@@ -1,5 +1,15 @@
 # This script segment is generated automatically by AutoPilot
 
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler drive_group_head_phase_sparsemux_7_2_179_1_1 BINDTYPE {op} TYPE {sparsemux} IMPL {onehotencoding_realdef}
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler drive_group_head_phase_sparsemux_9_3_179_1_1 BINDTYPE {op} TYPE {sparsemux} IMPL {onehotencoding_realdef}
+}
+
+
 # clear list
 if {${::AESL::PGuard_autoexp_gen}} {
     cg_default_interface_gen_dc_begin
@@ -11,22 +21,37 @@ set axilite_register_dict [dict create]
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 9 \
-    name head_ctx_ref \
+    id 11 \
+    name head_ctx_ref_0 \
     type other \
     dir IO \
     reset_level 1 \
     sync_rst true \
-    corename dc_head_ctx_ref \
+    corename dc_head_ctx_ref_0 \
     op interface \
-    ports { head_ctx_ref_i { I 179 vector } head_ctx_ref_o { O 179 vector } head_ctx_ref_o_ap_vld { O 1 bit } } \
+    ports { head_ctx_ref_0_i { I 179 vector } head_ctx_ref_0_o { O 179 vector } head_ctx_ref_0_o_ap_vld { O 1 bit } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 10 \
+    id 12 \
+    name head_ctx_ref_1 \
+    type other \
+    dir IO \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_head_ctx_ref_1 \
+    op interface \
+    ports { head_ctx_ref_1_i { I 179 vector } head_ctx_ref_1_o { O 179 vector } head_ctx_ref_1_o_ap_vld { O 1 bit } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 13 \
     name layer_idx \
     type other \
     dir I \
@@ -41,7 +66,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 11 \
+    id 14 \
     name start_r \
     type other \
     dir I \

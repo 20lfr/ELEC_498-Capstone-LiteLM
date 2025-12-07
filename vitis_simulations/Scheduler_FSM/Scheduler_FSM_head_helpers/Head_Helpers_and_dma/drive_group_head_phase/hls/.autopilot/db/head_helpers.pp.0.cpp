@@ -476,7 +476,7 @@ namespace std
 # 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp" 2
 
 constexpr int NUM_HEADS = 2;
-constexpr int HEADS_PARALLEL = 1;
+constexpr int HEADS_PARALLEL = 2;
 
 enum class HeadPhase : uint8_t {
     IDLE = 0,
@@ -641,7 +641,7 @@ bool run_single_head(
     bool start
 )
 {
-#pragma HLS INLINE off
+#pragma HLS INLINE
 
  ctx.compute_start = false;
     ctx.compute_op = ComputeOp::CMP_NONE;
@@ -671,6 +671,13 @@ bool run_single_head(
         if (ctx.att_scores_started) ctx.att_scores_dma_done = true;
         if (ctx.val_scale_started) ctx.val_scale_dma_done = true;
         if (ctx.att_value_started) ctx.att_value_dma_done = true;
+    }else{
+        if (ctx.q_started) ctx.q_dma_done = false;
+        if (ctx.k_started) ctx.k_dma_done = false;
+        if (ctx.v_started) ctx.v_dma_done = false;
+        if (ctx.att_scores_started) ctx.att_scores_dma_done = false;
+        if (ctx.val_scale_started) ctx.val_scale_dma_done = false;
+        if (ctx.att_value_started) ctx.att_value_dma_done = false;
     }
 
 
@@ -716,7 +723,7 @@ bool run_single_head(
                 ctx.q_started = true;
             }
 
-            if (ctx.compute_ready && ctx.q_dma_done) {
+            else if (ctx.compute_ready && ctx.q_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_Q;
             }
@@ -732,7 +739,7 @@ bool run_single_head(
                 ctx.k_started = true;
             }
 
-            if (ctx.compute_ready && ctx.k_dma_done) {
+            else if (ctx.compute_ready && ctx.k_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_K;
             }
@@ -753,7 +760,7 @@ bool run_single_head(
                 ctx.v_started = true;
             }
 
-            if (ctx.compute_ready && ctx.v_dma_done) {
+            else if (ctx.compute_ready && ctx.v_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_V;
             }
@@ -778,7 +785,7 @@ bool run_single_head(
                 ctx.att_scores_started = true;
             }
 
-            if (ctx.compute_ready && ctx.att_scores_dma_done) {
+            else if (ctx.compute_ready && ctx.att_scores_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_ATT_SCORES;
             } else if (ctx.att_scores_compute_done && ctx.att_scores_started) {
@@ -813,7 +820,7 @@ bool run_single_head(
                 ctx.att_value_started = true;
             }
 
-            if (ctx.compute_ready && ctx.att_value_dma_done) {
+            else if (ctx.compute_ready && ctx.att_value_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_ATT_VALUE;
             } else if (ctx.att_value_compute_done && ctx.att_value_started) {
@@ -843,27 +850,34 @@ __attribute__((sdx_kernel("drive_group_head_phase", 0))) bool drive_group_head_p
 ){
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=drive_group_head_phase
-# 257 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
+# 264 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
 
 #pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
 
  bool group_finished = true;
 
-    VITIS_LOOP_262_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+    VITIS_LOOP_269_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  HeadCtx &ctx = head_ctx_ref[lane];
+        const int lane_head_idx = base_head_idx + lane;
+
+
+
+
+
+
+
+        ctx.start_head = start && (ctx.phase == HeadPhase::IDLE);
 
         if (ctx.phase != HeadPhase::DONE) {
-            ctx.start_head = start && (ctx.phase == HeadPhase::IDLE);
             const bool head_done = run_single_head(
                 ctx,
                 layer_idx,
                 ctx.start_head);
             if (!head_done) group_finished = false;
         }
+
+
     }
-
-    (void)base_head_idx;
-
     return group_finished;
 }

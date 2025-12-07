@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "Sun Dec  7 15:48:11 2025",
- "timestampMillis": "1765140491739",
+ "dateTimestamp": "Sun Dec  7 18:24:18 2025",
+ "timestampMillis": "1765149858813",
  "buildStep": {
-  "cmdId": "e0068bdd-1718-46fc-b2a9-bf2974a18b6a",
+  "cmdId": "44ce11ad-e149-4b71-91fa-c44c5c361b46",
   "name": "v++",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/logs/drive_group_head_phase.steps.log",
   "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/hls_config.cfg --work_dir drive_group_head_phase ",
@@ -38,10 +38,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Dec  7 15:48:11 2025",
- "timestampMillis": "1765140491740",
+ "dateTimestamp": "Sun Dec  7 18:24:18 2025",
+ "timestampMillis": "1765149858814",
  "status": {
-  "cmdId": "e0068bdd-1718-46fc-b2a9-bf2974a18b6a",
+  "cmdId": "44ce11ad-e149-4b71-91fa-c44c5c361b46",
   "state": "CS_RUNNING"
  }
 }
@@ -49,8 +49,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "Sun Dec  7 15:48:15 2025",
- "timestampMillis": "1765140495519",
+ "dateTimestamp": "Sun Dec  7 18:24:22 2025",
+ "timestampMillis": "1765149862625",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -86,10 +86,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "Sun Dec  7 15:48:15 2025",
- "timestampMillis": "1765140495520",
+ "dateTimestamp": "Sun Dec  7 18:24:22 2025",
+ "timestampMillis": "1765149862625",
  "buildStep": {
-  "cmdId": "f0f997b4-a787-417e-abb8-7d1fffd813c4",
+  "cmdId": "fa6d1bf6-246c-480d-a7d2-40cd01c2ecd2",
   "name": "",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/hls/hls.log",
   "commandLine": "",
@@ -102,10 +102,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Dec  7 15:48:15 2025",
- "timestampMillis": "1765140495520",
+ "dateTimestamp": "Sun Dec  7 18:24:22 2025",
+ "timestampMillis": "1765149862625",
  "status": {
-  "cmdId": "f0f997b4-a787-417e-abb8-7d1fffd813c4",
+  "cmdId": "fa6d1bf6-246c-480d-a7d2-40cd01c2ecd2",
   "state": "CS_RUNNING"
  }
 }
@@ -113,8 +113,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:15 2025",
- "timestampMillis": "1765140495520",
+ "dateTimestamp": "Sun Dec  7 18:24:22 2025",
+ "timestampMillis": "1765149862626",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/hls/hls_data.json",
   "name": "",
@@ -127,8 +127,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:15 2025",
- "timestampMillis": "1765140495520",
+ "dateTimestamp": "Sun Dec  7 18:24:22 2025",
+ "timestampMillis": "1765149862626",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/hls/syn/report/csynth.rpt",
   "name": "",
@@ -141,8 +141,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:15 2025",
- "timestampMillis": "1765140495520",
+ "dateTimestamp": "Sun Dec  7 18:24:22 2025",
+ "timestampMillis": "1765149862626",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/hls/syn/report/csynth.xml",
   "name": "",
@@ -155,8 +155,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:24 2025",
- "timestampMillis": "1765140504439",
+ "dateTimestamp": "Sun Dec  7 18:24:31 2025",
+ "timestampMillis": "1765149871920",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/hls",
   "name": "",
@@ -169,8 +169,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:24 2025",
- "timestampMillis": "1765140504440",
+ "dateTimestamp": "Sun Dec  7 18:24:31 2025",
+ "timestampMillis": "1765149871921",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/hls",
   "name": "",
@@ -183,8 +183,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:24 2025",
- "timestampMillis": "1765140504440",
+ "dateTimestamp": "Sun Dec  7 18:24:31 2025",
+ "timestampMillis": "1765149871921",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/hls",
   "name": "",
@@ -197,10 +197,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Dec  7 15:48:24 2025",
- "timestampMillis": "1765140504440",
+ "dateTimestamp": "Sun Dec  7 18:24:31 2025",
+ "timestampMillis": "1765149871921",
  "status": {
-  "cmdId": "f0f997b4-a787-417e-abb8-7d1fffd813c4",
+  "cmdId": "fa6d1bf6-246c-480d-a7d2-40cd01c2ecd2",
   "state": "CS_PASSED"
  }
 }
@@ -208,10 +208,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Dec  7 15:48:24 2025",
- "timestampMillis": "1765140504558",
+ "dateTimestamp": "Sun Dec  7 18:24:32 2025",
+ "timestampMillis": "1765149872043",
  "status": {
-  "cmdId": "e0068bdd-1718-46fc-b2a9-bf2974a18b6a",
+  "cmdId": "44ce11ad-e149-4b71-91fa-c44c5c361b46",
   "state": "CS_PASSED"
  }
 }
@@ -219,8 +219,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:24 2025",
- "timestampMillis": "1765140504574",
+ "dateTimestamp": "Sun Dec  7 18:24:32 2025",
+ "timestampMillis": "1765149872059",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/reports/v++_compile_drive_group_head_phase_guidance.html",
   "name": "",
@@ -233,8 +233,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Dec  7 15:48:24 2025",
- "timestampMillis": "1765140504575",
+ "dateTimestamp": "Sun Dec  7 18:24:32 2025",
+ "timestampMillis": "1765149872060",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_head_helpers/Head_Helpers_and_dma/drive_group_head_phase/reports/.db/v++_compile_drive_group_head_phase_guidance.pb3",
   "name": "",

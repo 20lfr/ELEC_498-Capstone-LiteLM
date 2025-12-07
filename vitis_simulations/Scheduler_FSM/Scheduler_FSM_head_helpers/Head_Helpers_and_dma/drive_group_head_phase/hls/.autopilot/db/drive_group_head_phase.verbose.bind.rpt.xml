@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'drive_group_head_phase'" level="0">
-<item name = "Date">Sun Dec  7 15:48:23 2025
+<item name = "Date">Sun Dec  7 18:24:30 2025
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">drive_group_head_phase</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 6.556 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 6.647 ns, 2.70 ns</column>
 </table>
 </item>
 </section>
@@ -24,14 +24,13 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">1, 2, 10.000 ns, 20.000 ns, 2, 3, no</column>
+<column name="">2, 2, 20.000 ns, 20.000 ns, 3, 3, no</column>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_run_single_head_fu_92">run_single_head, 1, 1, 10.000 ns, 10.000 ns, 1, 1, no</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">
