@@ -1,13 +1,36 @@
-#include "Scheduler_FSM.hpp"
-#include "ControlMemInterface.hpp"
-#include "IRQ_wizard.hpp"
+#include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
+#include "ControlMemInterface/ControlMemInterface.hpp"
+#include "IRQ_Wizard/IRQ_wizard.hpp"
 
 // Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
-void transformer_top() {
+void transformer_top(
+
+    
+) {
 #pragma HLS INLINE off
 
     // Control Memory Address Space~~~~~~~~
     static ControlMemSpace ctrl_mem; 
+    ControlReg ctrl_addr      = ControlReg::CONTROL;
+    uint32_t   ctrl_data_in   = 0;
+    uint32_t   ctrl_data_out  = 0;
+    bool       ctrl_read_en   = false;
+    bool       ctrl_write_en  = false;
+    bool       ctrl_chip_en   = true;
+    bool       ctrl_resetn_in = true;
+
+    ControlMemInterface(
+        ctrl_mem,       // AXI-Lite mapped control memory
+        ctrl_addr,      // byte address for control/IRQ registers
+        ctrl_data_in,   // data from PS-side writes
+        ctrl_data_out,  // data returned on PS-side reads
+        ctrl_read_en,   // read strobe
+        ctrl_write_en,  // write strobe
+        ctrl_chip_en,   // chip enable gate
+        ctrl_resetn_in  // active-low reset
+    );
+
+    
 
     // Placeholder wires for scheduler inputs/outputs.
     bool axis_in_valid  = false;    // AXI-Stream ingress: TVALID
@@ -36,8 +59,8 @@ void transformer_top() {
     bool cntrl_busy     = false;
     bool cntrl_start_out= false;
     SchedState dbg_state = S_IDLE;
-    HeadCtx dbg_head_ctx[NUM_HEADS];
-    HeadResources dbg_head_res{};
+    uint32_t debug_compute_done = false;
+    HeadCtx head_ctx_ref[NUM_HEADS];
 
     
 
@@ -63,6 +86,7 @@ void transformer_top() {
         compute_done,
         requant_ready,
         requant_done,
+        head_ctx_ref,
         compute_start,
         compute_op,
         requant_start,
@@ -71,17 +95,12 @@ void transformer_top() {
         stream_start,
         stream_done,
         done,
-        dbg_state,
-        dbg_head_res,
-        dbg_head_ctx);
+        debug_compute_done, 
+        dbg_state
+    );
 
-    (void)dbg_state;
-    (void)dbg_head_res;
-    (void)dbg_head_ctx;
-    
-
-    
     // IRQ WIZARD~~~~~~~~~~~~~~~~~~~~~~~~~~
     bool irq_ps = false;
     irq_wizard(ctrl_mem, dma_done, done, error, irq_ps);
+
 }

@@ -1,5 +1,13 @@
 #include "ControlMemInterface.hpp"
 
+namespace {
+
+inline bool is_valid_address(uint32_t addr_bytes) {
+    // Valid offsets: 0x00 through 0x68 inclusive, 4-byte aligned.
+    return (addr_bytes <= static_cast<uint32_t>(ControlReg::RESERVED_DEBUG)) && (addr_bytes % 4 == 0);
+}
+
+} // namespace
 
 uint32_t ctrl_read(const ControlMemSpace &mem, ControlReg reg) {
     switch (reg) {
@@ -44,7 +52,7 @@ void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
     switch (reg) {
         case ControlReg::CONTROL:        mem.control = value;       break;
         case ControlReg::LAYER_INDEX:    mem.layer_index = value;   break;
-        case ControlReg::STATUS:         mem.status = value;        break;
+        case ControlReg::STATUS:         mem.status &= ~value;      break; // W1C
         case ControlReg::IRQ_STATUS:     mem.irq_status = value;    break;
         case ControlReg::IRQ_ENABLE:     mem.irq_enable = value;    break;
 
@@ -83,7 +91,7 @@ void init_mem_space(ControlMemSpace& mem){
     mem.layer_index    = 0;
     mem.status         = 0;
     mem.irq_status     = 0;
-    mem.irq_enable     = IRQ_DMA_DONE_BIT | IRQ_INFER_DONE_BIT | IRQ_ERROR_BIT | IRQ_CLEAR_BIT; // dma_done | inference_done  | error | clear
+    mem.irq_enable     = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT; // clear | error | inference_done | dma_done
 
     mem.dma_layer_len  = 0;
     mem.dma_head_len   = 0;
@@ -131,6 +139,14 @@ void ControlMemInterface(
     
     if (!reset_n) init_mem_space(mem);
     if (!chip_enable) return;
+    if (read_control && write_control) {
+        mem.status |= STATUS_INVALID_OP;
+        return;
+    }
+    if (!is_valid_address(static_cast<uint32_t>(address))) {
+        mem.status |= STATUS_INVALID_ADDR;
+        return;
+    }
     // Defaults
     data_out = 0;
     

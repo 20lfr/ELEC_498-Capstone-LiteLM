@@ -1,80 +1,76 @@
 Time resolution is 1 ps
-cycle grp ret|    head0 rdy done strt op    qst qdn kst kdn vst vdn vld |    head1 rdy done strt op    qst qdn kst kdn vst vdn vld |    head2 rdy done strt op    qst qdn kst kdn vst vdn vld |    head3 rdy done strt op    qst qdn kst kdn vst vdn vld |
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-[TB-DBG] Time 75000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 115000: Head 0 compute DONE generated
-[TB-DBG] Time 165000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 205000: Head 0 compute DONE generated
-[TB-DBG] Time 315000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 355000: Head 0 compute DONE generated
-[TB-DBG] Time 495000: Head 0 compute_start detected! inflight=0 done_hold=0
+cycle grp ret|    head0 rdy done strt op    qst qdn kst kdn vst vdn vld |    head1 rdy done strt op    qst qdn kst kdn vst vdn vld |
+---------------------------------------------------------------------------------------------------------------------------------------
+[TB-DBG] Time 75000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 105000: Head 0 DMA DONE generated
+[TB-DBG] Time 135000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 175000: Head 0 compute DONE generated
+[TB-DBG] Time 225000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 255000: Head 0 DMA DONE generated
+[TB-DBG] Time 285000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 325000: Head 0 compute DONE generated
+[TB-DBG] Time 435000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 465000: Head 0 DMA DONE generated
+[TB-DBG] Time 495000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
 [TB-DBG] Time 535000: Head 0 compute DONE generated
-[TB-DBG] Time 585000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 625000: Head 0 compute DONE generated
-[TB-DBG] Time 675000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 715000: Head 0 compute DONE generated
-[TB-DBG] Time 765000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 805000: Head 0 compute DONE generated
-[TB-DBG] Time 915000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 955000: Head 1 compute DONE generated
-cycle grp ret|    head0 rdy done strt op    qst qdn kst kdn vst vdn vld |    head1 rdy done strt op    qst qdn kst kdn vst vdn vld |    head2 rdy done strt op    qst qdn kst kdn vst vdn vld |    head3 rdy done strt op    qst qdn kst kdn vst vdn vld |
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-[TB-DBG] Time 75000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 115000: Head 0 compute DONE generated
-[TB-DBG] Time 165000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 205000: Head 0 compute DONE generated
-[TB-DBG] Time 315000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 355000: Head 0 compute DONE generated
-[TB-DBG] Time 495000: Head 0 compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 675000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 705000: Head 0 DMA DONE generated
+[TB-DBG] Time 735000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 775000: Head 0 compute DONE generated
+[TB-DBG] Time 825000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 865000: Head 0 compute DONE generated
+[TB-DBG] Time 915000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 955000: Head 0 compute DONE generated
+cycle grp ret|    head0 rdy done strt op    qst qdn kst kdn vst vdn vld |    head1 rdy done strt op    qst qdn kst kdn vst vdn vld |
+---------------------------------------------------------------------------------------------------------------------------------------
+[TB-DBG] Time 75000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 105000: Head 0 DMA DONE generated
+[TB-DBG] Time 135000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 175000: Head 0 compute DONE generated
+[TB-DBG] Time 225000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 255000: Head 0 DMA DONE generated
+[TB-DBG] Time 285000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 325000: Head 0 compute DONE generated
+[TB-DBG] Time 435000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 465000: Head 0 DMA DONE generated
+[TB-DBG] Time 495000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
 [TB-DBG] Time 535000: Head 0 compute DONE generated
-[TB-DBG] Time 585000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 625000: Head 0 compute DONE generated
-[TB-DBG] Time 675000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 715000: Head 0 compute DONE generated
-[TB-DBG] Time 765000: Head 0 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 805000: Head 0 compute DONE generated
-[TB-DBG] Time 915000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 955000: Head 1 compute DONE generated
-[TB-DBG] Time 1005000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1045000: Head 1 compute DONE generated
-[TB-DBG] Time 1155000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1195000: Head 1 compute DONE generated
-[TB-DBG] Time 1335000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1375000: Head 1 compute DONE generated
-[TB-DBG] Time 1425000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1465000: Head 1 compute DONE generated
-[TB-DBG] Time 1515000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1555000: Head 1 compute DONE generated
-[TB-DBG] Time 1605000: Head 1 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1645000: Head 1 compute DONE generated
-[TB-DBG] Time 1755000: Head 2 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1795000: Head 2 compute DONE generated
-[TB-DBG] Time 1845000: Head 2 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 1885000: Head 2 compute DONE generated
-[TB-DBG] Time 1995000: Head 2 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2035000: Head 2 compute DONE generated
-[TB-DBG] Time 2175000: Head 2 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2215000: Head 2 compute DONE generated
-[TB-DBG] Time 2265000: Head 2 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2305000: Head 2 compute DONE generated
-[TB-DBG] Time 2355000: Head 2 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2395000: Head 2 compute DONE generated
-[TB-DBG] Time 2445000: Head 2 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2485000: Head 2 compute DONE generated
-[TB-DBG] Time 2595000: Head 3 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2635000: Head 3 compute DONE generated
-[TB-DBG] Time 2685000: Head 3 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2725000: Head 3 compute DONE generated
-[TB-DBG] Time 2835000: Head 3 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 2875000: Head 3 compute DONE generated
-[TB-DBG] Time 3015000: Head 3 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 3055000: Head 3 compute DONE generated
-[TB-DBG] Time 3105000: Head 3 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 3145000: Head 3 compute DONE generated
-[TB-DBG] Time 3195000: Head 3 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 3235000: Head 3 compute DONE generated
-[TB-DBG] Time 3285000: Head 3 compute_start detected! inflight=0 done_hold=0
-[TB-DBG] Time 3325000: Head 3 compute DONE generated
+[TB-DBG] Time 675000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 705000: Head 0 DMA DONE generated
+[TB-DBG] Time 735000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 775000: Head 0 compute DONE generated
+[TB-DBG] Time 825000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 865000: Head 0 compute DONE generated
+[TB-DBG] Time 915000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 955000: Head 0 compute DONE generated
+[TB-DBG] Time 1005000: Head 0 (head_idx=0) DMA start detected
+[TB-DBG] Time 1035000: Head 0 DMA DONE generated
+[TB-DBG] Time 1065000: Head 0 (head_idx=0) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 1105000: Head 0 compute DONE generated
+[TB-DBG] Time 1235000: Head 1 (head_idx=1) DMA start detected
+[TB-DBG] Time 1265000: Head 1 DMA DONE generated
+[TB-DBG] Time 1295000: Head 1 (head_idx=1) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 1335000: Head 1 compute DONE generated
+[TB-DBG] Time 1385000: Head 1 (head_idx=1) DMA start detected
+[TB-DBG] Time 1415000: Head 1 DMA DONE generated
+[TB-DBG] Time 1445000: Head 1 (head_idx=1) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 1485000: Head 1 compute DONE generated
+[TB-DBG] Time 1595000: Head 1 (head_idx=1) DMA start detected
+[TB-DBG] Time 1625000: Head 1 DMA DONE generated
+[TB-DBG] Time 1655000: Head 1 (head_idx=1) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 1695000: Head 1 compute DONE generated
+[TB-DBG] Time 1835000: Head 1 (head_idx=1) DMA start detected
+[TB-DBG] Time 1865000: Head 1 DMA DONE generated
+[TB-DBG] Time 1895000: Head 1 (head_idx=1) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 1935000: Head 1 compute DONE generated
+[TB-DBG] Time 1985000: Head 1 (head_idx=1) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 2025000: Head 1 compute DONE generated
+[TB-DBG] Time 2075000: Head 1 (head_idx=1) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 2115000: Head 1 compute DONE generated
+[TB-DBG] Time 2165000: Head 1 (head_idx=1) DMA start detected
+[TB-DBG] Time 2195000: Head 1 DMA DONE generated
+[TB-DBG] Time 2225000: Head 1 (head_idx=1) compute_start detected! inflight=0 done_hold=0
+[TB-DBG] Time 2265000: Head 1 compute DONE generated
 
-=== SUCCESS: All head groups completed by cycle 336 ===
-$finish called at time : 3395 ns : File "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/_Golden-runs/Scheduler_FSM/simple_head_helpers/Single-HEADED/Verilog/drive_group_head_phase_tb.sv" Line 359
+=== SUCCESS: All head groups completed by cycle 230 ===
+$finish called at time : 2335 ns : File "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-Verilog/Head_Helpers_debug/drive_group_head_phase_tb.sv" Line 459

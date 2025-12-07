@@ -25,7 +25,7 @@ void test_reset_behavior() {
 
     assert(mem.dma_layer_len == 0);
     assert(mem.control == CTRL_RESETN_BIT);
-    assert(mem.irq_enable == (IRQ_DMA_DONE_BIT | IRQ_INFER_DONE_BIT | IRQ_ERROR_BIT | IRQ_CLEAR_BIT));
+    assert(mem.irq_enable == (IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT));
     assert(mem.irq_status == 0);
     assert(data_out == 0); // data_out is cleared when chip is enabled
 }
@@ -89,8 +89,53 @@ void test_read_prioritizes_over_write() {
                         /*chip_enable=*/true,
                         /*reset_n=*/true);
 
-    assert(data_out == 10u);
-    assert(mem.tile_stride == 10u); // write blocked when read asserted
+    assert((mem.status & STATUS_INVALID_OP) != 0);
+    assert(mem.tile_stride == 10u); // unchanged due to invalid op
+}
+
+void test_invalid_op_sets_status() {
+    ControlMemSpace mem{};
+    init_mem_space(mem);
+    uint32_t data_out = 0;
+
+    ControlMemInterface(mem,
+                        ControlReg::CONTROL,
+                        0,
+                        data_out,
+                        /*read_control=*/true,
+                        /*write_control=*/true,
+                        /*chip_enable=*/true,
+                        /*reset_n=*/true);
+
+    assert((mem.status & STATUS_INVALID_OP) != 0);
+}
+
+void test_invalid_address_sets_status_and_clear() {
+    ControlMemSpace mem{};
+    init_mem_space(mem);
+    uint32_t data_out = 0;
+
+    ControlMemInterface(mem,
+                        static_cast<ControlReg>(0x200), // out of range
+                        0,
+                        data_out,
+                        /*read_control=*/false,
+                        /*write_control=*/true,
+                        /*chip_enable=*/true,
+                        /*reset_n=*/true);
+
+    assert((mem.status & STATUS_INVALID_ADDR) != 0);
+
+    // Clear the status bit via W1C
+    ControlMemInterface(mem,
+                        ControlReg::STATUS,
+                        STATUS_INVALID_ADDR,
+                        data_out,
+                        /*read_control=*/false,
+                        /*write_control=*/true,
+                        /*chip_enable=*/true,
+                        /*reset_n=*/true);
+    assert((mem.status & STATUS_INVALID_ADDR) == 0);
 }
 
 } // namespace
@@ -100,6 +145,8 @@ int main() {
     test_write_and_read();
     test_chip_disable_gates_access();
     test_read_prioritizes_over_write();
+    test_invalid_op_sets_status();
+    test_invalid_address_sets_status_and_clear();
 
     std::cout << "ControlMemInterface_tb: all tests passed\n";
     return EXIT_SUCCESS;

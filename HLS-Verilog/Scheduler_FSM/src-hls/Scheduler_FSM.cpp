@@ -16,8 +16,8 @@ void scheduler_hls(
     uint32_t &cntrl_layer_idx, // [OUTPUT] Current layer index mirrored into
                                // control mem
     bool &cntrl_busy,          // [OUTPUT] Scheduler active (non-idle)
-    bool &cntrl_start_out, // [OUTPUT] FSM-controlled start bit (cleared after
-                           // leaving IDLE)
+    bool &cntrl_start_out,    // [OUTPUT] FSM-controlled start bit (cleared after
+                              // leaving IDLE)
 
     // ------------------------------------------------------------
     // AXI4-STREAM INPUT (INGRESS: PS → PL)
@@ -31,7 +31,7 @@ void scheduler_hls(
     // ------------------------------------------------------------
     bool wl_ready,    // [INPUT]  Weight loader ready for a new request
     bool &wl_start,   // [OUTPUT] Start weight load DMA
-    int &wl_addr_sel, // [OUTPUT] Select which matrix/tile (Q, K, V, K cache, V
+    DmaSel &wl_addr_sel, // [OUTPUT] Select which matrix/tile (Q, K, V, K cache, V
                       // cache, WO, W1...)
     int &wl_layer,    // [OUTPUT] Layer index for DMA
     int &wl_head,     // [OUTPUT] Head index for DMA (or -1 for non-head ops)
@@ -223,7 +223,7 @@ void scheduler_hls(
   cntrl_layer_idx = layer_idx;
   axis_in_ready = 0;
   wl_start = 0;
-  wl_addr_sel = 0;
+  wl_addr_sel = DmaSel::DMASEL_NONE;
   wl_layer = layer_idx;
   wl_head = 0;
   wl_tile = 0;
@@ -477,7 +477,7 @@ void scheduler_hls(
 
       if (!outproj_started && wl_ready) {
         wl_start = 1;
-        wl_addr_sel = DMASEL_WO;
+        wl_addr_sel = DmaSel::DMASEL_WO;
         wl_head = -1;
         wl_tile = wo_tile;
         wo_dma_busy = true;
@@ -536,7 +536,7 @@ void scheduler_hls(
 
         if (!ffn_started && wl_ready) {
           wl_start = 1;
-          wl_addr_sel = DMASEL_W1;
+          wl_addr_sel = DmaSel::DMASEL_W1;
           wl_head = -1;
           wl_tile = w1_tile;
           w1_dma_busy = true;
@@ -578,7 +578,7 @@ void scheduler_hls(
 
         if (!ffn_started && wl_ready) {
           wl_start = 1;
-          wl_addr_sel = DMASEL_W2;
+          wl_addr_sel = DmaSel::DMASEL_W2;
           wl_head = -1;
           wl_tile = w2_tile;
           w2_dma_busy = true;

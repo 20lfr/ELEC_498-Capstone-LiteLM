@@ -2,8 +2,8 @@
 
 namespace {
 
-constexpr uint32_t kStatusMask   = IRQ_DMA_DONE_BIT | IRQ_INFER_DONE_BIT | IRQ_ERROR_BIT | IRQ_CLEAR_BIT;
-constexpr uint32_t kMaskableBits = IRQ_DMA_DONE_BIT | IRQ_INFER_DONE_BIT | IRQ_ERROR_BIT; // clear bit bypasses mask
+constexpr uint32_t kStatusMask   = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT;
+constexpr uint32_t kMaskableBits = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT; // clear bit bypasses mask
 
 inline bool evaluate_irq(const ControlMemSpace &mem) {
     return (mem.irq_status & (mem.irq_enable & kMaskableBits)) != 0;

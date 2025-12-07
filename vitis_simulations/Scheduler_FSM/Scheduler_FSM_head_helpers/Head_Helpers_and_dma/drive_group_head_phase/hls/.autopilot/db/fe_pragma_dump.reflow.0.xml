@@ -1,0 +1,5 @@
+<pragmas>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="263" pragmaType="unroll" parentfunction="drive_group_head_phase" factor="-1" skip_exit_check="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="258" pragmaType="array_partition" parentfunction="drive_group_head_phase" dim="1" factor="0" mode="complete" dynamic="0" variable="head_ctx_ref"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="58" pragmaType="inline" parentfunction="run_single_head" off="1" region="0" recursive="0"/>
+</pragmas>

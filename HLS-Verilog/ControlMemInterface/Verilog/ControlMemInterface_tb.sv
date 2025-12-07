@@ -194,8 +194,8 @@ module ControlMemInterface_tb;
         // Apply reset (active low) then enable the block.
         #2;
         reset_n     = 1'b1;
-        chip_enable = 1'b1;
         ap_start    = 1'b1;
+        chip_enable = 1'b1;
         #1;
 
         // Basic write/readback checks across a couple of addresses.
