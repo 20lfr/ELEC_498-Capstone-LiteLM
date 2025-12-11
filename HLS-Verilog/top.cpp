@@ -38,7 +38,7 @@ void transformer_top(
     bool axis_in_ready  = false;    // AXI-Stream ingress: TREADY
     bool wl_ready       = false;    // Weight loader ready flag
     bool wl_start       = false;    // Scheduler-driven DMA start
-    int  wl_addr_sel    = 0;        // Matrix selector for DMA
+    DmaSel wl_addr_sel  = DmaSel::DMASEL_NONE; // Matrix selector for DMA
     int  wl_layer       = 0;        // Layer index for DMA
     int  wl_head        = 0;        // Head index for DMA (-1 for shared ops)
     int  wl_tile        = 0;        // Tile index for DMA

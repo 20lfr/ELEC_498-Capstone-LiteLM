@@ -2,3 +2,6 @@ Running: xsim.dir/drive_group_head_phase_tb_behav/xsimk -simmode gui -wdb drive_
 Design successfully loaded
 Design Loading Memory Usage: 179664 KB (Peak: 179664 KB)
 Design Loading CPU Usage: 830 ms
+Simulation completed
+Simulation Memory Usage: 262264 KB (Peak: 318932 KB)
+Simulation CPU Usage: 850 ms

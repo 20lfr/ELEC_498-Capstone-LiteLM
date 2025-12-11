@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="5,890.467 ns"></ZoomStartTime>
-      <ZoomEndTime time="6,925.204 ns"></ZoomEndTime>
-      <Cursor1Time time="6,840.017 ns"></Cursor1Time>
+      <ZoomStartTime time="0.043 ns"></ZoomStartTime>
+      <ZoomEndTime time="644.044 ns"></ZoomEndTime>
+      <Cursor1Time time="159.043 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="210"></NameColumnWidth>
-      <ValueColumnWidth column_width="60"></ValueColumnWidth>
+      <NameColumnWidth column_width="242"></NameColumnWidth>
+      <ValueColumnWidth column_width="64"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="95" />
+   <WVObjectSize size="93" />
    <wvobject type="logic" fp_name="/scheduler_hls_tb/ap_clk">
       <obj_property name="ElementShortName">ap_clk</obj_property>
       <obj_property name="ObjectShortName">ap_clk</obj_property>
@@ -142,8 +142,8 @@
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/wl_addr_sel">
-      <obj_property name="ElementShortName">wl_addr_sel[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wl_addr_sel[31:0]</obj_property>
+      <obj_property name="ElementShortName">wl_addr_sel[7:0]</obj_property>
+      <obj_property name="ObjectShortName">wl_addr_sel[7:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/wl_layer">
@@ -256,154 +256,254 @@
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg">
-      <obj_property name="ElementShortName">head_phase_dbg[0:3][7:0]</obj_property>
-      <obj_property name="ObjectShortName">head_phase_dbg[0:3][7:0]</obj_property>
+      <obj_property name="ElementShortName">head_phase_dbg[0:1][7:0]</obj_property>
+      <obj_property name="ObjectShortName">head_phase_dbg[0:1][7:0]</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[0]">
+   </wvobject>
+   <wvobject type="array" fp_name="/scheduler_hls_tb/head_last_op_dbg">
+      <obj_property name="ElementShortName">head_last_op_dbg[0:1][7:0]</obj_property>
+      <obj_property name="ObjectShortName">head_last_op_dbg[0:1][7:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_last_op_dbg[0]">
          <obj_property name="ElementShortName">[0][7:0]</obj_property>
          <obj_property name="ObjectShortName">[0][7:0]</obj_property>
          <obj_property name="CustomSignalColor">#FF00FF</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[1]">
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_last_op_dbg[1]">
          <obj_property name="ElementShortName">[1][7:0]</obj_property>
          <obj_property name="ObjectShortName">[1][7:0]</obj_property>
          <obj_property name="CustomSignalColor">#FF00FF</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[2]">
-         <obj_property name="ElementShortName">[2][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][7:0]</obj_property>
-         <obj_property name="CustomSignalColor">#D2691E</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[3]">
-         <obj_property name="ElementShortName">[3][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][7:0]</obj_property>
-         <obj_property name="CustomSignalColor">#D2691E</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[0]">
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_last_op_dbg[0]">
          <obj_property name="ElementShortName">[0][7:0]</obj_property>
          <obj_property name="ObjectShortName">[0][7:0]</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[1]">
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_last_op_dbg[1]">
          <obj_property name="ElementShortName">[1][7:0]</obj_property>
          <obj_property name="ObjectShortName">[1][7:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[2]">
-         <obj_property name="ElementShortName">[2][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][7:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg[3]">
-         <obj_property name="ElementShortName">[3][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][7:0]</obj_property>
       </wvobject>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg">
-      <obj_property name="ElementShortName">head_op_dbg[0:3][7:0]</obj_property>
-      <obj_property name="ObjectShortName">head_op_dbg[0:3][7:0]</obj_property>
+      <obj_property name="ElementShortName">head_op_dbg[0:1][7:0]</obj_property>
+      <obj_property name="ObjectShortName">head_op_dbg[0:1][7:0]</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[0]">
-         <obj_property name="ElementShortName">[0][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][7:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow">
+      <obj_property name="ElementShortName">head_ctx_shadow[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_shadow[0:1]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].att_value_dma_done">
+            <obj_property name="ElementShortName">.att_value_dma_done</obj_property>
+            <obj_property name="ObjectShortName">.att_value_dma_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].val_scale_dma_done">
+            <obj_property name="ElementShortName">.val_scale_dma_done</obj_property>
+            <obj_property name="ObjectShortName">.val_scale_dma_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].att_scores_dma_done">
+            <obj_property name="ElementShortName">.att_scores_dma_done</obj_property>
+            <obj_property name="ObjectShortName">.att_scores_dma_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].v_dma_done">
+            <obj_property name="ElementShortName">.v_dma_done</obj_property>
+            <obj_property name="ObjectShortName">.v_dma_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].k_dma_done">
+            <obj_property name="ElementShortName">.k_dma_done</obj_property>
+            <obj_property name="ObjectShortName">.k_dma_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].q_dma_done">
+            <obj_property name="ElementShortName">.q_dma_done</obj_property>
+            <obj_property name="ObjectShortName">.q_dma_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].att_value_compute_done">
+            <obj_property name="ElementShortName">.att_value_compute_done</obj_property>
+            <obj_property name="ObjectShortName">.att_value_compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].softmax_compute_done">
+            <obj_property name="ElementShortName">.softmax_compute_done</obj_property>
+            <obj_property name="ObjectShortName">.softmax_compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].val_scale_compute_done">
+            <obj_property name="ElementShortName">.val_scale_compute_done</obj_property>
+            <obj_property name="ObjectShortName">.val_scale_compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].att_scores_compute_done">
+            <obj_property name="ElementShortName">.att_scores_compute_done</obj_property>
+            <obj_property name="ObjectShortName">.att_scores_compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].v_compute_done">
+            <obj_property name="ElementShortName">.v_compute_done</obj_property>
+            <obj_property name="ObjectShortName">.v_compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].k_compute_done">
+            <obj_property name="ElementShortName">.k_compute_done</obj_property>
+            <obj_property name="ObjectShortName">.k_compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].q_compute_done">
+            <obj_property name="ElementShortName">.q_compute_done</obj_property>
+            <obj_property name="ObjectShortName">.q_compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].att_value_started">
+            <obj_property name="ElementShortName">.att_value_started</obj_property>
+            <obj_property name="ObjectShortName">.att_value_started</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].softmax_started">
+            <obj_property name="ElementShortName">.softmax_started</obj_property>
+            <obj_property name="ObjectShortName">.softmax_started</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].val_scale_started">
+            <obj_property name="ElementShortName">.val_scale_started</obj_property>
+            <obj_property name="ObjectShortName">.val_scale_started</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].att_scores_started">
+            <obj_property name="ElementShortName">.att_scores_started</obj_property>
+            <obj_property name="ObjectShortName">.att_scores_started</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].v_started">
+            <obj_property name="ElementShortName">.v_started</obj_property>
+            <obj_property name="ObjectShortName">.v_started</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].k_started">
+            <obj_property name="ElementShortName">.k_started</obj_property>
+            <obj_property name="ObjectShortName">.k_started</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].q_started">
+            <obj_property name="ElementShortName">.q_started</obj_property>
+            <obj_property name="ObjectShortName">.q_started</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].start_head">
+            <obj_property name="ElementShortName">.start_head</obj_property>
+            <obj_property name="ObjectShortName">.start_head</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].dma_done">
+            <obj_property name="ElementShortName">.dma_done</obj_property>
+            <obj_property name="ObjectShortName">.dma_done</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].wl_head">
+            <obj_property name="ElementShortName">.wl_head[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.wl_head[31:0]</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].wl_layer">
+            <obj_property name="ElementShortName">.wl_layer[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.wl_layer[31:0]</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].wl_addr_sel">
+            <obj_property name="ElementShortName">.wl_addr_sel[7:0]</obj_property>
+            <obj_property name="ObjectShortName">.wl_addr_sel[7:0]</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].wl_start">
+            <obj_property name="ElementShortName">.wl_start</obj_property>
+            <obj_property name="ObjectShortName">.wl_start</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].wl_ready">
+            <obj_property name="ElementShortName">.wl_ready</obj_property>
+            <obj_property name="ObjectShortName">.wl_ready</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].last_wl_addr">
+            <obj_property name="ElementShortName">.last_wl_addr[7:0]</obj_property>
+            <obj_property name="ObjectShortName">.last_wl_addr[7:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+            <obj_property name="UseCustomSignalColor">true</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].last_compute_op">
+            <obj_property name="ElementShortName">.last_compute_op[7:0]</obj_property>
+            <obj_property name="ObjectShortName">.last_compute_op[7:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+            <obj_property name="UseCustomSignalColor">true</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].compute_op">
+            <obj_property name="ElementShortName">.compute_op[7:0]</obj_property>
+            <obj_property name="ObjectShortName">.compute_op[7:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+            <obj_property name="UseCustomSignalColor">true</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].compute_start">
+            <obj_property name="ElementShortName">.compute_start</obj_property>
+            <obj_property name="ObjectShortName">.compute_start</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].compute_done">
+            <obj_property name="ElementShortName">.compute_done</obj_property>
+            <obj_property name="ObjectShortName">.compute_done</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].compute_ready">
+            <obj_property name="ElementShortName">.compute_ready</obj_property>
+            <obj_property name="ObjectShortName">.compute_ready</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].phase">
+            <obj_property name="ElementShortName">.phase[7:0]</obj_property>
+            <obj_property name="ObjectShortName">.phase[7:0]</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].head_idx">
+            <obj_property name="ElementShortName">.head_idx[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.head_idx[31:0]</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0].layer_stamp">
+            <obj_property name="ElementShortName">.layer_stamp[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.layer_stamp[31:0]</obj_property>
+         </wvobject>
       </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[1]">
-         <obj_property name="ElementShortName">[1][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[1][7:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[2]">
-         <obj_property name="ElementShortName">[2][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][7:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-         <obj_property name="CustomSignalColor">#D2691E</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[3]">
-         <obj_property name="ElementShortName">[3][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][7:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-         <obj_property name="CustomSignalColor">#D2691E</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
+      <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[0]">
-         <obj_property name="ElementShortName">[0][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][7:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[1]">
-         <obj_property name="ElementShortName">[1][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[1][7:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[2]">
-         <obj_property name="ElementShortName">[2][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][7:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/scheduler_hls_tb/head_op_dbg[3]">
-         <obj_property name="ElementShortName">[3][7:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][7:0]</obj_property>
-      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/scheduler_hls_tb/head_wl_ready">
+      <obj_property name="ElementShortName">head_wl_ready[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_wl_ready[0:1]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/scheduler_hls_tb/head_dma_done">
+      <obj_property name="ElementShortName">head_dma_done[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_dma_done[0:1]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/scheduler_hls_tb/STATE_ap_vld">
       <obj_property name="ElementShortName">STATE_ap_vld</obj_property>
       <obj_property name="ObjectShortName">STATE_ap_vld</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_0_i">
-      <obj_property name="ElementShortName">head_ctx_ref_0_i[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_0_i[65:0]</obj_property>
+      <obj_property name="ElementShortName">head_ctx_ref_0_i[194:0]</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_0_i[194:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_0_o">
-      <obj_property name="ElementShortName">head_ctx_ref_0_o[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_0_o[65:0]</obj_property>
+      <obj_property name="ElementShortName">head_ctx_ref_0_o[194:0]</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_0_o[194:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_ref_0_o_ap_vld">
       <obj_property name="ElementShortName">head_ctx_ref_0_o_ap_vld</obj_property>
       <obj_property name="ObjectShortName">head_ctx_ref_0_o_ap_vld</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_1_i">
-      <obj_property name="ElementShortName">head_ctx_ref_1_i[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_1_i[65:0]</obj_property>
+      <obj_property name="ElementShortName">head_ctx_ref_1_i[194:0]</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_1_i[194:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_1_o">
-      <obj_property name="ElementShortName">head_ctx_ref_1_o[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_1_o[65:0]</obj_property>
+      <obj_property name="ElementShortName">head_ctx_ref_1_o[194:0]</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_1_o[194:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_ref_1_o_ap_vld">
       <obj_property name="ElementShortName">head_ctx_ref_1_o_ap_vld</obj_property>
       <obj_property name="ObjectShortName">head_ctx_ref_1_o_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_2_i">
-      <obj_property name="ElementShortName">head_ctx_ref_2_i[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_2_i[65:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_2_o">
-      <obj_property name="ElementShortName">head_ctx_ref_2_o[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_2_o[65:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_ref_2_o_ap_vld">
-      <obj_property name="ElementShortName">head_ctx_ref_2_o_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_2_o_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_3_i">
-      <obj_property name="ElementShortName">head_ctx_ref_3_i[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_3_i[65:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_ref_3_o">
-      <obj_property name="ElementShortName">head_ctx_ref_3_o[65:0]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_3_o[65:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/head_ctx_ref_3_o_ap_vld">
-      <obj_property name="ElementShortName">head_ctx_ref_3_o_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_ref_3_o_ap_vld</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/scheduler_hls_tb/comp_busy">
       <obj_property name="ElementShortName">comp_busy</obj_property>
@@ -463,32 +563,32 @@
       <obj_property name="ObjectShortName">axis_drive</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_ctx_shadow">
-      <obj_property name="ElementShortName">head_ctx_shadow[0:3]</obj_property>
-      <obj_property name="ObjectShortName">head_ctx_shadow[0:3]</obj_property>
+      <obj_property name="ElementShortName">head_ctx_shadow[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_shadow[0:1]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_busy_ctr">
-      <obj_property name="ElementShortName">head_busy_ctr[0:3][3:0]</obj_property>
-      <obj_property name="ObjectShortName">head_busy_ctr[0:3][3:0]</obj_property>
+      <obj_property name="ElementShortName">head_busy_ctr[0:1][3:0]</obj_property>
+      <obj_property name="ObjectShortName">head_busy_ctr[0:1][3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_inflight">
-      <obj_property name="ElementShortName">head_inflight[0:3]</obj_property>
-      <obj_property name="ObjectShortName">head_inflight[0:3]</obj_property>
+      <obj_property name="ElementShortName">head_inflight[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_inflight[0:1]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_done_hold">
-      <obj_property name="ElementShortName">head_done_hold[0:3]</obj_property>
-      <obj_property name="ObjectShortName">head_done_hold[0:3]</obj_property>
+      <obj_property name="ElementShortName">head_done_hold[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_done_hold[0:1]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_done_ctr">
-      <obj_property name="ElementShortName">head_done_ctr[0:3][2:0]</obj_property>
-      <obj_property name="ObjectShortName">head_done_ctr[0:3][2:0]</obj_property>
+      <obj_property name="ElementShortName">head_done_ctr[0:1][2:0]</obj_property>
+      <obj_property name="ObjectShortName">head_done_ctr[0:1][2:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_compute_ready">
-      <obj_property name="ElementShortName">head_compute_ready[0:3]</obj_property>
-      <obj_property name="ObjectShortName">head_compute_ready[0:3]</obj_property>
+      <obj_property name="ElementShortName">head_compute_ready[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_compute_ready[0:1]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_compute_done">
-      <obj_property name="ElementShortName">head_compute_done[0:3]</obj_property>
-      <obj_property name="ObjectShortName">head_compute_done[0:3]</obj_property>
+      <obj_property name="ElementShortName">head_compute_done[0:1]</obj_property>
+      <obj_property name="ObjectShortName">head_compute_done[0:1]</obj_property>
       <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/CLK_PERIOD">
