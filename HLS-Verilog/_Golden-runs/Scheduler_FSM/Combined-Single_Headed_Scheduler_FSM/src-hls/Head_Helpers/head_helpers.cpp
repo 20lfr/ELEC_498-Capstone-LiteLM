@@ -2,13 +2,22 @@
 // Each head has its own "resource" (no shared arbitration).
 #include "head_helpers.hpp"
 
-void init_head_ctx(HeadCtx &ctx, int layer_idx) {
+void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.layer_stamp   = layer_idx;
+    ctx.head_idx      = head_idx;
     ctx.phase         = HeadPhase::IDLE;
     ctx.compute_ready = false;
     ctx.compute_done  = false;
     ctx.compute_start = false;
     ctx.compute_op    = ComputeOp::CMP_NONE;
+    ctx.last_compute_op = ComputeOp::CMP_NONE;
+    ctx.last_wl_addr  = DmaSel::DMASEL_NONE;
+    ctx.wl_ready      = false;
+    ctx.wl_start      = false;
+    ctx.wl_addr_sel   = DmaSel::DMASEL_NONE;
+    ctx.wl_layer      = -1;
+    ctx.wl_head       = -1;
+    ctx.dma_done      = false;
     ctx.start_head    = false;
     ctx.q_started          = false;
     ctx.k_started          = false;
@@ -25,6 +34,12 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx) {
     ctx.val_scale_compute_done  = false;
     ctx.softmax_compute_done    = false;
     ctx.att_value_compute_done  = false;
+    ctx.q_dma_done              = false;
+    ctx.k_dma_done              = false;
+    ctx.v_dma_done              = false;
+    ctx.att_scores_dma_done     = false;
+    ctx.val_scale_dma_done      = false;
+    ctx.att_value_dma_done      = false;
 }
 
 // NOTE: Head &ctx originate outside this logic, so it must be reset outside of it
@@ -42,24 +57,58 @@ bool run_single_head(
     bool     start          // [INPUT]: Kick from IDLE into Q (independent of compute_ready).
 )
 {
-#pragma HLS INLINE off
-    // Defaults each call
-    ctx.compute_start = false;
-    ctx.compute_op    = ComputeOp::CMP_NONE;
+#pragma HLS INLINE
     // Initialize context if layer changes
     if (ctx.layer_stamp != layer_idx) {
-        init_head_ctx(ctx, layer_idx);
+        init_head_ctx(ctx, layer_idx, ctx.head_idx);
+
+        ctx.wl_start      = false;
+        ctx.wl_addr_sel   = DmaSel::DMASEL_NONE;
     }
+
+    if (!ctx.wl_ready && ctx.wl_start){
+        ctx.wl_start      = false;
+        ctx.wl_addr_sel   = DmaSel::DMASEL_NONE;
+    }
+
+    if (!ctx.compute_ready && ctx.compute_start){
+        ctx.compute_start = false;
+        ctx.compute_op    = ComputeOp::CMP_NONE;
+    }
+
+    // Sticky capture of compute_done per phase so single-cycle pulses are retained temporarily
+    if (ctx.dma_done) {
+        if (ctx.q_started          && ctx.last_wl_addr == DmaSel::DMASEL_WQ)    ctx.q_dma_done = true; // ctx.dma_done && ctx.q_started
+        if (ctx.k_started          && ctx.last_wl_addr == DmaSel::DMASEL_WK)    ctx.k_dma_done = true;
+        if (ctx.v_started          && ctx.last_wl_addr == DmaSel::DMASEL_WV)    ctx.v_dma_done = true;
+        if (ctx.att_scores_started && ctx.last_wl_addr == DmaSel::DMASEL_CTX_K) ctx.att_scores_dma_done = true;
+        if (ctx.att_value_started  && ctx.last_wl_addr == DmaSel::DMASEL_CTX_V) ctx.att_value_dma_done  = true;
+    } else {
+        if (ctx.q_started)          ctx.q_dma_done = false;
+        if (ctx.k_started)          ctx.k_dma_done = false;
+        if (ctx.v_started)          ctx.v_dma_done = false;
+        if (ctx.att_scores_started) ctx.att_scores_dma_done = false;
+        if (ctx.val_scale_started)  ctx.val_scale_dma_done  = false;
+        if (ctx.att_value_started)  ctx.att_value_dma_done  = false;
+    }
+
 
     // Sticky capture of compute_done per phase so single-cycle pulses are retained
     if (ctx.compute_done) {
-        if (ctx.q_started)          ctx.q_compute_done = true;
-        if (ctx.k_started)          ctx.k_compute_done = true;
-        if (ctx.v_started)          ctx.v_compute_done = true;
-        if (ctx.att_scores_started) ctx.att_scores_compute_done = true;
-        if (ctx.val_scale_started)  ctx.val_scale_compute_done  = true;
-        if (ctx.softmax_started)    ctx.softmax_compute_done    = true;
-        if (ctx.att_value_started)  ctx.att_value_compute_done  = true;
+        if (ctx.q_started && ctx.last_compute_op == ComputeOp::CMP_Q)
+            ctx.q_compute_done = true;
+        if (ctx.k_started && ctx.last_compute_op == ComputeOp::CMP_K)
+            ctx.k_compute_done = true;
+        if (ctx.v_started && ctx.last_compute_op == ComputeOp::CMP_V)
+            ctx.v_compute_done = true;
+        if (ctx.att_scores_started && ctx.last_compute_op == ComputeOp::CMP_ATT_SCORES)
+            ctx.att_scores_compute_done = true;
+        if (ctx.val_scale_started && ctx.last_compute_op == ComputeOp::CMP_VALUE_SCALE)
+            ctx.val_scale_compute_done  = true;
+        if (ctx.softmax_started && ctx.last_compute_op == ComputeOp::CMP_SOFTMAX)
+            ctx.softmax_compute_done    = true;
+        if (ctx.att_value_started && ctx.last_compute_op == ComputeOp::CMP_ATT_VALUE)
+            ctx.att_value_compute_done  = true;
     }
 
     // Drive phase machine
@@ -70,6 +119,8 @@ bool run_single_head(
                 ctx.compute_ready = false;
                 ctx.compute_done  = false;
                 ctx.compute_start = false;
+                ctx.wl_start      = false;
+                ctx.wl_addr_sel   = DmaSel::DMASEL_NONE;
                 ctx.q_started = false;
                 ctx.k_started = false;
                 ctx.v_started = false;
@@ -84,14 +135,32 @@ bool run_single_head(
                 ctx.val_scale_compute_done  = false;
                 ctx.softmax_compute_done    = false;
                 ctx.att_value_compute_done  = false;
+                ctx.q_dma_done          = false;
+                ctx.k_dma_done          = false;
+                ctx.v_dma_done          = false;
+                ctx.att_scores_dma_done = false;
+                ctx.val_scale_dma_done  = false;
+                ctx.att_value_dma_done  = false;
+                ctx.last_compute_op = ComputeOp::CMP_NONE;
+                ctx.last_wl_addr  = DmaSel::DMASEL_NONE;
                 ctx.phase = HeadPhase::Q;
+
+                ctx.wl_layer = layer_idx;
+                ctx.wl_head = ctx.head_idx;
             }
             break;
         case HeadPhase::Q: // Q
-            if (ctx.compute_ready && !ctx.q_started) {
+            if (ctx.wl_ready && !ctx.q_started){
+                ctx.wl_start = true;
+                ctx.wl_addr_sel = DmaSel::DMASEL_WQ;
+                ctx.last_wl_addr = DmaSel::DMASEL_WQ;
+                ctx.q_started = true;
+            }
+            
+            else if (ctx.compute_ready && ctx.q_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op    = ComputeOp::CMP_Q;
-                ctx.q_started = true;
+                ctx.last_compute_op = ComputeOp::CMP_Q;
             }
             else if (ctx.q_compute_done && ctx.q_started) {
                 ctx.phase = HeadPhase::K;
@@ -99,10 +168,17 @@ bool run_single_head(
             }
             break;
         case HeadPhase::K: // K
-            if (ctx.compute_ready && !ctx.k_started) {
+            if (ctx.wl_ready && !ctx.k_started) {
+                ctx.wl_start = true;
+                ctx.wl_addr_sel = DmaSel::DMASEL_WK;
+                ctx.last_wl_addr = DmaSel::DMASEL_WK;
+                ctx.k_started = true;
+            }
+
+            else if (ctx.compute_ready && ctx.k_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op    = ComputeOp::CMP_K;
-                ctx.k_started = true;
+                ctx.last_compute_op = ComputeOp::CMP_K;
             }
             else if (ctx.k_compute_done && ctx.k_started) {
                 ctx.phase = HeadPhase::K_REQUANT;
@@ -115,10 +191,17 @@ bool run_single_head(
             ctx.phase = HeadPhase::V;
             break;
         case HeadPhase::V: // V
-            if (ctx.compute_ready && !ctx.v_started) {
+            if (ctx.wl_ready && !ctx.v_started) {
+                ctx.wl_start = true;
+                ctx.wl_addr_sel = DmaSel::DMASEL_WV;
+                ctx.last_wl_addr = DmaSel::DMASEL_WV;
+                ctx.v_started = true;
+            }
+
+            else if (ctx.compute_ready && ctx.v_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op    = ComputeOp::CMP_V;
-                ctx.v_started = true;
+                ctx.last_compute_op = ComputeOp::CMP_V;
             }
             else if (ctx.v_compute_done && ctx.v_started) {
                 ctx.phase = HeadPhase::V_REQUANT;
@@ -135,10 +218,17 @@ bool run_single_head(
             ctx.phase = HeadPhase::ATT_SCORES;
             break;
         case HeadPhase::ATT_SCORES:
-            if (ctx.compute_ready && !ctx.att_scores_started) {
+            if (ctx.wl_ready && !ctx.att_scores_started) {
+                ctx.wl_start = true;
+                ctx.wl_addr_sel = DmaSel::DMASEL_CTX_K;
+                ctx.last_wl_addr = DmaSel::DMASEL_CTX_K;
+                ctx.att_scores_started = true;
+            }
+
+            else if (ctx.compute_ready && ctx.att_scores_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op    = ComputeOp::CMP_ATT_SCORES;
-                ctx.att_scores_started = true;
+                ctx.last_compute_op = ComputeOp::CMP_ATT_SCORES;
             } else if (ctx.att_scores_compute_done && ctx.att_scores_started) {
                 ctx.phase = HeadPhase::VALUE_SCALE_CLAMP;
                 ctx.att_scores_started = false;
@@ -148,6 +238,7 @@ bool run_single_head(
             if (ctx.compute_ready && !ctx.val_scale_started) {
                 ctx.compute_start = true;
                 ctx.compute_op    = ComputeOp::CMP_VALUE_SCALE;
+                ctx.last_compute_op = ComputeOp::CMP_VALUE_SCALE;
                 ctx.val_scale_started = true;
             } else if (ctx.val_scale_compute_done && ctx.val_scale_started) {
                 ctx.phase = HeadPhase::ATT_SOFTMAX;
@@ -158,6 +249,7 @@ bool run_single_head(
             if (ctx.compute_ready && !ctx.softmax_started) {
                 ctx.compute_start = true;
                 ctx.compute_op    = ComputeOp::CMP_SOFTMAX;
+                ctx.last_compute_op = ComputeOp::CMP_SOFTMAX;
                 ctx.softmax_started = true;
             } else if (ctx.softmax_compute_done && ctx.softmax_started) {
                 ctx.phase = HeadPhase::ATT_VALUE;
@@ -165,10 +257,17 @@ bool run_single_head(
             }
             break;
         case HeadPhase::ATT_VALUE:
-            if (ctx.compute_ready && !ctx.att_value_started) {
+            if (ctx.wl_ready && !ctx.att_value_started) {
+                ctx.wl_start = true;
+                ctx.wl_addr_sel = DmaSel::DMASEL_CTX_V;
+                ctx.last_wl_addr = DmaSel::DMASEL_CTX_V;
+                ctx.att_value_started = true;
+            }
+
+            else if (ctx.compute_ready && ctx.att_value_dma_done) {
                 ctx.compute_start = true;
                 ctx.compute_op    = ComputeOp::CMP_ATT_VALUE;
-                ctx.att_value_started = true;
+                ctx.last_compute_op = ComputeOp::CMP_ATT_VALUE;
             } else if (ctx.att_value_compute_done && ctx.att_value_started) {
                 ctx.phase = HeadPhase::REQUANT2;
                 ctx.att_value_started = false;
@@ -195,6 +294,7 @@ bool drive_group_head_phase(
     bool        start                           // [INPUT]: Start the driving phase
 ){
 #pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
+    (void)base_head_idx; // placeholder until per-lane re-init uses this
 
     bool group_finished = true; // assume finished unless any head is still active
 
@@ -202,17 +302,23 @@ bool drive_group_head_phase(
 #pragma HLS UNROLL
         HeadCtx &ctx = head_ctx_ref[lane]; // Current head in this group
 
+        // Re-init when this lane targets a new head or layer
+        // if (ctx.head_idx != lane_head_idx || ctx.layer_stamp != layer_idx) {
+        //     init_head_ctx(ctx, layer_idx, lane_head_idx);
+        // }
+
+        // One-cycle start pulse only when idle
+        ctx.start_head = start && (ctx.phase == HeadPhase::IDLE);
+
         if (ctx.phase != HeadPhase::DONE) {
-            ctx.start_head = start && (ctx.phase == HeadPhase::IDLE);
             const bool head_done = run_single_head(
                 ctx,
                 layer_idx,
                 ctx.start_head);
             if (!head_done) group_finished = false;
         }
+
+        
     }
-
-    (void)base_head_idx; // currently unused, but reserved for global indexing/debug
-
     return group_finished;
 }

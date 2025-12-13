@@ -42,7 +42,7 @@ module scheduler_hls_tb;
   logic axis_in_ready_ap_vld;
   logic [0:0] wl_start;
   logic wl_start_ap_vld;
-  logic [31:0] wl_addr_sel;
+  logic [7:0]  wl_addr_sel;
   logic wl_addr_sel_ap_vld;
   logic [31:0] wl_layer;
   logic wl_layer_ap_vld;
@@ -64,15 +64,7 @@ module scheduler_hls_tb;
   logic done_ap_vld;
   logic [31:0] STATE;
   logic STATE_ap_vld;
-  // Head context interfaces (4 lanes)
-  logic [65:0] head_ctx_ref_0_i, head_ctx_ref_0_o;
-  logic        head_ctx_ref_0_o_ap_vld;
-  logic [65:0] head_ctx_ref_1_i, head_ctx_ref_1_o;
-  logic        head_ctx_ref_1_o_ap_vld;
-  logic [65:0] head_ctx_ref_2_i, head_ctx_ref_2_o;
-  logic        head_ctx_ref_2_o_ap_vld;
-  logic [65:0] head_ctx_ref_3_i, head_ctx_ref_3_o;
-  logic        head_ctx_ref_3_o_ap_vld;
+  logic [31:0] debug_compute_done;
 
   // Testbench state variables
   logic comp_busy;
@@ -91,33 +83,59 @@ module scheduler_hls_tb;
   logic axis_drive;
   // Head compute model
   localparam int HEADS_TOTAL = 4;
-  localparam int HEADS_PAR   = 4;
+  localparam int HEADS_PAR   = 2;
   typedef struct packed {
-    logic        att_value_compute_done;   // [65]
-    logic        softmax_compute_done;     // [64]
-    logic        val_scale_compute_done;  // [63]
-    logic        att_scores_compute_done; // [62]
-    logic        v_compute_done;          // [61]
-    logic        k_compute_done;          // [60]
-    logic        q_compute_done;          // [59]
-    logic        att_value_started;       // [58]
-    logic        softmax_started;         // [57]
-    logic        val_scale_started;       // [56]
-    logic        att_scores_started;      // [55]
-    logic        v_started;               // [54]
-    logic        k_started;               // [53]
-    logic        q_started;               // [52]
-    logic        start_head;              // [51]
-    logic [7:0]  compute_op;              // [50:43]
-    logic        compute_start;           // [42]
-    logic        compute_done;            // [41]
-    logic        compute_ready;           // [40]
-    logic [7:0]  phase;                   // [39:32]
-    logic [31:0] layer_stamp;             // [31:0]
+    logic        att_value_dma_done;
+    logic        val_scale_dma_done;
+    logic        att_scores_dma_done;
+    logic        v_dma_done;
+    logic        k_dma_done;
+    logic        q_dma_done;
+    logic        att_value_compute_done;
+    logic        softmax_compute_done;
+    logic        val_scale_compute_done;
+    logic        att_scores_compute_done;
+    logic        v_compute_done;
+    logic        k_compute_done;
+    logic        q_compute_done;
+    logic        att_value_started;
+    logic        softmax_started;
+    logic        val_scale_started;
+    logic        att_scores_started;
+    logic        v_started;
+    logic        k_started;
+    logic        q_started;
+    logic        start_head;
+    logic        dma_done;
+    logic [31:0] wl_head;
+    logic [31:0] wl_layer;
+    logic [7:0]  wl_addr_sel;
+    logic        wl_start;
+    logic        wl_ready;
+    logic [7:0]  last_wl_addr;
+    logic [7:0]  last_compute_op;
+    logic [7:0]  compute_op;
+    logic        compute_start;
+    logic        compute_done;
+    logic        compute_ready;
+    logic [7:0]  phase;
+    logic [31:0] head_idx;
+    logic [31:0] layer_stamp;
   } head_ctx_t;
+  localparam int HEAD_CTX_W = $bits(head_ctx_t);
+  // Head context interfaces (4 lanes)
+  logic [HEAD_CTX_W-1:0] head_ctx_ref_0_i, head_ctx_ref_0_o;
+  logic        head_ctx_ref_0_o_ap_vld;
+  logic [HEAD_CTX_W-1:0] head_ctx_ref_1_i, head_ctx_ref_1_o;
+  logic        head_ctx_ref_1_o_ap_vld;
+  logic [HEAD_CTX_W-1:0] head_ctx_ref_2_i, head_ctx_ref_2_o;
+  logic        head_ctx_ref_2_o_ap_vld;
+  logic [HEAD_CTX_W-1:0] head_ctx_ref_3_i, head_ctx_ref_3_o;
+  logic        head_ctx_ref_3_o_ap_vld;
   // Debug visibility
   logic [7:0] head_phase_dbg   [0:HEADS_TOTAL-1];
   logic [7:0] head_op_dbg      [0:HEADS_TOTAL-1];
+  logic [7:0] head_last_op_dbg      [0:HEADS_TOTAL-1];
 
   head_ctx_t head_ctx_shadow   [0:HEADS_TOTAL-1];
   logic [3:0] head_busy_ctr    [0:HEADS_TOTAL-1];
@@ -126,23 +144,38 @@ module scheduler_hls_tb;
   logic [2:0] head_done_ctr    [0:HEADS_TOTAL-1];
   logic       head_compute_ready [0:HEADS_TOTAL-1];
   logic       head_compute_done  [0:HEADS_TOTAL-1];
+  logic [3:0] head_dma_ctr     [0:HEADS_TOTAL-1];
+  logic       head_dma_inflight[0:HEADS_TOTAL-1];
+  logic       head_dma_done_hold[0:HEADS_TOTAL-1];
+  logic [2:0] head_dma_done_ctr[0:HEADS_TOTAL-1];
+  logic       head_wl_ready    [0:HEADS_TOTAL-1];
+  logic       head_dma_done    [0:HEADS_TOTAL-1];
+  // Main compute done hold
+  logic       comp_done_hold;
+  logic [2:0] comp_done_ctr;
+  // DMA done hold
+  logic       dma_done_hold;
+  logic [2:0] dma_done_ctr;
+  // Stream done hold
+  logic       stream_done_hold;
+  logic [2:0] stream_done_ctr;
   
 
   // Helper to decode DMA select
-  function string dma_name(input [31:0] sel);
+  function string dma_name(input [7:0] sel);
     case (sel)
-      32'd0:  return "NONE";
-      32'd1:  return "WQ";
-      32'd2:  return "WK";
-      32'd3:  return "WV";
-      32'd4:  return "CTX_K";
-      32'd5:  return "CTX_V";
-      32'd6:  return "K_WR";
-      32'd7:  return "V_WR";
-      32'd8:  return "WO";
-      32'd9:  return "W1";
-      32'd10: return "W2";
-      32'd11: return "WLOGIT";
+      8'd0:  return "NONE";
+      8'd1:  return "WQ";
+      8'd2:  return "WK";
+      8'd3:  return "WV";
+      8'd4:  return "CTX_K";
+      8'd5:  return "CTX_V";
+      8'd6:  return "K_WR";
+      8'd7:  return "V_WR";
+      8'd8:  return "WO";
+      8'd9:  return "W1";
+      8'd10: return "W2";
+      8'd11: return "WLOGIT";
       default: return "UNK";
     endcase
   endfunction
@@ -154,15 +187,27 @@ module scheduler_hls_tb;
       comp_busy    <= 1'b0;
       comp_timer   <= 0;
       compute_done <= 1'b0;
+      comp_done_hold <= 1'b0;
+      comp_done_ctr <= 0;
       compute_ready<= 1'b0;
     end else begin
       compute_done <= 1'b0;
       if (comp_busy) begin
         if (comp_timer == 0) begin
-          compute_done <= 1'b1;
+          comp_done_hold <= 1'b1;
+          comp_done_ctr  <= 3'd2;
           comp_busy <= 1'b0;
         end else begin
           comp_timer <= comp_timer - 1;
+        end
+      end
+      // Hold compute_done for a few cycles
+      if (comp_done_hold) begin
+        compute_done <= 1'b1;
+        if (comp_done_ctr == 0) begin
+          comp_done_hold <= 1'b0;
+        end else begin
+          comp_done_ctr <= comp_done_ctr - 1;
         end
       end
 
@@ -182,12 +227,23 @@ module scheduler_hls_tb;
     if (ap_rst) begin
       stream_busy  <= 1'b0;
       stream_done  <= 1'b0;
+      stream_done_hold <= 1'b0;
+      stream_done_ctr  <= 0;
       stream_ready <= 1'b0;
     end else begin
       stream_done <= 1'b0;
       if (stream_busy) begin
-        stream_done <= 1'b1;
         stream_busy <= 1'b0;
+        stream_done_hold <= 1'b1;
+        stream_done_ctr  <= 3'd2; // hold done high for a couple extra cycles
+      end
+      if (stream_done_hold) begin
+        stream_done <= 1'b1;
+        if (stream_done_ctr == 0) begin
+          stream_done_hold <= 1'b0;
+        end else begin
+          stream_done_ctr <= stream_done_ctr - 1;
+        end
       end
       if (stream_start && stream_start_ap_vld && !stream_busy) begin
         stream_busy <= 1'b1;
@@ -202,15 +258,26 @@ module scheduler_hls_tb;
       dma_busy  <= 1'b0;
       dma_timer <= 0;
       dma_done  <= 1'b0;
+      dma_done_hold <= 1'b0;
+      dma_done_ctr  <= 0;
       wl_ready  <= 1'b0;
     end else begin
       dma_done <= 1'b0;
       if (dma_busy) begin
         if (dma_timer == 0) begin
-          dma_done <= 1'b1;
           dma_busy <= 1'b0;
+          dma_done_hold <= 1'b1;
+          dma_done_ctr  <= 3'd2; // hold done high for a couple of extra cycles
         end else begin
           dma_timer <= dma_timer - 1;
+        end
+      end
+      if (dma_done_hold) begin
+        dma_done <= 1'b1;
+        if (dma_done_ctr == 0) begin
+          dma_done_hold <= 1'b0;
+        end else begin
+          dma_done_ctr <= dma_done_ctr - 1;
         end
       end
       if (wl_start && wl_start_ap_vld && wl_ready && !dma_busy) begin
@@ -254,14 +321,17 @@ module scheduler_hls_tb;
   end
 
   // Per-head compute model (separate from main compute)
+  // Per-head external handshakes derived from simple latency models
   always_comb begin
     for (int h = 0; h < HEADS_TOTAL; h++) begin
-      head_compute_ready[h] = !head_inflight[h] && !head_done_hold[h];
-      head_compute_done[h]  = head_done_hold[h];
+      head_compute_ready[h] = !head_inflight[h];
+      head_compute_done[h]  = (head_inflight[h] && (head_busy_ctr[h] == 0)) || head_done_hold[h];
+      head_wl_ready[h]      = !head_dma_inflight[h];
+      head_dma_done[h]      = (head_dma_inflight[h] && (head_dma_ctr[h] == 0)) || head_dma_done_hold[h];
     end
   end
 
-  // Pack head_ctx_ref_i with current shadow + computed ready/done
+  // Pack head_ctx_ref_i with current shadow + computed ready/done + DMA handshakes
   always_comb begin
     head_ctx_t t0, t1, t2, t3;
     t0 = head_ctx_shadow[0];
@@ -276,36 +346,112 @@ module scheduler_hls_tb;
     t1.compute_done  = head_compute_done[1];
     t2.compute_done  = head_compute_done[2];
     t3.compute_done  = head_compute_done[3];
+    t0.wl_ready      = head_wl_ready[0];
+    t1.wl_ready      = head_wl_ready[1];
+    t2.wl_ready      = head_wl_ready[2];
+    t3.wl_ready      = head_wl_ready[3];
+    t0.dma_done      = head_dma_done[0];
+    t1.dma_done      = head_dma_done[1];
+    t2.dma_done      = head_dma_done[2];
+    t3.dma_done      = head_dma_done[3];
     head_ctx_ref_0_i = t0;
     head_ctx_ref_1_i = t1;
     head_ctx_ref_2_i = t2;
     head_ctx_ref_3_i = t3;
   end
 
-  // Capture DUT head_ctx outputs and drive per-head compute latencies
+  head_ctx_t head_ctx_ref_0_struct;
+  head_ctx_t head_ctx_ref_1_struct;
+  head_ctx_t head_ctx_ref_2_struct;
+  head_ctx_t head_ctx_ref_3_struct;
+  assign head_ctx_ref_0_struct = head_ctx_ref_0_o;
+  assign head_ctx_ref_1_struct = head_ctx_ref_1_o;
+  assign head_ctx_ref_2_struct = head_ctx_ref_2_o;
+  assign head_ctx_ref_3_struct = head_ctx_ref_3_o;
+
+  // Capture DUT head_ctx outputs and drive per-head compute/DMA latencies
   generate
     genvar hh;
     for (hh = 0; hh < HEADS_TOTAL; hh++) begin : HEAD_COMPUTE
       always_ff @(posedge ap_clk) begin
+        logic compute_start_now;
+        logic dma_start_now;
         if (ap_rst) begin
-          head_ctx_shadow[hh] <= '{default:0};
-          head_ctx_shadow[hh].phase <= 0;
+          head_ctx_shadow[hh] <= '{
+            layer_stamp: 32'd0,
+            head_idx: hh,
+            phase: 8'd0,
+            compute_ready: 1'b0,
+            compute_done: 1'b0,
+            compute_start: 1'b0,
+            last_wl_addr: 8'd0,
+            last_compute_op: 8'd0,
+            compute_op: 8'd0,
+            wl_ready: 1'b0,
+            wl_start: 1'b0,
+            wl_addr_sel: 8'd0,
+            wl_layer: 32'd0,
+            wl_head: 32'(hh),
+            dma_done: 1'b0,
+            start_head: 1'b0,
+            q_started: 1'b0,
+            k_started: 1'b0,
+            v_started: 1'b0,
+            att_scores_started: 1'b0,
+            val_scale_started: 1'b0,
+            softmax_started: 1'b0,
+            att_value_started: 1'b0,
+            q_compute_done: 1'b0,
+            k_compute_done: 1'b0,
+            v_compute_done: 1'b0,
+            att_scores_compute_done: 1'b0,
+            val_scale_compute_done: 1'b0,
+            softmax_compute_done: 1'b0,
+            att_value_compute_done: 1'b0,
+            q_dma_done: 1'b0,
+            k_dma_done: 1'b0,
+            v_dma_done: 1'b0,
+            att_scores_dma_done: 1'b0,
+            val_scale_dma_done: 1'b0,
+            att_value_dma_done: 1'b0
+          };
           head_busy_ctr[hh] <= 0;
           head_inflight[hh] <= 1'b0;
           head_done_hold[hh] <= 1'b0;
           head_done_ctr[hh] <= 0;
+          head_dma_ctr[hh] <= 0;
+          head_dma_inflight[hh] <= 1'b0;
+          head_dma_done_hold[hh] <= 1'b0;
+          head_dma_done_ctr[hh] <= 0;
         end else begin
-          head_ctx_shadow[hh].compute_start <= 1'b0;
-          // update shadow when corresponding output valid
-          if (hh == 0 && head_ctx_ref_0_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_0_o;
-          if (hh == 1 && head_ctx_ref_1_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_1_o;
-          if (hh == 2 && head_ctx_ref_2_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_2_o;
-          if (hh == 3 && head_ctx_ref_3_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_3_o;
+          if (hh == 0 && head_ctx_ref_0_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_0_struct;
+          if (hh == 1 && head_ctx_ref_1_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_1_struct;
+          if (hh == 2 && head_ctx_ref_2_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_2_struct;
+          if (hh == 3 && head_ctx_ref_3_o_ap_vld) head_ctx_shadow[hh] <= head_ctx_ref_3_struct;
+
           head_phase_dbg[hh] <= head_ctx_shadow[hh].phase;
           head_op_dbg[hh]    <= head_ctx_shadow[hh].compute_op;
+          head_last_op_dbg[hh] <= head_ctx_shadow[hh].last_compute_op;
 
-          // detect compute_start from shadow (from previous cycle)
-          if (!head_inflight[hh] && !head_done_hold[hh] && head_ctx_shadow[hh].compute_start) begin
+
+          compute_start_now = 1'b0;
+          dma_start_now     = 1'b0;
+          if (hh == 0 && head_ctx_ref_0_o_ap_vld) begin
+            compute_start_now = head_ctx_ref_0_struct.compute_start;
+            dma_start_now     = head_ctx_ref_0_struct.wl_start;
+          end else if (hh == 1 && head_ctx_ref_1_o_ap_vld) begin
+            compute_start_now = head_ctx_ref_1_struct.compute_start;
+            dma_start_now     = head_ctx_ref_1_struct.wl_start;
+          end else if (hh == 2 && head_ctx_ref_2_o_ap_vld) begin
+            compute_start_now = head_ctx_ref_2_struct.compute_start;
+            dma_start_now     = head_ctx_ref_2_struct.wl_start;
+          end else if (hh == 3 && head_ctx_ref_3_o_ap_vld) begin
+            compute_start_now = head_ctx_ref_3_struct.compute_start;
+            dma_start_now     = head_ctx_ref_3_struct.wl_start;
+          end
+
+          // detect compute_start and run latency model
+          if (compute_start_now && !head_inflight[hh] && !head_done_hold[hh]) begin
             head_inflight[hh] <= 1'b1;
             head_busy_ctr[hh] <= COMP_LAT - 1;
             head_done_hold[hh] <= 1'b0;
@@ -318,10 +464,31 @@ module scheduler_hls_tb;
               head_busy_ctr[hh] <= head_busy_ctr[hh] - 1;
             end
           end else if (head_done_hold[hh]) begin
-            if (head_done_ctr[hh] > 0) begin
+            if (head_done_ctr[hh] > 1) begin
               head_done_ctr[hh] <= head_done_ctr[hh] - 1;
             end else begin
               head_done_hold[hh] <= 1'b0;
+            end
+          end
+
+          // Per-head DMA latency model
+          if (dma_start_now && !head_dma_inflight[hh] && !head_dma_done_hold[hh]) begin
+            head_dma_inflight[hh] <= 1'b1;
+            head_dma_ctr[hh] <= DMA_LAT - 1;
+            head_dma_done_hold[hh] <= 1'b0;
+          end else if (head_dma_inflight[hh]) begin
+            if (head_dma_ctr[hh] == 0) begin
+              head_dma_inflight[hh] <= 1'b0;
+              head_dma_done_hold[hh] <= 1'b1;
+              head_dma_done_ctr[hh] <= 3'd4;
+            end else begin
+              head_dma_ctr[hh] <= head_dma_ctr[hh] - 1;
+            end
+          end else if (head_dma_done_hold[hh]) begin
+            if (head_dma_done_ctr[hh] > 1) begin
+              head_dma_done_ctr[hh] <= head_dma_done_ctr[hh] - 1;
+            end else begin
+              head_dma_done_hold[hh] <= 1'b0;
             end
           end
         end
@@ -526,6 +693,7 @@ module scheduler_hls_tb;
     .stream_done(stream_done),
     .done(done),
     .done_ap_vld(done_ap_vld),
+    .debug_compute_done(debug_compute_done),
     .STATE(STATE),
     .STATE_ap_vld(STATE_ap_vld)
   );

@@ -49,8 +49,7 @@ static const char *op_name(int op_raw) {
     }
 }
 
-static const char *dma_name(int sel_raw) {
-    const DmaSel sel = static_cast<DmaSel>(sel_raw);
+static const char *dma_name(DmaSel sel) {
     switch (sel) {
     case DMASEL_NONE:   return "-";
     case DMASEL_WQ:     return "WQ";
@@ -103,7 +102,7 @@ int main() {
 
     bool wl_ready        = true;
     bool wl_start        = false;
-    int  wl_addr_sel     = 0;
+    DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
     int  wl_layer        = 0;
     int  wl_head         = 0;
     int  wl_tile         = 0;
@@ -128,6 +127,12 @@ int main() {
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
         head_lane_active_idx[lane] = -1;
     }
+    bool head_dma_busy[HEADS_PARALLEL] = {false};
+    int  head_dma_timer[HEADS_PARALLEL] = {0};
+    int  head_dma_active_idx[HEADS_PARALLEL] = {0};
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+        head_dma_active_idx[lane] = -1;
+    }
 
     bool requant_ready   = true;
     bool requant_done    = false;
@@ -139,6 +144,7 @@ int main() {
     bool stream_done     = false;
 
     bool done            = false;
+    uint32_t debug_compute_done = 0;
     SchedState STATE     = S_IDLE;
 
     bool comp_busy       = false;
@@ -156,7 +162,7 @@ int main() {
     std::printf("%-8s %-6s %-6s %-8s | %-16s | %-10s %-10s %-10s %-10s | %s\n",
                 "Cycle", "Start", "Reset", "Busy", "State",
                 "CmpStart", "CmpReady", "CmpDone", "CmpOp",
-                "Heads{idx:ph/cs/cd/op}");
+                "Heads{idx:ph/cr/cs/cd/op/wlR/addr/qd/wlD}");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
@@ -174,6 +180,7 @@ int main() {
         // Clear per-head compute_done pulse
         for (int i = 0; i < NUM_HEADS; ++i) {
             head_ctx_ref[i].compute_done = false;
+            head_ctx_ref[i].dma_done = false;
         }
 
         // Complete outstanding per-head compute operations
@@ -188,6 +195,22 @@ int main() {
                     head_lane_active_idx[lane] = -1;
                 } else {
                     --head_lane_timer[lane];
+                }
+            }
+        }
+
+        // Complete outstanding per-head DMA operations
+        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+            if (head_dma_busy[lane]) {
+                if (head_dma_timer[lane] == 0) {
+                    int idx = head_dma_active_idx[lane];
+                    if (idx >= 0 && idx < NUM_HEADS) {
+                        head_ctx_ref[idx].dma_done = true;
+                    }
+                    head_dma_busy[lane] = false;
+                    head_dma_active_idx[lane] = -1;
+                } else {
+                    --head_dma_timer[lane];
                 }
             }
         }
@@ -226,6 +249,7 @@ int main() {
         for (int i = 0; i < NUM_HEADS; ++i) {
             int lane = i % HEADS_PARALLEL;
             head_ctx_ref[i].compute_ready = !head_lane_busy[lane];
+            head_ctx_ref[i].wl_ready      = !head_dma_busy[lane];
         }
         stream_ready  = !stream_busy;
         wl_ready      = !dma_busy;
@@ -272,6 +296,7 @@ int main() {
             stream_start,
             stream_done,
             done,
+            debug_compute_done,
             STATE);
 
         std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10s %-10s %-10s %-10s | ",
@@ -286,14 +311,19 @@ int main() {
                     (compute_op == CMP_NONE ? "-" : op_name(compute_op)));
 
         for (int i = 0; i < NUM_HEADS; ++i) {
-            char buf[64];
-            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s %-8s",
+            char buf[96];
+            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s %-2s %-8s %-2s %-6s %-2s %-2s",
                           i,
                           phase_name(head_ctx_ref[i].phase),
+                          dash_or(head_ctx_ref[i].compute_ready),
                           dash_or(head_ctx_ref[i].compute_start),
                           dash_or(head_ctx_ref[i].compute_done),
-                          op_name(head_ctx_ref[i].compute_op));
-            std::printf("%-28s", buf);
+                          op_name(head_ctx_ref[i].compute_op),
+                          dash_or(head_ctx_ref[i].wl_ready),
+                          dma_name(head_ctx_ref[i].wl_addr_sel),
+                          dash_or(head_ctx_ref[i].q_dma_done),
+                          dash_or(head_ctx_ref[i].dma_done));
+            std::printf("%-54s", buf);
         }
         std::printf("\n");
 
@@ -306,6 +336,11 @@ int main() {
                 head_lane_active_idx[lane] = i;
                 int launched_op = static_cast<int>(head_ctx_ref[i].compute_op);
                 if (launched_op == CMP_ATT_SCORES) seen_attn = true;
+            }
+            if (head_ctx_ref[i].wl_start && !head_dma_busy[lane]) {
+                head_dma_busy[lane] = true;
+                head_dma_timer[lane] = DMA_LAT - 1;
+                head_dma_active_idx[lane] = i;
             }
         }
 
