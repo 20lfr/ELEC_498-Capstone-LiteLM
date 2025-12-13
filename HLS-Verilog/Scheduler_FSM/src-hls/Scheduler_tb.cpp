@@ -14,11 +14,15 @@ static const char *state_name(SchedState st) {
     case S_ATTENTION_HEADS: return "S_ATT_HEADS";
     case S_HEAD_CONCAT:     return "S_HEAD_CONCAT";
     case S_OUT_PROJECTION:  return "S_OUT_PROJ";
+    case S_REQUANT1:        return "S_RQ1";
     case S_RES_ADD_1:       return "S_RES_ADD_1";
     case S_LAYER_NORM_1:    return "S_LN_1";
+    case S_REQUANT2:        return "S_RQ2";
     case S_FFN:             return "S_FFN";
+    case S_REQUANT3:        return "S_RQ3";
     case S_RES_ADD_2:       return "S_RES_ADD_2";
     case S_LAYER_NORM_2:    return "S_LN_2";
+    case S_REQUANT4:        return "S_RQ4";
     case S_LOOP_CHECK:      return "S_LOOP_CHECK";
     case S_STREAM_OUT:      return "S_STREAM_OUT";
     default:                return "UNKNOWN";
@@ -32,25 +36,29 @@ static const char *op_name(int op_raw) {
     case CMP_Q:            return "Q";
     case CMP_K:            return "K";
     case CMP_V:            return "V";
+    case CMP_K_REQUANT:    return "K_RQ";
+    case CMP_V_REQUANT:    return "V_RQ";
+    case CMP_REQUANT_Q:    return "RQ_Q";
     case CMP_ATT_SCORES:   return "ATT_SCORES";
     case CMP_VALUE_SCALE:  return "VALUE_SCALE";
     case CMP_SOFTMAX:      return "SOFTMAX";
     case CMP_ATT_VALUE:    return "ATT_VALUE";
+    case CMP_REQUANT2:     return "RQ2";
+    case CMP_HEAD_REQUANT: return "HEAD_RQ";
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
+    case CMP_REQUANT1:     return "RQ1";
     case CMP_RESID0:       return "RESID0";
     case CMP_LN0:          return "LN0";
+    case CMP_REQUANT3:     return "RQ3";
     case CMP_FFN_W1:       return "FFN_W1";
     case CMP_FFN_ACT:      return "FFN_ACT";
     case CMP_FFN_W2:       return "FFN_W2";
+    case CMP_REQUANT4:     return "RQ4";
     case CMP_RESID1:       return "RESID1";
     case CMP_LN1:          return "LN1";
-    case CMP_REQUANT_Q:    return "RQ_Q";
     case CMP_DEQUANT:      return "DEQUANT";
     case CMP_LOGITS:       return "LOGITS";
-    case CMP_K_REQUANT:    return "K_RQ";
-    case CMP_V_REQUANT:    return "V_RQ";
-    case CMP_REQUANT2:     return "RQ2";
     default:               return "UNK";
     }
 }
@@ -139,11 +147,6 @@ int main() {
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
         head_dma_active_idx[lane] = -1;
     }
-
-    bool requant_ready   = true;
-    bool requant_done    = false;
-    bool requant_start   = false;
-    int  requant_op      = RQ_NONE;
 
     bool stream_ready    = true;
     bool stream_start    = false;
@@ -259,7 +262,6 @@ int main() {
         }
         stream_ready  = !stream_busy;
         wl_ready      = !dma_busy;
-        requant_ready = true;
 
         // Drive AXIS ingress: send a short burst when ready is asserted
         if (!axis_feed_done && (axis_drive || (cntrl_reset_n && start_pulsed))) {
@@ -291,18 +293,13 @@ int main() {
             dma_done,
             compute_ready,
             compute_done,
-            requant_ready,
-            requant_done,
             head_ctx_ref,
             compute_start,
             compute_op,
-            requant_start,
-            requant_op,
             stream_ready,
             stream_start,
             stream_done,
             done,
-            debug_compute_done,
             STATE);
 
         std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10s %-10s %-10s %-10s | ",

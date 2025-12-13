@@ -132,13 +132,17 @@ enum SchedState {
     S_ATTENTION_HEADS, // 3
     S_HEAD_CONCAT,     // 4
     S_OUT_PROJECTION,  // 5
-    S_RES_ADD_1,       // 6
-    S_LAYER_NORM_1,    // 7
-    S_FFN,             // 8
-    S_RES_ADD_2,       // 9
-    S_LAYER_NORM_2,    // 10
-    S_LOOP_CHECK,      // 11
-    S_STREAM_OUT       // 12
+    S_REQUANT1,        // 6
+    S_RES_ADD_1,       // 7
+    S_LAYER_NORM_1,    // 8
+    S_REQUANT2,        // 9
+    S_FFN,             // 10
+    S_REQUANT3,        // 11
+    S_RES_ADD_2,       // 12
+    S_LAYER_NORM_2,    // 13
+    S_REQUANT4,        // 14
+    S_LOOP_CHECK,      // 15
+    S_STREAM_OUT       // 16
 };
 
 enum RequantOp : uint8_t {
@@ -171,17 +175,12 @@ void scheduler_hls(
     bool dma_done,
     bool compute_ready,
     bool compute_done,
-    bool requant_ready,
-    bool requant_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
     int  &compute_op,
-    bool &requant_start,
-    int  &requant_op,
     bool stream_ready,
     bool &stream_start,
     bool stream_done,
     bool &done,
-    uint32_t &debug_compute_done,
     SchedState &STATE
 );

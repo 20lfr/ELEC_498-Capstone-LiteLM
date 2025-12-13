@@ -1,20 +1,5 @@
 # This script segment is generated automatically by AutoPilot
 
-if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler scheduler_hls_sparsemux_9_2_32_1_1 BINDTYPE {op} TYPE {sparsemux} IMPL {compactencoding_dontcare}
-}
-
-
-if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler scheduler_hls_sparsemux_9_2_4_1_1 BINDTYPE {op} TYPE {sparsemux} IMPL {compactencoding_dontcare}
-}
-
-
-if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler scheduler_hls_sparsemux_9_2_1_1_1 BINDTYPE {op} TYPE {sparsemux} IMPL {compactencoding_dontcare}
-}
-
-
 # clear list
 if {${::AESL::PGuard_autoexp_gen}} {
     cg_default_interface_gen_dc_begin
@@ -26,7 +11,7 @@ set axilite_register_dict [dict create]
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 92 \
+    id 87 \
     name cntrl_start \
     type other \
     dir I \
@@ -41,7 +26,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 93 \
+    id 88 \
     name cntrl_reset_n \
     type other \
     dir I \
@@ -56,7 +41,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 94 \
+    id 89 \
     name cntrl_layer_idx \
     type other \
     dir O \
@@ -71,7 +56,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 95 \
+    id 90 \
     name cntrl_busy \
     type other \
     dir O \
@@ -86,7 +71,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 96 \
+    id 91 \
     name cntrl_start_out \
     type other \
     dir O \
@@ -101,7 +86,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 97 \
+    id 92 \
     name axis_in_valid \
     type other \
     dir I \
@@ -116,7 +101,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 98 \
+    id 93 \
     name axis_in_last \
     type other \
     dir I \
@@ -131,7 +116,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 99 \
+    id 94 \
     name axis_in_ready \
     type other \
     dir O \
@@ -146,7 +131,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 100 \
+    id 95 \
     name wl_ready \
     type other \
     dir I \
@@ -161,22 +146,22 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 101 \
+    id 96 \
     name wl_start \
     type other \
-    dir O \
+    dir IO \
     reset_level 1 \
     sync_rst true \
     corename dc_wl_start \
     op interface \
-    ports { wl_start { O 1 vector } wl_start_ap_vld { O 1 bit } } \
+    ports { wl_start_i { I 1 vector } wl_start_o { O 1 vector } wl_start_o_ap_vld { O 1 bit } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 102 \
+    id 97 \
     name wl_addr_sel \
     type other \
     dir O \
@@ -191,7 +176,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 103 \
+    id 98 \
     name wl_layer \
     type other \
     dir O \
@@ -206,7 +191,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 104 \
+    id 99 \
     name wl_head \
     type other \
     dir O \
@@ -221,7 +206,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 105 \
+    id 100 \
     name wl_tile \
     type other \
     dir O \
@@ -236,7 +221,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 106 \
+    id 101 \
     name dma_done \
     type other \
     dir I \
@@ -251,7 +236,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 107 \
+    id 102 \
     name compute_ready \
     type other \
     dir I \
@@ -266,7 +251,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 108 \
+    id 103 \
     name compute_done \
     type other \
     dir I \
@@ -281,7 +266,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 109 \
+    id 104 \
     name head_ctx_ref_0 \
     type other \
     dir IO \
@@ -296,7 +281,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 110 \
+    id 105 \
     name head_ctx_ref_1 \
     type other \
     dir IO \
@@ -311,7 +296,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 111 \
+    id 106 \
     name head_ctx_ref_2 \
     type other \
     dir IO \
@@ -326,7 +311,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 112 \
+    id 107 \
     name head_ctx_ref_3 \
     type other \
     dir IO \
@@ -341,22 +326,22 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 113 \
+    id 108 \
     name compute_start \
     type other \
-    dir O \
+    dir IO \
     reset_level 1 \
     sync_rst true \
     corename dc_compute_start \
     op interface \
-    ports { compute_start { O 1 vector } compute_start_ap_vld { O 1 bit } } \
+    ports { compute_start_i { I 1 vector } compute_start_o { O 1 vector } compute_start_o_ap_vld { O 1 bit } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 114 \
+    id 109 \
     name compute_op \
     type other \
     dir O \
@@ -371,37 +356,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 115 \
-    name requant_start \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_requant_start \
-    op interface \
-    ports { requant_start { O 1 vector } requant_start_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 116 \
-    name requant_op \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_requant_op \
-    op interface \
-    ports { requant_op { O 32 vector } requant_op_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 117 \
+    id 110 \
     name stream_ready \
     type other \
     dir I \
@@ -416,7 +371,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 118 \
+    id 111 \
     name stream_start \
     type other \
     dir O \
@@ -431,7 +386,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 119 \
+    id 112 \
     name stream_done \
     type other \
     dir I \
@@ -446,7 +401,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 120 \
+    id 113 \
     name done \
     type other \
     dir O \
@@ -461,22 +416,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 121 \
-    name debug_compute_done \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_debug_compute_done \
-    op interface \
-    ports { debug_compute_done { O 32 vector } debug_compute_done_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 122 \
+    id 114 \
     name STATE \
     type other \
     dir O \

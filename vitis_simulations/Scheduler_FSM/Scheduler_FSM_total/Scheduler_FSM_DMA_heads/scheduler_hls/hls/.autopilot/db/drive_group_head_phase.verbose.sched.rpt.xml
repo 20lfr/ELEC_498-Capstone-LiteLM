@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'drive_group_head_phase'" level="0">
-<item name = "Date">Sat Dec 13 15:59:54 2025
+<item name = "Date">Sat Dec 13 18:20:07 2025
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">scheduler_hls</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 4.283 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 4.511 ns, 2.70 ns</column>
 </table>
 </item>
 </section>

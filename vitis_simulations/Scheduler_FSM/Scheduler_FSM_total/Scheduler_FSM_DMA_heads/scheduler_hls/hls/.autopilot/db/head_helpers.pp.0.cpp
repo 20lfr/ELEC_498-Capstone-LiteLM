@@ -476,7 +476,7 @@ namespace std
 # 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp" 2
 
 constexpr int NUM_HEADS = 4;
-constexpr int HEADS_PARALLEL = 1;
+constexpr int HEADS_PARALLEL = 2;
 
 enum class HeadPhase : uint8_t {
     IDLE = 0,
@@ -513,11 +513,14 @@ enum ComputeOp : uint8_t {
     CMP_HEAD_REQUANT,
     CMP_CONCAT,
     CMP_OUT_PROJ,
+    CMP_REQUANT1,
     CMP_RESID0,
     CMP_LN0,
+    CMP_REQUANT3,
     CMP_FFN_W1,
     CMP_FFN_ACT,
     CMP_FFN_W2,
+    CMP_REQUANT4,
     CMP_RESID1,
     CMP_LN1,
     CMP_DEQUANT,
@@ -697,33 +700,22 @@ bool run_single_head(
 
 
     if (ctx.compute_done && !ctx.compute_start) {
-        if (ctx.q_started && ctx.last_compute_op == ComputeOp::CMP_Q)
-            ctx.q_compute_done = true;
-        if (ctx.k_started && ctx.last_compute_op == ComputeOp::CMP_K)
-            ctx.k_compute_done = true;
-        if (ctx.k_requant_started && ctx.last_compute_op == ComputeOp::CMP_K_REQUANT)
-            ctx.k_requant_compute_done = true;
-        if (ctx.v_started && ctx.last_compute_op == ComputeOp::CMP_V)
-            ctx.v_compute_done = true;
-        if (ctx.v_requant_started && ctx.last_compute_op == ComputeOp::CMP_V_REQUANT)
-            ctx.v_requant_compute_done = true;
-        if (ctx.requant_q_started && ctx.last_compute_op == ComputeOp::CMP_REQUANT_Q)
-            ctx.requant_q_compute_done = true;
-        if (ctx.att_scores_started && ctx.last_compute_op == ComputeOp::CMP_ATT_SCORES)
-            ctx.att_scores_compute_done = true;
-        if (ctx.val_scale_started && ctx.last_compute_op == ComputeOp::CMP_VALUE_SCALE)
-            ctx.val_scale_compute_done = true;
-        if (ctx.softmax_started && ctx.last_compute_op == ComputeOp::CMP_SOFTMAX)
-            ctx.softmax_compute_done = true;
-        if (ctx.att_value_started && ctx.last_compute_op == ComputeOp::CMP_ATT_VALUE)
-            ctx.att_value_compute_done = true;
-        if (ctx.requant2_started && ctx.last_compute_op == ComputeOp::CMP_REQUANT2)
-            ctx.requant2_compute_done = true;
+        if (ctx.q_started && ctx.last_compute_op == ComputeOp::CMP_Q) ctx.q_compute_done = true;
+        if (ctx.k_started && ctx.last_compute_op == ComputeOp::CMP_K) ctx.k_compute_done = true;
+        if (ctx.k_requant_started && ctx.last_compute_op == ComputeOp::CMP_K_REQUANT) ctx.k_requant_compute_done = true;
+        if (ctx.v_started && ctx.last_compute_op == ComputeOp::CMP_V) ctx.v_compute_done = true;
+        if (ctx.v_requant_started && ctx.last_compute_op == ComputeOp::CMP_V_REQUANT) ctx.v_requant_compute_done = true;
+        if (ctx.requant_q_started && ctx.last_compute_op == ComputeOp::CMP_REQUANT_Q) ctx.requant_q_compute_done = true;
+        if (ctx.att_scores_started && ctx.last_compute_op == ComputeOp::CMP_ATT_SCORES) ctx.att_scores_compute_done = true;
+        if (ctx.val_scale_started && ctx.last_compute_op == ComputeOp::CMP_VALUE_SCALE) ctx.val_scale_compute_done = true;
+        if (ctx.softmax_started && ctx.last_compute_op == ComputeOp::CMP_SOFTMAX) ctx.softmax_compute_done = true;
+        if (ctx.att_value_started && ctx.last_compute_op == ComputeOp::CMP_ATT_VALUE) ctx.att_value_compute_done = true;
+        if (ctx.requant2_started && ctx.last_compute_op == ComputeOp::CMP_REQUANT2) ctx.requant2_compute_done = true;
     }
 
 
     switch (ctx.phase) {
-        case HeadPhase::IDLE:
+        case HeadPhase::IDLE: {
             if (start) {
 
                 ctx.compute_ready = false;
@@ -766,7 +758,8 @@ bool run_single_head(
                 ctx.wl_head = ctx.head_idx;
             }
             break;
-        case HeadPhase::Q:
+        }
+        case HeadPhase::Q: {
             if (ctx.wl_ready && !ctx.q_started){
                 ctx.wl_start = true;
                 ctx.wl_addr_sel = DmaSel::DMASEL_WQ;
@@ -784,7 +777,8 @@ bool run_single_head(
                 ctx.q_started = false;
             }
             break;
-        case HeadPhase::K:
+        }
+        case HeadPhase::K: {
             if (ctx.wl_ready && !ctx.k_started) {
                 ctx.wl_start = true;
                 ctx.wl_addr_sel = DmaSel::DMASEL_WK;
@@ -802,7 +796,8 @@ bool run_single_head(
                 ctx.k_started = false;
             }
             break;
-        case HeadPhase::K_REQUANT:
+        }
+        case HeadPhase::K_REQUANT: {
             if (ctx.compute_ready && !ctx.k_requant_started) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_K_REQUANT;
@@ -813,10 +808,12 @@ bool run_single_head(
                 ctx.k_requant_started = false;
             }
             break;
-        case HeadPhase::K_WRITEBACK:
+        }
+        case HeadPhase::K_WRITEBACK: {
             ctx.phase = HeadPhase::V;
             break;
-        case HeadPhase::V:
+        }
+        case HeadPhase::V: {
             if (ctx.wl_ready && !ctx.v_started) {
                 ctx.wl_start = true;
                 ctx.wl_addr_sel = DmaSel::DMASEL_WV;
@@ -834,7 +831,8 @@ bool run_single_head(
                 ctx.v_started = false;
             }
             break;
-        case HeadPhase::V_REQUANT:
+        }
+        case HeadPhase::V_REQUANT: {
             if (ctx.compute_ready && !ctx.v_requant_started) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_V_REQUANT;
@@ -845,10 +843,12 @@ bool run_single_head(
                 ctx.v_requant_started = false;
             }
             break;
-        case HeadPhase::V_WRITEBACK:
+        }
+        case HeadPhase::V_WRITEBACK: {
             ctx.phase = HeadPhase::REQUANT_Q;
             break;
-        case HeadPhase::REQUANT_Q:
+        }
+        case HeadPhase::REQUANT_Q: {
             if (ctx.compute_ready && !ctx.requant_q_started) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_REQUANT_Q;
@@ -859,7 +859,8 @@ bool run_single_head(
                 ctx.requant_q_started = false;
             }
             break;
-        case HeadPhase::ATT_SCORES:
+        }
+        case HeadPhase::ATT_SCORES: {
             if (ctx.wl_ready && !ctx.att_scores_started) {
                 ctx.wl_start = true;
                 ctx.wl_addr_sel = DmaSel::DMASEL_CTX_K;
@@ -876,7 +877,8 @@ bool run_single_head(
                 ctx.att_scores_started = false;
             }
             break;
-        case HeadPhase::VALUE_SCALE_CLAMP:
+        }
+        case HeadPhase::VALUE_SCALE_CLAMP: {
             if (ctx.compute_ready && !ctx.val_scale_started) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_VALUE_SCALE;
@@ -887,7 +889,8 @@ bool run_single_head(
                 ctx.val_scale_started = false;
             }
             break;
-        case HeadPhase::ATT_SOFTMAX:
+        }
+        case HeadPhase::ATT_SOFTMAX: {
             if (ctx.compute_ready && !ctx.softmax_started) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_SOFTMAX;
@@ -898,7 +901,8 @@ bool run_single_head(
                 ctx.softmax_started = false;
             }
             break;
-        case HeadPhase::ATT_VALUE:
+        }
+        case HeadPhase::ATT_VALUE: {
             if (ctx.wl_ready && !ctx.att_value_started) {
                 ctx.wl_start = true;
                 ctx.wl_addr_sel = DmaSel::DMASEL_CTX_V;
@@ -915,7 +919,8 @@ bool run_single_head(
                 ctx.att_value_started = false;
             }
             break;
-        case HeadPhase::REQUANT2:
+        }
+        case HeadPhase::REQUANT2: {
             if (ctx.compute_ready && !ctx.requant2_started) {
                 ctx.compute_start = true;
                 ctx.compute_op = ComputeOp::CMP_REQUANT2;
@@ -926,6 +931,7 @@ bool run_single_head(
                 ctx.requant2_started = false;
             }
             break;
+        }
         case HeadPhase::DONE:
             break;
         default:
@@ -948,7 +954,7 @@ bool drive_group_head_phase(
 
     bool group_finished = true;
 
-    VITIS_LOOP_352_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+    VITIS_LOOP_355_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  HeadCtx &ctx = head_ctx_ref[lane];
 

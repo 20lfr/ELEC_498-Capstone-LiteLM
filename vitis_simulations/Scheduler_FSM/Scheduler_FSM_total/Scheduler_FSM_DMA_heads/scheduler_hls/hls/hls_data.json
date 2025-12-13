@@ -170,21 +170,28 @@
     },
     "wl_start": {
       "index": "9",
-      "direction": "out",
+      "direction": "inout",
       "srcType": "bool&",
       "srcSize": "1",
       "hwRefs": [
         {
           "type": "port",
-          "interface": "wl_start",
-          "name": "wl_start",
+          "interface": "wl_start_i",
+          "name": "wl_start_i",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "port",
+          "interface": "wl_start_o",
+          "name": "wl_start_o",
           "usage": "data",
           "direction": "out"
         },
         {
           "type": "port",
-          "interface": "wl_start_ap_vld",
-          "name": "wl_start_ap_vld",
+          "interface": "wl_start_o_ap_vld",
+          "name": "wl_start_o_ap_vld",
           "usage": "control",
           "direction": "out"
         }
@@ -317,34 +324,8 @@
           "direction": "in"
         }]
     },
-    "requant_ready": {
-      "index": "17",
-      "direction": "in",
-      "srcType": "bool",
-      "srcSize": "1",
-      "hwRefs": [{
-          "type": "port",
-          "interface": "requant_ready",
-          "name": "requant_ready",
-          "usage": "data",
-          "direction": "in"
-        }]
-    },
-    "requant_done": {
-      "index": "18",
-      "direction": "in",
-      "srcType": "bool",
-      "srcSize": "1",
-      "hwRefs": [{
-          "type": "port",
-          "interface": "requant_done",
-          "name": "requant_done",
-          "usage": "data",
-          "direction": "in"
-        }]
-    },
     "head_ctx_ref": {
-      "index": "19",
+      "index": "17",
       "direction": "inout",
       "srcType": "HeadCtx&",
       "srcSize": "480",
@@ -436,29 +417,36 @@
       ]
     },
     "compute_start": {
-      "index": "20",
-      "direction": "out",
+      "index": "18",
+      "direction": "inout",
       "srcType": "bool&",
       "srcSize": "1",
       "hwRefs": [
         {
           "type": "port",
-          "interface": "compute_start",
-          "name": "compute_start",
+          "interface": "compute_start_i",
+          "name": "compute_start_i",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "port",
+          "interface": "compute_start_o",
+          "name": "compute_start_o",
           "usage": "data",
           "direction": "out"
         },
         {
           "type": "port",
-          "interface": "compute_start_ap_vld",
-          "name": "compute_start_ap_vld",
+          "interface": "compute_start_o_ap_vld",
+          "name": "compute_start_o_ap_vld",
           "usage": "control",
           "direction": "out"
         }
       ]
     },
     "compute_op": {
-      "index": "21",
+      "index": "19",
       "direction": "out",
       "srcType": "int&",
       "srcSize": "32",
@@ -479,52 +467,8 @@
         }
       ]
     },
-    "requant_start": {
-      "index": "22",
-      "direction": "out",
-      "srcType": "bool&",
-      "srcSize": "1",
-      "hwRefs": [
-        {
-          "type": "port",
-          "interface": "requant_start",
-          "name": "requant_start",
-          "usage": "data",
-          "direction": "out"
-        },
-        {
-          "type": "port",
-          "interface": "requant_start_ap_vld",
-          "name": "requant_start_ap_vld",
-          "usage": "control",
-          "direction": "out"
-        }
-      ]
-    },
-    "requant_op": {
-      "index": "23",
-      "direction": "out",
-      "srcType": "int&",
-      "srcSize": "32",
-      "hwRefs": [
-        {
-          "type": "port",
-          "interface": "requant_op",
-          "name": "requant_op",
-          "usage": "data",
-          "direction": "out"
-        },
-        {
-          "type": "port",
-          "interface": "requant_op_ap_vld",
-          "name": "requant_op_ap_vld",
-          "usage": "control",
-          "direction": "out"
-        }
-      ]
-    },
     "stream_ready": {
-      "index": "24",
+      "index": "20",
       "direction": "in",
       "srcType": "bool",
       "srcSize": "1",
@@ -537,7 +481,7 @@
         }]
     },
     "stream_start": {
-      "index": "25",
+      "index": "21",
       "direction": "out",
       "srcType": "bool&",
       "srcSize": "1",
@@ -559,7 +503,7 @@
       ]
     },
     "stream_done": {
-      "index": "26",
+      "index": "22",
       "direction": "in",
       "srcType": "bool",
       "srcSize": "1",
@@ -572,7 +516,7 @@
         }]
     },
     "done": {
-      "index": "27",
+      "index": "23",
       "direction": "out",
       "srcType": "bool&",
       "srcSize": "1",
@@ -593,30 +537,8 @@
         }
       ]
     },
-    "debug_compute_done": {
-      "index": "28",
-      "direction": "out",
-      "srcType": "unsigned int&",
-      "srcSize": "32",
-      "hwRefs": [
-        {
-          "type": "port",
-          "interface": "debug_compute_done",
-          "name": "debug_compute_done",
-          "usage": "data",
-          "direction": "out"
-        },
-        {
-          "type": "port",
-          "interface": "debug_compute_done_ap_vld",
-          "name": "debug_compute_done_ap_vld",
-          "usage": "control",
-          "direction": "out"
-        }
-      ]
-    },
     "STATE": {
-      "index": "29",
+      "index": "24",
       "direction": "out",
       "srcType": "SchedState&",
       "srcSize": "32",
@@ -650,8 +572,8 @@
     "ClockPeriod": "10",
     "Uncertainty": "2.7",
     "IsCombinational": "0",
-    "II": "1",
-    "Latency": "0"
+    "II": "2",
+    "Latency": "1"
   },
   "Xdc": {"OocClocks": ["create_clock -name ap_clk -period 10.000 [get_ports ap_clk]"]},
   "Ipx": {
@@ -660,7 +582,7 @@
     "Name": "scheduler_hls",
     "Version": "1.0",
     "DisplayName": "Scheduler_hls",
-    "Revision": "2114389799",
+    "Revision": "2114389940",
     "Description": "An IP generated by Vitis HLS",
     "Taxonomy": "\/VITIS_HLS_IP",
     "AutoFamilySupport": "",
@@ -676,16 +598,10 @@
     "TestBench": ["..\/..\/..\/..\/..\/..\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Scheduler_tb.cpp"],
     "Vhdl": [
       "impl\/vhdl\/scheduler_hls_drive_group_head_phase.vhd",
-      "impl\/vhdl\/scheduler_hls_sparsemux_9_2_1_1_1.vhd",
-      "impl\/vhdl\/scheduler_hls_sparsemux_9_2_4_1_1.vhd",
-      "impl\/vhdl\/scheduler_hls_sparsemux_9_2_32_1_1.vhd",
       "impl\/vhdl\/scheduler_hls.vhd"
     ],
     "Verilog": [
       "impl\/verilog\/scheduler_hls_drive_group_head_phase.v",
-      "impl\/verilog\/scheduler_hls_sparsemux_9_2_1_1_1.v",
-      "impl\/verilog\/scheduler_hls_sparsemux_9_2_4_1_1.v",
-      "impl\/verilog\/scheduler_hls_sparsemux_9_2_32_1_1.v",
       "impl\/verilog\/scheduler_hls.v"
     ],
     "IpMisc": ["impl\/misc\/logo.png"],
@@ -872,14 +788,29 @@
           "argName": "wl_ready"
         }]
     },
-    "wl_start": {
+    "wl_start_i": {
       "type": "data",
       "busTypeName": "data",
-      "protocol": "ap_vld",
+      "protocol": "ap_ovld",
+      "mode": "slave",
+      "dataWidth": "1",
+      "portMap": {"wl_start_i": "DATA"},
+      "ports": ["wl_start_i"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "wl_start"
+        }]
+    },
+    "wl_start_o": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_ovld",
       "mode": "master",
       "dataWidth": "1",
-      "portMap": {"wl_start": "DATA"},
-      "ports": ["wl_start"],
+      "portMap": {"wl_start_o": "DATA"},
+      "ports": ["wl_start_o"],
       "constraints": [{
           "constraint_type": "pragma interface",
           "mode": "ap_none",
@@ -990,36 +921,6 @@
           "mode": "ap_none",
           "register_option": "0",
           "argName": "compute_done"
-        }]
-    },
-    "requant_ready": {
-      "type": "data",
-      "busTypeName": "data",
-      "protocol": "ap_none",
-      "mode": "slave",
-      "dataWidth": "1",
-      "portMap": {"requant_ready": "DATA"},
-      "ports": ["requant_ready"],
-      "constraints": [{
-          "constraint_type": "pragma interface",
-          "mode": "ap_none",
-          "register_option": "0",
-          "argName": "requant_ready"
-        }]
-    },
-    "requant_done": {
-      "type": "data",
-      "busTypeName": "data",
-      "protocol": "ap_none",
-      "mode": "slave",
-      "dataWidth": "1",
-      "portMap": {"requant_done": "DATA"},
-      "ports": ["requant_done"],
-      "constraints": [{
-          "constraint_type": "pragma interface",
-          "mode": "ap_none",
-          "register_option": "0",
-          "argName": "requant_done"
         }]
     },
     "head_ctx_ref_0_i": {
@@ -1142,14 +1043,29 @@
           "argName": "head_ctx_ref"
         }]
     },
-    "compute_start": {
+    "compute_start_i": {
       "type": "data",
       "busTypeName": "data",
-      "protocol": "ap_vld",
+      "protocol": "ap_ovld",
+      "mode": "slave",
+      "dataWidth": "1",
+      "portMap": {"compute_start_i": "DATA"},
+      "ports": ["compute_start_i"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "compute_start"
+        }]
+    },
+    "compute_start_o": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_ovld",
       "mode": "master",
       "dataWidth": "1",
-      "portMap": {"compute_start": "DATA"},
-      "ports": ["compute_start"],
+      "portMap": {"compute_start_o": "DATA"},
+      "ports": ["compute_start_o"],
       "constraints": [{
           "constraint_type": "pragma interface",
           "mode": "ap_none",
@@ -1170,36 +1086,6 @@
           "mode": "ap_none",
           "register_option": "0",
           "argName": "compute_op"
-        }]
-    },
-    "requant_start": {
-      "type": "data",
-      "busTypeName": "data",
-      "protocol": "ap_vld",
-      "mode": "master",
-      "dataWidth": "1",
-      "portMap": {"requant_start": "DATA"},
-      "ports": ["requant_start"],
-      "constraints": [{
-          "constraint_type": "pragma interface",
-          "mode": "ap_none",
-          "register_option": "0",
-          "argName": "requant_start"
-        }]
-    },
-    "requant_op": {
-      "type": "data",
-      "busTypeName": "data",
-      "protocol": "ap_vld",
-      "mode": "master",
-      "dataWidth": "32",
-      "portMap": {"requant_op": "DATA"},
-      "ports": ["requant_op"],
-      "constraints": [{
-          "constraint_type": "pragma interface",
-          "mode": "ap_none",
-          "register_option": "0",
-          "argName": "requant_op"
         }]
     },
     "stream_ready": {
@@ -1260,21 +1146,6 @@
           "mode": "ap_none",
           "register_option": "0",
           "argName": "done"
-        }]
-    },
-    "debug_compute_done": {
-      "type": "data",
-      "busTypeName": "data",
-      "protocol": "ap_vld",
-      "mode": "master",
-      "dataWidth": "32",
-      "portMap": {"debug_compute_done": "DATA"},
-      "ports": ["debug_compute_done"],
-      "constraints": [{
-          "constraint_type": "pragma interface",
-          "mode": "ap_none",
-          "register_option": "0",
-          "argName": "debug_compute_done"
         }]
     },
     "STATE": {
@@ -1370,11 +1241,15 @@
       "dir": "in",
       "width": "1"
     },
-    "wl_start": {
+    "wl_start_i": {
+      "dir": "in",
+      "width": "1"
+    },
+    "wl_start_o": {
       "dir": "out",
       "width": "1"
     },
-    "wl_start_ap_vld": {
+    "wl_start_o_ap_vld": {
       "dir": "out",
       "width": "1"
     },
@@ -1419,14 +1294,6 @@
       "width": "1"
     },
     "compute_done": {
-      "dir": "in",
-      "width": "1"
-    },
-    "requant_ready": {
-      "dir": "in",
-      "width": "1"
-    },
-    "requant_done": {
       "dir": "in",
       "width": "1"
     },
@@ -1478,11 +1345,15 @@
       "dir": "out",
       "width": "1"
     },
-    "compute_start": {
+    "compute_start_i": {
+      "dir": "in",
+      "width": "1"
+    },
+    "compute_start_o": {
       "dir": "out",
       "width": "1"
     },
-    "compute_start_ap_vld": {
+    "compute_start_o_ap_vld": {
       "dir": "out",
       "width": "1"
     },
@@ -1491,22 +1362,6 @@
       "width": "32"
     },
     "compute_op_ap_vld": {
-      "dir": "out",
-      "width": "1"
-    },
-    "requant_start": {
-      "dir": "out",
-      "width": "1"
-    },
-    "requant_start_ap_vld": {
-      "dir": "out",
-      "width": "1"
-    },
-    "requant_op": {
-      "dir": "out",
-      "width": "32"
-    },
-    "requant_op_ap_vld": {
       "dir": "out",
       "width": "1"
     },
@@ -1534,14 +1389,6 @@
       "dir": "out",
       "width": "1"
     },
-    "debug_compute_done": {
-      "dir": "out",
-      "width": "32"
-    },
-    "debug_compute_done_ap_vld": {
-      "dir": "out",
-      "width": "1"
-    },
     "STATE": {
       "dir": "out",
       "width": "32"
@@ -1554,11 +1401,11 @@
   "ModuleInfo": {
     "Hierarchy": {
       "ModuleName": "scheduler_hls",
-      "BindInstances": "or_ln267_fu_8189_p2 or_ln265_fu_8196_p2 or_ln255_fu_8235_p2 or_ln253_fu_8242_p2 or_ln251_fu_8249_p2 or_ln249_fu_8256_p2 or_ln247_fu_8263_p2 add_ln631_fu_8374_p2 icmp_ln631_fu_8390_p2 xor_ln618_fu_8420_p2 or_ln618_fu_8426_p2 and_ln623_fu_8438_p2 xor_ln605_fu_8456_p2 or_ln605_fu_8462_p2 and_ln610_fu_8474_p2 xor_ln560_fu_8500_p2 or_ln560_fu_8506_p2 and_ln565_fu_8518_p2 icmp_ln572_fu_8551_p2 xor_ln579_fu_8557_p2 or_ln579_fu_8563_p2 and_ln586_fu_8585_p2 and_ln589_fu_8595_p2 xor_ln594_fu_8601_p2 or_ln594_fu_8607_p2 or_ln594_1_fu_8613_p2 add_ln598_fu_8625_p2 icmp_ln531_fu_8688_p2 xor_ln537_fu_8694_p2 or_ln537_fu_8700_p2 and_ln544_fu_8722_p2 and_ln547_fu_8732_p2 xor_ln552_fu_8738_p2 or_ln552_fu_8744_p2 or_ln552_1_fu_8750_p2 add_ln556_fu_8762_p2 xor_ln515_fu_8804_p2 or_ln515_fu_8810_p2 and_ln520_fu_8822_p2 xor_ln502_fu_8840_p2 or_ln502_fu_8846_p2 and_ln507_fu_8858_p2 icmp_ln472_fu_8891_p2 xor_ln478_fu_8897_p2 or_ln478_fu_8903_p2 and_ln485_fu_8925_p2 and_ln488_fu_8935_p2 xor_ln493_fu_8941_p2 or_ln493_fu_8947_p2 or_ln493_1_fu_8953_p2 add_ln497_fu_8965_p2 xor_ln459_fu_9007_p2 or_ln459_fu_9013_p2 and_ln464_fu_9025_p2 icmp_ln411_fu_9053_p2 sparsemux_9_2_32_1_1_U47 sparsemux_9_2_32_1_1_U48 sparsemux_9_2_4_1_1_U49 sparsemux_9_2_1_1_1_U50 sparsemux_9_2_1_1_1_U51 sparsemux_9_2_1_1_1_U52 sparsemux_9_2_4_1_1_U53 sparsemux_9_2_4_1_1_U54 sparsemux_9_2_4_1_1_U55 sparsemux_9_2_1_1_1_U56 sparsemux_9_2_1_1_1_U57 sparsemux_9_2_4_1_1_U58 sparsemux_9_2_32_1_1_U59 sparsemux_9_2_32_1_1_U60 sparsemux_9_2_1_1_1_U61 sparsemux_9_2_1_1_1_U62 sparsemux_9_2_1_1_1_U63 sparsemux_9_2_1_1_1_U64 sparsemux_9_2_1_1_1_U65 sparsemux_9_2_1_1_1_U66 sparsemux_9_2_1_1_1_U67 sparsemux_9_2_1_1_1_U68 sparsemux_9_2_1_1_1_U69 sparsemux_9_2_1_1_1_U70 sparsemux_9_2_1_1_1_U71 sparsemux_9_2_1_1_1_U72 sparsemux_9_2_1_1_1_U73 sparsemux_9_2_1_1_1_U74 sparsemux_9_2_1_1_1_U75 sparsemux_9_2_1_1_1_U76 sparsemux_9_2_1_1_1_U77 sparsemux_9_2_1_1_1_U78 sparsemux_9_2_1_1_1_U79 sparsemux_9_2_1_1_1_U80 sparsemux_9_2_1_1_1_U81 sparsemux_9_2_1_1_1_U82 sparsemux_9_2_1_1_1_U83 sparsemux_9_2_1_1_1_U84 sparsemux_9_2_1_1_1_U85 sparsemux_9_2_1_1_1_U86 sparsemux_9_2_1_1_1_U87 sparsemux_9_2_1_1_1_U88 xor_ln434_fu_12047_p2 add_ln442_fu_12055_p2 icmp_ln444_fu_12072_p2 and_ln339_fu_12296_p2 xor_ln641_fu_12312_p2 or_ln641_fu_12318_p2 and_ln644_fu_12330_p2 wl_head",
+      "BindInstances": "xor_ln172_fu_18427_p2 select_ln172_fu_18630_p3 head_group_layer_stamp_6_fu_18638_p3 and_ln172_fu_18648_p2 select_ln172_2_fu_18654_p3 and_ln172_1_fu_18662_p2 select_ln172_3_fu_18668_p3 select_ln172_4_fu_18676_p3 select_ln172_5_fu_18684_p3 select_ln172_6_fu_18692_p3 and_ln172_2_fu_18700_p2 and_ln172_3_fu_18707_p2 and_ln172_4_fu_18714_p2 and_ln172_5_fu_18721_p2 and_ln172_6_fu_18728_p2 and_ln172_7_fu_18749_p2 and_ln172_8_fu_18770_p2 and_ln172_9_fu_18791_p2 and_ln172_10_fu_18812_p2 and_ln172_11_fu_18833_p2 and_ln172_12_fu_18840_p2 and_ln172_13_fu_18847_p2 and_ln172_14_fu_18868_p2 and_ln172_15_fu_18875_p2 and_ln172_16_fu_18896_p2 and_ln172_17_fu_18903_p2 and_ln172_18_fu_18924_p2 and_ln172_19_fu_18945_p2 and_ln172_20_fu_18967_p2 select_ln172_7_fu_18989_p3 and_ln172_21_fu_18997_p2 and_ln172_22_fu_19004_p2 and_ln172_23_fu_19011_p2 and_ln172_24_fu_19032_p2 and_ln172_25_fu_19039_p2 and_ln172_26_fu_19060_p2 select_ln172_8_fu_19066_p3 and_ln172_27_fu_19074_p2 and_ln172_28_fu_19080_p2 select_ln172_9_fu_19086_p3 and_ln172_29_fu_19094_p2 and_ln172_30_fu_19100_p2 select_ln172_10_fu_19106_p3 and_ln172_31_fu_19114_p2 and_ln172_32_fu_19120_p2 xor_ln244_fu_19126_p2 and_ln244_fu_19133_p2 xor_ln253_fu_19139_p2 and_ln253_fu_19145_p2 and_ln253_1_fu_19151_p2 cntrl_busy icmp_ln262_fu_19164_p2 cntrl_start_out or_ln285_fu_19242_p2 or_ln285_1_fu_19249_p2 or_ln284_fu_19256_p2 or_ln284_1_fu_19263_p2 or_ln283_fu_19270_p2 or_ln283_1_fu_19277_p2 or_ln282_fu_19284_p2 or_ln282_1_fu_19291_p2 or_ln276_fu_19351_p2 or_ln276_1_fu_19358_p2 or_ln275_fu_19365_p2 or_ln275_1_fu_19372_p2 or_ln274_fu_19379_p2 or_ln274_1_fu_19386_p2 or_ln273_fu_19393_p2 or_ln273_1_fu_19400_p2 or_ln272_fu_19407_p2 or_ln272_1_fu_19414_p2 or_ln271_fu_19421_p2 or_ln271_1_fu_19428_p2 add_ln708_fu_19471_p2 icmp_ln708_fu_19487_p2 select_ln708_fu_19493_p3 or_ln708_fu_19501_p2 select_ln708_1_fu_19507_p3 xor_ln708_fu_19515_p2 or_ln708_1_fu_19521_p2 or_ln695_fu_19527_p2 or_ln700_fu_19533_p2 select_ln700_fu_19539_p3 or_ln700_1_fu_19547_p2 xor_ln700_fu_19553_p2 and_ln700_fu_19559_p2 select_ln700_1_fu_19565_p3 or_ln682_fu_19573_p2 or_ln687_fu_19579_p2 select_ln687_fu_19585_p3 or_ln687_1_fu_19593_p2 xor_ln687_fu_19599_p2 and_ln687_fu_19605_p2 select_ln687_1_fu_19611_p3 or_ln669_fu_19619_p2 or_ln674_fu_19625_p2 select_ln674_fu_19631_p3 or_ln674_1_fu_19639_p2 xor_ln674_fu_19645_p2 and_ln674_fu_19651_p2 select_ln674_1_fu_19657_p3 or_ln656_fu_19665_p2 or_ln661_fu_19671_p2 select_ln661_fu_19677_p3 or_ln661_1_fu_19685_p2 xor_ln661_fu_19691_p2 and_ln661_fu_19697_p2 select_ln661_1_fu_19703_p3 or_ln611_fu_19719_p2 or_ln616_fu_19725_p2 xor_ln616_fu_19731_p2 and_ln616_fu_19737_p2 or_ln616_1_fu_19743_p2 select_ln616_fu_19749_p3 icmp_ln623_fu_19767_p2 grp_fu_18263_p2 and_ln637_fu_19773_p2 and_ln640_fu_19779_p2 or_ln645_fu_19785_p2 add_ln649_fu_19791_p2 or_ln645_1_fu_19797_p2 xor_ln645_fu_19803_p2 and_ln645_fu_19809_p2 or_ln645_2_fu_19815_p2 select_ln645_fu_19821_p3 icmp_ln582_fu_19839_p2 grp_fu_18263_p2 and_ln595_fu_19845_p2 and_ln598_fu_19851_p2 or_ln603_fu_19857_p2 add_ln607_fu_19863_p2 or_ln603_1_fu_19869_p2 xor_ln603_fu_19875_p2 and_ln603_fu_19881_p2 or_ln603_2_fu_19887_p2 select_ln603_fu_19893_p3 or_ln566_fu_19901_p2 or_ln571_fu_19907_p2 select_ln571_fu_19913_p3 or_ln571_1_fu_19921_p2 xor_ln571_fu_19927_p2 and_ln571_fu_19933_p2 select_ln571_1_fu_19939_p3 or_ln553_fu_19947_p2 or_ln558_fu_19953_p2 select_ln558_fu_19959_p3 or_ln558_1_fu_19967_p2 xor_ln558_fu_19973_p2 and_ln558_fu_19979_p2 select_ln558_1_fu_19985_p3 or_ln540_fu_19993_p2 or_ln545_fu_19999_p2 select_ln545_fu_20005_p3 or_ln545_1_fu_20013_p2 xor_ln545_fu_20019_p2 and_ln545_fu_20025_p2 select_ln545_1_fu_20031_p3 or_ln527_fu_20039_p2 or_ln532_fu_20045_p2 select_ln532_fu_20051_p3 or_ln532_1_fu_20059_p2 xor_ln532_fu_20065_p2 and_ln532_fu_20071_p2 select_ln532_1_fu_20077_p3 icmp_ln497_fu_20095_p2 or_ln503_fu_20101_p2 and_ln510_fu_20107_p2 and_ln513_fu_20113_p2 or_ln518_fu_20119_p2 add_ln522_fu_20125_p2 or_ln518_1_fu_20131_p2 or_ln518_2_fu_20137_p2 xor_ln518_fu_20143_p2 and_ln518_fu_20149_p2 select_ln518_fu_20155_p3 or_ln484_fu_20163_p2 or_ln489_fu_20169_p2 select_ln489_fu_20175_p3 or_ln489_1_fu_20183_p2 xor_ln489_fu_20189_p2 and_ln489_fu_20195_p2 select_ln489_1_fu_20201_p3 icmp_ln437_fu_20225_p2 icmp_ln438_fu_20231_p2 select_ln438_fu_20237_p3 call_ret8_drive_group_head_phase_fu_18173_p_read90 call_ret8_drive_group_head_phase_fu_18173_p_read88 call_ret8_drive_group_head_phase_fu_18173_p_read86 call_ret8_drive_group_head_phase_fu_18173_p_read84 call_ret8_drive_group_head_phase_fu_18173_p_read82 call_ret8_drive_group_head_phase_fu_18173_p_read80 call_ret8_drive_group_head_phase_fu_18173_p_read78 call_ret8_drive_group_head_phase_fu_18173_p_read76 call_ret8_drive_group_head_phase_fu_18173_p_read74 call_ret8_drive_group_head_phase_fu_18173_p_read72 call_ret8_drive_group_head_phase_fu_18173_p_read70 call_ret8_drive_group_head_phase_fu_18173_p_read68 call_ret8_drive_group_head_phase_fu_18173_p_read66 call_ret8_drive_group_head_phase_fu_18173_p_read64 call_ret8_drive_group_head_phase_fu_18173_p_read62 call_ret8_drive_group_head_phase_fu_18173_p_read60 call_ret8_drive_group_head_phase_fu_18173_p_read58 call_ret8_drive_group_head_phase_fu_18173_p_read56 call_ret8_drive_group_head_phase_fu_18173_p_read54 call_ret8_drive_group_head_phase_fu_18173_p_read52 call_ret8_drive_group_head_phase_fu_18173_p_read50 call_ret8_drive_group_head_phase_fu_18173_p_read48 call_ret8_drive_group_head_phase_fu_18173_p_read46 call_ret8_drive_group_head_phase_fu_18173_p_read44 call_ret8_drive_group_head_phase_fu_18173_p_read42 call_ret8_drive_group_head_phase_fu_18173_p_read40 call_ret8_drive_group_head_phase_fu_18173_p_read38 call_ret8_drive_group_head_phase_fu_18173_p_read34 call_ret8_drive_group_head_phase_fu_18173_p_read32 call_ret8_drive_group_head_phase_fu_18173_p_read30 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_wl_addr_sel_read call_ret8_drive_group_head_phase_fu_18173_p_read26 call_ret8_drive_group_head_phase_fu_18173_p_read24 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_last_wl_addr_read call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_last_compute_op_read call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_compute_op_read call_ret8_drive_group_head_phase_fu_18173_p_read16 call_ret8_drive_group_head_phase_fu_18173_p_read14 call_ret8_drive_group_head_phase_fu_18173_p_read4 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_phase_read call_ret8_drive_group_head_phase_fu_18173_p_read head_group_head_idx_2_fu_20593_p3 select_ln438_1_fu_20601_p3 call_ret8_drive_group_head_phase_fu_18173_p_read91 call_ret8_drive_group_head_phase_fu_18173_p_read89 call_ret8_drive_group_head_phase_fu_18173_p_read87 call_ret8_drive_group_head_phase_fu_18173_p_read85 call_ret8_drive_group_head_phase_fu_18173_p_read83 call_ret8_drive_group_head_phase_fu_18173_p_read81 call_ret8_drive_group_head_phase_fu_18173_p_read79 call_ret8_drive_group_head_phase_fu_18173_p_read77 call_ret8_drive_group_head_phase_fu_18173_p_read75 call_ret8_drive_group_head_phase_fu_18173_p_read73 call_ret8_drive_group_head_phase_fu_18173_p_read71 call_ret8_drive_group_head_phase_fu_18173_p_read69 call_ret8_drive_group_head_phase_fu_18173_p_read67 call_ret8_drive_group_head_phase_fu_18173_p_read65 call_ret8_drive_group_head_phase_fu_18173_p_read63 call_ret8_drive_group_head_phase_fu_18173_p_read61 call_ret8_drive_group_head_phase_fu_18173_p_read59 call_ret8_drive_group_head_phase_fu_18173_p_read57 call_ret8_drive_group_head_phase_fu_18173_p_read55 call_ret8_drive_group_head_phase_fu_18173_p_read53 call_ret8_drive_group_head_phase_fu_18173_p_read51 call_ret8_drive_group_head_phase_fu_18173_p_read49 call_ret8_drive_group_head_phase_fu_18173_p_read47 call_ret8_drive_group_head_phase_fu_18173_p_read45 call_ret8_drive_group_head_phase_fu_18173_p_read43 call_ret8_drive_group_head_phase_fu_18173_p_read41 call_ret8_drive_group_head_phase_fu_18173_p_read39 call_ret8_drive_group_head_phase_fu_18173_p_read35 call_ret8_drive_group_head_phase_fu_18173_p_read33 call_ret8_drive_group_head_phase_fu_18173_p_read31 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_wl_addr_sel_read_5 call_ret8_drive_group_head_phase_fu_18173_p_read27 call_ret8_drive_group_head_phase_fu_18173_p_read25 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_last_wl_addr_read_5 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_last_compute_op_read_5 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_compute_op_read_5 call_ret8_drive_group_head_phase_fu_18173_p_read17 call_ret8_drive_group_head_phase_fu_18173_p_read15 call_ret8_drive_group_head_phase_fu_18173_p_read13 call_ret8_drive_group_head_phase_fu_18173_head_ctx_ref_phase_read_5 call_ret8_drive_group_head_phase_fu_18173_p_read1 head_group_head_idx_5_fu_21740_p3 icmp_ln454_fu_22176_p2 and_ln454_fu_22181_p2 head_ctx_ref_0_flag_2_fu_22186_p2 head_ctx_ref_0_new_2_fu_22193_p3 and_ln454_1_fu_22203_p2 head_ctx_ref_2_flag_2_fu_22207_p2 head_ctx_ref_2_new_2_fu_22214_p3 head_ctx_ref_1_new_1_fu_22314_p3 head_ctx_ref_3_new_1_fu_22324_p3 xor_ln460_fu_22334_p2 or_ln460_fu_22340_p2 add_ln468_fu_22346_p2 icmp_ln470_fu_22351_p2 or_ln470_fu_22356_p2 select_ln470_fu_22362_p3 or_ln470_1_fu_22371_p2 xor_ln470_fu_22378_p2 and_ln470_fu_22385_p2 select_ln470_1_fu_22392_p3 select_ln470_2_fu_22401_p3 and_ln355_fu_21057_p2 or_ln355_fu_21063_p2 select_ln355_fu_21069_p3 select_ln355_1_fu_21077_p3 xor_ln718_fu_21085_p2 or_ln718_fu_21091_p2 and_ln721_fu_21097_p2 or_ln721_fu_21103_p2 select_ln721_fu_21109_p3 or_ln290_fu_21117_p2 or_ln290_1_fu_21127_p2 xor_ln290_fu_21133_p2 and_ln290_fu_21139_p2 or_ln290_2_fu_21145_p2 and_ln290_1_fu_21151_p2 or_ln290_3_fu_21157_p2 and_ln290_2_fu_21163_p2 or_ln290_4_fu_21169_p2 and_ln290_3_fu_21175_p2 or_ln290_5_fu_21181_p2 and_ln290_4_fu_21187_p2 or_ln290_6_fu_21193_p2 and_ln290_5_fu_21199_p2 or_ln290_7_fu_21205_p2 and_ln290_6_fu_21211_p2 or_ln290_8_fu_21217_p2 and_ln290_7_fu_21223_p2 or_ln290_9_fu_21229_p2 and_ln290_8_fu_21235_p2 or_ln290_10_fu_21241_p2 and_ln290_9_fu_21247_p2 or_ln290_11_fu_21253_p2 and_ln290_10_fu_21259_p2 or_ln290_12_fu_21265_p2 and_ln290_11_fu_21271_p2 or_ln290_13_fu_21277_p2 and_ln290_12_fu_21283_p2 wl_head",
       "Instances": [{
           "ModuleName": "drive_group_head_phase",
-          "InstanceName": "grp_drive_group_head_phase_fu_7660",
-          "BindInstances": "icmp_ln362_fu_4479_p2 and_ln362_fu_4485_p2 icmp_ln364_fu_4492_p2 icmp_ln69_fu_4498_p2 and_ln69_fu_4504_p2 xor_ln69_fu_4546_p2 select_ln69_fu_4645_p3 select_ln69_1_fu_4683_p3 and_ln69_1_fu_4715_p2 and_ln69_2_fu_4757_p2 and_ln69_3_fu_4799_p2 and_ln69_4_fu_4838_p2 and_ln69_5_fu_4877_p2 and_ln69_6_fu_4916_p2 and_ln69_7_fu_4955_p2 and_ln69_8_fu_4994_p2 and_ln69_9_fu_5033_p2 and_ln69_10_fu_5072_p2 and_ln69_11_fu_5111_p2 and_ln69_12_fu_5150_p2 and_ln69_13_fu_5189_p2 and_ln69_14_fu_5229_p2 and_ln69_15_fu_5235_p2 and_ln69_16_fu_5241_p2 and_ln69_17_fu_5247_p2 and_ln69_18_fu_5253_p2 and_ln69_19_fu_5259_p2 and_ln69_20_fu_5265_p2 and_ln69_21_fu_5271_p2 and_ln69_22_fu_5277_p2 and_ln69_23_fu_5283_p2 and_ln69_24_fu_5289_p2 and_ln69_25_fu_5295_p2 and_ln69_26_fu_5301_p2 and_ln69_27_fu_5307_p2 and_ln69_28_fu_5313_p2 and_ln69_29_fu_5319_p2 and_ln69_30_fu_5325_p2 and_ln69_31_fu_5366_p2 select_ln69_2_fu_5396_p3 head_ctx_ref_wl_start_1_fu_5404_p2 not_and_ln69_fu_5440_p2 or_ln73_fu_5446_p2 write_flag12_1_fu_5452_p2 xor_ln78_fu_5488_p2 and_ln78_fu_5494_p2 or_ln78_fu_5500_p2 and_ln78_1_fu_5531_p2 xor_ln84_fu_5561_p2 or_ln84_fu_5567_p2 xor_ln91_fu_5573_p2 and_ln91_fu_5579_p2 xor_ln92_fu_5585_p2 and_ln92_fu_5591_p2 xor_ln93_fu_5597_p2 and_ln93_fu_5603_p2 xor_ln94_fu_5609_p2 and_ln94_fu_5615_p2 xor_ln95_fu_5621_p2 and_ln95_fu_5627_p2 icmp_ln85_fu_5633_p2 and_ln85_fu_5639_p2 or_ln85_fu_5645_p2 icmp_ln86_fu_5651_p2 and_ln86_fu_5657_p2 or_ln86_fu_5663_p2 icmp_ln87_fu_5669_p2 and_ln87_fu_5675_p2 or_ln87_fu_5681_p2 icmp_ln88_fu_5687_p2 and_ln88_fu_5693_p2 or_ln88_fu_5699_p2 icmp_ln89_fu_5705_p2 and_ln89_fu_5711_p2 or_ln89_fu_5717_p2 head_ctx_ref_q_dma_done_3_fu_5723_p3 head_ctx_ref_k_dma_done_3_fu_5765_p3 head_ctx_ref_v_dma_done_3_fu_5807_p3 head_ctx_ref_att_scores_dma_done_3_fu_5849_p3 head_ctx_ref_att_value_dma_done_3_fu_5891_p3 icmp_ln101_fu_5933_p2 and_ln101_fu_5939_p2 icmp_ln103_fu_5945_p2 and_ln103_fu_5951_p2 icmp_ln105_fu_5957_p2 and_ln105_fu_5963_p2 icmp_ln107_fu_5969_p2 and_ln107_fu_5975_p2 icmp_ln109_fu_5981_p2 and_ln109_fu_5987_p2 icmp_ln111_fu_5993_p2 and_ln111_fu_5999_p2 icmp_ln113_fu_6005_p2 and_ln113_fu_6011_p2 icmp_ln115_fu_6017_p2 and_ln115_fu_6023_p2 icmp_ln117_fu_6029_p2 and_ln117_fu_6035_p2 icmp_ln119_fu_6041_p2 and_ln119_fu_6047_p2 icmp_ln121_fu_6053_p2 and_ln121_fu_6059_p2 and_ln78_1_not_fu_6065_p2 not_sel_tmp1_fu_6071_p2 or_ln101_fu_6077_p2 head_ctx_ref_q_compute_done_2_fu_6083_p2 or_ln103_fu_6124_p2 head_ctx_ref_k_compute_done_2_fu_6130_p2 or_ln105_fu_6171_p2 head_ctx_ref_k_requant_compute_done_2_fu_6177_p2 or_ln107_fu_6217_p2 head_ctx_ref_v_compute_done_2_fu_6223_p2 or_ln109_fu_6264_p2 head_ctx_ref_v_requant_compute_done_2_fu_6270_p2 or_ln111_fu_6310_p2 head_ctx_ref_requant_q_compute_done_2_fu_6316_p2 or_ln113_fu_6356_p2 head_ctx_ref_att_scores_compute_done_2_fu_6362_p2 or_ln115_fu_6403_p2 head_ctx_ref_val_scale_compute_done_2_fu_6409_p2 or_ln117_fu_6449_p2 head_ctx_ref_softmax_compute_done_2_fu_6455_p2 or_ln119_fu_6495_p2 head_ctx_ref_att_value_compute_done_2_fu_6501_p2 or_ln121_fu_6542_p2 head_ctx_ref_requant2_compute_done_2_fu_6548_p2 or_ln303_fu_6665_p2 and_ln310_fu_6671_p2 and_ln314_fu_6677_p2 xor_ln314_fu_6683_p2 or_ln314_fu_6690_p2 select_ln314_fu_6697_p3 or_ln292_fu_6706_p2 or_ln297_fu_6712_p2 select_ln297_fu_6719_p3 or_ln281_fu_6728_p2 or_ln286_fu_6734_p2 select_ln286_fu_6741_p3 or_ln264_fu_6750_p2 and_ln271_fu_6756_p2 and_ln275_fu_6762_p2 xor_ln275_fu_6768_p2 or_ln275_fu_6775_p2 select_ln275_fu_6782_p3 or_ln253_fu_6791_p2 or_ln258_fu_6797_p2 select_ln258_fu_6804_p3 or_ln239_fu_6813_p2 or_ln244_fu_6819_p2 select_ln244_fu_6826_p3 or_ln221_fu_6835_p2 and_ln228_fu_6841_p2 and_ln233_fu_6847_p2 xor_ln233_fu_6853_p2 or_ln233_fu_6860_p2 select_ln233_fu_6867_p3 or_ln207_fu_6876_p2 or_ln212_fu_6882_p2 select_ln212_fu_6889_p3 or_ln189_fu_6898_p2 and_ln196_fu_6904_p2 and_ln201_fu_6910_p2 xor_ln201_fu_6916_p2 or_ln201_fu_6923_p2 select_ln201_fu_6930_p3 or_ln171_fu_6939_p2 and_ln178_fu_6945_p2 and_ln183_fu_6951_p2 xor_ln183_fu_6957_p2 or_ln183_fu_6964_p2 select_ln183_fu_6971_p3 or_ln320_fu_6980_p2 or_ln325_fu_6986_p2 select_ln325_fu_6993_p3 xor_ln128_fu_7002_p2 and_ln128_fu_7008_p2 or_ln128_fu_7015_p2 select_ln128_fu_7022_p3 or_ln128_1_fu_7031_p2 select_ln128_1_fu_7039_p3 select_ln128_2_fu_7048_p3 select_ln128_3_fu_7057_p3 and_ln128_1_fu_7066_p2 and_ln128_2_fu_7073_p2 and_ln128_3_fu_7080_p2 and_ln128_4_fu_7087_p2 and_ln128_5_fu_7094_p2 and_ln128_6_fu_7101_p2 and_ln128_7_fu_7108_p2 and_ln128_8_fu_7115_p2 and_ln128_9_fu_7122_p2 and_ln128_10_fu_7129_p2 and_ln128_11_fu_7136_p2 and_ln128_12_fu_7143_p2 and_ln128_13_fu_7150_p2 and_ln128_14_fu_7157_p2 and_ln128_15_fu_7164_p2 and_ln128_16_fu_7171_p2 and_ln128_17_fu_7178_p2 and_ln128_18_fu_7185_p2 and_ln128_19_fu_7192_p2 and_ln128_20_fu_7199_p2 and_ln128_21_fu_7206_p2 and_ln128_22_fu_7213_p2 and_ln128_23_fu_7220_p2 and_ln128_24_fu_7227_p2 and_ln128_25_fu_7234_p2 and_ln128_26_fu_7241_p2 and_ln128_27_fu_7248_p2 and_ln128_28_fu_7255_p2 and_ln128_29_fu_7262_p2 and_ln128_30_fu_7269_p2 select_ln374_3_fu_7293_p3 select_ln374_4_fu_7305_p3 select_ln374_fu_7317_p3 select_ln374_1_fu_7325_p3 select_ln374_2_fu_7333_p3 select_ln374_5_fu_7341_p3"
+          "InstanceName": "call_ret8_drive_group_head_phase_fu_18173",
+          "BindInstances": "icmp_ln365_fu_8848_p2 and_ln365_fu_8854_p2 icmp_ln367_fu_8861_p2 icmp_ln69_fu_8867_p2 and_ln69_fu_8873_p2 xor_ln69_fu_8914_p2 and_ln69_1_fu_9013_p2 and_ln69_2_fu_9043_p2 and_ln69_3_fu_9085_p2 and_ln69_4_fu_9127_p2 and_ln69_5_fu_9166_p2 and_ln69_6_fu_9205_p2 and_ln69_7_fu_9244_p2 and_ln69_8_fu_9283_p2 and_ln69_9_fu_9322_p2 and_ln69_10_fu_9361_p2 and_ln69_11_fu_9400_p2 and_ln69_12_fu_9439_p2 and_ln69_13_fu_9478_p2 and_ln69_14_fu_9517_p2 and_ln69_15_fu_9557_p2 and_ln69_16_fu_9563_p2 and_ln69_17_fu_9569_p2 and_ln69_18_fu_9575_p2 and_ln69_19_fu_9581_p2 and_ln69_20_fu_9587_p2 and_ln69_21_fu_9593_p2 and_ln69_22_fu_9599_p2 and_ln69_23_fu_9605_p2 and_ln69_24_fu_9611_p2 and_ln69_25_fu_9617_p2 and_ln69_26_fu_9623_p2 and_ln69_27_fu_9629_p2 and_ln69_28_fu_9635_p2 and_ln69_29_fu_9641_p2 and_ln69_30_fu_9647_p2 and_ln69_31_fu_9653_p2 select_ln69_fu_9695_p3 select_ln69_1_fu_9733_p3 select_ln69_2_fu_9765_p3 not_and_ln69_32_fu_9773_p2 or_ln73_fu_9779_p2 write_flag24_1_fu_9785_p2 head_ctx_ref_wl_start_0_1_fu_9821_p2 and_ln78_fu_9857_p2 xor_ln78_fu_9887_p2 and_ln78_1_fu_9893_p2 or_ln78_fu_9899_p2 xor_ln84_fu_9930_p2 or_ln84_fu_9936_p2 xor_ln91_fu_9942_p2 and_ln91_fu_9948_p2 xor_ln92_fu_9954_p2 and_ln92_fu_9960_p2 xor_ln93_fu_9966_p2 and_ln93_fu_9972_p2 xor_ln94_fu_9978_p2 and_ln94_fu_9984_p2 xor_ln95_fu_9990_p2 and_ln95_fu_9996_p2 icmp_ln85_fu_10002_p2 and_ln85_fu_10008_p2 or_ln85_fu_10014_p2 icmp_ln86_fu_10020_p2 and_ln86_fu_10026_p2 or_ln86_fu_10032_p2 icmp_ln87_fu_10038_p2 and_ln87_fu_10044_p2 or_ln87_fu_10050_p2 icmp_ln88_fu_10056_p2 and_ln88_fu_10062_p2 or_ln88_fu_10068_p2 icmp_ln89_fu_10074_p2 and_ln89_fu_10080_p2 or_ln89_fu_10086_p2 head_ctx_ref_q_dma_done_0_3_fu_10092_p3 head_ctx_ref_k_dma_done_0_3_fu_10134_p3 head_ctx_ref_v_dma_done_0_3_fu_10176_p3 head_ctx_ref_att_scores_dma_done_0_3_fu_10218_p3 head_ctx_ref_att_value_dma_done_0_3_fu_10260_p3 icmp_ln101_fu_10302_p2 and_ln101_fu_10308_p2 icmp_ln102_fu_10314_p2 and_ln102_fu_10320_p2 icmp_ln103_fu_10326_p2 and_ln103_fu_10332_p2 icmp_ln104_fu_10338_p2 and_ln104_fu_10344_p2 icmp_ln105_fu_10350_p2 and_ln105_fu_10356_p2 icmp_ln106_fu_10362_p2 and_ln106_fu_10368_p2 icmp_ln107_fu_10374_p2 and_ln107_fu_10380_p2 icmp_ln108_fu_10386_p2 and_ln108_fu_10392_p2 icmp_ln109_fu_10398_p2 and_ln109_fu_10404_p2 icmp_ln110_fu_10410_p2 and_ln110_fu_10416_p2 icmp_ln111_fu_10422_p2 and_ln111_fu_10428_p2 and_ln78_not_fu_10434_p2 not_sel_tmp1_fu_10440_p2 or_ln101_fu_10446_p2 head_ctx_ref_q_compute_done_0_2_fu_10452_p2 or_ln102_fu_10493_p2 head_ctx_ref_k_compute_done_0_2_fu_10499_p2 or_ln103_fu_10540_p2 head_ctx_ref_k_requant_compute_done_0_2_fu_10546_p2 or_ln104_fu_10586_p2 head_ctx_ref_v_compute_done_0_2_fu_10592_p2 or_ln105_fu_10633_p2 head_ctx_ref_v_requant_compute_done_0_2_fu_10639_p2 or_ln106_fu_10679_p2 head_ctx_ref_requant_q_compute_done_0_2_fu_10685_p2 or_ln107_fu_10725_p2 head_ctx_ref_att_scores_compute_done_0_2_fu_10731_p2 or_ln108_fu_10772_p2 head_ctx_ref_val_scale_compute_done_0_2_fu_10778_p2 or_ln109_fu_10818_p2 head_ctx_ref_softmax_compute_done_0_2_fu_10824_p2 or_ln110_fu_10864_p2 head_ctx_ref_att_value_compute_done_0_2_fu_10870_p2 or_ln111_fu_10911_p2 head_ctx_ref_requant2_compute_done_0_2_fu_10917_p2 or_ln304_fu_11034_p2 and_ln311_fu_11040_p2 and_ln315_fu_11046_p2 xor_ln315_fu_11052_p2 or_ln315_fu_11059_p2 select_ln315_fu_11066_p3 or_ln292_fu_11075_p2 or_ln297_fu_11081_p2 select_ln297_fu_11088_p3 or_ln280_fu_11097_p2 or_ln285_fu_11103_p2 select_ln285_fu_11110_p3 or_ln262_fu_11119_p2 and_ln269_fu_11125_p2 and_ln273_fu_11131_p2 xor_ln273_fu_11137_p2 or_ln273_fu_11144_p2 select_ln273_fu_11151_p3 or_ln250_fu_11160_p2 or_ln255_fu_11166_p2 select_ln255_fu_11173_p3 or_ln234_fu_11182_p2 or_ln239_fu_11188_p2 select_ln239_fu_11195_p3 or_ln215_fu_11204_p2 and_ln222_fu_11210_p2 and_ln227_fu_11216_p2 xor_ln227_fu_11222_p2 or_ln227_fu_11229_p2 select_ln227_fu_11236_p3 or_ln199_fu_11245_p2 or_ln204_fu_11251_p2 select_ln204_fu_11258_p3 or_ln180_fu_11267_p2 and_ln187_fu_11273_p2 and_ln192_fu_11279_p2 xor_ln192_fu_11285_p2 or_ln192_fu_11292_p2 select_ln192_fu_11299_p3 or_ln161_fu_11308_p2 and_ln168_fu_11314_p2 and_ln173_fu_11320_p2 xor_ln173_fu_11326_p2 or_ln173_fu_11333_p2 select_ln173_fu_11340_p3 or_ln322_fu_11349_p2 or_ln327_fu_11355_p2 select_ln327_fu_11362_p3 xor_ln117_fu_11371_p2 and_ln117_fu_11377_p2 and_ln117_1_fu_11384_p2 and_ln117_2_fu_11391_p2 or_ln117_fu_11398_p2 select_ln117_fu_11406_p3 or_ln117_1_fu_11415_p2 select_ln117_1_fu_11422_p3 and_ln117_3_fu_11431_p2 and_ln117_4_fu_11438_p2 and_ln117_5_fu_11445_p2 and_ln117_6_fu_11452_p2 and_ln117_7_fu_11459_p2 and_ln117_8_fu_11466_p2 and_ln117_9_fu_11473_p2 and_ln117_10_fu_11480_p2 and_ln117_11_fu_11487_p2 and_ln117_12_fu_11494_p2 and_ln117_13_fu_11501_p2 and_ln117_14_fu_11508_p2 and_ln117_15_fu_11515_p2 and_ln117_16_fu_11522_p2 and_ln117_17_fu_11529_p2 and_ln117_18_fu_11536_p2 and_ln117_19_fu_11543_p2 and_ln117_20_fu_11550_p2 and_ln117_21_fu_11557_p2 and_ln117_22_fu_11564_p2 and_ln117_23_fu_11571_p2 and_ln117_24_fu_11578_p2 and_ln117_25_fu_11585_p2 and_ln117_26_fu_11592_p2 and_ln117_27_fu_11599_p2 and_ln117_28_fu_11606_p2 and_ln117_29_fu_11613_p2 and_ln117_30_fu_11620_p2 select_ln117_2_fu_11627_p3 select_ln117_3_fu_11636_p3 icmp_ln365_1_fu_11662_p2 and_ln365_1_fu_11668_p2 icmp_ln367_1_fu_11675_p2 icmp_ln69_1_fu_11681_p2 and_ln69_32_fu_11687_p2 and_ln69_33_fu_11728_p2 xor_ln69_1_fu_11758_p2 and_ln69_34_fu_11857_p2 and_ln69_35_fu_11899_p2 and_ln69_36_fu_11941_p2 and_ln69_37_fu_11983_p2 and_ln69_38_fu_12022_p2 and_ln69_39_fu_12061_p2 and_ln69_40_fu_12100_p2 and_ln69_41_fu_12139_p2 and_ln69_42_fu_12178_p2 and_ln69_43_fu_12217_p2 and_ln69_44_fu_12256_p2 and_ln69_45_fu_12295_p2 and_ln69_46_fu_12334_p2 and_ln69_47_fu_12373_p2 and_ln69_48_fu_12412_p2 and_ln69_49_fu_12418_p2 and_ln69_50_fu_12424_p2 and_ln69_51_fu_12430_p2 and_ln69_52_fu_12436_p2 and_ln69_53_fu_12442_p2 and_ln69_54_fu_12448_p2 and_ln69_55_fu_12454_p2 and_ln69_56_fu_12460_p2 and_ln69_57_fu_12466_p2 and_ln69_58_fu_12472_p2 and_ln69_59_fu_12478_p2 and_ln69_60_fu_12484_p2 and_ln69_61_fu_12490_p2 and_ln69_62_fu_12496_p2 and_ln69_63_fu_12502_p2 select_ln69_3_fu_12508_p3 select_ln69_4_fu_12546_p3 select_ln69_5_fu_12578_p3 not_and_ln69_37_fu_12586_p2 or_ln73_1_fu_12592_p2 write_flag27_2_fu_12598_p2 head_ctx_ref_wl_start_1_2_fu_12634_p2 and_ln78_2_fu_12670_p2 xor_ln78_1_fu_12700_p2 and_ln78_3_fu_12706_p2 or_ln78_1_fu_12712_p2 xor_ln84_1_fu_12743_p2 or_ln84_1_fu_12749_p2 xor_ln91_1_fu_12755_p2 and_ln91_1_fu_12761_p2 xor_ln92_1_fu_12767_p2 and_ln92_1_fu_12773_p2 xor_ln93_1_fu_12779_p2 and_ln93_1_fu_12785_p2 xor_ln94_1_fu_12791_p2 and_ln94_1_fu_12797_p2 xor_ln95_1_fu_12803_p2 and_ln95_1_fu_12809_p2 icmp_ln85_1_fu_12815_p2 and_ln85_1_fu_12821_p2 or_ln85_1_fu_12827_p2 icmp_ln86_1_fu_12833_p2 and_ln86_1_fu_12839_p2 or_ln86_1_fu_12845_p2 icmp_ln87_1_fu_12851_p2 and_ln87_1_fu_12857_p2 or_ln87_1_fu_12863_p2 icmp_ln88_1_fu_12869_p2 and_ln88_1_fu_12875_p2 or_ln88_1_fu_12881_p2 icmp_ln89_1_fu_12887_p2 and_ln89_1_fu_12893_p2 or_ln89_1_fu_12899_p2 head_ctx_ref_q_dma_done_1_4_fu_12905_p3 head_ctx_ref_k_dma_done_1_4_fu_12947_p3 head_ctx_ref_v_dma_done_1_4_fu_12989_p3 head_ctx_ref_att_scores_dma_done_1_4_fu_13031_p3 head_ctx_ref_att_value_dma_done_1_4_fu_13073_p3 icmp_ln101_1_fu_13115_p2 and_ln101_1_fu_13121_p2 icmp_ln102_1_fu_13127_p2 and_ln102_1_fu_13133_p2 icmp_ln103_1_fu_13139_p2 and_ln103_1_fu_13145_p2 icmp_ln104_1_fu_13151_p2 and_ln104_1_fu_13157_p2 icmp_ln105_1_fu_13163_p2 and_ln105_1_fu_13169_p2 icmp_ln106_1_fu_13175_p2 and_ln106_1_fu_13181_p2 icmp_ln107_1_fu_13187_p2 and_ln107_1_fu_13193_p2 icmp_ln108_1_fu_13199_p2 and_ln108_1_fu_13205_p2 icmp_ln109_1_fu_13211_p2 and_ln109_1_fu_13217_p2 icmp_ln110_1_fu_13223_p2 and_ln110_1_fu_13229_p2 icmp_ln111_1_fu_13235_p2 and_ln111_1_fu_13241_p2 and_ln78_2_not_fu_13247_p2 not_sel_tmp41_fu_13253_p2 or_ln101_1_fu_13259_p2 head_ctx_ref_q_compute_done_1_3_fu_13265_p2 or_ln102_1_fu_13306_p2 head_ctx_ref_k_compute_done_1_3_fu_13312_p2 or_ln103_1_fu_13353_p2 head_ctx_ref_k_requant_compute_done_1_3_fu_13359_p2 or_ln104_1_fu_13399_p2 head_ctx_ref_v_compute_done_1_3_fu_13405_p2 or_ln105_1_fu_13446_p2 head_ctx_ref_v_requant_compute_done_1_3_fu_13452_p2 or_ln106_1_fu_13492_p2 head_ctx_ref_requant_q_compute_done_1_3_fu_13498_p2 or_ln107_1_fu_13538_p2 head_ctx_ref_att_scores_compute_done_1_3_fu_13544_p2 or_ln108_1_fu_13585_p2 head_ctx_ref_val_scale_compute_done_1_3_fu_13591_p2 or_ln109_1_fu_13631_p2 head_ctx_ref_softmax_compute_done_1_3_fu_13637_p2 or_ln110_1_fu_13677_p2 head_ctx_ref_att_value_compute_done_1_3_fu_13683_p2 or_ln111_1_fu_13724_p2 head_ctx_ref_requant2_compute_done_1_3_fu_13730_p2 or_ln304_1_fu_13847_p2 and_ln311_1_fu_13853_p2 and_ln315_1_fu_13859_p2 xor_ln315_1_fu_13865_p2 or_ln315_1_fu_13872_p2 select_ln315_1_fu_13879_p3 or_ln292_1_fu_13888_p2 or_ln297_1_fu_13894_p2 select_ln297_1_fu_13901_p3 or_ln280_1_fu_13910_p2 or_ln285_1_fu_13916_p2 select_ln285_1_fu_13923_p3 or_ln262_1_fu_13932_p2 and_ln269_1_fu_13938_p2 and_ln273_1_fu_13944_p2 xor_ln273_1_fu_13950_p2 or_ln273_1_fu_13957_p2 select_ln273_1_fu_13964_p3 or_ln250_1_fu_13973_p2 or_ln255_1_fu_13979_p2 select_ln255_1_fu_13986_p3 or_ln234_1_fu_13995_p2 or_ln239_1_fu_14001_p2 select_ln239_1_fu_14008_p3 or_ln215_1_fu_14017_p2 and_ln222_1_fu_14023_p2 and_ln227_1_fu_14029_p2 xor_ln227_1_fu_14035_p2 or_ln227_1_fu_14042_p2 select_ln227_1_fu_14049_p3 or_ln199_1_fu_14058_p2 or_ln204_1_fu_14064_p2 select_ln204_1_fu_14071_p3 or_ln180_1_fu_14080_p2 and_ln187_1_fu_14086_p2 and_ln192_1_fu_14092_p2 xor_ln192_1_fu_14098_p2 or_ln192_1_fu_14105_p2 select_ln192_1_fu_14112_p3 or_ln161_1_fu_14121_p2 and_ln168_1_fu_14127_p2 and_ln173_1_fu_14133_p2 xor_ln173_1_fu_14139_p2 or_ln173_1_fu_14146_p2 select_ln173_1_fu_14153_p3 or_ln322_1_fu_14162_p2 or_ln327_1_fu_14168_p2 select_ln327_1_fu_14175_p3 and_ln327_fu_14184_p2 xor_ln117_1_fu_14191_p2 and_ln117_31_fu_14197_p2 and_ln117_32_fu_14204_p2 and_ln117_33_fu_14211_p2 or_ln117_2_fu_14218_p2 or_ln117_3_fu_14225_p2 select_ln117_4_fu_14233_p3 and_ln117_34_fu_14242_p2 select_ln117_5_fu_14249_p3 and_ln117_35_fu_14258_p2 and_ln117_36_fu_14265_p2 and_ln117_37_fu_14272_p2 and_ln117_38_fu_14279_p2 and_ln117_39_fu_14286_p2 and_ln117_40_fu_14293_p2 and_ln117_41_fu_14300_p2 and_ln117_42_fu_14307_p2 and_ln117_43_fu_14314_p2 and_ln117_44_fu_14321_p2 and_ln117_45_fu_14328_p2 and_ln117_46_fu_14335_p2 and_ln117_47_fu_14342_p2 and_ln117_48_fu_14349_p2 and_ln117_49_fu_14356_p2 and_ln117_50_fu_14363_p2 and_ln117_51_fu_14370_p2 and_ln117_52_fu_14377_p2 and_ln117_53_fu_14384_p2 and_ln117_54_fu_14391_p2 and_ln117_55_fu_14398_p2 and_ln117_56_fu_14405_p2 and_ln117_57_fu_14412_p2 and_ln117_58_fu_14419_p2 and_ln117_59_fu_14426_p2 and_ln117_60_fu_14433_p2 and_ln117_61_fu_14440_p2 select_ln117_6_fu_14447_p3 select_ln117_7_fu_14456_p3 select_ln377_6_fu_14482_p3 select_ln377_7_fu_14494_p3 select_ln377_8_fu_14506_p3 select_ln377_9_fu_14518_p3 select_ln377_fu_14530_p3 select_ln377_1_fu_14538_p3 select_ln377_2_fu_14546_p3 select_ln377_3_fu_14554_p3 select_ln377_4_fu_14562_p3 select_ln377_5_fu_14570_p3 select_ln377_10_fu_14578_p3 select_ln377_11_fu_14590_p3"
         }]
     },
     "Info": {
@@ -1574,7 +1421,7 @@
         "isTaskLevelControl": "0",
         "isPipelined": "0",
         "isCombinational": "0",
-        "isOneStateSeq": "1"
+        "isOneStateSeq": "0"
       }
     },
     "Metrics": {
@@ -1590,15 +1437,15 @@
         "Timing": {
           "Target": "10.00",
           "Uncertainty": "2.70",
-          "Estimate": "4.283"
+          "Estimate": "4.511"
         },
         "Area": {
           "FF": "0",
           "AVAIL_FF": "234240",
           "UTIL_FF": "0",
-          "LUT": "2173",
+          "LUT": "4348",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "1",
+          "UTIL_LUT": "3",
           "BRAM_18K": "0",
           "AVAIL_BRAM": "288",
           "UTIL_BRAM": "0",
@@ -1612,25 +1459,25 @@
       },
       "scheduler_hls": {
         "Latency": {
-          "LatencyBest": "0",
-          "LatencyAvg": "0",
-          "LatencyWorst": "0",
-          "PipelineII": "1",
+          "LatencyBest": "1",
+          "LatencyAvg": "1",
+          "LatencyWorst": "1",
+          "PipelineII": "2",
           "PipelineDepth": "",
           "PipelineType": "no"
         },
         "Timing": {
           "Target": "10.00",
           "Uncertainty": "2.70",
-          "Estimate": "6.831"
+          "Estimate": "5.901"
         },
         "Area": {
-          "FF": "193",
+          "FF": "1767",
           "AVAIL_FF": "234240",
           "UTIL_FF": "~0",
-          "LUT": "5487",
+          "LUT": "11622",
           "AVAIL_LUT": "117120",
-          "UTIL_LUT": "4",
+          "UTIL_LUT": "9",
           "BRAM_18K": "0",
           "AVAIL_BRAM": "288",
           "UTIL_BRAM": "0",
@@ -1647,7 +1494,7 @@
   "GenerateBdFiles": "0",
   "GenData": {
     "DataVersion": "0.2",
-    "Time": "2025-12-13 15:59:58 EST",
+    "Time": "2025-12-13 18:20:13 EST",
     "ToolName": "vitis_hls",
     "ToolVersion": "2025.1"
   }

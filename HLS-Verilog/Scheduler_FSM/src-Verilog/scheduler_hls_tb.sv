@@ -5,7 +5,11 @@ module scheduler_hls_tb;
   localparam int CLK_PERIOD = 10;
   localparam int MAX_CYCLES = 2000;
   localparam int COMP_LAT = 3;
+  localparam int COMP_LAT_MIN = 1;
+  localparam int COMP_LAT_MAX = 4;
   localparam int DMA_LAT  = 3;
+  localparam int DMA_LAT_MIN  = 1;
+  localparam int DMA_LAT_MAX  = 4;
   localparam int AXIS_BEATS = 3;
 
   // Clock / reset
@@ -20,11 +24,11 @@ module scheduler_hls_tb;
   logic [0:0] axis_in_valid;
   logic [0:0] axis_in_last;
   logic [0:0] wl_ready;
+  logic [0:0] wl_start_i;
   logic [0:0] dma_done;
   logic [0:0] compute_ready;
   logic [0:0] compute_done;
-  logic [0:0] requant_ready;
-  logic [0:0] requant_done;
+  logic [0:0] compute_start_i;
   logic [0:0] stream_ready;
   logic [0:0] stream_done;
 
@@ -40,8 +44,8 @@ module scheduler_hls_tb;
   logic cntrl_start_out_ap_vld;
   logic [0:0] axis_in_ready;
   logic axis_in_ready_ap_vld;
-  logic [0:0] wl_start;
-  logic wl_start_ap_vld;
+  logic [0:0] wl_start_o;
+  logic wl_start_o_ap_vld;
   logic [7:0]  wl_addr_sel;
   logic wl_addr_sel_ap_vld;
   logic [31:0] wl_layer;
@@ -50,21 +54,16 @@ module scheduler_hls_tb;
   logic wl_head_ap_vld;
   logic [31:0] wl_tile;
   logic wl_tile_ap_vld;
-  logic [0:0] compute_start;
-  logic compute_start_ap_vld;
+  logic [0:0] compute_start_o;
+  logic compute_start_o_ap_vld;
   logic [31:0] compute_op;
   logic compute_op_ap_vld;
-  logic [0:0] requant_start;
-  logic requant_start_ap_vld;
-  logic [31:0] requant_op;
-  logic requant_op_ap_vld;
   logic [0:0] stream_start;
   logic stream_start_ap_vld;
   logic [0:0] done;
   logic done_ap_vld;
   logic [31:0] STATE;
   logic STATE_ap_vld;
-  logic [31:0] debug_compute_done;
 
   // Testbench state variables
   logic comp_busy;
@@ -188,9 +187,18 @@ module scheduler_hls_tb;
     endcase
   endfunction
 
+  function automatic int rand_comp_lat();
+    rand_comp_lat = $urandom_range(COMP_LAT_MIN, COMP_LAT_MAX);
+  endfunction
+
+  function automatic int rand_dma_lat();
+    rand_dma_lat = $urandom_range(DMA_LAT_MIN, DMA_LAT_MAX);
+  endfunction
+
 
   // Compute model with latency
   always_ff @(posedge ap_clk) begin : compute_model
+    int comp_lat_var;
     if (ap_rst) begin
       comp_busy    <= 1'b0;
       comp_timer   <= 0;
@@ -219,9 +227,10 @@ module scheduler_hls_tb;
         end
       end
 
-      if (compute_start && compute_start_ap_vld && !comp_busy) begin
+      if (compute_start_o && compute_start_o_ap_vld && !comp_busy) begin
         comp_busy <= 1'b1;
-        comp_timer <= COMP_LAT - 1;
+        comp_lat_var = rand_comp_lat();
+        comp_timer <= (comp_lat_var > 0) ? comp_lat_var - 1 : 0;
         if (compute_op == 32'd4) seen_attn <= 1'b1;    // CMP_ATT_SCORES
         if (compute_op == 32'd9) seen_concat <= 1'b1;  // CMP_CONCAT
       end
@@ -262,6 +271,7 @@ module scheduler_hls_tb;
 
   // DMA model for weight loader
   always_ff @(posedge ap_clk) begin : dma_model
+    int dma_lat_var;
     if (ap_rst) begin
       dma_busy  <= 1'b0;
       dma_timer <= 0;
@@ -288,9 +298,10 @@ module scheduler_hls_tb;
           dma_done_ctr <= dma_done_ctr - 1;
         end
       end
-      if (wl_start && wl_start_ap_vld && wl_ready && !dma_busy) begin
+      if (wl_start_o && wl_start_o_ap_vld && wl_ready && !dma_busy) begin
         dma_busy  <= 1'b1;
-        dma_timer <= DMA_LAT - 1;
+        dma_lat_var = rand_dma_lat();
+        dma_timer <= (dma_lat_var > 0) ? dma_lat_var - 1 : 0;
       end
       wl_ready <= !dma_busy;
     end
@@ -382,6 +393,8 @@ module scheduler_hls_tb;
     genvar hh;
     for (hh = 0; hh < HEADS_TOTAL; hh++) begin : HEAD_COMPUTE
       always_ff @(posedge ap_clk) begin
+        int comp_lat_h;
+        int dma_lat_h;
         logic compute_start_now;
         logic dma_start_now;
         if (ap_rst) begin
@@ -468,7 +481,8 @@ module scheduler_hls_tb;
           // detect compute_start and run latency model
           if (compute_start_now && !head_inflight[hh] && !head_done_hold[hh]) begin
             head_inflight[hh] <= 1'b1;
-            head_busy_ctr[hh] <= COMP_LAT - 1;
+            comp_lat_h = rand_comp_lat();
+            head_busy_ctr[hh] <= (comp_lat_h > 0) ? comp_lat_h - 1 : 0;
             head_done_hold[hh] <= 1'b0;
           end else if (head_inflight[hh]) begin
             if (head_busy_ctr[hh] == 0) begin
@@ -489,7 +503,8 @@ module scheduler_hls_tb;
           // Per-head DMA latency model
           if (dma_start_now && !head_dma_inflight[hh] && !head_dma_done_hold[hh]) begin
             head_dma_inflight[hh] <= 1'b1;
-            head_dma_ctr[hh] <= DMA_LAT - 1;
+            dma_lat_h = rand_dma_lat();
+            head_dma_ctr[hh] <= (dma_lat_h > 0) ? dma_lat_h - 1 : 0;
             head_dma_done_hold[hh] <= 1'b0;
           end else if (head_dma_inflight[hh]) begin
             if (head_dma_ctr[hh] == 0) begin
@@ -511,17 +526,6 @@ module scheduler_hls_tb;
     end
   endgenerate
 
-  // Requant static drives
-  always_ff @(posedge ap_clk) begin
-    if (ap_rst) begin
-      requant_ready <= 1'b0;
-      requant_done  <= 1'b0;
-    end else begin
-      requant_ready <= 1'b1;
-      requant_done  <= 1'b0;
-    end
-  end
-
   // Main stimulus and control
   initial begin : stimulus
     int cycle;
@@ -530,6 +534,8 @@ module scheduler_hls_tb;
     ap_start = 1'b0;
     cntrl_start = 1'b0;
     cntrl_reset_n = 1'b0;
+    wl_start_i = 1'b0;
+    compute_start_i = 1'b0;
     start_pulsed = 1'b0;
     seen_done = 1'b0;
     post_done_cycles = 0;
@@ -541,7 +547,7 @@ module scheduler_hls_tb;
     $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6s %-6s | %-8s %-8s %-8s %-6s",
              "Cycle", "Start", "Reset", "Busy", "State",
              "AXIS_v", "AXIS_r", "AXIS_last",
-             "WL_rdy", "WL_strt", "WL_addr", "WL_head", "WL_tile",
+             "WL_rdy", "WL_strt_o", "WL_addr", "WL_head", "WL_tile",
              "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
 
     // Release reset at cycle 2
@@ -575,11 +581,11 @@ module scheduler_hls_tb;
                axis_in_ready ? "1" : "-",
                axis_in_last ? "1" : "-",
                wl_ready ? "1" : "-",
-               wl_start ? "1" : "-",
+               wl_start_o ? "1" : "-",
                dma_name(wl_addr_sel),
                wl_head,
                wl_tile,
-               compute_start ? "1" : "-",
+               compute_start_o ? "1" : "-",
                compute_ready ? "1" : "-",
                compute_done ? "1" : "-",
                compute_op);
@@ -667,8 +673,9 @@ module scheduler_hls_tb;
     .axis_in_ready(axis_in_ready),
     .axis_in_ready_ap_vld(axis_in_ready_ap_vld),
     .wl_ready(wl_ready),
-    .wl_start(wl_start),
-    .wl_start_ap_vld(wl_start_ap_vld),
+    .wl_start_i(wl_start_i),
+    .wl_start_o(wl_start_o),
+    .wl_start_o_ap_vld(wl_start_o_ap_vld),
     .wl_addr_sel(wl_addr_sel),
     .wl_addr_sel_ap_vld(wl_addr_sel_ap_vld),
     .wl_layer(wl_layer),
@@ -680,8 +687,6 @@ module scheduler_hls_tb;
     .dma_done(dma_done),
     .compute_ready(compute_ready),
     .compute_done(compute_done),
-    .requant_ready(requant_ready),
-    .requant_done(requant_done),
     .head_ctx_ref_0_i(head_ctx_ref_0_i),
     .head_ctx_ref_0_o(head_ctx_ref_0_o),
     .head_ctx_ref_0_o_ap_vld(head_ctx_ref_0_o_ap_vld),
@@ -694,21 +699,17 @@ module scheduler_hls_tb;
     .head_ctx_ref_3_i(head_ctx_ref_3_i),
     .head_ctx_ref_3_o(head_ctx_ref_3_o),
     .head_ctx_ref_3_o_ap_vld(head_ctx_ref_3_o_ap_vld),
-    .compute_start(compute_start),
-    .compute_start_ap_vld(compute_start_ap_vld),
+    .compute_start_i(compute_start_i),
+    .compute_start_o(compute_start_o),
+    .compute_start_o_ap_vld(compute_start_o_ap_vld),
     .compute_op(compute_op),
     .compute_op_ap_vld(compute_op_ap_vld),
-    .requant_start(requant_start),
-    .requant_start_ap_vld(requant_start_ap_vld),
-    .requant_op(requant_op),
-    .requant_op_ap_vld(requant_op_ap_vld),
     .stream_ready(stream_ready),
     .stream_start(stream_start),
     .stream_start_ap_vld(stream_start_ap_vld),
     .stream_done(stream_done),
     .done(done),
     .done_ap_vld(done_ap_vld),
-    .debug_compute_done(debug_compute_done),
     .STATE(STATE),
     .STATE_ap_vld(STATE_ap_vld)
   );

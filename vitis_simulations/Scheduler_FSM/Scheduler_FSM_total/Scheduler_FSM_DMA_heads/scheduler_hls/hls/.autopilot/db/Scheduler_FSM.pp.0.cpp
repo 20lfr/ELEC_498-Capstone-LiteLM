@@ -478,7 +478,7 @@ namespace std
 
 
 constexpr int NUM_HEADS = 4;
-constexpr int HEADS_PARALLEL = 1;
+constexpr int HEADS_PARALLEL = 2;
 
 enum class HeadPhase : uint8_t {
     IDLE = 0,
@@ -515,11 +515,14 @@ enum ComputeOp : uint8_t {
     CMP_HEAD_REQUANT,
     CMP_CONCAT,
     CMP_OUT_PROJ,
+    CMP_REQUANT1,
     CMP_RESID0,
     CMP_LN0,
+    CMP_REQUANT3,
     CMP_FFN_W1,
     CMP_FFN_ACT,
     CMP_FFN_W2,
+    CMP_REQUANT4,
     CMP_RESID1,
     CMP_LN1,
     CMP_DEQUANT,
@@ -631,11 +634,15 @@ enum SchedState {
     S_ATTENTION_HEADS,
     S_HEAD_CONCAT,
     S_OUT_PROJECTION,
+    S_REQUANT1,
     S_RES_ADD_1,
     S_LAYER_NORM_1,
+    S_REQUANT2,
     S_FFN,
+    S_REQUANT3,
     S_RES_ADD_2,
     S_LAYER_NORM_2,
+    S_REQUANT4,
     S_LOOP_CHECK,
     S_STREAM_OUT
 };
@@ -670,18 +677,13 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     bool dma_done,
     bool compute_ready,
     bool compute_done,
-    bool requant_ready,
-    bool requant_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
     int &compute_op,
-    bool &requant_start,
-    int &requant_op,
     bool stream_ready,
     bool &stream_start,
     bool stream_done,
     bool &done,
-    uint32_t &debug_compute_done,
     SchedState &STATE
 );
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" 2
@@ -729,14 +731,9 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
     bool compute_ready,
     bool compute_done,
-    bool requant_ready,
-    bool requant_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
     int &compute_op,
-
-    bool &requant_start,
-    int &requant_op,
 
 
 
@@ -753,16 +750,11 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
 
 
-    uint32_t &debug_compute_done,
-
-
-
-
     SchedState &STATE
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=scheduler_hls
-# 76 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+# 66 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
 
 
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
@@ -799,6 +791,15 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
  static bool ln1_compute_done;
 #pragma HLS reset variable = ln1_compute_done
 
+ static bool requant1_compute_done;
+#pragma HLS reset variable = requant1_compute_done
+ static bool requant2_compute_done;
+#pragma HLS reset variable = requant2_compute_done
+ static bool requant3_compute_done;
+#pragma HLS reset variable = requant3_compute_done
+ static bool requant4_compute_done;
+#pragma HLS reset variable = requant4_compute_done
+
 
 
  static bool attn_group_done;
@@ -815,19 +816,27 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS reset variable = concat_started
  static bool outproj_started;
 #pragma HLS reset variable = outproj_started
+ static bool requant1_started;
+#pragma HLS reset variable = requant1_started
  static bool resid0_started;
 #pragma HLS reset variable = resid0_started
  static bool ln0_started;
 #pragma HLS reset variable = ln0_started
+ static bool requant2_started;
+#pragma HLS reset variable = requant2_started
  enum class FfnStage : uint8_t { W1 = 0, ACT, W2 };
   static FfnStage ffn_stage;
 #pragma HLS reset variable = ffn_stage
  static bool ffn_started;
 #pragma HLS reset variable = ffn_started
+ static bool requant3_started;
+#pragma HLS reset variable = requant3_started
  static bool resid1_started;
 #pragma HLS reset variable = resid1_started
  static bool ln1_started;
 #pragma HLS reset variable = ln1_started
+ static bool requant4_started;
+#pragma HLS reset variable = requant4_started
  static bool stream_started;
 #pragma HLS reset variable = stream_started
  static int wo_tile;
@@ -849,6 +858,8 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
  static bool w2_comp_busy;
 #pragma HLS reset variable = w2_comp_busy
 
+
+
  const bool reset = !cntrl_reset_n;
   if (reset) {
     st = S_IDLE;
@@ -862,11 +873,21 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     group_idx = 0;
 
     start_head_group = false;
-    VITIS_LOOP_175_1: for (int i = 0; i < NUM_HEADS; ++i){
+    VITIS_LOOP_184_1: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], -1, i);
     }
 
+
+    requant1_started = false;
+    requant2_started = false;
+    requant3_started = false;
+    requant4_started = false;
+
+    requant1_compute_done = false;
+    requant2_compute_done = false;
+    requant3_compute_done = false;
+    requant4_compute_done = false;
 
 
 
@@ -912,18 +933,22 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
   cntrl_layer_idx = layer_idx;
   axis_in_ready = 0;
-  wl_start = 0;
-  wl_addr_sel = DmaSel::DMASEL_NONE;
+  if (!wl_ready && wl_start){
+        wl_start = false;
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+  }
   wl_layer = layer_idx;
-  wl_head = 0;
-  wl_tile = 0;
-  compute_start = 0;
-  compute_op = CMP_NONE;
-  requant_start = 0;
-  requant_op = RQ_NONE;
+
+
+  if (!compute_ready && compute_start){
+      compute_start = false;
+      compute_op = ComputeOp::CMP_NONE;
+  }
   stream_start = 0;
   done = 0;
-  debug_compute_done = 0;
+
   cntrl_busy = (st != S_IDLE);
 
   cntrl_start_out = (st == S_IDLE) ? cntrl_start : false;
@@ -933,45 +958,27 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     return;
   }
 
-  if (compute_done) {
-    if (st == S_ATTENTION_HEADS && attn_started)
-      attn_compute_done = true;
-    if (st == S_HEAD_CONCAT && concat_started)
-      concat_compute_done = true;
-    if (st == S_OUT_PROJECTION && outproj_started)
-      outproj_compute_done = true;
-    if (st == S_RES_ADD_1 && resid0_started)
-      resid0_compute_done = true;
-    if (st == S_LAYER_NORM_1 && ln0_started)
-      ln0_compute_done = true;
+  if (compute_done && !compute_start) {
+    if (st == S_ATTENTION_HEADS && attn_started) attn_compute_done = true;
+    if (st == S_HEAD_CONCAT && concat_started) concat_compute_done = true;
+    if (st == S_OUT_PROJECTION && outproj_started) outproj_compute_done = true;
+    if (st == S_REQUANT1 && requant1_started) requant1_compute_done = true;
+    if (st == S_RES_ADD_1 && resid0_started) resid0_compute_done = true;
+    if (st == S_LAYER_NORM_1 && ln0_started) ln0_compute_done = true;
+    if (st == S_REQUANT2 && requant2_started) requant2_compute_done = true;
     if (st == S_FFN && ffn_started) {
-      if (ffn_stage == FfnStage::W1)
-        ffn_w1_compute_done = true;
-      else if (ffn_stage == FfnStage::ACT)
-        ffn_act_compute_done = true;
-      else if (ffn_stage == FfnStage::W2)
-        ffn_w2_compute_done = true;
+      if (ffn_stage == FfnStage::W1) ffn_w1_compute_done = true;
+      else if (ffn_stage == FfnStage::ACT) ffn_act_compute_done = true;
+      else if (ffn_stage == FfnStage::W2) ffn_w2_compute_done = true;
     }
-    if (st == S_RES_ADD_2 && resid1_started)
-      resid1_compute_done = true;
-    if (st == S_LAYER_NORM_2 && ln1_started)
-      ln1_compute_done = true;
+    if (st == S_REQUANT3 && requant3_started) requant3_compute_done = true;
+    if (st == S_RES_ADD_2 && resid1_started) resid1_compute_done = true;
+    if (st == S_LAYER_NORM_2 && ln1_started) ln1_compute_done = true;
+    if (st == S_REQUANT4 && requant4_started) requant4_compute_done = true;
   }
 
-
-  debug_compute_done = (attn_compute_done ? (1u << 0) : 0) |
-                       (concat_compute_done ? (1u << 1) : 0) |
-                       (outproj_compute_done ? (1u << 2) : 0) |
-                       (resid0_compute_done ? (1u << 3) : 0) |
-                       (ln0_compute_done ? (1u << 4) : 0) |
-                       (ffn_w1_compute_done ? (1u << 5) : 0) |
-                       (ffn_act_compute_done ? (1u << 6) : 0) |
-                       (ffn_w2_compute_done ? (1u << 7) : 0) |
-                       (resid1_compute_done ? (1u << 8) : 0) |
-                       (ln1_compute_done ? (1u << 9) : 0);
-
   switch (st) {
-    case S_IDLE:
+    case S_IDLE: {
       if (cntrl_start) {
         st = S_STREAM_IN;
 
@@ -982,6 +989,17 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         attn_group_done = false;
         group_idx = 0;
         start_head_group = false;
+
+
+        requant1_started = false;
+        requant2_started = false;
+        requant3_started = false;
+        requant4_started = false;
+
+        requant1_compute_done = false;
+        requant2_compute_done = false;
+        requant3_compute_done = false;
+        requant4_compute_done = false;
 
 
         concat_started = false;
@@ -1022,16 +1040,16 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         w2_comp_busy = false;
       }
       break;
-
-    case S_STREAM_IN:
+    }
+    case S_STREAM_IN: {
       axis_in_ready = 1;
 
       if (axis_in_valid && axis_in_last) {
         st = S_LAYER_COUNT;
       }
       break;
-
-    case S_LAYER_COUNT:
+    }
+    case S_LAYER_COUNT: {
 
 
       attn_started = false;
@@ -1041,10 +1059,21 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       group_idx = 0;
 
       start_head_group = true;
-      VITIS_LOOP_354_2: for (int i = 0; i < NUM_HEADS; ++i){
+      VITIS_LOOP_370_2: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], layer_idx, i);
       }
+
+
+      requant1_started = false;
+      requant2_started = false;
+      requant3_started = false;
+      requant4_started = false;
+
+      requant1_compute_done = false;
+      requant2_compute_done = false;
+      requant3_compute_done = false;
+      requant4_compute_done = false;
 
 
       concat_started = false;
@@ -1085,8 +1114,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       w2_comp_busy = false;
       st = S_ATTENTION_HEADS;
 
-      break;
-
+      break;}
     case S_ATTENTION_HEADS: {
 
 
@@ -1095,7 +1123,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
 
 
- VITIS_LOOP_408_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+ VITIS_LOOP_434_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
         if (h < NUM_HEADS) {
@@ -1111,7 +1139,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
           drive_group_head_phase(head_group, group_base, layer_idx, start_head_group);
 
 
-      VITIS_LOOP_424_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+      VITIS_LOOP_450_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
           if (h < NUM_HEADS) {
@@ -1144,8 +1172,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
       break;
     }
-
-    case S_HEAD_CONCAT:
+    case S_HEAD_CONCAT: {
       if (!concat_started && compute_ready) {
         concat_compute_done = false;
         compute_start = 1;
@@ -1157,11 +1184,11 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         st = S_OUT_PROJECTION;
       }
       break;
-
-    case S_OUT_PROJECTION:
+    }
+    case S_OUT_PROJECTION: {
       if (wo_tile >= NUM_WO_TILES) {
         resid0_started = false;
-        st = S_RES_ADD_1;
+        st = S_REQUANT1;
         break;
       }
 
@@ -1187,8 +1214,21 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         wo_tile++;
       }
       break;
-
-    case S_RES_ADD_1:
+    }
+    case S_REQUANT1: {
+      if (!requant1_started && compute_ready) {
+        requant1_compute_done = false;
+        compute_start = 1;
+        compute_op = CMP_REQUANT1;
+        requant1_started = true;
+      } else if (requant1_started && requant1_compute_done) {
+        requant1_started = false;
+        requant1_compute_done = false;
+        st = S_RES_ADD_1;
+      }
+      break;
+    }
+    case S_RES_ADD_1: {
       if (!resid0_started && compute_ready) {
         resid0_compute_done = false;
         compute_start = 1;
@@ -1200,8 +1240,8 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         st = S_LAYER_NORM_1;
       }
       break;
-
-    case S_LAYER_NORM_1:
+    }
+    case S_LAYER_NORM_1: {
       if (!ln0_started && compute_ready) {
         ln0_compute_done = false;
         compute_start = 1;
@@ -1210,11 +1250,24 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       } else if (ln0_started && ln0_compute_done) {
         ln0_started = false;
         ln0_compute_done = false;
+        st = S_REQUANT2;
+      }
+      break;
+    }
+    case S_REQUANT2: {
+      if (!requant2_started && compute_ready) {
+        requant2_compute_done = false;
+        compute_start = 1;
+        compute_op = CMP_REQUANT2;
+        requant2_started = true;
+      } else if (requant2_started && requant2_compute_done) {
+        requant2_started = false;
+        requant2_compute_done = false;
         st = S_FFN;
       }
       break;
-
-    case S_FFN:
+    }
+    case S_FFN: {
 
       switch (ffn_stage) {
       case FfnStage::W1:
@@ -1262,7 +1315,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         if (w2_tile >= NUM_W2_TILES) {
           ffn_started = false;
           ffn_stage = FfnStage::W1;
-          st = S_RES_ADD_2;
+          st = S_REQUANT3;
           break;
         }
 
@@ -1290,8 +1343,21 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         break;
       }
       break;
-
-    case S_RES_ADD_2:
+    }
+    case S_REQUANT3: {
+      if (!requant3_started && compute_ready) {
+        requant3_compute_done = false;
+        compute_start = 1;
+        compute_op = CMP_REQUANT3;
+        requant3_started = true;
+      } else if (requant3_started && requant3_compute_done) {
+        requant3_started = false;
+        requant3_compute_done = false;
+        st = S_RES_ADD_2;
+      }
+      break;
+    }
+    case S_RES_ADD_2: {
       if (!resid1_started && compute_ready) {
         resid1_compute_done = false;
         compute_start = 1;
@@ -1303,8 +1369,8 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         st = S_LAYER_NORM_2;
       }
       break;
-
-    case S_LAYER_NORM_2:
+    }
+    case S_LAYER_NORM_2: {
       if (!ln1_started && compute_ready) {
         ln1_compute_done = false;
         compute_start = 1;
@@ -1313,11 +1379,24 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       } else if (ln1_started && ln1_compute_done) {
         ln1_started = false;
         ln1_compute_done = false;
+        st = S_REQUANT4;
+      }
+      break;
+    }
+    case S_REQUANT4: {
+      if (!requant4_started && compute_ready) {
+        requant4_compute_done = false;
+        compute_start = 1;
+        compute_op = CMP_REQUANT4;
+        requant4_started = true;
+      } else if (requant4_started && requant4_compute_done) {
+        requant4_started = false;
+        requant4_compute_done = false;
         st = S_LOOP_CHECK;
       }
       break;
-
-    case S_LOOP_CHECK:
+    }
+    case S_LOOP_CHECK: {
       if (layer_idx + 1 < NUM_LAYERS) {
         layer_idx++;
         st = S_LAYER_COUNT;
@@ -1326,8 +1405,8 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         stream_started = false;
       }
       break;
-
-    case S_STREAM_OUT:
+    }
+    case S_STREAM_OUT: {
       if (!stream_started && stream_ready) {
         stream_start = 1;
         stream_started = true;
@@ -1338,6 +1417,6 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       }
       break;
     }
-
+  }
     STATE = st;
 }

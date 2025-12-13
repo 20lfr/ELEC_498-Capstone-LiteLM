@@ -6,7 +6,7 @@ target triple = "fpga64-xilinx-none"
 %struct.HeadCtx = type { i32, i32, i8, i1, i1, i1, i8, i8, i8, i1, i1, i8, i32, i32, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1 }
 
 ; Function Attrs: noinline willreturn
-define void @apatb_scheduler_hls_ir(i1 zeroext %cntrl_start, i1 zeroext %cntrl_reset_n, i32* noalias nocapture nonnull dereferenceable(4) %cntrl_layer_idx, i1* noalias nocapture nonnull dereferenceable(1) %cntrl_busy, i1* noalias nocapture nonnull dereferenceable(1) %cntrl_start_out, i1 zeroext %axis_in_valid, i1 zeroext %axis_in_last, i1* noalias nocapture nonnull dereferenceable(1) %axis_in_ready, i1 zeroext %wl_ready, i1* noalias nocapture nonnull dereferenceable(1) %wl_start, i8* noalias nocapture nonnull dereferenceable(1) %wl_addr_sel, i32* noalias nocapture nonnull dereferenceable(4) %wl_layer, i32* noalias nocapture nonnull dereferenceable(4) %wl_head, i32* noalias nocapture nonnull dereferenceable(4) %wl_tile, i1 zeroext %dma_done, i1 zeroext %compute_ready, i1 zeroext %compute_done, i1 zeroext %requant_ready, i1 zeroext %requant_done, [4 x %struct.HeadCtx]* noalias nonnull dereferenceable(240) "partition" %head_ctx_ref, i1* noalias nocapture nonnull dereferenceable(1) %compute_start, i32* noalias nocapture nonnull dereferenceable(4) %compute_op, i1* noalias nocapture nonnull dereferenceable(1) %requant_start, i32* noalias nocapture nonnull dereferenceable(4) %requant_op, i1 zeroext %stream_ready, i1* noalias nocapture nonnull dereferenceable(1) %stream_start, i1 zeroext %stream_done, i1* noalias nocapture nonnull dereferenceable(1) %done, i32* noalias nocapture nonnull dereferenceable(4) %debug_compute_done, i32* noalias nocapture nonnull dereferenceable(4) %STATE) local_unnamed_addr #0 {
+define void @apatb_scheduler_hls_ir(i1 zeroext %cntrl_start, i1 zeroext %cntrl_reset_n, i32* noalias nocapture nonnull dereferenceable(4) %cntrl_layer_idx, i1* noalias nocapture nonnull dereferenceable(1) %cntrl_busy, i1* noalias nocapture nonnull dereferenceable(1) %cntrl_start_out, i1 zeroext %axis_in_valid, i1 zeroext %axis_in_last, i1* noalias nocapture nonnull dereferenceable(1) %axis_in_ready, i1 zeroext %wl_ready, i1* noalias nocapture nonnull dereferenceable(1) %wl_start, i8* noalias nocapture nonnull dereferenceable(1) %wl_addr_sel, i32* noalias nocapture nonnull dereferenceable(4) %wl_layer, i32* noalias nocapture nonnull dereferenceable(4) %wl_head, i32* noalias nocapture nonnull dereferenceable(4) %wl_tile, i1 zeroext %dma_done, i1 zeroext %compute_ready, i1 zeroext %compute_done, [4 x %struct.HeadCtx]* noalias nonnull dereferenceable(240) "partition" %head_ctx_ref, i1* noalias nocapture nonnull dereferenceable(1) %compute_start, i32* noalias nocapture nonnull dereferenceable(4) %compute_op, i1 zeroext %stream_ready, i1* noalias nocapture nonnull dereferenceable(1) %stream_start, i1 zeroext %stream_done, i1* noalias nocapture nonnull dereferenceable(1) %done, i32* noalias nocapture nonnull dereferenceable(4) %STATE) local_unnamed_addr #0 {
 entry:
   %cntrl_layer_idx_copy = alloca i32, align 512
   %cntrl_busy_copy = alloca i1, align 512
@@ -23,15 +23,12 @@ entry:
   %head_ctx_ref_copy_3 = alloca i202, align 512
   %compute_start_copy = alloca i1, align 512
   %compute_op_copy = alloca i32, align 512
-  %requant_start_copy = alloca i1, align 512
-  %requant_op_copy = alloca i32, align 512
   %stream_start_copy = alloca i1, align 512
   %done_copy = alloca i1, align 512
-  %debug_compute_done_copy = alloca i32, align 512
   %STATE_copy = alloca i32, align 512
-  call void @copy_in(i32* nonnull %cntrl_layer_idx, i32* nonnull align 512 %cntrl_layer_idx_copy, i1* nonnull %cntrl_busy, i1* nonnull align 512 %cntrl_busy_copy, i1* nonnull %cntrl_start_out, i1* nonnull align 512 %cntrl_start_out_copy, i1* nonnull %axis_in_ready, i1* nonnull align 512 %axis_in_ready_copy, i1* nonnull %wl_start, i1* nonnull align 512 %wl_start_copy, i8* nonnull %wl_addr_sel, i8* nonnull align 512 %wl_addr_sel_copy, i32* nonnull %wl_layer, i32* nonnull align 512 %wl_layer_copy, i32* nonnull %wl_head, i32* nonnull align 512 %wl_head_copy, i32* nonnull %wl_tile, i32* nonnull align 512 %wl_tile_copy, [4 x %struct.HeadCtx]* nonnull %head_ctx_ref, i202* nonnull align 512 %head_ctx_ref_copy_0, i202* nonnull align 512 %head_ctx_ref_copy_1, i202* nonnull align 512 %head_ctx_ref_copy_2, i202* nonnull align 512 %head_ctx_ref_copy_3, i1* nonnull %compute_start, i1* nonnull align 512 %compute_start_copy, i32* nonnull %compute_op, i32* nonnull align 512 %compute_op_copy, i1* nonnull %requant_start, i1* nonnull align 512 %requant_start_copy, i32* nonnull %requant_op, i32* nonnull align 512 %requant_op_copy, i1* nonnull %stream_start, i1* nonnull align 512 %stream_start_copy, i1* nonnull %done, i1* nonnull align 512 %done_copy, i32* nonnull %debug_compute_done, i32* nonnull align 512 %debug_compute_done_copy, i32* nonnull %STATE, i32* nonnull align 512 %STATE_copy)
-  call void @apatb_scheduler_hls_hw(i1 %cntrl_start, i1 %cntrl_reset_n, i32* %cntrl_layer_idx_copy, i1* %cntrl_busy_copy, i1* %cntrl_start_out_copy, i1 %axis_in_valid, i1 %axis_in_last, i1* %axis_in_ready_copy, i1 %wl_ready, i1* %wl_start_copy, i8* %wl_addr_sel_copy, i32* %wl_layer_copy, i32* %wl_head_copy, i32* %wl_tile_copy, i1 %dma_done, i1 %compute_ready, i1 %compute_done, i1 %requant_ready, i1 %requant_done, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1* %compute_start_copy, i32* %compute_op_copy, i1* %requant_start_copy, i32* %requant_op_copy, i1 %stream_ready, i1* %stream_start_copy, i1 %stream_done, i1* %done_copy, i32* %debug_compute_done_copy, i32* %STATE_copy)
-  call void @copy_back(i32* %cntrl_layer_idx, i32* %cntrl_layer_idx_copy, i1* %cntrl_busy, i1* %cntrl_busy_copy, i1* %cntrl_start_out, i1* %cntrl_start_out_copy, i1* %axis_in_ready, i1* %axis_in_ready_copy, i1* %wl_start, i1* %wl_start_copy, i8* %wl_addr_sel, i8* %wl_addr_sel_copy, i32* %wl_layer, i32* %wl_layer_copy, i32* %wl_head, i32* %wl_head_copy, i32* %wl_tile, i32* %wl_tile_copy, [4 x %struct.HeadCtx]* %head_ctx_ref, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1* %compute_start, i1* %compute_start_copy, i32* %compute_op, i32* %compute_op_copy, i1* %requant_start, i1* %requant_start_copy, i32* %requant_op, i32* %requant_op_copy, i1* %stream_start, i1* %stream_start_copy, i1* %done, i1* %done_copy, i32* %debug_compute_done, i32* %debug_compute_done_copy, i32* %STATE, i32* %STATE_copy)
+  call void @copy_in(i32* nonnull %cntrl_layer_idx, i32* nonnull align 512 %cntrl_layer_idx_copy, i1* nonnull %cntrl_busy, i1* nonnull align 512 %cntrl_busy_copy, i1* nonnull %cntrl_start_out, i1* nonnull align 512 %cntrl_start_out_copy, i1* nonnull %axis_in_ready, i1* nonnull align 512 %axis_in_ready_copy, i1* nonnull %wl_start, i1* nonnull align 512 %wl_start_copy, i8* nonnull %wl_addr_sel, i8* nonnull align 512 %wl_addr_sel_copy, i32* nonnull %wl_layer, i32* nonnull align 512 %wl_layer_copy, i32* nonnull %wl_head, i32* nonnull align 512 %wl_head_copy, i32* nonnull %wl_tile, i32* nonnull align 512 %wl_tile_copy, [4 x %struct.HeadCtx]* nonnull %head_ctx_ref, i202* nonnull align 512 %head_ctx_ref_copy_0, i202* nonnull align 512 %head_ctx_ref_copy_1, i202* nonnull align 512 %head_ctx_ref_copy_2, i202* nonnull align 512 %head_ctx_ref_copy_3, i1* nonnull %compute_start, i1* nonnull align 512 %compute_start_copy, i32* nonnull %compute_op, i32* nonnull align 512 %compute_op_copy, i1* nonnull %stream_start, i1* nonnull align 512 %stream_start_copy, i1* nonnull %done, i1* nonnull align 512 %done_copy, i32* nonnull %STATE, i32* nonnull align 512 %STATE_copy)
+  call void @apatb_scheduler_hls_hw(i1 %cntrl_start, i1 %cntrl_reset_n, i32* %cntrl_layer_idx_copy, i1* %cntrl_busy_copy, i1* %cntrl_start_out_copy, i1 %axis_in_valid, i1 %axis_in_last, i1* %axis_in_ready_copy, i1 %wl_ready, i1* %wl_start_copy, i8* %wl_addr_sel_copy, i32* %wl_layer_copy, i32* %wl_head_copy, i32* %wl_tile_copy, i1 %dma_done, i1 %compute_ready, i1 %compute_done, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1* %compute_start_copy, i32* %compute_op_copy, i1 %stream_ready, i1* %stream_start_copy, i1 %stream_done, i1* %done_copy, i32* %STATE_copy)
+  call void @copy_back(i32* %cntrl_layer_idx, i32* %cntrl_layer_idx_copy, i1* %cntrl_busy, i1* %cntrl_busy_copy, i1* %cntrl_start_out, i1* %cntrl_start_out_copy, i1* %axis_in_ready, i1* %axis_in_ready_copy, i1* %wl_start, i1* %wl_start_copy, i8* %wl_addr_sel, i8* %wl_addr_sel_copy, i32* %wl_layer, i32* %wl_layer_copy, i32* %wl_head, i32* %wl_head_copy, i32* %wl_tile, i32* %wl_tile_copy, [4 x %struct.HeadCtx]* %head_ctx_ref, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1* %compute_start, i1* %compute_start_copy, i32* %compute_op, i32* %compute_op_copy, i1* %stream_start, i1* %stream_start_copy, i1* %done, i1* %done_copy, i32* %STATE, i32* %STATE_copy)
   ret void
 }
 
@@ -2787,7 +2784,7 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal void @copy_in(i32* noalias readonly "orig.arg.no"="0", i32* noalias align 512 "orig.arg.no"="1", i1* noalias readonly "orig.arg.no"="2", i1* noalias align 512 "orig.arg.no"="3", i1* noalias readonly "orig.arg.no"="4", i1* noalias align 512 "orig.arg.no"="5", i1* noalias readonly "orig.arg.no"="6", i1* noalias align 512 "orig.arg.no"="7", i1* noalias readonly "orig.arg.no"="8", i1* noalias align 512 "orig.arg.no"="9", i8* noalias readonly "orig.arg.no"="10", i8* noalias align 512 "orig.arg.no"="11", i32* noalias readonly "orig.arg.no"="12", i32* noalias align 512 "orig.arg.no"="13", i32* noalias readonly "orig.arg.no"="14", i32* noalias align 512 "orig.arg.no"="15", i32* noalias readonly "orig.arg.no"="16", i32* noalias align 512 "orig.arg.no"="17", [4 x %struct.HeadCtx]* noalias readonly "orig.arg.no"="18", i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.0" %_0, i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.1" %_1, i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.2" %_2, i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.3" %_3, i1* noalias readonly "orig.arg.no"="20", i1* noalias align 512 "orig.arg.no"="21", i32* noalias readonly "orig.arg.no"="22", i32* noalias align 512 "orig.arg.no"="23", i1* noalias readonly "orig.arg.no"="24", i1* noalias align 512 "orig.arg.no"="25", i32* noalias readonly "orig.arg.no"="26", i32* noalias align 512 "orig.arg.no"="27", i1* noalias readonly "orig.arg.no"="28", i1* noalias align 512 "orig.arg.no"="29", i1* noalias readonly "orig.arg.no"="30", i1* noalias align 512 "orig.arg.no"="31", i32* noalias readonly "orig.arg.no"="32", i32* noalias align 512 "orig.arg.no"="33", i32* noalias readonly "orig.arg.no"="34", i32* noalias align 512 "orig.arg.no"="35") #3 {
+define internal void @copy_in(i32* noalias readonly "orig.arg.no"="0", i32* noalias align 512 "orig.arg.no"="1", i1* noalias readonly "orig.arg.no"="2", i1* noalias align 512 "orig.arg.no"="3", i1* noalias readonly "orig.arg.no"="4", i1* noalias align 512 "orig.arg.no"="5", i1* noalias readonly "orig.arg.no"="6", i1* noalias align 512 "orig.arg.no"="7", i1* noalias readonly "orig.arg.no"="8", i1* noalias align 512 "orig.arg.no"="9", i8* noalias readonly "orig.arg.no"="10", i8* noalias align 512 "orig.arg.no"="11", i32* noalias readonly "orig.arg.no"="12", i32* noalias align 512 "orig.arg.no"="13", i32* noalias readonly "orig.arg.no"="14", i32* noalias align 512 "orig.arg.no"="15", i32* noalias readonly "orig.arg.no"="16", i32* noalias align 512 "orig.arg.no"="17", [4 x %struct.HeadCtx]* noalias readonly "orig.arg.no"="18", i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.0" %_0, i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.1" %_1, i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.2" %_2, i202* noalias align 512 "orig.arg.no"="19" "unpacked"="19.3" %_3, i1* noalias readonly "orig.arg.no"="20", i1* noalias align 512 "orig.arg.no"="21", i32* noalias readonly "orig.arg.no"="22", i32* noalias align 512 "orig.arg.no"="23", i1* noalias readonly "orig.arg.no"="24", i1* noalias align 512 "orig.arg.no"="25", i1* noalias readonly "orig.arg.no"="26", i1* noalias align 512 "orig.arg.no"="27", i32* noalias readonly "orig.arg.no"="28", i32* noalias align 512 "orig.arg.no"="29") #3 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %1, i32* %0)
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %3, i1* %2)
@@ -2802,11 +2799,8 @@ entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %20, i1* %19)
   call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %22, i32* %21)
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %24, i1* %23)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %26, i32* %25)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %28, i1* %27)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %30, i1* %29)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %32, i32* %31)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %34, i32* %33)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %26, i1* %25)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %28, i32* %27)
   ret void
 }
 
@@ -4700,7 +4694,7 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal void @copy_out(i32* noalias "orig.arg.no"="0", i32* noalias readonly align 512 "orig.arg.no"="1", i1* noalias "orig.arg.no"="2", i1* noalias readonly align 512 "orig.arg.no"="3", i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i1* noalias "orig.arg.no"="6", i1* noalias readonly align 512 "orig.arg.no"="7", i1* noalias "orig.arg.no"="8", i1* noalias readonly align 512 "orig.arg.no"="9", i8* noalias "orig.arg.no"="10", i8* noalias readonly align 512 "orig.arg.no"="11", i32* noalias "orig.arg.no"="12", i32* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i32* noalias "orig.arg.no"="16", i32* noalias readonly align 512 "orig.arg.no"="17", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="18", i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.3" %_3, i1* noalias "orig.arg.no"="20", i1* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", i1* noalias "orig.arg.no"="24", i1* noalias readonly align 512 "orig.arg.no"="25", i32* noalias "orig.arg.no"="26", i32* noalias readonly align 512 "orig.arg.no"="27", i1* noalias "orig.arg.no"="28", i1* noalias readonly align 512 "orig.arg.no"="29", i1* noalias "orig.arg.no"="30", i1* noalias readonly align 512 "orig.arg.no"="31", i32* noalias "orig.arg.no"="32", i32* noalias readonly align 512 "orig.arg.no"="33", i32* noalias "orig.arg.no"="34", i32* noalias readonly align 512 "orig.arg.no"="35") #4 {
+define internal void @copy_out(i32* noalias "orig.arg.no"="0", i32* noalias readonly align 512 "orig.arg.no"="1", i1* noalias "orig.arg.no"="2", i1* noalias readonly align 512 "orig.arg.no"="3", i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i1* noalias "orig.arg.no"="6", i1* noalias readonly align 512 "orig.arg.no"="7", i1* noalias "orig.arg.no"="8", i1* noalias readonly align 512 "orig.arg.no"="9", i8* noalias "orig.arg.no"="10", i8* noalias readonly align 512 "orig.arg.no"="11", i32* noalias "orig.arg.no"="12", i32* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i32* noalias "orig.arg.no"="16", i32* noalias readonly align 512 "orig.arg.no"="17", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="18", i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.3" %_3, i1* noalias "orig.arg.no"="20", i1* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", i1* noalias "orig.arg.no"="24", i1* noalias readonly align 512 "orig.arg.no"="25", i1* noalias "orig.arg.no"="26", i1* noalias readonly align 512 "orig.arg.no"="27", i32* noalias "orig.arg.no"="28", i32* noalias readonly align 512 "orig.arg.no"="29") #4 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i32(i32* %0, i32* align 512 %1)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %2, i1* align 512 %3)
@@ -4715,11 +4709,8 @@ entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* %19, i1* align 512 %20)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %21, i32* align 512 %22)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %23, i1* align 512 %24)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %25, i32* align 512 %26)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %27, i1* align 512 %28)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %29, i1* align 512 %30)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %31, i32* align 512 %32)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %33, i32* align 512 %34)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %25, i1* align 512 %26)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %27, i32* align 512 %28)
   ret void
 }
 
@@ -4727,10 +4718,10 @@ declare i8* @malloc(i64)
 
 declare void @free(i8*)
 
-declare void @apatb_scheduler_hls_hw(i1, i1, i32*, i1*, i1*, i1, i1, i1*, i1, i1*, i8*, i32*, i32*, i32*, i1, i1, i1, i1, i1, i202*, i202*, i202*, i202*, i1*, i32*, i1*, i32*, i1, i1*, i1, i1*, i32*, i32*)
+declare void @apatb_scheduler_hls_hw(i1, i1, i32*, i1*, i1*, i1, i1, i1*, i1, i1*, i8*, i32*, i32*, i32*, i1, i1, i1, i202*, i202*, i202*, i202*, i1*, i32*, i1, i1*, i1, i1*, i32*)
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal void @copy_back(i32* noalias "orig.arg.no"="0", i32* noalias readonly align 512 "orig.arg.no"="1", i1* noalias "orig.arg.no"="2", i1* noalias readonly align 512 "orig.arg.no"="3", i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i1* noalias "orig.arg.no"="6", i1* noalias readonly align 512 "orig.arg.no"="7", i1* noalias "orig.arg.no"="8", i1* noalias readonly align 512 "orig.arg.no"="9", i8* noalias "orig.arg.no"="10", i8* noalias readonly align 512 "orig.arg.no"="11", i32* noalias "orig.arg.no"="12", i32* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i32* noalias "orig.arg.no"="16", i32* noalias readonly align 512 "orig.arg.no"="17", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="18", i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.3" %_3, i1* noalias "orig.arg.no"="20", i1* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", i1* noalias "orig.arg.no"="24", i1* noalias readonly align 512 "orig.arg.no"="25", i32* noalias "orig.arg.no"="26", i32* noalias readonly align 512 "orig.arg.no"="27", i1* noalias "orig.arg.no"="28", i1* noalias readonly align 512 "orig.arg.no"="29", i1* noalias "orig.arg.no"="30", i1* noalias readonly align 512 "orig.arg.no"="31", i32* noalias "orig.arg.no"="32", i32* noalias readonly align 512 "orig.arg.no"="33", i32* noalias "orig.arg.no"="34", i32* noalias readonly align 512 "orig.arg.no"="35") #4 {
+define internal void @copy_back(i32* noalias "orig.arg.no"="0", i32* noalias readonly align 512 "orig.arg.no"="1", i1* noalias "orig.arg.no"="2", i1* noalias readonly align 512 "orig.arg.no"="3", i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i1* noalias "orig.arg.no"="6", i1* noalias readonly align 512 "orig.arg.no"="7", i1* noalias "orig.arg.no"="8", i1* noalias readonly align 512 "orig.arg.no"="9", i8* noalias "orig.arg.no"="10", i8* noalias readonly align 512 "orig.arg.no"="11", i32* noalias "orig.arg.no"="12", i32* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i32* noalias "orig.arg.no"="16", i32* noalias readonly align 512 "orig.arg.no"="17", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="18", i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="19" "unpacked"="19.3" %_3, i1* noalias "orig.arg.no"="20", i1* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", i1* noalias "orig.arg.no"="24", i1* noalias readonly align 512 "orig.arg.no"="25", i1* noalias "orig.arg.no"="26", i1* noalias readonly align 512 "orig.arg.no"="27", i32* noalias "orig.arg.no"="28", i32* noalias readonly align 512 "orig.arg.no"="29") #4 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i32(i32* %0, i32* align 512 %1)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %2, i1* align 512 %3)
@@ -4745,24 +4736,21 @@ entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* %19, i1* align 512 %20)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %21, i32* align 512 %22)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %23, i1* align 512 %24)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %25, i32* align 512 %26)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %27, i1* align 512 %28)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %29, i1* align 512 %30)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %31, i32* align 512 %32)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %33, i32* align 512 %34)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %25, i1* align 512 %26)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %27, i32* align 512 %28)
   ret void
 }
 
-declare void @scheduler_hls_hw_stub(i1 zeroext, i1 zeroext, i32* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i8* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1 zeroext, i1 zeroext, i1 zeroext, [4 x %struct.HeadCtx]* noalias nonnull, i1* noalias nocapture nonnull, i32* noalias nocapture nonnull, i1* noalias nocapture nonnull, i32* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull)
+declare void @scheduler_hls_hw_stub(i1 zeroext, i1 zeroext, i32* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i8* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1 zeroext, [4 x %struct.HeadCtx]* noalias nonnull, i1* noalias nocapture nonnull, i32* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i32* noalias nocapture nonnull)
 
-define void @scheduler_hls_hw_stub_wrapper(i1, i1, i32*, i1*, i1*, i1, i1, i1*, i1, i1*, i8*, i32*, i32*, i32*, i1, i1, i1, i1, i1, i202*, i202*, i202*, i202*, i1*, i32*, i1*, i32*, i1, i1*, i1, i1*, i32*, i32*) #5 {
+define void @scheduler_hls_hw_stub_wrapper(i1, i1, i32*, i1*, i1*, i1, i1, i1*, i1, i1*, i8*, i32*, i32*, i32*, i1, i1, i1, i202*, i202*, i202*, i202*, i1*, i32*, i1, i1*, i1, i1*, i32*) #5 {
 entry:
-  %33 = call i8* @malloc(i64 240)
-  %34 = bitcast i8* %33 to [4 x %struct.HeadCtx]*
-  call void @copy_out(i32* null, i32* %2, i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %7, i1* null, i1* %9, i8* null, i8* %10, i32* null, i32* %11, i32* null, i32* %12, i32* null, i32* %13, [4 x %struct.HeadCtx]* %34, i202* %19, i202* %20, i202* %21, i202* %22, i1* null, i1* %23, i32* null, i32* %24, i1* null, i1* %25, i32* null, i32* %26, i1* null, i1* %28, i1* null, i1* %30, i32* null, i32* %31, i32* null, i32* %32)
-  call void @scheduler_hls_hw_stub(i1 %0, i1 %1, i32* %2, i1* %3, i1* %4, i1 %5, i1 %6, i1* %7, i1 %8, i1* %9, i8* %10, i32* %11, i32* %12, i32* %13, i1 %14, i1 %15, i1 %16, i1 %17, i1 %18, [4 x %struct.HeadCtx]* %34, i1* %23, i32* %24, i1* %25, i32* %26, i1 %27, i1* %28, i1 %29, i1* %30, i32* %31, i32* %32)
-  call void @copy_in(i32* null, i32* %2, i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %7, i1* null, i1* %9, i8* null, i8* %10, i32* null, i32* %11, i32* null, i32* %12, i32* null, i32* %13, [4 x %struct.HeadCtx]* %34, i202* %19, i202* %20, i202* %21, i202* %22, i1* null, i1* %23, i32* null, i32* %24, i1* null, i1* %25, i32* null, i32* %26, i1* null, i1* %28, i1* null, i1* %30, i32* null, i32* %31, i32* null, i32* %32)
-  call void @free(i8* %33)
+  %28 = call i8* @malloc(i64 240)
+  %29 = bitcast i8* %28 to [4 x %struct.HeadCtx]*
+  call void @copy_out(i32* null, i32* %2, i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %7, i1* null, i1* %9, i8* null, i8* %10, i32* null, i32* %11, i32* null, i32* %12, i32* null, i32* %13, [4 x %struct.HeadCtx]* %29, i202* %17, i202* %18, i202* %19, i202* %20, i1* null, i1* %21, i32* null, i32* %22, i1* null, i1* %24, i1* null, i1* %26, i32* null, i32* %27)
+  call void @scheduler_hls_hw_stub(i1 %0, i1 %1, i32* %2, i1* %3, i1* %4, i1 %5, i1 %6, i1* %7, i1 %8, i1* %9, i8* %10, i32* %11, i32* %12, i32* %13, i1 %14, i1 %15, i1 %16, [4 x %struct.HeadCtx]* %29, i1* %21, i32* %22, i1 %23, i1* %24, i1 %25, i1* %26, i32* %27)
+  call void @copy_in(i32* null, i32* %2, i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %7, i1* null, i1* %9, i8* null, i8* %10, i32* null, i32* %11, i32* null, i32* %12, i32* null, i32* %13, [4 x %struct.HeadCtx]* %29, i202* %17, i202* %18, i202* %19, i202* %20, i1* null, i1* %21, i32* null, i32* %22, i1* null, i1* %24, i1* null, i1* %26, i32* null, i32* %27)
+  call void @free(i8* %28)
   ret void
 }
 
@@ -4786,11 +4774,11 @@ attributes #5 = { "fpga.wrapper.func"="stub" }
 !4 = !{}
 !5 = !{!6, !8, !10}
 !6 = !{!7}
-!7 = !{!"19", [4 x %struct.HeadCtx]* null}
+!7 = !{!"17", [4 x %struct.HeadCtx]* null}
 !8 = !{!9}
 !9 = !{!"array_partition", !"type=Complete", !"dim=1"}
 !10 = !{!11, !12, !13, !14}
-!11 = !{!"19.0", %struct.HeadCtx* null}
-!12 = !{!"19.1", %struct.HeadCtx* null}
-!13 = !{!"19.2", %struct.HeadCtx* null}
-!14 = !{!"19.3", %struct.HeadCtx* null}
+!11 = !{!"17.0", %struct.HeadCtx* null}
+!12 = !{!"17.1", %struct.HeadCtx* null}
+!13 = !{!"17.2", %struct.HeadCtx* null}
+!14 = !{!"17.3", %struct.HeadCtx* null}
