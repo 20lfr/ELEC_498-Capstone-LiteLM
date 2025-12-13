@@ -83,26 +83,34 @@ module scheduler_hls_tb;
   logic axis_drive;
   // Head compute model
   localparam int HEADS_TOTAL = 4;
-  localparam int HEADS_PAR   = 2;
+  localparam int HEADS_PAR   = 1;
   typedef struct packed {
+    // Reverse order of HeadCtx so LSBs align with C layout
     logic        att_value_dma_done;
-    logic        val_scale_dma_done;
     logic        att_scores_dma_done;
     logic        v_dma_done;
     logic        k_dma_done;
     logic        q_dma_done;
+    logic        requant2_compute_done;
     logic        att_value_compute_done;
     logic        softmax_compute_done;
     logic        val_scale_compute_done;
     logic        att_scores_compute_done;
+    logic        requant_q_compute_done;
+    logic        v_requant_compute_done;
     logic        v_compute_done;
+    logic        k_requant_compute_done;
     logic        k_compute_done;
     logic        q_compute_done;
+    logic        requant2_started;
     logic        att_value_started;
     logic        softmax_started;
     logic        val_scale_started;
     logic        att_scores_started;
+    logic        requant_q_started;
+    logic        v_requant_started;
     logic        v_started;
+    logic        k_requant_started;
     logic        k_started;
     logic        q_started;
     logic        start_head;
@@ -401,6 +409,10 @@ module scheduler_hls_tb;
             val_scale_started: 1'b0,
             softmax_started: 1'b0,
             att_value_started: 1'b0,
+            k_requant_started: 1'b0,
+            v_requant_started: 1'b0,
+            requant_q_started: 1'b0,
+            requant2_started: 1'b0,
             q_compute_done: 1'b0,
             k_compute_done: 1'b0,
             v_compute_done: 1'b0,
@@ -408,11 +420,14 @@ module scheduler_hls_tb;
             val_scale_compute_done: 1'b0,
             softmax_compute_done: 1'b0,
             att_value_compute_done: 1'b0,
+            k_requant_compute_done: 1'b0,
+            v_requant_compute_done: 1'b0,
+            requant_q_compute_done: 1'b0,
+            requant2_compute_done: 1'b0,
             q_dma_done: 1'b0,
             k_dma_done: 1'b0,
             v_dma_done: 1'b0,
             att_scores_dma_done: 1'b0,
-            val_scale_dma_done: 1'b0,
             att_value_dma_done: 1'b0
           };
           head_busy_ctr[hh] <= 0;

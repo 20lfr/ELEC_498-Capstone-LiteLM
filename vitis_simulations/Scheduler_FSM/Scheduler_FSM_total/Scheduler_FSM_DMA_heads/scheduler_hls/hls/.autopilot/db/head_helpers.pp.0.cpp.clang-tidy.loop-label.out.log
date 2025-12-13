@@ -1,5 +1,5 @@
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/head_helpers.pp.0.cpp:889:5: warning: Added loop label VITIS_LOOP_301_1:   [xilinx-label-all-loops]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/head_helpers.pp.0.cpp:951:5: warning: Added loop label VITIS_LOOP_352_1:   [xilinx-label-all-loops]
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
     ^~~
-    VITIS_LOOP_301_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/head_helpers.pp.0.cpp:889:5: note: FIX-IT applied suggested code changes
+    VITIS_LOOP_352_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/head_helpers.pp.0.cpp:951:5: note: FIX-IT applied suggested code changes

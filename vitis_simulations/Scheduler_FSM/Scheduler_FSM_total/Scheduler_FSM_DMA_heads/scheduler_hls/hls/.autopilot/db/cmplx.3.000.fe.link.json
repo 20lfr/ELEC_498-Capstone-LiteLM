@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 224,
-    "calls": "2 4 2 1 2",
+    "calls": "4 1 4 3 4",
     "control_depth": 2,
     "def_use_depth": 11,
     "file": "Scheduler_FSM.cpp",
@@ -19,15 +19,48 @@
       "L": 2,
       "T": 53
     },
-    "total_instructions": 1689
+    "total_instructions": 1913
   },
   "1": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "head_helpers.hpp",
+    "fileloc": 69,
+    "instructions": 87,
+    "memory_accesses": 0,
+    "name": "HeadCtx",
+    "stores": {
+      "L": 43
+    },
+    "total_instructions": 87
+  },
+  "2": {
+    "basicblocks": 190,
+    "calls": "4",
+    "control_depth": 0,
+    "def_use_depth": 3,
+    "file": "head_helpers.cpp",
+    "fileloc": 61,
+    "instructions": 723,
+    "loads": {
+      "L": 104
+    },
+    "memory_accesses": 0,
+    "name": "run_single_head",
+    "stores": {
+      "L": 145
+    },
+    "total_instructions": 810
+  },
+  "3": {
     "basicblocks": 13,
-    "calls": "3",
+    "calls": "2",
     "control_depth": 3,
     "def_use_depth": 4,
     "file": "head_helpers.cpp",
-    "fileloc": 290,
+    "fileloc": 341,
     "instructions": 34,
     "loads": {
       "L": 3
@@ -37,54 +70,21 @@
     "stores": {
       "L": 1
     },
-    "total_instructions": 676
-  },
-  "2": {
-    "basicblocks": 1,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "head_helpers.cpp",
-    "fileloc": 5,
-    "instructions": 73,
-    "memory_accesses": 0,
-    "name": "init_head_ctx",
-    "stores": {
-      "L": 36
-    },
-    "total_instructions": 73
-  },
-  "3": {
-    "basicblocks": 150,
-    "calls": "2",
-    "control_depth": 0,
-    "def_use_depth": 3,
-    "file": "head_helpers.cpp",
-    "fileloc": 54,
-    "instructions": 569,
-    "loads": {
-      "L": 79
-    },
-    "memory_accesses": 0,
-    "name": "run_single_head",
-    "stores": {
-      "L": 117
-    },
-    "total_instructions": 642
+    "total_instructions": 844
   },
   "4": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 1,
-    "file": "head_helpers.hpp",
-    "fileloc": 65,
-    "instructions": 73,
+    "file": "head_helpers.cpp",
+    "fileloc": 5,
+    "instructions": 87,
     "memory_accesses": 0,
-    "name": "HeadCtx",
+    "name": "init_head_ctx",
     "stores": {
-      "L": 36
+      "L": 43
     },
-    "total_instructions": 73
+    "total_instructions": 87
   }
 }

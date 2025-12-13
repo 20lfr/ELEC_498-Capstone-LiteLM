@@ -502,11 +502,15 @@ enum ComputeOp : uint8_t {
     CMP_NONE = 0,
     CMP_Q,
     CMP_K,
+    CMP_K_REQUANT,
     CMP_V,
+    CMP_V_REQUANT,
+    CMP_REQUANT_Q,
     CMP_ATT_SCORES,
     CMP_VALUE_SCALE,
     CMP_SOFTMAX,
     CMP_ATT_VALUE,
+    CMP_REQUANT2,
 
     CMP_HEAD_REQUANT,
     CMP_CONCAT,
@@ -561,25 +565,32 @@ struct HeadCtx {
 
     bool q_started = false;
     bool k_started = false;
+    bool k_requant_started = false;
     bool v_started = false;
+    bool v_requant_started = false;
+    bool requant_q_started = false;
     bool att_scores_started = false;
     bool val_scale_started = false;
     bool softmax_started = false;
     bool att_value_started = false;
+    bool requant2_started = false;
 
     bool q_compute_done = false;
     bool k_compute_done = false;
+    bool k_requant_compute_done = false;
     bool v_compute_done = false;
+    bool v_requant_compute_done = false;
+    bool requant_q_compute_done = false;
     bool att_scores_compute_done = false;
     bool val_scale_compute_done = false;
     bool softmax_compute_done = false;
     bool att_value_compute_done = false;
+    bool requant2_compute_done = false;
 
     bool q_dma_done = false;
     bool k_dma_done = false;
     bool v_dma_done = false;
     bool att_scores_dma_done = false;
-    bool val_scale_dma_done = false;
     bool att_value_dma_done = false;
 };
 

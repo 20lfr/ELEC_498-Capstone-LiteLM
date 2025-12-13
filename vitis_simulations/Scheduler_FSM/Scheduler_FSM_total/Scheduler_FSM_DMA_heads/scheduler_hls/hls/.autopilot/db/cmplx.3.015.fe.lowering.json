@@ -3,41 +3,41 @@
     "basicblocks": 135,
     "calls": "1 1 2 2 2 2 2 2 2 2",
     "control_depth": 0,
-    "def_use_depth": 20,
+    "def_use_depth": 23,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 10,
-    "instructions": 1647,
+    "instructions": 1850,
     "loads": {
       "G": 44,
-      "L": 35,
+      "L": 42,
       "T": 4
     },
     "memory_accesses": 0,
     "name": "scheduler_hls",
     "stores": {
       "G": 186,
-      "L": 105,
+      "L": 126,
       "T": 55
     },
-    "total_instructions": 2405
+    "total_instructions": 2792
   },
   "1": {
-    "basicblocks": 108,
+    "basicblocks": 136,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "head_helpers.cpp",
-    "fileloc": 290,
-    "instructions": 351,
+    "fileloc": 341,
+    "instructions": 443,
     "loads": {
-      "L": 38
+      "L": 56
     },
     "memory_accesses": 0,
     "name": "drive_group_head_phase",
     "stores": {
-      "L": 151
+      "L": 188
     },
-    "total_instructions": 351
+    "total_instructions": 443
   },
   "2": {
     "basicblocks": 1,

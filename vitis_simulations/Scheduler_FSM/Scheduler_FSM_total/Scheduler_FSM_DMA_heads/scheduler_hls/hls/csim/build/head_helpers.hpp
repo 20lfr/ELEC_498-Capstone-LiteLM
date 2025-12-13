@@ -27,24 +27,28 @@ enum ComputeOp : uint8_t {
     CMP_NONE = 0,           // 0 
     CMP_Q,                  // 1
     CMP_K,                  // 2
-    CMP_V,                  // 3
-    CMP_ATT_SCORES,         // 4
-    CMP_VALUE_SCALE,        // 5
-    CMP_SOFTMAX,            // 6
-    CMP_ATT_VALUE,          // 7
+    CMP_K_REQUANT,          // 3
+    CMP_V,                  // 4
+    CMP_V_REQUANT,          // 5
+    CMP_REQUANT_Q,          // 6
+    CMP_ATT_SCORES,         // 7
+    CMP_VALUE_SCALE,        // 8
+    CMP_SOFTMAX,            // 9
+    CMP_ATT_VALUE,          // 10
+    CMP_REQUANT2,           // 11
     // Scheduler-level ops
-    CMP_HEAD_REQUANT,       // 8
-    CMP_CONCAT,             // 9 
-    CMP_OUT_PROJ,           // 10
-    CMP_RESID0,             // 11
-    CMP_LN0,                // 12
-    CMP_FFN_W1,             // 13
-    CMP_FFN_ACT,            // 14
-    CMP_FFN_W2,             // 15
-    CMP_RESID1,             // 16
-    CMP_LN1,                // 17
-    CMP_DEQUANT,            // 18
-    CMP_LOGITS              // 19
+    CMP_HEAD_REQUANT,       // 12
+    CMP_CONCAT,             // 13
+    CMP_OUT_PROJ,           // 14
+    CMP_RESID0,             // 15
+    CMP_LN0,                // 16
+    CMP_FFN_W1,             // 17
+    CMP_FFN_ACT,            // 18
+    CMP_FFN_W2,             // 19
+    CMP_RESID1,             // 20
+    CMP_LN1,                // 21
+    CMP_DEQUANT,            // 22
+    CMP_LOGITS              // 23
 };
 
 enum DmaSel : uint8_t {
@@ -86,25 +90,32 @@ struct HeadCtx {
     // Per-head bookkeeping for started phases
     bool q_started          = false;
     bool k_started          = false;
+    bool k_requant_started  = false;
     bool v_started          = false;
+    bool v_requant_started  = false;
+    bool requant_q_started  = false;
     bool att_scores_started = false;
     bool val_scale_started  = false;
     bool softmax_started    = false;
     bool att_value_started  = false;
+    bool requant2_started   = false;
 
     bool q_compute_done          = false;
     bool k_compute_done          = false;
+    bool k_requant_compute_done  = false;
     bool v_compute_done          = false;
+    bool v_requant_compute_done  = false;
+    bool requant_q_compute_done  = false;
     bool att_scores_compute_done = false;
     bool val_scale_compute_done  = false;
     bool softmax_compute_done    = false;
     bool att_value_compute_done  = false;
+    bool requant2_compute_done   = false;
 
     bool q_dma_done          = false;
     bool k_dma_done          = false;
     bool v_dma_done          = false;
     bool att_scores_dma_done = false;
-    bool val_scale_dma_done  = false;
     bool att_value_dma_done  = false;
 };
 

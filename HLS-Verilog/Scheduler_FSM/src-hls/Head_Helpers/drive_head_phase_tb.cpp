@@ -98,7 +98,7 @@ int main() {
     int group_idx = 0;
 
     // Start each group sequentially; only the active group gets ready/done pulses.
-    while (!all_done && layer_idx < NUM_LAYERS && cycle < 512) {
+    while (!all_done && layer_idx < NUM_LAYERS && cycle < 1024) {
         const int group_base = group_idx * PAR;
 
         // Default all compute signals low

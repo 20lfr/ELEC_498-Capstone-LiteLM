@@ -45,6 +45,12 @@ static const char *op_name(int op_raw) {
     case CMP_FFN_W2:       return "FFN_W2";
     case CMP_RESID1:       return "RESID1";
     case CMP_LN1:          return "LN1";
+    case CMP_REQUANT_Q:    return "RQ_Q";
+    case CMP_DEQUANT:      return "DEQUANT";
+    case CMP_LOGITS:       return "LOGITS";
+    case CMP_K_REQUANT:    return "K_RQ";
+    case CMP_V_REQUANT:    return "V_RQ";
+    case CMP_REQUANT2:     return "RQ2";
     default:               return "UNK";
     }
 }
@@ -89,7 +95,7 @@ static const char *phase_name(HeadPhase ph) {
 }
 
 int main() {
-    const int MAX_CYCLES = 600;
+    const int MAX_CYCLES = 1200;
     const int COMP_LAT   = 3;
     const int DMA_LAT    = 3;
     const int AXIS_BEATS = 3;

@@ -1539,7 +1539,7 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
 
   static hls::sim::Register port19 {
     .name = "head_ctx_ref_0",
-    .width = 195,
+    .width = 202,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_0),
 #else
@@ -1551,7 +1551,7 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
 
   static hls::sim::Register port20 {
     .name = "head_ctx_ref_1",
-    .width = 195,
+    .width = 202,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_1),
 #else
@@ -1563,7 +1563,7 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
 
   static hls::sim::Register port21 {
     .name = "head_ctx_ref_2",
-    .width = 195,
+    .width = 202,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_2),
 #else
@@ -1575,7 +1575,7 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
 
   static hls::sim::Register port22 {
     .name = "head_ctx_ref_3",
-    .width = 195,
+    .width = 202,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_3),
 #else

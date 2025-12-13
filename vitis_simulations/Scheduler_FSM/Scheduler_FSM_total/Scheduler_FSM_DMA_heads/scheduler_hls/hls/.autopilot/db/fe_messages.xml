@@ -1,11 +1,11 @@
 <xilinx:hls_fe_msgs>
-    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:60:9" msg_body="HLS pragma dump">
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:67:9" msg_body="HLS pragma dump">
         <args ARG_PragmaFunction="run_single_head" ARG_PragmaIsValid="1" ARG_PragmaType="inline" ClangWarningOption="dump-hls-pragmas"/>
     </msg>
-    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:296:9" msg_body="HLS pragma dump">
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:347:9" msg_body="HLS pragma dump">
         <args ARG_PragmaFunction="drive_group_head_phase" ARG_PragmaIsValid="1" ARG_PragmaOptions="variable=head_ctx_ref complete dim=1" ARG_PragmaType="array_partition" ClangWarningOption="dump-hls-pragmas"/>
     </msg>
-    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:302:9" msg_body="HLS pragma dump">
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:353:9" msg_body="HLS pragma dump">
         <args ARG_PragmaFunction="drive_group_head_phase" ARG_PragmaIsValid="1" ARG_PragmaType="unroll" ClangWarningOption="dump-hls-pragmas"/>
     </msg>
     <msg msg_groups="" msg_id="207-5292" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:46:10" msg_body="unused parameter 'requant_ready'">
@@ -140,8 +140,8 @@
     <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:425:9" msg_body="HLS pragma dump">
         <args ARG_PragmaFunction="scheduler_hls" ARG_PragmaIsValid="1" ARG_PragmaType="unroll" ClangWarningOption="dump-hls-pragmas"/>
     </msg>
-    <msg msg_groups="CODE_UNSUPPORTED" msg_id="214-131" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:314:36" msg_body="Inlining function 'run_single_head(HeadCtx&amp;, int, bool)' into 'drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)'">
-        <args Callee="run_single_head(HeadCtx&amp;, int, bool)" Callee-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 59 Column 0" Caller="drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)" Caller-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 295 Column 0"/>
+    <msg msg_groups="CODE_UNSUPPORTED" msg_id="214-131" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:365:36" msg_body="Inlining function 'run_single_head(HeadCtx&amp;, int, bool)' into 'drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)'">
+        <args Callee="run_single_head(HeadCtx&amp;, int, bool)" Callee-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 66 Column 0" Caller="drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)" Caller-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 346 Column 0"/>
     </msg>
     <msg msg_groups="PRAGMA_UNROLL" msg_id="214-186" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Unrolling loop 'VITIS_LOOP_354_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:354:25) in function 'scheduler_hls' completely with a factor of 4">
         <args Factor="4" LoopLoc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:354:25" LoopName="VITIS_LOOP_354_2"/>
@@ -155,14 +155,14 @@
     <msg msg_groups="PRAGMA_UNROLL" msg_id="214-186" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Unrolling loop 'VITIS_LOOP_175_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:175:23) in function 'scheduler_hls' completely with a factor of 4">
         <args Factor="4" LoopLoc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:175:23" LoopName="VITIS_LOOP_175_1"/>
     </msg>
-    <msg msg_groups="PRAGMA_UNROLL" msg_id="214-186" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:295:0" msg_body="Unrolling loop 'VITIS_LOOP_301_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:301:23) in function 'drive_group_head_phase' completely with a factor of 1">
-        <args Factor="1" LoopLoc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:301:23" LoopName="VITIS_LOOP_301_1"/>
+    <msg msg_groups="PRAGMA_UNROLL" msg_id="214-186" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:346:0" msg_body="Unrolling loop 'VITIS_LOOP_352_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:352:23) in function 'drive_group_head_phase' completely with a factor of 1">
+        <args Factor="1" LoopLoc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:352:23" LoopName="VITIS_LOOP_352_1"/>
     </msg>
-    <msg msg_groups="PRAGMA_INLINE" msg_id="214-178" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:295:0" msg_body="Inlining function 'init_head_ctx(HeadCtx&amp;, int, int) (.4)' into 'drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)'">
-        <args Callee="init_head_ctx(HeadCtx&amp;, int, int) (.4)" Callee-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 5 Column 0" Caller="drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)" Caller-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 295 Column 0"/>
+    <msg msg_groups="PRAGMA_INLINE" msg_id="214-178" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:346:0" msg_body="Inlining function 'init_head_ctx(HeadCtx&amp;, int, int) (.4)' into 'drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)'">
+        <args Callee="init_head_ctx(HeadCtx&amp;, int, int) (.4)" Callee-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 5 Column 0" Caller="drive_group_head_phase(HeadCtx (&amp;) [1], int, int, bool)" Caller-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 346 Column 0"/>
     </msg>
     <msg msg_groups="PRAGMA_INLINE" msg_id="214-178" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Inlining function 'HeadCtx::HeadCtx()' into 'scheduler_hls(bool, bool, unsigned int&amp;, bool&amp;, bool&amp;, bool, bool, bool&amp;, bool, bool&amp;, DmaSel&amp;, int&amp;, int&amp;, int&amp;, bool, bool, bool, bool, bool, HeadCtx (&amp;) [4], bool&amp;, int&amp;, bool&amp;, int&amp;, bool, bool&amp;, bool, bool&amp;, unsigned int&amp;, SchedState&amp;)'">
-        <args Callee="HeadCtx::HeadCtx()" Callee-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp Line 65 Column 0" Caller="scheduler_hls(bool, bool, unsigned int&amp;, bool&amp;, bool&amp;, bool, bool, bool&amp;, bool, bool&amp;, DmaSel&amp;, int&amp;, int&amp;, int&amp;, bool, bool, bool, bool, bool, HeadCtx (&amp;) [4], bool&amp;, int&amp;, bool&amp;, int&amp;, bool, bool&amp;, bool, bool&amp;, unsigned int&amp;, SchedState&amp;)" Caller-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp Line 76 Column 0"/>
+        <args Callee="HeadCtx::HeadCtx()" Callee-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp Line 69 Column 0" Caller="scheduler_hls(bool, bool, unsigned int&amp;, bool&amp;, bool&amp;, bool, bool, bool&amp;, bool, bool&amp;, DmaSel&amp;, int&amp;, int&amp;, int&amp;, bool, bool, bool, bool, bool, HeadCtx (&amp;) [4], bool&amp;, int&amp;, bool&amp;, int&amp;, bool, bool&amp;, bool, bool&amp;, unsigned int&amp;, SchedState&amp;)" Caller-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp Line 76 Column 0"/>
     </msg>
     <msg msg_groups="PRAGMA_INLINE" msg_id="214-178" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Inlining function 'init_head_ctx(HeadCtx&amp;, int, int) (.4)' into 'scheduler_hls(bool, bool, unsigned int&amp;, bool&amp;, bool&amp;, bool, bool, bool&amp;, bool, bool&amp;, DmaSel&amp;, int&amp;, int&amp;, int&amp;, bool, bool, bool, bool, bool, HeadCtx (&amp;) [4], bool&amp;, int&amp;, bool&amp;, int&amp;, bool, bool&amp;, bool, bool&amp;, unsigned int&amp;, SchedState&amp;)'">
         <args Callee="init_head_ctx(HeadCtx&amp;, int, int) (.4)" Callee-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp Line 5 Column 0" Caller="scheduler_hls(bool, bool, unsigned int&amp;, bool&amp;, bool&amp;, bool, bool, bool&amp;, bool, bool&amp;, DmaSel&amp;, int&amp;, int&amp;, int&amp;, bool, bool, bool, bool, bool, HeadCtx (&amp;) [4], bool&amp;, int&amp;, bool&amp;, int&amp;, bool, bool&amp;, bool, bool&amp;, unsigned int&amp;, SchedState&amp;)" Caller-DebugLoc="File /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp Line 76 Column 0"/>
@@ -221,8 +221,17 @@
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.k_started': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.k_started"/>
     </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.k_requant_started': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.k_requant_started"/>
+    </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.v_started': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.v_started"/>
+    </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.v_requant_started': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.v_requant_started"/>
+    </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.requant_q_started': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.requant_q_started"/>
     </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.att_scores_started': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.att_scores_started"/>
@@ -236,14 +245,26 @@
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.att_value_started': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.att_value_started"/>
     </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.requant2_started': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.requant2_started"/>
+    </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.q_compute_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.q_compute_done"/>
     </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.k_compute_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.k_compute_done"/>
     </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.k_requant_compute_done': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.k_requant_compute_done"/>
+    </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.v_compute_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.v_compute_done"/>
+    </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.v_requant_compute_done': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.v_requant_compute_done"/>
+    </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.requant_q_compute_done': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.requant_q_compute_done"/>
     </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.att_scores_compute_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.att_scores_compute_done"/>
@@ -257,6 +278,9 @@
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.att_value_compute_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.att_value_compute_done"/>
     </msg>
+    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.requant2_compute_done': Complete partitioning on dimension 1.">
+        <args Dim="1" Mode="Complete" UOName="head_group.requant2_compute_done"/>
+    </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.q_dma_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.q_dma_done"/>
     </msg>
@@ -269,26 +293,23 @@
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.att_scores_dma_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.att_scores_dma_done"/>
     </msg>
-    <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.val_scale_dma_done': Complete partitioning on dimension 1.">
-        <args Dim="1" Mode="Complete" UOName="head_group.val_scale_dma_done"/>
-    </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404:15" msg_body="Applying array_partition to 'head_group.att_value_dma_done': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_group.att_value_dma_done"/>
     </msg>
     <msg msg_groups="PRAGMA_MISC" msg_id="214-248" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Applying array_partition to 'head_ctx_ref': Complete partitioning on dimension 1.">
         <args Dim="1" Mode="Complete" UOName="head_ctx_ref"/>
     </msg>
-    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_3' with compact=bit mode in 195-bits">
-        <args AggregateTypeName="compact=bit" Bitwidth="195" HwTyName="scalar" Name="head_ctx_ref_3"/>
+    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_3' with compact=bit mode in 202-bits">
+        <args AggregateTypeName="compact=bit" Bitwidth="202" HwTyName="scalar" Name="head_ctx_ref_3"/>
     </msg>
-    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_2' with compact=bit mode in 195-bits">
-        <args AggregateTypeName="compact=bit" Bitwidth="195" HwTyName="scalar" Name="head_ctx_ref_2"/>
+    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_2' with compact=bit mode in 202-bits">
+        <args AggregateTypeName="compact=bit" Bitwidth="202" HwTyName="scalar" Name="head_ctx_ref_2"/>
     </msg>
-    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_1' with compact=bit mode in 195-bits">
-        <args AggregateTypeName="compact=bit" Bitwidth="195" HwTyName="scalar" Name="head_ctx_ref_1"/>
+    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_1' with compact=bit mode in 202-bits">
+        <args AggregateTypeName="compact=bit" Bitwidth="202" HwTyName="scalar" Name="head_ctx_ref_1"/>
     </msg>
-    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_0' with compact=bit mode in 195-bits">
-        <args AggregateTypeName="compact=bit" Bitwidth="195" HwTyName="scalar" Name="head_ctx_ref_0"/>
+    <msg msg_groups="PRAGMA_AGGREGATE" msg_id="214-241" msg_severity="INFO" msg_loc="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:76:0" msg_body="Aggregating scalar variable 'head_ctx_ref_0' with compact=bit mode in 202-bits">
+        <args AggregateTypeName="compact=bit" Bitwidth="202" HwTyName="scalar" Name="head_ctx_ref_0"/>
     </msg>
 </xilinx:hls_fe_msgs>
 
