@@ -70,6 +70,8 @@ struct HeadCtx {
     bool compute_done  = false;
     bool compute_start = false;
     ComputeOp  compute_op    = ComputeOp::CMP_NONE;
+    ComputeOp  last_compute_op = ComputeOp::CMP_NONE; // Tracks last issued compute to gate done pulses
+    DmaSel     last_wl_addr  = DmaSel::DMASEL_NONE;   // Tracks last issued WL request for dma_done attribution
 
     bool    wl_ready    = false;                  // INPUT FROM WL 
     bool    wl_start    = false;                  // OUTPUT signal for head

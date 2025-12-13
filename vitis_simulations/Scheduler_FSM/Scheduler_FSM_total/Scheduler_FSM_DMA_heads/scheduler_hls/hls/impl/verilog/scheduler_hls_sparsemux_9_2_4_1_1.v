@@ -5,7 +5,7 @@
 // ==============================================================
 `timescale 1ns / 1ps
 
-module scheduler_hls_sparsemux_9_2_8_1_1 (din0,din1,din2,din3,def,sel,dout);
+module scheduler_hls_sparsemux_9_2_4_1_1 (din0,din1,din2,din3,def,sel,dout);
 
 parameter din0_WIDTH = 1;
 

@@ -40,6 +40,8 @@ set C_modelArgList {
 	{ requant_done uint 1 unused  }
 	{ head_ctx_ref_0 int 195 regular {pointer 2}  }
 	{ head_ctx_ref_1 int 195 regular {pointer 2}  }
+	{ head_ctx_ref_2 int 195 regular {pointer 2}  }
+	{ head_ctx_ref_3 int 195 regular {pointer 2}  }
 	{ compute_start int 1 regular {pointer 1}  }
 	{ compute_op int 32 regular {pointer 1}  }
 	{ requant_start int 1 regular {pointer 1}  }
@@ -76,6 +78,8 @@ set C_modelArgMapList {[
  	{ "Name" : "requant_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "head_ctx_ref_0", "interface" : "wire", "bitwidth" : 195, "direction" : "READWRITE"} , 
  	{ "Name" : "head_ctx_ref_1", "interface" : "wire", "bitwidth" : 195, "direction" : "READWRITE"} , 
+ 	{ "Name" : "head_ctx_ref_2", "interface" : "wire", "bitwidth" : 195, "direction" : "READWRITE"} , 
+ 	{ "Name" : "head_ctx_ref_3", "interface" : "wire", "bitwidth" : 195, "direction" : "READWRITE"} , 
  	{ "Name" : "compute_start", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} , 
  	{ "Name" : "compute_op", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "requant_start", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} , 
@@ -87,7 +91,7 @@ set C_modelArgMapList {[
  	{ "Name" : "debug_compute_done", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "STATE", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} ]}
 # RTL Port declarations: 
-set portNum 58
+set portNum 64
 set portList { 
 	{ ap_clk sc_in sc_logic 1 clock -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
@@ -129,24 +133,30 @@ set portList {
 	{ head_ctx_ref_1_i sc_in sc_lv 195 signal 20 } 
 	{ head_ctx_ref_1_o sc_out sc_lv 195 signal 20 } 
 	{ head_ctx_ref_1_o_ap_vld sc_out sc_logic 1 outvld 20 } 
-	{ compute_start sc_out sc_lv 1 signal 21 } 
-	{ compute_start_ap_vld sc_out sc_logic 1 outvld 21 } 
-	{ compute_op sc_out sc_lv 32 signal 22 } 
-	{ compute_op_ap_vld sc_out sc_logic 1 outvld 22 } 
-	{ requant_start sc_out sc_lv 1 signal 23 } 
-	{ requant_start_ap_vld sc_out sc_logic 1 outvld 23 } 
-	{ requant_op sc_out sc_lv 32 signal 24 } 
-	{ requant_op_ap_vld sc_out sc_logic 1 outvld 24 } 
-	{ stream_ready sc_in sc_lv 1 signal 25 } 
-	{ stream_start sc_out sc_lv 1 signal 26 } 
-	{ stream_start_ap_vld sc_out sc_logic 1 outvld 26 } 
-	{ stream_done sc_in sc_lv 1 signal 27 } 
-	{ done sc_out sc_lv 1 signal 28 } 
-	{ done_ap_vld sc_out sc_logic 1 outvld 28 } 
-	{ debug_compute_done sc_out sc_lv 32 signal 29 } 
-	{ debug_compute_done_ap_vld sc_out sc_logic 1 outvld 29 } 
-	{ STATE sc_out sc_lv 32 signal 30 } 
-	{ STATE_ap_vld sc_out sc_logic 1 outvld 30 } 
+	{ head_ctx_ref_2_i sc_in sc_lv 195 signal 21 } 
+	{ head_ctx_ref_2_o sc_out sc_lv 195 signal 21 } 
+	{ head_ctx_ref_2_o_ap_vld sc_out sc_logic 1 outvld 21 } 
+	{ head_ctx_ref_3_i sc_in sc_lv 195 signal 22 } 
+	{ head_ctx_ref_3_o sc_out sc_lv 195 signal 22 } 
+	{ head_ctx_ref_3_o_ap_vld sc_out sc_logic 1 outvld 22 } 
+	{ compute_start sc_out sc_lv 1 signal 23 } 
+	{ compute_start_ap_vld sc_out sc_logic 1 outvld 23 } 
+	{ compute_op sc_out sc_lv 32 signal 24 } 
+	{ compute_op_ap_vld sc_out sc_logic 1 outvld 24 } 
+	{ requant_start sc_out sc_lv 1 signal 25 } 
+	{ requant_start_ap_vld sc_out sc_logic 1 outvld 25 } 
+	{ requant_op sc_out sc_lv 32 signal 26 } 
+	{ requant_op_ap_vld sc_out sc_logic 1 outvld 26 } 
+	{ stream_ready sc_in sc_lv 1 signal 27 } 
+	{ stream_start sc_out sc_lv 1 signal 28 } 
+	{ stream_start_ap_vld sc_out sc_logic 1 outvld 28 } 
+	{ stream_done sc_in sc_lv 1 signal 29 } 
+	{ done sc_out sc_lv 1 signal 30 } 
+	{ done_ap_vld sc_out sc_logic 1 outvld 30 } 
+	{ debug_compute_done sc_out sc_lv 32 signal 31 } 
+	{ debug_compute_done_ap_vld sc_out sc_logic 1 outvld 31 } 
+	{ STATE sc_out sc_lv 32 signal 32 } 
+	{ STATE_ap_vld sc_out sc_logic 1 outvld 32 } 
 }
 set NewPortList {[ 
 	{ "name": "ap_clk", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "clock", "bundle":{"name": "ap_clk", "role": "default" }} , 
@@ -189,6 +199,12 @@ set NewPortList {[
  	{ "name": "head_ctx_ref_1_i", "direction": "in", "datatype": "sc_lv", "bitwidth":195, "type": "signal", "bundle":{"name": "head_ctx_ref_1", "role": "i" }} , 
  	{ "name": "head_ctx_ref_1_o", "direction": "out", "datatype": "sc_lv", "bitwidth":195, "type": "signal", "bundle":{"name": "head_ctx_ref_1", "role": "o" }} , 
  	{ "name": "head_ctx_ref_1_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_1", "role": "o_ap_vld" }} , 
+ 	{ "name": "head_ctx_ref_2_i", "direction": "in", "datatype": "sc_lv", "bitwidth":195, "type": "signal", "bundle":{"name": "head_ctx_ref_2", "role": "i" }} , 
+ 	{ "name": "head_ctx_ref_2_o", "direction": "out", "datatype": "sc_lv", "bitwidth":195, "type": "signal", "bundle":{"name": "head_ctx_ref_2", "role": "o" }} , 
+ 	{ "name": "head_ctx_ref_2_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_2", "role": "o_ap_vld" }} , 
+ 	{ "name": "head_ctx_ref_3_i", "direction": "in", "datatype": "sc_lv", "bitwidth":195, "type": "signal", "bundle":{"name": "head_ctx_ref_3", "role": "i" }} , 
+ 	{ "name": "head_ctx_ref_3_o", "direction": "out", "datatype": "sc_lv", "bitwidth":195, "type": "signal", "bundle":{"name": "head_ctx_ref_3", "role": "o" }} , 
+ 	{ "name": "head_ctx_ref_3_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_3", "role": "o_ap_vld" }} , 
  	{ "name": "compute_start", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start", "role": "default" }} , 
  	{ "name": "compute_start_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_start", "role": "ap_vld" }} , 
  	{ "name": "compute_op", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "compute_op", "role": "default" }} , 
@@ -231,6 +247,8 @@ set ArgLastReadFirstWriteLatency {
 		requant_done {Type I LastRead -1 FirstWrite -1}
 		head_ctx_ref_0 {Type IO LastRead 0 FirstWrite 0}
 		head_ctx_ref_1 {Type IO LastRead 0 FirstWrite 0}
+		head_ctx_ref_2 {Type IO LastRead 0 FirstWrite 0}
+		head_ctx_ref_3 {Type IO LastRead 0 FirstWrite 0}
 		compute_start {Type O LastRead -1 FirstWrite 0}
 		compute_op {Type O LastRead -1 FirstWrite 0}
 		requant_start {Type O LastRead -1 FirstWrite 0}
@@ -276,75 +294,42 @@ set ArgLastReadFirstWriteLatency {
 		w2_comp_busy {Type IO LastRead -1 FirstWrite -1}}
 	drive_group_head_phase {
 		p_read {Type I LastRead 0 FirstWrite -1}
-		p_read1 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_head_idx_0_val {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_head_idx_1_val {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_phase_read {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_layer_stamp_read {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_head_idx_val {Type I LastRead 0 FirstWrite -1}
 		head_ctx_ref_phase_read_5 {Type I LastRead 0 FirstWrite -1}
-		p_read4 {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_phase_read {Type I LastRead 0 FirstWrite -1}
+		p_read2 {Type I LastRead 0 FirstWrite -1}
+		p_read7 {Type I LastRead 0 FirstWrite -1}
+		p_read8 {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_compute_op_read {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_last_compute_op_read {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_last_wl_addr_read {Type I LastRead 0 FirstWrite -1}
+		p_read12 {Type I LastRead 0 FirstWrite -1}
 		p_read13 {Type I LastRead 0 FirstWrite -1}
-		p_read14 {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_wl_addr_sel_read {Type I LastRead 0 FirstWrite -1}
 		p_read15 {Type I LastRead 0 FirstWrite -1}
 		p_read16 {Type I LastRead 0 FirstWrite -1}
 		p_read17 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_compute_op_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_compute_op_read_5 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_last_compute_op_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_last_compute_op_read_5 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_last_wl_addr_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_last_wl_addr_read_5 {Type I LastRead 0 FirstWrite -1}
+		p_read19 {Type I LastRead 0 FirstWrite -1}
+		p_read20 {Type I LastRead 0 FirstWrite -1}
+		p_read21 {Type I LastRead 0 FirstWrite -1}
+		p_read22 {Type I LastRead 0 FirstWrite -1}
+		p_read23 {Type I LastRead 0 FirstWrite -1}
 		p_read24 {Type I LastRead 0 FirstWrite -1}
 		p_read25 {Type I LastRead 0 FirstWrite -1}
 		p_read26 {Type I LastRead 0 FirstWrite -1}
 		p_read27 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read_5 {Type I LastRead 0 FirstWrite -1}
+		p_read28 {Type I LastRead 0 FirstWrite -1}
+		p_read29 {Type I LastRead 0 FirstWrite -1}
 		p_read30 {Type I LastRead 0 FirstWrite -1}
 		p_read31 {Type I LastRead 0 FirstWrite -1}
 		p_read32 {Type I LastRead 0 FirstWrite -1}
 		p_read33 {Type I LastRead 0 FirstWrite -1}
 		p_read34 {Type I LastRead 0 FirstWrite -1}
 		p_read35 {Type I LastRead 0 FirstWrite -1}
+		p_read36 {Type I LastRead 0 FirstWrite -1}
+		p_read37 {Type I LastRead 0 FirstWrite -1}
 		p_read38 {Type I LastRead 0 FirstWrite -1}
-		p_read39 {Type I LastRead 0 FirstWrite -1}
-		p_read40 {Type I LastRead 0 FirstWrite -1}
-		p_read41 {Type I LastRead 0 FirstWrite -1}
-		p_read42 {Type I LastRead 0 FirstWrite -1}
-		p_read43 {Type I LastRead 0 FirstWrite -1}
-		p_read44 {Type I LastRead 0 FirstWrite -1}
-		p_read45 {Type I LastRead 0 FirstWrite -1}
-		p_read46 {Type I LastRead 0 FirstWrite -1}
-		p_read47 {Type I LastRead 0 FirstWrite -1}
-		p_read48 {Type I LastRead 0 FirstWrite -1}
-		p_read49 {Type I LastRead 0 FirstWrite -1}
-		p_read50 {Type I LastRead 0 FirstWrite -1}
-		p_read51 {Type I LastRead 0 FirstWrite -1}
-		p_read52 {Type I LastRead 0 FirstWrite -1}
-		p_read53 {Type I LastRead 0 FirstWrite -1}
-		p_read54 {Type I LastRead 0 FirstWrite -1}
-		p_read55 {Type I LastRead 0 FirstWrite -1}
-		p_read56 {Type I LastRead 0 FirstWrite -1}
-		p_read57 {Type I LastRead 0 FirstWrite -1}
-		p_read58 {Type I LastRead 0 FirstWrite -1}
-		p_read59 {Type I LastRead 0 FirstWrite -1}
-		p_read60 {Type I LastRead 0 FirstWrite -1}
-		p_read61 {Type I LastRead 0 FirstWrite -1}
-		p_read62 {Type I LastRead 0 FirstWrite -1}
-		p_read63 {Type I LastRead 0 FirstWrite -1}
-		p_read64 {Type I LastRead 0 FirstWrite -1}
-		p_read65 {Type I LastRead 0 FirstWrite -1}
-		p_read66 {Type I LastRead 0 FirstWrite -1}
-		p_read67 {Type I LastRead 0 FirstWrite -1}
-		p_read68 {Type I LastRead 0 FirstWrite -1}
-		p_read69 {Type I LastRead 0 FirstWrite -1}
-		p_read70 {Type I LastRead 0 FirstWrite -1}
-		p_read71 {Type I LastRead 0 FirstWrite -1}
-		p_read72 {Type I LastRead 0 FirstWrite -1}
-		p_read73 {Type I LastRead 0 FirstWrite -1}
-		p_read74 {Type I LastRead 0 FirstWrite -1}
-		p_read75 {Type I LastRead 0 FirstWrite -1}
-		p_read76 {Type I LastRead 0 FirstWrite -1}
-		p_read77 {Type I LastRead 0 FirstWrite -1}
 		layer_idx {Type I LastRead 0 FirstWrite -1}
 		start_r {Type I LastRead 0 FirstWrite -1}}}
 
@@ -380,6 +365,8 @@ set Spec2ImplPortList {
 	requant_done { ap_none {  { requant_done in_data 0 1 } } }
 	head_ctx_ref_0 { ap_ovld {  { head_ctx_ref_0_i in_data 0 195 }  { head_ctx_ref_0_o out_data 1 195 }  { head_ctx_ref_0_o_ap_vld out_vld 1 1 } } }
 	head_ctx_ref_1 { ap_ovld {  { head_ctx_ref_1_i in_data 0 195 }  { head_ctx_ref_1_o out_data 1 195 }  { head_ctx_ref_1_o_ap_vld out_vld 1 1 } } }
+	head_ctx_ref_2 { ap_ovld {  { head_ctx_ref_2_i in_data 0 195 }  { head_ctx_ref_2_o out_data 1 195 }  { head_ctx_ref_2_o_ap_vld out_vld 1 1 } } }
+	head_ctx_ref_3 { ap_ovld {  { head_ctx_ref_3_i in_data 0 195 }  { head_ctx_ref_3_o out_data 1 195 }  { head_ctx_ref_3_o_ap_vld out_vld 1 1 } } }
 	compute_start { ap_vld {  { compute_start out_data 1 1 }  { compute_start_ap_vld out_vld 1 1 } } }
 	compute_op { ap_vld {  { compute_op out_data 1 32 }  { compute_op_ap_vld out_vld 1 1 } } }
 	requant_start { ap_vld {  { requant_start out_data 1 1 }  { requant_start_ap_vld out_vld 1 1 } } }

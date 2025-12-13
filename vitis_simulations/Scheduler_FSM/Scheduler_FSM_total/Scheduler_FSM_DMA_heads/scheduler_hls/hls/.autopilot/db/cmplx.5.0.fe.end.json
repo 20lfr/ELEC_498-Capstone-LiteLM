@@ -3,9 +3,9 @@
         "name": "scheduler_hls",
         "file": "Scheduler_FSM.cpp",
         "fileloc": "10",
-        "instructions": "775",
-        "total_instructions": "1421",
-        "calls": "1",
+        "instructions": "800",
+        "total_instructions": "1454",
+        "calls": "1 1",
         "basicblocks": "124",
         "memory_accesses": "0",
         "control_depth": "0",
@@ -21,12 +21,12 @@
         "name": "drive_group_head_phase",
         "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Head_Helpers\/head_helpers.cpp",
         "fileloc": "291",
-        "instructions": "646",
-        "total_instructions": "646",
+        "instructions": "327",
+        "total_instructions": "327",
         "calls": "",
-        "basicblocks": "59",
+        "basicblocks": "30",
         "memory_accesses": "0",
         "control_depth": "0",
-        "def_use_depth": "72"
+        "def_use_depth": "37"
     }
 }

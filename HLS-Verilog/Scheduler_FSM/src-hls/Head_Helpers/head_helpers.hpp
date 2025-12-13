@@ -2,7 +2,7 @@
 #pragma once
 #include <cstdint>
 
-constexpr int NUM_HEADS      = 2;
+constexpr int NUM_HEADS      = 4;
 constexpr int HEADS_PARALLEL = 2;
 
 enum class HeadPhase : uint8_t {

@@ -7,7 +7,7 @@ WARNING: [XSIM 43-3431] One or more environment variables have been detected whi
 Starting static elaboration
 Pass Through NonSizing Optimizer
 WARNING: [VRFC 10-3818] variable 'seen_attn' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-Verilog/Head-Helpers-FSM-combo/scheduler_hls_tb.sv:79]
-WARNING: [VRFC 10-2921] 'seen_attn' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-Verilog/Head-Helpers-FSM-combo/scheduler_hls_tb.sv:181]
+WARNING: [VRFC 10-2921] 'seen_attn' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-Verilog/Head-Helpers-FSM-combo/scheduler_hls_tb.sv:185]
 WARNING: [VRFC 10-3818] variable 'seen_concat' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-Verilog/Head-Helpers-FSM-combo/scheduler_hls_tb.sv:80]
 Completed static elaboration
 Starting simulation data flow analysis
