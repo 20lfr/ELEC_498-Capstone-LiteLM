@@ -145,13 +145,32 @@ enum SchedState {
     S_STREAM_OUT       // 16
 };
 
-enum RequantOp : uint8_t {
-    RQ_NONE = 0, // 0
-    RQ_K,        // 1
-    RQ_V,        // 2
-    RQ_Q,        // 3
-    RQ_FINAL     // 4
+// LayerNorm micro-FSM phases (numbered per algorithm steps)
+enum class LnPhase : uint8_t {
+    SUM = 0,      // 1) S = sum_i y_i
+    SUMSQ,        // 2) Q = sum_i y_i^2
+    MEAN,         // 3) mu = S / d
+    EYY,          // 4) E[y^2] = Q / d
+    VAR,          // 5) sigma2 = E[y^2] - mu^2
+    VAR_EPS,      // 6) v = sigma2 + eps
+    INV_STD,      // 7) inv_std = 1 / sqrt(v)
+    NORM,         // 8) y_hat[i] = (y_i - mu) * inv_std
+    SCALE,        // 9) z_i = gamma_i * y_hat[i]
+    SHIFT,        // 10) o_i = z_i + beta_i
+    DONE
 };
+
+// Drive a three-phase LayerNorm using the shared compute interface.
+// Returns true once PASS2 completes and phase is set to DONE.
+bool LayerNorm(
+    LnPhase   &phase,
+    bool      &ln_started,
+    bool      &ln_compute_done,
+    bool       compute_ready,
+    bool      &compute_start,
+    ComputeOp &compute_op,
+    const ComputeOp ops[10]
+);
 
 
 // ------------------------------------------------------------
@@ -177,7 +196,7 @@ void scheduler_hls(
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
-    int  &compute_op,
+    ComputeOp  &compute_op,
     bool stream_ready,
     bool &stream_start,
     bool stream_done,

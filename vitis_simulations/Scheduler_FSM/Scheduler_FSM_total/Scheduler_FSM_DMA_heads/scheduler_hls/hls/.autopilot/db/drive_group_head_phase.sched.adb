@@ -38132,7 +38132,7 @@
 					<Obj>
 						<type>0</type>
 						<id>634</id>
-						<name>or_ln110_1</name>
+						<name>or_ln110_2</name>
 						<fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</fileName>
 						<fileDirectory>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads</fileDirectory>
 						<lineNumber>110</lineNumber>

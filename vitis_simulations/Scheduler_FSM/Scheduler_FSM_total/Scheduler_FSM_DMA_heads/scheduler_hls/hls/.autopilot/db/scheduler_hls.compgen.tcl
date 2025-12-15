@@ -349,7 +349,7 @@ eval "cg_default_interface_gen_dc { \
     sync_rst true \
     corename dc_compute_op \
     op interface \
-    ports { compute_op { O 32 vector } compute_op_ap_vld { O 1 bit } } \
+    ports { compute_op { O 8 vector } compute_op_ap_vld { O 1 bit } } \
 } "
 }
 

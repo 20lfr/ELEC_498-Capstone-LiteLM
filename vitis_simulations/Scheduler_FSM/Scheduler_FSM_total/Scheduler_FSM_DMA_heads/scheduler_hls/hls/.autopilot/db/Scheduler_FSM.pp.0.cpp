@@ -526,7 +526,29 @@ enum ComputeOp : uint8_t {
     CMP_RESID1,
     CMP_LN1,
     CMP_DEQUANT,
-    CMP_LOGITS
+    CMP_LOGITS,
+
+
+    CMP_LN0_SUM,
+    CMP_LN0_SUMSQ,
+    CMP_LN0_MEAN,
+    CMP_LN0_EYY,
+    CMP_LN0_VAR,
+    CMP_LN0_VAR_EPS,
+    CMP_LN0_INV_STD,
+    CMP_LN0_NORM,
+    CMP_LN0_SCALE,
+    CMP_LN0_SHIFT,
+    CMP_LN1_SUM,
+    CMP_LN1_SUMSQ,
+    CMP_LN1_MEAN,
+    CMP_LN1_EYY,
+    CMP_LN1_VAR,
+    CMP_LN1_VAR_EPS,
+    CMP_LN1_INV_STD,
+    CMP_LN1_NORM,
+    CMP_LN1_SCALE,
+    CMP_LN1_SHIFT
 };
 
 enum DmaSel : uint8_t {
@@ -647,13 +669,32 @@ enum SchedState {
     S_STREAM_OUT
 };
 
-enum RequantOp : uint8_t {
-    RQ_NONE = 0,
-    RQ_K,
-    RQ_V,
-    RQ_Q,
-    RQ_FINAL
+
+enum class LnPhase : uint8_t {
+    SUM = 0,
+    SUMSQ,
+    MEAN,
+    EYY,
+    VAR,
+    VAR_EPS,
+    INV_STD,
+    NORM,
+    SCALE,
+    SHIFT,
+    DONE
 };
+
+
+
+bool LayerNorm(
+    LnPhase &phase,
+    bool &ln_started,
+    bool &ln_compute_done,
+    bool compute_ready,
+    bool &compute_start,
+    ComputeOp &compute_op,
+    const ComputeOp ops[10]
+);
 
 
 
@@ -679,7 +720,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
-    int &compute_op,
+    ComputeOp &compute_op,
     bool stream_ready,
     bool &stream_start,
     bool stream_done,
@@ -687,13 +728,143 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     SchedState &STATE
 );
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" 2
-
-
-
-
-
-
-
+# 26 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+bool LayerNorm(
+  LnPhase &phase,
+  bool &ln_started,
+  bool &ln_compute_done,
+  bool compute_ready,
+  bool &compute_start,
+  ComputeOp &compute_op,
+  const ComputeOp ops[10]
+) {
+#pragma HLS INLINE
+ switch (phase) {
+    case LnPhase::SUM:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[0];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SUMSQ;
+      }
+      break;
+    case LnPhase::SUMSQ:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[1];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::MEAN;
+      }
+      break;
+    case LnPhase::MEAN:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[2];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::EYY;
+      }
+      break;
+    case LnPhase::EYY:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[3];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::VAR;
+      }
+      break;
+    case LnPhase::VAR:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[4];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::VAR_EPS;
+      }
+      break;
+    case LnPhase::VAR_EPS:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[5];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::INV_STD;
+      }
+      break;
+    case LnPhase::INV_STD:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[6];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::NORM;
+      }
+      break;
+    case LnPhase::NORM:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[7];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SCALE;
+      }
+      break;
+    case LnPhase::SCALE:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[8];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SHIFT;
+      }
+      break;
+    case LnPhase::SHIFT:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[9];
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::DONE;
+      }
+      break;
+    case LnPhase::DONE:
+      return true;
+  }
+  return (phase == LnPhase::DONE);
+}
 
 __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
@@ -733,7 +904,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
-    int &compute_op,
+    ComputeOp &compute_op,
 
 
 
@@ -754,7 +925,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=scheduler_hls
-# 66 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+# 219 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
 
 
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
@@ -780,6 +951,8 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS reset variable = resid0_compute_done
  static bool ln0_compute_done;
 #pragma HLS reset variable = ln0_compute_done
+ static LnPhase ln0_phase;
+#pragma HLS reset variable = ln0_phase
  static bool ffn_w1_compute_done;
 #pragma HLS reset variable = ffn_w1_compute_done
  static bool ffn_act_compute_done;
@@ -790,8 +963,23 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS reset variable = resid1_compute_done
  static bool ln1_compute_done;
 #pragma HLS reset variable = ln1_compute_done
+ static LnPhase ln1_phase;
+#pragma HLS reset variable = ln1_phase
 
- static bool requant1_compute_done;
+ static const ComputeOp ln0_ops[10] = {
+      ComputeOp::CMP_LN0_SUM, ComputeOp::CMP_LN0_SUMSQ,
+      ComputeOp::CMP_LN0_MEAN, ComputeOp::CMP_LN0_EYY,
+      ComputeOp::CMP_LN0_VAR, ComputeOp::CMP_LN0_VAR_EPS,
+      ComputeOp::CMP_LN0_INV_STD, ComputeOp::CMP_LN0_NORM,
+      ComputeOp::CMP_LN0_SCALE, ComputeOp::CMP_LN0_SHIFT};
+  static const ComputeOp ln1_ops[10] = {
+      ComputeOp::CMP_LN1_SUM, ComputeOp::CMP_LN1_SUMSQ,
+      ComputeOp::CMP_LN1_MEAN, ComputeOp::CMP_LN1_EYY,
+      ComputeOp::CMP_LN1_VAR, ComputeOp::CMP_LN1_VAR_EPS,
+      ComputeOp::CMP_LN1_INV_STD, ComputeOp::CMP_LN1_NORM,
+      ComputeOp::CMP_LN1_SCALE, ComputeOp::CMP_LN1_SHIFT};
+
+  static bool requant1_compute_done;
 #pragma HLS reset variable = requant1_compute_done
  static bool requant2_compute_done;
 #pragma HLS reset variable = requant2_compute_done
@@ -866,6 +1054,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     layer_idx = 0;
 
 
+
     attn_started = false;
     attn_done = false;
     attn_compute_done = false;
@@ -873,7 +1062,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     group_idx = 0;
 
     start_head_group = false;
-    VITIS_LOOP_184_1: for (int i = 0; i < NUM_HEADS; ++i){
+    VITIS_LOOP_355_1: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], -1, i);
     }
@@ -903,6 +1092,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     resid0_compute_done = false;
     ln0_started = false;
     ln0_compute_done = false;
+    ln0_phase = LnPhase::SUM;
 
 
     ffn_w1_compute_done = false;
@@ -916,6 +1106,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     resid1_compute_done = false;
     ln1_started = false;
     ln1_compute_done = false;
+    ln1_phase = LnPhase::SUM;
 
 
     stream_started = false;
@@ -1014,6 +1205,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         resid0_compute_done = false;
         ln0_started = false;
         ln0_compute_done = false;
+        ln0_phase = LnPhase::SUM;
 
 
         ffn_started = false;
@@ -1026,6 +1218,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         resid1_compute_done = false;
         ln1_started = false;
         ln1_compute_done = false;
+        ln1_phase = LnPhase::SUM;
 
 
         stream_started = false;
@@ -1059,7 +1252,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       group_idx = 0;
 
       start_head_group = true;
-      VITIS_LOOP_370_2: for (int i = 0; i < NUM_HEADS; ++i){
+      VITIS_LOOP_545_2: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], layer_idx, i);
       }
@@ -1088,6 +1281,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       resid0_compute_done = false;
       ln0_started = false;
       ln0_compute_done = false;
+      ln0_phase = LnPhase::SUM;
 
 
       ffn_stage = FfnStage::W1;
@@ -1101,6 +1295,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       resid1_compute_done = false;
       ln1_started = false;
       ln1_compute_done = false;
+      ln1_phase = LnPhase::SUM;
 
 
       wo_tile = 0;
@@ -1123,7 +1318,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
 
 
- VITIS_LOOP_434_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+ VITIS_LOOP_611_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
         if (h < NUM_HEADS) {
@@ -1139,7 +1334,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
           drive_group_head_phase(head_group, group_base, layer_idx, start_head_group);
 
 
-      VITIS_LOOP_450_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+      VITIS_LOOP_627_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
           if (h < NUM_HEADS) {
@@ -1242,18 +1437,16 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       break;
     }
     case S_LAYER_NORM_1: {
-      if (!ln0_started && compute_ready) {
-        ln0_compute_done = false;
-        compute_start = 1;
-        compute_op = CMP_LN0;
-        ln0_started = true;
-      } else if (ln0_started && ln0_compute_done) {
-        ln0_started = false;
-        ln0_compute_done = false;
+      const bool ln0_done =
+          LayerNorm(ln0_phase, ln0_started, ln0_compute_done, compute_ready,
+                    compute_start, compute_op, ln0_ops);
+      if (ln0_done) {
+        ln0_phase = LnPhase::SUM;
         st = S_REQUANT2;
       }
       break;
     }
+# 752 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
     case S_REQUANT2: {
       if (!requant2_started && compute_ready) {
         requant2_compute_done = false;
@@ -1371,18 +1564,16 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       break;
     }
     case S_LAYER_NORM_2: {
-      if (!ln1_started && compute_ready) {
-        ln1_compute_done = false;
-        compute_start = 1;
-        compute_op = CMP_LN1;
-        ln1_started = true;
-      } else if (ln1_started && ln1_compute_done) {
-        ln1_started = false;
-        ln1_compute_done = false;
+      const bool ln1_done =
+          LayerNorm(ln1_phase, ln1_started, ln1_compute_done, compute_ready,
+                    compute_start, compute_op, ln1_ops);
+      if (ln1_done) {
+        ln1_phase = LnPhase::SUM;
         st = S_REQUANT4;
       }
       break;
     }
+# 892 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
     case S_REQUANT4: {
       if (!requant4_started && compute_ready) {
         requant4_compute_done = false;

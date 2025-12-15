@@ -29,8 +29,7 @@ static const char *state_name(SchedState st) {
     }
 }
 
-static const char *op_name(int op_raw) {
-    const ComputeOp op = static_cast<ComputeOp>(op_raw);
+static const char *op_name(ComputeOp op) {
     switch (op) {
     case CMP_NONE:         return "-";
     case CMP_Q:            return "Q";
@@ -59,6 +58,26 @@ static const char *op_name(int op_raw) {
     case CMP_LN1:          return "LN1";
     case CMP_DEQUANT:      return "DEQUANT";
     case CMP_LOGITS:       return "LOGITS";
+    case CMP_LN0_SUM:      return "LN0_SUM";
+    case CMP_LN0_SUMSQ:    return "LN0_Q";
+    case CMP_LN0_MEAN:     return "LN0_MEAN";
+    case CMP_LN0_EYY:      return "LN0_EYY";
+    case CMP_LN0_VAR:      return "LN0_VAR";
+    case CMP_LN0_VAR_EPS:  return "LN0_VEPS";
+    case CMP_LN0_INV_STD:  return "LN0_INV";
+    case CMP_LN0_NORM:     return "LN0_NORM";
+    case CMP_LN0_SCALE:    return "LN0_SCL";
+    case CMP_LN0_SHIFT:    return "LN0_SHF";
+    case CMP_LN1_SUM:      return "LN1_SUM";
+    case CMP_LN1_SUMSQ:    return "LN1_Q";
+    case CMP_LN1_MEAN:     return "LN1_MEAN";
+    case CMP_LN1_EYY:      return "LN1_EYY";
+    case CMP_LN1_VAR:      return "LN1_VAR";
+    case CMP_LN1_VAR_EPS:  return "LN1_VEPS";
+    case CMP_LN1_INV_STD:  return "LN1_INV";
+    case CMP_LN1_NORM:     return "LN1_NORM";
+    case CMP_LN1_SCALE:    return "LN1_SCL";
+    case CMP_LN1_SHIFT:    return "LN1_SHF";
     default:               return "UNK";
     }
 }
@@ -133,7 +152,7 @@ int main() {
     bool compute_ready   = true;
     bool compute_done    = false;
     bool compute_start   = false;
-    int  compute_op      = CMP_NONE;
+    ComputeOp  compute_op      = ComputeOp::CMP_NONE;
 
     bool head_lane_busy[HEADS_PARALLEL] = {false};
     int  head_lane_timer[HEADS_PARALLEL] = {0};
@@ -337,7 +356,7 @@ int main() {
                 head_lane_busy[lane] = true;
                 head_lane_timer[lane] = COMP_LAT - 1;
                 head_lane_active_idx[lane] = i;
-                int launched_op = static_cast<int>(head_ctx_ref[i].compute_op);
+                ComputeOp launched_op = head_ctx_ref[i].compute_op;
                 if (launched_op == CMP_ATT_SCORES) seen_attn = true;
             }
             if (head_ctx_ref[i].wl_start && !head_dma_busy[lane]) {

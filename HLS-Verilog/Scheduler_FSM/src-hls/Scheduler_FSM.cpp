@@ -7,6 +7,159 @@
 // compute operation and waits for its corresponding done pulse before
 // advancing.
 
+// Drive a three-step LayerNorm (reduction -> scalar math -> elementwise) using
+// the shared compute interface.
+// Pass 1 (reduction):
+//   1) S = sum_i y_i
+//   2) Q = sum_i y_i^2
+// Scalar computation:
+//   3) mu        = S / d
+//   4) E[y^2]    = Q / d
+//   5) sigma2    = E[y^2] - mu^2
+//   6) v         = sigma2 + eps
+//   7) inv_std   = 1 / sqrt(v)
+// Pass 2 (element-wise):
+//   8) y_hat[i]  = (y_i - mu) * inv_std
+//   9) z_i       = gamma_i * y_hat[i]
+//  10) o_i       = z_i + beta_i
+// Output: o_i
+bool LayerNorm(
+  LnPhase &phase, 
+  bool &ln_started, 
+  bool &ln_compute_done,
+  bool compute_ready, 
+  bool &compute_start, 
+  ComputeOp &compute_op,
+  const ComputeOp ops[10]
+) {
+#pragma HLS INLINE
+  switch (phase) {
+    case LnPhase::SUM:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[0]; // SUM
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SUMSQ;
+      }
+      break;
+    case LnPhase::SUMSQ:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[1]; // SUMSQ
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::MEAN;
+      }
+      break;
+    case LnPhase::MEAN:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[2]; // MEAN
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::EYY;
+      }
+      break;
+    case LnPhase::EYY:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[3]; // EYY
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::VAR;
+      }
+      break;
+    case LnPhase::VAR:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[4]; // VAR
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::VAR_EPS;
+      }
+      break;
+    case LnPhase::VAR_EPS:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[5]; // VAR_EPS
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::INV_STD;
+      }
+      break;
+    case LnPhase::INV_STD:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[6]; // INV_STD
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::NORM;
+      }
+      break;
+    case LnPhase::NORM:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[7]; // NORM
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SCALE;
+      }
+      break;
+    case LnPhase::SCALE:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[8]; // SCALE
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SHIFT;
+      }
+      break;
+    case LnPhase::SHIFT:
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = ops[9]; // SHIFT
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::DONE;
+      }
+      break;
+    case LnPhase::DONE:
+      return true;
+  }
+  return (phase == LnPhase::DONE);
+}
+
 void scheduler_hls(
     // ------------------------------------------------------------
     // AXI4-Lite CONTROL INTERFACE (PS → PL)
@@ -45,7 +198,7 @@ void scheduler_hls(
     bool compute_done,   // [INPUT]  Compute operation finished (one-shot)
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]  Per-head context (in/out)
     bool &compute_start, // [OUTPUT] Trigger compute engine
-    int &compute_op,     // [OUTPUT] What operation to run (QKV, AttnScore,
+    ComputeOp &compute_op,     // [OUTPUT] What operation to run (QKV, AttnScore,
                          // Softmax...)
     // ------------------------------------------------------------
     // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
@@ -88,6 +241,8 @@ void scheduler_hls(
 #pragma HLS reset variable = resid0_compute_done
   static bool ln0_compute_done;
 #pragma HLS reset variable = ln0_compute_done
+  static LnPhase ln0_phase;
+#pragma HLS reset variable = ln0_phase
   static bool ffn_w1_compute_done;
 #pragma HLS reset variable = ffn_w1_compute_done
   static bool ffn_act_compute_done;
@@ -98,6 +253,21 @@ void scheduler_hls(
 #pragma HLS reset variable = resid1_compute_done
   static bool ln1_compute_done;
 #pragma HLS reset variable = ln1_compute_done
+  static LnPhase ln1_phase;
+#pragma HLS reset variable = ln1_phase
+  // Per-LN compute op tables (10 phases each)
+  static const ComputeOp ln0_ops[10] = {
+      ComputeOp::CMP_LN0_SUM,     ComputeOp::CMP_LN0_SUMSQ,
+      ComputeOp::CMP_LN0_MEAN,    ComputeOp::CMP_LN0_EYY,
+      ComputeOp::CMP_LN0_VAR,     ComputeOp::CMP_LN0_VAR_EPS,
+      ComputeOp::CMP_LN0_INV_STD, ComputeOp::CMP_LN0_NORM,
+      ComputeOp::CMP_LN0_SCALE,   ComputeOp::CMP_LN0_SHIFT};
+  static const ComputeOp ln1_ops[10] = {
+      ComputeOp::CMP_LN1_SUM,     ComputeOp::CMP_LN1_SUMSQ,
+      ComputeOp::CMP_LN1_MEAN,    ComputeOp::CMP_LN1_EYY,
+      ComputeOp::CMP_LN1_VAR,     ComputeOp::CMP_LN1_VAR_EPS,
+      ComputeOp::CMP_LN1_INV_STD, ComputeOp::CMP_LN1_NORM,
+      ComputeOp::CMP_LN1_SCALE,   ComputeOp::CMP_LN1_SHIFT};
 
   static bool requant1_compute_done;
 #pragma HLS reset variable = requant1_compute_done
@@ -172,6 +342,7 @@ void scheduler_hls(
   if (reset) {
     st = S_IDLE;
     layer_idx = 0;
+    // LayerNorm op tables
 
     // Attention
     attn_started = false;
@@ -211,6 +382,7 @@ void scheduler_hls(
     resid0_compute_done = false;
     ln0_started = false;
     ln0_compute_done = false;
+    ln0_phase = LnPhase::SUM;
 
     // FFN
     ffn_w1_compute_done = false;
@@ -224,6 +396,7 @@ void scheduler_hls(
     resid1_compute_done = false;
     ln1_started = false;
     ln1_compute_done = false;
+    ln1_phase = LnPhase::SUM;
 
     // Global progress/tiles
     stream_started = false;
@@ -322,6 +495,7 @@ void scheduler_hls(
         resid0_compute_done = false;
         ln0_started = false;
         ln0_compute_done = false;
+        ln0_phase = LnPhase::SUM;
 
         // FFN
         ffn_started = false;
@@ -334,6 +508,7 @@ void scheduler_hls(
         resid1_compute_done = false;
         ln1_started = false;
         ln1_compute_done = false;
+        ln1_phase = LnPhase::SUM;
 
         // Global progress/tiles
         stream_started = false;
@@ -396,6 +571,7 @@ void scheduler_hls(
       resid0_compute_done = false;
       ln0_started = false;
       ln0_compute_done = false;
+      ln0_phase = LnPhase::SUM;
 
       // FFN
       ffn_stage = FfnStage::W1;
@@ -409,6 +585,7 @@ void scheduler_hls(
       resid1_compute_done = false;
       ln1_started = false;
       ln1_compute_done = false;
+      ln1_phase = LnPhase::SUM;
 
       // Global progress/tiles
       wo_tile = 0;
@@ -550,14 +727,11 @@ void scheduler_hls(
       break;
     }
     case S_LAYER_NORM_1: {
-      if (!ln0_started && compute_ready) {
-        ln0_compute_done = false;
-        compute_start = 1;
-        compute_op = CMP_LN0;
-        ln0_started = true;
-      } else if (ln0_started && ln0_compute_done) {
-        ln0_started = false;
-        ln0_compute_done = false;
+      const bool ln0_done =
+          LayerNorm(ln0_phase, ln0_started, ln0_compute_done, compute_ready,
+                    compute_start, compute_op, ln0_ops);
+      if (ln0_done) {
+        ln0_phase = LnPhase::SUM;
         st = S_REQUANT2;
       }
       break;
@@ -679,14 +853,11 @@ void scheduler_hls(
       break;
     }
     case S_LAYER_NORM_2: {
-      if (!ln1_started && compute_ready) {
-        ln1_compute_done = false;
-        compute_start = 1;
-        compute_op = CMP_LN1;
-        ln1_started = true;
-      } else if (ln1_started && ln1_compute_done) {
-        ln1_started = false;
-        ln1_compute_done = false;
+      const bool ln1_done =
+          LayerNorm(ln1_phase, ln1_started, ln1_compute_done, compute_ready,
+                    compute_start, compute_op, ln1_ops);
+      if (ln1_done) {
+        ln1_phase = LnPhase::SUM;
         st = S_REQUANT4;
       }
       break;

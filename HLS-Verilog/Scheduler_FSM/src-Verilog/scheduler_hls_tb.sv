@@ -56,7 +56,7 @@ module scheduler_hls_tb;
   logic wl_tile_ap_vld;
   logic [0:0] compute_start_o;
   logic compute_start_o_ap_vld;
-  logic [31:0] compute_op;
+  logic [7:0]  compute_op;
   logic compute_op_ap_vld;
   logic [0:0] stream_start;
   logic stream_start_ap_vld;
@@ -83,6 +83,30 @@ module scheduler_hls_tb;
   // Head compute model
   localparam int HEADS_TOTAL = 4;
   localparam int HEADS_PAR   = 1;
+  // ComputeOp encodings (must match Scheduler_FSM.hpp)
+  localparam int CMP_ATT_SCORES = 7;
+  localparam int CMP_CONCAT     = 13;
+  // LayerNorm fine-grain ops (for readability in logs)
+  localparam int CMP_LN0_SUM      = 27;
+  localparam int CMP_LN0_SUMSQ    = 28;
+  localparam int CMP_LN0_MEAN     = 29;
+  localparam int CMP_LN0_EYY      = 30;
+  localparam int CMP_LN0_VAR      = 31;
+  localparam int CMP_LN0_VAR_EPS  = 32;
+  localparam int CMP_LN0_INV_STD  = 33;
+  localparam int CMP_LN0_NORM     = 34;
+  localparam int CMP_LN0_SCALE    = 35;
+  localparam int CMP_LN0_SHIFT    = 36;
+  localparam int CMP_LN1_SUM      = 37;
+  localparam int CMP_LN1_SUMSQ    = 38;
+  localparam int CMP_LN1_MEAN     = 39;
+  localparam int CMP_LN1_EYY      = 40;
+  localparam int CMP_LN1_VAR      = 41;
+  localparam int CMP_LN1_VAR_EPS  = 42;
+  localparam int CMP_LN1_INV_STD  = 43;
+  localparam int CMP_LN1_NORM     = 44;
+  localparam int CMP_LN1_SCALE    = 45;
+  localparam int CMP_LN1_SHIFT    = 46;
   typedef struct packed {
     // Reverse order of HeadCtx so LSBs align with C layout
     logic        att_value_dma_done;
@@ -199,6 +223,7 @@ module scheduler_hls_tb;
   // Compute model with latency
   always_ff @(posedge ap_clk) begin : compute_model
     int comp_lat_var;
+    logic is_ln_op;
     if (ap_rst) begin
       comp_busy    <= 1'b0;
       comp_timer   <= 0;
@@ -229,10 +254,12 @@ module scheduler_hls_tb;
 
       if (compute_start_o && compute_start_o_ap_vld && !comp_busy) begin
         comp_busy <= 1'b1;
-        comp_lat_var = rand_comp_lat();
+        // LayerNorm ops run shorter (6 cycles), others ~24 cycles
+        is_ln_op = (compute_op >= CMP_LN0_SUM) && (compute_op <= CMP_LN1_SHIFT);
+        comp_lat_var = is_ln_op ? 6 : 24;
         comp_timer <= (comp_lat_var > 0) ? comp_lat_var - 1 : 0;
-        if (compute_op == 32'd4) seen_attn <= 1'b1;    // CMP_ATT_SCORES
-        if (compute_op == 32'd9) seen_concat <= 1'b1;  // CMP_CONCAT
+        if (compute_op == CMP_ATT_SCORES) seen_attn <= 1'b1;
+        if (compute_op == CMP_CONCAT)     seen_concat <= 1'b1;
       end
 
       compute_ready <= !comp_busy && !compute_done;
@@ -397,6 +424,7 @@ module scheduler_hls_tb;
         int dma_lat_h;
         logic compute_start_now;
         logic dma_start_now;
+        logic is_ln_head_op;
         if (ap_rst) begin
           head_ctx_shadow[hh] <= '{
             layer_stamp: 32'd0,
@@ -477,11 +505,12 @@ module scheduler_hls_tb;
             compute_start_now = head_ctx_ref_3_struct.compute_start;
             dma_start_now     = head_ctx_ref_3_struct.wl_start;
           end
-
           // detect compute_start and run latency model
           if (compute_start_now && !head_inflight[hh] && !head_done_hold[hh]) begin
             head_inflight[hh] <= 1'b1;
-            comp_lat_h = rand_comp_lat();
+            is_ln_head_op = (head_ctx_shadow[hh].compute_op >= CMP_LN0_SUM) &&
+                            (head_ctx_shadow[hh].compute_op <= CMP_LN1_SHIFT);
+            comp_lat_h = is_ln_head_op ? 6 : 24;
             head_busy_ctr[hh] <= (comp_lat_h > 0) ? comp_lat_h - 1 : 0;
             head_done_hold[hh] <= 1'b0;
           end else if (head_inflight[hh]) begin
@@ -544,7 +573,7 @@ module scheduler_hls_tb;
     seen_concat = 1'b0;
 
     // Print header
-    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6s %-6s | %-8s %-8s %-8s %-6s",
+    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6s %-6s | %-8s %-8s %-8s %-10s",
              "Cycle", "Start", "Reset", "Busy", "State",
              "AXIS_v", "AXIS_r", "AXIS_last",
              "WL_rdy", "WL_strt_o", "WL_addr", "WL_head", "WL_tile",
@@ -571,7 +600,7 @@ module scheduler_hls_tb;
       end
       
       // Print state
-      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6d %-6d | %-8s %-8s %-8s %-6d",
+      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6d %-6d | %-8s %-8s %-8s %-10s",
                cycle,
                cntrl_start ? "1" : "-",
                cntrl_reset_n ? "1" : "-",
@@ -588,7 +617,7 @@ module scheduler_hls_tb;
                compute_start_o ? "1" : "-",
                compute_ready ? "1" : "-",
                compute_done ? "1" : "-",
-               compute_op);
+               op_name(compute_op));
       
       // Track done signal
       if (done) begin
@@ -641,14 +670,71 @@ module scheduler_hls_tb;
       32'd3:  return "S_ATT_HEADS";
       32'd4:  return "S_HEAD_CONCAT";
       32'd5:  return "S_OUT_PROJ";
-      32'd6:  return "S_RES_ADD_1";
-      32'd7:  return "S_LN_1";
-      32'd8:  return "S_FFN";
-      32'd9:  return "S_RES_ADD_2";
-      32'd10: return "S_LN_2";
-      32'd11: return "S_LOOP_CHECK";
-      32'd12: return "S_STREAM_OUT";
+      32'd6:  return "S_REQUANT1";
+      32'd7:  return "S_RES_ADD_1";
+      32'd8:  return "S_LN_1";
+      32'd9:  return "S_REQUANT2";
+      32'd10: return "S_FFN";
+      32'd11: return "S_REQUANT3";
+      32'd12: return "S_RES_ADD_2";
+      32'd13: return "S_LN_2";
+      32'd14: return "S_REQUANT4";
+      32'd15: return "S_LOOP_CHECK";
+      32'd16: return "S_STREAM_OUT";
       default: return "UNKNOWN";
+    endcase
+  endfunction
+
+  function string op_name(input [7:0] op);
+    case (op)
+      8'd0:  return "NONE";
+      8'd1:  return "Q";
+      8'd2:  return "K";
+      8'd3:  return "K_RQ";
+      8'd4:  return "V";
+      8'd5:  return "V_RQ";
+      8'd6:  return "RQ_Q";
+      8'd7:  return "ATT_SCO";
+      8'd8:  return "VAL_SCL";
+      8'd9:  return "SOFTMAX";
+      8'd10: return "ATT_VAL";
+      8'd11: return "RQ2";
+      8'd12: return "HEAD_RQ";
+      8'd13: return "CONCAT";
+      8'd14: return "OUT_PROJ";
+      8'd15: return "RQ1";
+      8'd16: return "RESID0";
+      8'd17: return "LN0";
+      8'd18: return "RQ3";
+      8'd19: return "FFN_W1";
+      8'd20: return "FFN_ACT";
+      8'd21: return "FFN_W2";
+      8'd22: return "RQ4";
+      8'd23: return "RESID1";
+      8'd24: return "LN1";
+      8'd25: return "DEQUANT";
+      8'd26: return "LOGITS";
+      8'd27: return "LN0_SUM";
+      8'd28: return "LN0_Q";
+      8'd29: return "LN0_MEAN";
+      8'd30: return "LN0_EYY";
+      8'd31: return "LN0_VAR";
+      8'd32: return "LN0_VEPS";
+      8'd33: return "LN0_INV";
+      8'd34: return "LN0_NORM";
+      8'd35: return "LN0_SCL";
+      8'd36: return "LN0_SHF";
+      8'd37: return "LN1_SUM";
+      8'd38: return "LN1_Q";
+      8'd39: return "LN1_MEAN";
+      8'd40: return "LN1_EYY";
+      8'd41: return "LN1_VAR";
+      8'd42: return "LN1_VEPS";
+      8'd43: return "LN1_INV";
+      8'd44: return "LN1_NORM";
+      8'd45: return "LN1_SCL";
+      8'd46: return "LN1_SHF";
+      default: return "UNK";
     endcase
   endfunction
 

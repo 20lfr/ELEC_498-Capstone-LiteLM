@@ -46,7 +46,7 @@ void transformer_top(
     bool compute_ready  = false;    // Compute core idle indicator
     bool compute_done   = false;    // Compute completion pulse
     bool compute_start  = false;    // Scheduler trigger for compute core
-    int  compute_op     = CMP_NONE; // Which compute op to run
+    ComputeOp  compute_op     = ComputeOp::CMP_NONE; // Which compute op to run
     bool requant_ready  = false;    // Requant engine idle indicator
     bool requant_done   = false;    // Requant engine completion pulse
     bool requant_start  = false;    // Scheduler trigger for requant engine

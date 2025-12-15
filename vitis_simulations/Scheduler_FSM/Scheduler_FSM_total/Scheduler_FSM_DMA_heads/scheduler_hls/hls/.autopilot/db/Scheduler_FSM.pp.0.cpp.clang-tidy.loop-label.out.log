@@ -1,20 +1,20 @@
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:876:5: warning: Added loop label VITIS_LOOP_184_1:   [xilinx-label-all-loops]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1065:5: warning: Added loop label VITIS_LOOP_355_1:   [xilinx-label-all-loops]
     for (int i = 0; i < NUM_HEADS; ++i){
     ^~~
-    VITIS_LOOP_184_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:876:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1062:7: warning: Added loop label VITIS_LOOP_370_2:   [xilinx-label-all-loops]
+    VITIS_LOOP_355_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1065:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1255:7: warning: Added loop label VITIS_LOOP_545_2:   [xilinx-label-all-loops]
       for (int i = 0; i < NUM_HEADS; ++i){
       ^~~
-      VITIS_LOOP_370_2: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1062:7: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1126:2: warning: Added loop label VITIS_LOOP_434_3:   [xilinx-label-all-loops]
+      VITIS_LOOP_545_2: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1255:7: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1321:2: warning: Added loop label VITIS_LOOP_611_3:   [xilinx-label-all-loops]
  for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
  ^~~
- VITIS_LOOP_434_3: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1126:2: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1142:7: warning: Added loop label VITIS_LOOP_450_4:   [xilinx-label-all-loops]
+ VITIS_LOOP_611_3: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1321:2: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1337:7: warning: Added loop label VITIS_LOOP_627_4:   [xilinx-label-all-loops]
       for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
       ^~~
-      VITIS_LOOP_450_4: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1142:7: note: FIX-IT applied suggested code changes
+      VITIS_LOOP_627_4: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads/scheduler_hls/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:1337:7: note: FIX-IT applied suggested code changes

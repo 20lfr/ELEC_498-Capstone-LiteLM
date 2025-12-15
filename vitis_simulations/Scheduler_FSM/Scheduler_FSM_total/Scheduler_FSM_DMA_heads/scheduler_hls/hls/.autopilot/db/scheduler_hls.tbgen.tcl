@@ -41,7 +41,7 @@ set C_modelArgList {
 	{ head_ctx_ref_2 int 202 regular {pointer 2}  }
 	{ head_ctx_ref_3 int 202 regular {pointer 2}  }
 	{ compute_start int 1 regular {pointer 2}  }
-	{ compute_op int 32 regular {pointer 1}  }
+	{ compute_op int 8 regular {pointer 1}  }
 	{ stream_ready uint 1 regular  }
 	{ stream_start int 1 regular {pointer 1}  }
 	{ stream_done uint 1 regular  }
@@ -74,7 +74,7 @@ set C_modelArgMapList {[
  	{ "Name" : "head_ctx_ref_2", "interface" : "wire", "bitwidth" : 202, "direction" : "READWRITE"} , 
  	{ "Name" : "head_ctx_ref_3", "interface" : "wire", "bitwidth" : 202, "direction" : "READWRITE"} , 
  	{ "Name" : "compute_start", "interface" : "wire", "bitwidth" : 1, "direction" : "READWRITE"} , 
- 	{ "Name" : "compute_op", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
+ 	{ "Name" : "compute_op", "interface" : "wire", "bitwidth" : 8, "direction" : "WRITEONLY"} , 
  	{ "Name" : "stream_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "stream_start", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} , 
  	{ "Name" : "stream_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
@@ -131,7 +131,7 @@ set portList {
 	{ compute_start_i sc_in sc_lv 1 signal 21 } 
 	{ compute_start_o sc_out sc_lv 1 signal 21 } 
 	{ compute_start_o_ap_vld sc_out sc_logic 1 outvld 21 } 
-	{ compute_op sc_out sc_lv 32 signal 22 } 
+	{ compute_op sc_out sc_lv 8 signal 22 } 
 	{ compute_op_ap_vld sc_out sc_logic 1 outvld 22 } 
 	{ stream_ready sc_in sc_lv 1 signal 23 } 
 	{ stream_start sc_out sc_lv 1 signal 24 } 
@@ -191,7 +191,7 @@ set NewPortList {[
  	{ "name": "compute_start_i", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start", "role": "i" }} , 
  	{ "name": "compute_start_o", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start", "role": "o" }} , 
  	{ "name": "compute_start_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_start", "role": "o_ap_vld" }} , 
- 	{ "name": "compute_op", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "compute_op", "role": "default" }} , 
+ 	{ "name": "compute_op", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "compute_op", "role": "default" }} , 
  	{ "name": "compute_op_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_op", "role": "ap_vld" }} , 
  	{ "name": "stream_ready", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "stream_ready", "role": "default" }} , 
  	{ "name": "stream_start", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "stream_start", "role": "default" }} , 
@@ -253,6 +253,7 @@ set ArgLastReadFirstWriteLatency {
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
 		ln0_compute_done {Type IO LastRead -1 FirstWrite -1}
+		ln0_phase {Type IO LastRead -1 FirstWrite -1}
 		ffn_w1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ffn_act_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ffn_w2_compute_done {Type IO LastRead -1 FirstWrite -1}
@@ -262,6 +263,7 @@ set ArgLastReadFirstWriteLatency {
 		resid1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
+		ln1_phase {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
 		wo_tile {Type IO LastRead -1 FirstWrite -1}
 		wo_dma_busy {Type IO LastRead -1 FirstWrite -1}
@@ -393,7 +395,7 @@ set Spec2ImplPortList {
 	head_ctx_ref_2 { ap_ovld {  { head_ctx_ref_2_i in_data 0 202 }  { head_ctx_ref_2_o out_data 1 202 }  { head_ctx_ref_2_o_ap_vld out_vld 1 1 } } }
 	head_ctx_ref_3 { ap_ovld {  { head_ctx_ref_3_i in_data 0 202 }  { head_ctx_ref_3_o out_data 1 202 }  { head_ctx_ref_3_o_ap_vld out_vld 1 1 } } }
 	compute_start { ap_ovld {  { compute_start_i in_data 0 1 }  { compute_start_o out_data 1 1 }  { compute_start_o_ap_vld out_vld 1 1 } } }
-	compute_op { ap_vld {  { compute_op out_data 1 32 }  { compute_op_ap_vld out_vld 1 1 } } }
+	compute_op { ap_vld {  { compute_op out_data 1 8 }  { compute_op_ap_vld out_vld 1 1 } } }
 	stream_ready { ap_none {  { stream_ready in_data 0 1 } } }
 	stream_start { ap_vld {  { stream_start out_data 1 1 }  { stream_start_ap_vld out_vld 1 1 } } }
 	stream_done { ap_none {  { stream_done in_data 0 1 } } }

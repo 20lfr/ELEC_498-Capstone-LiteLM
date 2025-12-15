@@ -1564,7 +1564,7 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
 
   static hls::sim::Register port22 {
     .name = "compute_op",
-    .width = 32,
+    .width = 8,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_compute_op),
 #else

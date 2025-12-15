@@ -524,7 +524,29 @@ enum ComputeOp : uint8_t {
     CMP_RESID1,
     CMP_LN1,
     CMP_DEQUANT,
-    CMP_LOGITS
+    CMP_LOGITS,
+
+
+    CMP_LN0_SUM,
+    CMP_LN0_SUMSQ,
+    CMP_LN0_MEAN,
+    CMP_LN0_EYY,
+    CMP_LN0_VAR,
+    CMP_LN0_VAR_EPS,
+    CMP_LN0_INV_STD,
+    CMP_LN0_NORM,
+    CMP_LN0_SCALE,
+    CMP_LN0_SHIFT,
+    CMP_LN1_SUM,
+    CMP_LN1_SUMSQ,
+    CMP_LN1_MEAN,
+    CMP_LN1_EYY,
+    CMP_LN1_VAR,
+    CMP_LN1_VAR_EPS,
+    CMP_LN1_INV_STD,
+    CMP_LN1_NORM,
+    CMP_LN1_SCALE,
+    CMP_LN1_SHIFT
 };
 
 enum DmaSel : uint8_t {

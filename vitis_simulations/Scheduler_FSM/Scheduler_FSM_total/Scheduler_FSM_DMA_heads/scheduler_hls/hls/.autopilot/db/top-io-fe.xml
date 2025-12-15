@@ -105,8 +105,8 @@
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>
-      <arg id="19" access_type="w" src_name="compute_op" src_type="int&amp;" src_isptr="1" src_bitwidth="32" src_size_or_depth="1">
-        <hw hw_usage="data" hw_interface="Register" hw_name="compute_op" hw_bitwidth="32" hw_size_or_depth="1" hw_kernel_support="false">
+      <arg id="19" access_type="w" src_name="compute_op" src_type="ComputeOp&amp;" src_isptr="1" src_bitwidth="8" src_size_or_depth="1">
+        <hw hw_usage="data" hw_interface="Register" hw_name="compute_op" hw_bitwidth="8" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>

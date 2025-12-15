@@ -48,7 +48,7 @@ const Port_Property HLS_Design_Meta::port_props[]={
 	Port_Property("compute_start_i", 1, hls_in, 21, "ap_ovld", "in_data", 1),
 	Port_Property("compute_start_o", 1, hls_out, 21, "ap_ovld", "out_data", 1),
 	Port_Property("compute_start_o_ap_vld", 1, hls_out, 21, "ap_ovld", "out_vld", 1),
-	Port_Property("compute_op", 32, hls_out, 22, "ap_vld", "out_data", 1),
+	Port_Property("compute_op", 8, hls_out, 22, "ap_vld", "out_data", 1),
 	Port_Property("compute_op_ap_vld", 1, hls_out, 22, "ap_vld", "out_vld", 1),
 	Port_Property("stream_ready", 1, hls_in, 23, "ap_none", "in_data", 1),
 	Port_Property("stream_start", 1, hls_out, 24, "ap_vld", "out_data", 1),
