@@ -11,30 +11,12 @@
         "control_depth": "0",
         "def_use_depth": "86"
     },
-    "2": {
-        "name": "scheduler_hls",
-        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Scheduler_FSM.cpp",
-        "fileloc": "167",
-        "instructions": "1123",
-        "total_instructions": "1914",
-        "calls": "1",
-        "basicblocks": "224",
-        "memory_accesses": "0",
-        "control_depth": "0",
-        "def_use_depth": "12",
-        "loads": {
-            "G": "42"
-        },
-        "stores": {
-            "G": "42"
-        }
-    },
     "0": {
         "name": "transformer_top",
         "file": "top.cpp",
         "fileloc": "4",
         "instructions": "427",
-        "total_instructions": "2341",
+        "total_instructions": "2437",
         "calls": "2",
         "basicblocks": "120",
         "memory_accesses": "0",
@@ -45,6 +27,24 @@
         },
         "stores": {
             "G": "27"
+        }
+    },
+    "2": {
+        "name": "scheduler_hls",
+        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Scheduler_FSM.cpp",
+        "fileloc": "167",
+        "instructions": "1219",
+        "total_instructions": "2010",
+        "calls": "1",
+        "basicblocks": "234",
+        "memory_accesses": "0",
+        "control_depth": "0",
+        "def_use_depth": "12",
+        "loads": {
+            "G": "47"
+        },
+        "stores": {
+            "G": "47"
         }
     }
 }

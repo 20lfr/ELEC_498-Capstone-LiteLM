@@ -118,7 +118,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 362, Column: 2 }
+                   Line: 374, Column: 2 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int)'
@@ -134,7 +134,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'HeadCtx::HeadCtx()'
@@ -150,7 +150,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 647, Column: 11 }
+                   Line: 692, Column: 11 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'drive_group_head_phase(HeadCtx (&) [2], int, int, bool)'
@@ -166,7 +166,7 @@ Args:
 Pass:            inline
 Name:            AlwaysInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 754, Column: 11 }
+                   Line: 800, Column: 11 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Inlining function '''
@@ -285,9 +285,9 @@ DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Veril
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_568_2
+  - LoopName:        VITIS_LOOP_613_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:568:25'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:613:25'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -302,9 +302,9 @@ DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Veril
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_650_4
+  - LoopName:        VITIS_LOOP_695_4
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:650:25'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:695:25'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -319,9 +319,9 @@ DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Veril
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_634_3
+  - LoopName:        VITIS_LOOP_679_3
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:634:20'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:679:20'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -336,9 +336,9 @@ DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Veril
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_360_1
+  - LoopName:        VITIS_LOOP_372_1
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:360:23'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:372:23'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -382,7 +382,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 362, Column: 2 }
+                   Line: 374, Column: 2 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int)'
@@ -398,7 +398,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'HeadCtx::HeadCtx()'
@@ -414,7 +414,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 640, Column: 11 }
+                   Line: 685, Column: 11 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int) (.4)'
@@ -430,7 +430,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 647, Column: 11 }
+                   Line: 692, Column: 11 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'drive_group_head_phase(HeadCtx (&) [2], int, int, bool)'
@@ -591,7 +591,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -610,7 +610,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -629,7 +629,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -648,7 +648,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -667,7 +667,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -686,7 +686,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -705,7 +705,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -724,7 +724,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -743,7 +743,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -762,7 +762,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -781,7 +781,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -800,7 +800,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -819,7 +819,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -838,7 +838,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -857,7 +857,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -876,7 +876,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -895,7 +895,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -914,7 +914,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -933,7 +933,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -952,7 +952,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -971,7 +971,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -990,7 +990,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1009,7 +1009,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1028,7 +1028,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1047,7 +1047,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1066,7 +1066,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1085,7 +1085,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1104,7 +1104,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1123,7 +1123,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1142,7 +1142,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1161,7 +1161,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1180,7 +1180,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1199,7 +1199,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1218,7 +1218,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1237,7 +1237,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1256,7 +1256,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1275,7 +1275,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1294,7 +1294,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1313,7 +1313,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1332,7 +1332,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1351,7 +1351,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1370,7 +1370,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1389,7 +1389,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 630, Column: 15 }
+                   Line: 675, Column: 15 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - String:          'Applying '
@@ -1515,14 +1515,14 @@ Args:
   - String:          'automatically set the pipeline for Loop< '
   - LoopName:        unknown
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:630:15'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:675:15'
   - String:          ' '
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 362, Column: 2 }
+                   Line: 374, Column: 2 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int)'
@@ -1538,7 +1538,7 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 647, Column: 11 }
+                   Line: 692, Column: 11 }
 Function:        _Z13scheduler_hls15ControlMemSpacebbRbbS0_R6DmaSelRiS3_S3_bbbRA4_7HeadCtxS0_R9ComputeOpbS0_bS0_R10SchedState
 Args:            
   - Callee:          'drive_group_head_phase(HeadCtx (&) [2], int, int, bool)'

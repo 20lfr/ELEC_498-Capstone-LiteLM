@@ -1,6 +1,6 @@
 INFO: [SIM 2] *************** CSIM start ***************
 INFO: [SIM 4] CSIM will launch CLANG as the compiler.
-   Compiling ../../../../../../../HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp in debug mode
    Generating csim.exe
 Cycle    Start  Reset  | CtrlAddr   | CtrlDin    CtrlDout   Rd       Wr       CE       RstN     | DbgState         DbgDone  SeenDone IRQ    IRQFlag    IRQData    | MemCtrl    MemIRQ     MemIRQEn  
 0        0      0      | 8          | 0          0          1        -        1        -        | S_IDLE           -        -        -      -          0          | 1          0          7         

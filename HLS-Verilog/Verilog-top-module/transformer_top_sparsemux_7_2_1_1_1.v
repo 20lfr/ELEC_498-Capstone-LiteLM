@@ -5,15 +5,13 @@
 // ==============================================================
 `timescale 1ns / 1ps
 
-module transformer_top_sparsemux_9_3_32_1_1 (din0,din1,din2,din3,def,sel,dout);
+module transformer_top_sparsemux_7_2_1_1_1 (din0,din1,din2,def,sel,dout);
 
 parameter din0_WIDTH = 1;
 
 parameter din1_WIDTH = 1;
 
 parameter din2_WIDTH = 1;
-
-parameter din3_WIDTH = 1;
 
 parameter def_WIDTH = 1;
 parameter sel_WIDTH = 1;
@@ -25,8 +23,6 @@ parameter [sel_WIDTH-1:0] CASE1 = 1;
 
 parameter [sel_WIDTH-1:0] CASE2 = 1;
 
-parameter [sel_WIDTH-1:0] CASE3 = 1;
-
 parameter ID = 1;
 parameter NUM_STAGE = 1;
 
@@ -37,8 +33,6 @@ input [din0_WIDTH-1:0] din0;
 input [din1_WIDTH-1:0] din1;
 
 input [din2_WIDTH-1:0] din2;
-
-input [din3_WIDTH-1:0] din3;
 
 input [def_WIDTH-1:0] def;
 input [sel_WIDTH-1:0] sel;
@@ -58,8 +52,6 @@ always @ (*) begin
     CASE1 : dout_tmp = din1;
     
     CASE2 : dout_tmp = din2;
-    
-    CASE3 : dout_tmp = din3;
     
     default : dout_tmp = def;
 endcase

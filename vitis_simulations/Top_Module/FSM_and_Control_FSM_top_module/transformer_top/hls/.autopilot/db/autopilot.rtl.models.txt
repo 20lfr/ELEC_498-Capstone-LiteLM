@@ -1,3 +1,5 @@
+transformer_top_sparsemux_7_2_1_1_1
+transformer_top_sparsemux_7_2_1_1_1
 transformer_top_sparsemux_7_2_202_1_1
 drive_group_head_phase
 scheduler_hls

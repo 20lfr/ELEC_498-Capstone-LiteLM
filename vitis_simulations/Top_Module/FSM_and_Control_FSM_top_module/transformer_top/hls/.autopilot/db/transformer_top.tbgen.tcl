@@ -294,6 +294,9 @@ set ArgLastReadFirstWriteLatency {
 		concat_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_compute_done {Type IO LastRead -1 FirstWrite -1}
+		wo_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w1_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w2_dma_done {Type IO LastRead -1 FirstWrite -1}
 		resid0_started {Type IO LastRead -1 FirstWrite -1}
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
@@ -309,6 +312,8 @@ set ArgLastReadFirstWriteLatency {
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_phase {Type IO LastRead -1 FirstWrite -1}
+		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
+		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
 		wo_tile {Type IO LastRead -1 FirstWrite -1}
 		wo_dma_busy {Type IO LastRead -1 FirstWrite -1}
@@ -356,6 +361,9 @@ set ArgLastReadFirstWriteLatency {
 		concat_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_compute_done {Type IO LastRead -1 FirstWrite -1}
+		wo_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w1_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w2_dma_done {Type IO LastRead -1 FirstWrite -1}
 		resid0_started {Type IO LastRead -1 FirstWrite -1}
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
@@ -371,6 +379,8 @@ set ArgLastReadFirstWriteLatency {
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_phase {Type IO LastRead -1 FirstWrite -1}
+		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
+		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
 		wo_tile {Type IO LastRead -1 FirstWrite -1}
 		wo_dma_busy {Type IO LastRead -1 FirstWrite -1}

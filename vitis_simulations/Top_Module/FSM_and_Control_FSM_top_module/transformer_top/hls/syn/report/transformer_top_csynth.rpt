@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'transformer_top'
 ================================================================
-* Date:           Tue Dec 16 15:04:13 2025
+* Date:           Tue Dec 16 17:06:52 2025
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        transformer_top
@@ -38,7 +38,7 @@
         |                            |               |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
         |          Instance          |     Module    |   min   |   max   |    min    |    max    | min | max |   Type  |
         +----------------------------+---------------+---------+---------+-----------+-----------+-----+-----+---------+
-        |grp_scheduler_hls_fu_12718  |scheduler_hls  |        1|        1|  10.000 ns|  10.000 ns|    1|    1|       no|
+        |grp_scheduler_hls_fu_12728  |scheduler_hls  |        1|        1|  10.000 ns|  10.000 ns|    1|    1|       no|
         +----------------------------+---------------+---------+---------+-----------+-----------+-----+-----+---------+
 
         * Loop: 
@@ -56,16 +56,16 @@
 |DSP              |        -|     -|       -|       -|    -|
 |Expression       |        -|     -|       0|    1131|    -|
 |FIFO             |        -|     -|       -|       -|    -|
-|Instance         |        -|     -|    3486|   12873|    -|
+|Instance         |        -|     -|    3511|   13357|    -|
 |Memory           |        -|     -|       -|       -|    -|
 |Multiplexer      |        -|     -|       0|     961|    -|
 |Register         |        -|     -|    3559|       -|    -|
 +-----------------+---------+------+--------+--------+-----+
-|Total            |        0|     0|    7045|   14965|    0|
+|Total            |        0|     0|    7070|   15449|    0|
 +-----------------+---------+------+--------+--------+-----+
 |Available        |      288|  1248|  234240|  117120|   64|
 +-----------------+---------+------+--------+--------+-----+
-|Utilization (%)  |        0|     0|       3|      12|    0|
+|Utilization (%)  |        0|     0|       3|      13|    0|
 +-----------------+---------+------+--------+--------+-----+
 
 + Detail: 
@@ -73,9 +73,9 @@
     +----------------------------+---------------+---------+----+------+-------+-----+
     |          Instance          |     Module    | BRAM_18K| DSP|  FF  |  LUT  | URAM|
     +----------------------------+---------------+---------+----+------+-------+-----+
-    |grp_scheduler_hls_fu_12718  |scheduler_hls  |        0|   0|  3486|  12873|    0|
+    |grp_scheduler_hls_fu_12728  |scheduler_hls  |        0|   0|  3511|  13357|    0|
     +----------------------------+---------------+---------+----+------+-------+-----+
-    |Total                       |               |        0|   0|  3486|  12873|    0|
+    |Total                       |               |        0|   0|  3511|  13357|    0|
     +----------------------------+---------------+---------+----+------+-------+-----+
 
     * DSP: 
@@ -91,50 +91,50 @@
     +----------------------------------------+----------+----+---+----+------------+------------+
     |              Variable Name             | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
     +----------------------------------------+----------+----+---+----+------------+------------+
-    |and_ln150_fu_13300_p2                   |       and|   0|  0|   2|           1|           1|
-    |and_ln59_fu_13348_p2                    |       and|   0|  0|  32|          32|          32|
-    |and_ln7_fu_13318_p2                     |       and|   0|  0|   2|           1|           1|
-    |and_ln9_1_fu_13668_p2                   |       and|   0|  0|   3|           3|           3|
+    |and_ln150_fu_13320_p2                   |       and|   0|  0|   2|           1|           1|
+    |and_ln59_fu_13368_p2                    |       and|   0|  0|  32|          32|          32|
+    |and_ln7_fu_13338_p2                     |       and|   0|  0|   2|           1|           1|
+    |and_ln9_1_fu_13688_p2                   |       and|   0|  0|   3|           3|           3|
     |irq_ps                                  |       and|   0|  0|   2|           1|           1|
-    |icmp_ln7_1_fu_13312_p2                  |      icmp|   0|  0|   9|           2|           1|
-    |icmp_ln7_fu_13306_p2                    |      icmp|   0|  0|  39|          32|           7|
-    |icmp_ln9_fu_13674_p2                    |      icmp|   0|  0|  10|           3|           1|
-    |ctrl_mem_irq_status_flag_5_fu_13680_p2  |        or|   0|  0|   2|           1|           1|
-    |or_ln24_fu_13627_p2                     |        or|   0|  0|   2|           1|           1|
-    |ctrl_mem_irq_status_new_5_fu_13685_p3   |    select|   0|  0|  32|           1|           1|
-    |p_3_fu_13692_p3                         |    select|   0|  0|  32|           1|           1|
-    |select_ln148_10_fu_13164_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_11_fu_13172_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_12_fu_13180_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_13_fu_13188_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_14_fu_13196_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_15_fu_13204_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_16_fu_13212_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_17_fu_13220_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_18_fu_13228_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_19_fu_13236_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_1_fu_13092_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_20_fu_13244_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_21_fu_13252_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_22_fu_13260_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_23_fu_13268_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_24_fu_13276_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_25_fu_13284_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_26_fu_13292_p3             |    select|   0|  0|  32|           1|          32|
-    |select_ln148_2_fu_13100_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_3_fu_13108_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_4_fu_13116_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_5_fu_13124_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_6_fu_13132_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_7_fu_13140_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_8_fu_13148_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_9_fu_13156_p3              |    select|   0|  0|  32|           1|          32|
-    |select_ln148_fu_13025_p3                |    select|   0|  0|  32|           1|          32|
-    |select_ln24_1_fu_13639_p3               |    select|   0|  0|  32|           1|          32|
-    |select_ln24_fu_13632_p3                 |    select|   0|  0|  32|           1|          32|
-    |xor_ln148_fu_13019_p2                   |       xor|   0|  0|   2|           1|           2|
-    |xor_ln20_fu_13441_p2                    |       xor|   0|  0|   2|           1|           2|
-    |xor_ln59_fu_13342_p2                    |       xor|   0|  0|  32|          32|           2|
+    |icmp_ln7_1_fu_13332_p2                  |      icmp|   0|  0|   9|           2|           1|
+    |icmp_ln7_fu_13326_p2                    |      icmp|   0|  0|  39|          32|           7|
+    |icmp_ln9_fu_13694_p2                    |      icmp|   0|  0|  10|           3|           1|
+    |ctrl_mem_irq_status_flag_5_fu_13700_p2  |        or|   0|  0|   2|           1|           1|
+    |or_ln24_fu_13647_p2                     |        or|   0|  0|   2|           1|           1|
+    |ctrl_mem_irq_status_new_5_fu_13705_p3   |    select|   0|  0|  32|           1|           1|
+    |p_3_fu_13712_p3                         |    select|   0|  0|  32|           1|           1|
+    |select_ln148_10_fu_13184_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_11_fu_13192_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_12_fu_13200_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_13_fu_13208_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_14_fu_13216_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_15_fu_13224_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_16_fu_13232_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_17_fu_13240_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_18_fu_13248_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_19_fu_13256_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_1_fu_13112_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_20_fu_13264_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_21_fu_13272_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_22_fu_13280_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_23_fu_13288_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_24_fu_13296_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_25_fu_13304_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_26_fu_13312_p3             |    select|   0|  0|  32|           1|          32|
+    |select_ln148_2_fu_13120_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_3_fu_13128_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_4_fu_13136_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_5_fu_13144_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_6_fu_13152_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_7_fu_13160_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_8_fu_13168_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_9_fu_13176_p3              |    select|   0|  0|  32|           1|          32|
+    |select_ln148_fu_13045_p3                |    select|   0|  0|  32|           1|          32|
+    |select_ln24_1_fu_13659_p3               |    select|   0|  0|  32|           1|          32|
+    |select_ln24_fu_13652_p3                 |    select|   0|  0|  32|           1|          32|
+    |xor_ln148_fu_13039_p2                   |       xor|   0|  0|   2|           1|           2|
+    |xor_ln20_fu_13461_p2                    |       xor|   0|  0|   2|           1|           2|
+    |xor_ln59_fu_13362_p2                    |       xor|   0|  0|  32|          32|           2|
     +----------------------------------------+----------+----+---+----+------------+------------+
     |Total                                   |          |   0|  0|1131|         142|         985|
     +----------------------------------------+----------+----+---+----+------------+------------+
@@ -144,90 +144,90 @@
     |                        Name                       | LUT | Input Size| Bits| Total Bits|
     +---------------------------------------------------+-----+-----------+-----+-----------+
     |ap_NS_fsm                                          |   20|          4|    1|          4|
-    |ap_phi_mux_ctrl_mem_control_loc_3_phi_fu_544_p120  |   14|          3|   32|         96|
+    |ap_phi_mux_ctrl_mem_control_loc_3_phi_fu_554_p120  |   14|          3|   32|         96|
     |compute_op                                         |    9|          2|    8|         16|
-    |ctrl_data_out_new_0_reg_12557                      |  140|         28|   32|        896|
-    |ctrl_mem_control_flag_3_reg_668                    |    9|          2|    1|          2|
-    |ctrl_mem_control_loc_3_reg_541                     |    9|          2|   32|         64|
-    |ctrl_mem_control_new_3_reg_795                     |    9|          2|   32|         64|
-    |ctrl_mem_dma_head_len_flag_3_reg_3172              |    9|          2|    1|          2|
-    |ctrl_mem_dma_head_len_loc_3_reg_3484               |    9|          2|   32|         64|
-    |ctrl_mem_dma_head_len_new_3_reg_3299               |    9|          2|   32|         64|
-    |ctrl_mem_dma_layer_len_flag_3_reg_2734             |    9|          2|    1|          2|
-    |ctrl_mem_dma_layer_len_loc_3_reg_3046              |    9|          2|   32|         64|
-    |ctrl_mem_dma_layer_len_new_3_reg_2861              |    9|          2|   32|         64|
-    |ctrl_mem_dma_tile_len_flag_3_reg_3610              |    9|          2|    1|          2|
-    |ctrl_mem_dma_tile_len_loc_3_reg_3922               |    9|          2|   32|         64|
-    |ctrl_mem_dma_tile_len_new_3_reg_3737               |    9|          2|   32|         64|
-    |ctrl_mem_head_stride_flag_3_reg_4486               |    9|          2|    1|          2|
-    |ctrl_mem_head_stride_loc_3_reg_4798                |    9|          2|   32|         64|
-    |ctrl_mem_head_stride_new_3_reg_4613                |    9|          2|   32|         64|
-    |ctrl_mem_irq_enable_flag_3_reg_2296                |    9|          2|    1|          2|
-    |ctrl_mem_irq_enable_loc_3_reg_2608                 |    9|          2|   32|         64|
-    |ctrl_mem_irq_enable_new_3_reg_2423                 |    9|          2|   32|         64|
-    |ctrl_mem_irq_status_flag_3_reg_1856                |    9|          2|    1|          2|
-    |ctrl_mem_irq_status_loc_3_reg_2170                 |    9|          2|   32|         64|
-    |ctrl_mem_irq_status_new_3_reg_1984                 |    9|          2|   32|         64|
-    |ctrl_mem_k_cache_addr_flag_3_reg_7990              |    9|          2|    1|          2|
-    |ctrl_mem_k_cache_addr_loc_3_reg_8302               |    9|          2|   32|         64|
-    |ctrl_mem_k_cache_addr_new_3_reg_8117               |    9|          2|   32|         64|
-    |ctrl_mem_layer_index_flag_3_reg_980                |    9|          2|    1|          2|
-    |ctrl_mem_layer_index_loc_3_reg_1292                |    9|          2|   32|         64|
-    |ctrl_mem_layer_index_new_3_reg_1107                |    9|          2|   32|         64|
-    |ctrl_mem_layer_stride_flag_3_reg_4048              |    9|          2|    1|          2|
-    |ctrl_mem_layer_stride_loc_3_reg_4360               |    9|          2|   32|         64|
-    |ctrl_mem_layer_stride_new_3_reg_4175               |    9|          2|   32|         64|
-    |ctrl_mem_logit_scale_qv_flag_3_reg_8866            |    9|          2|    1|          2|
-    |ctrl_mem_logit_scale_qv_loc_3_reg_9178             |    9|          2|   32|         64|
-    |ctrl_mem_logit_scale_qv_new_3_reg_8993             |    9|          2|   32|         64|
-    |ctrl_mem_reserved_debug_flag_3_reg_11932           |    9|          2|    1|          2|
-    |ctrl_mem_reserved_debug_loc_3_reg_12244            |    9|          2|   32|         64|
-    |ctrl_mem_reserved_debug_new_3_reg_12059            |    9|          2|   32|         64|
-    |ctrl_mem_scale_k_flag_3_reg_10180                  |    9|          2|    1|          2|
-    |ctrl_mem_scale_k_loc_3_reg_10492                   |    9|          2|   32|         64|
-    |ctrl_mem_scale_k_new_3_reg_10307                   |    9|          2|   32|         64|
-    |ctrl_mem_scale_q_flag_3_reg_9304                   |    9|          2|    1|          2|
-    |ctrl_mem_scale_q_loc_3_reg_9616                    |    9|          2|   32|         64|
-    |ctrl_mem_scale_q_new_3_reg_9431                    |    9|          2|   32|         64|
-    |ctrl_mem_scale_v_flag_3_reg_11056                  |    9|          2|    1|          2|
-    |ctrl_mem_scale_v_loc_3_reg_11368                   |    9|          2|   32|         64|
-    |ctrl_mem_scale_v_new_3_reg_11183                   |    9|          2|   32|         64|
-    |ctrl_mem_status_flag_3_reg_1418                    |    9|          2|    1|          2|
-    |ctrl_mem_status_loc_3_reg_1730                     |   20|          4|   32|        128|
-    |ctrl_mem_status_new_3_reg_1547                     |   20|          4|   32|        128|
-    |ctrl_mem_tile_stride_flag_3_reg_4924               |    9|          2|    1|          2|
-    |ctrl_mem_tile_stride_loc_3_reg_5236                |    9|          2|   32|         64|
-    |ctrl_mem_tile_stride_new_3_reg_5051                |    9|          2|   32|         64|
-    |ctrl_mem_v_cache_addr_flag_3_reg_8428              |    9|          2|    1|          2|
-    |ctrl_mem_v_cache_addr_loc_3_reg_8740               |    9|          2|   32|         64|
-    |ctrl_mem_v_cache_addr_new_3_reg_8555               |    9|          2|   32|         64|
-    |ctrl_mem_w1_base_addr_flag_3_reg_7114              |    9|          2|    1|          2|
-    |ctrl_mem_w1_base_addr_loc_3_reg_7426               |    9|          2|   32|         64|
-    |ctrl_mem_w1_base_addr_new_3_reg_7241               |    9|          2|   32|         64|
-    |ctrl_mem_w2_base_addr_flag_3_reg_7552              |    9|          2|    1|          2|
-    |ctrl_mem_w2_base_addr_loc_3_reg_7864               |    9|          2|   32|         64|
-    |ctrl_mem_w2_base_addr_new_3_reg_7679               |    9|          2|   32|         64|
-    |ctrl_mem_wk_base_addr_flag_3_reg_5800              |    9|          2|    1|          2|
-    |ctrl_mem_wk_base_addr_loc_3_reg_6112               |    9|          2|   32|         64|
-    |ctrl_mem_wk_base_addr_new_3_reg_5927               |    9|          2|   32|         64|
-    |ctrl_mem_wo_base_addr_flag_3_reg_6676              |    9|          2|    1|          2|
-    |ctrl_mem_wo_base_addr_loc_3_reg_6988               |    9|          2|   32|         64|
-    |ctrl_mem_wo_base_addr_new_3_reg_6803               |    9|          2|   32|         64|
-    |ctrl_mem_wq_base_addr_flag_3_reg_5362              |    9|          2|    1|          2|
-    |ctrl_mem_wq_base_addr_loc_3_reg_5674               |    9|          2|   32|         64|
-    |ctrl_mem_wq_base_addr_new_3_reg_5489               |    9|          2|   32|         64|
-    |ctrl_mem_wv_base_addr_flag_3_reg_6238              |    9|          2|    1|          2|
-    |ctrl_mem_wv_base_addr_loc_3_reg_6550               |    9|          2|   32|         64|
-    |ctrl_mem_wv_base_addr_new_3_reg_6365               |    9|          2|   32|         64|
-    |ctrl_mem_zero_point_k_flag_3_reg_10618             |    9|          2|    1|          2|
-    |ctrl_mem_zero_point_k_loc_3_reg_10930              |    9|          2|   32|         64|
-    |ctrl_mem_zero_point_k_new_3_reg_10745              |    9|          2|   32|         64|
-    |ctrl_mem_zero_point_q_flag_3_reg_9742              |    9|          2|    1|          2|
-    |ctrl_mem_zero_point_q_loc_3_reg_10054              |    9|          2|   32|         64|
-    |ctrl_mem_zero_point_q_new_3_reg_9869               |    9|          2|   32|         64|
-    |ctrl_mem_zero_point_v_flag_3_reg_11494             |    9|          2|    1|          2|
-    |ctrl_mem_zero_point_v_loc_3_reg_11806              |    9|          2|   32|         64|
-    |ctrl_mem_zero_point_v_new_3_reg_11621              |    9|          2|   32|         64|
+    |ctrl_data_out_new_0_reg_12567                      |  140|         28|   32|        896|
+    |ctrl_mem_control_flag_3_reg_678                    |    9|          2|    1|          2|
+    |ctrl_mem_control_loc_3_reg_551                     |    9|          2|   32|         64|
+    |ctrl_mem_control_new_3_reg_805                     |    9|          2|   32|         64|
+    |ctrl_mem_dma_head_len_flag_3_reg_3182              |    9|          2|    1|          2|
+    |ctrl_mem_dma_head_len_loc_3_reg_3494               |    9|          2|   32|         64|
+    |ctrl_mem_dma_head_len_new_3_reg_3309               |    9|          2|   32|         64|
+    |ctrl_mem_dma_layer_len_flag_3_reg_2744             |    9|          2|    1|          2|
+    |ctrl_mem_dma_layer_len_loc_3_reg_3056              |    9|          2|   32|         64|
+    |ctrl_mem_dma_layer_len_new_3_reg_2871              |    9|          2|   32|         64|
+    |ctrl_mem_dma_tile_len_flag_3_reg_3620              |    9|          2|    1|          2|
+    |ctrl_mem_dma_tile_len_loc_3_reg_3932               |    9|          2|   32|         64|
+    |ctrl_mem_dma_tile_len_new_3_reg_3747               |    9|          2|   32|         64|
+    |ctrl_mem_head_stride_flag_3_reg_4496               |    9|          2|    1|          2|
+    |ctrl_mem_head_stride_loc_3_reg_4808                |    9|          2|   32|         64|
+    |ctrl_mem_head_stride_new_3_reg_4623                |    9|          2|   32|         64|
+    |ctrl_mem_irq_enable_flag_3_reg_2306                |    9|          2|    1|          2|
+    |ctrl_mem_irq_enable_loc_3_reg_2618                 |    9|          2|   32|         64|
+    |ctrl_mem_irq_enable_new_3_reg_2433                 |    9|          2|   32|         64|
+    |ctrl_mem_irq_status_flag_3_reg_1866                |    9|          2|    1|          2|
+    |ctrl_mem_irq_status_loc_3_reg_2180                 |    9|          2|   32|         64|
+    |ctrl_mem_irq_status_new_3_reg_1994                 |    9|          2|   32|         64|
+    |ctrl_mem_k_cache_addr_flag_3_reg_8000              |    9|          2|    1|          2|
+    |ctrl_mem_k_cache_addr_loc_3_reg_8312               |    9|          2|   32|         64|
+    |ctrl_mem_k_cache_addr_new_3_reg_8127               |    9|          2|   32|         64|
+    |ctrl_mem_layer_index_flag_3_reg_990                |    9|          2|    1|          2|
+    |ctrl_mem_layer_index_loc_3_reg_1302                |    9|          2|   32|         64|
+    |ctrl_mem_layer_index_new_3_reg_1117                |    9|          2|   32|         64|
+    |ctrl_mem_layer_stride_flag_3_reg_4058              |    9|          2|    1|          2|
+    |ctrl_mem_layer_stride_loc_3_reg_4370               |    9|          2|   32|         64|
+    |ctrl_mem_layer_stride_new_3_reg_4185               |    9|          2|   32|         64|
+    |ctrl_mem_logit_scale_qv_flag_3_reg_8876            |    9|          2|    1|          2|
+    |ctrl_mem_logit_scale_qv_loc_3_reg_9188             |    9|          2|   32|         64|
+    |ctrl_mem_logit_scale_qv_new_3_reg_9003             |    9|          2|   32|         64|
+    |ctrl_mem_reserved_debug_flag_3_reg_11942           |    9|          2|    1|          2|
+    |ctrl_mem_reserved_debug_loc_3_reg_12254            |    9|          2|   32|         64|
+    |ctrl_mem_reserved_debug_new_3_reg_12069            |    9|          2|   32|         64|
+    |ctrl_mem_scale_k_flag_3_reg_10190                  |    9|          2|    1|          2|
+    |ctrl_mem_scale_k_loc_3_reg_10502                   |    9|          2|   32|         64|
+    |ctrl_mem_scale_k_new_3_reg_10317                   |    9|          2|   32|         64|
+    |ctrl_mem_scale_q_flag_3_reg_9314                   |    9|          2|    1|          2|
+    |ctrl_mem_scale_q_loc_3_reg_9626                    |    9|          2|   32|         64|
+    |ctrl_mem_scale_q_new_3_reg_9441                    |    9|          2|   32|         64|
+    |ctrl_mem_scale_v_flag_3_reg_11066                  |    9|          2|    1|          2|
+    |ctrl_mem_scale_v_loc_3_reg_11378                   |    9|          2|   32|         64|
+    |ctrl_mem_scale_v_new_3_reg_11193                   |    9|          2|   32|         64|
+    |ctrl_mem_status_flag_3_reg_1428                    |    9|          2|    1|          2|
+    |ctrl_mem_status_loc_3_reg_1740                     |   20|          4|   32|        128|
+    |ctrl_mem_status_new_3_reg_1557                     |   20|          4|   32|        128|
+    |ctrl_mem_tile_stride_flag_3_reg_4934               |    9|          2|    1|          2|
+    |ctrl_mem_tile_stride_loc_3_reg_5246                |    9|          2|   32|         64|
+    |ctrl_mem_tile_stride_new_3_reg_5061                |    9|          2|   32|         64|
+    |ctrl_mem_v_cache_addr_flag_3_reg_8438              |    9|          2|    1|          2|
+    |ctrl_mem_v_cache_addr_loc_3_reg_8750               |    9|          2|   32|         64|
+    |ctrl_mem_v_cache_addr_new_3_reg_8565               |    9|          2|   32|         64|
+    |ctrl_mem_w1_base_addr_flag_3_reg_7124              |    9|          2|    1|          2|
+    |ctrl_mem_w1_base_addr_loc_3_reg_7436               |    9|          2|   32|         64|
+    |ctrl_mem_w1_base_addr_new_3_reg_7251               |    9|          2|   32|         64|
+    |ctrl_mem_w2_base_addr_flag_3_reg_7562              |    9|          2|    1|          2|
+    |ctrl_mem_w2_base_addr_loc_3_reg_7874               |    9|          2|   32|         64|
+    |ctrl_mem_w2_base_addr_new_3_reg_7689               |    9|          2|   32|         64|
+    |ctrl_mem_wk_base_addr_flag_3_reg_5810              |    9|          2|    1|          2|
+    |ctrl_mem_wk_base_addr_loc_3_reg_6122               |    9|          2|   32|         64|
+    |ctrl_mem_wk_base_addr_new_3_reg_5937               |    9|          2|   32|         64|
+    |ctrl_mem_wo_base_addr_flag_3_reg_6686              |    9|          2|    1|          2|
+    |ctrl_mem_wo_base_addr_loc_3_reg_6998               |    9|          2|   32|         64|
+    |ctrl_mem_wo_base_addr_new_3_reg_6813               |    9|          2|   32|         64|
+    |ctrl_mem_wq_base_addr_flag_3_reg_5372              |    9|          2|    1|          2|
+    |ctrl_mem_wq_base_addr_loc_3_reg_5684               |    9|          2|   32|         64|
+    |ctrl_mem_wq_base_addr_new_3_reg_5499               |    9|          2|   32|         64|
+    |ctrl_mem_wv_base_addr_flag_3_reg_6248              |    9|          2|    1|          2|
+    |ctrl_mem_wv_base_addr_loc_3_reg_6560               |    9|          2|   32|         64|
+    |ctrl_mem_wv_base_addr_new_3_reg_6375               |    9|          2|   32|         64|
+    |ctrl_mem_zero_point_k_flag_3_reg_10628             |    9|          2|    1|          2|
+    |ctrl_mem_zero_point_k_loc_3_reg_10940              |    9|          2|   32|         64|
+    |ctrl_mem_zero_point_k_new_3_reg_10755              |    9|          2|   32|         64|
+    |ctrl_mem_zero_point_q_flag_3_reg_9752              |    9|          2|    1|          2|
+    |ctrl_mem_zero_point_q_loc_3_reg_10064              |    9|          2|   32|         64|
+    |ctrl_mem_zero_point_q_new_3_reg_9879               |    9|          2|   32|         64|
+    |ctrl_mem_zero_point_v_flag_3_reg_11504             |    9|          2|    1|          2|
+    |ctrl_mem_zero_point_v_loc_3_reg_11816              |    9|          2|   32|         64|
+    |ctrl_mem_zero_point_v_new_3_reg_11631              |    9|          2|   32|         64|
     |wl_addr_sel                                        |    9|          2|    8|         16|
     |wl_head                                            |    9|          2|   32|         64|
     |wl_tile                                            |    9|          2|   32|         64|
@@ -240,139 +240,139 @@
     |                   Name                   |  FF | LUT| Bits| Const Bits|
     +------------------------------------------+-----+----+-----+-----------+
     |ap_CS_fsm                                 |    3|   0|    3|          0|
-    |axis_in_last_read_reg_13864               |    1|   0|    1|          0|
-    |axis_in_valid_read_reg_13869              |    1|   0|    1|          0|
-    |compute_done_read_reg_13849               |    1|   0|    1|          0|
+    |axis_in_last_read_reg_13884               |    1|   0|    1|          0|
+    |axis_in_valid_read_reg_13889              |    1|   0|    1|          0|
+    |compute_done_read_reg_13869               |    1|   0|    1|          0|
     |compute_op_reg                            |    8|   0|    8|          0|
-    |compute_ready_read_reg_13854              |    1|   0|    1|          0|
-    |compute_start_read_reg_17173              |    1|   0|    1|          0|
-    |ctrl_data_out_flag_0_reg_12370            |    1|   0|    1|          0|
-    |ctrl_data_out_new_0_reg_12557             |   32|   0|   32|          0|
+    |compute_ready_read_reg_13874              |    1|   0|    1|          0|
+    |compute_start_read_reg_17193              |    1|   0|    1|          0|
+    |ctrl_data_out_flag_0_reg_12380            |    1|   0|    1|          0|
+    |ctrl_data_out_new_0_reg_12567             |   32|   0|   32|          0|
     |ctrl_mem_control                          |   32|   0|   32|          0|
-    |ctrl_mem_control_flag_3_reg_668           |    1|   0|    1|          0|
-    |ctrl_mem_control_loc_3_reg_541            |   32|   0|   32|          0|
-    |ctrl_mem_control_new_3_reg_795            |   32|   0|   32|          0|
+    |ctrl_mem_control_flag_3_reg_678           |    1|   0|    1|          0|
+    |ctrl_mem_control_loc_3_reg_551            |   32|   0|   32|          0|
+    |ctrl_mem_control_new_3_reg_805            |   32|   0|   32|          0|
     |ctrl_mem_dma_head_len                     |   32|   0|   32|          0|
-    |ctrl_mem_dma_head_len_flag_3_reg_3172     |    1|   0|    1|          0|
-    |ctrl_mem_dma_head_len_loc_3_reg_3484      |   32|   0|   32|          0|
-    |ctrl_mem_dma_head_len_new_3_reg_3299      |   32|   0|   32|          0|
+    |ctrl_mem_dma_head_len_flag_3_reg_3182     |    1|   0|    1|          0|
+    |ctrl_mem_dma_head_len_loc_3_reg_3494      |   32|   0|   32|          0|
+    |ctrl_mem_dma_head_len_new_3_reg_3309      |   32|   0|   32|          0|
     |ctrl_mem_dma_layer_len                    |   32|   0|   32|          0|
-    |ctrl_mem_dma_layer_len_flag_3_reg_2734    |    1|   0|    1|          0|
-    |ctrl_mem_dma_layer_len_loc_3_reg_3046     |   32|   0|   32|          0|
-    |ctrl_mem_dma_layer_len_new_3_reg_2861     |   32|   0|   32|          0|
+    |ctrl_mem_dma_layer_len_flag_3_reg_2744    |    1|   0|    1|          0|
+    |ctrl_mem_dma_layer_len_loc_3_reg_3056     |   32|   0|   32|          0|
+    |ctrl_mem_dma_layer_len_new_3_reg_2871     |   32|   0|   32|          0|
     |ctrl_mem_dma_tile_len                     |   32|   0|   32|          0|
-    |ctrl_mem_dma_tile_len_flag_3_reg_3610     |    1|   0|    1|          0|
-    |ctrl_mem_dma_tile_len_loc_3_reg_3922      |   32|   0|   32|          0|
-    |ctrl_mem_dma_tile_len_new_3_reg_3737      |   32|   0|   32|          0|
+    |ctrl_mem_dma_tile_len_flag_3_reg_3620     |    1|   0|    1|          0|
+    |ctrl_mem_dma_tile_len_loc_3_reg_3932      |   32|   0|   32|          0|
+    |ctrl_mem_dma_tile_len_new_3_reg_3747      |   32|   0|   32|          0|
     |ctrl_mem_head_stride                      |   32|   0|   32|          0|
-    |ctrl_mem_head_stride_flag_3_reg_4486      |    1|   0|    1|          0|
-    |ctrl_mem_head_stride_loc_3_reg_4798       |   32|   0|   32|          0|
-    |ctrl_mem_head_stride_new_3_reg_4613       |   32|   0|   32|          0|
+    |ctrl_mem_head_stride_flag_3_reg_4496      |    1|   0|    1|          0|
+    |ctrl_mem_head_stride_loc_3_reg_4808       |   32|   0|   32|          0|
+    |ctrl_mem_head_stride_new_3_reg_4623       |   32|   0|   32|          0|
     |ctrl_mem_irq_enable                       |   32|   0|   32|          0|
-    |ctrl_mem_irq_enable_flag_3_reg_2296       |    1|   0|    1|          0|
-    |ctrl_mem_irq_enable_loc_3_reg_2608        |   32|   0|   32|          0|
-    |ctrl_mem_irq_enable_new_3_reg_2423        |   32|   0|   32|          0|
+    |ctrl_mem_irq_enable_flag_3_reg_2306       |    1|   0|    1|          0|
+    |ctrl_mem_irq_enable_loc_3_reg_2618        |   32|   0|   32|          0|
+    |ctrl_mem_irq_enable_new_3_reg_2433        |   32|   0|   32|          0|
     |ctrl_mem_irq_status                       |   32|   0|   32|          0|
-    |ctrl_mem_irq_status_flag_3_reg_1856       |    1|   0|    1|          0|
-    |ctrl_mem_irq_status_loc_3_reg_2170        |   32|   0|   32|          0|
-    |ctrl_mem_irq_status_new_3_reg_1984        |   32|   0|   32|          0|
+    |ctrl_mem_irq_status_flag_3_reg_1866       |    1|   0|    1|          0|
+    |ctrl_mem_irq_status_loc_3_reg_2180        |   32|   0|   32|          0|
+    |ctrl_mem_irq_status_new_3_reg_1994        |   32|   0|   32|          0|
     |ctrl_mem_k_cache_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_k_cache_addr_flag_3_reg_7990     |    1|   0|    1|          0|
-    |ctrl_mem_k_cache_addr_loc_3_reg_8302      |   32|   0|   32|          0|
-    |ctrl_mem_k_cache_addr_new_3_reg_8117      |   32|   0|   32|          0|
+    |ctrl_mem_k_cache_addr_flag_3_reg_8000     |    1|   0|    1|          0|
+    |ctrl_mem_k_cache_addr_loc_3_reg_8312      |   32|   0|   32|          0|
+    |ctrl_mem_k_cache_addr_new_3_reg_8127      |   32|   0|   32|          0|
     |ctrl_mem_layer_index                      |   32|   0|   32|          0|
-    |ctrl_mem_layer_index_flag_3_reg_980       |    1|   0|    1|          0|
-    |ctrl_mem_layer_index_loc_3_reg_1292       |   32|   0|   32|          0|
-    |ctrl_mem_layer_index_new_3_reg_1107       |   32|   0|   32|          0|
+    |ctrl_mem_layer_index_flag_3_reg_990       |    1|   0|    1|          0|
+    |ctrl_mem_layer_index_loc_3_reg_1302       |   32|   0|   32|          0|
+    |ctrl_mem_layer_index_new_3_reg_1117       |   32|   0|   32|          0|
     |ctrl_mem_layer_stride                     |   32|   0|   32|          0|
-    |ctrl_mem_layer_stride_flag_3_reg_4048     |    1|   0|    1|          0|
-    |ctrl_mem_layer_stride_loc_3_reg_4360      |   32|   0|   32|          0|
-    |ctrl_mem_layer_stride_new_3_reg_4175      |   32|   0|   32|          0|
+    |ctrl_mem_layer_stride_flag_3_reg_4058     |    1|   0|    1|          0|
+    |ctrl_mem_layer_stride_loc_3_reg_4370      |   32|   0|   32|          0|
+    |ctrl_mem_layer_stride_new_3_reg_4185      |   32|   0|   32|          0|
     |ctrl_mem_logit_scale_qv                   |   32|   0|   32|          0|
-    |ctrl_mem_logit_scale_qv_flag_3_reg_8866   |    1|   0|    1|          0|
-    |ctrl_mem_logit_scale_qv_loc_3_reg_9178    |   32|   0|   32|          0|
-    |ctrl_mem_logit_scale_qv_new_3_reg_8993    |   32|   0|   32|          0|
+    |ctrl_mem_logit_scale_qv_flag_3_reg_8876   |    1|   0|    1|          0|
+    |ctrl_mem_logit_scale_qv_loc_3_reg_9188    |   32|   0|   32|          0|
+    |ctrl_mem_logit_scale_qv_new_3_reg_9003    |   32|   0|   32|          0|
     |ctrl_mem_reserved_debug                   |   32|   0|   32|          0|
-    |ctrl_mem_reserved_debug_flag_3_reg_11932  |    1|   0|    1|          0|
-    |ctrl_mem_reserved_debug_loc_3_reg_12244   |   32|   0|   32|          0|
-    |ctrl_mem_reserved_debug_new_3_reg_12059   |   32|   0|   32|          0|
+    |ctrl_mem_reserved_debug_flag_3_reg_11942  |    1|   0|    1|          0|
+    |ctrl_mem_reserved_debug_loc_3_reg_12254   |   32|   0|   32|          0|
+    |ctrl_mem_reserved_debug_new_3_reg_12069   |   32|   0|   32|          0|
     |ctrl_mem_scale_k                          |   32|   0|   32|          0|
-    |ctrl_mem_scale_k_flag_3_reg_10180         |    1|   0|    1|          0|
-    |ctrl_mem_scale_k_loc_3_reg_10492          |   32|   0|   32|          0|
-    |ctrl_mem_scale_k_new_3_reg_10307          |   32|   0|   32|          0|
+    |ctrl_mem_scale_k_flag_3_reg_10190         |    1|   0|    1|          0|
+    |ctrl_mem_scale_k_loc_3_reg_10502          |   32|   0|   32|          0|
+    |ctrl_mem_scale_k_new_3_reg_10317          |   32|   0|   32|          0|
     |ctrl_mem_scale_q                          |   32|   0|   32|          0|
-    |ctrl_mem_scale_q_flag_3_reg_9304          |    1|   0|    1|          0|
-    |ctrl_mem_scale_q_loc_3_reg_9616           |   32|   0|   32|          0|
-    |ctrl_mem_scale_q_new_3_reg_9431           |   32|   0|   32|          0|
+    |ctrl_mem_scale_q_flag_3_reg_9314          |    1|   0|    1|          0|
+    |ctrl_mem_scale_q_loc_3_reg_9626           |   32|   0|   32|          0|
+    |ctrl_mem_scale_q_new_3_reg_9441           |   32|   0|   32|          0|
     |ctrl_mem_scale_v                          |   32|   0|   32|          0|
-    |ctrl_mem_scale_v_flag_3_reg_11056         |    1|   0|    1|          0|
-    |ctrl_mem_scale_v_loc_3_reg_11368          |   32|   0|   32|          0|
-    |ctrl_mem_scale_v_new_3_reg_11183          |   32|   0|   32|          0|
+    |ctrl_mem_scale_v_flag_3_reg_11066         |    1|   0|    1|          0|
+    |ctrl_mem_scale_v_loc_3_reg_11378          |   32|   0|   32|          0|
+    |ctrl_mem_scale_v_new_3_reg_11193          |   32|   0|   32|          0|
     |ctrl_mem_status                           |   32|   0|   32|          0|
-    |ctrl_mem_status_flag_3_reg_1418           |    1|   0|    1|          0|
-    |ctrl_mem_status_loc_3_reg_1730            |   32|   0|   32|          0|
-    |ctrl_mem_status_new_3_reg_1547            |   32|   0|   32|          0|
+    |ctrl_mem_status_flag_3_reg_1428           |    1|   0|    1|          0|
+    |ctrl_mem_status_loc_3_reg_1740            |   32|   0|   32|          0|
+    |ctrl_mem_status_new_3_reg_1557            |   32|   0|   32|          0|
     |ctrl_mem_tile_stride                      |   32|   0|   32|          0|
-    |ctrl_mem_tile_stride_flag_3_reg_4924      |    1|   0|    1|          0|
-    |ctrl_mem_tile_stride_loc_3_reg_5236       |   32|   0|   32|          0|
-    |ctrl_mem_tile_stride_new_3_reg_5051       |   32|   0|   32|          0|
+    |ctrl_mem_tile_stride_flag_3_reg_4934      |    1|   0|    1|          0|
+    |ctrl_mem_tile_stride_loc_3_reg_5246       |   32|   0|   32|          0|
+    |ctrl_mem_tile_stride_new_3_reg_5061       |   32|   0|   32|          0|
     |ctrl_mem_v_cache_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_v_cache_addr_flag_3_reg_8428     |    1|   0|    1|          0|
-    |ctrl_mem_v_cache_addr_loc_3_reg_8740      |   32|   0|   32|          0|
-    |ctrl_mem_v_cache_addr_new_3_reg_8555      |   32|   0|   32|          0|
+    |ctrl_mem_v_cache_addr_flag_3_reg_8438     |    1|   0|    1|          0|
+    |ctrl_mem_v_cache_addr_loc_3_reg_8750      |   32|   0|   32|          0|
+    |ctrl_mem_v_cache_addr_new_3_reg_8565      |   32|   0|   32|          0|
     |ctrl_mem_w1_base_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_w1_base_addr_flag_3_reg_7114     |    1|   0|    1|          0|
-    |ctrl_mem_w1_base_addr_loc_3_reg_7426      |   32|   0|   32|          0|
-    |ctrl_mem_w1_base_addr_new_3_reg_7241      |   32|   0|   32|          0|
+    |ctrl_mem_w1_base_addr_flag_3_reg_7124     |    1|   0|    1|          0|
+    |ctrl_mem_w1_base_addr_loc_3_reg_7436      |   32|   0|   32|          0|
+    |ctrl_mem_w1_base_addr_new_3_reg_7251      |   32|   0|   32|          0|
     |ctrl_mem_w2_base_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_w2_base_addr_flag_3_reg_7552     |    1|   0|    1|          0|
-    |ctrl_mem_w2_base_addr_loc_3_reg_7864      |   32|   0|   32|          0|
-    |ctrl_mem_w2_base_addr_new_3_reg_7679      |   32|   0|   32|          0|
+    |ctrl_mem_w2_base_addr_flag_3_reg_7562     |    1|   0|    1|          0|
+    |ctrl_mem_w2_base_addr_loc_3_reg_7874      |   32|   0|   32|          0|
+    |ctrl_mem_w2_base_addr_new_3_reg_7689      |   32|   0|   32|          0|
     |ctrl_mem_wk_base_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_wk_base_addr_flag_3_reg_5800     |    1|   0|    1|          0|
-    |ctrl_mem_wk_base_addr_loc_3_reg_6112      |   32|   0|   32|          0|
-    |ctrl_mem_wk_base_addr_new_3_reg_5927      |   32|   0|   32|          0|
+    |ctrl_mem_wk_base_addr_flag_3_reg_5810     |    1|   0|    1|          0|
+    |ctrl_mem_wk_base_addr_loc_3_reg_6122      |   32|   0|   32|          0|
+    |ctrl_mem_wk_base_addr_new_3_reg_5937      |   32|   0|   32|          0|
     |ctrl_mem_wo_base_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_wo_base_addr_flag_3_reg_6676     |    1|   0|    1|          0|
-    |ctrl_mem_wo_base_addr_loc_3_reg_6988      |   32|   0|   32|          0|
-    |ctrl_mem_wo_base_addr_new_3_reg_6803      |   32|   0|   32|          0|
+    |ctrl_mem_wo_base_addr_flag_3_reg_6686     |    1|   0|    1|          0|
+    |ctrl_mem_wo_base_addr_loc_3_reg_6998      |   32|   0|   32|          0|
+    |ctrl_mem_wo_base_addr_new_3_reg_6813      |   32|   0|   32|          0|
     |ctrl_mem_wq_base_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_wq_base_addr_flag_3_reg_5362     |    1|   0|    1|          0|
-    |ctrl_mem_wq_base_addr_loc_3_reg_5674      |   32|   0|   32|          0|
-    |ctrl_mem_wq_base_addr_new_3_reg_5489      |   32|   0|   32|          0|
+    |ctrl_mem_wq_base_addr_flag_3_reg_5372     |    1|   0|    1|          0|
+    |ctrl_mem_wq_base_addr_loc_3_reg_5684      |   32|   0|   32|          0|
+    |ctrl_mem_wq_base_addr_new_3_reg_5499      |   32|   0|   32|          0|
     |ctrl_mem_wv_base_addr                     |   32|   0|   32|          0|
-    |ctrl_mem_wv_base_addr_flag_3_reg_6238     |    1|   0|    1|          0|
-    |ctrl_mem_wv_base_addr_loc_3_reg_6550      |   32|   0|   32|          0|
-    |ctrl_mem_wv_base_addr_new_3_reg_6365      |   32|   0|   32|          0|
+    |ctrl_mem_wv_base_addr_flag_3_reg_6248     |    1|   0|    1|          0|
+    |ctrl_mem_wv_base_addr_loc_3_reg_6560      |   32|   0|   32|          0|
+    |ctrl_mem_wv_base_addr_new_3_reg_6375      |   32|   0|   32|          0|
     |ctrl_mem_zero_point_k                     |   32|   0|   32|          0|
-    |ctrl_mem_zero_point_k_flag_3_reg_10618    |    1|   0|    1|          0|
-    |ctrl_mem_zero_point_k_loc_3_reg_10930     |   32|   0|   32|          0|
-    |ctrl_mem_zero_point_k_new_3_reg_10745     |   32|   0|   32|          0|
+    |ctrl_mem_zero_point_k_flag_3_reg_10628    |    1|   0|    1|          0|
+    |ctrl_mem_zero_point_k_loc_3_reg_10940     |   32|   0|   32|          0|
+    |ctrl_mem_zero_point_k_new_3_reg_10755     |   32|   0|   32|          0|
     |ctrl_mem_zero_point_q                     |   32|   0|   32|          0|
-    |ctrl_mem_zero_point_q_flag_3_reg_9742     |    1|   0|    1|          0|
-    |ctrl_mem_zero_point_q_loc_3_reg_10054     |   32|   0|   32|          0|
-    |ctrl_mem_zero_point_q_new_3_reg_9869      |   32|   0|   32|          0|
+    |ctrl_mem_zero_point_q_flag_3_reg_9752     |    1|   0|    1|          0|
+    |ctrl_mem_zero_point_q_loc_3_reg_10064     |   32|   0|   32|          0|
+    |ctrl_mem_zero_point_q_new_3_reg_9879      |   32|   0|   32|          0|
     |ctrl_mem_zero_point_v                     |   32|   0|   32|          0|
-    |ctrl_mem_zero_point_v_flag_3_reg_11494    |    1|   0|    1|          0|
-    |ctrl_mem_zero_point_v_loc_3_reg_11806     |   32|   0|   32|          0|
-    |ctrl_mem_zero_point_v_new_3_reg_11621     |   32|   0|   32|          0|
-    |dma_done_read_reg_13859                   |    1|   0|    1|          0|
-    |done_assign_reg_17205                     |    1|   0|    1|          0|
-    |grp_scheduler_hls_fu_12718_ap_start_reg   |    1|   0|    1|          0|
-    |head_ctx_ref_0_read_reg_17178             |  202|   0|  202|          0|
-    |head_ctx_ref_1_read_reg_17183             |  202|   0|  202|          0|
-    |head_ctx_ref_2_read_reg_17188             |  202|   0|  202|          0|
-    |head_ctx_ref_3_read_reg_17193             |  202|   0|  202|          0|
-    |stream_done_read_reg_13839                |    1|   0|    1|          0|
-    |stream_ready_read_reg_13844               |    1|   0|    1|          0|
-    |trunc_ln87_1_reg_17163                    |    2|   0|    2|          0|
-    |trunc_ln87_reg_17198                      |    1|   0|    1|          0|
+    |ctrl_mem_zero_point_v_flag_3_reg_11504    |    1|   0|    1|          0|
+    |ctrl_mem_zero_point_v_loc_3_reg_11816     |   32|   0|   32|          0|
+    |ctrl_mem_zero_point_v_new_3_reg_11631     |   32|   0|   32|          0|
+    |dma_done_read_reg_13879                   |    1|   0|    1|          0|
+    |done_assign_reg_17225                     |    1|   0|    1|          0|
+    |grp_scheduler_hls_fu_12728_ap_start_reg   |    1|   0|    1|          0|
+    |head_ctx_ref_0_read_reg_17198             |  202|   0|  202|          0|
+    |head_ctx_ref_1_read_reg_17203             |  202|   0|  202|          0|
+    |head_ctx_ref_2_read_reg_17208             |  202|   0|  202|          0|
+    |head_ctx_ref_3_read_reg_17213             |  202|   0|  202|          0|
+    |stream_done_read_reg_13859                |    1|   0|    1|          0|
+    |stream_ready_read_reg_13864               |    1|   0|    1|          0|
+    |trunc_ln87_1_reg_17183                    |    2|   0|    2|          0|
+    |trunc_ln87_reg_17218                      |    1|   0|    1|          0|
     |wl_addr_sel_reg                           |    8|   0|    8|          0|
     |wl_head_reg                               |   32|   0|   32|          0|
-    |wl_ready_read_reg_13834                   |    1|   0|    1|          0|
-    |wl_start_read_reg_17168                   |    1|   0|    1|          0|
+    |wl_ready_read_reg_13854                   |    1|   0|    1|          0|
+    |wl_start_read_reg_17188                   |    1|   0|    1|          0|
     |wl_tile_reg                               |   32|   0|   32|          0|
-    |xor_ln20_reg_17212                        |    1|   0|    1|          0|
+    |xor_ln20_reg_17232                        |    1|   0|    1|          0|
     +------------------------------------------+-----+----+-----+-----------+
     |Total                                     | 3559|   0| 3559|          0|
     +------------------------------------------+-----+----+-----+-----------+

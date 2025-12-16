@@ -18,27 +18,27 @@
       "L": 1,
       "T": 4
     },
-    "total_instructions": 3937
+    "total_instructions": 4013
   },
   "1": {
-    "basicblocks": 303,
+    "basicblocks": 341,
     "calls": "3 3 3 3 2 3 3 3 3",
     "control_depth": 2,
     "def_use_depth": 8,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 163,
-    "instructions": 2634,
+    "instructions": 2710,
     "loads": {
-      "G": 94,
-      "L": 103
+      "G": 110,
+      "L": 104
     },
     "memory_accesses": 3,
     "name": "scheduler_hls",
     "stores": {
-      "G": 330,
+      "G": 349,
       "L": 366
     },
-    "total_instructions": 3575
+    "total_instructions": 3651
   },
   "2": {
     "basicblocks": 271,
