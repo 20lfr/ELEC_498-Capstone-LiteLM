@@ -414,6 +414,17 @@ void scheduler_hls(
     w2_tile = 0;
     w2_dma_busy = false;
     w2_comp_busy = false;
+
+    // Weight Stager and Loader params
+    wl_start = false;
+    wl_addr_sel = DmaSel::DMASEL_NONE;
+    wl_head = 0;
+    wl_tile = 0;
+    wl_layer = 0;
+
+    // Compute params
+    compute_start = false;
+    compute_op = ComputeOp::CMP_NONE;
   }
 
   // Default outputs
@@ -522,6 +533,17 @@ void scheduler_hls(
         w2_tile = 0;
         w2_dma_busy = false;
         w2_comp_busy = false;
+
+        // Weight Stager and Loader params
+        wl_start = false;
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_layer = 0;
+
+        // Compute params
+        compute_start = false;
+        compute_op = ComputeOp::CMP_NONE;
       }
       break;
     }

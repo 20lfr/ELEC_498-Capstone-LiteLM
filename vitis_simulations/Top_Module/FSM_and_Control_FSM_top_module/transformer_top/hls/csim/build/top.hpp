@@ -32,6 +32,5 @@ void transformer_top(
     bool ctrl_chip_en,
     bool ctrl_resetn_in,
     SchedState &dbg_state, 
-    ControlMemSpace &dbg_ctrl_mem,
     bool done
 );

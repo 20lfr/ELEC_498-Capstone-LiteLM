@@ -1,0 +1,240 @@
+
+
+================================================================
+== Vitis HLS Report for 'transformer_top'
+================================================================
+* Date:           Mon Dec 15 23:41:20 2025
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        transformer_top
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  6.953 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max    | min | max |   Type  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |        2|        2|  20.000 ns|  20.000 ns|    3|    3|       no|
+    +---------+---------+-----------+-----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        +--------------------------+---------------+---------+---------+-----------+-----------+-----+-----+---------+
+        |                          |               |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+        |         Instance         |     Module    |   min   |   max   |    min    |    max    | min | max |   Type  |
+        +--------------------------+---------------+---------+---------+-----------+-----------+-----+-----+---------+
+        |grp_scheduler_hls_fu_408  |scheduler_hls  |        1|        1|  10.000 ns|  10.000 ns|    1|    1|       no|
+        +--------------------------+---------------+---------+---------+-----------+-----------+-----+-----+---------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|     268|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|    3484|   12860|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|      59|    -|
+|Register         |        -|     -|     937|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     0|    4421|   13187|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|     0|       1|      11|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +---------------------------+----------------------+---------+----+------+-------+-----+
+    |          Instance         |        Module        | BRAM_18K| DSP|  FF  |  LUT  | URAM|
+    +---------------------------+----------------------+---------+----+------+-------+-----+
+    |grp_scheduler_hls_fu_408   |scheduler_hls         |        0|   0|  3484|  12846|    0|
+    |sparsemux_9_3_32_1_1_U111  |sparsemux_9_3_32_1_1  |        0|   0|     0|     14|    0|
+    +---------------------------+----------------------+---------+----+------+-------+-----+
+    |Total                      |                      |        0|   0|  3484|  12860|    0|
+    +---------------------------+----------------------+---------+----+------+-------+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-------------------------------------+----------+----+---+----+------------+------------+
+    |            Variable Name            | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-------------------------------------+----------+----+---+----+------------+------------+
+    |and_ln137_1_fu_661_p2                |       and|   0|  0|   2|           1|           1|
+    |and_ln137_2_fu_667_p2                |       and|   0|  0|   2|           1|           1|
+    |and_ln137_3_fu_673_p2                |       and|   0|  0|   2|           1|           1|
+    |and_ln137_fu_655_p2                  |       and|   0|  0|   2|           1|           1|
+    |and_ln147_1_fu_643_p2                |       and|   0|  0|   2|           1|           1|
+    |and_ln147_2_fu_753_p2                |       and|   0|  0|   2|           1|           1|
+    |and_ln147_fu_559_p2                  |       and|   0|  0|   2|           1|           1|
+    |and_ln54_1_fu_717_p2                 |       and|   0|  0|   2|           1|           1|
+    |and_ln54_2_fu_723_p2                 |       and|   0|  0|   2|           1|           1|
+    |and_ln54_3_fu_741_p2                 |       and|   0|  0|   2|           1|           1|
+    |and_ln54_4_fu_765_p2                 |       and|   0|  0|   2|           1|           1|
+    |and_ln54_fu_679_p2                   |       and|   0|  0|   2|           1|           1|
+    |and_ln7_1_fu_759_p2                  |       and|   0|  0|   2|           1|           1|
+    |and_ln7_fu_705_p2                    |       and|   0|  0|   2|           1|           1|
+    |ctrl_mem_status_new_3_i_fu_781_p6    |       and|   0|  0|  32|          32|          32|
+    |icmp_ln54_1_fu_699_p2                |      icmp|   0|  0|  39|          32|           4|
+    |icmp_ln54_fu_631_p2                  |      icmp|   0|  0|  39|          32|           1|
+    |icmp_ln7_1_fu_595_p2                 |      icmp|   0|  0|   9|           2|           1|
+    |icmp_ln7_fu_589_p2                   |      icmp|   0|  0|  39|          32|           7|
+    |ctrl_mem_control_flag_3_i_fu_685_p2  |        or|   0|  0|   2|           1|           1|
+    |ctrl_mem_status_flag_3_i_fu_747_p2   |        or|   0|  0|   2|           1|           1|
+    |or_ln54_1_fu_735_p2                  |        or|   0|  0|   2|           1|           1|
+    |or_ln54_fu_729_p2                    |        or|   0|  0|   2|           1|           1|
+    |ctrl_mem_control_new_3_i_fu_691_p3   |    select|   0|  0|   2|           1|           2|
+    |select_ln145_fu_551_p3               |    select|   0|  0|  32|           1|          32|
+    |xor_ln136_fu_649_p2                  |       xor|   0|  0|   2|           1|           2|
+    |xor_ln145_fu_545_p2                  |       xor|   0|  0|   2|           1|           2|
+    |xor_ln147_fu_637_p2                  |       xor|   0|  0|   2|           2|           1|
+    |xor_ln57_fu_619_p2                   |       xor|   0|  0|  32|          32|           2|
+    |xor_ln7_fu_711_p2                    |       xor|   0|  0|   2|           2|           1|
+    +-------------------------------------+----------+----+---+----+------------+------------+
+    |Total                                |          |   0|  0| 268|         188|         105|
+    +-------------------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +----------------------------------------+----+-----------+-----+-----------+
+    |                  Name                  | LUT| Input Size| Bits| Total Bits|
+    +----------------------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm                               |  14|          3|    1|          3|
+    |ap_sig_allocacmp_ctrl_mem_control_load  |   9|          2|    2|          4|
+    |compute_op                              |   9|          2|    8|         16|
+    |wl_addr_sel                             |   9|          2|    8|         16|
+    |wl_head                                 |   9|          2|   32|         64|
+    |wl_tile                                 |   9|          2|   32|         64|
+    +----------------------------------------+----+-----------+-----+-----------+
+    |Total                                   |  59|         13|   83|        167|
+    +----------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +---------------------------------------+-----+----+-----+-----------+
+    |                  Name                 |  FF | LUT| Bits| Const Bits|
+    +---------------------------------------+-----+----+-----+-----------+
+    |ap_CS_fsm                              |    2|   0|    2|          0|
+    |axis_in_last_read_reg_902              |    1|   0|    1|          0|
+    |axis_in_valid_read_reg_907             |    1|   0|    1|          0|
+    |compute_done_read_reg_887              |    1|   0|    1|          0|
+    |compute_op_reg                         |    8|   0|    8|          0|
+    |compute_ready_read_reg_892             |    1|   0|    1|          0|
+    |compute_start_read_reg_928             |    1|   0|    1|          0|
+    |ctrl_mem_control                       |    2|   0|    2|          0|
+    |ctrl_mem_control_load_reg_918          |    2|   0|    2|          0|
+    |ctrl_mem_status                        |   32|   0|   32|          0|
+    |dma_done_read_reg_897                  |    1|   0|    1|          0|
+    |grp_scheduler_hls_fu_408_ap_start_reg  |    1|   0|    1|          0|
+    |head_ctx_ref_0_read_reg_933            |  202|   0|  202|          0|
+    |head_ctx_ref_1_read_reg_938            |  202|   0|  202|          0|
+    |head_ctx_ref_2_read_reg_943            |  202|   0|  202|          0|
+    |head_ctx_ref_3_read_reg_948            |  202|   0|  202|          0|
+    |stream_done_read_reg_877               |    1|   0|    1|          0|
+    |stream_ready_read_reg_882              |    1|   0|    1|          0|
+    |wl_addr_sel_reg                        |    8|   0|    8|          0|
+    |wl_head_reg                            |   32|   0|   32|          0|
+    |wl_ready_read_reg_872                  |    1|   0|    1|          0|
+    |wl_start_read_reg_923                  |    1|   0|    1|          0|
+    |wl_tile_reg                            |   32|   0|   32|          0|
+    +---------------------------------------+-----+----+-----+-----------+
+    |Total                                  |  937|   0|  937|          0|
+    +---------------------------------------+-----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------------+-----+-----+------------+-----------------+--------------+
+|        RTL Ports        | Dir | Bits|  Protocol  |  Source Object  |    C Type    |
++-------------------------+-----+-----+------------+-----------------+--------------+
+|ap_clk                   |   in|    1|  ap_ctrl_hs|  transformer_top|  return value|
+|ap_rst                   |   in|    1|  ap_ctrl_hs|  transformer_top|  return value|
+|ap_start                 |   in|    1|  ap_ctrl_hs|  transformer_top|  return value|
+|ap_done                  |  out|    1|  ap_ctrl_hs|  transformer_top|  return value|
+|ap_idle                  |  out|    1|  ap_ctrl_hs|  transformer_top|  return value|
+|ap_ready                 |  out|    1|  ap_ctrl_hs|  transformer_top|  return value|
+|axis_in_valid            |   in|    1|     ap_none|    axis_in_valid|        scalar|
+|axis_in_last             |   in|    1|     ap_none|     axis_in_last|        scalar|
+|axis_in_ready            |  out|    1|      ap_vld|    axis_in_ready|       pointer|
+|axis_in_ready_ap_vld     |  out|    1|      ap_vld|    axis_in_ready|       pointer|
+|dma_done                 |   in|    1|     ap_none|         dma_done|        scalar|
+|compute_ready            |   in|    1|     ap_none|    compute_ready|        scalar|
+|compute_done             |   in|    1|     ap_none|     compute_done|        scalar|
+|head_ctx_ref_0_i         |   in|  202|     ap_ovld|   head_ctx_ref_0|       pointer|
+|head_ctx_ref_0_o         |  out|  202|     ap_ovld|   head_ctx_ref_0|       pointer|
+|head_ctx_ref_0_o_ap_vld  |  out|    1|     ap_ovld|   head_ctx_ref_0|       pointer|
+|head_ctx_ref_1_i         |   in|  202|     ap_ovld|   head_ctx_ref_1|       pointer|
+|head_ctx_ref_1_o         |  out|  202|     ap_ovld|   head_ctx_ref_1|       pointer|
+|head_ctx_ref_1_o_ap_vld  |  out|    1|     ap_ovld|   head_ctx_ref_1|       pointer|
+|head_ctx_ref_2_i         |   in|  202|     ap_ovld|   head_ctx_ref_2|       pointer|
+|head_ctx_ref_2_o         |  out|  202|     ap_ovld|   head_ctx_ref_2|       pointer|
+|head_ctx_ref_2_o_ap_vld  |  out|    1|     ap_ovld|   head_ctx_ref_2|       pointer|
+|head_ctx_ref_3_i         |   in|  202|     ap_ovld|   head_ctx_ref_3|       pointer|
+|head_ctx_ref_3_o         |  out|  202|     ap_ovld|   head_ctx_ref_3|       pointer|
+|head_ctx_ref_3_o_ap_vld  |  out|    1|     ap_ovld|   head_ctx_ref_3|       pointer|
+|compute_start_i          |   in|    1|     ap_ovld|    compute_start|       pointer|
+|compute_start_o          |  out|    1|     ap_ovld|    compute_start|       pointer|
+|compute_start_o_ap_vld   |  out|    1|     ap_ovld|    compute_start|       pointer|
+|compute_op               |  out|    8|      ap_vld|       compute_op|       pointer|
+|compute_op_ap_vld        |  out|    1|      ap_vld|       compute_op|       pointer|
+|stream_ready             |   in|    1|     ap_none|     stream_ready|        scalar|
+|stream_start             |  out|    1|      ap_vld|     stream_start|       pointer|
+|stream_start_ap_vld      |  out|    1|      ap_vld|     stream_start|       pointer|
+|stream_done              |   in|    1|     ap_none|      stream_done|        scalar|
+|wl_ready                 |   in|    1|     ap_none|         wl_ready|        scalar|
+|wl_start_i               |   in|    1|     ap_ovld|         wl_start|       pointer|
+|wl_start_o               |  out|    1|     ap_ovld|         wl_start|       pointer|
+|wl_start_o_ap_vld        |  out|    1|     ap_ovld|         wl_start|       pointer|
+|wl_addr_sel              |  out|    8|      ap_vld|      wl_addr_sel|       pointer|
+|wl_addr_sel_ap_vld       |  out|    1|      ap_vld|      wl_addr_sel|       pointer|
+|wl_layer                 |  out|   32|      ap_vld|         wl_layer|       pointer|
+|wl_layer_ap_vld          |  out|    1|      ap_vld|         wl_layer|       pointer|
+|wl_head                  |  out|   32|      ap_vld|          wl_head|       pointer|
+|wl_head_ap_vld           |  out|    1|      ap_vld|          wl_head|       pointer|
+|wl_tile                  |  out|   32|      ap_vld|          wl_tile|       pointer|
+|wl_tile_ap_vld           |  out|    1|      ap_vld|          wl_tile|       pointer|
+|ctrl_addr                |   in|   32|     ap_none|        ctrl_addr|        scalar|
+|ctrl_data_in             |   in|   32|     ap_none|     ctrl_data_in|        scalar|
+|ctrl_data_out            |   in|   32|     ap_none|    ctrl_data_out|        scalar|
+|ctrl_read_en             |   in|    1|     ap_none|     ctrl_read_en|        scalar|
+|ctrl_write_en            |   in|    1|     ap_none|    ctrl_write_en|        scalar|
+|ctrl_chip_en             |   in|    1|     ap_none|     ctrl_chip_en|        scalar|
+|ctrl_resetn_in           |   in|    1|     ap_none|   ctrl_resetn_in|        scalar|
+|dbg_state                |  out|   32|      ap_vld|        dbg_state|       pointer|
+|dbg_state_ap_vld         |  out|    1|      ap_vld|        dbg_state|       pointer|
+|done                     |   in|    1|     ap_none|             done|        scalar|
++-------------------------+-----+-----+------------+-----------------+--------------+
+

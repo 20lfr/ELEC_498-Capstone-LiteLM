@@ -55,7 +55,6 @@ void transformer_top(
     bool       ctrl_resetn_in, 
 
     SchedState  &dbg_state,
-    ControlMemSpace &dbg_ctrl_mem,
     bool        done
 
 
@@ -85,11 +84,9 @@ void transformer_top(
     
 
     
-
-
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
     scheduler_hls(
-        dbg_ctrl_mem,
+        ctrl_mem,
         axis_in_valid,
         axis_in_last,
         axis_in_ready,

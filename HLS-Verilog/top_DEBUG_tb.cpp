@@ -121,6 +121,47 @@ static const char *phase_name(HeadPhase ph) {
     }
 }
 
+// Helpers to drive control interface transactions
+void ctrl_write(
+    ControlReg  addr,
+    uint32_t    data_in,
+    bool        resetn_in,
+    ControlReg  &ctrl_addr,
+    uint32_t    &ctrl_data_in,
+    uint32_t    &ctrl_data_out,
+    bool        &ctrl_read_en,
+    bool        &ctrl_write_en,
+    bool        &ctrl_chip_en,
+    bool        &ctrl_resetn_in
+) {
+    ctrl_addr      = addr;
+    ctrl_data_in   = data_in;
+    ctrl_data_out  = 0;
+    ctrl_read_en   = false;
+    ctrl_write_en  = true;
+    ctrl_chip_en   = true;
+    ctrl_resetn_in = resetn_in;
+}
+
+void ctrl_read(
+    ControlReg  addr,
+    bool        resetn_in,
+    ControlReg  &ctrl_addr,
+    uint32_t    &ctrl_data_in,
+    uint32_t    &ctrl_data_out,
+    bool        &ctrl_read_en,
+    bool        &ctrl_write_en,
+    bool        &ctrl_chip_en,
+    bool        &ctrl_resetn_in
+) {
+    ctrl_addr      = addr;
+    ctrl_data_in   = 0;
+    ctrl_data_out  = 0;
+    ctrl_read_en   = true;
+    ctrl_write_en  = false;
+    ctrl_chip_en   = true;
+    ctrl_resetn_in = resetn_in;
+}
 
 int main() {
     const int MAX_CYCLES = 1200;
@@ -129,7 +170,6 @@ int main() {
     const int AXIS_BEATS = 3;
 
     ControlMemSpace dbg_ctrl_mem{};
-    dbg_ctrl_mem.control = 0; // reset_n low, start low until released
 
     bool wl_ready        = true;
     bool wl_start        = false;
@@ -180,7 +220,7 @@ int main() {
     bool stream_busy     = false;
     bool reset_released  = false;
     bool start_pulsed    = false;
-    bool start_clear_pending = false;
+    bool pending_start_clear = false;
     bool seen_stream_out = false;
     int  idle_after_stream = 0;
     bool seen_done       = false;
@@ -199,32 +239,57 @@ int main() {
     bool ctrl_write_en   = false;
     bool ctrl_chip_en    = false; // gate writes until used
     bool ctrl_resetn_in  = false;
+    uint32_t ctrl_shadow_control = 0;
+    int ctrl_gap_cycles = 0; // spacing between control bus transactions
 
-    std::printf("%-8s %-6s %-6s %-8s | %-16s | %-10s %-10s %-10s %-10s | %s\n",
+    std::printf("%-8s %-6s %-6s %-8s | %-16s | %-10s %-10s %-10s %-8s %-8s %-8s %-8s | %-10s %-10s %-10s %-10s | %s\n",
                 "Cycle", "Start", "Reset", "Busy", "State",
+                "CtrlAddr", "CtrlDin", "CtrlDout", "Rd", "Wr", "CE", "RstN",
                 "CmpStart", "CmpReady", "CmpDone", "CmpOp",
                 "Heads{idx:ph/cr/cs/cd/op/wlR/addr/qd/wlD}");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
-        // Simple reset release at cycle 2
-        if (cycle == 2) {
-            dbg_ctrl_mem.control |= CTRL_RESETN_BIT;
-            ctrl_resetn_in = true;
-            reset_released = true;
+        // Default idle control signals each cycle
+        ctrl_addr     = ControlReg::STATUS;
+        ctrl_data_in  = 0;
+        ctrl_read_en  = false;
+        ctrl_write_en = false;
+        ctrl_chip_en  = false;
+
+        // Space out control transactions to model multi-cycle AXI-lite access
+        if (ctrl_gap_cycles > 0) {
+            ctrl_gap_cycles--;
+        } else {
+            // Release reset and assert start after a brief reset hold
+            if (!reset_released && cycle >= 2) {
+                ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT | CTRL_START_BIT, true,
+                           ctrl_addr, ctrl_data_in, ctrl_data_out,
+                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                ctrl_shadow_control = CTRL_RESETN_BIT | CTRL_START_BIT;
+                ctrl_resetn_in = true;
+                reset_released = true;
+                start_pulsed   = true;
+                pending_start_clear = true;
+                ctrl_gap_cycles = 1;
+            } else if (pending_start_clear) {
+                // Clear start bit a few cycles later to make it a pulse
+                ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT, ctrl_resetn_in,
+                           ctrl_addr, ctrl_data_in, ctrl_data_out,
+                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                ctrl_shadow_control = CTRL_RESETN_BIT;
+                pending_start_clear = false;
+                ctrl_gap_cycles = 1;
+            } else {
+                // Periodically read status to observe scheduler (one transaction at a time)
+                ctrl_read(ControlReg::STATUS, ctrl_resetn_in,
+                          ctrl_addr, ctrl_data_in, ctrl_data_out,
+                          ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                ctrl_gap_cycles = 1;
+            }
         }
-        const bool cntrl_busy = ((dbg_ctrl_mem.status & STATUS_BUSY_BIT) != 0);
-        if (start_clear_pending) {
-            dbg_ctrl_mem.control &= ~CTRL_START_BIT; // drive start low after pulse
-            start_clear_pending = false;
-        }
-        // Issue a single-cycle start pulse once after reset deasserts
-        if (reset_released && ((dbg_ctrl_mem.control & CTRL_RESETN_BIT) != 0) && !start_pulsed) {
-            dbg_ctrl_mem.control |= CTRL_START_BIT; // set start bit
-            start_pulsed = true;
-            start_clear_pending = true;
-        }
+        const bool cntrl_busy = (ctrl_data_out & STATUS_BUSY_BIT) != 0; // observe only, no control gating
 
         // Clear per-head compute_done pulse
         for (int i = 0; i < NUM_HEADS; ++i) {
@@ -304,7 +369,7 @@ int main() {
         wl_ready      = !dma_busy;
 
         // Drive AXIS ingress: send a short burst when ready is asserted
-        if (!axis_feed_done && (axis_drive || (((dbg_ctrl_mem.control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
+        if (!axis_feed_done && (axis_drive || (((ctrl_shadow_control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
             axis_drive = true;
             if (!axis_in_valid && axis_in_ready) {
                 axis_in_valid = true;
@@ -342,18 +407,24 @@ int main() {
             ctrl_chip_en,
             ctrl_resetn_in,
             dbg_state, 
-            dbg_ctrl_mem, 
             dbg_done
         );
 
-        const bool cntrl_start   = ((dbg_ctrl_mem.control & CTRL_START_BIT) != 0);
-        const bool cntrl_reset_n = ((dbg_ctrl_mem.control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10s %-10s %-10s %-10s | ",
+        const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
+        const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
+        std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10u %-10u %-10u %-8s %-8s %-8s %-8s | %-10s %-10s %-10s %-10s | ",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
                     dash_or(cntrl_busy),
                     state_name(dbg_state),
+                    static_cast<unsigned>(ctrl_addr),
+                    ctrl_data_in,
+                    ctrl_data_out,
+                    dash_or(ctrl_read_en),
+                    dash_or(ctrl_write_en),
+                    dash_or(ctrl_chip_en),
+                    dash_or(ctrl_resetn_in),
                     dash_or(compute_start),
                     dash_or(compute_ready),
                     dash_or(compute_done),
@@ -430,7 +501,6 @@ int main() {
 
         if (dbg_done) {
             seen_done = true;
-            dbg_ctrl_mem.control &= ~CTRL_START_BIT; // clear start bit
         }
         if (seen_done){
             post_done_cycles++;
@@ -443,7 +513,7 @@ int main() {
         if (seen_stream_out && idle_after_stream >= 4) {
             break;
         }
-        if (!cntrl_busy && !cntrl_start && seen_done && seen_idle_after) {
+        if (!cntrl_start && seen_done && seen_idle_after) {
             break;
         }
     }
@@ -457,7 +527,7 @@ int main() {
         return 1;
     }
 
-    std::printf("PASS: STREAM_OUT reached and FSM stayed IDLE for %d cycles after. Layer=%u\n",
-                idle_after_stream, dbg_ctrl_mem.layer_index);
+    std::printf("PASS: STREAM_OUT reached and FSM stayed IDLE for %d cycles after.\n",
+                idle_after_stream);
     return 0;
 }
