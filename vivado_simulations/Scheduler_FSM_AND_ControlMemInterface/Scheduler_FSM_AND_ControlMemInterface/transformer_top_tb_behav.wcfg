@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="782.976 ns"></ZoomEndTime>
-      <Cursor1Time time="115.000 ns"></Cursor1Time>
+      <ZoomStartTime time="32,891.248 ns"></ZoomStartTime>
+      <ZoomEndTime time="33,108.091 ns"></ZoomEndTime>
+      <Cursor1Time time="40,025.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="230"></NameColumnWidth>
+      <NameColumnWidth column_width="206"></NameColumnWidth>
       <ValueColumnWidth column_width="60"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="135" />
+   <WVObjectSize size="142" />
    <wvobject type="logic" fp_name="/transformer_top_tb/ap_clk">
       <obj_property name="ElementShortName">ap_clk</obj_property>
       <obj_property name="ObjectShortName">ap_clk</obj_property>
@@ -103,13 +103,6 @@
       <obj_property name="ElementShortName">stream_done[0:0]</obj_property>
       <obj_property name="ObjectShortName">stream_done[0:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/transformer_top_tb/dbg_state">
-      <obj_property name="ElementShortName">dbg_state[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dbg_state[31:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/transformer_top_tb/ap_done">
       <obj_property name="ElementShortName">ap_done</obj_property>
       <obj_property name="ObjectShortName">ap_done</obj_property>
@@ -138,17 +131,86 @@
       <obj_property name="ElementShortName">axis_in_ready_ap_vld</obj_property>
       <obj_property name="ObjectShortName">axis_in_ready_ap_vld</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_ctrl_mem">
+      <obj_property name="ElementShortName">dbg_ctrl_mem[863:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_ctrl_mem[863:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/irq_ps">
+      <obj_property name="ElementShortName">irq_ps[0:0]</obj_property>
+      <obj_property name="ObjectShortName">irq_ps[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/irq_inference_done">
+      <obj_property name="ElementShortName">irq_inference_done</obj_property>
+      <obj_property name="ObjectShortName">irq_inference_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/seen_done">
+      <obj_property name="ElementShortName">seen_done</obj_property>
+      <obj_property name="ObjectShortName">seen_done</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/post_done_cycles">
+      <obj_property name="ElementShortName">post_done_cycles[31:0]</obj_property>
+      <obj_property name="ObjectShortName">post_done_cycles[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/seen_idle_after">
+      <obj_property name="ElementShortName">seen_idle_after</obj_property>
+      <obj_property name="ObjectShortName">seen_idle_after</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_state">
+      <obj_property name="ElementShortName">dbg_state[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_state[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dma_done">
+      <obj_property name="ElementShortName">dma_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_done[0:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/wl_start_o">
       <obj_property name="ElementShortName">wl_start_o[0:0]</obj_property>
       <obj_property name="ObjectShortName">wl_start_o[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/transformer_top_tb/wl_start_o_ap_vld">
-      <obj_property name="ElementShortName">wl_start_o_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">wl_start_o_ap_vld</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/wl_addr_sel">
       <obj_property name="ElementShortName">wl_addr_sel[7:0]</obj_property>
       <obj_property name="ObjectShortName">wl_addr_sel[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wl_tile">
+      <obj_property name="ElementShortName">wl_tile[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wl_tile[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/compute_start_o">
+      <obj_property name="ElementShortName">compute_start_o[0:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_start_o[0:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/compute_op">
+      <obj_property name="ElementShortName">compute_op[7:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_op[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/stream_done">
+      <obj_property name="ElementShortName">stream_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">stream_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wl_start_o_ap_vld">
+      <obj_property name="ElementShortName">wl_start_o_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wl_start_o_ap_vld</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/transformer_top_tb/wl_addr_sel_ap_vld">
       <obj_property name="ElementShortName">wl_addr_sel_ap_vld</obj_property>
@@ -170,25 +232,13 @@
       <obj_property name="ElementShortName">wl_head_ap_vld</obj_property>
       <obj_property name="ObjectShortName">wl_head_ap_vld</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/transformer_top_tb/wl_tile">
-      <obj_property name="ElementShortName">wl_tile[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wl_tile[31:0]</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/transformer_top_tb/wl_tile_ap_vld">
       <obj_property name="ElementShortName">wl_tile_ap_vld</obj_property>
       <obj_property name="ObjectShortName">wl_tile_ap_vld</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/transformer_top_tb/compute_start_o">
-      <obj_property name="ElementShortName">compute_start_o[0:0]</obj_property>
-      <obj_property name="ObjectShortName">compute_start_o[0:0]</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/transformer_top_tb/compute_start_o_ap_vld">
       <obj_property name="ElementShortName">compute_start_o_ap_vld</obj_property>
       <obj_property name="ObjectShortName">compute_start_o_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/transformer_top_tb/compute_op">
-      <obj_property name="ElementShortName">compute_op[7:0]</obj_property>
-      <obj_property name="ObjectShortName">compute_op[7:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/transformer_top_tb/compute_op_ap_vld">
       <obj_property name="ElementShortName">compute_op_ap_vld</obj_property>
@@ -237,10 +287,6 @@
    <wvobject type="logic" fp_name="/transformer_top_tb/reset_released">
       <obj_property name="ElementShortName">reset_released</obj_property>
       <obj_property name="ObjectShortName">reset_released</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/transformer_top_tb/seen_done">
-      <obj_property name="ElementShortName">seen_done</obj_property>
-      <obj_property name="ObjectShortName">seen_done</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/post_done_cycles">
       <obj_property name="ElementShortName">post_done_cycles[31:0]</obj_property>

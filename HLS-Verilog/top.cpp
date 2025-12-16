@@ -48,23 +48,22 @@ void transformer_top(
 
     ControlReg ctrl_addr,
     uint32_t   ctrl_data_in,
-    uint32_t   ctrl_data_out,
+    uint32_t   &ctrl_data_out,
     bool       ctrl_read_en,
     bool       ctrl_write_en,
     bool       ctrl_chip_en,
     bool       ctrl_resetn_in, 
 
     SchedState  &dbg_state,
-    bool        done
+    ControlMemSpace &dbg_ctrl_mem,
+    bool        done, 
 
-
+    bool        &irq_ps
 ) {
 #pragma HLS INLINE off
 
     // Control Memory Address Space~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     static ControlMemSpace ctrl_mem; 
-    
-
     ControlMemInterface(
         ctrl_mem,       // AXI-Lite mapped control memory
         ctrl_addr,      // byte address for control/IRQ registers
@@ -110,7 +109,7 @@ void transformer_top(
     );
 
     // IRQ WIZARD~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // bool irq_ps = false;
-    // irq_wizard(ctrl_mem, dma_done, done, error, irq_ps);
+    irq_ps = irq_wizard(ctrl_mem, done, error);
+    dbg_ctrl_mem = ctrl_mem;
 
 }

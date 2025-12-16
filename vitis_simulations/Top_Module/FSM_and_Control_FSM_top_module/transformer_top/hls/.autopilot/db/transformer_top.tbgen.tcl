@@ -42,13 +42,15 @@ set C_modelArgList {
 	{ wl_tile int 32 regular {pointer 1}  }
 	{ ctrl_addr int 32 regular  }
 	{ ctrl_data_in int 32 regular  }
-	{ ctrl_data_out int 32 unused  }
+	{ ctrl_data_out int 32 regular {pointer 1}  }
 	{ ctrl_read_en uint 1 regular  }
 	{ ctrl_write_en uint 1 regular  }
 	{ ctrl_chip_en uint 1 regular  }
 	{ ctrl_resetn_in uint 1 regular  }
 	{ dbg_state int 32 regular {pointer 1}  }
+	{ dbg_ctrl_mem int 864 regular {pointer 1}  }
 	{ done uint 1 unused  }
+	{ irq_ps int 1 regular {pointer 1}  }
 }
 set hasAXIMCache 0
 set l_AXIML2Cache [list]
@@ -77,15 +79,17 @@ set C_modelArgMapList {[
  	{ "Name" : "wl_tile", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "ctrl_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
  	{ "Name" : "ctrl_data_in", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
- 	{ "Name" : "ctrl_data_out", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_data_out", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "ctrl_read_en", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "ctrl_write_en", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "ctrl_chip_en", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "ctrl_resetn_in", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "dbg_state", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
- 	{ "Name" : "done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} ]}
+ 	{ "Name" : "dbg_ctrl_mem", "interface" : "wire", "bitwidth" : 864, "direction" : "WRITEONLY"} , 
+ 	{ "Name" : "done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "irq_ps", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} ]}
 # RTL Port declarations: 
-set portNum 56
+set portNum 61
 set portList { 
 	{ ap_clk sc_in sc_logic 1 clock -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
@@ -135,14 +139,19 @@ set portList {
 	{ wl_tile_ap_vld sc_out sc_logic 1 outvld 20 } 
 	{ ctrl_addr sc_in sc_lv 32 signal 21 } 
 	{ ctrl_data_in sc_in sc_lv 32 signal 22 } 
-	{ ctrl_data_out sc_in sc_lv 32 signal 23 } 
+	{ ctrl_data_out sc_out sc_lv 32 signal 23 } 
+	{ ctrl_data_out_ap_vld sc_out sc_logic 1 outvld 23 } 
 	{ ctrl_read_en sc_in sc_lv 1 signal 24 } 
 	{ ctrl_write_en sc_in sc_lv 1 signal 25 } 
 	{ ctrl_chip_en sc_in sc_lv 1 signal 26 } 
 	{ ctrl_resetn_in sc_in sc_lv 1 signal 27 } 
 	{ dbg_state sc_out sc_lv 32 signal 28 } 
 	{ dbg_state_ap_vld sc_out sc_logic 1 outvld 28 } 
-	{ done sc_in sc_lv 1 signal 29 } 
+	{ dbg_ctrl_mem sc_out sc_lv 864 signal 29 } 
+	{ dbg_ctrl_mem_ap_vld sc_out sc_logic 1 outvld 29 } 
+	{ done sc_in sc_lv 1 signal 30 } 
+	{ irq_ps sc_out sc_lv 1 signal 31 } 
+	{ irq_ps_ap_vld sc_out sc_logic 1 outvld 31 } 
 }
 set NewPortList {[ 
 	{ "name": "ap_clk", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "clock", "bundle":{"name": "ap_clk", "role": "default" }} , 
@@ -193,14 +202,19 @@ set NewPortList {[
  	{ "name": "wl_tile_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "wl_tile", "role": "ap_vld" }} , 
  	{ "name": "ctrl_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_addr", "role": "default" }} , 
  	{ "name": "ctrl_data_in", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_data_in", "role": "default" }} , 
- 	{ "name": "ctrl_data_out", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_data_out", "role": "default" }} , 
+ 	{ "name": "ctrl_data_out", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_data_out", "role": "default" }} , 
+ 	{ "name": "ctrl_data_out_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "ctrl_data_out", "role": "ap_vld" }} , 
  	{ "name": "ctrl_read_en", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ctrl_read_en", "role": "default" }} , 
  	{ "name": "ctrl_write_en", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ctrl_write_en", "role": "default" }} , 
  	{ "name": "ctrl_chip_en", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ctrl_chip_en", "role": "default" }} , 
  	{ "name": "ctrl_resetn_in", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ctrl_resetn_in", "role": "default" }} , 
  	{ "name": "dbg_state", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "dbg_state", "role": "default" }} , 
  	{ "name": "dbg_state_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "dbg_state", "role": "ap_vld" }} , 
- 	{ "name": "done", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "done", "role": "default" }}  ]}
+ 	{ "name": "dbg_ctrl_mem", "direction": "out", "datatype": "sc_lv", "bitwidth":864, "type": "signal", "bundle":{"name": "dbg_ctrl_mem", "role": "default" }} , 
+ 	{ "name": "dbg_ctrl_mem_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "dbg_ctrl_mem", "role": "ap_vld" }} , 
+ 	{ "name": "done", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "done", "role": "default" }} , 
+ 	{ "name": "irq_ps", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "irq_ps", "role": "default" }} , 
+ 	{ "name": "irq_ps_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "irq_ps", "role": "ap_vld" }}  ]}
 
 set ArgLastReadFirstWriteLatency {
 	transformer_top {
@@ -227,15 +241,42 @@ set ArgLastReadFirstWriteLatency {
 		wl_tile {Type O LastRead -1 FirstWrite 1}
 		ctrl_addr {Type I LastRead 0 FirstWrite -1}
 		ctrl_data_in {Type I LastRead 0 FirstWrite -1}
-		ctrl_data_out {Type I LastRead -1 FirstWrite -1}
+		ctrl_data_out {Type O LastRead -1 FirstWrite 1}
 		ctrl_read_en {Type I LastRead 0 FirstWrite -1}
 		ctrl_write_en {Type I LastRead 0 FirstWrite -1}
 		ctrl_chip_en {Type I LastRead 0 FirstWrite -1}
 		ctrl_resetn_in {Type I LastRead 0 FirstWrite -1}
 		dbg_state {Type O LastRead -1 FirstWrite 1}
+		dbg_ctrl_mem {Type O LastRead -1 FirstWrite 2}
 		done {Type I LastRead -1 FirstWrite -1}
-		ctrl_mem_status {Type IO LastRead -1 FirstWrite -1}
+		irq_ps {Type O LastRead -1 FirstWrite 2}
 		ctrl_mem_control {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_layer_index {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_status {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_irq_status {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_irq_enable {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_dma_layer_len {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_dma_head_len {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_dma_tile_len {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_layer_stride {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_head_stride {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_tile_stride {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_wq_base_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_wk_base_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_wv_base_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_wo_base_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_w1_base_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_w2_base_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_k_cache_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_v_cache_addr {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_logit_scale_qv {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_scale_q {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_zero_point_q {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_scale_k {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_zero_point_k {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_scale_v {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_zero_point_v {Type IO LastRead -1 FirstWrite -1}
+		ctrl_mem_reserved_debug {Type IO LastRead -1 FirstWrite -1}
 		st {Type IO LastRead -1 FirstWrite -1}
 		layer_idx {Type IO LastRead -1 FirstWrite -1}
 		attn_started {Type IO LastRead -1 FirstWrite -1}
@@ -253,6 +294,9 @@ set ArgLastReadFirstWriteLatency {
 		concat_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_compute_done {Type IO LastRead -1 FirstWrite -1}
+		wo_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w1_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w2_dma_done {Type IO LastRead -1 FirstWrite -1}
 		resid0_started {Type IO LastRead -1 FirstWrite -1}
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
@@ -268,6 +312,8 @@ set ArgLastReadFirstWriteLatency {
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_phase {Type IO LastRead -1 FirstWrite -1}
+		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
+		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
 		wo_tile {Type IO LastRead -1 FirstWrite -1}
 		wo_dma_busy {Type IO LastRead -1 FirstWrite -1}
@@ -315,6 +361,9 @@ set ArgLastReadFirstWriteLatency {
 		concat_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_compute_done {Type IO LastRead -1 FirstWrite -1}
+		wo_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w1_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w2_dma_done {Type IO LastRead -1 FirstWrite -1}
 		resid0_started {Type IO LastRead -1 FirstWrite -1}
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
@@ -330,6 +379,8 @@ set ArgLastReadFirstWriteLatency {
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_phase {Type IO LastRead -1 FirstWrite -1}
+		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
+		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
 		wo_tile {Type IO LastRead -1 FirstWrite -1}
 		wo_dma_busy {Type IO LastRead -1 FirstWrite -1}
@@ -431,8 +482,8 @@ set ArgLastReadFirstWriteLatency {
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "2", "Max" : "2"}
-	, {"Name" : "Interval", "Min" : "3", "Max" : "3"}
+	{"Name" : "Latency", "Min" : "3", "Max" : "3"}
+	, {"Name" : "Interval", "Min" : "4", "Max" : "4"}
 ]}
 
 set PipelineEnableSignalInfo {[
@@ -462,13 +513,15 @@ set Spec2ImplPortList {
 	wl_tile { ap_vld {  { wl_tile out_data 1 32 }  { wl_tile_ap_vld out_vld 1 1 } } }
 	ctrl_addr { ap_none {  { ctrl_addr in_data 0 32 } } }
 	ctrl_data_in { ap_none {  { ctrl_data_in in_data 0 32 } } }
-	ctrl_data_out { ap_none {  { ctrl_data_out in_data 0 32 } } }
+	ctrl_data_out { ap_vld {  { ctrl_data_out out_data 1 32 }  { ctrl_data_out_ap_vld out_vld 1 1 } } }
 	ctrl_read_en { ap_none {  { ctrl_read_en in_data 0 1 } } }
 	ctrl_write_en { ap_none {  { ctrl_write_en in_data 0 1 } } }
 	ctrl_chip_en { ap_none {  { ctrl_chip_en in_data 0 1 } } }
 	ctrl_resetn_in { ap_none {  { ctrl_resetn_in in_data 0 1 } } }
 	dbg_state { ap_vld {  { dbg_state out_data 1 32 }  { dbg_state_ap_vld out_vld 1 1 } } }
+	dbg_ctrl_mem { ap_vld {  { dbg_ctrl_mem out_data 1 864 }  { dbg_ctrl_mem_ap_vld out_vld 1 1 } } }
 	done { ap_none {  { done in_data 0 1 } } }
+	irq_ps { ap_vld {  { irq_ps out_data 1 1 }  { irq_ps_ap_vld out_vld 1 1 } } }
 }
 
 set maxi_interface_dict [dict create]

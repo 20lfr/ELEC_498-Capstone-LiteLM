@@ -79,8 +79,12 @@ using namespace std;
 #define AUTOTB_TVOUT_ctrl_resetn_in "../tv/cdatafile/c.transformer_top.autotvout_ctrl_resetn_in.dat"
 #define AUTOTB_TVIN_dbg_state "../tv/cdatafile/c.transformer_top.autotvin_dbg_state.dat"
 #define AUTOTB_TVOUT_dbg_state "../tv/cdatafile/c.transformer_top.autotvout_dbg_state.dat"
+#define AUTOTB_TVIN_dbg_ctrl_mem "../tv/cdatafile/c.transformer_top.autotvin_dbg_ctrl_mem.dat"
+#define AUTOTB_TVOUT_dbg_ctrl_mem "../tv/cdatafile/c.transformer_top.autotvout_dbg_ctrl_mem.dat"
 #define AUTOTB_TVIN_done "../tv/cdatafile/c.transformer_top.autotvin_done.dat"
 #define AUTOTB_TVOUT_done "../tv/cdatafile/c.transformer_top.autotvout_done.dat"
+#define AUTOTB_TVIN_irq_ps "../tv/cdatafile/c.transformer_top.autotvin_irq_ps.dat"
+#define AUTOTB_TVOUT_irq_ps "../tv/cdatafile/c.transformer_top.autotvout_irq_ps.dat"
 
 
 // tvout file define:
@@ -97,7 +101,10 @@ using namespace std;
 #define AUTOTB_TVOUT_PC_wl_layer "../tv/rtldatafile/rtl.transformer_top.autotvout_wl_layer.dat"
 #define AUTOTB_TVOUT_PC_wl_head "../tv/rtldatafile/rtl.transformer_top.autotvout_wl_head.dat"
 #define AUTOTB_TVOUT_PC_wl_tile "../tv/rtldatafile/rtl.transformer_top.autotvout_wl_tile.dat"
+#define AUTOTB_TVOUT_PC_ctrl_data_out "../tv/rtldatafile/rtl.transformer_top.autotvout_ctrl_data_out.dat"
 #define AUTOTB_TVOUT_PC_dbg_state "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_state.dat"
+#define AUTOTB_TVOUT_PC_dbg_ctrl_mem "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_ctrl_mem.dat"
+#define AUTOTB_TVOUT_PC_irq_ps "../tv/rtldatafile/rtl.transformer_top.autotvout_irq_ps.dat"
 
 
 namespace hls::sim
@@ -1301,10 +1308,10 @@ namespace hls::sim
 
 
 extern "C"
-void transformer_top_hw_stub_wrapper(hls::sim::Byte<1>, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, hls::sim::Byte<4>, hls::sim::Byte<4>, hls::sim::Byte<4>, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, hls::sim::Byte<1>);
+void transformer_top_hw_stub_wrapper(hls::sim::Byte<1>, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, hls::sim::Byte<4>, hls::sim::Byte<4>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, hls::sim::Byte<1>, void*);
 
 extern "C"
-void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid, hls::sim::Byte<1> __xlx_apatb_param_axis_in_last, void* __xlx_apatb_param_axis_in_ready, hls::sim::Byte<1> __xlx_apatb_param_dma_done, hls::sim::Byte<1> __xlx_apatb_param_compute_ready, hls::sim::Byte<1> __xlx_apatb_param_compute_done, void* __xlx_apatb_param_head_ctx_ref_0, void* __xlx_apatb_param_head_ctx_ref_1, void* __xlx_apatb_param_head_ctx_ref_2, void* __xlx_apatb_param_head_ctx_ref_3, void* __xlx_apatb_param_compute_start, void* __xlx_apatb_param_compute_op, hls::sim::Byte<1> __xlx_apatb_param_stream_ready, void* __xlx_apatb_param_stream_start, hls::sim::Byte<1> __xlx_apatb_param_stream_done, hls::sim::Byte<1> __xlx_apatb_param_wl_ready, void* __xlx_apatb_param_wl_start, void* __xlx_apatb_param_wl_addr_sel, void* __xlx_apatb_param_wl_layer, void* __xlx_apatb_param_wl_head, void* __xlx_apatb_param_wl_tile, hls::sim::Byte<4> __xlx_apatb_param_ctrl_addr, hls::sim::Byte<4> __xlx_apatb_param_ctrl_data_in, hls::sim::Byte<4> __xlx_apatb_param_ctrl_data_out, hls::sim::Byte<1> __xlx_apatb_param_ctrl_read_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_write_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_chip_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_resetn_in, void* __xlx_apatb_param_dbg_state, hls::sim::Byte<1> __xlx_apatb_param_done)
+void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid, hls::sim::Byte<1> __xlx_apatb_param_axis_in_last, void* __xlx_apatb_param_axis_in_ready, hls::sim::Byte<1> __xlx_apatb_param_dma_done, hls::sim::Byte<1> __xlx_apatb_param_compute_ready, hls::sim::Byte<1> __xlx_apatb_param_compute_done, void* __xlx_apatb_param_head_ctx_ref_0, void* __xlx_apatb_param_head_ctx_ref_1, void* __xlx_apatb_param_head_ctx_ref_2, void* __xlx_apatb_param_head_ctx_ref_3, void* __xlx_apatb_param_compute_start, void* __xlx_apatb_param_compute_op, hls::sim::Byte<1> __xlx_apatb_param_stream_ready, void* __xlx_apatb_param_stream_start, hls::sim::Byte<1> __xlx_apatb_param_stream_done, hls::sim::Byte<1> __xlx_apatb_param_wl_ready, void* __xlx_apatb_param_wl_start, void* __xlx_apatb_param_wl_addr_sel, void* __xlx_apatb_param_wl_layer, void* __xlx_apatb_param_wl_head, void* __xlx_apatb_param_wl_tile, hls::sim::Byte<4> __xlx_apatb_param_ctrl_addr, hls::sim::Byte<4> __xlx_apatb_param_ctrl_data_in, void* __xlx_apatb_param_ctrl_data_out, hls::sim::Byte<1> __xlx_apatb_param_ctrl_read_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_write_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_chip_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_resetn_in, void* __xlx_apatb_param_dbg_state, void* __xlx_apatb_param_dbg_ctrl_mem, hls::sim::Byte<1> __xlx_apatb_param_done, void* __xlx_apatb_param_irq_ps)
 {
   static hls::sim::Register port0 {
     .name = "axis_in_valid",
@@ -1576,12 +1583,13 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     .name = "ctrl_data_out",
     .width = 32,
 #ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_ctrl_data_out),
 #else
-    .owriter = nullptr,
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_ctrl_data_out),
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_ctrl_data_out),
 #endif
   };
-  port23.param = &__xlx_apatb_param_ctrl_data_out;
+  port23.param = __xlx_apatb_param_ctrl_data_out;
 
   static hls::sim::Register port24 {
     .name = "ctrl_read_en",
@@ -1640,6 +1648,18 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
   port28.param = __xlx_apatb_param_dbg_state;
 
   static hls::sim::Register port29 {
+    .name = "dbg_ctrl_mem",
+    .width = 864,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_ctrl_mem),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_ctrl_mem),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_ctrl_mem),
+#endif
+  };
+  port29.param = __xlx_apatb_param_dbg_ctrl_mem;
+
+  static hls::sim::Register port30 {
     .name = "done",
     .width = 1,
 #ifdef POST_CHECK
@@ -1648,7 +1668,19 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_done),
 #endif
   };
-  port29.param = &__xlx_apatb_param_done;
+  port30.param = &__xlx_apatb_param_done;
+
+  static hls::sim::Register port31 {
+    .name = "irq_ps",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_irq_ps),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_irq_ps),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_irq_ps),
+#endif
+  };
+  port31.param = __xlx_apatb_param_irq_ps;
 
   try {
 #ifdef POST_CHECK
@@ -1666,7 +1698,10 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     check(port18);
     check(port19);
     check(port20);
+    check(port23);
     check(port28);
+    check(port29);
+    check(port31);
 #else
     static hls::sim::RefTCL tcl("../tv/cdatafile/ref.tcl");
     tcl.containsVLA = 0;
@@ -1701,6 +1736,8 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     dump(port27, port27.iwriter, tcl.AESL_transaction);
     dump(port28, port28.iwriter, tcl.AESL_transaction);
     dump(port29, port29.iwriter, tcl.AESL_transaction);
+    dump(port30, port30.iwriter, tcl.AESL_transaction);
+    dump(port31, port31.iwriter, tcl.AESL_transaction);
     port0.doTCL(tcl);
     port1.doTCL(tcl);
     port2.doTCL(tcl);
@@ -1731,8 +1768,10 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     port27.doTCL(tcl);
     port28.doTCL(tcl);
     port29.doTCL(tcl);
+    port30.doTCL(tcl);
+    port31.doTCL(tcl);
     CodeState = CALL_C_DUT;
-    transformer_top_hw_stub_wrapper(__xlx_apatb_param_axis_in_valid, __xlx_apatb_param_axis_in_last, __xlx_apatb_param_axis_in_ready, __xlx_apatb_param_dma_done, __xlx_apatb_param_compute_ready, __xlx_apatb_param_compute_done, __xlx_apatb_param_head_ctx_ref_0, __xlx_apatb_param_head_ctx_ref_1, __xlx_apatb_param_head_ctx_ref_2, __xlx_apatb_param_head_ctx_ref_3, __xlx_apatb_param_compute_start, __xlx_apatb_param_compute_op, __xlx_apatb_param_stream_ready, __xlx_apatb_param_stream_start, __xlx_apatb_param_stream_done, __xlx_apatb_param_wl_ready, __xlx_apatb_param_wl_start, __xlx_apatb_param_wl_addr_sel, __xlx_apatb_param_wl_layer, __xlx_apatb_param_wl_head, __xlx_apatb_param_wl_tile, __xlx_apatb_param_ctrl_addr, __xlx_apatb_param_ctrl_data_in, __xlx_apatb_param_ctrl_data_out, __xlx_apatb_param_ctrl_read_en, __xlx_apatb_param_ctrl_write_en, __xlx_apatb_param_ctrl_chip_en, __xlx_apatb_param_ctrl_resetn_in, __xlx_apatb_param_dbg_state, __xlx_apatb_param_done);
+    transformer_top_hw_stub_wrapper(__xlx_apatb_param_axis_in_valid, __xlx_apatb_param_axis_in_last, __xlx_apatb_param_axis_in_ready, __xlx_apatb_param_dma_done, __xlx_apatb_param_compute_ready, __xlx_apatb_param_compute_done, __xlx_apatb_param_head_ctx_ref_0, __xlx_apatb_param_head_ctx_ref_1, __xlx_apatb_param_head_ctx_ref_2, __xlx_apatb_param_head_ctx_ref_3, __xlx_apatb_param_compute_start, __xlx_apatb_param_compute_op, __xlx_apatb_param_stream_ready, __xlx_apatb_param_stream_start, __xlx_apatb_param_stream_done, __xlx_apatb_param_wl_ready, __xlx_apatb_param_wl_start, __xlx_apatb_param_wl_addr_sel, __xlx_apatb_param_wl_layer, __xlx_apatb_param_wl_head, __xlx_apatb_param_wl_tile, __xlx_apatb_param_ctrl_addr, __xlx_apatb_param_ctrl_data_in, __xlx_apatb_param_ctrl_data_out, __xlx_apatb_param_ctrl_read_en, __xlx_apatb_param_ctrl_write_en, __xlx_apatb_param_ctrl_chip_en, __xlx_apatb_param_ctrl_resetn_in, __xlx_apatb_param_dbg_state, __xlx_apatb_param_dbg_ctrl_mem, __xlx_apatb_param_done, __xlx_apatb_param_irq_ps);
     CodeState = DUMP_OUTPUTS;
     dump(port2, port2.owriter, tcl.AESL_transaction);
     dump(port6, port6.owriter, tcl.AESL_transaction);
@@ -1747,7 +1786,10 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     dump(port18, port18.owriter, tcl.AESL_transaction);
     dump(port19, port19.owriter, tcl.AESL_transaction);
     dump(port20, port20.owriter, tcl.AESL_transaction);
+    dump(port23, port23.owriter, tcl.AESL_transaction);
     dump(port28, port28.owriter, tcl.AESL_transaction);
+    dump(port29, port29.owriter, tcl.AESL_transaction);
+    dump(port31, port31.owriter, tcl.AESL_transaction);
     tcl.AESL_transaction++;
 #endif
   } catch (const hls::sim::SimException &e) {

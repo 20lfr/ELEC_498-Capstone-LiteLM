@@ -16,7 +16,7 @@ set DLRegItemOffset 0
 set svuvm_can_support 1
 set cdfgNum 4
 set C_modelName {scheduler_hls}
-set C_modelType { int 876 }
+set C_modelType { int 877 }
 set ap_memory_interface_dict [dict create]
 set C_modelArgList {
 	{ ctrl_mem_control int 2 regular  }
@@ -62,9 +62,9 @@ set C_modelArgMapList {[
  	{ "Name" : "compute_op", "interface" : "wire", "bitwidth" : 8, "direction" : "WRITEONLY"} , 
  	{ "Name" : "stream_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "stream_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 876} ]}
+ 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 877} ]}
 # RTL Port declarations: 
-set portNum 39
+set portNum 40
 set portList { 
 	{ ap_clk sc_in sc_logic 1 clock -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
@@ -100,11 +100,12 @@ set portList {
 	{ ap_return_2 sc_out sc_lv 32 signal -1 } 
 	{ ap_return_3 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_4 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_5 sc_out sc_lv 32 signal -1 } 
-	{ ap_return_6 sc_out sc_lv 202 signal -1 } 
+	{ ap_return_5 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_6 sc_out sc_lv 32 signal -1 } 
 	{ ap_return_7 sc_out sc_lv 202 signal -1 } 
 	{ ap_return_8 sc_out sc_lv 202 signal -1 } 
 	{ ap_return_9 sc_out sc_lv 202 signal -1 } 
+	{ ap_return_10 sc_out sc_lv 202 signal -1 } 
 }
 set NewPortList {[ 
 	{ "name": "ap_clk", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "clock", "bundle":{"name": "ap_clk", "role": "default" }} , 
@@ -141,11 +142,12 @@ set NewPortList {[
  	{ "name": "ap_return_2", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_2", "role": "default" }} , 
  	{ "name": "ap_return_3", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_3", "role": "default" }} , 
  	{ "name": "ap_return_4", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_4", "role": "default" }} , 
- 	{ "name": "ap_return_5", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_5", "role": "default" }} , 
- 	{ "name": "ap_return_6", "direction": "out", "datatype": "sc_lv", "bitwidth":202, "type": "signal", "bundle":{"name": "ap_return_6", "role": "default" }} , 
+ 	{ "name": "ap_return_5", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_5", "role": "default" }} , 
+ 	{ "name": "ap_return_6", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_6", "role": "default" }} , 
  	{ "name": "ap_return_7", "direction": "out", "datatype": "sc_lv", "bitwidth":202, "type": "signal", "bundle":{"name": "ap_return_7", "role": "default" }} , 
  	{ "name": "ap_return_8", "direction": "out", "datatype": "sc_lv", "bitwidth":202, "type": "signal", "bundle":{"name": "ap_return_8", "role": "default" }} , 
- 	{ "name": "ap_return_9", "direction": "out", "datatype": "sc_lv", "bitwidth":202, "type": "signal", "bundle":{"name": "ap_return_9", "role": "default" }}  ]}
+ 	{ "name": "ap_return_9", "direction": "out", "datatype": "sc_lv", "bitwidth":202, "type": "signal", "bundle":{"name": "ap_return_9", "role": "default" }} , 
+ 	{ "name": "ap_return_10", "direction": "out", "datatype": "sc_lv", "bitwidth":202, "type": "signal", "bundle":{"name": "ap_return_10", "role": "default" }}  ]}
 
 set ArgLastReadFirstWriteLatency {
 	scheduler_hls {
@@ -185,6 +187,9 @@ set ArgLastReadFirstWriteLatency {
 		concat_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_started {Type IO LastRead -1 FirstWrite -1}
 		outproj_compute_done {Type IO LastRead -1 FirstWrite -1}
+		wo_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w1_dma_done {Type IO LastRead -1 FirstWrite -1}
+		w2_dma_done {Type IO LastRead -1 FirstWrite -1}
 		resid0_started {Type IO LastRead -1 FirstWrite -1}
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
@@ -200,6 +205,8 @@ set ArgLastReadFirstWriteLatency {
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_phase {Type IO LastRead -1 FirstWrite -1}
+		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
+		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
 		wo_tile {Type IO LastRead -1 FirstWrite -1}
 		wo_dma_busy {Type IO LastRead -1 FirstWrite -1}

@@ -319,7 +319,6 @@ constexpr uint32_t CTRL_START_BIT    = 1u << 1;
 constexpr uint32_t IRQ_CLEAR_BIT      = 1u << 0;
 constexpr uint32_t IRQ_ERROR_BIT      = 1u << 1;
 constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
-constexpr uint32_t IRQ_DMA_DONE_BIT   = 1u << 3;
 
 // Status register bits
 constexpr uint32_t STATUS_INVALID_ADDR = 1u << 0;
@@ -371,8 +370,8 @@ struct ControlMemSpace {
     uint32_t control        = CTRL_RESETN_BIT;  // cntrl_reset | cntrl_start
     uint32_t layer_index    = 0;
     uint32_t status         = 0;
-    uint32_t irq_status     = 0;                // clear | error | inference_done | dma_done
-    uint32_t irq_enable     = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT; // clear | error | inference_done | dma_done
+    uint32_t irq_status     = 0;                // clear | error | inference_done
+    uint32_t irq_enable     = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT; // clear | error | inference_done 
 
     uint32_t dma_layer_len  = 0;
     uint32_t dma_head_len   = 0;

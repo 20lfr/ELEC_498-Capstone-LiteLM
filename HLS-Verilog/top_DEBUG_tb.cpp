@@ -148,7 +148,6 @@ void ctrl_read(
     bool        resetn_in,
     ControlReg  &ctrl_addr,
     uint32_t    &ctrl_data_in,
-    uint32_t    &ctrl_data_out,
     bool        &ctrl_read_en,
     bool        &ctrl_write_en,
     bool        &ctrl_chip_en,
@@ -156,20 +155,18 @@ void ctrl_read(
 ) {
     ctrl_addr      = addr;
     ctrl_data_in   = 0;
-    ctrl_data_out  = 0;
     ctrl_read_en   = true;
-    ctrl_write_en  = false;
     ctrl_chip_en   = true;
+    ctrl_write_en  = false;
     ctrl_resetn_in = resetn_in;
 }
 
 int main() {
-    const int MAX_CYCLES = 1200;
+    const int MAX_CYCLES = 750;
     const int COMP_LAT   = 3;
     const int DMA_LAT    = 3;
     const int AXIS_BEATS = 3;
 
-    ControlMemSpace dbg_ctrl_mem{};
 
     bool wl_ready        = true;
     bool wl_start        = false;
@@ -212,6 +209,9 @@ int main() {
     bool dbg_done            = false;
     uint32_t debug_compute_done = 0;
     SchedState dbg_state     = S_IDLE;
+    bool irq_ps              = false;
+    bool irq_interupt_flagged = false;
+    uint32_t   interupt_data = 0;
 
     bool comp_busy       = false;
     int  comp_timer      = 0;
@@ -241,12 +241,16 @@ int main() {
     bool ctrl_resetn_in  = false;
     uint32_t ctrl_shadow_control = 0;
     int ctrl_gap_cycles = 0; // spacing between control bus transactions
+    bool seen_irq_done = false;
 
-    std::printf("%-8s %-6s %-6s %-8s | %-16s | %-10s %-10s %-10s %-8s %-8s %-8s %-8s | %-10s %-10s %-10s %-10s | %s\n",
-                "Cycle", "Start", "Reset", "Busy", "State",
-                "CtrlAddr", "CtrlDin", "CtrlDout", "Rd", "Wr", "CE", "RstN",
-                "CmpStart", "CmpReady", "CmpDone", "CmpOp",
-                "Heads{idx:ph/cr/cs/cd/op/wlR/addr/qd/wlD}");
+    ControlMemSpace dbg_ctrl_mem{};
+
+    std::printf("%-8s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-8s %-6s %-10s %-10s | %-10s %-10s %-10s\n",
+                "Cycle", "Start", "Reset",
+                "CtrlAddr",
+                "CtrlDin", "CtrlDout", "Rd", "Wr", "CE", "RstN",
+                "DbgState", "DbgDone", "SeenDone", "IRQ", "IRQFlag", "IRQData",
+                "MemCtrl", "MemIRQ", "MemIRQEn");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
@@ -281,15 +285,29 @@ int main() {
                 ctrl_shadow_control = CTRL_RESETN_BIT;
                 pending_start_clear = false;
                 ctrl_gap_cycles = 1;
-            } else {
+            } else if(seen_irq_done){
+                ctrl_write(ControlReg::IRQ_STATUS, IRQ_CLEAR_BIT, ctrl_resetn_in,
+                           ctrl_addr, ctrl_data_in, ctrl_data_out,
+                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                ctrl_gap_cycles = 1;
+                seen_irq_done = false;
+            }
+            else if(irq_ps){
+                ctrl_read(ControlReg::IRQ_STATUS, ctrl_resetn_in,
+                          ctrl_addr, ctrl_data_in,
+                          ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                ctrl_gap_cycles = 1;
+                irq_interupt_flagged = true;
+                interupt_data = ctrl_data_out;
+            } 
+            else {
                 // Periodically read status to observe scheduler (one transaction at a time)
                 ctrl_read(ControlReg::STATUS, ctrl_resetn_in,
-                          ctrl_addr, ctrl_data_in, ctrl_data_out,
+                          ctrl_addr, ctrl_data_in,
                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
                 ctrl_gap_cycles = 1;
             }
         }
-        const bool cntrl_busy = (ctrl_data_out & STATUS_BUSY_BIT) != 0; // observe only, no control gating
 
         // Clear per-head compute_done pulse
         for (int i = 0; i < NUM_HEADS; ++i) {
@@ -407,17 +425,17 @@ int main() {
             ctrl_chip_en,
             ctrl_resetn_in,
             dbg_state, 
-            dbg_done
+            dbg_ctrl_mem,
+            dbg_done, 
+            irq_ps
         );
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10u %-10u %-10u %-8s %-8s %-8s %-8s | %-10s %-10s %-10s %-10s | ",
+        std::printf("%-8d %-6d %-6d | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s %-8s %-6s %-10s %-10u | %-10u %-10u %-10u\n",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
-                    dash_or(cntrl_busy),
-                    state_name(dbg_state),
                     static_cast<unsigned>(ctrl_addr),
                     ctrl_data_in,
                     ctrl_data_out,
@@ -425,27 +443,15 @@ int main() {
                     dash_or(ctrl_write_en),
                     dash_or(ctrl_chip_en),
                     dash_or(ctrl_resetn_in),
-                    dash_or(compute_start),
-                    dash_or(compute_ready),
-                    dash_or(compute_done),
-                    (compute_op == CMP_NONE ? "-" : op_name(compute_op)));
-
-        for (int i = 0; i < NUM_HEADS; ++i) {
-            char buf[96];
-            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s %-2s %-8s %-2s %-6s %-2s %-2s",
-                          i,
-                          phase_name(head_ctx_ref[i].phase),
-                          dash_or(head_ctx_ref[i].compute_ready),
-                          dash_or(head_ctx_ref[i].compute_start),
-                          dash_or(head_ctx_ref[i].compute_done),
-                          op_name(head_ctx_ref[i].compute_op),
-                          dash_or(head_ctx_ref[i].wl_ready),
-                          dma_name(head_ctx_ref[i].wl_addr_sel),
-                          dash_or(head_ctx_ref[i].q_dma_done),
-                          dash_or(head_ctx_ref[i].dma_done));
-            std::printf("%-54s", buf);
-        }
-        std::printf("\n");
+                    state_name(dbg_state),
+                    dash_or(dbg_done),
+                    dash_or(seen_done),
+                    dash_or(irq_ps),
+                    dash_or(irq_interupt_flagged),
+                    interupt_data,
+                    dbg_ctrl_mem.control,
+                    dbg_ctrl_mem.irq_status,
+                    dbg_ctrl_mem.irq_enable);
 
         // Track the tail of the sequence: once we hit STREAM_OUT, watch for 4 idle cycles
         if (dbg_state == S_STREAM_OUT) {
@@ -499,21 +505,21 @@ int main() {
             }
         }
 
-        if (dbg_done) {
+        if (irq_interupt_flagged && (interupt_data & IRQ_INFER_DONE_BIT)) {
             seen_done = true;
+            irq_interupt_flagged = false;
+            interupt_data = 0;
+            seen_irq_done = true;
         }
-        if (seen_done){
+        else if (seen_done){
             post_done_cycles++;
-            if (post_done_cycles >= 4) {
+            if (post_done_cycles >= 2) {
                 seen_idle_after = true;
+                seen_irq_done = false;
             }
         }
 
-        // Exit once we've seen STREAM_OUT and remained idle for 4 cycles
-        if (seen_stream_out && idle_after_stream >= 4) {
-            break;
-        }
-        if (!cntrl_start && seen_done && seen_idle_after) {
+        if (!cntrl_start && seen_done && seen_idle_after && seen_stream_out && idle_after_stream >= 4) {
             break;
         }
     }

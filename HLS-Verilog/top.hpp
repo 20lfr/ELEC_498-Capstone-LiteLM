@@ -3,6 +3,8 @@
 #include "top_params.hpp"
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
+#include "IRQ_Wizard/IRQ_Wizard.hpp"
+
 
 // Top-level wrapper prototype
 void transformer_top(
@@ -26,11 +28,13 @@ void transformer_top(
     int &wl_tile,
     ControlReg ctrl_addr,
     uint32_t ctrl_data_in,
-    uint32_t ctrl_data_out,
+    uint32_t &ctrl_data_out,
     bool ctrl_read_en,
     bool ctrl_write_en,
     bool ctrl_chip_en,
     bool ctrl_resetn_in,
     SchedState &dbg_state, 
-    bool done
+    ControlMemSpace &dbg_ctrl_mem,
+    bool done, 
+    bool &irq_ps
 );

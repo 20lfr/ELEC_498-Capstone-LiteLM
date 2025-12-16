@@ -110,7 +110,7 @@
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>
-      <arg id="20" access_type="r" src_name="ctrl_data_out" src_type="unsigned int" src_isptr="0" src_bitwidth="32" src_size_or_depth="1">
+      <arg id="20" access_type="w" src_name="ctrl_data_out" src_type="unsigned int&amp;" src_isptr="1" src_bitwidth="32" src_size_or_depth="1">
         <hw hw_usage="data" hw_interface="Register" hw_name="ctrl_data_out" hw_bitwidth="32" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
@@ -140,8 +140,18 @@
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>
-      <arg id="26" access_type="r" src_name="done" src_type="bool" src_isptr="0" src_bitwidth="1" src_size_or_depth="1">
+      <arg id="26" access_type="w" src_name="dbg_ctrl_mem" src_type="ControlMemSpace&amp;" src_isptr="1" src_bitwidth="864" src_size_or_depth="1">
+        <hw hw_usage="data" hw_interface="Register" hw_name="dbg_ctrl_mem" hw_bitwidth="864" hw_size_or_depth="1" hw_kernel_support="false">
+          <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
+        </hw>
+      </arg>
+      <arg id="27" access_type="r" src_name="done" src_type="bool" src_isptr="0" src_bitwidth="1" src_size_or_depth="1">
         <hw hw_usage="data" hw_interface="Register" hw_name="done" hw_bitwidth="1" hw_size_or_depth="1" hw_kernel_support="false">
+          <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
+        </hw>
+      </arg>
+      <arg id="28" access_type="w" src_name="irq_ps" src_type="bool&amp;" src_isptr="1" src_bitwidth="1" src_size_or_depth="1">
+        <hw hw_usage="data" hw_interface="Register" hw_name="irq_ps" hw_bitwidth="1" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>

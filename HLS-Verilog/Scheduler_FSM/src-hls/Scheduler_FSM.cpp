@@ -331,6 +331,18 @@ void scheduler_hls(
 #pragma HLS reset variable = w2_comp_busy
 
 
+  static bool wo_dma_done;
+#pragma HLS reset variable = wo_dma_done;
+  static bool w1_dma_done;
+#pragma HLS reset variable = w1_dma_done;
+  static bool w2_dma_done;
+#pragma HLS reset variable = w2_dma_done;
+  static bool axis_last_seen;
+#pragma HLS reset variable = axis_last_seen;
+  static bool stream_done_seen;
+#pragma HLS reset variable = stream_done_seen;
+
+
   // Reset Logic
   const bool cntrl_reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
   const bool reset = !cntrl_reset_n;
@@ -381,6 +393,9 @@ void scheduler_hls(
     // Output projection
     outproj_started = false;
     outproj_compute_done = false;
+    wo_dma_done = false;
+    w1_dma_done = false;
+    w2_dma_done = false;
 
     // Residual + LN (1st)
     resid0_started = false;
@@ -402,6 +417,8 @@ void scheduler_hls(
     ln1_started = false;
     ln1_compute_done = false;
     ln1_phase = LnPhase::SUM;
+    axis_last_seen = false;
+    stream_done_seen = false;
 
     // Global progress/tiles
     stream_started = false;
@@ -449,6 +466,34 @@ void scheduler_hls(
   if (reset) {
     STATE = st;
     return;
+  }
+
+  // Sticky ingress TLAST capture
+  if (axis_in_valid && axis_in_last) {
+    axis_last_seen = true;
+  } else if (st != S_STREAM_IN) {
+    axis_last_seen = false;
+  }
+
+  // Sticky stream_done capture
+  if (stream_started && stream_done) {
+    stream_done_seen = true;
+  } else if (!stream_started) {
+    stream_done_seen = false;
+  }
+  
+  // Sticky capture of DMA done per phase so single-cycle pulses are retained temporarily,
+  // mirroring the compute_done pattern.
+  if (dma_done && !wl_start) {
+    if (st == S_OUT_PROJECTION && outproj_started) wo_dma_done = true;
+    if (st == S_FFN && ffn_started) {
+      if (ffn_stage == FfnStage::W1)      w1_dma_done = true;
+      else if (ffn_stage == FfnStage::W2) w2_dma_done = true;
+    }
+  } else {
+    if (outproj_started && !wo_dma_busy) wo_dma_done = false;
+    if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
+    if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
   }
 
   if (compute_done && !compute_start) {
@@ -550,7 +595,7 @@ void scheduler_hls(
     case S_STREAM_IN: {
       axis_in_ready = 1;
       // Wait for ingress token with tlast before starting layer processing
-      if (axis_in_valid && axis_in_last) {
+      if (axis_last_seen || (axis_in_valid && axis_in_last)) {
         st = S_LAYER_COUNT;
       }
       break;
@@ -707,8 +752,9 @@ void scheduler_hls(
         wl_tile = wo_tile;
         wo_dma_busy = true;
         outproj_started = true;
-      } else if (outproj_started && wo_dma_busy && dma_done) {
+      } else if (outproj_started && wo_dma_busy && wo_dma_done) {
         wo_dma_busy = false;
+        wo_dma_done = false;
         wo_comp_busy = true;
       } else if (outproj_started && wo_comp_busy && compute_ready) {
         outproj_compute_done = false;
@@ -789,8 +835,9 @@ void scheduler_hls(
           wl_tile = w1_tile;
           w1_dma_busy = true;
           ffn_started = true;
-        } else if (ffn_started && w1_dma_busy && dma_done) {
+        } else if (ffn_started && w1_dma_busy && (dma_done || w1_dma_done)) {
           w1_dma_busy = false;
+          w1_dma_done = false;
           w1_comp_busy = true;
         } else if (ffn_started && w1_comp_busy && compute_ready) {
           ffn_w1_compute_done = false;
@@ -831,8 +878,9 @@ void scheduler_hls(
           wl_tile = w2_tile;
           w2_dma_busy = true;
           ffn_started = true;
-        } else if (ffn_started && w2_dma_busy && dma_done) {
+        } else if (ffn_started && w2_dma_busy && (dma_done || w2_dma_done)) {
           w2_dma_busy = false;
+          w2_dma_done = false;
           w2_comp_busy = true;
         } else if (ffn_started && w2_comp_busy && compute_ready) {
           ffn_w2_compute_done = false;
@@ -912,8 +960,9 @@ void scheduler_hls(
       if (!stream_started && stream_ready) {
         stream_start = 1;
         stream_started = true;
-      } else if (stream_started && stream_done) {
+      } else if (stream_started && (stream_done_seen || stream_done)) {
         stream_started = false;
+        stream_done_seen = false;
         done = 1;
         st = S_IDLE;
       }

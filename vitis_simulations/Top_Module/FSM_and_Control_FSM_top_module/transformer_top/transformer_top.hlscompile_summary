@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "Mon Dec 15 23:40:57 2025",
- "timestampMillis": "1765860057121",
+ "dateTimestamp": "Tue Dec 16 17:06:26 2025",
+ "timestampMillis": "1765922786316",
  "buildStep": {
-  "cmdId": "8c496dad-dc37-4b20-97e4-076d203bbb1c",
+  "cmdId": "aaef2019-0ad8-43c3-93f7-4be5285ae6eb",
   "name": "v++",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/logs/transformer_top.steps.log",
   "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg --work_dir transformer_top ",
@@ -28,7 +28,7 @@
   "iniFiles": [
    {
     "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg",
-    "content": "part=xck26-sfvc784-2LV-c\n\n[hls]\nflow_target=vivado\npackage.output.format=ip_catalog\npackage.output.syn=false\nsyn.top=transformer_top\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp\nclock=10ns\ntb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp"
+    "content": "part=xck26-sfvc784-2LV-c\n\n[hls]\nflow_target=vivado\npackage.output.format=ip_catalog\npackage.output.syn=false\nsyn.top=transformer_top\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp\nsyn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp\nclock=10ns\ntb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp"
    }
   ],
   "cwd": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module"
@@ -38,10 +38,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Dec 15 23:40:57 2025",
- "timestampMillis": "1765860057121",
+ "dateTimestamp": "Tue Dec 16 17:06:26 2025",
+ "timestampMillis": "1765922786316",
  "status": {
-  "cmdId": "8c496dad-dc37-4b20-97e4-076d203bbb1c",
+  "cmdId": "aaef2019-0ad8-43c3-93f7-4be5285ae6eb",
   "state": "CS_RUNNING"
  }
 }
@@ -49,8 +49,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "Mon Dec 15 23:41:00 2025",
- "timestampMillis": "1765860060995",
+ "dateTimestamp": "Tue Dec 16 17:06:30 2025",
+ "timestampMillis": "1765922790157",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -76,7 +76,9 @@
      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp",
      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp",
      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp",
-     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp"
     ],
     "psSources": [],
     "cuNames": [],
@@ -92,10 +94,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "Mon Dec 15 23:41:00 2025",
- "timestampMillis": "1765860060995",
+ "dateTimestamp": "Tue Dec 16 17:06:30 2025",
+ "timestampMillis": "1765922790158",
  "buildStep": {
-  "cmdId": "a5a4f548-fcd0-407c-892c-f6a2c80c8a66",
+  "cmdId": "1f900bda-1ace-4480-8ca3-5a2b3ffe864d",
   "name": "",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/hls.log",
   "commandLine": "",
@@ -108,10 +110,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Dec 15 23:41:00 2025",
- "timestampMillis": "1765860060995",
+ "dateTimestamp": "Tue Dec 16 17:06:30 2025",
+ "timestampMillis": "1765922790158",
  "status": {
-  "cmdId": "a5a4f548-fcd0-407c-892c-f6a2c80c8a66",
+  "cmdId": "1f900bda-1ace-4480-8ca3-5a2b3ffe864d",
   "state": "CS_RUNNING"
  }
 }
@@ -119,8 +121,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:00 2025",
- "timestampMillis": "1765860060996",
+ "dateTimestamp": "Tue Dec 16 17:06:30 2025",
+ "timestampMillis": "1765922790158",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/hls_data.json",
   "name": "",
@@ -133,8 +135,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:00 2025",
- "timestampMillis": "1765860060996",
+ "dateTimestamp": "Tue Dec 16 17:06:30 2025",
+ "timestampMillis": "1765922790158",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth.rpt",
   "name": "",
@@ -147,8 +149,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:00 2025",
- "timestampMillis": "1765860060996",
+ "dateTimestamp": "Tue Dec 16 17:06:30 2025",
+ "timestampMillis": "1765922790158",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth.xml",
   "name": "",
@@ -161,8 +163,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:21 2025",
- "timestampMillis": "1765860081599",
+ "dateTimestamp": "Tue Dec 16 17:06:53 2025",
+ "timestampMillis": "1765922813693",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls",
   "name": "",
@@ -175,8 +177,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:21 2025",
- "timestampMillis": "1765860081600",
+ "dateTimestamp": "Tue Dec 16 17:06:53 2025",
+ "timestampMillis": "1765922813693",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls",
   "name": "",
@@ -189,8 +191,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:21 2025",
- "timestampMillis": "1765860081600",
+ "dateTimestamp": "Tue Dec 16 17:06:53 2025",
+ "timestampMillis": "1765922813694",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls",
   "name": "",
@@ -203,10 +205,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Dec 15 23:41:21 2025",
- "timestampMillis": "1765860081600",
+ "dateTimestamp": "Tue Dec 16 17:06:53 2025",
+ "timestampMillis": "1765922813694",
  "status": {
-  "cmdId": "a5a4f548-fcd0-407c-892c-f6a2c80c8a66",
+  "cmdId": "1f900bda-1ace-4480-8ca3-5a2b3ffe864d",
   "state": "CS_PASSED"
  }
 }
@@ -214,10 +216,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Dec 15 23:41:21 2025",
- "timestampMillis": "1765860081805",
+ "dateTimestamp": "Tue Dec 16 17:06:53 2025",
+ "timestampMillis": "1765922813936",
  "status": {
-  "cmdId": "8c496dad-dc37-4b20-97e4-076d203bbb1c",
+  "cmdId": "aaef2019-0ad8-43c3-93f7-4be5285ae6eb",
   "state": "CS_PASSED"
  }
 }
@@ -225,8 +227,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:21 2025",
- "timestampMillis": "1765860081820",
+ "dateTimestamp": "Tue Dec 16 17:06:53 2025",
+ "timestampMillis": "1765922813951",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/reports/v++_compile_transformer_top_guidance.html",
   "name": "",
@@ -239,8 +241,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Dec 15 23:41:21 2025",
- "timestampMillis": "1765860081821",
+ "dateTimestamp": "Tue Dec 16 17:06:53 2025",
+ "timestampMillis": "1765922813951",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/reports/.db/v++_compile_transformer_top_guidance.pb3",
   "name": "",

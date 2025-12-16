@@ -672,7 +672,6 @@ constexpr uint32_t CTRL_START_BIT = 1u << 1;
 constexpr uint32_t IRQ_CLEAR_BIT = 1u << 0;
 constexpr uint32_t IRQ_ERROR_BIT = 1u << 1;
 constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
-constexpr uint32_t IRQ_DMA_DONE_BIT = 1u << 3;
 
 
 constexpr uint32_t STATUS_INVALID_ADDR = 1u << 0;
@@ -725,7 +724,7 @@ struct ControlMemSpace {
     uint32_t layer_index = 0;
     uint32_t status = 0;
     uint32_t irq_status = 0;
-    uint32_t irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT;
+    uint32_t irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
 
     uint32_t dma_layer_len = 0;
     uint32_t dma_head_len = 0;
@@ -863,6 +862,15 @@ void ControlMemInterface(
 
 );
 # 6 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp" 1
+
+
+
+
+
+bool irq_wizard(ControlMemSpace &mem, bool infer_done, bool error);
+# 7 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
+
 
 
 __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
@@ -886,13 +894,15 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     int &wl_tile,
     ControlReg ctrl_addr,
     uint32_t ctrl_data_in,
-    uint32_t ctrl_data_out,
+    uint32_t &ctrl_data_out,
     bool ctrl_read_en,
     bool ctrl_write_en,
     bool ctrl_chip_en,
     bool ctrl_resetn_in,
     SchedState &dbg_state,
-    bool done
+    ControlMemSpace &dbg_ctrl_mem,
+    bool done,
+    bool &irq_ps
 );
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp" 2
 
@@ -937,27 +947,26 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
     ControlReg ctrl_addr,
     uint32_t ctrl_data_in,
-    uint32_t ctrl_data_out,
+    uint32_t &ctrl_data_out,
     bool ctrl_read_en,
     bool ctrl_write_en,
     bool ctrl_chip_en,
     bool ctrl_resetn_in,
 
     SchedState &dbg_state,
-    bool done
+    ControlMemSpace &dbg_ctrl_mem,
+    bool done,
 
-
+    bool &irq_ps
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=transformer_top
-# 61 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+# 62 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
 
 #pragma HLS INLINE off
 
 
  static ControlMemSpace ctrl_mem;
-
-
     ControlMemInterface(
         ctrl_mem,
         ctrl_addr,
@@ -974,8 +983,6 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
     bool error = false;
-
-
 
 
 
@@ -1005,7 +1012,7 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     );
 
 
-
-
+    irq_ps = irq_wizard(ctrl_mem, done, error);
+    dbg_ctrl_mem = ctrl_mem;
 
 }
