@@ -1,62 +1,28 @@
 {
   "0": {
-    "basicblocks": 1,
-    "calls": "2 3",
+    "basicblocks": 74,
+    "calls": "1",
     "control_depth": 0,
-    "def_use_depth": 1,
+    "def_use_depth": 7,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 68,
+    "instructions": 362,
     "loads": {
-      "G": 1
+      "G": 59,
+      "L": 1
     },
     "memory_accesses": 0,
     "name": "transformer_top",
     "stores": {
-      "L": 2
+      "G": 58,
+      "L": 1,
+      "T": 4
     },
-    "total_instructions": 3811
+    "total_instructions": 3937
   },
   "1": {
-    "basicblocks": 271,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 3,
-    "file": "head_helpers.cpp",
-    "fileloc": 344,
-    "instructions": 885,
-    "loads": {
-      "L": 112
-    },
-    "memory_accesses": 0,
-    "name": "drive_group_head_phase",
-    "stores": {
-      "L": 376
-    },
-    "total_instructions": 885
-  },
-  "2": {
-    "basicblocks": 69,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 3,
-    "file": "ControlMemInterface.cpp",
-    "fileloc": 130,
-    "instructions": 168,
-    "loads": {
-      "G": 30
-    },
-    "memory_accesses": 0,
-    "name": "ControlMemInterface",
-    "stores": {
-      "G": 56,
-      "L": 2
-    },
-    "total_instructions": 168
-  },
-  "3": {
     "basicblocks": 303,
-    "calls": "4 4 4 4 1 4 4 4 4",
+    "calls": "3 3 3 3 2 3 3 3 3",
     "control_depth": 2,
     "def_use_depth": 8,
     "file": "Scheduler_FSM.cpp",
@@ -74,7 +40,25 @@
     },
     "total_instructions": 3575
   },
-  "4": {
+  "2": {
+    "basicblocks": 271,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 3,
+    "file": "head_helpers.cpp",
+    "fileloc": 344,
+    "instructions": 885,
+    "loads": {
+      "L": 112
+    },
+    "memory_accesses": 0,
+    "name": "drive_group_head_phase",
+    "stores": {
+      "L": 376
+    },
+    "total_instructions": 885
+  },
+  "3": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,

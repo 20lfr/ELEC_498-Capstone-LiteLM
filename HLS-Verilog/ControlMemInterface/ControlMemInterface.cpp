@@ -12,6 +12,7 @@ inline bool is_valid_address(uint32_t addr_bytes) {
 
 // HELPER FUNCTIONS
 uint32_t ctrl_read(const ControlMemSpace &mem, ControlReg reg) {
+#pragma HLS INLINE
     switch (reg) {
         case ControlReg::CONTROL:        return mem.control;
         case ControlReg::LAYER_INDEX:    return mem.layer_index;
@@ -51,6 +52,7 @@ uint32_t ctrl_read(const ControlMemSpace &mem, ControlReg reg) {
 }
 
 void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
+#pragma HLS INLINE
     switch (reg) {
         case ControlReg::CONTROL:        mem.control = value;       break;
         case ControlReg::LAYER_INDEX:    mem.layer_index = value;   break;
@@ -92,11 +94,12 @@ void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
 
 
 void init_mem_space(ControlMemSpace& mem){
+#pragma HLS INLINE
     mem.control        = CTRL_RESETN_BIT;       // cntrl_reset_n | cntrl_start
     mem.layer_index    = 0;
     mem.status         = 0;
     mem.irq_status     = 0;
-    mem.irq_enable     = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT; // clear | error | inference_done | dma_done
+    mem.irq_enable     = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT; // clear | error | inference_done | dma_done
 
     mem.dma_layer_len  = 0;
     mem.dma_head_len   = 0;
@@ -140,7 +143,7 @@ void ControlMemInterface(
     bool            reset_n             // Reset enable
 
 ){
-
+#pragma HLS INLINE
     
     if (!reset_n) init_mem_space(mem);
     if (!chip_enable) return;

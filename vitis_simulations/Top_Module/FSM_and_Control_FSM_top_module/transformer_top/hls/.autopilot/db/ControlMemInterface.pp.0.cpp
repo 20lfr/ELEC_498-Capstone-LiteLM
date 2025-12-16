@@ -672,7 +672,6 @@ constexpr uint32_t CTRL_START_BIT = 1u << 1;
 constexpr uint32_t IRQ_CLEAR_BIT = 1u << 0;
 constexpr uint32_t IRQ_ERROR_BIT = 1u << 1;
 constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
-constexpr uint32_t IRQ_DMA_DONE_BIT = 1u << 3;
 
 
 constexpr uint32_t STATUS_INVALID_ADDR = 1u << 0;
@@ -725,7 +724,7 @@ struct ControlMemSpace {
     uint32_t layer_index = 0;
     uint32_t status = 0;
     uint32_t irq_status = 0;
-    uint32_t irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT;
+    uint32_t irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
 
     uint32_t dma_layer_len = 0;
     uint32_t dma_head_len = 0;
@@ -796,7 +795,8 @@ inline bool is_valid_address(uint32_t addr_bytes) {
 
 
 uint32_t ctrl_read(const ControlMemSpace &mem, ControlReg reg) {
-    switch (reg) {
+#pragma HLS INLINE
+ switch (reg) {
         case ControlReg::CONTROL: return mem.control;
         case ControlReg::LAYER_INDEX: return mem.layer_index;
         case ControlReg::STATUS: return mem.status;
@@ -835,7 +835,8 @@ uint32_t ctrl_read(const ControlMemSpace &mem, ControlReg reg) {
 }
 
 void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
-    switch (reg) {
+#pragma HLS INLINE
+ switch (reg) {
         case ControlReg::CONTROL: mem.control = value; break;
         case ControlReg::LAYER_INDEX: mem.layer_index = value; break;
         case ControlReg::STATUS: mem.status &= ~value; break;
@@ -876,11 +877,12 @@ void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
 
 
 void init_mem_space(ControlMemSpace& mem){
-    mem.control = CTRL_RESETN_BIT;
+#pragma HLS INLINE
+ mem.control = CTRL_RESETN_BIT;
     mem.layer_index = 0;
     mem.status = 0;
     mem.irq_status = 0;
-    mem.irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT | IRQ_DMA_DONE_BIT;
+    mem.irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
 
     mem.dma_layer_len = 0;
     mem.dma_head_len = 0;
@@ -924,9 +926,9 @@ void ControlMemInterface(
     bool reset_n
 
 ){
+#pragma HLS INLINE
 
-
-    if (!reset_n) init_mem_space(mem);
+ if (!reset_n) init_mem_space(mem);
     if (!chip_enable) return;
     if (read_control && write_control) {
         mem.status |= STATUS_INVALID_OP;

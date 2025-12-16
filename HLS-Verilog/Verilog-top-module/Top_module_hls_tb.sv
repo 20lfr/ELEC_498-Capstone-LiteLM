@@ -26,7 +26,7 @@ module transformer_top_tb;
   logic [0:0]  ctrl_write_en;
   logic [0:0]  ctrl_chip_en;
   logic [0:0]  ctrl_resetn_in;
-  assign ctrl_data_out = 32'd0;
+
   assign done_in = 1'b0;
   logic [0:0] axis_in_valid;
   logic [0:0] axis_in_last;
@@ -64,6 +64,11 @@ module transformer_top_tb;
   logic [0:0] stream_start;
   logic stream_start_ap_vld;
   logic [0:0] done_in;
+  logic ctrl_data_out_ap_vld;
+  logic [863:0] dbg_ctrl_mem;
+  logic dbg_ctrl_mem_ap_vld;
+  logic [0:0] irq_ps;
+  logic irq_ps_ap_vld;
 
   // Testbench state variables
   logic comp_busy;
@@ -199,6 +204,8 @@ module transformer_top_tb;
   // Stream done hold
   logic       stream_done_hold;
   logic [2:0] stream_done_ctr;
+
+  logic       irq_inference_done;
   
 
   // Helper to decode DMA select
@@ -435,6 +442,14 @@ module transformer_top_tb;
     head_ctx_ref_3_i = t3;
   end
 
+
+
+  always_ff @(posedge ap_clk) begin : irq_driver
+    if (irq_ps && (ctrl_data_out[2])) begin
+      irq_inference_done <= 1'b1;
+    end
+  end
+
   head_ctx_t head_ctx_ref_0_struct;
   head_ctx_t head_ctx_ref_1_struct;
   head_ctx_t head_ctx_ref_2_struct;
@@ -610,6 +625,7 @@ module transformer_top_tb;
     seen_attn = 1'b0;
     seen_concat = 1'b0;
     idle_after_done = 0;
+    irq_inference_done = 0;
 
     // Print header
     $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6s %-6s | %-8s %-8s %-8s %-10s",
@@ -660,6 +676,12 @@ module transformer_top_tb;
           ctrl_shadow_control <= 32'd1;
           pending_start_clear <= 1'b0;
           ctrl_gap_cycles <= 1;
+        end else if (irq_ps) begin
+
+          // READ FROM IRQ_STATUS register
+          ctrl_addr     <= 32'd12; // IRQ_STATUS offset
+          ctrl_read_en  <= 1'b1;
+          ctrl_chip_en  <= 1'b1;
         end else begin
           // Optional status read (no-op since ctrl_data_out is TB-driven)
           ctrl_addr     <= 32'd8; // STATUS offset
@@ -690,7 +712,11 @@ module transformer_top_tb;
                op_name(compute_op));
       
       // Track done signal
-      if (ap_done) begin
+      // if (ap_done) begin
+      //   seen_done <= 1'b1;
+      // end
+
+      if (irq_inference_done) begin
         seen_done <= 1'b1;
       end
       
@@ -867,13 +893,18 @@ module transformer_top_tb;
     .ctrl_addr(ctrl_addr),
     .ctrl_data_in(ctrl_data_in),
     .ctrl_data_out(ctrl_data_out),
+    .ctrl_data_out_ap_vld(ctrl_data_out_ap_vld),
     .ctrl_read_en(ctrl_read_en),
     .ctrl_write_en(ctrl_write_en),
     .ctrl_chip_en(ctrl_chip_en),
     .ctrl_resetn_in(ctrl_resetn_in),
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
-    .done(done_in)
+    .dbg_ctrl_mem(dbg_ctrl_mem),
+    .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
+    .done(done_in),
+    .irq_ps(irq_ps),
+    .irq_ps_ap_vld(irq_ps_ap_vld)
   );
 
 endmodule

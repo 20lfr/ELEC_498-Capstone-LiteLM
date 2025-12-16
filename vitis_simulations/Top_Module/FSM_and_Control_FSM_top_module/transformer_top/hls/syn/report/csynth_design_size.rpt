@@ -6,41 +6,41 @@
 +---------------+-----------------------------+--------------+----------------------------------------------------------------------------------------+
 | Phase         | Step                        | Instructions | Description                                                                            |
 +---------------+-----------------------------+--------------+----------------------------------------------------------------------------------------+
-| Compile/Link  |                             | 2,707        | After all functions are compiled and linked into a single design                       |
+| Compile/Link  |                             | 2,739        | After all functions are compiled and linked into a single design                       |
 |               |                             |              |                                                                                        |
 | Unroll/Inline |                             |              | After user unroll and inline pragmas are applied                                       |
-|               | (1) unroll                  | 4,929        | user unroll pragmas are applied                                                        |
-|               | (2) simplification          | 4,115        | simplification of applied user unroll pragmas                                          |
-|               | (3) inline                  | 4,070        | user inline pragmas are applied                                                        |
-|               | (4) simplification          | 3,897        | simplification of applied user inline pragmas                                          |
+|               | (1) unroll                  | 5,022        | user unroll pragmas are applied                                                        |
+|               | (2) simplification          | 4,208        | simplification of applied user unroll pragmas                                          |
+|               | (3) inline                  | 4,167        | user inline pragmas are applied                                                        |
+|               | (4) simplification          | 3,993        | simplification of applied user inline pragmas                                          |
 |               |                             |              |                                                                                        |
 | Array/Struct  |                             |              | After user array partition and struct aggregate/disaggregate pragmas are applied       |
-|               | (1) array partition         | 5,176        | user array partition pragmas are applied                                               |
-|               | (2) simplification          | 4,443        | simplification of applied user array partition & struct aggregate/disaggregate pragmas |
-|               | (3) aggregate/disaggregate  | 8,055        | user struct aggregate/disaggregate pragmas are applied                                 |
-|               | (4) array reshape           | 5,927        | apply array reshape pragmas                                                            |
-|               | (5) access patterns         | 6,263        | array access pattern optmizations                                                      |
+|               | (1) array partition         | 5,272        | user array partition pragmas are applied                                               |
+|               | (2) simplification          | 4,539        | simplification of applied user array partition & struct aggregate/disaggregate pragmas |
+|               | (3) aggregate/disaggregate  | 8,313        | user struct aggregate/disaggregate pragmas are applied                                 |
+|               | (4) array reshape           | 6,103        | apply array reshape pragmas                                                            |
+|               | (5) access patterns         | 6,439        | array access pattern optmizations                                                      |
 |               |                             |              |                                                                                        |
 | Performance   |                             |              | After transformations are applied to meet performance pragma targets                   |
-|               | (1) loop simplification     | 4,471        | loop and instruction simplification                                                    |
-|               | (2) parallelization         | 4,471        | loops are unrolled or pipelined to meet performance targets                            |
-|               | (3) array partition         | 4,471        | arrays are partitioned to meet performance targets                                     |
-|               | (4) simplification          | 3,751        | simplification of design after performance transformations                             |
+|               | (1) loop simplification     | 4,593        | loop and instruction simplification                                                    |
+|               | (2) parallelization         | 4,593        | loops are unrolled or pipelined to meet performance targets                            |
+|               | (3) array partition         | 4,593        | arrays are partitioned to meet performance targets                                     |
+|               | (4) simplification          | 3,873        | simplification of design after performance transformations                             |
 |               |                             |              |                                                                                        |
 | HW Transforms |                             |              | After hardware transfomations                                                          |
-|               | (1) lowering                | 3,811        | initial conversion to HW specific instructions                                         |
-|               | (2) optimizations           | 3,573        | high level synthesis optimizations                                                     |
+|               | (1) lowering                | 3,937        | initial conversion to HW specific instructions                                         |
+|               | (2) optimizations           | 3,699        | high level synthesis optimizations                                                     |
 +---------------+-----------------------------+--------------+----------------------------------------------------------------------------------------+
 
 * Instructions per Function for each Compilation Phase
 +----------------------------+-----------------------------+----------------+----------------+----------------+----------------+----------------+
 | Function                   | Location                    | Compile/Link   | Unroll/Inline  | Array/Struct   | Performance    | HW Transforms  |
 +----------------------------+-----------------------------+----------------+----------------+----------------+----------------+----------------+
-| + transformer_top          | top.cpp:4                   | 2,707          | 3,897          | 6,263          | 3,751          | 3,573          |
-|  + ControlMemInterface     | ControlMemInterface.cpp:130 |  262           |  168           |  168           |  168           |  168           |
-|     init_mem_space         | ControlMemInterface.cpp:94  |   55           |                |                |                |                |
+| + transformer_top          | top.cpp:4                   | 2,739          | 3,993          | 6,439          | 3,873          | 3,699          |
+|  + ControlMemInterface     | ControlMemInterface.cpp:133 |  262           |                |                |                |                |
+|     init_mem_space         | ControlMemInterface.cpp:96  |   55           |                |                |                |                |
 |     is_valid_address       | ControlMemInterface.cpp:5   |    7           |                |                |                |                |
-|     ctrl_write             | ControlMemInterface.cpp:53  |   86           |                |                |                |                |
+|     ctrl_write             | ControlMemInterface.cpp:54  |   86           |                |                |                |                |
 |     ctrl_read              | ControlMemInterface.cpp:14  |   85           |                |                |                |                |
 |  + scheduler_hls           | Scheduler_FSM.cpp:163       | 2,435          | 3,695          | 6,087          | 3,575          | 3,335          |
 |     init_head_ctx          | head_helpers.cpp:5          |  261 (3 calls) |  696 (8 calls) |  808 (8 calls) |   56 (8 calls) |   56 (8 calls) |
@@ -49,6 +49,8 @@
 |   + drive_group_head_phase | head_helpers.cpp:344        |  844           |  983           |  887           |  885           |  885           |
 |    + run_single_head       | head_helpers.cpp:61         |  810           |                |                |                |                |
 |       init_head_ctx        | head_helpers.cpp:5          |   87           |                |                |                |                |
+|  + irq_wizard              | IRQ_Wizard.cpp:15           |   29           |                |                |                |                |
+|     evaluate_irq           | IRQ_Wizard.cpp:8            |    8           |                |                |                |                |
 +----------------------------+-----------------------------+----------------+----------------+----------------+----------------+----------------+
 
 * Design Size Message Settings

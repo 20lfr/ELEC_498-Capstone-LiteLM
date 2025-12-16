@@ -1,24 +1,59 @@
---- !Missed
+--- !Passed
 Pass:            inline
-Name:            NeverInline
+Name:            AlwaysInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 145, Column: 19 }
+                   Line: 148, Column: 16 }
 Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
 Args:            
+  - String:          'Inlining function '''
   - Callee:          'init_mem_space(ControlMemSpace&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 94, Column: 0 }
-  - String:          ' not inlined into '
+                       Line: 96, Column: 0 }
+  - String:          ''' into '''
   - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
+                       Line: 145, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            inline
+Name:            AlwaysInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                   Line: 165, Column: 9 }
+Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'ctrl_write(ControlMemSpace&, ControlReg, unsigned int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                       Line: 54, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                       Line: 145, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            inline
+Name:            AlwaysInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                   Line: 162, Column: 20 }
+Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'ctrl_read(ControlMemSpace const&, ControlReg)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                       Line: 14, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                       Line: 145, Column: 0 }
+  - String:          ''''
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 151, Column: 10 }
+                   Line: 154, Column: 10 }
 Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
 Args:            
   - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
@@ -27,39 +62,7 @@ Args:
   - String:          ' not inlined into '
   - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 159, Column: 20 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - Callee:          'ctrl_read(ControlMemSpace const&, ControlReg)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 14, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 162, Column: 9 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - Callee:          'ctrl_write(ControlMemSpace&, ControlReg, unsigned int)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 53, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
+                       Line: 145, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -179,33 +182,99 @@ Args:
 --- !Missed
 Pass:            inline
 Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 68, Column: 5 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                   Line: 31, Column: 12 }
+Function:        _Z10irq_wizardR15ControlMemSpacebb
 Args:            
+  - Callee:          '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                       Line: 8, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'irq_wizard(ControlMemSpace&, bool, bool)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                       Line: 15, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Passed
+Pass:            inline
+Name:            AlwaysInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                   Line: 67, Column: 5 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - String:          'Inlining function '''
   - Callee:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int, bool, bool, bool, bool, SchedState&, bool)'
+                       Line: 145, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 61, Column: 0 }
+                       Line: 62, Column: 0 }
+  - String:          ''''
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                   Line: 154, Column: 10 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                       Line: 5, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                       Line: 62, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 90, Column: 5 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 87, Column: 5 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
                        Line: 213, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int, bool, bool, bool, bool, SchedState&, bool)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 61, Column: 0 }
+                       Line: 62, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Passed
+Pass:            inline
+Name:            AlwaysInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                   Line: 112, Column: 14 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'irq_wizard(ControlMemSpace&, bool, bool)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                       Line: 15, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                       Line: 62, Column: 0 }
+  - String:          ''''
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                   Line: 31, Column: 12 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - Callee:          '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                       Line: 8, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                       Line: 62, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Passed
@@ -296,70 +365,6 @@ Args:
 --- !Missed
 Pass:            inline
 Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 145, Column: 19 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - Callee:          'init_mem_space(ControlMemSpace&)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 94, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 151, Column: 10 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 5, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 159, Column: 20 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - Callee:          'ctrl_read(ControlMemSpace const&, ControlReg)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 14, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 162, Column: 9 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - Callee:          'ctrl_write(ControlMemSpace&, ControlReg, unsigned int)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 53, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                    Line: 70, Column: 9 }
 Function:        _Z22drive_group_head_phaseRA2_7HeadCtxiib
@@ -440,33 +445,49 @@ Args:
 --- !Missed
 Pass:            inline
 Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 68, Column: 5 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                   Line: 154, Column: 10 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
-  - Callee:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
+  - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
+                       Line: 5, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int, bool, bool, bool, bool, SchedState&, bool)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 61, Column: 0 }
+                       Line: 62, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 90, Column: 5 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 87, Column: 5 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
                        Line: 213, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int, bool, bool, bool, bool, SchedState&, bool)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 61, Column: 0 }
+                       Line: 62, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                   Line: 31, Column: 12 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - Callee:          '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                       Line: 8, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                       Line: 62, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -474,80 +495,12 @@ Pass:            inline
 Name:            NeverInline
 Function:        apatb_transformer_top_ir
 Args:            
-  - Callee:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int, bool, bool, bool, bool, SchedState&, bool)'
+  - Callee:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 61, Column: 0 }
+                       Line: 62, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          apatb_transformer_top_ir
   - String:          ' because it should never be inlined (cost=never)'
-...
---- !Passed
-Pass:            reflow-inliner
-Name:            Inline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 142, Column: 0 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - String:          'Inlining function '''
-  - Callee:          'init_mem_space(ControlMemSpace&)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 94, Column: 0 }
-  - String:          ''' into '''
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ''''
-...
---- !Passed
-Pass:            reflow-inliner
-Name:            Inline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 142, Column: 0 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - String:          'Inlining function '''
-  - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 5, Column: 0 }
-  - String:          ''' into '''
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ''''
-...
---- !Passed
-Pass:            reflow-inliner
-Name:            Inline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 142, Column: 0 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - String:          'Inlining function '''
-  - Callee:          'ctrl_read(ControlMemSpace const&, ControlReg)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 14, Column: 0 }
-  - String:          ''' into '''
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ''''
-...
---- !Passed
-Pass:            reflow-inliner
-Name:            Inline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                   Line: 142, Column: 0 }
-Function:        _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb
-Args:            
-  - String:          'Inlining function '''
-  - Callee:          'ctrl_write(ControlMemSpace&, ControlReg, unsigned int)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 53, Column: 0 }
-  - String:          ''' into '''
-  - Caller:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-inliner
@@ -598,6 +551,40 @@ Args:
   - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
                        Line: 213, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            reflow-inliner
+Name:            Inline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
+                       Line: 5, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                       Line: 62, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            reflow-inliner
+Name:            Inline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
+                       Line: 8, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                       Line: 62, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
@@ -1421,8 +1408,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 61, Column: 0 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1440,8 +1427,25 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 61, Column: 0 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
+Args:            
+  - String:          'Aggregating '
+  - HwTyName:        scalar
+  - String:          ' variable '''
+  - Name:            dbg_ctrl_mem
+  - String:          ''' with '
+  - AggregateTypeName: 'compact=bit'
+  - String:          ' mode in '
+  - Bitwidth:        '864'
+  - String:          '-bits'
+...
+--- !Passed
+Pass:            reflow-aggr
+Name:            AggrSucc
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1457,8 +1461,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 61, Column: 0 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1474,8 +1478,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 61, Column: 0 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1491,8 +1495,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 61, Column: 0 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 62, Column: 0 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1550,31 +1554,15 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 68, Column: 5 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
-Args:            
-  - Callee:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
-                       Line: 142, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int, bool, bool, bool, bool, SchedState&, bool)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 61, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 90, Column: 5 }
-Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjjbbbbR10SchedStateb
+                   Line: 87, Column: 5 }
+Function:        _Z15transformer_topbbRbbbbRA4_7HeadCtxS_R9ComputeOpbS_bbS_R6DmaSelRiS7_S7_10ControlRegjRjbbbbR10SchedStateR15ControlMemSpacebS_
 Args:            
   - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
                        Line: 213, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int, bool, bool, bool, bool, SchedState&, bool)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, SchedState&, ControlMemSpace&, bool, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 61, Column: 0 }
+                       Line: 62, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
