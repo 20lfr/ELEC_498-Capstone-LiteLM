@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 290,
-    "calls": "2 2 2 2 1 2 2 2 2",
+    "calls": "1 1 1 1 2 1 1 1 1",
     "control_depth": 2,
     "def_use_depth": 23,
     "file": "Scheduler_FSM.cpp",
@@ -22,6 +22,21 @@
     "total_instructions": 3330
   },
   "1": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "head_helpers.cpp",
+    "fileloc": 5,
+    "instructions": 7,
+    "memory_accesses": 0,
+    "name": "init_head_ctx",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 7
+  },
+  "2": {
     "basicblocks": 271,
     "calls": "",
     "control_depth": 0,
@@ -38,20 +53,5 @@
       "L": 376
     },
     "total_instructions": 885
-  },
-  "2": {
-    "basicblocks": 1,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 4,
-    "file": "head_helpers.cpp",
-    "fileloc": 5,
-    "instructions": 7,
-    "memory_accesses": 0,
-    "name": "init_head_ctx",
-    "stores": {
-      "L": 1
-    },
-    "total_instructions": 7
   }
 }

@@ -721,5 +721,5 @@ Cycle    Start  Reset  Busy     | State            | CmpStart   CmpReady   CmpDo
 PASS: DONE observed and FSM returned to IDLE after 4 post-done cycles. Layer=1
 INFO: [SIM 211-1] CSim done with 0 errors.
 INFO: [SIM 211-3] *************** CSIM finish ***************
-INFO: [HLS 200-112] Total CPU user time: 2.32 seconds. Total CPU system time: 0.78 seconds. Total elapsed time: 3.07 seconds; peak allocated memory: 445.137 MB.
+INFO: [HLS 200-112] Total CPU user time: 2.36 seconds. Total CPU system time: 0.78 seconds. Total elapsed time: 3.11 seconds; peak allocated memory: 445.145 MB.
 INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 6s

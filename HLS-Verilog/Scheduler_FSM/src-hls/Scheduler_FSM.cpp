@@ -164,13 +164,7 @@ void scheduler_hls(
     // ------------------------------------------------------------
     // AXI4-Lite CONTROL INTERFACE (PS → PL)
     // ------------------------------------------------------------
-    bool cntrl_start,          // [INPUT]  From AXI-Lite: "start inference" bit
-    bool cntrl_reset_n,        // [INPUT]  Active-low synchronous reset
-    uint32_t &cntrl_layer_idx, // [OUTPUT] Current layer index mirrored into
-                               // control mem
-    bool &cntrl_busy,          // [OUTPUT] Scheduler active (non-idle)
-    bool &cntrl_start_out,    // [OUTPUT] FSM-controlled start bit (cleared after
-                              // leaving IDLE)
+    ControlMemSpace ctrl_mem,
 
     // ------------------------------------------------------------
     // AXI4-STREAM INPUT (INGRESS: PS → PL)
@@ -338,7 +332,18 @@ void scheduler_hls(
 
 
   // Reset Logic
+  const bool cntrl_reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
   const bool reset = !cntrl_reset_n;
+
+  const bool busy = (st != S_IDLE);
+
+  // Mirror busy into status bit 2 without clobbering other bits
+  ctrl_mem.status = (ctrl_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
+
+  // Expose a start bit that auto-clears once we leave IDLE
+  const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
+
+
   if (reset) {
     st = S_IDLE;
     layer_idx = 0;
@@ -412,7 +417,7 @@ void scheduler_hls(
   }
 
   // Default outputs
-  cntrl_layer_idx = layer_idx;
+  ctrl_mem.layer_index = layer_idx;
   axis_in_ready = 0;
   if (!wl_ready && wl_start){
         wl_start      = false;
@@ -429,10 +434,6 @@ void scheduler_hls(
   }
   stream_start = 0;
   done = 0;
-
-  cntrl_busy = (st != S_IDLE);
-  // Expose a start bit that auto-clears once we leave IDLE
-  cntrl_start_out = (st == S_IDLE) ? cntrl_start : false;
 
   if (reset) {
     STATE = st;

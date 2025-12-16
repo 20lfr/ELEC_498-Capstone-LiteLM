@@ -1446,7 +1446,6 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       }
       break;
     }
-# 752 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
     case S_REQUANT2: {
       if (!requant2_started && compute_ready) {
         requant2_compute_done = false;
@@ -1573,7 +1572,6 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       }
       break;
     }
-# 892 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
     case S_REQUANT4: {
       if (!requant4_started && compute_ready) {
         requant4_compute_done = false;

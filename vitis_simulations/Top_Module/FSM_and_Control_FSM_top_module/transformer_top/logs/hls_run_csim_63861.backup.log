@@ -1,0 +1,106 @@
+WARNING: [vitis-run 60-2507] Dispatch failed to load the system diagram library librdi_system_diagram. Diagrams will not be produced.
+  **** HLS Build v2025.1 6135595
+INFO: [HLS 200-2005] Using work_dir /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top 
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/vitis-comp.json
+INFO: [HLS 200-10] Creating and opening component '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top'.
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-2174] Applying component config ini file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(13)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(14)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(15)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'tb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_tb.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(16)
+INFO: [HLS 200-10] Adding test bench file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_tb.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.top=transformer_top' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying config ini 'flow_target=vivado' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying config ini 'part=xck26-sfvc784-2LV-c' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xck26-sfvc784-2LV-c'
+INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(17)
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(5)
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/vitis-comp.json
+INFO: [SIM 211-2] *************** CSIM start ***************
+INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
+INFO: [HLS 200-2036] Building debug C Simulation binaries
+   Compiling ../../../../../../../HLS-Verilog/top_tb.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/top.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp in debug mode
+   Generating csim.exe
+../../../../../../../HLS-Verilog/top.cpp:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header]
+#pragma once
+        ^
+1 warning generated.
+Cycle    rst_n  start  c_done   c_rdy    | cmp_strt cmp_done cmp_op   wl_start | ax_v     ax_r     ax_last  state 
+0        0      0      0        1        | 0        0        -        0        | 0        0        0        0     
+1        0      0      0        1        | 0        0        -        0        | 0        0        0        0     
+2        1      1      0        1        | 0        0        -        0        | 0        0        0        0     
+3        1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+4        1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+5        1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+6        1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+7        1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+8        1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+9        1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+10       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+11       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+12       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+13       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+14       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+15       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+16       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+17       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+18       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+19       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+20       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+21       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+22       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+23       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+24       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+25       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+26       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+27       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+28       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+29       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+30       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+31       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+32       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+33       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+34       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+35       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+36       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+37       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+38       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+39       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+40       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+41       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+42       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+43       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+44       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+45       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+46       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+47       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+48       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+49       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+50       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+51       1      1      0        1        | 0        0        -        0        | 0        1        0        0     
+INFO: [SIM 211-1] CSim done with 0 errors.
+INFO: [SIM 211-3] *************** CSIM finish ***************
+INFO: [HLS 200-112] Total CPU user time: 2.51 seconds. Total CPU system time: 0.86 seconds. Total elapsed time: 3.33 seconds; peak allocated memory: 445.082 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 7s

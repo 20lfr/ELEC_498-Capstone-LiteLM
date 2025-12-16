@@ -3,7 +3,7 @@
 // Enhanced testbench for scheduler_hls RTL matching C++ testbench functionality
 module scheduler_hls_tb;
   localparam int CLK_PERIOD = 10;
-  localparam int MAX_CYCLES = 2000;
+  localparam int MAX_CYCLES = 4000;
   localparam int COMP_LAT = 3;
   localparam int COMP_LAT_MIN = 1;
   localparam int COMP_LAT_MAX = 4;

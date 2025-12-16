@@ -9,6 +9,8 @@ inline bool is_valid_address(uint32_t addr_bytes) {
 
 } // namespace
 
+
+// HELPER FUNCTIONS
 uint32_t ctrl_read(const ControlMemSpace &mem, ControlReg reg) {
     switch (reg) {
         case ControlReg::CONTROL:        return mem.control;
@@ -85,6 +87,9 @@ void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
         case ControlReg::RESERVED_DEBUG: mem.reserved_debug = value;break;
     }
 }
+
+
+
 
 void init_mem_space(ControlMemSpace& mem){
     mem.control        = CTRL_RESETN_BIT;       // cntrl_reset_n | cntrl_start

@@ -1,6 +1,5 @@
 #pragma once
-
-#include "ControlMemInterface.hpp"
+#include "../../top.hpp"
 
 // Lightweight helper that models the IRQ wizard logic around the shared control
 // memory space. Keeps the register manipulation separated from the scheduler.

@@ -121,17 +121,15 @@ static const char *phase_name(HeadPhase ph) {
     }
 }
 
+
 int main() {
     const int MAX_CYCLES = 1200;
     const int COMP_LAT   = 3;
     const int DMA_LAT    = 3;
     const int AXIS_BEATS = 3;
 
-    bool cntrl_start     = false;
-    bool cntrl_reset_n   = false;
-    uint32_t cntrl_layer_idx = 0;
-    bool cntrl_busy      = false;
-    bool cntrl_start_out = false;
+    ControlMemSpace ctrl_mem{};
+    ctrl_mem.control = CTRL_RESETN_BIT; // reset_n high, start low
 
     bool wl_ready        = true;
     bool wl_start        = false;
@@ -196,13 +194,14 @@ int main() {
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
         // Simple reset release at cycle 2
-        if (cycle == 2) cntrl_reset_n = true;
+        if (cycle == 2) ctrl_mem.control |= CTRL_RESETN_BIT;
+        const bool cntrl_busy = ((ctrl_mem.status & STATUS_BUSY_BIT) != 0);
         // Issue a single-cycle start pulse once after reset deasserts
-        if (cntrl_reset_n && !start_pulsed) {
-            cntrl_start = true;
+        if (((ctrl_mem.control & CTRL_RESETN_BIT) != 0) && !start_pulsed) {
+            ctrl_mem.control |= CTRL_START_BIT; // set start bit
             start_pulsed = true;
         } else if (cntrl_busy) {
-            cntrl_start = false;
+            ctrl_mem.control &= ~CTRL_START_BIT; // clear start when busy
         }
 
         // Clear per-head compute_done pulse
@@ -283,7 +282,7 @@ int main() {
         wl_ready      = !dma_busy;
 
         // Drive AXIS ingress: send a short burst when ready is asserted
-        if (!axis_feed_done && (axis_drive || (cntrl_reset_n && start_pulsed))) {
+        if (!axis_feed_done && (axis_drive || (((ctrl_mem.control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
             axis_drive = true;
             if (!axis_in_valid && axis_in_ready) {
                 axis_in_valid = true;
@@ -295,11 +294,7 @@ int main() {
         }
 
         scheduler_hls(
-            cntrl_start,
-            cntrl_reset_n,
-            cntrl_layer_idx,
-            cntrl_busy,
-            cntrl_start_out,
+            ctrl_mem,
             axis_in_valid,
             axis_in_last,
             axis_in_ready,
@@ -321,6 +316,8 @@ int main() {
             done,
             STATE);
 
+        const bool cntrl_start   = ((ctrl_mem.control & CTRL_START_BIT) != 0);
+        const bool cntrl_reset_n = ((ctrl_mem.control & CTRL_RESETN_BIT) != 0);
         std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10s %-10s %-10s %-10s | ",
                     cycle,
                     cntrl_start ? 1 : 0,
@@ -393,7 +390,7 @@ int main() {
 
         if (done) {
             seen_done = true;
-            cntrl_start = false;
+            ctrl_mem.control &= ~CTRL_START_BIT; // clear start bit
         }
         if (seen_done){
             post_done_cycles++;
@@ -417,6 +414,6 @@ int main() {
     }
 
     std::printf("PASS: DONE observed and FSM returned to IDLE after %d post-done cycles. Layer=%u\n",
-                post_done_cycles, cntrl_layer_idx);
+                post_done_cycles, ctrl_mem.layer_index);
     return 0;
 }
