@@ -378,8 +378,16 @@ struct ControlMemSpace {
     uint32_t dma_tile_len   = 0;
 
     uint32_t layer_stride   = 0;
-    uint32_t head_stride    = 0;
-    uint32_t tile_stride    = 0;
+    uint32_t wq_head_stride    = 0;
+    uint32_t wk_head_stride    = 0;
+    uint32_t wv_head_stride    = 0;
+
+    uint32_t k_cache_stride   = 0;
+    uint32_t v_cache_stride   = 0;
+
+    uint32_t wo_tile_stride    = 0;
+    uint32_t w1_tile_stride    = 0;
+    uint32_t w2_tile_stride    = 0;
 
     uint32_t wq_base_addr   = 0;
     uint32_t wk_base_addr   = 0;

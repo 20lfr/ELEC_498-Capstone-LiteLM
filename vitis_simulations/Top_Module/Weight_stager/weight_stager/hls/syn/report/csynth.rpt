@@ -1,0 +1,144 @@
+
+
+================================================================
+== Synthesis Summary Report of 'weight_stager'
+================================================================
++ General Information: 
+    * Date:           Tue Dec 16 19:16:28 2025
+    * Version:        2025.1 (Build 6135595 on May 21 2025)
+    * Project:        weight_stager
+    * Solution:       hls (Vivado IP Flow Target)
+    * Product family: zynquplus
+    * Target device:  xck26-sfvc784-2LV-c
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +-----------------+------+------+---------+-------+----------+---------+------+----------+------+---------+----------+-----------+-----+
+    |     Modules     | Issue|      |     Latency     | Iteration|         | Trip |          |      |         |          |           |     |
+    |     & Loops     | Type | Slack| (cycles)|  (ns) |  Latency | Interval| Count| Pipelined| BRAM |   DSP   |    FF    |    LUT    | URAM|
+    +-----------------+------+------+---------+-------+----------+---------+------+----------+------+---------+----------+-----------+-----+
+    |+ weight_stager  |     -|  1.95|        0|  0.000|         -|        1|     -|        no|     -|  6 (~0%)|  33 (~0%)|  864 (~0%)|    -|
+    +-----------------+------+------+---------+-------+----------+---------+------+----------+------+---------+----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* Other Ports
++----------------+---------+-----------+----------+
+| Port           | Mode    | Direction | Bitwidth |
++----------------+---------+-----------+----------+
+| ap_return      |         | out       | 32       |
+| ctrl_mem       | ap_none | in        | 1056     |
+| error          | ap_vld  | out       | 1        |
+| memory_request | ap_vld  | out       | 1        |
+| wl_addr_sel    | ap_none | in        | 8        |
+| wl_head        | ap_none | in        | 32       |
+| wl_layer       | ap_none | in        | 32       |
+| wl_ready       | ap_vld  | out       | 1        |
+| wl_start       | ap_none | in        | 1        |
+| wl_tile        | ap_none | in        | 32       |
++----------------+---------+-----------+----------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------------------------------+
+| Interface | Type       | Ports                             |
++-----------+------------+-----------------------------------+
+| ap_clk    | clock      | ap_clk                            |
+| ap_rst    | reset      | ap_rst                            |
+| ap_ctrl   | ap_ctrl_hs | ap_done ap_idle ap_ready ap_start |
++-----------+------------+-----------------------------------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------------+-----------+-----------------+
+| Argument       | Direction | Datatype        |
++----------------+-----------+-----------------+
+| wl_start       | in        | bool            |
+| wl_addr_sel    | in        | DmaSel          |
+| wl_layer       | in        | int             |
+| wl_head        | in        | int             |
+| wl_tile        | in        | int             |
+| ctrl_mem       | in        | ControlMemSpace |
+| wl_ready       | out       | bool&           |
+| memory_request | out       | bool&           |
+| error          | out       | bool&           |
+| return         | out       | unsigned int    |
++----------------+-----------+-----------------+
+
+* SW-to-HW Mapping
++----------------+-----------------------+---------+
+| Argument       | HW Interface          | HW Type |
++----------------+-----------------------+---------+
+| wl_start       | wl_start              | port    |
+| wl_addr_sel    | wl_addr_sel           | port    |
+| wl_layer       | wl_layer              | port    |
+| wl_head        | wl_head               | port    |
+| wl_tile        | wl_tile               | port    |
+| ctrl_mem       | ctrl_mem              | port    |
+| wl_ready       | wl_ready              | port    |
+| wl_ready       | wl_ready_ap_vld       | port    |
+| memory_request | memory_request        | port    |
+| memory_request | memory_request_ap_vld | port    |
+| error          | error                 | port    |
+| error          | error_ap_vld          | port    |
+| return         | ap_return             | port    |
++----------------+-----------------------+---------+
+
+
+================================================================
+== Bind Op Report
+================================================================
++-------------------------+-----+--------+------------+-------+--------+---------+
+| Name                    | DSP | Pragma | Variable   | Op    | Impl   | Latency |
++-------------------------+-----+--------+------------+-------+--------+---------+
+| + weight_stager         | 6   |        |            |       |        |         |
+|   and_ln21_fu_458_p2    |     |        | and_ln21   | and   | auto   | 0       |
+|   add_ln27_fu_472_p2    |     |        | add_ln27   | add   | fabric | 0       |
+|   icmp_ln27_fu_478_p2   |     |        | icmp_ln27  | setlt | auto   | 0       |
+|   and_ln27_fu_484_p2    |     |        | and_ln27   | and   | auto   | 0       |
+|   and_ln27_1_fu_490_p2  |     |        | and_ln27_1 | and   | auto   | 0       |
+|   add_ln37_fu_504_p2    |     |        | add_ln37   | add   | fabric | 0       |
+|   icmp_ln37_fu_510_p2   |     |        | icmp_ln37  | setlt | auto   | 0       |
+|   and_ln37_fu_516_p2    |     |        | and_ln37   | and   | auto   | 0       |
+|   and_ln37_1_fu_522_p2  |     |        | and_ln37_1 | and   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln76   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln76_1 | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln72   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln72_1 | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln68   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln68_1 | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln64   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln64_1 | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln60   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln60_1 | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln56   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln56_1 | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln52   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln52_1 | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U1 | 3   |        | mul_ln48   | mul   | auto   | 0       |
+|   mul_32s_32s_32_1_1_U2 | 3   |        | mul_ln48_1 | mul   | auto   | 0       |
++-------------------------+-----+--------+------------+-------+--------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
+  No bind storage info in design
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-------+-------------------------+---------------------------------------------------------------------------------+
+| Type  | Options                 | Location                                                                        |
++-------+-------------------------+---------------------------------------------------------------------------------+
+| RESET | variable = addr_latched | ../../../HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp:16 in weight_stager |
++-------+-------------------------+---------------------------------------------------------------------------------+
+
+

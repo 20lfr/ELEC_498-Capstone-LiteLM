@@ -1,0 +1,3 @@
+relativeroot=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Weight_stager
+original_argv=-c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Weight_stager/hls_config.cfg --work_dir weight_stager 
+

@@ -1,0 +1,23 @@
+{
+  "0": {
+    "basicblocks": 31,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "Weight_stager.cpp",
+    "fileloc": 3,
+    "instructions": 163,
+    "loads": {
+      "G": 1,
+      "L": 24
+    },
+    "memory_accesses": 0,
+    "name": "weight_stager",
+    "stores": {
+      "G": 9,
+      "L": 1,
+      "T": 18
+    },
+    "total_instructions": 163
+  }
+}

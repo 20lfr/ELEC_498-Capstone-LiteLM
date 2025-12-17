@@ -27,3 +27,16 @@ comp.run(operation="C_SIMULATION")
 
 comp.run(operation="SYNTHESIS")
 
+comp = client.create_hls_component(name = "Weight_stager",cfg_file = ["hls_config.cfg"],template = "empty_hls_component")
+
+comp = client.get_component(name="Weight_stager")
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="SYNTHESIS")
+

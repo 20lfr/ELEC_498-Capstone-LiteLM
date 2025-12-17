@@ -1,0 +1,8 @@
+0.7
+2020.2
+May 21 2025
+22:59:56
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Verilog/weight_stager.v,1765930610,verilog,,/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Verilog/weight_stager_mul_32s_32s_32_1_1.v,,weight_stager,,uvm,../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef,,,,,
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Verilog/weight_stager_mul_32s_32s_32_1_1.v,1765930610,verilog,,,,weight_stager_mul_32s_32s_32_1_1,,uvm,../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef,,,,,
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Verilog/weight_stager_tb.sv,1765931895,systemVerilog,,,,weight_stager_tb,,uvm,../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef,,,,,
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vivado_simulations/Weight_stager/Weight_stager.sim/sim_1/behav/xsim/glbl.v,1741209010,verilog,,,,glbl,,uvm,,,,,,
