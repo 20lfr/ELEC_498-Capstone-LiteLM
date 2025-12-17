@@ -66,6 +66,7 @@ int main() {
         }
 
         uint32_t addr = weight_stager(
+            false, // reset
             wl_start,
             sel,
             layer,

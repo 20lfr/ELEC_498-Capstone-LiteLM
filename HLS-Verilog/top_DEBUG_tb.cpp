@@ -526,10 +526,8 @@ int main() {
         for (int i = 0; i < NUM_HEADS; ++i) {
             int lane = i % HEADS_PARALLEL;
             head_ctx_ref[i].compute_ready = !head_lane_busy[lane];
-            head_ctx_ref[i].wl_ready      = !head_dma_busy[lane];
         }
         stream_ready  = !stream_busy;
-        wl_ready      = !dma_busy;
 
         // Drive AXIS ingress: send a short burst when ready is asserted
         if (!axis_feed_done && (axis_drive || (((ctrl_shadow_control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
@@ -595,7 +593,7 @@ int main() {
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-8s %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%d %d %d %d %d %d} err=%d dma_req=%d dma_done=%d dma_addr=0x%08X\n",
+        std::printf("%-8d %-6d %-6d | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-8s %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%d %d %d %d %d %d} err=%d dma_req=%d dma_done=%d dma_addr=0x%08X",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
@@ -627,6 +625,17 @@ int main() {
                     memory_request ? 1 : 0,
                     dma_done ? 1 : 0,
                     dma_address);
+        for (int i = 0; i < NUM_HEADS; ++i) {
+            char buf[96];
+            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s 0x%08X %-2s",
+                          i,
+                          phase_name(head_ctx_ref[i].phase),
+                          dash_or(head_ctx_ref[i].memory_request),
+                          head_ctx_ref[i].dma_address,
+                          dash_or(head_ctx_ref[i].dma_done));
+            std::printf(" %s", buf);
+        }
+        std::printf("\n");
 
         // Track the tail of the sequence: once we hit STREAM_OUT, watch for 4 idle cycles
         if (dbg_state == S_STREAM_OUT) {
@@ -648,7 +657,7 @@ int main() {
                 ComputeOp launched_op = head_ctx_ref[i].compute_op;
                 if (launched_op == CMP_ATT_SCORES) seen_attn = true;
             }
-            if (head_ctx_ref[i].wl_start && !head_dma_busy[lane]) {
+            if (head_ctx_ref[i].memory_request && !head_dma_busy[lane]) {
                 head_dma_busy[lane] = true;
                 head_dma_timer[lane] = DMA_LAT - 1;
                 head_dma_active_idx[lane] = i;

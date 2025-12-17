@@ -4,7 +4,7 @@
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
 #include "IRQ_Wizard/IRQ_Wizard.hpp"
-#include "Weight_Loader-Stager/Weight_stager.hpp"
+// #include "Weight_Loader-Stager/Weight_stager.hpp"
 
 
 // Top-level wrapper prototype

@@ -28,13 +28,9 @@ void scheduler_hls(
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel  &wl_addr_sel,
-    int  &wl_layer,
-    int  &wl_head,
-    int  &wl_tile,
-    bool dma_done,
+    bool      &memory_request,
+    uint32_t  &dma_address,
+    bool      dma_done,
     bool compute_ready,
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
@@ -44,5 +40,14 @@ void scheduler_hls(
     bool &stream_start,
     bool stream_done,
     bool &done,
-    SchedState &STATE
+    bool &error,
+    SchedState &STATE,
+
+    // Debug signal OUTPUT
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile
 );

@@ -476,9 +476,56 @@ namespace std
 
 
 
-
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp" 1
+# 123 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp"
 constexpr int NUM_HEADS = 4;
-constexpr int HEADS_PARALLEL = 2;
+constexpr int NUM_LAYERS = 2;
+constexpr int NUM_WO_TILES = 4;
+constexpr int NUM_W1_TILES = 4;
+constexpr int NUM_W2_TILES = 4;
+constexpr int NUM_LOGIT_TILES = 2;
+
+
+
+
+enum SchedState {
+    S_IDLE,
+    S_STREAM_IN,
+    S_LAYER_COUNT,
+    S_ATTENTION_HEADS,
+    S_HEAD_CONCAT,
+    S_OUT_PROJECTION,
+    S_REQUANT1,
+    S_RES_ADD_1,
+    S_LAYER_NORM_1,
+    S_REQUANT2,
+    S_FFN,
+    S_REQUANT3,
+    S_RES_ADD_2,
+    S_LAYER_NORM_2,
+    S_REQUANT4,
+    S_LOOP_CHECK,
+    S_STREAM_OUT
+};
+
+
+enum class LnPhase : uint8_t {
+    SUM = 0,
+    SUMSQ,
+    MEAN,
+    EYY,
+    VAR,
+    VAR_EPS,
+    INV_STD,
+    NORM,
+    SCALE,
+    SHIFT,
+    DONE
+};
+
+
+
+
 
 enum class HeadPhase : uint8_t {
     IDLE = 0,
@@ -619,6 +666,121 @@ struct HeadCtx {
     bool att_value_dma_done = false;
 };
 
+
+
+
+
+
+constexpr uint32_t CTRL_RESETN_BIT = 1u << 0;
+constexpr uint32_t CTRL_START_BIT = 1u << 1;
+
+constexpr uint32_t IRQ_CLEAR_BIT = 1u << 0;
+constexpr uint32_t IRQ_ERROR_BIT = 1u << 1;
+constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
+
+
+constexpr uint32_t STATUS_INVALID_ADDR = 1u << 0;
+constexpr uint32_t STATUS_INVALID_OP = 1u << 1;
+constexpr uint32_t STATUS_BUSY_BIT = 1u << 2;
+
+
+
+
+
+enum class ControlReg : uint32_t {
+    CONTROL = 0x00,
+    LAYER_INDEX = 0x04,
+    STATUS = 0x08,
+    IRQ_STATUS = 0x0C,
+    IRQ_ENABLE = 0x10,
+
+    DMA_LAYER_LEN = 0x14,
+    DMA_HEAD_LEN = 0x18,
+    DMA_TILE_LEN = 0x1C,
+
+    LAYER_STRIDE = 0x20,
+    WQ_HEAD_STRIDE = 0x24,
+    WK_HEAD_STRIDE = 0x28,
+    WV_HEAD_STRIDE = 0x2C,
+
+    K_CACHE_STRIDE = 0x30,
+    V_CACHE_STRIDE = 0x34,
+
+    WO_TILE_STRIDE = 0x38,
+    W1_TILE_STRIDE = 0x3C,
+    W2_TILE_STRIDE = 0x40,
+
+    WQ_BASE_ADDR = 0x44,
+    WK_BASE_ADDR = 0x48,
+    WV_BASE_ADDR = 0x4C,
+    WO_BASE_ADDR = 0x50,
+    W1_BASE_ADDR = 0x54,
+    W2_BASE_ADDR = 0x58,
+
+    K_CACHE_ADDR = 0x5C,
+    V_CACHE_ADDR = 0x60,
+
+    LOGIT_SCALE_QV = 0x64,
+    SCALE_Q = 0x68,
+    ZERO_POINT_Q = 0x6C,
+    SCALE_K = 0x70,
+    ZERO_POINT_K = 0x74,
+    SCALE_V = 0x78,
+    ZERO_POINT_V = 0x7C,
+
+    RESERVED_DEBUG = 0x80
+};
+
+
+struct ControlMemSpace {
+    uint32_t control = CTRL_RESETN_BIT;
+    uint32_t layer_index = 0;
+    uint32_t status = 0;
+    uint32_t irq_status = 0;
+    uint32_t irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
+
+    uint32_t dma_layer_len = 0;
+    uint32_t dma_head_len = 0;
+    uint32_t dma_tile_len = 0;
+
+    uint32_t layer_stride = 0;
+    uint32_t wq_head_stride = 0;
+    uint32_t wk_head_stride = 0;
+    uint32_t wv_head_stride = 0;
+
+    uint32_t k_cache_stride = 0;
+    uint32_t v_cache_stride = 0;
+
+    uint32_t wo_tile_stride = 0;
+    uint32_t w1_tile_stride = 0;
+    uint32_t w2_tile_stride = 0;
+
+    uint32_t wq_base_addr = 0;
+    uint32_t wk_base_addr = 0;
+    uint32_t wv_base_addr = 0;
+    uint32_t wo_base_addr = 0;
+    uint32_t w1_base_addr = 0;
+    uint32_t w2_base_addr = 0;
+
+    uint32_t k_cache_addr = 0;
+    uint32_t v_cache_addr = 0;
+
+    uint32_t logit_scale_qv = 0;
+    uint32_t scale_q = 0;
+    uint32_t zero_point_q = 0;
+    uint32_t scale_k = 0;
+    uint32_t zero_point_k = 0;
+    uint32_t scale_v = 0;
+    uint32_t zero_point_v = 0;
+
+    uint32_t reserved_debug = 0;
+};
+# 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp" 2
+
+
+
+constexpr int HEADS_PARALLEL = 2;
+
 void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx);
 
 
@@ -636,53 +798,10 @@ bool drive_group_head_phase(
     bool start
 );
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp" 2
-# 116 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
-constexpr int NUM_LAYERS = 2;
-constexpr int NUM_WO_TILES = 4;
-constexpr int NUM_W1_TILES = 4;
-constexpr int NUM_W2_TILES = 4;
-constexpr int NUM_LOGIT_TILES = 2;
-
-constexpr int NUM_HEAD_GROUPS =
-    (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
 
 
+constexpr int NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
 
-
-enum SchedState {
-    S_IDLE,
-    S_STREAM_IN,
-    S_LAYER_COUNT,
-    S_ATTENTION_HEADS,
-    S_HEAD_CONCAT,
-    S_OUT_PROJECTION,
-    S_REQUANT1,
-    S_RES_ADD_1,
-    S_LAYER_NORM_1,
-    S_REQUANT2,
-    S_FFN,
-    S_REQUANT3,
-    S_RES_ADD_2,
-    S_LAYER_NORM_2,
-    S_REQUANT4,
-    S_LOOP_CHECK,
-    S_STREAM_OUT
-};
-
-
-enum class LnPhase : uint8_t {
-    SUM = 0,
-    SUMSQ,
-    MEAN,
-    EYY,
-    VAR,
-    VAR_EPS,
-    INV_STD,
-    NORM,
-    SCALE,
-    SHIFT,
-    DONE
-};
 
 
 
@@ -701,20 +820,12 @@ bool LayerNorm(
 
 
 __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
-    bool cntrl_start,
-    bool cntrl_reset_n,
-    uint32_t &cntrl_layer_idx,
-    bool &cntrl_busy,
-    bool &cntrl_start_out,
+    ControlMemSpace ctrl_mem,
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel &wl_addr_sel,
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
+    bool &memory_request,
+    uint32_t &dma_address,
     bool dma_done,
     bool compute_ready,
     bool compute_done,
@@ -725,10 +836,41 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     bool &stream_start,
     bool stream_done,
     bool &done,
-    SchedState &STATE
+    bool &error,
+    SchedState &STATE,
+
+
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile
 );
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" 2
-# 26 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/../../Weight_Loader-Stager/Weight_stager.hpp" 1
+
+
+
+
+
+
+
+
+uint32_t weight_stager(
+    bool wl_start,
+    DmaSel wl_addr_sel,
+    int wl_layer,
+    int wl_head,
+    int wl_tile,
+    ControlMemSpace ctrl_mem,
+
+    bool &wl_ready,
+    bool &memory_request,
+    bool &error
+);
+# 3 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" 2
+# 27 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
 bool LayerNorm(
   LnPhase &phase,
   bool &ln_started,
@@ -870,13 +1012,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
 
 
-    bool cntrl_start,
-    bool cntrl_reset_n,
-    uint32_t &cntrl_layer_idx,
-
-    bool &cntrl_busy,
-    bool &cntrl_start_out,
-
+    ControlMemSpace ctrl_mem,
 
 
 
@@ -888,13 +1024,8 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
 
 
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel &wl_addr_sel,
-
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
+    bool &memory_request,
+    uint32_t &dma_address,
     bool dma_done,
 
 
@@ -917,15 +1048,23 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
 
     bool &done,
+    bool &error,
+    SchedState &STATE,
 
 
 
 
-    SchedState &STATE
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=scheduler_hls
-# 219 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+# 217 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
 
 
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
@@ -937,7 +1076,33 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS reset variable = layer_idx
 
 
- static bool attn_started;
+ static bool wl_start;
+#pragma HLS reset variable = wl_start
+ static DmaSel wl_addr_sel;
+#pragma HLS reset variable = wl_addr_sel
+ static int wl_head;
+#pragma HLS reset variable = wl_head
+ static int wl_tile;
+#pragma HLS reset variable = wl_tile
+ static int wl_layer;
+#pragma HLS reset variable = wl_layer
+ static bool wl_ready;
+#pragma HLS reset variable = wl_ready
+ dma_address = weight_stager(wl_start, wl_addr_sel, wl_layer,
+                              wl_head, wl_tile, ctrl_mem, wl_ready,
+                              memory_request, error);
+
+
+  dbg_wl_start = wl_start;
+  dbg_wl_addr_sel = wl_addr_sel;
+  dbg_wl_layer = wl_layer;
+  dbg_wl_head = wl_head;
+  dbg_wl_tile = wl_tile;
+  dbg_wl_ready = wl_ready;
+
+
+
+  static bool attn_started;
 #pragma HLS reset variable = attn_started
  static bool attn_done;
 #pragma HLS reset variable = attn_done
@@ -1047,8 +1212,29 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS reset variable = w2_comp_busy
 
 
+ static bool wo_dma_done;
+#pragma HLS reset variable = wo_dma_done
+ static bool w1_dma_done;
+#pragma HLS reset variable = w1_dma_done
+ static bool w2_dma_done;
+#pragma HLS reset variable = w2_dma_done
+ static bool axis_last_seen;
+#pragma HLS reset variable = axis_last_seen
+ static bool stream_done_seen;
+#pragma HLS reset variable = stream_done_seen
 
- const bool reset = !cntrl_reset_n;
+
+
+
+
+ const bool cntrl_reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
+  const bool reset = !cntrl_reset_n;
+  const bool busy = (st != S_IDLE);
+
+  ctrl_mem.status = (ctrl_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
+
+  const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
+
   if (reset) {
     st = S_IDLE;
     layer_idx = 0;
@@ -1062,7 +1248,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     group_idx = 0;
 
     start_head_group = false;
-    VITIS_LOOP_355_1: for (int i = 0; i < NUM_HEADS; ++i){
+    VITIS_LOOP_400_1: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], -1, i);
     }
@@ -1086,6 +1272,9 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 
     outproj_started = false;
     outproj_compute_done = false;
+    wo_dma_done = false;
+    w1_dma_done = false;
+    w2_dma_done = false;
 
 
     resid0_started = false;
@@ -1107,6 +1296,8 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     ln1_started = false;
     ln1_compute_done = false;
     ln1_phase = LnPhase::SUM;
+    axis_last_seen = false;
+    stream_done_seen = false;
 
 
     stream_started = false;
@@ -1119,10 +1310,27 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
     w2_tile = 0;
     w2_dma_busy = false;
     w2_comp_busy = false;
+
+
+    compute_start = false;
+    compute_op = ComputeOp::CMP_NONE;
+
+
+    wl_start = false;
+    wl_addr_sel = DmaSel::DMASEL_NONE;
+    wl_head = 0;
+    wl_tile = 0;
+    wl_layer = 0;
+    memory_request = false;
+    wl_ready = false;
+    dma_address = 0;
+
+    done = false;
+    error = false;
   }
 
 
-  cntrl_layer_idx = layer_idx;
+  ctrl_mem.layer_index = layer_idx;
   axis_in_ready = 0;
   if (!wl_ready && wl_start){
         wl_start = false;
@@ -1140,13 +1348,37 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
   stream_start = 0;
   done = 0;
 
-  cntrl_busy = (st != S_IDLE);
-
-  cntrl_start_out = (st == S_IDLE) ? cntrl_start : false;
-
   if (reset) {
     STATE = st;
     return;
+  }
+
+
+  if (axis_in_valid && axis_in_last) {
+    axis_last_seen = true;
+  } else if (st != S_STREAM_IN) {
+    axis_last_seen = false;
+  }
+
+
+  if (stream_started && stream_done) {
+    stream_done_seen = true;
+  } else if (!stream_started) {
+    stream_done_seen = false;
+  }
+
+
+
+  if (dma_done && !wl_start) {
+    if (st == S_OUT_PROJECTION && outproj_started) wo_dma_done = true;
+    if (st == S_FFN && ffn_started) {
+      if (ffn_stage == FfnStage::W1) w1_dma_done = true;
+      else if (ffn_stage == FfnStage::W2) w2_dma_done = true;
+    }
+  } else {
+    if (outproj_started && !wo_dma_busy) wo_dma_done = false;
+    if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
+    if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
   }
 
   if (compute_done && !compute_start) {
@@ -1231,13 +1463,37 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         w2_tile = 0;
         w2_dma_busy = false;
         w2_comp_busy = false;
+
+
+        wl_start = false;
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_layer = 0;
+
+
+        compute_start = false;
+        compute_op = ComputeOp::CMP_NONE;
+
+
+        wl_start = false;
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_layer = 0;
+        memory_request = false;
+        wl_ready = false;
+        dma_address = 0;
+
+        done = false;
+        error = false;
       }
       break;
     }
     case S_STREAM_IN: {
       axis_in_ready = 1;
 
-      if (axis_in_valid && axis_in_last) {
+      if (axis_last_seen || (axis_in_valid && axis_in_last)) {
         st = S_LAYER_COUNT;
       }
       break;
@@ -1252,7 +1508,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       group_idx = 0;
 
       start_head_group = true;
-      VITIS_LOOP_545_2: for (int i = 0; i < NUM_HEADS; ++i){
+      VITIS_LOOP_660_2: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], layer_idx, i);
       }
@@ -1307,6 +1563,19 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       w2_tile = 0;
       w2_dma_busy = false;
       w2_comp_busy = false;
+
+
+
+      wl_start = false;
+      wl_addr_sel = DmaSel::DMASEL_NONE;
+      wl_head = 0;
+      wl_tile = 0;
+      wl_layer = 0;
+      memory_request = false;
+      wl_ready = false;
+      dma_address = 0;
+
+      done = false;
       st = S_ATTENTION_HEADS;
 
       break;}
@@ -1318,7 +1587,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
 #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
 
 
- VITIS_LOOP_611_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+ VITIS_LOOP_739_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
         if (h < NUM_HEADS) {
@@ -1334,7 +1603,7 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
           drive_group_head_phase(head_group, group_base, layer_idx, start_head_group);
 
 
-      VITIS_LOOP_627_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+      VITIS_LOOP_755_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
           if (h < NUM_HEADS) {
@@ -1394,8 +1663,9 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
         wl_tile = wo_tile;
         wo_dma_busy = true;
         outproj_started = true;
-      } else if (outproj_started && wo_dma_busy && dma_done) {
+      } else if (outproj_started && wo_dma_busy && wo_dma_done) {
         wo_dma_busy = false;
+        wo_dma_done = false;
         wo_comp_busy = true;
       } else if (outproj_started && wo_comp_busy && compute_ready) {
         outproj_compute_done = false;
@@ -1476,8 +1746,9 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
           wl_tile = w1_tile;
           w1_dma_busy = true;
           ffn_started = true;
-        } else if (ffn_started && w1_dma_busy && dma_done) {
+        } else if (ffn_started && w1_dma_busy && (dma_done || w1_dma_done)) {
           w1_dma_busy = false;
+          w1_dma_done = false;
           w1_comp_busy = true;
         } else if (ffn_started && w1_comp_busy && compute_ready) {
           ffn_w1_compute_done = false;
@@ -1518,8 +1789,9 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
           wl_tile = w2_tile;
           w2_dma_busy = true;
           ffn_started = true;
-        } else if (ffn_started && w2_dma_busy && dma_done) {
+        } else if (ffn_started && w2_dma_busy && (dma_done || w2_dma_done)) {
           w2_dma_busy = false;
+          w2_dma_done = false;
           w2_comp_busy = true;
         } else if (ffn_started && w2_comp_busy && compute_ready) {
           ffn_w2_compute_done = false;
@@ -1599,8 +1871,9 @@ __attribute__((sdx_kernel("scheduler_hls", 0))) void scheduler_hls(
       if (!stream_started && stream_ready) {
         stream_start = 1;
         stream_started = true;
-      } else if (stream_started && stream_done) {
+      } else if (stream_started && (stream_done_seen || stream_done)) {
         stream_started = false;
+        stream_done_seen = false;
         done = 1;
         st = S_IDLE;
       }

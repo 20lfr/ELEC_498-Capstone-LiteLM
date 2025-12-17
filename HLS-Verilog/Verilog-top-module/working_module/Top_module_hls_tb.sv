@@ -3,7 +3,7 @@
 // Enhanced testbench for transformer_top RTL matching C++ testbench functionality
 module transformer_top_tb;
   localparam int CLK_PERIOD = 10;
-  localparam int MAX_CYCLES = 4000;
+  localparam int MAX_CYCLES = 8000;
   localparam int COMP_LAT = 3;
   localparam int COMP_LAT_MIN = 1;
   localparam int COMP_LAT_MAX = 4;
@@ -29,9 +29,11 @@ module transformer_top_tb;
 
   logic [0:0] axis_in_valid;
   logic [0:0] axis_in_last;
-  logic [0:0] wl_ready;
-  logic [0:0] wl_start_i;
   logic [0:0] dma_done;
+  logic [31:0] dma_address;
+  logic        dma_address_ap_vld;
+  logic [0:0]  memory_request;
+  logic        memory_request_ap_vld;
   logic [0:0] compute_ready;
   logic [0:0] compute_done;
   logic [0:0] compute_start_i;
@@ -46,28 +48,63 @@ module transformer_top_tb;
   logic dbg_state_ap_vld;
   logic [0:0] axis_in_ready;
   logic axis_in_ready_ap_vld;
-  logic [0:0] wl_start_o;
-  logic wl_start_o_ap_vld;
-  logic [7:0]  wl_addr_sel;
-  logic wl_addr_sel_ap_vld;
-  logic [31:0] wl_layer;
-  logic wl_layer_ap_vld;
-  logic [31:0] wl_head;
-  logic wl_head_ap_vld;
-  logic [31:0] wl_tile;
-  logic wl_tile_ap_vld;
   logic [0:0] compute_start_o;
   logic compute_start_o_ap_vld;
   logic [7:0]  compute_op;
   logic compute_op_ap_vld;
   logic [0:0] stream_start;
   logic stream_start_ap_vld;
-  logic [0:0] done_in;
   logic ctrl_data_out_ap_vld;
-  logic [863:0] dbg_ctrl_mem;
+  logic [1055:0] dbg_ctrl_mem;
   logic dbg_ctrl_mem_ap_vld;
+  logic [31:0] control_reg;
+  logic        control_reg_ap_vld;
+  logic [31:0] irq_status_reg;
+  logic        irq_status_reg_ap_vld;
+  logic [31:0] irq_enable_reg;
+  logic        irq_enable_reg_ap_vld;
+  logic [31:0] wq_base_addr;
+  logic        wq_base_addr_ap_vld;
+  logic [31:0] wk_base_addr;
+  logic        wk_base_addr_ap_vld;
+  logic [31:0] wv_base_addr;
+  logic        wv_base_addr_ap_vld;
+  logic [31:0] wq_head_stride;
+  logic        wq_head_stride_ap_vld;
+  logic [31:0] wk_head_stride;
+  logic        wk_head_stride_ap_vld;
+  logic [31:0] wv_head_stride;
+  logic        wv_head_stride_ap_vld;
+  logic [31:0] wo_base_addr;
+  logic        wo_base_addr_ap_vld;
+  logic [31:0] w1_base_addr;
+  logic        w1_base_addr_ap_vld;
+  logic [31:0] w2_base_addr;
+  logic        w2_base_addr_ap_vld;
+  logic [31:0] wo_tile_stride;
+  logic        wo_tile_stride_ap_vld;
+  logic [31:0] w1_tile_stride;
+  logic        w1_tile_stride_ap_vld;
+  logic [31:0] w2_tile_stride;
+  logic        w2_tile_stride_ap_vld;
   logic [0:0] irq_ps;
   logic irq_ps_ap_vld;
+  logic [0:0] dbg_wl_ready;
+  logic        dbg_wl_ready_ap_vld;
+  logic [0:0] dbg_wl_start;
+  logic        dbg_wl_start_ap_vld;
+  logic [7:0]  dbg_wl_addr_sel;
+  logic        dbg_wl_addr_sel_ap_vld;
+  logic [31:0] dbg_wl_layer;
+  logic        dbg_wl_layer_ap_vld;
+  logic [31:0] dbg_wl_head;
+  logic        dbg_wl_head_ap_vld;
+  logic [31:0] dbg_wl_tile;
+  logic        dbg_wl_tile_ap_vld;
+  logic [0:0]  dbg_done;
+  logic        dbg_done_ap_vld;
+  logic [0:0]  dbg_error;
+  logic        dbg_error_ap_vld;
 
   // Testbench state variables
   logic comp_busy;
@@ -89,11 +126,23 @@ module transformer_top_tb;
   logic axis_drive;
   logic [31:0] ctrl_shadow_control;
   int ctrl_gap_cycles;
+  logic assign_base_addresses;
+  int base_assign_step;
+  typedef enum logic [2:0] {
+    CTRL_ASSERT_RESET,
+    CTRL_DEASSERT_RESET,
+    CTRL_PROGRAM_BASES,
+    CTRL_ASSERT_START,
+    CTRL_CLEAR_START,
+    CTRL_DONE
+  } ctrl_init_stage_t;
+  ctrl_init_stage_t ctrl_stage;
   int idle_after_done;
   logic axis_last_stretch_active;
   int axis_last_stretch_ctr;
-  logic axis_last_stretch_active;
-  int axis_last_stretch_ctr;
+  logic seen_irq_done;
+  logic irq_interupt_flagged;
+  logic [31:0] interupt_data;
   logic [31:0] ctrl_data_out_shadow;
   // Head compute model
   localparam int HEADS_TOTAL = 4;
@@ -236,16 +285,6 @@ module transformer_top_tb;
     rand_dma_lat = $urandom_range(DMA_LAT_MIN, DMA_LAT_MAX);
   endfunction
 
-
-  // Drive the DUT's inference-done input once ap_done asserts so the IRQ path can fire.
-  always_ff @(posedge ap_clk) begin
-    if (ap_rst) begin
-      done_in <= 1'b0;
-    end else if (ap_done && irq_inference_done) begin
-      done_in <= 1'b1;
-    end
-  end
-
   // Capture ctrl_data_out only when the DUT marks it valid.
   always_ff @(posedge ap_clk) begin
     if (ap_rst) begin
@@ -291,7 +330,7 @@ module transformer_top_tb;
         comp_busy <= 1'b1;
         // LayerNorm ops run shorter (6 cycles), others ~24 cycles
         is_ln_op = (compute_op >= CMP_LN0_SUM) && (compute_op <= CMP_LN1_SHIFT);
-        comp_lat_var = is_ln_op ? 6 : 24;
+        comp_lat_var = is_ln_op ? 20 : 24;
         comp_timer <= (comp_lat_var > 0) ? comp_lat_var - 1 : 0;
         if (compute_op == CMP_ATT_SCORES) seen_attn <= 1'b1;
         if (compute_op == CMP_CONCAT)     seen_concat <= 1'b1;
@@ -331,7 +370,7 @@ module transformer_top_tb;
     end
   end
 
-  // DMA model for weight loader
+  // DMA model: honor DUT memory_request and return dma_done after a small latency
   always_ff @(posedge ap_clk) begin : dma_model
     int dma_lat_var;
     if (ap_rst) begin
@@ -340,7 +379,6 @@ module transformer_top_tb;
       dma_done  <= 1'b0;
       dma_done_hold <= 1'b0;
       dma_done_ctr  <= 0;
-      wl_ready  <= 1'b0;
     end else begin
       dma_done <= 1'b0;
       if (dma_busy) begin
@@ -360,12 +398,11 @@ module transformer_top_tb;
           dma_done_ctr <= dma_done_ctr - 1;
         end
       end
-      if (wl_start_o && wl_start_o_ap_vld && wl_ready && !dma_busy) begin
+      if (memory_request && memory_request_ap_vld && !dma_busy) begin
         dma_busy  <= 1'b1;
         dma_lat_var = rand_dma_lat();
         dma_timer <= (dma_lat_var > 0) ? dma_lat_var - 1 : 0;
       end
-      wl_ready <= !dma_busy;
     end
   end
 
@@ -630,7 +667,9 @@ module transformer_top_tb;
     ctrl_chip_en = 1'b0;
     ctrl_resetn_in = 1'b0;
     ctrl_gap_cycles = 0;
-    wl_start_i = 1'b0;
+    assign_base_addresses = 1'b0;
+    base_assign_step = 0;
+    ctrl_stage = CTRL_ASSERT_RESET;
     compute_start_i = 1'b0;
     start_pulsed = 1'b0;
     pending_start_clear = 1'b0;
@@ -643,12 +682,15 @@ module transformer_top_tb;
     seen_concat = 1'b0;
     idle_after_done = 0;
     irq_inference_done = 0;
+    seen_irq_done = 1'b0;
+    irq_interupt_flagged = 1'b0;
+    interupt_data = 32'd0;
 
     // Print header
-    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6s %-6s | %-8s %-8s %-8s %-10s",
+    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-7s %-8s %-10s | %-8s %-8s %-8s %-10s",
              "Cycle", "Start", "Reset", "Busy", "State",
              "AXIS_v", "AXIS_r", "AXIS_last",
-             "WL_rdy", "WL_strt_o", "WL_addr", "WL_head", "WL_tile",
+             "MemReq", "DMA_Done", "DMA_Addr",
              "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
 
     // Release reset at cycle 2
@@ -672,52 +714,114 @@ module transformer_top_tb;
         ctrl_write_en <= 1'b0;
         ctrl_chip_en  <= 1'b0;
 
-        // Explicit reset-low write, then release reset and assert start
-        if (!reset_low_written) begin
-          ctrl_addr      <= 32'd0; // CONTROL
-          ctrl_data_in   <= 32'd0; // hold reset low, start low
-          ctrl_write_en  <= 1'b1;
-          ctrl_chip_en   <= 1'b1;
-          ctrl_resetn_in <= 1'b0;
-          ctrl_shadow_control <= 32'd0;
-          reset_low_written <= 1'b1;
-          ctrl_gap_cycles <= 3; // hold write for extra cycles
-        end else if (!reset_released) begin
-          ctrl_addr     <= 32'd0; // CONTROL
-          ctrl_data_in  <= 32'd3; // RESETN | START
-          ctrl_write_en <= 1'b1;
-          ctrl_chip_en  <= 1'b1;
-          ctrl_resetn_in<= 1'b1;
-          ctrl_shadow_control <= 32'd3;
-          reset_released <= 1'b1;
-          start_pulsed <= 1'b1;
-          pending_start_clear <= 1'b1;
-          ctrl_gap_cycles <= 3; // hold write for extra cycles
-        end else if (pending_start_clear) begin
-          ctrl_addr     <= 32'd0; // CONTROL
-          ctrl_data_in  <= 32'd1; // keep reset high, clear start
-          ctrl_write_en <= 1'b1;
-          ctrl_chip_en  <= 1'b1;
-          ctrl_resetn_in<= 1'b1;
-          ctrl_shadow_control <= 32'd1;
-          pending_start_clear <= 1'b0;
-          ctrl_gap_cycles <= 3; // hold write for extra cycles
-        end else if (irq_ps) begin
-          // READ FROM IRQ_STATUS register
-          ctrl_addr     <= 32'd12; // IRQ_STATUS offset
-          ctrl_read_en  <= 1'b1;
-          ctrl_chip_en  <= 1'b1;
-        end else begin
-          // Optional status read
-          ctrl_addr     <= 32'd8; // STATUS offset
-          ctrl_read_en  <= 1'b1;
-          ctrl_chip_en  <= 1'b1;
-          ctrl_gap_cycles <= 1;
-        end
+        case (ctrl_stage)
+          CTRL_ASSERT_RESET: begin
+            ctrl_addr      <= 32'd0; // CONTROL
+            ctrl_data_in   <= 32'd0; // reset low, start low
+            ctrl_write_en  <= 1'b1;
+            ctrl_chip_en   <= 1'b1;
+            ctrl_resetn_in <= 1'b0;
+            ctrl_shadow_control <= 32'd0;
+            ctrl_stage <= CTRL_DEASSERT_RESET;
+            ctrl_gap_cycles <= 3;
+          end
+          CTRL_DEASSERT_RESET: begin
+            ctrl_addr      <= 32'd0; // CONTROL
+            ctrl_data_in   <= 32'd1; // RESETN high, START low
+            ctrl_write_en  <= 1'b1;
+            ctrl_chip_en   <= 1'b1;
+            ctrl_resetn_in <= 1'b1;
+            ctrl_shadow_control <= 32'd1;
+            ctrl_stage <= CTRL_PROGRAM_BASES;
+            ctrl_gap_cycles <= 3;
+          end
+          CTRL_PROGRAM_BASES: begin
+            // Program base addresses and strides, one write per cycle
+            ctrl_resetn_in <= 1'b1;
+            ctrl_write_en  <= 1'b1;
+            ctrl_chip_en   <= 1'b1;
+            case (base_assign_step)
+              0: begin ctrl_addr <= 32'h20; ctrl_data_in <= 32'h0000_1000; end // LAYER_STRIDE
+              1: begin ctrl_addr <= 32'h24; ctrl_data_in <= 32'h0000_0100; end // WQ_HEAD_STRIDE
+              2: begin ctrl_addr <= 32'h28; ctrl_data_in <= 32'h0000_0100; end // WK_HEAD_STRIDE
+              3: begin ctrl_addr <= 32'h2C; ctrl_data_in <= 32'h0000_0100; end // WV_HEAD_STRIDE
+              4: begin ctrl_addr <= 32'h30; ctrl_data_in <= 32'h0000_0400; end // K_CACHE_STRIDE
+              5: begin ctrl_addr <= 32'h34; ctrl_data_in <= 32'h0000_0400; end // V_CACHE_STRIDE
+              6: begin ctrl_addr <= 32'h38; ctrl_data_in <= 32'h0000_0100; end // WO_TILE_STRIDE
+              7: begin ctrl_addr <= 32'h3C; ctrl_data_in <= 32'h0000_0300; end // W1_TILE_STRIDE
+              8: begin ctrl_addr <= 32'h40; ctrl_data_in <= 32'h0000_0800; end // W2_TILE_STRIDE
+              9: begin ctrl_addr <= 32'h44; ctrl_data_in <= 32'h1000_0000; end // WQ_BASE_ADDR
+              10: begin ctrl_addr <= 32'h48; ctrl_data_in <= 32'h2000_0000; end // WK_BASE_ADDR
+              11: begin ctrl_addr <= 32'h4C; ctrl_data_in <= 32'h3000_0000; end // WV_BASE_ADDR
+              12: begin ctrl_addr <= 32'h5C; ctrl_data_in <= 32'h4000_0000; end // K_CACHE_ADDR
+              13: begin ctrl_addr <= 32'h60; ctrl_data_in <= 32'h5000_0000; end // V_CACHE_ADDR
+              14: begin ctrl_addr <= 32'h50; ctrl_data_in <= 32'h6000_0000; end // WO_BASE_ADDR
+              15: begin ctrl_addr <= 32'h54; ctrl_data_in <= 32'h7000_0000; end // W1_BASE_ADDR
+              16: begin ctrl_addr <= 32'h58; ctrl_data_in <= 32'h8000_0000; end // W2_BASE_ADDR
+              default: begin end
+            endcase
+            if (base_assign_step >= 16) begin
+              assign_base_addresses <= 1'b1;
+              ctrl_stage <= CTRL_ASSERT_START;
+            end else begin
+              base_assign_step <= base_assign_step + 1;
+            end
+            ctrl_gap_cycles <= 5;
+          end
+          CTRL_ASSERT_START: begin
+            ctrl_addr      <= 32'd0; // CONTROL
+            ctrl_data_in   <= 32'd3; // RESETN | START
+            ctrl_write_en  <= 1'b1;
+            ctrl_chip_en   <= 1'b1;
+            ctrl_resetn_in <= 1'b1;
+            ctrl_shadow_control <= 32'd3;
+            reset_released <= 1'b1;
+            start_pulsed   <= 1'b1;
+            pending_start_clear <= 1'b1;
+            ctrl_stage <= CTRL_CLEAR_START;
+            ctrl_gap_cycles <= 3;
+          end
+          CTRL_CLEAR_START: begin
+            ctrl_addr      <= 32'd0; // CONTROL
+            ctrl_data_in   <= 32'd1; // keep reset high, clear start
+            ctrl_write_en  <= 1'b1;
+            ctrl_chip_en   <= 1'b1;
+            ctrl_resetn_in <= 1'b1;
+            ctrl_shadow_control <= 32'd1;
+            pending_start_clear <= 1'b0;
+            ctrl_stage <= CTRL_DONE;
+            ctrl_gap_cycles <= 3;
+          end
+          default: begin
+            if (seen_irq_done) begin
+              ctrl_addr     <= 32'd12; // IRQ_STATUS offset, write clear
+              ctrl_data_in  <= 32'd1;  // IRQ_CLEAR_BIT
+              ctrl_write_en <= 1'b1;
+              ctrl_chip_en  <= 1'b1;
+              ctrl_resetn_in<= 1'b1;
+              ctrl_gap_cycles <= 1;
+              seen_irq_done <= 1'b0;
+            end else if (irq_ps) begin
+              ctrl_addr     <= 32'd12; // IRQ_STATUS offset
+              ctrl_read_en  <= 1'b1;
+              ctrl_chip_en  <= 1'b1;
+              ctrl_resetn_in<= 1'b1;
+              ctrl_gap_cycles <= 1;
+              irq_interupt_flagged <= 1'b1;
+              interupt_data <= ctrl_data_out;
+            end else begin
+              ctrl_addr     <= 32'd8; // STATUS offset
+              ctrl_read_en  <= 1'b1;
+              ctrl_chip_en  <= 1'b1;
+              ctrl_resetn_in<= 1'b1;
+              ctrl_gap_cycles <= 1;
+            end
+          end
+        endcase
       end
       
       // Print state
-      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6d %-6d | %-8s %-8s %-8s %-10s",
+      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-7s %-8s %-10h | %-8s %-8s %-8s %-10s",
                cycle,
                (ctrl_shadow_control[1]) ? "1" : "-",
                (ctrl_shadow_control[0]) ? "1" : "-",
@@ -726,11 +830,9 @@ module transformer_top_tb;
                axis_in_valid ? "1" : "-",
                axis_in_ready ? "1" : "-",
                axis_in_last ? "1" : "-",
-               wl_ready ? "1" : "-",
-               wl_start_o ? "1" : "-",
-               dma_name(wl_addr_sel),
-               wl_head,
-               wl_tile,
+               memory_request ? "1" : "-",
+               dma_done ? "1" : "-",
+               dma_address,
                compute_start_o ? "1" : "-",
                compute_ready ? "1" : "-",
                compute_done ? "1" : "-",
@@ -875,6 +977,10 @@ module transformer_top_tb;
     .axis_in_ready(axis_in_ready),
     .axis_in_ready_ap_vld(axis_in_ready_ap_vld),
     .dma_done(dma_done),
+    .dma_address(dma_address),
+    .dma_address_ap_vld(dma_address_ap_vld),
+    .memory_request(memory_request),
+    .memory_request_ap_vld(memory_request_ap_vld),
     .compute_ready(compute_ready),
     .compute_done(compute_done),
     .head_ctx_ref_0_i(head_ctx_ref_0_i),
@@ -894,22 +1000,10 @@ module transformer_top_tb;
     .compute_start_o_ap_vld(compute_start_o_ap_vld),
     .compute_op(compute_op),
     .compute_op_ap_vld(compute_op_ap_vld),
-    .wl_ready(wl_ready),
-    .wl_start_o(wl_start_o),
-    .wl_start_o_ap_vld(wl_start_o_ap_vld),
-    .wl_addr_sel(wl_addr_sel),
-    .wl_addr_sel_ap_vld(wl_addr_sel_ap_vld),
-    .wl_layer(wl_layer),
-    .wl_layer_ap_vld(wl_layer_ap_vld),
-    .wl_head(wl_head),
-    .wl_head_ap_vld(wl_head_ap_vld),
-    .wl_tile(wl_tile),
-    .wl_tile_ap_vld(wl_tile_ap_vld),
     .stream_ready(stream_ready),
     .stream_start(stream_start),
     .stream_start_ap_vld(stream_start_ap_vld),
     .stream_done(stream_done),
-    .wl_start_i(wl_start_i),
     .ctrl_addr(ctrl_addr),
     .ctrl_data_in(ctrl_data_in),
     .ctrl_data_out(ctrl_data_out),
@@ -922,9 +1016,54 @@ module transformer_top_tb;
     .dbg_state_ap_vld(dbg_state_ap_vld),
     .dbg_ctrl_mem(dbg_ctrl_mem),
     .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
-    .done(done_in),
     .irq_ps(irq_ps),
-    .irq_ps_ap_vld(irq_ps_ap_vld)
+    .irq_ps_ap_vld(irq_ps_ap_vld),
+    .control_reg(control_reg),
+    .control_reg_ap_vld(control_reg_ap_vld),
+    .irq_status_reg(irq_status_reg),
+    .irq_status_reg_ap_vld(irq_status_reg_ap_vld),
+    .irq_enable_reg(irq_enable_reg),
+    .irq_enable_reg_ap_vld(irq_enable_reg_ap_vld),
+    .wq_base_addr(wq_base_addr),
+    .wq_base_addr_ap_vld(wq_base_addr_ap_vld),
+    .wk_base_addr(wk_base_addr),
+    .wk_base_addr_ap_vld(wk_base_addr_ap_vld),
+    .wv_base_addr(wv_base_addr),
+    .wv_base_addr_ap_vld(wv_base_addr_ap_vld),
+    .wq_head_stride(wq_head_stride),
+    .wq_head_stride_ap_vld(wq_head_stride_ap_vld),
+    .wk_head_stride(wk_head_stride),
+    .wk_head_stride_ap_vld(wk_head_stride_ap_vld),
+    .wv_head_stride(wv_head_stride),
+    .wv_head_stride_ap_vld(wv_head_stride_ap_vld),
+    .wo_base_addr(wo_base_addr),
+    .wo_base_addr_ap_vld(wo_base_addr_ap_vld),
+    .w1_base_addr(w1_base_addr),
+    .w1_base_addr_ap_vld(w1_base_addr_ap_vld),
+    .w2_base_addr(w2_base_addr),
+    .w2_base_addr_ap_vld(w2_base_addr_ap_vld),
+    .wo_tile_stride(wo_tile_stride),
+    .wo_tile_stride_ap_vld(wo_tile_stride_ap_vld),
+    .w1_tile_stride(w1_tile_stride),
+    .w1_tile_stride_ap_vld(w1_tile_stride_ap_vld),
+    .w2_tile_stride(w2_tile_stride),
+    .w2_tile_stride_ap_vld(w2_tile_stride_ap_vld),
+    .dbg_wl_ready(dbg_wl_ready),
+    .dbg_wl_ready_ap_vld(dbg_wl_ready_ap_vld),
+    .dbg_wl_start(dbg_wl_start),
+    .dbg_wl_start_ap_vld(dbg_wl_start_ap_vld),
+    .dbg_wl_addr_sel(dbg_wl_addr_sel),
+    .dbg_wl_addr_sel_ap_vld(dbg_wl_addr_sel_ap_vld),
+    .dbg_wl_layer(dbg_wl_layer),
+    .dbg_wl_layer_ap_vld(dbg_wl_layer_ap_vld),
+    .dbg_wl_head(dbg_wl_head),
+    .dbg_wl_head_ap_vld(dbg_wl_head_ap_vld),
+    .dbg_wl_tile(dbg_wl_tile),
+    .dbg_wl_tile_ap_vld(dbg_wl_tile_ap_vld),
+    .dbg_done(dbg_done),
+    .dbg_done_ap_vld(dbg_done_ap_vld),
+    .dbg_error(dbg_error),
+    .dbg_error_ap_vld(dbg_error_ap_vld)
   );
 
 endmodule

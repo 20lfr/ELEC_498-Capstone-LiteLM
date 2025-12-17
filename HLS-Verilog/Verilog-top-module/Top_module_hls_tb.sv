@@ -56,7 +56,6 @@ module transformer_top_tb;
   logic stream_start_ap_vld;
   logic ctrl_data_out_ap_vld;
   logic [1055:0] dbg_ctrl_mem;
-  logic dbg_ctrl_mem_ap_vld;
   logic [31:0] control_reg;
   logic        control_reg_ap_vld;
   logic [31:0] irq_status_reg;
@@ -129,6 +128,7 @@ module transformer_top_tb;
   logic assign_base_addresses;
   int base_assign_step;
   typedef enum logic [2:0] {
+    CTRL_RESET_MEM,
     CTRL_ASSERT_RESET,
     CTRL_DEASSERT_RESET,
     CTRL_PROGRAM_BASES,
@@ -201,6 +201,8 @@ module transformer_top_tb;
     logic        k_started;
     logic        q_started;
     logic        start_head;
+    logic        memory_request;
+    logic [31:0] dma_address;
     logic        dma_done;
     logic [31:0] wl_head;
     logic [31:0] wl_layer;
@@ -464,7 +466,6 @@ module transformer_top_tb;
     for (int h = 0; h < HEADS_TOTAL; h++) begin
       head_compute_ready[h] = !head_inflight[h];
       head_compute_done[h]  = (head_inflight[h] && (head_busy_ctr[h] == 0)) || head_done_hold[h];
-      head_wl_ready[h]      = !head_dma_inflight[h];
       head_dma_done[h]      = (head_dma_inflight[h] && (head_dma_ctr[h] == 0)) || head_dma_done_hold[h];
     end
   end
@@ -484,10 +485,6 @@ module transformer_top_tb;
     t1.compute_done  = head_compute_done[1];
     t2.compute_done  = head_compute_done[2];
     t3.compute_done  = head_compute_done[3];
-    t0.wl_ready      = head_wl_ready[0];
-    t1.wl_ready      = head_wl_ready[1];
-    t2.wl_ready      = head_wl_ready[2];
-    t3.wl_ready      = head_wl_ready[3];
     t0.dma_done      = head_dma_done[0];
     t1.dma_done      = head_dma_done[1];
     t2.dma_done      = head_dma_done[2];
@@ -552,6 +549,8 @@ module transformer_top_tb;
             v_requant_started: 1'b0,
             requant_q_started: 1'b0,
             requant2_started: 1'b0,
+            memory_request: 1'b0,
+            dma_address: 32'd0,
             q_compute_done: 1'b0,
             k_compute_done: 1'b0,
             v_compute_done: 1'b0,
@@ -592,16 +591,16 @@ module transformer_top_tb;
           dma_start_now     = 1'b0;
           if (hh == 0 && head_ctx_ref_0_o_ap_vld) begin
             compute_start_now = head_ctx_ref_0_struct.compute_start;
-            dma_start_now     = head_ctx_ref_0_struct.wl_start;
+            dma_start_now     = head_ctx_ref_0_struct.memory_request;
           end else if (hh == 1 && head_ctx_ref_1_o_ap_vld) begin
             compute_start_now = head_ctx_ref_1_struct.compute_start;
-            dma_start_now     = head_ctx_ref_1_struct.wl_start;
+            dma_start_now     = head_ctx_ref_1_struct.memory_request;
           end else if (hh == 2 && head_ctx_ref_2_o_ap_vld) begin
             compute_start_now = head_ctx_ref_2_struct.compute_start;
-            dma_start_now     = head_ctx_ref_2_struct.wl_start;
+            dma_start_now     = head_ctx_ref_2_struct.memory_request;
           end else if (hh == 3 && head_ctx_ref_3_o_ap_vld) begin
             compute_start_now = head_ctx_ref_3_struct.compute_start;
-            dma_start_now     = head_ctx_ref_3_struct.wl_start;
+            dma_start_now     = head_ctx_ref_3_struct.memory_request;
           end
           // detect compute_start and run latency model
           if (compute_start_now && !head_inflight[hh] && !head_done_hold[hh]) begin
@@ -637,7 +636,7 @@ module transformer_top_tb;
             if (head_dma_ctr[hh] == 0) begin
               head_dma_inflight[hh] <= 1'b0;
               head_dma_done_hold[hh] <= 1'b1;
-              head_dma_done_ctr[hh] <= 3'd4;
+              head_dma_done_ctr[hh] <= 3'd6;
             end else begin
               head_dma_ctr[hh] <= head_dma_ctr[hh] - 1;
             end
@@ -666,10 +665,11 @@ module transformer_top_tb;
     ctrl_write_en = 1'b0;
     ctrl_chip_en = 1'b0;
     ctrl_resetn_in = 1'b0;
+    dbg_ctrl_mem = '0;
     ctrl_gap_cycles = 0;
     assign_base_addresses = 1'b0;
     base_assign_step = 0;
-    ctrl_stage = CTRL_ASSERT_RESET;
+    ctrl_stage = CTRL_RESET_MEM;
     compute_start_i = 1'b0;
     start_pulsed = 1'b0;
     pending_start_clear = 1'b0;
@@ -715,12 +715,22 @@ module transformer_top_tb;
         ctrl_chip_en  <= 1'b0;
 
         case (ctrl_stage)
+          CTRL_RESET_MEM: begin
+            ctrl_addr      <= 32'd0; // MEMORY_RESET
+            ctrl_data_in   <= 32'd0; // assert memory reset
+            ctrl_write_en  <= 1'b0;
+            ctrl_chip_en   <= 1'b0;
+            ctrl_resetn_in <= 1'b0;
+            ctrl_stage <= CTRL_ASSERT_RESET;
+            ctrl_gap_cycles <= 10;
+          end
+
           CTRL_ASSERT_RESET: begin
             ctrl_addr      <= 32'd0; // CONTROL
             ctrl_data_in   <= 32'd0; // reset low, start low
             ctrl_write_en  <= 1'b1;
             ctrl_chip_en   <= 1'b1;
-            ctrl_resetn_in <= 1'b0;
+            ctrl_resetn_in <= 1'b1;
             ctrl_shadow_control <= 32'd0;
             ctrl_stage <= CTRL_DEASSERT_RESET;
             ctrl_gap_cycles <= 3;
@@ -766,7 +776,7 @@ module transformer_top_tb;
             end else begin
               base_assign_step <= base_assign_step + 1;
             end
-            ctrl_gap_cycles <= 5;
+            ctrl_gap_cycles <= 10;
           end
           CTRL_ASSERT_START: begin
             ctrl_addr      <= 32'd0; // CONTROL
@@ -1015,7 +1025,6 @@ module transformer_top_tb;
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
     .dbg_ctrl_mem(dbg_ctrl_mem),
-    .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
     .irq_ps(irq_ps),
     .irq_ps_ap_vld(irq_ps_ap_vld),
     .control_reg(control_reg),

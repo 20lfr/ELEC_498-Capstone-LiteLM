@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="33.286 ns"></ZoomStartTime>
-      <ZoomEndTime time="1,131.744 ns"></ZoomEndTime>
-      <Cursor1Time time="43,905.000 ns"></Cursor1Time>
+      <ZoomStartTime time="19.913 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,989.914 ns"></ZoomEndTime>
+      <Cursor1Time time="355.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="190"></NameColumnWidth>
-      <ValueColumnWidth column_width="85"></ValueColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="135" />
    <wvobject type="logic" fp_name="/transformer_top_tb/ap_clk">
@@ -85,16 +85,6 @@
       <obj_property name="ElementShortName">ap_idle</obj_property>
       <obj_property name="ObjectShortName">ap_idle</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/transformer_top_tb/w1_base_addr">
-      <obj_property name="ElementShortName">w1_base_addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">w1_base_addr[31:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/transformer_top_tb/control_reg">
-      <obj_property name="ElementShortName">control_reg[31:0]</obj_property>
-      <obj_property name="ObjectShortName">control_reg[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/dbg_state">
       <obj_property name="ElementShortName">dbg_state[31:0]</obj_property>
       <obj_property name="ObjectShortName">dbg_state[31:0]</obj_property>
@@ -135,6 +125,20 @@
    <wvobject type="logic" fp_name="/transformer_top_tb/seen_done">
       <obj_property name="ElementShortName">seen_done</obj_property>
       <obj_property name="ObjectShortName">seen_done</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/control_reg">
+      <obj_property name="ElementShortName">control_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">control_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wq_base_addr">
+      <obj_property name="ElementShortName">wq_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wq_base_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/w1_base_addr">
+      <obj_property name="ElementShortName">w1_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">w1_base_addr[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/wq_head_stride">
       <obj_property name="ElementShortName">wq_head_stride[31:0]</obj_property>
@@ -188,10 +192,6 @@
    <wvobject type="array" fp_name="/transformer_top_tb/dbg_ctrl_mem">
       <obj_property name="ElementShortName">dbg_ctrl_mem[1055:0]</obj_property>
       <obj_property name="ObjectShortName">dbg_ctrl_mem[1055:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/transformer_top_tb/dbg_ctrl_mem_ap_vld">
-      <obj_property name="ElementShortName">dbg_ctrl_mem_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">dbg_ctrl_mem_ap_vld</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/irq_ps">
       <obj_property name="ElementShortName">irq_ps[0:0]</obj_property>

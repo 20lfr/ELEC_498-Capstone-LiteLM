@@ -474,9 +474,56 @@ namespace std
   using ::uintptr_t;
 }
 # 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp" 2
-
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp" 1
+# 123 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp"
 constexpr int NUM_HEADS = 4;
-constexpr int HEADS_PARALLEL = 2;
+constexpr int NUM_LAYERS = 2;
+constexpr int NUM_WO_TILES = 4;
+constexpr int NUM_W1_TILES = 4;
+constexpr int NUM_W2_TILES = 4;
+constexpr int NUM_LOGIT_TILES = 2;
+
+
+
+
+enum SchedState {
+    S_IDLE,
+    S_STREAM_IN,
+    S_LAYER_COUNT,
+    S_ATTENTION_HEADS,
+    S_HEAD_CONCAT,
+    S_OUT_PROJECTION,
+    S_REQUANT1,
+    S_RES_ADD_1,
+    S_LAYER_NORM_1,
+    S_REQUANT2,
+    S_FFN,
+    S_REQUANT3,
+    S_RES_ADD_2,
+    S_LAYER_NORM_2,
+    S_REQUANT4,
+    S_LOOP_CHECK,
+    S_STREAM_OUT
+};
+
+
+enum class LnPhase : uint8_t {
+    SUM = 0,
+    SUMSQ,
+    MEAN,
+    EYY,
+    VAR,
+    VAR_EPS,
+    INV_STD,
+    NORM,
+    SCALE,
+    SHIFT,
+    DONE
+};
+
+
+
+
 
 enum class HeadPhase : uint8_t {
     IDLE = 0,
@@ -616,6 +663,121 @@ struct HeadCtx {
     bool att_scores_dma_done = false;
     bool att_value_dma_done = false;
 };
+
+
+
+
+
+
+constexpr uint32_t CTRL_RESETN_BIT = 1u << 0;
+constexpr uint32_t CTRL_START_BIT = 1u << 1;
+
+constexpr uint32_t IRQ_CLEAR_BIT = 1u << 0;
+constexpr uint32_t IRQ_ERROR_BIT = 1u << 1;
+constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
+
+
+constexpr uint32_t STATUS_INVALID_ADDR = 1u << 0;
+constexpr uint32_t STATUS_INVALID_OP = 1u << 1;
+constexpr uint32_t STATUS_BUSY_BIT = 1u << 2;
+
+
+
+
+
+enum class ControlReg : uint32_t {
+    CONTROL = 0x00,
+    LAYER_INDEX = 0x04,
+    STATUS = 0x08,
+    IRQ_STATUS = 0x0C,
+    IRQ_ENABLE = 0x10,
+
+    DMA_LAYER_LEN = 0x14,
+    DMA_HEAD_LEN = 0x18,
+    DMA_TILE_LEN = 0x1C,
+
+    LAYER_STRIDE = 0x20,
+    WQ_HEAD_STRIDE = 0x24,
+    WK_HEAD_STRIDE = 0x28,
+    WV_HEAD_STRIDE = 0x2C,
+
+    K_CACHE_STRIDE = 0x30,
+    V_CACHE_STRIDE = 0x34,
+
+    WO_TILE_STRIDE = 0x38,
+    W1_TILE_STRIDE = 0x3C,
+    W2_TILE_STRIDE = 0x40,
+
+    WQ_BASE_ADDR = 0x44,
+    WK_BASE_ADDR = 0x48,
+    WV_BASE_ADDR = 0x4C,
+    WO_BASE_ADDR = 0x50,
+    W1_BASE_ADDR = 0x54,
+    W2_BASE_ADDR = 0x58,
+
+    K_CACHE_ADDR = 0x5C,
+    V_CACHE_ADDR = 0x60,
+
+    LOGIT_SCALE_QV = 0x64,
+    SCALE_Q = 0x68,
+    ZERO_POINT_Q = 0x6C,
+    SCALE_K = 0x70,
+    ZERO_POINT_K = 0x74,
+    SCALE_V = 0x78,
+    ZERO_POINT_V = 0x7C,
+
+    RESERVED_DEBUG = 0x80
+};
+
+
+struct ControlMemSpace {
+    uint32_t control = CTRL_RESETN_BIT;
+    uint32_t layer_index = 0;
+    uint32_t status = 0;
+    uint32_t irq_status = 0;
+    uint32_t irq_enable = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
+
+    uint32_t dma_layer_len = 0;
+    uint32_t dma_head_len = 0;
+    uint32_t dma_tile_len = 0;
+
+    uint32_t layer_stride = 0;
+    uint32_t wq_head_stride = 0;
+    uint32_t wk_head_stride = 0;
+    uint32_t wv_head_stride = 0;
+
+    uint32_t k_cache_stride = 0;
+    uint32_t v_cache_stride = 0;
+
+    uint32_t wo_tile_stride = 0;
+    uint32_t w1_tile_stride = 0;
+    uint32_t w2_tile_stride = 0;
+
+    uint32_t wq_base_addr = 0;
+    uint32_t wk_base_addr = 0;
+    uint32_t wv_base_addr = 0;
+    uint32_t wo_base_addr = 0;
+    uint32_t w1_base_addr = 0;
+    uint32_t w2_base_addr = 0;
+
+    uint32_t k_cache_addr = 0;
+    uint32_t v_cache_addr = 0;
+
+    uint32_t logit_scale_qv = 0;
+    uint32_t scale_q = 0;
+    uint32_t zero_point_q = 0;
+    uint32_t scale_k = 0;
+    uint32_t zero_point_k = 0;
+    uint32_t scale_v = 0;
+    uint32_t zero_point_v = 0;
+
+    uint32_t reserved_debug = 0;
+};
+# 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp" 2
+
+
+
+constexpr int HEADS_PARALLEL = 2;
 
 void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx);
 

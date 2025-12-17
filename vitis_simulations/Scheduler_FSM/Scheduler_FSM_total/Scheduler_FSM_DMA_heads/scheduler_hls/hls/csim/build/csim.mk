@@ -23,7 +23,7 @@ __USE_VCXX_CLANG__ = 1
 
 ObjDir = obj
 
-HLS_SOURCES = ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_tb.cpp ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp
+HLS_SOURCES = ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_tb.cpp ../../../../../../../../HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp
 
 override TARGET := csim.exe
 
@@ -88,6 +88,12 @@ $(ObjDir)/Scheduler_tb.o: ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-
 	$(Verb)  $(CXX) -std=gnu++14 ${CCFLAG} -c -MMD -Wno-unknown-pragmas -Wno-unknown-pragmas  $(IFLAG) $(DFLAG) $< -o $@ ; \
 
 -include $(ObjDir)/Scheduler_tb.d
+
+$(ObjDir)/Weight_stager.o: ../../../../../../../../HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp $(ObjDir)/.dir csim.mk
+	$(Echo) "   Compiling ../../../../../../../../HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp in $(BuildMode) mode" $(AVE_DIR_DLOG)
+	$(Verb)  $(CXX) -std=gnu++14 ${CCFLAG} -c -MMD  $(IFLAG) $(DFLAG) $< -o $@ ; \
+
+-include $(ObjDir)/Weight_stager.d
 
 $(ObjDir)/head_helpers.o: ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp $(ObjDir)/.dir csim.mk
 	$(Echo) "   Compiling ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp in $(BuildMode) mode" $(AVE_DIR_DLOG)

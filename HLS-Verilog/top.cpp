@@ -82,12 +82,12 @@ void transformer_top(
 #pragma HLS INLINE off
 
     // WEIGHT LOADER handshake state (persist across calls)
-    static bool wl_start        = false;
-    static DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
-    static int wl_layer         = 0;
-    static int wl_head          = 0;
-    static int wl_tile          = 0;
-    bool wl_ready;
+    // static bool wl_start        = false;
+    // static DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
+    // static int wl_layer         = 0;
+    // static int wl_head          = 0;
+    // static int wl_tile          = 0;
+    // bool wl_ready;
 
     bool done               = false;    // Scheduler done flag
     bool error              = false;    // Scheduler error flag
@@ -112,13 +112,13 @@ void transformer_top(
     w2_tile_stride   = ctrl_mem.w2_tile_stride;
 
     // Clear handshake state on external resetn deassert.
-    if (!ctrl_resetn_in) {
-        wl_start      = false;
-        wl_addr_sel   = DmaSel::DMASEL_NONE;
-        wl_layer      = 0;
-        wl_head       = 0;
-        wl_tile       = 0;
-        wl_ready      = false;
+    if (ctrl_mem.control & !CTRL_RESETN_BIT) {
+        // wl_start      = false;
+        // wl_addr_sel   = DmaSel::DMASEL_NONE;
+        // wl_layer      = 0;
+        // wl_head       = 0;
+        // wl_tile       = 0;
+        // wl_ready      = false;
         memory_request= false;
         done          = false;
         error         = false;
@@ -137,29 +137,16 @@ void transformer_top(
         ctrl_resetn_in  // active-low reset
     );
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    
 
-    // WEIGHT LOADER (AXI4-FULL MASTER via DMA)~~~~~~~~~~~~~~~~~~~~~~
-    dma_address = weight_stager(wl_start, wl_addr_sel, wl_layer, 
-                    wl_head, wl_tile, ctrl_mem, wl_ready, 
-                    memory_request, error);
-    
-
-    
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
     scheduler_hls(
         ctrl_mem,
         axis_in_valid,
         axis_in_last,
         axis_in_ready,
-        wl_ready,
-        wl_start,
-        wl_addr_sel,
-        wl_layer,
-        wl_head,
-        wl_tile,
-        dma_done, // <-- needs to come from the AXI-full interface
+        memory_request,
+        dma_address,
+        dma_done,
         compute_ready,
         compute_done,
         head_ctx_ref,
@@ -169,20 +156,29 @@ void transformer_top(
         stream_start,
         stream_done,
         done,
-        dbg_state // FOR DEBUGGGG FOR NOW REMOVE WHEN DONE!!!
+        error,
+        dbg_state,
+
+        // Debug signal OUTPUT
+        dbg_wl_ready,
+        dbg_wl_start,
+        dbg_wl_addr_sel,
+        dbg_wl_layer,
+        dbg_wl_head,
+        dbg_wl_tile
     );
 
     
 
     // IRQ WIZARD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     irq_ps = irq_wizard(ctrl_mem, done, error);
-    dbg_ctrl_mem = ctrl_mem;
-    dbg_wl_ready = wl_ready;
-    dbg_wl_start = wl_start;
-    dbg_wl_addr_sel = wl_addr_sel;
-    dbg_wl_layer = wl_layer;
-    dbg_wl_head = wl_head;
-    dbg_wl_tile = wl_tile;
+    // dbg_ctrl_mem = ctrl_mem;
+    // dbg_wl_ready = wl_ready;
+    // dbg_wl_start = wl_start;
+    // dbg_wl_addr_sel = wl_addr_sel;
+    // dbg_wl_layer = wl_layer;
+    // dbg_wl_head = wl_head;
+    // dbg_wl_tile = wl_tile;
     dbg_done = done;
     dbg_error = error;
 

@@ -21,34 +21,18 @@
 using namespace std;
 
 // wrapc file define:
-#define AUTOTB_TVIN_cntrl_start "../tv/cdatafile/c.scheduler_hls.autotvin_cntrl_start.dat"
-#define AUTOTB_TVOUT_cntrl_start "../tv/cdatafile/c.scheduler_hls.autotvout_cntrl_start.dat"
-#define AUTOTB_TVIN_cntrl_reset_n "../tv/cdatafile/c.scheduler_hls.autotvin_cntrl_reset_n.dat"
-#define AUTOTB_TVOUT_cntrl_reset_n "../tv/cdatafile/c.scheduler_hls.autotvout_cntrl_reset_n.dat"
-#define AUTOTB_TVIN_cntrl_layer_idx "../tv/cdatafile/c.scheduler_hls.autotvin_cntrl_layer_idx.dat"
-#define AUTOTB_TVOUT_cntrl_layer_idx "../tv/cdatafile/c.scheduler_hls.autotvout_cntrl_layer_idx.dat"
-#define AUTOTB_TVIN_cntrl_busy "../tv/cdatafile/c.scheduler_hls.autotvin_cntrl_busy.dat"
-#define AUTOTB_TVOUT_cntrl_busy "../tv/cdatafile/c.scheduler_hls.autotvout_cntrl_busy.dat"
-#define AUTOTB_TVIN_cntrl_start_out "../tv/cdatafile/c.scheduler_hls.autotvin_cntrl_start_out.dat"
-#define AUTOTB_TVOUT_cntrl_start_out "../tv/cdatafile/c.scheduler_hls.autotvout_cntrl_start_out.dat"
+#define AUTOTB_TVIN_ctrl_mem "../tv/cdatafile/c.scheduler_hls.autotvin_ctrl_mem.dat"
+#define AUTOTB_TVOUT_ctrl_mem "../tv/cdatafile/c.scheduler_hls.autotvout_ctrl_mem.dat"
 #define AUTOTB_TVIN_axis_in_valid "../tv/cdatafile/c.scheduler_hls.autotvin_axis_in_valid.dat"
 #define AUTOTB_TVOUT_axis_in_valid "../tv/cdatafile/c.scheduler_hls.autotvout_axis_in_valid.dat"
 #define AUTOTB_TVIN_axis_in_last "../tv/cdatafile/c.scheduler_hls.autotvin_axis_in_last.dat"
 #define AUTOTB_TVOUT_axis_in_last "../tv/cdatafile/c.scheduler_hls.autotvout_axis_in_last.dat"
 #define AUTOTB_TVIN_axis_in_ready "../tv/cdatafile/c.scheduler_hls.autotvin_axis_in_ready.dat"
 #define AUTOTB_TVOUT_axis_in_ready "../tv/cdatafile/c.scheduler_hls.autotvout_axis_in_ready.dat"
-#define AUTOTB_TVIN_wl_ready "../tv/cdatafile/c.scheduler_hls.autotvin_wl_ready.dat"
-#define AUTOTB_TVOUT_wl_ready "../tv/cdatafile/c.scheduler_hls.autotvout_wl_ready.dat"
-#define AUTOTB_TVIN_wl_start "../tv/cdatafile/c.scheduler_hls.autotvin_wl_start.dat"
-#define AUTOTB_TVOUT_wl_start "../tv/cdatafile/c.scheduler_hls.autotvout_wl_start.dat"
-#define AUTOTB_TVIN_wl_addr_sel "../tv/cdatafile/c.scheduler_hls.autotvin_wl_addr_sel.dat"
-#define AUTOTB_TVOUT_wl_addr_sel "../tv/cdatafile/c.scheduler_hls.autotvout_wl_addr_sel.dat"
-#define AUTOTB_TVIN_wl_layer "../tv/cdatafile/c.scheduler_hls.autotvin_wl_layer.dat"
-#define AUTOTB_TVOUT_wl_layer "../tv/cdatafile/c.scheduler_hls.autotvout_wl_layer.dat"
-#define AUTOTB_TVIN_wl_head "../tv/cdatafile/c.scheduler_hls.autotvin_wl_head.dat"
-#define AUTOTB_TVOUT_wl_head "../tv/cdatafile/c.scheduler_hls.autotvout_wl_head.dat"
-#define AUTOTB_TVIN_wl_tile "../tv/cdatafile/c.scheduler_hls.autotvin_wl_tile.dat"
-#define AUTOTB_TVOUT_wl_tile "../tv/cdatafile/c.scheduler_hls.autotvout_wl_tile.dat"
+#define AUTOTB_TVIN_memory_request "../tv/cdatafile/c.scheduler_hls.autotvin_memory_request.dat"
+#define AUTOTB_TVOUT_memory_request "../tv/cdatafile/c.scheduler_hls.autotvout_memory_request.dat"
+#define AUTOTB_TVIN_dma_address "../tv/cdatafile/c.scheduler_hls.autotvin_dma_address.dat"
+#define AUTOTB_TVOUT_dma_address "../tv/cdatafile/c.scheduler_hls.autotvout_dma_address.dat"
 #define AUTOTB_TVIN_dma_done "../tv/cdatafile/c.scheduler_hls.autotvin_dma_done.dat"
 #define AUTOTB_TVOUT_dma_done "../tv/cdatafile/c.scheduler_hls.autotvout_dma_done.dat"
 #define AUTOTB_TVIN_compute_ready "../tv/cdatafile/c.scheduler_hls.autotvin_compute_ready.dat"
@@ -75,20 +59,28 @@ using namespace std;
 #define AUTOTB_TVOUT_stream_done "../tv/cdatafile/c.scheduler_hls.autotvout_stream_done.dat"
 #define AUTOTB_TVIN_done "../tv/cdatafile/c.scheduler_hls.autotvin_done.dat"
 #define AUTOTB_TVOUT_done "../tv/cdatafile/c.scheduler_hls.autotvout_done.dat"
+#define AUTOTB_TVIN_error "../tv/cdatafile/c.scheduler_hls.autotvin_error.dat"
+#define AUTOTB_TVOUT_error "../tv/cdatafile/c.scheduler_hls.autotvout_error.dat"
 #define AUTOTB_TVIN_STATE "../tv/cdatafile/c.scheduler_hls.autotvin_STATE.dat"
 #define AUTOTB_TVOUT_STATE "../tv/cdatafile/c.scheduler_hls.autotvout_STATE.dat"
+#define AUTOTB_TVIN_dbg_wl_ready "../tv/cdatafile/c.scheduler_hls.autotvin_dbg_wl_ready.dat"
+#define AUTOTB_TVOUT_dbg_wl_ready "../tv/cdatafile/c.scheduler_hls.autotvout_dbg_wl_ready.dat"
+#define AUTOTB_TVIN_dbg_wl_start "../tv/cdatafile/c.scheduler_hls.autotvin_dbg_wl_start.dat"
+#define AUTOTB_TVOUT_dbg_wl_start "../tv/cdatafile/c.scheduler_hls.autotvout_dbg_wl_start.dat"
+#define AUTOTB_TVIN_dbg_wl_addr_sel "../tv/cdatafile/c.scheduler_hls.autotvin_dbg_wl_addr_sel.dat"
+#define AUTOTB_TVOUT_dbg_wl_addr_sel "../tv/cdatafile/c.scheduler_hls.autotvout_dbg_wl_addr_sel.dat"
+#define AUTOTB_TVIN_dbg_wl_layer "../tv/cdatafile/c.scheduler_hls.autotvin_dbg_wl_layer.dat"
+#define AUTOTB_TVOUT_dbg_wl_layer "../tv/cdatafile/c.scheduler_hls.autotvout_dbg_wl_layer.dat"
+#define AUTOTB_TVIN_dbg_wl_head "../tv/cdatafile/c.scheduler_hls.autotvin_dbg_wl_head.dat"
+#define AUTOTB_TVOUT_dbg_wl_head "../tv/cdatafile/c.scheduler_hls.autotvout_dbg_wl_head.dat"
+#define AUTOTB_TVIN_dbg_wl_tile "../tv/cdatafile/c.scheduler_hls.autotvin_dbg_wl_tile.dat"
+#define AUTOTB_TVOUT_dbg_wl_tile "../tv/cdatafile/c.scheduler_hls.autotvout_dbg_wl_tile.dat"
 
 
 // tvout file define:
-#define AUTOTB_TVOUT_PC_cntrl_layer_idx "../tv/rtldatafile/rtl.scheduler_hls.autotvout_cntrl_layer_idx.dat"
-#define AUTOTB_TVOUT_PC_cntrl_busy "../tv/rtldatafile/rtl.scheduler_hls.autotvout_cntrl_busy.dat"
-#define AUTOTB_TVOUT_PC_cntrl_start_out "../tv/rtldatafile/rtl.scheduler_hls.autotvout_cntrl_start_out.dat"
 #define AUTOTB_TVOUT_PC_axis_in_ready "../tv/rtldatafile/rtl.scheduler_hls.autotvout_axis_in_ready.dat"
-#define AUTOTB_TVOUT_PC_wl_start "../tv/rtldatafile/rtl.scheduler_hls.autotvout_wl_start.dat"
-#define AUTOTB_TVOUT_PC_wl_addr_sel "../tv/rtldatafile/rtl.scheduler_hls.autotvout_wl_addr_sel.dat"
-#define AUTOTB_TVOUT_PC_wl_layer "../tv/rtldatafile/rtl.scheduler_hls.autotvout_wl_layer.dat"
-#define AUTOTB_TVOUT_PC_wl_head "../tv/rtldatafile/rtl.scheduler_hls.autotvout_wl_head.dat"
-#define AUTOTB_TVOUT_PC_wl_tile "../tv/rtldatafile/rtl.scheduler_hls.autotvout_wl_tile.dat"
+#define AUTOTB_TVOUT_PC_memory_request "../tv/rtldatafile/rtl.scheduler_hls.autotvout_memory_request.dat"
+#define AUTOTB_TVOUT_PC_dma_address "../tv/rtldatafile/rtl.scheduler_hls.autotvout_dma_address.dat"
 #define AUTOTB_TVOUT_PC_head_ctx_ref_0 "../tv/rtldatafile/rtl.scheduler_hls.autotvout_head_ctx_ref_0.dat"
 #define AUTOTB_TVOUT_PC_head_ctx_ref_1 "../tv/rtldatafile/rtl.scheduler_hls.autotvout_head_ctx_ref_1.dat"
 #define AUTOTB_TVOUT_PC_head_ctx_ref_2 "../tv/rtldatafile/rtl.scheduler_hls.autotvout_head_ctx_ref_2.dat"
@@ -97,7 +89,14 @@ using namespace std;
 #define AUTOTB_TVOUT_PC_compute_op "../tv/rtldatafile/rtl.scheduler_hls.autotvout_compute_op.dat"
 #define AUTOTB_TVOUT_PC_stream_start "../tv/rtldatafile/rtl.scheduler_hls.autotvout_stream_start.dat"
 #define AUTOTB_TVOUT_PC_done "../tv/rtldatafile/rtl.scheduler_hls.autotvout_done.dat"
+#define AUTOTB_TVOUT_PC_error "../tv/rtldatafile/rtl.scheduler_hls.autotvout_error.dat"
 #define AUTOTB_TVOUT_PC_STATE "../tv/rtldatafile/rtl.scheduler_hls.autotvout_STATE.dat"
+#define AUTOTB_TVOUT_PC_dbg_wl_ready "../tv/rtldatafile/rtl.scheduler_hls.autotvout_dbg_wl_ready.dat"
+#define AUTOTB_TVOUT_PC_dbg_wl_start "../tv/rtldatafile/rtl.scheduler_hls.autotvout_dbg_wl_start.dat"
+#define AUTOTB_TVOUT_PC_dbg_wl_addr_sel "../tv/rtldatafile/rtl.scheduler_hls.autotvout_dbg_wl_addr_sel.dat"
+#define AUTOTB_TVOUT_PC_dbg_wl_layer "../tv/rtldatafile/rtl.scheduler_hls.autotvout_dbg_wl_layer.dat"
+#define AUTOTB_TVOUT_PC_dbg_wl_head "../tv/rtldatafile/rtl.scheduler_hls.autotvout_dbg_wl_head.dat"
+#define AUTOTB_TVOUT_PC_dbg_wl_tile "../tv/rtldatafile/rtl.scheduler_hls.autotvout_dbg_wl_tile.dat"
 
 
 namespace hls::sim
@@ -1301,70 +1300,23 @@ namespace hls::sim
 
 
 extern "C"
-void scheduler_hls_hw_stub_wrapper(hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, void*, void*, void*, void*, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, void*, void*);
+void scheduler_hls_hw_stub_wrapper(hls::sim::Byte<132>*, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, void*, void*, void*);
 
 extern "C"
-void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls::sim::Byte<1> __xlx_apatb_param_cntrl_reset_n, void* __xlx_apatb_param_cntrl_layer_idx, void* __xlx_apatb_param_cntrl_busy, void* __xlx_apatb_param_cntrl_start_out, hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid, hls::sim::Byte<1> __xlx_apatb_param_axis_in_last, void* __xlx_apatb_param_axis_in_ready, hls::sim::Byte<1> __xlx_apatb_param_wl_ready, void* __xlx_apatb_param_wl_start, void* __xlx_apatb_param_wl_addr_sel, void* __xlx_apatb_param_wl_layer, void* __xlx_apatb_param_wl_head, void* __xlx_apatb_param_wl_tile, hls::sim::Byte<1> __xlx_apatb_param_dma_done, hls::sim::Byte<1> __xlx_apatb_param_compute_ready, hls::sim::Byte<1> __xlx_apatb_param_compute_done, void* __xlx_apatb_param_head_ctx_ref_0, void* __xlx_apatb_param_head_ctx_ref_1, void* __xlx_apatb_param_head_ctx_ref_2, void* __xlx_apatb_param_head_ctx_ref_3, void* __xlx_apatb_param_compute_start, void* __xlx_apatb_param_compute_op, hls::sim::Byte<1> __xlx_apatb_param_stream_ready, void* __xlx_apatb_param_stream_start, hls::sim::Byte<1> __xlx_apatb_param_stream_done, void* __xlx_apatb_param_done, void* __xlx_apatb_param_STATE)
+void apatb_scheduler_hls_hw(hls::sim::Byte<132>* __xlx_apatb_param_ctrl_mem, hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid, hls::sim::Byte<1> __xlx_apatb_param_axis_in_last, void* __xlx_apatb_param_axis_in_ready, void* __xlx_apatb_param_memory_request, void* __xlx_apatb_param_dma_address, hls::sim::Byte<1> __xlx_apatb_param_dma_done, hls::sim::Byte<1> __xlx_apatb_param_compute_ready, hls::sim::Byte<1> __xlx_apatb_param_compute_done, void* __xlx_apatb_param_head_ctx_ref_0, void* __xlx_apatb_param_head_ctx_ref_1, void* __xlx_apatb_param_head_ctx_ref_2, void* __xlx_apatb_param_head_ctx_ref_3, void* __xlx_apatb_param_compute_start, void* __xlx_apatb_param_compute_op, hls::sim::Byte<1> __xlx_apatb_param_stream_ready, void* __xlx_apatb_param_stream_start, hls::sim::Byte<1> __xlx_apatb_param_stream_done, void* __xlx_apatb_param_done, void* __xlx_apatb_param_error, void* __xlx_apatb_param_STATE, void* __xlx_apatb_param_dbg_wl_ready, void* __xlx_apatb_param_dbg_wl_start, void* __xlx_apatb_param_dbg_wl_addr_sel, void* __xlx_apatb_param_dbg_wl_layer, void* __xlx_apatb_param_dbg_wl_head, void* __xlx_apatb_param_dbg_wl_tile)
 {
   static hls::sim::Register port0 {
-    .name = "cntrl_start",
-    .width = 1,
+    .name = "ctrl_mem",
+    .width = 1056,
 #ifdef POST_CHECK
 #else
     .owriter = nullptr,
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_cntrl_start),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_ctrl_mem),
 #endif
   };
-  port0.param = &__xlx_apatb_param_cntrl_start;
+  port0.param = __xlx_apatb_param_ctrl_mem;
 
   static hls::sim::Register port1 {
-    .name = "cntrl_reset_n",
-    .width = 1,
-#ifdef POST_CHECK
-#else
-    .owriter = nullptr,
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_cntrl_reset_n),
-#endif
-  };
-  port1.param = &__xlx_apatb_param_cntrl_reset_n;
-
-  static hls::sim::Register port2 {
-    .name = "cntrl_layer_idx",
-    .width = 32,
-#ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_cntrl_layer_idx),
-#else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_cntrl_layer_idx),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_cntrl_layer_idx),
-#endif
-  };
-  port2.param = __xlx_apatb_param_cntrl_layer_idx;
-
-  static hls::sim::Register port3 {
-    .name = "cntrl_busy",
-    .width = 1,
-#ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_cntrl_busy),
-#else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_cntrl_busy),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_cntrl_busy),
-#endif
-  };
-  port3.param = __xlx_apatb_param_cntrl_busy;
-
-  static hls::sim::Register port4 {
-    .name = "cntrl_start_out",
-    .width = 1,
-#ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_cntrl_start_out),
-#else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_cntrl_start_out),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_cntrl_start_out),
-#endif
-  };
-  port4.param = __xlx_apatb_param_cntrl_start_out;
-
-  static hls::sim::Register port5 {
     .name = "axis_in_valid",
     .width = 1,
 #ifdef POST_CHECK
@@ -1373,9 +1325,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_axis_in_valid),
 #endif
   };
-  port5.param = &__xlx_apatb_param_axis_in_valid;
+  port1.param = &__xlx_apatb_param_axis_in_valid;
 
-  static hls::sim::Register port6 {
+  static hls::sim::Register port2 {
     .name = "axis_in_last",
     .width = 1,
 #ifdef POST_CHECK
@@ -1384,9 +1336,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_axis_in_last),
 #endif
   };
-  port6.param = &__xlx_apatb_param_axis_in_last;
+  port2.param = &__xlx_apatb_param_axis_in_last;
 
-  static hls::sim::Register port7 {
+  static hls::sim::Register port3 {
     .name = "axis_in_ready",
     .width = 1,
 #ifdef POST_CHECK
@@ -1396,80 +1348,33 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_axis_in_ready),
 #endif
   };
-  port7.param = __xlx_apatb_param_axis_in_ready;
+  port3.param = __xlx_apatb_param_axis_in_ready;
 
-  static hls::sim::Register port8 {
-    .name = "wl_ready",
+  static hls::sim::Register port4 {
+    .name = "memory_request",
     .width = 1,
 #ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_memory_request),
 #else
-    .owriter = nullptr,
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_wl_ready),
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_memory_request),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_memory_request),
 #endif
   };
-  port8.param = &__xlx_apatb_param_wl_ready;
+  port4.param = __xlx_apatb_param_memory_request;
 
-  static hls::sim::Register port9 {
-    .name = "wl_start",
-    .width = 1,
-#ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_wl_start),
-#else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_wl_start),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_wl_start),
-#endif
-  };
-  port9.param = __xlx_apatb_param_wl_start;
-
-  static hls::sim::Register port10 {
-    .name = "wl_addr_sel",
-    .width = 8,
-#ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_wl_addr_sel),
-#else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_wl_addr_sel),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_wl_addr_sel),
-#endif
-  };
-  port10.param = __xlx_apatb_param_wl_addr_sel;
-
-  static hls::sim::Register port11 {
-    .name = "wl_layer",
+  static hls::sim::Register port5 {
+    .name = "dma_address",
     .width = 32,
 #ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_wl_layer),
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dma_address),
 #else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_wl_layer),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_wl_layer),
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dma_address),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dma_address),
 #endif
   };
-  port11.param = __xlx_apatb_param_wl_layer;
+  port5.param = __xlx_apatb_param_dma_address;
 
-  static hls::sim::Register port12 {
-    .name = "wl_head",
-    .width = 32,
-#ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_wl_head),
-#else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_wl_head),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_wl_head),
-#endif
-  };
-  port12.param = __xlx_apatb_param_wl_head;
-
-  static hls::sim::Register port13 {
-    .name = "wl_tile",
-    .width = 32,
-#ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_wl_tile),
-#else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_wl_tile),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_wl_tile),
-#endif
-  };
-  port13.param = __xlx_apatb_param_wl_tile;
-
-  static hls::sim::Register port14 {
+  static hls::sim::Register port6 {
     .name = "dma_done",
     .width = 1,
 #ifdef POST_CHECK
@@ -1478,9 +1383,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dma_done),
 #endif
   };
-  port14.param = &__xlx_apatb_param_dma_done;
+  port6.param = &__xlx_apatb_param_dma_done;
 
-  static hls::sim::Register port15 {
+  static hls::sim::Register port7 {
     .name = "compute_ready",
     .width = 1,
 #ifdef POST_CHECK
@@ -1489,9 +1394,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_ready),
 #endif
   };
-  port15.param = &__xlx_apatb_param_compute_ready;
+  port7.param = &__xlx_apatb_param_compute_ready;
 
-  static hls::sim::Register port16 {
+  static hls::sim::Register port8 {
     .name = "compute_done",
     .width = 1,
 #ifdef POST_CHECK
@@ -1500,9 +1405,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_done),
 #endif
   };
-  port16.param = &__xlx_apatb_param_compute_done;
+  port8.param = &__xlx_apatb_param_compute_done;
 
-  static hls::sim::Register port17 {
+  static hls::sim::Register port9 {
     .name = "head_ctx_ref_0",
     .width = 202,
 #ifdef POST_CHECK
@@ -1512,9 +1417,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_head_ctx_ref_0),
 #endif
   };
-  port17.param = __xlx_apatb_param_head_ctx_ref_0;
+  port9.param = __xlx_apatb_param_head_ctx_ref_0;
 
-  static hls::sim::Register port18 {
+  static hls::sim::Register port10 {
     .name = "head_ctx_ref_1",
     .width = 202,
 #ifdef POST_CHECK
@@ -1524,9 +1429,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_head_ctx_ref_1),
 #endif
   };
-  port18.param = __xlx_apatb_param_head_ctx_ref_1;
+  port10.param = __xlx_apatb_param_head_ctx_ref_1;
 
-  static hls::sim::Register port19 {
+  static hls::sim::Register port11 {
     .name = "head_ctx_ref_2",
     .width = 202,
 #ifdef POST_CHECK
@@ -1536,9 +1441,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_head_ctx_ref_2),
 #endif
   };
-  port19.param = __xlx_apatb_param_head_ctx_ref_2;
+  port11.param = __xlx_apatb_param_head_ctx_ref_2;
 
-  static hls::sim::Register port20 {
+  static hls::sim::Register port12 {
     .name = "head_ctx_ref_3",
     .width = 202,
 #ifdef POST_CHECK
@@ -1548,9 +1453,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_head_ctx_ref_3),
 #endif
   };
-  port20.param = __xlx_apatb_param_head_ctx_ref_3;
+  port12.param = __xlx_apatb_param_head_ctx_ref_3;
 
-  static hls::sim::Register port21 {
+  static hls::sim::Register port13 {
     .name = "compute_start",
     .width = 1,
 #ifdef POST_CHECK
@@ -1560,9 +1465,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_start),
 #endif
   };
-  port21.param = __xlx_apatb_param_compute_start;
+  port13.param = __xlx_apatb_param_compute_start;
 
-  static hls::sim::Register port22 {
+  static hls::sim::Register port14 {
     .name = "compute_op",
     .width = 8,
 #ifdef POST_CHECK
@@ -1572,9 +1477,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_op),
 #endif
   };
-  port22.param = __xlx_apatb_param_compute_op;
+  port14.param = __xlx_apatb_param_compute_op;
 
-  static hls::sim::Register port23 {
+  static hls::sim::Register port15 {
     .name = "stream_ready",
     .width = 1,
 #ifdef POST_CHECK
@@ -1583,9 +1488,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_stream_ready),
 #endif
   };
-  port23.param = &__xlx_apatb_param_stream_ready;
+  port15.param = &__xlx_apatb_param_stream_ready;
 
-  static hls::sim::Register port24 {
+  static hls::sim::Register port16 {
     .name = "stream_start",
     .width = 1,
 #ifdef POST_CHECK
@@ -1595,9 +1500,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_stream_start),
 #endif
   };
-  port24.param = __xlx_apatb_param_stream_start;
+  port16.param = __xlx_apatb_param_stream_start;
 
-  static hls::sim::Register port25 {
+  static hls::sim::Register port17 {
     .name = "stream_done",
     .width = 1,
 #ifdef POST_CHECK
@@ -1606,9 +1511,9 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_stream_done),
 #endif
   };
-  port25.param = &__xlx_apatb_param_stream_done;
+  port17.param = &__xlx_apatb_param_stream_done;
 
-  static hls::sim::Register port26 {
+  static hls::sim::Register port18 {
     .name = "done",
     .width = 1,
 #ifdef POST_CHECK
@@ -1618,9 +1523,21 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_done),
 #endif
   };
-  port26.param = __xlx_apatb_param_done;
+  port18.param = __xlx_apatb_param_done;
 
-  static hls::sim::Register port27 {
+  static hls::sim::Register port19 {
+    .name = "error",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_error),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_error),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_error),
+#endif
+  };
+  port19.param = __xlx_apatb_param_error;
+
+  static hls::sim::Register port20 {
     .name = "STATE",
     .width = 32,
 #ifdef POST_CHECK
@@ -1630,29 +1547,102 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_STATE),
 #endif
   };
-  port27.param = __xlx_apatb_param_STATE;
+  port20.param = __xlx_apatb_param_STATE;
+
+  static hls::sim::Register port21 {
+    .name = "dbg_wl_ready",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_wl_ready),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_wl_ready),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_wl_ready),
+#endif
+  };
+  port21.param = __xlx_apatb_param_dbg_wl_ready;
+
+  static hls::sim::Register port22 {
+    .name = "dbg_wl_start",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_wl_start),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_wl_start),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_wl_start),
+#endif
+  };
+  port22.param = __xlx_apatb_param_dbg_wl_start;
+
+  static hls::sim::Register port23 {
+    .name = "dbg_wl_addr_sel",
+    .width = 8,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_wl_addr_sel),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_wl_addr_sel),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_wl_addr_sel),
+#endif
+  };
+  port23.param = __xlx_apatb_param_dbg_wl_addr_sel;
+
+  static hls::sim::Register port24 {
+    .name = "dbg_wl_layer",
+    .width = 32,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_wl_layer),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_wl_layer),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_wl_layer),
+#endif
+  };
+  port24.param = __xlx_apatb_param_dbg_wl_layer;
+
+  static hls::sim::Register port25 {
+    .name = "dbg_wl_head",
+    .width = 32,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_wl_head),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_wl_head),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_wl_head),
+#endif
+  };
+  port25.param = __xlx_apatb_param_dbg_wl_head;
+
+  static hls::sim::Register port26 {
+    .name = "dbg_wl_tile",
+    .width = 32,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_wl_tile),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_wl_tile),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_wl_tile),
+#endif
+  };
+  port26.param = __xlx_apatb_param_dbg_wl_tile;
 
   try {
 #ifdef POST_CHECK
     CodeState = ENTER_WRAPC_PC;
-    check(port2);
     check(port3);
     check(port4);
-    check(port7);
+    check(port5);
     check(port9);
     check(port10);
     check(port11);
     check(port12);
     check(port13);
-    check(port17);
+    check(port14);
+    check(port16);
     check(port18);
     check(port19);
     check(port20);
     check(port21);
     check(port22);
+    check(port23);
     check(port24);
+    check(port25);
     check(port26);
-    check(port27);
 #else
     static hls::sim::RefTCL tcl("../tv/cdatafile/ref.tcl");
     tcl.containsVLA = 0;
@@ -1684,7 +1674,6 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     dump(port24, port24.iwriter, tcl.AESL_transaction);
     dump(port25, port25.iwriter, tcl.AESL_transaction);
     dump(port26, port26.iwriter, tcl.AESL_transaction);
-    dump(port27, port27.iwriter, tcl.AESL_transaction);
     port0.doTCL(tcl);
     port1.doTCL(tcl);
     port2.doTCL(tcl);
@@ -1712,28 +1701,28 @@ void apatb_scheduler_hls_hw(hls::sim::Byte<1> __xlx_apatb_param_cntrl_start, hls
     port24.doTCL(tcl);
     port25.doTCL(tcl);
     port26.doTCL(tcl);
-    port27.doTCL(tcl);
     CodeState = CALL_C_DUT;
-    scheduler_hls_hw_stub_wrapper(__xlx_apatb_param_cntrl_start, __xlx_apatb_param_cntrl_reset_n, __xlx_apatb_param_cntrl_layer_idx, __xlx_apatb_param_cntrl_busy, __xlx_apatb_param_cntrl_start_out, __xlx_apatb_param_axis_in_valid, __xlx_apatb_param_axis_in_last, __xlx_apatb_param_axis_in_ready, __xlx_apatb_param_wl_ready, __xlx_apatb_param_wl_start, __xlx_apatb_param_wl_addr_sel, __xlx_apatb_param_wl_layer, __xlx_apatb_param_wl_head, __xlx_apatb_param_wl_tile, __xlx_apatb_param_dma_done, __xlx_apatb_param_compute_ready, __xlx_apatb_param_compute_done, __xlx_apatb_param_head_ctx_ref_0, __xlx_apatb_param_head_ctx_ref_1, __xlx_apatb_param_head_ctx_ref_2, __xlx_apatb_param_head_ctx_ref_3, __xlx_apatb_param_compute_start, __xlx_apatb_param_compute_op, __xlx_apatb_param_stream_ready, __xlx_apatb_param_stream_start, __xlx_apatb_param_stream_done, __xlx_apatb_param_done, __xlx_apatb_param_STATE);
+    scheduler_hls_hw_stub_wrapper(__xlx_apatb_param_ctrl_mem, __xlx_apatb_param_axis_in_valid, __xlx_apatb_param_axis_in_last, __xlx_apatb_param_axis_in_ready, __xlx_apatb_param_memory_request, __xlx_apatb_param_dma_address, __xlx_apatb_param_dma_done, __xlx_apatb_param_compute_ready, __xlx_apatb_param_compute_done, __xlx_apatb_param_head_ctx_ref_0, __xlx_apatb_param_head_ctx_ref_1, __xlx_apatb_param_head_ctx_ref_2, __xlx_apatb_param_head_ctx_ref_3, __xlx_apatb_param_compute_start, __xlx_apatb_param_compute_op, __xlx_apatb_param_stream_ready, __xlx_apatb_param_stream_start, __xlx_apatb_param_stream_done, __xlx_apatb_param_done, __xlx_apatb_param_error, __xlx_apatb_param_STATE, __xlx_apatb_param_dbg_wl_ready, __xlx_apatb_param_dbg_wl_start, __xlx_apatb_param_dbg_wl_addr_sel, __xlx_apatb_param_dbg_wl_layer, __xlx_apatb_param_dbg_wl_head, __xlx_apatb_param_dbg_wl_tile);
     CodeState = DUMP_OUTPUTS;
-    dump(port2, port2.owriter, tcl.AESL_transaction);
     dump(port3, port3.owriter, tcl.AESL_transaction);
     dump(port4, port4.owriter, tcl.AESL_transaction);
-    dump(port7, port7.owriter, tcl.AESL_transaction);
+    dump(port5, port5.owriter, tcl.AESL_transaction);
     dump(port9, port9.owriter, tcl.AESL_transaction);
     dump(port10, port10.owriter, tcl.AESL_transaction);
     dump(port11, port11.owriter, tcl.AESL_transaction);
     dump(port12, port12.owriter, tcl.AESL_transaction);
     dump(port13, port13.owriter, tcl.AESL_transaction);
-    dump(port17, port17.owriter, tcl.AESL_transaction);
+    dump(port14, port14.owriter, tcl.AESL_transaction);
+    dump(port16, port16.owriter, tcl.AESL_transaction);
     dump(port18, port18.owriter, tcl.AESL_transaction);
     dump(port19, port19.owriter, tcl.AESL_transaction);
     dump(port20, port20.owriter, tcl.AESL_transaction);
     dump(port21, port21.owriter, tcl.AESL_transaction);
     dump(port22, port22.owriter, tcl.AESL_transaction);
+    dump(port23, port23.owriter, tcl.AESL_transaction);
     dump(port24, port24.owriter, tcl.AESL_transaction);
+    dump(port25, port25.owriter, tcl.AESL_transaction);
     dump(port26, port26.owriter, tcl.AESL_transaction);
-    dump(port27, port27.owriter, tcl.AESL_transaction);
     tcl.AESL_transaction++;
 #endif
   } catch (const hls::sim::SimException &e) {

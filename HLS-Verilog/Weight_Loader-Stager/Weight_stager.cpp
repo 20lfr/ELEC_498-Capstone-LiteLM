@@ -1,6 +1,7 @@
 #include "Weight_stager.hpp"
 
-uint32_t weight_stager(      
+uint32_t weight_stager(   
+    bool        reset,
     bool        wl_start,       
     DmaSel      wl_addr_sel, 
     int         wl_layer,     
@@ -17,6 +18,14 @@ uint32_t weight_stager(
 #pragma HLS reset variable = addr_latched
     wl_ready = true;
     memory_request = false;
+
+    if (reset) {
+        addr_latched = 0;
+        wl_ready = true;
+        memory_request = false;
+        error = false;
+        return 0;
+    }
 
     // Basic validation
     if (wl_start && (wl_layer < 0)) {

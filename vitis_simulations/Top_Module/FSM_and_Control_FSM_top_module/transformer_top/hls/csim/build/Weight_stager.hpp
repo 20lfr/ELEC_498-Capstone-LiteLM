@@ -6,7 +6,8 @@
 
 
 
-uint32_t weight_stager(      
+uint32_t weight_stager(  
+    bool        reset,    
     bool        wl_start,       
     DmaSel      wl_addr_sel, 
     int         wl_layer,     

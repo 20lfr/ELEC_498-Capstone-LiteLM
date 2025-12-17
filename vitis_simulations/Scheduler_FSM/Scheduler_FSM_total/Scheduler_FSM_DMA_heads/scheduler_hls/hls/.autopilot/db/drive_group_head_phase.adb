@@ -38132,7 +38132,7 @@
             <Obj>
               <type>0</type>
               <id>634</id>
-              <name>or_ln110_2</name>
+              <name>or_ln110_1</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</fileName>
               <fileDirectory>../.</fileDirectory>
               <lineNumber>110</lineNumber>
@@ -38164,7 +38164,7 @@
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>or_ln110_2_fu_13677_p2</rtlName>
+              <rtlName>or_ln110_1_fu_13677_p2</rtlName>
               <control>auto</control>
               <opType>and</opType>
               <implIndex>auto</implIndex>
@@ -38260,7 +38260,7 @@
             <Obj>
               <type>0</type>
               <id>636</id>
-              <name>or_ln111_1</name>
+              <name>or_ln111_2</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</fileName>
               <fileDirectory>../.</fileDirectory>
               <lineNumber>111</lineNumber>
@@ -38292,7 +38292,7 @@
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>or_ln111_1_fu_13724_p2</rtlName>
+              <rtlName>or_ln111_2_fu_13724_p2</rtlName>
               <control>auto</control>
               <opType>and</opType>
               <implIndex>auto</implIndex>
@@ -132952,7 +132952,7 @@
           </second>
         </item>
         <item>
-          <first>or_ln110_2_fu_13677_p2 ( and ) </first>
+          <first>or_ln110_1_fu_13677_p2 ( and ) </first>
           <second>
             <count>4</count>
             <item_version>0</item_version>
@@ -132998,7 +132998,7 @@
           </second>
         </item>
         <item>
-          <first>or_ln111_1_fu_13724_p2 ( and ) </first>
+          <first>or_ln111_2_fu_13724_p2 ( and ) </first>
           <second>
             <count>4</count>
             <item_version>0</item_version>
@@ -141396,7 +141396,7 @@
           </second>
         </item>
         <item>
-          <first>or_ln110_2_fu_13677_p2 ( and ) </first>
+          <first>or_ln110_1_fu_13677_p2 ( and ) </first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -141412,7 +141412,7 @@
           </second>
         </item>
         <item>
-          <first>or_ln111_1_fu_13724_p2 ( and ) </first>
+          <first>or_ln111_2_fu_13724_p2 ( and ) </first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -158079,7 +158079,7 @@
         </second>
       </item>
       <item>
-        <first>or_ln110_2_fu_13677</first>
+        <first>or_ln110_1_fu_13677</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>
@@ -158095,7 +158095,7 @@
         </second>
       </item>
       <item>
-        <first>or_ln111_1_fu_13724</first>
+        <first>or_ln111_2_fu_13724</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>

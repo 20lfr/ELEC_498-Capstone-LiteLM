@@ -626,6 +626,8 @@ struct HeadCtx {
     int wl_head = -1;
     bool dma_done = false;
 
+    uint32_t dma_address = 0;
+    bool memory_request = false;
 
     bool start_head = false;
 
@@ -792,14 +794,18 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx);
 bool run_single_head(
     HeadCtx &ctx,
     int layer_idx,
-    bool start
+    bool start,
+    ControlMemSpace ctrl_mem,
+    bool &error
 );
 
 bool drive_group_head_phase(
     HeadCtx (&head_ctx_ref)[HEADS_PARALLEL],
     int group_idx,
     int layer_idx,
-    bool start
+    bool start,
+    ControlMemSpace ctrl_mem,
+    bool &error
 );
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp" 2
 
@@ -828,12 +834,8 @@ void scheduler_hls(
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel &wl_addr_sel,
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
+    bool &memory_request,
+    uint32_t &dma_address,
     bool dma_done,
     bool compute_ready,
     bool compute_done,
@@ -844,7 +846,16 @@ void scheduler_hls(
     bool &stream_start,
     bool stream_done,
     bool &done,
-    SchedState &STATE
+    bool &error,
+    SchedState &STATE,
+
+
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile
 );
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
 # 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp" 1
@@ -886,28 +897,7 @@ void ControlMemInterface(
 
 bool irq_wizard(ControlMemSpace &mem, bool infer_done, bool error);
 # 7 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
-# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.hpp" 1
 
-
-
-
-
-
-
-
-uint32_t weight_stager(
-    bool wl_start,
-    DmaSel wl_addr_sel,
-    int wl_layer,
-    int wl_head,
-    int wl_tile,
-    ControlMemSpace ctrl_mem,
-
-    bool &wl_ready,
-    bool &memory_request,
-    bool &error
-);
-# 8 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
 
 
 
@@ -1049,16 +1039,8 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 # 81 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
 
 #pragma HLS INLINE off
-
-
- static bool wl_start = false;
-    static DmaSel wl_addr_sel = DmaSel::DMASEL_NONE;
-    static int wl_layer = 0;
-    static int wl_head = 0;
-    static int wl_tile = 0;
-    bool wl_ready;
-
-    bool done = false;
+# 92 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+ bool done = false;
     bool error = false;
     static ControlMemSpace ctrl_mem;
 
@@ -1081,13 +1063,13 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     w2_tile_stride = ctrl_mem.w2_tile_stride;
 
 
-    if (!ctrl_resetn_in) {
-        wl_start = false;
-        wl_addr_sel = DmaSel::DMASEL_NONE;
-        wl_layer = 0;
-        wl_head = 0;
-        wl_tile = 0;
-        wl_ready = false;
+    if (ctrl_mem.control & !CTRL_RESETN_BIT) {
+
+
+
+
+
+
         memory_request= false;
         done = false;
         error = false;
@@ -1108,26 +1090,13 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
 
-
-
-    dma_address = weight_stager(wl_start, wl_addr_sel, wl_layer,
-                    wl_head, wl_tile, ctrl_mem, wl_ready,
-                    memory_request, error);
-
-
-
-
     scheduler_hls(
         ctrl_mem,
         axis_in_valid,
         axis_in_last,
         axis_in_ready,
-        wl_ready,
-        wl_start,
-        wl_addr_sel,
-        wl_layer,
-        wl_head,
-        wl_tile,
+        memory_request,
+        dma_address,
         dma_done,
         compute_ready,
         compute_done,
@@ -1138,20 +1107,29 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
         stream_start,
         stream_done,
         done,
-        dbg_state
+        error,
+        dbg_state,
+
+
+        dbg_wl_ready,
+        dbg_wl_start,
+        dbg_wl_addr_sel,
+        dbg_wl_layer,
+        dbg_wl_head,
+        dbg_wl_tile
     );
 
 
 
 
     irq_ps = irq_wizard(ctrl_mem, done, error);
-    dbg_ctrl_mem = ctrl_mem;
-    dbg_wl_ready = wl_ready;
-    dbg_wl_start = wl_start;
-    dbg_wl_addr_sel = wl_addr_sel;
-    dbg_wl_layer = wl_layer;
-    dbg_wl_head = wl_head;
-    dbg_wl_tile = wl_tile;
+
+
+
+
+
+
+
     dbg_done = done;
     dbg_error = error;
 

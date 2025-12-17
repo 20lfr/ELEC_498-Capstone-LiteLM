@@ -626,6 +626,8 @@ struct HeadCtx {
     int wl_head = -1;
     bool dma_done = false;
 
+    uint32_t dma_address = 0;
+    bool memory_request = false;
 
     bool start_head = false;
 
@@ -776,37 +778,47 @@ struct ControlMemSpace {
 
 
 
-uint32_t weight_stager(
-    bool wl_start,
-    DmaSel wl_addr_sel,
-    int wl_layer,
-    int wl_head,
-    int wl_tile,
-    ControlMemSpace ctrl_mem,
+struct WeightStager {
+    uint32_t addr_latched = 0;
 
-    bool &wl_ready,
-    bool &memory_request,
-    bool &error
-);
+    uint32_t run(
+        bool reset,
+        bool wl_start,
+        DmaSel wl_addr_sel,
+        int wl_layer,
+        int wl_head,
+        int wl_tile,
+        ControlMemSpace ctrl_mem,
+        bool &wl_ready,
+        bool &memory_request,
+        bool &error);
+};
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp" 2
 
-uint32_t weight_stager(
+uint32_t WeightStager::run(
+    bool reset,
     bool wl_start,
     DmaSel wl_addr_sel,
     int wl_layer,
     int wl_head,
     int wl_tile,
     ControlMemSpace ctrl_mem,
-
     bool &wl_ready,
     bool &memory_request,
     bool &error
 ) {
 #pragma HLS INLINE
- static uint32_t addr_latched = 0;
 #pragma HLS reset variable = addr_latched
  wl_ready = true;
     memory_request = false;
+
+    if (reset) {
+        addr_latched = 0;
+        wl_ready = true;
+        memory_request = false;
+        error = false;
+        return 0;
+    }
 
 
     if (wl_start && (wl_layer < 0)) {
