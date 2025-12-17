@@ -12,6 +12,7 @@ uint32_t weight_stager(
     bool        &memory_request,
     bool        &error
 ) {
+#pragma HLS INLINE
     static uint32_t addr_latched = 0;
 #pragma HLS reset variable = addr_latched
     wl_ready = true;

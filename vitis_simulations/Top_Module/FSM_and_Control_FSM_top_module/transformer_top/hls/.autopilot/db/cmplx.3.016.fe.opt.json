@@ -1,24 +1,24 @@
 {
   "0": {
-    "basicblocks": 74,
+    "basicblocks": 100,
     "calls": "1",
     "control_depth": 0,
-    "def_use_depth": 7,
+    "def_use_depth": 8,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 364,
+    "instructions": 615,
     "loads": {
-      "G": 59,
+      "G": 86,
       "L": 1
     },
     "memory_accesses": 0,
     "name": "transformer_top",
     "stores": {
-      "G": 58,
-      "L": 1,
-      "T": 4
+      "G": 84,
+      "L": 2,
+      "T": 39
     },
-    "total_instructions": 3775
+    "total_instructions": 4031
   },
   "1": {
     "basicblocks": 341,
@@ -27,18 +27,18 @@
     "def_use_depth": 8,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 163,
-    "instructions": 2470,
+    "instructions": 2475,
     "loads": {
-      "G": 110,
-      "L": 104
+      "G": 112,
+      "L": 102
     },
     "memory_accesses": 3,
     "name": "scheduler_hls",
     "stores": {
-      "G": 349,
-      "L": 366
+      "G": 376,
+      "L": 339
     },
-    "total_instructions": 3411
+    "total_instructions": 3416
   },
   "2": {
     "basicblocks": 271,

@@ -4,31 +4,51 @@ target datalayout = "e-m:e-i64:64-i128:128-i256:256-i512:512-i1024:1024-i2048:20
 target triple = "fpga64-xilinx-none"
 
 %struct.HeadCtx = type { i32, i32, i8, i1, i1, i1, i8, i8, i8, i1, i1, i8, i32, i32, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1, i1 }
-%struct.ControlMemSpace = type { i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32 }
+%struct.ControlMemSpace = type { i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32, i32 }
 
 ; Function Attrs: noinline willreturn
-define void @apatb_transformer_top_ir(i1 zeroext %axis_in_valid, i1 zeroext %axis_in_last, i1* noalias nocapture nonnull dereferenceable(1) %axis_in_ready, i1 zeroext %dma_done, i1 zeroext %compute_ready, i1 zeroext %compute_done, [4 x %struct.HeadCtx]* noalias nonnull dereferenceable(240) %head_ctx_ref, i1* noalias nocapture nonnull dereferenceable(1) %compute_start, i8* noalias nocapture nonnull dereferenceable(1) %compute_op, i1 zeroext %stream_ready, i1* noalias nocapture nonnull dereferenceable(1) %stream_start, i1 zeroext %stream_done, i1 zeroext %wl_ready, i1* noalias nocapture nonnull dereferenceable(1) %wl_start, i8* noalias nocapture nonnull dereferenceable(1) %wl_addr_sel, i32* noalias nocapture nonnull dereferenceable(4) %wl_layer, i32* noalias nocapture nonnull dereferenceable(4) %wl_head, i32* noalias nocapture nonnull dereferenceable(4) %wl_tile, i32 %ctrl_addr, i32 %ctrl_data_in, i32* noalias nocapture nonnull dereferenceable(4) %ctrl_data_out, i1 zeroext %ctrl_read_en, i1 zeroext %ctrl_write_en, i1 zeroext %ctrl_chip_en, i1 zeroext %ctrl_resetn_in, i32* noalias nocapture nonnull dereferenceable(4) %dbg_state, %struct.ControlMemSpace* noalias nocapture nonnull dereferenceable(108) %dbg_ctrl_mem, i1 zeroext %done, i1* noalias nocapture nonnull dereferenceable(1) %irq_ps) local_unnamed_addr #0 {
+define void @apatb_transformer_top_ir(i1 zeroext %axis_in_valid, i1 zeroext %axis_in_last, i1* noalias nocapture nonnull dereferenceable(1) %axis_in_ready, i1 zeroext %dma_done, i32* noalias nocapture nonnull dereferenceable(4) %dma_address, i1* noalias nocapture nonnull dereferenceable(1) %memory_request, i1 zeroext %compute_ready, i1 zeroext %compute_done, i1* noalias nocapture nonnull dereferenceable(1) %compute_start, i8* noalias nocapture nonnull dereferenceable(1) %compute_op, [4 x %struct.HeadCtx]* noalias nonnull dereferenceable(240) %head_ctx_ref, i1 zeroext %stream_ready, i1* noalias nocapture nonnull dereferenceable(1) %stream_start, i1 zeroext %stream_done, i32 %ctrl_addr, i32 %ctrl_data_in, i32* noalias nocapture nonnull dereferenceable(4) %ctrl_data_out, i1 zeroext %ctrl_read_en, i1 zeroext %ctrl_write_en, i1 zeroext %ctrl_chip_en, i1 zeroext %ctrl_resetn_in, i1* noalias nocapture nonnull dereferenceable(1) %irq_ps, i32* noalias nocapture nonnull dereferenceable(4) %dbg_state, %struct.ControlMemSpace* noalias nocapture nonnull dereferenceable(132) %dbg_ctrl_mem, i32* noalias nocapture nonnull dereferenceable(4) %control_reg, i32* noalias nocapture nonnull dereferenceable(4) %irq_status_reg, i32* noalias nocapture nonnull dereferenceable(4) %irq_enable_reg, i32* noalias nocapture nonnull dereferenceable(4) %wq_base_addr, i32* noalias nocapture nonnull dereferenceable(4) %wk_base_addr, i32* noalias nocapture nonnull dereferenceable(4) %wv_base_addr, i32* noalias nocapture nonnull dereferenceable(4) %wo_base_addr, i32* noalias nocapture nonnull dereferenceable(4) %w1_base_addr, i32* noalias nocapture nonnull dereferenceable(4) %w2_base_addr, i32* noalias nocapture nonnull dereferenceable(4) %wq_head_stride, i32* noalias nocapture nonnull dereferenceable(4) %wk_head_stride, i32* noalias nocapture nonnull dereferenceable(4) %wv_head_stride, i32* noalias nocapture nonnull dereferenceable(4) %wo_tile_stride, i32* noalias nocapture nonnull dereferenceable(4) %w1_tile_stride, i32* noalias nocapture nonnull dereferenceable(4) %w2_tile_stride, i1* noalias nocapture nonnull dereferenceable(1) %dbg_wl_ready, i1* noalias nocapture nonnull dereferenceable(1) %dbg_wl_start, i8* noalias nocapture nonnull dereferenceable(1) %dbg_wl_addr_sel, i32* noalias nocapture nonnull dereferenceable(4) %dbg_wl_layer, i32* noalias nocapture nonnull dereferenceable(4) %dbg_wl_head, i32* noalias nocapture nonnull dereferenceable(4) %dbg_wl_tile, i1* noalias nocapture nonnull dereferenceable(1) %dbg_done, i1* noalias nocapture nonnull dereferenceable(1) %dbg_error) local_unnamed_addr #0 {
 entry:
   %axis_in_ready_copy = alloca i1, align 512
+  %dma_address_copy = alloca i32, align 512
+  %memory_request_copy = alloca i1, align 512
+  %compute_start_copy = alloca i1, align 512
+  %compute_op_copy = alloca i8, align 512
   %head_ctx_ref_copy_0 = alloca i202, align 512
   %head_ctx_ref_copy_1 = alloca i202, align 512
   %head_ctx_ref_copy_2 = alloca i202, align 512
   %head_ctx_ref_copy_3 = alloca i202, align 512
-  %compute_start_copy = alloca i1, align 512
-  %compute_op_copy = alloca i8, align 512
   %stream_start_copy = alloca i1, align 512
-  %wl_start_copy = alloca i1, align 512
-  %wl_addr_sel_copy = alloca i8, align 512
-  %wl_layer_copy = alloca i32, align 512
-  %wl_head_copy = alloca i32, align 512
-  %wl_tile_copy = alloca i32, align 512
   %ctrl_data_out_copy = alloca i32, align 512
-  %dbg_state_copy = alloca i32, align 512
-  %dbg_ctrl_mem_copy = alloca i864, align 512
   %irq_ps_copy = alloca i1, align 512
-  call void @copy_in(i1* nonnull %axis_in_ready, i1* nonnull align 512 %axis_in_ready_copy, [4 x %struct.HeadCtx]* nonnull %head_ctx_ref, i202* nonnull align 512 %head_ctx_ref_copy_0, i202* nonnull align 512 %head_ctx_ref_copy_1, i202* nonnull align 512 %head_ctx_ref_copy_2, i202* nonnull align 512 %head_ctx_ref_copy_3, i1* nonnull %compute_start, i1* nonnull align 512 %compute_start_copy, i8* nonnull %compute_op, i8* nonnull align 512 %compute_op_copy, i1* nonnull %stream_start, i1* nonnull align 512 %stream_start_copy, i1* nonnull %wl_start, i1* nonnull align 512 %wl_start_copy, i8* nonnull %wl_addr_sel, i8* nonnull align 512 %wl_addr_sel_copy, i32* nonnull %wl_layer, i32* nonnull align 512 %wl_layer_copy, i32* nonnull %wl_head, i32* nonnull align 512 %wl_head_copy, i32* nonnull %wl_tile, i32* nonnull align 512 %wl_tile_copy, i32* nonnull %ctrl_data_out, i32* nonnull align 512 %ctrl_data_out_copy, i32* nonnull %dbg_state, i32* nonnull align 512 %dbg_state_copy, %struct.ControlMemSpace* nonnull %dbg_ctrl_mem, i864* nonnull align 512 %dbg_ctrl_mem_copy, i1* nonnull %irq_ps, i1* nonnull align 512 %irq_ps_copy)
-  call void @apatb_transformer_top_hw(i1 %axis_in_valid, i1 %axis_in_last, i1* %axis_in_ready_copy, i1 %dma_done, i1 %compute_ready, i1 %compute_done, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1* %compute_start_copy, i8* %compute_op_copy, i1 %stream_ready, i1* %stream_start_copy, i1 %stream_done, i1 %wl_ready, i1* %wl_start_copy, i8* %wl_addr_sel_copy, i32* %wl_layer_copy, i32* %wl_head_copy, i32* %wl_tile_copy, i32 %ctrl_addr, i32 %ctrl_data_in, i32* %ctrl_data_out_copy, i1 %ctrl_read_en, i1 %ctrl_write_en, i1 %ctrl_chip_en, i1 %ctrl_resetn_in, i32* %dbg_state_copy, i864* %dbg_ctrl_mem_copy, i1 %done, i1* %irq_ps_copy)
-  call void @copy_back(i1* %axis_in_ready, i1* %axis_in_ready_copy, [4 x %struct.HeadCtx]* %head_ctx_ref, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1* %compute_start, i1* %compute_start_copy, i8* %compute_op, i8* %compute_op_copy, i1* %stream_start, i1* %stream_start_copy, i1* %wl_start, i1* %wl_start_copy, i8* %wl_addr_sel, i8* %wl_addr_sel_copy, i32* %wl_layer, i32* %wl_layer_copy, i32* %wl_head, i32* %wl_head_copy, i32* %wl_tile, i32* %wl_tile_copy, i32* %ctrl_data_out, i32* %ctrl_data_out_copy, i32* %dbg_state, i32* %dbg_state_copy, %struct.ControlMemSpace* %dbg_ctrl_mem, i864* %dbg_ctrl_mem_copy, i1* %irq_ps, i1* %irq_ps_copy)
+  %dbg_state_copy = alloca i32, align 512
+  %dbg_ctrl_mem_copy = alloca i1056, align 512
+  %control_reg_copy = alloca i32, align 512
+  %irq_status_reg_copy = alloca i32, align 512
+  %irq_enable_reg_copy = alloca i32, align 512
+  %wq_base_addr_copy = alloca i32, align 512
+  %wk_base_addr_copy = alloca i32, align 512
+  %wv_base_addr_copy = alloca i32, align 512
+  %wo_base_addr_copy = alloca i32, align 512
+  %w1_base_addr_copy = alloca i32, align 512
+  %w2_base_addr_copy = alloca i32, align 512
+  %wq_head_stride_copy = alloca i32, align 512
+  %wk_head_stride_copy = alloca i32, align 512
+  %wv_head_stride_copy = alloca i32, align 512
+  %wo_tile_stride_copy = alloca i32, align 512
+  %w1_tile_stride_copy = alloca i32, align 512
+  %w2_tile_stride_copy = alloca i32, align 512
+  %dbg_wl_ready_copy = alloca i1, align 512
+  %dbg_wl_start_copy = alloca i1, align 512
+  %dbg_wl_addr_sel_copy = alloca i8, align 512
+  %dbg_wl_layer_copy = alloca i32, align 512
+  %dbg_wl_head_copy = alloca i32, align 512
+  %dbg_wl_tile_copy = alloca i32, align 512
+  %dbg_done_copy = alloca i1, align 512
+  %dbg_error_copy = alloca i1, align 512
+  call void @copy_in(i1* nonnull %axis_in_ready, i1* nonnull align 512 %axis_in_ready_copy, i32* nonnull %dma_address, i32* nonnull align 512 %dma_address_copy, i1* nonnull %memory_request, i1* nonnull align 512 %memory_request_copy, i1* nonnull %compute_start, i1* nonnull align 512 %compute_start_copy, i8* nonnull %compute_op, i8* nonnull align 512 %compute_op_copy, [4 x %struct.HeadCtx]* nonnull %head_ctx_ref, i202* nonnull align 512 %head_ctx_ref_copy_0, i202* nonnull align 512 %head_ctx_ref_copy_1, i202* nonnull align 512 %head_ctx_ref_copy_2, i202* nonnull align 512 %head_ctx_ref_copy_3, i1* nonnull %stream_start, i1* nonnull align 512 %stream_start_copy, i32* nonnull %ctrl_data_out, i32* nonnull align 512 %ctrl_data_out_copy, i1* nonnull %irq_ps, i1* nonnull align 512 %irq_ps_copy, i32* nonnull %dbg_state, i32* nonnull align 512 %dbg_state_copy, %struct.ControlMemSpace* nonnull %dbg_ctrl_mem, i1056* nonnull align 512 %dbg_ctrl_mem_copy, i32* nonnull %control_reg, i32* nonnull align 512 %control_reg_copy, i32* nonnull %irq_status_reg, i32* nonnull align 512 %irq_status_reg_copy, i32* nonnull %irq_enable_reg, i32* nonnull align 512 %irq_enable_reg_copy, i32* nonnull %wq_base_addr, i32* nonnull align 512 %wq_base_addr_copy, i32* nonnull %wk_base_addr, i32* nonnull align 512 %wk_base_addr_copy, i32* nonnull %wv_base_addr, i32* nonnull align 512 %wv_base_addr_copy, i32* nonnull %wo_base_addr, i32* nonnull align 512 %wo_base_addr_copy, i32* nonnull %w1_base_addr, i32* nonnull align 512 %w1_base_addr_copy, i32* nonnull %w2_base_addr, i32* nonnull align 512 %w2_base_addr_copy, i32* nonnull %wq_head_stride, i32* nonnull align 512 %wq_head_stride_copy, i32* nonnull %wk_head_stride, i32* nonnull align 512 %wk_head_stride_copy, i32* nonnull %wv_head_stride, i32* nonnull align 512 %wv_head_stride_copy, i32* nonnull %wo_tile_stride, i32* nonnull align 512 %wo_tile_stride_copy, i32* nonnull %w1_tile_stride, i32* nonnull align 512 %w1_tile_stride_copy, i32* nonnull %w2_tile_stride, i32* nonnull align 512 %w2_tile_stride_copy, i1* nonnull %dbg_wl_ready, i1* nonnull align 512 %dbg_wl_ready_copy, i1* nonnull %dbg_wl_start, i1* nonnull align 512 %dbg_wl_start_copy, i8* nonnull %dbg_wl_addr_sel, i8* nonnull align 512 %dbg_wl_addr_sel_copy, i32* nonnull %dbg_wl_layer, i32* nonnull align 512 %dbg_wl_layer_copy, i32* nonnull %dbg_wl_head, i32* nonnull align 512 %dbg_wl_head_copy, i32* nonnull %dbg_wl_tile, i32* nonnull align 512 %dbg_wl_tile_copy, i1* nonnull %dbg_done, i1* nonnull align 512 %dbg_done_copy, i1* nonnull %dbg_error, i1* nonnull align 512 %dbg_error_copy)
+  call void @apatb_transformer_top_hw(i1 %axis_in_valid, i1 %axis_in_last, i1* %axis_in_ready_copy, i1 %dma_done, i32* %dma_address_copy, i1* %memory_request_copy, i1 %compute_ready, i1 %compute_done, i1* %compute_start_copy, i8* %compute_op_copy, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1 %stream_ready, i1* %stream_start_copy, i1 %stream_done, i32 %ctrl_addr, i32 %ctrl_data_in, i32* %ctrl_data_out_copy, i1 %ctrl_read_en, i1 %ctrl_write_en, i1 %ctrl_chip_en, i1 %ctrl_resetn_in, i1* %irq_ps_copy, i32* %dbg_state_copy, i1056* %dbg_ctrl_mem_copy, i32* %control_reg_copy, i32* %irq_status_reg_copy, i32* %irq_enable_reg_copy, i32* %wq_base_addr_copy, i32* %wk_base_addr_copy, i32* %wv_base_addr_copy, i32* %wo_base_addr_copy, i32* %w1_base_addr_copy, i32* %w2_base_addr_copy, i32* %wq_head_stride_copy, i32* %wk_head_stride_copy, i32* %wv_head_stride_copy, i32* %wo_tile_stride_copy, i32* %w1_tile_stride_copy, i32* %w2_tile_stride_copy, i1* %dbg_wl_ready_copy, i1* %dbg_wl_start_copy, i8* %dbg_wl_addr_sel_copy, i32* %dbg_wl_layer_copy, i32* %dbg_wl_head_copy, i32* %dbg_wl_tile_copy, i1* %dbg_done_copy, i1* %dbg_error_copy)
+  call void @copy_back(i1* %axis_in_ready, i1* %axis_in_ready_copy, i32* %dma_address, i32* %dma_address_copy, i1* %memory_request, i1* %memory_request_copy, i1* %compute_start, i1* %compute_start_copy, i8* %compute_op, i8* %compute_op_copy, [4 x %struct.HeadCtx]* %head_ctx_ref, i202* %head_ctx_ref_copy_0, i202* %head_ctx_ref_copy_1, i202* %head_ctx_ref_copy_2, i202* %head_ctx_ref_copy_3, i1* %stream_start, i1* %stream_start_copy, i32* %ctrl_data_out, i32* %ctrl_data_out_copy, i1* %irq_ps, i1* %irq_ps_copy, i32* %dbg_state, i32* %dbg_state_copy, %struct.ControlMemSpace* %dbg_ctrl_mem, i1056* %dbg_ctrl_mem_copy, i32* %control_reg, i32* %control_reg_copy, i32* %irq_status_reg, i32* %irq_status_reg_copy, i32* %irq_enable_reg, i32* %irq_enable_reg_copy, i32* %wq_base_addr, i32* %wq_base_addr_copy, i32* %wk_base_addr, i32* %wk_base_addr_copy, i32* %wv_base_addr, i32* %wv_base_addr_copy, i32* %wo_base_addr, i32* %wo_base_addr_copy, i32* %w1_base_addr, i32* %w1_base_addr_copy, i32* %w2_base_addr, i32* %w2_base_addr_copy, i32* %wq_head_stride, i32* %wq_head_stride_copy, i32* %wk_head_stride, i32* %wk_head_stride_copy, i32* %wv_head_stride, i32* %wv_head_stride_copy, i32* %wo_tile_stride, i32* %wo_tile_stride_copy, i32* %w1_tile_stride, i32* %w1_tile_stride_copy, i32* %w2_tile_stride, i32* %w2_tile_stride_copy, i1* %dbg_wl_ready, i1* %dbg_wl_ready_copy, i1* %dbg_wl_start, i1* %dbg_wl_start_copy, i8* %dbg_wl_addr_sel, i8* %dbg_wl_addr_sel_copy, i32* %dbg_wl_layer, i32* %dbg_wl_layer_copy, i32* %dbg_wl_head, i32* %dbg_wl_head_copy, i32* %dbg_wl_tile, i32* %dbg_wl_tile_copy, i1* %dbg_done, i1* %dbg_done_copy, i1* %dbg_error, i1* %dbg_error_copy)
   ret void
 }
 
@@ -45,6 +65,40 @@ copy:                                             ; preds = %entry
   %4 = load i8, i8* %3
   %5 = trunc i8 %4 to i1
   store i1 %5, i1* %dst, align 512
+  br label %ret
+
+ret:                                              ; preds = %copy, %entry
+  ret void
+}
+
+; Function Attrs: argmemonly noinline norecurse willreturn
+define internal fastcc void @onebyonecpy_hls.p0i32(i32* noalias align 512 %dst, i32* noalias readonly %src) unnamed_addr #1 {
+entry:
+  %0 = icmp eq i32* %dst, null
+  %1 = icmp eq i32* %src, null
+  %2 = or i1 %0, %1
+  br i1 %2, label %ret, label %copy
+
+copy:                                             ; preds = %entry
+  %3 = load i32, i32* %src, align 4
+  store i32 %3, i32* %dst, align 512
+  br label %ret
+
+ret:                                              ; preds = %copy, %entry
+  ret void
+}
+
+; Function Attrs: argmemonly noinline norecurse willreturn
+define internal fastcc void @onebyonecpy_hls.p0i8(i8* noalias align 512 %dst, i8* noalias readonly %src) unnamed_addr #1 {
+entry:
+  %0 = icmp eq i8* %dst, null
+  %1 = icmp eq i8* %src, null
+  %2 = or i1 %0, %1
+  br i1 %2, label %ret, label %copy
+
+copy:                                             ; preds = %entry
+  %3 = load i8, i8* %src, align 1
+  store i8 %3, i8* %dst, align 512
   br label %ret
 
 ret:                                              ; preds = %copy, %entry
@@ -320,43 +374,9 @@ ret:                                              ; preds = %copy.split, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0i8(i8* noalias align 512 %dst, i8* noalias readonly %src) unnamed_addr #1 {
+define internal fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace(i1056* noalias align 512 %dst, %struct.ControlMemSpace* noalias readonly %src) unnamed_addr #1 {
 entry:
-  %0 = icmp eq i8* %dst, null
-  %1 = icmp eq i8* %src, null
-  %2 = or i1 %0, %1
-  br i1 %2, label %ret, label %copy
-
-copy:                                             ; preds = %entry
-  %3 = load i8, i8* %src, align 1
-  store i8 %3, i8* %dst, align 512
-  br label %ret
-
-ret:                                              ; preds = %copy, %entry
-  ret void
-}
-
-; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0i32(i32* noalias align 512 %dst, i32* noalias readonly %src) unnamed_addr #1 {
-entry:
-  %0 = icmp eq i32* %dst, null
-  %1 = icmp eq i32* %src, null
-  %2 = or i1 %0, %1
-  br i1 %2, label %ret, label %copy
-
-copy:                                             ; preds = %entry
-  %3 = load i32, i32* %src, align 4
-  store i32 %3, i32* %dst, align 512
-  br label %ret
-
-ret:                                              ; preds = %copy, %entry
-  ret void
-}
-
-; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace(i864* noalias align 512 %dst, %struct.ControlMemSpace* noalias readonly %src) unnamed_addr #1 {
-entry:
-  %0 = icmp eq i864* %dst, null
+  %0 = icmp eq i1056* %dst, null
   %1 = icmp eq %struct.ControlMemSpace* %src, null
   %2 = or i1 %0, %1
   br i1 %2, label %ret, label %copy
@@ -364,138 +384,168 @@ entry:
 copy:                                             ; preds = %entry
   %src.0 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 0
   %3 = load i32, i32* %src.0, align 4
-  %4 = zext i32 %3 to i864
+  %4 = zext i32 %3 to i1056
   %src.1 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 1
   %5 = load i32, i32* %src.1, align 4
-  %6 = zext i32 %5 to i864
-  %7 = shl i864 %6, 32
+  %6 = zext i32 %5 to i1056
+  %7 = shl i1056 %6, 32
   %src.2 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 2
   %8 = load i32, i32* %src.2, align 4
-  %9 = zext i32 %8 to i864
-  %10 = shl i864 %9, 64
+  %9 = zext i32 %8 to i1056
+  %10 = shl i1056 %9, 64
   %src.3 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 3
   %11 = load i32, i32* %src.3, align 4
-  %12 = zext i32 %11 to i864
-  %13 = shl i864 %12, 96
+  %12 = zext i32 %11 to i1056
+  %13 = shl i1056 %12, 96
   %src.4 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 4
   %14 = load i32, i32* %src.4, align 4
-  %15 = zext i32 %14 to i864
-  %16 = shl i864 %15, 128
+  %15 = zext i32 %14 to i1056
+  %16 = shl i1056 %15, 128
   %src.5 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 5
   %17 = load i32, i32* %src.5, align 4
-  %18 = zext i32 %17 to i864
-  %19 = shl i864 %18, 160
+  %18 = zext i32 %17 to i1056
+  %19 = shl i1056 %18, 160
   %src.6 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 6
   %20 = load i32, i32* %src.6, align 4
-  %21 = zext i32 %20 to i864
-  %22 = shl i864 %21, 192
+  %21 = zext i32 %20 to i1056
+  %22 = shl i1056 %21, 192
   %src.7 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 7
   %23 = load i32, i32* %src.7, align 4
-  %24 = zext i32 %23 to i864
-  %25 = shl i864 %24, 224
+  %24 = zext i32 %23 to i1056
+  %25 = shl i1056 %24, 224
   %src.8 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 8
   %26 = load i32, i32* %src.8, align 4
-  %27 = zext i32 %26 to i864
-  %28 = shl i864 %27, 256
+  %27 = zext i32 %26 to i1056
+  %28 = shl i1056 %27, 256
   %src.9 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 9
   %29 = load i32, i32* %src.9, align 4
-  %30 = zext i32 %29 to i864
-  %31 = shl i864 %30, 288
+  %30 = zext i32 %29 to i1056
+  %31 = shl i1056 %30, 288
   %src.10 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 10
   %32 = load i32, i32* %src.10, align 4
-  %33 = zext i32 %32 to i864
-  %34 = shl i864 %33, 320
+  %33 = zext i32 %32 to i1056
+  %34 = shl i1056 %33, 320
   %src.11 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 11
   %35 = load i32, i32* %src.11, align 4
-  %36 = zext i32 %35 to i864
-  %37 = shl i864 %36, 352
+  %36 = zext i32 %35 to i1056
+  %37 = shl i1056 %36, 352
   %src.12 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 12
   %38 = load i32, i32* %src.12, align 4
-  %39 = zext i32 %38 to i864
-  %40 = shl i864 %39, 384
+  %39 = zext i32 %38 to i1056
+  %40 = shl i1056 %39, 384
   %src.13 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 13
   %41 = load i32, i32* %src.13, align 4
-  %42 = zext i32 %41 to i864
-  %43 = shl i864 %42, 416
+  %42 = zext i32 %41 to i1056
+  %43 = shl i1056 %42, 416
   %src.14 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 14
   %44 = load i32, i32* %src.14, align 4
-  %45 = zext i32 %44 to i864
-  %46 = shl i864 %45, 448
+  %45 = zext i32 %44 to i1056
+  %46 = shl i1056 %45, 448
   %src.15 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 15
   %47 = load i32, i32* %src.15, align 4
-  %48 = zext i32 %47 to i864
-  %49 = shl i864 %48, 480
+  %48 = zext i32 %47 to i1056
+  %49 = shl i1056 %48, 480
   %src.16 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 16
   %50 = load i32, i32* %src.16, align 4
-  %51 = zext i32 %50 to i864
-  %52 = shl i864 %51, 512
+  %51 = zext i32 %50 to i1056
+  %52 = shl i1056 %51, 512
   %src.17 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 17
   %53 = load i32, i32* %src.17, align 4
-  %54 = zext i32 %53 to i864
-  %55 = shl i864 %54, 544
+  %54 = zext i32 %53 to i1056
+  %55 = shl i1056 %54, 544
   %src.18 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 18
   %56 = load i32, i32* %src.18, align 4
-  %57 = zext i32 %56 to i864
-  %58 = shl i864 %57, 576
+  %57 = zext i32 %56 to i1056
+  %58 = shl i1056 %57, 576
   %src.19 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 19
   %59 = load i32, i32* %src.19, align 4
-  %60 = zext i32 %59 to i864
-  %61 = shl i864 %60, 608
+  %60 = zext i32 %59 to i1056
+  %61 = shl i1056 %60, 608
   %src.20 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 20
   %62 = load i32, i32* %src.20, align 4
-  %63 = zext i32 %62 to i864
-  %64 = shl i864 %63, 640
+  %63 = zext i32 %62 to i1056
+  %64 = shl i1056 %63, 640
   %src.21 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 21
   %65 = load i32, i32* %src.21, align 4
-  %66 = zext i32 %65 to i864
-  %67 = shl i864 %66, 672
+  %66 = zext i32 %65 to i1056
+  %67 = shl i1056 %66, 672
   %src.22 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 22
   %68 = load i32, i32* %src.22, align 4
-  %69 = zext i32 %68 to i864
-  %70 = shl i864 %69, 704
+  %69 = zext i32 %68 to i1056
+  %70 = shl i1056 %69, 704
   %src.23 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 23
   %71 = load i32, i32* %src.23, align 4
-  %72 = zext i32 %71 to i864
-  %73 = shl i864 %72, 736
+  %72 = zext i32 %71 to i1056
+  %73 = shl i1056 %72, 736
   %src.24 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 24
   %74 = load i32, i32* %src.24, align 4
-  %75 = zext i32 %74 to i864
-  %76 = shl i864 %75, 768
+  %75 = zext i32 %74 to i1056
+  %76 = shl i1056 %75, 768
   %src.25 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 25
   %77 = load i32, i32* %src.25, align 4
-  %78 = zext i32 %77 to i864
-  %79 = shl i864 %78, 800
+  %78 = zext i32 %77 to i1056
+  %79 = shl i1056 %78, 800
   %src.26 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 26
   %80 = load i32, i32* %src.26, align 4
-  %81 = zext i32 %80 to i864
-  %82 = shl i864 %81, 832
-  %thr.or62 = or i864 %67, %64
-  %thr.or63 = or i864 %61, %58
-  %thr.or64 = or i864 %55, %52
-  %thr.or65 = or i864 %49, %46
-  %thr.or66 = or i864 %43, %40
-  %thr.or67 = or i864 %37, %34
-  %thr.or68 = or i864 %31, %28
-  %thr.or69 = or i864 %25, %22
-  %thr.or70 = or i864 %19, %16
-  %thr.or71 = or i864 %13, %10
-  %thr.or72 = or i864 %7, %4
-  %thr.or73 = or i864 %thr.or62, %thr.or63
-  %thr.or74 = or i864 %thr.or64, %thr.or65
-  %thr.or75 = or i864 %thr.or66, %thr.or67
-  %thr.or76 = or i864 %thr.or68, %thr.or69
-  %thr.or77 = or i864 %thr.or70, %thr.or71
-  %thr.or78 = or i864 %82, %thr.or72
-  %thr.or79 = or i864 %79, %76
-  %thr.or80 = or i864 %73, %70
-  %thr.or81 = or i864 %thr.or73, %thr.or74
-  %thr.or82 = or i864 %thr.or75, %thr.or76
-  %thr.or83 = or i864 %thr.or77, %thr.or78
-  %thr.or84 = or i864 %thr.or79, %thr.or80
-  %thr.or85 = or i864 %thr.or81, %thr.or82
-  %thr.or86 = or i864 %thr.or83, %thr.or84
-  %thr.or87 = or i864 %thr.or85, %thr.or86
-  store i864 %thr.or87, i864* %dst, align 512
+  %81 = zext i32 %80 to i1056
+  %82 = shl i1056 %81, 832
+  %src.27 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 27
+  %83 = load i32, i32* %src.27, align 4
+  %84 = zext i32 %83 to i1056
+  %85 = shl i1056 %84, 864
+  %src.28 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 28
+  %86 = load i32, i32* %src.28, align 4
+  %87 = zext i32 %86 to i1056
+  %88 = shl i1056 %87, 896
+  %src.29 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 29
+  %89 = load i32, i32* %src.29, align 4
+  %90 = zext i32 %89 to i1056
+  %91 = shl i1056 %90, 928
+  %src.30 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 30
+  %92 = load i32, i32* %src.30, align 4
+  %93 = zext i32 %92 to i1056
+  %94 = shl i1056 %93, 960
+  %src.31 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 31
+  %95 = load i32, i32* %src.31, align 4
+  %96 = zext i32 %95 to i1056
+  %97 = shl i1056 %96, 992
+  %src.32 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %src, i64 0, i32 32
+  %98 = load i32, i32* %src.32, align 4
+  %99 = zext i32 %98 to i1056
+  %100 = shl i1056 %99, 1024
+  %thr.or77 = or i1056 %7, %4
+  %thr.or78 = or i1056 %100, %thr.or77
+  %thr.or79 = or i1056 %97, %94
+  %thr.or80 = or i1056 %91, %88
+  %thr.or81 = or i1056 %85, %82
+  %thr.or82 = or i1056 %79, %76
+  %thr.or83 = or i1056 %73, %70
+  %thr.or84 = or i1056 %67, %64
+  %thr.or85 = or i1056 %61, %58
+  %thr.or86 = or i1056 %55, %52
+  %thr.or87 = or i1056 %49, %46
+  %thr.or88 = or i1056 %43, %40
+  %thr.or89 = or i1056 %37, %34
+  %thr.or90 = or i1056 %31, %28
+  %thr.or91 = or i1056 %25, %22
+  %thr.or92 = or i1056 %19, %16
+  %thr.or93 = or i1056 %13, %10
+  %thr.or94 = or i1056 %thr.or78, %thr.or79
+  %thr.or95 = or i1056 %thr.or80, %thr.or81
+  %thr.or96 = or i1056 %thr.or82, %thr.or83
+  %thr.or97 = or i1056 %thr.or84, %thr.or85
+  %thr.or98 = or i1056 %thr.or86, %thr.or87
+  %thr.or99 = or i1056 %thr.or88, %thr.or89
+  %thr.or100 = or i1056 %thr.or90, %thr.or91
+  %thr.or101 = or i1056 %thr.or92, %thr.or93
+  %thr.or102 = or i1056 %thr.or94, %thr.or95
+  %thr.or103 = or i1056 %thr.or96, %thr.or97
+  %thr.or104 = or i1056 %thr.or98, %thr.or99
+  %thr.or105 = or i1056 %thr.or100, %thr.or101
+  %thr.or106 = or i1056 %thr.or102, %thr.or103
+  %thr.or107 = or i1056 %thr.or104, %thr.or105
+  %thr.or108 = or i1056 %thr.or106, %thr.or107
+  store i1056 %thr.or108, i1056* %dst, align 512
   br label %ret
 
 ret:                                              ; preds = %copy, %entry
@@ -2933,22 +2983,42 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal void @copy_in(i1* noalias readonly "orig.arg.no"="0", i1* noalias align 512 "orig.arg.no"="1", [4 x %struct.HeadCtx]* noalias readonly "orig.arg.no"="2", i202* noalias align 512 "orig.arg.no"="3" "unpacked"="3.0" %_0, i202* noalias align 512 "orig.arg.no"="3" "unpacked"="3.1" %_1, i202* noalias align 512 "orig.arg.no"="3" "unpacked"="3.2" %_2, i202* noalias align 512 "orig.arg.no"="3" "unpacked"="3.3" %_3, i1* noalias readonly "orig.arg.no"="4", i1* noalias align 512 "orig.arg.no"="5", i8* noalias readonly "orig.arg.no"="6", i8* noalias align 512 "orig.arg.no"="7", i1* noalias readonly "orig.arg.no"="8", i1* noalias align 512 "orig.arg.no"="9", i1* noalias readonly "orig.arg.no"="10", i1* noalias align 512 "orig.arg.no"="11", i8* noalias readonly "orig.arg.no"="12", i8* noalias align 512 "orig.arg.no"="13", i32* noalias readonly "orig.arg.no"="14", i32* noalias align 512 "orig.arg.no"="15", i32* noalias readonly "orig.arg.no"="16", i32* noalias align 512 "orig.arg.no"="17", i32* noalias readonly "orig.arg.no"="18", i32* noalias align 512 "orig.arg.no"="19", i32* noalias readonly "orig.arg.no"="20", i32* noalias align 512 "orig.arg.no"="21", i32* noalias readonly "orig.arg.no"="22", i32* noalias align 512 "orig.arg.no"="23", %struct.ControlMemSpace* noalias readonly "orig.arg.no"="24", i864* noalias align 512 "orig.arg.no"="25", i1* noalias readonly "orig.arg.no"="26", i1* noalias align 512 "orig.arg.no"="27") #3 {
+define internal void @copy_in(i1* noalias readonly "orig.arg.no"="0", i1* noalias align 512 "orig.arg.no"="1", i32* noalias readonly "orig.arg.no"="2", i32* noalias align 512 "orig.arg.no"="3", i1* noalias readonly "orig.arg.no"="4", i1* noalias align 512 "orig.arg.no"="5", i1* noalias readonly "orig.arg.no"="6", i1* noalias align 512 "orig.arg.no"="7", i8* noalias readonly "orig.arg.no"="8", i8* noalias align 512 "orig.arg.no"="9", [4 x %struct.HeadCtx]* noalias readonly "orig.arg.no"="10", i202* noalias align 512 "orig.arg.no"="11" "unpacked"="11.0" %_0, i202* noalias align 512 "orig.arg.no"="11" "unpacked"="11.1" %_1, i202* noalias align 512 "orig.arg.no"="11" "unpacked"="11.2" %_2, i202* noalias align 512 "orig.arg.no"="11" "unpacked"="11.3" %_3, i1* noalias readonly "orig.arg.no"="12", i1* noalias align 512 "orig.arg.no"="13", i32* noalias readonly "orig.arg.no"="14", i32* noalias align 512 "orig.arg.no"="15", i1* noalias readonly "orig.arg.no"="16", i1* noalias align 512 "orig.arg.no"="17", i32* noalias readonly "orig.arg.no"="18", i32* noalias align 512 "orig.arg.no"="19", %struct.ControlMemSpace* noalias readonly "orig.arg.no"="20", i1056* noalias align 512 "orig.arg.no"="21", i32* noalias readonly "orig.arg.no"="22", i32* noalias align 512 "orig.arg.no"="23", i32* noalias readonly "orig.arg.no"="24", i32* noalias align 512 "orig.arg.no"="25", i32* noalias readonly "orig.arg.no"="26", i32* noalias align 512 "orig.arg.no"="27", i32* noalias readonly "orig.arg.no"="28", i32* noalias align 512 "orig.arg.no"="29", i32* noalias readonly "orig.arg.no"="30", i32* noalias align 512 "orig.arg.no"="31", i32* noalias readonly "orig.arg.no"="32", i32* noalias align 512 "orig.arg.no"="33", i32* noalias readonly "orig.arg.no"="34", i32* noalias align 512 "orig.arg.no"="35", i32* noalias readonly "orig.arg.no"="36", i32* noalias align 512 "orig.arg.no"="37", i32* noalias readonly "orig.arg.no"="38", i32* noalias align 512 "orig.arg.no"="39", i32* noalias readonly "orig.arg.no"="40", i32* noalias align 512 "orig.arg.no"="41", i32* noalias readonly "orig.arg.no"="42", i32* noalias align 512 "orig.arg.no"="43", i32* noalias readonly "orig.arg.no"="44", i32* noalias align 512 "orig.arg.no"="45", i32* noalias readonly "orig.arg.no"="46", i32* noalias align 512 "orig.arg.no"="47", i32* noalias readonly "orig.arg.no"="48", i32* noalias align 512 "orig.arg.no"="49", i32* noalias readonly "orig.arg.no"="50", i32* noalias align 512 "orig.arg.no"="51", i1* noalias readonly "orig.arg.no"="52", i1* noalias align 512 "orig.arg.no"="53", i1* noalias readonly "orig.arg.no"="54", i1* noalias align 512 "orig.arg.no"="55", i8* noalias readonly "orig.arg.no"="56", i8* noalias align 512 "orig.arg.no"="57", i32* noalias readonly "orig.arg.no"="58", i32* noalias align 512 "orig.arg.no"="59", i32* noalias readonly "orig.arg.no"="60", i32* noalias align 512 "orig.arg.no"="61", i32* noalias readonly "orig.arg.no"="62", i32* noalias align 512 "orig.arg.no"="63", i1* noalias readonly "orig.arg.no"="64", i1* noalias align 512 "orig.arg.no"="65", i1* noalias readonly "orig.arg.no"="66", i1* noalias align 512 "orig.arg.no"="67") #3 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %1, i1* %0)
-  call void @onebyonecpy_hls.p0a4struct.HeadCtx.11.14(i202* align 512 %_0, i202* align 512 %_1, i202* align 512 %_2, i202* align 512 %_3, [4 x %struct.HeadCtx]* %2)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %4, i1* %3)
-  call fastcc void @onebyonecpy_hls.p0i8(i8* align 512 %6, i8* %5)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %8, i1* %7)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %10, i1* %9)
-  call fastcc void @onebyonecpy_hls.p0i8(i8* align 512 %12, i8* %11)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %3, i32* %2)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %5, i1* %4)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %7, i1* %6)
+  call fastcc void @onebyonecpy_hls.p0i8(i8* align 512 %9, i8* %8)
+  call void @onebyonecpy_hls.p0a4struct.HeadCtx.11.14(i202* align 512 %_0, i202* align 512 %_1, i202* align 512 %_2, i202* align 512 %_3, [4 x %struct.HeadCtx]* %10)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %12, i1* %11)
   call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %14, i32* %13)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %16, i32* %15)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %16, i1* %15)
   call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %18, i32* %17)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %20, i32* %19)
+  call fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace(i1056* align 512 %20, %struct.ControlMemSpace* %19)
   call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %22, i32* %21)
-  call fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace(i864* align 512 %24, %struct.ControlMemSpace* %23)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %26, i1* %25)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %24, i32* %23)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %26, i32* %25)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %28, i32* %27)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %30, i32* %29)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %32, i32* %31)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %34, i32* %33)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %36, i32* %35)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %38, i32* %37)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %40, i32* %39)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %42, i32* %41)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %44, i32* %43)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %46, i32* %45)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %48, i32* %47)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %50, i32* %49)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %52, i1* %51)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %54, i1* %53)
+  call fastcc void @onebyonecpy_hls.p0i8(i8* align 512 %56, i8* %55)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %58, i32* %57)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %60, i32* %59)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %62, i32* %61)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %64, i1* %63)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %66, i1* %65)
   ret void
 }
 
@@ -4842,142 +4912,186 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal void @copy_out(i1* noalias "orig.arg.no"="0", i1* noalias readonly align 512 "orig.arg.no"="1", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="2", i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.3" %_3, i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i8* noalias "orig.arg.no"="6", i8* noalias readonly align 512 "orig.arg.no"="7", i1* noalias "orig.arg.no"="8", i1* noalias readonly align 512 "orig.arg.no"="9", i1* noalias "orig.arg.no"="10", i1* noalias readonly align 512 "orig.arg.no"="11", i8* noalias "orig.arg.no"="12", i8* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i32* noalias "orig.arg.no"="16", i32* noalias readonly align 512 "orig.arg.no"="17", i32* noalias "orig.arg.no"="18", i32* noalias readonly align 512 "orig.arg.no"="19", i32* noalias "orig.arg.no"="20", i32* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", %struct.ControlMemSpace* noalias "orig.arg.no"="24", i864* noalias readonly align 512 "orig.arg.no"="25", i1* noalias "orig.arg.no"="26", i1* noalias readonly align 512 "orig.arg.no"="27") #4 {
+define internal void @copy_out(i1* noalias "orig.arg.no"="0", i1* noalias readonly align 512 "orig.arg.no"="1", i32* noalias "orig.arg.no"="2", i32* noalias readonly align 512 "orig.arg.no"="3", i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i1* noalias "orig.arg.no"="6", i1* noalias readonly align 512 "orig.arg.no"="7", i8* noalias "orig.arg.no"="8", i8* noalias readonly align 512 "orig.arg.no"="9", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="10", i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.3" %_3, i1* noalias "orig.arg.no"="12", i1* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i1* noalias "orig.arg.no"="16", i1* noalias readonly align 512 "orig.arg.no"="17", i32* noalias "orig.arg.no"="18", i32* noalias readonly align 512 "orig.arg.no"="19", %struct.ControlMemSpace* noalias "orig.arg.no"="20", i1056* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", i32* noalias "orig.arg.no"="24", i32* noalias readonly align 512 "orig.arg.no"="25", i32* noalias "orig.arg.no"="26", i32* noalias readonly align 512 "orig.arg.no"="27", i32* noalias "orig.arg.no"="28", i32* noalias readonly align 512 "orig.arg.no"="29", i32* noalias "orig.arg.no"="30", i32* noalias readonly align 512 "orig.arg.no"="31", i32* noalias "orig.arg.no"="32", i32* noalias readonly align 512 "orig.arg.no"="33", i32* noalias "orig.arg.no"="34", i32* noalias readonly align 512 "orig.arg.no"="35", i32* noalias "orig.arg.no"="36", i32* noalias readonly align 512 "orig.arg.no"="37", i32* noalias "orig.arg.no"="38", i32* noalias readonly align 512 "orig.arg.no"="39", i32* noalias "orig.arg.no"="40", i32* noalias readonly align 512 "orig.arg.no"="41", i32* noalias "orig.arg.no"="42", i32* noalias readonly align 512 "orig.arg.no"="43", i32* noalias "orig.arg.no"="44", i32* noalias readonly align 512 "orig.arg.no"="45", i32* noalias "orig.arg.no"="46", i32* noalias readonly align 512 "orig.arg.no"="47", i32* noalias "orig.arg.no"="48", i32* noalias readonly align 512 "orig.arg.no"="49", i32* noalias "orig.arg.no"="50", i32* noalias readonly align 512 "orig.arg.no"="51", i1* noalias "orig.arg.no"="52", i1* noalias readonly align 512 "orig.arg.no"="53", i1* noalias "orig.arg.no"="54", i1* noalias readonly align 512 "orig.arg.no"="55", i8* noalias "orig.arg.no"="56", i8* noalias readonly align 512 "orig.arg.no"="57", i32* noalias "orig.arg.no"="58", i32* noalias readonly align 512 "orig.arg.no"="59", i32* noalias "orig.arg.no"="60", i32* noalias readonly align 512 "orig.arg.no"="61", i32* noalias "orig.arg.no"="62", i32* noalias readonly align 512 "orig.arg.no"="63", i1* noalias "orig.arg.no"="64", i1* noalias readonly align 512 "orig.arg.no"="65", i1* noalias "orig.arg.no"="66", i1* noalias readonly align 512 "orig.arg.no"="67") #4 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* %0, i1* align 512 %1)
-  call void @onebyonecpy_hls.p0a4struct.HeadCtx.21.24([4 x %struct.HeadCtx]* %2, i202* align 512 %_0, i202* align 512 %_1, i202* align 512 %_2, i202* align 512 %_3)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %3, i1* align 512 %4)
-  call fastcc void @onebyonecpy_hls.p0i8(i8* %5, i8* align 512 %6)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %7, i1* align 512 %8)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %9, i1* align 512 %10)
-  call fastcc void @onebyonecpy_hls.p0i8(i8* %11, i8* align 512 %12)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %2, i32* align 512 %3)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %4, i1* align 512 %5)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %6, i1* align 512 %7)
+  call fastcc void @onebyonecpy_hls.p0i8(i8* %8, i8* align 512 %9)
+  call void @onebyonecpy_hls.p0a4struct.HeadCtx.21.24([4 x %struct.HeadCtx]* %10, i202* align 512 %_0, i202* align 512 %_1, i202* align 512 %_2, i202* align 512 %_3)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %11, i1* align 512 %12)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %13, i32* align 512 %14)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %15, i32* align 512 %16)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %15, i1* align 512 %16)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %17, i32* align 512 %18)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %19, i32* align 512 %20)
+  call fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace.29(%struct.ControlMemSpace* %19, i1056* align 512 %20)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %21, i32* align 512 %22)
-  call fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace.29(%struct.ControlMemSpace* %23, i864* align 512 %24)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %25, i1* align 512 %26)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %23, i32* align 512 %24)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %25, i32* align 512 %26)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %27, i32* align 512 %28)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %29, i32* align 512 %30)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %31, i32* align 512 %32)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %33, i32* align 512 %34)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %35, i32* align 512 %36)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %37, i32* align 512 %38)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %39, i32* align 512 %40)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %41, i32* align 512 %42)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %43, i32* align 512 %44)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %45, i32* align 512 %46)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %47, i32* align 512 %48)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %49, i32* align 512 %50)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %51, i1* align 512 %52)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %53, i1* align 512 %54)
+  call fastcc void @onebyonecpy_hls.p0i8(i8* %55, i8* align 512 %56)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %57, i32* align 512 %58)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %59, i32* align 512 %60)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %61, i32* align 512 %62)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %63, i1* align 512 %64)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %65, i1* align 512 %66)
   ret void
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace.29(%struct.ControlMemSpace* noalias %dst, i864* noalias readonly align 512 %src) unnamed_addr #1 {
+define internal fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace.29(%struct.ControlMemSpace* noalias %dst, i1056* noalias readonly align 512 %src) unnamed_addr #1 {
 entry:
   %0 = icmp eq %struct.ControlMemSpace* %dst, null
-  %1 = icmp eq i864* %src, null
+  %1 = icmp eq i1056* %src, null
   %2 = or i1 %0, %1
   br i1 %2, label %ret, label %copy
 
 copy:                                             ; preds = %entry
   %dst.0 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 0
-  %3 = load i864, i864* %src, align 512
-  %.partselect26 = trunc i864 %3 to i32
-  store i32 %.partselect26, i32* %dst.0, align 512
+  %3 = load i1056, i1056* %src, align 512
+  %.partselect32 = trunc i1056 %3 to i32
+  store i32 %.partselect32, i32* %dst.0, align 512
   %dst.1 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 1
-  %4 = lshr i864 %3, 32
-  %.partselect25 = trunc i864 %4 to i32
-  store i32 %.partselect25, i32* %dst.1, align 4
+  %4 = lshr i1056 %3, 32
+  %.partselect31 = trunc i1056 %4 to i32
+  store i32 %.partselect31, i32* %dst.1, align 4
   %dst.2 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 2
-  %5 = lshr i864 %3, 64
-  %.partselect24 = trunc i864 %5 to i32
-  store i32 %.partselect24, i32* %dst.2, align 8
+  %5 = lshr i1056 %3, 64
+  %.partselect30 = trunc i1056 %5 to i32
+  store i32 %.partselect30, i32* %dst.2, align 8
   %dst.3 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 3
-  %6 = lshr i864 %3, 96
-  %.partselect23 = trunc i864 %6 to i32
-  store i32 %.partselect23, i32* %dst.3, align 4
+  %6 = lshr i1056 %3, 96
+  %.partselect29 = trunc i1056 %6 to i32
+  store i32 %.partselect29, i32* %dst.3, align 4
   %dst.4 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 4
-  %7 = lshr i864 %3, 128
-  %.partselect22 = trunc i864 %7 to i32
-  store i32 %.partselect22, i32* %dst.4, align 16
+  %7 = lshr i1056 %3, 128
+  %.partselect28 = trunc i1056 %7 to i32
+  store i32 %.partselect28, i32* %dst.4, align 16
   %dst.5 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 5
-  %8 = lshr i864 %3, 160
-  %.partselect21 = trunc i864 %8 to i32
-  store i32 %.partselect21, i32* %dst.5, align 4
+  %8 = lshr i1056 %3, 160
+  %.partselect27 = trunc i1056 %8 to i32
+  store i32 %.partselect27, i32* %dst.5, align 4
   %dst.6 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 6
-  %9 = lshr i864 %3, 192
-  %.partselect20 = trunc i864 %9 to i32
-  store i32 %.partselect20, i32* %dst.6, align 8
+  %9 = lshr i1056 %3, 192
+  %.partselect26 = trunc i1056 %9 to i32
+  store i32 %.partselect26, i32* %dst.6, align 8
   %dst.7 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 7
-  %10 = lshr i864 %3, 224
-  %.partselect19 = trunc i864 %10 to i32
-  store i32 %.partselect19, i32* %dst.7, align 4
+  %10 = lshr i1056 %3, 224
+  %.partselect25 = trunc i1056 %10 to i32
+  store i32 %.partselect25, i32* %dst.7, align 4
   %dst.8 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 8
-  %11 = lshr i864 %3, 256
-  %.partselect18 = trunc i864 %11 to i32
-  store i32 %.partselect18, i32* %dst.8, align 32
+  %11 = lshr i1056 %3, 256
+  %.partselect24 = trunc i1056 %11 to i32
+  store i32 %.partselect24, i32* %dst.8, align 32
   %dst.9 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 9
-  %12 = lshr i864 %3, 288
-  %.partselect17 = trunc i864 %12 to i32
-  store i32 %.partselect17, i32* %dst.9, align 4
+  %12 = lshr i1056 %3, 288
+  %.partselect23 = trunc i1056 %12 to i32
+  store i32 %.partselect23, i32* %dst.9, align 4
   %dst.10 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 10
-  %13 = lshr i864 %3, 320
-  %.partselect16 = trunc i864 %13 to i32
-  store i32 %.partselect16, i32* %dst.10, align 8
+  %13 = lshr i1056 %3, 320
+  %.partselect22 = trunc i1056 %13 to i32
+  store i32 %.partselect22, i32* %dst.10, align 8
   %dst.11 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 11
-  %14 = lshr i864 %3, 352
-  %.partselect15 = trunc i864 %14 to i32
-  store i32 %.partselect15, i32* %dst.11, align 4
+  %14 = lshr i1056 %3, 352
+  %.partselect21 = trunc i1056 %14 to i32
+  store i32 %.partselect21, i32* %dst.11, align 4
   %dst.12 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 12
-  %15 = lshr i864 %3, 384
-  %.partselect14 = trunc i864 %15 to i32
-  store i32 %.partselect14, i32* %dst.12, align 16
+  %15 = lshr i1056 %3, 384
+  %.partselect20 = trunc i1056 %15 to i32
+  store i32 %.partselect20, i32* %dst.12, align 16
   %dst.13 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 13
-  %16 = lshr i864 %3, 416
-  %.partselect13 = trunc i864 %16 to i32
-  store i32 %.partselect13, i32* %dst.13, align 4
+  %16 = lshr i1056 %3, 416
+  %.partselect19 = trunc i1056 %16 to i32
+  store i32 %.partselect19, i32* %dst.13, align 4
   %dst.14 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 14
-  %17 = lshr i864 %3, 448
-  %.partselect12 = trunc i864 %17 to i32
-  store i32 %.partselect12, i32* %dst.14, align 8
+  %17 = lshr i1056 %3, 448
+  %.partselect18 = trunc i1056 %17 to i32
+  store i32 %.partselect18, i32* %dst.14, align 8
   %dst.15 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 15
-  %18 = lshr i864 %3, 480
-  %.partselect11 = trunc i864 %18 to i32
-  store i32 %.partselect11, i32* %dst.15, align 4
+  %18 = lshr i1056 %3, 480
+  %.partselect17 = trunc i1056 %18 to i32
+  store i32 %.partselect17, i32* %dst.15, align 4
   %dst.16 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 16
-  %19 = lshr i864 %3, 512
-  %.partselect10 = trunc i864 %19 to i32
-  store i32 %.partselect10, i32* %dst.16, align 64
+  %19 = lshr i1056 %3, 512
+  %.partselect16 = trunc i1056 %19 to i32
+  store i32 %.partselect16, i32* %dst.16, align 64
   %dst.17 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 17
-  %20 = lshr i864 %3, 544
-  %.partselect9 = trunc i864 %20 to i32
-  store i32 %.partselect9, i32* %dst.17, align 4
+  %20 = lshr i1056 %3, 544
+  %.partselect15 = trunc i1056 %20 to i32
+  store i32 %.partselect15, i32* %dst.17, align 4
   %dst.18 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 18
-  %21 = lshr i864 %3, 576
-  %.partselect8 = trunc i864 %21 to i32
-  store i32 %.partselect8, i32* %dst.18, align 8
+  %21 = lshr i1056 %3, 576
+  %.partselect14 = trunc i1056 %21 to i32
+  store i32 %.partselect14, i32* %dst.18, align 8
   %dst.19 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 19
-  %22 = lshr i864 %3, 608
-  %.partselect7 = trunc i864 %22 to i32
-  store i32 %.partselect7, i32* %dst.19, align 4
+  %22 = lshr i1056 %3, 608
+  %.partselect13 = trunc i1056 %22 to i32
+  store i32 %.partselect13, i32* %dst.19, align 4
   %dst.20 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 20
-  %23 = lshr i864 %3, 640
-  %.partselect6 = trunc i864 %23 to i32
-  store i32 %.partselect6, i32* %dst.20, align 16
+  %23 = lshr i1056 %3, 640
+  %.partselect12 = trunc i1056 %23 to i32
+  store i32 %.partselect12, i32* %dst.20, align 16
   %dst.21 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 21
-  %24 = lshr i864 %3, 672
-  %.partselect5 = trunc i864 %24 to i32
-  store i32 %.partselect5, i32* %dst.21, align 4
+  %24 = lshr i1056 %3, 672
+  %.partselect11 = trunc i1056 %24 to i32
+  store i32 %.partselect11, i32* %dst.21, align 4
   %dst.22 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 22
-  %25 = lshr i864 %3, 704
-  %.partselect4 = trunc i864 %25 to i32
-  store i32 %.partselect4, i32* %dst.22, align 8
+  %25 = lshr i1056 %3, 704
+  %.partselect10 = trunc i1056 %25 to i32
+  store i32 %.partselect10, i32* %dst.22, align 8
   %dst.23 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 23
-  %26 = lshr i864 %3, 736
-  %.partselect3 = trunc i864 %26 to i32
-  store i32 %.partselect3, i32* %dst.23, align 4
+  %26 = lshr i1056 %3, 736
+  %.partselect9 = trunc i1056 %26 to i32
+  store i32 %.partselect9, i32* %dst.23, align 4
   %dst.24 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 24
-  %27 = lshr i864 %3, 768
-  %.partselect2 = trunc i864 %27 to i32
-  store i32 %.partselect2, i32* %dst.24, align 32
+  %27 = lshr i1056 %3, 768
+  %.partselect8 = trunc i1056 %27 to i32
+  store i32 %.partselect8, i32* %dst.24, align 32
   %dst.25 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 25
-  %28 = lshr i864 %3, 800
-  %.partselect1 = trunc i864 %28 to i32
-  store i32 %.partselect1, i32* %dst.25, align 4
+  %28 = lshr i1056 %3, 800
+  %.partselect7 = trunc i1056 %28 to i32
+  store i32 %.partselect7, i32* %dst.25, align 4
   %dst.26 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 26
-  %29 = lshr i864 %3, 832
-  %.partselect = trunc i864 %29 to i32
-  store i32 %.partselect, i32* %dst.26, align 8
+  %29 = lshr i1056 %3, 832
+  %.partselect6 = trunc i1056 %29 to i32
+  store i32 %.partselect6, i32* %dst.26, align 8
+  %dst.27 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 27
+  %30 = lshr i1056 %3, 864
+  %.partselect5 = trunc i1056 %30 to i32
+  store i32 %.partselect5, i32* %dst.27, align 4
+  %dst.28 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 28
+  %31 = lshr i1056 %3, 896
+  %.partselect4 = trunc i1056 %31 to i32
+  store i32 %.partselect4, i32* %dst.28, align 16
+  %dst.29 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 29
+  %32 = lshr i1056 %3, 928
+  %.partselect3 = trunc i1056 %32 to i32
+  store i32 %.partselect3, i32* %dst.29, align 4
+  %dst.30 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 30
+  %33 = lshr i1056 %3, 960
+  %.partselect2 = trunc i1056 %33 to i32
+  store i32 %.partselect2, i32* %dst.30, align 8
+  %dst.31 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 31
+  %34 = lshr i1056 %3, 992
+  %.partselect1 = trunc i1056 %34 to i32
+  store i32 %.partselect1, i32* %dst.31, align 4
+  %dst.32 = getelementptr %struct.ControlMemSpace, %struct.ControlMemSpace* %dst, i64 0, i32 32
+  %35 = lshr i1056 %3, 1024
+  %.partselect = trunc i1056 %35 to i32
+  store i32 %.partselect, i32* %dst.32, align 128
   br label %ret
 
 ret:                                              ; preds = %copy, %entry
@@ -4988,41 +5102,61 @@ declare i8* @malloc(i64)
 
 declare void @free(i8*)
 
-declare void @apatb_transformer_top_hw(i1, i1, i1*, i1, i1, i1, i202*, i202*, i202*, i202*, i1*, i8*, i1, i1*, i1, i1, i1*, i8*, i32*, i32*, i32*, i32, i32, i32*, i1, i1, i1, i1, i32*, i864*, i1, i1*)
+declare void @apatb_transformer_top_hw(i1, i1, i1*, i1, i32*, i1*, i1, i1, i1*, i8*, i202*, i202*, i202*, i202*, i1, i1*, i1, i32, i32, i32*, i1, i1, i1, i1, i1*, i32*, i1056*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i1*, i1*, i8*, i32*, i32*, i32*, i1*, i1*)
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal void @copy_back(i1* noalias "orig.arg.no"="0", i1* noalias readonly align 512 "orig.arg.no"="1", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="2", i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="3" "unpacked"="3.3" %_3, i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i8* noalias "orig.arg.no"="6", i8* noalias readonly align 512 "orig.arg.no"="7", i1* noalias "orig.arg.no"="8", i1* noalias readonly align 512 "orig.arg.no"="9", i1* noalias "orig.arg.no"="10", i1* noalias readonly align 512 "orig.arg.no"="11", i8* noalias "orig.arg.no"="12", i8* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i32* noalias "orig.arg.no"="16", i32* noalias readonly align 512 "orig.arg.no"="17", i32* noalias "orig.arg.no"="18", i32* noalias readonly align 512 "orig.arg.no"="19", i32* noalias "orig.arg.no"="20", i32* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", %struct.ControlMemSpace* noalias "orig.arg.no"="24", i864* noalias readonly align 512 "orig.arg.no"="25", i1* noalias "orig.arg.no"="26", i1* noalias readonly align 512 "orig.arg.no"="27") #4 {
+define internal void @copy_back(i1* noalias "orig.arg.no"="0", i1* noalias readonly align 512 "orig.arg.no"="1", i32* noalias "orig.arg.no"="2", i32* noalias readonly align 512 "orig.arg.no"="3", i1* noalias "orig.arg.no"="4", i1* noalias readonly align 512 "orig.arg.no"="5", i1* noalias "orig.arg.no"="6", i1* noalias readonly align 512 "orig.arg.no"="7", i8* noalias "orig.arg.no"="8", i8* noalias readonly align 512 "orig.arg.no"="9", [4 x %struct.HeadCtx]* noalias "orig.arg.no"="10", i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.0" %_0, i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.1" %_1, i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.2" %_2, i202* noalias readonly align 512 "orig.arg.no"="11" "unpacked"="11.3" %_3, i1* noalias "orig.arg.no"="12", i1* noalias readonly align 512 "orig.arg.no"="13", i32* noalias "orig.arg.no"="14", i32* noalias readonly align 512 "orig.arg.no"="15", i1* noalias "orig.arg.no"="16", i1* noalias readonly align 512 "orig.arg.no"="17", i32* noalias "orig.arg.no"="18", i32* noalias readonly align 512 "orig.arg.no"="19", %struct.ControlMemSpace* noalias "orig.arg.no"="20", i1056* noalias readonly align 512 "orig.arg.no"="21", i32* noalias "orig.arg.no"="22", i32* noalias readonly align 512 "orig.arg.no"="23", i32* noalias "orig.arg.no"="24", i32* noalias readonly align 512 "orig.arg.no"="25", i32* noalias "orig.arg.no"="26", i32* noalias readonly align 512 "orig.arg.no"="27", i32* noalias "orig.arg.no"="28", i32* noalias readonly align 512 "orig.arg.no"="29", i32* noalias "orig.arg.no"="30", i32* noalias readonly align 512 "orig.arg.no"="31", i32* noalias "orig.arg.no"="32", i32* noalias readonly align 512 "orig.arg.no"="33", i32* noalias "orig.arg.no"="34", i32* noalias readonly align 512 "orig.arg.no"="35", i32* noalias "orig.arg.no"="36", i32* noalias readonly align 512 "orig.arg.no"="37", i32* noalias "orig.arg.no"="38", i32* noalias readonly align 512 "orig.arg.no"="39", i32* noalias "orig.arg.no"="40", i32* noalias readonly align 512 "orig.arg.no"="41", i32* noalias "orig.arg.no"="42", i32* noalias readonly align 512 "orig.arg.no"="43", i32* noalias "orig.arg.no"="44", i32* noalias readonly align 512 "orig.arg.no"="45", i32* noalias "orig.arg.no"="46", i32* noalias readonly align 512 "orig.arg.no"="47", i32* noalias "orig.arg.no"="48", i32* noalias readonly align 512 "orig.arg.no"="49", i32* noalias "orig.arg.no"="50", i32* noalias readonly align 512 "orig.arg.no"="51", i1* noalias "orig.arg.no"="52", i1* noalias readonly align 512 "orig.arg.no"="53", i1* noalias "orig.arg.no"="54", i1* noalias readonly align 512 "orig.arg.no"="55", i8* noalias "orig.arg.no"="56", i8* noalias readonly align 512 "orig.arg.no"="57", i32* noalias "orig.arg.no"="58", i32* noalias readonly align 512 "orig.arg.no"="59", i32* noalias "orig.arg.no"="60", i32* noalias readonly align 512 "orig.arg.no"="61", i32* noalias "orig.arg.no"="62", i32* noalias readonly align 512 "orig.arg.no"="63", i1* noalias "orig.arg.no"="64", i1* noalias readonly align 512 "orig.arg.no"="65", i1* noalias "orig.arg.no"="66", i1* noalias readonly align 512 "orig.arg.no"="67") #4 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* %0, i1* align 512 %1)
-  call void @onebyonecpy_hls.p0a4struct.HeadCtx.21.24([4 x %struct.HeadCtx]* %2, i202* align 512 %_0, i202* align 512 %_1, i202* align 512 %_2, i202* align 512 %_3)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %3, i1* align 512 %4)
-  call fastcc void @onebyonecpy_hls.p0i8(i8* %5, i8* align 512 %6)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %7, i1* align 512 %8)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %9, i1* align 512 %10)
-  call fastcc void @onebyonecpy_hls.p0i8(i8* %11, i8* align 512 %12)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %2, i32* align 512 %3)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %4, i1* align 512 %5)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %6, i1* align 512 %7)
+  call fastcc void @onebyonecpy_hls.p0i8(i8* %8, i8* align 512 %9)
+  call void @onebyonecpy_hls.p0a4struct.HeadCtx.21.24([4 x %struct.HeadCtx]* %10, i202* align 512 %_0, i202* align 512 %_1, i202* align 512 %_2, i202* align 512 %_3)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %11, i1* align 512 %12)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %13, i32* align 512 %14)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %15, i32* align 512 %16)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %15, i1* align 512 %16)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %17, i32* align 512 %18)
-  call fastcc void @onebyonecpy_hls.p0i32(i32* %19, i32* align 512 %20)
+  call fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace.29(%struct.ControlMemSpace* %19, i1056* align 512 %20)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %21, i32* align 512 %22)
-  call fastcc void @onebyonecpy_hls.p0struct.ControlMemSpace.29(%struct.ControlMemSpace* %23, i864* align 512 %24)
-  call fastcc void @onebyonecpy_hls.p0i1(i1* %25, i1* align 512 %26)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %23, i32* align 512 %24)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %25, i32* align 512 %26)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %27, i32* align 512 %28)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %29, i32* align 512 %30)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %31, i32* align 512 %32)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %33, i32* align 512 %34)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %35, i32* align 512 %36)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %37, i32* align 512 %38)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %39, i32* align 512 %40)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %41, i32* align 512 %42)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %43, i32* align 512 %44)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %45, i32* align 512 %46)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %47, i32* align 512 %48)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %49, i32* align 512 %50)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %51, i1* align 512 %52)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %53, i1* align 512 %54)
+  call fastcc void @onebyonecpy_hls.p0i8(i8* %55, i8* align 512 %56)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %57, i32* align 512 %58)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %59, i32* align 512 %60)
+  call fastcc void @onebyonecpy_hls.p0i32(i32* %61, i32* align 512 %62)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %63, i1* align 512 %64)
+  call fastcc void @onebyonecpy_hls.p0i1(i1* %65, i1* align 512 %66)
   ret void
 }
 
-declare void @transformer_top_hw_stub(i1 zeroext, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1 zeroext, [4 x %struct.HeadCtx]* noalias nonnull, i1* noalias nocapture nonnull, i8* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1* noalias nocapture nonnull, i8* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32, i32, i32* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1 zeroext, i1 zeroext, i32* noalias nocapture nonnull, %struct.ControlMemSpace* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull)
+declare void @transformer_top_hw_stub(i1 zeroext, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i32* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1* noalias nocapture nonnull, i8* noalias nocapture nonnull, [4 x %struct.HeadCtx]* noalias nonnull, i1 zeroext, i1* noalias nocapture nonnull, i1 zeroext, i32, i32, i32* noalias nocapture nonnull, i1 zeroext, i1 zeroext, i1 zeroext, i1 zeroext, i1* noalias nocapture nonnull, i32* noalias nocapture nonnull, %struct.ControlMemSpace* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull, i8* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i32* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull)
 
-define void @transformer_top_hw_stub_wrapper(i1, i1, i1*, i1, i1, i1, i202*, i202*, i202*, i202*, i1*, i8*, i1, i1*, i1, i1, i1*, i8*, i32*, i32*, i32*, i32, i32, i32*, i1, i1, i1, i1, i32*, i864*, i1, i1*) #5 {
+define void @transformer_top_hw_stub_wrapper(i1, i1, i1*, i1, i32*, i1*, i1, i1, i1*, i8*, i202*, i202*, i202*, i202*, i1, i1*, i1, i32, i32, i32*, i1, i1, i1, i1, i1*, i32*, i1056*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i32*, i1*, i1*, i8*, i32*, i32*, i32*, i1*, i1*) #5 {
 entry:
-  %32 = call i8* @malloc(i64 240)
-  %33 = bitcast i8* %32 to [4 x %struct.HeadCtx]*
-  %34 = call i8* @malloc(i64 108)
-  %35 = bitcast i8* %34 to %struct.ControlMemSpace*
-  call void @copy_out(i1* null, i1* %2, [4 x %struct.HeadCtx]* %33, i202* %6, i202* %7, i202* %8, i202* %9, i1* null, i1* %10, i8* null, i8* %11, i1* null, i1* %13, i1* null, i1* %16, i8* null, i8* %17, i32* null, i32* %18, i32* null, i32* %19, i32* null, i32* %20, i32* null, i32* %23, i32* null, i32* %28, %struct.ControlMemSpace* %35, i864* %29, i1* null, i1* %31)
-  call void @transformer_top_hw_stub(i1 %0, i1 %1, i1* %2, i1 %3, i1 %4, i1 %5, [4 x %struct.HeadCtx]* %33, i1* %10, i8* %11, i1 %12, i1* %13, i1 %14, i1 %15, i1* %16, i8* %17, i32* %18, i32* %19, i32* %20, i32 %21, i32 %22, i32* %23, i1 %24, i1 %25, i1 %26, i1 %27, i32* %28, %struct.ControlMemSpace* %35, i1 %30, i1* %31)
-  call void @copy_in(i1* null, i1* %2, [4 x %struct.HeadCtx]* %33, i202* %6, i202* %7, i202* %8, i202* %9, i1* null, i1* %10, i8* null, i8* %11, i1* null, i1* %13, i1* null, i1* %16, i8* null, i8* %17, i32* null, i32* %18, i32* null, i32* %19, i32* null, i32* %20, i32* null, i32* %23, i32* null, i32* %28, %struct.ControlMemSpace* %35, i864* %29, i1* null, i1* %31)
-  call void @free(i8* %32)
-  call void @free(i8* %34)
+  %50 = call i8* @malloc(i64 240)
+  %51 = bitcast i8* %50 to [4 x %struct.HeadCtx]*
+  %52 = call i8* @malloc(i64 132)
+  %53 = bitcast i8* %52 to %struct.ControlMemSpace*
+  call void @copy_out(i1* null, i1* %2, i32* null, i32* %4, i1* null, i1* %5, i1* null, i1* %8, i8* null, i8* %9, [4 x %struct.HeadCtx]* %51, i202* %10, i202* %11, i202* %12, i202* %13, i1* null, i1* %15, i32* null, i32* %19, i1* null, i1* %24, i32* null, i32* %25, %struct.ControlMemSpace* %53, i1056* %26, i32* null, i32* %27, i32* null, i32* %28, i32* null, i32* %29, i32* null, i32* %30, i32* null, i32* %31, i32* null, i32* %32, i32* null, i32* %33, i32* null, i32* %34, i32* null, i32* %35, i32* null, i32* %36, i32* null, i32* %37, i32* null, i32* %38, i32* null, i32* %39, i32* null, i32* %40, i32* null, i32* %41, i1* null, i1* %42, i1* null, i1* %43, i8* null, i8* %44, i32* null, i32* %45, i32* null, i32* %46, i32* null, i32* %47, i1* null, i1* %48, i1* null, i1* %49)
+  call void @transformer_top_hw_stub(i1 %0, i1 %1, i1* %2, i1 %3, i32* %4, i1* %5, i1 %6, i1 %7, i1* %8, i8* %9, [4 x %struct.HeadCtx]* %51, i1 %14, i1* %15, i1 %16, i32 %17, i32 %18, i32* %19, i1 %20, i1 %21, i1 %22, i1 %23, i1* %24, i32* %25, %struct.ControlMemSpace* %53, i32* %27, i32* %28, i32* %29, i32* %30, i32* %31, i32* %32, i32* %33, i32* %34, i32* %35, i32* %36, i32* %37, i32* %38, i32* %39, i32* %40, i32* %41, i1* %42, i1* %43, i8* %44, i32* %45, i32* %46, i32* %47, i1* %48, i1* %49)
+  call void @copy_in(i1* null, i1* %2, i32* null, i32* %4, i1* null, i1* %5, i1* null, i1* %8, i8* null, i8* %9, [4 x %struct.HeadCtx]* %51, i202* %10, i202* %11, i202* %12, i202* %13, i1* null, i1* %15, i32* null, i32* %19, i1* null, i1* %24, i32* null, i32* %25, %struct.ControlMemSpace* %53, i1056* %26, i32* null, i32* %27, i32* null, i32* %28, i32* null, i32* %29, i32* null, i32* %30, i32* null, i32* %31, i32* null, i32* %32, i32* null, i32* %33, i32* null, i32* %34, i32* null, i32* %35, i32* null, i32* %36, i32* null, i32* %37, i32* null, i32* %38, i32* null, i32* %39, i32* null, i32* %40, i32* null, i32* %41, i1* null, i1* %42, i1* null, i1* %43, i8* null, i8* %44, i32* null, i32* %45, i32* null, i32* %46, i32* null, i32* %47, i1* null, i1* %48, i1* null, i1* %49)
+  call void @free(i8* %50)
+  call void @free(i8* %52)
   ret void
 }
 
@@ -5034,7 +5168,7 @@ attributes #4 = { argmemonly noinline norecurse willreturn "fpga.wrapper.func"="
 attributes #5 = { "fpga.wrapper.func"="stub" }
 
 !llvm.dbg.cu = !{}
-!llvm.ident = !{!0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0}
+!llvm.ident = !{!0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0, !0}
 !llvm.module.flags = !{!1, !2, !3}
 !blackbox_cfg = !{!4}
 !datalayout.transforms.on.top = !{!5}
@@ -5046,11 +5180,11 @@ attributes #5 = { "fpga.wrapper.func"="stub" }
 !4 = !{}
 !5 = !{!6, !8, !10}
 !6 = !{!7}
-!7 = !{!"6", [4 x %struct.HeadCtx]* null}
+!7 = !{!"10", [4 x %struct.HeadCtx]* null}
 !8 = !{!9}
 !9 = !{!"array_partition", !"type=Complete", !"dim=1"}
 !10 = !{!11, !12, !13, !14}
-!11 = !{!"6.0", %struct.HeadCtx* null}
-!12 = !{!"6.1", %struct.HeadCtx* null}
-!13 = !{!"6.2", %struct.HeadCtx* null}
-!14 = !{!"6.3", %struct.HeadCtx* null}
+!11 = !{!"10.0", %struct.HeadCtx* null}
+!12 = !{!"10.1", %struct.HeadCtx* null}
+!13 = !{!"10.2", %struct.HeadCtx* null}
+!14 = !{!"10.3", %struct.HeadCtx* null}

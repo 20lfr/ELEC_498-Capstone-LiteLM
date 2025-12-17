@@ -694,28 +694,36 @@ enum class ControlReg : uint32_t {
     DMA_TILE_LEN = 0x1C,
 
     LAYER_STRIDE = 0x20,
-    HEAD_STRIDE = 0x24,
-    TILE_STRIDE = 0x28,
+    WQ_HEAD_STRIDE = 0x24,
+    WK_HEAD_STRIDE = 0x28,
+    WV_HEAD_STRIDE = 0x2C,
 
-    WQ_BASE_ADDR = 0x2C,
-    WK_BASE_ADDR = 0x30,
-    WV_BASE_ADDR = 0x34,
-    WO_BASE_ADDR = 0x38,
-    W1_BASE_ADDR = 0x3C,
-    W2_BASE_ADDR = 0x40,
+    K_CACHE_STRIDE = 0x30,
+    V_CACHE_STRIDE = 0x34,
 
-    K_CACHE_ADDR = 0x44,
-    V_CACHE_ADDR = 0x48,
+    WO_TILE_STRIDE = 0x38,
+    W1_TILE_STRIDE = 0x3C,
+    W2_TILE_STRIDE = 0x40,
 
-    LOGIT_SCALE_QV = 0x4C,
-    SCALE_Q = 0x50,
-    ZERO_POINT_Q = 0x54,
-    SCALE_K = 0x58,
-    ZERO_POINT_K = 0x5C,
-    SCALE_V = 0x60,
-    ZERO_POINT_V = 0x64,
+    WQ_BASE_ADDR = 0x44,
+    WK_BASE_ADDR = 0x48,
+    WV_BASE_ADDR = 0x4C,
+    WO_BASE_ADDR = 0x50,
+    W1_BASE_ADDR = 0x54,
+    W2_BASE_ADDR = 0x58,
 
-    RESERVED_DEBUG = 0x68
+    K_CACHE_ADDR = 0x5C,
+    V_CACHE_ADDR = 0x60,
+
+    LOGIT_SCALE_QV = 0x64,
+    SCALE_Q = 0x68,
+    ZERO_POINT_Q = 0x6C,
+    SCALE_K = 0x70,
+    ZERO_POINT_K = 0x74,
+    SCALE_V = 0x78,
+    ZERO_POINT_V = 0x7C,
+
+    RESERVED_DEBUG = 0x80
 };
 
 
@@ -731,8 +739,16 @@ struct ControlMemSpace {
     uint32_t dma_tile_len = 0;
 
     uint32_t layer_stride = 0;
-    uint32_t head_stride = 0;
-    uint32_t tile_stride = 0;
+    uint32_t wq_head_stride = 0;
+    uint32_t wk_head_stride = 0;
+    uint32_t wv_head_stride = 0;
+
+    uint32_t k_cache_stride = 0;
+    uint32_t v_cache_stride = 0;
+
+    uint32_t wo_tile_stride = 0;
+    uint32_t w1_tile_stride = 0;
+    uint32_t w2_tile_stride = 0;
 
     uint32_t wq_base_addr = 0;
     uint32_t wk_base_addr = 0;
@@ -870,6 +886,28 @@ void ControlMemInterface(
 
 bool irq_wizard(ControlMemSpace &mem, bool infer_done, bool error);
 # 7 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.hpp" 1
+
+
+
+
+
+
+
+
+uint32_t weight_stager(
+    bool wl_start,
+    DmaSel wl_addr_sel,
+    int wl_layer,
+    int wl_head,
+    int wl_tile,
+    ControlMemSpace ctrl_mem,
+
+    bool &wl_ready,
+    bool &memory_request,
+    bool &error
+);
+# 8 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
 
 
 
@@ -878,20 +916,16 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool axis_in_last,
     bool &axis_in_ready,
     bool dma_done,
+    uint32_t &dma_address,
+    bool &memory_request,
     bool compute_ready,
     bool compute_done,
-    HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
     ComputeOp &compute_op,
+    HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool stream_ready,
     bool &stream_start,
     bool stream_done,
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel &wl_addr_sel,
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
     ControlReg ctrl_addr,
     uint32_t ctrl_data_in,
     uint32_t &ctrl_data_out,
@@ -899,10 +933,35 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool ctrl_write_en,
     bool ctrl_chip_en,
     bool ctrl_resetn_in,
+    bool &irq_ps,
+
+
     SchedState &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
-    bool done,
-    bool &irq_ps
+    uint32_t &control_reg,
+    uint32_t &irq_status_reg,
+    uint32_t &irq_enable_reg,
+    uint32_t &wq_base_addr,
+    uint32_t &wk_base_addr,
+    uint32_t &wv_base_addr,
+    uint32_t &wo_base_addr,
+    uint32_t &w1_base_addr,
+    uint32_t &w2_base_addr,
+    uint32_t &wq_head_stride,
+    uint32_t &wk_head_stride,
+    uint32_t &wv_head_stride,
+    uint32_t &wo_tile_stride,
+    uint32_t &w1_tile_stride,
+    uint32_t &w2_tile_stride,
+
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile,
+    bool &dbg_done,
+    bool &dbg_error
 );
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp" 2
 
@@ -919,15 +978,17 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
     bool dma_done,
+    uint32_t &dma_address,
+    bool &memory_request,
 
 
 
 
     bool compute_ready,
     bool compute_done,
-    HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
     ComputeOp &compute_op,
+    HeadCtx (&head_ctx_ref)[NUM_HEADS],
 
 
 
@@ -935,14 +996,8 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool stream_ready,
     bool &stream_start,
     bool stream_done,
-# 40 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel &wl_addr_sel,
 
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
+
 
 
     ControlReg ctrl_addr,
@@ -953,20 +1008,93 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool ctrl_chip_en,
     bool ctrl_resetn_in,
 
+
+
+
+    bool &irq_ps,
+
+
+
+
     SchedState &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
-    bool done,
+    uint32_t &control_reg,
+    uint32_t &irq_status_reg,
+    uint32_t &irq_enable_reg,
+    uint32_t &wq_base_addr,
+    uint32_t &wk_base_addr,
+    uint32_t &wv_base_addr,
+    uint32_t &wo_base_addr,
+    uint32_t &w1_base_addr,
+    uint32_t &w2_base_addr,
+    uint32_t &wq_head_stride,
+    uint32_t &wk_head_stride,
+    uint32_t &wv_head_stride,
+    uint32_t &wo_tile_stride,
+    uint32_t &w1_tile_stride,
+    uint32_t &w2_tile_stride,
 
-    bool &irq_ps
+
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile,
+    bool &dbg_done,
+    bool &dbg_error
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=transformer_top
-# 62 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+# 81 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
 
 #pragma HLS INLINE off
 
 
- static ControlMemSpace ctrl_mem;
+ static bool wl_start = false;
+    static DmaSel wl_addr_sel = DmaSel::DMASEL_NONE;
+    static int wl_layer = 0;
+    static int wl_head = 0;
+    static int wl_tile = 0;
+    bool wl_ready;
+
+    bool done = false;
+    bool error = false;
+    static ControlMemSpace ctrl_mem;
+
+
+
+    control_reg = ctrl_mem.control;
+    irq_status_reg = ctrl_mem.irq_status;
+    irq_enable_reg = ctrl_mem.irq_enable;
+    wq_base_addr = ctrl_mem.wq_base_addr;
+    wk_base_addr = ctrl_mem.wk_base_addr;
+    wv_base_addr = ctrl_mem.wv_base_addr;
+    wo_base_addr = ctrl_mem.wo_base_addr;
+    w1_base_addr = ctrl_mem.w1_base_addr;
+    w2_base_addr = ctrl_mem.w2_base_addr;
+    wq_head_stride = ctrl_mem.wq_head_stride;
+    wk_head_stride = ctrl_mem.wk_head_stride;
+    wv_head_stride = ctrl_mem.wv_head_stride;
+    wo_tile_stride = ctrl_mem.wo_tile_stride;
+    w1_tile_stride = ctrl_mem.w1_tile_stride;
+    w2_tile_stride = ctrl_mem.w2_tile_stride;
+
+
+    if (!ctrl_resetn_in) {
+        wl_start = false;
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_layer = 0;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_ready = false;
+        memory_request= false;
+        done = false;
+        error = false;
+    }
+
+
+
     ControlMemInterface(
         ctrl_mem,
         ctrl_addr,
@@ -982,7 +1110,9 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
 
-    bool error = false;
+    dma_address = weight_stager(wl_start, wl_addr_sel, wl_layer,
+                    wl_head, wl_tile, ctrl_mem, wl_ready,
+                    memory_request, error);
 
 
 
@@ -1012,7 +1142,17 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     );
 
 
+
+
     irq_ps = irq_wizard(ctrl_mem, done, error);
     dbg_ctrl_mem = ctrl_mem;
+    dbg_wl_ready = wl_ready;
+    dbg_wl_start = wl_start;
+    dbg_wl_addr_sel = wl_addr_sel;
+    dbg_wl_layer = wl_layer;
+    dbg_wl_head = wl_head;
+    dbg_wl_tile = wl_tile;
+    dbg_done = done;
+    dbg_error = error;
 
 }

@@ -332,15 +332,15 @@ void scheduler_hls(
 
 
   static bool wo_dma_done;
-#pragma HLS reset variable = wo_dma_done;
+#pragma HLS reset variable = wo_dma_done
   static bool w1_dma_done;
-#pragma HLS reset variable = w1_dma_done;
+#pragma HLS reset variable = w1_dma_done
   static bool w2_dma_done;
-#pragma HLS reset variable = w2_dma_done;
+#pragma HLS reset variable = w2_dma_done
   static bool axis_last_seen;
-#pragma HLS reset variable = axis_last_seen;
+#pragma HLS reset variable = axis_last_seen
   static bool stream_done_seen;
-#pragma HLS reset variable = stream_done_seen;
+#pragma HLS reset variable = stream_done_seen
 
 
   // Reset Logic

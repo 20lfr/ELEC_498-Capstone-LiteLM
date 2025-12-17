@@ -763,25 +763,9 @@
       <key>line</key>
       <integer>335</integer>
       <key>column</key>
-      <integer>41</integer>
-      <key>message</key>
-      <string>unexpected pragma argument &apos;;&apos;, expects identifier</string>
-      <key>ID</key>
-      <integer>5571</integer>
-      <key>WarningOption</key>
-      <string>invalid-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>335</integer>
-      <key>column</key>
       <integer>9</integer>
       <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=0_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_dma_done;_XLX_SEP_</string>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_dma_done_XLX_SEP_</string>
       <key>ID</key>
       <integer>5471</integer>
       <key>WarningOption</key>
@@ -795,25 +779,9 @@
       <key>line</key>
       <integer>337</integer>
       <key>column</key>
-      <integer>41</integer>
-      <key>message</key>
-      <string>unexpected pragma argument &apos;;&apos;, expects identifier</string>
-      <key>ID</key>
-      <integer>5571</integer>
-      <key>WarningOption</key>
-      <string>invalid-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>337</integer>
-      <key>column</key>
       <integer>9</integer>
       <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=0_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_dma_done;_XLX_SEP_</string>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_dma_done_XLX_SEP_</string>
       <key>ID</key>
       <integer>5471</integer>
       <key>WarningOption</key>
@@ -827,25 +795,9 @@
       <key>line</key>
       <integer>339</integer>
       <key>column</key>
-      <integer>41</integer>
-      <key>message</key>
-      <string>unexpected pragma argument &apos;;&apos;, expects identifier</string>
-      <key>ID</key>
-      <integer>5571</integer>
-      <key>WarningOption</key>
-      <string>invalid-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>339</integer>
-      <key>column</key>
       <integer>9</integer>
       <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=0_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_dma_done;_XLX_SEP_</string>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_dma_done_XLX_SEP_</string>
       <key>ID</key>
       <integer>5471</integer>
       <key>WarningOption</key>
@@ -859,25 +811,9 @@
       <key>line</key>
       <integer>341</integer>
       <key>column</key>
-      <integer>44</integer>
-      <key>message</key>
-      <string>unexpected pragma argument &apos;;&apos;, expects identifier</string>
-      <key>ID</key>
-      <integer>5571</integer>
-      <key>WarningOption</key>
-      <string>invalid-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>341</integer>
-      <key>column</key>
       <integer>9</integer>
       <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=0_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = axis_last_seen;_XLX_SEP_</string>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = axis_last_seen_XLX_SEP_</string>
       <key>ID</key>
       <integer>5471</integer>
       <key>WarningOption</key>
@@ -891,25 +827,9 @@
       <key>line</key>
       <integer>343</integer>
       <key>column</key>
-      <integer>46</integer>
-      <key>message</key>
-      <string>unexpected pragma argument &apos;;&apos;, expects identifier</string>
-      <key>ID</key>
-      <integer>5571</integer>
-      <key>WarningOption</key>
-      <string>invalid-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>343</integer>
-      <key>column</key>
       <integer>9</integer>
       <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=0_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = stream_done_seen;_XLX_SEP_</string>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = stream_done_seen_XLX_SEP_</string>
       <key>ID</key>
       <integer>5471</integer>
       <key>WarningOption</key>

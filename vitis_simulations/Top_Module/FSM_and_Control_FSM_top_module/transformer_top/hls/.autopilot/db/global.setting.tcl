@@ -43,8 +43,8 @@ set SCTraceFileName mytrace
 set SCTraceFileFormat vcd
 set SCTraceOption all
 set TargetInfo xck26:-sfvc784:-2LV-c
-set SourceFiles {sc {} c {/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp}}
-set SourceFlags {sc {} c {{} {} {} {} {}}}
+set SourceFiles {sc {} c {/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp}}
+set SourceFlags {sc {} c {{} {} {} {} {} {}}}
 set DirectiveFile {}
 set TBFiles {verilog /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp bc /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp vhdl /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp sc /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp cas /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp c {}}
 set SpecLanguage C

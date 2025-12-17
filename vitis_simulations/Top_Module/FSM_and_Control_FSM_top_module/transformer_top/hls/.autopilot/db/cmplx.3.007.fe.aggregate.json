@@ -1,27 +1,45 @@
 {
   "0": {
-    "basicblocks": 74,
-    "calls": "2",
+    "basicblocks": 100,
+    "calls": "3",
     "control_depth": 0,
     "def_use_depth": 4,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 434,
+    "instructions": 679,
     "loads": {
-      "G": 59,
+      "G": 86,
       "L": 1,
-      "T": 27
+      "T": 33
     },
     "memory_accesses": 0,
     "name": "transformer_top",
     "stores": {
-      "G": 58,
-      "L": 1,
-      "T": 30
+      "G": 84,
+      "L": 2,
+      "T": 71
     },
-    "total_instructions": 8389
+    "total_instructions": 8639
   },
   "1": {
+    "basicblocks": 271,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 3,
+    "file": "head_helpers.cpp",
+    "fileloc": 344,
+    "instructions": 887,
+    "loads": {
+      "L": 114
+    },
+    "memory_accesses": 0,
+    "name": "drive_group_head_phase",
+    "stores": {
+      "L": 376
+    },
+    "total_instructions": 887
+  },
+  "2": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -39,42 +57,24 @@
     },
     "total_instructions": 345
   },
-  "2": {
+  "3": {
     "basicblocks": 581,
-    "calls": "1 1 1 1 3 1 1 1 1",
+    "calls": "2 2 2 2 1 2 2 2 2",
     "control_depth": 2,
     "def_use_depth": 5,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 163,
-    "instructions": 4308,
+    "instructions": 4313,
     "loads": {
-      "G": 110,
-      "L": 434
+      "G": 112,
+      "L": 432
     },
     "memory_accesses": 87,
     "name": "scheduler_hls",
     "stores": {
-      "G": 349,
-      "L": 532
+      "G": 376,
+      "L": 505
     },
-    "total_instructions": 7955
-  },
-  "3": {
-    "basicblocks": 271,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 3,
-    "file": "head_helpers.cpp",
-    "fileloc": 344,
-    "instructions": 887,
-    "loads": {
-      "L": 114
-    },
-    "memory_accesses": 0,
-    "name": "drive_group_head_phase",
-    "stores": {
-      "L": 376
-    },
-    "total_instructions": 887
+    "total_instructions": 7960
   }
 }

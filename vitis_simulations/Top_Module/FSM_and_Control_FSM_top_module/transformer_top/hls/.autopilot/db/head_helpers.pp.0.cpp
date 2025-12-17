@@ -697,28 +697,36 @@ enum class ControlReg : uint32_t {
     DMA_TILE_LEN = 0x1C,
 
     LAYER_STRIDE = 0x20,
-    HEAD_STRIDE = 0x24,
-    TILE_STRIDE = 0x28,
+    WQ_HEAD_STRIDE = 0x24,
+    WK_HEAD_STRIDE = 0x28,
+    WV_HEAD_STRIDE = 0x2C,
 
-    WQ_BASE_ADDR = 0x2C,
-    WK_BASE_ADDR = 0x30,
-    WV_BASE_ADDR = 0x34,
-    WO_BASE_ADDR = 0x38,
-    W1_BASE_ADDR = 0x3C,
-    W2_BASE_ADDR = 0x40,
+    K_CACHE_STRIDE = 0x30,
+    V_CACHE_STRIDE = 0x34,
 
-    K_CACHE_ADDR = 0x44,
-    V_CACHE_ADDR = 0x48,
+    WO_TILE_STRIDE = 0x38,
+    W1_TILE_STRIDE = 0x3C,
+    W2_TILE_STRIDE = 0x40,
 
-    LOGIT_SCALE_QV = 0x4C,
-    SCALE_Q = 0x50,
-    ZERO_POINT_Q = 0x54,
-    SCALE_K = 0x58,
-    ZERO_POINT_K = 0x5C,
-    SCALE_V = 0x60,
-    ZERO_POINT_V = 0x64,
+    WQ_BASE_ADDR = 0x44,
+    WK_BASE_ADDR = 0x48,
+    WV_BASE_ADDR = 0x4C,
+    WO_BASE_ADDR = 0x50,
+    W1_BASE_ADDR = 0x54,
+    W2_BASE_ADDR = 0x58,
 
-    RESERVED_DEBUG = 0x68
+    K_CACHE_ADDR = 0x5C,
+    V_CACHE_ADDR = 0x60,
+
+    LOGIT_SCALE_QV = 0x64,
+    SCALE_Q = 0x68,
+    ZERO_POINT_Q = 0x6C,
+    SCALE_K = 0x70,
+    ZERO_POINT_K = 0x74,
+    SCALE_V = 0x78,
+    ZERO_POINT_V = 0x7C,
+
+    RESERVED_DEBUG = 0x80
 };
 
 
@@ -734,8 +742,16 @@ struct ControlMemSpace {
     uint32_t dma_tile_len = 0;
 
     uint32_t layer_stride = 0;
-    uint32_t head_stride = 0;
-    uint32_t tile_stride = 0;
+    uint32_t wq_head_stride = 0;
+    uint32_t wk_head_stride = 0;
+    uint32_t wv_head_stride = 0;
+
+    uint32_t k_cache_stride = 0;
+    uint32_t v_cache_stride = 0;
+
+    uint32_t wo_tile_stride = 0;
+    uint32_t w1_tile_stride = 0;
+    uint32_t w2_tile_stride = 0;
 
     uint32_t wq_base_addr = 0;
     uint32_t wk_base_addr = 0;

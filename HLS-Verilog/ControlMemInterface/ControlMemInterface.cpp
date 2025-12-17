@@ -25,8 +25,14 @@ uint32_t ctrl_read(const ControlMemSpace &mem, ControlReg reg) {
         case ControlReg::DMA_TILE_LEN:   return mem.dma_tile_len;
 
         case ControlReg::LAYER_STRIDE:   return mem.layer_stride;
-        case ControlReg::HEAD_STRIDE:    return mem.head_stride;
-        case ControlReg::TILE_STRIDE:    return mem.tile_stride;
+        case ControlReg::WQ_HEAD_STRIDE: return mem.wq_head_stride;
+        case ControlReg::WK_HEAD_STRIDE: return mem.wk_head_stride;
+        case ControlReg::WV_HEAD_STRIDE: return mem.wv_head_stride;
+        case ControlReg::K_CACHE_STRIDE: return mem.k_cache_stride;
+        case ControlReg::V_CACHE_STRIDE: return mem.v_cache_stride;
+        case ControlReg::WO_TILE_STRIDE: return mem.wo_tile_stride;
+        case ControlReg::W1_TILE_STRIDE: return mem.w1_tile_stride;
+        case ControlReg::W2_TILE_STRIDE: return mem.w2_tile_stride;
 
         case ControlReg::WQ_BASE_ADDR:   return mem.wq_base_addr;
         case ControlReg::WK_BASE_ADDR:   return mem.wk_base_addr;
@@ -65,8 +71,14 @@ void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
         case ControlReg::DMA_TILE_LEN:   mem.dma_tile_len = value;  break;
 
         case ControlReg::LAYER_STRIDE:   mem.layer_stride = value;  break;
-        case ControlReg::HEAD_STRIDE:    mem.head_stride = value;   break;
-        case ControlReg::TILE_STRIDE:    mem.tile_stride = value;   break;
+        case ControlReg::WQ_HEAD_STRIDE: mem.wq_head_stride = value;break;
+        case ControlReg::WK_HEAD_STRIDE: mem.wk_head_stride = value;break;
+        case ControlReg::WV_HEAD_STRIDE: mem.wv_head_stride = value;break;
+        case ControlReg::K_CACHE_STRIDE: mem.k_cache_stride = value;break;
+        case ControlReg::V_CACHE_STRIDE: mem.v_cache_stride = value;break;
+        case ControlReg::WO_TILE_STRIDE: mem.wo_tile_stride = value;break;
+        case ControlReg::W1_TILE_STRIDE: mem.w1_tile_stride = value;break;
+        case ControlReg::W2_TILE_STRIDE: mem.w2_tile_stride = value;break;
 
         case ControlReg::WQ_BASE_ADDR:   mem.wq_base_addr = value;  break;
         case ControlReg::WK_BASE_ADDR:   mem.wk_base_addr = value;  break;
@@ -90,9 +102,6 @@ void ctrl_write(ControlMemSpace &mem, ControlReg reg, uint32_t value) {
     }
 }
 
-
-
-
 void init_mem_space(ControlMemSpace& mem){
 #pragma HLS INLINE
     mem.control        = CTRL_RESETN_BIT;       // cntrl_reset_n | cntrl_start
@@ -106,8 +115,14 @@ void init_mem_space(ControlMemSpace& mem){
     mem.dma_tile_len   = 0;
 
     mem.layer_stride   = 0;
-    mem.head_stride    = 0;
-    mem.tile_stride    = 0;
+    mem.wq_head_stride = 0;
+    mem.wk_head_stride = 0;
+    mem.wv_head_stride = 0;
+    mem.k_cache_stride = 0;
+    mem.v_cache_stride = 0;
+    mem.wo_tile_stride = 0;
+    mem.w1_tile_stride = 0;
+    mem.w2_tile_stride = 0;
 
     mem.wq_base_addr   = 0;
     mem.wk_base_addr   = 0;

@@ -341,28 +341,36 @@ enum class ControlReg : uint32_t {
     DMA_TILE_LEN    = 0x1C, // 7
 
     LAYER_STRIDE    = 0x20, // 8
-    HEAD_STRIDE     = 0x24, // 9
-    TILE_STRIDE     = 0x28, // 10
+    WQ_HEAD_STRIDE  = 0x24, // 9
+    WK_HEAD_STRIDE  = 0x28, // 10
+    WV_HEAD_STRIDE  = 0x2C, // 11
 
-    WQ_BASE_ADDR    = 0x2C, // 11
-    WK_BASE_ADDR    = 0x30, // 12
-    WV_BASE_ADDR    = 0x34, // 13
-    WO_BASE_ADDR    = 0x38, // 14
-    W1_BASE_ADDR    = 0x3C, // 15
-    W2_BASE_ADDR    = 0x40, // 16
+    K_CACHE_STRIDE  = 0x30, // 12
+    V_CACHE_STRIDE  = 0x34, // 13
 
-    K_CACHE_ADDR    = 0x44, // 17
-    V_CACHE_ADDR    = 0x48, // 18
+    WO_TILE_STRIDE  = 0x38, // 14
+    W1_TILE_STRIDE  = 0x3C, // 15
+    W2_TILE_STRIDE  = 0x40, // 16
 
-    LOGIT_SCALE_QV  = 0x4C, // 19
-    SCALE_Q         = 0x50, // 20
-    ZERO_POINT_Q    = 0x54, // 21
-    SCALE_K         = 0x58, // 22
-    ZERO_POINT_K    = 0x5C, // 23
-    SCALE_V         = 0x60, // 24
-    ZERO_POINT_V    = 0x64, // 25
+    WQ_BASE_ADDR    = 0x44, // 17
+    WK_BASE_ADDR    = 0x48, // 18
+    WV_BASE_ADDR    = 0x4C, // 19
+    WO_BASE_ADDR    = 0x50, // 20
+    W1_BASE_ADDR    = 0x54, // 21
+    W2_BASE_ADDR    = 0x58, // 22
 
-    RESERVED_DEBUG  = 0x68  // 26
+    K_CACHE_ADDR    = 0x5C, // 23
+    V_CACHE_ADDR    = 0x60, // 24
+
+    LOGIT_SCALE_QV  = 0x64, // 25
+    SCALE_Q         = 0x68, // 26
+    ZERO_POINT_Q    = 0x6C, // 27
+    SCALE_K         = 0x70, // 28
+    ZERO_POINT_K    = 0x74, // 29
+    SCALE_V         = 0x78, // 30
+    ZERO_POINT_V    = 0x7C, // 31
+
+    RESERVED_DEBUG  = 0x80  // 32
 };
 
 // Structure that mirrors the AXI-lite accessible registers.

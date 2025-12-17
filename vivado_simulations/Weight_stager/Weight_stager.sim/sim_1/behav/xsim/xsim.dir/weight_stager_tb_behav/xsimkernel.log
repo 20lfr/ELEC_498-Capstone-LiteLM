@@ -2,3 +2,6 @@ Running: xsim.dir/weight_stager_tb_behav/xsimk -simmode gui -wdb weight_stager_t
 Design successfully loaded
 Design Loading Memory Usage: 179068 KB (Peak: 179068 KB)
 Design Loading CPU Usage: 840 ms
+Simulation completed
+Simulation Memory Usage: 269776 KB (Peak: 318336 KB)
+Simulation CPU Usage: 840 ms

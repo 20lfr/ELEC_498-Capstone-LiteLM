@@ -6,5 +6,10 @@ set SynModuleInfo {
       {MODELNAME transformer_top_sparsemux_7_2_202_1_1 RTLNAME transformer_top_sparsemux_7_2_202_1_1 BINDTYPE op TYPE sparsemux IMPL onehotencoding_realdef}
     }
   }
-  {SRCNAME transformer_top MODELNAME transformer_top RTLNAME transformer_top IS_TOP 1}
+  {SRCNAME transformer_top MODELNAME transformer_top RTLNAME transformer_top IS_TOP 1
+    SUBMODULES {
+      {MODELNAME transformer_top_mul_32s_32s_32_1_1 RTLNAME transformer_top_mul_32s_32s_32_1_1 BINDTYPE op TYPE mul IMPL auto LATENCY 0 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_mul_2s_32s_32_1_1 RTLNAME transformer_top_mul_2s_32s_32_1_1 BINDTYPE op TYPE mul IMPL auto LATENCY 0 ALLOW_PRAGMA 1}
+    }
+  }
 }

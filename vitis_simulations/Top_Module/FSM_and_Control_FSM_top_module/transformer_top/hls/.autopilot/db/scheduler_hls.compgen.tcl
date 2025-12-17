@@ -86,66 +86,6 @@ eval "cg_default_interface_gen_dc { \
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
     id 104 \
-    name wl_start_read \
-    type other \
-    dir I \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_start_read \
-    op interface \
-    ports { wl_start_read { I 1 vector } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 105 \
-    name wl_addr_sel \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_addr_sel \
-    op interface \
-    ports { wl_addr_sel { O 8 vector } wl_addr_sel_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 106 \
-    name wl_head \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_head \
-    op interface \
-    ports { wl_head { O 32 vector } wl_head_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 107 \
-    name wl_tile \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_tile \
-    op interface \
-    ports { wl_tile { O 32 vector } wl_tile_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 108 \
     name dma_done \
     type other \
     dir I \
@@ -160,7 +100,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 109 \
+    id 105 \
     name compute_ready \
     type other \
     dir I \
@@ -175,7 +115,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 110 \
+    id 106 \
     name compute_done \
     type other \
     dir I \
@@ -190,7 +130,22 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 111 \
+    id 107 \
+    name p_read \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_p_read \
+    op interface \
+    ports { p_read { I 202 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 108 \
     name p_read1 \
     type other \
     dir I \
@@ -205,7 +160,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 112 \
+    id 109 \
     name p_read2 \
     type other \
     dir I \
@@ -220,7 +175,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 113 \
+    id 110 \
     name p_read3 \
     type other \
     dir I \
@@ -235,22 +190,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 114 \
-    name p_read4 \
-    type other \
-    dir I \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_p_read4 \
-    op interface \
-    ports { p_read4 { I 202 vector } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 115 \
+    id 111 \
     name compute_start_read \
     type other \
     dir I \
@@ -265,7 +205,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 116 \
+    id 112 \
     name compute_op \
     type other \
     dir O \
@@ -280,7 +220,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 117 \
+    id 113 \
     name stream_ready \
     type other \
     dir I \
@@ -295,7 +235,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 118 \
+    id 114 \
     name stream_done \
     type other \
     dir I \
@@ -304,6 +244,81 @@ eval "cg_default_interface_gen_dc { \
     corename dc_stream_done \
     op interface \
     ports { stream_done { I 1 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 115 \
+    name wl_start \
+    type other \
+    dir IO \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_wl_start \
+    op interface \
+    ports { wl_start_i { I 1 vector } wl_start_o { O 1 vector } wl_start_o_ap_vld { O 1 bit } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 116 \
+    name wl_layer \
+    type other \
+    dir O \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_wl_layer \
+    op interface \
+    ports { wl_layer { O 32 vector } wl_layer_ap_vld { O 1 bit } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 117 \
+    name wl_tile \
+    type other \
+    dir O \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_wl_tile \
+    op interface \
+    ports { wl_tile { O 32 vector } wl_tile_ap_vld { O 1 bit } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 118 \
+    name wl_head \
+    type other \
+    dir O \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_wl_head \
+    op interface \
+    ports { wl_head { O 2 vector } wl_head_ap_vld { O 1 bit } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 119 \
+    name wl_addr_sel \
+    type other \
+    dir O \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_wl_addr_sel \
+    op interface \
+    ports { wl_addr_sel { O 4 vector } wl_addr_sel_ap_vld { O 1 bit } } \
 } "
 }
 

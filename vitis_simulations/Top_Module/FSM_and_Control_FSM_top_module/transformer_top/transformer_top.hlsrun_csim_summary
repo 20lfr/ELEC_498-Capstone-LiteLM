@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "Tue Dec 16 17:06:10 2025",
- "timestampMillis": "1765922770534",
+ "dateTimestamp": "Wed Dec 17 00:53:03 2025",
+ "timestampMillis": "1765950783149",
  "buildStep": {
-  "cmdId": "97e6360d-0bbd-442c-8f7f-580c058f4dd7",
+  "cmdId": "ffe93b84-6472-4254-8d02-0deb6dca967c",
   "name": "vitis-run",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/logs/transformer_top.steps.log",
   "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/vitis-run  --mode hls --csim --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg --work_dir transformer_top ",
@@ -33,10 +33,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Dec 16 17:06:10 2025",
- "timestampMillis": "1765922770534",
+ "dateTimestamp": "Wed Dec 17 00:53:03 2025",
+ "timestampMillis": "1765950783149",
  "status": {
-  "cmdId": "97e6360d-0bbd-442c-8f7f-580c058f4dd7",
+  "cmdId": "ffe93b84-6472-4254-8d02-0deb6dca967c",
   "state": "CS_RUNNING"
  }
 }
@@ -44,8 +44,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "Tue Dec 16 17:06:14 2025",
- "timestampMillis": "1765922774323",
+ "dateTimestamp": "Wed Dec 17 00:53:06 2025",
+ "timestampMillis": "1765950786950",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -73,7 +73,9 @@
      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp",
      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp",
      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp",
-     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp"
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp"
     ],
     "psSources": [],
     "cuNames": [],
@@ -89,10 +91,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "Tue Dec 16 17:06:14 2025",
- "timestampMillis": "1765922774323",
+ "dateTimestamp": "Wed Dec 17 00:53:06 2025",
+ "timestampMillis": "1765950786951",
  "buildStep": {
-  "cmdId": "8cb68f7f-1050-4cc6-a739-b07d2537895d",
+  "cmdId": "af49e5e9-288a-4f07-b28b-6613dbc60970",
   "name": "",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/hls.log",
   "commandLine": "",
@@ -105,10 +107,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Dec 16 17:06:14 2025",
- "timestampMillis": "1765922774324",
+ "dateTimestamp": "Wed Dec 17 00:53:06 2025",
+ "timestampMillis": "1765950786951",
  "status": {
-  "cmdId": "8cb68f7f-1050-4cc6-a739-b07d2537895d",
+  "cmdId": "af49e5e9-288a-4f07-b28b-6613dbc60970",
   "state": "CS_RUNNING"
  }
 }
@@ -116,10 +118,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Dec 16 17:06:14 2025",
- "timestampMillis": "1765922774858",
+ "dateTimestamp": "Wed Dec 17 00:53:07 2025",
+ "timestampMillis": "1765950787686",
  "status": {
-  "cmdId": "8cb68f7f-1050-4cc6-a739-b07d2537895d",
+  "cmdId": "af49e5e9-288a-4f07-b28b-6613dbc60970",
   "state": "CS_PASSED"
  }
 }
@@ -127,10 +129,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Dec 16 17:06:14 2025",
- "timestampMillis": "1765922774967",
+ "dateTimestamp": "Wed Dec 17 00:53:07 2025",
+ "timestampMillis": "1765950787795",
  "status": {
-  "cmdId": "97e6360d-0bbd-442c-8f7f-580c058f4dd7",
+  "cmdId": "ffe93b84-6472-4254-8d02-0deb6dca967c",
   "state": "CS_PASSED"
  }
 }
@@ -138,8 +140,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Tue Dec 16 17:06:14 2025",
- "timestampMillis": "1765922774968",
+ "dateTimestamp": "Wed Dec 17 00:53:07 2025",
+ "timestampMillis": "1765950787796",
  "report": {
   "path": "",
   "name": "",
@@ -152,8 +154,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Tue Dec 16 17:06:14 2025",
- "timestampMillis": "1765922774968",
+ "dateTimestamp": "Wed Dec 17 00:53:07 2025",
+ "timestampMillis": "1765950787799",
  "report": {
   "path": "",
   "name": "",
