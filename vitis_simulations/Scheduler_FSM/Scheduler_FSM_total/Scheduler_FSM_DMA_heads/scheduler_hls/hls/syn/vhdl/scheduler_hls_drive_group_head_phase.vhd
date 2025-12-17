@@ -728,10 +728,10 @@ attribute shreg_extract : string;
     signal or_ln109_1_fu_13631_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln110_1_fu_13229_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln69_57_fu_12466_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal or_ln110_2_fu_13677_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal or_ln110_1_fu_13677_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln111_1_fu_13241_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln69_58_fu_12472_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal or_ln111_1_fu_13724_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal or_ln111_2_fu_13724_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln315_1_fu_13859_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln273_1_fu_13944_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln227_1_fu_14029_p2 : STD_LOGIC_VECTOR (0 downto 0);
@@ -3185,7 +3185,7 @@ begin
         and_ln94_1_fu_12797_p2 when (or_ln84_1_fu_12749_p2(0) = '1') else 
         or_ln88_1_fu_12881_p2;
     head_ctx_ref_att_value_compute_done_0_2_fu_10870_p2 <= (or_ln110_fu_10864_p2 or and_ln69_24_fu_9611_p2);
-    head_ctx_ref_att_value_compute_done_1_3_fu_13683_p2 <= (or_ln110_2_fu_13677_p2 or and_ln69_57_fu_12466_p2);
+    head_ctx_ref_att_value_compute_done_1_3_fu_13683_p2 <= (or_ln110_1_fu_13677_p2 or and_ln69_57_fu_12466_p2);
     head_ctx_ref_att_value_dma_done_0_3_fu_10260_p3 <= 
         and_ln95_fu_9996_p2 when (or_ln84_fu_9936_p2(0) = '1') else 
         or_ln89_fu_10086_p2;
@@ -3211,7 +3211,7 @@ begin
         and_ln91_1_fu_12761_p2 when (or_ln84_1_fu_12749_p2(0) = '1') else 
         or_ln85_1_fu_12827_p2;
     head_ctx_ref_requant2_compute_done_0_2_fu_10917_p2 <= (or_ln111_fu_10911_p2 or and_ln69_25_fu_9617_p2);
-    head_ctx_ref_requant2_compute_done_1_3_fu_13730_p2 <= (or_ln111_1_fu_13724_p2 or and_ln69_58_fu_12472_p2);
+    head_ctx_ref_requant2_compute_done_1_3_fu_13730_p2 <= (or_ln111_2_fu_13724_p2 or and_ln69_58_fu_12472_p2);
     head_ctx_ref_requant_q_compute_done_0_2_fu_10685_p2 <= (or_ln106_fu_10679_p2 or and_ln69_20_fu_9587_p2);
     head_ctx_ref_requant_q_compute_done_1_3_fu_13498_p2 <= (or_ln106_1_fu_13492_p2 or and_ln69_53_fu_12442_p2);
     head_ctx_ref_softmax_compute_done_0_2_fu_10824_p2 <= (or_ln109_fu_10818_p2 or and_ln69_23_fu_9605_p2);
@@ -3290,9 +3290,9 @@ begin
     or_ln108_fu_10772_p2 <= (not_sel_tmp1_fu_10440_p2 and and_ln108_fu_10392_p2);
     or_ln109_1_fu_13631_p2 <= (not_sel_tmp41_fu_13253_p2 and and_ln109_1_fu_13217_p2);
     or_ln109_fu_10818_p2 <= (not_sel_tmp1_fu_10440_p2 and and_ln109_fu_10404_p2);
-    or_ln110_2_fu_13677_p2 <= (not_sel_tmp41_fu_13253_p2 and and_ln110_1_fu_13229_p2);
+    or_ln110_1_fu_13677_p2 <= (not_sel_tmp41_fu_13253_p2 and and_ln110_1_fu_13229_p2);
     or_ln110_fu_10864_p2 <= (not_sel_tmp1_fu_10440_p2 and and_ln110_fu_10416_p2);
-    or_ln111_1_fu_13724_p2 <= (not_sel_tmp41_fu_13253_p2 and and_ln111_1_fu_13241_p2);
+    or_ln111_2_fu_13724_p2 <= (not_sel_tmp41_fu_13253_p2 and and_ln111_1_fu_13241_p2);
     or_ln111_fu_10911_p2 <= (not_sel_tmp1_fu_10440_p2 and and_ln111_fu_10428_p2);
     or_ln117_1_fu_11415_p2 <= (write_flag24_1_fu_9785_p2 or and_ln365_fu_8854_p2);
     or_ln117_2_fu_14218_p2 <= (write_flag27_2_fu_12598_p2 or and_ln365_1_fu_11668_p2);

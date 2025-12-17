@@ -1,60 +1,143 @@
 {
   "0": {
-    "basicblocks": 1,
-    "calls": "7 9 11",
+    "basicblocks": 3,
+    "calls": "14 2 3",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 13,
+    "instructions": 64,
     "loads": {
-      "G": 2,
-      "L": 1
+      "G": 17,
+      "L": 4
     },
     "memory_accesses": 0,
     "name": "transformer_top",
     "stores": {
-      "L": 2,
-      "T": 2
+      "L": 5,
+      "T": 19
     },
-    "total_instructions": 2830
+    "total_instructions": 3384
   },
   "1": {
+    "basicblocks": 3,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "ControlMemInterface.cpp",
+    "fileloc": 5,
+    "instructions": 7,
+    "memory_accesses": 0,
+    "name": "is_valid_address",
+    "total_instructions": 7
+  },
+  "10": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 1,
     "file": "head_helpers.cpp",
-    "fileloc": 5,
-    "instructions": 87,
+    "fileloc": 6,
+    "instructions": 91,
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
-      "L": 43
+      "L": 45
     },
-    "total_instructions": 87
-  },
-  "10": {
-    "basicblocks": 13,
-    "calls": "3",
-    "control_depth": 3,
-    "def_use_depth": 4,
-    "file": "head_helpers.cpp",
-    "fileloc": 344,
-    "instructions": 34,
-    "loads": {
-      "L": 3
-    },
-    "memory_accesses": 5,
-    "name": "drive_group_head_phase",
-    "stores": {
-      "L": 1
-    },
-    "total_instructions": 844
+    "total_instructions": 91
   },
   "11": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "ControlMemInterface.cpp",
+    "fileloc": 105,
+    "instructions": 67,
+    "memory_accesses": 0,
+    "name": "init_mem_space",
+    "stores": {
+      "L": 33
+    },
+    "total_instructions": 67
+  },
+  "12": {
+    "basicblocks": 84,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 2,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 27,
+    "instructions": 208,
+    "loads": {
+      "L": 42
+    },
+    "memory_accesses": 0,
+    "name": "LayerNorm",
+    "stores": {
+      "L": 70
+    },
+    "total_instructions": 208
+  },
+  "13": {
+    "basicblocks": 32,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "Weight_stager.cpp",
+    "fileloc": 3,
+    "instructions": 167,
+    "loads": {
+      "L": 24
+    },
+    "memory_accesses": 0,
+    "name": "weight_stager",
+    "stores": {
+      "L": 35
+    },
+    "total_instructions": 167
+  },
+  "14": {
+    "basicblocks": 15,
+    "calls": "11 1 4 5",
+    "control_depth": 0,
+    "def_use_depth": 3,
+    "file": "ControlMemInterface.cpp",
+    "fileloc": 148,
+    "instructions": 29,
+    "loads": {
+      "L": 2
+    },
+    "memory_accesses": 0,
+    "name": "ControlMemInterface",
+    "stores": {
+      "L": 4
+    },
+    "total_instructions": 310
+  },
+  "2": {
+    "basicblocks": 304,
+    "calls": "13 10 12 12 6 10 8 10",
+    "control_depth": 2,
+    "def_use_depth": 8,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 164,
+    "instructions": 990,
+    "loads": {
+      "G": 148,
+      "L": 9
+    },
+    "memory_accesses": 11,
+    "name": "scheduler_hls",
+    "stores": {
+      "G": 300,
+      "L": 60
+    },
+    "total_instructions": 2981
+  },
+  "3": {
     "basicblocks": 8,
-    "calls": "2",
+    "calls": "7",
     "control_depth": 0,
     "def_use_depth": 4,
     "file": "IRQ_Wizard.cpp",
@@ -70,37 +153,55 @@
     },
     "total_instructions": 29
   },
-  "12": {
-    "basicblocks": 3,
+  "4": {
+    "basicblocks": 35,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 3,
+    "file": "ControlMemInterface.cpp",
+    "fileloc": 60,
+    "instructions": 104,
+    "loads": {
+      "L": 1
+    },
+    "memory_accesses": 0,
+    "name": "ctrl_write",
+    "stores": {
+      "L": 33
+    },
+    "total_instructions": 104
+  },
+  "5": {
+    "basicblocks": 36,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 1,
     "file": "ControlMemInterface.cpp",
-    "fileloc": 5,
-    "instructions": 7,
+    "fileloc": 14,
+    "instructions": 103,
+    "loads": {
+      "L": 33
+    },
     "memory_accesses": 0,
-    "name": "is_valid_address",
-    "total_instructions": 7
+    "name": "ctrl_read",
+    "total_instructions": 103
   },
-  "13": {
-    "basicblocks": 84,
+  "6": {
+    "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 2,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 26,
-    "instructions": 208,
-    "loads": {
-      "L": 42
-    },
+    "def_use_depth": 1,
+    "file": "top_params.hpp",
+    "fileloc": 258,
+    "instructions": 91,
     "memory_accesses": 0,
-    "name": "LayerNorm",
+    "name": "HeadCtx",
     "stores": {
-      "L": 70
+      "L": 45
     },
-    "total_instructions": 208
+    "total_instructions": 91
   },
-  "2": {
+  "7": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -115,123 +216,40 @@
     "name": "evaluate_irq",
     "total_instructions": 8
   },
-  "3": {
-    "basicblocks": 190,
-    "calls": "1",
-    "control_depth": 0,
-    "def_use_depth": 3,
+  "8": {
+    "basicblocks": 13,
+    "calls": "9",
+    "control_depth": 3,
+    "def_use_depth": 4,
     "file": "head_helpers.cpp",
-    "fileloc": 61,
-    "instructions": 723,
+    "fileloc": 352,
+    "instructions": 37,
     "loads": {
-      "L": 104
+      "L": 4
+    },
+    "memory_accesses": 7,
+    "name": "drive_group_head_phase",
+    "stores": {
+      "L": 2
+    },
+    "total_instructions": 1044
+  },
+  "9": {
+    "basicblocks": 190,
+    "calls": "10 13",
+    "control_depth": 0,
+    "def_use_depth": 6,
+    "file": "head_helpers.cpp",
+    "fileloc": 64,
+    "instructions": 749,
+    "loads": {
+      "L": 111
     },
     "memory_accesses": 0,
     "name": "run_single_head",
     "stores": {
-      "L": 145
+      "L": 146
     },
-    "total_instructions": 810
-  },
-  "4": {
-    "basicblocks": 1,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "top_params.hpp",
-    "fileloc": 258,
-    "instructions": 87,
-    "memory_accesses": 0,
-    "name": "HeadCtx",
-    "stores": {
-      "L": 43
-    },
-    "total_instructions": 87
-  },
-  "5": {
-    "basicblocks": 29,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 3,
-    "file": "ControlMemInterface.cpp",
-    "fileloc": 54,
-    "instructions": 86,
-    "loads": {
-      "L": 1
-    },
-    "memory_accesses": 0,
-    "name": "ctrl_write",
-    "stores": {
-      "L": 27
-    },
-    "total_instructions": 86
-  },
-  "6": {
-    "basicblocks": 1,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "ControlMemInterface.cpp",
-    "fileloc": 96,
-    "instructions": 55,
-    "memory_accesses": 0,
-    "name": "init_mem_space",
-    "stores": {
-      "L": 27
-    },
-    "total_instructions": 55
-  },
-  "7": {
-    "basicblocks": 15,
-    "calls": "6 12 5 8",
-    "control_depth": 0,
-    "def_use_depth": 3,
-    "file": "ControlMemInterface.cpp",
-    "fileloc": 133,
-    "instructions": 29,
-    "loads": {
-      "L": 2
-    },
-    "memory_accesses": 0,
-    "name": "ControlMemInterface",
-    "stores": {
-      "L": 4
-    },
-    "total_instructions": 262
-  },
-  "8": {
-    "basicblocks": 30,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "ControlMemInterface.cpp",
-    "fileloc": 14,
-    "instructions": 85,
-    "loads": {
-      "L": 27
-    },
-    "memory_accesses": 0,
-    "name": "ctrl_read",
-    "total_instructions": 85
-  },
-  "9": {
-    "basicblocks": 304,
-    "calls": "1 13 13 4 1 10 1",
-    "control_depth": 2,
-    "def_use_depth": 5,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 163,
-    "instructions": 918,
-    "loads": {
-      "G": 130,
-      "L": 9
-    },
-    "memory_accesses": 11,
-    "name": "scheduler_hls",
-    "stores": {
-      "G": 260,
-      "L": 68
-    },
-    "total_instructions": 2526
+    "total_instructions": 1007
   }
 }

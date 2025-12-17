@@ -11,7 +11,7 @@ if {${::AESL::PGuard_rtl_comp_handler}} {
 
 
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler transformer_top_sparsemux_7_2_202_1_1 BINDTYPE {op} TYPE {sparsemux} IMPL {onehotencoding_realdef}
+	::AP::rtl_comp_handler transformer_top_sparsemux_7_2_235_1_1 BINDTYPE {op} TYPE {sparsemux} IMPL {onehotencoding_realdef}
 }
 
 
@@ -25,7 +25,7 @@ if {${::AESL::PGuard_autoexp_gen}} {
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 100 \
+    id 123 \
     name ctrl_mem_control \
     type other \
     dir I \
@@ -40,7 +40,262 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 101 \
+    id 124 \
+    name ctrl_mem_layer_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_layer_stride \
+    op interface \
+    ports { ctrl_mem_layer_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 125 \
+    name ctrl_mem_wq_head_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wq_head_stride \
+    op interface \
+    ports { ctrl_mem_wq_head_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 126 \
+    name ctrl_mem_wk_head_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wk_head_stride \
+    op interface \
+    ports { ctrl_mem_wk_head_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 127 \
+    name ctrl_mem_wv_head_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wv_head_stride \
+    op interface \
+    ports { ctrl_mem_wv_head_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 128 \
+    name ctrl_mem_k_cache_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_k_cache_stride \
+    op interface \
+    ports { ctrl_mem_k_cache_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 129 \
+    name ctrl_mem_v_cache_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_v_cache_stride \
+    op interface \
+    ports { ctrl_mem_v_cache_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 130 \
+    name ctrl_mem_wo_tile_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wo_tile_stride \
+    op interface \
+    ports { ctrl_mem_wo_tile_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 131 \
+    name ctrl_mem_w1_tile_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_w1_tile_stride \
+    op interface \
+    ports { ctrl_mem_w1_tile_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 132 \
+    name ctrl_mem_w2_tile_stride \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_w2_tile_stride \
+    op interface \
+    ports { ctrl_mem_w2_tile_stride { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 133 \
+    name ctrl_mem_wq_base_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wq_base_addr \
+    op interface \
+    ports { ctrl_mem_wq_base_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 134 \
+    name ctrl_mem_wk_base_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wk_base_addr \
+    op interface \
+    ports { ctrl_mem_wk_base_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 135 \
+    name ctrl_mem_wv_base_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wv_base_addr \
+    op interface \
+    ports { ctrl_mem_wv_base_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 136 \
+    name ctrl_mem_wo_base_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_wo_base_addr \
+    op interface \
+    ports { ctrl_mem_wo_base_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 137 \
+    name ctrl_mem_w1_base_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_w1_base_addr \
+    op interface \
+    ports { ctrl_mem_w1_base_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 138 \
+    name ctrl_mem_w2_base_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_w2_base_addr \
+    op interface \
+    ports { ctrl_mem_w2_base_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 139 \
+    name ctrl_mem_k_cache_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_k_cache_addr \
+    op interface \
+    ports { ctrl_mem_k_cache_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 140 \
+    name ctrl_mem_v_cache_addr \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_ctrl_mem_v_cache_addr \
+    op interface \
+    ports { ctrl_mem_v_cache_addr { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 141 \
     name axis_in_valid \
     type other \
     dir I \
@@ -55,7 +310,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 102 \
+    id 142 \
     name axis_in_last \
     type other \
     dir I \
@@ -70,82 +325,22 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 103 \
-    name wl_ready \
-    type other \
-    dir I \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_ready \
-    op interface \
-    ports { wl_ready { I 1 vector } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 104 \
-    name wl_start_read \
-    type other \
-    dir I \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_start_read \
-    op interface \
-    ports { wl_start_read { I 1 vector } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 105 \
-    name wl_addr_sel \
+    id 143 \
+    name dma_address \
     type other \
     dir O \
     reset_level 1 \
     sync_rst true \
-    corename dc_wl_addr_sel \
+    corename dc_dma_address \
     op interface \
-    ports { wl_addr_sel { O 8 vector } wl_addr_sel_ap_vld { O 1 bit } } \
+    ports { dma_address { O 32 vector } dma_address_ap_vld { O 1 bit } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 106 \
-    name wl_head \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_head \
-    op interface \
-    ports { wl_head { O 32 vector } wl_head_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 107 \
-    name wl_tile \
-    type other \
-    dir O \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_wl_tile \
-    op interface \
-    ports { wl_tile { O 32 vector } wl_tile_ap_vld { O 1 bit } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 108 \
+    id 144 \
     name dma_done \
     type other \
     dir I \
@@ -160,7 +355,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 109 \
+    id 145 \
     name compute_ready \
     type other \
     dir I \
@@ -175,7 +370,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 110 \
+    id 146 \
     name compute_done \
     type other \
     dir I \
@@ -190,7 +385,22 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 111 \
+    id 147 \
+    name p_read \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_p_read \
+    op interface \
+    ports { p_read { I 235 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 148 \
     name p_read1 \
     type other \
     dir I \
@@ -198,14 +408,14 @@ eval "cg_default_interface_gen_dc { \
     sync_rst true \
     corename dc_p_read1 \
     op interface \
-    ports { p_read1 { I 202 vector } } \
+    ports { p_read1 { I 235 vector } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 112 \
+    id 149 \
     name p_read2 \
     type other \
     dir I \
@@ -213,14 +423,14 @@ eval "cg_default_interface_gen_dc { \
     sync_rst true \
     corename dc_p_read2 \
     op interface \
-    ports { p_read2 { I 202 vector } } \
+    ports { p_read2 { I 235 vector } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 113 \
+    id 150 \
     name p_read3 \
     type other \
     dir I \
@@ -228,29 +438,14 @@ eval "cg_default_interface_gen_dc { \
     sync_rst true \
     corename dc_p_read3 \
     op interface \
-    ports { p_read3 { I 202 vector } } \
+    ports { p_read3 { I 235 vector } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 114 \
-    name p_read4 \
-    type other \
-    dir I \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_p_read4 \
-    op interface \
-    ports { p_read4 { I 202 vector } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 115 \
+    id 151 \
     name compute_start_read \
     type other \
     dir I \
@@ -265,7 +460,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 116 \
+    id 152 \
     name compute_op \
     type other \
     dir O \
@@ -280,7 +475,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 117 \
+    id 153 \
     name stream_ready \
     type other \
     dir I \
@@ -295,7 +490,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 118 \
+    id 154 \
     name stream_done \
     type other \
     dir I \

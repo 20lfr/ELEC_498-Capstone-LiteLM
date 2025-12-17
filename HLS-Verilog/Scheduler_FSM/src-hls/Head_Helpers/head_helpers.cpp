@@ -1,6 +1,7 @@
 // Simplified, single-head helper flow that only exercises compute.
 // Each head has its own "resource" (no shared arbitration).
 #include "head_helpers.hpp"
+#include "../../../Weight_Loader-Stager/Weight_stager.hpp"
 
 void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.layer_stamp   = layer_idx;
@@ -18,6 +19,8 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.wl_layer      = -1;
     ctx.wl_head       = -1;
     ctx.dma_done      = false;
+    ctx.dma_address = 0;                 
+    ctx.memory_request = false; 
     ctx.start_head    = false;
     ctx.q_started          = false;
     ctx.k_started          = false;
@@ -61,7 +64,9 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
 bool run_single_head(
     HeadCtx &ctx,           // [BOTH]   Persistent head state (phase, flags, last layer stamp, compute handshake bits).
     int      layer_idx,     // [INPUT]: Current layer stamp; if changed, ctx re-initializes to IDLE.
-    bool     start          // [INPUT]: Kick from IDLE into Q (independent of compute_ready).
+    bool     start,          // [INPUT]: Kick from IDLE into Q (independent of compute_ready).
+    ControlMemSpace ctrl_mem,  // [BOTH]: Control memory space for WL
+    bool     &error         // [OUTPUT]: Error flag from weight_stager
 )
 {
 #pragma HLS INLINE
@@ -69,7 +74,10 @@ bool run_single_head(
     if (ctx.layer_stamp != layer_idx) {
         init_head_ctx(ctx, layer_idx, ctx.head_idx);
     }
-
+    const bool wl_reset = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0) | (ctx.phase == HeadPhase::IDLE);
+    weight_stager(wl_reset, ctx.wl_start, ctx.wl_addr_sel, ctx.wl_layer,
+                ctx.wl_head, -1, ctrl_mem, ctx.wl_ready, 
+                ctx.memory_request, error, ctx.dma_address);
     if (!ctx.wl_ready && ctx.wl_start){
         ctx.wl_start      = false;
         ctx.wl_addr_sel   = DmaSel::DMASEL_NONE;
@@ -345,7 +353,9 @@ bool drive_group_head_phase(
     HeadCtx     (&head_ctx_ref)[HEADS_PARALLEL], // [BOTH]:  Tracks current group only
     int         base_head_idx,                  // [INPUT]: Global base index of this group
     int         layer_idx,                      // [INPUT]: Current Layer ID
-    bool        start                           // [INPUT]: Start the driving phase
+    bool        start,                          // [INPUT]: Start the driving phase
+    ControlMemSpace ctrl_mem,                   // [INPUT]: Control memory space for WL
+    bool     &error                             // [OUTPUT]: Error flag from weight_stager
 ){
 #pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
     (void)base_head_idx; // placeholder until per-lane re-init uses this
@@ -368,7 +378,9 @@ bool drive_group_head_phase(
             const bool head_done = run_single_head(
                 ctx,
                 layer_idx,
-                ctx.start_head);
+                ctx.start_head,
+                ctrl_mem,
+                error);
             if (!head_done) group_finished = false;
         }
 

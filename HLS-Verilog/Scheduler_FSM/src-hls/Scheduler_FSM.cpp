@@ -1,4 +1,5 @@
 #include "Scheduler_FSM.hpp"
+#include "../../Weight_Loader-Stager/Weight_stager.hpp"
 #include <cstdint>
 
 // Minimal, single-path scheduler FSM used to bring RTL back to a known-good
@@ -176,14 +177,9 @@ void scheduler_hls(
     // ------------------------------------------------------------
     // WEIGHT LOADER (AXI4-FULL MASTER via DMA)
     // ------------------------------------------------------------
-    bool wl_ready,    // [INPUT]  Weight loader ready for a new request
-    bool &wl_start,   // [OUTPUT] Start weight load DMA
-    DmaSel &wl_addr_sel, // [OUTPUT] Select which matrix/tile (Q, K, V, K cache, V
-                      // cache, WO, W1...)
-    int &wl_layer,    // [OUTPUT] Layer index for DMA
-    int &wl_head,     // [OUTPUT] Head index for DMA (or -1 for non-head ops)
-    int &wl_tile,     // [OUTPUT] Tile index for large matrices
-    bool dma_done,    // [INPUT]  DMA transfer completed (single-cycle pulse)
+    bool      &memory_request, // [OUTPUT] Memory request signal
+    uint32_t  &dma_address,    // [OUTPUT] DMA virtual-address to read weights from
+    bool      dma_done,        // [INPUT]  DMA transfer completed (single-cycle pulse)
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
@@ -205,11 +201,19 @@ void scheduler_hls(
     // GLOBAL COMPLETION FLAG
     // ------------------------------------------------------------
     bool &done, // [OUTPUT] Inference pipeline fully complete
+    bool &error, // [OUTPUT] Error flag (not used in this minimal FSM)
+    SchedState &STATE, // [OUTPUT] Current scheduler state
 
     // ------------------------------------------------------------
     // DEBUG STATE OUTPUT
     // ------------------------------------------------------------
-    SchedState &STATE // [OUTPUT] Current scheduler state
+    bool &dbg_wl_ready,    // [INPUT]  Weight loader ready for a new request
+    bool &dbg_wl_start,   // [OUTPUT] Start weight load DMA
+    DmaSel &dbg_wl_addr_sel, // [OUTPUT] Select which matrix/tile (Q, K, V, K cache, V
+                      // cache, WO, W1...)
+    int &dbg_wl_layer,    // [OUTPUT] Layer index for DMA
+    int &dbg_wl_head,     // [OUTPUT] Head index for DMA (or -1 for non-head ops)
+    int &dbg_wl_tile     // [OUTPUT] Tile index for large matrices
 ) {
 
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
@@ -219,6 +223,29 @@ void scheduler_hls(
 #pragma HLS reset variable = st
   static int layer_idx;
 #pragma HLS reset variable = layer_idx
+
+// WEIGHT LOADER (AXI4-FULL MASTER via DMA)~~~~~~~~~~~~~~~~~~~~~~
+  static bool wl_start;
+#pragma HLS reset variable = wl_start
+  static DmaSel wl_addr_sel;
+#pragma HLS reset variable = wl_addr_sel
+  static int wl_head;
+#pragma HLS reset variable = wl_head
+  static int wl_tile;
+#pragma HLS reset variable = wl_tile
+  static int wl_layer;
+#pragma HLS reset variable = wl_layer
+  static bool wl_ready;
+#pragma HLS reset variable = wl_ready
+
+  // DEBUG OUTPUTS
+  dbg_wl_start = wl_start;
+  dbg_wl_addr_sel = wl_addr_sel;
+  dbg_wl_layer = wl_layer;
+  dbg_wl_head = wl_head;
+  dbg_wl_tile = wl_tile;
+  dbg_wl_ready = wl_ready;
+    
 
   // One-shot guards for start pulses in each state
   static bool attn_started;
@@ -283,7 +310,7 @@ void scheduler_hls(
 // HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
+// POST-HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   static bool concat_started;
 #pragma HLS reset variable = concat_started
   static bool outproj_started;
@@ -332,30 +359,33 @@ void scheduler_hls(
 
 
   static bool wo_dma_done;
-#pragma HLS reset variable = wo_dma_done;
+#pragma HLS reset variable = wo_dma_done
   static bool w1_dma_done;
-#pragma HLS reset variable = w1_dma_done;
+#pragma HLS reset variable = w1_dma_done
   static bool w2_dma_done;
-#pragma HLS reset variable = w2_dma_done;
+#pragma HLS reset variable = w2_dma_done
   static bool axis_last_seen;
-#pragma HLS reset variable = axis_last_seen;
+#pragma HLS reset variable = axis_last_seen
   static bool stream_done_seen;
-#pragma HLS reset variable = stream_done_seen;
+#pragma HLS reset variable = stream_done_seen
+// POST-HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-  // Reset Logic
+
+  // Control Memory Local Logic
   const bool cntrl_reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
   const bool reset = !cntrl_reset_n;
-
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
   const bool busy = (st != S_IDLE);
-
   // Mirror busy into status bit 2 without clobbering other bits
   ctrl_mem.status = (ctrl_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
-
   // Expose a start bit that auto-clears once we leave IDLE
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
 
-
+  weight_stager(wl_reset, wl_start, wl_addr_sel, wl_layer,
+                -1, wl_tile, ctrl_mem, wl_ready,
+                memory_request, error, dma_address);
+  // FSM Reset
   if (reset) {
     st = S_IDLE;
     layer_idx = 0;
@@ -432,16 +462,22 @@ void scheduler_hls(
     w2_dma_busy = false;
     w2_comp_busy = false;
 
+    // Compute params
+    compute_start = false;
+    compute_op = ComputeOp::CMP_NONE;
+
     // Weight Stager and Loader params
     wl_start = false;
     wl_addr_sel = DmaSel::DMASEL_NONE;
     wl_head = 0;
     wl_tile = 0;
     wl_layer = 0;
+    memory_request = false;
+    wl_ready = false;
+    dma_address = 0;
 
-    // Compute params
-    compute_start = false;
-    compute_op = ComputeOp::CMP_NONE;
+    done = false;
+    error = false;
   }
 
   // Default outputs
@@ -589,6 +625,19 @@ void scheduler_hls(
         // Compute params
         compute_start = false;
         compute_op = ComputeOp::CMP_NONE;
+
+        // Weight Stager and Loader params
+        wl_start = false;
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_layer = 0;
+        memory_request = false;
+        wl_ready = false;
+        dma_address = 0;
+
+        done = false;
+        error = false;
       }
       break;
     }
@@ -665,6 +714,19 @@ void scheduler_hls(
       w2_tile = 0;
       w2_dma_busy = false;
       w2_comp_busy = false;
+
+
+      // Weight Stager and Loader params
+      wl_start = false;
+      wl_addr_sel = DmaSel::DMASEL_NONE;
+      wl_head = 0;
+      wl_tile = 0;
+      wl_layer = 0;
+      memory_request = false;
+      wl_ready = false;
+      dma_address = 0;
+
+      done = false;
       st = S_ATTENTION_HEADS;
 
       break;}
@@ -689,7 +751,7 @@ void scheduler_hls(
 
       // Drive current head group; compute handshake handled externally
       attn_group_done =
-          drive_group_head_phase(head_group, group_base, layer_idx, start_head_group);
+          drive_group_head_phase(head_group, group_base, layer_idx, start_head_group, ctrl_mem, error);
 
       // Copy results back into the full context
       for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {

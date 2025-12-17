@@ -130,13 +130,35 @@ int main() {
 
     ControlMemSpace ctrl_mem{};
     ctrl_mem.control = CTRL_RESETN_BIT; // reset_n high, start low
+    ctrl_mem.layer_stride    = 0x1000;
+    ctrl_mem.wq_head_stride  = 0x0100;
+    ctrl_mem.wk_head_stride  = 0x0200;
+    ctrl_mem.wv_head_stride  = 0x0300;
+    ctrl_mem.k_cache_stride  = 0x0400;
+    ctrl_mem.v_cache_stride  = 0x0500;
+    ctrl_mem.wo_tile_stride  = 0x0600;
+    ctrl_mem.w1_tile_stride  = 0x0700;
+    ctrl_mem.w2_tile_stride  = 0x0800;
 
-    bool wl_ready        = true;
-    bool wl_start        = false;
-    DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
-    int  wl_layer        = 0;
-    int  wl_head         = 0;
-    int  wl_tile         = 0;
+    ctrl_mem.wq_base_addr    = 0x10000000;
+    ctrl_mem.wk_base_addr    = 0x20000000;
+    ctrl_mem.wv_base_addr    = 0x30000000;
+    ctrl_mem.k_cache_addr    = 0x40000000;
+    ctrl_mem.v_cache_addr    = 0x50000000;
+    ctrl_mem.wo_base_addr    = 0x60000000;
+    ctrl_mem.w1_base_addr    = 0x70000000;
+    ctrl_mem.w2_base_addr    = 0x80000000;
+
+    bool      memory_request = false;
+    uint32_t  dma_address    = 0;
+    bool      error          = false;
+
+    bool dbg_wl_ready    = false;
+    bool dbg_wl_start    = false;
+    DmaSel dbg_wl_addr_sel = DmaSel::DMASEL_NONE;
+    int  dbg_wl_layer    = 0;
+    int  dbg_wl_head     = 0;
+    int  dbg_wl_tile     = 0;
     HeadCtx head_ctx_ref[NUM_HEADS];
     bool dma_done        = false;
 
@@ -185,9 +207,11 @@ int main() {
     bool seen_attn       = false;
     bool seen_concat     = false;
 
-    std::printf("%-8s %-6s %-6s %-8s | %-16s | %-10s %-10s %-10s %-10s | %s\n",
+    std::printf("%-8s %-6s %-6s %-8s | %-16s | %-10s %-10s %-10s %-10s | %-8s %-10s %-8s %-8s %-8s %-6s %-6s %-6s | %s\n",
                 "Cycle", "Start", "Reset", "Busy", "State",
                 "CmpStart", "CmpReady", "CmpDone", "CmpOp",
+                "MemReq", "DmaAddr", "dbgWlR", "dbgWlS", "dbgAddr",
+                "dbgLyr", "dbgHead", "dbgTile",
                 "Heads{idx:ph/cr/cs/cd/op/wlR/addr/qd/wlD}");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
@@ -255,6 +279,10 @@ int main() {
 
         // Complete outstanding DMA transfers
         dma_done = false;
+        if (memory_request && !dma_busy) {
+            dma_busy  = true;
+            dma_timer = DMA_LAT - 1;
+        }
         if (dma_busy) {
             if (dma_timer == 0) {
                 dma_done = true;
@@ -279,7 +307,6 @@ int main() {
             head_ctx_ref[i].wl_ready      = !head_dma_busy[lane];
         }
         stream_ready  = !stream_busy;
-        wl_ready      = !dma_busy;
 
         // Drive AXIS ingress: send a short burst when ready is asserted
         if (!axis_feed_done && (axis_drive || (((ctrl_mem.control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
@@ -298,12 +325,8 @@ int main() {
             axis_in_valid,
             axis_in_last,
             axis_in_ready,
-            wl_ready,
-            wl_start,
-            wl_addr_sel,
-            wl_layer,
-            wl_head,
-            wl_tile,
+            memory_request,
+            dma_address,
             dma_done,
             compute_ready,
             compute_done,
@@ -314,11 +337,18 @@ int main() {
             stream_start,
             stream_done,
             done,
-            STATE);
+            error,
+            STATE,
+            dbg_wl_ready,
+            dbg_wl_start,
+            dbg_wl_addr_sel,
+            dbg_wl_layer,
+            dbg_wl_head,
+            dbg_wl_tile);
 
         const bool cntrl_start   = ((ctrl_mem.control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_mem.control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10s %-10s %-10s %-10s | ",
+        std::printf("%-8d %-6d %-6d %-8s | %-16s | %-10s %-10s %-10s %-10s | %-8s 0x%08x %-8s %-8s %-8s %-6d %-6d %-6d | ",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
@@ -327,7 +357,15 @@ int main() {
                     dash_or(compute_start),
                     dash_or(compute_ready),
                     dash_or(compute_done),
-                    (compute_op == CMP_NONE ? "-" : op_name(compute_op)));
+                    (compute_op == CMP_NONE ? "-" : op_name(compute_op)),
+                    dash_or(memory_request),
+                    dma_address,
+                    dash_or(dbg_wl_ready),
+                    dash_or(dbg_wl_start),
+                    dma_name(dbg_wl_addr_sel),
+                    dbg_wl_layer,
+                    dbg_wl_head,
+                    dbg_wl_tile);
 
         for (int i = 0; i < NUM_HEADS; ++i) {
             char buf[96];
@@ -368,10 +406,6 @@ int main() {
             comp_busy  = true;
             comp_timer = COMP_LAT - 1;
             if (compute_op == CMP_CONCAT) seen_concat = true;
-        }
-        if (wl_start && wl_ready && !dma_busy) {
-            dma_busy  = true;
-            dma_timer = DMA_LAT - 1;
         }
         if (stream_start) {
             stream_busy = true;

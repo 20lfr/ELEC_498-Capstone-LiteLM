@@ -69,6 +69,19 @@
     "arguments": [
       "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
       "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "-fhls",
+      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-fhlstoplevel=transformer_top",
+      "-c",
+      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp"
+    ],
+    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp"
+  },
+  {
+    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module",
+    "arguments": [
+      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls-tb",
       "-hls-sim-headers-dir=/tools/Xilinx/2025.1/Vitis/include",
       "-c",

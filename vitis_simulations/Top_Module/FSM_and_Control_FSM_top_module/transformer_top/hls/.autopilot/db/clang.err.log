@@ -1,16 +1,12 @@
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:335:41: warning: unexpected pragma argument ';', expects identifier [-Winvalid-hls-pragmas]
-#pragma HLS reset variable = wo_dma_done;
-                                        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:337:41: warning: unexpected pragma argument ';', expects identifier [-Winvalid-hls-pragmas]
-#pragma HLS reset variable = w1_dma_done;
-                                        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:339:41: warning: unexpected pragma argument ';', expects identifier [-Winvalid-hls-pragmas]
-#pragma HLS reset variable = w2_dma_done;
-                                        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:341:44: warning: unexpected pragma argument ';', expects identifier [-Winvalid-hls-pragmas]
-#pragma HLS reset variable = axis_last_seen;
-                                           ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:343:46: warning: unexpected pragma argument ';', expects identifier [-Winvalid-hls-pragmas]
-#pragma HLS reset variable = stream_done_seen;
-                                             ^
-5 warnings generated.
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: warning: | has lower precedence than ==; == will be evaluated first [-Wparentheses]
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
+                              ^~~~~~~~~~~~~~
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: note: place parentheses around the '==' expression to silence this warning
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
+                              ^
+                                (           )
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: note: place parentheses around the | expression to evaluate it first
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
+                              ^
+                        (         )
+1 warning generated.

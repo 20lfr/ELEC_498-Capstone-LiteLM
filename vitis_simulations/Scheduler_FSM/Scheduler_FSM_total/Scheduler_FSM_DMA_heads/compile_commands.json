@@ -30,6 +30,19 @@
     "arguments": [
       "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
       "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "-fhls",
+      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-fhlstoplevel=scheduler_hls",
+      "-c",
+      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp"
+    ],
+    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp"
+  },
+  {
+    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Scheduler_FSM/Scheduler_FSM_total/Scheduler_FSM_DMA_heads",
+    "arguments": [
+      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls-tb",
       "-hls-sim-headers-dir=/tools/Xilinx/2025.1/Vitis/include",
       "-c",

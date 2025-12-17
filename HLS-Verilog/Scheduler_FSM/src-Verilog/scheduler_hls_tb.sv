@@ -19,12 +19,8 @@ module scheduler_hls_tb;
 
   // DUT inputs
   logic ap_start;
-  logic [0:0] cntrl_start;
-  logic [0:0] cntrl_reset_n;
   logic [0:0] axis_in_valid;
   logic [0:0] axis_in_last;
-  logic [0:0] wl_ready;
-  logic [0:0] wl_start_i;
   logic [0:0] dma_done;
   logic [0:0] compute_ready;
   logic [0:0] compute_done;
@@ -36,24 +32,12 @@ module scheduler_hls_tb;
   logic ap_done;
   logic ap_idle;
   logic ap_ready;
-  logic [31:0] cntrl_layer_idx;
-  logic cntrl_layer_idx_ap_vld;
-  logic [0:0] cntrl_busy;
-  logic cntrl_busy_ap_vld;
-  logic [0:0] cntrl_start_out;
-  logic cntrl_start_out_ap_vld;
   logic [0:0] axis_in_ready;
   logic axis_in_ready_ap_vld;
-  logic [0:0] wl_start_o;
-  logic wl_start_o_ap_vld;
-  logic [7:0]  wl_addr_sel;
-  logic wl_addr_sel_ap_vld;
-  logic [31:0] wl_layer;
-  logic wl_layer_ap_vld;
-  logic [31:0] wl_head;
-  logic wl_head_ap_vld;
-  logic [31:0] wl_tile;
-  logic wl_tile_ap_vld;
+  logic [0:0] memory_request;
+  logic memory_request_ap_vld;
+  logic [31:0] dma_address;
+  logic dma_address_ap_vld;
   logic [0:0] compute_start_o;
   logic compute_start_o_ap_vld;
   logic [7:0]  compute_op;
@@ -62,8 +46,22 @@ module scheduler_hls_tb;
   logic stream_start_ap_vld;
   logic [0:0] done;
   logic done_ap_vld;
+  logic [0:0] error;
+  logic error_ap_vld;
   logic [31:0] STATE;
   logic STATE_ap_vld;
+  logic [0:0] dbg_wl_ready;
+  logic dbg_wl_ready_ap_vld;
+  logic [0:0] dbg_wl_start;
+  logic dbg_wl_start_ap_vld;
+  logic [7:0]  dbg_wl_addr_sel;
+  logic dbg_wl_addr_sel_ap_vld;
+  logic [31:0] dbg_wl_layer;
+  logic dbg_wl_layer_ap_vld;
+  logic [31:0] dbg_wl_head;
+  logic dbg_wl_head_ap_vld;
+  logic [31:0] dbg_wl_tile;
+  logic dbg_wl_tile_ap_vld;
 
   // Testbench state variables
   logic comp_busy;
@@ -107,6 +105,51 @@ module scheduler_hls_tb;
   localparam int CMP_LN1_NORM     = 44;
   localparam int CMP_LN1_SCALE    = 45;
   localparam int CMP_LN1_SHIFT    = 46;
+  localparam logic [31:0] CTRL_RESETN_BIT = 32'h1;
+  localparam logic [31:0] CTRL_START_BIT  = 32'h2;
+
+  // Control memory layout (packed to match C struct; reversed declaration order
+  // so the LSBs line up with the C layout).
+  typedef struct packed {
+    logic [31:0] reserved_debug;
+    logic [31:0] zero_point_v;
+    logic [31:0] scale_v;
+    logic [31:0] zero_point_k;
+    logic [31:0] scale_k;
+    logic [31:0] zero_point_q;
+    logic [31:0] scale_q;
+    logic [31:0] logit_scale_qv;
+    logic [31:0] v_cache_addr;
+    logic [31:0] k_cache_addr;
+    logic [31:0] w2_base_addr;
+    logic [31:0] w1_base_addr;
+    logic [31:0] wo_base_addr;
+    logic [31:0] wv_base_addr;
+    logic [31:0] wk_base_addr;
+    logic [31:0] wq_base_addr;
+    logic [31:0] w2_tile_stride;
+    logic [31:0] w1_tile_stride;
+    logic [31:0] wo_tile_stride;
+    logic [31:0] v_cache_stride;
+    logic [31:0] k_cache_stride;
+    logic [31:0] wv_head_stride;
+    logic [31:0] wk_head_stride;
+    logic [31:0] wq_head_stride;
+    logic [31:0] layer_stride;
+    logic [31:0] dma_tile_len;
+    logic [31:0] dma_head_len;
+    logic [31:0] dma_layer_len;
+    logic [31:0] irq_enable;
+    logic [31:0] irq_status;
+    logic [31:0] status;
+    logic [31:0] layer_index;
+    logic [31:0] control;
+  } ctrl_mem_t;
+
+  ctrl_mem_t ctrl_mem;
+  logic [1055:0] ctrl_mem_bus;
+  assign ctrl_mem_bus = ctrl_mem;
+
   typedef struct packed {
     // Reverse order of HeadCtx so LSBs align with C layout
     logic        att_value_dma_done;
@@ -305,10 +348,13 @@ module scheduler_hls_tb;
       dma_done  <= 1'b0;
       dma_done_hold <= 1'b0;
       dma_done_ctr  <= 0;
-      wl_ready  <= 1'b0;
     end else begin
       dma_done <= 1'b0;
-      if (dma_busy) begin
+      if (memory_request && !dma_busy) begin
+        dma_busy  <= 1'b1;
+        dma_lat_var = rand_dma_lat();
+        dma_timer <= (dma_lat_var > 0) ? dma_lat_var - 1 : 0;
+      end else if (dma_busy) begin
         if (dma_timer == 0) begin
           dma_busy <= 1'b0;
           dma_done_hold <= 1'b1;
@@ -325,12 +371,6 @@ module scheduler_hls_tb;
           dma_done_ctr <= dma_done_ctr - 1;
         end
       end
-      if (wl_start_o && wl_start_o_ap_vld && wl_ready && !dma_busy) begin
-        dma_busy  <= 1'b1;
-        dma_lat_var = rand_dma_lat();
-        dma_timer <= (dma_lat_var > 0) ? dma_lat_var - 1 : 0;
-      end
-      wl_ready <= !dma_busy;
     end
   end
 
@@ -343,7 +383,7 @@ module scheduler_hls_tb;
       axis_in_valid  <= 1'b0;
       axis_in_last   <= 1'b0;
     end else begin
-      if (!axis_feed_done && (axis_drive || (cntrl_reset_n && start_pulsed))) begin
+      if (!axis_feed_done && (axis_drive || start_pulsed)) begin
         axis_drive <= 1'b1;
         if (!axis_in_valid && axis_in_ready) begin
           axis_in_valid <= 1'b1;
@@ -560,10 +600,9 @@ module scheduler_hls_tb;
     int cycle;
     
     // Initialize
+    ctrl_mem = '0;
+    ctrl_mem.control = 32'd0;
     ap_start = 1'b0;
-    cntrl_start = 1'b0;
-    cntrl_reset_n = 1'b0;
-    wl_start_i = 1'b0;
     compute_start_i = 1'b0;
     start_pulsed = 1'b0;
     seen_done = 1'b0;
@@ -571,49 +610,68 @@ module scheduler_hls_tb;
     seen_idle_after = 1'b0;
     seen_attn = 1'b0;
     seen_concat = 1'b0;
+    axis_in_valid = 1'b0;
+    axis_in_last  = 1'b0;
 
     // Print header
-    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6s %-6s | %-8s %-8s %-8s %-10s",
-             "Cycle", "Start", "Reset", "Busy", "State",
+    $display("%-8s %-6s %-6s %-6s | %-12s | %-6s %-6s %-8s | %-7s %-10s %-6s %-6s %-8s %-6s %-6s %-6s | %-8s %-8s %-8s %-10s",
+             "Cycle", "apRst", "CtrlR", "CtrlS", "State",
              "AXIS_v", "AXIS_r", "AXIS_last",
-             "WL_rdy", "WL_strt_o", "WL_addr", "WL_head", "WL_tile",
+             "MemReq", "DmaAddr", "dbgWlR", "dbgWlS", "dbgAddr", "dbgLyr", "dbgHead", "dbgTile",
              "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
 
-    // Release reset at cycle 2
+    // Hold ctrl_mem reset low for two cycles
     repeat(2) @(posedge ap_clk);
+
+    // Deassert fabric reset
     ap_rst = 1'b0;
-    cntrl_reset_n = 1'b1;
     ap_start = 1'b1; // Hold high continuously to mirror C++ model calling every cycle
-    
+    // Bring ctrl_mem resetn high, program strides/bases, then assert start
+    ctrl_mem.control       = CTRL_RESETN_BIT;
+    ctrl_mem.layer_stride  = 32'h0000_1000;
+    ctrl_mem.wq_head_stride= 32'h0000_0100;
+    ctrl_mem.wk_head_stride= 32'h0000_0200;
+    ctrl_mem.wv_head_stride= 32'h0000_0300;
+    ctrl_mem.k_cache_stride= 32'h0000_0400;
+    ctrl_mem.v_cache_stride= 32'h0000_0500;
+    ctrl_mem.wo_tile_stride= 32'h0000_0600;
+    ctrl_mem.w1_tile_stride= 32'h0000_0700;
+    ctrl_mem.w2_tile_stride= 32'h0000_0800;
+    ctrl_mem.wq_base_addr  = 32'h1000_0000;
+    ctrl_mem.wk_base_addr  = 32'h2000_0000;
+    ctrl_mem.wv_base_addr  = 32'h3000_0000;
+    ctrl_mem.k_cache_addr  = 32'h4000_0000;
+    ctrl_mem.v_cache_addr  = 32'h5000_0000;
+    ctrl_mem.wo_base_addr  = 32'h6000_0000;
+    ctrl_mem.w1_base_addr  = 32'h7000_0000;
+    ctrl_mem.w2_base_addr  = 32'h8000_0000;
+
     @(posedge ap_clk);
+    ctrl_mem.control = CTRL_RESETN_BIT | CTRL_START_BIT;
+    start_pulsed = 1'b1;
 
     // Main test loop
     for (cycle = 0; cycle < MAX_CYCLES; cycle++) begin
       @(posedge ap_clk);
-      
-      // Issue a single-cycle start pulse once after reset deasserts
-      if (cntrl_reset_n && !start_pulsed) begin
-        cntrl_start <= 1'b1;
-        start_pulsed <= 1'b1;
-      end else if (cntrl_busy) begin
-        cntrl_start <= 1'b0;
-      end
-      
+
       // Print state
-      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-6s %-6s %-8s %-6d %-6d | %-8s %-8s %-8s %-10s",
+      $display("%-8d %-6s %-6s %-6s | %-12s | %-6s %-6s %-8s | %-7s 0x%08x %-6s %-6s %-8s %-6d %-6d %-6d | %-8s %-8s %-8s %-10s",
                cycle,
-               cntrl_start ? "1" : "-",
-               cntrl_reset_n ? "1" : "-",
-               cntrl_busy ? "1" : "-",
+               ap_rst ? "1" : "-",
+               ctrl_mem.control[0] ? "1" : "-",
+               ctrl_mem.control[1] ? "1" : "-",
                state_name(STATE),
                axis_in_valid ? "1" : "-",
                axis_in_ready ? "1" : "-",
                axis_in_last ? "1" : "-",
-               wl_ready ? "1" : "-",
-               wl_start_o ? "1" : "-",
-               dma_name(wl_addr_sel),
-               wl_head,
-               wl_tile,
+               memory_request ? "1" : "-",
+               dma_address,
+               dbg_wl_ready ? "1" : "-",
+               dbg_wl_start ? "1" : "-",
+               dma_name(dbg_wl_addr_sel),
+               dbg_wl_layer,
+               dbg_wl_head,
+               dbg_wl_tile,
                compute_start_o ? "1" : "-",
                compute_ready ? "1" : "-",
                compute_done ? "1" : "-",
@@ -622,7 +680,7 @@ module scheduler_hls_tb;
       // Track done signal
       if (done) begin
         seen_done <= 1'b1;
-        cntrl_start <= 1'b0;
+        ctrl_mem.control[1] = 1'b0;
       end
       
       if (seen_done) begin
@@ -633,7 +691,7 @@ module scheduler_hls_tb;
       end
       
       // Exit condition: idle after done
-      if (!cntrl_busy && !cntrl_start && seen_done && seen_idle_after) begin
+      if (ap_idle && !ctrl_mem.control[1] && seen_done && seen_idle_after) begin
         break;
       end
     end
@@ -656,8 +714,8 @@ module scheduler_hls_tb;
       $finish(1);
     end
 
-    $display("\nPASS: DONE observed and FSM returned to IDLE after %0d post-done cycles. Layer=%0d",
-             post_done_cycles, cntrl_layer_idx);
+    $display("\nPASS: DONE observed and FSM returned to IDLE after %0d post-done cycles.",
+             post_done_cycles);
     $finish(0);
   end
 
@@ -746,30 +804,15 @@ module scheduler_hls_tb;
     .ap_done(ap_done),
     .ap_idle(ap_idle),
     .ap_ready(ap_ready),
-    .cntrl_start(cntrl_start),
-    .cntrl_reset_n(cntrl_reset_n),
-    .cntrl_layer_idx(cntrl_layer_idx),
-    .cntrl_layer_idx_ap_vld(cntrl_layer_idx_ap_vld),
-    .cntrl_busy(cntrl_busy),
-    .cntrl_busy_ap_vld(cntrl_busy_ap_vld),
-    .cntrl_start_out(cntrl_start_out),
-    .cntrl_start_out_ap_vld(cntrl_start_out_ap_vld),
+    .ctrl_mem(ctrl_mem_bus),
     .axis_in_valid(axis_in_valid),
     .axis_in_last(axis_in_last),
     .axis_in_ready(axis_in_ready),
     .axis_in_ready_ap_vld(axis_in_ready_ap_vld),
-    .wl_ready(wl_ready),
-    .wl_start_i(wl_start_i),
-    .wl_start_o(wl_start_o),
-    .wl_start_o_ap_vld(wl_start_o_ap_vld),
-    .wl_addr_sel(wl_addr_sel),
-    .wl_addr_sel_ap_vld(wl_addr_sel_ap_vld),
-    .wl_layer(wl_layer),
-    .wl_layer_ap_vld(wl_layer_ap_vld),
-    .wl_head(wl_head),
-    .wl_head_ap_vld(wl_head_ap_vld),
-    .wl_tile(wl_tile),
-    .wl_tile_ap_vld(wl_tile_ap_vld),
+    .memory_request(memory_request),
+    .memory_request_ap_vld(memory_request_ap_vld),
+    .dma_address(dma_address),
+    .dma_address_ap_vld(dma_address_ap_vld),
     .dma_done(dma_done),
     .compute_ready(compute_ready),
     .compute_done(compute_done),
@@ -796,8 +839,22 @@ module scheduler_hls_tb;
     .stream_done(stream_done),
     .done(done),
     .done_ap_vld(done_ap_vld),
+    .error(error),
+    .error_ap_vld(error_ap_vld),
     .STATE(STATE),
-    .STATE_ap_vld(STATE_ap_vld)
+    .STATE_ap_vld(STATE_ap_vld),
+    .dbg_wl_ready(dbg_wl_ready),
+    .dbg_wl_ready_ap_vld(dbg_wl_ready_ap_vld),
+    .dbg_wl_start(dbg_wl_start),
+    .dbg_wl_start_ap_vld(dbg_wl_start_ap_vld),
+    .dbg_wl_addr_sel(dbg_wl_addr_sel),
+    .dbg_wl_addr_sel_ap_vld(dbg_wl_addr_sel_ap_vld),
+    .dbg_wl_layer(dbg_wl_layer),
+    .dbg_wl_layer_ap_vld(dbg_wl_layer_ap_vld),
+    .dbg_wl_head(dbg_wl_head),
+    .dbg_wl_head_ap_vld(dbg_wl_head_ap_vld),
+    .dbg_wl_tile(dbg_wl_tile),
+    .dbg_wl_tile_ap_vld(dbg_wl_tile_ap_vld)
   );
 
 endmodule

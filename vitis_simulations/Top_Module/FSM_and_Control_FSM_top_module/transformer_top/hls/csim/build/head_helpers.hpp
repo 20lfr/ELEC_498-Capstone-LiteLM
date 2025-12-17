@@ -14,12 +14,16 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx);
 bool run_single_head(
     HeadCtx     &ctx,
     int         layer_idx,
-    bool        start
+    bool        start, 
+    ControlMemSpace ctrl_mem,  
+    bool     &error         
 );
 
 bool drive_group_head_phase(
     HeadCtx     (&head_ctx_ref)[HEADS_PARALLEL],
     int         group_idx,
     int         layer_idx,
-    bool        start
+    bool        start, 
+    ControlMemSpace ctrl_mem,  
+    bool     &error         
 );

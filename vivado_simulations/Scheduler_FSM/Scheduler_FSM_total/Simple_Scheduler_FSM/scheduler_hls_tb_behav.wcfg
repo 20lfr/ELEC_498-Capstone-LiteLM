@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="6,480.001 ns"></ZoomEndTime>
-      <Cursor1Time time="2,305.000 ns"></Cursor1Time>
+      <ZoomStartTime time="12,167.936 ns"></ZoomStartTime>
+      <ZoomEndTime time="18,667.937 ns"></ZoomEndTime>
+      <Cursor1Time time="4,492.936 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="238"></NameColumnWidth>
+      <NameColumnWidth column_width="234"></NameColumnWidth>
       <ValueColumnWidth column_width="60"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="82" />
+   <WVObjectSize size="67" />
    <wvobject type="logic" fp_name="/scheduler_hls_tb/ap_clk">
       <obj_property name="ElementShortName">ap_clk</obj_property>
       <obj_property name="ObjectShortName">ap_clk</obj_property>
@@ -32,14 +32,6 @@
       <obj_property name="ElementShortName">ap_start</obj_property>
       <obj_property name="ObjectShortName">ap_start</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/cntrl_start">
-      <obj_property name="ElementShortName">cntrl_start[0:0]</obj_property>
-      <obj_property name="ObjectShortName">cntrl_start[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/cntrl_reset_n">
-      <obj_property name="ElementShortName">cntrl_reset_n[0:0]</obj_property>
-      <obj_property name="ObjectShortName">cntrl_reset_n[0:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/axis_in_valid">
       <obj_property name="ElementShortName">axis_in_valid[0:0]</obj_property>
       <obj_property name="ObjectShortName">axis_in_valid[0:0]</obj_property>
@@ -47,10 +39,6 @@
    <wvobject type="array" fp_name="/scheduler_hls_tb/axis_in_last">
       <obj_property name="ElementShortName">axis_in_last[0:0]</obj_property>
       <obj_property name="ObjectShortName">axis_in_last[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/wl_ready">
-      <obj_property name="ElementShortName">wl_ready[0:0]</obj_property>
-      <obj_property name="ObjectShortName">wl_ready[0:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/dma_done">
       <obj_property name="ElementShortName">dma_done[0:0]</obj_property>
@@ -90,30 +78,6 @@
       <obj_property name="ElementShortName">ap_ready</obj_property>
       <obj_property name="ObjectShortName">ap_ready</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/cntrl_layer_idx">
-      <obj_property name="ElementShortName">cntrl_layer_idx[31:0]</obj_property>
-      <obj_property name="ObjectShortName">cntrl_layer_idx[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/cntrl_layer_idx_ap_vld">
-      <obj_property name="ElementShortName">cntrl_layer_idx_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">cntrl_layer_idx_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/cntrl_busy">
-      <obj_property name="ElementShortName">cntrl_busy[0:0]</obj_property>
-      <obj_property name="ObjectShortName">cntrl_busy[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/cntrl_busy_ap_vld">
-      <obj_property name="ElementShortName">cntrl_busy_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">cntrl_busy_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/cntrl_start_out">
-      <obj_property name="ElementShortName">cntrl_start_out[0:0]</obj_property>
-      <obj_property name="ObjectShortName">cntrl_start_out[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/cntrl_start_out_ap_vld">
-      <obj_property name="ElementShortName">cntrl_start_out_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">cntrl_start_out_ap_vld</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/axis_in_ready">
       <obj_property name="ElementShortName">axis_in_ready[0:0]</obj_property>
       <obj_property name="ObjectShortName">axis_in_ready[0:0]</obj_property>
@@ -121,48 +85,6 @@
    <wvobject type="logic" fp_name="/scheduler_hls_tb/axis_in_ready_ap_vld">
       <obj_property name="ElementShortName">axis_in_ready_ap_vld</obj_property>
       <obj_property name="ObjectShortName">axis_in_ready_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/wl_addr_sel">
-      <obj_property name="ElementShortName">wl_addr_sel[7:0]</obj_property>
-      <obj_property name="ObjectShortName">wl_addr_sel[7:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/wl_layer">
-      <obj_property name="ElementShortName">wl_layer[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wl_layer[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/wl_head">
-      <obj_property name="ElementShortName">wl_head[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wl_head[31:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/scheduler_hls_tb/wl_tile">
-      <obj_property name="ElementShortName">wl_tile[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wl_tile[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/wl_addr_sel_ap_vld">
-      <obj_property name="ElementShortName">wl_addr_sel_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">wl_addr_sel_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/wl_layer_ap_vld">
-      <obj_property name="ElementShortName">wl_layer_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">wl_layer_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/wl_head_ap_vld">
-      <obj_property name="ElementShortName">wl_head_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">wl_head_ap_vld</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/scheduler_hls_tb/wl_tile_ap_vld">
-      <obj_property name="ElementShortName">wl_tile_ap_vld</obj_property>
-      <obj_property name="ObjectShortName">wl_tile_ap_vld</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/scheduler_hls_tb/compute_op_ap_vld">
       <obj_property name="ElementShortName">compute_op_ap_vld</obj_property>
@@ -199,8 +121,8 @@
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/compute_op">
-      <obj_property name="ElementShortName">compute_op[31:0]</obj_property>
-      <obj_property name="ObjectShortName">compute_op[31:0]</obj_property>
+      <obj_property name="ElementShortName">compute_op[7:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_op[7:0]</obj_property>
       <obj_property name="CustomSignalColor">#FF00FF</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
@@ -210,6 +132,18 @@
       <obj_property name="ObjectShortName">STATE[31:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/scheduler_hls_tb/dma_address">
+      <obj_property name="ElementShortName">dma_address[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_address[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF0080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/scheduler_hls_tb/memory_request">
+      <obj_property name="ElementShortName">memory_request[0:0]</obj_property>
+      <obj_property name="ObjectShortName">memory_request[0:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF0080</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/scheduler_hls_tb/head_phase_dbg">

@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'drive_group_head_phase'
 ================================================================
-* Date:           Mon Dec 15 15:52:01 2025
+* Date:           Wed Dec 17 11:57:58 2025
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        scheduler_hls
@@ -584,10 +584,10 @@ ST_1 : Operation 507 [1/1] (0.00ns) (grouped into LUT with out node head_ctx_ref
 ST_1 : Operation 508 [1/1] (0.28ns) (out node of the LUT)   --->   "%head_ctx_ref_val_scale_compute_done_1_3 = or i1 %and_ln69_55, i1 %or_ln108_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:69->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 508 'or' 'head_ctx_ref_val_scale_compute_done_1_3' <Predicate = (!icmp_ln367_1)> <Delay = 0.28> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
 ST_1 : Operation 509 [1/1] (0.00ns) (grouped into LUT with out node head_ctx_ref_softmax_compute_done_1_3)   --->   "%or_ln109_1 = and i1 %and_ln109_1, i1 %not_sel_tmp41" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:109->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 509 'and' 'or_ln109_1' <Predicate = (!icmp_ln367_1)> <Delay = 0.00> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
 ST_1 : Operation 510 [1/1] (0.28ns) (out node of the LUT)   --->   "%head_ctx_ref_softmax_compute_done_1_3 = or i1 %and_ln69_56, i1 %or_ln109_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:69->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 510 'or' 'head_ctx_ref_softmax_compute_done_1_3' <Predicate = (!icmp_ln367_1)> <Delay = 0.28> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 511 [1/1] (0.00ns) (grouped into LUT with out node head_ctx_ref_att_value_compute_done_1_3)   --->   "%or_ln110_2 = and i1 %and_ln110_1, i1 %not_sel_tmp41" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:110->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 511 'and' 'or_ln110_2' <Predicate = (!icmp_ln367_1)> <Delay = 0.00> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 512 [1/1] (0.28ns) (out node of the LUT)   --->   "%head_ctx_ref_att_value_compute_done_1_3 = or i1 %and_ln69_57, i1 %or_ln110_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:69->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 512 'or' 'head_ctx_ref_att_value_compute_done_1_3' <Predicate = (!icmp_ln367_1)> <Delay = 0.28> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 513 [1/1] (0.00ns) (grouped into LUT with out node head_ctx_ref_requant2_compute_done_1_3)   --->   "%or_ln111_1 = and i1 %and_ln111_1, i1 %not_sel_tmp41" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:111->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 513 'and' 'or_ln111_1' <Predicate = (!icmp_ln367_1)> <Delay = 0.00> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 514 [1/1] (0.28ns) (out node of the LUT)   --->   "%head_ctx_ref_requant2_compute_done_1_3 = or i1 %and_ln69_58, i1 %or_ln111_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:69->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 514 'or' 'head_ctx_ref_requant2_compute_done_1_3' <Predicate = (!icmp_ln367_1)> <Delay = 0.28> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 511 [1/1] (0.00ns) (grouped into LUT with out node head_ctx_ref_att_value_compute_done_1_3)   --->   "%or_ln110_1 = and i1 %and_ln110_1, i1 %not_sel_tmp41" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:110->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 511 'and' 'or_ln110_1' <Predicate = (!icmp_ln367_1)> <Delay = 0.00> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 512 [1/1] (0.28ns) (out node of the LUT)   --->   "%head_ctx_ref_att_value_compute_done_1_3 = or i1 %and_ln69_57, i1 %or_ln110_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:69->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 512 'or' 'head_ctx_ref_att_value_compute_done_1_3' <Predicate = (!icmp_ln367_1)> <Delay = 0.28> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 513 [1/1] (0.00ns) (grouped into LUT with out node head_ctx_ref_requant2_compute_done_1_3)   --->   "%or_ln111_2 = and i1 %and_ln111_1, i1 %not_sel_tmp41" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:111->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 513 'and' 'or_ln111_2' <Predicate = (!icmp_ln367_1)> <Delay = 0.00> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 514 [1/1] (0.28ns) (out node of the LUT)   --->   "%head_ctx_ref_requant2_compute_done_1_3 = or i1 %and_ln69_58, i1 %or_ln111_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:69->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 514 'or' 'head_ctx_ref_requant2_compute_done_1_3' <Predicate = (!icmp_ln367_1)> <Delay = 0.28> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
 ST_1 : Operation 515 [1/1] (0.79ns)   --->   "%switch_ln115 = switch i4 %select_ln69_5, void %sw.bb.i.1, i4 13, void %sw.bb401.i.1, i4 1, void %sw.bb172.i.1, i4 2, void %sw.bb199.i.1, i4 3, void %sw.bb226.i.1, i4 4, void %sw.bb244.i.1, i4 5, void %sw.bb246.i.1, i4 6, void %sw.bb273.i.1, i4 7, void %for.end, i4 8, void %sw.bb293.i.1, i4 9, void %sw.bb311.i.1, i4 10, void %sw.bb338.i.1, i4 11, void %sw.bb356.i.1, i4 12, void %sw.bb374.i.1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:115->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 515 'switch' 'switch_ln115' <Predicate = (!icmp_ln367_1)> <Delay = 0.79>
 ST_1 : Operation 516 [1/1] (0.28ns)   --->   "%or_ln304_1 = or i1 %and_ln69_46, i1 %not_and_ln69_37" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:304->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 516 'or' 'or_ln304_1' <Predicate = (!icmp_ln367_1 & select_ln69_5 == 12)> <Delay = 0.28> <CoreInst = "LogicGate">   --->   Core 74 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.28> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
 ST_1 : Operation 517 [1/1] (0.72ns)   --->   "%br_ln304 = br i1 %or_ln304_1, void %for.end, void %if.else383.i.1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:304->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:368]   --->   Operation 517 'br' 'br_ln304' <Predicate = (!icmp_ln367_1 & select_ln69_5 == 12)> <Delay = 0.72>
@@ -1480,9 +1480,9 @@ or_ln108_1                               (and        ) [ 00]
 head_ctx_ref_val_scale_compute_done_1_3  (or         ) [ 01]
 or_ln109_1                               (and        ) [ 00]
 head_ctx_ref_softmax_compute_done_1_3    (or         ) [ 01]
-or_ln110_2                               (and        ) [ 00]
+or_ln110_1                               (and        ) [ 00]
 head_ctx_ref_att_value_compute_done_1_3  (or         ) [ 00]
-or_ln111_1                               (and        ) [ 00]
+or_ln111_2                               (and        ) [ 00]
 head_ctx_ref_requant2_compute_done_1_3   (or         ) [ 01]
 switch_ln115                             (switch     ) [ 00]
 or_ln304_1                               (or         ) [ 01]
@@ -16795,7 +16795,7 @@ ret_ln377                                (ret        ) [ 00]
 </bind>
 </comp>
 
-<comp id="13677" class="1004" name="or_ln110_2_fu_13677">
+<comp id="13677" class="1004" name="or_ln110_1_fu_13677">
 <pin_list>
 <pin id="13678" dir="0" index="0" bw="1" slack="0"/>
 <pin id="13679" dir="0" index="1" bw="1" slack="0"/>
@@ -16803,7 +16803,7 @@ ret_ln377                                (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="and(23) " fcode="and"/>
-<opset="or_ln110_2/1 "/>
+<opset="or_ln110_1/1 "/>
 </bind>
 </comp>
 
@@ -16819,7 +16819,7 @@ ret_ln377                                (ret        ) [ 00]
 </bind>
 </comp>
 
-<comp id="13724" class="1004" name="or_ln111_1_fu_13724">
+<comp id="13724" class="1004" name="or_ln111_2_fu_13724">
 <pin_list>
 <pin id="13725" dir="0" index="0" bw="1" slack="0"/>
 <pin id="13726" dir="0" index="1" bw="1" slack="0"/>
@@ -16827,7 +16827,7 @@ ret_ln377                                (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="and(23) " fcode="and"/>
-<opset="or_ln111_1/1 "/>
+<opset="or_ln111_2/1 "/>
 </bind>
 </comp>
 
@@ -29491,9 +29491,9 @@ ret_ln377                                (ret        ) [ 00]
 		head_ctx_ref_val_scale_compute_done_1_3 : 1
 		or_ln109_1 : 1
 		head_ctx_ref_softmax_compute_done_1_3 : 1
-		or_ln110_2 : 1
+		or_ln110_1 : 1
 		head_ctx_ref_att_value_compute_done_1_3 : 1
-		or_ln111_1 : 1
+		or_ln111_2 : 1
 		head_ctx_ref_requant2_compute_done_1_3 : 1
 		switch_ln115 : 2
 		or_ln304_1 : 1
@@ -30047,8 +30047,8 @@ ret_ln377                                (ret        ) [ 00]
 |          |                or_ln107_1_fu_13538                |    0    |    2    |
 |          |                or_ln108_1_fu_13585                |    0    |    2    |
 |          |                or_ln109_1_fu_13631                |    0    |    2    |
-|          |                or_ln110_2_fu_13677                |    0    |    2    |
-|          |                or_ln111_1_fu_13724                |    0    |    2    |
+|          |                or_ln110_1_fu_13677                |    0    |    2    |
+|          |                or_ln111_2_fu_13724                |    0    |    2    |
 |          |                and_ln311_1_fu_13853               |    0    |    2    |
 |          |                and_ln315_1_fu_13859               |    0    |    2    |
 |          |                and_ln269_1_fu_13938               |    0    |    2    |

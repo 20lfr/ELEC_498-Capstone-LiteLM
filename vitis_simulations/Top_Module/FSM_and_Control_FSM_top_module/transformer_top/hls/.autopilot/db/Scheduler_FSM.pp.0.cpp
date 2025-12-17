@@ -631,6 +631,8 @@ struct HeadCtx {
     int wl_head = -1;
     bool dma_done = false;
 
+    uint32_t dma_address = 0;
+    bool memory_request = false;
 
     bool start_head = false;
 
@@ -699,28 +701,36 @@ enum class ControlReg : uint32_t {
     DMA_TILE_LEN = 0x1C,
 
     LAYER_STRIDE = 0x20,
-    HEAD_STRIDE = 0x24,
-    TILE_STRIDE = 0x28,
+    WQ_HEAD_STRIDE = 0x24,
+    WK_HEAD_STRIDE = 0x28,
+    WV_HEAD_STRIDE = 0x2C,
 
-    WQ_BASE_ADDR = 0x2C,
-    WK_BASE_ADDR = 0x30,
-    WV_BASE_ADDR = 0x34,
-    WO_BASE_ADDR = 0x38,
-    W1_BASE_ADDR = 0x3C,
-    W2_BASE_ADDR = 0x40,
+    K_CACHE_STRIDE = 0x30,
+    V_CACHE_STRIDE = 0x34,
 
-    K_CACHE_ADDR = 0x44,
-    V_CACHE_ADDR = 0x48,
+    WO_TILE_STRIDE = 0x38,
+    W1_TILE_STRIDE = 0x3C,
+    W2_TILE_STRIDE = 0x40,
 
-    LOGIT_SCALE_QV = 0x4C,
-    SCALE_Q = 0x50,
-    ZERO_POINT_Q = 0x54,
-    SCALE_K = 0x58,
-    ZERO_POINT_K = 0x5C,
-    SCALE_V = 0x60,
-    ZERO_POINT_V = 0x64,
+    WQ_BASE_ADDR = 0x44,
+    WK_BASE_ADDR = 0x48,
+    WV_BASE_ADDR = 0x4C,
+    WO_BASE_ADDR = 0x50,
+    W1_BASE_ADDR = 0x54,
+    W2_BASE_ADDR = 0x58,
 
-    RESERVED_DEBUG = 0x68
+    K_CACHE_ADDR = 0x5C,
+    V_CACHE_ADDR = 0x60,
+
+    LOGIT_SCALE_QV = 0x64,
+    SCALE_Q = 0x68,
+    ZERO_POINT_Q = 0x6C,
+    SCALE_K = 0x70,
+    ZERO_POINT_K = 0x74,
+    SCALE_V = 0x78,
+    ZERO_POINT_V = 0x7C,
+
+    RESERVED_DEBUG = 0x80
 };
 
 
@@ -736,8 +746,16 @@ struct ControlMemSpace {
     uint32_t dma_tile_len = 0;
 
     uint32_t layer_stride = 0;
-    uint32_t head_stride = 0;
-    uint32_t tile_stride = 0;
+    uint32_t wq_head_stride = 0;
+    uint32_t wk_head_stride = 0;
+    uint32_t wv_head_stride = 0;
+
+    uint32_t k_cache_stride = 0;
+    uint32_t v_cache_stride = 0;
+
+    uint32_t wo_tile_stride = 0;
+    uint32_t w1_tile_stride = 0;
+    uint32_t w2_tile_stride = 0;
 
     uint32_t wq_base_addr = 0;
     uint32_t wk_base_addr = 0;
@@ -772,14 +790,18 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx);
 bool run_single_head(
     HeadCtx &ctx,
     int layer_idx,
-    bool start
+    bool start,
+    ControlMemSpace ctrl_mem,
+    bool &error
 );
 
 bool drive_group_head_phase(
     HeadCtx (&head_ctx_ref)[HEADS_PARALLEL],
     int group_idx,
     int layer_idx,
-    bool start
+    bool start,
+    ControlMemSpace ctrl_mem,
+    bool &error
 );
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp" 2
 
@@ -808,12 +830,8 @@ void scheduler_hls(
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel &wl_addr_sel,
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
+    bool &memory_request,
+    uint32_t &dma_address,
     bool dma_done,
     bool compute_ready,
     bool compute_done,
@@ -824,10 +842,43 @@ void scheduler_hls(
     bool &stream_start,
     bool stream_done,
     bool &done,
-    SchedState &STATE
+    bool &error,
+    SchedState &STATE,
+
+
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile
 );
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" 2
-# 26 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/../../Weight_Loader-Stager/Weight_stager.hpp" 1
+
+
+
+
+
+
+
+
+void weight_stager(
+    bool reset,
+    bool wl_start,
+    DmaSel wl_addr_sel,
+    int wl_layer,
+    int wl_head,
+    int wl_tile,
+    ControlMemSpace ctrl_mem,
+
+    bool &wl_ready,
+    bool &memory_request,
+    bool &error,
+    uint32_t &addr_latched
+);
+# 3 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" 2
+# 27 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
 bool LayerNorm(
   LnPhase &phase,
   bool &ln_started,
@@ -981,13 +1032,8 @@ void scheduler_hls(
 
 
 
-    bool wl_ready,
-    bool &wl_start,
-    DmaSel &wl_addr_sel,
-
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
+    bool &memory_request,
+    uint32_t &dma_address,
     bool dma_done,
 
 
@@ -1010,11 +1056,19 @@ void scheduler_hls(
 
 
     bool &done,
+    bool &error,
+    SchedState &STATE,
 
 
 
 
-    SchedState &STATE
+    bool &dbg_wl_ready,
+    bool &dbg_wl_start,
+    DmaSel &dbg_wl_addr_sel,
+
+    int &dbg_wl_layer,
+    int &dbg_wl_head,
+    int &dbg_wl_tile
 ) {
 
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
@@ -1026,7 +1080,30 @@ void scheduler_hls(
 #pragma HLS reset variable = layer_idx
 
 
- static bool attn_started;
+ static bool wl_start;
+#pragma HLS reset variable = wl_start
+ static DmaSel wl_addr_sel;
+#pragma HLS reset variable = wl_addr_sel
+ static int wl_head;
+#pragma HLS reset variable = wl_head
+ static int wl_tile;
+#pragma HLS reset variable = wl_tile
+ static int wl_layer;
+#pragma HLS reset variable = wl_layer
+ static bool wl_ready;
+#pragma HLS reset variable = wl_ready
+
+
+ dbg_wl_start = wl_start;
+  dbg_wl_addr_sel = wl_addr_sel;
+  dbg_wl_layer = wl_layer;
+  dbg_wl_head = wl_head;
+  dbg_wl_tile = wl_tile;
+  dbg_wl_ready = wl_ready;
+
+
+
+  static bool attn_started;
 #pragma HLS reset variable = attn_started
  static bool attn_done;
 #pragma HLS reset variable = attn_done
@@ -1137,29 +1214,32 @@ void scheduler_hls(
 
 
  static bool wo_dma_done;
-#pragma HLS reset variable = wo_dma_done;
+#pragma HLS reset variable = wo_dma_done
  static bool w1_dma_done;
-#pragma HLS reset variable = w1_dma_done;
+#pragma HLS reset variable = w1_dma_done
  static bool w2_dma_done;
-#pragma HLS reset variable = w2_dma_done;
+#pragma HLS reset variable = w2_dma_done
  static bool axis_last_seen;
-#pragma HLS reset variable = axis_last_seen;
+#pragma HLS reset variable = axis_last_seen
  static bool stream_done_seen;
-#pragma HLS reset variable = stream_done_seen;
+#pragma HLS reset variable = stream_done_seen
+
+
 
 
 
  const bool cntrl_reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
   const bool reset = !cntrl_reset_n;
-
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
   const bool busy = (st != S_IDLE);
-
 
   ctrl_mem.status = (ctrl_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
 
-
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
 
+  weight_stager(wl_reset, wl_start, wl_addr_sel, wl_layer,
+                -1, wl_tile, ctrl_mem, wl_ready,
+                memory_request, error, dma_address);
 
   if (reset) {
     st = S_IDLE;
@@ -1174,7 +1254,7 @@ void scheduler_hls(
     group_idx = 0;
 
     start_head_group = false;
-    VITIS_LOOP_372_1: for (int i = 0; i < NUM_HEADS; ++i){
+    VITIS_LOOP_402_1: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], -1, i);
     }
@@ -1238,15 +1318,21 @@ void scheduler_hls(
     w2_comp_busy = false;
 
 
+    compute_start = false;
+    compute_op = ComputeOp::CMP_NONE;
+
+
     wl_start = false;
     wl_addr_sel = DmaSel::DMASEL_NONE;
     wl_head = 0;
     wl_tile = 0;
     wl_layer = 0;
+    memory_request = false;
+    wl_ready = false;
+    dma_address = 0;
 
-
-    compute_start = false;
-    compute_op = ComputeOp::CMP_NONE;
+    done = false;
+    error = false;
   }
 
 
@@ -1394,6 +1480,19 @@ void scheduler_hls(
 
         compute_start = false;
         compute_op = ComputeOp::CMP_NONE;
+
+
+        wl_start = false;
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_layer = 0;
+        memory_request = false;
+        wl_ready = false;
+        dma_address = 0;
+
+        done = false;
+        error = false;
       }
       break;
     }
@@ -1415,7 +1514,7 @@ void scheduler_hls(
       group_idx = 0;
 
       start_head_group = true;
-      VITIS_LOOP_613_2: for (int i = 0; i < NUM_HEADS; ++i){
+      VITIS_LOOP_662_2: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], layer_idx, i);
       }
@@ -1470,6 +1569,19 @@ void scheduler_hls(
       w2_tile = 0;
       w2_dma_busy = false;
       w2_comp_busy = false;
+
+
+
+      wl_start = false;
+      wl_addr_sel = DmaSel::DMASEL_NONE;
+      wl_head = 0;
+      wl_tile = 0;
+      wl_layer = 0;
+      memory_request = false;
+      wl_ready = false;
+      dma_address = 0;
+
+      done = false;
       st = S_ATTENTION_HEADS;
 
       break;}
@@ -1481,7 +1593,7 @@ void scheduler_hls(
 #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
 
 
- VITIS_LOOP_679_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+ VITIS_LOOP_741_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
         if (h < NUM_HEADS) {
@@ -1494,10 +1606,10 @@ void scheduler_hls(
 
 
       attn_group_done =
-          drive_group_head_phase(head_group, group_base, layer_idx, start_head_group);
+          drive_group_head_phase(head_group, group_base, layer_idx, start_head_group, ctrl_mem, error);
 
 
-      VITIS_LOOP_695_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+      VITIS_LOOP_757_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
           if (h < NUM_HEADS) {

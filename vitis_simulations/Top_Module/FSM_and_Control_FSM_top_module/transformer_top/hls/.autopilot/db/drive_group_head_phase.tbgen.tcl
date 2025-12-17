@@ -1,6 +1,6 @@
 set moduleName drive_group_head_phase
 set isTopModule 0
-set isCombinational 1
+set isCombinational 0
 set isDatapathOnly 0
 set isPipelined 0
 set isPipelined_legacy 0
@@ -16,7 +16,7 @@ set DLRegItemOffset 0
 set svuvm_can_support 1
 set cdfgNum 4
 set C_modelName {drive_group_head_phase}
-set C_modelType { int 341 }
+set C_modelType { int 408 }
 set ap_memory_interface_dict [dict create]
 set C_modelArgList {
 	{ p_read int 32 regular  }
@@ -49,10 +49,10 @@ set C_modelArgList {
 	{ p_read33 int 32 regular  }
 	{ p_read34 int 1 regular  }
 	{ p_read35 int 1 regular  }
+	{ p_read36 int 32 regular  }
+	{ p_read37 int 32 regular  }
 	{ p_read38 int 1 regular  }
 	{ p_read39 int 1 regular  }
-	{ p_read40 int 1 regular  }
-	{ p_read41 int 1 regular  }
 	{ p_read42 int 1 regular  }
 	{ p_read43 int 1 regular  }
 	{ p_read44 int 1 regular  }
@@ -103,8 +103,24 @@ set C_modelArgList {
 	{ p_read89 int 1 regular  }
 	{ p_read90 int 1 regular  }
 	{ p_read91 int 1 regular  }
+	{ p_read92 int 1 regular  }
+	{ p_read93 int 1 regular  }
+	{ p_read94 int 1 regular  }
+	{ p_read95 int 1 regular  }
 	{ layer_idx int 32 regular  }
 	{ start_r uint 1 regular  }
+	{ ctrl_mem_layer_stride int 32 regular  }
+	{ ctrl_mem_wq_head_stride int 32 regular  }
+	{ ctrl_mem_wk_head_stride int 32 regular  }
+	{ ctrl_mem_wv_head_stride int 32 regular  }
+	{ ctrl_mem_k_cache_stride int 32 regular  }
+	{ ctrl_mem_v_cache_stride int 32 regular  }
+	{ ctrl_mem_wq_base_addr int 32 regular  }
+	{ ctrl_mem_wk_base_addr int 32 regular  }
+	{ ctrl_mem_wv_base_addr int 32 regular  }
+	{ ctrl_mem_k_cache_addr int 32 regular  }
+	{ ctrl_mem_v_cache_addr int 32 regular  }
+	{ error_read int 1 regular  }
 }
 set hasAXIMCache 0
 set l_AXIML2Cache [list]
@@ -140,10 +156,10 @@ set C_modelArgMapList {[
  	{ "Name" : "p_read33", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
  	{ "Name" : "p_read34", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read35", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read36", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read37", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
  	{ "Name" : "p_read38", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read39", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read40", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read41", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read42", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read43", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read44", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
@@ -194,12 +210,33 @@ set C_modelArgMapList {[
  	{ "Name" : "p_read89", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read90", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read91", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read92", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read93", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read94", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read95", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "layer_idx", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
  	{ "Name" : "start_r", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 341} ]}
+ 	{ "Name" : "ctrl_mem_layer_stride", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_wq_head_stride", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_wk_head_stride", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_wv_head_stride", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_k_cache_stride", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_v_cache_stride", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_wq_base_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_wk_base_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_wv_base_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_k_cache_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "ctrl_mem_v_cache_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "error_read", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 408} ]}
 # RTL Port declarations: 
-set portNum 173
+set portNum 198
 set portList { 
+	{ ap_clk sc_in sc_logic 1 clock -1 } 
+	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
+	{ ap_start sc_in sc_logic 1 start -1 } 
+	{ ap_done sc_out sc_logic 1 predone -1 } 
+	{ ap_idle sc_out sc_logic 1 done -1 } 
 	{ ap_ready sc_out sc_logic 1 ready -1 } 
 	{ p_read sc_in sc_lv 32 signal 0 } 
 	{ p_read1 sc_in sc_lv 32 signal 1 } 
@@ -231,10 +268,10 @@ set portList {
 	{ p_read33 sc_in sc_lv 32 signal 27 } 
 	{ p_read34 sc_in sc_lv 1 signal 28 } 
 	{ p_read35 sc_in sc_lv 1 signal 29 } 
-	{ p_read38 sc_in sc_lv 1 signal 30 } 
-	{ p_read39 sc_in sc_lv 1 signal 31 } 
-	{ p_read40 sc_in sc_lv 1 signal 32 } 
-	{ p_read41 sc_in sc_lv 1 signal 33 } 
+	{ p_read36 sc_in sc_lv 32 signal 30 } 
+	{ p_read37 sc_in sc_lv 32 signal 31 } 
+	{ p_read38 sc_in sc_lv 1 signal 32 } 
+	{ p_read39 sc_in sc_lv 1 signal 33 } 
 	{ p_read42 sc_in sc_lv 1 signal 34 } 
 	{ p_read43 sc_in sc_lv 1 signal 35 } 
 	{ p_read44 sc_in sc_lv 1 signal 36 } 
@@ -285,8 +322,24 @@ set portList {
 	{ p_read89 sc_in sc_lv 1 signal 81 } 
 	{ p_read90 sc_in sc_lv 1 signal 82 } 
 	{ p_read91 sc_in sc_lv 1 signal 83 } 
-	{ layer_idx sc_in sc_lv 32 signal 84 } 
-	{ start_r sc_in sc_lv 1 signal 85 } 
+	{ p_read92 sc_in sc_lv 1 signal 84 } 
+	{ p_read93 sc_in sc_lv 1 signal 85 } 
+	{ p_read94 sc_in sc_lv 1 signal 86 } 
+	{ p_read95 sc_in sc_lv 1 signal 87 } 
+	{ layer_idx sc_in sc_lv 32 signal 88 } 
+	{ start_r sc_in sc_lv 1 signal 89 } 
+	{ ctrl_mem_layer_stride sc_in sc_lv 32 signal 90 } 
+	{ ctrl_mem_wq_head_stride sc_in sc_lv 32 signal 91 } 
+	{ ctrl_mem_wk_head_stride sc_in sc_lv 32 signal 92 } 
+	{ ctrl_mem_wv_head_stride sc_in sc_lv 32 signal 93 } 
+	{ ctrl_mem_k_cache_stride sc_in sc_lv 32 signal 94 } 
+	{ ctrl_mem_v_cache_stride sc_in sc_lv 32 signal 95 } 
+	{ ctrl_mem_wq_base_addr sc_in sc_lv 32 signal 96 } 
+	{ ctrl_mem_wk_base_addr sc_in sc_lv 32 signal 97 } 
+	{ ctrl_mem_wv_base_addr sc_in sc_lv 32 signal 98 } 
+	{ ctrl_mem_k_cache_addr sc_in sc_lv 32 signal 99 } 
+	{ ctrl_mem_v_cache_addr sc_in sc_lv 32 signal 100 } 
+	{ error_read sc_in sc_lv 1 signal 101 } 
 	{ ap_return_0 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_1 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_2 sc_out sc_lv 1 signal -1 } 
@@ -312,8 +365,8 @@ set portList {
 	{ ap_return_22 sc_out sc_lv 32 signal -1 } 
 	{ ap_return_23 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_24 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_25 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_26 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_25 sc_out sc_lv 32 signal -1 } 
+	{ ap_return_26 sc_out sc_lv 32 signal -1 } 
 	{ ap_return_27 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_28 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_29 sc_out sc_lv 1 signal -1 } 
@@ -368,14 +421,23 @@ set portList {
 	{ ap_return_78 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_79 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_80 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_81 sc_out sc_lv 32 signal -1 } 
-	{ ap_return_82 sc_out sc_lv 32 signal -1 } 
-	{ ap_return_83 sc_out sc_lv 8 signal -1 } 
-	{ ap_return_84 sc_out sc_lv 8 signal -1 } 
-	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
+	{ ap_return_81 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_82 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_83 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_84 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_85 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_86 sc_out sc_lv 32 signal -1 } 
+	{ ap_return_87 sc_out sc_lv 32 signal -1 } 
+	{ ap_return_88 sc_out sc_lv 8 signal -1 } 
+	{ ap_return_89 sc_out sc_lv 8 signal -1 } 
 }
 set NewPortList {[ 
-	{ "name": "ap_ready", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "ready", "bundle":{"name": "ap_ready", "role": "default" }} , 
+	{ "name": "ap_clk", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "clock", "bundle":{"name": "ap_clk", "role": "default" }} , 
+ 	{ "name": "ap_rst", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "reset", "bundle":{"name": "ap_rst", "role": "default" }} , 
+ 	{ "name": "ap_start", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "start", "bundle":{"name": "ap_start", "role": "default" }} , 
+ 	{ "name": "ap_done", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "predone", "bundle":{"name": "ap_done", "role": "default" }} , 
+ 	{ "name": "ap_idle", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "done", "bundle":{"name": "ap_idle", "role": "default" }} , 
+ 	{ "name": "ap_ready", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "ready", "bundle":{"name": "ap_ready", "role": "default" }} , 
  	{ "name": "p_read", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read", "role": "default" }} , 
  	{ "name": "p_read1", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read1", "role": "default" }} , 
  	{ "name": "head_ctx_ref_head_idx_0_val", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "head_ctx_ref_head_idx_0_val", "role": "default" }} , 
@@ -406,10 +468,10 @@ set NewPortList {[
  	{ "name": "p_read33", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read33", "role": "default" }} , 
  	{ "name": "p_read34", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read34", "role": "default" }} , 
  	{ "name": "p_read35", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read35", "role": "default" }} , 
+ 	{ "name": "p_read36", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read36", "role": "default" }} , 
+ 	{ "name": "p_read37", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read37", "role": "default" }} , 
  	{ "name": "p_read38", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read38", "role": "default" }} , 
  	{ "name": "p_read39", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read39", "role": "default" }} , 
- 	{ "name": "p_read40", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read40", "role": "default" }} , 
- 	{ "name": "p_read41", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read41", "role": "default" }} , 
  	{ "name": "p_read42", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read42", "role": "default" }} , 
  	{ "name": "p_read43", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read43", "role": "default" }} , 
  	{ "name": "p_read44", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read44", "role": "default" }} , 
@@ -460,8 +522,24 @@ set NewPortList {[
  	{ "name": "p_read89", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read89", "role": "default" }} , 
  	{ "name": "p_read90", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read90", "role": "default" }} , 
  	{ "name": "p_read91", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read91", "role": "default" }} , 
+ 	{ "name": "p_read92", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read92", "role": "default" }} , 
+ 	{ "name": "p_read93", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read93", "role": "default" }} , 
+ 	{ "name": "p_read94", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read94", "role": "default" }} , 
+ 	{ "name": "p_read95", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read95", "role": "default" }} , 
  	{ "name": "layer_idx", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "layer_idx", "role": "default" }} , 
  	{ "name": "start_r", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "start_r", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_layer_stride", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_layer_stride", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_wq_head_stride", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_wq_head_stride", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_wk_head_stride", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_wk_head_stride", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_wv_head_stride", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_wv_head_stride", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_k_cache_stride", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_k_cache_stride", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_v_cache_stride", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_v_cache_stride", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_wq_base_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_wq_base_addr", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_wk_base_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_wk_base_addr", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_wv_base_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_wv_base_addr", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_k_cache_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_k_cache_addr", "role": "default" }} , 
+ 	{ "name": "ctrl_mem_v_cache_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_v_cache_addr", "role": "default" }} , 
+ 	{ "name": "error_read", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "error_read", "role": "default" }} , 
  	{ "name": "ap_return_0", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_0", "role": "default" }} , 
  	{ "name": "ap_return_1", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_1", "role": "default" }} , 
  	{ "name": "ap_return_2", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_2", "role": "default" }} , 
@@ -487,8 +565,8 @@ set NewPortList {[
  	{ "name": "ap_return_22", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_22", "role": "default" }} , 
  	{ "name": "ap_return_23", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_23", "role": "default" }} , 
  	{ "name": "ap_return_24", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_24", "role": "default" }} , 
- 	{ "name": "ap_return_25", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_25", "role": "default" }} , 
- 	{ "name": "ap_return_26", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_26", "role": "default" }} , 
+ 	{ "name": "ap_return_25", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_25", "role": "default" }} , 
+ 	{ "name": "ap_return_26", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_26", "role": "default" }} , 
  	{ "name": "ap_return_27", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_27", "role": "default" }} , 
  	{ "name": "ap_return_28", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_28", "role": "default" }} , 
  	{ "name": "ap_return_29", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_29", "role": "default" }} , 
@@ -543,11 +621,15 @@ set NewPortList {[
  	{ "name": "ap_return_78", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_78", "role": "default" }} , 
  	{ "name": "ap_return_79", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_79", "role": "default" }} , 
  	{ "name": "ap_return_80", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_80", "role": "default" }} , 
- 	{ "name": "ap_return_81", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_81", "role": "default" }} , 
- 	{ "name": "ap_return_82", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_82", "role": "default" }} , 
- 	{ "name": "ap_return_83", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "ap_return_83", "role": "default" }} , 
- 	{ "name": "ap_return_84", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "ap_return_84", "role": "default" }} , 
- 	{ "name": "ap_rst", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "reset", "bundle":{"name": "ap_rst", "role": "default" }}  ]}
+ 	{ "name": "ap_return_81", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_81", "role": "default" }} , 
+ 	{ "name": "ap_return_82", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_82", "role": "default" }} , 
+ 	{ "name": "ap_return_83", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_83", "role": "default" }} , 
+ 	{ "name": "ap_return_84", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_84", "role": "default" }} , 
+ 	{ "name": "ap_return_85", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_85", "role": "default" }} , 
+ 	{ "name": "ap_return_86", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_86", "role": "default" }} , 
+ 	{ "name": "ap_return_87", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_87", "role": "default" }} , 
+ 	{ "name": "ap_return_88", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "ap_return_88", "role": "default" }} , 
+ 	{ "name": "ap_return_89", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "ap_return_89", "role": "default" }}  ]}
 
 set ArgLastReadFirstWriteLatency {
 	drive_group_head_phase {
@@ -581,10 +663,10 @@ set ArgLastReadFirstWriteLatency {
 		p_read33 {Type I LastRead 0 FirstWrite -1}
 		p_read34 {Type I LastRead 0 FirstWrite -1}
 		p_read35 {Type I LastRead 0 FirstWrite -1}
+		p_read36 {Type I LastRead 0 FirstWrite -1}
+		p_read37 {Type I LastRead 0 FirstWrite -1}
 		p_read38 {Type I LastRead 0 FirstWrite -1}
 		p_read39 {Type I LastRead 0 FirstWrite -1}
-		p_read40 {Type I LastRead 0 FirstWrite -1}
-		p_read41 {Type I LastRead 0 FirstWrite -1}
 		p_read42 {Type I LastRead 0 FirstWrite -1}
 		p_read43 {Type I LastRead 0 FirstWrite -1}
 		p_read44 {Type I LastRead 0 FirstWrite -1}
@@ -635,14 +717,30 @@ set ArgLastReadFirstWriteLatency {
 		p_read89 {Type I LastRead 0 FirstWrite -1}
 		p_read90 {Type I LastRead 0 FirstWrite -1}
 		p_read91 {Type I LastRead 0 FirstWrite -1}
+		p_read92 {Type I LastRead 0 FirstWrite -1}
+		p_read93 {Type I LastRead 0 FirstWrite -1}
+		p_read94 {Type I LastRead 0 FirstWrite -1}
+		p_read95 {Type I LastRead 0 FirstWrite -1}
 		layer_idx {Type I LastRead 0 FirstWrite -1}
-		start_r {Type I LastRead 0 FirstWrite -1}}}
+		start_r {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_layer_stride {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_wq_head_stride {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_wk_head_stride {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_wv_head_stride {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_k_cache_stride {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_v_cache_stride {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_wq_base_addr {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_wk_base_addr {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_wv_base_addr {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_k_cache_addr {Type I LastRead 0 FirstWrite -1}
+		ctrl_mem_v_cache_addr {Type I LastRead 0 FirstWrite -1}
+		error_read {Type I LastRead 0 FirstWrite -1}}}
 
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "0", "Max" : "0"}
-	, {"Name" : "Interval", "Min" : "0", "Max" : "0"}
+	{"Name" : "Latency", "Min" : "1", "Max" : "1"}
+	, {"Name" : "Interval", "Min" : "1", "Max" : "1"}
 ]}
 
 set PipelineEnableSignalInfo {[
@@ -679,10 +777,10 @@ set Spec2ImplPortList {
 	p_read33 { ap_none {  { p_read33 in_data 0 32 } } }
 	p_read34 { ap_none {  { p_read34 in_data 0 1 } } }
 	p_read35 { ap_none {  { p_read35 in_data 0 1 } } }
+	p_read36 { ap_none {  { p_read36 in_data 0 32 } } }
+	p_read37 { ap_none {  { p_read37 in_data 0 32 } } }
 	p_read38 { ap_none {  { p_read38 in_data 0 1 } } }
 	p_read39 { ap_none {  { p_read39 in_data 0 1 } } }
-	p_read40 { ap_none {  { p_read40 in_data 0 1 } } }
-	p_read41 { ap_none {  { p_read41 in_data 0 1 } } }
 	p_read42 { ap_none {  { p_read42 in_data 0 1 } } }
 	p_read43 { ap_none {  { p_read43 in_data 0 1 } } }
 	p_read44 { ap_none {  { p_read44 in_data 0 1 } } }
@@ -733,6 +831,22 @@ set Spec2ImplPortList {
 	p_read89 { ap_none {  { p_read89 in_data 0 1 } } }
 	p_read90 { ap_none {  { p_read90 in_data 0 1 } } }
 	p_read91 { ap_none {  { p_read91 in_data 0 1 } } }
+	p_read92 { ap_none {  { p_read92 in_data 0 1 } } }
+	p_read93 { ap_none {  { p_read93 in_data 0 1 } } }
+	p_read94 { ap_none {  { p_read94 in_data 0 1 } } }
+	p_read95 { ap_none {  { p_read95 in_data 0 1 } } }
 	layer_idx { ap_none {  { layer_idx in_data 0 32 } } }
 	start_r { ap_none {  { start_r in_data 0 1 } } }
+	ctrl_mem_layer_stride { ap_none {  { ctrl_mem_layer_stride in_data 0 32 } } }
+	ctrl_mem_wq_head_stride { ap_none {  { ctrl_mem_wq_head_stride in_data 0 32 } } }
+	ctrl_mem_wk_head_stride { ap_none {  { ctrl_mem_wk_head_stride in_data 0 32 } } }
+	ctrl_mem_wv_head_stride { ap_none {  { ctrl_mem_wv_head_stride in_data 0 32 } } }
+	ctrl_mem_k_cache_stride { ap_none {  { ctrl_mem_k_cache_stride in_data 0 32 } } }
+	ctrl_mem_v_cache_stride { ap_none {  { ctrl_mem_v_cache_stride in_data 0 32 } } }
+	ctrl_mem_wq_base_addr { ap_none {  { ctrl_mem_wq_base_addr in_data 0 32 } } }
+	ctrl_mem_wk_base_addr { ap_none {  { ctrl_mem_wk_base_addr in_data 0 32 } } }
+	ctrl_mem_wv_base_addr { ap_none {  { ctrl_mem_wv_base_addr in_data 0 32 } } }
+	ctrl_mem_k_cache_addr { ap_none {  { ctrl_mem_k_cache_addr in_data 0 32 } } }
+	ctrl_mem_v_cache_addr { ap_none {  { ctrl_mem_v_cache_addr in_data 0 32 } } }
+	error_read { ap_none {  { error_read in_data 0 1 } } }
 }
