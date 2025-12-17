@@ -1,4 +1,12 @@
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:7:9: error: '#pragma HLS' is only allowed in function scope
-#pragma HLS reset variable = head_stagers
-        ^
-1 error generated.
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: warning: | has lower precedence than ==; == will be evaluated first [-Wparentheses]
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
+                              ^~~~~~~~~~~~~~
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: note: place parentheses around the '==' expression to silence this warning
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
+                              ^
+                                (           )
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: note: place parentheses around the | expression to evaluate it first
+  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
+                              ^
+                        (         )
+1 warning generated.

@@ -6,7 +6,7 @@
 
 
 
-uint32_t weight_stager(  
+void weight_stager(  
     bool        reset,    
     bool        wl_start,       
     DmaSel      wl_addr_sel, 
@@ -17,5 +17,6 @@ uint32_t weight_stager(
 
     bool        &wl_ready,
     bool        &memory_request,
-    bool        &error
+    bool        &error, 
+    uint32_t    &addr_latched
 );

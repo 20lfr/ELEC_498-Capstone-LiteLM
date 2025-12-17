@@ -778,24 +778,7 @@ struct ControlMemSpace {
 
 
 
-struct WeightStager {
-    uint32_t addr_latched = 0;
-
-    uint32_t run(
-        bool reset,
-        bool wl_start,
-        DmaSel wl_addr_sel,
-        int wl_layer,
-        int wl_head,
-        int wl_tile,
-        ControlMemSpace ctrl_mem,
-        bool &wl_ready,
-        bool &memory_request,
-        bool &error);
-};
-# 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp" 2
-
-uint32_t WeightStager::run(
+void weight_stager(
     bool reset,
     bool wl_start,
     DmaSel wl_addr_sel,
@@ -803,12 +786,29 @@ uint32_t WeightStager::run(
     int wl_head,
     int wl_tile,
     ControlMemSpace ctrl_mem,
+
     bool &wl_ready,
     bool &memory_request,
-    bool &error
+    bool &error,
+    uint32_t &addr_latched
+);
+# 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp" 2
+
+void weight_stager(
+    bool reset,
+    bool wl_start,
+    DmaSel wl_addr_sel,
+    int wl_layer,
+    int wl_head,
+    int wl_tile,
+    ControlMemSpace ctrl_mem,
+
+    bool &wl_ready,
+    bool &memory_request,
+    bool &error,
+    uint32_t &addr_latched
 ) {
 #pragma HLS INLINE
-#pragma HLS reset variable = addr_latched
  wl_ready = true;
     memory_request = false;
 
@@ -817,14 +817,16 @@ uint32_t WeightStager::run(
         wl_ready = true;
         memory_request = false;
         error = false;
-        return 0;
+        addr_latched = 0;
+        return;
     }
 
 
     if (wl_start && (wl_layer < 0)) {
         wl_ready = false;
         error = true;
-        return 0;
+        addr_latched = 0;
+        return;
     }
 
     if (wl_start && (wl_head < 0) && (wl_addr_sel == DmaSel::DMASEL_WQ ||
@@ -834,7 +836,8 @@ uint32_t WeightStager::run(
                                     wl_addr_sel == DmaSel::DMASEL_CTX_V)) {
         wl_ready = false;
         error = true;
-        return 0;
+        addr_latched = 0;
+        return;
     }
 
     if (wl_start && (wl_tile < 0) && (wl_addr_sel == DmaSel::DMASEL_WO ||
@@ -842,7 +845,8 @@ uint32_t WeightStager::run(
                                     wl_addr_sel == DmaSel::DMASEL_W2)) {
         wl_ready = false;
         error = true;
-        return 0;
+        addr_latched = 0;
+        return;
     }
     if (wl_start) {
         wl_ready = false;
@@ -885,5 +889,4 @@ uint32_t WeightStager::run(
                 break;
         }
     }
-    return addr_latched;
 }

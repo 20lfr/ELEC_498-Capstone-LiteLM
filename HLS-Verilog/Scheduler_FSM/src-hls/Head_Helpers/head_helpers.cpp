@@ -75,9 +75,9 @@ bool run_single_head(
         init_head_ctx(ctx, layer_idx, ctx.head_idx);
     }
     const bool wl_reset = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0) | (ctx.phase == HeadPhase::IDLE);
-    ctx.dma_address = weight_stager(wl_reset, ctx.wl_start, ctx.wl_addr_sel, ctx.wl_layer,
-                                ctx.wl_head, -1, ctrl_mem, ctx.wl_ready, 
-                                ctx.memory_request, error);
+    weight_stager(wl_reset, ctx.wl_start, ctx.wl_addr_sel, ctx.wl_layer,
+                ctx.wl_head, -1, ctrl_mem, ctx.wl_ready, 
+                ctx.memory_request, error, ctx.dma_address);
     if (!ctx.wl_ready && ctx.wl_start){
         ctx.wl_start      = false;
         ctx.wl_addr_sel   = DmaSel::DMASEL_NONE;

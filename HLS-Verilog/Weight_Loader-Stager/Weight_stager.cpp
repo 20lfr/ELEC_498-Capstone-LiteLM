@@ -1,6 +1,6 @@
 #include "Weight_stager.hpp"
 
-uint32_t weight_stager(   
+void weight_stager(   
     bool        reset,
     bool        wl_start,       
     DmaSel      wl_addr_sel, 
@@ -11,11 +11,10 @@ uint32_t weight_stager(
 
     bool        &wl_ready,
     bool        &memory_request,
-    bool        &error
+    bool        &error, 
+    uint32_t    &addr_latched
 ) {
 #pragma HLS INLINE
-    static uint32_t addr_latched = 0;
-#pragma HLS reset variable = addr_latched
     wl_ready = true;
     memory_request = false;
 
@@ -24,14 +23,16 @@ uint32_t weight_stager(
         wl_ready = true;
         memory_request = false;
         error = false;
-        return 0;
+        addr_latched = 0;
+        return;
     }
 
     // Basic validation
     if (wl_start && (wl_layer < 0)) {
         wl_ready = false;
         error = true;
-        return 0;
+        addr_latched = 0;
+        return;
     }
     // Head validation (if requesting head-specific DMA)
     if (wl_start && (wl_head < 0) && (wl_addr_sel == DmaSel::DMASEL_WQ || 
@@ -41,7 +42,8 @@ uint32_t weight_stager(
                                     wl_addr_sel == DmaSel::DMASEL_CTX_V)) {
         wl_ready = false;
         error = true;
-        return 0;
+        addr_latched = 0;
+        return;
     }
     // Tile validation (if requesting tile-specific DMA)
     if (wl_start && (wl_tile < 0) && (wl_addr_sel == DmaSel::DMASEL_WO || 
@@ -49,7 +51,8 @@ uint32_t weight_stager(
                                     wl_addr_sel == DmaSel::DMASEL_W2)) {
         wl_ready = false;
         error = true;
-        return 0;
+        addr_latched = 0;
+        return;
     }
     if (wl_start) {
         wl_ready = false;
@@ -92,5 +95,4 @@ uint32_t weight_stager(
                 break;
         }
     }
-    return addr_latched;
 }

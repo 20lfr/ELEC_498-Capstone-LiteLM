@@ -811,25 +811,21 @@ bool drive_group_head_phase(
 
 
 
-struct WeightStager {
-    uint32_t addr_latched = 0;
+void weight_stager(
+    bool reset,
+    bool wl_start,
+    DmaSel wl_addr_sel,
+    int wl_layer,
+    int wl_head,
+    int wl_tile,
+    ControlMemSpace ctrl_mem,
 
-    uint32_t run(
-        bool reset,
-        bool wl_start,
-        DmaSel wl_addr_sel,
-        int wl_layer,
-        int wl_head,
-        int wl_tile,
-        ControlMemSpace ctrl_mem,
-        bool &wl_ready,
-        bool &memory_request,
-        bool &error);
-};
+    bool &wl_ready,
+    bool &memory_request,
+    bool &error,
+    uint32_t &addr_latched
+);
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" 2
-
-static WeightStager head_stagers[NUM_HEADS];
-#pragma HLS reset variable = head_stagers
 
 void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.layer_stamp = layer_idx;
@@ -879,7 +875,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.att_scores_dma_done = false;
     ctx.att_value_dma_done = false;
 }
-# 67 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
+# 64 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
 bool run_single_head(
     HeadCtx &ctx,
     int layer_idx,
@@ -894,11 +890,9 @@ bool run_single_head(
         init_head_ctx(ctx, layer_idx, ctx.head_idx);
     }
     const bool wl_reset = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0) | (ctx.phase == HeadPhase::IDLE);
-    WeightStager &stager = head_stagers[(ctx.head_idx >= 0) ? ctx.head_idx : 0];
-    if (wl_reset) stager.addr_latched = 0;
-    ctx.dma_address = stager.run(wl_reset, ctx.wl_start, ctx.wl_addr_sel, ctx.wl_layer,
-                                 ctx.wl_head, -1, ctrl_mem, ctx.wl_ready,
-                                 ctx.memory_request, error);
+    weight_stager(wl_reset, ctx.wl_start, ctx.wl_addr_sel, ctx.wl_layer,
+                ctx.wl_head, -1, ctrl_mem, ctx.wl_ready,
+                ctx.memory_request, error, ctx.dma_address);
     if (!ctx.wl_ready && ctx.wl_start){
         ctx.wl_start = false;
         ctx.wl_addr_sel = DmaSel::DMASEL_NONE;
@@ -1183,7 +1177,7 @@ bool drive_group_head_phase(
 
     bool group_finished = true;
 
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+    VITIS_LOOP_365_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  HeadCtx &ctx = head_ctx_ref[lane];
 

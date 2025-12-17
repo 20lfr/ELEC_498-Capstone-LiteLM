@@ -332,7 +332,7 @@ module transformer_top_tb;
         comp_busy <= 1'b1;
         // LayerNorm ops run shorter (6 cycles), others ~24 cycles
         is_ln_op = (compute_op >= CMP_LN0_SUM) && (compute_op <= CMP_LN1_SHIFT);
-        comp_lat_var = is_ln_op ? 20 : 24;
+        comp_lat_var = is_ln_op ? 25 : 27;
         comp_timer <= (comp_lat_var > 0) ? comp_lat_var - 1 : 0;
         if (compute_op == CMP_ATT_SCORES) seen_attn <= 1'b1;
         if (compute_op == CMP_CONCAT)     seen_concat <= 1'b1;

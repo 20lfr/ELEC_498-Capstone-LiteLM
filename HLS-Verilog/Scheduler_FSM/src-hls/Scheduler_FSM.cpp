@@ -382,9 +382,9 @@ void scheduler_hls(
   // Expose a start bit that auto-clears once we leave IDLE
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
 
-  dma_address = weight_stager(wl_reset, wl_start, wl_addr_sel, wl_layer,
-                              -1, wl_tile, ctrl_mem, wl_ready,
-                              memory_request, error);
+  weight_stager(wl_reset, wl_start, wl_addr_sel, wl_layer,
+                -1, wl_tile, ctrl_mem, wl_ready,
+                memory_request, error, dma_address);
   // FSM Reset
   if (reset) {
     st = S_IDLE;
