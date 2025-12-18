@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "compileCommands": "${workspaceFolder}/vitis_simulations/Top_Module/compute_block/compile_commands.json",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/tools/Xilinx/2025.1/Vitis/include/**",
+        "/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/**"
+      ]
+    }
+  ],
+  "version": 4
+}
