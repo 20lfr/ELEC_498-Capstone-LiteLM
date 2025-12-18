@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <ap_int.h>
 
 
 /*
@@ -127,6 +128,13 @@ constexpr int NUM_W1_TILES    = 4;
 constexpr int NUM_W2_TILES    = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
+constexpr int D_MODEL = 8; // Number of heads processed in parallel
+constexpr int D_FFN   = 22; // Feed-Forward hidden layer size
+constexpr int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
+constexpr int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
+constexpr int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
+constexpr int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
+constexpr int CONTEXT_LENGTH = 16; // Context window length
 // ------------------------------------------------------------
 // Scheduler state + helper enums
 // ------------------------------------------------------------
