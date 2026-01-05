@@ -1,0 +1,51 @@
+<dict>
+  <key>main-file</key>
+  <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp</string>
+  <key>diagnostics</key>
+  <array>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
+      <key>line</key>
+      <integer>388</integer>
+      <key>column</key>
+      <integer>31</integer>
+      <key>message</key>
+      <string>| has lower precedence than ==; == will be evaluated first</string>
+      <key>ID</key>
+      <integer>5094</integer>
+      <key>WarningOption</key>
+      <string>parentheses</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>note</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
+      <key>line</key>
+      <integer>388</integer>
+      <key>column</key>
+      <integer>31</integer>
+      <key>message</key>
+      <string>place parentheses around the &apos;==&apos; expression to silence this warning</string>
+      <key>ID</key>
+      <integer>4428</integer>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>note</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
+      <key>line</key>
+      <integer>388</integer>
+      <key>column</key>
+      <integer>31</integer>
+      <key>message</key>
+      <string>place parentheses around the | expression to evaluate it first</string>
+      <key>ID</key>
+      <integer>4426</integer>
+    </dict>
+  </array>
+</dict>
