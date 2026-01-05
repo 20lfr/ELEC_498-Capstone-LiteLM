@@ -1181,7 +1181,7 @@ wire   [0:0] or_ln109_1_fu_14337_p2;
 wire   [0:0] and_ln110_1_fu_14231_p2;
 wire   [0:0] or_ln110_1_fu_14383_p2;
 wire   [0:0] and_ln111_1_fu_14241_p2;
-wire   [0:0] or_ln111_2_fu_14429_p2;
+wire   [0:0] or_ln111_1_fu_14429_p2;
 wire   [0:0] and_ln112_1_fu_14251_p2;
 wire   [0:0] or_ln112_1_fu_14474_p2;
 wire   [0:0] and_ln113_1_fu_14261_p2;
@@ -1193,7 +1193,7 @@ wire   [0:0] or_ln115_1_fu_14610_p2;
 wire   [0:0] and_ln116_1_fu_14291_p2;
 wire   [0:0] or_ln116_1_fu_14656_p2;
 wire   [0:0] and_ln117_1_fu_14301_p2;
-wire   [0:0] or_ln117_1_fu_14701_p2;
+wire   [0:0] or_ln117_2_fu_14701_p2;
 wire   [0:0] and_ln118_1_fu_14311_p2;
 wire   [0:0] or_ln118_1_fu_14746_p2;
 wire   [0:0] and_ln119_1_fu_14321_p2;
@@ -6876,7 +6876,7 @@ assign head_ctx_ref_k_compute_done_1_3_fu_14389_p2 = (or_ln110_1_fu_14383_p2 | a
 
 assign head_ctx_ref_k_requant_compute_done_0_2_fu_12355_p2 = (or_ln111_fu_12349_p2 | and_ln74_17_fu_11518_p2);
 
-assign head_ctx_ref_k_requant_compute_done_1_3_fu_14435_p2 = (or_ln111_2_fu_14429_p2 | and_ln74_49_reg_17374);
+assign head_ctx_ref_k_requant_compute_done_1_3_fu_14435_p2 = (or_ln111_1_fu_14429_p2 | and_ln74_49_reg_17374);
 
 assign head_ctx_ref_q_compute_done_0_2_fu_12261_p2 = (or_ln109_fu_12255_p2 | and_ln74_15_fu_11506_p2);
 
@@ -6892,7 +6892,7 @@ assign head_ctx_ref_requant_q_compute_done_1_3_fu_14571_p2 = (or_ln114_1_fu_1456
 
 assign head_ctx_ref_softmax_compute_done_0_2_fu_12633_p2 = (or_ln117_fu_12627_p2 | and_ln74_23_fu_11554_p2);
 
-assign head_ctx_ref_softmax_compute_done_1_3_fu_14707_p2 = (or_ln117_1_fu_14701_p2 | and_ln74_55_reg_17404);
+assign head_ctx_ref_softmax_compute_done_1_3_fu_14707_p2 = (or_ln117_2_fu_14701_p2 | and_ln74_55_reg_17404);
 
 assign head_ctx_ref_v_compute_done_0_2_fu_12401_p2 = (or_ln112_fu_12395_p2 | and_ln74_18_fu_11524_p2);
 
@@ -7002,7 +7002,7 @@ assign or_ln110_1_fu_14383_p2 = (not_sel_tmp34_fu_14332_p2 & and_ln110_1_fu_1423
 
 assign or_ln110_fu_12302_p2 = (not_sel_tmp1_fu_12249_p2 & and_ln110_fu_12129_p2);
 
-assign or_ln111_2_fu_14429_p2 = (not_sel_tmp34_fu_14332_p2 & and_ln111_1_fu_14241_p2);
+assign or_ln111_1_fu_14429_p2 = (not_sel_tmp34_fu_14332_p2 & and_ln111_1_fu_14241_p2);
 
 assign or_ln111_fu_12349_p2 = (not_sel_tmp1_fu_12249_p2 & and_ln111_fu_12141_p2);
 
@@ -7026,7 +7026,7 @@ assign or_ln116_1_fu_14656_p2 = (not_sel_tmp34_fu_14332_p2 & and_ln116_1_fu_1429
 
 assign or_ln116_fu_12581_p2 = (not_sel_tmp1_fu_12249_p2 & and_ln116_fu_12201_p2);
 
-assign or_ln117_1_fu_14701_p2 = (not_sel_tmp34_fu_14332_p2 & and_ln117_1_fu_14301_p2);
+assign or_ln117_2_fu_14701_p2 = (not_sel_tmp34_fu_14332_p2 & and_ln117_1_fu_14301_p2);
 
 assign or_ln117_fu_12627_p2 = (not_sel_tmp1_fu_12249_p2 & and_ln117_fu_12213_p2);
 
