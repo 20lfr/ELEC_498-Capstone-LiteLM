@@ -1,0 +1,367 @@
+WARNING: [v++ 60-2507] Dispatch failed to load the system diagram library librdi_system_diagram. Diagrams will not be produced.
+  **** HLS Build v2025.1 6135595
+INFO: [HLS 200-2005] Using work_dir /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top 
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/vitis-comp.json
+INFO: [HLS 200-10] Creating and opening component '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top'.
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-2174] Applying component config ini file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(13)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(14)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(15)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(16)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(17)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(18)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(19)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'tb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(21)
+INFO: [HLS 200-10] Adding test bench file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.top=transformer_top' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying config ini 'flow_target=vivado' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying config ini 'part=xck26-sfvc784-2LV-c' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xck26-sfvc784-2LV-c'
+INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(20)
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg(5)
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/vitis-comp.json
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 2.35 seconds. CPU system time: 0.67 seconds. Elapsed time: 3 seconds; current allocated memory: 445.199 MB.
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' ... 
+WARNING: [HLS 207-5292] unused parameter 'dbg_ctrl_mem' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:55:22)
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' ... 
+WARNING: [HLS 207-5094] | has lower precedence than ==; == will be evaluated first (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31)
+INFO: [HLS 207-4428] place parentheses around the '==' expression to silence this warning (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31)
+INFO: [HLS 207-4426] place parentheses around the | expression to evaluate it first (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31)
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 1.14 seconds. CPU system time: 1.95 seconds. Elapsed time: 3.09 seconds; current allocated memory: 448.285 MB.
+INFO: [HLS 200-777] Using interface defaults for 'Vivado' flow target.
+INFO: [HLS 200-1995] There were 3,384 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 5,621 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,722 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,682 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,493 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 5,843 instructions in the design after the 'Array/Struct (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 5,076 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 8,856 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 6,648 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 7,000 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 5,104 instructions in the design after the 'Performance (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 5,104 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 5,104 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,348 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,448 instructions in the design after the 'HW Transforms (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,198 instructions in the design after the 'HW Transforms (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 214-131] Inlining function 'init_mem_space(ControlMemSpace&)' into 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:163:16)
+INFO: [HLS 214-131] Inlining function 'ctrl_write(ControlMemSpace&, ControlReg, unsigned int)' into 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:180:9)
+INFO: [HLS 214-131] Inlining function 'ctrl_read(ControlMemSpace const&, ControlReg)' into 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:177:20)
+INFO: [HLS 214-131] Inlining function 'weight_stager(bool, bool, DmaSel, int, int, int, ControlMemSpace, bool&, bool&, bool&, unsigned int&)' into 'run_single_head(HeadCtx&, int, bool, ControlMemSpace, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:78:5)
+INFO: [HLS 214-131] Inlining function 'run_single_head(HeadCtx&, int, bool, ControlMemSpace, bool&)' into 'drive_group_head_phase(HeadCtx (&) [2], int, int, bool, ControlMemSpace, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:378:36)
+INFO: [HLS 214-131] Inlining function 'weight_stager(bool, bool, DmaSel, int, int, int, ControlMemSpace, bool&, bool&, bool&, unsigned int&)' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:385:3)
+INFO: [HLS 214-131] Inlining function 'LayerNorm(LnPhase&, bool&, bool&, bool, bool&, ComputeOp&, ComputeOp const*)' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:990:11)
+INFO: [HLS 214-131] Inlining function 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' into 'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, ComputeOp&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:129:5)
+INFO: [HLS 214-131] Inlining function 'irq_wizard(ControlMemSpace&, bool, bool)' into 'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, ComputeOp&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:174:14)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_662_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:662:25) in function 'scheduler_hls' completely with a factor of 4 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:217:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_757_4' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:757:25) in function 'scheduler_hls' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:217:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_741_3' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:741:20) in function 'scheduler_hls' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:217:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_402_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:402:23) in function 'scheduler_hls' completely with a factor of 4 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:217:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_365_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:365:23) in function 'drive_group_head_phase' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:359:0)
+INFO: [HLS 214-178] Inlining function 'init_head_ctx(HeadCtx&, int, int) (.5)' into 'drive_group_head_phase(HeadCtx (&) [2], int, int, bool, ControlMemSpace, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:359:0)
+INFO: [HLS 214-178] Inlining function 'HeadCtx::HeadCtx()' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:217:0)
+INFO: [HLS 214-178] Inlining function 'init_head_ctx(HeadCtx&, int, int) (.5)' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, ComputeOp&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:217:0)
+INFO: [HLS 214-178] Inlining function '(anonymous namespace)::is_valid_address(unsigned int)' into 'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, ComputeOp&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-178] Inlining function '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)' into 'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, ComputeOp&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.layer_stamp': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.head_idx': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.phase': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_ready': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_start': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_op': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.last_compute_op': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.last_wl_addr': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_ready': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_start': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_addr_sel': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_layer': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_head': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.dma_address': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.memory_request': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.start_head': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.q_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_requant_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_requant_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.requant_q_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_scores_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.val_scale_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.softmax_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_value_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.requant2_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.q_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_requant_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_requant_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.requant_q_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_scores_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.val_scale_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.softmax_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_value_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.requant2_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.q_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_scores_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_value_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_ctx_ref': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'dbg_ctrl_mem' with compact=bit mode in 1056-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_3' with compact=bit mode in 235-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_2' with compact=bit mode in 235-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_1' with compact=bit mode in 235-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_0' with compact=bit mode in 235-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:81:0)
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15 
+INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 5.51 seconds. CPU system time: 0.61 seconds. Elapsed time: 7.06 seconds; current allocated memory: 451.070 MB.
+INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 451.070 MB.
+INFO: [HLS 200-10] Starting code transformations ...
+INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 0.17 seconds. CPU system time: 0 seconds. Elapsed time: 0.17 seconds; current allocated memory: 455.172 MB.
+INFO: [HLS 200-10] Checking synthesizability ...
+INFO: [XFORM 203-602] Inlining function 'init_head_ctx' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404) automatically.
+INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 0.24 seconds. CPU system time: 0 seconds. Elapsed time: 0.25 seconds; current allocated memory: 459.883 MB.
+INFO: [XFORM 203-602] Inlining function 'init_head_ctx' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:404) automatically.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp:20:9) in function 'transformer_top'... converting 3 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:15) in function 'scheduler_hls'... converting 3 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:168:21) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:389:7) in function 'scheduler_hls'... converting 15 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:508:21) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:535:20) in function 'scheduler_hls'... converting 18 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:736:40) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:774:13) in function 'scheduler_hls'... converting 25 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:68:21) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:92:22) in function 'drive_group_head_phase'... converting 15 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:68:21) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:92:22) in function 'drive_group_head_phase'... converting 15 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:108:26) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:123:5) in function 'drive_group_head_phase'... converting 4 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:108:26) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:123:5) in function 'drive_group_head_phase'... converting 4 basic blocks.
+INFO: [XFORM 203-11] Balancing expressions in function 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:190)...4 expression(s) balanced.
+INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 0.91 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.92 seconds; current allocated memory: 489.445 MB.
+INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 0.71 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.74 seconds; current allocated memory: 538.066 MB.
+INFO: [HLS 200-10] Starting hardware synthesis ...
+INFO: [HLS 200-10] Synthesizing 'transformer_top' ...
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'drive_group_head_phase' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 2.22 seconds. CPU system time: 0.05 seconds. Elapsed time: 2.28 seconds; current allocated memory: 571.598 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.45 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.47 seconds; current allocated memory: 587.602 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'scheduler_hls' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 2.57 seconds. CPU system time: 0.03 seconds. Elapsed time: 2.59 seconds; current allocated memory: 624.188 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.95 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.97 seconds; current allocated memory: 640.191 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'transformer_top' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.91 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.93 seconds; current allocated memory: 640.191 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.33 seconds. CPU system time: 0 seconds. Elapsed time: 0.34 seconds; current allocated memory: 640.191 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'drive_group_head_phase' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_32s_32_1_1': 4 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'drive_group_head_phase'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1 seconds. CPU system time: 0.07 seconds. Elapsed time: 1.06 seconds; current allocated memory: 702.441 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'scheduler_hls' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+WARNING: [RTGEN 206-101] Register 'wl_start' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wl_addr_sel' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wl_layer' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wl_head' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wl_tile' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wl_ready' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'st' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'layer_idx' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'attn_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'group_idx' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'start_head_group' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant1_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant2_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant3_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant4_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant2_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant3_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant4_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'concat_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'concat_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'outproj_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'outproj_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_dma_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_dma_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_dma_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid0_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid0_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln0_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln0_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln0_phase' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_w1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_act_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_w2_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_stage' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid1_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln1_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln1_phase' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'axis_last_seen' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'stream_done_seen' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'stream_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_tile' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_dma_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_comp_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_tile' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_dma_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_comp_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_tile' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_dma_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_comp_busy' is power-on initialization.
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_32s_32_1_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_7_2_1_1_1': 6 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_7_2_235_1_1': 4 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'scheduler_hls'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.96 seconds. CPU system time: 0.11 seconds. Elapsed time: 2.08 seconds; current allocated memory: 800.344 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'transformer_top' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/axis_in_valid' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/axis_in_last' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/axis_in_ready' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dma_done' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dma_address' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/memory_request' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/compute_ready' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/compute_done' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/compute_start' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/compute_op' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_0' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_1' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_2' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_3' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/stream_ready' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/stream_start' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/stream_done' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_addr' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_data_in' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_data_out' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_read_en' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_write_en' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_chip_en' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_resetn_in' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/irq_ps' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_state' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_ctrl_mem' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/control_reg' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/irq_status_reg' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/irq_enable_reg' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wq_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wk_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wv_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wo_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w1_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w2_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wq_head_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wk_head_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wv_head_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wo_tile_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w1_tile_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w2_tile_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_wl_ready' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_wl_start' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_wl_addr_sel' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_wl_layer' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_wl_head' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_wl_tile' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_done' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_error' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on function 'transformer_top' to 'ap_ctrl_hs'.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_control' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_irq_status' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_irq_enable' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wq_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wk_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wv_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wo_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w1_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w2_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wq_head_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wk_head_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wv_head_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wo_tile_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w1_tile_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w2_tile_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_layer_index' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_status' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_dma_layer_len' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_dma_head_len' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_dma_tile_len' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_layer_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_k_cache_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_v_cache_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_k_cache_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_v_cache_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_logit_scale_qv' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_scale_q' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_zero_point_q' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_scale_k' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_zero_point_k' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_scale_v' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_zero_point_v' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_reserved_debug' is power-on initialization.
+WARNING: [RTGEN 206-101] Port 'transformer_top/dbg_ctrl_mem' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'transformer_top'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.69 seconds. CPU system time: 0.15 seconds. Elapsed time: 1.83 seconds; current allocated memory: 871.953 MB.
+INFO: [HLS 200-111] Finished Generating all RTL models: CPU user time: 0.52 seconds. CPU system time: 0.08 seconds. Elapsed time: 0.61 seconds; current allocated memory: 910.184 MB.
+INFO: [HLS 200-111] Finished Updating report files: CPU user time: 0.88 seconds. CPU system time: 0.07 seconds. Elapsed time: 0.94 seconds; current allocated memory: 921.320 MB.
+INFO: [VHDL 208-304] Generating VHDL RTL for transformer_top.
+INFO: [VLOG 209-307] Generating Verilog RTL for transformer_top.
+INFO: [HLS 200-789] **** Estimated Fmax: 137.34 MHz
+INFO: [HLS 200-112] Total CPU user time: 24.6 seconds. Total CPU system time: 3.91 seconds. Total elapsed time: 29.44 seconds; peak allocated memory: 921.320 MB.
+INFO: [v++ 60-791] Total elapsed time: 0h 0m 33s

@@ -98,6 +98,7 @@ Time resolution is 1 ps
 95            -      1        - |       S_IDLE |      -      -        - |       -        - 0000000000 |        -        1        -       NONE
 96            -      1        - |       S_IDLE |      -      -        - |       -        - 0000000000 |        -        1        -       NONE
    Cycle  Start  Reset     Busy |        State | AXIS_v AXIS_r AXIS_last |  MemReq DMA_Done   DMA_Addr |  CmpStrt   CmpRdy  CmpDone      CmpOp
+   Cycle  Start  Reset     Busy |        State | AXIS_v AXIS_r AXIS_last |  MemReq DMA_Done   DMA_Addr |  CmpStrt   CmpRdy  CmpDone      CmpOp
        0      -      -        - |       S_IDLE |      -      -        - |       -        - xxxxxxxx   |        -        1        -        UNK
 1             -      -        - |       S_IDLE |      -      -        - |       -        - 0000000000 |        -        1        -        UNK
 2             -      -        - |       S_IDLE |      -      -        - |       -        - 0000000000 |        -        1        -        UNK

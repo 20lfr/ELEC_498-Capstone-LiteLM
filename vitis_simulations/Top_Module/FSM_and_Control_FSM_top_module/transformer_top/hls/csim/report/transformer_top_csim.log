@@ -1,6 +1,10 @@
 INFO: [SIM 2] *************** CSIM start ***************
 INFO: [SIM 4] CSIM will launch CLANG as the compiler.
+   Compiling ../../../../../../../HLS-Verilog/top_DEBUG_tb.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/top.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp in debug mode
    Generating csim.exe

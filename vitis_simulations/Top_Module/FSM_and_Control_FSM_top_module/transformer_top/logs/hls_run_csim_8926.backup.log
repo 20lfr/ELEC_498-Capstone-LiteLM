@@ -45,22 +45,18 @@ INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_
 INFO: [SIM 211-2] *************** CSIM start ***************
 INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
 INFO: [HLS 200-2036] Building debug C Simulation binaries
-   Compiling ../../../../../../../HLS-Verilog/top_DEBUG_tb.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp in debug mode
-   Compiling ../../../../../../../HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp in debug mode
-   Compiling ../../../../../../../HLS-Verilog/top.cpp in debug mode
-   Compiling ../../../../../../../HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp in debug mode
    Generating csim.exe
-../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:388:31: warning: | has lower precedence than ==; == will be evaluated first [-Wparentheses]
+../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: warning: | has lower precedence than ==; == will be evaluated first [-Wparentheses]
   const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
                               ^~~~~~~~~~~~~~
-../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:388:31: note: place parentheses around the '==' expression to silence this warning
+../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: note: place parentheses around the '==' expression to silence this warning
   const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
                               ^
                                 (           )
-../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:388:31: note: place parentheses around the | expression to evaluate it first
+../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:378:31: note: place parentheses around the | expression to evaluate it first
   const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
                               ^
                         (         )
@@ -814,5 +810,5 @@ Cycle    Start  Reset  | CtrlAddr   | CtrlDin    CtrlDout   Rd       Wr       CE
 PASS: STREAM_OUT reached and FSM stayed IDLE for 7 cycles after.
 INFO: [SIM 211-1] CSim done with 0 errors.
 INFO: [SIM 211-3] *************** CSIM finish ***************
-INFO: [HLS 200-112] Total CPU user time: 11.34 seconds. Total CPU system time: 1.33 seconds. Total elapsed time: 12.81 seconds; peak allocated memory: 445.230 MB.
-INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 16s
+INFO: [HLS 200-112] Total CPU user time: 2.62 seconds. Total CPU system time: 0.8 seconds. Total elapsed time: 3.39 seconds; peak allocated memory: 445.223 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 7s

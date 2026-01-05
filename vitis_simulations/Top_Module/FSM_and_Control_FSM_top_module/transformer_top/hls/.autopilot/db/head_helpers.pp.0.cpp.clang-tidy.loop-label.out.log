@@ -1,5 +1,0 @@
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/head_helpers.pp.0.cpp:1180:5: warning: Added loop label VITIS_LOOP_365_1:   [xilinx-label-all-loops]
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-    ^~~
-    VITIS_LOOP_365_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/head_helpers.pp.0.cpp:1180:5: note: FIX-IT applied suggested code changes
