@@ -4,6 +4,6 @@
   "configuration": {
     "componentType": "HLS",
     "configFiles": ["..\/hls_config.cfg"],
-    "work_dir": "."
+    "work_dir": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/vitis_simulations\/Top_Module\/FSM_and_Control_FSM_top_module\/transformer_top"
   }
 }

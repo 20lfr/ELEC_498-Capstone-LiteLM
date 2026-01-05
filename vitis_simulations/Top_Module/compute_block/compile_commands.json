@@ -4,9 +4,6 @@
     "arguments": [
       "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
       "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
-      "-I/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog",
-      "-I/tools/Xilinx/2025.1/Vitis/include",
-      "-I/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
       "-fhls",
       "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
       "-fhlstoplevel=compute_controller",
@@ -20,9 +17,6 @@
     "arguments": [
       "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
       "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
-      "-I/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog",
-      "-I/tools/Xilinx/2025.1/Vitis/include",
-      "-I/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
       "-fhls-tb",
       "-hls-sim-headers-dir=/tools/Xilinx/2025.1/Vitis/include",
       "-c",

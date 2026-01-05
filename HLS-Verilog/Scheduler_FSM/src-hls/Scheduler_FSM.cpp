@@ -35,7 +35,7 @@ bool LayerNorm(
 ) {
 #pragma HLS INLINE
   switch (phase) {
-    case LnPhase::SUM:
+    case LnPhase::SUM: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -47,7 +47,8 @@ bool LayerNorm(
         phase = LnPhase::SUMSQ;
       }
       break;
-    case LnPhase::SUMSQ:
+    }
+    case LnPhase::SUMSQ: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -59,7 +60,8 @@ bool LayerNorm(
         phase = LnPhase::MEAN;
       }
       break;
-    case LnPhase::MEAN:
+    }
+    case LnPhase::MEAN: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -71,7 +73,8 @@ bool LayerNorm(
         phase = LnPhase::EYY;
       }
       break;
-    case LnPhase::EYY:
+    }
+    case LnPhase::EYY: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -83,7 +86,8 @@ bool LayerNorm(
         phase = LnPhase::VAR;
       }
       break;
-    case LnPhase::VAR:
+    }
+    case LnPhase::VAR: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -95,7 +99,8 @@ bool LayerNorm(
         phase = LnPhase::VAR_EPS;
       }
       break;
-    case LnPhase::VAR_EPS:
+    }
+    case LnPhase::VAR_EPS: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -107,7 +112,8 @@ bool LayerNorm(
         phase = LnPhase::INV_STD;
       }
       break;
-    case LnPhase::INV_STD:
+    }
+    case LnPhase::INV_STD: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -119,7 +125,8 @@ bool LayerNorm(
         phase = LnPhase::NORM;
       }
       break;
-    case LnPhase::NORM:
+    }
+    case LnPhase::NORM: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -131,7 +138,8 @@ bool LayerNorm(
         phase = LnPhase::SCALE;
       }
       break;
-    case LnPhase::SCALE:
+    }
+    case LnPhase::SCALE: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -143,7 +151,8 @@ bool LayerNorm(
         phase = LnPhase::SHIFT;
       }
       break;
-    case LnPhase::SHIFT:
+    }
+    case LnPhase::SHIFT: {
       if (!ln_started && compute_ready) {
         ln_compute_done = false;
         compute_start = 1;
@@ -155,6 +164,7 @@ bool LayerNorm(
         phase = LnPhase::DONE;
       }
       break;
+    }
     case LnPhase::DONE:
       return true;
   }

@@ -1,0 +1,10 @@
+<AutoPilot:solution xmlns:AutoPilot="com.autoesl.autopilot.solution">
+    <name>
+        <value string="hls"/>
+    </name>
+    <project>
+        <value string="transformer_top"/>
+    </project>
+    <flowTarget value="vivado"/>
+</AutoPilot:solution>
+
