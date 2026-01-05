@@ -1,0 +1,4 @@
+| has lower precedence than ==; == will be evaluated first
+place parentheses around the '==' expression to silence this warning
+place parentheses around the | expression to evaluate it first
+1 warning generated.

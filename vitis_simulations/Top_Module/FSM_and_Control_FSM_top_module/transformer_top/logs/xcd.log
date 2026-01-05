@@ -3392,3 +3392,19 @@ Mon Jan  5 17:16:27 2026: DISPATCH_HANDLER: Adding handler from function makeHan
 Mon Jan  5 17:16:27 2026: SESSION_MGR: creating session with session uuid: 'a4d768b1-eb6f-432d-af8b-fadd7fba23ab' and name 'v++_compile_transformer_top'
 Mon Jan  5 17:16:27 2026: KERNEL_SVC: creating session with uuid: 'a4d768b1-eb6f-432d-af8b-fadd7fba23ab' and name 'v++_compile_transformer_top'
 Mon Jan  5 17:16:27 2026: GUIDANCE_SMGR: creating guidance session with uuid: 'a4d768b1-eb6f-432d-af8b-fadd7fba23ab' and name 'v++_compile_transformer_top'
+Mon Jan  5 17:16:31 2026: Dispatch Server: Accepted socket connection from client
+Mon Jan  5 17:16:31 2026: Starting Socket connection
+Mon Jan  5 17:17:14 2026: SESSION_MGR: closing session for UUID 'a4d768b1-eb6f-432d-af8b-fadd7fba23ab' with name 'v++_compile_transformer_top'
+Mon Jan  5 17:17:14 2026: KERNEL_SVC: closing session for UUID 'a4d768b1-eb6f-432d-af8b-fadd7fba23ab' with name 'v++_compile_transformer_top'
+Mon Jan  5 17:17:14 2026: GUIDANCE_SMGR: closing session for UUID 'a4d768b1-eb6f-432d-af8b-fadd7fba23ab' with name 'v++_compile_transformer_top'
+Mon Jan  5 17:17:14 2026: STOP_SERVER received, server token: 601d1c99-76e8-4662-a898-704d5febed33, passed token: 601d1c99-76e8-4662-a898-704d5febed33
+Mon Jan  5 17:17:14 2026: Socket received request to stop server.
+Mon Jan  5 17:17:14 2026: Dispatch Server: do_await_stop
+Mon Jan  5 17:17:14 2026: Dispatch Server: stopping mainFifo_
+Mon Jan  5 17:17:14 2026: XCD main fifo: Stopping
+Mon Jan  5 17:17:14 2026: XCD main fifo: do_read error code: Operation canceled
+Mon Jan  5 17:17:14 2026: XCD main fifo: bytes_transferred: 0
+Mon Jan  5 17:17:14 2026: SERVER: destructor for server bound to port 43621
+Mon Jan  5 17:17:14 2026: XCD main fifo: Good unlink of /tmp/xcdmain601d1c99-76e8-4662-a898-704d5febed33
+Mon Jan  5 17:17:14 2026: Server exiting with status 0.
+Mon Jan  5 17:17:14 2026: Closing log file.
