@@ -19,10 +19,10 @@ void ControlTest_Top(
     #pragma HLS INTERFACE s_axilite port=return         bundle=control
 
     // Instantiate logic
-    ControlMemInterface ctrl;
+    static ControlMemInterface ctrl;
     // Read Inputs
     ctrl.update_inputs(config_in);
-    static StatusMemSpace active_status = ctrl.get_mutable_status();
+    StatusMemSpace active_status = ctrl.get_mutable_status();
 
     if (sim_trigger_error) {
       active_status.irq_status |= IRQ_ERROR_BIT;
