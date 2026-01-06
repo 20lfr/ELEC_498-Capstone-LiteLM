@@ -9,7 +9,23 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>36</integer>
+      <integer>28</integer>
+      <key>column</key>
+      <integer>9</integer>
+      <key>message</key>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=inline_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=pack_compute_op_XLX_SEP_ PragmaOptions=_XLX_SEP_</string>
+      <key>ID</key>
+      <integer>5471</integer>
+      <key>WarningOption</key>
+      <string>dump-hls-pragmas</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
+      <key>line</key>
+      <integer>46</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -25,7 +41,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>219</integer>
+      <integer>237</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -41,7 +57,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>223</integer>
+      <integer>241</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -57,7 +73,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>225</integer>
+      <integer>243</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -73,103 +89,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>229</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_start_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>231</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_addr_sel_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>233</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_head_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>235</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_tile_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>237</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_layer_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>239</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_ready_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>252</integer>
+      <integer>247</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -185,7 +105,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>254</integer>
+      <integer>249</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -201,7 +121,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>256</integer>
+      <integer>251</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -217,7 +137,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>258</integer>
+      <integer>253</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -233,7 +153,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>260</integer>
+      <integer>255</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -249,7 +169,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>262</integer>
+      <integer>257</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -265,7 +185,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>264</integer>
+      <integer>259</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -281,7 +201,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>266</integer>
+      <integer>261</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -297,7 +217,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>268</integer>
+      <integer>263</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -313,7 +233,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>270</integer>
+      <integer>265</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -329,7 +249,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>272</integer>
+      <integer>267</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -345,7 +265,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>274</integer>
+      <integer>269</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -361,7 +281,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>276</integer>
+      <integer>271</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -377,7 +297,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>278</integer>
+      <integer>273</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -393,7 +313,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>294</integer>
+      <integer>289</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -409,7 +329,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>296</integer>
+      <integer>291</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -425,7 +345,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>298</integer>
+      <integer>293</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -441,7 +361,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>300</integer>
+      <integer>295</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -457,7 +377,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>305</integer>
+      <integer>300</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -473,7 +393,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>307</integer>
+      <integer>302</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -489,7 +409,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>309</integer>
+      <integer>304</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -505,7 +425,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>315</integer>
+      <integer>310</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -521,7 +441,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>317</integer>
+      <integer>312</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -537,7 +457,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>319</integer>
+      <integer>314</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -553,7 +473,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>321</integer>
+      <integer>316</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -569,7 +489,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>323</integer>
+      <integer>318</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -585,7 +505,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>325</integer>
+      <integer>320</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -601,7 +521,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>328</integer>
+      <integer>323</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -617,7 +537,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>330</integer>
+      <integer>325</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -633,7 +553,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>332</integer>
+      <integer>327</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -649,7 +569,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>334</integer>
+      <integer>329</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -665,7 +585,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>336</integer>
+      <integer>331</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -681,7 +601,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>338</integer>
+      <integer>333</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -697,7 +617,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>340</integer>
+      <integer>335</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -713,7 +633,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>342</integer>
+      <integer>337</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -729,7 +649,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>344</integer>
+      <integer>339</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -745,7 +665,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>346</integer>
+      <integer>341</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -761,7 +681,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>348</integer>
+      <integer>343</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -777,7 +697,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>350</integer>
+      <integer>345</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -793,7 +713,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>352</integer>
+      <integer>347</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -809,7 +729,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>354</integer>
+      <integer>349</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -825,7 +745,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>356</integer>
+      <integer>351</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -841,7 +761,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>358</integer>
+      <integer>353</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -857,7 +777,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>362</integer>
+      <integer>357</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -873,7 +793,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>364</integer>
+      <integer>359</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -889,7 +809,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>366</integer>
+      <integer>361</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -905,7 +825,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>368</integer>
+      <integer>363</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -921,7 +841,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>370</integer>
+      <integer>365</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -937,51 +857,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>378</integer>
-      <key>column</key>
-      <integer>31</integer>
-      <key>message</key>
-      <string>| has lower precedence than ==; == will be evaluated first</string>
-      <key>ID</key>
-      <integer>5094</integer>
-      <key>WarningOption</key>
-      <string>parentheses</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>note</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>378</integer>
-      <key>column</key>
-      <integer>31</integer>
-      <key>message</key>
-      <string>place parentheses around the &apos;==&apos; expression to silence this warning</string>
-      <key>ID</key>
-      <integer>4428</integer>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>note</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>378</integer>
-      <key>column</key>
-      <integer>31</integer>
-      <key>message</key>
-      <string>place parentheses around the | expression to evaluate it first</string>
-      <key>ID</key>
-      <integer>4426</integer>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>403</integer>
+      <integer>394</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -997,7 +873,39 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
-      <integer>663</integer>
+      <integer>647</integer>
+      <key>column</key>
+      <integer>9</integer>
+      <key>message</key>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_</string>
+      <key>ID</key>
+      <integer>5471</integer>
+      <key>WarningOption</key>
+      <string>dump-hls-pragmas</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
+      <key>line</key>
+      <integer>718</integer>
+      <key>column</key>
+      <integer>9</integer>
+      <key>message</key>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=array_partition_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = head_group complete dim = 1_XLX_SEP_</string>
+      <key>ID</key>
+      <integer>5471</integer>
+      <key>WarningOption</key>
+      <string>dump-hls-pragmas</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
+      <key>line</key>
+      <integer>722</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -1014,38 +922,6 @@
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
       <key>line</key>
       <integer>738</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=array_partition_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = head_group complete dim = 1_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>742</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp</string>
-      <key>line</key>
-      <integer>758</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>

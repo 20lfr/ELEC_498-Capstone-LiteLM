@@ -1,45 +1,45 @@
 {
     "1": {
-        "name": "scheduler_hls",
-        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Scheduler_FSM.cpp",
-        "fileloc": "168",
-        "instructions": "1399",
-        "total_instructions": "2332",
-        "calls": "2",
-        "basicblocks": "249",
-        "memory_accesses": "0",
-        "control_depth": "0",
-        "def_use_depth": "17",
-        "loads": {
-            "G": "53"
-        },
-        "stores": {
-            "G": "54"
-        }
-    },
-    "2": {
         "name": "drive_group_head_phase",
         "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Head_Helpers\/head_helpers.cpp",
-        "fileloc": "353",
-        "instructions": "933",
-        "total_instructions": "933",
+        "fileloc": "390",
+        "instructions": "1038",
+        "total_instructions": "1038",
         "calls": "",
-        "basicblocks": "103",
+        "basicblocks": "109",
         "memory_accesses": "0",
         "control_depth": "0",
-        "def_use_depth": "91"
+        "def_use_depth": "96"
+    },
+    "2": {
+        "name": "scheduler_hls",
+        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Scheduler_FSM.cpp",
+        "fileloc": "188",
+        "instructions": "1369",
+        "total_instructions": "2407",
+        "calls": "1",
+        "basicblocks": "271",
+        "memory_accesses": "0",
+        "control_depth": "0",
+        "def_use_depth": "11",
+        "loads": {
+            "G": "47"
+        },
+        "stores": {
+            "G": "47"
+        }
     },
     "0": {
         "name": "transformer_top",
         "file": "top.cpp",
         "fileloc": "4",
-        "instructions": "541",
-        "total_instructions": "2873",
-        "calls": "1",
+        "instructions": "507",
+        "total_instructions": "2914",
+        "calls": "2",
         "basicblocks": "144",
         "memory_accesses": "0",
         "control_depth": "0",
-        "def_use_depth": "9",
+        "def_use_depth": "6",
         "loads": {
             "G": "33"
         },

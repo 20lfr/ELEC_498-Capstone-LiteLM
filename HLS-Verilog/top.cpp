@@ -10,11 +10,16 @@ void transformer_top(
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
 
     // ------------------------------------------------------------
-    // WEIGHT LOADER (AXI4-FULL MASTER via DMA)
+    // Memory Management System (WEIGHT LOADER via DMA)
     // ------------------------------------------------------------
     bool        dma_done,                   // [INPUT]  DMA transfer completed (single-cycle pulse)
-    uint32_t    &dma_address,               // [OUTPUT] Address of completed DMA transfer
-    bool        &memory_request,            // [OUTPUT] Request a DMA transfer
+
+    bool        wl_ready,                 // [INPUT]  Weight loader ready for a new request
+    bool        &wl_start,                // [OUTPUT] Start weight load request
+    DmaSel      &wl_addr_sel,             // [OUTPUT] Select weight matrix/tile
+    int         &wl_layer,                // [OUTPUT] Layer index for DMA
+    int         &wl_head,                 // [OUTPUT] Head index (or -1 for non-head ops)
+    int         &wl_tile,                 // [OUTPUT] Tile index for large matrices
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
@@ -22,7 +27,7 @@ void transformer_top(
     bool compute_ready,                 // [INPUT]  Compute engine idle / ready for next op
     bool compute_done,                  // [INPUT]  Compute operation finished (one-shot)
     bool &compute_start,                // [OUTPUT] Trigger compute engine
-    ComputeOp &compute_op,              // [OUTPUT] What operation to run (Wo, W1, W2, FFN, etc)
+    uint32_t &compute_op,               // [OUTPUT] Packed op|layer|head|tile for compute
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
     
     // ------------------------------------------------------------
@@ -69,25 +74,10 @@ void transformer_top(
     uint32_t &w1_tile_stride,
     uint32_t &w2_tile_stride,
 
-
-    bool &dbg_wl_ready,
-    bool &dbg_wl_start,
-    DmaSel &dbg_wl_addr_sel,
-    int &dbg_wl_layer,
-    int &dbg_wl_head,
-    int &dbg_wl_tile,
     bool &dbg_done,
     bool &dbg_error
 ) {
-#pragma HLS INLINE off
-
-    // WEIGHT LOADER handshake state (persist across calls)
-    // static bool wl_start        = false;
-    // static DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
-    // static int wl_layer         = 0;
-    // static int wl_head          = 0;
-    // static int wl_tile          = 0;
-    // bool wl_ready;
+#pragma HLS INLINE off   
 
     bool done               = false;    // Scheduler done flag
     bool error              = false;    // Scheduler error flag
@@ -113,13 +103,6 @@ void transformer_top(
 
     // Clear handshake state on external resetn deassert.
     if (ctrl_mem.control & !CTRL_RESETN_BIT) {
-        // wl_start      = false;
-        // wl_addr_sel   = DmaSel::DMASEL_NONE;
-        // wl_layer      = 0;
-        // wl_head       = 0;
-        // wl_tile       = 0;
-        // wl_ready      = false;
-        memory_request= false;
         done          = false;
         error         = false;
     }
@@ -144,9 +127,13 @@ void transformer_top(
         axis_in_valid,
         axis_in_last,
         axis_in_ready,
-        memory_request,
-        dma_address,
         dma_done,
+        wl_ready,
+        wl_start,
+        wl_addr_sel,
+        wl_layer,
+        wl_head,
+        wl_tile,
         compute_ready,
         compute_done,
         head_ctx_ref,
@@ -157,28 +144,13 @@ void transformer_top(
         stream_done,
         done,
         error,
-        dbg_state,
-
-        // Debug signal OUTPUT
-        dbg_wl_ready,
-        dbg_wl_start,
-        dbg_wl_addr_sel,
-        dbg_wl_layer,
-        dbg_wl_head,
-        dbg_wl_tile
+        dbg_state
     );
 
     
 
     // IRQ WIZARD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     irq_ps = irq_wizard(ctrl_mem, done, error);
-    // dbg_ctrl_mem = ctrl_mem;
-    // dbg_wl_ready = wl_ready;
-    // dbg_wl_start = wl_start;
-    // dbg_wl_addr_sel = wl_addr_sel;
-    // dbg_wl_layer = wl_layer;
-    // dbg_wl_head = wl_head;
-    // dbg_wl_tile = wl_tile;
     dbg_done = done;
     dbg_error = error;
 

@@ -2,10 +2,9 @@
 verilog xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
 "../../../../../../HLS-Verilog/Verilog-top-module/transformer_top.v" \
 "../../../../../../HLS-Verilog/Verilog-top-module/transformer_top_drive_group_head_phase.v" \
-"../../../../../../HLS-Verilog/Verilog-top-module/transformer_top_mul_32s_32s_32_1_1.v" \
 "../../../../../../HLS-Verilog/Verilog-top-module/transformer_top_scheduler_hls.v" \
 "../../../../../../HLS-Verilog/Verilog-top-module/transformer_top_sparsemux_7_2_1_1_1.v" \
-"../../../../../../HLS-Verilog/Verilog-top-module/transformer_top_sparsemux_7_2_235_1_1.v" \
+"../../../../../../HLS-Verilog/Verilog-top-module/transformer_top_sparsemux_7_2_254_1_1.v" \
 
 sv xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
 "../../../../../../HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv" \

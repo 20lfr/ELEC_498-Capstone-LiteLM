@@ -28,7 +28,8 @@ static const char* phase_str(HeadPhase phase) {
     }
 }
 
-static const char* op_str(int op) {
+static const char* op_str(uint32_t packed_op) {
+    const ComputeOp op = static_cast<ComputeOp>(packed_op & 0xFFu);
     switch (op) {
         case CMP_Q: return "Q";
         case CMP_K: return "K";

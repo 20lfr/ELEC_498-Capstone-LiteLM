@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <ap_int.h>
 
 
 /*
@@ -127,6 +128,13 @@ constexpr int NUM_W1_TILES    = 4;
 constexpr int NUM_W2_TILES    = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
+constexpr int D_MODEL = 8; // Number of heads processed in parallel
+constexpr int D_FFN   = 22; // Feed-Forward hidden layer size
+constexpr int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
+constexpr int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
+constexpr int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
+constexpr int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
+constexpr int CONTEXT_LENGTH = 16; // Context window length
 // ------------------------------------------------------------
 // Scheduler state + helper enums
 // ------------------------------------------------------------
@@ -244,11 +252,11 @@ enum DmaSel : uint8_t {
     DMASEL_NONE = 0,    // 0
     DMASEL_WQ,          // 1
     DMASEL_WK,          // 2
-    DMASEL_WV,          // 3
-    DMASEL_CTX_K,       // 4
-    DMASEL_CTX_V,       // 5
-    DMASEL_K_WRITE,     // 6
-    DMASEL_V_WRITE,     // 7
+    DMASEL_K_WRITE,     // 3
+    DMASEL_WV,          // 4
+    DMASEL_V_WRITE,     // 5
+    DMASEL_CTX_K,       // 6
+    DMASEL_CTX_V,       // 7
     DMASEL_WO,          // 8
     DMASEL_W1,          // 9
     DMASEL_W2,          // 10
@@ -262,8 +270,8 @@ struct HeadCtx {
     bool compute_ready = false;
     bool compute_done  = false;
     bool compute_start = false;
-    ComputeOp  compute_op    = ComputeOp::CMP_NONE;
-    ComputeOp  last_compute_op = ComputeOp::CMP_NONE; // Tracks last issued compute to gate done pulses
+    uint32_t   compute_op    = 0;
+    uint32_t   last_compute_op = 0; // Packed compute op for done gating
     DmaSel     last_wl_addr  = DmaSel::DMASEL_NONE;   // Tracks last issued WL request for dma_done attribution
 
     bool    wl_ready    = false;                  // INPUT FROM WL 
@@ -273,17 +281,16 @@ struct HeadCtx {
     int     wl_head     = -1;                      // OUTPUT signal for head
     bool    dma_done    = false;                  // INPUT FROM AXI-FULL 
 
-    uint32_t dma_address = 0;                     // OUTPUT signal for head
-    bool     memory_request = false;               // OUTPUT signal for head
-
     bool start_head = false;
 
     // Per-head bookkeeping for started phases
     bool q_started          = false;
     bool k_started          = false;
     bool k_requant_started  = false;
+    bool k_writeback_started = false;
     bool v_started          = false;
     bool v_requant_started  = false;
+    bool v_writeback_started = false;
     bool requant_q_started  = false;
     bool att_scores_started = false;
     bool val_scale_started  = false;
@@ -305,7 +312,9 @@ struct HeadCtx {
 
     bool q_dma_done          = false;
     bool k_dma_done          = false;
+    bool k_writeback_dma_done = false;
     bool v_dma_done          = false;
+    bool v_writeback_dma_done = false;
     bool att_scores_dma_done = false;
     bool att_value_dma_done  = false;
 };

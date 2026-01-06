@@ -13,17 +13,7 @@
 						"AP_START": { "actual": "ap_start"}
 					}
 				},
-				"grp_scheduler_hls_fu_16461/grp_drive_group_head_phase_fu_33035/grp_drive_group_head_phase_fu_33035_activity": {
-					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
-					"ports": {
-						"AP_CLK": { "actual": "ap_clk"},
-						"AP_DONE": { "actual": "ap_done"},
-						"AP_READY": { "actual": "ap_ready"},
-						"AP_RESET": { "actual": "ap_rst"},
-						"AP_START": { "actual": "ap_start"}
-					}
-				},
-				"grp_scheduler_hls_fu_16461/grp_scheduler_hls_fu_16461_activity": {
+				"grp_scheduler_hls_fu_13859/grp_scheduler_hls_fu_13859_activity": {
 					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
 					"ports": {
 						"AP_CLK": { "actual": "ap_clk"},
