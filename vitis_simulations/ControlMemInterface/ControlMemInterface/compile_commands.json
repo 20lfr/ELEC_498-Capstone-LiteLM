@@ -1,27 +1,27 @@
 [
   {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface",
+    "directory": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface",
     "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls",
-      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
-      "-fhlstoplevel=ControlMemInterface",
+      "-hls-syn-headers-dir=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-fhlstoplevel=ControlTest_Top",
       "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp"
+      "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface/../../../HLS-Verilog/ControlMemInterface/ControlTest_Top.cpp"
     ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp"
+    "file": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface/../../../HLS-Verilog/ControlMemInterface/ControlTest_Top.cpp"
   },
   {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface",
+    "directory": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface",
     "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls-tb",
-      "-hls-sim-headers-dir=/tools/Xilinx/2025.1/Vitis/include",
+      "-hls-sim-headers-dir=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/include",
       "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface_tb.cpp"
+      "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface/../../../HLS-Verilog/ControlMemInterface/ControlMemInterface_tb.cpp"
     ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface_tb.cpp"
+    "file": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM/vitis_simulations/ControlMemInterface/ControlMemInterface/../../../HLS-Verilog/ControlMemInterface/ControlMemInterface_tb.cpp"
   }
 ]

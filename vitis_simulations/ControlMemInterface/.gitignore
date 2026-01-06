@@ -1,6 +1,7 @@
 # Ignore build output directory
 /build
 /export
+/mask_allowed
 
 # Ignore object files and dependent files
 .o
@@ -9,6 +10,7 @@
 #Ignore logs folder and log files
 /logs
 .log
+.cache
 
 #Ignore lock files
 .lock
@@ -19,3 +21,4 @@
 
 _ide/logs
 _ide/.wsdata
+_ide/workspace*

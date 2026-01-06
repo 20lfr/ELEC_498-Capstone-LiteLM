@@ -315,17 +315,24 @@ struct HeadCtx {
 // Control + IRQ bitfields
 // ------------------------------------------------------------
 // Bit positions: bit0 = reset_n, bit1 = start
-constexpr uint32_t CTRL_RESETN_BIT   = 1u << 0;
-constexpr uint32_t CTRL_START_BIT    = 1u << 1;
+constexpr uint32_t CTRL_RESETN_BIT      = 1u << 0;
+constexpr uint32_t CTRL_START_BIT       = 1u << 1;
 
-constexpr uint32_t IRQ_CLEAR_BIT      = 1u << 0;
-constexpr uint32_t IRQ_ERROR_BIT      = 1u << 1;
-constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
+// IRQ Bits
+constexpr uint32_t IRQ_CLEAR_BIT        = 1u << 0;
+constexpr uint32_t IRQ_ERROR_BIT        = 1u << 1;
+constexpr uint32_t IRQ_INFER_DONE_BIT   = 1u << 2;
 
-// Status register bits
-constexpr uint32_t STATUS_INVALID_ADDR = 1u << 0;
-constexpr uint32_t STATUS_INVALID_OP   = 1u << 1;
-constexpr uint32_t STATUS_BUSY_BIT     = 1u << 2;
+// Status bits
+constexpr uint32_t STATUS_IDLE          = 1u << 0;
+constexpr uint32_t STATUS_INVALID_ADDR  = 1u << 1;
+constexpr uint32_t STATUS_INVALID_OP    = 1u << 2;
+constexpr uint32_t STATUS_BUSY_BIT      = 1u << 3;
+
+// Error Codes
+constexpr uint32_t ERR_NONE             = 0x0;
+constexpr uint32_t ERR_DMA_ALIGNMENT    = 0x10;
+constexpr uint32_t ERR_DMA_ZERO_LEN     = 0x11;
 
 
 // ------------------------------------------------------------
@@ -375,13 +382,10 @@ enum class ControlReg : uint32_t {
     RESERVED_DEBUG  = 0x80  // 32
 };
 
-// Structure that mirrors the AXI-lite accessible registers.
+// Config (PS Writes -> PL Reads)
+// Passed by value
 struct ControlMemSpace {
     uint32_t control        = CTRL_RESETN_BIT;  // cntrl_reset | cntrl_start
-    uint32_t layer_index    = 0;
-    uint32_t status         = 0;
-    uint32_t irq_status     = 0;                // clear | error | inference_done
-    uint32_t irq_enable     = IRQ_CLEAR_BIT | IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT; // clear | error | inference_done 
 
     uint32_t dma_layer_len  = 0;
     uint32_t dma_head_len   = 0;
@@ -416,6 +420,13 @@ struct ControlMemSpace {
     uint32_t zero_point_k   = 0;
     uint32_t scale_v        = 0;
     uint32_t zero_point_v   = 0;
+};
 
-    uint32_t reserved_debug = 0;
+// Status (PS Reads <- PL Writes)
+// Passed by reference
+struct StatusMemSpace {
+    uint32_t status = STATUS_IDLE;      // Busy, Done, Error flags
+    uint32_t irq_status = 0;  // Interrupt specific flags
+    uint32_t error_code = 0;  // Specific error reason (e.g. alignment)
+    uint32_t current_layer = 0; // Progress tracking
 };
