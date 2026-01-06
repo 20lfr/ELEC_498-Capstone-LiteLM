@@ -1,15 +1,27 @@
 {
     "1": {
+        "name": "drive_group_head_phase",
+        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Head_Helpers\/head_helpers.cpp",
+        "fileloc": "390",
+        "instructions": "1038",
+        "total_instructions": "1038",
+        "calls": "",
+        "basicblocks": "109",
+        "memory_accesses": "0",
+        "control_depth": "0",
+        "def_use_depth": "96"
+    },
+    "2": {
         "name": "scheduler_hls",
         "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Scheduler_FSM.cpp",
         "fileloc": "188",
-        "instructions": "1334",
-        "total_instructions": "2204",
-        "calls": "2",
-        "basicblocks": "265",
+        "instructions": "1369",
+        "total_instructions": "2407",
+        "calls": "1",
+        "basicblocks": "271",
         "memory_accesses": "0",
         "control_depth": "0",
-        "def_use_depth": "12",
+        "def_use_depth": "11",
         "loads": {
             "G": "47"
         },
@@ -17,25 +29,13 @@
             "G": "47"
         }
     },
-    "2": {
-        "name": "drive_group_head_phase",
-        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Scheduler_FSM\/src-hls\/Head_Helpers\/head_helpers.cpp",
-        "fileloc": "362",
-        "instructions": "870",
-        "total_instructions": "870",
-        "calls": "",
-        "basicblocks": "97",
-        "memory_accesses": "0",
-        "control_depth": "0",
-        "def_use_depth": "86"
-    },
     "0": {
         "name": "transformer_top",
         "file": "top.cpp",
         "fileloc": "4",
         "instructions": "507",
-        "total_instructions": "2711",
-        "calls": "1",
+        "total_instructions": "2914",
+        "calls": "2",
         "basicblocks": "144",
         "memory_accesses": "0",
         "control_depth": "0",

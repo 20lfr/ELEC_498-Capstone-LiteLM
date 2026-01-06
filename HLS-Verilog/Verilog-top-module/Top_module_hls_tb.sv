@@ -171,7 +171,9 @@ module transformer_top_tb;
     // Reverse order of HeadCtx so LSBs align with C layout
     logic        att_value_dma_done;
     logic        att_scores_dma_done;
+    logic        v_writeback_dma_done;
     logic        v_dma_done;
+    logic        k_writeback_dma_done;
     logic        k_dma_done;
     logic        q_dma_done;
     logic        requant2_compute_done;
@@ -191,8 +193,10 @@ module transformer_top_tb;
     logic        val_scale_started;
     logic        att_scores_started;
     logic        requant_q_started;
+    logic        v_writeback_started;
     logic        v_requant_started;
     logic        v_started;
+    logic        k_writeback_started;
     logic        k_requant_started;
     logic        k_started;
     logic        q_started;
@@ -545,7 +549,9 @@ module transformer_top_tb;
             softmax_started: 1'b0,
             att_value_started: 1'b0,
             k_requant_started: 1'b0,
+            k_writeback_started: 1'b0,
             v_requant_started: 1'b0,
+            v_writeback_started: 1'b0,
             requant_q_started: 1'b0,
             requant2_started: 1'b0,
             q_compute_done: 1'b0,
@@ -561,7 +567,9 @@ module transformer_top_tb;
             requant2_compute_done: 1'b0,
             q_dma_done: 1'b0,
             k_dma_done: 1'b0,
+            k_writeback_dma_done: 1'b0,
             v_dma_done: 1'b0,
+            v_writeback_dma_done: 1'b0,
             att_scores_dma_done: 1'b0,
             att_value_dma_done: 1'b0
           };

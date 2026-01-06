@@ -42,7 +42,9 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.softmax_started    = false;
     ctx.att_value_started  = false;
     ctx.k_requant_started  = false;
+    ctx.k_writeback_started = false;
     ctx.v_requant_started  = false;
+    ctx.v_writeback_started = false;
     ctx.requant_q_started  = false;
     ctx.requant2_started   = false;
 
@@ -59,7 +61,9 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.requant2_compute_done   = false;
     ctx.q_dma_done              = false;
     ctx.k_dma_done              = false;
+    ctx.k_writeback_dma_done    = false;
     ctx.v_dma_done              = false;
+    ctx.v_writeback_dma_done    = false;
     ctx.att_scores_dma_done     = false;
     ctx.att_value_dma_done      = false;
 }
@@ -100,13 +104,17 @@ bool run_single_head(
     if (ctx.dma_done && !ctx.wl_start) {
         if (ctx.q_started          && ctx.last_wl_addr == DmaSel::DMASEL_WQ)    ctx.q_dma_done = true; // ctx.dma_done && ctx.q_started
         if (ctx.k_started          && ctx.last_wl_addr == DmaSel::DMASEL_WK)    ctx.k_dma_done = true;
+        if (ctx.k_writeback_started && ctx.last_wl_addr == DmaSel::DMASEL_K_WRITE) ctx.k_writeback_dma_done = true;
         if (ctx.v_started          && ctx.last_wl_addr == DmaSel::DMASEL_WV)    ctx.v_dma_done = true;
+        if (ctx.v_writeback_started && ctx.last_wl_addr == DmaSel::DMASEL_V_WRITE) ctx.v_writeback_dma_done = true;
         if (ctx.att_scores_started && ctx.last_wl_addr == DmaSel::DMASEL_CTX_K) ctx.att_scores_dma_done = true;
         if (ctx.att_value_started  && ctx.last_wl_addr == DmaSel::DMASEL_CTX_V) ctx.att_value_dma_done  = true;
     } else {
         if (ctx.q_started)          ctx.q_dma_done = false;
         if (ctx.k_started)          ctx.k_dma_done = false;
+        if (ctx.k_writeback_started) ctx.k_writeback_dma_done = false;
         if (ctx.v_started)          ctx.v_dma_done = false;
+        if (ctx.v_writeback_started) ctx.v_writeback_dma_done = false;
         if (ctx.att_scores_started) ctx.att_scores_dma_done = false;
         if (ctx.att_value_started)  ctx.att_value_dma_done  = false;
     }
@@ -146,7 +154,9 @@ bool run_single_head(
                 ctx.softmax_started    = false;
                 ctx.att_value_started  = false;
                 ctx.k_requant_started  = false;
+                ctx.k_writeback_started = false;
                 ctx.v_requant_started  = false;
+                ctx.v_writeback_started = false;
                 ctx.requant_q_started  = false;
                 ctx.requant2_started   = false;
                 ctx.q_compute_done          = false;
@@ -162,7 +172,9 @@ bool run_single_head(
                 ctx.requant2_compute_done   = false;
                 ctx.q_dma_done          = false;
                 ctx.k_dma_done          = false;
+                ctx.k_writeback_dma_done = false;
                 ctx.v_dma_done          = false;
+                ctx.v_writeback_dma_done = false;
                 ctx.att_scores_dma_done = false;
                 ctx.att_value_dma_done  = false;
                 ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, ctx.head_idx, -1);
@@ -225,7 +237,15 @@ bool run_single_head(
             break;
         }
         case HeadPhase::K_WRITEBACK: {
-            ctx.phase = HeadPhase::V;
+            if (ctx.wl_ready && !ctx.k_writeback_started) {
+                ctx.wl_start = true;
+                ctx.wl_addr_sel = DmaSel::DMASEL_K_WRITE;
+                ctx.last_wl_addr = DmaSel::DMASEL_K_WRITE;
+                ctx.k_writeback_started = true;
+            } else if (ctx.k_writeback_dma_done && ctx.k_writeback_started) {
+                ctx.phase = HeadPhase::V;
+                ctx.k_writeback_started = false;
+            }
             break;
         }
         case HeadPhase::V: {// V
@@ -260,7 +280,15 @@ bool run_single_head(
             break;
         }
         case HeadPhase::V_WRITEBACK: {
-            ctx.phase = HeadPhase::REQUANT_Q;
+            if (ctx.wl_ready && !ctx.v_writeback_started) {
+                ctx.wl_start = true;
+                ctx.wl_addr_sel = DmaSel::DMASEL_V_WRITE;
+                ctx.last_wl_addr = DmaSel::DMASEL_V_WRITE;
+                ctx.v_writeback_started = true;
+            } else if (ctx.v_writeback_dma_done && ctx.v_writeback_started) {
+                ctx.phase = HeadPhase::REQUANT_Q;
+                ctx.v_writeback_started = false;
+            }
             break;
         }
         case HeadPhase::REQUANT_Q: {

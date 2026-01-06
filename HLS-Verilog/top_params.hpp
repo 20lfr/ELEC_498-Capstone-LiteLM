@@ -252,11 +252,11 @@ enum DmaSel : uint8_t {
     DMASEL_NONE = 0,    // 0
     DMASEL_WQ,          // 1
     DMASEL_WK,          // 2
-    DMASEL_WV,          // 3
-    DMASEL_CTX_K,       // 4
-    DMASEL_CTX_V,       // 5
-    DMASEL_K_WRITE,     // 6
-    DMASEL_V_WRITE,     // 7
+    DMASEL_K_WRITE,     // 3
+    DMASEL_WV,          // 4
+    DMASEL_V_WRITE,     // 5
+    DMASEL_CTX_K,       // 6
+    DMASEL_CTX_V,       // 7
     DMASEL_WO,          // 8
     DMASEL_W1,          // 9
     DMASEL_W2,          // 10
@@ -287,8 +287,10 @@ struct HeadCtx {
     bool q_started          = false;
     bool k_started          = false;
     bool k_requant_started  = false;
+    bool k_writeback_started = false;
     bool v_started          = false;
     bool v_requant_started  = false;
+    bool v_writeback_started = false;
     bool requant_q_started  = false;
     bool att_scores_started = false;
     bool val_scale_started  = false;
@@ -310,7 +312,9 @@ struct HeadCtx {
 
     bool q_dma_done          = false;
     bool k_dma_done          = false;
+    bool k_writeback_dma_done = false;
     bool v_dma_done          = false;
+    bool v_writeback_dma_done = false;
     bool att_scores_dma_done = false;
     bool att_value_dma_done  = false;
 };
