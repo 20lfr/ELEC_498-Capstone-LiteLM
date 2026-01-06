@@ -6887,9 +6887,13 @@ void scheduler_hls(
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,
-    bool &memory_request,
-    uint32_t &dma_address,
     bool dma_done,
+    bool wl_ready,
+    bool &wl_start,
+    DmaSel &wl_addr_sel,
+    int &wl_layer,
+    int &wl_head,
+    int &wl_tile,
     bool compute_ready,
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
@@ -6900,15 +6904,7 @@ void scheduler_hls(
     bool stream_done,
     bool &done,
     bool &error,
-    SchedState &STATE,
-
-
-    bool &dbg_wl_ready,
-    bool &dbg_wl_start,
-    DmaSel &dbg_wl_addr_sel,
-    int &dbg_wl_layer,
-    int &dbg_wl_head,
-    int &dbg_wl_tile
+    SchedState &STATE
 );
 # 2 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" 2
 # 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/../../Weight_Loader-Stager/Weight_stager.hpp" 1
@@ -7109,9 +7105,14 @@ void scheduler_hls(
 
 
 
-    bool &memory_request,
-    uint32_t &dma_address,
     bool dma_done,
+
+    bool wl_ready,
+    bool &wl_start,
+    DmaSel &wl_addr_sel,
+    int &wl_layer,
+    int &wl_head,
+    int &wl_tile,
 
 
 
@@ -7133,18 +7134,12 @@ void scheduler_hls(
 
     bool &done,
     bool &error,
-    SchedState &STATE,
+    SchedState &STATE
 
 
 
 
-    bool &dbg_wl_ready,
-    bool &dbg_wl_start,
-    DmaSel &dbg_wl_addr_sel,
 
-    int &dbg_wl_layer,
-    int &dbg_wl_head,
-    int &dbg_wl_tile
 ) {
 
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
@@ -7156,30 +7151,7 @@ void scheduler_hls(
 #pragma HLS reset variable = layer_idx
 
 
- static bool wl_start;
-#pragma HLS reset variable = wl_start
- static DmaSel wl_addr_sel;
-#pragma HLS reset variable = wl_addr_sel
- static int wl_head;
-#pragma HLS reset variable = wl_head
- static int wl_tile;
-#pragma HLS reset variable = wl_tile
- static int wl_layer;
-#pragma HLS reset variable = wl_layer
- static bool wl_ready;
-#pragma HLS reset variable = wl_ready
-
-
- dbg_wl_start = wl_start;
-  dbg_wl_addr_sel = wl_addr_sel;
-  dbg_wl_layer = wl_layer;
-  dbg_wl_head = wl_head;
-  dbg_wl_tile = wl_tile;
-  dbg_wl_ready = wl_ready;
-
-
-
-  static bool attn_started;
+ static bool attn_started;
 #pragma HLS reset variable = attn_started
  static bool attn_done;
 #pragma HLS reset variable = attn_done
@@ -7306,16 +7278,12 @@ void scheduler_hls(
 
  const bool cntrl_reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
   const bool reset = !cntrl_reset_n;
-  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
   const bool busy = (st != S_IDLE);
 
   ctrl_mem.status = (ctrl_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
 
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
 
-  weight_stager(wl_reset, wl_start, wl_addr_sel, wl_layer,
-                -1, wl_tile, ctrl_mem, wl_ready,
-                memory_request, error, dma_address);
 
   if (reset) {
     st = S_IDLE;
@@ -7330,7 +7298,7 @@ void scheduler_hls(
     group_idx = 0;
 
     start_head_group = false;
-    VITIS_LOOP_421_1: for (int i = 0; i < NUM_HEADS; ++i){
+    VITIS_LOOP_393_1: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], -1, i);
     }
@@ -7403,10 +7371,6 @@ void scheduler_hls(
     wl_head = 0;
     wl_tile = 0;
     wl_layer = 0;
-    memory_request = false;
-    wl_ready = false;
-    dma_address = 0;
-
     done = false;
     error = false;
   }
@@ -7563,9 +7527,6 @@ void scheduler_hls(
         wl_head = 0;
         wl_tile = 0;
         wl_layer = 0;
-        memory_request = false;
-        wl_ready = false;
-        dma_address = 0;
 
         done = false;
         error = false;
@@ -7590,7 +7551,7 @@ void scheduler_hls(
       group_idx = 0;
 
       start_head_group = true;
-      VITIS_LOOP_681_2: for (int i = 0; i < NUM_HEADS; ++i){
+      VITIS_LOOP_646_2: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], layer_idx, i);
       }
@@ -7653,10 +7614,6 @@ void scheduler_hls(
       wl_head = 0;
       wl_tile = 0;
       wl_layer = 0;
-      memory_request = false;
-      wl_ready = false;
-      dma_address = 0;
-
       done = false;
       st = S_ATTENTION_HEADS;
 
@@ -7669,7 +7626,7 @@ void scheduler_hls(
 #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
 
 
- VITIS_LOOP_760_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+ VITIS_LOOP_721_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
         if (h < NUM_HEADS) {
@@ -7685,7 +7642,7 @@ void scheduler_hls(
           drive_group_head_phase(head_group, group_base, layer_idx, start_head_group, ctrl_mem, error);
 
 
-      VITIS_LOOP_776_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+      VITIS_LOOP_737_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
           if (h < NUM_HEADS) {

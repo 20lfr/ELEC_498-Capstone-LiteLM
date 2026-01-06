@@ -4,201 +4,172 @@
 /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:46:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=inline_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=LayerNorm_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS INLINE
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:238:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=array_partition_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = head_ctx_ref complete dim = 1_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:237:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=array_partition_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = head_ctx_ref complete dim = 1_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:242:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = st_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:241:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = st_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = st
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:244:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = layer_idx_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:243:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = layer_idx_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = layer_idx
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:248:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_start_XLX_SEP_ [-Wdump-hls-pragmas]
-#pragma HLS reset variable = wl_start
-        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:250:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_addr_sel_XLX_SEP_ [-Wdump-hls-pragmas]
-#pragma HLS reset variable = wl_addr_sel
-        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:252:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_head_XLX_SEP_ [-Wdump-hls-pragmas]
-#pragma HLS reset variable = wl_head
-        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:254:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_tile_XLX_SEP_ [-Wdump-hls-pragmas]
-#pragma HLS reset variable = wl_tile
-        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:256:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_layer_XLX_SEP_ [-Wdump-hls-pragmas]
-#pragma HLS reset variable = wl_layer
-        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:258:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wl_ready_XLX_SEP_ [-Wdump-hls-pragmas]
-#pragma HLS reset variable = wl_ready
-        ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:271:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:247:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = attn_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:273:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:249:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = attn_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:275:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:251:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = attn_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:277:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = concat_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:253:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = concat_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = concat_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:279:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = outproj_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:255:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = outproj_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = outproj_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:281:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid0_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:257:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid0_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = resid0_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:283:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln0_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:259:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln0_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ln0_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:285:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln0_phase_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:261:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln0_phase_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ln0_phase
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:287:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_w1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:263:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_w1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ffn_w1_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:289:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_act_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:265:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_act_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ffn_act_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:291:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_w2_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:267:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_w2_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ffn_w2_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:293:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:269:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = resid1_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:295:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:271:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ln1_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:297:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln1_phase_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:273:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln1_phase_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ln1_phase
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:313:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:289:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant1_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant1_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:315:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant2_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:291:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant2_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant2_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:317:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant3_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:293:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant3_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant3_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:319:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant4_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:295:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant4_compute_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant4_compute_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:324:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_group_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:300:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = attn_group_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = attn_group_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:326:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = group_idx_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:302:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = group_idx_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = group_idx
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:328:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = start_head_group_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:304:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = start_head_group_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = start_head_group
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:334:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = concat_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:310:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = concat_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = concat_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:336:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = outproj_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:312:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = outproj_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = outproj_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:338:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant1_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:314:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant1_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant1_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:340:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid0_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:316:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid0_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = resid0_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:342:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln0_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:318:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln0_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ln0_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:344:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant2_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:320:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant2_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant2_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:347:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_stage_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:323:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_stage_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ffn_stage
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:349:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:325:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ffn_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ffn_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:351:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant3_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:327:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant3_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant3_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:353:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid1_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:329:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = resid1_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = resid1_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:355:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln1_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:331:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = ln1_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = ln1_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:357:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant4_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:333:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = requant4_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = requant4_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:359:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = stream_started_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:335:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = stream_started_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = stream_started
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:361:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_tile_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:337:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_tile_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = wo_tile
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:363:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_dma_busy_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:339:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_dma_busy_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = wo_dma_busy
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:365:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_comp_busy_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:341:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_comp_busy_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = wo_comp_busy
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:367:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_tile_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:343:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_tile_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w1_tile
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:369:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_dma_busy_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:345:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_dma_busy_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w1_dma_busy
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:371:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_comp_busy_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:347:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_comp_busy_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w1_comp_busy
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:373:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_tile_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:349:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_tile_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w2_tile
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:375:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_dma_busy_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:351:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_dma_busy_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w2_dma_busy
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:377:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_comp_busy_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:353:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_comp_busy_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w2_comp_busy
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:381:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_dma_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:357:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = wo_dma_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = wo_dma_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:383:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_dma_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:359:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w1_dma_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w1_dma_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:385:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_dma_done_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:361:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = w2_dma_done_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = w2_dma_done
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:387:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = axis_last_seen_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:363:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = axis_last_seen_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = axis_last_seen
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:389:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = stream_done_seen_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:365:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = stream_done_seen_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS reset variable = stream_done_seen
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:397:31: warning: | has lower precedence than ==; == will be evaluated first [-Wparentheses]
-  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
-                              ^~~~~~~~~~~~~~
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:397:31: note: place parentheses around the '==' expression to silence this warning
-  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
-                              ^
-                                (           )
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:397:31: note: place parentheses around the | expression to evaluate it first
-  const bool wl_reset = reset | st == S_IDLE | st == S_LAYER_COUNT;
-                              ^
-                        (         )
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:422:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:394:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS UNROLL
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:682:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:647:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS UNROLL
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:757:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=array_partition_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = head_group complete dim = 1_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:718:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=array_partition_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=variable = head_group complete dim = 1_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:761:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:722:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS UNROLL
         ^
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:777:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:738:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=scheduler_hls_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
 #pragma HLS UNROLL
         ^
-65 warnings generated.
+58 warnings generated.

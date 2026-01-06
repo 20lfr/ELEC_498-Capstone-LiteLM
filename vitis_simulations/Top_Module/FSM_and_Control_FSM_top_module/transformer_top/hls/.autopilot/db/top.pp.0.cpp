@@ -6891,9 +6891,13 @@ void scheduler_hls(
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,
-    bool &memory_request,
-    uint32_t &dma_address,
     bool dma_done,
+    bool wl_ready,
+    bool &wl_start,
+    DmaSel &wl_addr_sel,
+    int &wl_layer,
+    int &wl_head,
+    int &wl_tile,
     bool compute_ready,
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
@@ -6904,15 +6908,7 @@ void scheduler_hls(
     bool stream_done,
     bool &done,
     bool &error,
-    SchedState &STATE,
-
-
-    bool &dbg_wl_ready,
-    bool &dbg_wl_start,
-    DmaSel &dbg_wl_addr_sel,
-    int &dbg_wl_layer,
-    int &dbg_wl_head,
-    int &dbg_wl_tile
+    SchedState &STATE
 );
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
 # 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp" 1
@@ -6963,8 +6959,12 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool axis_in_last,
     bool &axis_in_ready,
     bool dma_done,
-    uint32_t &dma_address,
-    bool &memory_request,
+    bool wl_ready,
+    bool &wl_start,
+    DmaSel &wl_addr_sel,
+    int &wl_layer,
+    int &wl_head,
+    int &wl_tile,
     bool compute_ready,
     bool compute_done,
     bool &compute_start,
@@ -7001,12 +7001,6 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     uint32_t &w1_tile_stride,
     uint32_t &w2_tile_stride,
 
-    bool &dbg_wl_ready,
-    bool &dbg_wl_start,
-    DmaSel &dbg_wl_addr_sel,
-    int &dbg_wl_layer,
-    int &dbg_wl_head,
-    int &dbg_wl_tile,
     bool &dbg_done,
     bool &dbg_error
 );
@@ -7025,8 +7019,13 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
     bool dma_done,
-    uint32_t &dma_address,
-    bool &memory_request,
+
+    bool wl_ready,
+    bool &wl_start,
+    DmaSel &wl_addr_sel,
+    int &wl_layer,
+    int &wl_head,
+    int &wl_tile,
 
 
 
@@ -7081,22 +7080,15 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     uint32_t &w1_tile_stride,
     uint32_t &w2_tile_stride,
 
-
-    bool &dbg_wl_ready,
-    bool &dbg_wl_start,
-    DmaSel &dbg_wl_addr_sel,
-    int &dbg_wl_layer,
-    int &dbg_wl_head,
-    int &dbg_wl_tile,
     bool &dbg_done,
     bool &dbg_error
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=transformer_top
-# 81 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+# 79 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
 
 #pragma HLS INLINE off
-# 92 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+
  bool done = false;
     bool error = false;
     static ControlMemSpace ctrl_mem;
@@ -7121,13 +7113,6 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
     if (ctrl_mem.control & !CTRL_RESETN_BIT) {
-
-
-
-
-
-
-        memory_request= false;
         done = false;
         error = false;
     }
@@ -7152,9 +7137,13 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
         axis_in_valid,
         axis_in_last,
         axis_in_ready,
-        memory_request,
-        dma_address,
         dma_done,
+        wl_ready,
+        wl_start,
+        wl_addr_sel,
+        wl_layer,
+        wl_head,
+        wl_tile,
         compute_ready,
         compute_done,
         head_ctx_ref,
@@ -7165,28 +7154,13 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
         stream_done,
         done,
         error,
-        dbg_state,
-
-
-        dbg_wl_ready,
-        dbg_wl_start,
-        dbg_wl_addr_sel,
-        dbg_wl_layer,
-        dbg_wl_head,
-        dbg_wl_tile
+        dbg_state
     );
 
 
 
 
     irq_ps = irq_wizard(ctrl_mem, done, error);
-
-
-
-
-
-
-
     dbg_done = done;
     dbg_error = error;
 

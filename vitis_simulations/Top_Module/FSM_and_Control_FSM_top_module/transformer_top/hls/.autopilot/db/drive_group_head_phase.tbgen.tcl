@@ -120,7 +120,6 @@ set C_modelArgList {
 	{ ctrl_mem_wv_base_addr int 32 regular  }
 	{ ctrl_mem_k_cache_addr int 32 regular  }
 	{ ctrl_mem_v_cache_addr int 32 regular  }
-	{ error_read int 1 regular  }
 }
 set hasAXIMCache 0
 set l_AXIML2Cache [list]
@@ -227,10 +226,9 @@ set C_modelArgMapList {[
  	{ "Name" : "ctrl_mem_wv_base_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
  	{ "Name" : "ctrl_mem_k_cache_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
  	{ "Name" : "ctrl_mem_v_cache_addr", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
- 	{ "Name" : "error_read", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 568} ]}
 # RTL Port declarations: 
-set portNum 200
+set portNum 199
 set portList { 
 	{ ap_clk sc_in sc_logic 1 clock -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
@@ -339,7 +337,6 @@ set portList {
 	{ ctrl_mem_wv_base_addr sc_in sc_lv 32 signal 98 } 
 	{ ctrl_mem_k_cache_addr sc_in sc_lv 32 signal 99 } 
 	{ ctrl_mem_v_cache_addr sc_in sc_lv 32 signal 100 } 
-	{ error_read sc_in sc_lv 1 signal 101 } 
 	{ ap_return_0 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_1 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_2 sc_out sc_lv 32 signal -1 } 
@@ -541,7 +538,6 @@ set NewPortList {[
  	{ "name": "ctrl_mem_wv_base_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_wv_base_addr", "role": "default" }} , 
  	{ "name": "ctrl_mem_k_cache_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_k_cache_addr", "role": "default" }} , 
  	{ "name": "ctrl_mem_v_cache_addr", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ctrl_mem_v_cache_addr", "role": "default" }} , 
- 	{ "name": "error_read", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "error_read", "role": "default" }} , 
  	{ "name": "ap_return_0", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_0", "role": "default" }} , 
  	{ "name": "ap_return_1", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_1", "role": "default" }} , 
  	{ "name": "ap_return_2", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_2", "role": "default" }} , 
@@ -737,8 +733,7 @@ set ArgLastReadFirstWriteLatency {
 		ctrl_mem_wk_base_addr {Type I LastRead 0 FirstWrite -1}
 		ctrl_mem_wv_base_addr {Type I LastRead 0 FirstWrite -1}
 		ctrl_mem_k_cache_addr {Type I LastRead 0 FirstWrite -1}
-		ctrl_mem_v_cache_addr {Type I LastRead 0 FirstWrite -1}
-		error_read {Type I LastRead 0 FirstWrite -1}}}
+		ctrl_mem_v_cache_addr {Type I LastRead 0 FirstWrite -1}}}
 
 set hasDtUnsupportedChannel 0
 
@@ -852,5 +847,4 @@ set Spec2ImplPortList {
 	ctrl_mem_wv_base_addr { ap_none {  { ctrl_mem_wv_base_addr in_data 0 32 } } }
 	ctrl_mem_k_cache_addr { ap_none {  { ctrl_mem_k_cache_addr in_data 0 32 } } }
 	ctrl_mem_v_cache_addr { ap_none {  { ctrl_mem_v_cache_addr in_data 0 32 } } }
-	error_read { ap_none {  { error_read in_data 0 1 } } }
 }
