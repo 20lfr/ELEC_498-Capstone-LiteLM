@@ -8,7 +8,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity transformer_top_sparsemux_7_2_235_1_1 is
+entity transformer_top_sparsemux_7_2_283_1_1 is
 generic (
 
     din0_WIDTH : INTEGER := 1;
@@ -45,7 +45,7 @@ port (
 );
 end entity;
 
-architecture behav of transformer_top_sparsemux_7_2_235_1_1 is
+architecture behav of transformer_top_sparsemux_7_2_283_1_1 is
     signal dout_tmp : std_logic_vector (dout_WIDTH-1 downto 0);
 
 

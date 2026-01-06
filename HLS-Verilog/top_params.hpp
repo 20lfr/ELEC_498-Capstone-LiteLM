@@ -270,8 +270,8 @@ struct HeadCtx {
     bool compute_ready = false;
     bool compute_done  = false;
     bool compute_start = false;
-    ComputeOp  compute_op    = ComputeOp::CMP_NONE;
-    ComputeOp  last_compute_op = ComputeOp::CMP_NONE; // Tracks last issued compute to gate done pulses
+    uint32_t   compute_op    = 0;
+    uint32_t   last_compute_op = 0; // Packed compute op for done gating
     DmaSel     last_wl_addr  = DmaSel::DMASEL_NONE;   // Tracks last issued WL request for dma_done attribution
 
     bool    wl_ready    = false;                  // INPUT FROM WL 

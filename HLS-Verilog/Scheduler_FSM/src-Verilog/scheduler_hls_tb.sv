@@ -187,7 +187,7 @@ module scheduler_hls_tb;
     logic        wl_start;
     logic        wl_ready;
     logic [7:0]  last_wl_addr;
-    logic [7:0]  last_compute_op;
+    logic [31:0] last_compute_op;
     logic [7:0]  compute_op;
     logic        compute_start;
     logic        compute_done;
@@ -209,7 +209,7 @@ module scheduler_hls_tb;
   // Debug visibility
   logic [7:0] head_phase_dbg   [0:HEADS_TOTAL-1];
   logic [7:0] head_op_dbg      [0:HEADS_TOTAL-1];
-  logic [7:0] head_last_op_dbg      [0:HEADS_TOTAL-1];
+  logic [31:0] head_last_op_dbg      [0:HEADS_TOTAL-1];
 
   head_ctx_t head_ctx_shadow   [0:HEADS_TOTAL-1];
   logic [3:0] head_busy_ctr    [0:HEADS_TOTAL-1];
@@ -474,7 +474,7 @@ module scheduler_hls_tb;
             compute_done: 1'b0,
             compute_start: 1'b0,
             last_wl_addr: 8'd0,
-            last_compute_op: 8'd0,
+            last_compute_op: 32'd0,
             compute_op: 8'd0,
             wl_ready: 1'b0,
             wl_start: 1'b0,

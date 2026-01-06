@@ -6674,8 +6674,8 @@ struct HeadCtx {
     bool compute_ready = false;
     bool compute_done = false;
     bool compute_start = false;
-    ComputeOp compute_op = ComputeOp::CMP_NONE;
-    ComputeOp last_compute_op = ComputeOp::CMP_NONE;
+    uint32_t compute_op = 0;
+    uint32_t last_compute_op = 0;
     DmaSel last_wl_addr = DmaSel::DMASEL_NONE;
 
     bool wl_ready = false;
@@ -6883,6 +6883,20 @@ void weight_stager(
 );
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" 2
 
+static inline uint32_t pack_compute_op(ComputeOp op, int layer, int head, int tile) {
+#pragma HLS INLINE
+ const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
+    const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
+    const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
+    const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
+    return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
+}
+
+static inline ComputeOp unpack_compute_op(uint32_t packed_op) {
+#pragma HLS INLINE
+ return static_cast<ComputeOp>(packed_op & 0xFFu);
+}
+
 void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.layer_stamp = layer_idx;
     ctx.head_idx = head_idx;
@@ -6890,8 +6904,8 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.compute_ready = false;
     ctx.compute_done = false;
     ctx.compute_start = false;
-    ctx.compute_op = ComputeOp::CMP_NONE;
-    ctx.last_compute_op = ComputeOp::CMP_NONE;
+    ctx.compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, head_idx, -1);
+    ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, head_idx, -1);
     ctx.last_wl_addr = DmaSel::DMASEL_NONE;
     ctx.wl_ready = false;
     ctx.wl_start = false;
@@ -6931,7 +6945,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.att_scores_dma_done = false;
     ctx.att_value_dma_done = false;
 }
-# 64 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
+# 78 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
 bool run_single_head(
     HeadCtx &ctx,
     int layer_idx,
@@ -6956,7 +6970,7 @@ bool run_single_head(
 
     if (!ctx.compute_ready && ctx.compute_start){
         ctx.compute_start = false;
-        ctx.compute_op = ComputeOp::CMP_NONE;
+        ctx.compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, ctx.head_idx, -1);
     }
 
 
@@ -6977,17 +6991,18 @@ bool run_single_head(
 
 
     if (ctx.compute_done && !ctx.compute_start) {
-        if (ctx.q_started && ctx.last_compute_op == ComputeOp::CMP_Q) ctx.q_compute_done = true;
-        if (ctx.k_started && ctx.last_compute_op == ComputeOp::CMP_K) ctx.k_compute_done = true;
-        if (ctx.k_requant_started && ctx.last_compute_op == ComputeOp::CMP_K_REQUANT) ctx.k_requant_compute_done = true;
-        if (ctx.v_started && ctx.last_compute_op == ComputeOp::CMP_V) ctx.v_compute_done = true;
-        if (ctx.v_requant_started && ctx.last_compute_op == ComputeOp::CMP_V_REQUANT) ctx.v_requant_compute_done = true;
-        if (ctx.requant_q_started && ctx.last_compute_op == ComputeOp::CMP_REQUANT_Q) ctx.requant_q_compute_done = true;
-        if (ctx.att_scores_started && ctx.last_compute_op == ComputeOp::CMP_ATT_SCORES) ctx.att_scores_compute_done = true;
-        if (ctx.val_scale_started && ctx.last_compute_op == ComputeOp::CMP_VALUE_SCALE) ctx.val_scale_compute_done = true;
-        if (ctx.softmax_started && ctx.last_compute_op == ComputeOp::CMP_SOFTMAX) ctx.softmax_compute_done = true;
-        if (ctx.att_value_started && ctx.last_compute_op == ComputeOp::CMP_ATT_VALUE) ctx.att_value_compute_done = true;
-        if (ctx.requant2_started && ctx.last_compute_op == ComputeOp::CMP_REQUANT2) ctx.requant2_compute_done = true;
+        const ComputeOp last_op = unpack_compute_op(ctx.last_compute_op);
+        if (ctx.q_started && last_op == ComputeOp::CMP_Q) ctx.q_compute_done = true;
+        if (ctx.k_started && last_op == ComputeOp::CMP_K) ctx.k_compute_done = true;
+        if (ctx.k_requant_started && last_op == ComputeOp::CMP_K_REQUANT) ctx.k_requant_compute_done = true;
+        if (ctx.v_started && last_op == ComputeOp::CMP_V) ctx.v_compute_done = true;
+        if (ctx.v_requant_started && last_op == ComputeOp::CMP_V_REQUANT) ctx.v_requant_compute_done = true;
+        if (ctx.requant_q_started && last_op == ComputeOp::CMP_REQUANT_Q) ctx.requant_q_compute_done = true;
+        if (ctx.att_scores_started && last_op == ComputeOp::CMP_ATT_SCORES) ctx.att_scores_compute_done = true;
+        if (ctx.val_scale_started && last_op == ComputeOp::CMP_VALUE_SCALE) ctx.val_scale_compute_done = true;
+        if (ctx.softmax_started && last_op == ComputeOp::CMP_SOFTMAX) ctx.softmax_compute_done = true;
+        if (ctx.att_value_started && last_op == ComputeOp::CMP_ATT_VALUE) ctx.att_value_compute_done = true;
+        if (ctx.requant2_started && last_op == ComputeOp::CMP_REQUANT2) ctx.requant2_compute_done = true;
     }
 
 
@@ -7027,7 +7042,7 @@ bool run_single_head(
                 ctx.v_dma_done = false;
                 ctx.att_scores_dma_done = false;
                 ctx.att_value_dma_done = false;
-                ctx.last_compute_op = ComputeOp::CMP_NONE;
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_NONE;
                 ctx.phase = HeadPhase::Q;
 
@@ -7046,8 +7061,8 @@ bool run_single_head(
 
             else if (ctx.compute_ready && ctx.q_dma_done) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_Q;
-                ctx.last_compute_op = ComputeOp::CMP_Q;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_Q, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_Q, layer_idx, ctx.head_idx, -1);
             }
             else if (ctx.q_compute_done && ctx.q_started) {
                 ctx.phase = HeadPhase::K;
@@ -7065,8 +7080,8 @@ bool run_single_head(
 
             else if (ctx.compute_ready && ctx.k_dma_done) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_K;
-                ctx.last_compute_op = ComputeOp::CMP_K;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_K, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_K, layer_idx, ctx.head_idx, -1);
             }
             else if (ctx.k_compute_done && ctx.k_started) {
                 ctx.phase = HeadPhase::K_REQUANT;
@@ -7077,8 +7092,8 @@ bool run_single_head(
         case HeadPhase::K_REQUANT: {
             if (ctx.compute_ready && !ctx.k_requant_started) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_K_REQUANT;
-                ctx.last_compute_op = ComputeOp::CMP_K_REQUANT;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_K_REQUANT, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_K_REQUANT, layer_idx, ctx.head_idx, -1);
                 ctx.k_requant_started = true;
             } else if (ctx.k_requant_compute_done && ctx.k_requant_started) {
                 ctx.phase = HeadPhase::K_WRITEBACK;
@@ -7100,8 +7115,8 @@ bool run_single_head(
 
             else if (ctx.compute_ready && ctx.v_dma_done) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_V;
-                ctx.last_compute_op = ComputeOp::CMP_V;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_V, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_V, layer_idx, ctx.head_idx, -1);
             }
             else if (ctx.v_compute_done && ctx.v_started) {
                 ctx.phase = HeadPhase::V_REQUANT;
@@ -7112,8 +7127,8 @@ bool run_single_head(
         case HeadPhase::V_REQUANT: {
             if (ctx.compute_ready && !ctx.v_requant_started) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_V_REQUANT;
-                ctx.last_compute_op = ComputeOp::CMP_V_REQUANT;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_V_REQUANT, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_V_REQUANT, layer_idx, ctx.head_idx, -1);
                 ctx.v_requant_started = true;
             } else if (ctx.v_requant_compute_done && ctx.v_requant_started) {
                 ctx.phase = HeadPhase::V_WRITEBACK;
@@ -7128,8 +7143,8 @@ bool run_single_head(
         case HeadPhase::REQUANT_Q: {
             if (ctx.compute_ready && !ctx.requant_q_started) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_REQUANT_Q;
-                ctx.last_compute_op = ComputeOp::CMP_REQUANT_Q;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_REQUANT_Q, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_REQUANT_Q, layer_idx, ctx.head_idx, -1);
                 ctx.requant_q_started = true;
             } else if (ctx.requant_q_compute_done && ctx.requant_q_started) {
                 ctx.phase = HeadPhase::ATT_SCORES;
@@ -7147,8 +7162,8 @@ bool run_single_head(
 
             else if (ctx.compute_ready && ctx.att_scores_dma_done) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_ATT_SCORES;
-                ctx.last_compute_op = ComputeOp::CMP_ATT_SCORES;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_ATT_SCORES, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_ATT_SCORES, layer_idx, ctx.head_idx, -1);
             } else if (ctx.att_scores_compute_done && ctx.att_scores_started) {
                 ctx.phase = HeadPhase::VALUE_SCALE_CLAMP;
                 ctx.att_scores_started = false;
@@ -7158,8 +7173,8 @@ bool run_single_head(
         case HeadPhase::VALUE_SCALE_CLAMP: {
             if (ctx.compute_ready && !ctx.val_scale_started) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_VALUE_SCALE;
-                ctx.last_compute_op = ComputeOp::CMP_VALUE_SCALE;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_VALUE_SCALE, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_VALUE_SCALE, layer_idx, ctx.head_idx, -1);
                 ctx.val_scale_started = true;
             } else if (ctx.val_scale_compute_done && ctx.val_scale_started) {
                 ctx.phase = HeadPhase::ATT_SOFTMAX;
@@ -7170,8 +7185,8 @@ bool run_single_head(
         case HeadPhase::ATT_SOFTMAX: {
             if (ctx.compute_ready && !ctx.softmax_started) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_SOFTMAX;
-                ctx.last_compute_op = ComputeOp::CMP_SOFTMAX;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_SOFTMAX, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_SOFTMAX, layer_idx, ctx.head_idx, -1);
                 ctx.softmax_started = true;
             } else if (ctx.softmax_compute_done && ctx.softmax_started) {
                 ctx.phase = HeadPhase::ATT_VALUE;
@@ -7189,8 +7204,8 @@ bool run_single_head(
 
             else if (ctx.compute_ready && ctx.att_value_dma_done) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_ATT_VALUE;
-                ctx.last_compute_op = ComputeOp::CMP_ATT_VALUE;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_ATT_VALUE, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_ATT_VALUE, layer_idx, ctx.head_idx, -1);
             } else if (ctx.att_value_compute_done && ctx.att_value_started) {
                 ctx.phase = HeadPhase::REQUANT2;
                 ctx.att_value_started = false;
@@ -7200,8 +7215,8 @@ bool run_single_head(
         case HeadPhase::REQUANT2: {
             if (ctx.compute_ready && !ctx.requant2_started) {
                 ctx.compute_start = true;
-                ctx.compute_op = ComputeOp::CMP_REQUANT2;
-                ctx.last_compute_op = ComputeOp::CMP_REQUANT2;
+                ctx.compute_op = pack_compute_op(ComputeOp::CMP_REQUANT2, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_REQUANT2, layer_idx, ctx.head_idx, -1);
                 ctx.requant2_started = true;
             } else if (ctx.requant2_compute_done && ctx.requant2_started) {
                 ctx.phase = HeadPhase::DONE;
@@ -7233,7 +7248,7 @@ bool drive_group_head_phase(
 
     bool group_finished = true;
 
-    VITIS_LOOP_365_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+    VITIS_LOOP_380_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  HeadCtx &ctx = head_ctx_ref[lane];
 

@@ -18,7 +18,7 @@ void transformer_top(
     bool compute_ready,                 // [INPUT]  Compute engine idle / ready for next op
     bool compute_done,                  // [INPUT]  Compute operation finished (one-shot)
     bool &compute_start,                // [OUTPUT] Trigger compute engine
-    ComputeOp &compute_op,              // [OUTPUT] What operation to run (Wo, W1, W2, FFN, etc)
+    uint32_t &compute_op,               // [OUTPUT] Packed op|layer|head|tile for compute
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
     bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
     bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming

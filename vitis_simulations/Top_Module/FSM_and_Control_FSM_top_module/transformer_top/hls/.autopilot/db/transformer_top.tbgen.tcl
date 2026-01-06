@@ -28,11 +28,11 @@ set C_modelArgList {
 	{ compute_ready uint 1 regular  }
 	{ compute_done uint 1 regular  }
 	{ compute_start int 1 regular {pointer 2}  }
-	{ compute_op int 8 regular {pointer 1}  }
-	{ head_ctx_ref_0 int 235 regular {pointer 2}  }
-	{ head_ctx_ref_1 int 235 regular {pointer 2}  }
-	{ head_ctx_ref_2 int 235 regular {pointer 2}  }
-	{ head_ctx_ref_3 int 235 regular {pointer 2}  }
+	{ compute_op int 32 regular {pointer 1}  }
+	{ head_ctx_ref_0 int 283 regular {pointer 2}  }
+	{ head_ctx_ref_1 int 283 regular {pointer 2}  }
+	{ head_ctx_ref_2 int 283 regular {pointer 2}  }
+	{ head_ctx_ref_3 int 283 regular {pointer 2}  }
 	{ stream_ready uint 1 regular  }
 	{ stream_start int 1 regular {pointer 1}  }
 	{ stream_done uint 1 regular  }
@@ -83,11 +83,11 @@ set C_modelArgMapList {[
  	{ "Name" : "compute_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "compute_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "compute_start", "interface" : "wire", "bitwidth" : 1, "direction" : "READWRITE"} , 
- 	{ "Name" : "compute_op", "interface" : "wire", "bitwidth" : 8, "direction" : "WRITEONLY"} , 
- 	{ "Name" : "head_ctx_ref_0", "interface" : "wire", "bitwidth" : 235, "direction" : "READWRITE"} , 
- 	{ "Name" : "head_ctx_ref_1", "interface" : "wire", "bitwidth" : 235, "direction" : "READWRITE"} , 
- 	{ "Name" : "head_ctx_ref_2", "interface" : "wire", "bitwidth" : 235, "direction" : "READWRITE"} , 
- 	{ "Name" : "head_ctx_ref_3", "interface" : "wire", "bitwidth" : 235, "direction" : "READWRITE"} , 
+ 	{ "Name" : "compute_op", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
+ 	{ "Name" : "head_ctx_ref_0", "interface" : "wire", "bitwidth" : 283, "direction" : "READWRITE"} , 
+ 	{ "Name" : "head_ctx_ref_1", "interface" : "wire", "bitwidth" : 283, "direction" : "READWRITE"} , 
+ 	{ "Name" : "head_ctx_ref_2", "interface" : "wire", "bitwidth" : 283, "direction" : "READWRITE"} , 
+ 	{ "Name" : "head_ctx_ref_3", "interface" : "wire", "bitwidth" : 283, "direction" : "READWRITE"} , 
  	{ "Name" : "stream_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "stream_start", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} , 
  	{ "Name" : "stream_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
@@ -147,19 +147,19 @@ set portList {
 	{ compute_start_i sc_in sc_lv 1 signal 8 } 
 	{ compute_start_o sc_out sc_lv 1 signal 8 } 
 	{ compute_start_o_ap_vld sc_out sc_logic 1 outvld 8 } 
-	{ compute_op sc_out sc_lv 8 signal 9 } 
+	{ compute_op sc_out sc_lv 32 signal 9 } 
 	{ compute_op_ap_vld sc_out sc_logic 1 outvld 9 } 
-	{ head_ctx_ref_0_i sc_in sc_lv 235 signal 10 } 
-	{ head_ctx_ref_0_o sc_out sc_lv 235 signal 10 } 
+	{ head_ctx_ref_0_i sc_in sc_lv 283 signal 10 } 
+	{ head_ctx_ref_0_o sc_out sc_lv 283 signal 10 } 
 	{ head_ctx_ref_0_o_ap_vld sc_out sc_logic 1 outvld 10 } 
-	{ head_ctx_ref_1_i sc_in sc_lv 235 signal 11 } 
-	{ head_ctx_ref_1_o sc_out sc_lv 235 signal 11 } 
+	{ head_ctx_ref_1_i sc_in sc_lv 283 signal 11 } 
+	{ head_ctx_ref_1_o sc_out sc_lv 283 signal 11 } 
 	{ head_ctx_ref_1_o_ap_vld sc_out sc_logic 1 outvld 11 } 
-	{ head_ctx_ref_2_i sc_in sc_lv 235 signal 12 } 
-	{ head_ctx_ref_2_o sc_out sc_lv 235 signal 12 } 
+	{ head_ctx_ref_2_i sc_in sc_lv 283 signal 12 } 
+	{ head_ctx_ref_2_o sc_out sc_lv 283 signal 12 } 
 	{ head_ctx_ref_2_o_ap_vld sc_out sc_logic 1 outvld 12 } 
-	{ head_ctx_ref_3_i sc_in sc_lv 235 signal 13 } 
-	{ head_ctx_ref_3_o sc_out sc_lv 235 signal 13 } 
+	{ head_ctx_ref_3_i sc_in sc_lv 283 signal 13 } 
+	{ head_ctx_ref_3_o sc_out sc_lv 283 signal 13 } 
 	{ head_ctx_ref_3_o_ap_vld sc_out sc_logic 1 outvld 13 } 
 	{ stream_ready sc_in sc_lv 1 signal 14 } 
 	{ stream_start sc_out sc_lv 1 signal 15 } 
@@ -246,19 +246,19 @@ set NewPortList {[
  	{ "name": "compute_start_i", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start", "role": "i" }} , 
  	{ "name": "compute_start_o", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start", "role": "o" }} , 
  	{ "name": "compute_start_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_start", "role": "o_ap_vld" }} , 
- 	{ "name": "compute_op", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "compute_op", "role": "default" }} , 
+ 	{ "name": "compute_op", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "compute_op", "role": "default" }} , 
  	{ "name": "compute_op_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_op", "role": "ap_vld" }} , 
- 	{ "name": "head_ctx_ref_0_i", "direction": "in", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_0", "role": "i" }} , 
- 	{ "name": "head_ctx_ref_0_o", "direction": "out", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_0", "role": "o" }} , 
+ 	{ "name": "head_ctx_ref_0_i", "direction": "in", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_0", "role": "i" }} , 
+ 	{ "name": "head_ctx_ref_0_o", "direction": "out", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_0", "role": "o" }} , 
  	{ "name": "head_ctx_ref_0_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_0", "role": "o_ap_vld" }} , 
- 	{ "name": "head_ctx_ref_1_i", "direction": "in", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_1", "role": "i" }} , 
- 	{ "name": "head_ctx_ref_1_o", "direction": "out", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_1", "role": "o" }} , 
+ 	{ "name": "head_ctx_ref_1_i", "direction": "in", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_1", "role": "i" }} , 
+ 	{ "name": "head_ctx_ref_1_o", "direction": "out", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_1", "role": "o" }} , 
  	{ "name": "head_ctx_ref_1_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_1", "role": "o_ap_vld" }} , 
- 	{ "name": "head_ctx_ref_2_i", "direction": "in", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_2", "role": "i" }} , 
- 	{ "name": "head_ctx_ref_2_o", "direction": "out", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_2", "role": "o" }} , 
+ 	{ "name": "head_ctx_ref_2_i", "direction": "in", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_2", "role": "i" }} , 
+ 	{ "name": "head_ctx_ref_2_o", "direction": "out", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_2", "role": "o" }} , 
  	{ "name": "head_ctx_ref_2_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_2", "role": "o_ap_vld" }} , 
- 	{ "name": "head_ctx_ref_3_i", "direction": "in", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_3", "role": "i" }} , 
- 	{ "name": "head_ctx_ref_3_o", "direction": "out", "datatype": "sc_lv", "bitwidth":235, "type": "signal", "bundle":{"name": "head_ctx_ref_3", "role": "o" }} , 
+ 	{ "name": "head_ctx_ref_3_i", "direction": "in", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_3", "role": "i" }} , 
+ 	{ "name": "head_ctx_ref_3_o", "direction": "out", "datatype": "sc_lv", "bitwidth":283, "type": "signal", "bundle":{"name": "head_ctx_ref_3", "role": "o" }} , 
  	{ "name": "head_ctx_ref_3_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_3", "role": "o_ap_vld" }} , 
  	{ "name": "stream_ready", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "stream_ready", "role": "default" }} , 
  	{ "name": "stream_start", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "stream_start", "role": "default" }} , 
@@ -551,38 +551,44 @@ set ArgLastReadFirstWriteLatency {
 	drive_group_head_phase {
 		p_read {Type I LastRead 0 FirstWrite -1}
 		p_read1 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_head_idx_0_val {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_head_idx_1_val {Type I LastRead 0 FirstWrite -1}
+		p_read2 {Type I LastRead 0 FirstWrite -1}
+		p_read3 {Type I LastRead 0 FirstWrite -1}
 		head_ctx_ref_phase_read {Type I LastRead 0 FirstWrite -1}
 		head_ctx_ref_phase_read_5 {Type I LastRead 0 FirstWrite -1}
-		p_read4 {Type I LastRead 0 FirstWrite -1}
+		p_read6 {Type I LastRead 0 FirstWrite -1}
+		p_read7 {Type I LastRead 0 FirstWrite -1}
+		p_read8 {Type I LastRead 0 FirstWrite -1}
+		p_read9 {Type I LastRead 0 FirstWrite -1}
+		p_read10 {Type I LastRead 0 FirstWrite -1}
+		p_read11 {Type I LastRead 0 FirstWrite -1}
+		p_read12 {Type I LastRead 0 FirstWrite -1}
 		p_read13 {Type I LastRead 0 FirstWrite -1}
 		p_read14 {Type I LastRead 0 FirstWrite -1}
 		p_read15 {Type I LastRead 0 FirstWrite -1}
-		p_read16 {Type I LastRead 0 FirstWrite -1}
-		p_read17 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_compute_op_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_compute_op_read_5 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_last_compute_op_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_last_compute_op_read_5 {Type I LastRead 0 FirstWrite -1}
 		head_ctx_ref_last_wl_addr_read {Type I LastRead 0 FirstWrite -1}
 		head_ctx_ref_last_wl_addr_read_5 {Type I LastRead 0 FirstWrite -1}
+		p_read18 {Type I LastRead 0 FirstWrite -1}
+		p_read19 {Type I LastRead 0 FirstWrite -1}
+		p_read20 {Type I LastRead 0 FirstWrite -1}
+		p_read21 {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_wl_addr_sel_read {Type I LastRead 0 FirstWrite -1}
+		head_ctx_ref_wl_addr_sel_read_5 {Type I LastRead 0 FirstWrite -1}
 		p_read24 {Type I LastRead 0 FirstWrite -1}
 		p_read25 {Type I LastRead 0 FirstWrite -1}
 		p_read26 {Type I LastRead 0 FirstWrite -1}
 		p_read27 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read_5 {Type I LastRead 0 FirstWrite -1}
+		p_read28 {Type I LastRead 0 FirstWrite -1}
+		p_read29 {Type I LastRead 0 FirstWrite -1}
 		p_read30 {Type I LastRead 0 FirstWrite -1}
 		p_read31 {Type I LastRead 0 FirstWrite -1}
 		p_read32 {Type I LastRead 0 FirstWrite -1}
 		p_read33 {Type I LastRead 0 FirstWrite -1}
-		p_read34 {Type I LastRead 0 FirstWrite -1}
-		p_read35 {Type I LastRead 0 FirstWrite -1}
 		p_read36 {Type I LastRead 0 FirstWrite -1}
 		p_read37 {Type I LastRead 0 FirstWrite -1}
 		p_read38 {Type I LastRead 0 FirstWrite -1}
 		p_read39 {Type I LastRead 0 FirstWrite -1}
+		p_read40 {Type I LastRead 0 FirstWrite -1}
+		p_read41 {Type I LastRead 0 FirstWrite -1}
 		p_read42 {Type I LastRead 0 FirstWrite -1}
 		p_read43 {Type I LastRead 0 FirstWrite -1}
 		p_read44 {Type I LastRead 0 FirstWrite -1}
@@ -631,12 +637,6 @@ set ArgLastReadFirstWriteLatency {
 		p_read87 {Type I LastRead 0 FirstWrite -1}
 		p_read88 {Type I LastRead 0 FirstWrite -1}
 		p_read89 {Type I LastRead 0 FirstWrite -1}
-		p_read90 {Type I LastRead 0 FirstWrite -1}
-		p_read91 {Type I LastRead 0 FirstWrite -1}
-		p_read92 {Type I LastRead 0 FirstWrite -1}
-		p_read93 {Type I LastRead 0 FirstWrite -1}
-		p_read94 {Type I LastRead 0 FirstWrite -1}
-		p_read95 {Type I LastRead 0 FirstWrite -1}
 		layer_idx {Type I LastRead 0 FirstWrite -1}
 		start_r {Type I LastRead 0 FirstWrite -1}
 		ctrl_mem_layer_stride {Type I LastRead 0 FirstWrite -1}
@@ -655,8 +655,8 @@ set ArgLastReadFirstWriteLatency {
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "2", "Max" : "4"}
-	, {"Name" : "Interval", "Min" : "3", "Max" : "5"}
+	{"Name" : "Latency", "Min" : "2", "Max" : "5"}
+	, {"Name" : "Interval", "Min" : "3", "Max" : "6"}
 ]}
 
 set PipelineEnableSignalInfo {[
@@ -672,11 +672,11 @@ set Spec2ImplPortList {
 	compute_ready { ap_none {  { compute_ready in_data 0 1 } } }
 	compute_done { ap_none {  { compute_done in_data 0 1 } } }
 	compute_start { ap_ovld {  { compute_start_i in_data 0 1 }  { compute_start_o out_data 1 1 }  { compute_start_o_ap_vld out_vld 1 1 } } }
-	compute_op { ap_vld {  { compute_op out_data 1 8 }  { compute_op_ap_vld out_vld 1 1 } } }
-	head_ctx_ref_0 { ap_ovld {  { head_ctx_ref_0_i in_data 0 235 }  { head_ctx_ref_0_o out_data 1 235 }  { head_ctx_ref_0_o_ap_vld out_vld 1 1 } } }
-	head_ctx_ref_1 { ap_ovld {  { head_ctx_ref_1_i in_data 0 235 }  { head_ctx_ref_1_o out_data 1 235 }  { head_ctx_ref_1_o_ap_vld out_vld 1 1 } } }
-	head_ctx_ref_2 { ap_ovld {  { head_ctx_ref_2_i in_data 0 235 }  { head_ctx_ref_2_o out_data 1 235 }  { head_ctx_ref_2_o_ap_vld out_vld 1 1 } } }
-	head_ctx_ref_3 { ap_ovld {  { head_ctx_ref_3_i in_data 0 235 }  { head_ctx_ref_3_o out_data 1 235 }  { head_ctx_ref_3_o_ap_vld out_vld 1 1 } } }
+	compute_op { ap_vld {  { compute_op out_data 1 32 }  { compute_op_ap_vld out_vld 1 1 } } }
+	head_ctx_ref_0 { ap_ovld {  { head_ctx_ref_0_i in_data 0 283 }  { head_ctx_ref_0_o out_data 1 283 }  { head_ctx_ref_0_o_ap_vld out_vld 1 1 } } }
+	head_ctx_ref_1 { ap_ovld {  { head_ctx_ref_1_i in_data 0 283 }  { head_ctx_ref_1_o out_data 1 283 }  { head_ctx_ref_1_o_ap_vld out_vld 1 1 } } }
+	head_ctx_ref_2 { ap_ovld {  { head_ctx_ref_2_i in_data 0 283 }  { head_ctx_ref_2_o out_data 1 283 }  { head_ctx_ref_2_o_ap_vld out_vld 1 1 } } }
+	head_ctx_ref_3 { ap_ovld {  { head_ctx_ref_3_i in_data 0 283 }  { head_ctx_ref_3_o out_data 1 283 }  { head_ctx_ref_3_o_ap_vld out_vld 1 1 } } }
 	stream_ready { ap_none {  { stream_ready in_data 0 1 } } }
 	stream_start { ap_vld {  { stream_start out_data 1 1 }  { stream_start_ap_vld out_vld 1 1 } } }
 	stream_done { ap_none {  { stream_done in_data 0 1 } } }

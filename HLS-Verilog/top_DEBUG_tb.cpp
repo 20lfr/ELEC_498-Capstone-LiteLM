@@ -82,6 +82,10 @@ static const char *op_name(ComputeOp op) {
     }
 }
 
+static inline ComputeOp decode_op(uint32_t packed_op) {
+    return static_cast<ComputeOp>(packed_op & 0xFFu);
+}
+
 static const char *dma_name(DmaSel sel) {
     switch (sel) {
     case DMASEL_NONE:   return "-";
@@ -189,7 +193,7 @@ int main() {
     bool compute_ready   = true;
     bool compute_done    = false;
     bool compute_start   = false;
-    ComputeOp  compute_op      = ComputeOp::CMP_NONE;
+    uint32_t  compute_op      = 0;
 
     bool head_lane_busy[HEADS_PARALLEL] = {false};
     int  head_lane_timer[HEADS_PARALLEL] = {0};
@@ -275,8 +279,8 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-10s %-8s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} err=%s dma_req=%s dma_done=%s dma_addr=%s\n",
-                "Cycle", "Start", "Reset",
+    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-10s %-8s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} err=%s dma_req=%s dma_done=%s dma_addr=%s\n",
+                "Cycle", "Start", "Reset", "CompOp", "C_St", "C_Dn",
                 "CtrlAddr",
                 "CtrlDin", "CtrlDout", "Rd", "Wr", "CE", "RstN",
                 "DbgState", "MemReq", "DMA_Addr", "DbgDone", "Seen", "IRQ", "IRQFlag", "IRQData",
@@ -593,10 +597,13 @@ int main() {
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-8s %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%d %d %d %d %d %d} err=%d dma_req=%d dma_done=%d dma_addr=0x%08X",
+        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-8s %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%d %d %d %d %d %d} err=%d dma_req=%d dma_done=%d dma_addr=0x%08X",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
+                    compute_op,
+                    dash_or(compute_start),
+                    dash_or(compute_done),
                     static_cast<unsigned>(ctrl_addr),
                     ctrl_data_in,
                     ctrl_data_out,
@@ -626,10 +633,13 @@ int main() {
                     dma_done ? 1 : 0,
                     dma_address);
         for (int i = 0; i < NUM_HEADS; ++i) {
-            char buf[96];
-            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s 0x%08X %-2s",
+            char buf[128];
+            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s 0x%08X %-2s 0x%08X %-2s",
                           i,
                           phase_name(head_ctx_ref[i].phase),
+                          dash_or(head_ctx_ref[i].compute_start),
+                          dash_or(head_ctx_ref[i].compute_done),
+                          head_ctx_ref[i].compute_op,
                           dash_or(head_ctx_ref[i].memory_request),
                           head_ctx_ref[i].dma_address,
                           dash_or(head_ctx_ref[i].dma_done));
@@ -654,7 +664,7 @@ int main() {
                 head_lane_busy[lane] = true;
                 head_lane_timer[lane] = COMP_LAT - 1;
                 head_lane_active_idx[lane] = i;
-                ComputeOp launched_op = head_ctx_ref[i].compute_op;
+                ComputeOp launched_op = decode_op(head_ctx_ref[i].compute_op);
                 if (launched_op == CMP_ATT_SCORES) seen_attn = true;
             }
             if (head_ctx_ref[i].memory_request && !head_dma_busy[lane]) {
@@ -668,7 +678,7 @@ int main() {
         if (!comp_busy && compute_start) {
             comp_busy  = true;
             comp_timer = COMP_LAT - 1;
-            if (compute_op == CMP_CONCAT) seen_concat = true;
+            if (decode_op(compute_op) == CMP_CONCAT) seen_concat = true;
         }
         // Fulfill DMA requests: when memory_request is asserted, capture address and return dma_done after a fixed latency.
         if (memory_request && !dma_busy) {

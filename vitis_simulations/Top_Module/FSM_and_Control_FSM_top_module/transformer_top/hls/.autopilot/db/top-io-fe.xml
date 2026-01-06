@@ -46,22 +46,22 @@
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>
-      <arg id="9" access_type="w" src_name="compute_op" src_type="ComputeOp&amp;" src_isptr="1" src_bitwidth="8" src_size_or_depth="1">
-        <hw hw_usage="data" hw_interface="Register" hw_name="compute_op" hw_bitwidth="8" hw_size_or_depth="1" hw_kernel_support="false">
+      <arg id="9" access_type="w" src_name="compute_op" src_type="unsigned int&amp;" src_isptr="1" src_bitwidth="32" src_size_or_depth="1">
+        <hw hw_usage="data" hw_interface="Register" hw_name="compute_op" hw_bitwidth="32" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>
-      <arg id="10" access_type="rw" src_name="head_ctx_ref" src_type="HeadCtx&amp;" src_isptr="1" src_bitwidth="544" src_size_or_depth="4">
-        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_0" hw_bitwidth="235" hw_size_or_depth="1" hw_kernel_support="false">
+      <arg id="10" access_type="rw" src_name="head_ctx_ref" src_type="HeadCtx&amp;" src_isptr="1" src_bitwidth="576" src_size_or_depth="4">
+        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_0" hw_bitwidth="283" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
-        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_1" hw_bitwidth="235" hw_size_or_depth="1" hw_kernel_support="false">
+        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_1" hw_bitwidth="283" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
-        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_2" hw_bitwidth="235" hw_size_or_depth="1" hw_kernel_support="false">
+        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_2" hw_bitwidth="283" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
-        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_3" hw_bitwidth="235" hw_size_or_depth="1" hw_kernel_support="false">
+        <hw hw_usage="data" hw_interface="Register" hw_name="head_ctx_ref_3" hw_bitwidth="283" hw_size_or_depth="1" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>

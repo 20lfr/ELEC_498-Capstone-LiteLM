@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 3,
-    "calls": "2 5 9",
+    "calls": "15 8 2",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
@@ -17,42 +17,78 @@
       "L": 5,
       "T": 19
     },
-    "total_instructions": 3384
+    "total_instructions": 4293
   },
   "1": {
-    "basicblocks": 35,
-    "calls": "",
+    "basicblocks": 190,
+    "calls": "13 16 5 11 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5",
     "control_depth": 0,
-    "def_use_depth": 3,
-    "file": "ControlMemInterface.cpp",
-    "fileloc": 60,
-    "instructions": 104,
+    "def_use_depth": 6,
+    "file": "head_helpers.cpp",
+    "fileloc": 78,
+    "instructions": 802,
     "loads": {
-      "L": 1
+      "L": 125
     },
     "memory_accesses": 0,
-    "name": "ctrl_write",
+    "name": "run_single_head",
     "stores": {
-      "L": 33
+      "L": 146
     },
-    "total_instructions": 104
+    "total_instructions": 1377
   },
   "10": {
+    "basicblocks": 3,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "ControlMemInterface.cpp",
+    "fileloc": 5,
+    "instructions": 7,
+    "memory_accesses": 0,
+    "name": "is_valid_address",
+    "total_instructions": 7
+  },
+  "11": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 1,
     "file": "head_helpers.cpp",
-    "fileloc": 6,
-    "instructions": 91,
+    "fileloc": 15,
+    "instructions": 3,
+    "memory_accesses": 0,
+    "name": "unpack_compute_op",
+    "total_instructions": 3
+  },
+  "12": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 27,
+    "instructions": 12,
+    "memory_accesses": 0,
+    "name": "pack_compute_op",
+    "total_instructions": 12
+  },
+  "13": {
+    "basicblocks": 1,
+    "calls": "5 5",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "head_helpers.cpp",
+    "fileloc": 20,
+    "instructions": 93,
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
       "L": 45
     },
-    "total_instructions": 91
+    "total_instructions": 117
   },
-  "11": {
+  "14": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -67,7 +103,25 @@
     },
     "total_instructions": 67
   },
-  "12": {
+  "15": {
+    "basicblocks": 15,
+    "calls": "14 10 4 6",
+    "control_depth": 0,
+    "def_use_depth": 3,
+    "file": "ControlMemInterface.cpp",
+    "fileloc": 148,
+    "instructions": 29,
+    "loads": {
+      "L": 2
+    },
+    "memory_accesses": 0,
+    "name": "ControlMemInterface",
+    "stores": {
+      "L": 4
+    },
+    "total_instructions": 310
+  },
+  "16": {
     "basicblocks": 32,
     "calls": "",
     "control_depth": 0,
@@ -85,14 +139,14 @@
     },
     "total_instructions": 167
   },
-  "13": {
+  "17": {
     "basicblocks": 84,
-    "calls": "",
+    "calls": "12 12 12 12 12 12 12 12 12 12",
     "control_depth": 0,
-    "def_use_depth": 2,
+    "def_use_depth": 3,
     "file": "Scheduler_FSM.cpp",
-    "fileloc": 27,
-    "instructions": 208,
+    "fileloc": 36,
+    "instructions": 218,
     "loads": {
       "L": 42
     },
@@ -101,45 +155,75 @@
     "stores": {
       "L": 70
     },
-    "total_instructions": 208
-  },
-  "14": {
-    "basicblocks": 190,
-    "calls": "10 12",
-    "control_depth": 0,
-    "def_use_depth": 6,
-    "file": "head_helpers.cpp",
-    "fileloc": 64,
-    "instructions": 749,
-    "loads": {
-      "L": 111
-    },
-    "memory_accesses": 0,
-    "name": "run_single_head",
-    "stores": {
-      "L": 146
-    },
-    "total_instructions": 1007
+    "total_instructions": 338
   },
   "2": {
-    "basicblocks": 15,
-    "calls": "11 8 1 3",
+    "basicblocks": 8,
+    "calls": "7",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "IRQ_Wizard.cpp",
+    "fileloc": 15,
+    "instructions": 21,
+    "loads": {
+      "L": 3
+    },
+    "memory_accesses": 0,
+    "name": "irq_wizard",
+    "stores": {
+      "L": 3
+    },
+    "total_instructions": 29
+  },
+  "3": {
+    "basicblocks": 13,
+    "calls": "1",
+    "control_depth": 3,
+    "def_use_depth": 4,
+    "file": "head_helpers.cpp",
+    "fileloc": 367,
+    "instructions": 37,
+    "loads": {
+      "L": 4
+    },
+    "memory_accesses": 7,
+    "name": "drive_group_head_phase",
+    "stores": {
+      "L": 2
+    },
+    "total_instructions": 1414
+  },
+  "4": {
+    "basicblocks": 35,
+    "calls": "",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "ControlMemInterface.cpp",
-    "fileloc": 148,
-    "instructions": 29,
+    "fileloc": 60,
+    "instructions": 104,
     "loads": {
-      "L": 2
+      "L": 1
     },
     "memory_accesses": 0,
-    "name": "ControlMemInterface",
+    "name": "ctrl_write",
     "stores": {
-      "L": 4
+      "L": 33
     },
-    "total_instructions": 310
+    "total_instructions": 104
   },
-  "3": {
+  "5": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "head_helpers.cpp",
+    "fileloc": 6,
+    "instructions": 12,
+    "memory_accesses": 0,
+    "name": "pack_compute_op",
+    "total_instructions": 12
+  },
+  "6": {
     "basicblocks": 36,
     "calls": "",
     "control_depth": 0,
@@ -153,59 +237,6 @@
     "memory_accesses": 0,
     "name": "ctrl_read",
     "total_instructions": 103
-  },
-  "4": {
-    "basicblocks": 1,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "top_params.hpp",
-    "fileloc": 266,
-    "instructions": 91,
-    "memory_accesses": 0,
-    "name": "HeadCtx",
-    "stores": {
-      "L": 45
-    },
-    "total_instructions": 91
-  },
-  "5": {
-    "basicblocks": 304,
-    "calls": "12 10 13 13 4 10 6 10",
-    "control_depth": 2,
-    "def_use_depth": 8,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 174,
-    "instructions": 990,
-    "loads": {
-      "G": 148,
-      "L": 9
-    },
-    "memory_accesses": 11,
-    "name": "scheduler_hls",
-    "stores": {
-      "G": 300,
-      "L": 60
-    },
-    "total_instructions": 2981
-  },
-  "6": {
-    "basicblocks": 13,
-    "calls": "14",
-    "control_depth": 3,
-    "def_use_depth": 4,
-    "file": "head_helpers.cpp",
-    "fileloc": 352,
-    "instructions": 37,
-    "loads": {
-      "L": 4
-    },
-    "memory_accesses": 7,
-    "name": "drive_group_head_phase",
-    "stores": {
-      "L": 2
-    },
-    "total_instructions": 1044
   },
   "7": {
     "basicblocks": 1,
@@ -223,33 +254,38 @@
     "total_instructions": 8
   },
   "8": {
-    "basicblocks": 3,
+    "basicblocks": 304,
+    "calls": "16 13 12 12 12 17 12 12 12 12 12 12 17 12 12 12 12 9 13 3 13 12",
+    "control_depth": 2,
+    "def_use_depth": 8,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 184,
+    "instructions": 1023,
+    "loads": {
+      "G": 167,
+      "L": 9
+    },
+    "memory_accesses": 11,
+    "name": "scheduler_hls",
+    "stores": {
+      "G": 300,
+      "L": 60
+    },
+    "total_instructions": 3890
+  },
+  "9": {
+    "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 1,
-    "file": "ControlMemInterface.cpp",
-    "fileloc": 5,
-    "instructions": 7,
+    "file": "top_params.hpp",
+    "fileloc": 266,
+    "instructions": 91,
     "memory_accesses": 0,
-    "name": "is_valid_address",
-    "total_instructions": 7
-  },
-  "9": {
-    "basicblocks": 8,
-    "calls": "7",
-    "control_depth": 0,
-    "def_use_depth": 4,
-    "file": "IRQ_Wizard.cpp",
-    "fileloc": 15,
-    "instructions": 21,
-    "loads": {
-      "L": 3
-    },
-    "memory_accesses": 0,
-    "name": "irq_wizard",
+    "name": "HeadCtx",
     "stores": {
-      "L": 3
+      "L": 45
     },
-    "total_instructions": 29
+    "total_instructions": 91
   }
 }

@@ -361,7 +361,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>8</bitwidth>
+					<bitwidth>32</bitwidth>
 				</Value>
 				<direction>1</direction>
 				<if_type>0</if_type>
@@ -397,7 +397,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<direction>2</direction>
 				<if_type>0</if_type>
@@ -433,7 +433,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<direction>2</direction>
 				<if_type>0</if_type>
@@ -469,7 +469,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<direction>2</direction>
 				<if_type>0</if_type>
@@ -505,7 +505,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<direction>2</direction>
 				<if_type>0</if_type>
@@ -32211,7 +32211,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>2</count>
@@ -32268,7 +32268,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>2</count>
@@ -32325,7 +32325,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>2</count>
@@ -32382,7 +32382,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>2</count>
@@ -32439,7 +32439,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>1084</bitwidth>
+					<bitwidth>1276</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>86</count>
@@ -33252,7 +33252,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>1</count>
@@ -33367,7 +33367,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>1</count>
@@ -33482,7 +33482,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>1</count>
@@ -33597,7 +33597,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>235</bitwidth>
+					<bitwidth>283</bitwidth>
 				</Value>
 				<oprand_edges>
 					<count>1</count>
@@ -43368,7 +43368,7 @@
 						<coreId>4294967295</coreId>
 						<rtlModuleName></rtlModuleName>
 					</Obj>
-					<bitwidth>1084</bitwidth>
+					<bitwidth>1276</bitwidth>
 				</Value>
 				<const_type>6</const_type>
 				<content>&lt;constant:scheduler_hls&gt;</content>
@@ -144823,7 +144823,7 @@
 			<mMinTripCount>-1</mMinTripCount>
 			<mMaxTripCount>-1</mMaxTripCount>
 			<mMinLatency>2</mMinLatency>
-			<mMaxLatency>4</mMaxLatency>
+			<mMaxLatency>5</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>

@@ -1,4 +1,4 @@
-Running: xsim.dir/transformer_top_tb_behav/xsimk -simmode gui -wdb transformer_top_tb_behav.wdb -simrunnum 0 -socket 49285
+Running: xsim.dir/transformer_top_tb_behav/xsimk -simmode gui -wdb transformer_top_tb_behav.wdb -simrunnum 0 -socket 38511
 Design successfully loaded
-Design Loading Memory Usage: 226688 KB (Peak: 226688 KB)
-Design Loading CPU Usage: 850 ms
+Design Loading Memory Usage: 206836 KB (Peak: 206836 KB)
+Design Loading CPU Usage: 860 ms

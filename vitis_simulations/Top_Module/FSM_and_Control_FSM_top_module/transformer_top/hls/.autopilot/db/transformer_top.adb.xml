@@ -563,9 +563,9 @@ entry:35 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i1 %co
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="173" bw="0" op_0_bw="0" op_1_bw="8">
+<Node id="173" bw="0" op_0_bw="0" op_1_bw="32">
 <![CDATA[
-entry:36 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i8 %compute_op
+entry:36 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i32 %compute_op
 
 ]]></Node>
 <StgValue><ssdm name="specbitsmap_ln0"/></StgValue>
@@ -578,9 +578,9 @@ entry:36 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i8 %compute_
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="174" bw="0" op_0_bw="0" op_1_bw="8" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
+<Node id="174" bw="0" op_0_bw="0" op_1_bw="32" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
 <![CDATA[
-entry:37 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %compute_op, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
+entry:37 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i32 %compute_op, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
 
 ]]></Node>
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
@@ -593,9 +593,9 @@ entry:37 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %co
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="175" bw="0" op_0_bw="0" op_1_bw="235">
+<Node id="175" bw="0" op_0_bw="0" op_1_bw="283">
 <![CDATA[
-entry:38 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_ctx_ref_0
+entry:38 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i283 %head_ctx_ref_0
 
 ]]></Node>
 <StgValue><ssdm name="specbitsmap_ln0"/></StgValue>
@@ -608,9 +608,9 @@ entry:38 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_c
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="176" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
+<Node id="176" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
 <![CDATA[
-entry:39 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i235 %head_ctx_ref_0, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
+entry:39 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i283 %head_ctx_ref_0, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
 
 ]]></Node>
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
@@ -623,9 +623,9 @@ entry:39 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i235 %
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="177" bw="0" op_0_bw="0" op_1_bw="235">
+<Node id="177" bw="0" op_0_bw="0" op_1_bw="283">
 <![CDATA[
-entry:40 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_ctx_ref_1
+entry:40 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i283 %head_ctx_ref_1
 
 ]]></Node>
 <StgValue><ssdm name="specbitsmap_ln0"/></StgValue>
@@ -638,9 +638,9 @@ entry:40 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_c
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="178" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
+<Node id="178" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
 <![CDATA[
-entry:41 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i235 %head_ctx_ref_1, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
+entry:41 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i283 %head_ctx_ref_1, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
 
 ]]></Node>
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
@@ -653,9 +653,9 @@ entry:41 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i235 %
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="179" bw="0" op_0_bw="0" op_1_bw="235">
+<Node id="179" bw="0" op_0_bw="0" op_1_bw="283">
 <![CDATA[
-entry:42 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_ctx_ref_2
+entry:42 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i283 %head_ctx_ref_2
 
 ]]></Node>
 <StgValue><ssdm name="specbitsmap_ln0"/></StgValue>
@@ -668,9 +668,9 @@ entry:42 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_c
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="180" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
+<Node id="180" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
 <![CDATA[
-entry:43 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i235 %head_ctx_ref_2, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
+entry:43 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i283 %head_ctx_ref_2, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
 
 ]]></Node>
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
@@ -683,9 +683,9 @@ entry:43 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i235 %
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="181" bw="0" op_0_bw="0" op_1_bw="235">
+<Node id="181" bw="0" op_0_bw="0" op_1_bw="283">
 <![CDATA[
-entry:44 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_ctx_ref_3
+entry:44 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i283 %head_ctx_ref_3
 
 ]]></Node>
 <StgValue><ssdm name="specbitsmap_ln0"/></StgValue>
@@ -698,9 +698,9 @@ entry:44 %specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i235 %head_c
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="182" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
+<Node id="182" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
 <![CDATA[
-entry:45 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i235 %head_ctx_ref_3, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
+entry:45 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i283 %head_ctx_ref_3, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0
 
 ]]></Node>
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
@@ -5046,9 +5046,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:89 %compute_st
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="590" bw="235" op_0_bw="235" op_1_bw="235">
+<Node id="590" bw="283" op_0_bw="283" op_1_bw="283">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:90 %head_ctx_ref_0_read = read i235 @_ssdm_op_Read.ap_auto.i235P0A, i235 %head_ctx_ref_0
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:90 %head_ctx_ref_0_read = read i283 @_ssdm_op_Read.ap_auto.i283P0A, i283 %head_ctx_ref_0
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_0_read"/></StgValue>
@@ -5061,9 +5061,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:90 %head_ctx_r
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="591" bw="235" op_0_bw="235" op_1_bw="235">
+<Node id="591" bw="283" op_0_bw="283" op_1_bw="283">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:91 %head_ctx_ref_1_read = read i235 @_ssdm_op_Read.ap_auto.i235P0A, i235 %head_ctx_ref_1
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:91 %head_ctx_ref_1_read = read i283 @_ssdm_op_Read.ap_auto.i283P0A, i283 %head_ctx_ref_1
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_1_read"/></StgValue>
@@ -5076,9 +5076,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:91 %head_ctx_r
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="592" bw="235" op_0_bw="235" op_1_bw="235">
+<Node id="592" bw="283" op_0_bw="283" op_1_bw="283">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:92 %head_ctx_ref_2_read = read i235 @_ssdm_op_Read.ap_auto.i235P0A, i235 %head_ctx_ref_2
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:92 %head_ctx_ref_2_read = read i283 @_ssdm_op_Read.ap_auto.i283P0A, i283 %head_ctx_ref_2
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_2_read"/></StgValue>
@@ -5091,9 +5091,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:92 %head_ctx_r
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="593" bw="235" op_0_bw="235" op_1_bw="235">
+<Node id="593" bw="283" op_0_bw="283" op_1_bw="283">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:93 %head_ctx_ref_3_read = read i235 @_ssdm_op_Read.ap_auto.i235P0A, i235 %head_ctx_ref_3
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:93 %head_ctx_ref_3_read = read i283 @_ssdm_op_Read.ap_auto.i283P0A, i283 %head_ctx_ref_3
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_3_read"/></StgValue>
@@ -5106,9 +5106,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:93 %head_ctx_r
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="594" bw="1084" op_0_bw="1084" op_1_bw="2" op_2_bw="32" op_3_bw="32" op_4_bw="32" op_5_bw="32" op_6_bw="32" op_7_bw="32" op_8_bw="32" op_9_bw="32" op_10_bw="32" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="32" op_16_bw="32" op_17_bw="32" op_18_bw="32" op_19_bw="1" op_20_bw="1" op_21_bw="32" op_22_bw="1" op_23_bw="1" op_24_bw="1" op_25_bw="235" op_26_bw="235" op_27_bw="235" op_28_bw="235" op_29_bw="1" op_30_bw="8" op_31_bw="1" op_32_bw="1" op_33_bw="1" op_34_bw="4" op_35_bw="32" op_36_bw="2" op_37_bw="32" op_38_bw="1" op_39_bw="5" op_40_bw="32" op_41_bw="1" op_42_bw="32" op_43_bw="1" op_44_bw="1" op_45_bw="1" op_46_bw="1" op_47_bw="1" op_48_bw="1" op_49_bw="1" op_50_bw="1" op_51_bw="1" op_52_bw="1" op_53_bw="1" op_54_bw="1" op_55_bw="1" op_56_bw="1" op_57_bw="1" op_58_bw="1" op_59_bw="1" op_60_bw="1" op_61_bw="1" op_62_bw="1" op_63_bw="4" op_64_bw="1" op_65_bw="1" op_66_bw="1" op_67_bw="2" op_68_bw="1" op_69_bw="1" op_70_bw="1" op_71_bw="1" op_72_bw="1" op_73_bw="4" op_74_bw="1" op_75_bw="1" op_76_bw="1" op_77_bw="32" op_78_bw="1" op_79_bw="1" op_80_bw="32" op_81_bw="1" op_82_bw="1" op_83_bw="32" op_84_bw="1" op_85_bw="1">
+<Node id="594" bw="1276" op_0_bw="1276" op_1_bw="2" op_2_bw="32" op_3_bw="32" op_4_bw="32" op_5_bw="32" op_6_bw="32" op_7_bw="32" op_8_bw="32" op_9_bw="32" op_10_bw="32" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="32" op_16_bw="32" op_17_bw="32" op_18_bw="32" op_19_bw="1" op_20_bw="1" op_21_bw="32" op_22_bw="1" op_23_bw="1" op_24_bw="1" op_25_bw="283" op_26_bw="283" op_27_bw="283" op_28_bw="283" op_29_bw="1" op_30_bw="32" op_31_bw="1" op_32_bw="1" op_33_bw="1" op_34_bw="4" op_35_bw="32" op_36_bw="2" op_37_bw="32" op_38_bw="1" op_39_bw="5" op_40_bw="32" op_41_bw="1" op_42_bw="32" op_43_bw="1" op_44_bw="1" op_45_bw="1" op_46_bw="1" op_47_bw="1" op_48_bw="1" op_49_bw="1" op_50_bw="1" op_51_bw="1" op_52_bw="1" op_53_bw="1" op_54_bw="1" op_55_bw="1" op_56_bw="1" op_57_bw="1" op_58_bw="1" op_59_bw="1" op_60_bw="1" op_61_bw="1" op_62_bw="1" op_63_bw="4" op_64_bw="1" op_65_bw="1" op_66_bw="1" op_67_bw="2" op_68_bw="1" op_69_bw="1" op_70_bw="1" op_71_bw="1" op_72_bw="1" op_73_bw="4" op_74_bw="1" op_75_bw="1" op_76_bw="1" op_77_bw="32" op_78_bw="1" op_79_bw="1" op_80_bw="32" op_81_bw="1" op_82_bw="1" op_83_bw="32" op_84_bw="1" op_85_bw="1">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:94 %call_ret = call i1084 @scheduler_hls, i2 %p_0, i32 %ctrl_mem_layer_stride_loc_1, i32 %p_9, i32 %p_10, i32 %p_11, i32 %ctrl_mem_k_cache_stride_loc_1, i32 %ctrl_mem_v_cache_stride_loc_1, i32 %p_14, i32 %p_15, i32 %p_16, i32 %p_17, i32 %p_18, i32 %p_19, i32 %p_20, i32 %p_21, i32 %p_22, i32 %ctrl_mem_k_cache_addr_loc_1, i32 %ctrl_mem_v_cache_addr_loc_1, i1 %axis_in_valid_read, i1 %axis_in_last_read, i32 %dma_address, i1 %dma_done_read, i1 %compute_ready_read, i1 %compute_done_read, i235 %head_ctx_ref_0_read, i235 %head_ctx_ref_1_read, i235 %head_ctx_ref_2_read, i235 %head_ctx_ref_3_read, i1 %compute_start_read, i8 %compute_op, i1 %stream_ready_read, i1 %stream_done_read, i1 %wl_start, i4 %wl_addr_sel, i32 %wl_layer, i2 %wl_head, i32 %wl_tile, i1 %wl_ready, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i4 %ln0_phase, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i4 %ln1_phase, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:94 %call_ret = call i1276 @scheduler_hls, i2 %p_0, i32 %ctrl_mem_layer_stride_loc_1, i32 %p_9, i32 %p_10, i32 %p_11, i32 %ctrl_mem_k_cache_stride_loc_1, i32 %ctrl_mem_v_cache_stride_loc_1, i32 %p_14, i32 %p_15, i32 %p_16, i32 %p_17, i32 %p_18, i32 %p_19, i32 %p_20, i32 %p_21, i32 %p_22, i32 %ctrl_mem_k_cache_addr_loc_1, i32 %ctrl_mem_v_cache_addr_loc_1, i1 %axis_in_valid_read, i1 %axis_in_last_read, i32 %dma_address, i1 %dma_done_read, i1 %compute_ready_read, i1 %compute_done_read, i283 %head_ctx_ref_0_read, i283 %head_ctx_ref_1_read, i283 %head_ctx_ref_2_read, i283 %head_ctx_ref_3_read, i1 %compute_start_read, i32 %compute_op, i1 %stream_ready_read, i1 %stream_done_read, i1 %wl_start, i4 %wl_addr_sel, i32 %wl_layer, i2 %wl_head, i32 %wl_tile, i1 %wl_ready, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i4 %ln0_phase, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i4 %ln1_phase, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy
 
 ]]></Node>
 <StgValue><ssdm name="call_ret"/></StgValue>
@@ -6189,9 +6189,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:88 %trunc_ln14
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="594" bw="1084" op_0_bw="1084" op_1_bw="2" op_2_bw="32" op_3_bw="32" op_4_bw="32" op_5_bw="32" op_6_bw="32" op_7_bw="32" op_8_bw="32" op_9_bw="32" op_10_bw="32" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="32" op_16_bw="32" op_17_bw="32" op_18_bw="32" op_19_bw="1" op_20_bw="1" op_21_bw="32" op_22_bw="1" op_23_bw="1" op_24_bw="1" op_25_bw="235" op_26_bw="235" op_27_bw="235" op_28_bw="235" op_29_bw="1" op_30_bw="8" op_31_bw="1" op_32_bw="1" op_33_bw="1" op_34_bw="4" op_35_bw="32" op_36_bw="2" op_37_bw="32" op_38_bw="1" op_39_bw="5" op_40_bw="32" op_41_bw="1" op_42_bw="32" op_43_bw="1" op_44_bw="1" op_45_bw="1" op_46_bw="1" op_47_bw="1" op_48_bw="1" op_49_bw="1" op_50_bw="1" op_51_bw="1" op_52_bw="1" op_53_bw="1" op_54_bw="1" op_55_bw="1" op_56_bw="1" op_57_bw="1" op_58_bw="1" op_59_bw="1" op_60_bw="1" op_61_bw="1" op_62_bw="1" op_63_bw="4" op_64_bw="1" op_65_bw="1" op_66_bw="1" op_67_bw="2" op_68_bw="1" op_69_bw="1" op_70_bw="1" op_71_bw="1" op_72_bw="1" op_73_bw="4" op_74_bw="1" op_75_bw="1" op_76_bw="1" op_77_bw="32" op_78_bw="1" op_79_bw="1" op_80_bw="32" op_81_bw="1" op_82_bw="1" op_83_bw="32" op_84_bw="1" op_85_bw="1">
+<Node id="594" bw="1276" op_0_bw="1276" op_1_bw="2" op_2_bw="32" op_3_bw="32" op_4_bw="32" op_5_bw="32" op_6_bw="32" op_7_bw="32" op_8_bw="32" op_9_bw="32" op_10_bw="32" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="32" op_16_bw="32" op_17_bw="32" op_18_bw="32" op_19_bw="1" op_20_bw="1" op_21_bw="32" op_22_bw="1" op_23_bw="1" op_24_bw="1" op_25_bw="283" op_26_bw="283" op_27_bw="283" op_28_bw="283" op_29_bw="1" op_30_bw="32" op_31_bw="1" op_32_bw="1" op_33_bw="1" op_34_bw="4" op_35_bw="32" op_36_bw="2" op_37_bw="32" op_38_bw="1" op_39_bw="5" op_40_bw="32" op_41_bw="1" op_42_bw="32" op_43_bw="1" op_44_bw="1" op_45_bw="1" op_46_bw="1" op_47_bw="1" op_48_bw="1" op_49_bw="1" op_50_bw="1" op_51_bw="1" op_52_bw="1" op_53_bw="1" op_54_bw="1" op_55_bw="1" op_56_bw="1" op_57_bw="1" op_58_bw="1" op_59_bw="1" op_60_bw="1" op_61_bw="1" op_62_bw="1" op_63_bw="4" op_64_bw="1" op_65_bw="1" op_66_bw="1" op_67_bw="2" op_68_bw="1" op_69_bw="1" op_70_bw="1" op_71_bw="1" op_72_bw="1" op_73_bw="4" op_74_bw="1" op_75_bw="1" op_76_bw="1" op_77_bw="32" op_78_bw="1" op_79_bw="1" op_80_bw="32" op_81_bw="1" op_82_bw="1" op_83_bw="32" op_84_bw="1" op_85_bw="1">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:94 %call_ret = call i1084 @scheduler_hls, i2 %p_0, i32 %ctrl_mem_layer_stride_loc_1, i32 %p_9, i32 %p_10, i32 %p_11, i32 %ctrl_mem_k_cache_stride_loc_1, i32 %ctrl_mem_v_cache_stride_loc_1, i32 %p_14, i32 %p_15, i32 %p_16, i32 %p_17, i32 %p_18, i32 %p_19, i32 %p_20, i32 %p_21, i32 %p_22, i32 %ctrl_mem_k_cache_addr_loc_1, i32 %ctrl_mem_v_cache_addr_loc_1, i1 %axis_in_valid_read, i1 %axis_in_last_read, i32 %dma_address, i1 %dma_done_read, i1 %compute_ready_read, i1 %compute_done_read, i235 %head_ctx_ref_0_read, i235 %head_ctx_ref_1_read, i235 %head_ctx_ref_2_read, i235 %head_ctx_ref_3_read, i1 %compute_start_read, i8 %compute_op, i1 %stream_ready_read, i1 %stream_done_read, i1 %wl_start, i4 %wl_addr_sel, i32 %wl_layer, i2 %wl_head, i32 %wl_tile, i1 %wl_ready, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i4 %ln0_phase, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i4 %ln1_phase, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:94 %call_ret = call i1276 @scheduler_hls, i2 %p_0, i32 %ctrl_mem_layer_stride_loc_1, i32 %p_9, i32 %p_10, i32 %p_11, i32 %ctrl_mem_k_cache_stride_loc_1, i32 %ctrl_mem_v_cache_stride_loc_1, i32 %p_14, i32 %p_15, i32 %p_16, i32 %p_17, i32 %p_18, i32 %p_19, i32 %p_20, i32 %p_21, i32 %p_22, i32 %ctrl_mem_k_cache_addr_loc_1, i32 %ctrl_mem_v_cache_addr_loc_1, i1 %axis_in_valid_read, i1 %axis_in_last_read, i32 %dma_address, i1 %dma_done_read, i1 %compute_ready_read, i1 %compute_done_read, i283 %head_ctx_ref_0_read, i283 %head_ctx_ref_1_read, i283 %head_ctx_ref_2_read, i283 %head_ctx_ref_3_read, i1 %compute_start_read, i32 %compute_op, i1 %stream_ready_read, i1 %stream_done_read, i1 %wl_start, i4 %wl_addr_sel, i32 %wl_layer, i2 %wl_head, i32 %wl_tile, i1 %wl_ready, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i4 %ln0_phase, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i4 %ln1_phase, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy
 
 ]]></Node>
 <StgValue><ssdm name="call_ret"/></StgValue>
@@ -6204,9 +6204,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:94 %call_ret =
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="595" bw="1" op_0_bw="1084">
+<Node id="595" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:95 %axis_in_ready_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:95 %axis_in_ready_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="axis_in_ready_ret"/></StgValue>
@@ -6219,9 +6219,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:95 %axis_in_re
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="596" bw="1" op_0_bw="1084">
+<Node id="596" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:96 %memory_request_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:96 %memory_request_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="memory_request_ret"/></StgValue>
@@ -6234,9 +6234,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:96 %memory_req
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="597" bw="1" op_0_bw="1084">
+<Node id="597" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:97 %compute_start_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:97 %compute_start_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="compute_start_ret"/></StgValue>
@@ -6249,9 +6249,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:97 %compute_st
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="598" bw="1" op_0_bw="1084">
+<Node id="598" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:98 %stream_start_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:98 %stream_start_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="stream_start_ret"/></StgValue>
@@ -6264,9 +6264,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:98 %stream_sta
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="599" bw="1" op_0_bw="1084">
+<Node id="599" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:99 %done = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:99 %done = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="done"/></StgValue>
@@ -6279,9 +6279,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:99 %done = ext
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="600" bw="32" op_0_bw="1084">
+<Node id="600" bw="32" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:100 %dbg_state_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:100 %dbg_state_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="dbg_state_ret"/></StgValue>
@@ -6294,9 +6294,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:100 %dbg_state
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="601" bw="1" op_0_bw="1084">
+<Node id="601" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:101 %dbg_wl_ready_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:101 %dbg_wl_ready_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="dbg_wl_ready_ret"/></StgValue>
@@ -6309,9 +6309,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:101 %dbg_wl_re
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="602" bw="1" op_0_bw="1084">
+<Node id="602" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:102 %dbg_wl_start_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:102 %dbg_wl_start_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="dbg_wl_start_ret"/></StgValue>
@@ -6324,9 +6324,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:102 %dbg_wl_st
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="603" bw="8" op_0_bw="1084">
+<Node id="603" bw="8" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:103 %dbg_wl_addr_sel_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:103 %dbg_wl_addr_sel_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="dbg_wl_addr_sel_ret"/></StgValue>
@@ -6339,9 +6339,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:103 %dbg_wl_ad
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="604" bw="32" op_0_bw="1084">
+<Node id="604" bw="32" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:104 %dbg_wl_layer_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:104 %dbg_wl_layer_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="dbg_wl_layer_ret"/></StgValue>
@@ -6354,9 +6354,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:104 %dbg_wl_la
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="605" bw="32" op_0_bw="1084">
+<Node id="605" bw="32" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:105 %dbg_wl_head_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:105 %dbg_wl_head_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="dbg_wl_head_ret"/></StgValue>
@@ -6369,9 +6369,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:105 %dbg_wl_he
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="606" bw="32" op_0_bw="1084">
+<Node id="606" bw="32" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:106 %dbg_wl_tile_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:106 %dbg_wl_tile_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="dbg_wl_tile_ret"/></StgValue>
@@ -6384,9 +6384,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:106 %dbg_wl_ti
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="607" bw="235" op_0_bw="1084">
+<Node id="607" bw="283" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:107 %head_ctx_ref_0_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:107 %head_ctx_ref_0_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_0_ret"/></StgValue>
@@ -6399,9 +6399,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:107 %head_ctx_
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="608" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="235" op_3_bw="0">
+<Node id="608" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="283" op_3_bw="0">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:108 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i235P0A, i235 %head_ctx_ref_0, i235 %head_ctx_ref_0_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:108 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i283P0A, i283 %head_ctx_ref_0, i283 %head_ctx_ref_0_ret
 
 ]]></Node>
 <StgValue><ssdm name="write_ln142"/></StgValue>
@@ -6414,9 +6414,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:108 %write_ln1
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="609" bw="235" op_0_bw="1084">
+<Node id="609" bw="283" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:109 %head_ctx_ref_1_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:109 %head_ctx_ref_1_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_1_ret"/></StgValue>
@@ -6429,9 +6429,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:109 %head_ctx_
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="610" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="235" op_3_bw="0">
+<Node id="610" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="283" op_3_bw="0">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:110 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i235P0A, i235 %head_ctx_ref_1, i235 %head_ctx_ref_1_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:110 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i283P0A, i283 %head_ctx_ref_1, i283 %head_ctx_ref_1_ret
 
 ]]></Node>
 <StgValue><ssdm name="write_ln142"/></StgValue>
@@ -6444,9 +6444,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:110 %write_ln1
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="611" bw="235" op_0_bw="1084">
+<Node id="611" bw="283" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:111 %head_ctx_ref_2_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:111 %head_ctx_ref_2_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_2_ret"/></StgValue>
@@ -6459,9 +6459,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:111 %head_ctx_
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="612" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="235" op_3_bw="0">
+<Node id="612" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="283" op_3_bw="0">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:112 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i235P0A, i235 %head_ctx_ref_2, i235 %head_ctx_ref_2_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:112 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i283P0A, i283 %head_ctx_ref_2, i283 %head_ctx_ref_2_ret
 
 ]]></Node>
 <StgValue><ssdm name="write_ln142"/></StgValue>
@@ -6474,9 +6474,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:112 %write_ln1
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="613" bw="235" op_0_bw="1084">
+<Node id="613" bw="283" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:113 %head_ctx_ref_3_ret = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:113 %head_ctx_ref_3_ret = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_3_ret"/></StgValue>
@@ -6489,9 +6489,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:113 %head_ctx_
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="614" bw="0" op_0_bw="0" op_1_bw="235" op_2_bw="235" op_3_bw="0">
+<Node id="614" bw="0" op_0_bw="0" op_1_bw="283" op_2_bw="283" op_3_bw="0">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:114 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i235P0A, i235 %head_ctx_ref_3, i235 %head_ctx_ref_3_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:114 %write_ln142 = write void @_ssdm_op_Write.ap_auto.i283P0A, i283 %head_ctx_ref_3, i283 %head_ctx_ref_3_ret
 
 ]]></Node>
 <StgValue><ssdm name="write_ln142"/></StgValue>
@@ -6504,9 +6504,9 @@ _Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:114 %write_ln1
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="615" bw="1" op_0_bw="1084">
+<Node id="615" bw="1" op_0_bw="1276">
 <![CDATA[
-_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:115 %error = extractvalue i1084 %call_ret
+_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit:115 %error = extractvalue i1276 %call_ret
 
 ]]></Node>
 <StgValue><ssdm name="error"/></StgValue>
@@ -29037,19 +29037,19 @@ _Z10irq_wizardR15ControlMemSpacebb.exit.new:0 %ret_ln185 = ret
 </dataflow>
 <dataflow id="4817" from="compute_start" to="compute_start_read" fromId="626" toId="309">
 </dataflow>
-<dataflow id="4819" from="_ssdm_op_Read.ap_auto.i235P0A" to="head_ctx_ref_0_read" fromId="4818" toId="310">
+<dataflow id="4819" from="_ssdm_op_Read.ap_auto.i283P0A" to="head_ctx_ref_0_read" fromId="4818" toId="310">
 </dataflow>
 <dataflow id="4820" from="head_ctx_ref_0" to="head_ctx_ref_0_read" fromId="628" toId="310">
 </dataflow>
-<dataflow id="4821" from="_ssdm_op_Read.ap_auto.i235P0A" to="head_ctx_ref_1_read" fromId="4818" toId="311">
+<dataflow id="4821" from="_ssdm_op_Read.ap_auto.i283P0A" to="head_ctx_ref_1_read" fromId="4818" toId="311">
 </dataflow>
 <dataflow id="4822" from="head_ctx_ref_1" to="head_ctx_ref_1_read" fromId="629" toId="311">
 </dataflow>
-<dataflow id="4823" from="_ssdm_op_Read.ap_auto.i235P0A" to="head_ctx_ref_2_read" fromId="4818" toId="312">
+<dataflow id="4823" from="_ssdm_op_Read.ap_auto.i283P0A" to="head_ctx_ref_2_read" fromId="4818" toId="312">
 </dataflow>
 <dataflow id="4824" from="head_ctx_ref_2" to="head_ctx_ref_2_read" fromId="630" toId="312">
 </dataflow>
-<dataflow id="4825" from="_ssdm_op_Read.ap_auto.i235P0A" to="head_ctx_ref_3_read" fromId="4818" toId="313">
+<dataflow id="4825" from="_ssdm_op_Read.ap_auto.i283P0A" to="head_ctx_ref_3_read" fromId="4818" toId="313">
 </dataflow>
 <dataflow id="4826" from="head_ctx_ref_3" to="head_ctx_ref_3_read" fromId="631" toId="313">
 </dataflow>
@@ -96135,7 +96135,7 @@ _Z10irq_wizardR15ControlMemSpacebb.exit.new:0 %ret_ln185 = ret
 </dataflow>
 <dataflow id="15095" from="call_ret" to="head_ctx_ref_0_ret" fromId="386" toId="399">
 </dataflow>
-<dataflow id="15097" from="_ssdm_op_Write.ap_auto.i235P0A" to="write_ln142" fromId="15096" toId="400">
+<dataflow id="15097" from="_ssdm_op_Write.ap_auto.i283P0A" to="write_ln142" fromId="15096" toId="400">
 </dataflow>
 <dataflow id="15098" from="head_ctx_ref_0" to="write_ln142" fromId="628" toId="400">
 </dataflow>
@@ -96143,7 +96143,7 @@ _Z10irq_wizardR15ControlMemSpacebb.exit.new:0 %ret_ln185 = ret
 </dataflow>
 <dataflow id="15100" from="call_ret" to="head_ctx_ref_1_ret" fromId="386" toId="401">
 </dataflow>
-<dataflow id="15101" from="_ssdm_op_Write.ap_auto.i235P0A" to="write_ln142" fromId="15096" toId="402">
+<dataflow id="15101" from="_ssdm_op_Write.ap_auto.i283P0A" to="write_ln142" fromId="15096" toId="402">
 </dataflow>
 <dataflow id="15102" from="head_ctx_ref_1" to="write_ln142" fromId="629" toId="402">
 </dataflow>
@@ -96151,7 +96151,7 @@ _Z10irq_wizardR15ControlMemSpacebb.exit.new:0 %ret_ln185 = ret
 </dataflow>
 <dataflow id="15104" from="call_ret" to="head_ctx_ref_2_ret" fromId="386" toId="403">
 </dataflow>
-<dataflow id="15105" from="_ssdm_op_Write.ap_auto.i235P0A" to="write_ln142" fromId="15096" toId="404">
+<dataflow id="15105" from="_ssdm_op_Write.ap_auto.i283P0A" to="write_ln142" fromId="15096" toId="404">
 </dataflow>
 <dataflow id="15106" from="head_ctx_ref_2" to="write_ln142" fromId="630" toId="404">
 </dataflow>
@@ -96159,7 +96159,7 @@ _Z10irq_wizardR15ControlMemSpacebb.exit.new:0 %ret_ln185 = ret
 </dataflow>
 <dataflow id="15108" from="call_ret" to="head_ctx_ref_3_ret" fromId="386" toId="405">
 </dataflow>
-<dataflow id="15109" from="_ssdm_op_Write.ap_auto.i235P0A" to="write_ln142" fromId="15096" toId="406">
+<dataflow id="15109" from="_ssdm_op_Write.ap_auto.i283P0A" to="write_ln142" fromId="15096" toId="406">
 </dataflow>
 <dataflow id="15110" from="head_ctx_ref_3" to="write_ln142" fromId="631" toId="406">
 </dataflow>
