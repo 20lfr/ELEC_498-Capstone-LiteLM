@@ -41,7 +41,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</string>
       <key>line</key>
-      <integer>86</integer>
+      <integer>84</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -57,7 +57,39 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</string>
       <key>line</key>
-      <integer>375</integer>
+      <integer>80</integer>
+      <key>column</key>
+      <integer>21</integer>
+      <key>message</key>
+      <string>unused parameter &apos;ctrl_mem&apos;</string>
+      <key>ID</key>
+      <integer>5292</integer>
+      <key>WarningOption</key>
+      <string>unused-parameter</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</string>
+      <key>line</key>
+      <integer>81</integer>
+      <key>column</key>
+      <integer>11</integer>
+      <key>message</key>
+      <string>unused parameter &apos;error&apos;</string>
+      <key>ID</key>
+      <integer>5292</integer>
+      <key>WarningOption</key>
+      <string>unused-parameter</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</string>
+      <key>line</key>
+      <integer>369</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -73,7 +105,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</string>
       <key>line</key>
-      <integer>381</integer>
+      <integer>375</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>

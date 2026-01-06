@@ -6685,9 +6685,6 @@ struct HeadCtx {
     int wl_head = -1;
     bool dma_done = false;
 
-    uint32_t dma_address = 0;
-    bool memory_request = false;
-
     bool start_head = false;
 
 
@@ -6913,8 +6910,6 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.wl_layer = -1;
     ctx.wl_head = -1;
     ctx.dma_done = false;
-    ctx.dma_address = 0;
-    ctx.memory_request = false;
     ctx.start_head = false;
     ctx.q_started = false;
     ctx.k_started = false;
@@ -6945,7 +6940,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.att_scores_dma_done = false;
     ctx.att_value_dma_done = false;
 }
-# 78 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
+# 76 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
 bool run_single_head(
     HeadCtx &ctx,
     int layer_idx,
@@ -6959,10 +6954,6 @@ bool run_single_head(
  if (ctx.layer_stamp != layer_idx) {
         init_head_ctx(ctx, layer_idx, ctx.head_idx);
     }
-    const bool wl_reset = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0) | (ctx.phase == HeadPhase::IDLE);
-    weight_stager(wl_reset, ctx.wl_start, ctx.wl_addr_sel, ctx.wl_layer,
-                ctx.wl_head, -1, ctrl_mem, ctx.wl_ready,
-                ctx.memory_request, error, ctx.dma_address);
     if (!ctx.wl_ready && ctx.wl_start){
         ctx.wl_start = false;
         ctx.wl_addr_sel = DmaSel::DMASEL_NONE;
@@ -7248,7 +7239,7 @@ bool drive_group_head_phase(
 
     bool group_finished = true;
 
-    VITIS_LOOP_380_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+    VITIS_LOOP_374_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  HeadCtx &ctx = head_ctx_ref[lane];
 

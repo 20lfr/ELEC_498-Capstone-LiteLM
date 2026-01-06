@@ -6687,9 +6687,6 @@ struct HeadCtx {
     int wl_head = -1;
     bool dma_done = false;
 
-    uint32_t dma_address = 0;
-    bool memory_request = false;
-
     bool start_head = false;
 
 
