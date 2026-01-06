@@ -18,7 +18,7 @@
 <PipelineType>no</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>6.915</EstimatedClockPeriod>
+<EstimatedClockPeriod>8.057</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
@@ -33,7 +33,7 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfViolations>
-<IssueType>-</IssueType>
+<IssueType>Timing Violation</IssueType>
 <ViolationType>-</ViolationType>
 <SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:4</SourceLocation>
 </SummaryOfViolations>
@@ -41,8 +41,8 @@
 
 <AreaEstimates>
 <Resources>
-<FF>7567</FF>
-<LUT>16344</LUT>
+<FF>7661</FF>
+<LUT>19080</LUT>
 <BRAM_18K>0</BRAM_18K>
 <DSP>0</DSP>
 <URAM>0</URAM>
@@ -419,7 +419,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -431,7 +431,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -455,7 +455,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -467,7 +467,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -491,7 +491,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -503,7 +503,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -527,7 +527,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -539,7 +539,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>250</Bits>
+<Bits>254</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>

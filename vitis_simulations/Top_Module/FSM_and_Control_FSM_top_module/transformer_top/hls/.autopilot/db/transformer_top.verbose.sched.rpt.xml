@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'transformer_top'" level="0">
-<item name = "Date">Tue Jan  6 12:44:50 2026
+<item name = "Date">Tue Jan  6 13:15:10 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">transformer_top</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 6.915 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 8.057 ns, 2.70 ns</column>
 </table>
 </item>
 </section>

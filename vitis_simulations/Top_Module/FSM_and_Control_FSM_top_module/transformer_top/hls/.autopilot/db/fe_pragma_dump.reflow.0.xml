@@ -1,13 +1,11 @@
 <pragmas>
-<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp" line="15" pragmaType="inline" parentfunction="ctrl_read" off="0" region="0" recursive="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp" line="61" pragmaType="inline" parentfunction="ctrl_write" off="0" region="0" recursive="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp" line="106" pragmaType="inline" parentfunction="init_mem_space" off="0" region="0" recursive="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp" line="15" pragmaType="inline" parentfunction="ctrl_read" off="0" region="0" recursive="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="46" pragmaType="inline" parentfunction="LayerNorm" off="0" region="0" recursive="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="7" pragmaType="inline" parentfunction="pack_compute_op" off="0" region="0" recursive="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="16" pragmaType="inline" parentfunction="unpack_compute_op" off="0" region="0" recursive="0"/>
-<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp" line="106" pragmaType="inline" parentfunction="init_mem_space" off="0" region="0" recursive="0"/>
-<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="46" pragmaType="inline" parentfunction="LayerNorm" off="0" region="0" recursive="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="28" pragmaType="inline" parentfunction="pack_compute_op" off="0" region="0" recursive="0"/>
-<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp" line="80" pragmaType="inline" parentfunction="transformer_top" off="1" region="0" recursive="0"/>
-<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp" line="161" pragmaType="inline" parentfunction="ControlMemInterface" off="0" region="0" recursive="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="647" pragmaType="unroll" parentfunction="scheduler_hls" factor="-1" skip_exit_check="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="738" pragmaType="unroll" parentfunction="scheduler_hls" factor="-1" skip_exit_check="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="722" pragmaType="unroll" parentfunction="scheduler_hls" factor="-1" skip_exit_check="0"/>
@@ -64,8 +62,10 @@
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="363" pragmaType="reset" parentfunction="scheduler_hls" off="0" variable="_ZZ13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedStateE14axis_last_seen"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="365" pragmaType="reset" parentfunction="scheduler_hls" off="0" variable="_ZZ13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedStateE16stream_done_seen"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp" line="718" pragmaType="array_partition" parentfunction="scheduler_hls" dim="1" factor="0" mode="complete" dynamic="0" variable="head_group"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp" line="80" pragmaType="inline" parentfunction="transformer_top" off="1" region="0" recursive="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp" line="161" pragmaType="inline" parentfunction="ControlMemInterface" off="0" region="0" recursive="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp" line="16" pragmaType="inline" parentfunction="irq_wizard" off="0" region="0" recursive="0"/>
 <pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="0" pragmaType="inline" parentfunction="run_single_head" off="0" region="0" recursive="0"/>
-<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="375" pragmaType="unroll" parentfunction="drive_group_head_phase" factor="-1" skip_exit_check="0"/>
-<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="369" pragmaType="array_partition" parentfunction="drive_group_head_phase" dim="1" factor="0" mode="complete" dynamic="0" variable="head_ctx_ref"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="403" pragmaType="unroll" parentfunction="drive_group_head_phase" factor="-1" skip_exit_check="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp" line="397" pragmaType="array_partition" parentfunction="drive_group_head_phase" dim="1" factor="0" mode="complete" dynamic="0" variable="head_ctx_ref"/>
 </pragmas>
