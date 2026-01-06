@@ -2,3 +2,6 @@ Running: xsim.dir/transformer_top_tb_behav/xsimk -simmode gui -wdb transformer_t
 Design successfully loaded
 Design Loading Memory Usage: 206836 KB (Peak: 206836 KB)
 Design Loading CPU Usage: 860 ms
+Simulation completed
+Simulation Memory Usage: 296412 KB (Peak: 346104 KB)
+Simulation CPU Usage: 4570 ms

@@ -2246,17 +2246,6 @@
 <Bits>32</Bits>
 <Attribute>data</Attribute>
 </RtlPorts>
-<RtlPorts>
-<name>error_read</name>
-<Object>error_read</Object>
-<Type>scalar</Type>
-<Scope></Scope>
-<IOProtocol>ap_none</IOProtocol>
-<IOConfig></IOConfig>
-<Dir>in</Dir>
-<Bits>1</Bits>
-<Attribute>data</Attribute>
-</RtlPorts>
 </InterfaceSummary>
 
 </profile>

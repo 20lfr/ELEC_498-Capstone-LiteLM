@@ -199,103 +199,86 @@ Args:
                        Line: 45, Column: 0 }
   - String:          ''''
 ...
---- !Passed
+--- !Missed
 Pass:            inline
-Name:            AlwaysInline
+Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 404, Column: 3 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 395, Column: 2 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
-  - String:          'Inlining function '''
-  - Callee:          'weight_stager(bool, bool, DmaSel, int, int, int, ControlMemSpace, bool&, bool&, bool&, unsigned int&)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp, 
-                       Line: 16, Column: 0 }
-  - String:          ''' into '''
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Callee:          'init_head_ctx(HeadCtx&, int, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
+                       Line: 20, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
-  - String:          ''''
+                       Line: 235, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Passed
 Pass:            inline
 Name:            AlwaysInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 1021, Column: 22 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 458, Column: 18 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Inlining function '''
   - Callee:          'pack_compute_op(ComputeOp, int, int, int) (.3)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
                        Line: 27, Column: 0 }
   - String:          ''' into '''
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            inline
 Name:            AlwaysInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 1009, Column: 11 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 970, Column: 11 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Inlining function '''
   - Callee:          'LayerNorm(LnPhase&, bool&, bool&, bool, int, bool&, unsigned int&, ComputeOp const*)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
                        Line: 45, Column: 0 }
   - String:          ''' into '''
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ''''
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 773, Column: 11 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 734, Column: 11 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'drive_group_head_phase(HeadCtx (&) [2], int, int, bool, ControlMemSpace, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                        Line: 374, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 423, Column: 2 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
-Args:            
-  - Callee:          'init_head_ctx(HeadCtx&, int, int)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
-                       Line: 20, Column: 0 }
-  - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
-  - String:          ' because it should never be inlined (cost=never)'
-...
---- !Missed
-Pass:            inline
-Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'HeadCtx::HeadCtx()'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp, 
                        Line: 266, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -318,17 +301,17 @@ Args:
 Pass:            inline
 Name:            AlwaysInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 129, Column: 5 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 112, Column: 5 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Inlining function '''
   - Callee:          'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
                        Line: 160, Column: 0 }
   - String:          ''' into '''
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ''''
 ...
 --- !Missed
@@ -336,48 +319,48 @@ Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
                    Line: 169, Column: 10 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
                        Line: 5, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 142, Column: 5 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 125, Column: 5 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
-  - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Passed
 Pass:            inline
 Name:            AlwaysInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 174, Column: 14 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 153, Column: 14 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Inlining function '''
   - Callee:          'irq_wizard(ControlMemSpace&, bool, bool)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
                        Line: 15, Column: 0 }
   - String:          ''' into '''
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ''''
 ...
 --- !Missed
@@ -385,28 +368,28 @@ Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
                    Line: 31, Column: 12 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - Callee:          '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
                        Line: 8, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Passed
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaFullyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 236, Column: 0 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 235, Column: 0 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_681_2
+  - LoopName:        VITIS_LOOP_646_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:681:25'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:646:25'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -417,13 +400,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaFullyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 236, Column: 0 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 235, Column: 0 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_776_4
+  - LoopName:        VITIS_LOOP_737_4
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:776:25'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:737:25'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -434,13 +417,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaFullyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 236, Column: 0 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 235, Column: 0 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_760_3
+  - LoopName:        VITIS_LOOP_721_3
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:760:20'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:721:20'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -451,13 +434,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaFullyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 236, Column: 0 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 235, Column: 0 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_421_1
+  - LoopName:        VITIS_LOOP_393_1
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:421:23'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:393:23'
   - String:          ') '
   - String:          'in function '''
   - String:          scheduler_hls
@@ -501,64 +484,64 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 423, Column: 2 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 395, Column: 2 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                        Line: 20, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'HeadCtx::HeadCtx()'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp, 
                        Line: 266, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 766, Column: 11 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 727, Column: 11 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int) (.5)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                        Line: 20, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 773, Column: 11 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 734, Column: 11 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'drive_group_head_phase(HeadCtx (&) [2], int, int, bool, ControlMemSpace, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                        Line: 374, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -566,31 +549,31 @@ Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
                    Line: 169, Column: 10 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
                        Line: 5, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 142, Column: 5 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 125, Column: 5 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
-  - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -598,15 +581,15 @@ Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
                    Line: 31, Column: 12 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - Callee:          '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
                        Line: 8, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -614,9 +597,9 @@ Pass:            inline
 Name:            NeverInline
 Function:        apatb_transformer_top_ir
 Args:            
-  - Callee:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Callee:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          apatb_transformer_top_ir
   - String:          ' because it should never be inlined (cost=never)'
@@ -625,59 +608,59 @@ Args:
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 236, Column: 0 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 235, Column: 0 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Inlining function '''
   - Callee:          'HeadCtx::HeadCtx()'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp, 
                        Line: 266, Column: 0 }
   - String:          ''' into '''
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Inlining function '''
   - Callee:          '(anonymous namespace)::is_valid_address(unsigned int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp, 
                        Line: 5, Column: 0 }
   - String:          ''' into '''
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Inlining function '''
   - Callee:          '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp, 
                        Line: 8, Column: 0 }
   - String:          ''' into '''
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -695,8 +678,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -714,8 +697,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -733,8 +716,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -752,8 +735,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -771,8 +754,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -790,8 +773,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -809,8 +792,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -828,8 +811,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -847,8 +830,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -866,8 +849,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -885,8 +868,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -904,8 +887,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -923,8 +906,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -942,8 +925,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -961,8 +944,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -980,8 +963,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -999,8 +982,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1018,8 +1001,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1037,8 +1020,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1056,8 +1039,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1075,8 +1058,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1094,8 +1077,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1113,8 +1096,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1132,8 +1115,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1151,8 +1134,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1170,8 +1153,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1189,8 +1172,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1208,8 +1191,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1227,8 +1210,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1246,8 +1229,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1265,8 +1248,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1284,8 +1267,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1303,8 +1286,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1322,8 +1305,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1341,8 +1324,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1360,8 +1343,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1379,8 +1362,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1398,8 +1381,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1417,8 +1400,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1436,8 +1419,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1455,8 +1438,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1474,8 +1457,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1493,8 +1476,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1512,8 +1495,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 756, Column: 15 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 717, Column: 15 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1531,8 +1514,8 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Applying '
   - String:          array_partition
@@ -1550,8 +1533,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1567,8 +1550,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1584,8 +1567,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1601,8 +1584,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1618,8 +1601,8 @@ Args:
 Pass:            reflow-aggr
 Name:            AggrSucc
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 81, Column: 0 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 79, Column: 0 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
   - String:          'Aggregating '
   - HwTyName:        scalar
@@ -1638,7 +1621,7 @@ Args:
   - String:          'automatically set the pipeline for Loop< '
   - LoopName:        unknown
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:756:15'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:717:15'
   - String:          ' '
 ...
 --- !Missed
@@ -1661,63 +1644,63 @@ Args:
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 423, Column: 2 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 395, Column: 2 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                        Line: 20, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 766, Column: 11 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 727, Column: 11 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'init_head_ctx(HeadCtx&, int, int) (.5)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                        Line: 20, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                   Line: 773, Column: 11 }
-Function:        _Z13scheduler_hls15ControlMemSpacebbRbS0_RjbbbRA4_7HeadCtxS0_S1_bS0_bS0_S0_R10SchedStateS0_S0_R6DmaSelRiS9_S9_
+                   Line: 734, Column: 11 }
+Function:        _Z13scheduler_hls15ControlMemSpacebbRbbbS0_R6DmaSelRiS3_S3_bbRA4_7HeadCtxS0_RjbS0_bS0_S0_R10SchedState
 Args:            
   - Callee:          'drive_group_head_phase(HeadCtx (&) [2], int, int, bool, ControlMemSpace, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp, 
                        Line: 374, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Caller:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                   Line: 142, Column: 5 }
-Function:        _Z15transformer_topbbRbbRjS_bbS_S0_RA4_7HeadCtxbS_b10ControlRegjS0_bbbbS_R10SchedStateR15ControlMemSpaceS0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S0_S_S_R6DmaSelRiSB_SB_S_S_
+                   Line: 125, Column: 5 }
+Function:        _Z15transformer_topbbRbbbS_R6DmaSelRiS2_S2_bbS_RjRA4_7HeadCtxbS_b10ControlRegjS3_bbbbS_R10SchedStateR15ControlMemSpaceS3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S3_S_S_
 Args:            
-  - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool&, unsigned int&, bool, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&, bool&, bool&, DmaSel&, int&, int&, int&)'
+  - Callee:          'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp, 
-                       Line: 236, Column: 0 }
+                       Line: 235, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'transformer_top(bool, bool, bool&, bool, unsigned int&, bool&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&, DmaSel&, int&, int&, int&, bool&, bool&)'
+  - Caller:          'transformer_top(bool, bool, bool&, bool, bool, bool&, DmaSel&, int&, int&, int&, bool, bool, bool&, unsigned int&, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp, 
-                       Line: 81, Column: 0 }
+                       Line: 79, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...

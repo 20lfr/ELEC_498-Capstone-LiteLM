@@ -125,6 +125,122 @@ static const char *phase_name(HeadPhase ph) {
     }
 }
 
+static uint32_t compute_wl_address(
+    DmaSel sel,
+    int layer,
+    int head,
+    int tile,
+    const ControlMemSpace &ctrl
+) {
+    if (layer < 0) {
+        return 0;
+    }
+    const uint32_t layer_u = static_cast<uint32_t>(layer);
+    switch (sel) {
+    case DMASEL_WQ:
+        if (head < 0) return 0;
+        return ctrl.wq_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(head) * ctrl.wq_head_stride;
+    case DMASEL_WK:
+        if (head < 0) return 0;
+        return ctrl.wk_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(head) * ctrl.wk_head_stride;
+    case DMASEL_WV:
+        if (head < 0) return 0;
+        return ctrl.wv_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(head) * ctrl.wv_head_stride;
+    case DMASEL_CTX_K:
+        if (head < 0) return 0;
+        return ctrl.k_cache_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(head) * ctrl.k_cache_stride;
+    case DMASEL_CTX_V:
+        if (head < 0) return 0;
+        return ctrl.v_cache_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(head) * ctrl.v_cache_stride;
+    case DMASEL_WO:
+        if (tile < 0) return 0;
+        return ctrl.wo_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(tile) * ctrl.wo_tile_stride;
+    case DMASEL_W1:
+        if (tile < 0) return 0;
+        return ctrl.w1_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(tile) * ctrl.w1_tile_stride;
+    case DMASEL_W2:
+        if (tile < 0) return 0;
+        return ctrl.w2_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(tile) * ctrl.w2_tile_stride;
+    default:
+        return 0;
+    }
+}
+
+static void apply_ctrl_write(ControlReg addr, uint32_t data, ControlMemSpace &shadow) {
+    switch (addr) {
+    case ControlReg::CONTROL:
+        shadow.control = data;
+        break;
+    case ControlReg::IRQ_STATUS:
+        shadow.irq_status = data;
+        break;
+    case ControlReg::IRQ_ENABLE:
+        shadow.irq_enable = data;
+        break;
+    case ControlReg::LAYER_STRIDE:
+        shadow.layer_stride = data;
+        break;
+    case ControlReg::WQ_HEAD_STRIDE:
+        shadow.wq_head_stride = data;
+        break;
+    case ControlReg::WK_HEAD_STRIDE:
+        shadow.wk_head_stride = data;
+        break;
+    case ControlReg::WV_HEAD_STRIDE:
+        shadow.wv_head_stride = data;
+        break;
+    case ControlReg::K_CACHE_STRIDE:
+        shadow.k_cache_stride = data;
+        break;
+    case ControlReg::V_CACHE_STRIDE:
+        shadow.v_cache_stride = data;
+        break;
+    case ControlReg::WO_TILE_STRIDE:
+        shadow.wo_tile_stride = data;
+        break;
+    case ControlReg::W1_TILE_STRIDE:
+        shadow.w1_tile_stride = data;
+        break;
+    case ControlReg::W2_TILE_STRIDE:
+        shadow.w2_tile_stride = data;
+        break;
+    case ControlReg::WQ_BASE_ADDR:
+        shadow.wq_base_addr = data;
+        break;
+    case ControlReg::WK_BASE_ADDR:
+        shadow.wk_base_addr = data;
+        break;
+    case ControlReg::WV_BASE_ADDR:
+        shadow.wv_base_addr = data;
+        break;
+    case ControlReg::WO_BASE_ADDR:
+        shadow.wo_base_addr = data;
+        break;
+    case ControlReg::W1_BASE_ADDR:
+        shadow.w1_base_addr = data;
+        break;
+    case ControlReg::W2_BASE_ADDR:
+        shadow.w2_base_addr = data;
+        break;
+    case ControlReg::K_CACHE_ADDR:
+        shadow.k_cache_addr = data;
+        break;
+    case ControlReg::V_CACHE_ADDR:
+        shadow.v_cache_addr = data;
+        break;
+    default:
+        break;
+    }
+}
+
 // Helpers to drive control interface transactions
 void ctrl_write(
     ControlReg  addr,
@@ -172,7 +288,7 @@ int main() {
     const int AXIS_BEATS = 3;
 
 
-    bool wl_ready        = true;
+    bool wl_ready        = false;
     bool wl_start        = false;
     DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
     int  wl_layer        = 0;
@@ -180,8 +296,8 @@ int main() {
     int  wl_tile         = 0;
     HeadCtx head_ctx_ref[NUM_HEADS];
     bool dma_done        = false;
-    bool memory_request  = false;
-    uint32_t dma_address = 0;
+    bool wl_dma_request  = false;
+    uint32_t wl_dma_address = 0;
 
     bool axis_in_valid   = false;
     bool axis_in_last    = false;
@@ -212,20 +328,11 @@ int main() {
     bool stream_start    = false;
     bool stream_done     = false;
 
-    bool dbg_done            = false;
     uint32_t debug_compute_done = 0;
     SchedState dbg_state     = S_IDLE;
     bool irq_ps              = false;
     bool irq_interupt_flagged = false;
-    uint32_t   interupt_data = 0;
-    // Debug mirrors
-    bool dbg_wl_ready = false;
-    bool dbg_wl_start = false;
-    DmaSel dbg_wl_addr_sel = DmaSel::DMASEL_NONE;
-    int dbg_wl_layer = 0;
-    int dbg_wl_head = 0;
-    int dbg_wl_tile = 0;
-    bool dbg_error = false;
+    uint32_t interupt_data = 0;
 
     bool comp_busy       = false;
     int  comp_timer      = 0;
@@ -246,8 +353,11 @@ int main() {
     int  base_assign_step = 0;
     enum class CtrlInitStage { AssertReset, DeassertReset, ProgramBases, AssertStart, ClearStart, Done };
     CtrlInitStage ctrl_stage = CtrlInitStage::AssertReset;
+    bool dbg_done = false;
+    bool dbg_error = false;
 
-
+    ControlMemSpace ctrl_shadow_mem{};
+    ctrl_shadow_mem.control = 0;
 
     // DEBUG - UNUSED
     ControlReg ctrl_addr = ControlReg::CONTROL;
@@ -260,6 +370,14 @@ int main() {
     uint32_t ctrl_shadow_control = 0;
     int ctrl_gap_cycles = 0; // spacing between control bus transactions
     bool seen_irq_done = false;
+
+    auto issue_ctrl_write = [&](ControlReg addr, uint32_t data, bool resetn) {
+        ctrl_write(addr, data, resetn,
+                   ctrl_addr, ctrl_data_in, ctrl_data_out,
+                   ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+        apply_ctrl_write(addr, data, ctrl_shadow_mem);
+        ctrl_shadow_control = ctrl_shadow_mem.control;
+    };
 
     ControlMemSpace dbg_ctrl_mem{};
 
@@ -279,14 +397,14 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-10s %-8s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} err=%s dma_req=%s dma_done=%s dma_addr=%s\n",
+    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} dma_done=%s dma_addr=%s\n",
                 "Cycle", "Start", "Reset", "CompOp", "C_St", "C_Dn",
                 "CtrlAddr",
                 "CtrlDin", "CtrlDout", "Rd", "Wr", "CE", "RstN",
-                "DbgState", "MemReq", "DMA_Addr", "DbgDone", "Seen", "IRQ", "IRQFlag", "IRQData",
+                "DbgState", "WlReq", "WlAddr", "Seen", "IRQ", "IRQFlag", "IRQData",
                 "MemCtrl", "MemIRQ", "MemIRQEn",
                 "WLrdy", "WLstrt", "WLSel", "Layer", "Head", "Tile",
-                "Err", "DMAReq", "DMADone", "DMAAddr");
+                "DMADone", "DMAAddr");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
@@ -302,18 +420,12 @@ int main() {
         if (ctrl_gap_cycles > 0) {
             ctrl_gap_cycles--;
         } else if (ctrl_stage == CtrlInitStage::AssertReset) {
-            ctrl_write(ControlReg::CONTROL, 0x00000000, false,
-                       ctrl_addr, ctrl_data_in, ctrl_data_out,
-                       ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
-            ctrl_shadow_control = 0;
+            issue_ctrl_write(ControlReg::CONTROL, 0x00000000, false);
             ctrl_resetn_in = false;
             ctrl_stage = CtrlInitStage::DeassertReset;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::DeassertReset) {
-            ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT, true,
-                       ctrl_addr, ctrl_data_in, ctrl_data_out,
-                       ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
-            ctrl_shadow_control = CTRL_RESETN_BIT;
+            issue_ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT, true);
             ctrl_resetn_in = true;
             ctrl_stage = CtrlInitStage::ProgramBases;
             ctrl_gap_cycles = 1;
@@ -321,89 +433,55 @@ int main() {
             // Program control-space base addresses and strides with reset asserted
             switch (base_assign_step) {
             case 0:
-                ctrl_write(ControlReg::LAYER_STRIDE, 0x00001000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::LAYER_STRIDE, 0x00001000, ctrl_resetn_in);
                 break;
             case 1:
-                ctrl_write(ControlReg::WQ_HEAD_STRIDE, 0x00000100, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WQ_HEAD_STRIDE, 0x00000100, ctrl_resetn_in);
                 break;
             case 2:
-                ctrl_write(ControlReg::WK_HEAD_STRIDE, 0x00000100, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WK_HEAD_STRIDE, 0x00000100, ctrl_resetn_in);
                 break;
             case 3:
-                ctrl_write(ControlReg::WV_HEAD_STRIDE, 0x00000100, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WV_HEAD_STRIDE, 0x00000100, ctrl_resetn_in);
                 break;
             case 4:
-                ctrl_write(ControlReg::K_CACHE_STRIDE, 0x00000400, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::K_CACHE_STRIDE, 0x00000400, ctrl_resetn_in);
                 break;
             case 5:
-                ctrl_write(ControlReg::V_CACHE_STRIDE, 0x00000400, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::V_CACHE_STRIDE, 0x00000400, ctrl_resetn_in);
                 break;
             case 6:
-                ctrl_write(ControlReg::WO_TILE_STRIDE, 0x00000100, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WO_TILE_STRIDE, 0x00000100, ctrl_resetn_in);
                 break;
             case 7:
-                ctrl_write(ControlReg::W1_TILE_STRIDE, 0x00000300, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::W1_TILE_STRIDE, 0x00000300, ctrl_resetn_in);
                 break;
             case 8:
-                ctrl_write(ControlReg::W2_TILE_STRIDE, 0x00000800, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::W2_TILE_STRIDE, 0x00000800, ctrl_resetn_in);
                 break;
             case 9:
-                ctrl_write(ControlReg::WQ_BASE_ADDR, 0x10000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WQ_BASE_ADDR, 0x10000000, ctrl_resetn_in);
                 break;
             case 10:
-                ctrl_write(ControlReg::WK_BASE_ADDR, 0x20000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WK_BASE_ADDR, 0x20000000, ctrl_resetn_in);
                 break;
             case 11:
-                ctrl_write(ControlReg::WV_BASE_ADDR, 0x30000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WV_BASE_ADDR, 0x30000000, ctrl_resetn_in);
                 break;
             case 12:
-                ctrl_write(ControlReg::K_CACHE_ADDR, 0x40000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::K_CACHE_ADDR, 0x40000000, ctrl_resetn_in);
                 break;
             case 13:
-                ctrl_write(ControlReg::V_CACHE_ADDR, 0x50000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::V_CACHE_ADDR, 0x50000000, ctrl_resetn_in);
                 break;
             case 14:
-                ctrl_write(ControlReg::WO_BASE_ADDR, 0x60000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::WO_BASE_ADDR, 0x60000000, ctrl_resetn_in);
                 break;
             case 15:
-                ctrl_write(ControlReg::W1_BASE_ADDR, 0x70000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::W1_BASE_ADDR, 0x70000000, ctrl_resetn_in);
                 break;
             case 16:
-                ctrl_write(ControlReg::W2_BASE_ADDR, 0x80000000, ctrl_resetn_in,
-                           ctrl_addr, ctrl_data_in, ctrl_data_out,
-                           ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+                issue_ctrl_write(ControlReg::W2_BASE_ADDR, 0x80000000, ctrl_resetn_in);
                 assign_base_addresses = true;
                 ctrl_stage = CtrlInitStage::AssertStart;
                 break;
@@ -417,10 +495,7 @@ int main() {
             }
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::AssertStart) {
-            ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT | CTRL_START_BIT, true,
-                       ctrl_addr, ctrl_data_in, ctrl_data_out,
-                       ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
-            ctrl_shadow_control = CTRL_RESETN_BIT | CTRL_START_BIT;
+            issue_ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT | CTRL_START_BIT, true);
             ctrl_resetn_in = true;
             reset_released = true;
             start_pulsed   = true;
@@ -428,17 +503,12 @@ int main() {
             ctrl_stage = CtrlInitStage::ClearStart;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::ClearStart) {
-            ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT, ctrl_resetn_in,
-                       ctrl_addr, ctrl_data_in, ctrl_data_out,
-                       ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
-            ctrl_shadow_control = CTRL_RESETN_BIT;
+            issue_ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT, ctrl_resetn_in);
             pending_start_clear = false;
             ctrl_stage = CtrlInitStage::Done;
             ctrl_gap_cycles = 1;
         } else if(seen_irq_done){
-            ctrl_write(ControlReg::IRQ_STATUS, IRQ_CLEAR_BIT, ctrl_resetn_in,
-                       ctrl_addr, ctrl_data_in, ctrl_data_out,
-                       ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
+            issue_ctrl_write(ControlReg::IRQ_STATUS, IRQ_CLEAR_BIT, ctrl_resetn_in);
             ctrl_gap_cycles = 1;
             seen_irq_done = false;
         }
@@ -532,6 +602,8 @@ int main() {
             head_ctx_ref[i].compute_ready = !head_lane_busy[lane];
         }
         stream_ready  = !stream_busy;
+        wl_ready = !dma_busy;
+        wl_dma_request = false;
 
         // Drive AXIS ingress: send a short burst when ready is asserted
         if (!axis_feed_done && (axis_drive || (((ctrl_shadow_control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
@@ -550,8 +622,12 @@ int main() {
             axis_in_last,
             axis_in_ready,
             dma_done,
-            dma_address,
-            memory_request,
+            wl_ready,
+            wl_start,
+            wl_addr_sel,
+            wl_layer,
+            wl_head,
+            wl_tile,
             compute_ready,
             compute_done,
             compute_start,
@@ -585,19 +661,21 @@ int main() {
             wo_tile_stride,
             w1_tile_stride,
             w2_tile_stride,
-            dbg_wl_ready,
-            dbg_wl_start,
-            dbg_wl_addr_sel,
-            dbg_wl_layer,
-            dbg_wl_head,
-            dbg_wl_tile,
             dbg_done,
             dbg_error
         );
 
+        if (wl_start && !dma_busy) {
+            wl_dma_request = true;
+            wl_dma_address = compute_wl_address(wl_addr_sel, wl_layer, wl_head, wl_tile,
+                                                ctrl_shadow_mem);
+            dma_busy  = true;
+            dma_timer = DMA_LAT - 1;
+        }
+
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-8s %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%d %d %d %d %d %d} err=%d dma_req=%d dma_done=%d dma_addr=0x%08X",
+        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%s %s %s %d %d %d} dma_done=%s dma_addr=0x%08X",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
@@ -612,9 +690,8 @@ int main() {
                     dash_or(ctrl_chip_en),
                     dash_or(ctrl_resetn_in),
                     state_name(dbg_state),
-                    dash_or(memory_request),
-                    dma_address,
-                    dash_or(dbg_done),
+                    dash_or(wl_dma_request),
+                    wl_dma_address,
                     dash_or(seen_done),
                     dash_or(irq_ps),
                     dash_or(irq_interupt_flagged),
@@ -622,16 +699,14 @@ int main() {
                     dbg_ctrl_mem.control,
                     dbg_ctrl_mem.irq_status,
                     dbg_ctrl_mem.irq_enable,
-                    dbg_wl_ready,
-                    dbg_wl_start,
-                    static_cast<int>(dbg_wl_addr_sel),
-                    dbg_wl_layer,
-                    dbg_wl_head,
-                    dbg_wl_tile,
-                    dbg_error,
-                    memory_request ? 1 : 0,
-                    dma_done ? 1 : 0,
-                    dma_address);
+                    dash_or(wl_ready),
+                    dash_or(wl_start),
+                    dma_name(wl_addr_sel),
+                    wl_layer,
+                    wl_head,
+                    wl_tile,
+                    dash_or(dma_done),
+                    wl_dma_address);
         for (int i = 0; i < NUM_HEADS; ++i) {
             char buf[128];
             std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s 0x%08X %-2s 0x%08X %-2s",
@@ -679,22 +754,6 @@ int main() {
             comp_busy  = true;
             comp_timer = COMP_LAT - 1;
             if (decode_op(compute_op) == CMP_CONCAT) seen_concat = true;
-        }
-        // Fulfill DMA requests: when memory_request is asserted, capture address and return dma_done after a fixed latency.
-        if (memory_request && !dma_busy) {
-            dma_busy  = true;
-            dma_timer = DMA_LAT - 1;
-            dma_done  = false;
-        } else if (dma_busy) {
-            if (dma_timer == 0) {
-                dma_busy = false;
-                dma_done = true; // single-cycle pulse
-            } else {
-                dma_timer--;
-                dma_done = false;
-            }
-        } else {
-            dma_done = false;
         }
         if (stream_start) {
             stream_busy = true;

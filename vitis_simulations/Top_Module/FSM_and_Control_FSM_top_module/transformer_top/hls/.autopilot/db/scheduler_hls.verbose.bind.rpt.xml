@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'scheduler_hls'" level="0">
-<item name = "Date">Mon Jan  5 19:06:08 2026
+<item name = "Date">Tue Jan  6 12:16:45 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">transformer_top</item>
@@ -31,7 +31,7 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_drive_group_head_phase_fu_33880">drive_group_head_phase, 2, 2, 20.000 ns, 20.000 ns, 2, 2, no</column>
+<column name="grp_drive_group_head_phase_fu_30849">drive_group_head_phase, 2, 2, 20.000 ns, 20.000 ns, 2, 2, no</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">

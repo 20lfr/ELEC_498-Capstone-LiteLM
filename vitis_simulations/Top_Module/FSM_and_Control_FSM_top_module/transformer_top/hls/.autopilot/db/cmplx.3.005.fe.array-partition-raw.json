@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 84,
-    "calls": "2",
+    "calls": "1",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
@@ -18,45 +18,42 @@
       "L": 2,
       "T": 20
     },
-    "total_instructions": 6179
+    "total_instructions": 6053
   },
   "1": {
-    "basicblocks": 316,
-    "calls": "3 3",
-    "control_depth": 0,
-    "def_use_depth": 5,
-    "file": "head_helpers.cpp",
-    "fileloc": 367,
-    "instructions": 1154,
-    "loads": {
-      "L": 146
-    },
-    "memory_accesses": 0,
-    "name": "drive_group_head_phase",
-    "stores": {
-      "L": 358
-    },
-    "total_instructions": 1258
-  },
-  "2": {
-    "basicblocks": 833,
-    "calls": "4 4 4 4 3 3 1 4 4 4 4",
+    "basicblocks": 814,
+    "calls": "2 2 2 2 3 3 4 2 2 2 2",
     "control_depth": 4,
     "def_use_depth": 4,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 184,
-    "instructions": 3766,
+    "instructions": 3640,
     "loads": {
-      "G": 112,
-      "L": 272
+      "G": 106,
+      "L": 274
     },
     "memory_accesses": 135,
     "name": "scheduler_hls",
     "stores": {
-      "G": 388,
-      "L": 483
+      "G": 349,
+      "L": 474
     },
-    "total_instructions": 5904
+    "total_instructions": 5778
+  },
+  "2": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "head_helpers.cpp",
+    "fileloc": 20,
+    "instructions": 97,
+    "memory_accesses": 0,
+    "name": "init_head_ctx",
+    "stores": {
+      "L": 45
+    },
+    "total_instructions": 97
   },
   "3": {
     "basicblocks": 1,
@@ -74,18 +71,21 @@
     "total_instructions": 52
   },
   "4": {
-    "basicblocks": 1,
-    "calls": "",
+    "basicblocks": 316,
+    "calls": "3 3",
     "control_depth": 0,
-    "def_use_depth": 4,
+    "def_use_depth": 5,
     "file": "head_helpers.cpp",
-    "fileloc": 20,
-    "instructions": 97,
-    "memory_accesses": 0,
-    "name": "init_head_ctx",
-    "stores": {
-      "L": 45
+    "fileloc": 367,
+    "instructions": 1154,
+    "loads": {
+      "L": 146
     },
-    "total_instructions": 97
+    "memory_accesses": 0,
+    "name": "drive_group_head_phase",
+    "stores": {
+      "L": 358
+    },
+    "total_instructions": 1258
   }
 }

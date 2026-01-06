@@ -38,39 +38,39 @@ Diagnostics:
         Length:          0
         ReplacementText: 'VITIS_LOOP_1248_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_421_1:  '
-    FileOffset:      421
+    Message:         'Added loop label VITIS_LOOP_393_1:  '
+    FileOffset:      393
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp
-        Offset:          981377
+        Offset:          980455
         Length:          0
-        ReplacementText: 'VITIS_LOOP_421_1: '
+        ReplacementText: 'VITIS_LOOP_393_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_681_2:  '
-    FileOffset:      681
+    Message:         'Added loop label VITIS_LOOP_646_2:  '
+    FileOffset:      646
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp
-        Offset:          987762
+        Offset:          986685
         Length:          0
-        ReplacementText: 'VITIS_LOOP_681_2: '
+        ReplacementText: 'VITIS_LOOP_646_2: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_760_3:  '
-    FileOffset:      760
+    Message:         'Added loop label VITIS_LOOP_721_3:  '
+    FileOffset:      721
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp
-        Offset:          989465
+        Offset:          988310
         Length:          0
-        ReplacementText: 'VITIS_LOOP_760_3: '
+        ReplacementText: 'VITIS_LOOP_721_3: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_776_4:  '
-    FileOffset:      776
+    Message:         'Added loop label VITIS_LOOP_737_4:  '
+    FileOffset:      737
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp
-        Offset:          989927
+        Offset:          988772
         Length:          0
-        ReplacementText: 'VITIS_LOOP_776_4: '
+        ReplacementText: 'VITIS_LOOP_737_4: '
 ...

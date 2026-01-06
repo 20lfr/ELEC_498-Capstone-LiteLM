@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "Mon Jan  5 19:05:30 2026",
- "timestampMillis": "1767657930456",
+ "dateTimestamp": "Tue Jan  6 12:16:07 2026",
+ "timestampMillis": "1767719767935",
  "buildStep": {
-  "cmdId": "7c1dd929-4e11-4cab-91f2-083818f29bae",
+  "cmdId": "f199efbe-f690-4bdf-9047-f8ff6c8e86c0",
   "name": "v++",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/logs/transformer_top.steps.log",
   "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg --work_dir transformer_top ",
@@ -38,10 +38,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Jan  5 19:05:30 2026",
- "timestampMillis": "1767657930456",
+ "dateTimestamp": "Tue Jan  6 12:16:07 2026",
+ "timestampMillis": "1767719767935",
  "status": {
-  "cmdId": "7c1dd929-4e11-4cab-91f2-083818f29bae",
+  "cmdId": "f199efbe-f690-4bdf-9047-f8ff6c8e86c0",
   "state": "CS_RUNNING"
  }
 }
@@ -49,8 +49,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "Mon Jan  5 19:05:34 2026",
- "timestampMillis": "1767657934389",
+ "dateTimestamp": "Tue Jan  6 12:16:11 2026",
+ "timestampMillis": "1767719771791",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -96,10 +96,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "Mon Jan  5 19:05:34 2026",
- "timestampMillis": "1767657934390",
+ "dateTimestamp": "Tue Jan  6 12:16:11 2026",
+ "timestampMillis": "1767719771792",
  "buildStep": {
-  "cmdId": "cedbe916-234e-4d90-8924-5f80d7c424d0",
+  "cmdId": "93a1e10d-bb91-462f-b36d-f17dfb61fdfd",
   "name": "",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/hls.log",
   "commandLine": "",
@@ -112,10 +112,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Jan  5 19:05:34 2026",
- "timestampMillis": "1767657934390",
+ "dateTimestamp": "Tue Jan  6 12:16:11 2026",
+ "timestampMillis": "1767719771792",
  "status": {
-  "cmdId": "cedbe916-234e-4d90-8924-5f80d7c424d0",
+  "cmdId": "93a1e10d-bb91-462f-b36d-f17dfb61fdfd",
   "state": "CS_RUNNING"
  }
 }
@@ -123,8 +123,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:05:34 2026",
- "timestampMillis": "1767657934391",
+ "dateTimestamp": "Tue Jan  6 12:16:11 2026",
+ "timestampMillis": "1767719771792",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/hls_data.json",
   "name": "",
@@ -137,8 +137,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:05:34 2026",
- "timestampMillis": "1767657934391",
+ "dateTimestamp": "Tue Jan  6 12:16:11 2026",
+ "timestampMillis": "1767719771792",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth.rpt",
   "name": "",
@@ -151,8 +151,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:05:34 2026",
- "timestampMillis": "1767657934391",
+ "dateTimestamp": "Tue Jan  6 12:16:11 2026",
+ "timestampMillis": "1767719771792",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/syn/report/csynth.xml",
   "name": "",
@@ -165,8 +165,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:06:16 2026",
- "timestampMillis": "1767657976754",
+ "dateTimestamp": "Tue Jan  6 12:16:53 2026",
+ "timestampMillis": "1767719813230",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls",
   "name": "",
@@ -179,8 +179,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:06:16 2026",
- "timestampMillis": "1767657976754",
+ "dateTimestamp": "Tue Jan  6 12:16:53 2026",
+ "timestampMillis": "1767719813230",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls",
   "name": "",
@@ -193,8 +193,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:06:16 2026",
- "timestampMillis": "1767657976754",
+ "dateTimestamp": "Tue Jan  6 12:16:53 2026",
+ "timestampMillis": "1767719813230",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls",
   "name": "",
@@ -207,10 +207,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Jan  5 19:06:16 2026",
- "timestampMillis": "1767657976754",
+ "dateTimestamp": "Tue Jan  6 12:16:53 2026",
+ "timestampMillis": "1767719813230",
  "status": {
-  "cmdId": "cedbe916-234e-4d90-8924-5f80d7c424d0",
+  "cmdId": "93a1e10d-bb91-462f-b36d-f17dfb61fdfd",
   "state": "CS_PASSED"
  }
 }
@@ -218,10 +218,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Mon Jan  5 19:06:17 2026",
- "timestampMillis": "1767657977033",
+ "dateTimestamp": "Tue Jan  6 12:16:53 2026",
+ "timestampMillis": "1767719813504",
  "status": {
-  "cmdId": "7c1dd929-4e11-4cab-91f2-083818f29bae",
+  "cmdId": "f199efbe-f690-4bdf-9047-f8ff6c8e86c0",
   "state": "CS_PASSED"
  }
 }
@@ -229,8 +229,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:06:17 2026",
- "timestampMillis": "1767657977051",
+ "dateTimestamp": "Tue Jan  6 12:16:53 2026",
+ "timestampMillis": "1767719813520",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/reports/v++_compile_transformer_top_guidance.html",
   "name": "",
@@ -243,8 +243,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Mon Jan  5 19:06:17 2026",
- "timestampMillis": "1767657977051",
+ "dateTimestamp": "Tue Jan  6 12:16:53 2026",
+ "timestampMillis": "1767719813521",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/reports/.db/v++_compile_transformer_top_guidance.pb3",
   "name": "",
