@@ -281,9 +281,6 @@ struct HeadCtx {
     int     wl_head     = -1;                      // OUTPUT signal for head
     bool    dma_done    = false;                  // INPUT FROM AXI-FULL 
 
-    uint32_t dma_address = 0;                     // OUTPUT signal for head
-    bool     memory_request = false;               // OUTPUT signal for head
-
     bool start_head = false;
 
     // Per-head bookkeeping for started phases

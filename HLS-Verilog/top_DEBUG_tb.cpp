@@ -600,6 +600,7 @@ int main() {
         for (int i = 0; i < NUM_HEADS; ++i) {
             int lane = i % HEADS_PARALLEL;
             head_ctx_ref[i].compute_ready = !head_lane_busy[lane];
+            head_ctx_ref[i].wl_ready      = !head_dma_busy[lane];
         }
         stream_ready  = !stream_busy;
         wl_ready = !dma_busy;
@@ -709,14 +710,14 @@ int main() {
                     wl_dma_address);
         for (int i = 0; i < NUM_HEADS; ++i) {
             char buf[128];
-            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s 0x%08X %-2s 0x%08X %-2s",
+            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s 0x%08X %-2s %-4s %-2s",
                           i,
                           phase_name(head_ctx_ref[i].phase),
                           dash_or(head_ctx_ref[i].compute_start),
                           dash_or(head_ctx_ref[i].compute_done),
                           head_ctx_ref[i].compute_op,
-                          dash_or(head_ctx_ref[i].memory_request),
-                          head_ctx_ref[i].dma_address,
+                          dash_or(head_ctx_ref[i].wl_start),
+                          dma_name(head_ctx_ref[i].wl_addr_sel),
                           dash_or(head_ctx_ref[i].dma_done));
             std::printf(" %s", buf);
         }
@@ -742,7 +743,7 @@ int main() {
                 ComputeOp launched_op = decode_op(head_ctx_ref[i].compute_op);
                 if (launched_op == CMP_ATT_SCORES) seen_attn = true;
             }
-            if (head_ctx_ref[i].memory_request && !head_dma_busy[lane]) {
+            if (head_ctx_ref[i].wl_start && !head_dma_busy[lane]) {
                 head_dma_busy[lane] = true;
                 head_dma_timer[lane] = DMA_LAT - 1;
                 head_dma_active_idx[lane] = i;

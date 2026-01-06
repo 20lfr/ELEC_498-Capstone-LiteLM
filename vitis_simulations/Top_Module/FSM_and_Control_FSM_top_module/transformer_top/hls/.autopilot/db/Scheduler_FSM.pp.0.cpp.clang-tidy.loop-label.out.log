@@ -18,23 +18,23 @@
       ^~~
       VITIS_LOOP_1248_1: 
 /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:4576:7: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7301:5: warning: Added loop label VITIS_LOOP_393_1:   [xilinx-label-all-loops]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7298:5: warning: Added loop label VITIS_LOOP_393_1:   [xilinx-label-all-loops]
     for (int i = 0; i < NUM_HEADS; ++i){
     ^~~
     VITIS_LOOP_393_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7301:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7554:7: warning: Added loop label VITIS_LOOP_646_2:   [xilinx-label-all-loops]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7298:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7551:7: warning: Added loop label VITIS_LOOP_646_2:   [xilinx-label-all-loops]
       for (int i = 0; i < NUM_HEADS; ++i){
       ^~~
       VITIS_LOOP_646_2: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7554:7: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7629:2: warning: Added loop label VITIS_LOOP_721_3:   [xilinx-label-all-loops]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7551:7: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7626:2: warning: Added loop label VITIS_LOOP_721_3:   [xilinx-label-all-loops]
  for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
  ^~~
  VITIS_LOOP_721_3: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7629:2: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7645:7: warning: Added loop label VITIS_LOOP_737_4:   [xilinx-label-all-loops]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7626:2: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7642:7: warning: Added loop label VITIS_LOOP_737_4:   [xilinx-label-all-loops]
       for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
       ^~~
       VITIS_LOOP_737_4: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7645:7: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/transformer_top/hls/.autopilot/db/Scheduler_FSM.pp.0.cpp:7642:7: note: FIX-IT applied suggested code changes

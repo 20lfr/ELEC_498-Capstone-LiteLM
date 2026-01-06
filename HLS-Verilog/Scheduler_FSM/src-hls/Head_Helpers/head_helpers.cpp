@@ -33,8 +33,6 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.wl_layer      = -1;
     ctx.wl_head       = -1;
     ctx.dma_done      = false;
-    ctx.dma_address = 0;                 
-    ctx.memory_request = false; 
     ctx.start_head    = false;
     ctx.q_started          = false;
     ctx.k_started          = false;
@@ -88,10 +86,6 @@ bool run_single_head(
     if (ctx.layer_stamp != layer_idx) {
         init_head_ctx(ctx, layer_idx, ctx.head_idx);
     }
-    const bool wl_reset = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0) | (ctx.phase == HeadPhase::IDLE);
-    weight_stager(wl_reset, ctx.wl_start, ctx.wl_addr_sel, ctx.wl_layer,
-                ctx.wl_head, -1, ctrl_mem, ctx.wl_ready, 
-                ctx.memory_request, error, ctx.dma_address);
     if (!ctx.wl_ready && ctx.wl_start){
         ctx.wl_start      = false;
         ctx.wl_addr_sel   = DmaSel::DMASEL_NONE;

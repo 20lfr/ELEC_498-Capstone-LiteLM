@@ -173,7 +173,7 @@ set DataType "void"
 set Port [list $PortName $Interface $DataType $Pointer $Dims $Const    $Volatile $ArrayOpt]
 lappend PortList $Port
 set PortName "head_ctx_ref_0"
-set BitWidth "283"
+set BitWidth "250"
 set ArrayOpt ""
 set Const "0"
 set Volatile "1"
@@ -185,7 +185,7 @@ set DataType "void"
 set Port [list $PortName $Interface $DataType $Pointer $Dims $Const    $Volatile $ArrayOpt]
 lappend PortList $Port
 set PortName "head_ctx_ref_1"
-set BitWidth "283"
+set BitWidth "250"
 set ArrayOpt ""
 set Const "0"
 set Volatile "1"
@@ -197,7 +197,7 @@ set DataType "void"
 set Port [list $PortName $Interface $DataType $Pointer $Dims $Const    $Volatile $ArrayOpt]
 lappend PortList $Port
 set PortName "head_ctx_ref_2"
-set BitWidth "283"
+set BitWidth "250"
 set ArrayOpt ""
 set Const "0"
 set Volatile "1"
@@ -209,7 +209,7 @@ set DataType "void"
 set Port [list $PortName $Interface $DataType $Pointer $Dims $Const    $Volatile $ArrayOpt]
 lappend PortList $Port
 set PortName "head_ctx_ref_3"
-set BitWidth "283"
+set BitWidth "250"
 set ArrayOpt ""
 set Const "0"
 set Volatile "1"

@@ -30,10 +30,18 @@ module transformer_top_tb;
   logic [0:0] axis_in_valid;
   logic [0:0] axis_in_last;
   logic [0:0] dma_done;
-  logic [31:0] dma_address;
-  logic        dma_address_ap_vld;
-  logic [0:0]  memory_request;
-  logic        memory_request_ap_vld;
+  logic [0:0] wl_ready;
+  logic [0:0] wl_start_i;
+  logic [0:0] wl_start_o;
+  logic       wl_start_o_ap_vld;
+  logic [7:0] wl_addr_sel;
+  logic       wl_addr_sel_ap_vld;
+  logic [31:0] wl_layer;
+  logic       wl_layer_ap_vld;
+  logic [31:0] wl_head;
+  logic       wl_head_ap_vld;
+  logic [31:0] wl_tile;
+  logic       wl_tile_ap_vld;
   logic [0:0] compute_ready;
   logic [0:0] compute_done;
   logic [0:0] compute_start_i;
@@ -88,18 +96,6 @@ module transformer_top_tb;
   logic        w2_tile_stride_ap_vld;
   logic [0:0] irq_ps;
   logic irq_ps_ap_vld;
-  logic [0:0] dbg_wl_ready;
-  logic        dbg_wl_ready_ap_vld;
-  logic [0:0] dbg_wl_start;
-  logic        dbg_wl_start_ap_vld;
-  logic [7:0]  dbg_wl_addr_sel;
-  logic        dbg_wl_addr_sel_ap_vld;
-  logic [31:0] dbg_wl_layer;
-  logic        dbg_wl_layer_ap_vld;
-  logic [31:0] dbg_wl_head;
-  logic        dbg_wl_head_ap_vld;
-  logic [31:0] dbg_wl_tile;
-  logic        dbg_wl_tile_ap_vld;
   logic [0:0]  dbg_done;
   logic        dbg_done_ap_vld;
   logic [0:0]  dbg_error;
@@ -201,8 +197,6 @@ module transformer_top_tb;
     logic        k_started;
     logic        q_started;
     logic        start_head;
-    logic        memory_request;
-    logic [31:0] dma_address;
     logic        dma_done;
     logic [31:0] wl_head;
     logic [31:0] wl_layer;
@@ -245,7 +239,6 @@ module transformer_top_tb;
   logic       head_dma_inflight[0:HEADS_TOTAL-1];
   logic       head_dma_done_hold[0:HEADS_TOTAL-1];
   logic [2:0] head_dma_done_ctr[0:HEADS_TOTAL-1];
-  logic       head_wl_ready    [0:HEADS_TOTAL-1];
   logic       head_dma_done    [0:HEADS_TOTAL-1];
   // Main compute done hold
   logic       comp_done_hold;
@@ -332,7 +325,7 @@ module transformer_top_tb;
         comp_busy <= 1'b1;
         // LayerNorm ops run shorter (6 cycles), others ~24 cycles
         is_ln_op = (compute_op[7:0] >= CMP_LN0_SUM) && (compute_op[7:0] <= CMP_LN1_SHIFT);
-        comp_lat_var = is_ln_op ? 25 : 27;
+        comp_lat_var = is_ln_op ? 30 : 30;
         comp_timer <= (comp_lat_var > 0) ? comp_lat_var - 1 : 0;
         if (compute_op[7:0] == CMP_ATT_SCORES) seen_attn <= 1'b1;
         if (compute_op[7:0] == CMP_CONCAT)     seen_concat <= 1'b1;
@@ -372,7 +365,7 @@ module transformer_top_tb;
     end
   end
 
-  // DMA model: honor DUT memory_request and return dma_done after a small latency
+  // DMA model: honor DUT wl_start_o and return dma_done after a small latency
   always_ff @(posedge ap_clk) begin : dma_model
     int dma_lat_var;
     if (ap_rst) begin
@@ -381,8 +374,10 @@ module transformer_top_tb;
       dma_done  <= 1'b0;
       dma_done_hold <= 1'b0;
       dma_done_ctr  <= 0;
+      wl_ready <= 1'b0;
     end else begin
       dma_done <= 1'b0;
+      wl_ready <= !dma_busy;
       if (dma_busy) begin
         if (dma_timer == 0) begin
           dma_busy <= 1'b0;
@@ -400,7 +395,7 @@ module transformer_top_tb;
           dma_done_ctr <= dma_done_ctr - 1;
         end
       end
-      if (memory_request && memory_request_ap_vld && !dma_busy) begin
+      if (wl_start_o && wl_start_o_ap_vld && !dma_busy) begin
         dma_busy  <= 1'b1;
         dma_lat_var = rand_dma_lat();
         dma_timer <= (dma_lat_var > 0) ? dma_lat_var - 1 : 0;
@@ -481,6 +476,10 @@ module transformer_top_tb;
     t1.compute_ready = head_compute_ready[1];
     t2.compute_ready = head_compute_ready[2];
     t3.compute_ready = head_compute_ready[3];
+    t0.wl_ready      = !head_dma_inflight[0];
+    t1.wl_ready      = !head_dma_inflight[1];
+    t2.wl_ready      = !head_dma_inflight[2];
+    t3.wl_ready      = !head_dma_inflight[3];
     t0.compute_done  = head_compute_done[0];
     t1.compute_done  = head_compute_done[1];
     t2.compute_done  = head_compute_done[2];
@@ -549,8 +548,6 @@ module transformer_top_tb;
             v_requant_started: 1'b0,
             requant_q_started: 1'b0,
             requant2_started: 1'b0,
-            memory_request: 1'b0,
-            dma_address: 32'd0,
             q_compute_done: 1'b0,
             k_compute_done: 1'b0,
             v_compute_done: 1'b0,
@@ -591,16 +588,16 @@ module transformer_top_tb;
           dma_start_now     = 1'b0;
           if (hh == 0 && head_ctx_ref_0_o_ap_vld) begin
             compute_start_now = head_ctx_ref_0_struct.compute_start;
-            dma_start_now     = head_ctx_ref_0_struct.memory_request;
+            dma_start_now     = head_ctx_ref_0_struct.wl_start;
           end else if (hh == 1 && head_ctx_ref_1_o_ap_vld) begin
             compute_start_now = head_ctx_ref_1_struct.compute_start;
-            dma_start_now     = head_ctx_ref_1_struct.memory_request;
+            dma_start_now     = head_ctx_ref_1_struct.wl_start;
           end else if (hh == 2 && head_ctx_ref_2_o_ap_vld) begin
             compute_start_now = head_ctx_ref_2_struct.compute_start;
-            dma_start_now     = head_ctx_ref_2_struct.memory_request;
+            dma_start_now     = head_ctx_ref_2_struct.wl_start;
           end else if (hh == 3 && head_ctx_ref_3_o_ap_vld) begin
             compute_start_now = head_ctx_ref_3_struct.compute_start;
-            dma_start_now     = head_ctx_ref_3_struct.memory_request;
+            dma_start_now     = head_ctx_ref_3_struct.wl_start;
           end
           // detect compute_start and run latency model
           if (compute_start_now && !head_inflight[hh] && !head_done_hold[hh]) begin
@@ -671,6 +668,7 @@ module transformer_top_tb;
     base_assign_step = 0;
     ctrl_stage = CTRL_RESET_MEM;
     compute_start_i = 1'b0;
+    wl_start_i = 1'b0;
     start_pulsed = 1'b0;
     pending_start_clear = 1'b0;
     reset_low_written = 1'b0;
@@ -687,10 +685,10 @@ module transformer_top_tb;
     interupt_data = 32'd0;
 
     // Print header
-    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-7s %-8s %-10s | %-8s %-8s %-8s %-10s",
+    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s %-10s",
              "Cycle", "Start", "Reset", "Busy", "State",
              "AXIS_v", "AXIS_r", "AXIS_last",
-             "MemReq", "DMA_Done", "DMA_Addr",
+             "WLStart", "DMA_Done",
              "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
 
     // Release reset at cycle 2
@@ -831,7 +829,7 @@ module transformer_top_tb;
       end
       
       // Print state
-      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-7s %-8s %-10h | %-8s %-8s %-8s 0x%08h",
+      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s 0x%08h",
                cycle,
                (ctrl_shadow_control[1]) ? "1" : "-",
                (ctrl_shadow_control[0]) ? "1" : "-",
@@ -840,9 +838,8 @@ module transformer_top_tb;
                axis_in_valid ? "1" : "-",
                axis_in_ready ? "1" : "-",
                axis_in_last ? "1" : "-",
-               memory_request ? "1" : "-",
+               wl_start_o ? "1" : "-",
                dma_done ? "1" : "-",
-               dma_address,
                compute_start_o ? "1" : "-",
                compute_ready ? "1" : "-",
                compute_done ? "1" : "-",
@@ -987,10 +984,18 @@ module transformer_top_tb;
     .axis_in_ready(axis_in_ready),
     .axis_in_ready_ap_vld(axis_in_ready_ap_vld),
     .dma_done(dma_done),
-    .dma_address(dma_address),
-    .dma_address_ap_vld(dma_address_ap_vld),
-    .memory_request(memory_request),
-    .memory_request_ap_vld(memory_request_ap_vld),
+    .wl_ready(wl_ready),
+    .wl_start_i(wl_start_i),
+    .wl_start_o(wl_start_o),
+    .wl_start_o_ap_vld(wl_start_o_ap_vld),
+    .wl_addr_sel(wl_addr_sel),
+    .wl_addr_sel_ap_vld(wl_addr_sel_ap_vld),
+    .wl_layer(wl_layer),
+    .wl_layer_ap_vld(wl_layer_ap_vld),
+    .wl_head(wl_head),
+    .wl_head_ap_vld(wl_head_ap_vld),
+    .wl_tile(wl_tile),
+    .wl_tile_ap_vld(wl_tile_ap_vld),
     .compute_ready(compute_ready),
     .compute_done(compute_done),
     .head_ctx_ref_0_i(head_ctx_ref_0_i),
@@ -1057,18 +1062,6 @@ module transformer_top_tb;
     .w1_tile_stride_ap_vld(w1_tile_stride_ap_vld),
     .w2_tile_stride(w2_tile_stride),
     .w2_tile_stride_ap_vld(w2_tile_stride_ap_vld),
-    .dbg_wl_ready(dbg_wl_ready),
-    .dbg_wl_ready_ap_vld(dbg_wl_ready_ap_vld),
-    .dbg_wl_start(dbg_wl_start),
-    .dbg_wl_start_ap_vld(dbg_wl_start_ap_vld),
-    .dbg_wl_addr_sel(dbg_wl_addr_sel),
-    .dbg_wl_addr_sel_ap_vld(dbg_wl_addr_sel_ap_vld),
-    .dbg_wl_layer(dbg_wl_layer),
-    .dbg_wl_layer_ap_vld(dbg_wl_layer_ap_vld),
-    .dbg_wl_head(dbg_wl_head),
-    .dbg_wl_head_ap_vld(dbg_wl_head_ap_vld),
-    .dbg_wl_tile(dbg_wl_tile),
-    .dbg_wl_tile_ap_vld(dbg_wl_tile_ap_vld),
     .dbg_done(dbg_done),
     .dbg_done_ap_vld(dbg_done_ap_vld),
     .dbg_error(dbg_error),
