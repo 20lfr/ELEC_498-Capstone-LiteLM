@@ -13,7 +13,7 @@
 						"AP_START": { "actual": "ap_start"}
 					}
 				},
-				"grp_scheduler_hls_fu_16461/grp_drive_group_head_phase_fu_33035/grp_drive_group_head_phase_fu_33035_activity": {
+				"grp_scheduler_hls_fu_16461/grp_drive_group_head_phase_fu_33880/grp_drive_group_head_phase_fu_33880_activity": {
 					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
 					"ports": {
 						"AP_CLK": { "actual": "ap_clk"},

@@ -14,8 +14,9 @@ bool LayerNorm(
     bool      &ln_started,
     bool      &ln_compute_done,
     bool       compute_ready,
+    int        layer_idx,
     bool      &compute_start,
-    ComputeOp &compute_op,
+    uint32_t  &compute_op,
     const ComputeOp ops[10]
 );
 
@@ -35,7 +36,7 @@ void scheduler_hls(
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
-    ComputeOp  &compute_op,
+    uint32_t  &compute_op,
     bool stream_ready,
     bool &stream_start,
     bool stream_done,

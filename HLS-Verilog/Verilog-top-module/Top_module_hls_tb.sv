@@ -50,7 +50,7 @@ module transformer_top_tb;
   logic axis_in_ready_ap_vld;
   logic [0:0] compute_start_o;
   logic compute_start_o_ap_vld;
-  logic [7:0]  compute_op;
+  logic [31:0] compute_op;
   logic compute_op_ap_vld;
   logic [0:0] stream_start;
   logic stream_start_ap_vld;
@@ -210,8 +210,8 @@ module transformer_top_tb;
     logic        wl_start;
     logic        wl_ready;
     logic [7:0]  last_wl_addr;
-    logic [7:0]  last_compute_op;
-    logic [7:0]  compute_op;
+    logic [31:0] last_compute_op;
+    logic [31:0] compute_op;
     logic        compute_start;
     logic        compute_done;
     logic        compute_ready;
@@ -231,8 +231,8 @@ module transformer_top_tb;
   logic        head_ctx_ref_3_o_ap_vld;
   // Debug visibility
   logic [7:0] head_phase_dbg   [0:HEADS_TOTAL-1];
-  logic [7:0] head_op_dbg      [0:HEADS_TOTAL-1];
-  logic [7:0] head_last_op_dbg      [0:HEADS_TOTAL-1];
+  logic [31:0] head_op_dbg      [0:HEADS_TOTAL-1];
+  logic [31:0] head_last_op_dbg      [0:HEADS_TOTAL-1];
 
   head_ctx_t head_ctx_shadow   [0:HEADS_TOTAL-1];
   logic [3:0] head_busy_ctr    [0:HEADS_TOTAL-1];
@@ -331,11 +331,11 @@ module transformer_top_tb;
       if (compute_start_o && compute_start_o_ap_vld && !comp_busy) begin
         comp_busy <= 1'b1;
         // LayerNorm ops run shorter (6 cycles), others ~24 cycles
-        is_ln_op = (compute_op >= CMP_LN0_SUM) && (compute_op <= CMP_LN1_SHIFT);
+        is_ln_op = (compute_op[7:0] >= CMP_LN0_SUM) && (compute_op[7:0] <= CMP_LN1_SHIFT);
         comp_lat_var = is_ln_op ? 25 : 27;
         comp_timer <= (comp_lat_var > 0) ? comp_lat_var - 1 : 0;
-        if (compute_op == CMP_ATT_SCORES) seen_attn <= 1'b1;
-        if (compute_op == CMP_CONCAT)     seen_concat <= 1'b1;
+        if (compute_op[7:0] == CMP_ATT_SCORES) seen_attn <= 1'b1;
+        if (compute_op[7:0] == CMP_CONCAT)     seen_concat <= 1'b1;
       end
 
       compute_ready <= !comp_busy && !compute_done;
@@ -529,8 +529,8 @@ module transformer_top_tb;
             compute_done: 1'b0,
             compute_start: 1'b0,
             last_wl_addr: 8'd0,
-            last_compute_op: 8'd0,
-            compute_op: 8'd0,
+            last_compute_op: 32'd0,
+            compute_op: 32'd0,
             wl_ready: 1'b0,
             wl_start: 1'b0,
             wl_addr_sel: 8'd0,
@@ -605,8 +605,8 @@ module transformer_top_tb;
           // detect compute_start and run latency model
           if (compute_start_now && !head_inflight[hh] && !head_done_hold[hh]) begin
             head_inflight[hh] <= 1'b1;
-            is_ln_head_op = (head_ctx_shadow[hh].compute_op >= CMP_LN0_SUM) &&
-                            (head_ctx_shadow[hh].compute_op <= CMP_LN1_SHIFT);
+            is_ln_head_op = (head_ctx_shadow[hh].compute_op[7:0] >= CMP_LN0_SUM) &&
+                            (head_ctx_shadow[hh].compute_op[7:0] <= CMP_LN1_SHIFT);
             comp_lat_h = is_ln_head_op ? 6 : 24;
             head_busy_ctr[hh] <= (comp_lat_h > 0) ? comp_lat_h - 1 : 0;
             head_done_hold[hh] <= 1'b0;
@@ -614,7 +614,7 @@ module transformer_top_tb;
             if (head_busy_ctr[hh] == 0) begin
               head_inflight[hh] <= 1'b0;
               head_done_hold[hh] <= 1'b1;
-              head_done_ctr[hh] <= 3'd4;
+              head_done_ctr[hh] <= 3'd6;
             end else begin
               head_busy_ctr[hh] <= head_busy_ctr[hh] - 1;
             end
@@ -831,7 +831,7 @@ module transformer_top_tb;
       end
       
       // Print state
-      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-7s %-8s %-10h | %-8s %-8s %-8s %-10s",
+      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-7s %-8s %-10h | %-8s %-8s %-8s 0x%08h",
                cycle,
                (ctrl_shadow_control[1]) ? "1" : "-",
                (ctrl_shadow_control[0]) ? "1" : "-",
@@ -846,7 +846,7 @@ module transformer_top_tb;
                compute_start_o ? "1" : "-",
                compute_ready ? "1" : "-",
                compute_done ? "1" : "-",
-               op_name(compute_op));
+               compute_op);
       
       // Track done signal
       // if (ap_done) begin

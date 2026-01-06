@@ -82,6 +82,10 @@ static const char *op_name(ComputeOp op) {
     }
 }
 
+static inline ComputeOp decode_op(uint32_t packed_op) {
+    return static_cast<ComputeOp>(packed_op & 0xFFu);
+}
+
 static const char *dma_name(DmaSel sel) {
     switch (sel) {
     case DMASEL_NONE:   return "-";
@@ -172,7 +176,7 @@ int main() {
     bool compute_ready   = true;
     bool compute_done    = false;
     bool compute_start   = false;
-    ComputeOp  compute_op      = ComputeOp::CMP_NONE;
+    uint32_t  compute_op      = 0;
 
     bool head_lane_busy[HEADS_PARALLEL] = {false};
     int  head_lane_timer[HEADS_PARALLEL] = {0};
@@ -357,7 +361,7 @@ int main() {
                     dash_or(compute_start),
                     dash_or(compute_ready),
                     dash_or(compute_done),
-                    (compute_op == CMP_NONE ? "-" : op_name(compute_op)),
+                    (decode_op(compute_op) == CMP_NONE ? "-" : op_name(decode_op(compute_op))),
                     dash_or(memory_request),
                     dma_address,
                     dash_or(dbg_wl_ready),
@@ -375,7 +379,7 @@ int main() {
                           dash_or(head_ctx_ref[i].compute_ready),
                           dash_or(head_ctx_ref[i].compute_start),
                           dash_or(head_ctx_ref[i].compute_done),
-                          op_name(head_ctx_ref[i].compute_op),
+                          op_name(decode_op(head_ctx_ref[i].compute_op)),
                           dash_or(head_ctx_ref[i].wl_ready),
                           dma_name(head_ctx_ref[i].wl_addr_sel),
                           dash_or(head_ctx_ref[i].q_dma_done),
@@ -391,7 +395,7 @@ int main() {
                 head_lane_busy[lane] = true;
                 head_lane_timer[lane] = COMP_LAT - 1;
                 head_lane_active_idx[lane] = i;
-                ComputeOp launched_op = head_ctx_ref[i].compute_op;
+                ComputeOp launched_op = decode_op(head_ctx_ref[i].compute_op);
                 if (launched_op == CMP_ATT_SCORES) seen_attn = true;
             }
             if (head_ctx_ref[i].wl_start && !head_dma_busy[lane]) {
@@ -405,7 +409,7 @@ int main() {
         if (!comp_busy && compute_start) {
             comp_busy  = true;
             comp_timer = COMP_LAT - 1;
-            if (compute_op == CMP_CONCAT) seen_concat = true;
+            if (decode_op(compute_op) == CMP_CONCAT) seen_concat = true;
         }
         if (stream_start) {
             stream_busy = true;

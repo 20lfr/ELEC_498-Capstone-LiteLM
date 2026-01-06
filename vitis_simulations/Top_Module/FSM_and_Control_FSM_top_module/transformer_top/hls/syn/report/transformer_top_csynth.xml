@@ -18,18 +18,18 @@
 <PipelineType>no</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>7.281</EstimatedClockPeriod>
+<EstimatedClockPeriod>6.313</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
 <Best-caseLatency>2</Best-caseLatency>
-<Average-caseLatency>2</Average-caseLatency>
-<Worst-caseLatency>4</Worst-caseLatency>
+<Average-caseLatency>3</Average-caseLatency>
+<Worst-caseLatency>5</Worst-caseLatency>
 <Best-caseRealTimeLatency>20.000 ns</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>20.000 ns</Average-caseRealTimeLatency>
-<Worst-caseRealTimeLatency>40.000 ns</Worst-caseRealTimeLatency>
+<Average-caseRealTimeLatency>30.000 ns</Average-caseRealTimeLatency>
+<Worst-caseRealTimeLatency>50.000 ns</Worst-caseRealTimeLatency>
 <Interval-min>3</Interval-min>
-<Interval-max>5</Interval-max>
+<Interval-max>6</Interval-max>
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfViolations>
@@ -41,9 +41,9 @@
 
 <AreaEstimates>
 <Resources>
-<DSP>18</DSP>
-<FF>9022</FF>
-<LUT>19796</LUT>
+<DSP>12</DSP>
+<FF>11269</FF>
+<LUT>20279</LUT>
 <BRAM_18K>0</BRAM_18K>
 <URAM>0</URAM>
 </Resources>
@@ -299,7 +299,7 @@
 <IOProtocol>ap_vld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>8</Bits>
+<Bits>32</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -323,7 +323,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -335,7 +335,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -359,7 +359,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -371,7 +371,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -395,7 +395,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -407,7 +407,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -431,7 +431,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>in</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -443,7 +443,7 @@
 <IOProtocol>ap_ovld</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>235</Bits>
+<Bits>283</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>

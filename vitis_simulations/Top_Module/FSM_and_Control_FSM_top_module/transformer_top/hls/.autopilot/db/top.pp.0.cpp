@@ -6671,8 +6671,8 @@ struct HeadCtx {
     bool compute_ready = false;
     bool compute_done = false;
     bool compute_start = false;
-    ComputeOp compute_op = ComputeOp::CMP_NONE;
-    ComputeOp last_compute_op = ComputeOp::CMP_NONE;
+    uint32_t compute_op = 0;
+    uint32_t last_compute_op = 0;
     DmaSel last_wl_addr = DmaSel::DMASEL_NONE;
 
     bool wl_ready = false;
@@ -6876,8 +6876,9 @@ bool LayerNorm(
     bool &ln_started,
     bool &ln_compute_done,
     bool compute_ready,
+    int layer_idx,
     bool &compute_start,
-    ComputeOp &compute_op,
+    uint32_t &compute_op,
     const ComputeOp ops[10]
 );
 
@@ -6897,7 +6898,7 @@ void scheduler_hls(
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
-    ComputeOp &compute_op,
+    uint32_t &compute_op,
     bool stream_ready,
     bool &stream_start,
     bool stream_done,
@@ -6967,7 +6968,7 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool compute_ready,
     bool compute_done,
     bool &compute_start,
-    ComputeOp &compute_op,
+    uint32_t &compute_op,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool stream_ready,
     bool &stream_start,
@@ -7033,7 +7034,7 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool compute_ready,
     bool compute_done,
     bool &compute_start,
-    ComputeOp &compute_op,
+    uint32_t &compute_op,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
 
 

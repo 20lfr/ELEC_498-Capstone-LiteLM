@@ -1473,7 +1473,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
 
   static hls::sim::Register port9 {
     .name = "compute_op",
-    .width = 8,
+    .width = 32,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_compute_op),
 #else
@@ -1485,7 +1485,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
 
   static hls::sim::Register port10 {
     .name = "head_ctx_ref_0",
-    .width = 235,
+    .width = 283,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_0),
 #else
@@ -1497,7 +1497,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
 
   static hls::sim::Register port11 {
     .name = "head_ctx_ref_1",
-    .width = 235,
+    .width = 283,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_1),
 #else
@@ -1509,7 +1509,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
 
   static hls::sim::Register port12 {
     .name = "head_ctx_ref_2",
-    .width = 235,
+    .width = 283,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_2),
 #else
@@ -1521,7 +1521,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
 
   static hls::sim::Register port13 {
     .name = "head_ctx_ref_3",
-    .width = 235,
+    .width = 283,
 #ifdef POST_CHECK
     .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_head_ctx_ref_3),
 #else

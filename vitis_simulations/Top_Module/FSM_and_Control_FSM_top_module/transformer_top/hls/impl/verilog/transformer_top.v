@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.281262,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=9022,HLS_SYN_LUT=19796,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=6.312600,HLS_SYN_LAT=3,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=11269,HLS_SYN_LUT=20279,HLS_VERSION=2025_1}" *)
 
 module transformer_top (
         ap_clk,
@@ -131,19 +131,19 @@ input  [0:0] compute_done;
 input  [0:0] compute_start_i;
 output  [0:0] compute_start_o;
 output   compute_start_o_ap_vld;
-output  [7:0] compute_op;
+output  [31:0] compute_op;
 output   compute_op_ap_vld;
-input  [234:0] head_ctx_ref_0_i;
-output  [234:0] head_ctx_ref_0_o;
+input  [282:0] head_ctx_ref_0_i;
+output  [282:0] head_ctx_ref_0_o;
 output   head_ctx_ref_0_o_ap_vld;
-input  [234:0] head_ctx_ref_1_i;
-output  [234:0] head_ctx_ref_1_o;
+input  [282:0] head_ctx_ref_1_i;
+output  [282:0] head_ctx_ref_1_o;
 output   head_ctx_ref_1_o_ap_vld;
-input  [234:0] head_ctx_ref_2_i;
-output  [234:0] head_ctx_ref_2_o;
+input  [282:0] head_ctx_ref_2_i;
+output  [282:0] head_ctx_ref_2_o;
 output   head_ctx_ref_2_o_ap_vld;
-input  [234:0] head_ctx_ref_3_i;
-output  [234:0] head_ctx_ref_3_o;
+input  [282:0] head_ctx_ref_3_i;
+output  [282:0] head_ctx_ref_3_o;
 output   head_ctx_ref_3_o_ap_vld;
 input  [0:0] stream_ready;
 output  [0:0] stream_start;
@@ -216,7 +216,7 @@ reg axis_in_ready_ap_vld;
 reg[31:0] dma_address;
 reg memory_request_ap_vld;
 reg compute_start_o_ap_vld;
-reg[7:0] compute_op;
+reg[31:0] compute_op;
 reg head_ctx_ref_0_o_ap_vld;
 reg head_ctx_ref_1_o_ap_vld;
 reg head_ctx_ref_2_o_ap_vld;
@@ -331,17 +331,17 @@ wire   [31:0] or_ln1_fu_18495_p3;
 wire   [31:0] and_ln65_fu_18509_p2;
 wire   [31:0] or_ln_fu_18529_p4;
 reg   [0:0] compute_start_read_reg_21737;
-reg   [234:0] head_ctx_ref_0_read_reg_21742;
-reg   [234:0] head_ctx_ref_1_read_reg_21747;
-reg   [234:0] head_ctx_ref_2_read_reg_21752;
-reg   [234:0] head_ctx_ref_3_read_reg_21757;
+reg   [282:0] head_ctx_ref_0_read_reg_21742;
+reg   [282:0] head_ctx_ref_1_read_reg_21747;
+reg   [282:0] head_ctx_ref_2_read_reg_21752;
+reg   [282:0] head_ctx_ref_3_read_reg_21757;
 wire    grp_scheduler_hls_fu_16461_ap_start;
 wire    grp_scheduler_hls_fu_16461_ap_done;
 wire    grp_scheduler_hls_fu_16461_ap_idle;
 wire    grp_scheduler_hls_fu_16461_ap_ready;
 wire   [31:0] grp_scheduler_hls_fu_16461_dma_address;
 wire    grp_scheduler_hls_fu_16461_dma_address_ap_vld;
-wire   [7:0] grp_scheduler_hls_fu_16461_compute_op;
+wire   [31:0] grp_scheduler_hls_fu_16461_compute_op;
 wire    grp_scheduler_hls_fu_16461_compute_op_ap_vld;
 wire   [0:0] grp_scheduler_hls_fu_16461_ap_return_0;
 wire   [0:0] grp_scheduler_hls_fu_16461_ap_return_1;
@@ -355,10 +355,10 @@ wire   [7:0] grp_scheduler_hls_fu_16461_ap_return_8;
 wire   [31:0] grp_scheduler_hls_fu_16461_ap_return_9;
 wire   [31:0] grp_scheduler_hls_fu_16461_ap_return_10;
 wire   [31:0] grp_scheduler_hls_fu_16461_ap_return_11;
-wire   [234:0] grp_scheduler_hls_fu_16461_ap_return_12;
-wire   [234:0] grp_scheduler_hls_fu_16461_ap_return_13;
-wire   [234:0] grp_scheduler_hls_fu_16461_ap_return_14;
-wire   [234:0] grp_scheduler_hls_fu_16461_ap_return_15;
+wire   [282:0] grp_scheduler_hls_fu_16461_ap_return_12;
+wire   [282:0] grp_scheduler_hls_fu_16461_ap_return_13;
+wire   [282:0] grp_scheduler_hls_fu_16461_ap_return_14;
+wire   [282:0] grp_scheduler_hls_fu_16461_ap_return_15;
 wire   [0:0] grp_scheduler_hls_fu_16461_ap_return_16;
 reg   [31:0] ctrl_mem_layer_stride_loc_1_reg_756;
 wire   [0:0] ctrl_chip_en_read_read_fu_416_p2;
@@ -492,7 +492,7 @@ reg   [31:0] ctrl_data_out_new_0_reg_16270;
 reg    grp_scheduler_hls_fu_16461_ap_start_reg;
 wire    ap_CS_fsm_state2;
 reg   [31:0] dma_address_reg;
-reg   [7:0] compute_op_reg;
+reg   [31:0] compute_op_reg;
 wire   [31:0] ctrl_mem_irq_status_new_3_fu_18950_p3;
 wire   [0:0] ctrl_mem_irq_status_flag_3_fu_18944_p2;
 wire   [1:0] trunc_ln4_3_fu_16754_p1;

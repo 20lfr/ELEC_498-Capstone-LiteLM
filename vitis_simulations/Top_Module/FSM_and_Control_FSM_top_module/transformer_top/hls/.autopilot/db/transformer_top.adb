@@ -361,7 +361,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>8</bitwidth>
+            <bitwidth>32</bitwidth>
           </Value>
           <direction>1</direction>
           <if_type>0</if_type>
@@ -397,7 +397,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <direction>2</direction>
           <if_type>0</if_type>
@@ -433,7 +433,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <direction>2</direction>
           <if_type>0</if_type>
@@ -469,7 +469,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <direction>2</direction>
           <if_type>0</if_type>
@@ -505,7 +505,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <direction>2</direction>
           <if_type>0</if_type>
@@ -32211,7 +32211,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -32268,7 +32268,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -32325,7 +32325,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -32382,7 +32382,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -32439,7 +32439,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>1084</bitwidth>
+            <bitwidth>1276</bitwidth>
           </Value>
           <oprand_edges>
             <count>86</count>
@@ -33252,7 +33252,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>1</count>
@@ -33367,7 +33367,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>1</count>
@@ -33482,7 +33482,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>1</count>
@@ -33597,7 +33597,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>235</bitwidth>
+            <bitwidth>283</bitwidth>
           </Value>
           <oprand_edges>
             <count>1</count>
@@ -43368,7 +43368,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>1084</bitwidth>
+            <bitwidth>1276</bitwidth>
           </Value>
           <const_type>6</const_type>
           <content>&lt;constant:scheduler_hls&gt;</content>
@@ -144823,7 +144823,7 @@
         <mMinTripCount>-1</mMinTripCount>
         <mMaxTripCount>-1</mMaxTripCount>
         <mMinLatency>2</mMinLatency>
-        <mMaxLatency>4</mMaxLatency>
+        <mMaxLatency>5</mMaxLatency>
         <mIsDfPipe>0</mIsDfPipe>
         <mDfPipe class_id="-1"></mDfPipe>
       </item>
@@ -147588,15 +147588,15 @@
             <item_version>0</item_version>
             <item class_id="38" tracking_level="0" version="0">
               <first>DSP</first>
-              <second>18</second>
+              <second>12</second>
             </item>
             <item>
               <first>FF</first>
-              <second>5272</second>
+              <second>7303</second>
             </item>
             <item>
               <first>LUT</first>
-              <second>17499</second>
+              <second>17982</second>
             </item>
           </second>
         </item>
@@ -148975,11 +148975,11 @@
             </item>
             <item>
               <first>(1Bits)</first>
-              <second>8</second>
+              <second>32</second>
             </item>
             <item>
               <first>(2Count)</first>
-              <second>16</second>
+              <second>64</second>
             </item>
             <item>
               <first>FF</first>
@@ -151454,7 +151454,7 @@
             <item_version>0</item_version>
             <item>
               <first>(Bits)</first>
-              <second>8</second>
+              <second>32</second>
             </item>
             <item>
               <first>(Consts)</first>
@@ -151462,7 +151462,7 @@
             </item>
             <item>
               <first>FF</first>
-              <second>8</second>
+              <second>32</second>
             </item>
           </second>
         </item>
@@ -153620,7 +153620,7 @@
             <item_version>0</item_version>
             <item>
               <first>(Bits)</first>
-              <second>235</second>
+              <second>283</second>
             </item>
             <item>
               <first>(Consts)</first>
@@ -153628,7 +153628,7 @@
             </item>
             <item>
               <first>FF</first>
-              <second>235</second>
+              <second>283</second>
             </item>
           </second>
         </item>
@@ -153639,7 +153639,7 @@
             <item_version>0</item_version>
             <item>
               <first>(Bits)</first>
-              <second>235</second>
+              <second>283</second>
             </item>
             <item>
               <first>(Consts)</first>
@@ -153647,7 +153647,7 @@
             </item>
             <item>
               <first>FF</first>
-              <second>235</second>
+              <second>283</second>
             </item>
           </second>
         </item>
@@ -153658,7 +153658,7 @@
             <item_version>0</item_version>
             <item>
               <first>(Bits)</first>
-              <second>235</second>
+              <second>283</second>
             </item>
             <item>
               <first>(Consts)</first>
@@ -153666,7 +153666,7 @@
             </item>
             <item>
               <first>FF</first>
-              <second>235</second>
+              <second>283</second>
             </item>
           </second>
         </item>
@@ -153677,7 +153677,7 @@
             <item_version>0</item_version>
             <item>
               <first>(Bits)</first>
-              <second>235</second>
+              <second>283</second>
             </item>
             <item>
               <first>(Consts)</first>
@@ -153685,7 +153685,7 @@
             </item>
             <item>
               <first>FF</first>
-              <second>235</second>
+              <second>283</second>
             </item>
           </second>
         </item>
