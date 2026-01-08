@@ -334,53 +334,8 @@ constexpr uint32_t ERR_NONE             = 0x0;
 constexpr uint32_t ERR_DMA_ALIGNMENT    = 0x10;
 constexpr uint32_t ERR_DMA_ZERO_LEN     = 0x11;
 
-
-// ------------------------------------------------------------
-// Control memory register map (AXI-Lite accessible)
-// ------------------------------------------------------------
-enum class ControlReg : uint32_t {
-    CONTROL         = 0x00, // 0
-    LAYER_INDEX     = 0x04, // 1
-    STATUS          = 0x08, // 2
-    IRQ_STATUS      = 0x0C, // 3
-    IRQ_ENABLE      = 0x10, // 4
-
-    DMA_LAYER_LEN   = 0x14, // 5
-    DMA_HEAD_LEN    = 0x18, // 6
-    DMA_TILE_LEN    = 0x1C, // 7
-
-    LAYER_STRIDE    = 0x20, // 8
-    WQ_HEAD_STRIDE  = 0x24, // 9
-    WK_HEAD_STRIDE  = 0x28, // 10
-    WV_HEAD_STRIDE  = 0x2C, // 11
-
-    K_CACHE_STRIDE  = 0x30, // 12
-    V_CACHE_STRIDE  = 0x34, // 13
-
-    WO_TILE_STRIDE  = 0x38, // 14
-    W1_TILE_STRIDE  = 0x3C, // 15
-    W2_TILE_STRIDE  = 0x40, // 16
-
-    WQ_BASE_ADDR    = 0x44, // 17
-    WK_BASE_ADDR    = 0x48, // 18
-    WV_BASE_ADDR    = 0x4C, // 19
-    WO_BASE_ADDR    = 0x50, // 20
-    W1_BASE_ADDR    = 0x54, // 21
-    W2_BASE_ADDR    = 0x58, // 22
-
-    K_CACHE_ADDR    = 0x5C, // 23
-    V_CACHE_ADDR    = 0x60, // 24
-
-    LOGIT_SCALE_QV  = 0x64, // 25
-    SCALE_Q         = 0x68, // 26
-    ZERO_POINT_Q    = 0x6C, // 27
-    SCALE_K         = 0x70, // 28
-    ZERO_POINT_K    = 0x74, // 29
-    SCALE_V         = 0x78, // 30
-    ZERO_POINT_V    = 0x7C, // 31
-
-    RESERVED_DEBUG  = 0x80  // 32
-};
+// Register Addr mapping is auto generated in a HLS project
+// `mask_allowed/hel/impl/ip/drivers/<top_function>/src/x<top_function>_hw.h`
 
 // Config (PS Writes -> PL Reads)
 // Passed by value
@@ -392,26 +347,27 @@ struct ControlMemSpace {
     uint32_t dma_tile_len   = 0;
 
     uint32_t layer_stride   = 0;
-    uint32_t wq_head_stride    = 0;
-    uint32_t wk_head_stride    = 0;
-    uint32_t wv_head_stride    = 0;
+    uint32_t wq_head_stride = 0;
+    uint32_t wk_head_stride = 0;
+    uint32_t wv_head_stride = 0;
 
-    uint32_t k_cache_stride   = 0;
-    uint32_t v_cache_stride   = 0;
+    uint32_t k_cache_stride = 0;
+    uint32_t v_cache_stride = 0;
 
-    uint32_t wo_tile_stride    = 0;
-    uint32_t w1_tile_stride    = 0;
-    uint32_t w2_tile_stride    = 0;
+    uint32_t wo_tile_stride = 0;
+    uint32_t w1_tile_stride = 0;
+    uint32_t w2_tile_stride = 0;
 
-    uint32_t wq_base_addr   = 0;
-    uint32_t wk_base_addr   = 0;
-    uint32_t wv_base_addr   = 0;
-    uint32_t wo_base_addr   = 0;
-    uint32_t w1_base_addr   = 0;
-    uint32_t w2_base_addr   = 0;
+    // address size match ARM64 address space
+    uint64_t wq_base_addr   = 0;
+    uint64_t wk_base_addr   = 0;
+    uint64_t wv_base_addr   = 0;
+    uint64_t wo_base_addr   = 0;
+    uint64_t w1_base_addr   = 0;
+    uint64_t w2_base_addr   = 0;
 
-    uint32_t k_cache_addr   = 0;
-    uint32_t v_cache_addr   = 0;
+    uint64_t k_cache_addr   = 0;
+    uint64_t v_cache_addr   = 0;
 
     uint32_t logit_scale_qv = 0;
     uint32_t scale_q        = 0;
@@ -425,8 +381,8 @@ struct ControlMemSpace {
 // Status (PS Reads <- PL Writes)
 // Passed by reference
 struct StatusMemSpace {
-    uint32_t status = STATUS_IDLE;      // Busy, Done, Error flags
-    uint32_t irq_status = 0;  // Interrupt specific flags
-    uint32_t error_code = 0;  // Specific error reason (e.g. alignment)
-    uint32_t current_layer = 0; // Progress tracking
+    uint32_t status = STATUS_IDLE;
+    uint32_t irq_status     = 0;
+    uint32_t error_code     = 0;
+    uint32_t current_layer  = 0;
 };

@@ -7,7 +7,7 @@ void ControlTest_Top(
     ControlMemSpace config_in,    // Input Bundle
     StatusMemSpace  &status_out,  // Output Bundle
     uint32_t        irq_clear_in // Control Bundle
-    
+
     // 2. Dummy Hardware Signals (to simulate internal logic)
     // bool            sim_trigger_done,
     // bool            sim_trigger_error

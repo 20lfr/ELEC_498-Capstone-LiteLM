@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="ControlTest_Top_ControlTest_Top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=4.201000,HLS_SYN_LAT=0,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=1175,HLS_SYN_LUT=2598,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="ControlTest_Top_ControlTest_Top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=4.201000,HLS_SYN_LAT=0,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=1495,HLS_SYN_LUT=3238,HLS_VERSION=2025_1}" *)
 
 module ControlTest_Top (
         ap_clk,
@@ -71,7 +71,7 @@ reg    ap_idle;
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg    ap_ready;
-wire   [895:0] config_in;
+wire   [1215:0] config_in;
 wire   [127:0] status_out;
 reg    status_out_ap_vld;
 wire   [31:0] irq_clear_in;
@@ -81,21 +81,21 @@ wire   [31:0] ctrl_irq_status_new_2_fu_259_p3;
 wire   [0:0] ctrl_irq_status_flag_2_fu_253_p2;
 wire   [31:0] select_ln30_fu_339_p3;
 wire   [0:0] or_ln30_fu_333_p2;
-wire   [0:0] or_ln26_1_fu_185_p2;
+wire   [0:0] or_ln26_1_fu_213_p2;
 wire   [0:0] icmp_ln32_fu_241_p2;
 wire   [31:0] xor_ln18_fu_143_p2;
 wire   [31:0] config_in_dma_layer_len_fu_105_p3;
 wire   [31:0] config_in_dma_head_len_fu_113_p3;
 wire   [31:0] config_in_dma_tile_len_fu_121_p3;
-wire   [0:0] icmp_ln26_1_fu_167_p2;
-wire   [0:0] icmp_ln26_2_fu_173_p2;
-wire   [0:0] or_ln26_fu_179_p2;
-wire   [0:0] icmp_ln26_fu_161_p2;
 wire   [31:0] ctrl_irq_status_loc_0_fu_155_p2;
-wire   [29:0] tmp_fu_195_p4;
-wire   [0:0] trunc_ln52_fu_205_p1;
+wire   [29:0] tmp_fu_183_p4;
+wire   [0:0] trunc_ln52_fu_193_p1;
+wire   [0:0] icmp_ln26_2_fu_177_p2;
+wire   [0:0] icmp_ln26_fu_161_p2;
+wire   [0:0] or_ln26_fu_207_p2;
+wire   [0:0] icmp_ln26_1_fu_171_p2;
 wire   [0:0] not_icmp_ln17_fu_149_p2;
-wire   [31:0] or_ln_fu_209_p4;
+wire   [31:0] or_ln_fu_197_p4;
 wire   [5:0] config_in_wq_base_addr_cast1_fu_129_p4;
 wire   [0:0] ctrl_irq_status_flag_1_fu_219_p2;
 wire   [0:0] not_icmp_ln32_fu_247_p2;
@@ -240,29 +240,29 @@ assign config_in_dma_layer_len_fu_105_p3 = {{config_in[63:32]}};
 
 assign config_in_dma_tile_len_fu_121_p3 = {{config_in[127:96]}};
 
-assign config_in_wq_base_addr_cast1_fu_129_p4 = {{config_in[421:416]}};
+assign config_in_wq_base_addr_cast1_fu_129_p4 = {{config_in[453:448]}};
 
-assign ctrl_irq_status_flag_1_fu_219_p2 = (or_ln26_1_fu_185_p2 | not_icmp_ln17_fu_149_p2);
+assign ctrl_irq_status_flag_1_fu_219_p2 = (or_ln26_1_fu_213_p2 | not_icmp_ln17_fu_149_p2);
 
 assign ctrl_irq_status_flag_2_fu_253_p2 = (not_icmp_ln32_fu_247_p2 | ctrl_irq_status_flag_1_fu_219_p2);
 
 assign ctrl_irq_status_loc_0_fu_155_p2 = (xor_ln18_fu_143_p2 & ctrl_irq_status);
 
-assign ctrl_irq_status_new_1_fu_225_p3 = ((or_ln26_1_fu_185_p2[0:0] == 1'b1) ? or_ln_fu_209_p4 : ctrl_irq_status_loc_0_fu_155_p2);
+assign ctrl_irq_status_new_1_fu_225_p3 = ((or_ln26_1_fu_213_p2[0:0] == 1'b1) ? or_ln_fu_197_p4 : ctrl_irq_status_loc_0_fu_155_p2);
 
-assign ctrl_irq_status_new_2_fu_259_p3 = ((icmp_ln32_fu_241_p2[0:0] == 1'b1) ? ctrl_irq_status_new_1_fu_225_p3 : or_ln_fu_209_p4);
+assign ctrl_irq_status_new_2_fu_259_p3 = ((icmp_ln32_fu_241_p2[0:0] == 1'b1) ? ctrl_irq_status_new_1_fu_225_p3 : or_ln_fu_197_p4);
 
-assign ctrl_status_flag_1_fu_267_p2 = (or_ln26_1_fu_185_p2 | not_icmp_ln32_fu_247_p2);
+assign ctrl_status_flag_1_fu_267_p2 = (or_ln26_1_fu_213_p2 | not_icmp_ln32_fu_247_p2);
 
-assign ctrl_status_loc_0_fu_233_p3 = ((or_ln26_1_fu_185_p2[0:0] == 1'b1) ? 32'd17 : ctrl_status);
+assign ctrl_status_loc_0_fu_233_p3 = ((or_ln26_1_fu_213_p2[0:0] == 1'b1) ? 32'd17 : ctrl_status);
 
 assign ctrl_status_loc_1_fu_281_p3 = ((icmp_ln32_fu_241_p2[0:0] == 1'b1) ? ctrl_status_loc_0_fu_233_p3 : 32'd16);
 
 assign ctrl_status_new_1_cast_cast_cast_fu_273_p3 = ((icmp_ln32_fu_241_p2[0:0] == 1'b1) ? 32'd17 : 32'd16);
 
-assign icmp_ln26_1_fu_167_p2 = ((config_in_dma_head_len_fu_113_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln26_1_fu_171_p2 = ((config_in_dma_head_len_fu_113_p3 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln26_2_fu_173_p2 = ((config_in_dma_tile_len_fu_121_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln26_2_fu_177_p2 = ((config_in_dma_tile_len_fu_121_p3 == 32'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln26_fu_161_p2 = ((config_in_dma_layer_len_fu_105_p3 == 32'd0) ? 1'b1 : 1'b0);
 
@@ -274,15 +274,15 @@ assign not_icmp_ln32_fu_247_p2 = (icmp_ln32_fu_241_p2 ^ 1'd1);
 
 assign or_ln1_fu_323_p4 = {{{tmp_2_fu_309_p4}, {1'd1}}, {trunc_ln42_fu_319_p1}};
 
-assign or_ln26_1_fu_185_p2 = (or_ln26_fu_179_p2 | icmp_ln26_fu_161_p2);
+assign or_ln26_1_fu_213_p2 = (or_ln26_fu_207_p2 | icmp_ln26_1_fu_171_p2);
 
-assign or_ln26_fu_179_p2 = (icmp_ln26_2_fu_173_p2 | icmp_ln26_1_fu_167_p2);
+assign or_ln26_fu_207_p2 = (icmp_ln26_fu_161_p2 | icmp_ln26_2_fu_177_p2);
 
 assign or_ln30_fu_333_p2 = (xor_ln61_fu_297_p2 | ctrl_status_flag_1_fu_267_p2);
 
 assign or_ln42_4_fu_355_p3 = {{ctrl_irq_status_new_2_fu_259_p3}, {select_ln30_1_fu_347_p3}};
 
-assign or_ln_fu_209_p4 = {{{tmp_fu_195_p4}, {1'd1}}, {trunc_ln52_fu_205_p1}};
+assign or_ln_fu_197_p4 = {{{tmp_fu_183_p4}, {1'd1}}, {trunc_ln52_fu_193_p1}};
 
 assign select_ln30_1_fu_347_p3 = ((tmp_1_fu_289_p3[0:0] == 1'b1) ? ctrl_status_loc_1_fu_281_p3 : or_ln1_fu_323_p4);
 
@@ -294,11 +294,11 @@ assign tmp_1_fu_289_p3 = ctrl_irq_status_new_2_fu_259_p3[32'd1];
 
 assign tmp_2_fu_309_p4 = {{ctrl_status_loc_1_fu_281_p3[31:4]}};
 
-assign tmp_fu_195_p4 = {{ctrl_irq_status_loc_0_fu_155_p2[31:2]}};
+assign tmp_fu_183_p4 = {{ctrl_irq_status_loc_0_fu_155_p2[31:2]}};
 
 assign trunc_ln42_fu_319_p1 = ctrl_status_loc_1_fu_281_p3[2:0];
 
-assign trunc_ln52_fu_205_p1 = ctrl_irq_status_loc_0_fu_155_p2[0:0];
+assign trunc_ln52_fu_193_p1 = ctrl_irq_status_loc_0_fu_155_p2[0:0];
 
 assign xor_ln18_fu_143_p2 = (irq_clear_in ^ 32'd4294967295);
 

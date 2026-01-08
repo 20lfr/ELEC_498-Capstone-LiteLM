@@ -32,7 +32,7 @@ module ControlTest_Top_control_s_axi
     output wire                          RVALID,
     input  wire                          RREADY,
     output wire                          interrupt,
-    output wire [895:0]                  config_in,
+    output wire [1215:0]                 config_in,
     input  wire [127:0]                  status_out,
     input  wire                          status_out_ap_vld,
     output wire [31:0]                   irq_clear_in,
@@ -119,21 +119,41 @@ module ControlTest_Top_control_s_axi
 //        bit 31~0 - config_in[863:832] (Read/Write)
 // 0x7c : Data signal of config_in
 //        bit 31~0 - config_in[895:864] (Read/Write)
-// 0x80 : reserved
-// 0x84 : Data signal of status_out
+// 0x80 : Data signal of config_in
+//        bit 31~0 - config_in[927:896] (Read/Write)
+// 0x84 : Data signal of config_in
+//        bit 31~0 - config_in[959:928] (Read/Write)
+// 0x88 : Data signal of config_in
+//        bit 31~0 - config_in[991:960] (Read/Write)
+// 0x8c : Data signal of config_in
+//        bit 31~0 - config_in[1023:992] (Read/Write)
+// 0x90 : Data signal of config_in
+//        bit 31~0 - config_in[1055:1024] (Read/Write)
+// 0x94 : Data signal of config_in
+//        bit 31~0 - config_in[1087:1056] (Read/Write)
+// 0x98 : Data signal of config_in
+//        bit 31~0 - config_in[1119:1088] (Read/Write)
+// 0x9c : Data signal of config_in
+//        bit 31~0 - config_in[1151:1120] (Read/Write)
+// 0xa0 : Data signal of config_in
+//        bit 31~0 - config_in[1183:1152] (Read/Write)
+// 0xa4 : Data signal of config_in
+//        bit 31~0 - config_in[1215:1184] (Read/Write)
+// 0xa8 : reserved
+// 0xac : Data signal of status_out
 //        bit 31~0 - status_out[31:0] (Read)
-// 0x88 : Data signal of status_out
+// 0xb0 : Data signal of status_out
 //        bit 31~0 - status_out[63:32] (Read)
-// 0x8c : Data signal of status_out
+// 0xb4 : Data signal of status_out
 //        bit 31~0 - status_out[95:64] (Read)
-// 0x90 : Data signal of status_out
+// 0xb8 : Data signal of status_out
 //        bit 31~0 - status_out[127:96] (Read)
-// 0x94 : Control signal of status_out
+// 0xbc : Control signal of status_out
 //        bit 0  - status_out_ap_vld (Read/COR)
 //        others - reserved
-// 0xac : Data signal of irq_clear_in
+// 0xd4 : Data signal of irq_clear_in
 //        bit 31~0 - irq_clear_in[31:0] (Read/Write)
-// 0xb0 : reserved
+// 0xd8 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
@@ -170,14 +190,24 @@ localparam
     ADDR_CONFIG_IN_DATA_25   = 8'h74,
     ADDR_CONFIG_IN_DATA_26   = 8'h78,
     ADDR_CONFIG_IN_DATA_27   = 8'h7c,
-    ADDR_CONFIG_IN_CTRL      = 8'h80,
-    ADDR_STATUS_OUT_DATA_0   = 8'h84,
-    ADDR_STATUS_OUT_DATA_1   = 8'h88,
-    ADDR_STATUS_OUT_DATA_2   = 8'h8c,
-    ADDR_STATUS_OUT_DATA_3   = 8'h90,
-    ADDR_STATUS_OUT_CTRL     = 8'h94,
-    ADDR_IRQ_CLEAR_IN_DATA_0 = 8'hac,
-    ADDR_IRQ_CLEAR_IN_CTRL   = 8'hb0,
+    ADDR_CONFIG_IN_DATA_28   = 8'h80,
+    ADDR_CONFIG_IN_DATA_29   = 8'h84,
+    ADDR_CONFIG_IN_DATA_30   = 8'h88,
+    ADDR_CONFIG_IN_DATA_31   = 8'h8c,
+    ADDR_CONFIG_IN_DATA_32   = 8'h90,
+    ADDR_CONFIG_IN_DATA_33   = 8'h94,
+    ADDR_CONFIG_IN_DATA_34   = 8'h98,
+    ADDR_CONFIG_IN_DATA_35   = 8'h9c,
+    ADDR_CONFIG_IN_DATA_36   = 8'ha0,
+    ADDR_CONFIG_IN_DATA_37   = 8'ha4,
+    ADDR_CONFIG_IN_CTRL      = 8'ha8,
+    ADDR_STATUS_OUT_DATA_0   = 8'hac,
+    ADDR_STATUS_OUT_DATA_1   = 8'hb0,
+    ADDR_STATUS_OUT_DATA_2   = 8'hb4,
+    ADDR_STATUS_OUT_DATA_3   = 8'hb8,
+    ADDR_STATUS_OUT_CTRL     = 8'hbc,
+    ADDR_IRQ_CLEAR_IN_DATA_0 = 8'hd4,
+    ADDR_IRQ_CLEAR_IN_CTRL   = 8'hd8,
     WRIDLE                   = 2'd0,
     WRDATA                   = 2'd1,
     WRRESP                   = 2'd2,
@@ -214,7 +244,7 @@ localparam
     reg                           int_gie = 1'b0;
     reg  [1:0]                    int_ier = 2'b0;
     reg  [1:0]                    int_isr = 2'b0;
-    reg  [895:0]                  int_config_in = 'b0;
+    reg  [1215:0]                 int_config_in = 'b0;
     reg                           int_status_out_ap_vld;
     reg  [127:0]                  int_status_out = 'b0;
     reg  [31:0]                   int_irq_clear_in = 'b0;
@@ -410,6 +440,36 @@ always @(posedge ACLK) begin
                 end
                 ADDR_CONFIG_IN_DATA_27: begin
                     rdata <= int_config_in[895:864];
+                end
+                ADDR_CONFIG_IN_DATA_28: begin
+                    rdata <= int_config_in[927:896];
+                end
+                ADDR_CONFIG_IN_DATA_29: begin
+                    rdata <= int_config_in[959:928];
+                end
+                ADDR_CONFIG_IN_DATA_30: begin
+                    rdata <= int_config_in[991:960];
+                end
+                ADDR_CONFIG_IN_DATA_31: begin
+                    rdata <= int_config_in[1023:992];
+                end
+                ADDR_CONFIG_IN_DATA_32: begin
+                    rdata <= int_config_in[1055:1024];
+                end
+                ADDR_CONFIG_IN_DATA_33: begin
+                    rdata <= int_config_in[1087:1056];
+                end
+                ADDR_CONFIG_IN_DATA_34: begin
+                    rdata <= int_config_in[1119:1088];
+                end
+                ADDR_CONFIG_IN_DATA_35: begin
+                    rdata <= int_config_in[1151:1120];
+                end
+                ADDR_CONFIG_IN_DATA_36: begin
+                    rdata <= int_config_in[1183:1152];
+                end
+                ADDR_CONFIG_IN_DATA_37: begin
+                    rdata <= int_config_in[1215:1184];
                 end
                 ADDR_STATUS_OUT_DATA_0: begin
                     rdata <= int_status_out[31:0];
@@ -852,6 +912,106 @@ always @(posedge ACLK) begin
     else if (ACLK_EN) begin
         if (w_hs && waddr == ADDR_CONFIG_IN_DATA_27)
             int_config_in[895:864] <= (WDATA[31:0] & wmask) | (int_config_in[895:864] & ~wmask);
+    end
+end
+
+// int_config_in[927:896]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[927:896] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_28)
+            int_config_in[927:896] <= (WDATA[31:0] & wmask) | (int_config_in[927:896] & ~wmask);
+    end
+end
+
+// int_config_in[959:928]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[959:928] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_29)
+            int_config_in[959:928] <= (WDATA[31:0] & wmask) | (int_config_in[959:928] & ~wmask);
+    end
+end
+
+// int_config_in[991:960]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[991:960] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_30)
+            int_config_in[991:960] <= (WDATA[31:0] & wmask) | (int_config_in[991:960] & ~wmask);
+    end
+end
+
+// int_config_in[1023:992]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[1023:992] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_31)
+            int_config_in[1023:992] <= (WDATA[31:0] & wmask) | (int_config_in[1023:992] & ~wmask);
+    end
+end
+
+// int_config_in[1055:1024]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[1055:1024] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_32)
+            int_config_in[1055:1024] <= (WDATA[31:0] & wmask) | (int_config_in[1055:1024] & ~wmask);
+    end
+end
+
+// int_config_in[1087:1056]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[1087:1056] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_33)
+            int_config_in[1087:1056] <= (WDATA[31:0] & wmask) | (int_config_in[1087:1056] & ~wmask);
+    end
+end
+
+// int_config_in[1119:1088]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[1119:1088] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_34)
+            int_config_in[1119:1088] <= (WDATA[31:0] & wmask) | (int_config_in[1119:1088] & ~wmask);
+    end
+end
+
+// int_config_in[1151:1120]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[1151:1120] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_35)
+            int_config_in[1151:1120] <= (WDATA[31:0] & wmask) | (int_config_in[1151:1120] & ~wmask);
+    end
+end
+
+// int_config_in[1183:1152]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[1183:1152] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_36)
+            int_config_in[1183:1152] <= (WDATA[31:0] & wmask) | (int_config_in[1183:1152] & ~wmask);
+    end
+end
+
+// int_config_in[1215:1184]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_in[1215:1184] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_IN_DATA_37)
+            int_config_in[1215:1184] <= (WDATA[31:0] & wmask) | (int_config_in[1215:1184] & ~wmask);
     end
 end
 
