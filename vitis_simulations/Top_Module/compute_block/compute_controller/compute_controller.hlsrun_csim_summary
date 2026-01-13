@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "Tue Jan  6 12:11:05 2026",
- "timestampMillis": "1767719465513",
+ "dateTimestamp": "Tue Jan 13 18:31:54 2026",
+ "timestampMillis": "1768347114598",
  "buildStep": {
-  "cmdId": "663db166-04b9-4036-b82c-638a38c213bb",
+  "cmdId": "8c516d07-54e9-4ea0-8363-efa9aaee39be",
   "name": "vitis-run",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/compute_block/compute_controller/logs/compute_controller.steps.log",
   "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/vitis-run  --mode hls --csim --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/compute_block/hls_config.cfg --work_dir compute_controller ",
@@ -33,10 +33,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Jan  6 12:11:05 2026",
- "timestampMillis": "1767719465513",
+ "dateTimestamp": "Tue Jan 13 18:31:54 2026",
+ "timestampMillis": "1768347114599",
  "status": {
-  "cmdId": "663db166-04b9-4036-b82c-638a38c213bb",
+  "cmdId": "8c516d07-54e9-4ea0-8363-efa9aaee39be",
   "state": "CS_RUNNING"
  }
 }
@@ -44,8 +44,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "Tue Jan  6 12:11:09 2026",
- "timestampMillis": "1767719469645",
+ "dateTimestamp": "Tue Jan 13 18:31:58 2026",
+ "timestampMillis": "1768347118429",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -65,7 +65,8 @@
     },
     "sources": [
      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/compute_controller.hpp",
-     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/compute_controller.cpp"
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/compute_controller.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp"
     ],
     "psSources": [],
     "cuNames": [],
@@ -81,10 +82,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "Tue Jan  6 12:11:09 2026",
- "timestampMillis": "1767719469646",
+ "dateTimestamp": "Tue Jan 13 18:31:58 2026",
+ "timestampMillis": "1768347118430",
  "buildStep": {
-  "cmdId": "306400a2-b3ed-4071-85a7-158569193251",
+  "cmdId": "5cadb80c-2408-47ed-b94c-6374770381ab",
   "name": "",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/compute_block/compute_controller/hls/hls.log",
   "commandLine": "",
@@ -97,10 +98,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Jan  6 12:11:09 2026",
- "timestampMillis": "1767719469646",
+ "dateTimestamp": "Tue Jan 13 18:31:58 2026",
+ "timestampMillis": "1768347118430",
  "status": {
-  "cmdId": "306400a2-b3ed-4071-85a7-158569193251",
+  "cmdId": "5cadb80c-2408-47ed-b94c-6374770381ab",
   "state": "CS_RUNNING"
  }
 }
@@ -108,10 +109,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Jan  6 12:11:11 2026",
- "timestampMillis": "1767719471802",
+ "dateTimestamp": "Tue Jan 13 18:31:58 2026",
+ "timestampMillis": "1768347118765",
  "status": {
-  "cmdId": "306400a2-b3ed-4071-85a7-158569193251",
+  "cmdId": "5cadb80c-2408-47ed-b94c-6374770381ab",
   "state": "CS_PASSED"
  }
 }
@@ -119,19 +120,19 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Tue Jan  6 12:11:11 2026",
- "timestampMillis": "1767719471929",
+ "dateTimestamp": "Tue Jan 13 18:31:58 2026",
+ "timestampMillis": "1768347118883",
  "status": {
-  "cmdId": "663db166-04b9-4036-b82c-638a38c213bb",
-  "state": "CS_FAILED"
+  "cmdId": "8c516d07-54e9-4ea0-8363-efa9aaee39be",
+  "state": "CS_PASSED"
  }
 }
 </ENTRY>
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Tue Jan  6 12:11:11 2026",
- "timestampMillis": "1767719471929",
+ "dateTimestamp": "Tue Jan 13 18:31:58 2026",
+ "timestampMillis": "1768347118883",
  "report": {
   "path": "",
   "name": "",
@@ -144,8 +145,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Tue Jan  6 12:11:11 2026",
- "timestampMillis": "1767719471929",
+ "dateTimestamp": "Tue Jan 13 18:31:58 2026",
+ "timestampMillis": "1768347118883",
  "report": {
   "path": "",
   "name": "",
