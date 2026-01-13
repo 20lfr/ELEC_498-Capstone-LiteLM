@@ -1,0 +1,31 @@
+[
+  {
+    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/compute_block",
+    "arguments": [
+      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "-fhls",
+      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-I/tools/Xilinx/2025.1/Vitis/include",
+      "-I/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-fhlstoplevel=compute_controller",
+      "-c",
+      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/compute_controller.cpp"
+    ],
+    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/compute_controller.cpp"
+  },
+  {
+    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/compute_block",
+    "arguments": [
+      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "-fhls-tb",
+      "-hls-sim-headers-dir=/tools/Xilinx/2025.1/Vitis/include",
+      "-I/tools/Xilinx/2025.1/Vitis/include",
+      "-I/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-c",
+      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/computer_controller_tb.cpp"
+    ],
+    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/computer_controller_tb.cpp"
+  }
+]

@@ -53,5 +53,7 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
+    "C_Cpp.errorSquiggles": "Enabled"
 }
