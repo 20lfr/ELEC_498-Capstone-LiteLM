@@ -1,0 +1,15 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_OUT_PROJ.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_mac_muladd_8s_4s_12s_13_4_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_mul_8s_4s_12_1_1.v" \
+
+sv xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

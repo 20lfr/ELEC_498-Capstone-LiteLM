@@ -1,0 +1,164 @@
+<profile>
+
+<section name = "Vitis HLS Report for 'OUT_PROJ'" level="0">
+<item name = "Date">Wed Jan 14 14:32:36 2026
+</item>
+<item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
+<item name = "Project">compute_controller</item>
+<item name = "Solution">hls (Vivado IP Flow Target)</item>
+<item name = "Product family">zynquplus</item>
+<item name = "Target device">xck26-sfvc784-2LV-c</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00 ns, 2.973 ns, 2.70 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">9, 9, 90.000 ns, 90.000 ns, 9, 9, no</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="DSP">-, 8, -, -, -</column>
+<column name="Expression">-, -, 0, 128, -</column>
+<column name="FIFO">-, -, -, -, -</column>
+<column name="Instance">-, 0, 0, 320, -</column>
+<column name="Memory">-, -, -, -, -</column>
+<column name="Multiplexer">-, -, 0, 209, -</column>
+<column name="Register">-, -, 70, -, -</column>
+<specialColumn name="Available">288, 1248, 234240, 117120, 64</specialColumn>
+<specialColumn name="Utilization (%)">0, ~0, ~0, ~0, 0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="mul_8s_4s_12_1_1_U1">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_4s_12_1_1_U2">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_4s_12_1_1_U3">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_4s_12_1_1_U4">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_4s_12_1_1_U5">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_4s_12_1_1_U6">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_4s_12_1_1_U7">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_4s_12_1_1_U8">mul_8s_4s_12_1_1, 0, 0, 0, 40, 0</column>
+</table>
+</item>
+<item name = "DSP"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U9">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U10">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U11">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U12">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U13">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U14">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U15">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_4s_12s_13_4_1_U16">mac_muladd_8s_4s_12s_13_4_1, i0 + i1 * i2</column>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="10">Memory, Module, BRAM_18K, FF, LUT, URAM, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="8">Name, BRAM_18K, FF, LUT, URAM, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="acc_1_fu_570_p2">+, 0, 0, 22, 15, 15</column>
+<column name="acc_fu_540_p2">+, 0, 0, 22, 15, 15</column>
+<column name="add_ln37_12_fu_560_p2">+, 0, 0, 21, 14, 14</column>
+<column name="add_ln37_2_fu_475_p2">+, 0, 0, 21, 14, 14</column>
+<column name="add_ln37_5_fu_530_p2">+, 0, 0, 21, 14, 14</column>
+<column name="add_ln37_9_fu_515_p2">+, 0, 0, 21, 14, 14</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="OUT_PROJ_valueA_address0_local">26, 5, 3, 15</column>
+<column name="OUT_PROJ_valueA_address1_local">26, 5, 3, 15</column>
+<column name="OUT_PROJ_valueB_address0_local">49, 9, 4, 36</column>
+<column name="OUT_PROJ_valueB_address1_local">49, 9, 4, 36</column>
+<column name="ap_NS_fsm">59, 11, 1, 11</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="add_ln37_2_reg_887">14, 0, 14, 0</column>
+<column name="add_ln37_9_reg_902">14, 0, 14, 0</column>
+<column name="ap_CS_fsm">10, 0, 10, 0</column>
+<column name="reg_309">4, 0, 4, 0</column>
+<column name="reg_313">4, 0, 4, 0</column>
+<column name="reg_317">4, 0, 4, 0</column>
+<column name="reg_321">4, 0, 4, 0</column>
+<column name="w_11_reg_688">4, 0, 4, 0</column>
+<column name="w_13_reg_723">4, 0, 4, 0</column>
+<column name="w_15_reg_728">4, 0, 4, 0</column>
+<column name="w_8_reg_683">4, 0, 4, 0</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, OUT_PROJ, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, OUT_PROJ, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, OUT_PROJ, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, OUT_PROJ, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, OUT_PROJ, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, OUT_PROJ, return value</column>
+<column name="OUT_PROJ_valueA_address0">out, 3, ap_memory, OUT_PROJ_valueA, array</column>
+<column name="OUT_PROJ_valueA_ce0">out, 1, ap_memory, OUT_PROJ_valueA, array</column>
+<column name="OUT_PROJ_valueA_q0">in, 8, ap_memory, OUT_PROJ_valueA, array</column>
+<column name="OUT_PROJ_valueA_address1">out, 3, ap_memory, OUT_PROJ_valueA, array</column>
+<column name="OUT_PROJ_valueA_ce1">out, 1, ap_memory, OUT_PROJ_valueA, array</column>
+<column name="OUT_PROJ_valueA_q1">in, 8, ap_memory, OUT_PROJ_valueA, array</column>
+<column name="OUT_PROJ_valueB_address0">out, 4, ap_memory, OUT_PROJ_valueB, array</column>
+<column name="OUT_PROJ_valueB_ce0">out, 1, ap_memory, OUT_PROJ_valueB, array</column>
+<column name="OUT_PROJ_valueB_q0">in, 4, ap_memory, OUT_PROJ_valueB, array</column>
+<column name="OUT_PROJ_valueB_address1">out, 4, ap_memory, OUT_PROJ_valueB, array</column>
+<column name="OUT_PROJ_valueB_ce1">out, 1, ap_memory, OUT_PROJ_valueB, array</column>
+<column name="OUT_PROJ_valueB_q1">in, 4, ap_memory, OUT_PROJ_valueB, array</column>
+<column name="OUT_PROJ_accum_address0">out, 1, ap_memory, OUT_PROJ_accum, array</column>
+<column name="OUT_PROJ_accum_ce0">out, 1, ap_memory, OUT_PROJ_accum, array</column>
+<column name="OUT_PROJ_accum_we0">out, 1, ap_memory, OUT_PROJ_accum, array</column>
+<column name="OUT_PROJ_accum_d0">out, 32, ap_memory, OUT_PROJ_accum, array</column>
+<column name="OUT_PROJ_accum_address1">out, 1, ap_memory, OUT_PROJ_accum, array</column>
+<column name="OUT_PROJ_accum_ce1">out, 1, ap_memory, OUT_PROJ_accum, array</column>
+<column name="OUT_PROJ_accum_we1">out, 1, ap_memory, OUT_PROJ_accum, array</column>
+<column name="OUT_PROJ_accum_d1">out, 32, ap_memory, OUT_PROJ_accum, array</column>
+</table>
+</item>
+</section>
+</profile>

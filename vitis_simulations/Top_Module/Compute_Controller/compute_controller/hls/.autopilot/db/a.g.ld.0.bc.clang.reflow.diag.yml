@@ -1,0 +1,111 @@
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 126, Column: 17 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPaP6ap_intILi4EEPiS_
+Args:            
+  - Callee:          'OUT_PROJ(signed char const*, ap_int<4> const*, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 29, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, signed char*, ap_int<4>*, int*, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 68, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 29, Column: 0 }
+Function:        _Z8OUT_PROJPKaPK6ap_intILi4EEPi
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_31_1
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:31:19'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          OUT_PROJ
+  - String:          ''' completely with a factor of '
+  - Factor:          '2'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 29, Column: 0 }
+Function:        _Z8OUT_PROJPKaPK6ap_intILi4EEPi
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_34_2
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:34:26'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          OUT_PROJ
+  - String:          ''' completely with a factor of '
+  - Factor:          '8'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 29, Column: 0 }
+Function:        _Z8OUT_PROJPKaPK6ap_intILi4EEPi
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_34_2
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:34:26'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          OUT_PROJ
+  - String:          ''' completely with a factor of '
+  - Factor:          '8'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 126, Column: 17 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPaP6ap_intILi4EEPiS_
+Args:            
+  - Callee:          'OUT_PROJ(signed char const*, ap_int<4> const*, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 29, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, signed char*, ap_int<4>*, int*, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 68, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+Function:        apatb_compute_controller_ir
+Args:            
+  - Callee:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, signed char*, ap_int<4>*, int*, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 68, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          apatb_compute_controller_ir
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 126, Column: 17 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPaP6ap_intILi4EEPiS_
+Args:            
+  - Callee:          'OUT_PROJ(signed char const*, ap_int<4> const*, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 29, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, signed char*, ap_int<4>*, int*, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 68, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
