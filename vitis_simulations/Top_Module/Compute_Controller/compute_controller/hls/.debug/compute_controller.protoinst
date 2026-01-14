@@ -13,7 +13,7 @@
 						"AP_START": { "actual": "ap_start"}
 					}
 				},
-				"grp_OUT_PROJ_fu_307/grp_OUT_PROJ_fu_307_activity": {
+				"grp_OUT_PROJ_fu_349/grp_OUT_PROJ_fu_349_activity": {
 					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
 					"ports": {
 						"AP_CLK": { "actual": "ap_clk"},

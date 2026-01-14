@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'compute_controller'
 ================================================================
-* Date:           Wed Jan 14 14:32:36 2026
+* Date:           Wed Jan 14 16:45:59 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        compute_controller
@@ -38,7 +38,7 @@
         |                     |          |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
         |       Instance      |  Module  |   min   |   max   |    min    |    max    | min | max |   Type  |
         +---------------------+----------+---------+---------+-----------+-----------+-----+-----+---------+
-        |grp_OUT_PROJ_fu_307  |OUT_PROJ  |        9|        9|  90.000 ns|  90.000 ns|    9|    9|       no|
+        |grp_OUT_PROJ_fu_349  |OUT_PROJ  |        9|        9|  90.000 ns|  90.000 ns|    9|    9|       no|
         +---------------------+----------+---------+---------+-----------+-----------+-----+-----+---------+
 
         * Loop: 
@@ -54,14 +54,14 @@
 |       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
 +-----------------+---------+------+--------+--------+-----+
 |DSP              |        -|     -|       -|       -|    -|
-|Expression       |        -|     -|       0|     112|    -|
+|Expression       |        -|     -|       0|     114|    -|
 |FIFO             |        -|     -|       -|       -|    -|
 |Instance         |        -|     8|      70|     657|    -|
 |Memory           |        -|     -|       -|       -|    -|
-|Multiplexer      |        -|     -|       0|     227|    -|
-|Register         |        -|     -|     141|       -|    -|
+|Multiplexer      |        -|     -|       0|     245|    -|
+|Register         |        -|     -|     143|       -|    -|
 +-----------------+---------+------+--------+--------+-----+
-|Total            |        0|     8|     211|     996|    0|
+|Total            |        0|     8|     213|    1016|    0|
 +-----------------+---------+------+--------+--------+-----+
 |Available        |      288|  1248|  234240|  117120|   64|
 +-----------------+---------+------+--------+--------+-----+
@@ -73,7 +73,7 @@
     +---------------------+----------+---------+----+----+-----+-----+
     |       Instance      |  Module  | BRAM_18K| DSP| FF | LUT | URAM|
     +---------------------+----------+---------+----+----+-----+-----+
-    |grp_OUT_PROJ_fu_307  |OUT_PROJ  |        0|   8|  70|  657|    0|
+    |grp_OUT_PROJ_fu_349  |OUT_PROJ  |        0|   8|  70|  657|    0|
     +---------------------+----------+---------+----+----+-----+-----+
     |Total                |          |        0|   8|  70|  657|    0|
     +---------------------+----------+---------+----+----+-----+-----+
@@ -92,21 +92,22 @@
     |           Variable Name          | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
     +----------------------------------+----------+----+---+----+------------+------------+
     |ap_block_state2_on_subcall_done   |       and|   0|  0|   2|           1|           1|
-    |ap_condition_156                  |       and|   0|  0|   2|           1|           1|
-    |ap_condition_253                  |       and|   0|  0|   2|           1|           1|
-    |ap_predicate_op67_call_state2     |       and|   0|  0|   2|           1|           1|
-    |icmp_ln104_fu_413_p2              |      icmp|   0|  0|  15|           8|           4|
-    |icmp_ln125_fu_383_p2              |      icmp|   0|  0|  15|           8|           4|
-    |icmp_ln78_fu_340_p2               |      icmp|   0|  0|  15|           8|           1|
-    |icmp_ln79_fu_346_p2               |      icmp|   0|  0|  15|           8|           3|
-    |grp_fu_323_p3                     |    select|   0|  0|  32|           1|           1|
-    |next_state_1_cast_cast_fu_426_p3  |    select|   0|  0|   3|           1|           1|
-    |select_ln117_1_fu_389_p3          |    select|   0|  0|   2|           1|           2|
-    |select_ln135_1_fu_371_p3          |    select|   0|  0|   3|           1|           3|
-    |grp_fu_317_p2                     |       xor|   0|  0|   2|           1|           2|
-    |xor_ln104_fu_419_p2               |       xor|   0|  0|   2|           1|           2|
+    |ap_condition_153                  |       and|   0|  0|   2|           1|           1|
+    |ap_condition_255                  |       and|   0|  0|   2|           1|           1|
+    |ap_condition_320                  |       and|   0|  0|   2|           1|           1|
+    |ap_predicate_op66_call_state2     |       and|   0|  0|   2|           1|           1|
+    |icmp_ln105_fu_449_p2              |      icmp|   0|  0|  15|           8|           4|
+    |icmp_ln126_fu_419_p2              |      icmp|   0|  0|  15|           8|           4|
+    |icmp_ln78_fu_369_p2               |      icmp|   0|  0|  15|           8|           1|
+    |icmp_ln79_fu_375_p2               |      icmp|   0|  0|  15|           8|           3|
+    |next_state_1_cast_cast_fu_462_p3  |    select|   0|  0|   3|           1|           1|
+    |select_ln118_fu_425_p3            |    select|   0|  0|   2|           1|           2|
+    |select_ln136_1_fu_407_p3          |    select|   0|  0|   3|           1|           3|
+    |select_ln136_fu_399_p3            |    select|   0|  0|  32|           1|           1|
+    |grp_fu_359_p2                     |       xor|   0|  0|   2|           1|           2|
+    |xor_ln105_fu_455_p2               |       xor|   0|  0|   2|           1|           2|
     +----------------------------------+----------+----+---+----+------------+------------+
-    |Total                             |          |   0|  0| 112|          42|          27|
+    |Total                             |          |   0|  0| 114|          43|          28|
     +----------------------------------+----------+----+---+----+------------+------------+
 
     * Multiplexer: 
@@ -114,28 +115,30 @@
     |                        Name                       | LUT| Input Size| Bits| Total Bits|
     +---------------------------------------------------+----+-----------+-----+-----------+
     |ap_NS_fsm                                          |  14|          3|    1|          3|
-    |ap_phi_mux_compute_done_new_0_phi_fu_260_p4        |   9|          2|    1|          2|
-    |ap_phi_mux_compute_ready_new_0_phi_fu_248_p4       |   9|          2|    1|          2|
-    |ap_phi_mux_mem_op_new_0_phi_fu_200_p14             |   9|          2|   32|         64|
-    |ap_phi_mux_mem_op_new_1_phi_fu_298_p4              |   9|          2|   32|         64|
-    |ap_phi_mux_mem_read_request_new_0_phi_fu_148_p14   |   9|          2|    1|          2|
-    |ap_phi_mux_mem_read_request_new_1_phi_fu_272_p4    |   9|          2|    1|          2|
-    |ap_phi_mux_mem_write_request_new_0_phi_fu_174_p14  |   9|          2|    1|          2|
-    |ap_phi_mux_mem_write_request_new_1_phi_fu_285_p4   |   9|          2|    1|          2|
-    |ap_phi_mux_next_state_1_phi_fu_225_p14             |   9|          2|    8|         16|
-    |compute_done_new_0_reg_256                         |   9|          2|    1|          2|
-    |compute_ready_new_0_reg_244                        |   9|          2|    1|          2|
+    |ap_phi_mux_compute_done_new_0_phi_fu_290_p4        |   9|          2|    1|          2|
+    |ap_phi_mux_compute_ready_new_0_phi_fu_278_p4       |   9|          2|    1|          2|
+    |ap_phi_mux_mem_op_flag_0_phi_fu_203_p14            |   9|          2|    1|          2|
+    |ap_phi_mux_mem_op_flag_1_phi_fu_328_p4             |   9|          2|    1|          2|
+    |ap_phi_mux_mem_op_new_1_phi_fu_340_p4              |   9|          2|   32|         64|
+    |ap_phi_mux_mem_read_request_new_0_phi_fu_150_p14   |   9|          2|    1|          2|
+    |ap_phi_mux_mem_read_request_new_1_phi_fu_302_p4    |   9|          2|    1|          2|
+    |ap_phi_mux_mem_write_request_new_0_phi_fu_176_p14  |   9|          2|    1|          2|
+    |ap_phi_mux_mem_write_request_new_1_phi_fu_315_p4   |   9|          2|    1|          2|
+    |ap_phi_mux_next_state_1_phi_fu_255_p14             |   9|          2|    8|         16|
+    |compute_done_new_0_reg_286                         |   9|          2|    1|          2|
+    |compute_ready_new_0_reg_274                        |   9|          2|    1|          2|
     |error                                              |  20|          4|    1|          4|
-    |mem_op_new_0_reg_196                               |   9|          2|   32|         64|
-    |mem_op_new_1_reg_294                               |   9|          2|   32|         64|
-    |mem_read_request_new_0_reg_144                     |   9|          2|    1|          2|
-    |mem_read_request_new_1_reg_268                     |   9|          2|    1|          2|
-    |mem_write_request_new_0_reg_170                    |   9|          2|    1|          2|
-    |mem_write_request_new_1_reg_281                    |   9|          2|    1|          2|
-    |next_state_1_reg_221                               |  31|          6|    8|         48|
+    |mem_op_flag_1_reg_324                              |   9|          2|    1|          2|
+    |mem_op_new_0_reg_226                               |   9|          2|   32|         64|
+    |mem_op_new_1_reg_336                               |   9|          2|   32|         64|
+    |mem_read_request_new_0_reg_146                     |   9|          2|    1|          2|
+    |mem_read_request_new_1_reg_298                     |   9|          2|    1|          2|
+    |mem_write_request_new_0_reg_172                    |   9|          2|    1|          2|
+    |mem_write_request_new_1_reg_311                    |   9|          2|    1|          2|
+    |next_state_1_reg_251                               |  31|          6|    8|         48|
     |state                                              |   9|          2|    8|         16|
     +---------------------------------------------------+----+-----------+-----+-----------+
-    |Total                                              | 227|         49|  166|        367|
+    |Total                                              | 245|         53|  137|        309|
     +---------------------------------------------------+----+-----------+-----+-----------+
 
     * Register: 
@@ -143,26 +146,28 @@
     |               Name               | FF | LUT| Bits| Const Bits|
     +----------------------------------+----+----+-----+-----------+
     |ap_CS_fsm                         |   2|   0|    2|          0|
-    |compute_done_new_0_reg_256        |   1|   0|    1|          0|
-    |compute_ready_new_0_reg_244       |   1|   0|    1|          0|
-    |grp_OUT_PROJ_fu_307_ap_start_reg  |   1|   0|    1|          0|
-    |icmp_ln125_reg_478                |   1|   0|    1|          0|
-    |icmp_ln78_reg_458                 |   1|   0|    1|          0|
-    |icmp_ln79_reg_463                 |   1|   0|    1|          0|
-    |mem_op_new_0_reg_196              |  32|   0|   32|          0|
-    |mem_op_new_1_reg_294              |  32|   0|   32|          0|
-    |mem_read_request_new_0_reg_144    |   1|   0|    1|          0|
-    |mem_read_request_new_1_reg_268    |   1|   0|    1|          0|
-    |mem_write_request_new_0_reg_170   |   1|   0|    1|          0|
-    |mem_write_request_new_1_reg_281   |   1|   0|    1|          0|
-    |next_state_1_reg_221              |   8|   0|    8|          0|
-    |next_state_reg_453                |   8|   0|    8|          0|
+    |compute_done_new_0_reg_286        |   1|   0|    1|          0|
+    |compute_ready_new_0_reg_274       |   1|   0|    1|          0|
+    |grp_OUT_PROJ_fu_349_ap_start_reg  |   1|   0|    1|          0|
+    |icmp_ln126_reg_524                |   1|   0|    1|          0|
+    |icmp_ln78_reg_494                 |   1|   0|    1|          0|
+    |icmp_ln79_reg_499                 |   1|   0|    1|          0|
+    |mem_op_flag_0_reg_198             |   1|   0|    1|          0|
+    |mem_op_flag_1_reg_324             |   1|   0|    1|          0|
+    |mem_op_new_0_reg_226              |  32|   0|   32|          0|
+    |mem_op_new_1_reg_336              |  32|   0|   32|          0|
+    |mem_read_request_new_0_reg_146    |   1|   0|    1|          0|
+    |mem_read_request_new_1_reg_298    |   1|   0|    1|          0|
+    |mem_write_request_new_0_reg_172   |   1|   0|    1|          0|
+    |mem_write_request_new_1_reg_311   |   1|   0|    1|          0|
+    |next_state_1_reg_251              |   8|   0|    8|          0|
+    |next_state_reg_489                |   8|   0|    8|          0|
     |req_instruction                   |  32|   0|   32|          0|
     |req_op                            |   8|   0|    8|          0|
-    |reset_read_reg_449                |   1|   0|    1|          0|
+    |reset_read_reg_485                |   1|   0|    1|          0|
     |state                             |   8|   0|    8|          0|
     +----------------------------------+----+----+-----+-----------+
-    |Total                             | 141|   0|  141|          0|
+    |Total                             | 143|   0|  143|          0|
     +----------------------------------+----+----+-----+-----------+
 
 

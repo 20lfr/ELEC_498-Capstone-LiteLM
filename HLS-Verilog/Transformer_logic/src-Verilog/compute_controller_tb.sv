@@ -27,7 +27,7 @@ module compute_controller_tb;
     logic ap_rst = 1'b1;
     always #(CLK_PERIOD/2) ap_clk = ~ap_clk;
 
-    logic [31:0]OUT_PROJ_counter = 0;
+    logic [7:0] OUT_PROJ_counter = 8'd0;
     typedef enum logic [1:0] {
         SETUP           =   2'b00,
         OUT_PROJ_SEND  = 2'b01,
@@ -135,7 +135,11 @@ module compute_controller_tb;
 
       for (t = 0; t < D_MODEL; t = t + 1) begin
         for (j = 0; j < D_MODEL; j = j + 1) begin
-          full_weights[t * D_MODEL + j] = ((t % 2) != 0) ? 4'hF : 4'h1;
+          int row_mag;
+          int row_sign;
+          row_mag = (t / 2) + 1;
+          row_sign = (t % 2) ? -1 : 1;
+          full_weights[t * D_MODEL + j] = row_sign * row_mag;
         end
       end
 
@@ -226,16 +230,16 @@ module compute_controller_tb;
             mem_timer <= mem_timer - 1;
           end
         end else begin
-          if (mem_read_request) begin
+          if (mem_read_request && mem_read_request_ap_vld && mem_op_ap_vld) begin
             mem_busy <= 1'b1;
             mem_timer <= MEM_LAT - 1;
             mem_pending <= MEM_READ;
-            pending_tile <= mem_op_ap_vld ? mem_op[31:24] : OUT_PROJ_counter;
-          end else if (mem_write_request) begin
+            pending_tile <= mem_op[31:24];
+          end else if (mem_write_request && mem_write_request_ap_vld && mem_op_ap_vld) begin
             mem_busy <= 1'b1;
             mem_timer <= MEM_LAT - 1;
             mem_pending <= MEM_WRITE;
-            pending_tile <= mem_op_ap_vld ? mem_op[31:24] : OUT_PROJ_counter;
+            pending_tile <= mem_op[31:24];
           end
         end
       end
@@ -273,6 +277,9 @@ module compute_controller_tb;
       for(cycles = 0; cycles < MAX_CYCLES; cycles++) begin
         @(posedge ap_clk);
 
+        compute_start <= 1'b0;
+        compute_instruction <= 32'd0;
+
         case (compute_state)
           SETUP: begin
               // Initialize signals
@@ -294,7 +301,7 @@ module compute_controller_tb;
               reset <= 0;
               if (compute_ready) begin
                   compute_start <= 1;
-                  compute_instruction <= { {7'd0, OUT_PROJ_counter}, 8'hFF, 8'h01, 8'h0E };
+                  compute_instruction <= { OUT_PROJ_counter, 8'hFF, 8'h01, 8'h0E };
                   compute_state <= OUTPROJ_WAIT;
               end
           end

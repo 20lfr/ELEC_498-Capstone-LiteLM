@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'compute_controller'" level="0">
-<item name = "Date">Wed Jan 14 14:32:36 2026
+<item name = "Date">Wed Jan 14 16:45:59 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -31,7 +31,7 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_OUT_PROJ_fu_307">OUT_PROJ, 9, 9, 90.000 ns, 90.000 ns, 9, 9, no</column>
+<column name="grp_OUT_PROJ_fu_349">OUT_PROJ, 9, 9, 90.000 ns, 90.000 ns, 9, 9, no</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">
@@ -48,12 +48,12 @@
 <item name = "Summary"><table name="" hasTotal="1">
 <keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
 <column name="DSP">-, -, -, -, -</column>
-<column name="Expression">-, -, 0, 112, -</column>
+<column name="Expression">-, -, 0, 114, -</column>
 <column name="FIFO">-, -, -, -, -</column>
 <column name="Instance">-, 8, 70, 657, -</column>
 <column name="Memory">-, -, -, -, -</column>
-<column name="Multiplexer">-, -, 0, 227, -</column>
-<column name="Register">-, -, 141, -, -</column>
+<column name="Multiplexer">-, -, 0, 245, -</column>
+<column name="Register">-, -, 143, -, -</column>
 <specialColumn name="Available">288, 1248, 234240, 117120, 64</specialColumn>
 <specialColumn name="Utilization (%)">0, ~0, ~0, ~0, 0</specialColumn>
 </table>
@@ -62,7 +62,7 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="1">
 <keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
-<column name="grp_OUT_PROJ_fu_307">OUT_PROJ, 0, 8, 70, 657, 0</column>
+<column name="grp_OUT_PROJ_fu_349">OUT_PROJ, 0, 8, 70, 657, 0</column>
 </table>
 </item>
 <item name = "DSP"><table name="" hasTotal="0">
@@ -80,66 +80,71 @@
 <item name = "Expression"><table name="" hasTotal="1">
 <keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
 <column name="ap_block_state2_on_subcall_done">and, 0, 0, 2, 1, 1</column>
-<column name="ap_condition_156">and, 0, 0, 2, 1, 1</column>
-<column name="ap_condition_253">and, 0, 0, 2, 1, 1</column>
-<column name="ap_predicate_op67_call_state2">and, 0, 0, 2, 1, 1</column>
-<column name="icmp_ln104_fu_413_p2">icmp, 0, 0, 15, 8, 4</column>
-<column name="icmp_ln125_fu_383_p2">icmp, 0, 0, 15, 8, 4</column>
-<column name="icmp_ln78_fu_340_p2">icmp, 0, 0, 15, 8, 1</column>
-<column name="icmp_ln79_fu_346_p2">icmp, 0, 0, 15, 8, 3</column>
-<column name="grp_fu_323_p3">select, 0, 0, 32, 1, 1</column>
-<column name="next_state_1_cast_cast_fu_426_p3">select, 0, 0, 3, 1, 1</column>
-<column name="select_ln117_1_fu_389_p3">select, 0, 0, 2, 1, 2</column>
-<column name="select_ln135_1_fu_371_p3">select, 0, 0, 3, 1, 3</column>
-<column name="grp_fu_317_p2">xor, 0, 0, 2, 1, 2</column>
-<column name="xor_ln104_fu_419_p2">xor, 0, 0, 2, 1, 2</column>
+<column name="ap_condition_153">and, 0, 0, 2, 1, 1</column>
+<column name="ap_condition_255">and, 0, 0, 2, 1, 1</column>
+<column name="ap_condition_320">and, 0, 0, 2, 1, 1</column>
+<column name="ap_predicate_op66_call_state2">and, 0, 0, 2, 1, 1</column>
+<column name="icmp_ln105_fu_449_p2">icmp, 0, 0, 15, 8, 4</column>
+<column name="icmp_ln126_fu_419_p2">icmp, 0, 0, 15, 8, 4</column>
+<column name="icmp_ln78_fu_369_p2">icmp, 0, 0, 15, 8, 1</column>
+<column name="icmp_ln79_fu_375_p2">icmp, 0, 0, 15, 8, 3</column>
+<column name="next_state_1_cast_cast_fu_462_p3">select, 0, 0, 3, 1, 1</column>
+<column name="select_ln118_fu_425_p3">select, 0, 0, 2, 1, 2</column>
+<column name="select_ln136_1_fu_407_p3">select, 0, 0, 3, 1, 3</column>
+<column name="select_ln136_fu_399_p3">select, 0, 0, 32, 1, 1</column>
+<column name="grp_fu_359_p2">xor, 0, 0, 2, 1, 2</column>
+<column name="xor_ln105_fu_455_p2">xor, 0, 0, 2, 1, 2</column>
 </table>
 </item>
 <item name = "Multiplexer"><table name="" hasTotal="1">
 <keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
 <column name="ap_NS_fsm">14, 3, 1, 3</column>
-<column name="ap_phi_mux_compute_done_new_0_phi_fu_260_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_compute_ready_new_0_phi_fu_248_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_op_new_0_phi_fu_200_p14">9, 2, 32, 64</column>
-<column name="ap_phi_mux_mem_op_new_1_phi_fu_298_p4">9, 2, 32, 64</column>
-<column name="ap_phi_mux_mem_read_request_new_0_phi_fu_148_p14">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_read_request_new_1_phi_fu_272_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_write_request_new_0_phi_fu_174_p14">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_write_request_new_1_phi_fu_285_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_next_state_1_phi_fu_225_p14">9, 2, 8, 16</column>
-<column name="compute_done_new_0_reg_256">9, 2, 1, 2</column>
-<column name="compute_ready_new_0_reg_244">9, 2, 1, 2</column>
+<column name="ap_phi_mux_compute_done_new_0_phi_fu_290_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_compute_ready_new_0_phi_fu_278_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_op_flag_0_phi_fu_203_p14">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_op_flag_1_phi_fu_328_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_op_new_1_phi_fu_340_p4">9, 2, 32, 64</column>
+<column name="ap_phi_mux_mem_read_request_new_0_phi_fu_150_p14">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_read_request_new_1_phi_fu_302_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_write_request_new_0_phi_fu_176_p14">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_write_request_new_1_phi_fu_315_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_next_state_1_phi_fu_255_p14">9, 2, 8, 16</column>
+<column name="compute_done_new_0_reg_286">9, 2, 1, 2</column>
+<column name="compute_ready_new_0_reg_274">9, 2, 1, 2</column>
 <column name="error">20, 4, 1, 4</column>
-<column name="mem_op_new_0_reg_196">9, 2, 32, 64</column>
-<column name="mem_op_new_1_reg_294">9, 2, 32, 64</column>
-<column name="mem_read_request_new_0_reg_144">9, 2, 1, 2</column>
-<column name="mem_read_request_new_1_reg_268">9, 2, 1, 2</column>
-<column name="mem_write_request_new_0_reg_170">9, 2, 1, 2</column>
-<column name="mem_write_request_new_1_reg_281">9, 2, 1, 2</column>
-<column name="next_state_1_reg_221">31, 6, 8, 48</column>
+<column name="mem_op_flag_1_reg_324">9, 2, 1, 2</column>
+<column name="mem_op_new_0_reg_226">9, 2, 32, 64</column>
+<column name="mem_op_new_1_reg_336">9, 2, 32, 64</column>
+<column name="mem_read_request_new_0_reg_146">9, 2, 1, 2</column>
+<column name="mem_read_request_new_1_reg_298">9, 2, 1, 2</column>
+<column name="mem_write_request_new_0_reg_172">9, 2, 1, 2</column>
+<column name="mem_write_request_new_1_reg_311">9, 2, 1, 2</column>
+<column name="next_state_1_reg_251">31, 6, 8, 48</column>
 <column name="state">9, 2, 8, 16</column>
 </table>
 </item>
 <item name = "Register"><table name="" hasTotal="1">
 <keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
 <column name="ap_CS_fsm">2, 0, 2, 0</column>
-<column name="compute_done_new_0_reg_256">1, 0, 1, 0</column>
-<column name="compute_ready_new_0_reg_244">1, 0, 1, 0</column>
-<column name="grp_OUT_PROJ_fu_307_ap_start_reg">1, 0, 1, 0</column>
-<column name="icmp_ln125_reg_478">1, 0, 1, 0</column>
-<column name="icmp_ln78_reg_458">1, 0, 1, 0</column>
-<column name="icmp_ln79_reg_463">1, 0, 1, 0</column>
-<column name="mem_op_new_0_reg_196">32, 0, 32, 0</column>
-<column name="mem_op_new_1_reg_294">32, 0, 32, 0</column>
-<column name="mem_read_request_new_0_reg_144">1, 0, 1, 0</column>
-<column name="mem_read_request_new_1_reg_268">1, 0, 1, 0</column>
-<column name="mem_write_request_new_0_reg_170">1, 0, 1, 0</column>
-<column name="mem_write_request_new_1_reg_281">1, 0, 1, 0</column>
-<column name="next_state_1_reg_221">8, 0, 8, 0</column>
-<column name="next_state_reg_453">8, 0, 8, 0</column>
+<column name="compute_done_new_0_reg_286">1, 0, 1, 0</column>
+<column name="compute_ready_new_0_reg_274">1, 0, 1, 0</column>
+<column name="grp_OUT_PROJ_fu_349_ap_start_reg">1, 0, 1, 0</column>
+<column name="icmp_ln126_reg_524">1, 0, 1, 0</column>
+<column name="icmp_ln78_reg_494">1, 0, 1, 0</column>
+<column name="icmp_ln79_reg_499">1, 0, 1, 0</column>
+<column name="mem_op_flag_0_reg_198">1, 0, 1, 0</column>
+<column name="mem_op_flag_1_reg_324">1, 0, 1, 0</column>
+<column name="mem_op_new_0_reg_226">32, 0, 32, 0</column>
+<column name="mem_op_new_1_reg_336">32, 0, 32, 0</column>
+<column name="mem_read_request_new_0_reg_146">1, 0, 1, 0</column>
+<column name="mem_read_request_new_1_reg_298">1, 0, 1, 0</column>
+<column name="mem_write_request_new_0_reg_172">1, 0, 1, 0</column>
+<column name="mem_write_request_new_1_reg_311">1, 0, 1, 0</column>
+<column name="next_state_1_reg_251">8, 0, 8, 0</column>
+<column name="next_state_reg_489">8, 0, 8, 0</column>
 <column name="req_instruction">32, 0, 32, 0</column>
 <column name="req_op">8, 0, 8, 0</column>
-<column name="reset_read_reg_449">1, 0, 1, 0</column>
+<column name="reset_read_reg_485">1, 0, 1, 0</column>
 <column name="state">8, 0, 8, 0</column>
 </table>
 </item>

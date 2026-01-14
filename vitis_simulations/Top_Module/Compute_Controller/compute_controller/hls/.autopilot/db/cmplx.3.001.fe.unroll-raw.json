@@ -6,7 +6,7 @@
     "def_use_depth": 2,
     "file": "compute_controller.cpp",
     "fileloc": 46,
-    "instructions": 74,
+    "instructions": 73,
     "loads": {
       "G": 7
     },
@@ -14,9 +14,9 @@
     "name": "compute_controller",
     "stores": {
       "G": 7,
-      "T": 20
+      "T": 19
     },
-    "total_instructions": 206
+    "total_instructions": 205
   },
   "1": {
     "basicblocks": 6,

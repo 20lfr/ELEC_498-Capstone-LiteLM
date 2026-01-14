@@ -6944,7 +6944,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     compute_done = (state == ComputeState::DONE);
     mem_read_request = false;
     mem_write_request = false;
-    mem_op = 0;
+
 
     if (reset) {
         state = ComputeState::IDLE;
@@ -6952,6 +6952,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
         compute_ready = true;
         compute_done = false;
         mem_read_request = false;
+        mem_write_request = false;
         mem_op = 0;
         return;
     }
@@ -6981,7 +6982,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
             mem_op = req.instruction;
             if (mem_transfer_done) {
                 mem_read_request = false;
-                mem_op = 0;
+
                 next_state = ComputeState::EXECUTE;
             }
             break;

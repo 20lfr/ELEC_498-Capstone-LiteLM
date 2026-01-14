@@ -12,12 +12,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="491.121 ns"></ZoomEndTime>
-      <Cursor1Time time="285.000 ns"></Cursor1Time>
+      <ZoomEndTime time="1,235.000 ns"></ZoomEndTime>
+      <Cursor1Time time="85.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="267"></NameColumnWidth>
-      <ValueColumnWidth column_width="78"></ValueColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="72" />
    <wvobject type="logic" fp_name="/compute_controller_tb/ap_clk">
@@ -29,8 +29,8 @@
       <obj_property name="ObjectShortName">ap_rst</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/OUT_PROJ_counter">
-      <obj_property name="ElementShortName">OUT_PROJ_counter[31:0]</obj_property>
-      <obj_property name="ObjectShortName">OUT_PROJ_counter[31:0]</obj_property>
+      <obj_property name="ElementShortName">OUT_PROJ_counter[7:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_counter[7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/compute_state">
       <obj_property name="ElementShortName">compute_state[1:0]</obj_property>
@@ -80,10 +80,6 @@
       <obj_property name="ElementShortName">compute_start[0:0]</obj_property>
       <obj_property name="ObjectShortName">compute_start[0:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/compute_instruction">
-      <obj_property name="ElementShortName">compute_instruction[31:0]</obj_property>
-      <obj_property name="ObjectShortName">compute_instruction[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/compute_ready">
       <obj_property name="ElementShortName">compute_ready[0:0]</obj_property>
       <obj_property name="ObjectShortName">compute_ready[0:0]</obj_property>
@@ -120,9 +116,18 @@
       <obj_property name="ElementShortName">mem_write_request_ap_vld</obj_property>
       <obj_property name="ObjectShortName">mem_write_request_ap_vld</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/compute_instruction">
+      <obj_property name="ElementShortName">compute_instruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_instruction[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/mem_op">
       <obj_property name="ElementShortName">mem_op[31:0]</obj_property>
       <obj_property name="ObjectShortName">mem_op[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/compute_controller_tb/mem_op_ap_vld">
       <obj_property name="ElementShortName">mem_op_ap_vld</obj_property>
@@ -247,11 +252,15 @@
          <obj_property name="ElementShortName">[0][31:0]</obj_property>
          <obj_property name="ObjectShortName">[0][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/accum_mem[1]">
          <obj_property name="ElementShortName">[1][31:0]</obj_property>
          <obj_property name="ObjectShortName">[1][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/accum_mem[0]">
          <obj_property name="ElementShortName">[0][31:0]</obj_property>
@@ -270,41 +279,89 @@
          <obj_property name="ElementShortName">[0][31:0]</obj_property>
          <obj_property name="ObjectShortName">[0][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/full_accum[1]">
          <obj_property name="ElementShortName">[1][31:0]</obj_property>
          <obj_property name="ObjectShortName">[1][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/full_accum[2]">
          <obj_property name="ElementShortName">[2][31:0]</obj_property>
          <obj_property name="ObjectShortName">[2][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/full_accum[3]">
          <obj_property name="ElementShortName">[3][31:0]</obj_property>
          <obj_property name="ObjectShortName">[3][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/full_accum[4]">
          <obj_property name="ElementShortName">[4][31:0]</obj_property>
          <obj_property name="ObjectShortName">[4][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/full_accum[5]">
          <obj_property name="ElementShortName">[5][31:0]</obj_property>
          <obj_property name="ObjectShortName">[5][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/full_accum[6]">
          <obj_property name="ElementShortName">[6][31:0]</obj_property>
          <obj_property name="ObjectShortName">[6][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/compute_controller_tb/full_accum[7]">
          <obj_property name="ElementShortName">[7][31:0]</obj_property>
          <obj_property name="ObjectShortName">[7][31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[0]">
+         <obj_property name="ElementShortName">[0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[1]">
+         <obj_property name="ElementShortName">[1][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[2]">
+         <obj_property name="ElementShortName">[2][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[3]">
+         <obj_property name="ElementShortName">[3][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[4]">
+         <obj_property name="ElementShortName">[4][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[5]">
+         <obj_property name="ElementShortName">[5][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[6]">
+         <obj_property name="ElementShortName">[6][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[7]">
+         <obj_property name="ElementShortName">[7][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
       </wvobject>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/NUM_HEADS">

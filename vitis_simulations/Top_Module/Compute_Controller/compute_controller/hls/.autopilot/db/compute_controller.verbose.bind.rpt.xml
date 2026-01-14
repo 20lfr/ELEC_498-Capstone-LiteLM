@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'compute_controller'" level="0">
-<item name = "Date">Wed Jan 14 14:32:36 2026
+<item name = "Date">Wed Jan 14 16:45:58 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -31,7 +31,7 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_OUT_PROJ_fu_307">OUT_PROJ, 9, 9, 90.000 ns, 90.000 ns, 9, 9, no</column>
+<column name="grp_OUT_PROJ_fu_349">OUT_PROJ, 9, 9, 90.000 ns, 90.000 ns, 9, 9, no</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">
