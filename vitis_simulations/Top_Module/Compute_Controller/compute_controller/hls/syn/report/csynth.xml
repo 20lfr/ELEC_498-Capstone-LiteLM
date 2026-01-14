@@ -38,8 +38,8 @@
     <AreaEstimates>
         <Resources>
             <DSP>8</DSP>
-            <FF>211</FF>
-            <LUT>996</LUT>
+            <FF>213</FF>
+            <LUT>1016</LUT>
             <BRAM_18K>0</BRAM_18K>
             <URAM>0</URAM>
         </Resources>
@@ -556,14 +556,14 @@
             <ModuleName>compute_controller</ModuleName>
             <InstancesList>
                 <Instance>
-                    <InstName>grp_OUT_PROJ_fu_307</InstName>
+                    <InstName>grp_OUT_PROJ_fu_349</InstName>
                     <ModuleName>OUT_PROJ</ModuleName>
                     <IsCompInst>true</IsCompInst>
-                    <ID>307</ID>
+                    <ID>349</ID>
                     <BindInstances>mac_muladd_8s_4s_12s_13_4_1_U13 mac_muladd_8s_4s_12s_13_4_1_U13 mul_8s_4s_12_1_1_U5 mac_muladd_8s_4s_12s_13_4_1_U14 mac_muladd_8s_4s_12s_13_4_1_U14 mul_8s_4s_12_1_1_U6 mac_muladd_8s_4s_12s_13_4_1_U9 mac_muladd_8s_4s_12s_13_4_1_U9 mul_8s_4s_12_1_1_U1 mac_muladd_8s_4s_12s_13_4_1_U10 mac_muladd_8s_4s_12s_13_4_1_U10 mul_8s_4s_12_1_1_U2 mac_muladd_8s_4s_12s_13_4_1_U10 mac_muladd_8s_4s_12s_13_4_1_U9 add_ln37_2_fu_475_p2 mac_muladd_8s_4s_12s_13_4_1_U14 mac_muladd_8s_4s_12s_13_4_1_U13 add_ln37_5_fu_530_p2 acc_fu_540_p2 mac_muladd_8s_4s_12s_13_4_1_U15 mac_muladd_8s_4s_12s_13_4_1_U15 mul_8s_4s_12_1_1_U7 mac_muladd_8s_4s_12s_13_4_1_U16 mac_muladd_8s_4s_12s_13_4_1_U16 mul_8s_4s_12_1_1_U8 mac_muladd_8s_4s_12s_13_4_1_U11 mac_muladd_8s_4s_12s_13_4_1_U11 mul_8s_4s_12_1_1_U3 mac_muladd_8s_4s_12s_13_4_1_U12 mac_muladd_8s_4s_12s_13_4_1_U12 mul_8s_4s_12_1_1_U4 mac_muladd_8s_4s_12s_13_4_1_U12 mac_muladd_8s_4s_12s_13_4_1_U11 add_ln37_9_fu_515_p2 mac_muladd_8s_4s_12s_13_4_1_U16 mac_muladd_8s_4s_12s_13_4_1_U15 add_ln37_12_fu_560_p2 acc_1_fu_570_p2</BindInstances>
                 </Instance>
             </InstancesList>
-            <BindInstances>icmp_ln78_fu_340_p2 icmp_ln79_fu_346_p2 grp_fu_317_p2 grp_fu_323_p3 select_ln135_1_fu_371_p3 icmp_ln125_fu_383_p2 grp_fu_317_p2 grp_fu_323_p3 select_ln117_1_fu_389_p3 icmp_ln104_fu_413_p2 xor_ln104_fu_419_p2 next_state_1_cast_cast_fu_426_p3</BindInstances>
+            <BindInstances>icmp_ln78_fu_369_p2 icmp_ln79_fu_375_p2 grp_fu_359_p2 select_ln136_fu_399_p3 select_ln136_1_fu_407_p3 icmp_ln126_fu_419_p2 grp_fu_359_p2 select_ln118_fu_425_p3 icmp_ln105_fu_449_p2 xor_ln105_fu_455_p2 next_state_1_cast_cast_fu_462_p3</BindInstances>
         </TopModule>
     </RTLDesignHierarchy>
     <ModuleInformation>
@@ -682,10 +682,10 @@
                     <DSP>8</DSP>
                     <AVAIL_DSP>1248</AVAIL_DSP>
                     <UTIL_DSP>~0</UTIL_DSP>
-                    <FF>211</FF>
+                    <FF>213</FF>
                     <AVAIL_FF>234240</AVAIL_FF>
                     <UTIL_FF>~0</UTIL_FF>
-                    <LUT>996</LUT>
+                    <LUT>1016</LUT>
                     <AVAIL_LUT>117120</AVAIL_LUT>
                     <UTIL_LUT>~0</UTIL_LUT>
                     <BRAM_18K>0</BRAM_18K>
@@ -697,18 +697,17 @@
                 </Resources>
             </AreaEstimates>
             <BindNodes>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln78_fu_340_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:78" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln78" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln79_fu_346_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:79" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln79" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op xor" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="xor" PRAGMA="" RTLNAME="grp_fu_317_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:135" STORAGESUBTYPE="" URAM="0" VARIABLE="xor_ln135" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="grp_fu_323_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:135" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln135" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln135_1_fu_371_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:135" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln135_1" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln125_fu_383_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:125" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln125" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op xor" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="xor" PRAGMA="" RTLNAME="grp_fu_317_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:117" STORAGESUBTYPE="" URAM="0" VARIABLE="xor_ln117" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="grp_fu_323_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:117" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln117" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln117_1_fu_389_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:117" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln117_1" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln104_fu_413_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:104" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln104" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op xor" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="xor" PRAGMA="" RTLNAME="xor_ln104_fu_419_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:104" STORAGESUBTYPE="" URAM="0" VARIABLE="xor_ln104" VISIBLE="false"/>
-                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="next_state_1_cast_cast_fu_426_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:104" STORAGESUBTYPE="" URAM="0" VARIABLE="next_state_1_cast_cast" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln78_fu_369_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:78" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln78" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln79_fu_375_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:79" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln79" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op xor" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="xor" PRAGMA="" RTLNAME="grp_fu_359_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:136" STORAGESUBTYPE="" URAM="0" VARIABLE="xor_ln136" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln136_fu_399_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:136" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln136" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln136_1_fu_407_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:136" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln136_1" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln126_fu_419_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:126" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln126" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op xor" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="xor" PRAGMA="" RTLNAME="grp_fu_359_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:118" STORAGESUBTYPE="" URAM="0" VARIABLE="xor_ln118" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="select_ln118_fu_425_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:118" STORAGESUBTYPE="" URAM="0" VARIABLE="select_ln118" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op seteq" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="seteq" PRAGMA="" RTLNAME="icmp_ln105_fu_449_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105" STORAGESUBTYPE="" URAM="0" VARIABLE="icmp_ln105" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op xor" DSP="0" ID="" IMPL="auto" LATENCY="0" LOOP="" OPTYPE="xor" PRAGMA="" RTLNAME="xor_ln105_fu_455_p2" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105" STORAGESUBTYPE="" URAM="0" VARIABLE="xor_ln105" VISIBLE="false"/>
+                <BindNode BINDTYPE="op" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_op select" DSP="0" ID="" IMPL="auto_sel" LATENCY="0" LOOP="" OPTYPE="select" PRAGMA="" RTLNAME="next_state_1_cast_cast_fu_462_p3" SOURCE="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105" STORAGESUBTYPE="" URAM="0" VARIABLE="next_state_1_cast_cast" VISIBLE="false"/>
             </BindNodes>
         </Module>
     </ModuleInformation>

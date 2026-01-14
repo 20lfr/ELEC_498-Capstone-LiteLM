@@ -197,6 +197,7 @@ enum class HeadPhase : uint8_t {
 
 enum ComputeOp : uint8_t {
     CMP_NONE = 0,           // 0 
+    // Attention ops
     CMP_Q,                  // 1
     CMP_K,                  // 2
     CMP_K_REQUANT,          // 3

@@ -40,6 +40,73 @@ void OUT_PROJ(
     }
 }
 
+void REQUANT_int32_to_int8(
+    int32_t x32[D_MODEL],   // input vector
+    int32_t M,              // integer multiplier               (Provided by PS)
+    int32_t n,              // right shift                      (Provided by PS)
+    int32_t z_out,          // output zero-point (int8 range)   (Provided by PS)
+
+    int8_t y8[D_MODEL]      // output vector
+) {
+
+    // Original Integer Requant Formula (for each element in vector):
+    /*
+         y[t] = saturate_to_int8( (x[t] * M) + 2^(n-1)/(2^n) + z_out )
+    */
+    for (int t = 0; t < D_TILE_WO; ++t) {
+#pragma HLS UNROLL
+        int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
+        int64_t rounded = 1LL << (n - 1);
+        int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+        int32_t shifted = scaled + z_out;
+
+        if (shifted > 127) {
+            y8[t] = 127;
+        } else if (shifted < -128) {
+            y8[t] = -128;
+        } else {
+            y8[t] = static_cast<int8_t>(shifted);
+        }
+    }   
+}
+
+void LAYER_NORM(
+    const int8_t x[D_MODEL],        // input vector
+    const int32_t gamma[D_MODEL],   // scale parameter
+    const int32_t beta[D_MODEL],    // shift parameter
+    const int32_t mean,             // mean of input vector
+    const int32_t inv_std,          // inverse standard deviation
+    int8_t y[D_MODEL]               // output vector
+) {
+#pragma HLS INLINE off
+
+    // Calculte mean:
+    int32_t sum = 0;
+    int32_t square = 0;
+
+    for (int i = 0; i < D_MODEL; ++i) {
+        sum += static_cast<int32_t>(x[i]);
+        square += static_cast<int32_t>(x[i]) * static_cast<int32_t>(x[i]);
+    }
+
+    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS UNROLL          
+        int32_t diff = static_cast<int32_t>(x[i]) - mean;
+        int64_t scaled = static_cast<int64_t>(diff) * static_cast<int64_t>(inv_std);
+        int32_t normalized = static_cast<int32_t>(scaled >> 16); // Assuming inv_std is in Q16 format
+        int64_t scaled_gamma = static_cast<int64_t>(normalized) * static_cast<int64_t>(gamma[i]);
+        int32_t shifted = static_cast<int32_t>(scaled_gamma >> 16) + beta[i]; // Assuming gamma is in Q16 format
+
+        // Saturate to int8 range
+        if (shifted > 127) {
+            y[i] = 127;
+        } else if (shifted < -128) {
+            y[i] = -128;
+        } else {
+            y[i] = static_cast<int8_t>(shifted);
+        }
+    }
+}
 // ---------------------------------------------------------------------------
 // Top-level compute controller
 // ---------------------------------------------------------------------------
@@ -65,7 +132,24 @@ void compute_controller(
 
 
     bool        &error               // [OUTPUT] Error flag on invalid request
+
+
+    
 ) {
+    // TODO: Inputs for remaining non-head compute ops:
+    // CMP_OUT_PROJ (14)
+    // CMP_REQUANT1 (15)
+    // CMP_RESID0 (16)
+    // CMP_LN0 (17)
+    // CMP_REQUANT3 (18)
+    // CMP_FFN_W1 (19)
+    // CMP_FFN_ACT (20)
+    // CMP_FFN_W2 (21)
+    // CMP_REQUANT4 (22)
+    // CMP_RESID1 (23)
+    // CMP_LN1 (24)
+    // CMP_DEQUANT (25)
+    // CMP_LOGITS (26)
 #pragma HLS INLINE off
 // #pragma HLS ARRAY_PARTITION variable=OUT_PROJ_valueA complete dim=1
 // #pragma HLS ARRAY_PARTITION variable=OUT_PROJ_valueB complete dim=1
@@ -79,7 +163,7 @@ void compute_controller(
     compute_done  = (state == ComputeState::DONE);
     mem_read_request   = false;
     mem_write_request  = false;
-    mem_op        = 0;
+    // mem_op        = 0;
 
     if (reset) {
         state = ComputeState::IDLE;
@@ -117,7 +201,7 @@ void compute_controller(
             mem_op = req.instruction;
             if (mem_transfer_done) {
                 mem_read_request = false;
-                mem_op = 0;
+                // mem_op = 0;
                 next_state = ComputeState::EXECUTE;
             }
             break;

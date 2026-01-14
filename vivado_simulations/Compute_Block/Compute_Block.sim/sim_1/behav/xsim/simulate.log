@@ -9,4 +9,4 @@ Default DUT inputs:
   compute_start=0 compute_instruction=0x00000000 mem_transfer_done=0
   OUT_PROJ_valueA_q0=0x0 OUT_PROJ_valueA_q1=0x0
   OUT_PROJ_valueB_q0=0x0 OUT_PROJ_valueB_q1=0x0
-$finish called at time : 1175 ns : File "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv" Line 312
+$finish called at time : 1235 ns : File "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv" Line 319

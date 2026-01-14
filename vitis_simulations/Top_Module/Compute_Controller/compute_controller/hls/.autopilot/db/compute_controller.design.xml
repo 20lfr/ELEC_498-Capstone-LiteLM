@@ -5,10 +5,10 @@
 <ModuleName>compute_controller</ModuleName>
 <InstancesList>
 <Instance>
-<InstName>grp_OUT_PROJ_fu_307</InstName>
+<InstName>grp_OUT_PROJ_fu_349</InstName>
 <ModuleName>OUT_PROJ</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>307</ID>
+<ID>349</ID>
 </Instance>
 </InstancesList>
 </TopModule>
@@ -378,10 +378,10 @@
 <DSP>8</DSP>
 <AVAIL_DSP>1248</AVAIL_DSP>
 <UTIL_DSP>~0</UTIL_DSP>
-<FF>211</FF>
+<FF>213</FF>
 <AVAIL_FF>234240</AVAIL_FF>
 <UTIL_FF>~0</UTIL_FF>
-<LUT>996</LUT>
+<LUT>1016</LUT>
 <AVAIL_LUT>117120</AVAIL_LUT>
 <UTIL_LUT>~0</UTIL_LUT>
 <BRAM_18K>0</BRAM_18K>

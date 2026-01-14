@@ -7,9 +7,9 @@ WARNING: [XSIM 43-3431] One or more environment variables have been detected whi
 Starting static elaboration
 Pass Through NonSizing Optimizer
 WARNING: [VRFC 10-3818] variable 'mem_transfer_done' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:63]
-WARNING: [VRFC 10-2921] 'mem_transfer_done' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:184]
+WARNING: [VRFC 10-2921] 'mem_transfer_done' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:188]
 WARNING: [VRFC 10-3818] variable 'OUT_PROJ_valueA_q0' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:72]
-WARNING: [VRFC 10-2921] 'OUT_PROJ_valueA_q0' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:152]
+WARNING: [VRFC 10-2921] 'OUT_PROJ_valueA_q0' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:156]
 WARNING: [VRFC 10-3818] variable 'OUT_PROJ_valueA_q1' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:75]
 WARNING: [VRFC 10-3818] variable 'OUT_PROJ_valueB_q0' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:78]
 WARNING: [VRFC 10-3818] variable 'OUT_PROJ_valueB_q1' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv:81]
