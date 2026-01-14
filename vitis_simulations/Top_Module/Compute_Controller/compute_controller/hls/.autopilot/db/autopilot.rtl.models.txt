@@ -1,0 +1,4 @@
+compute_controller_mul_8s_4s_12_1_1
+compute_controller_mac_muladd_8s_4s_12s_13_4_1
+OUT_PROJ
+compute_controller

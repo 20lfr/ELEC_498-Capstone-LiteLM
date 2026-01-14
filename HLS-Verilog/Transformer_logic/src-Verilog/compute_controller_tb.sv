@@ -1,0 +1,367 @@
+`timescale 1ns/1ps
+
+module compute_controller_tb;
+
+  // Parameters
+    localparam int NUM_HEADS       = 4;
+    localparam int NUM_LAYERS      = 2;
+    localparam int NUM_WO_TILES    = 4;
+    localparam int NUM_W1_TILES    = 4;
+    localparam int NUM_W2_TILES    = 4;
+    localparam int NUM_LOGIT_TILES = 2;
+
+    localparam int D_MODEL = 8; // Number of heads processed in parallel
+    localparam int D_FFN   = 22; // Feed-Forward hidden layer size
+    localparam int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
+    localparam int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
+    localparam int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
+    localparam int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
+    localparam int CONTEXT_LENGTH = 16; // Context window length
+
+    localparam int CLK_PERIOD = 10; // in nanoseconds
+    localparam int MAX_CYCLES = 8000;
+
+
+    // Signals
+    logic ap_clk = 1'b0;
+    logic ap_rst = 1'b1;
+    always #(CLK_PERIOD/2) ap_clk = ~ap_clk;
+
+    logic [31:0]OUT_PROJ_counter = 0;
+    typedef enum logic [1:0] {
+        SETUP           =   2'b00,
+        OUT_PROJ_SEND  = 2'b01,
+        OUTPROJ_WAIT   = 2'b10,
+        DONE            = 2'b11
+    } compute_state_t;
+    compute_state_t compute_state = SETUP;
+    localparam int RESET_HOLD_CYCLES = 3;
+    int reset_hold_ctr;
+    localparam int MEM_LAT = 2;
+    typedef enum logic [1:0] {
+        MEM_NONE  = 2'b00,
+        MEM_READ  = 2'b01,
+        MEM_WRITE = 2'b10
+    } mem_pending_t;
+    mem_pending_t mem_pending = MEM_NONE;
+    logic mem_busy;
+    int mem_timer;
+    int pending_tile;
+
+    // DUT Signals
+    logic ap_start;
+    logic ap_done;
+    logic ap_idle;
+    logic ap_ready;
+    logic [0:0] reset;
+    logic [0:0] compute_start;
+    logic [31:0] compute_instruction;
+    logic [0:0] compute_ready;
+    logic compute_ready_ap_vld;
+    logic [0:0] compute_done;
+    logic compute_done_ap_vld;
+    logic [0:0] mem_transfer_done;
+    logic [0:0] mem_read_request;
+    logic mem_read_request_ap_vld;
+    logic [0:0] mem_write_request;
+    logic mem_write_request_ap_vld;
+    logic [31:0] mem_op;
+    logic mem_op_ap_vld;
+    logic [2:0] OUT_PROJ_valueA_address0;
+    logic OUT_PROJ_valueA_ce0;
+    logic [7:0] OUT_PROJ_valueA_q0;
+    logic [2:0] OUT_PROJ_valueA_address1;
+    logic OUT_PROJ_valueA_ce1;
+    logic [7:0] OUT_PROJ_valueA_q1;
+    logic [3:0] OUT_PROJ_valueB_address0;
+    logic OUT_PROJ_valueB_ce0;
+    logic [3:0] OUT_PROJ_valueB_q0;
+    logic [3:0] OUT_PROJ_valueB_address1;
+    logic OUT_PROJ_valueB_ce1;
+    logic [3:0] OUT_PROJ_valueB_q1;
+    logic [0:0] OUT_PROJ_accum_address0;
+    logic OUT_PROJ_accum_ce0;
+    logic OUT_PROJ_accum_we0;
+    logic [31:0] OUT_PROJ_accum_d0;
+    logic [0:0] OUT_PROJ_accum_address1;
+    logic OUT_PROJ_accum_ce1;
+    logic OUT_PROJ_accum_we1;
+    logic [31:0] OUT_PROJ_accum_d1;
+    logic [0:0] error;
+    logic error_ap_vld;
+
+    // Simple memory model for OUT_PROJ inputs/outputs.
+    logic [7:0] full_valueA [0:D_MODEL-1];
+    logic [3:0] full_weights [0:D_MODEL*D_MODEL-1];
+    logic [7:0] valueA_mem [0:D_MODEL-1];
+    logic [3:0] valueB_mem [0:D_MODEL*D_TILE_WO-1];
+    logic [31:0] accum_mem [0:D_TILE_WO-1];
+    logic [31:0] full_accum [0:D_MODEL-1];
+
+
+    // Responses we need:
+    /*
+      FSM sending:
+        1. Send Compute Request
+        2. Wait for Compute Done
+      Memory Controller Sending:
+        1. Respond to mem_read requests (ie provide data for reads)
+        2. Respond to mem_write requests (ie write data to memory)
+          (1 and 2 recieve mem_op along side these signals. Memory Manager must respond with proper data from request) 
+    */
+
+    // Assumptions:
+    /*
+      FSM:
+        1. Sends ONLY the compute_start and compute_instruction signals to start a compute operation
+        2. Waits for compute_done signal to indicate operation is complete
+        3. See's MAC as a BBOX, and does not interact with the memory controller directly within this stage
+      Memory Controller:
+        1. Knows the size and type of data base ONLY on the memory operation (mem_op)
+        2. Does not know what operations are used for, but must obey the requests from the compute controller
+    */
+
+    // Iniitializing memory
+    initial begin : init_mem
+      int i;
+      int t;
+      int j;
+
+      for (i = 0; i < D_MODEL; i = i + 1) begin
+        full_valueA[i] = i + 1;
+        valueA_mem[i] = full_valueA[i];
+        full_accum[i] = 32'd0;
+      end
+
+      for (t = 0; t < D_MODEL; t = t + 1) begin
+        for (j = 0; j < D_MODEL; j = j + 1) begin
+          full_weights[t * D_MODEL + j] = ((t % 2) != 0) ? 4'hF : 4'h1;
+        end
+      end
+
+      for (t = 0; t < D_TILE_WO; t = t + 1) begin
+        for (j = 0; j < D_MODEL; j = j + 1) begin
+          valueB_mem[t * D_MODEL + j] = full_weights[t * D_MODEL + j];
+        end
+        accum_mem[t] = 32'd0;
+      end
+    end
+
+
+
+    always_ff @(posedge ap_clk) begin : OUT_PROJ_mem_model
+      if (ap_rst) begin
+        OUT_PROJ_valueA_q0 <= '0;
+        OUT_PROJ_valueA_q1 <= '0;
+        OUT_PROJ_valueB_q0 <= '0;
+        OUT_PROJ_valueB_q1 <= '0;
+      end else begin
+        if (OUT_PROJ_valueA_ce0) begin
+          OUT_PROJ_valueA_q0 <= valueA_mem[OUT_PROJ_valueA_address0];
+        end
+        if (OUT_PROJ_valueA_ce1) begin
+          OUT_PROJ_valueA_q1 <= valueA_mem[OUT_PROJ_valueA_address1];
+        end
+
+
+        if (OUT_PROJ_valueB_ce0) begin
+          OUT_PROJ_valueB_q0 <= valueB_mem[OUT_PROJ_valueB_address0];
+        end
+        if (OUT_PROJ_valueB_ce1) begin
+          OUT_PROJ_valueB_q1 <= valueB_mem[OUT_PROJ_valueB_address1];
+        end
+
+
+        if (OUT_PROJ_accum_ce0 && OUT_PROJ_accum_we0) begin
+          accum_mem[OUT_PROJ_accum_address0] <= OUT_PROJ_accum_d0;
+        end
+        if (OUT_PROJ_accum_ce1 && OUT_PROJ_accum_we1) begin
+          accum_mem[OUT_PROJ_accum_address1] <= OUT_PROJ_accum_d1;
+        end
+      end
+    end
+
+    always_ff @(posedge ap_clk) begin : MEM_controller_respond
+    
+      if (ap_rst) begin
+        mem_transfer_done <= 0;
+        mem_busy <= 1'b0;
+        mem_timer <= 0;
+        mem_pending <= MEM_NONE;
+        pending_tile <= 0;
+      end else begin
+        mem_transfer_done <= 1'b0;
+
+        if (mem_busy) begin
+          if (mem_timer == 0) begin
+            mem_transfer_done <= 1'b1;
+            mem_busy <= 1'b0;
+            if (mem_pending == MEM_READ) begin
+              int out_base;
+              int t;
+              int j;
+              for (j = 0; j < D_MODEL; j = j + 1) begin
+                valueA_mem[j] <= full_valueA[j];
+              end
+              if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
+                out_base = pending_tile * D_TILE_WO;
+                for (t = 0; t < D_TILE_WO; t = t + 1) begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    valueB_mem[t * D_MODEL + j] <= full_weights[(out_base + t) * D_MODEL + j];
+                  end
+                end
+              end
+            end else if (mem_pending == MEM_WRITE) begin
+              int out_base;
+              int t;
+              if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
+                out_base = pending_tile * D_TILE_WO;
+                for (t = 0; t < D_TILE_WO; t = t + 1) begin
+                  full_accum[out_base + t] <= accum_mem[t];
+                end
+              end
+            end
+            mem_pending <= MEM_NONE;
+          end else begin
+            mem_timer <= mem_timer - 1;
+          end
+        end else begin
+          if (mem_read_request) begin
+            mem_busy <= 1'b1;
+            mem_timer <= MEM_LAT - 1;
+            mem_pending <= MEM_READ;
+            pending_tile <= mem_op_ap_vld ? mem_op[31:24] : OUT_PROJ_counter;
+          end else if (mem_write_request) begin
+            mem_busy <= 1'b1;
+            mem_timer <= MEM_LAT - 1;
+            mem_pending <= MEM_WRITE;
+            pending_tile <= mem_op_ap_vld ? mem_op[31:24] : OUT_PROJ_counter;
+          end
+        end
+      end
+      
+    end
+
+    initial begin : stimulus
+      int cycles = 0;
+      // Default inputs to the DUT.
+      ap_start = 1'b0;
+      ap_rst = 1'b1;
+      reset = 1'b0;
+      compute_start = 1'b0;
+      compute_instruction = 32'd0;
+      mem_transfer_done = 1'b0;
+      OUT_PROJ_valueA_q0 = 8'd0;
+      OUT_PROJ_valueA_q1 = 8'd0;
+      OUT_PROJ_valueB_q0 = 4'd0;
+      OUT_PROJ_valueB_q1 = 4'd0;
+      reset_hold_ctr = 0;
+
+      $display("Default DUT inputs:");
+      $display("  ap_clk=%0b ap_rst=%0b ap_start=%0b reset=%0b", ap_clk, ap_rst, ap_start, reset);
+      $display("  compute_start=%0b compute_instruction=0x%08x mem_transfer_done=%0b",
+               compute_start, compute_instruction, mem_transfer_done);
+      $display("  OUT_PROJ_valueA_q0=0x%0h OUT_PROJ_valueA_q1=0x%0h",
+               OUT_PROJ_valueA_q0, OUT_PROJ_valueA_q1);
+      $display("  OUT_PROJ_valueB_q0=0x%0h OUT_PROJ_valueB_q1=0x%0h",
+               OUT_PROJ_valueB_q0, OUT_PROJ_valueB_q1);
+
+
+
+      @(posedge ap_clk);
+
+      for(cycles = 0; cycles < MAX_CYCLES; cycles++) begin
+        @(posedge ap_clk);
+
+        case (compute_state)
+          SETUP: begin
+              // Initialize signals
+              OUT_PROJ_counter <= 0;
+              if (reset_hold_ctr >= (RESET_HOLD_CYCLES - 1)) begin
+                  ap_rst <= 1'b0;
+                  ap_start <= 1'b1;
+                  reset <= 1'b0;
+                  compute_state <= OUT_PROJ_SEND;
+              end else begin
+                  ap_rst <= 1'b1;
+                  ap_start <= 1'b0;
+                  reset <= 1'b1;
+                  reset_hold_ctr <= reset_hold_ctr + 1;
+              end
+          end
+          OUT_PROJ_SEND: begin
+              // Initialize signals for OUT_PROJ send
+              reset <= 0;
+              if (compute_ready) begin
+                  compute_start <= 1;
+                  compute_instruction <= { {7'd0, OUT_PROJ_counter}, 8'hFF, 8'h01, 8'h0E };
+                  compute_state <= OUTPROJ_WAIT;
+              end
+          end
+          OUTPROJ_WAIT: begin
+            if (OUT_PROJ_counter == NUM_WO_TILES) begin
+              compute_state <= DONE;
+            end
+            if (compute_done && OUT_PROJ_counter < NUM_WO_TILES) begin
+              OUT_PROJ_counter <= OUT_PROJ_counter + 1;
+              compute_state <= OUT_PROJ_SEND;
+            end
+          end
+          DONE: begin
+              // Finish simulation
+              $finish;
+          end
+
+        endcase
+      end
+    end
+
+
+    // DUT Instantiation
+    compute_controller dut (
+        .ap_clk(ap_clk),
+        .ap_rst(ap_rst),
+        .ap_start(ap_start),
+        .ap_done(ap_done),
+        .ap_idle(ap_idle),
+        .ap_ready(ap_ready),
+        .reset(reset),
+        .compute_start(compute_start),
+        .compute_instruction(compute_instruction),
+        .compute_ready(compute_ready),
+        .compute_ready_ap_vld(compute_ready_ap_vld),
+        .compute_done(compute_done),
+        .compute_done_ap_vld(compute_done_ap_vld),
+        .mem_transfer_done(mem_transfer_done),
+        .mem_read_request(mem_read_request),
+        .mem_read_request_ap_vld(mem_read_request_ap_vld),
+        .mem_write_request(mem_write_request),
+        .mem_write_request_ap_vld(mem_write_request_ap_vld),
+        .mem_op(mem_op),
+        .mem_op_ap_vld(mem_op_ap_vld),
+        .OUT_PROJ_valueA_address0(OUT_PROJ_valueA_address0),
+        .OUT_PROJ_valueA_ce0(OUT_PROJ_valueA_ce0),
+        .OUT_PROJ_valueA_q0(OUT_PROJ_valueA_q0),
+        .OUT_PROJ_valueA_address1(OUT_PROJ_valueA_address1),
+        .OUT_PROJ_valueA_ce1(OUT_PROJ_valueA_ce1),
+        .OUT_PROJ_valueA_q1(OUT_PROJ_valueA_q1),
+        .OUT_PROJ_valueB_address0(OUT_PROJ_valueB_address0),
+        .OUT_PROJ_valueB_ce0(OUT_PROJ_valueB_ce0),
+        .OUT_PROJ_valueB_q0(OUT_PROJ_valueB_q0),
+        .OUT_PROJ_valueB_address1(OUT_PROJ_valueB_address1),
+        .OUT_PROJ_valueB_ce1(OUT_PROJ_valueB_ce1),
+        .OUT_PROJ_valueB_q1(OUT_PROJ_valueB_q1),
+        .OUT_PROJ_accum_address0(OUT_PROJ_accum_address0),
+        .OUT_PROJ_accum_ce0(OUT_PROJ_accum_ce0),
+        .OUT_PROJ_accum_we0(OUT_PROJ_accum_we0),
+        .OUT_PROJ_accum_d0(OUT_PROJ_accum_d0),
+        .OUT_PROJ_accum_address1(OUT_PROJ_accum_address1),
+        .OUT_PROJ_accum_ce1(OUT_PROJ_accum_ce1),
+        .OUT_PROJ_accum_we1(OUT_PROJ_accum_we1),
+        .OUT_PROJ_accum_d1(OUT_PROJ_accum_d1),
+        .error(error),
+        .error_ap_vld(error_ap_vld)
+    );
+
+
+endmodule

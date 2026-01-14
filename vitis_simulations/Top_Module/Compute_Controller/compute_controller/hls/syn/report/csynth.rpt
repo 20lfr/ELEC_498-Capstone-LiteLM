@@ -1,0 +1,218 @@
+
+
+================================================================
+== Synthesis Summary Report of 'compute_controller'
+================================================================
++ General Information: 
+    * Date:           Wed Jan 14 14:32:36 2026
+    * Version:        2025.1 (Build 6135595 on May 21 2025)
+    * Project:        compute_controller
+    * Solution:       hls (Vivado IP Flow Target)
+    * Product family: zynquplus
+    * Target device:  xck26-sfvc784-2LV-c
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +----------------------+------+------+---------+---------+----------+---------+------+----------+------+---------+-----------+-----------+-----+
+    |        Modules       | Issue|      |      Latency      | Iteration|         | Trip |          |      |         |           |           |     |
+    |        & Loops       | Type | Slack| (cycles)|   (ns)  |  Latency | Interval| Count| Pipelined| BRAM |   DSP   |     FF    |    LUT    | URAM|
+    +----------------------+------+------+---------+---------+----------+---------+------+----------+------+---------+-----------+-----------+-----+
+    |+ compute_controller  |     -|  4.33|       10|  100.000|         -|       11|     -|        no|     -|  8 (~0%)|  211 (~0%)|  996 (~0%)|    -|
+    | + OUT_PROJ           |     -|  4.33|        9|   90.000|         -|        9|     -|        no|     -|  8 (~0%)|   70 (~0%)|  657 (~0%)|    -|
+    +----------------------+------+------+---------+---------+----------+---------+------+----------+------+---------+-----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* AP_MEMORY
++--------------------------+-----------+----------+
+| Port                     | Direction | Bitwidth |
++--------------------------+-----------+----------+
+| OUT_PROJ_accum_address0  | out       | 1        |
+| OUT_PROJ_accum_address1  | out       | 1        |
+| OUT_PROJ_accum_d0        | out       | 32       |
+| OUT_PROJ_accum_d1        | out       | 32       |
+| OUT_PROJ_valueA_address0 | out       | 3        |
+| OUT_PROJ_valueA_address1 | out       | 3        |
+| OUT_PROJ_valueA_q0       | in        | 8        |
+| OUT_PROJ_valueA_q1       | in        | 8        |
+| OUT_PROJ_valueB_address0 | out       | 4        |
+| OUT_PROJ_valueB_address1 | out       | 4        |
+| OUT_PROJ_valueB_q0       | in        | 4        |
+| OUT_PROJ_valueB_q1       | in        | 4        |
++--------------------------+-----------+----------+
+
+* Other Ports
++---------------------+---------+-----------+----------+
+| Port                | Mode    | Direction | Bitwidth |
++---------------------+---------+-----------+----------+
+| compute_done        | ap_vld  | out       | 1        |
+| compute_instruction | ap_none | in        | 32       |
+| compute_ready       | ap_vld  | out       | 1        |
+| compute_start       | ap_none | in        | 1        |
+| error               | ap_vld  | out       | 1        |
+| mem_op              | ap_vld  | out       | 32       |
+| mem_read_request    | ap_vld  | out       | 1        |
+| mem_transfer_done   | ap_none | in        | 1        |
+| mem_write_request   | ap_vld  | out       | 1        |
+| reset               | ap_none | in        | 1        |
++---------------------+---------+-----------+----------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------------------------------+
+| Interface | Type       | Ports                             |
++-----------+------------+-----------------------------------+
+| ap_clk    | clock      | ap_clk                            |
+| ap_rst    | reset      | ap_rst                            |
+| ap_ctrl   | ap_ctrl_hs | ap_done ap_idle ap_ready ap_start |
++-----------+------------+-----------------------------------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++---------------------+-----------+---------------+
+| Argument            | Direction | Datatype      |
++---------------------+-----------+---------------+
+| reset               | in        | bool          |
+| compute_start       | in        | bool          |
+| compute_instruction | in        | unsigned int  |
+| compute_ready       | out       | bool&         |
+| compute_done        | out       | bool&         |
+| mem_transfer_done   | in        | bool          |
+| mem_read_request    | out       | bool&         |
+| mem_write_request   | out       | bool&         |
+| mem_op              | out       | unsigned int& |
+| OUT_PROJ_valueA     | in        | signed char*  |
+| OUT_PROJ_valueB     | in        | ap_int<4>*    |
+| OUT_PROJ_accum      | out       | int*          |
+| error               | out       | bool&         |
++---------------------+-----------+---------------+
+
+* SW-to-HW Mapping
++---------------------+--------------------------+---------+----------+
+| Argument            | HW Interface             | HW Type | HW Usage |
++---------------------+--------------------------+---------+----------+
+| reset               | reset                    | port    |          |
+| compute_start       | compute_start            | port    |          |
+| compute_instruction | compute_instruction      | port    |          |
+| compute_ready       | compute_ready            | port    |          |
+| compute_ready       | compute_ready_ap_vld     | port    |          |
+| compute_done        | compute_done             | port    |          |
+| compute_done        | compute_done_ap_vld      | port    |          |
+| mem_transfer_done   | mem_transfer_done        | port    |          |
+| mem_read_request    | mem_read_request         | port    |          |
+| mem_read_request    | mem_read_request_ap_vld  | port    |          |
+| mem_write_request   | mem_write_request        | port    |          |
+| mem_write_request   | mem_write_request_ap_vld | port    |          |
+| mem_op              | mem_op                   | port    |          |
+| mem_op              | mem_op_ap_vld            | port    |          |
+| OUT_PROJ_valueA     | OUT_PROJ_valueA_address0 | port    | offset   |
+| OUT_PROJ_valueA     | OUT_PROJ_valueA_ce0      | port    |          |
+| OUT_PROJ_valueA     | OUT_PROJ_valueA_q0       | port    |          |
+| OUT_PROJ_valueA     | OUT_PROJ_valueA_address1 | port    | offset   |
+| OUT_PROJ_valueA     | OUT_PROJ_valueA_ce1      | port    |          |
+| OUT_PROJ_valueA     | OUT_PROJ_valueA_q1       | port    |          |
+| OUT_PROJ_valueB     | OUT_PROJ_valueB_address0 | port    | offset   |
+| OUT_PROJ_valueB     | OUT_PROJ_valueB_ce0      | port    |          |
+| OUT_PROJ_valueB     | OUT_PROJ_valueB_q0       | port    |          |
+| OUT_PROJ_valueB     | OUT_PROJ_valueB_address1 | port    | offset   |
+| OUT_PROJ_valueB     | OUT_PROJ_valueB_ce1      | port    |          |
+| OUT_PROJ_valueB     | OUT_PROJ_valueB_q1       | port    |          |
+| OUT_PROJ_accum      | OUT_PROJ_accum_address0  | port    | offset   |
+| OUT_PROJ_accum      | OUT_PROJ_accum_ce0       | port    |          |
+| OUT_PROJ_accum      | OUT_PROJ_accum_we0       | port    |          |
+| OUT_PROJ_accum      | OUT_PROJ_accum_d0        | port    |          |
+| OUT_PROJ_accum      | OUT_PROJ_accum_address1  | port    | offset   |
+| OUT_PROJ_accum      | OUT_PROJ_accum_ce1       | port    |          |
+| OUT_PROJ_accum      | OUT_PROJ_accum_we1       | port    |          |
+| OUT_PROJ_accum      | OUT_PROJ_accum_d1        | port    |          |
+| error               | error                    | port    |          |
+| error               | error_ap_vld             | port    |          |
++---------------------+--------------------------+---------+----------+
+
+
+================================================================
+== Bind Op Report
+================================================================
++------------------------------------+-----+--------+------------------------+--------+-----------+---------+
+| Name                               | DSP | Pragma | Variable               | Op     | Impl      | Latency |
++------------------------------------+-----+--------+------------------------+--------+-----------+---------+
+| + compute_controller               | 8   |        |                        |        |           |         |
+|   icmp_ln78_fu_340_p2              |     |        | icmp_ln78              | seteq  | auto      | 0       |
+|   icmp_ln79_fu_346_p2              |     |        | icmp_ln79              | seteq  | auto      | 0       |
+|   grp_fu_317_p2                    |     |        | xor_ln135              | xor    | auto      | 0       |
+|   grp_fu_323_p3                    |     |        | select_ln135           | select | auto_sel  | 0       |
+|   select_ln135_1_fu_371_p3         |     |        | select_ln135_1         | select | auto_sel  | 0       |
+|   icmp_ln125_fu_383_p2             |     |        | icmp_ln125             | seteq  | auto      | 0       |
+|   grp_fu_317_p2                    |     |        | xor_ln117              | xor    | auto      | 0       |
+|   grp_fu_323_p3                    |     |        | select_ln117           | select | auto_sel  | 0       |
+|   select_ln117_1_fu_389_p3         |     |        | select_ln117_1         | select | auto_sel  | 0       |
+|   icmp_ln104_fu_413_p2             |     |        | icmp_ln104             | seteq  | auto      | 0       |
+|   xor_ln104_fu_419_p2              |     |        | xor_ln104              | xor    | auto      | 0       |
+|   next_state_1_cast_cast_fu_426_p3 |     |        | next_state_1_cast_cast | select | auto_sel  | 0       |
+|  + OUT_PROJ                        | 8   |        |                        |        |           |         |
+|    mac_muladd_8s_4s_12s_13_4_1_U13 | 1   |        | mul_ln37               | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U13 | 1   |        | sext_ln37_9            | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U5             |     |        | mul_ln37_1             | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U14 | 1   |        | mul_ln37_2             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U14 | 1   |        | sext_ln37_11           | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U6             |     |        | mul_ln37_3             | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U9  | 1   |        | mul_ln37_4             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U9  | 1   |        | sext_ln37_13           | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U1             |     |        | mul_ln37_5             | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U10 | 1   |        | mul_ln37_6             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U10 | 1   |        | sext_ln37_15           | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U2             |     |        | mul_ln37_7             | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U10 | 1   |        | add_ln37               | add    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U9  | 1   |        | add_ln37_1             | add    | dsp_slice | 3       |
+|    add_ln37_2_fu_475_p2            |     |        | add_ln37_2             | add    | fabric    | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U14 | 1   |        | add_ln37_3             | add    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U13 | 1   |        | add_ln37_4             | add    | dsp_slice | 3       |
+|    add_ln37_5_fu_530_p2            |     |        | add_ln37_5             | add    | fabric    | 0       |
+|    acc_fu_540_p2                   |     |        | acc                    | add    | fabric    | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U15 | 1   |        | mul_ln37_8             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U15 | 1   |        | sext_ln37_24           | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U7             |     |        | mul_ln37_9             | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U16 | 1   |        | mul_ln37_10            | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U16 | 1   |        | sext_ln37_26           | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U8             |     |        | mul_ln37_11            | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U11 | 1   |        | mul_ln37_12            | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U11 | 1   |        | sext_ln37_28           | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U3             |     |        | mul_ln37_13            | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U12 | 1   |        | mul_ln37_14            | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U12 | 1   |        | sext_ln37_30           | sext   | dsp_slice | 3       |
+|    mul_8s_4s_12_1_1_U4             |     |        | mul_ln37_15            | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U12 | 1   |        | add_ln37_7             | add    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U11 | 1   |        | add_ln37_8             | add    | dsp_slice | 3       |
+|    add_ln37_9_fu_515_p2            |     |        | add_ln37_9             | add    | fabric    | 0       |
+|    mac_muladd_8s_4s_12s_13_4_1_U16 | 1   |        | add_ln37_10            | add    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_13_4_1_U15 | 1   |        | add_ln37_11            | add    | dsp_slice | 3       |
+|    add_ln37_12_fu_560_p2           |     |        | add_ln37_12            | add    | fabric    | 0       |
+|    acc_1_fu_570_p2                 |     |        | acc_1                  | add    | fabric    | 0       |
++------------------------------------+-----+--------+------------------------+--------+-----------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
+  No bind storage info in design
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++--------+---------+------------------------------------------------------------------------------------------------+
+| Type   | Options | Location                                                                                       |
++--------+---------+------------------------------------------------------------------------------------------------+
+| INLINE | off     | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:30 in out_proj           |
+| UNROLL |         | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:32 in out_proj           |
+| UNROLL |         | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:35 in out_proj           |
+| INLINE | off     | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:69 in compute_controller |
++--------+---------+------------------------------------------------------------------------------------------------+
+
+

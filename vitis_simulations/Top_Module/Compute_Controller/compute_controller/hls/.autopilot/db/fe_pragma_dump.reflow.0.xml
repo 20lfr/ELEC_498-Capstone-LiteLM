@@ -1,0 +1,7 @@
+<pragmas>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp" line="30" pragmaType="inline" parentfunction="OUT_PROJ" off="1" region="0" recursive="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp" line="32" pragmaType="unroll" parentfunction="OUT_PROJ" factor="-1" skip_exit_check="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp" line="35" pragmaType="unroll" parentfunction="OUT_PROJ" factor="-1" skip_exit_check="0"/>
+<pragma file="" line="0" pragmaType="inline" parentfunction="ap_int_base<4, true>::operator long long() const" off="0" region="0" recursive="0"/>
+<pragma file="/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp" line="69" pragmaType="inline" parentfunction="compute_controller" off="1" region="0" recursive="0"/>
+</pragmas>

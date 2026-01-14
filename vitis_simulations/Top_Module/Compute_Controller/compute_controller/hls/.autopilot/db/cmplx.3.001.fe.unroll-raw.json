@@ -1,0 +1,39 @@
+{
+  "0": {
+    "basicblocks": 22,
+    "calls": "1",
+    "control_depth": 0,
+    "def_use_depth": 2,
+    "file": "compute_controller.cpp",
+    "fileloc": 46,
+    "instructions": 74,
+    "loads": {
+      "G": 7
+    },
+    "memory_accesses": 0,
+    "name": "compute_controller",
+    "stores": {
+      "G": 7,
+      "T": 20
+    },
+    "total_instructions": 206
+  },
+  "1": {
+    "basicblocks": 6,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 10,
+    "file": "compute_controller.cpp",
+    "fileloc": 25,
+    "instructions": 132,
+    "loads": {
+      "L": 32
+    },
+    "memory_accesses": 0,
+    "name": "OUT_PROJ",
+    "stores": {
+      "L": 2
+    },
+    "total_instructions": 132
+  }
+}
