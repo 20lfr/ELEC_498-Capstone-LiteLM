@@ -5,6 +5,7 @@
 
 using int4_t = ap_int<4>;
 
+
 // Top-level compute controller stub.
 // - Latches a request from the scheduler (compute_start/compute_op + memory addrs/sizes)
 // - Fetches the operands from BRAM/URAM (simulated here by reading valueA/valueB pointers)
