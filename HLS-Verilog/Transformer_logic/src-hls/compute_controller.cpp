@@ -1,24 +1,5 @@
 #include "compute_controller.hpp"
 
-namespace {
-
-constexpr int MAX_VALUEA = D_MODEL;
-constexpr int MAX_VALUEB = D_MODEL * D_HEADS;
-
-// Simple controller state machine.
-enum class ComputeState : uint8_t { IDLE = 0, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
-
-// Captured request from the scheduler.
-struct PendingRequest {
-    uint32_t instruction    = 0x00000000;
-    ComputeOp op            = ComputeOp::CMP_NONE;
-    uint8_t layer_idx       = 0;
-    uint8_t head_idx        = 0;
-    uint8_t tile_idx        = 0;
-};
-
-} // namespace
-
 // ---------------------------------------------------------------------------
 // Compute kernels
 // ---------------------------------------------------------------------------
@@ -28,6 +9,15 @@ void OUT_PROJ(
     int32_t out[D_TILE_WO]
 ) {
 #pragma HLS INLINE off
+    /*
+    y =         ^ [] *+ []     ...     [] ^        =     [] ^
+                ^ []    []     ...     [] ^              [] ^
+        D_MODEL ^ ..    ..     ...     .. ^ D_MODEL      .. ^ D_MODEL
+                ^ []    []     ...     [] ^              [] ^
+                ^ []    []     ...     [] ^              [] ^
+                            <-D_MODEL->
+    */
+
     for (int t = 0; t < D_TILE_WO; ++t) {
 #pragma HLS UNROLL
         int32_t acc = 0;
@@ -74,8 +64,7 @@ void LAYER_NORM(
     const int8_t x[D_MODEL],        // input vector
     const int32_t gamma[D_MODEL],   // scale parameter
     const int32_t beta[D_MODEL],    // shift parameter
-    const int32_t mean,             // mean of input vector
-    const int32_t inv_std,          // inverse standard deviation
+    const int32_t epsilon,          // Divide variance avoid parameter
     int8_t y[D_MODEL]               // output vector
 ) {
 #pragma HLS INLINE off
@@ -88,25 +77,108 @@ void LAYER_NORM(
         sum += static_cast<int32_t>(x[i]);
         square += static_cast<int32_t>(x[i]) * static_cast<int32_t>(x[i]);
     }
+    // mean     = sum / D_MODEL;
+    // variance = (square / D_MODEL) - (mean * mean);
+
+    int32_t mean = sum / D_MODEL;
+    int32_t variance = (square / D_MODEL) - (sum * sum) / (D_MODEL * D_MODEL);
+    int32_t v = (variance * variance) + epsilon;
+    int32_t inv_std = 1 / sqrt(v);
 
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL          
-        int32_t diff = static_cast<int32_t>(x[i]) - mean;
-        int64_t scaled = static_cast<int64_t>(diff) * static_cast<int64_t>(inv_std);
-        int32_t normalized = static_cast<int32_t>(scaled >> 16); // Assuming inv_std is in Q16 format
-        int64_t scaled_gamma = static_cast<int64_t>(normalized) * static_cast<int64_t>(gamma[i]);
-        int32_t shifted = static_cast<int32_t>(scaled_gamma >> 16) + beta[i]; // Assuming gamma is in Q16 format
+        int32_t normalized = (static_cast<int32_t>(x[i]) - mean) * inv_std;
+        int32_t scaled = (normalized * gamma[i]) + beta[i];
 
         // Saturate to int8 range
-        if (shifted > 127) {
+        if (scaled > 127) {
             y[i] = 127;
-        } else if (shifted < -128) {
+        } else if (scaled < -128) {
             y[i] = -128;
         } else {
-            y[i] = static_cast<int8_t>(shifted);
+            y[i] = static_cast<int8_t>(scaled);
         }
     }
 }
+
+void FFN_PRE_ACT(
+    const int8_t input[D_MODEL],
+    const int4_t weights[D_MODEL * D_FFN],
+    int8_t output[D_FFN]
+) {
+
+    /*
+    y =         ^ [] *+ []     ...     [] ^        =   [] ^
+                ^ []    []     ...     [] ^            [] ^
+        D_MODEL ^ ..    ..     ...     .. ^ D_FFN      .. ^ D_FFN
+                ^ []    []     ...     [] ^            [] ^
+                ^ []    []     ...     [] ^            [] ^
+                            <-D_MODEL->
+    */
+    for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS UNROLL
+        int32_t acc = 0;
+        for (int j = 0; j < D_MODEL; ++j) {
+#pragma HLS UNROLL
+            const int4_t w = weights[i * D_MODEL + j];
+            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w); 
+        }
+        output[i] = acc;
+    }
+}
+
+void FFN_ACT_RELU(
+    const int8_t input[D_FFN],
+    int8_t output[D_FFN]
+) { 
+    for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS UNROLL
+        if (input[i] < 0) {
+            output[i] = 0;
+        } else {
+            output[i] = input[i];
+        }
+    }
+}   
+
+void FFN_POST_ACT(
+    const int8_t input[D_FFN],
+    const int4_t weights[D_FFN * D_MODEL],
+    int8_t output[D_FFN]
+) {
+#pragma HLS INLINE off
+    /*
+    y =     ^ [] *+ []     ...     [] ^         =   [] ^
+            ^ []    []     ...     [] ^             [] ^
+      D_FNN ^ ..    ..     ...     .. ^ D_MODEL     .. ^ D_MODEL
+            ^ []    []     ...     [] ^             [] ^
+            ^ []    []     ...     [] ^             [] ^
+                        <-D_FFN->
+    */
+    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS UNROLL
+        int32_t acc = 0;
+        for (int j = 0; j < D_FFN; ++j) {
+#pragma HLS UNROLL
+            const int4_t w = weights[i * D_FFN + j];
+            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w); 
+        }
+        output[i] = acc;
+    }
+}
+
+void RES_ADD(
+    const int8_t input[D_MODEL],
+    const int8_t residual[D_MODEL],
+    int8_t output[D_MODEL]
+) { 
+    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS UNROLL
+        output[i] = input[i] + residual[i];
+    }
+}
+
+
 // ---------------------------------------------------------------------------
 // Top-level compute controller
 // ---------------------------------------------------------------------------

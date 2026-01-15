@@ -173,7 +173,6 @@ enum class LnPhase : uint8_t {
     DONE
 };
 
-
 // ------------------------------------------------------------
 // Headed Attention and FSM enums
 // ------------------------------------------------------------
@@ -318,6 +317,24 @@ struct HeadCtx {
     bool v_writeback_dma_done = false;
     bool att_scores_dma_done = false;
     bool att_value_dma_done  = false;
+};
+
+
+
+// ------------------------------------------------------------
+// MAC state + helper structs
+// ------------------------------------------------------------
+
+// Simple controller state machine.
+enum class ComputeState : uint8_t { IDLE = 0, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
+
+// Captured request from the scheduler.
+struct PendingRequest {
+    uint32_t instruction    = 0x00000000;
+    ComputeOp op            = ComputeOp::CMP_NONE;
+    uint8_t layer_idx       = 0;
+    uint8_t head_idx        = 0;
+    uint8_t tile_idx        = 0;
 };
 
 
