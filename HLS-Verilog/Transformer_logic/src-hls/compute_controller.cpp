@@ -4,8 +4,8 @@
 // Compute kernels
 // ---------------------------------------------------------------------------
 void OUT_PROJ(
-    const int8_t valueA[D_MODEL],
-    const int4_t valueB[D_MODEL * D_TILE_WO],
+    const int8_t vectorA[D_MODEL],
+    const int4_t matrixB[D_MODEL * D_TILE_WO],
     int32_t out[D_TILE_WO]
 ) {
 #pragma HLS INLINE off
@@ -23,14 +23,14 @@ void OUT_PROJ(
         int32_t acc = 0;
         for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
-            const int4_t w = valueB[t * D_MODEL + i];
-            acc += static_cast<int32_t>(valueA[i]) * static_cast<int32_t>(w);
+            const int4_t w = matrixB[t * D_MODEL + i];
+            acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
         }
         out[t] = acc;
     }
 }
 
-void REQUANT_int32_to_int8(
+void REQUANT_D_MODEL_int32_to_int8(
     int32_t x32[D_MODEL],   // input vector
     int32_t M,              // integer multiplier               (Provided by PS)
     int32_t n,              // right shift                      (Provided by PS)
@@ -43,7 +43,7 @@ void REQUANT_int32_to_int8(
     /*
          y[t] = saturate_to_int8( (x[t] * M) + 2^(n-1)/(2^n) + z_out )
     */
-    for (int t = 0; t < D_TILE_WO; ++t) {
+    for (int t = 0; t < D_MODEL; ++t) {
 #pragma HLS UNROLL
         int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
         int64_t rounded = 1LL << (n - 1);
@@ -101,69 +101,73 @@ void LAYER_NORM(
     }
 }
 
-void FFN_PRE_ACT(
-    const int8_t input[D_MODEL],
-    const int4_t weights[D_MODEL * D_FFN],
-    int8_t output[D_FFN]
-) {
+// Assume int4_t is a signed 4-bit type, e.g. typedef ap_int<4> int4_t;
 
-    /*
-    y =         ^ [] *+ []     ...     [] ^        =   [] ^
-                ^ []    []     ...     [] ^            [] ^
-        D_MODEL ^ ..    ..     ...     .. ^ D_FFN      .. ^ D_FFN
-                ^ []    []     ...     [] ^            [] ^
-                ^ []    []     ...     [] ^            [] ^
-                            <-D_MODEL->
-    */
+void FFN_PRE_ACT(
+    const int8_t  input[D_MODEL],              // activations (int8)
+    const int4_t  weights[D_MODEL * D_FFN],    // weights (int4)
+    const int32_t bias[D_FFN],                 // bias per output neuron
+    const int16_t scale[D_FFN],                // per-neuron scale in Q0.15
+    int16_t       output[D_FFN]                // pre-activation in int16 (e.g. Q1.15-ish)
+) {
+    const int16_t ACT_MIN = -32768;   // clamp range for pre-activation
+    const int16_t ACT_MAX =  32767;
     for (int i = 0; i < D_FFN; ++i) {
-#pragma HLS UNROLL
-        int32_t acc = 0;
+#pragma HLS PIPELINE II=1
+        int32_t acc = bias[i];
         for (int j = 0; j < D_MODEL; ++j) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=4  // or tune this based on resources
             const int4_t w = weights[i * D_MODEL + j];
-            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w); 
+            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
         }
-        output[i] = acc;
+        int32_t scaled = (acc * static_cast<int32_t>(scale[i])) >> 15;
+        if (scaled > ACT_MAX)       scaled = ACT_MAX;
+        else if (scaled < ACT_MIN)  scaled = ACT_MIN;
+        output[i] = static_cast<int16_t>(scaled);
     }
 }
 
 void FFN_ACT_RELU(
-    const int8_t input[D_FFN],
-    int8_t output[D_FFN]
-) { 
+    const int16_t input[D_FFN],   // pre-activation in some Q format (e.g., Q1.15-ish)
+    int16_t       output[D_FFN]   // same format, just clamped at 0
+) {
     for (int i = 0; i < D_FFN; ++i) {
-#pragma HLS UNROLL
-        if (input[i] < 0) {
+#pragma HLS PIPELINE II=1
+        int16_t v = input[i];
+        if (v < 0) {
             output[i] = 0;
         } else {
-            output[i] = input[i];
+            output[i] = v;
         }
     }
-}   
-
+}
+ 
 void FFN_POST_ACT(
-    const int8_t input[D_FFN],
-    const int4_t weights[D_FFN * D_MODEL],
-    int8_t output[D_FFN]
+    const int16_t input[D_FFN],               // ReLU'ed activations (int16, fixed-point)
+    const int4_t  weights[D_FFN * D_MODEL],   // W2, stored as [D_MODEL x D_FFN]
+    const int32_t bias[D_MODEL],              // bias for each output dim
+    const int16_t scale[D_MODEL],             // per-output scale in Q0.15
+    int8_t        output[D_MODEL]             // back to int8 activations
 ) {
 #pragma HLS INLINE off
-    /*
-    y =     ^ [] *+ []     ...     [] ^         =   [] ^
-            ^ []    []     ...     [] ^             [] ^
-      D_FNN ^ ..    ..     ...     .. ^ D_MODEL     .. ^ D_MODEL
-            ^ []    []     ...     [] ^             [] ^
-            ^ []    []     ...     [] ^             [] ^
-                        <-D_FFN->
-    */
+    const int32_t OUT_MIN = -128;
+    const int32_t OUT_MAX =  127;
     for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS UNROLL
-        int32_t acc = 0;
+#pragma HLS PIPELINE II=1
+        int32_t acc = bias[i];
         for (int j = 0; j < D_FFN; ++j) {
-#pragma HLS UNROLL
-            const int4_t w = weights[i * D_FFN + j];
-            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w); 
-        }
-        output[i] = acc;
+#pragma HLS UNROLL factor=4   // tune this based on area/timing
+            const int4_t w = weights[i * D_FFN + j];  // row-major: row i, col j
+            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
+        } 
+
+        // Apply scaling
+        int32_t scaled = (acc * static_cast<int32_t>(scale[i])) >> 15;
+
+        // Clamp to int8 range
+        if (scaled > OUT_MAX)       scaled = OUT_MAX;
+        else if (scaled < OUT_MIN)  scaled = OUT_MIN;
+        output[i] = static_cast<int8_t>(scaled); 
     }
 }
 
@@ -198,30 +202,21 @@ void compute_controller(
     uint32_t     &mem_op,             // [OUTPUT] Full Intruction Identifier for memory manager
 
     // Data location INPUT signals from Memory Controller
-    int8_t      OUT_PROJ_valueA[D_MODEL],                // [INPUT] Input activations for OUT_PROJ
-    int4_t      OUT_PROJ_valueB[D_MODEL * D_TILE_WO],     // [INPUT] Weights for OUT_PROJ
-    int32_t     OUT_PROJ_accum[D_TILE_WO],               // [OUTPUT] Output accumulators for OUT_PROJ
 
+    // Common requirements
+    int8_t      input_embedding[D_MODEL],               // [INPUT] Input activations for functions
+
+    // OUT_PROJ requirements
+                   
+    int4_t      OUT_PROJ_valueB[D_MODEL * D_TILE_WO],   // [INPUT] Weights for OUT_PROJ
+    int32_t     OUT_PROJ_accum[D_TILE_WO],              // [OUTPUT] Output accumulators for OUT_PROJ
+
+    // FFN requirements
+    int8_t      FFN_intermediate[D_FFN],              // [INPUT] Intermediate activations for FFN POST-ACT
+    int4_t      FFN_weights1[D_MODEL * D_FFN],          // [INPUT] Weights for FFN PRE-ACT
 
     bool        &error               // [OUTPUT] Error flag on invalid request
-
-
-    
 ) {
-    // TODO: Inputs for remaining non-head compute ops:
-    // CMP_OUT_PROJ (14)
-    // CMP_REQUANT1 (15)
-    // CMP_RESID0 (16)
-    // CMP_LN0 (17)
-    // CMP_REQUANT3 (18)
-    // CMP_FFN_W1 (19)
-    // CMP_FFN_ACT (20)
-    // CMP_FFN_W2 (21)
-    // CMP_REQUANT4 (22)
-    // CMP_RESID1 (23)
-    // CMP_LN1 (24)
-    // CMP_DEQUANT (25)
-    // CMP_LOGITS (26)
 #pragma HLS INLINE off
 // #pragma HLS ARRAY_PARTITION variable=OUT_PROJ_valueA complete dim=1
 // #pragma HLS ARRAY_PARTITION variable=OUT_PROJ_valueB complete dim=1
@@ -258,7 +253,9 @@ void compute_controller(
                 req.layer_idx     = (compute_instruction >> 8) & 0xFFu;
                 req.head_idx      = (compute_instruction >> 16) & 0xFFu;
                 req.tile_idx      = (compute_instruction >> 24) & 0xFFu;
-                if (req.op == ComputeOp::CMP_OUT_PROJ) {
+
+                // Check from proper op request
+                if (req.op == ComputeOp::CMP_OUT_PROJ || req.op == ComputeOp::CMP_REQUANT1 || req.op == ComputeOp::CMP_RESID0 || req.op == ComputeOp::CMP_LN0 || req.op == ComputeOp::CMP_REQUANT3 || req.op == ComputeOp::CMP_FFN_W1 || req.op == ComputeOp::CMP_FFN_ACT || req.op == ComputeOp::CMP_FFN_W2 || req.op == ComputeOp::CMP_REQUANT4 || req.op == ComputeOp::CMP_RESID1 || req.op == ComputeOp::CMP_LN1 || req.op == ComputeOp::CMP_DEQUANT || req.op == ComputeOp::CMP_LOGITS) {
                     error = false; // Clear stale errors on a new request.
                     next_state = ComputeState::WAIT_MEM;
                 } else {
@@ -280,7 +277,7 @@ void compute_controller(
 
         case ComputeState::EXECUTE:
             if (req.op == ComputeOp::CMP_OUT_PROJ) {
-                OUT_PROJ(OUT_PROJ_valueA, OUT_PROJ_valueB, OUT_PROJ_accum);
+                OUT_PROJ(input_embedding, OUT_PROJ_valueB, OUT_PROJ_accum);
             } else {
                 error = true;
             }
