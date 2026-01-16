@@ -27,27 +27,33 @@ void MAC_QKV(
 }
 
 void ATT_SCORES(
-    const int8_t input[D_HEADS],
-    const int8_t K_cache[D_HEADS * CONTEXT_LENGTH],
-    int32_t output[CONTEXT_LENGTH]
+    const int8_t input[D_HEADS],                    // query vector q[d]
+    const int8_t K_cache[CONTEXT_LENGTH * D_HEADS], // keys K[t][d], row-major by t
+    int32_t output[CONTEXT_LENGTH]                  // logits per position t
 ) {
-
     /*
-    y =         ^ [] *+ []     ...     [] ^        =        [] ^
-                ^ []    []     ...     [] ^                 [] ^
-        D_HEADS ^ ..    ..     ...     .. ^ CONTEXT_LENGTH  .. ^ CONTEXT_LENGTH
-                ^ []    []     ...     [] ^                 [] ^
-                ^ []    []     ...     [] ^                 [] ^
-                            <-D_HEADS->
+        K_cache layout (row-major by context position):
+
+            t = 0      : K_cache[0 * D_HEADS + d] = K[0][d]
+            t = 1      : K_cache[1 * D_HEADS + d] = K[1][d]
+            ...
+            t = T-1    : K_cache[t * D_HEADS + d] = K[t][d]
+
+        score[t] = sum_{d=0}^{D_HEADS-1} input[d] * K_cache[t * D_HEADS + d]
     */
-    for (int i = 0; i < D_HEADS; ++i) {
+
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
         int32_t acc = 0;
-        for (int j = 0; j < CONTEXT_LENGTH; ++j) {
-            acc += input[i] * K_cache[i * CONTEXT_LENGTH + j];
+        for (int d = 0; d < D_HEADS; ++d) {
+#pragma HLS PIPELINE II=1
+            int8_t q = input[d];
+            int8_t k = K_cache[t * D_HEADS + d];
+            acc += static_cast<int32_t>(q) * static_cast<int32_t>(k);
         }
-        output[i] = acc;
+        output[t] = acc;
     }
 }
+
 
 void VALUE_SCALE_CLAMP(
     const int32_t input[CONTEXT_LENGTH],
@@ -164,6 +170,48 @@ void SOFTMAX(
         if (prob_q15 > MAX_Q15) prob_q15 = MAX_Q15;
         output[i] = static_cast<int16_t>(prob_q15); // still non-negative, just stored in int16_t
     }
+}
+
+void ATT_VALUES(
+    const int8_t input[CONTEXT_LENGTH],              // attention weights over positions
+    const int8_t V_cache[D_HEADS * CONTEXT_LENGTH],  // [D_HEADS][CONTEXT_LENGTH]
+    int32_t output[D_HEADS]                          // one scalar per head
+) {
+    for (int h = 0; h < D_HEADS; ++h) {
+        int32_t acc = 0;
+        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+#pragma HLS PIPELINE II=1
+            int8_t alpha = input[t];
+            int8_t v     = V_cache[h * CONTEXT_LENGTH + t]; // row-major: head h, pos t
+            acc += static_cast<int32_t>(alpha) * static_cast<int32_t>(v);
+        }
+        output[h] = acc;
+    }
+}
+
+void REQUANT_D_HEADS_int32_to_int8(
+    int32_t x32[D_HEADS],   // input vector
+    int32_t M,              // integer multiplier               (Provided by PS)
+    int32_t n,              // right shift                      (Provided by PS)
+    int32_t z_out,          // output zero-point (int8 range)   (Provided by PS)
+
+    int8_t y8[D_HEADS]      // output vector
+) {
+    for (int t = 0; t < D_HEADS; ++t) {
+#pragma HLS UNROLL
+        int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
+        int64_t rounded = 1LL << (n - 1);
+        int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+        int32_t shifted = scaled + z_out;
+
+        if (shifted > 127) {
+            y8[t] = 127;
+        } else if (shifted < -128) {
+            y8[t] = -128;
+        } else {
+            y8[t] = static_cast<int8_t>(shifted);
+        }
+    }   
 }
 
 
