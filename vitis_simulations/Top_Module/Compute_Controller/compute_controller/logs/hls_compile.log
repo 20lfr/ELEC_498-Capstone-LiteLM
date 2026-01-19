@@ -24,78 +24,329 @@ INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/
 INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
 INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(5)
 INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/vitis-comp.json
-INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 2.5 seconds. CPU system time: 0.55 seconds. Elapsed time: 3.03 seconds; current allocated memory: 445.094 MB.
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 2.65 seconds. CPU system time: 0.55 seconds. Elapsed time: 3.17 seconds; current allocated memory: 445.125 MB.
 INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' ... 
-INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 2.09 seconds. CPU system time: 0.59 seconds. Elapsed time: 2.68 seconds; current allocated memory: 446.719 MB.
+WARNING: [HLS 207-1016] unknown warning group '-Wmisleading-indentation', ignored (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:16:34)
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 19.04 seconds. CPU system time: 1.54 seconds. Elapsed time: 20.66 seconds; current allocated memory: 450.973 MB.
 INFO: [HLS 200-777] Using interface defaults for 'Vivado' flow target.
-INFO: [HLS 200-1995] There were 128 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 205 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 165 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 156 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 156 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Array/Struct (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Performance (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 159 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 185 instructions in the design after the 'HW Transforms (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 200-1995] There were 188 instructions in the design after the 'HW Transforms (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
-INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_31_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:31:19) in function 'OUT_PROJ' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:29:0)
-INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_34_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:34:26) in function 'OUT_PROJ' completely with a factor of 8 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:29:0)
-INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 1.52 seconds. CPU system time: 0.53 seconds. Elapsed time: 6.66 seconds; current allocated memory: 448.379 MB.
-INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 448.379 MB.
+INFO: [HLS 200-1995] There were 15,029 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 12,212 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,863 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,789 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,561 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,523 instructions in the design after the 'Array/Struct (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,523 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,523 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,523 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,529 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,529 instructions in the design after the 'Performance (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,525 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,523 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,523 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,595 instructions in the design after the 'HW Transforms (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 4,619 instructions in the design after the 'HW Transforms (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_154_2' is marked as complete unroll implied by the pipeline pragma (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:154:27)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_116_2' is marked as complete unroll implied by the pipeline pragma (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:116:27)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_271_2' is marked as complete unroll implied by the pipeline pragma (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:271:27)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_243_1' is marked as complete unroll implied by the pipeline pragma (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:243:27)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_154_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:154:27) in function 'FFN_POST_ACT' completely with a factor of 22 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:149:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_116_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:116:27) in function 'FFN_PRE_ACT' completely with a factor of 8 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:110:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_94_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:94:22) in function 'LAYER_NORM' completely with a factor of 8 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:72:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_271_2' (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:271:27) in function 'sqrt_fixed<32, 16>' completely with a factor of 17 (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:20:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_243_1' (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:243:27) in function 'sqrt_fixed<32, 16>' completely with a factor of 8 (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:20:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_171_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:171:23) in function 'RES_ADD' completely with a factor of 8 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:170:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_49_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:49:22) in function 'REQUANT_D_MODEL_int32_to_int8' completely with a factor of 8 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_24_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:24:19) in function 'OUT_PROJ' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:13:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_27_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:27:26) in function 'OUT_PROJ' completely with a factor of 8 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:13:0)
+INFO: [HLS 214-178] Inlining function 'FFN_PRE_ACT(signed char const*, ap_int<4> const*, ap_int<4> const*, short const*, short*)' into 'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, signed char*, ap_int<4>*, int*, int*, ap_int<4>*, ap_int<4>*, short*, short*, short*, short*, short*, ap_int<4>*, ap_int<4>*, short*, int*, int*, int, int, int, signed char*, int*, int*, int, int*, signed char*, signed char*, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:241:0)
+INFO: [HLS 214-178] Inlining function 'FFN_ACT_RELU(short const*, short*)' into 'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, signed char*, ap_int<4>*, int*, int*, ap_int<4>*, ap_int<4>*, short*, short*, short*, short*, short*, ap_int<4>*, ap_int<4>*, short*, int*, int*, int, int, int, signed char*, int*, int*, int, int*, signed char*, signed char*, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:241:0)
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_79_1> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:79:22 
+INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 2.46 seconds. CPU system time: 0.78 seconds. Elapsed time: 7.01 seconds; current allocated memory: 452.098 MB.
+INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 452.098 MB.
 INFO: [HLS 200-10] Starting code transformations ...
-INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 448.523 MB.
+INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.08 seconds; current allocated memory: 453.703 MB.
 INFO: [HLS 200-10] Checking synthesizability ...
-INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 448.555 MB.
-INFO: [XFORM 203-11] Balancing expressions in function 'OUT_PROJ' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:36:1)...14 expression(s) balanced.
-INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 0.04 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.04 seconds; current allocated memory: 469.789 MB.
-INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 470.156 MB.
+WARNING: [SYNCHK 200-120] /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:90: multiplication is assumed not to overflow by default, otherwise, please add option '-fwrapv'.
+INFO: [SYNCHK 200-10] 0 error(s), 1 warning(s).
+INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 0.08 seconds. CPU system time: 0 seconds. Elapsed time: 0.07 seconds; current allocated memory: 455.531 MB.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:21:9) to (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:349:1) in function 'sqrt_fixed<32, 16>'... converting 115 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:88:36) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:100:1) in function 'LAYER_NORM'... converting 17 basic blocks.
+INFO: [XFORM 203-11] Balancing expressions in function 'compute_controller' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:113:23)...8 expression(s) balanced.
+INFO: [XFORM 203-11] Balancing expressions in function 'OUT_PROJ' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:29:1)...16 expression(s) balanced.
+INFO: [XFORM 203-11] Balancing expressions in function 'FFN_POST_ACT' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:151:20)...22 expression(s) balanced.
+INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 0.28 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.31 seconds; current allocated memory: 479.789 MB.
+INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 0.3 seconds. CPU system time: 0.04 seconds. Elapsed time: 0.34 seconds; current allocated memory: 569.609 MB.
 INFO: [HLS 200-10] Starting hardware synthesis ...
 INFO: [HLS 200-10] Synthesizing 'compute_controller' ...
+WARNING: [SYN 201-103] Legalizing function name 'sqrt_fixed<32, 16>' to 'sqrt_fixed_32_16_s'.
 INFO: [HLS 200-10] ----------------------------------------------------------------
-INFO: [HLS 200-42] -- Implementing module 'OUT_PROJ' 
+INFO: [HLS 200-42] -- Implementing module 'REQUANT_D_MODEL_int32_to_int8' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [SCHED 204-11] Starting scheduling ...
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37_11) to 3 in order to utilize available DSP registers.
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37_10) to 3 in order to utilize available DSP registers.
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37_8) to 3 in order to utilize available DSP registers.
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37_7) to 3 in order to utilize available DSP registers.
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37_4) to 3 in order to utilize available DSP registers.
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37_3) to 3 in order to utilize available DSP registers.
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37_1) to 3 in order to utilize available DSP registers.
-INFO: [HLS 200-486] Changing DSP latency (root=add_ln37) to 3 in order to utilize available DSP registers.
 INFO: [SCHED 204-11] Finished scheduling.
-INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.05 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.08 seconds; current allocated memory: 471.246 MB.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.09 seconds. CPU system time: 0.04 seconds. Elapsed time: 0.12 seconds; current allocated memory: 571.879 MB.
 INFO: [BIND 205-100] Starting micro-architecture generation ...
 INFO: [BIND 205-101] Performing variable lifetime analysis.
 INFO: [BIND 205-101] Exploring resource sharing.
 INFO: [BIND 205-101] Binding ...
 INFO: [BIND 205-100] Finished micro-architecture generation.
-INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 471.246 MB.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 571.879 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'LAYER_NORM_Pipeline_VITIS_LOOP_79_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=square_3) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_79_1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 5, loop 'VITIS_LOOP_79_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.03 seconds; current allocated memory: 572.195 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 572.195 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'sqrt_fixed_32_16_s' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining function 'sqrt_fixed<32, 16>'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 7, function 'sqrt_fixed<32, 16>'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.37 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.38 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.05 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'LAYER_NORM' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.15 seconds. CPU system time: 0 seconds. Elapsed time: 0.15 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'RES_ADD' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=scaled) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_18) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_17) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_16) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_15) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_13) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_12) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_11) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_10) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_7) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_6) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_5) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_4) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_2) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161_1) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln161) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_151_1'.
+WARNING: [HLS 200-885] The II Violation in module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' (loop 'VITIS_LOOP_151_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:156) on array 'FFN2_weights2' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'FFN2_weights2'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' (loop 'VITIS_LOOP_151_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:156) on array 'FFN2_weights2' due to limited memory ports (II = 2). Please consider using a memory core with more ports or partitioning the array 'FFN2_weights2'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' (loop 'VITIS_LOOP_151_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:156) on array 'FFN2_weights2' due to limited memory ports (II = 3). Please consider using a memory core with more ports or partitioning the array 'FFN2_weights2'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' (loop 'VITIS_LOOP_151_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:156) on array 'FFN2_weights2' due to limited memory ports (II = 4). Please consider using a memory core with more ports or partitioning the array 'FFN2_weights2'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' (loop 'VITIS_LOOP_151_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:156) on array 'FFN2_weights2' due to limited memory ports (II = 7). Please consider using a memory core with more ports or partitioning the array 'FFN2_weights2'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' (loop 'VITIS_LOOP_151_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:156) on array 'FFN2_weights2' due to limited memory ports (II = 9). Please consider using a memory core with more ports or partitioning the array 'FFN2_weights2'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' (loop 'VITIS_LOOP_151_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:156) on array 'FFN2_weights2' due to limited memory ports (II = 10). Please consider using a memory core with more ports or partitioning the array 'FFN2_weights2'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 11, Depth = 20, loop 'VITIS_LOOP_151_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.16 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.16 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'FFN_POST_ACT' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.05 seconds. CPU system time: 0 seconds. Elapsed time: 0.05 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_132_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_132_1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_132_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_113_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=mul_ln121_8) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln121_5) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln121_4) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln121_3) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln121_1) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln121) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_113_1'.
+WARNING: [HLS 200-885] The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_113_1' (loop 'VITIS_LOOP_113_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:118->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:348) on array 'FFN1_weights1' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'FFN1_weights1'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_113_1' (loop 'VITIS_LOOP_113_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:118->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:348) on array 'FFN1_weights1' due to limited memory ports (II = 2). Please consider using a memory core with more ports or partitioning the array 'FFN1_weights1'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_113_1' (loop 'VITIS_LOOP_113_1'): Unable to schedule 'load' operation 4 bit ('w', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:118->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:348) on array 'FFN1_weights1' due to limited memory ports (II = 3). Please consider using a memory core with more ports or partitioning the array 'FFN1_weights1'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 4, Depth = 10, loop 'VITIS_LOOP_113_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'OUT_PROJ' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_13) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_12) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_11) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_9) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_8) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_5) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_4) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_3) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30_1) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln30) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.05 seconds. CPU system time: 0 seconds. Elapsed time: 0.05 seconds; current allocated memory: 590.094 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 590.094 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-42] -- Implementing module 'compute_controller' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [SCHED 204-11] Starting scheduling ...
 INFO: [SCHED 204-11] Finished scheduling.
-INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 471.246 MB.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.05 seconds. CPU system time: 0 seconds. Elapsed time: 0.06 seconds; current allocated memory: 590.094 MB.
 INFO: [BIND 205-100] Starting micro-architecture generation ...
 INFO: [BIND 205-101] Performing variable lifetime analysis.
 INFO: [BIND 205-101] Exploring resource sharing.
 INFO: [BIND 205-101] Binding ...
 INFO: [BIND 205-100] Finished micro-architecture generation.
-INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 471.246 MB.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.02 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'REQUANT_D_MODEL_int32_to_int8' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_32s_64_1_1': 2 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'REQUANT_D_MODEL_int32_to_int8'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.05 seconds; current allocated memory: 590.094 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'LAYER_NORM_Pipeline_VITIS_LOOP_79_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'LAYER_NORM_Pipeline_VITIS_LOOP_79_1' pipeline 'VITIS_LOOP_79_1' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_8s_19s_19_4_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'LAYER_NORM_Pipeline_VITIS_LOOP_79_1'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.07 seconds; current allocated memory: 590.223 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'sqrt_fixed_32_16_s' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'sqrt_fixed_32_16_s'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.1 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.11 seconds; current allocated memory: 593.754 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'LAYER_NORM' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'mul_24s_24s_48_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_25s_32s_48_1_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_32s_48_1_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'udiv_33s_24ns_32_37_seq_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'LAYER_NORM'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.19 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.21 seconds; current allocated memory: 604.980 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'RES_ADD' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'RES_ADD'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.09 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.1 seconds; current allocated memory: 610.695 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1' pipeline 'VITIS_LOOP_151_1' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'am_addmul_23s_23s_16s_32_4_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_20s_21_4_1': 8 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_21_4_1': 6 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_4s_20_4_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_16s_4s_20_1_1': 7 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.08 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.09 seconds; current allocated memory: 612.266 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'FFN_POST_ACT' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'FFN_POST_ACT'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.1 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.11 seconds; current allocated memory: 618.398 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_132_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_132_1' pipeline 'VITIS_LOOP_132_1' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_132_1'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.05 seconds; current allocated memory: 620.504 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_113_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_113_1' pipeline 'VITIS_LOOP_113_1' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'am_addmul_14s_14s_16s_31_4_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_4s_12s_13_4_1': 4 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_4s_4s_12_4_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_8s_4s_12_1_1': 3 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_113_1'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.05 seconds; current allocated memory: 621.191 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-10] -- Generating RTL for module 'OUT_PROJ' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
-INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_4s_12s_13_4_1': 8 instance(s).
-INFO: [RTGEN 206-100] Generating core module 'mul_8s_4s_12_1_1': 8 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_4s_12s_13_4_1': 6 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_4s_13s_13_4_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_4s_32s_32_4_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_8s_4s_12_1_1': 6 instance(s).
 INFO: [RTGEN 206-100] Finished creating RTL model for 'OUT_PROJ'.
-INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.02 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.03 seconds; current allocated memory: 471.246 MB.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.08 seconds; current allocated memory: 624.039 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
@@ -108,20 +359,44 @@ INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/mem_tra
 INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/mem_read_request' to 'ap_vld'.
 INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/mem_write_request' to 'ap_vld'.
 INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/mem_op' to 'ap_vld'.
-INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/OUT_PROJ_valueA' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/int8_activation' to 'ap_memory'.
 INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/OUT_PROJ_valueB' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/OUT_PROJ_bias' to 'ap_memory'.
 INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/OUT_PROJ_accum' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN1_weights1' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN1_biases' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN1_scale' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN1_output' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/RELU_input' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/RELU_output' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN2_input' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN2_weights2' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN2_biases' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN2_scale' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/FFN2_output' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/requant_activation' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/requant_scale' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/requant_shift' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/requant_zero_point' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/requant_output' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/layerNorm_gamma' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/layerNorm_beta' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/layerNorm_epsilon' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/layerNorm_out' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/residualAdd_residual' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/residualAdd_output' to 'ap_memory'.
 INFO: [RTGEN 206-500] Setting interface mode on port 'compute_controller/error' to 'ap_vld'.
 INFO: [RTGEN 206-500] Setting interface mode on function 'compute_controller' to 'ap_ctrl_hs'.
 WARNING: [RTGEN 206-101] Register 'state' is power-on initialization.
 WARNING: [RTGEN 206-101] Register 'req_instruction' is power-on initialization.
 WARNING: [RTGEN 206-101] Register 'req_op' is power-on initialization.
 INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller'.
-INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.07 seconds; current allocated memory: 474.113 MB.
-INFO: [HLS 200-111] Finished Generating all RTL models: CPU user time: 0.13 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.14 seconds; current allocated memory: 478.133 MB.
-INFO: [HLS 200-111] Finished Updating report files: CPU user time: 0.4 seconds. CPU system time: 0.06 seconds. Elapsed time: 0.47 seconds; current allocated memory: 481.273 MB.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.11 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.11 seconds; current allocated memory: 627.281 MB.
+INFO: [HLS 200-111] Finished Generating all RTL models: CPU user time: 0.23 seconds. CPU system time: 0.04 seconds. Elapsed time: 0.27 seconds; current allocated memory: 632.566 MB.
+INFO: [HLS 200-111] Finished Updating report files: CPU user time: 1 seconds. CPU system time: 0.07 seconds. Elapsed time: 1.08 seconds; current allocated memory: 650.293 MB.
 INFO: [VHDL 208-304] Generating VHDL RTL for compute_controller.
 INFO: [VLOG 209-307] Generating Verilog RTL for compute_controller.
-INFO: [HLS 200-789] **** Estimated Fmax: 336.36 MHz
-INFO: [HLS 200-112] Total CPU user time: 6.92 seconds. Total CPU system time: 1.83 seconds. Total elapsed time: 13.35 seconds; peak allocated memory: 481.273 MB.
-INFO: [v++ 60-791] Total elapsed time: 0h 0m 17s
+INFO: [HLS 200-790] **** Loop Constraint Status: All loop constraints were NOT satisfied.
+INFO: [HLS 200-789] **** Estimated Fmax: 139.52 MHz
+INFO: [HLS 200-112] Total CPU user time: 28.28 seconds. Total CPU system time: 3.27 seconds. Total elapsed time: 35.39 seconds; peak allocated memory: 650.293 MB.
+INFO: [v++ 60-791] Total elapsed time: 0h 0m 39s

@@ -1,0 +1,149 @@
+
+
+================================================================
+== Vitis HLS Report for 'RES_ADD'
+================================================================
+* Date:           Sat Jan 17 19:38:45 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  2.119 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max    | min | max |   Type  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |        4|        4|  40.000 ns|  40.000 ns|    4|    4|       no|
+    +---------+---------+-----------+-----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|      30|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|       -|       -|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|     187|    -|
+|Register         |        -|     -|       5|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     0|       5|     217|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|     0|      ~0|      ~0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------+----------+----+---+----+------------+------------+
+    | Variable Name | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +---------------+----------+----+---+----+------------+------------+
+    |grp_fu_275_p2  |         +|   0|  0|  15|           8|           8|
+    |grp_fu_282_p2  |         +|   0|  0|  15|           8|           8|
+    +---------------+----------+----+---+----+------------+------------+
+    |Total          |          |   0|  0|  30|          16|          16|
+    +---------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------------------+----+-----------+-----+-----------+
+    |                 Name                | LUT| Input Size| Bits| Total Bits|
+    +-------------------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm                            |  31|          6|    1|          6|
+    |int8_activation_address0_local       |  26|          5|    3|         15|
+    |int8_activation_address1_local       |  26|          5|    3|         15|
+    |residualAdd_output_address0_local    |  26|          5|    3|         15|
+    |residualAdd_output_address1_local    |  26|          5|    3|         15|
+    |residualAdd_residual_address0_local  |  26|          5|    3|         15|
+    |residualAdd_residual_address1_local  |  26|          5|    3|         15|
+    +-------------------------------------+----+-----------+-----+-----------+
+    |Total                                | 187|         36|   19|         96|
+    +-------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-----------+---+----+-----+-----------+
+    |    Name   | FF| LUT| Bits| Const Bits|
+    +-----------+---+----+-----+-----------+
+    |ap_CS_fsm  |  5|   0|    5|          0|
+    +-----------+---+----+-----+-----------+
+    |Total      |  5|   0|    5|          0|
+    +-----------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------------------+-----+-----+------------+----------------------+--------------+
+|           RTL Ports           | Dir | Bits|  Protocol  |     Source Object    |    C Type    |
++-------------------------------+-----+-----+------------+----------------------+--------------+
+|ap_clk                         |   in|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_rst                         |   in|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_start                       |   in|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_done                        |  out|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_idle                        |  out|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_ready                       |  out|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|int8_activation_address0       |  out|    3|   ap_memory|       int8_activation|         array|
+|int8_activation_ce0            |  out|    1|   ap_memory|       int8_activation|         array|
+|int8_activation_q0             |   in|    8|   ap_memory|       int8_activation|         array|
+|int8_activation_address1       |  out|    3|   ap_memory|       int8_activation|         array|
+|int8_activation_ce1            |  out|    1|   ap_memory|       int8_activation|         array|
+|int8_activation_q1             |   in|    8|   ap_memory|       int8_activation|         array|
+|residualAdd_residual_address0  |  out|    3|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_ce0       |  out|    1|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_q0        |   in|    8|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_address1  |  out|    3|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_ce1       |  out|    1|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_q1        |   in|    8|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_output_address0    |  out|    3|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_ce0         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_we0         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_d0          |  out|    8|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_address1    |  out|    3|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_ce1         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_we1         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_d1          |  out|    8|   ap_memory|    residualAdd_output|         array|
++-------------------------------+-----+-----+------------+----------------------+--------------+
+

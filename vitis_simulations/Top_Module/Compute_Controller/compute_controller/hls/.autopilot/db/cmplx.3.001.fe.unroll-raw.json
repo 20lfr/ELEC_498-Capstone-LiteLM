@@ -1,12 +1,12 @@
 {
   "0": {
-    "basicblocks": 22,
-    "calls": "1",
+    "basicblocks": 47,
+    "calls": "4 3 1 4 2 5 6 4 3 1 4 8",
     "control_depth": 0,
     "def_use_depth": 2,
     "file": "compute_controller.cpp",
-    "fileloc": 46,
-    "instructions": 73,
+    "fileloc": 181,
+    "instructions": 121,
     "loads": {
       "G": 7
     },
@@ -16,24 +16,147 @@
       "G": 7,
       "T": 19
     },
-    "total_instructions": 205
+    "total_instructions": 12212
   },
   "1": {
+    "basicblocks": 4,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 3,
+    "file": "compute_controller.cpp",
+    "fileloc": 166,
+    "instructions": 57,
+    "loads": {
+      "L": 16
+    },
+    "memory_accesses": 0,
+    "name": "RES_ADD",
+    "stores": {
+      "L": 8
+    },
+    "total_instructions": 57
+  },
+  "2": {
+    "basicblocks": 6,
+    "calls": "",
+    "control_depth": 1,
+    "def_use_depth": 27,
+    "file": "compute_controller.cpp",
+    "fileloc": 143,
+    "instructions": 240,
+    "loads": {
+      "L": 46
+    },
+    "memory_accesses": 47,
+    "name": "FFN_POST_ACT",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 240
+  },
+  "3": {
+    "basicblocks": 488,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "compute_controller.cpp",
+    "fileloc": 66,
+    "instructions": 970,
+    "loads": {
+      "L": 28
+    },
+    "memory_accesses": 3,
+    "name": "LAYER_NORM",
+    "stores": {
+      "L": 8
+    },
+    "total_instructions": 5356
+  },
+  "4": {
+    "basicblocks": 52,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 7,
+    "file": "compute_controller.cpp",
+    "fileloc": 36,
+    "instructions": 189,
+    "loads": {
+      "L": 8
+    },
+    "memory_accesses": 0,
+    "name": "REQUANT_D_MODEL_int32_to_int8",
+    "stores": {
+      "L": 24
+    },
+    "total_instructions": 189
+  },
+  "5": {
+    "basicblocks": 8,
+    "calls": "",
+    "control_depth": 2,
+    "def_use_depth": 3,
+    "file": "compute_controller.cpp",
+    "fileloc": 128,
+    "instructions": 21,
+    "loads": {
+      "L": 1
+    },
+    "memory_accesses": 3,
+    "name": "FFN_ACT_RELU",
+    "stores": {
+      "L": 2
+    },
+    "total_instructions": 21
+  },
+  "6": {
+    "basicblocks": 11,
+    "calls": "",
+    "control_depth": 3,
+    "def_use_depth": 16,
+    "file": "compute_controller.cpp",
+    "fileloc": 104,
+    "instructions": 111,
+    "loads": {
+      "L": 18
+    },
+    "memory_accesses": 19,
+    "name": "FFN_PRE_ACT",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 111
+  },
+  "7": {
+    "basicblocks": 2179,
+    "calls": "",
+    "control_depth": 11,
+    "def_use_depth": 102,
+    "file": "hls_sqrt_apfixed.h",
+    "fileloc": 19,
+    "instructions": 4384,
+    "memory_accesses": 3,
+    "name": "sqrt_fixed<32, 16>",
+    "stores": {
+      "L": 3
+    },
+    "total_instructions": 4384
+  },
+  "8": {
     "basicblocks": 6,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 10,
+    "def_use_depth": 11,
     "file": "compute_controller.cpp",
-    "fileloc": 25,
-    "instructions": 132,
+    "fileloc": 8,
+    "instructions": 137,
     "loads": {
-      "L": 32
+      "L": 34
     },
     "memory_accesses": 0,
     "name": "OUT_PROJ",
     "stores": {
       "L": 2
     },
-    "total_instructions": 132
+    "total_instructions": 137
   }
 }

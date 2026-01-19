@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'compute_controller'" level="0">
-<item name = "Date">Wed Jan 14 16:45:58 2026
+<item name = "Date">Sat Jan 17 19:38:45 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 2.973 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 7.167 ns, 2.70 ns</column>
 </table>
 </item>
 </section>
@@ -24,14 +24,20 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">1, 10, 10.000 ns, 0.100 us, 2, 11, no</column>
+<column name="">1, 79, 10.000 ns, 0.790 us, 2, 80, no</column>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_OUT_PROJ_fu_349">OUT_PROJ, 9, 9, 90.000 ns, 90.000 ns, 9, 9, no</column>
+<column name="grp_REQUANT_D_MODEL_int32_to_int8_fu_585">REQUANT_D_MODEL_int32_to_int8, 5, 5, 50.000 ns, 50.000 ns, 5, 5, no</column>
+<column name="grp_LAYER_NORM_fu_599">LAYER_NORM, 65, 65, 0.650 us, 0.650 us, 65, 65, no</column>
+<column name="grp_RES_ADD_fu_612">RES_ADD, 4, 4, 40.000 ns, 40.000 ns, 4, 4, no</column>
+<column name="grp_FFN_POST_ACT_fu_622">FFN_POST_ACT, 77, 77, 0.770 us, 0.770 us, 77, 77, no</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_132_1_fu_636">compute_controller_Pipeline_VITIS_LOOP_132_1, 24, 24, 0.240 us, 0.240 us, 23, 23, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_113_1_fu_644">compute_controller_Pipeline_VITIS_LOOP_113_1, 15, 15, 0.150 us, 0.150 us, 12, 12, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_OUT_PROJ_fu_666">OUT_PROJ, 9, 9, 90.000 ns, 90.000 ns, 9, 9, no</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">

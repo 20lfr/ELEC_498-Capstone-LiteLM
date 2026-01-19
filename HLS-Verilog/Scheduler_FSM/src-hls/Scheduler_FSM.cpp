@@ -864,81 +864,84 @@ void scheduler_hls(
     case S_FFN: {
       // Serialize W1 -> ACT -> W2
       switch (ffn_stage) {
-      case FfnStage::W1:
-        if (w1_tile >= NUM_W1_TILES) {
-          ffn_started = false;
-          ffn_stage = FfnStage::ACT;
+        case FfnStage::W1: {
+          if (w1_tile >= NUM_W1_TILES) {
+            ffn_started = false;
+            ffn_stage = FfnStage::ACT;
+            break;
+          }
+
+          if (!ffn_started && wl_ready) {
+            wl_start = 1;
+            wl_addr_sel = DmaSel::DMASEL_W1;
+            wl_head = -1;
+            wl_tile = w1_tile;
+            w1_dma_busy = true;
+            ffn_started = true;
+          } else if (ffn_started && w1_dma_busy && (dma_done || w1_dma_done)) {
+            w1_dma_busy = false;
+            w1_dma_done = false;
+            w1_comp_busy = true;
+          } else if (ffn_started && w1_comp_busy && compute_ready) {
+            ffn_w1_compute_done = false;
+            compute_start = 1;
+            compute_op = pack_compute_op(CMP_FFN_W1, layer_idx, -1, w1_tile);
+            w1_comp_busy = false;
+          } else if (ffn_started && !w1_dma_busy && !w1_comp_busy &&
+                    ffn_w1_compute_done) {
+            ffn_started = false;
+            ffn_w1_compute_done = false;
+            w1_tile++;
+          }
           break;
         }
-
-        if (!ffn_started && wl_ready) {
-          wl_start = 1;
-          wl_addr_sel = DmaSel::DMASEL_W1;
-          wl_head = -1;
-          wl_tile = w1_tile;
-          w1_dma_busy = true;
-          ffn_started = true;
-        } else if (ffn_started && w1_dma_busy && (dma_done || w1_dma_done)) {
-          w1_dma_busy = false;
-          w1_dma_done = false;
-          w1_comp_busy = true;
-        } else if (ffn_started && w1_comp_busy && compute_ready) {
-          ffn_w1_compute_done = false;
-          compute_start = 1;
-          compute_op = pack_compute_op(CMP_FFN_W1, layer_idx, -1, w1_tile);
-          w1_comp_busy = false;
-        } else if (ffn_started && !w1_dma_busy && !w1_comp_busy &&
-                  ffn_w1_compute_done) {
-          ffn_started = false;
-          ffn_w1_compute_done = false;
-          w1_tile++;
-        }
-        break;
-      case FfnStage::ACT:
-        if (!ffn_started && compute_ready) {
-          ffn_act_compute_done = false;
-          compute_start = 1;
-          compute_op = pack_compute_op(CMP_FFN_ACT, layer_idx, -1, -1);
-          ffn_started = true;
-        } else if (ffn_started && ffn_act_compute_done) {
-          ffn_started = false;
-          ffn_act_compute_done = false;
-          ffn_stage = FfnStage::W2;
-        }
-        break;
-      case FfnStage::W2:
-        if (w2_tile >= NUM_W2_TILES) {
-          ffn_started = false;
-          ffn_stage = FfnStage::W1;
-          st = S_REQUANT3;
+        case FfnStage::ACT:{
+          if (!ffn_started && compute_ready) {
+            ffn_act_compute_done = false;
+            compute_start = 1;
+            compute_op = pack_compute_op(CMP_FFN_ACT, layer_idx, -1, -1);
+            ffn_started = true;
+          } else if (ffn_started && ffn_act_compute_done) {
+            ffn_started = false;
+            ffn_act_compute_done = false;
+            ffn_stage = FfnStage::W2;
+          }
           break;
         }
+        case FfnStage::W2: {
+          if (w2_tile >= NUM_W2_TILES) {
+            ffn_started = false;
+            ffn_stage = FfnStage::W1;
+            st = S_REQUANT3;
+            break;
+          }
 
-        if (!ffn_started && wl_ready) {
-          wl_start = 1;
-          wl_addr_sel = DmaSel::DMASEL_W2;
-          wl_head = -1;
-          wl_tile = w2_tile;
-          w2_dma_busy = true;
-          ffn_started = true;
-        } else if (ffn_started && w2_dma_busy && (dma_done || w2_dma_done)) {
-          w2_dma_busy = false;
-          w2_dma_done = false;
-          w2_comp_busy = true;
-        } else if (ffn_started && w2_comp_busy && compute_ready) {
-          ffn_w2_compute_done = false;
-          compute_start = 1;
-          compute_op = pack_compute_op(CMP_FFN_W2, layer_idx, -1, w2_tile);
-          w2_comp_busy = false;
-        } else if (ffn_started && !w2_dma_busy && !w2_comp_busy &&
-                  ffn_w2_compute_done) {
-          ffn_started = false;
-          ffn_w2_compute_done = false;
-          w2_tile++;
+          if (!ffn_started && wl_ready) {
+            wl_start = 1;
+            wl_addr_sel = DmaSel::DMASEL_W2;
+            wl_head = -1;
+            wl_tile = w2_tile;
+            w2_dma_busy = true;
+            ffn_started = true;
+          } else if (ffn_started && w2_dma_busy && (dma_done || w2_dma_done)) {
+            w2_dma_busy = false;
+            w2_dma_done = false;
+            w2_comp_busy = true;
+          } else if (ffn_started && w2_comp_busy && compute_ready) {
+            ffn_w2_compute_done = false;
+            compute_start = 1;
+            compute_op = pack_compute_op(CMP_FFN_W2, layer_idx, -1, w2_tile);
+            w2_comp_busy = false;
+          } else if (ffn_started && !w2_dma_busy && !w2_comp_busy &&
+                    ffn_w2_compute_done) {
+            ffn_started = false;
+            ffn_w2_compute_done = false;
+            w2_tile++;
+          }
+          break;
         }
-        break;
       }
-      break;
+        break;
     }
     case S_REQUANT3: {
       if (!requant3_started && compute_ready) {

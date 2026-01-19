@@ -1,1 +1,4 @@
-clang-tidy applied 6 of 6 suggested fixes.
+1 warning and 26 errors generated.
+Error while processing /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp.
+clang-tidy applied 141 of 141 suggested fixes.
+Suppressed 1 warnings (1 with check filters).
