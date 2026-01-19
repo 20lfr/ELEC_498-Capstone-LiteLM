@@ -145,10 +145,39 @@ int main() {
     int8_t valueA_mem[D_MODEL] = {};
     int8_t valueA_in[D_MODEL] = {};
     int4_t valueB_in[D_MODEL * D_TILE_WO] = {};
+    int32_t out_proj_bias[D_TILE_WO] = {};
     int4_t full_weights[D_MODEL * D_MODEL] = {};
     int32_t out_accum[D_TILE_WO] = {};
     int32_t expected_full[D_MODEL] = {};
     int32_t full_accum[D_MODEL] = {};
+
+    int4_t ffn1_weights[D_MODEL * D_TILE_W1] = {};
+    int4_t ffn1_biases[D_TILE_W1] = {};
+    int16_t ffn1_scale[D_TILE_W1] = {};
+    int16_t ffn1_output[D_TILE_W1] = {};
+
+    int16_t relu_input[D_FFN] = {};
+    int16_t relu_output[D_FFN] = {};
+
+    int16_t ffn2_input[D_FFN] = {};
+    int4_t ffn2_weights[D_TILE_W2 * D_FFN] = {};
+    int4_t ffn2_biases[D_TILE_W2] = {};
+    int16_t ffn2_scale[D_TILE_W2] = {};
+    int32_t ffn2_output[D_MODEL] = {};
+
+    int32_t requant_activation[D_MODEL] = {};
+    int32_t requant_scale = 0;
+    int32_t requant_shift = 0;
+    int32_t requant_zero_point = 0;
+    int8_t requant_output[D_MODEL] = {};
+
+    int32_t layernorm_gamma[D_MODEL] = {};
+    int32_t layernorm_beta[D_MODEL] = {};
+    int32_t layernorm_epsilon = 0;
+    int32_t layernorm_out[D_MODEL] = {};
+
+    int8_t residual[D_MODEL] = {};
+    int8_t residual_out[D_MODEL] = {};
 
     const int MEM_LAT = 2;
     bool mem_busy = false;
@@ -222,7 +251,30 @@ int main() {
             mem_op,
             valueA_in,
             valueB_in,
+            out_proj_bias,
             out_accum,
+            ffn1_weights,
+            ffn1_biases,
+            ffn1_scale,
+            ffn1_output,
+            relu_input,
+            relu_output,
+            ffn2_input,
+            ffn2_weights,
+            ffn2_biases,
+            ffn2_scale,
+            ffn2_output,
+            requant_activation,
+            requant_scale,
+            requant_shift,
+            requant_zero_point,
+            requant_output,
+            layernorm_gamma,
+            layernorm_beta,
+            layernorm_epsilon,
+            layernorm_out,
+            residual,
+            residual_out,
             error);
 
         const uint8_t op_field = static_cast<uint8_t>(compute_instruction & 0xFFu);

@@ -54,7 +54,6 @@ void ATT_SCORES(
     }
 }
 
-
 void VALUE_SCALE_CLAMP(
     const int32_t input[CONTEXT_LENGTH],
     const int16_t scale_q15,               // Q1.15

@@ -1,15 +1,53 @@
 {
     "1": {
+        "name": "compute_controller_Pipeline_VITIS_LOOP_132_1",
+        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Transformer_logic\/src-hls\/compute_controller.cpp",
+        "fileloc": "352",
+        "instructions": "24",
+        "total_instructions": "24",
+        "calls": "",
+        "basicblocks": "4",
+        "memory_accesses": "4",
+        "control_depth": "1",
+        "def_use_depth": "1",
+        "loads": {
+            "L": "1",
+            "T": "1"
+        },
+        "stores": {
+            "L": "2",
+            "T": "1"
+        },
+        "loops": {
+            "L": "1"
+        }
+    },
+    "2": {
+        "name": "FFN_POST_ACT",
+        "file": "compute_controller.cpp",
+        "fileloc": "143",
+        "instructions": "51",
+        "total_instructions": "318",
+        "calls": "4",
+        "basicblocks": "1",
+        "memory_accesses": "0",
+        "control_depth": "0",
+        "def_use_depth": "2",
+        "loads": {
+            "T": "22"
+        }
+    },
+    "3": {
         "name": "OUT_PROJ",
         "file": "compute_controller.cpp",
-        "fileloc": "25",
-        "instructions": "140",
-        "total_instructions": "140",
+        "fileloc": "8",
+        "instructions": "138",
+        "total_instructions": "138",
         "calls": "",
         "basicblocks": "1",
         "memory_accesses": "0",
         "control_depth": "0",
-        "def_use_depth": "6",
+        "def_use_depth": "7",
         "loads": {
             "T": "24"
         },
@@ -17,22 +55,158 @@
             "T": "2"
         }
     },
+    "4": {
+        "name": "FFN_POST_ACT_Pipeline_VITIS_LOOP_151_1",
+        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Transformer_logic\/src-hls\/compute_controller.cpp",
+        "fileloc": "151",
+        "instructions": "267",
+        "total_instructions": "267",
+        "calls": "",
+        "basicblocks": "4",
+        "memory_accesses": "29",
+        "control_depth": "1",
+        "def_use_depth": "1",
+        "loads": {
+            "L": "2",
+            "T": "24"
+        },
+        "stores": {
+            "L": "4",
+            "T": "1"
+        },
+        "loops": {
+            "L": "1"
+        }
+    },
     "0": {
         "name": "compute_controller",
         "file": "compute_controller.cpp",
-        "fileloc": "46",
-        "instructions": "86",
-        "total_instructions": "226",
-        "calls": "1",
-        "basicblocks": "16",
+        "fileloc": "181",
+        "instructions": "180",
+        "total_instructions": "3044",
+        "calls": "8 9 5 8 2 1 7 8 9 5 8 3",
+        "basicblocks": "28",
+        "memory_accesses": "0",
+        "control_depth": "0",
+        "def_use_depth": "4",
+        "loads": {
+            "G": "3",
+            "T": "10"
+        },
+        "stores": {
+            "G": "4"
+        }
+    },
+    "5": {
+        "name": "RES_ADD",
+        "file": "compute_controller.cpp",
+        "fileloc": "166",
+        "instructions": "60",
+        "total_instructions": "60",
+        "calls": "",
+        "basicblocks": "1",
         "memory_accesses": "0",
         "control_depth": "0",
         "def_use_depth": "3",
         "loads": {
-            "G": "3"
+            "T": "16"
         },
         "stores": {
-            "G": "4"
+            "T": "8"
+        }
+    },
+    "6": {
+        "name": "sqrt_fixed<32, 16>",
+        "file": "\/tools\/Xilinx\/2025.1\/Vitis\/common\/technology\/autopilot\/etc\/hls_sqrt_apfixed.h",
+        "fileloc": "19",
+        "instructions": "484",
+        "total_instructions": "484",
+        "calls": "",
+        "basicblocks": "1",
+        "memory_accesses": "1",
+        "control_depth": "0",
+        "def_use_depth": "158"
+    },
+    "7": {
+        "name": "compute_controller_Pipeline_VITIS_LOOP_113_1",
+        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Transformer_logic\/src-hls\/compute_controller.cpp",
+        "fileloc": "348",
+        "instructions": "116",
+        "total_instructions": "116",
+        "calls": "",
+        "basicblocks": "4",
+        "memory_accesses": "13",
+        "control_depth": "1",
+        "def_use_depth": "1",
+        "loads": {
+            "L": "1",
+            "T": "10"
+        },
+        "stores": {
+            "L": "2",
+            "T": "1"
+        },
+        "loops": {
+            "L": "1"
+        }
+    },
+    "8": {
+        "name": "REQUANT_D_MODEL_int32_to_int8",
+        "file": "compute_controller.cpp",
+        "fileloc": "36",
+        "instructions": "147",
+        "total_instructions": "147",
+        "calls": "",
+        "basicblocks": "1",
+        "memory_accesses": "0",
+        "control_depth": "0",
+        "def_use_depth": "10",
+        "loads": {
+            "T": "8"
+        },
+        "stores": {
+            "T": "8"
+        }
+    },
+    "9": {
+        "name": "LAYER_NORM",
+        "file": "compute_controller.cpp",
+        "fileloc": "66",
+        "instructions": "261",
+        "total_instructions": "780",
+        "calls": "10 6",
+        "basicblocks": "1",
+        "memory_accesses": "0",
+        "control_depth": "0",
+        "def_use_depth": "19",
+        "loads": {
+            "L": "2",
+            "T": "24"
+        },
+        "stores": {
+            "T": "8"
+        }
+    },
+    "10": {
+        "name": "LAYER_NORM_Pipeline_VITIS_LOOP_79_1",
+        "file": "\/home\/luka\/Scripting\/ELEC_498-Capstone-LiteLM\/HLS-Verilog\/Transformer_logic\/src-hls\/compute_controller.cpp",
+        "fileloc": "76",
+        "instructions": "35",
+        "total_instructions": "35",
+        "calls": "",
+        "basicblocks": "4",
+        "memory_accesses": "7",
+        "control_depth": "1",
+        "def_use_depth": "1",
+        "loads": {
+            "L": "4",
+            "T": "1"
+        },
+        "stores": {
+            "L": "6"
+        },
+        "loops": {
+            "L": "1"
         }
     }
 }

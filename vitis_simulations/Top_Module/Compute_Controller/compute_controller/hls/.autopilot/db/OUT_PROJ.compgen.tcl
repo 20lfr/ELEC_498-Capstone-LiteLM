@@ -1,13 +1,12 @@
 # This script segment is generated automatically by AutoPilot
 
-set name compute_controller_mul_8s_4s_12_1_1
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler $name BINDTYPE {op} TYPE {mul} IMPL {auto} LATENCY 0 ALLOW_PRAGMA 1
+	::AP::rtl_comp_handler compute_controller_mac_muladd_8s_4s_32s_32_4_1 BINDTYPE {op} TYPE {all} IMPL {dsp_slice} LATENCY 3
 }
 
 
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler compute_controller_mac_muladd_8s_4s_12s_13_4_1 BINDTYPE {op} TYPE {all} IMPL {dsp_slice} LATENCY 3
+	::AP::rtl_comp_handler compute_controller_mac_muladd_8s_4s_13s_13_4_1 BINDTYPE {op} TYPE {all} IMPL {dsp_slice} LATENCY 3
 }
 
 
@@ -22,17 +21,17 @@ if {${::AESL::PGuard_autoexp_gen}} {
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 19 \
-    name OUT_PROJ_valueA \
+    id 137 \
+    name int8_activation \
     reset_level 1 \
     sync_rst true \
     dir I \
-    corename OUT_PROJ_valueA \
+    corename int8_activation \
     op interface \
-    ports { OUT_PROJ_valueA_address0 { O 3 vector } OUT_PROJ_valueA_ce0 { O 1 bit } OUT_PROJ_valueA_q0 { I 8 vector } OUT_PROJ_valueA_address1 { O 3 vector } OUT_PROJ_valueA_ce1 { O 1 bit } OUT_PROJ_valueA_q1 { I 8 vector } } \
+    ports { int8_activation_address0 { O 3 vector } int8_activation_ce0 { O 1 bit } int8_activation_q0 { I 8 vector } int8_activation_address1 { O 3 vector } int8_activation_ce1 { O 1 bit } int8_activation_q1 { I 8 vector } } \
 } "
 } else {
-puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'OUT_PROJ_valueA'"
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'int8_activation'"
 }
 }
 
@@ -41,7 +40,7 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 20 \
+    id 138 \
     name OUT_PROJ_valueB \
     reset_level 1 \
     sync_rst true \
@@ -60,7 +59,7 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 21 \
+    id 141 \
     name OUT_PROJ_accum \
     reset_level 1 \
     sync_rst true \
@@ -74,6 +73,36 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 }
 }
 
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 139 \
+    name bias_0_0_val \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_bias_0_0_val \
+    op interface \
+    ports { bias_0_0_val { I 32 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 140 \
+    name bias_0_1_val \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_bias_0_1_val \
+    op interface \
+    ports { bias_0_1_val { I 32 vector } } \
+} "
+}
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {

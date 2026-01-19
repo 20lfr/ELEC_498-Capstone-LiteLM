@@ -1,0 +1,1447 @@
+
+
+================================================================
+== Vitis HLS Report for 'RES_ADD'
+================================================================
+* Date:           Sat Jan 17 19:38:45 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  2.119 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max    | min | max |   Type  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |        4|        4|  40.000 ns|  40.000 ns|    4|    4|       no|
+    +---------+---------+-----------+-----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|      30|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|       -|       -|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|     187|    -|
+|Register         |        -|     -|       5|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     0|       5|     217|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|     0|      ~0|      ~0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------+----------+----+---+----+------------+------------+
+    | Variable Name | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +---------------+----------+----+---+----+------------+------------+
+    |grp_fu_275_p2  |         +|   0|  0|  15|           8|           8|
+    |grp_fu_282_p2  |         +|   0|  0|  15|           8|           8|
+    +---------------+----------+----+---+----+------------+------------+
+    |Total          |          |   0|  0|  30|          16|          16|
+    +---------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------------------+----+-----------+-----+-----------+
+    |                 Name                | LUT| Input Size| Bits| Total Bits|
+    +-------------------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm                            |  31|          6|    1|          6|
+    |int8_activation_address0_local       |  26|          5|    3|         15|
+    |int8_activation_address1_local       |  26|          5|    3|         15|
+    |residualAdd_output_address0_local    |  26|          5|    3|         15|
+    |residualAdd_output_address1_local    |  26|          5|    3|         15|
+    |residualAdd_residual_address0_local  |  26|          5|    3|         15|
+    |residualAdd_residual_address1_local  |  26|          5|    3|         15|
+    +-------------------------------------+----+-----------+-----+-----------+
+    |Total                                | 187|         36|   19|         96|
+    +-------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-----------+---+----+-----+-----------+
+    |    Name   | FF| LUT| Bits| Const Bits|
+    +-----------+---+----+-----+-----------+
+    |ap_CS_fsm  |  5|   0|    5|          0|
+    +-----------+---+----+-----+-----------+
+    |Total      |  5|   0|    5|          0|
+    +-----------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------------------+-----+-----+------------+----------------------+--------------+
+|           RTL Ports           | Dir | Bits|  Protocol  |     Source Object    |    C Type    |
++-------------------------------+-----+-----+------------+----------------------+--------------+
+|ap_clk                         |   in|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_rst                         |   in|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_start                       |   in|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_done                        |  out|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_idle                        |  out|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|ap_ready                       |  out|    1|  ap_ctrl_hs|               RES_ADD|  return value|
+|int8_activation_address0       |  out|    3|   ap_memory|       int8_activation|         array|
+|int8_activation_ce0            |  out|    1|   ap_memory|       int8_activation|         array|
+|int8_activation_q0             |   in|    8|   ap_memory|       int8_activation|         array|
+|int8_activation_address1       |  out|    3|   ap_memory|       int8_activation|         array|
+|int8_activation_ce1            |  out|    1|   ap_memory|       int8_activation|         array|
+|int8_activation_q1             |   in|    8|   ap_memory|       int8_activation|         array|
+|residualAdd_residual_address0  |  out|    3|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_ce0       |  out|    1|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_q0        |   in|    8|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_address1  |  out|    3|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_ce1       |  out|    1|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_residual_q1        |   in|    8|   ap_memory|  residualAdd_residual|         array|
+|residualAdd_output_address0    |  out|    3|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_ce0         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_we0         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_d0          |  out|    8|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_address1    |  out|    3|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_ce1         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_we1         |  out|    1|   ap_memory|    residualAdd_output|         array|
+|residualAdd_output_d1          |  out|    8|   ap_memory|    residualAdd_output|         array|
++-------------------------------+-----+-----+------------+----------------------+--------------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 2
+IsDatapathOnly: 2
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 5
+* Pipeline : 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 
+3 --> 4 
+4 --> 5 
+5 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 0.67>
+ST_1 : Operation 6 [1/1] (0.00ns)   --->   "%int8_activation_addr = getelementptr i8 %int8_activation, i64 0, i64 0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 6 'getelementptr' 'int8_activation_addr' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 7 [2/2] (0.67ns)   --->   "%int8_activation_load = load i3 %int8_activation_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 7 'load' 'int8_activation_load' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_1 : Operation 8 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr = getelementptr i8 %residualAdd_residual, i64 0, i64 0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 8 'getelementptr' 'residualAdd_residual_addr' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 9 [2/2] (0.67ns)   --->   "%residualAdd_residual_load = load i3 %residualAdd_residual_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 9 'load' 'residualAdd_residual_load' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_1 : Operation 10 [1/1] (0.00ns)   --->   "%int8_activation_addr_8 = getelementptr i8 %int8_activation, i64 0, i64 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 10 'getelementptr' 'int8_activation_addr_8' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 11 [2/2] (0.67ns)   --->   "%int8_activation_load_8 = load i3 %int8_activation_addr_8" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 11 'load' 'int8_activation_load_8' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_1 : Operation 12 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr_1 = getelementptr i8 %residualAdd_residual, i64 0, i64 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 12 'getelementptr' 'residualAdd_residual_addr_1' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 13 [2/2] (0.67ns)   --->   "%residualAdd_residual_load_1 = load i3 %residualAdd_residual_addr_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 13 'load' 'residualAdd_residual_load_1' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+
+State 2 <SV = 1> <Delay = 2.11>
+ST_2 : Operation 14 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load = load i3 %int8_activation_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 14 'load' 'int8_activation_load' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 15 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load = load i3 %residualAdd_residual_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 15 'load' 'residualAdd_residual_load' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 16 [1/1] (0.76ns)   --->   "%add_ln173 = add i8 %residualAdd_residual_load, i8 %int8_activation_load" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 16 'add' 'add_ln173' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 17 [1/1] (0.00ns)   --->   "%residualAdd_output_addr = getelementptr i8 %residualAdd_output, i64 0, i64 0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 17 'getelementptr' 'residualAdd_output_addr' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 18 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173, i3 %residualAdd_output_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 18 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 19 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load_8 = load i3 %int8_activation_addr_8" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 19 'load' 'int8_activation_load_8' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 20 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load_1 = load i3 %residualAdd_residual_addr_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 20 'load' 'residualAdd_residual_load_1' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 21 [1/1] (0.76ns)   --->   "%add_ln173_1 = add i8 %residualAdd_residual_load_1, i8 %int8_activation_load_8" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 21 'add' 'add_ln173_1' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 22 [1/1] (0.00ns)   --->   "%residualAdd_output_addr_1 = getelementptr i8 %residualAdd_output, i64 0, i64 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 22 'getelementptr' 'residualAdd_output_addr_1' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 23 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173_1, i3 %residualAdd_output_addr_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 23 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 24 [1/1] (0.00ns)   --->   "%int8_activation_addr_9 = getelementptr i8 %int8_activation, i64 0, i64 2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 24 'getelementptr' 'int8_activation_addr_9' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 25 [2/2] (0.67ns)   --->   "%int8_activation_load_9 = load i3 %int8_activation_addr_9" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 25 'load' 'int8_activation_load_9' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 26 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr_2 = getelementptr i8 %residualAdd_residual, i64 0, i64 2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 26 'getelementptr' 'residualAdd_residual_addr_2' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 27 [2/2] (0.67ns)   --->   "%residualAdd_residual_load_2 = load i3 %residualAdd_residual_addr_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 27 'load' 'residualAdd_residual_load_2' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 28 [1/1] (0.00ns)   --->   "%int8_activation_addr_10 = getelementptr i8 %int8_activation, i64 0, i64 3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 28 'getelementptr' 'int8_activation_addr_10' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 29 [2/2] (0.67ns)   --->   "%int8_activation_load_10 = load i3 %int8_activation_addr_10" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 29 'load' 'int8_activation_load_10' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_2 : Operation 30 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr_3 = getelementptr i8 %residualAdd_residual, i64 0, i64 3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 30 'getelementptr' 'residualAdd_residual_addr_3' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 31 [2/2] (0.67ns)   --->   "%residualAdd_residual_load_3 = load i3 %residualAdd_residual_addr_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 31 'load' 'residualAdd_residual_load_3' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+
+State 3 <SV = 2> <Delay = 2.11>
+ST_3 : Operation 32 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load_9 = load i3 %int8_activation_addr_9" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 32 'load' 'int8_activation_load_9' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 33 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load_2 = load i3 %residualAdd_residual_addr_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 33 'load' 'residualAdd_residual_load_2' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 34 [1/1] (0.76ns)   --->   "%add_ln173_2 = add i8 %residualAdd_residual_load_2, i8 %int8_activation_load_9" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 34 'add' 'add_ln173_2' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 35 [1/1] (0.00ns)   --->   "%residualAdd_output_addr_2 = getelementptr i8 %residualAdd_output, i64 0, i64 2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 35 'getelementptr' 'residualAdd_output_addr_2' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 36 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173_2, i3 %residualAdd_output_addr_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 36 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 37 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load_10 = load i3 %int8_activation_addr_10" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 37 'load' 'int8_activation_load_10' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 38 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load_3 = load i3 %residualAdd_residual_addr_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 38 'load' 'residualAdd_residual_load_3' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 39 [1/1] (0.76ns)   --->   "%add_ln173_3 = add i8 %residualAdd_residual_load_3, i8 %int8_activation_load_10" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 39 'add' 'add_ln173_3' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 40 [1/1] (0.00ns)   --->   "%residualAdd_output_addr_3 = getelementptr i8 %residualAdd_output, i64 0, i64 3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 40 'getelementptr' 'residualAdd_output_addr_3' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 41 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173_3, i3 %residualAdd_output_addr_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 41 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 42 [1/1] (0.00ns)   --->   "%int8_activation_addr_11 = getelementptr i8 %int8_activation, i64 0, i64 4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 42 'getelementptr' 'int8_activation_addr_11' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 43 [2/2] (0.67ns)   --->   "%int8_activation_load_11 = load i3 %int8_activation_addr_11" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 43 'load' 'int8_activation_load_11' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 44 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr_4 = getelementptr i8 %residualAdd_residual, i64 0, i64 4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 44 'getelementptr' 'residualAdd_residual_addr_4' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 45 [2/2] (0.67ns)   --->   "%residualAdd_residual_load_4 = load i3 %residualAdd_residual_addr_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 45 'load' 'residualAdd_residual_load_4' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 46 [1/1] (0.00ns)   --->   "%int8_activation_addr_12 = getelementptr i8 %int8_activation, i64 0, i64 5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 46 'getelementptr' 'int8_activation_addr_12' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 47 [2/2] (0.67ns)   --->   "%int8_activation_load_12 = load i3 %int8_activation_addr_12" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 47 'load' 'int8_activation_load_12' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_3 : Operation 48 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr_5 = getelementptr i8 %residualAdd_residual, i64 0, i64 5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 48 'getelementptr' 'residualAdd_residual_addr_5' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 49 [2/2] (0.67ns)   --->   "%residualAdd_residual_load_5 = load i3 %residualAdd_residual_addr_5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 49 'load' 'residualAdd_residual_load_5' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+
+State 4 <SV = 3> <Delay = 2.11>
+ST_4 : Operation 50 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load_11 = load i3 %int8_activation_addr_11" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 50 'load' 'int8_activation_load_11' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 51 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load_4 = load i3 %residualAdd_residual_addr_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 51 'load' 'residualAdd_residual_load_4' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 52 [1/1] (0.76ns)   --->   "%add_ln173_4 = add i8 %residualAdd_residual_load_4, i8 %int8_activation_load_11" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 52 'add' 'add_ln173_4' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 53 [1/1] (0.00ns)   --->   "%residualAdd_output_addr_4 = getelementptr i8 %residualAdd_output, i64 0, i64 4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 53 'getelementptr' 'residualAdd_output_addr_4' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 54 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173_4, i3 %residualAdd_output_addr_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 54 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 55 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load_12 = load i3 %int8_activation_addr_12" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 55 'load' 'int8_activation_load_12' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 56 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load_5 = load i3 %residualAdd_residual_addr_5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 56 'load' 'residualAdd_residual_load_5' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 57 [1/1] (0.76ns)   --->   "%add_ln173_5 = add i8 %residualAdd_residual_load_5, i8 %int8_activation_load_12" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 57 'add' 'add_ln173_5' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 58 [1/1] (0.00ns)   --->   "%residualAdd_output_addr_5 = getelementptr i8 %residualAdd_output, i64 0, i64 5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 58 'getelementptr' 'residualAdd_output_addr_5' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 59 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173_5, i3 %residualAdd_output_addr_5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 59 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 60 [1/1] (0.00ns)   --->   "%int8_activation_addr_13 = getelementptr i8 %int8_activation, i64 0, i64 6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 60 'getelementptr' 'int8_activation_addr_13' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 61 [2/2] (0.67ns)   --->   "%int8_activation_load_13 = load i3 %int8_activation_addr_13" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 61 'load' 'int8_activation_load_13' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 62 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr_6 = getelementptr i8 %residualAdd_residual, i64 0, i64 6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 62 'getelementptr' 'residualAdd_residual_addr_6' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 63 [2/2] (0.67ns)   --->   "%residualAdd_residual_load_6 = load i3 %residualAdd_residual_addr_6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 63 'load' 'residualAdd_residual_load_6' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 64 [1/1] (0.00ns)   --->   "%int8_activation_addr_14 = getelementptr i8 %int8_activation, i64 0, i64 7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 64 'getelementptr' 'int8_activation_addr_14' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 65 [2/2] (0.67ns)   --->   "%int8_activation_load_14 = load i3 %int8_activation_addr_14" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 65 'load' 'int8_activation_load_14' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_4 : Operation 66 [1/1] (0.00ns)   --->   "%residualAdd_residual_addr_7 = getelementptr i8 %residualAdd_residual, i64 0, i64 7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 66 'getelementptr' 'residualAdd_residual_addr_7' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 67 [2/2] (0.67ns)   --->   "%residualAdd_residual_load_7 = load i3 %residualAdd_residual_addr_7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 67 'load' 'residualAdd_residual_load_7' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+
+State 5 <SV = 4> <Delay = 2.11>
+ST_5 : Operation 68 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %residualAdd_output, void @empty_1, i32 0, i32 0, void @empty_0, i32 4294967295, i32 0, void @empty_0, void @empty_0, void @empty_0, i32 0, i32 0, i32 0, i32 0, void @empty_0, void @empty_0, i32 4294967295, i32 0, i32 0"   --->   Operation 68 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 69 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %residualAdd_residual, void @empty_1, i32 0, i32 0, void @empty_0, i32 4294967295, i32 0, void @empty_0, void @empty_0, void @empty_0, i32 0, i32 0, i32 0, i32 0, void @empty_0, void @empty_0, i32 4294967295, i32 0, i32 0"   --->   Operation 69 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 70 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %int8_activation, void @empty_1, i32 0, i32 0, void @empty_0, i32 4294967295, i32 0, void @empty_0, void @empty_0, void @empty_0, i32 0, i32 0, i32 0, i32 0, void @empty_0, void @empty_0, i32 4294967295, i32 0, i32 0"   --->   Operation 70 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 71 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load_13 = load i3 %int8_activation_addr_13" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 71 'load' 'int8_activation_load_13' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_5 : Operation 72 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load_6 = load i3 %residualAdd_residual_addr_6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 72 'load' 'residualAdd_residual_load_6' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_5 : Operation 73 [1/1] (0.76ns)   --->   "%add_ln173_6 = add i8 %residualAdd_residual_load_6, i8 %int8_activation_load_13" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 73 'add' 'add_ln173_6' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 74 [1/1] (0.00ns)   --->   "%residualAdd_output_addr_6 = getelementptr i8 %residualAdd_output, i64 0, i64 6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 74 'getelementptr' 'residualAdd_output_addr_6' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 75 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173_6, i3 %residualAdd_output_addr_6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 75 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_5 : Operation 76 [1/2] ( I:0.67ns O:0.67ns )   --->   "%int8_activation_load_14 = load i3 %int8_activation_addr_14" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 76 'load' 'int8_activation_load_14' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_5 : Operation 77 [1/2] ( I:0.67ns O:0.67ns )   --->   "%residualAdd_residual_load_7 = load i3 %residualAdd_residual_addr_7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 77 'load' 'residualAdd_residual_load_7' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_5 : Operation 78 [1/1] (0.76ns)   --->   "%add_ln173_7 = add i8 %residualAdd_residual_load_7, i8 %int8_activation_load_14" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 78 'add' 'add_ln173_7' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 79 [1/1] (0.00ns)   --->   "%residualAdd_output_addr_7 = getelementptr i8 %residualAdd_output, i64 0, i64 7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 79 'getelementptr' 'residualAdd_output_addr_7' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 80 [1/1] ( I:0.67ns O:0.67ns )   --->   "%store_ln173 = store i8 %add_ln173_7, i3 %residualAdd_output_addr_7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:173]   --->   Operation 80 'store' 'store_ln173' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 8> <RAM>
+ST_5 : Operation 81 [1/1] (0.00ns)   --->   "%ret_ln175 = ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:175]   --->   Operation 81 'ret' 'ret_ln175' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+STG Binding: 
+---------------- STG Properties BEGIN ----------------
+- Is combinational: 0
+- Is one-state seq: 0
+- Is datapath-only: 0
+- Is pipelined: 0
+- Is top level: 0
+Port [ Return ] is wired: 1; IO mode=ap_ctrl_hs:ce=0
+Port [ int8_activation]:  wired=1; compound=1; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[11]; IO mode=ap_memory:ce=0
+Port [ residualAdd_residual]:  wired=1; compound=1; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[11]; IO mode=ap_memory:ce=0
+Port [ residualAdd_output]:  wired=1; compound=1; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=1; pingpong=0; private_global=0; MemPort=[00]; IO mode=ap_memory:ce=0
+---------------- STG Properties END ------------------
+
+---------------- Datapath Model BEGIN ----------------
+
+<LifeTime>
+<method=bitvector/>
+int8_activation_addr        (getelementptr) [ 001000]
+residualAdd_residual_addr   (getelementptr) [ 001000]
+int8_activation_addr_8      (getelementptr) [ 001000]
+residualAdd_residual_addr_1 (getelementptr) [ 001000]
+int8_activation_load        (load         ) [ 000000]
+residualAdd_residual_load   (load         ) [ 000000]
+add_ln173                   (add          ) [ 000000]
+residualAdd_output_addr     (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+int8_activation_load_8      (load         ) [ 000000]
+residualAdd_residual_load_1 (load         ) [ 000000]
+add_ln173_1                 (add          ) [ 000000]
+residualAdd_output_addr_1   (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+int8_activation_addr_9      (getelementptr) [ 000100]
+residualAdd_residual_addr_2 (getelementptr) [ 000100]
+int8_activation_addr_10     (getelementptr) [ 000100]
+residualAdd_residual_addr_3 (getelementptr) [ 000100]
+int8_activation_load_9      (load         ) [ 000000]
+residualAdd_residual_load_2 (load         ) [ 000000]
+add_ln173_2                 (add          ) [ 000000]
+residualAdd_output_addr_2   (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+int8_activation_load_10     (load         ) [ 000000]
+residualAdd_residual_load_3 (load         ) [ 000000]
+add_ln173_3                 (add          ) [ 000000]
+residualAdd_output_addr_3   (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+int8_activation_addr_11     (getelementptr) [ 000010]
+residualAdd_residual_addr_4 (getelementptr) [ 000010]
+int8_activation_addr_12     (getelementptr) [ 000010]
+residualAdd_residual_addr_5 (getelementptr) [ 000010]
+int8_activation_load_11     (load         ) [ 000000]
+residualAdd_residual_load_4 (load         ) [ 000000]
+add_ln173_4                 (add          ) [ 000000]
+residualAdd_output_addr_4   (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+int8_activation_load_12     (load         ) [ 000000]
+residualAdd_residual_load_5 (load         ) [ 000000]
+add_ln173_5                 (add          ) [ 000000]
+residualAdd_output_addr_5   (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+int8_activation_addr_13     (getelementptr) [ 000001]
+residualAdd_residual_addr_6 (getelementptr) [ 000001]
+int8_activation_addr_14     (getelementptr) [ 000001]
+residualAdd_residual_addr_7 (getelementptr) [ 000001]
+specinterface_ln0           (specinterface) [ 000000]
+specinterface_ln0           (specinterface) [ 000000]
+specinterface_ln0           (specinterface) [ 000000]
+int8_activation_load_13     (load         ) [ 000000]
+residualAdd_residual_load_6 (load         ) [ 000000]
+add_ln173_6                 (add          ) [ 000000]
+residualAdd_output_addr_6   (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+int8_activation_load_14     (load         ) [ 000000]
+residualAdd_residual_load_7 (load         ) [ 000000]
+add_ln173_7                 (add          ) [ 000000]
+residualAdd_output_addr_7   (getelementptr) [ 000000]
+store_ln173                 (store        ) [ 000000]
+ret_ln175                   (ret          ) [ 000000]
+</LifeTime>
+
+<model>
+
+<comp_list>
+<comp id="0" class="1000" name="int8_activation">
+<pin_list>
+<pin id="1" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="int8_activation"/><MemPortTyVec>1 1 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="2" class="1000" name="residualAdd_residual">
+<pin_list>
+<pin id="3" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="residualAdd_residual"/><MemPortTyVec>1 1 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="4" class="1000" name="residualAdd_output">
+<pin_list>
+<pin id="5" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="residualAdd_output"/><MemPortTyVec>0 0 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="6" class="1001" name="const_6">
+<pin_list>
+<pin id="7" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="8" class="1001" name="const_8">
+<pin_list>
+<pin id="9" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="10" class="1001" name="const_10">
+<pin_list>
+<pin id="11" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="12" class="1001" name="const_12">
+<pin_list>
+<pin id="13" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="14" class="1001" name="const_14">
+<pin_list>
+<pin id="15" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="16" class="1001" name="const_16">
+<pin_list>
+<pin id="17" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="18" class="1001" name="const_18">
+<pin_list>
+<pin id="19" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="20" class="1001" name="const_20">
+<pin_list>
+<pin id="21" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="22" class="1001" name="const_22">
+<pin_list>
+<pin id="23" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecInterface"/></StgValue>
+</bind>
+</comp>
+
+<comp id="24" class="1001" name="const_24">
+<pin_list>
+<pin id="25" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_1"/></StgValue>
+</bind>
+</comp>
+
+<comp id="26" class="1001" name="const_26">
+<pin_list>
+<pin id="27" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="28" class="1001" name="const_28">
+<pin_list>
+<pin id="29" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_0"/></StgValue>
+</bind>
+</comp>
+
+<comp id="30" class="1001" name="const_30">
+<pin_list>
+<pin id="31" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="32" class="1004" name="int8_activation_addr_gep_fu_32">
+<pin_list>
+<pin id="33" dir="0" index="0" bw="8" slack="0"/>
+<pin id="34" dir="0" index="1" bw="1" slack="0"/>
+<pin id="35" dir="0" index="2" bw="1" slack="0"/>
+<pin id="36" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr/1 "/>
+</bind>
+</comp>
+
+<comp id="40" class="1004" name="grp_access_fu_40">
+<pin_list>
+<pin id="41" dir="0" index="0" bw="3" slack="0"/>
+<pin id="42" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="43" dir="0" index="2" bw="0" slack="0"/>
+<pin id="45" dir="0" index="4" bw="3" slack="2147483647"/>
+<pin id="46" dir="0" index="5" bw="8" slack="2147483647"/>
+<pin id="47" dir="0" index="6" bw="0" slack="2147483647"/>
+<pin id="44" dir="1" index="3" bw="8" slack="0"/>
+<pin id="48" dir="1" index="7" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="int8_activation_load/1 int8_activation_load_8/1 int8_activation_load_9/2 int8_activation_load_10/2 int8_activation_load_11/3 int8_activation_load_12/3 int8_activation_load_13/4 int8_activation_load_14/4 "/>
+</bind>
+</comp>
+
+<comp id="50" class="1004" name="residualAdd_residual_addr_gep_fu_50">
+<pin_list>
+<pin id="51" dir="0" index="0" bw="8" slack="0"/>
+<pin id="52" dir="0" index="1" bw="1" slack="0"/>
+<pin id="53" dir="0" index="2" bw="1" slack="0"/>
+<pin id="54" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr/1 "/>
+</bind>
+</comp>
+
+<comp id="58" class="1004" name="grp_access_fu_58">
+<pin_list>
+<pin id="59" dir="0" index="0" bw="3" slack="0"/>
+<pin id="60" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="61" dir="0" index="2" bw="0" slack="0"/>
+<pin id="63" dir="0" index="4" bw="3" slack="2147483647"/>
+<pin id="64" dir="0" index="5" bw="8" slack="2147483647"/>
+<pin id="65" dir="0" index="6" bw="0" slack="2147483647"/>
+<pin id="62" dir="1" index="3" bw="8" slack="0"/>
+<pin id="66" dir="1" index="7" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="residualAdd_residual_load/1 residualAdd_residual_load_1/1 residualAdd_residual_load_2/2 residualAdd_residual_load_3/2 residualAdd_residual_load_4/3 residualAdd_residual_load_5/3 residualAdd_residual_load_6/4 residualAdd_residual_load_7/4 "/>
+</bind>
+</comp>
+
+<comp id="68" class="1004" name="int8_activation_addr_8_gep_fu_68">
+<pin_list>
+<pin id="69" dir="0" index="0" bw="8" slack="0"/>
+<pin id="70" dir="0" index="1" bw="1" slack="0"/>
+<pin id="71" dir="0" index="2" bw="1" slack="0"/>
+<pin id="72" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr_8/1 "/>
+</bind>
+</comp>
+
+<comp id="77" class="1004" name="residualAdd_residual_addr_1_gep_fu_77">
+<pin_list>
+<pin id="78" dir="0" index="0" bw="8" slack="0"/>
+<pin id="79" dir="0" index="1" bw="1" slack="0"/>
+<pin id="80" dir="0" index="2" bw="1" slack="0"/>
+<pin id="81" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr_1/1 "/>
+</bind>
+</comp>
+
+<comp id="86" class="1004" name="residualAdd_output_addr_gep_fu_86">
+<pin_list>
+<pin id="87" dir="0" index="0" bw="8" slack="0"/>
+<pin id="88" dir="0" index="1" bw="1" slack="0"/>
+<pin id="89" dir="0" index="2" bw="1" slack="0"/>
+<pin id="90" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr/2 "/>
+</bind>
+</comp>
+
+<comp id="94" class="1004" name="grp_access_fu_94">
+<pin_list>
+<pin id="95" dir="0" index="0" bw="3" slack="0"/>
+<pin id="96" dir="0" index="1" bw="8" slack="0"/>
+<pin id="97" dir="0" index="2" bw="0" slack="0"/>
+<pin id="99" dir="0" index="4" bw="3" slack="0"/>
+<pin id="100" dir="0" index="5" bw="8" slack="2147483647"/>
+<pin id="101" dir="0" index="6" bw="0" slack="2147483647"/>
+<pin id="98" dir="1" index="3" bw="8" slack="2147483647"/>
+<pin id="102" dir="1" index="7" bw="8" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln173/2 store_ln173/2 store_ln173/3 store_ln173/3 store_ln173/4 store_ln173/4 store_ln173/5 store_ln173/5 "/>
+</bind>
+</comp>
+
+<comp id="104" class="1004" name="residualAdd_output_addr_1_gep_fu_104">
+<pin_list>
+<pin id="105" dir="0" index="0" bw="8" slack="0"/>
+<pin id="106" dir="0" index="1" bw="1" slack="0"/>
+<pin id="107" dir="0" index="2" bw="1" slack="0"/>
+<pin id="108" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr_1/2 "/>
+</bind>
+</comp>
+
+<comp id="113" class="1004" name="int8_activation_addr_9_gep_fu_113">
+<pin_list>
+<pin id="114" dir="0" index="0" bw="8" slack="0"/>
+<pin id="115" dir="0" index="1" bw="1" slack="0"/>
+<pin id="116" dir="0" index="2" bw="3" slack="0"/>
+<pin id="117" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr_9/2 "/>
+</bind>
+</comp>
+
+<comp id="122" class="1004" name="residualAdd_residual_addr_2_gep_fu_122">
+<pin_list>
+<pin id="123" dir="0" index="0" bw="8" slack="0"/>
+<pin id="124" dir="0" index="1" bw="1" slack="0"/>
+<pin id="125" dir="0" index="2" bw="3" slack="0"/>
+<pin id="126" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr_2/2 "/>
+</bind>
+</comp>
+
+<comp id="131" class="1004" name="int8_activation_addr_10_gep_fu_131">
+<pin_list>
+<pin id="132" dir="0" index="0" bw="8" slack="0"/>
+<pin id="133" dir="0" index="1" bw="1" slack="0"/>
+<pin id="134" dir="0" index="2" bw="3" slack="0"/>
+<pin id="135" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr_10/2 "/>
+</bind>
+</comp>
+
+<comp id="140" class="1004" name="residualAdd_residual_addr_3_gep_fu_140">
+<pin_list>
+<pin id="141" dir="0" index="0" bw="8" slack="0"/>
+<pin id="142" dir="0" index="1" bw="1" slack="0"/>
+<pin id="143" dir="0" index="2" bw="3" slack="0"/>
+<pin id="144" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr_3/2 "/>
+</bind>
+</comp>
+
+<comp id="149" class="1004" name="residualAdd_output_addr_2_gep_fu_149">
+<pin_list>
+<pin id="150" dir="0" index="0" bw="8" slack="0"/>
+<pin id="151" dir="0" index="1" bw="1" slack="0"/>
+<pin id="152" dir="0" index="2" bw="3" slack="0"/>
+<pin id="153" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr_2/3 "/>
+</bind>
+</comp>
+
+<comp id="158" class="1004" name="residualAdd_output_addr_3_gep_fu_158">
+<pin_list>
+<pin id="159" dir="0" index="0" bw="8" slack="0"/>
+<pin id="160" dir="0" index="1" bw="1" slack="0"/>
+<pin id="161" dir="0" index="2" bw="3" slack="0"/>
+<pin id="162" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr_3/3 "/>
+</bind>
+</comp>
+
+<comp id="167" class="1004" name="int8_activation_addr_11_gep_fu_167">
+<pin_list>
+<pin id="168" dir="0" index="0" bw="8" slack="0"/>
+<pin id="169" dir="0" index="1" bw="1" slack="0"/>
+<pin id="170" dir="0" index="2" bw="4" slack="0"/>
+<pin id="171" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr_11/3 "/>
+</bind>
+</comp>
+
+<comp id="176" class="1004" name="residualAdd_residual_addr_4_gep_fu_176">
+<pin_list>
+<pin id="177" dir="0" index="0" bw="8" slack="0"/>
+<pin id="178" dir="0" index="1" bw="1" slack="0"/>
+<pin id="179" dir="0" index="2" bw="4" slack="0"/>
+<pin id="180" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr_4/3 "/>
+</bind>
+</comp>
+
+<comp id="185" class="1004" name="int8_activation_addr_12_gep_fu_185">
+<pin_list>
+<pin id="186" dir="0" index="0" bw="8" slack="0"/>
+<pin id="187" dir="0" index="1" bw="1" slack="0"/>
+<pin id="188" dir="0" index="2" bw="4" slack="0"/>
+<pin id="189" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr_12/3 "/>
+</bind>
+</comp>
+
+<comp id="194" class="1004" name="residualAdd_residual_addr_5_gep_fu_194">
+<pin_list>
+<pin id="195" dir="0" index="0" bw="8" slack="0"/>
+<pin id="196" dir="0" index="1" bw="1" slack="0"/>
+<pin id="197" dir="0" index="2" bw="4" slack="0"/>
+<pin id="198" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr_5/3 "/>
+</bind>
+</comp>
+
+<comp id="203" class="1004" name="residualAdd_output_addr_4_gep_fu_203">
+<pin_list>
+<pin id="204" dir="0" index="0" bw="8" slack="0"/>
+<pin id="205" dir="0" index="1" bw="1" slack="0"/>
+<pin id="206" dir="0" index="2" bw="4" slack="0"/>
+<pin id="207" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr_4/4 "/>
+</bind>
+</comp>
+
+<comp id="212" class="1004" name="residualAdd_output_addr_5_gep_fu_212">
+<pin_list>
+<pin id="213" dir="0" index="0" bw="8" slack="0"/>
+<pin id="214" dir="0" index="1" bw="1" slack="0"/>
+<pin id="215" dir="0" index="2" bw="4" slack="0"/>
+<pin id="216" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr_5/4 "/>
+</bind>
+</comp>
+
+<comp id="221" class="1004" name="int8_activation_addr_13_gep_fu_221">
+<pin_list>
+<pin id="222" dir="0" index="0" bw="8" slack="0"/>
+<pin id="223" dir="0" index="1" bw="1" slack="0"/>
+<pin id="224" dir="0" index="2" bw="4" slack="0"/>
+<pin id="225" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr_13/4 "/>
+</bind>
+</comp>
+
+<comp id="230" class="1004" name="residualAdd_residual_addr_6_gep_fu_230">
+<pin_list>
+<pin id="231" dir="0" index="0" bw="8" slack="0"/>
+<pin id="232" dir="0" index="1" bw="1" slack="0"/>
+<pin id="233" dir="0" index="2" bw="4" slack="0"/>
+<pin id="234" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr_6/4 "/>
+</bind>
+</comp>
+
+<comp id="239" class="1004" name="int8_activation_addr_14_gep_fu_239">
+<pin_list>
+<pin id="240" dir="0" index="0" bw="8" slack="0"/>
+<pin id="241" dir="0" index="1" bw="1" slack="0"/>
+<pin id="242" dir="0" index="2" bw="4" slack="0"/>
+<pin id="243" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="int8_activation_addr_14/4 "/>
+</bind>
+</comp>
+
+<comp id="248" class="1004" name="residualAdd_residual_addr_7_gep_fu_248">
+<pin_list>
+<pin id="249" dir="0" index="0" bw="8" slack="0"/>
+<pin id="250" dir="0" index="1" bw="1" slack="0"/>
+<pin id="251" dir="0" index="2" bw="4" slack="0"/>
+<pin id="252" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_residual_addr_7/4 "/>
+</bind>
+</comp>
+
+<comp id="257" class="1004" name="residualAdd_output_addr_6_gep_fu_257">
+<pin_list>
+<pin id="258" dir="0" index="0" bw="8" slack="0"/>
+<pin id="259" dir="0" index="1" bw="1" slack="0"/>
+<pin id="260" dir="0" index="2" bw="4" slack="0"/>
+<pin id="261" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr_6/5 "/>
+</bind>
+</comp>
+
+<comp id="266" class="1004" name="residualAdd_output_addr_7_gep_fu_266">
+<pin_list>
+<pin id="267" dir="0" index="0" bw="8" slack="0"/>
+<pin id="268" dir="0" index="1" bw="1" slack="0"/>
+<pin id="269" dir="0" index="2" bw="4" slack="0"/>
+<pin id="270" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="residualAdd_output_addr_7/5 "/>
+</bind>
+</comp>
+
+<comp id="275" class="1004" name="grp_fu_275">
+<pin_list>
+<pin id="276" dir="0" index="0" bw="8" slack="0"/>
+<pin id="277" dir="0" index="1" bw="8" slack="0"/>
+<pin id="278" dir="1" index="2" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln173/2 add_ln173_2/3 add_ln173_4/4 add_ln173_6/5 "/>
+</bind>
+</comp>
+
+<comp id="282" class="1004" name="grp_fu_282">
+<pin_list>
+<pin id="283" dir="0" index="0" bw="8" slack="0"/>
+<pin id="284" dir="0" index="1" bw="8" slack="0"/>
+<pin id="285" dir="1" index="2" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln173_1/2 add_ln173_3/3 add_ln173_5/4 add_ln173_7/5 "/>
+</bind>
+</comp>
+
+<comp id="289" class="1005" name="int8_activation_addr_reg_289">
+<pin_list>
+<pin id="290" dir="0" index="0" bw="3" slack="1"/>
+<pin id="291" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr "/>
+</bind>
+</comp>
+
+<comp id="294" class="1005" name="residualAdd_residual_addr_reg_294">
+<pin_list>
+<pin id="295" dir="0" index="0" bw="3" slack="1"/>
+<pin id="296" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr "/>
+</bind>
+</comp>
+
+<comp id="299" class="1005" name="int8_activation_addr_8_reg_299">
+<pin_list>
+<pin id="300" dir="0" index="0" bw="3" slack="1"/>
+<pin id="301" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr_8 "/>
+</bind>
+</comp>
+
+<comp id="304" class="1005" name="residualAdd_residual_addr_1_reg_304">
+<pin_list>
+<pin id="305" dir="0" index="0" bw="3" slack="1"/>
+<pin id="306" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr_1 "/>
+</bind>
+</comp>
+
+<comp id="309" class="1005" name="int8_activation_addr_9_reg_309">
+<pin_list>
+<pin id="310" dir="0" index="0" bw="3" slack="1"/>
+<pin id="311" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr_9 "/>
+</bind>
+</comp>
+
+<comp id="314" class="1005" name="residualAdd_residual_addr_2_reg_314">
+<pin_list>
+<pin id="315" dir="0" index="0" bw="3" slack="1"/>
+<pin id="316" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr_2 "/>
+</bind>
+</comp>
+
+<comp id="319" class="1005" name="int8_activation_addr_10_reg_319">
+<pin_list>
+<pin id="320" dir="0" index="0" bw="3" slack="1"/>
+<pin id="321" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr_10 "/>
+</bind>
+</comp>
+
+<comp id="324" class="1005" name="residualAdd_residual_addr_3_reg_324">
+<pin_list>
+<pin id="325" dir="0" index="0" bw="3" slack="1"/>
+<pin id="326" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr_3 "/>
+</bind>
+</comp>
+
+<comp id="329" class="1005" name="int8_activation_addr_11_reg_329">
+<pin_list>
+<pin id="330" dir="0" index="0" bw="3" slack="1"/>
+<pin id="331" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr_11 "/>
+</bind>
+</comp>
+
+<comp id="334" class="1005" name="residualAdd_residual_addr_4_reg_334">
+<pin_list>
+<pin id="335" dir="0" index="0" bw="3" slack="1"/>
+<pin id="336" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr_4 "/>
+</bind>
+</comp>
+
+<comp id="339" class="1005" name="int8_activation_addr_12_reg_339">
+<pin_list>
+<pin id="340" dir="0" index="0" bw="3" slack="1"/>
+<pin id="341" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr_12 "/>
+</bind>
+</comp>
+
+<comp id="344" class="1005" name="residualAdd_residual_addr_5_reg_344">
+<pin_list>
+<pin id="345" dir="0" index="0" bw="3" slack="1"/>
+<pin id="346" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr_5 "/>
+</bind>
+</comp>
+
+<comp id="349" class="1005" name="int8_activation_addr_13_reg_349">
+<pin_list>
+<pin id="350" dir="0" index="0" bw="3" slack="1"/>
+<pin id="351" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr_13 "/>
+</bind>
+</comp>
+
+<comp id="354" class="1005" name="residualAdd_residual_addr_6_reg_354">
+<pin_list>
+<pin id="355" dir="0" index="0" bw="3" slack="1"/>
+<pin id="356" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr_6 "/>
+</bind>
+</comp>
+
+<comp id="359" class="1005" name="int8_activation_addr_14_reg_359">
+<pin_list>
+<pin id="360" dir="0" index="0" bw="3" slack="1"/>
+<pin id="361" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="int8_activation_addr_14 "/>
+</bind>
+</comp>
+
+<comp id="364" class="1005" name="residualAdd_residual_addr_7_reg_364">
+<pin_list>
+<pin id="365" dir="0" index="0" bw="3" slack="1"/>
+<pin id="366" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="residualAdd_residual_addr_7 "/>
+</bind>
+</comp>
+
+</comp_list>
+
+<net_list>
+<net id="37"><net_src comp="0" pin="0"/><net_sink comp="32" pin=0"/></net>
+
+<net id="38"><net_src comp="6" pin="0"/><net_sink comp="32" pin=1"/></net>
+
+<net id="39"><net_src comp="6" pin="0"/><net_sink comp="32" pin=2"/></net>
+
+<net id="49"><net_src comp="32" pin="3"/><net_sink comp="40" pin=2"/></net>
+
+<net id="55"><net_src comp="2" pin="0"/><net_sink comp="50" pin=0"/></net>
+
+<net id="56"><net_src comp="6" pin="0"/><net_sink comp="50" pin=1"/></net>
+
+<net id="57"><net_src comp="6" pin="0"/><net_sink comp="50" pin=2"/></net>
+
+<net id="67"><net_src comp="50" pin="3"/><net_sink comp="58" pin=2"/></net>
+
+<net id="73"><net_src comp="0" pin="0"/><net_sink comp="68" pin=0"/></net>
+
+<net id="74"><net_src comp="6" pin="0"/><net_sink comp="68" pin=1"/></net>
+
+<net id="75"><net_src comp="8" pin="0"/><net_sink comp="68" pin=2"/></net>
+
+<net id="76"><net_src comp="68" pin="3"/><net_sink comp="40" pin=0"/></net>
+
+<net id="82"><net_src comp="2" pin="0"/><net_sink comp="77" pin=0"/></net>
+
+<net id="83"><net_src comp="6" pin="0"/><net_sink comp="77" pin=1"/></net>
+
+<net id="84"><net_src comp="8" pin="0"/><net_sink comp="77" pin=2"/></net>
+
+<net id="85"><net_src comp="77" pin="3"/><net_sink comp="58" pin=0"/></net>
+
+<net id="91"><net_src comp="4" pin="0"/><net_sink comp="86" pin=0"/></net>
+
+<net id="92"><net_src comp="6" pin="0"/><net_sink comp="86" pin=1"/></net>
+
+<net id="93"><net_src comp="6" pin="0"/><net_sink comp="86" pin=2"/></net>
+
+<net id="103"><net_src comp="86" pin="3"/><net_sink comp="94" pin=2"/></net>
+
+<net id="109"><net_src comp="4" pin="0"/><net_sink comp="104" pin=0"/></net>
+
+<net id="110"><net_src comp="6" pin="0"/><net_sink comp="104" pin=1"/></net>
+
+<net id="111"><net_src comp="8" pin="0"/><net_sink comp="104" pin=2"/></net>
+
+<net id="112"><net_src comp="104" pin="3"/><net_sink comp="94" pin=0"/></net>
+
+<net id="118"><net_src comp="0" pin="0"/><net_sink comp="113" pin=0"/></net>
+
+<net id="119"><net_src comp="6" pin="0"/><net_sink comp="113" pin=1"/></net>
+
+<net id="120"><net_src comp="10" pin="0"/><net_sink comp="113" pin=2"/></net>
+
+<net id="121"><net_src comp="113" pin="3"/><net_sink comp="40" pin=2"/></net>
+
+<net id="127"><net_src comp="2" pin="0"/><net_sink comp="122" pin=0"/></net>
+
+<net id="128"><net_src comp="6" pin="0"/><net_sink comp="122" pin=1"/></net>
+
+<net id="129"><net_src comp="10" pin="0"/><net_sink comp="122" pin=2"/></net>
+
+<net id="130"><net_src comp="122" pin="3"/><net_sink comp="58" pin=2"/></net>
+
+<net id="136"><net_src comp="0" pin="0"/><net_sink comp="131" pin=0"/></net>
+
+<net id="137"><net_src comp="6" pin="0"/><net_sink comp="131" pin=1"/></net>
+
+<net id="138"><net_src comp="12" pin="0"/><net_sink comp="131" pin=2"/></net>
+
+<net id="139"><net_src comp="131" pin="3"/><net_sink comp="40" pin=0"/></net>
+
+<net id="145"><net_src comp="2" pin="0"/><net_sink comp="140" pin=0"/></net>
+
+<net id="146"><net_src comp="6" pin="0"/><net_sink comp="140" pin=1"/></net>
+
+<net id="147"><net_src comp="12" pin="0"/><net_sink comp="140" pin=2"/></net>
+
+<net id="148"><net_src comp="140" pin="3"/><net_sink comp="58" pin=0"/></net>
+
+<net id="154"><net_src comp="4" pin="0"/><net_sink comp="149" pin=0"/></net>
+
+<net id="155"><net_src comp="6" pin="0"/><net_sink comp="149" pin=1"/></net>
+
+<net id="156"><net_src comp="10" pin="0"/><net_sink comp="149" pin=2"/></net>
+
+<net id="157"><net_src comp="149" pin="3"/><net_sink comp="94" pin=2"/></net>
+
+<net id="163"><net_src comp="4" pin="0"/><net_sink comp="158" pin=0"/></net>
+
+<net id="164"><net_src comp="6" pin="0"/><net_sink comp="158" pin=1"/></net>
+
+<net id="165"><net_src comp="12" pin="0"/><net_sink comp="158" pin=2"/></net>
+
+<net id="166"><net_src comp="158" pin="3"/><net_sink comp="94" pin=0"/></net>
+
+<net id="172"><net_src comp="0" pin="0"/><net_sink comp="167" pin=0"/></net>
+
+<net id="173"><net_src comp="6" pin="0"/><net_sink comp="167" pin=1"/></net>
+
+<net id="174"><net_src comp="14" pin="0"/><net_sink comp="167" pin=2"/></net>
+
+<net id="175"><net_src comp="167" pin="3"/><net_sink comp="40" pin=2"/></net>
+
+<net id="181"><net_src comp="2" pin="0"/><net_sink comp="176" pin=0"/></net>
+
+<net id="182"><net_src comp="6" pin="0"/><net_sink comp="176" pin=1"/></net>
+
+<net id="183"><net_src comp="14" pin="0"/><net_sink comp="176" pin=2"/></net>
+
+<net id="184"><net_src comp="176" pin="3"/><net_sink comp="58" pin=2"/></net>
+
+<net id="190"><net_src comp="0" pin="0"/><net_sink comp="185" pin=0"/></net>
+
+<net id="191"><net_src comp="6" pin="0"/><net_sink comp="185" pin=1"/></net>
+
+<net id="192"><net_src comp="16" pin="0"/><net_sink comp="185" pin=2"/></net>
+
+<net id="193"><net_src comp="185" pin="3"/><net_sink comp="40" pin=0"/></net>
+
+<net id="199"><net_src comp="2" pin="0"/><net_sink comp="194" pin=0"/></net>
+
+<net id="200"><net_src comp="6" pin="0"/><net_sink comp="194" pin=1"/></net>
+
+<net id="201"><net_src comp="16" pin="0"/><net_sink comp="194" pin=2"/></net>
+
+<net id="202"><net_src comp="194" pin="3"/><net_sink comp="58" pin=0"/></net>
+
+<net id="208"><net_src comp="4" pin="0"/><net_sink comp="203" pin=0"/></net>
+
+<net id="209"><net_src comp="6" pin="0"/><net_sink comp="203" pin=1"/></net>
+
+<net id="210"><net_src comp="14" pin="0"/><net_sink comp="203" pin=2"/></net>
+
+<net id="211"><net_src comp="203" pin="3"/><net_sink comp="94" pin=2"/></net>
+
+<net id="217"><net_src comp="4" pin="0"/><net_sink comp="212" pin=0"/></net>
+
+<net id="218"><net_src comp="6" pin="0"/><net_sink comp="212" pin=1"/></net>
+
+<net id="219"><net_src comp="16" pin="0"/><net_sink comp="212" pin=2"/></net>
+
+<net id="220"><net_src comp="212" pin="3"/><net_sink comp="94" pin=0"/></net>
+
+<net id="226"><net_src comp="0" pin="0"/><net_sink comp="221" pin=0"/></net>
+
+<net id="227"><net_src comp="6" pin="0"/><net_sink comp="221" pin=1"/></net>
+
+<net id="228"><net_src comp="18" pin="0"/><net_sink comp="221" pin=2"/></net>
+
+<net id="229"><net_src comp="221" pin="3"/><net_sink comp="40" pin=2"/></net>
+
+<net id="235"><net_src comp="2" pin="0"/><net_sink comp="230" pin=0"/></net>
+
+<net id="236"><net_src comp="6" pin="0"/><net_sink comp="230" pin=1"/></net>
+
+<net id="237"><net_src comp="18" pin="0"/><net_sink comp="230" pin=2"/></net>
+
+<net id="238"><net_src comp="230" pin="3"/><net_sink comp="58" pin=2"/></net>
+
+<net id="244"><net_src comp="0" pin="0"/><net_sink comp="239" pin=0"/></net>
+
+<net id="245"><net_src comp="6" pin="0"/><net_sink comp="239" pin=1"/></net>
+
+<net id="246"><net_src comp="20" pin="0"/><net_sink comp="239" pin=2"/></net>
+
+<net id="247"><net_src comp="239" pin="3"/><net_sink comp="40" pin=0"/></net>
+
+<net id="253"><net_src comp="2" pin="0"/><net_sink comp="248" pin=0"/></net>
+
+<net id="254"><net_src comp="6" pin="0"/><net_sink comp="248" pin=1"/></net>
+
+<net id="255"><net_src comp="20" pin="0"/><net_sink comp="248" pin=2"/></net>
+
+<net id="256"><net_src comp="248" pin="3"/><net_sink comp="58" pin=0"/></net>
+
+<net id="262"><net_src comp="4" pin="0"/><net_sink comp="257" pin=0"/></net>
+
+<net id="263"><net_src comp="6" pin="0"/><net_sink comp="257" pin=1"/></net>
+
+<net id="264"><net_src comp="18" pin="0"/><net_sink comp="257" pin=2"/></net>
+
+<net id="265"><net_src comp="257" pin="3"/><net_sink comp="94" pin=2"/></net>
+
+<net id="271"><net_src comp="4" pin="0"/><net_sink comp="266" pin=0"/></net>
+
+<net id="272"><net_src comp="6" pin="0"/><net_sink comp="266" pin=1"/></net>
+
+<net id="273"><net_src comp="20" pin="0"/><net_sink comp="266" pin=2"/></net>
+
+<net id="274"><net_src comp="266" pin="3"/><net_sink comp="94" pin=0"/></net>
+
+<net id="279"><net_src comp="58" pin="7"/><net_sink comp="275" pin=0"/></net>
+
+<net id="280"><net_src comp="40" pin="7"/><net_sink comp="275" pin=1"/></net>
+
+<net id="281"><net_src comp="275" pin="2"/><net_sink comp="94" pin=4"/></net>
+
+<net id="286"><net_src comp="58" pin="3"/><net_sink comp="282" pin=0"/></net>
+
+<net id="287"><net_src comp="40" pin="3"/><net_sink comp="282" pin=1"/></net>
+
+<net id="288"><net_src comp="282" pin="2"/><net_sink comp="94" pin=1"/></net>
+
+<net id="292"><net_src comp="32" pin="3"/><net_sink comp="289" pin=0"/></net>
+
+<net id="293"><net_src comp="289" pin="1"/><net_sink comp="40" pin=2"/></net>
+
+<net id="297"><net_src comp="50" pin="3"/><net_sink comp="294" pin=0"/></net>
+
+<net id="298"><net_src comp="294" pin="1"/><net_sink comp="58" pin=2"/></net>
+
+<net id="302"><net_src comp="68" pin="3"/><net_sink comp="299" pin=0"/></net>
+
+<net id="303"><net_src comp="299" pin="1"/><net_sink comp="40" pin=0"/></net>
+
+<net id="307"><net_src comp="77" pin="3"/><net_sink comp="304" pin=0"/></net>
+
+<net id="308"><net_src comp="304" pin="1"/><net_sink comp="58" pin=0"/></net>
+
+<net id="312"><net_src comp="113" pin="3"/><net_sink comp="309" pin=0"/></net>
+
+<net id="313"><net_src comp="309" pin="1"/><net_sink comp="40" pin=2"/></net>
+
+<net id="317"><net_src comp="122" pin="3"/><net_sink comp="314" pin=0"/></net>
+
+<net id="318"><net_src comp="314" pin="1"/><net_sink comp="58" pin=2"/></net>
+
+<net id="322"><net_src comp="131" pin="3"/><net_sink comp="319" pin=0"/></net>
+
+<net id="323"><net_src comp="319" pin="1"/><net_sink comp="40" pin=0"/></net>
+
+<net id="327"><net_src comp="140" pin="3"/><net_sink comp="324" pin=0"/></net>
+
+<net id="328"><net_src comp="324" pin="1"/><net_sink comp="58" pin=0"/></net>
+
+<net id="332"><net_src comp="167" pin="3"/><net_sink comp="329" pin=0"/></net>
+
+<net id="333"><net_src comp="329" pin="1"/><net_sink comp="40" pin=2"/></net>
+
+<net id="337"><net_src comp="176" pin="3"/><net_sink comp="334" pin=0"/></net>
+
+<net id="338"><net_src comp="334" pin="1"/><net_sink comp="58" pin=2"/></net>
+
+<net id="342"><net_src comp="185" pin="3"/><net_sink comp="339" pin=0"/></net>
+
+<net id="343"><net_src comp="339" pin="1"/><net_sink comp="40" pin=0"/></net>
+
+<net id="347"><net_src comp="194" pin="3"/><net_sink comp="344" pin=0"/></net>
+
+<net id="348"><net_src comp="344" pin="1"/><net_sink comp="58" pin=0"/></net>
+
+<net id="352"><net_src comp="221" pin="3"/><net_sink comp="349" pin=0"/></net>
+
+<net id="353"><net_src comp="349" pin="1"/><net_sink comp="40" pin=2"/></net>
+
+<net id="357"><net_src comp="230" pin="3"/><net_sink comp="354" pin=0"/></net>
+
+<net id="358"><net_src comp="354" pin="1"/><net_sink comp="58" pin=2"/></net>
+
+<net id="362"><net_src comp="239" pin="3"/><net_sink comp="359" pin=0"/></net>
+
+<net id="363"><net_src comp="359" pin="1"/><net_sink comp="40" pin=0"/></net>
+
+<net id="367"><net_src comp="248" pin="3"/><net_sink comp="364" pin=0"/></net>
+
+<net id="368"><net_src comp="364" pin="1"/><net_sink comp="58" pin=0"/></net>
+
+</net_list>
+
+</model> 
+---------------- Datapath Model END ------------------
+
+* FSMD analyzer results:
+  - Output states:
+	Port: int8_activation | {}
+	Port: residualAdd_residual | {}
+	Port: residualAdd_output | {2 3 4 5 }
+ - Input state : 
+	Port: RES_ADD : int8_activation | {1 2 3 4 5 }
+	Port: RES_ADD : residualAdd_residual | {1 2 3 4 5 }
+	Port: RES_ADD : residualAdd_output | {}
+  - Chain level:
+	State 1
+		int8_activation_load : 1
+		residualAdd_residual_load : 1
+		int8_activation_load_8 : 1
+		residualAdd_residual_load_1 : 1
+	State 2
+		add_ln173 : 1
+		store_ln173 : 2
+		add_ln173_1 : 1
+		store_ln173 : 2
+		int8_activation_load_9 : 1
+		residualAdd_residual_load_2 : 1
+		int8_activation_load_10 : 1
+		residualAdd_residual_load_3 : 1
+	State 3
+		add_ln173_2 : 1
+		store_ln173 : 2
+		add_ln173_3 : 1
+		store_ln173 : 2
+		int8_activation_load_11 : 1
+		residualAdd_residual_load_4 : 1
+		int8_activation_load_12 : 1
+		residualAdd_residual_load_5 : 1
+	State 4
+		add_ln173_4 : 1
+		store_ln173 : 2
+		add_ln173_5 : 1
+		store_ln173 : 2
+		int8_activation_load_13 : 1
+		residualAdd_residual_load_6 : 1
+		int8_activation_load_14 : 1
+		residualAdd_residual_load_7 : 1
+	State 5
+		add_ln173_6 : 1
+		store_ln173 : 2
+		add_ln173_7 : 1
+		store_ln173 : 2
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+
+* Functional unit list:
+|----------|----------------|---------|---------|
+| Operation| Functional Unit|    FF   |   LUT   |
+|----------|----------------|---------|---------|
+|    add   |   grp_fu_275   |    0    |    15   |
+|          |   grp_fu_282   |    0    |    15   |
+|----------|----------------|---------|---------|
+|   Total  |                |    0    |    30   |
+|----------|----------------|---------|---------|
+
+Memories:
+N/A
+
+* Register list:
++-----------------------------------+--------+
+|                                   |   FF   |
++-----------------------------------+--------+
+|  int8_activation_addr_10_reg_319  |    3   |
+|  int8_activation_addr_11_reg_329  |    3   |
+|  int8_activation_addr_12_reg_339  |    3   |
+|  int8_activation_addr_13_reg_349  |    3   |
+|  int8_activation_addr_14_reg_359  |    3   |
+|   int8_activation_addr_8_reg_299  |    3   |
+|   int8_activation_addr_9_reg_309  |    3   |
+|    int8_activation_addr_reg_289   |    3   |
+|residualAdd_residual_addr_1_reg_304|    3   |
+|residualAdd_residual_addr_2_reg_314|    3   |
+|residualAdd_residual_addr_3_reg_324|    3   |
+|residualAdd_residual_addr_4_reg_334|    3   |
+|residualAdd_residual_addr_5_reg_344|    3   |
+|residualAdd_residual_addr_6_reg_354|    3   |
+|residualAdd_residual_addr_7_reg_364|    3   |
+| residualAdd_residual_addr_reg_294 |    3   |
++-----------------------------------+--------+
+|               Total               |   48   |
++-----------------------------------+--------+
+
+* Multiplexer (MUX) list: 
+|------------------|------|------|------|--------||---------||---------||---------|
+|       Comp       |  Pin | Size |  BW  | S x BW ||  Delay  ||    FF   ||   LUT   |
+|------------------|------|------|------|--------||---------||---------||---------|
+| grp_access_fu_40 |  p0  |   8  |   3  |   24   ||    0    ||    43   |
+| grp_access_fu_40 |  p2  |   8  |   0  |    0   ||    0    ||    43   |
+| grp_access_fu_58 |  p0  |   8  |   3  |   24   ||    0    ||    43   |
+| grp_access_fu_58 |  p2  |   8  |   0  |    0   ||    0    ||    43   |
+| grp_access_fu_94 |  p0  |   4  |   3  |   12   ||    0    ||    20   |
+| grp_access_fu_94 |  p2  |   4  |   0  |    0   ||    0    ||    20   |
+|------------------|------|------|------|--------||---------||---------||---------|
+|       Total      |      |      |      |   60   ||  3.934  ||    0    ||   212   |
+|------------------|------|------|------|--------||---------||---------||---------|
+
+
+
+* Summary:
++-----------+--------+--------+--------+
+|           |  Delay |   FF   |   LUT  |
++-----------+--------+--------+--------+
+|  Function |    -   |    0   |   30   |
+|   Memory  |    -   |    -   |    -   |
+|Multiplexer|    3   |    0   |   212  |
+|  Register |    -   |   48   |    -   |
++-----------+--------+--------+--------+
+|   Total   |    3   |   48   |   242  |
++-----------+--------+--------+--------+
