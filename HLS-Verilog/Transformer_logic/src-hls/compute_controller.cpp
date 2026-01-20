@@ -192,56 +192,13 @@ void compute_controller(
     bool        &mem_write_request,        // [OUTPUT] Request memory manager
     uint32_t     &mem_op,             // [OUTPUT] Full Intruction Identifier for memory manager
 
-    // Data location INPUT signals from Memory Controller
-
-    // Common requirements
-    int8_t      int8_activation[D_MODEL],               // [INPUT] Input activations for functions
-
-    // OUT_PROJ requirements          
-    int4_t      OUT_PROJ_valueB[D_MODEL * D_TILE_WO],   // [INPUT] Weights for OUT_PROJ
-    int4_t      OUT_PROJ_bias[D_TILE_WO],               // [INPUT] Bias for OUT_PROJ
-    int32_t     OUT_PROJ_accum[D_TILE_WO],              // [OUTPUT] Output accumulators for OUT_PROJ
-
-    // FFN-PRE_ACT requirements
-    int4_t      FFN1_weights1[D_MODEL * D_TILE_W1],          // [INPUT] Weights for FFN PRE-ACT
-    int4_t      FFN1_biases[D_TILE_W1],
-    int16_t     FFN1_scale[D_TILE_W1],
-    int16_t     FFN1_output[D_TILE_W1],
-
-    // FFN-RELU requirements
-    int16_t     RELU_input[D_FFN],
-    int16_t     RELU_output[D_FFN],
-
-    // FFN-POST_ACT requirements
-    int16_t     FFN2_input[D_FFN],                      // [INPUT] Intermediate activations for FFN POST-ACT
-    int4_t      FFN2_weights2[D_TILE_W2 * D_FFN],       // [INPUT] Weights for FFN PRE-ACT
-    int4_t      FFN2_biases[D_TILE_W2],
-    int16_t     FFN2_scale[D_TILE_W2],
-    int32_t     FFN2_output[D_MODEL],
- 
-    // REQUANT requirements
-    int32_t     requant_activation[D_MODEL],
-    int32_t     requant_scale,                              // [INPUT] Used for REQUANT input
-    int32_t     requant_shift,                              // [INPUT] Used for REQUANT input
-    int32_t     requant_zero_point,                         // [INPUT] Used for REQU
-    int8_t      requant_output[D_MODEL],               // [OUTPUT] Used for REQUANT output
-
-    // layer norm requirements
-    int32_t     layerNorm_gamma[D_MODEL],            // [INPUT] LayerNorm scale parameter
-    int32_t     layerNorm_beta[D_MODEL],             // [INPUT] LayerNorm shift parameter
-    int32_t     layerNorm_epsilon,                   // [INPUT] LayerNorm variance
-    int32_t     layerNorm_out[D_MODEL],
-
-    // residual add requirements
-    int8_t      residualAdd_residual[D_MODEL], 
-    int8_t      residualAdd_output[D_MODEL],
+    // Flat input/output buffers
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
 
     bool        &error               // [OUTPUT] Error flag on invalid request
 ) {
 #pragma HLS INLINE off
-// #pragma HLS ARRAY_PARTITION variable=OUT_PROJ_valueA complete dim=1
-// #pragma HLS ARRAY_PARTITION variable=OUT_PROJ_valueB complete dim=1
-// #pragma HLS ARRAY_PARTITION variable=OUT_PROJ_accum complete dim=1
 
     static ComputeState state = ComputeState::IDLE;
     static PendingRequest req;
@@ -304,7 +261,7 @@ void compute_controller(
             mem_op = req.instruction;
             if (mem_transfer_done) {
                 mem_read_request = false;
-                // mem_op = 0;
+                mem_op = 0;
                 next_state = ComputeState::EXECUTE;
             }
             break;
@@ -312,79 +269,47 @@ void compute_controller(
         case ComputeState::EXECUTE: {
             switch (req.op) {
                 case ComputeOp::CMP_OUT_PROJ: {
-                    OUT_PROJ(int8_activation, OUT_PROJ_valueB, OUT_PROJ_bias, OUT_PROJ_accum);
+                    int8_t vectorA[D_MODEL];
+                    int4_t matrixB[D_MODEL * D_TILE_WO];
+                    int4_t bias[D_TILE_WO];
+                    int32_t out[D_TILE_WO];
+
+                    for (int i = 0; i < D_MODEL; ++i) {
+                        vectorA[i] = compute_buf::read_i8(
+                            in_buf,
+                            compute_buf::OutProjLayout::ACT + i);
+                    }
+                    for (int i = 0; i < D_MODEL * D_TILE_WO; ++i) {
+                        matrixB[i] = compute_buf::read_i4(
+                            in_buf,
+                            (compute_buf::OutProjLayout::W * 2) + i);
+                    }
+                    for (int i = 0; i < D_TILE_WO; ++i) {
+                        bias[i] = compute_buf::read_i4(
+                            in_buf,
+                            (compute_buf::OutProjLayout::B * 2) + i);
+                    }
+
+                    OUT_PROJ(vectorA, matrixB, bias, out);
+
+                    for (int t = 0; t < D_TILE_WO; ++t) {
+                        compute_buf::write_i32(out_buf, t * 4, out[t]);
+                    }
                     break;
                 }
-                case ComputeOp::CMP_REQUANT1:{
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale, 
-                        requant_shift, 
-                        requant_zero_point,
-                        requant_output      // Reusing input_embedding as output
-                    );
+                case ComputeOp::CMP_REQUANT1:
+                case ComputeOp::CMP_RESID0:
+                case ComputeOp::CMP_LN0:
+                case ComputeOp::CMP_REQUANT3:
+                case ComputeOp::CMP_FFN_W1:
+                case ComputeOp::CMP_FFN_ACT:
+                case ComputeOp::CMP_FFN_W2:
+                case ComputeOp::CMP_REQUANT4:
+                case ComputeOp::CMP_RESID1:
+                case ComputeOp::CMP_LN1:
+                case ComputeOp::CMP_DEQUANT:
+                case ComputeOp::CMP_LOGITS:
                     break;
-                }
-                case ComputeOp::CMP_RESID0: {
-                    RES_ADD(int8_activation, residualAdd_residual, residualAdd_output);
-                    break;
-                }
-                case ComputeOp::CMP_LN0: {
-                    LAYER_NORM(int8_activation, layerNorm_gamma, layerNorm_beta, layerNorm_epsilon, layerNorm_out);
-                    break;
-                }
-                case ComputeOp::CMP_REQUANT2:{
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale, 
-                        requant_shift, 
-                        requant_zero_point,
-                        requant_output      // Reusing input_embedding as output
-                    );
-                    break;
-                }    
-                case ComputeOp::CMP_FFN_W1: {
-                    FFN_PRE_ACT(int8_activation, FFN1_weights1, FFN1_biases, FFN1_scale, FFN1_output);
-                    break;
-                }
-                case ComputeOp::CMP_FFN_ACT: {
-                    FFN_ACT_RELU(RELU_input, RELU_output);
-                    break;
-                }
-                case ComputeOp::CMP_FFN_W2: {
-                    FFN_POST_ACT(FFN2_input, FFN2_weights2, FFN2_biases, FFN2_scale, FFN2_output);
-                    break;
-                }
-                case ComputeOp::CMP_REQUANT3: {
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale, 
-                        requant_shift, 
-                        requant_zero_point,
-                        requant_output      // Reusing input_embedding as output
-                    );
-                    break;
-                }
-                case ComputeOp::CMP_RESID1: {
-                    RES_ADD(int8_activation, residualAdd_residual, residualAdd_output);
-                    break;
-                }
-                case ComputeOp::CMP_LN1: {
-                    LAYER_NORM(int8_activation, layerNorm_gamma, layerNorm_beta, layerNorm_epsilon, layerNorm_out);
-                    break;
-                }
-                case ComputeOp::CMP_REQUANT4: {
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale, 
-                        requant_shift, 
-                        requant_zero_point,
-                        requant_output      // Reusing input_embedding as output
-                    );
-                    break;
-                }
-                case ComputeOp::CMP_DEQUANT: {}
-                case ComputeOp::CMP_LOGITS: {}
                 default:
                     error = true;
                     break;
