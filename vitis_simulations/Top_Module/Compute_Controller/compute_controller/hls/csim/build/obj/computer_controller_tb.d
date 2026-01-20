@@ -19,4 +19,5 @@ obj/computer_controller_tb.o: \
   /tools/Xilinx/2025.1/Vitis/include/ap_fixed.h \
   /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_base.h \
   /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_ref.h \
-  /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_special.h
+  /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_special.h \
+  ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_buffer_layout.hpp

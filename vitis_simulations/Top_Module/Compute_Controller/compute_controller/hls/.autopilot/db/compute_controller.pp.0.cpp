@@ -2572,7 +2572,7 @@ struct ap_range_ref {
     bool reverse = l_index > h_index;
     unsigned low = reverse ? h_index : l_index;
     unsigned high = reverse ? l_index : h_index;
-    VITIS_LOOP_676_1: for (unsigned i = low; i != high+1; ++i) {
+    for (unsigned i = low; i != high+1; ++i) {
 
 #pragma HLS unroll
 
@@ -2586,7 +2586,7 @@ struct ap_range_ref {
     bool reverse = l_index > h_index;
     unsigned low = reverse ? h_index : l_index;
     unsigned high = reverse ? l_index : h_index;
-    VITIS_LOOP_690_1: for (unsigned i = low; i != high+1; ++i) {
+    for (unsigned i = low; i != high+1; ++i) {
 
 #pragma HLS unroll
 
@@ -2600,7 +2600,7 @@ struct ap_range_ref {
     bool reverse = l_index > h_index;
     unsigned low = reverse ? h_index : l_index;
     unsigned high = reverse ? l_index : h_index;
-    VITIS_LOOP_704_1: for (unsigned i = low; i != high+1; ++i) {
+    for (unsigned i = low; i != high+1; ++i) {
 
 #pragma HLS unroll
 
@@ -4568,7 +4568,7 @@ struct ap_fixed_base : ssdm_int<_AP_W, _AP_S> {
       int NZeros = 0;
       int i = 0;
       bool hitNonZero = false;
-      VITIS_LOOP_1248_1: for (i = 0; i < __N - 1; ++i) {
+      for (i = 0; i < __N - 1; ++i) {
         ap_int_base<64, false> t;
         t.range(0, 63) = this->range(_AP_W - i * 64 - 64, _AP_W - i * 64 - 1);
         NZeros += hitNonZero ? 0 : (t.V == 0 ? 64 : __builtin_clzll(t.V));
@@ -6841,10 +6841,197 @@ struct ControlMemSpace {
     uint32_t reserved_debug = 0;
 };
 # 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp" 2
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_buffer_layout.hpp" 1
+
+
+
+# 1 "/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/ap_int.h" 1
+# 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_buffer_layout.hpp" 2
+
+
+namespace compute_buf {
+
+constexpr int div_ceil(int a, int b) {
+    return (a + b - 1) / b;
+}
+
+constexpr int max2(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+
+
+
+constexpr int OUT_PROJ_ACT_BYTES = D_MODEL;
+constexpr int OUT_PROJ_W_NIBBLES = D_MODEL * D_TILE_WO;
+constexpr int OUT_PROJ_W_BYTES = div_ceil(OUT_PROJ_W_NIBBLES, 2);
+constexpr int OUT_PROJ_B_NIBBLES = D_TILE_WO;
+constexpr int OUT_PROJ_B_BYTES = div_ceil(OUT_PROJ_B_NIBBLES, 2);
+constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
+
+constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
+constexpr int RESID_IN_BYTES = D_MODEL * 2;
+constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
+
+constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
+constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
+constexpr int FFN_W1_B_NIBBLES = D_TILE_W1;
+constexpr int FFN_W1_B_BYTES = div_ceil(FFN_W1_B_NIBBLES, 2);
+constexpr int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES + (D_TILE_W1 * 2);
+
+constexpr int FFN_ACT_IN_BYTES = D_FFN * 2;
+
+constexpr int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
+constexpr int FFN_W2_W_BYTES = div_ceil(FFN_W2_W_NIBBLES, 2);
+constexpr int FFN_W2_B_NIBBLES = D_TILE_W2;
+constexpr int FFN_W2_B_BYTES = div_ceil(FFN_W2_B_NIBBLES, 2);
+constexpr int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES + (D_TILE_W2 * 2);
+
+constexpr int IN_BUF_BYTES = max2(
+    OUT_PROJ_IN_BYTES,
+    max2(
+        REQUANT_IN_BYTES,
+        max2(
+            RESID_IN_BYTES,
+            max2(
+                LN_IN_BYTES,
+                max2(FFN_W1_IN_BYTES,
+                    max2(FFN_ACT_IN_BYTES, FFN_W2_IN_BYTES))))));
+
+
+
+
+constexpr int OUT_PROJ_OUT_BYTES = D_TILE_WO * 4;
+constexpr int REQUANT_OUT_BYTES = D_MODEL;
+constexpr int RESID_OUT_BYTES = D_MODEL;
+constexpr int LN_OUT_BYTES = D_MODEL * 4;
+constexpr int FFN_W1_OUT_BYTES = D_TILE_W1 * 2;
+constexpr int FFN_ACT_OUT_BYTES = D_FFN * 2;
+constexpr int FFN_W2_OUT_BYTES = D_TILE_W2 * 4;
+
+constexpr int OUT_BUF_BYTES = max2(
+    OUT_PROJ_OUT_BYTES,
+    max2(
+        REQUANT_OUT_BYTES,
+        max2(
+            RESID_OUT_BYTES,
+            max2(
+                LN_OUT_BYTES,
+                max2(FFN_W1_OUT_BYTES, max2(FFN_ACT_OUT_BYTES, FFN_W2_OUT_BYTES))))));
+
+
+
+
+struct OutProjLayout {
+    static constexpr int ACT = 0;
+    static constexpr int W = ACT + OUT_PROJ_ACT_BYTES;
+    static constexpr int B = W + OUT_PROJ_W_BYTES;
+};
+
+struct RequantLayout {
+    static constexpr int X = 0;
+    static constexpr int M = X + (D_MODEL * 4);
+    static constexpr int N = M + 4;
+    static constexpr int Z = N + 4;
+};
+
+struct ResidLayout {
+    static constexpr int X = 0;
+    static constexpr int R = X + D_MODEL;
+};
+
+struct LayerNormLayout {
+    static constexpr int X = 0;
+    static constexpr int GAMMA = X + D_MODEL;
+    static constexpr int BETA = GAMMA + (D_MODEL * 4);
+    static constexpr int EPS = BETA + (D_MODEL * 4);
+};
+
+struct FfnW1Layout {
+    static constexpr int X = 0;
+    static constexpr int W = X + D_MODEL;
+    static constexpr int B = W + FFN_W1_W_BYTES;
+    static constexpr int S = B + FFN_W1_B_BYTES;
+};
+
+struct FfnActLayout {
+    static constexpr int X = 0;
+};
+
+struct FfnW2Layout {
+    static constexpr int X = 0;
+    static constexpr int W = X + (D_FFN * 2);
+    static constexpr int B = W + FFN_W2_W_BYTES;
+    static constexpr int S = B + FFN_W2_B_BYTES;
+};
+
+
+
+
+inline int8_t read_i8(const uint8_t *buf, int byte_addr) {
+    return static_cast<int8_t>(buf[byte_addr]);
+}
+
+inline ap_int<4> read_i4(const uint8_t *buf, int nibble_idx) {
+    const int byte_addr = nibble_idx / 2;
+    const uint8_t byte_val = buf[byte_addr];
+    const ap_uint<4> nibble = (nibble_idx & 1) ? ap_uint<4>(byte_val >> 4)
+                                               : ap_uint<4>(byte_val & 0xF);
+    return ap_int<4>(nibble);
+}
+
+inline int16_t read_i16(const uint8_t *buf, int byte_addr) {
+    const uint16_t lo = buf[byte_addr];
+    const uint16_t hi = buf[byte_addr + 1];
+    const uint16_t v = static_cast<uint16_t>((hi << 8) | lo);
+    return static_cast<int16_t>(v);
+}
+
+inline int32_t read_i32(const uint8_t *buf, int byte_addr) {
+    const uint32_t b0 = buf[byte_addr + 0];
+    const uint32_t b1 = buf[byte_addr + 1];
+    const uint32_t b2 = buf[byte_addr + 2];
+    const uint32_t b3 = buf[byte_addr + 3];
+    const uint32_t v = (b3 << 24) | (b2 << 16) | (b1 << 8) | b0;
+    return static_cast<int32_t>(v);
+}
+
+inline void write_i8(uint8_t *buf, int byte_addr, int8_t value) {
+    buf[byte_addr] = static_cast<uint8_t>(value);
+}
+
+inline void write_i4(uint8_t *buf, int nibble_idx, ap_int<4> value) {
+    const int byte_addr = nibble_idx / 2;
+    const ap_uint<4> nibble = ap_uint<4>(value);
+    uint8_t byte_val = buf[byte_addr];
+    if (nibble_idx & 1) {
+        byte_val = static_cast<uint8_t>((byte_val & 0x0F)
+                                         | (static_cast<uint8_t>(nibble) << 4));
+    } else {
+        byte_val = static_cast<uint8_t>((byte_val & 0xF0) | static_cast<uint8_t>(nibble));
+    }
+    buf[byte_addr] = byte_val;
+}
+
+inline void write_i16(uint8_t *buf, int byte_addr, int16_t value) {
+    const uint16_t v = static_cast<uint16_t>(value);
+    buf[byte_addr + 0] = static_cast<uint8_t>(v & 0xFFu);
+    buf[byte_addr + 1] = static_cast<uint8_t>((v >> 8) & 0xFFu);
+}
+
+inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
+    const uint32_t v = static_cast<uint32_t>(value);
+    buf[byte_addr + 0] = static_cast<uint8_t>(v & 0xFFu);
+    buf[byte_addr + 1] = static_cast<uint8_t>((v >> 8) & 0xFFu);
+    buf[byte_addr + 2] = static_cast<uint8_t>((v >> 16) & 0xFFu);
+    buf[byte_addr + 3] = static_cast<uint8_t>((v >> 24) & 0xFFu);
+}
+
+}
+# 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp" 2
 
 
 using int4_t = ap_int<4>;
-
 
 __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     bool reset,
@@ -6862,48 +7049,8 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     uint32_t &mem_op,
 
 
-
-
-    int8_t int8_activation[D_MODEL],
-
-
-    int4_t OUT_PROJ_valueB[D_MODEL * D_TILE_WO],
-    int32_t OUT_PROJ_bias[D_TILE_WO],
-    int32_t OUT_PROJ_accum[D_TILE_WO],
-
-
-    int4_t FFN1_weights1[D_MODEL * D_TILE_W1],
-    int4_t FFN1_biases[D_TILE_W1],
-    int16_t FFN1_scale[D_TILE_W1],
-    int16_t FFN1_output[D_TILE_W1],
-
-
-    int16_t RELU_input[D_FFN],
-    int16_t RELU_output[D_FFN],
-
-
-    int16_t FFN2_input[D_FFN],
-    int4_t FFN2_weights2[D_TILE_W2 * D_FFN],
-    int4_t FFN2_biases[D_TILE_W2],
-    int16_t FFN2_scale[D_TILE_W2],
-    int32_t FFN2_output[D_MODEL],
-
-
-    int32_t requant_activation[D_MODEL],
-    int32_t requant_scale,
-    int32_t requant_shift,
-    int32_t requant_zero_point,
-    int8_t requant_output[D_MODEL],
-
-
-    int32_t layerNorm_gamma[D_MODEL],
-    int32_t layerNorm_beta[D_MODEL],
-    int32_t layerNorm_epsilon,
-    int32_t layerNorm_out[D_MODEL],
-
-
-    int8_t residualAdd_residual[D_MODEL],
-    int8_t residualAdd_output[D_MODEL],
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES],
 
     bool &error
 );
@@ -17127,7 +17274,7 @@ namespace cordic_apfixed {
     ap_fixed<W,I> x_s, y_s, z_s;
     ap_uint<1> d;
 
-    VITIS_LOOP_61_1: for (int n=0; n<Nmax; n++){
+    for (int n=0; n<Nmax; n++){
 #pragma HLS pipeline
 
  if(MODE == 1) {
@@ -17173,7 +17320,7 @@ namespace cordic_apfixed {
 
     const int Nmax = W - I + 1;
 
-    VITIS_LOOP_117_1: for (int n=0; n<Nmax; n++){
+    for (int n=0; n<Nmax; n++){
 
       if(INTYPE==64){
 #pragma HLS pipeline II=5
@@ -17336,7 +17483,7 @@ namespace cordic_apfixed {
     if(I==1){
       if(out[W-1]==1){
         out[W-1] = 0;
-        VITIS_LOOP_289_1: for(int i=0;i<W-1;i++){
+        for(int i=0;i<W-1;i++){
 #pragma HLS UNROLL
  out[i] = 1;
         }
@@ -17488,7 +17635,7 @@ namespace cordic_apfixed {
     if(I==1||bpoint){
       if( out[W-1]==1 ){
         out[W-1] = 0;
-        VITIS_LOOP_449_1: for(int i=0;i<W-1;i++){
+        for(int i=0;i<W-1;i++){
 #pragma HLS UNROLL
  out[i] = 1;
         }
@@ -17668,11 +17815,11 @@ namespace cordic_apfixed {
 
     ap_fixed<W+1,2> in1abs_sft;
     ap_fixed<W+1,2> in2abs_sft;
-    VITIS_LOOP_629_1: for(int i=0;i<W+1;i++){
+    for(int i=0;i<W+1;i++){
 #pragma HLS UNROLL
  in1abs_sft[i] = in1abs[i];
     }
-    VITIS_LOOP_633_2: for(int i=0;i<W+1;i++){
+    for(int i=0;i<W+1;i++){
 #pragma HLS UNROLL
  in2abs_sft[i] = in2abs[i];
     }
@@ -17782,7 +17929,7 @@ namespace cordic_apfixed {
     ap_fixed<W,I> x_s, y_s, z_s;
     ap_uint<1> d;
 
-    VITIS_LOOP_743_1: for (int n=0; n<Nmax; n++){
+    for (int n=0; n<Nmax; n++){
 
       int k = hyperb_table_tau_128[n];
 
@@ -17872,7 +18019,7 @@ namespace cordic_apfixed {
 
     if(s_out_tmp[W-1]==1){
       s_out_tmp[W-1] = 0;
-      VITIS_LOOP_840_1: for(int i=0;i<W-1;i++){
+      for(int i=0;i<W-1;i++){
 #pragma HLS UNROLL
  s_out_tmp[i] = 1;
       }
@@ -17891,7 +18038,7 @@ namespace cordic_apfixed {
 
     if(c_out_tmp[W-1]==1){
       c_out[W-1] = 0;
-      VITIS_LOOP_859_2: for(int i=0;i<W-1;i++){
+      for(int i=0;i<W-1;i++){
 #pragma HLS UNROLL
  c_out[i] = 1;
       }
@@ -18181,7 +18328,7 @@ namespace cordic_apfixed {
     ap_fixed<W,I> y_semi_recovery;
     ap_fixed<W,I> in_s;
 
-    VITIS_LOOP_1173_1: for(int i=0; i<Nmax; i++) {
+    for(int i=0; i<Nmax; i++) {
 
       xk = x_r << k;
       x_k = x_r >> k;
@@ -18264,7 +18411,7 @@ namespace cordic_apfixed {
     ap_fixed<W,I> x_semi_recovery;
     ap_fixed<W,I> in_s;
 
-    VITIS_LOOP_1256_1: for(int i=0; i<Nmax; i++) {
+    for(int i=0; i<Nmax; i++) {
 
       xk = x_r << k;
       x_k = x_r >> k;
@@ -18670,17 +18817,17 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         }
         if (I_<3) {
             bool overf = 0;
-            VITIS_LOOP_68_1: for (int j = 3; j >= I_+1; j--) {
+            for (int j = 3; j >= I_+1; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_74_2: for (int j = 3; j >= I_+1; j--){
+                for (int j = 3; j >= I_+1; j--){
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_78_3: for (int j = I_; j >= 0; j--){
+                for (int j = I_; j >= 0; j--){
 #pragma HLS unroll
  y[j] = 1;
                }
@@ -18727,17 +18874,17 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         }
         if (I_<6) {
             bool overf = 0;
-            VITIS_LOOP_145_4: for (int j = 9; j >= I_+4; j--) {
+            for (int j = 9; j >= I_+4; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_151_5: for (int j = 9; j >= I_+4; j--){
+                for (int j = 9; j >= I_+4; j--){
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_155_6: for (int j = I_+3; j >= 0; j--){
+                for (int j = I_+3; j >= 0; j--){
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -18752,7 +18899,7 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         ap_ufixed<11,0> x_l_fract;
         x_l_fract(10,0) = x_l(10,0);
         bool overf = 0;
-        VITIS_LOOP_170_7: for (int j = 14; j < 22; j++){
+        for (int j = 14; j < 22; j++){
 #pragma HLS unroll
  if (x_l[22]!=x_l[j])
                 overf = 1;
@@ -18760,7 +18907,7 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
 
         if (overf||((x_l_int==7)&&(x_l_fract>ap_ufixed<11,0>("0x0.ap0")))) {
             if (!x_l[22]) {
-                VITIS_LOOP_178_8: for (int j = 0; j < 22; j++){
+                for (int j = 0; j < 22; j++){
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -18825,17 +18972,17 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         }
         if (I_<12) {
             bool overf = 0;
-            VITIS_LOOP_243_9: for (int j = 21; j >= I_+10; j--) {
+            for (int j = 21; j >= I_+10; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_249_10: for (int j = 21; j >= I_+10; j--) {
+                for (int j = 21; j >= I_+10; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_253_11: for (int j = I_+9; j >= 0; j--) {
+                for (int j = I_+9; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -18850,7 +18997,7 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         ap_ufixed<23,0> x_l_fract;
         x_l_fract(22,0) = x_l(22,0);
         bool overf = 0;
-        VITIS_LOOP_268_12: for (int j = 27; j < 46; j++){
+        for (int j = 27; j < 46; j++){
 #pragma HLS unroll
  if (x_l[46]!=x_l[j])
                 overf = 1;
@@ -18858,7 +19005,7 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
 
         if (overf||((x_l_int==15)&&(x_l_fract>=ap_ufixed<23,0>("0x0.f14028p0")))) {
             if (!x_l[46]) {
-                VITIS_LOOP_276_13: for (int j = 0; j < 46; j++) {
+                for (int j = 0; j < 46; j++) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19087,17 +19234,17 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         }
         if (I_<24) {
             bool overf = 0;
-            VITIS_LOOP_505_14: for (int j = 45; j >= I_+22; j--) {
+            for (int j = 45; j >= I_+22; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_511_15: for (int j = 45; j >= I_+22; j--){
+                for (int j = 45; j >= I_+22; j--){
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_515_16: for (int j = I_+21; j >= 0; j--) {
+                for (int j = I_+21; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19107,11 +19254,11 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
     } else {
 
         ap_fixed<65,33> x_l = 0;
-        VITIS_LOOP_525_17: for (int j = 32-F_; j < 32+I_; j++){
+        for (int j = 32-F_; j < 32+I_; j++){
 #pragma HLS unroll
  x_l[j] = x[j-(32-F_)];
         }
-        VITIS_LOOP_529_18: for (int j = 32+I_; j <= 64; j++){
+        for (int j = 32+I_; j <= 64; j++){
 #pragma HLS unroll
  x_l[j] = x[W_-1];
         }
@@ -19121,7 +19268,7 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         ap_ufixed<32,0> x_l_fract;
         x_l_fract(31,0) = x_l(31,0);
         bool overf = 0;
-        VITIS_LOOP_539_19: for (int j = 37; j < 64; j++) {
+        for (int j = 37; j < 64; j++) {
 #pragma HLS unroll
  if (x_l[64]!=x_l[j])
                 overf = 1;
@@ -19129,7 +19276,7 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
 
         if (overf||(x_l_int>22)||((x_l_int==22)&&(x_l_fract>=ap_ufixed<32,0>("0x0.2e42fefap0")))) {
             if (!x_l[64]) {
-                VITIS_LOOP_547_20: for (int j = 0; j < 64; j++){
+                for (int j = 0; j < 64; j++){
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19490,17 +19637,17 @@ ap_fixed<W_,I_> exp(ap_fixed<W_,I_> x)
         }
         if (I_<33) {
             bool overf = 0;
-            VITIS_LOOP_908_21: for (int j = 63; j >= I_+31; j--) {
+            for (int j = 63; j >= I_+31; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_914_22: for (int j = 63; j >= I_+31; j--) {
+                for (int j = 63; j >= I_+31; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_918_23: for (int j = I_+30; j >= 0; j--) {
+                for (int j = I_+30; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19616,17 +19763,17 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         }
         y += delta;
             bool overf = 0;
-            VITIS_LOOP_1034_1: for (int j = 4; j >= I_+1; j--) {
+            for (int j = 4; j >= I_+1; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_1040_2: for (int j = 4; j >= I_+1; j--) {
+                for (int j = 4; j >= I_+1; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_1044_3: for (int j = I_; j >= 0; j--) {
+                for (int j = I_; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19713,17 +19860,17 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         y += delta;
 
             bool overf = 0;
-            VITIS_LOOP_1131_4: for (int j = 10; j >= I_+4; j--) {
+            for (int j = 10; j >= I_+4; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_1137_5: for (int j = 10; j >= I_+4; j--) {
+                for (int j = 10; j >= I_+4; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_1141_6: for (int j = I_+3; j >= 0; j--) {
+                for (int j = I_+3; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19742,14 +19889,14 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         ap_ufixed<wf,0> x_l_fract;
         x_l_fract(wf-1,0) = x_l(wf-1,0);
         bool overf = 0;
-        VITIS_LOOP_1160_7: for (int j = wf+3; j < w-1; j++) {
+        for (int j = wf+3; j < w-1; j++) {
 #pragma HLS unroll
  if (x_l[w-1]!=x_l[j])
                 overf = 1;
         }
         if (overf||((x_l_int==7)&&(x_l_fract>ap_ufixed<wf,0>("0x0.9fe7038p0")))) {
             if (!x_l[w-1]) {
-                VITIS_LOOP_1167_8: for (int j = 0; j < 22; j++) {
+                for (int j = 0; j < 22; j++) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19865,17 +20012,17 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         y += delta;
 
             overf = 0;
-            VITIS_LOOP_1283_9: for (int j = 22; j >= I_+10; j--) {
+            for (int j = 22; j >= I_+10; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_1289_10: for (int j = 22; j >= I_+10; j--){
+                for (int j = 22; j >= I_+10; j--){
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_1293_11: for (int j = I_+9; j >= 0; j--) {
+                for (int j = I_+9; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -19895,14 +20042,14 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         ap_ufixed<wf,0> x_l_fract;
         x_l_fract(wf-1,0) = x_l(wf-1,0);
         bool overf = 0;
-        VITIS_LOOP_1313_12: for (int j = wf+4; j < w-1; j++){
+        for (int j = wf+4; j < w-1; j++){
 #pragma HLS unroll
  if (x_l[w-1]!=x_l[j])
                 overf = 1;
         }
         if (overf||((x_l_int==15)&&(x_l_fract>=ap_ufixed<wf,0>("0x0.F1402743D99F8p0")))) {
             if (!x_l[w-1]) {
-                VITIS_LOOP_1320_13: for (int j = 0; j < 46; j++) {
+                for (int j = 0; j < 46; j++) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -20164,17 +20311,17 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         y += delta;
 
             overf = 0;
-            VITIS_LOOP_1582_14: for (int j = 46; j >= I_+22; j--) {
+            for (int j = 46; j >= I_+22; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_1588_15: for (int j = 46; j >= I_+22; j--) {
+                for (int j = 46; j >= I_+22; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_1592_16: for (int j = I_+21; j >= 0; j--) {
+                for (int j = I_+21; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -20198,14 +20345,14 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         x_l_fract(wf-1,0) = x_l(wf-1,0);
 
         bool overf = 0;
-        VITIS_LOOP_1616_17: for (int j = wf+5; j < w-1; j++){
+        for (int j = wf+5; j < w-1; j++){
 #pragma HLS unroll
  if (x_l[w-1]!=x_l[j])
                 overf = 1;
         }
         if (overf||(x_l_int>22)||((x_l_int==22)&&(x_l_fract>=ap_ufixed<wf,0>("0x0.2E42FEFA39EF35783p0")))) {
             if (!x_l[w-1]) {
-                VITIS_LOOP_1623_18: for (int j = 0; j < 64; j++) {
+                for (int j = 0; j < 64; j++) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -20635,17 +20782,17 @@ ap_fixed<WO_,I_> exp_core(ap_fixed<WI_,I_> x)
         y += delta;
 
             overf = 0;
-            VITIS_LOOP_2053_19: for (int j = 64; j >= I_+31; j--) {
+            for (int j = 64; j >= I_+31; j--) {
 #pragma HLS unroll
  if (y[j])
                     overf = 1;
             }
             if (overf) {
-                VITIS_LOOP_2059_20: for (int j = 64; j >= I_+31; j--) {
+                for (int j = 64; j >= I_+31; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_2063_21: for (int j = I_+30; j >= 0; j--) {
+                for (int j = I_+30; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -20774,18 +20921,18 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
 
         if(I<3) {
             bool overf = 0;
-            VITIS_LOOP_2192_1: for(int j=3; j>=I+1; j--) {
+            for(int j=3; j>=I+1; j--) {
 #pragma HLS unroll
  if(y[j]) {
                     overf = 1;
                 }
             }
             if (overf) {
-                VITIS_LOOP_2199_2: for(int j=3; j>=I+1; j--) {
+                for(int j=3; j>=I+1; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_2203_3: for(int j=I; j>=0; j--) {
+                for(int j=I; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -20832,18 +20979,18 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
 
         if(I < 5) {
             bool overf = 0;
-            VITIS_LOOP_2250_4: for(int j=7; j>=3+I; j--) {
+            for(int j=7; j>=3+I; j--) {
 #pragma HLS unroll
  if(y[j]) {
                     overf = 1;
                 }
             }
             if(overf) {
-                VITIS_LOOP_2257_5: for(int j=7; j>=3+I; j--) {
+                for(int j=7; j>=3+I; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_2261_6: for(int j=I+2; j>=0; j--) {
+                for(int j=I+2; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -20861,7 +21008,7 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
         x_l_fract(7,0) = x_l(7,0);
 
         bool overf_1 = 0;
-        VITIS_LOOP_2279_7: for(int j=11; j<16; j++) {
+        for(int j=11; j<16; j++) {
 #pragma HLS unroll
  if(x_l[16]!=x_l[j]) {
                 overf_1 = 1;
@@ -20916,18 +21063,18 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
 
         if(I < 9) {
             bool overf_2 = 0;
-            VITIS_LOOP_2334_8: for(int j=15; j>=7+I; j--) {
+            for(int j=15; j>=7+I; j--) {
 #pragma HLS unroll
  if(y[j]) {
                     overf_2 = 1;
                 }
             }
             if(overf_2) {
-                VITIS_LOOP_2341_9: for(int j=15; j>=7+I; j--) {
+                for(int j=15; j>=7+I; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_2345_10: for(int j=6+I; j>=0; j--) {
+                for(int j=6+I; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -20945,7 +21092,7 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
         x_l_fract(15,0) = x_l(15,0);
 
         bool overf_1 = 0;
-        VITIS_LOOP_2363_11: for(int j=20; j<32; j++) {
+        for(int j=20; j<32; j++) {
 #pragma HLS unroll
  if(x_l[32]!=x_l[j]) {
                 overf_1 = 1;
@@ -21034,18 +21181,18 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
 
         if(I<17) {
             bool overf_2 = 0;
-            VITIS_LOOP_2452_12: for(int j=31; j>=I+15; j--) {
+            for(int j=31; j>=I+15; j--) {
 #pragma HLS unroll
  if(y[j]) {
                     overf_2 = 1;
                 }
             }
             if(overf_2) {
-                VITIS_LOOP_2459_13: for(int j=31; j>=I+15; j--) {
+                for(int j=31; j>=I+15; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_2463_14: for(int j=I+14; j>=0; j--) {
+                for(int j=I+14; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -21055,11 +21202,11 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
 
     } else {
         ap_fixed<65,33> x_l = 0;
-        VITIS_LOOP_2473_15: for(int j=32-F; j<32+I; j++) {
+        for(int j=32-F; j<32+I; j++) {
 #pragma HLS unroll
  x_l[j] = x[j-(32-F)];
         }
-        VITIS_LOOP_2477_16: for(int j=32+I; j<=64; j++) {
+        for(int j=32+I; j<=64; j++) {
 #pragma HLS unroll
  x_l[j] = x[W-1];
         }
@@ -21070,7 +21217,7 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
         x_l_fract(31,0) = x_l(31,0);
 
         bool overf_1 = 0;
-        VITIS_LOOP_2488_17: for(int j=37; j<64; j++) {
+        for(int j=37; j<64; j++) {
 #pragma HLS unroll
  if(x_l[j]!=x_l[64]) {
                 overf_1 = 1;
@@ -21078,7 +21225,7 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
         }
         if(overf_1) {
             if(!x_l[64]) {
-                VITIS_LOOP_2496_18: for(int j=0; j<64; j++) {
+                for(int j=0; j<64; j++) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -21403,18 +21550,18 @@ ap_fixed<W,I> exp2(ap_fixed<W,I> x) {
 
         if(I<33) {
             bool overf_2 = 0;
-            VITIS_LOOP_2821_19: for(int j=63; j>=I+31; j--) {
+            for(int j=63; j>=I+31; j--) {
 #pragma HLS unroll
  if(y[j]) {
                     overf_2 = 1;
                 }
             }
             if(overf_2) {
-                VITIS_LOOP_2828_20: for(int j=63; j>=I+31; j--) {
+                for(int j=63; j>=I+31; j--) {
 #pragma HLS unroll
  y[j] = 0;
                 }
-                VITIS_LOOP_2832_21: for(int j=I+30; j>=0; j--) {
+                for(int j=I+30; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
                 }
@@ -21502,18 +21649,18 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   }
   if(I_<4){
    bool overf = 0;
-   VITIS_LOOP_2920_1: for(int j = 5; j>=I_+2; j--) {
+   for(int j = 5; j>=I_+2; j--) {
 #pragma HLS unroll
  if(y[j]) {
      overf = 1;
     }
    }
    if(overf) {
-    VITIS_LOOP_2927_2: for(int j = 5; j>=I_+2; j--) {
+    for(int j = 5; j>=I_+2; j--) {
 #pragma HLS unroll
  y[j] = 0;
     }
-    VITIS_LOOP_2931_3: for(int j = I_+1; j>=0; j--) {
+    for(int j = I_+1; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
     }
@@ -21528,7 +21675,7 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   ap_ufixed<6,0> x_l_fract;
   x_l_fract(5,0) = x_l(5,0);
   bool overf = 0;
-  VITIS_LOOP_2946_4: for(int j = 11; j >=7; j--) {
+  for(int j = 11; j >=7; j--) {
 #pragma HLS unroll
  if(x_l[12]!=x_l[j]) {
     overf = 1;
@@ -21560,18 +21707,18 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   }
   if(I_<7) {
    bool overf = 0;
-   VITIS_LOOP_2978_5: for(int j = 11; j >= I_+5; j--) {
+   for(int j = 11; j >= I_+5; j--) {
 #pragma HLS unroll
  if(y[j]) {
      overf = 1;
     }
    }
    if(overf) {
-    VITIS_LOOP_2985_6: for(int j = 11; j>= I_+5; j--) {
+    for(int j = 11; j>= I_+5; j--) {
 #pragma HLS unroll
  y[j] = 0;
     }
-    VITIS_LOOP_2989_7: for(int j = I_+4; j>=0; j--) {
+    for(int j = I_+4; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
     }
@@ -21586,7 +21733,7 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   ap_ufixed<13,0> x_l_fract;
   x_l_fract(12,0) = x_l(12,0);
   bool overf = 0;
-  VITIS_LOOP_3004_8: for(int j = 25; j>=15; j--) {
+  for(int j = 25; j>=15; j--) {
 #pragma HLS unroll
  if(x_l[26]!=x_l[j]) {
     overf = 1;
@@ -21636,18 +21783,18 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   }
   if(I_<14) {
    bool overf = 0;
-   VITIS_LOOP_3054_9: for(int j = 25; j>= I_+12; j--) {
+   for(int j = 25; j>= I_+12; j--) {
 #pragma HLS unroll
  if(y[j]) {
      overf = 1;
     }
    }
    if(overf) {
-    VITIS_LOOP_3061_10: for(int j = 25; j>=I_+12; j--) {
+    for(int j = 25; j>=I_+12; j--) {
 #pragma HLS unroll
  y[j] = 0;
     }
-    VITIS_LOOP_3065_11: for(int j = I_+11; j>=0; j--) {
+    for(int j = I_+11; j>=0; j--) {
 #pragma HLS unroll
  y[j] = 1;
     }
@@ -21662,7 +21809,7 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   ap_ufixed<26,0> x_l_fract;
   x_l_fract(25,0) = x_l(25,0);
   bool overf = 0;
-  VITIS_LOOP_3080_12: for(int j = 51; j >= 29; j--) {
+  for(int j = 51; j >= 29; j--) {
 #pragma HLS unroll
  if(x_l[52]!=x_l[j]) {
     overf = 1;
@@ -21799,18 +21946,18 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   }
   if(I_<27) {
    bool overf = 0;
-   VITIS_LOOP_3217_13: for(int j = 51; j >= 25 + I_; j--) {
+   for(int j = 51; j >= 25 + I_; j--) {
 #pragma HLS unroll
  if(y[j]) {
      overf = 1;
     }
    }
    if(overf) {
-    VITIS_LOOP_3224_14: for(int j = 51; j>=25 + I_; j--) {
+    for(int j = 51; j>=25 + I_; j--) {
 #pragma HLS unroll
  y[j] = 0;
     }
-    VITIS_LOOP_3228_15: for(int j = 24 + I_; j >= 0; j--) {
+    for(int j = 24 + I_; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
     }
@@ -21825,7 +21972,7 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   ap_ufixed<32,0> x_l_fract;
   x_l_fract(31,0) = x_l(31,0);
   bool overf = 0;
-  VITIS_LOOP_3243_16: for(int j = 63; j >= 36; j--) {
+  for(int j = 63; j >= 36; j--) {
 #pragma HLS unroll
  if(x_l[64]!=x_l[j]) {
     overf = 1;
@@ -21985,18 +22132,18 @@ ap_fixed<W_,I_> exp10(ap_fixed<W_,I_> x) {
   }
   if(I_<33) {
    bool overf = 0;
-   VITIS_LOOP_3403_17: for(int j = 63; j >= 31 + I_; j--) {
+   for(int j = 63; j >= 31 + I_; j--) {
 #pragma HLS unroll
  if(y[j]) {
      overf = 1;
     }
    }
    if(overf) {
-    VITIS_LOOP_3410_18: for(int j = 63; j >= 31 + I_; j--) {
+    for(int j = 63; j >= 31 + I_; j--) {
 #pragma HLS unroll
  y[j] = 0;
     }
-    VITIS_LOOP_3414_19: for(int j = 30 + I_; j >= 0; j--) {
+    for(int j = 30 + I_; j >= 0; j--) {
 #pragma HLS unroll
  y[j] = 1;
     }
@@ -22711,7 +22858,7 @@ ap_fixed<W_,I_> log(ap_fixed<W_,I_> x)
             ap_ufixed<1 + org_wf,1> b_frac=0;
             b_frac[org_wf] = 0;
             b_frac(org_wf-1,org_wf-W_+1) = x(W_-2,0);
-            VITIS_LOOP_703_1: for (b_exp = I_-1; b_exp >= -F_; b_exp--) {
+            for (b_exp = I_-1; b_exp >= -F_; b_exp--) {
 #pragma HLS unroll
  if ((!b_frac[org_wf]&b_frac[org_wf-1]&b_frac[org_wf-2])|(b_frac[org_wf]&!b_frac[org_wf-1]))
                     break;
@@ -22929,7 +23076,7 @@ ap_fixed<W_,I_> log10(ap_fixed<W_,I_> x)
             ap_ufixed<1 + org_wf,1> b_frac=0;
             b_frac[org_wf] = 0;
             b_frac(org_wf-1,org_wf-W_+1) = x(W_-2,0);
-            VITIS_LOOP_921_1: for (b_exp = I_-1; b_exp >= -F_; b_exp--) {
+            for (b_exp = I_-1; b_exp >= -F_; b_exp--) {
 #pragma HLS unroll
  if ((!b_frac[org_wf]&b_frac[org_wf-1]&b_frac[org_wf-2])|(b_frac[org_wf]&!b_frac[org_wf-1]))
                     break;
@@ -23346,7 +23493,7 @@ ap_fixed<W_,I_> log2(ap_fixed<W_,I_> x)
             ap_ufixed<1 + org_wf,1> b_frac=0;
             b_frac[org_wf] = 0;
             b_frac(org_wf-1,org_wf-W_+1) = x(W_-2,0);
-            VITIS_LOOP_1345_1: for (b_exp = I_-1; b_exp >= -F_; b_exp--) {
+            for (b_exp = I_-1; b_exp >= -F_; b_exp--) {
 #pragma HLS unroll
  if ((!b_frac[org_wf]&b_frac[org_wf-1]&b_frac[org_wf-2])|(b_frac[org_wf]&!b_frac[org_wf-1]))
                     break;
@@ -23669,7 +23816,7 @@ ap_fixed<W_,I_> sqrt_fixed(ap_fixed<W_,I_> x)
         ap_ufixed< prcs/2, 0> res_FH = 0;
 # 242 "/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h"
     if (I_>0)
-        VITIS_LOOP_243_1: for ( int pos = msbr-1; pos >= 0; pos-- ) {
+        for ( int pos = msbr-1; pos >= 0; pos-- ) {
 #pragma HLS unroll
  ap_ufixed<msbm , msbm> mul_I = 0;
 
@@ -23697,7 +23844,7 @@ ap_fixed<W_,I_> sqrt_fixed(ap_fixed<W_,I_> x)
                 res_I [ pos ] = 1;
             }
         }
-        VITIS_LOOP_271_2: for ( int pos = -1; pos >= -F_-1; pos-- ) {
+        for ( int pos = -1; pos >= -F_-1; pos-- ) {
 #pragma HLS unroll
  ap_ufixed<msbm + prcs , msbm> mul = 0;
 
@@ -24401,7 +24548,7 @@ ap_fixed<W_,I_> pow(ap_fixed<W_,I_> x, ap_fixed<W_,I_> y) {
             return 0;
         } else {
 
-            VITIS_LOOP_48_1: for (int j = 0; j < W_-1; j++){
+            for (int j = 0; j < W_-1; j++){
 #pragma HLS unroll
  r[j] = 1;
             }
@@ -24454,7 +24601,7 @@ ap_fixed<W_,I_> pow(ap_fixed<W_,I_> x, ap_fixed<W_,I_> y) {
     bool e_overf = 0;
     bool overf = 0;
 
-    VITIS_LOOP_109_2: for (int j = F_l+F_+I_m-1; j < F_l+W_+5; j++){
+    for (int j = F_l+F_+I_m-1; j < F_l+W_+5; j++){
 #pragma HLS unroll
  if (mul_y_ln[F_l+W_+5]!=mul_y_ln[j])
             m_overf = 1;
@@ -24468,7 +24615,7 @@ ap_fixed<W_,I_> pow(ap_fixed<W_,I_> x, ap_fixed<W_,I_> y) {
 
 
         if (I_<I_m) {
-            VITIS_LOOP_123_3: for (int j = WO_m-1; j >= W_-1; j--) {
+            for (int j = WO_m-1; j >= W_-1; j--) {
 #pragma HLS unroll
  if (exp_r[j])
                     e_overf=1;
@@ -24498,7 +24645,7 @@ ap_fixed<W_,I_> pow(ap_fixed<W_,I_> x, ap_fixed<W_,I_> y) {
 
         if(overf) {
             r[W_-1] = 0;
-            VITIS_LOOP_153_4: for (int j = W_-2; j >= 0; j--){
+            for (int j = W_-2; j >= 0; j--){
 #pragma HLS unroll
  r[j] = 1;
             }
@@ -24583,7 +24730,7 @@ ap_fixed<W_,I_> pown(ap_fixed<W_,I_> x, int n) {
 
 
 
-           VITIS_LOOP_281_1: for(int i = wf_log+we_log-2; i > WI_e - 2; --i) {
+           for(int i = wf_log+we_log-2; i > WI_e - 2; --i) {
 #pragma HLS unroll
  if(x_log_mul_n[i] != x_log_mul_n[wf_log+we_log-1]){
 
@@ -24603,7 +24750,7 @@ ap_fixed<W_,I_> pown(ap_fixed<W_,I_> x, int n) {
 
 
            if (I_<I_e) {
-               VITIS_LOOP_301_2: for (int j = WO_e-1; j >= W_-1; j--) {
+               for (int j = WO_e-1; j >= W_-1; j--) {
 #pragma HLS unroll
 
  if (exp_r[j])
@@ -24617,7 +24764,7 @@ ap_fixed<W_,I_> pown(ap_fixed<W_,I_> x, int n) {
                if(x_sig && !n_is_odd) {
                    r[W_-1] = 1;
                } else {
-                   VITIS_LOOP_315_3: for(int i = 0; i < W_-1; ++i) {
+                   for(int i = 0; i < W_-1; ++i) {
 #pragma HLS unroll
  r[W_-1] = 1;
                    }
@@ -24710,7 +24857,7 @@ ap_fixed<W_,I_> rootn(ap_fixed<W_,I_> x, int n) {
         bool ovf = 0;
 
         if(I_ < I_d) {
-           VITIS_LOOP_433_1: for (int j =WO_d-1; j >= W_-1; j--) {
+           for (int j =WO_d-1; j >= W_-1; j--) {
 #pragma HLS unroll
 
  if (exp_r[j])
@@ -24724,7 +24871,7 @@ ap_fixed<W_,I_> rootn(ap_fixed<W_,I_> x, int n) {
            if(x[W_-1]&&n_is_odd) {
               r[W_-1] = 1;
            } else {
-              VITIS_LOOP_447_2: for(int i = 0; i < W_-1; ++i) {
+              for(int i = 0; i < W_-1; ++i) {
 #pragma HLS unroll
  r[i] = 1;
               }
@@ -24844,7 +24991,7 @@ ap_fixed<W_,I_> fdim_fixed(ap_fixed<W_,I_> x, ap_fixed<W_,I_> y )
         x_overf = x - y;
         overf = x_overf[W_-1];
         if(overf) {
-            VITIS_LOOP_33_1: for (int i = 0; i < W_-1; i++){
+            for (int i = 0; i < W_-1; i++){
 #pragma HLS UNROLL
  xs[i] = 1;
             }
@@ -24968,7 +25115,7 @@ ap_fixed<W_,I_> maxmag_fixed(ap_fixed<W_,I_> x, ap_fixed<W_,I_> y )
 
     if(xs_t[W_-1])
     {
-            VITIS_LOOP_183_1: for (int i = 0; i < W_-1; i++){
+            for (int i = 0; i < W_-1; i++){
 #pragma HLS UNROLL
  xs[i] = 1;
             }
@@ -25023,7 +25170,7 @@ ap_fixed<W_,I_> minmag_fixed(ap_fixed<W_,I_> x, ap_fixed<W_,I_> y )
     }
     if(xs_t[W_-1])
     {
-            VITIS_LOOP_248_1: for (int i = 0; i < W_-1; i++){
+            for (int i = 0; i < W_-1; i++){
 #pragma HLS UNROLL
  xs[i] = 1;
             }
@@ -25290,7 +25437,7 @@ ap_fixed<W,I> frexp(ap_fixed<W,I> x,
     int pos = 0;
 
     static const int loop_nm = W > 6 ? (W + 5)/6 : 1;
-    VITIS_LOOP_44_1: for(int l = loop_nm; l > 0; --l){
+    for(int l = loop_nm; l > 0; --l){
 #pragma HLS pipeline II=1
  ap_uint<6> t = 0;
        if(l*6 > W) t = x_p(W - 1, (l - 1) * 6);
@@ -25541,7 +25688,7 @@ template <int W_, int I_>
 bool generic_all(ap_fixed<W_,I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_16_1: for (int i=0; i<W_;i++)
+ for (int i=0; i<W_;i++)
      if (x[i]==0)
       return false;
     return true;
@@ -25552,7 +25699,7 @@ template <int W_, int I_>
 bool generic_all(ap_ufixed<W_,I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_27_1: for (int i=0; i<W_;i++)
+ for (int i=0; i<W_;i++)
      if (x[i]==0)
       return false;
     return true;
@@ -25563,7 +25710,7 @@ template <int I_>
 bool generic_all(ap_int<I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_38_1: for (int i=0; i<I_;i++)
+ for (int i=0; i<I_;i++)
      if (x[i]==0)
       return false;
     return true;
@@ -25574,7 +25721,7 @@ template <int I_>
 bool generic_all(ap_uint<I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_49_1: for (int i=0; i<I_;i++)
+ for (int i=0; i<I_;i++)
      if (x[i]==0)
       return false;
     return true;
@@ -25585,7 +25732,7 @@ template <int W_, int I_>
 bool generic_any(ap_fixed<W_,I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_60_1: for (int i=0; i<W_;i++)
+ for (int i=0; i<W_;i++)
      if (x[i]==1)
       return true;
     return false;
@@ -25596,7 +25743,7 @@ template <int W_, int I_>
 bool generic_any(ap_ufixed<W_,I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_71_1: for (int i=0; i<W_;i++)
+ for (int i=0; i<W_;i++)
      if (x[i]==1)
       return true;
     return false;
@@ -25607,7 +25754,7 @@ template <int I_>
 bool generic_any(ap_int<I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_82_1: for (int i=0; i<I_;i++)
+ for (int i=0; i<I_;i++)
      if (x[i]==1)
       return true;
     return false;
@@ -25618,7 +25765,7 @@ template <int I_>
 bool generic_any(ap_uint<I_> x)
 {
 #pragma HLS pipeline II=1
- VITIS_LOOP_93_1: for (int i=0; i<I_;i++)
+ for (int i=0; i<I_;i++)
      if (x[i]==1)
       return true;
     return false;
@@ -27977,7 +28124,7 @@ namespace hls_mad {
         ap_fixed<W_,I_> r = 0;
 
         if(sum[W_-1]!=sum[W_]) {
-           VITIS_LOOP_26_1: for(int i = 0; i < W_-1; ++i) {
+           for(int i = 0; i < W_-1; ++i) {
 #pragma HLS unroll
  r[i] = !sum[W_];
            }
@@ -28041,7 +28188,7 @@ ap_fixed<W, I> cbrt_fixed(ap_fixed<W,I> x) {
       ap_ufixed<2*msbr+prcs+2,2*msbr+2> resq = 0;
       ap_ufixed<msbr+prcs+1, msbr+1> res = 0;
       ap_ufixed<3*msbr+prcs+4, 3*msbr+4> x_rem = x_p;
-      VITIS_LOOP_40_1: for(int pos = msbr - 1 ; pos >= -F-1; pos--) {
+      for(int pos = msbr - 1 ; pos >= -F-1; pos--) {
           ap_ufixed<3*msbr+prcs+2, 3*msbr+2> mul1a = 0;
           ap_ufixed<3*msbr+prcs+1, 3*msbr+1> mul1b = 0;
 
@@ -28158,7 +28305,7 @@ ap_fixed<W, I> hypot_fixed(ap_fixed<W, I> x, ap_fixed<W, I> y) {
     ap_ufixed<2*msbr+1,2*msbr+1> x_l_I = 0;
     if(I>0) {
         x_l_I = xy_sq(2*W-1, 2*W-2*I);
-        VITIS_LOOP_49_1: for(int pos = msbr - 1; pos >= 0; pos--) {
+        for(int pos = msbr - 1; pos >= 0; pos--) {
             ap_ufixed<2*msbr,2*msbr> mul_I = 0;
 
 
@@ -28183,7 +28330,7 @@ ap_fixed<W, I> hypot_fixed(ap_fixed<W, I> x, ap_fixed<W, I> y) {
     ap_ufixed<prcs/2,0> res_F = 0;
     ap_ufixed<prcs/2,0> x_l_FH = xy_sq;
     ap_ufixed<prcs/2, -prcs/2> x_l_FL = xy_sq;
-    VITIS_LOOP_81_2: for(int pos = -1; pos >= -F-1; pos--) {
+    for(int pos = -1; pos >= -F-1; pos--) {
         ap_ufixed<msbr+prcs, msbr> mul = 0;
 
 
@@ -28253,7 +28400,7 @@ ap_fixed<W, I> hypot_fixed(ap_fixed<W, I> x, ap_fixed<W, I> y) {
     ap_fixed<W,I> r = 0;
     if(res[msbr+prcs/2-1]) {
 
-       VITIS_LOOP_169_3: for(int i = 0; i < W - 1; ++i) {
+       for(int i = 0; i < W - 1; ++i) {
 #pragma HLS unroll
  r[i] = 1;
        }
@@ -30481,15 +30628,15 @@ namespace hls {
 void OUT_PROJ(
     const int8_t vectorA[D_MODEL],
     const int4_t matrixB[D_MODEL * D_TILE_WO],
-    const int32_t bias[D_TILE_WO],
+    const int4_t bias[D_TILE_WO],
     int32_t out[D_TILE_WO]
 ) {
 #pragma HLS INLINE off
 # 24 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
- VITIS_LOOP_24_1: for (int t = 0; t < D_TILE_WO; ++t) {
+ for (int t = 0; t < D_TILE_WO; ++t) {
 #pragma HLS UNROLL
- int32_t acc = bias[t];
-        VITIS_LOOP_27_2: for (int i = 0; i < D_MODEL; ++i) {
+ int32_t acc = static_cast<int32_t>(bias[t]);
+        for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  const int4_t w = matrixB[t * D_MODEL + i];
             acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
@@ -30499,10 +30646,10 @@ void OUT_PROJ(
 }
 
 void REQUANT_D_MODEL_int32_to_int8(
-    int32_t x32[D_MODEL],
-    int32_t M,
-    int32_t n,
-    int32_t z_out,
+    const int32_t x32[D_MODEL],
+    const int32_t M,
+    const int32_t n,
+    const int32_t z_out,
 
     int8_t y8[D_MODEL]
 ) {
@@ -30511,7 +30658,7 @@ void REQUANT_D_MODEL_int32_to_int8(
 
 
 
-    VITIS_LOOP_49_1: for (int t = 0; t < D_MODEL; ++t) {
+    for (int t = 0; t < D_MODEL; ++t) {
 #pragma HLS UNROLL
  int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
         int64_t rounded = 1LL << (n - 1);
@@ -30541,7 +30688,7 @@ void LAYER_NORM(
  int32_t sum = 0;
     int32_t square = 0;
 
-    VITIS_LOOP_79_1: for (int i = 0; i < D_MODEL; ++i) {
+    for (int i = 0; i < D_MODEL; ++i) {
         sum += static_cast<int32_t>(x[i]);
         square += static_cast<int32_t>(x[i]) * static_cast<int32_t>(x[i]);
     }
@@ -30556,14 +30703,13 @@ void LAYER_NORM(
     ap_fixed<32, 16> v = (variance * variance) + ap_fixed<32, 16>(epsilon);
     ap_fixed<32, 16> inv_std = ap_fixed<32, 16>(1) / hls::sqrt(v);
 
-    VITIS_LOOP_94_2: for (int i = 0; i < D_MODEL; ++i) {
+    for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  ap_fixed<32, 16> normalized = (ap_fixed<32, 16>(x[i]) - mean) * inv_std;
         ap_fixed<32, 16> scaled = (normalized * ap_fixed<32, 16>(gamma[i])) + ap_fixed<32, 16>(beta[i]);
         y[i] = static_cast<int32_t>(scaled);
     }
 }
-
 
 
 void FFN_PRE_ACT(
@@ -30575,10 +30721,10 @@ void FFN_PRE_ACT(
 ) {
     const int16_t ACT_MIN = -32768;
     const int16_t ACT_MAX = 32767;
-    VITIS_LOOP_113_1: for (int i = 0; i < D_TILE_W1; ++i) {
+    for (int i = 0; i < D_TILE_W1; ++i) {
 #pragma HLS PIPELINE II=1
  int32_t acc = static_cast<int32_t>(bias[i]);
-        VITIS_LOOP_116_2: for (int j = 0; j < D_MODEL; ++j) {
+        for (int j = 0; j < D_MODEL; ++j) {
 #pragma HLS UNROLL factor=4
  const int4_t w = weights[i * D_MODEL + j];
             acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
@@ -30594,7 +30740,7 @@ void FFN_ACT_RELU(
     const int16_t input[D_FFN],
     int16_t output[D_FFN]
 ) {
-    VITIS_LOOP_132_1: for (int i = 0; i < D_FFN; ++i) {
+    for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS PIPELINE II=1
  int16_t v = input[i];
         if (v < 0) {
@@ -30613,10 +30759,10 @@ void FFN_POST_ACT(
     int32_t output[D_TILE_W2]
 ) {
 #pragma HLS INLINE off
- VITIS_LOOP_151_1: for (int i = 0; i < D_TILE_W2; ++i) {
+ for (int i = 0; i < D_TILE_W2; ++i) {
 #pragma HLS PIPELINE II=1
  int32_t acc = static_cast<int32_t>(bias[i]);
-        VITIS_LOOP_154_2: for (int j = 0; j < D_FFN; ++j) {
+        for (int j = 0; j < D_FFN; ++j) {
 #pragma HLS UNROLL factor=4
  const int4_t w = weights[i * D_FFN + j];
             acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
@@ -30633,7 +30779,7 @@ void RES_ADD(
     const int8_t residual[D_MODEL],
     int8_t output[D_MODEL]
 ) {
-    VITIS_LOOP_171_1: for (int i = 0; i < D_MODEL; ++i) {
+    for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  output[i] = input[i] + residual[i];
     }
@@ -30659,59 +30805,16 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     uint32_t &mem_op,
 
 
-
-
-    int8_t int8_activation[D_MODEL],
-
-
-    int4_t OUT_PROJ_valueB[D_MODEL * D_TILE_WO],
-    int32_t OUT_PROJ_bias[D_TILE_WO],
-    int32_t OUT_PROJ_accum[D_TILE_WO],
-
-
-    int4_t FFN1_weights1[D_MODEL * D_TILE_W1],
-    int4_t FFN1_biases[D_TILE_W1],
-    int16_t FFN1_scale[D_TILE_W1],
-    int16_t FFN1_output[D_TILE_W1],
-
-
-    int16_t RELU_input[D_FFN],
-    int16_t RELU_output[D_FFN],
-
-
-    int16_t FFN2_input[D_FFN],
-    int4_t FFN2_weights2[D_TILE_W2 * D_FFN],
-    int4_t FFN2_biases[D_TILE_W2],
-    int16_t FFN2_scale[D_TILE_W2],
-    int32_t FFN2_output[D_MODEL],
-
-
-    int32_t requant_activation[D_MODEL],
-    int32_t requant_scale,
-    int32_t requant_shift,
-    int32_t requant_zero_point,
-    int8_t requant_output[D_MODEL],
-
-
-    int32_t layerNorm_gamma[D_MODEL],
-    int32_t layerNorm_beta[D_MODEL],
-    int32_t layerNorm_epsilon,
-    int32_t layerNorm_out[D_MODEL],
-
-
-    int8_t residualAdd_residual[D_MODEL],
-    int8_t residualAdd_output[D_MODEL],
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES],
 
     bool &error
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=compute_controller
-# 241 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
+# 200 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
 
 #pragma HLS INLINE off
-
-
-
 
  static ComputeState state = ComputeState::IDLE;
     static PendingRequest req;
@@ -30737,7 +30840,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     ComputeState next_state = state;
 
     switch (state) {
-        case ComputeState::IDLE:
+        case ComputeState::IDLE: {
             if (compute_start) {
                 req.instruction = compute_instruction;
                 req.op = static_cast<ComputeOp>(compute_instruction & 0xFFu);
@@ -30768,100 +30871,69 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                 }
             }
             break;
-
-        case ComputeState::WAIT_MEM:
+        }
+        case ComputeState::WAIT_MEM: {
             mem_read_request = true;
             mem_op = req.instruction;
             if (mem_transfer_done) {
                 mem_read_request = false;
-
+                mem_op = 0;
                 next_state = ComputeState::EXECUTE;
             }
             break;
-
-        case ComputeState::EXECUTE:
+        }
+        case ComputeState::EXECUTE: {
             switch (req.op) {
                 case ComputeOp::CMP_OUT_PROJ: {
-                    OUT_PROJ(int8_activation, OUT_PROJ_valueB, OUT_PROJ_bias, OUT_PROJ_accum);
+                    int8_t vectorA[D_MODEL];
+                    int4_t matrixB[D_MODEL * D_TILE_WO];
+                    int4_t bias[D_TILE_WO];
+                    int32_t out[D_TILE_WO];
+
+                    for (int i = 0; i < D_MODEL; ++i) {
+                        vectorA[i] = compute_buf::read_i8(
+                            in_buf,
+                            compute_buf::OutProjLayout::ACT + i);
+                    }
+                    for (int i = 0; i < D_MODEL * D_TILE_WO; ++i) {
+                        matrixB[i] = compute_buf::read_i4(
+                            in_buf,
+                            (compute_buf::OutProjLayout::W * 2) + i);
+                    }
+                    for (int i = 0; i < D_TILE_WO; ++i) {
+                        bias[i] = compute_buf::read_i4(
+                            in_buf,
+                            (compute_buf::OutProjLayout::B * 2) + i);
+                    }
+
+                    OUT_PROJ(vectorA, matrixB, bias, out);
+
+                    for (int t = 0; t < D_TILE_WO; ++t) {
+                        compute_buf::write_i32(out_buf, t * 4, out[t]);
+                    }
                     break;
                 }
-                case ComputeOp::CMP_REQUANT1:{
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale,
-                        requant_shift,
-                        requant_zero_point,
-                        requant_output
-                    );
+                case ComputeOp::CMP_REQUANT1:
+                case ComputeOp::CMP_RESID0:
+                case ComputeOp::CMP_LN0:
+                case ComputeOp::CMP_REQUANT3:
+                case ComputeOp::CMP_FFN_W1:
+                case ComputeOp::CMP_FFN_ACT:
+                case ComputeOp::CMP_FFN_W2:
+                case ComputeOp::CMP_REQUANT4:
+                case ComputeOp::CMP_RESID1:
+                case ComputeOp::CMP_LN1:
+                case ComputeOp::CMP_DEQUANT:
+                case ComputeOp::CMP_LOGITS:
                     break;
-                }
-                case ComputeOp::CMP_RESID0: {
-                    RES_ADD(int8_activation, residualAdd_residual, residualAdd_output);
-                    break;
-                }
-                case ComputeOp::CMP_LN0: {
-                    LAYER_NORM(int8_activation, layerNorm_gamma, layerNorm_beta, layerNorm_epsilon, layerNorm_out);
-                    break;
-                }
-                case ComputeOp::CMP_REQUANT2:{
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale,
-                        requant_shift,
-                        requant_zero_point,
-                        requant_output
-                    );
-                    break;
-                }
-                case ComputeOp::CMP_FFN_W1: {
-                    FFN_PRE_ACT(int8_activation, FFN1_weights1, FFN1_biases, FFN1_scale, FFN1_output);
-                    break;
-                }
-                case ComputeOp::CMP_FFN_ACT: {
-                    FFN_ACT_RELU(RELU_input, RELU_output);
-                    break;
-                }
-                case ComputeOp::CMP_FFN_W2: {
-                    FFN_POST_ACT(FFN2_input, FFN2_weights2, FFN2_biases, FFN2_scale, FFN2_output);
-                    break;
-                }
-                case ComputeOp::CMP_REQUANT3: {
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale,
-                        requant_shift,
-                        requant_zero_point,
-                        requant_output
-                    );
-                    break;
-                }
-                case ComputeOp::CMP_RESID1: {
-                    RES_ADD(int8_activation, residualAdd_residual, residualAdd_output);
-                    break;
-                }
-                case ComputeOp::CMP_LN1: {
-                    LAYER_NORM(int8_activation, layerNorm_gamma, layerNorm_beta, layerNorm_epsilon, layerNorm_out);
-                    break;
-                }
-                case ComputeOp::CMP_REQUANT4: {
-                    REQUANT_D_MODEL_int32_to_int8(
-                        requant_activation,
-                        requant_scale,
-                        requant_shift,
-                        requant_zero_point,
-                        requant_output
-                    );
-                    break;
-                }
-                case ComputeOp::CMP_DEQUANT: {}
-                case ComputeOp::CMP_LOGITS: {}
                 default:
                     error = true;
                     break;
             }
             next_state = ComputeState::MEM_WRITEBACK;
             break;
-        case ComputeState::MEM_WRITEBACK:
+        }
+        case ComputeState::MEM_WRITEBACK: {
             mem_write_request = true;
             mem_op = req.instruction;
             if (mem_transfer_done) {
@@ -30870,11 +30942,12 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                 next_state = ComputeState::DONE;
             }
             break;
-
-        case ComputeState::DONE:
+        }
+        case ComputeState::DONE: {
 
             next_state = ComputeState::IDLE;
             break;
+        }
     }
 
     state = next_state;

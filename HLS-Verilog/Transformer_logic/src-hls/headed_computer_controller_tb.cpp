@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <cstdint>
+#include <cstring>
 
 namespace {
 
@@ -143,11 +144,9 @@ int main() {
     uint32_t mem_op = 0;
 
     int8_t valueA_mem[D_MODEL] = {};
-    int8_t valueA_in[D_MODEL] = {};
-    int4_t valueB_in[D_MODEL * D_TILE_WO] = {};
-    int32_t out_proj_bias[D_TILE_WO] = {};
+    uint8_t in_buf[compute_buf::IN_BUF_BYTES] = {};
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
     int4_t full_weights[D_MODEL * D_MODEL] = {};
-    int32_t out_accum[D_TILE_WO] = {};
     int32_t expected_full[D_MODEL] = {};
     int32_t full_accum[D_MODEL] = {};
 
@@ -221,14 +220,35 @@ int main() {
                 mem_transfer_done = true;
                 mem_busy = false;
                 if (mem_pending == MemPending::READ) {
+                    std::memset(in_buf, 0, sizeof(in_buf));
                     for (int i = 0; i < D_MODEL; ++i) {
-                        valueA_in[i] = valueA_mem[i];
+                        compute_buf::write_i8(
+                            in_buf,
+                            compute_buf::OutProjLayout::ACT + i,
+                            valueA_mem[i]);
                     }
-                    load_tile_weights(valueB_in, full_weights, mem_tile_idx);
+                    if ((mem_tile_idx >= 0) && (mem_tile_idx < NUM_WO_TILES)) {
+                        const int out_base = mem_tile_idx * D_TILE_WO;
+                        for (int t = 0; t < D_TILE_WO; ++t) {
+                            for (int i = 0; i < D_MODEL; ++i) {
+                                const int idx = (t * D_MODEL) + i;
+                                compute_buf::write_i4(
+                                    in_buf,
+                                    (compute_buf::OutProjLayout::W * 2) + idx,
+                                    full_weights[(out_base + t) * D_MODEL + i]);
+                            }
+                        }
+                    }
+                    for (int t = 0; t < D_TILE_WO; ++t) {
+                        compute_buf::write_i4(
+                            in_buf,
+                            (compute_buf::OutProjLayout::B * 2) + t,
+                            int4_t(0));
+                    }
                 } else if (mem_pending == MemPending::WRITE) {
                     for (int t = 0; t < D_TILE_WO; ++t) {
                         const int out = mem_tile_idx * D_TILE_WO + t;
-                        full_accum[out] = out_accum[t];
+                        full_accum[out] = compute_buf::read_i32(out_buf, t * 4);
                     }
                     writeback_pending = false;
                 }
@@ -249,32 +269,8 @@ int main() {
             mem_read_request,
             mem_write_request,
             mem_op,
-            valueA_in,
-            valueB_in,
-            out_proj_bias,
-            out_accum,
-            ffn1_weights,
-            ffn1_biases,
-            ffn1_scale,
-            ffn1_output,
-            relu_input,
-            relu_output,
-            ffn2_input,
-            ffn2_weights,
-            ffn2_biases,
-            ffn2_scale,
-            ffn2_output,
-            requant_activation,
-            requant_scale,
-            requant_shift,
-            requant_zero_point,
-            requant_output,
-            layernorm_gamma,
-            layernorm_beta,
-            layernorm_epsilon,
-            layernorm_out,
-            residual,
-            residual_out,
+            in_buf,
+            out_buf,
             error);
 
         const uint8_t op_field = static_cast<uint8_t>(compute_instruction & 0xFFu);
@@ -342,13 +338,14 @@ int main() {
                 if (compute_done) {
                 for (int t = 0; t < D_TILE_WO; ++t) {
                     const int out = tile_idx * D_TILE_WO + t;
+                    const int32_t got = compute_buf::read_i32(out_buf, t * 4);
                     if (!writeback_pending) {
-                        full_accum[out] = out_accum[t];
+                        full_accum[out] = got;
                     }
-                    if (out_accum[t] != expected_full[out]) {
+                    if (got != expected_full[out]) {
                         std::fprintf(stderr,
                                      "CMP_OUT_PROJ failed at out %d: got %d expected %d\n",
-                                     out, static_cast<int>(out_accum[t]),
+                                     out, static_cast<int>(got),
                                      static_cast<int>(expected_full[out]));
                         return 1;
                     }

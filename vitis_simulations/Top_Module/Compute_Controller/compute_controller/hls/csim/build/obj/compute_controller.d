@@ -20,6 +20,7 @@ obj/compute_controller.o: \
   /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_base.h \
   /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_ref.h \
   /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_special.h \
+  ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_buffer_layout.hpp \
   /tools/Xilinx/2025.1/Vitis/include/hls_math.h \
   /tools/Xilinx/2025.1/Vitis/include/etc/hls_hotbm_apfixed.h \
   /tools/Xilinx/2025.1/Vitis/include/utils/x_hls_defines.h \
