@@ -1,37 +1,62 @@
 #include "compute_controller.hpp"
 #include <ap_fixed.h>
-#include <hls_math.h>
+
+
+// MAC Architecture
+
+
+
+void MAC_ARCHITECTURE(
+    bool start,
+    bool &ready,
+    const int16_t vectorA[VECTOR_MAX],
+    const int4_t matrixB[MATRIX_MAX],
+    const int4_t bias[ACCUM_MAX],
+    bool &complete,
+    int32_t accum_vector[ACCUM_MAX]
+) {
+#pragma HLS INLINE
+#pragma HLS ARRAY_PARTITION variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_OUT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
+
+    static bool busy = false;
+#pragma HLS reset variable = busy
+
+    // Drop ready immediately when a start pulse is present so the handshake
+    // shows the MAC is busy even for single-cycle computes.
+    ready = (!busy) && (!start);
+    complete = false;
+
+    const bool do_compute = (!busy && start);
+    if (do_compute) {
+        busy = true;
+    } else if (busy) {
+        busy = false;
+    }
+
+    if (do_compute) {
+        for (int out = 0; out < ACCUM_MAX; ++out) {
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
+            int32_t acc = static_cast<int32_t>(bias[out]);
+            for (int i = 0; i < VECTOR_MAX; ++i) {
+#pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                const int4_t w = matrixB[out * VECTOR_MAX + i];
+                acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
+            }
+            accum_vector[out] = acc;
+        }
+        complete = true;
+    }
+}
+
+
+
 
 // ---------------------------------------------------------------------------
 // Compute kernels
 // ---------------------------------------------------------------------------
-void OUT_PROJ(
-    const int8_t vectorA[D_MODEL],
-    const int4_t matrixB[D_MODEL * D_TILE_WO],
-    const int4_t bias[D_TILE_WO],
-    int32_t out[D_TILE_WO]
-) {
-#pragma HLS INLINE off
-    /*
-    y =         ^ [] *+ []     ...     [] ^        =     [] ^
-                ^ []    []     ...     [] ^              [] ^
-        D_MODEL ^ ..    ..     ...     .. ^ D_MODEL      .. ^ D_MODEL
-                ^ []    []     ...     [] ^              [] ^
-                ^ []    []     ...     [] ^              [] ^
-                            <-D_MODEL->
-    */
-
-    for (int t = 0; t < D_TILE_WO; ++t) {
-#pragma HLS UNROLL
-        int32_t acc = static_cast<int32_t>(bias[t]);
-        for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS UNROLL
-            const int4_t w = matrixB[t * D_MODEL + i];
-            acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
-        }
-        out[t] = acc;
-    }
-}
 
 void REQUANT_D_MODEL_int32_to_int8(
     const int32_t x32[D_MODEL],   // input vector
@@ -89,7 +114,9 @@ void LAYER_NORM(
     ap_fixed<32, 16> square_mean = square_fx / D_MODEL;
     ap_fixed<32, 16> variance = square_mean - mean * mean;
     ap_fixed<32, 16> v = (variance * variance) + ap_fixed<32, 16>(epsilon);
-    ap_fixed<32, 16> inv_std = ap_fixed<32, 16>(1) / hls::sqrt(v);
+    // ap_fixed<32, 16> inv_std = ap_fixed<32, 16>(1) / hls::sqrt(v);
+    ap_fixed<32, 16> inv_std = 1;
+
 
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL          
@@ -196,28 +223,79 @@ void compute_controller(
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
 
+    // Debug visibility
+    ComputeState &dbg_state,
+    uint32_t    &dbg_req_instruction,
+    uint8_t     &dbg_req_op,
+    uint8_t     &dbg_req_layer,
+    uint8_t     &dbg_req_head,
+    uint8_t     &dbg_req_tile,
+    bool        &dbg_mac_start,
+    bool        &dbg_mac_ready,
+    bool        &dbg_mac_complete,
+
     bool        &error               // [OUTPUT] Error flag on invalid request
 ) {
 #pragma HLS INLINE off
 
     static ComputeState state = ComputeState::IDLE;
+#pragma HLS reset variable = state
     static PendingRequest req;
+
 
     // Outputs based on current state (before any transition).
     compute_ready = (state == ComputeState::IDLE);
     compute_done  = (state == ComputeState::DONE);
-    mem_read_request   = false;
-    mem_write_request  = false;
+    
     // mem_op        = 0;
+    static int16_t vectorA[VECTOR_MAX];
+    static int4_t matrixB[MATRIX_MAX];
+    static int4_t bias[ACCUM_MAX];
+    static int32_t out[ACCUM_MAX];
+#pragma HLS ARRAY_PARTITION variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_OUT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=out cyclic factor=MAC_OUT_UNROLL dim=1
+    bool mac_start = false;
+    static bool mac_ready = true;
+    static bool mac_complete = false;
+    static bool capture_pending = false;
+    
 
     if (reset) {
         state = ComputeState::IDLE;
+        req = PendingRequest{};
         error = false;
         compute_ready = true;
         compute_done  = false;
         mem_read_request   = false;
         mem_write_request = false;
         mem_op        = 0;
+        dbg_state = state;
+        dbg_req_instruction = req.instruction;
+        dbg_req_op = static_cast<uint8_t>(req.op);
+        dbg_req_layer = req.layer_idx;
+        dbg_req_head = req.head_idx;
+        dbg_req_tile = req.tile_idx;
+
+        mac_start = false;
+        mac_ready = true;
+        mac_complete = false;
+        capture_pending = false;
+
+        for (int i = 0; i < VECTOR_MAX; ++i) {
+#pragma HLS UNROLL
+            vectorA[i] = 0;
+        }
+        for (int i = 0; i < MATRIX_MAX; ++i) {
+#pragma HLS UNROLL
+            matrixB[i] = 0;
+        }
+        for (int i = 0; i < ACCUM_MAX; ++i) {
+#pragma HLS UNROLL
+            bias[i] = 0;
+        }
+
         return;
     }
 
@@ -225,34 +303,52 @@ void compute_controller(
 
     switch (state) {
         case ComputeState::IDLE: {
+            capture_pending = false;
             if (compute_start) {
-                req.instruction    = compute_instruction;
-                req.op            = static_cast<ComputeOp>(compute_instruction & 0xFFu);
-                req.layer_idx     = (compute_instruction >> 8) & 0xFFu;
-                req.head_idx      = (compute_instruction >> 16) & 0xFFu;
-                req.tile_idx      = (compute_instruction >> 24) & 0xFFu;
-
-                // Check from proper op request
-                if (req.op == ComputeOp::CMP_OUT_PROJ || 
-                    req.op == ComputeOp::CMP_REQUANT1 || 
-                    req.op == ComputeOp::CMP_RESID0 || 
-                    req.op == ComputeOp::CMP_LN0 || 
-                    req.op == ComputeOp::CMP_REQUANT3 || 
-                    req.op == ComputeOp::CMP_FFN_W1 || 
-                    req.op == ComputeOp::CMP_FFN_ACT || 
-                    req.op == ComputeOp::CMP_FFN_W2 || 
-                    req.op == ComputeOp::CMP_REQUANT4 || 
-                    req.op == ComputeOp::CMP_RESID1 || 
-                    req.op == ComputeOp::CMP_LN1 || 
-                    req.op == ComputeOp::CMP_DEQUANT || 
-                    req.op == ComputeOp::CMP_LOGITS) {
-                    
-                    error = false; // Clear stale errors on a new request.
-                    next_state = ComputeState::WAIT_MEM;
-                } else {
-                    error = true;
-                    next_state = ComputeState::DONE;
-                }
+                mac_start = false;
+                mac_complete = false;
+                req.instruction     = compute_instruction;
+                req.op              = static_cast<ComputeOp>(compute_instruction & 0xFFu);
+                req.layer_idx       = (compute_instruction >> 8) & 0xFFu;
+                req.head_idx        = (compute_instruction >> 16) & 0xFFu;
+                req.tile_idx        = (compute_instruction >> 24) & 0xFFu;
+                next_state = ComputeState::CAPTURE_INSTRUCTION;
+            }
+            break;
+        }
+        case ComputeState::CAPTURE_INSTRUCTION: {
+            if (!capture_pending && compute_instruction != req.instruction) {
+                capture_pending = true;
+                req.instruction     = compute_instruction;
+                req.op              = static_cast<ComputeOp>(compute_instruction & 0xFFu);
+                req.layer_idx       = (compute_instruction >> 8) & 0xFFu;
+                req.head_idx        = (compute_instruction >> 16) & 0xFFu;
+                req.tile_idx        = (compute_instruction >> 24) & 0xFFu;
+                next_state = ComputeState::CAPTURE_INSTRUCTION;
+                break;
+            }
+            capture_pending = false;
+            // This state is now merged into IDLE.
+            // Check from proper op request
+            if (req.op == ComputeOp::CMP_OUT_PROJ || 
+                req.op == ComputeOp::CMP_REQUANT1 || 
+                req.op == ComputeOp::CMP_RESID0 || 
+                req.op == ComputeOp::CMP_LN0 || 
+                req.op == ComputeOp::CMP_REQUANT3 || 
+                req.op == ComputeOp::CMP_FFN_W1 || 
+                req.op == ComputeOp::CMP_FFN_ACT || 
+                req.op == ComputeOp::CMP_FFN_W2 || 
+                req.op == ComputeOp::CMP_REQUANT4 || 
+                req.op == ComputeOp::CMP_RESID1 || 
+                req.op == ComputeOp::CMP_LN1 || 
+                req.op == ComputeOp::CMP_DEQUANT || 
+                req.op == ComputeOp::CMP_LOGITS) {
+                
+                error = false; // Clear stale errors on a new request.
+                next_state = ComputeState::WAIT_MEM;
+            } else {
+                error = true;
+                next_state = ComputeState::DONE;
             }
             break;
         }
@@ -261,7 +357,6 @@ void compute_controller(
             mem_op = req.instruction;
             if (mem_transfer_done) {
                 mem_read_request = false;
-                mem_op = 0;
                 next_state = ComputeState::EXECUTE;
             }
             break;
@@ -269,31 +364,52 @@ void compute_controller(
         case ComputeState::EXECUTE: {
             switch (req.op) {
                 case ComputeOp::CMP_OUT_PROJ: {
-                    int8_t vectorA[D_MODEL];
-                    int4_t matrixB[D_MODEL * D_TILE_WO];
-                    int4_t bias[D_TILE_WO];
-                    int32_t out[D_TILE_WO];
-
                     for (int i = 0; i < D_MODEL; ++i) {
-                        vectorA[i] = compute_buf::read_i8(
-                            in_buf,
-                            compute_buf::OutProjLayout::ACT + i);
+// #pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                        vectorA[i] = static_cast<int16_t>(
+                            compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i));
                     }
-                    for (int i = 0; i < D_MODEL * D_TILE_WO; ++i) {
-                        matrixB[i] = compute_buf::read_i4(
-                            in_buf,
-                            (compute_buf::OutProjLayout::W * 2) + i);
+                    for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
+// #pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                        vectorA[i] = 0;
+                    }
+
+
+                    for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
+                        for (int i = 0; i < VECTOR_MAX; ++i) {
+// #pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                            if (out_idx < D_TILE_WO && i < D_MODEL) {
+                                const int w_idx = (out_idx * D_MODEL) + i;
+                                matrixB[(out_idx * VECTOR_MAX) + i] = compute_buf::read_i4(
+                                    in_buf,
+                                    (compute_buf::OutProjLayout::W * 2) + w_idx);
+                            } else {
+                                matrixB[(out_idx * VECTOR_MAX) + i] = 0;
+                            }
+                        }
                     }
                     for (int i = 0; i < D_TILE_WO; ++i) {
-                        bias[i] = compute_buf::read_i4(
-                            in_buf,
-                            (compute_buf::OutProjLayout::B * 2) + i);
+// #pragma HLS UNROLL factor=MAC_OUT_UNROLL
+                        bias[i] = compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::B * 2) + i);
+                    }
+                    for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
+// #pragma HLS UNROLL factor=MAC_OUT_UNROLL
+                        bias[i] = 0;
                     }
 
-                    OUT_PROJ(vectorA, matrixB, bias, out);
+                    if(mac_ready && !mac_start && !mac_complete) {
+                        mac_start = true;
+                        mac_complete = false;
+                    }
+                    else mac_start = false;
 
-                    for (int t = 0; t < D_TILE_WO; ++t) {
-                        compute_buf::write_i32(out_buf, t * 4, out[t]);
+                    if (mac_complete) {
+                        for (int t = 0; t < D_TILE_WO; ++t) {
+                            compute_buf::write_i32(out_buf, t * 4, out[t]);
+                        }
+                        next_state = ComputeState::MEM_WRITEBACK;
+                    } else {
+                        next_state = ComputeState::EXECUTE;
                     }
                     break;
                 }
@@ -309,12 +425,14 @@ void compute_controller(
                 case ComputeOp::CMP_LN1:
                 case ComputeOp::CMP_DEQUANT:
                 case ComputeOp::CMP_LOGITS:
+                    next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 default:
                     error = true;
+                    next_state = ComputeState::DONE;
                     break;
             }
-            next_state = ComputeState::MEM_WRITEBACK;
+            MAC_ARCHITECTURE(mac_start, mac_ready, vectorA, matrixB, bias, mac_complete, out);
             break;
         }
         case ComputeState::MEM_WRITEBACK: {
@@ -323,16 +441,32 @@ void compute_controller(
             if (mem_transfer_done) {
                 mem_write_request = false;
                 mem_op = 0;
+                mac_complete = false;
                 next_state = ComputeState::DONE;
             }
             break;
         }
         case ComputeState::DONE: {
             // One-cycle done pulse; fall back to idle.
+            req.instruction     = 0;
+            req.op              = static_cast<ComputeOp>(0);
+            req.layer_idx       = 0;
+            req.head_idx        = 0;
+            req.tile_idx        = 0;
             next_state = ComputeState::IDLE;
             break;
         }
     }
 
     state = next_state;
+
+    dbg_state = state;
+    dbg_req_instruction = req.instruction;
+    dbg_req_op = static_cast<uint8_t>(req.op);
+    dbg_req_layer = req.layer_idx;
+    dbg_req_head = req.head_idx;
+    dbg_req_tile = req.tile_idx;
+    dbg_mac_start = mac_start;
+    dbg_mac_ready = mac_ready;
+    dbg_mac_complete = mac_complete;
 }

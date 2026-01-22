@@ -1,0 +1,148 @@
+
+
+================================================================
+== Vitis HLS Report for 'compute_controller_Pipeline_VITIS_LOOP_372_5'
+================================================================
+* Date:           Wed Jan 21 19:44:11 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  1.893 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval |                    Pipeline                    |
+    |   min   |   max   |    min   |    max   | min | max |                      Type                      |
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |       16|       16|  0.160 us|  0.160 us|   15|   15|  loop auto-rewind stp (delay=0 clock cycles(s))|
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                    |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |      Loop Name     |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_372_5  |       14|       14|         1|          1|          1|    14|       yes|
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|      24|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|       -|       -|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|      27|    -|
+|Register         |        -|     -|       7|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     0|       7|      51|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|     0|      ~0|      ~0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +----------------------+----------+----+---+----+------------+------------+
+    |     Variable Name    | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +----------------------+----------+----+---+----+------------+------------+
+    |add_ln372_fu_154_p2   |         +|   0|  0|  12|           5|           1|
+    |icmp_ln372_fu_116_p2  |      icmp|   0|  0|  12|           5|           5|
+    +----------------------+----------+----+---+----+------------+------------+
+    |Total                 |          |   0|  0|  24|          10|           6|
+    +----------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +--------------------+----+-----------+-----+-----------+
+    |        Name        | LUT| Input Size| Bits| Total Bits|
+    +--------------------+----+-----------+-----+-----------+
+    |ap_done_int         |   9|          2|    1|          2|
+    |ap_sig_allocacmp_i  |   9|          2|    5|         10|
+    |i_1_fu_48           |   9|          2|    5|         10|
+    +--------------------+----+-----------+-----+-----------+
+    |Total               |  27|          6|   11|         22|
+    +--------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------+---+----+-----+-----------+
+    |     Name    | FF| LUT| Bits| Const Bits|
+    +-------------+---+----+-----+-----------+
+    |ap_CS_fsm    |  1|   0|    1|          0|
+    |ap_done_reg  |  1|   0|    1|          0|
+    |i_1_fu_48    |  5|   0|    5|          0|
+    +-------------+---+----+-----+-----------+
+    |Total        |  7|   0|    7|          0|
+    +-------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++---------------------------------------------------------------------------------+-----+-----+------------+------------------------------------------------------------------------+--------------+
+|                                    RTL Ports                                    | Dir | Bits|  Protocol  |                              Source Object                             |    C Type    |
++---------------------------------------------------------------------------------+-----+-----+------------+------------------------------------------------------------------------+--------------+
+|ap_clk                                                                           |   in|    1|  ap_ctrl_hs|                            compute_controller_Pipeline_VITIS_LOOP_372_5|  return value|
+|ap_rst                                                                           |   in|    1|  ap_ctrl_hs|                            compute_controller_Pipeline_VITIS_LOOP_372_5|  return value|
+|ap_start                                                                         |   in|    1|  ap_ctrl_hs|                            compute_controller_Pipeline_VITIS_LOOP_372_5|  return value|
+|ap_done                                                                          |  out|    1|  ap_ctrl_hs|                            compute_controller_Pipeline_VITIS_LOOP_372_5|  return value|
+|ap_idle                                                                          |  out|    1|  ap_ctrl_hs|                            compute_controller_Pipeline_VITIS_LOOP_372_5|  return value|
+|ap_ready                                                                         |  out|    1|  ap_ctrl_hs|                            compute_controller_Pipeline_VITIS_LOOP_372_5|  return value|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0  |  out|    3|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_d0        |  out|    8|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0  |  out|    3|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_we0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_d0        |  out|    8|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0  |  out|    3|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_d0        |  out|    8|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0    |  out|    3|   ap_memory|    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0         |  out|    1|   ap_memory|    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0         |  out|    1|   ap_memory|    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_d0          |  out|    8|   ap_memory|    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u|         array|
++---------------------------------------------------------------------------------+-----+-----+------------+------------------------------------------------------------------------+--------------+
+

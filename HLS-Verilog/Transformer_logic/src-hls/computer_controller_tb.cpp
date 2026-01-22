@@ -173,6 +173,15 @@ int main() {
     int4_t full_bias[D_MODEL] = {};
     uint8_t in_buf[compute_buf::IN_BUF_BYTES] = {};
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
+    ComputeState dbg_state = ComputeState::IDLE;
+    uint32_t dbg_req_instruction = 0;
+    uint8_t dbg_req_op = 0;
+    uint8_t dbg_req_layer = 0;
+    uint8_t dbg_req_head = 0;
+    uint8_t dbg_req_tile = 0;
+    bool dbg_mac_start = false;
+    bool dbg_mac_ready = false;
+    bool dbg_mac_complete = false;
     int32_t expected_full[D_MODEL] = {};
     int32_t full_accum[D_MODEL] = {};
 
@@ -183,6 +192,7 @@ int main() {
     MemPending mem_pending = MemPending::NONE;
     int mem_tile_idx = -1;
     bool writeback_pending = false;
+    int mem_done_hold = 0;
 
     init_inputs(valueA_mem, full_weights, full_bias);
     expected_out_proj_full(valueA_mem, full_weights, full_bias, expected_full);
@@ -205,18 +215,25 @@ int main() {
     bool compute_start = false;
     int tile_idx = 0;
 
-    std::printf("%-6s %-5s %-5s %-5s %-5s %-6s %-6s %-6s %-6s %-10s %-10s %-5s %-5s %-5s %-5s Acc[0:%d]\n",
+    std::printf("%-6s %-5s %-5s %-5s %-5s %-6s %-6s %-6s %-6s %-10s %-10s %-5s %-5s %-5s %-5s %-7s %-10s %-8s %-5s %-5s %-5s %-5s %-5s %-5s Acc[0:%d]\n",
                 "Cycle", "Rst", "Start", "Ready", "Done", "Err",
                 "MRead", "MWrite", "MDone", "MOp", "Instr", "Op", "Layer", "Head", "Tile",
+                "State", "ReqInstr", "ReqOp", "ReqL", "ReqH", "ReqT",
+                "MacS", "MacR", "MacC",
                 D_MODEL - 1);
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
         const bool reset = (cycle < 2);
 
         mem_transfer_done = false;
+        if (mem_done_hold > 0) {
+            mem_transfer_done = true;
+            --mem_done_hold;
+        }
         if (mem_busy) {
             if (mem_timer == 0) {
                 mem_transfer_done = true;
+                mem_done_hold = 2;
                 mem_busy = false;
                 if (mem_pending == MemPending::READ) {
                     std::memset(in_buf, 0, sizeof(in_buf));
@@ -292,6 +309,15 @@ int main() {
             mem_op,
             in_buf,
             out_buf,
+            dbg_state,
+            dbg_req_instruction,
+            dbg_req_op,
+            dbg_req_layer,
+            dbg_req_head,
+            dbg_req_tile,
+            dbg_mac_start,
+            dbg_mac_ready,
+            dbg_mac_complete,
             error);
 
         const uint8_t op_field = static_cast<uint8_t>(compute_instruction & 0xFFu);
@@ -299,7 +325,7 @@ int main() {
         const int8_t head_field = static_cast<int8_t>((compute_instruction >> 16) & 0xFFu);
         const int8_t tile_field = static_cast<int8_t>((compute_instruction >> 24) & 0xFFu);
 
-        std::printf("%-6d %-5d %-5d %-5d %-5d %-6d %-6d %-6d %-6d %-10s 0x%08x %-10s %-5d %-5d %-5d",
+        std::printf("%-6d %-5d %-5d %-5d %-5d %-6d %-6d %-6d %-6d %-10s 0x%08x %-10s %-5d %-5d %-5d %-7d 0x%08x %-8s %-5d %-5d %-5d %-5d %-5d %-5d",
                     cycle,
                     reset ? 1 : 0,
                     compute_start ? 1 : 0,
@@ -314,7 +340,16 @@ int main() {
                     op_name(static_cast<ComputeOp>(op_field)),
                     static_cast<int>(layer_field),
                     static_cast<int>(head_field),
-                    static_cast<int>(tile_field));
+                    static_cast<int>(tile_field),
+                    static_cast<int>(dbg_state),
+                    dbg_req_instruction,
+                    op_name(static_cast<ComputeOp>(dbg_req_op)),
+                    static_cast<int>(dbg_req_layer),
+                    static_cast<int>(static_cast<int8_t>(dbg_req_head)),
+                    static_cast<int>(static_cast<int8_t>(dbg_req_tile)),
+                    dbg_mac_start ? 1 : 0,
+                    dbg_mac_ready ? 1 : 0,
+                    dbg_mac_complete ? 1 : 0);
         for (int out = 0; out < D_MODEL; ++out) {
             std::printf(" %d", static_cast<int>(full_accum[out]));
         }

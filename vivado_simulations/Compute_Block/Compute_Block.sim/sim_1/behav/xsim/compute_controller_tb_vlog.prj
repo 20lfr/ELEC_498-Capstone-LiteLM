@@ -1,9 +1,24 @@
 # compile verilog/system verilog design source files
 verilog xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
-"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller.v" \
-"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_OUT_PROJ.v" \
-"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_mac_muladd_8s_4s_12s_13_4_1.v" \
-"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_mul_8s_4s_12_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_367_4.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_372_5.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_378_6_VITIS_LOOP_379_7.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_391_8.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_395_9.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_407_10.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_43_2.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_43_21.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10_RAM_AkbM.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11_RAM_AjbC.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_RAM_AUbkb.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_RAM_AUlbW.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_RAM_AUfYi.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_flow_control_loop_pipe_sequential_init.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_mac_muladd_8s_4s_12s_32_4_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_mul_6s_5ns_6_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_mul_7s_6ns_7_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_mul_8s_4s_12_1_1.v" \
 
 sv xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
 "../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv" \

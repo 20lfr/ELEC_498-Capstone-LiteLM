@@ -326,7 +326,7 @@ struct HeadCtx {
 // ------------------------------------------------------------
 
 // Simple controller state machine.
-enum class ComputeState : uint8_t { IDLE = 0, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
+enum class ComputeState : uint8_t { IDLE = 0, CAPTURE_INSTRUCTION, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
 
 // Captured request from the scheduler.
 struct PendingRequest {

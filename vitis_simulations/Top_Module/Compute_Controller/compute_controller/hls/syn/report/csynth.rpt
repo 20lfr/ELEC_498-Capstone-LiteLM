@@ -1,0 +1,333 @@
+
+
+================================================================
+== Synthesis Summary Report of 'compute_controller'
+================================================================
++ General Information: 
+    * Date:           Wed Jan 21 19:44:12 2026
+    * Version:        2025.1 (Build 6135595 on May 21 2025)
+    * Project:        compute_controller
+    * Solution:       hls (Vivado IP Flow Target)
+    * Product family: zynquplus
+    * Target device:  xck26-sfvc784-2LV-c
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +------------------------------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+------+---------+------------+-----------+-----+
+    |                              Modules                             | Issue|      |       Latency       | Iteration|         | Trip |          |      |         |            |           |     |
+    |                              & Loops                             | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined| BRAM |   DSP   |     FF     |    LUT    | URAM|
+    +------------------------------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+------+---------+------------+-----------+-----+
+    |+ compute_controller                                              |     -|  0.35|      211|  2.110e+03|         -|      212|     -|        no|     -|  4 (~0%)|  1095 (~0%)|  3723 (3%)|    -|
+    | + compute_controller_Pipeline_VITIS_LOOP_367_4                   |     -|  5.65|       10|    100.000|         -|        9|     -|    rewind|     -|        -|    10 (~0%)|   62 (~0%)|    -|
+    |  o VITIS_LOOP_367_4                                              |     -|  7.30|        8|     80.000|         2|        1|     8|       yes|     -|        -|           -|          -|    -|
+    | + compute_controller_Pipeline_VITIS_LOOP_372_5                   |     -|  5.41|       16|    160.000|         -|       15|     -|    rewind|     -|        -|     7 (~0%)|   51 (~0%)|    -|
+    |  o VITIS_LOOP_372_5                                              |     -|  7.30|       14|    140.000|         1|        1|    14|       yes|     -|        -|           -|          -|    -|
+    | + compute_controller_Pipeline_VITIS_LOOP_378_6_VITIS_LOOP_379_7  |     -|  0.35|      112|  1.120e+03|         -|      111|     -|    rewind|     -|        -|    34 (~0%)|  296 (~0%)|    -|
+    |  o VITIS_LOOP_378_6_VITIS_LOOP_379_7                             |     -|  7.30|      110|  1.100e+03|         2|        1|   110|       yes|     -|        -|           -|          -|    -|
+    | + compute_controller_Pipeline_VITIS_LOOP_391_8                   |     -|  5.65|        4|     40.000|         -|        3|     -|    rewind|     -|        -|     4 (~0%)|   59 (~0%)|    -|
+    |  o VITIS_LOOP_391_8                                              |     -|  7.30|        2|     20.000|         1|        1|     2|       yes|     -|        -|           -|          -|    -|
+    | + compute_controller_Pipeline_VITIS_LOOP_395_9                   |     -|  5.52|        5|     50.000|         -|        4|     -|    rewind|     -|        -|     5 (~0%)|   47 (~0%)|    -|
+    |  o VITIS_LOOP_395_9                                              |     -|  7.30|        3|     30.000|         1|        1|     3|       yes|     -|        -|           -|          -|    -|
+    | + compute_controller_Pipeline_VITIS_LOOP_407_10                  |     -|  5.20|        6|     60.000|         -|        5|     -|    rewind|     -|        -|    22 (~0%)|  157 (~0%)|    -|
+    |  o VITIS_LOOP_407_10                                             |    II|  7.30|        4|     40.000|         2|        2|     2|       yes|     -|        -|           -|          -|    -|
+    | o VITIS_LOOP_40_1                                                |     -|  7.30|       61|    610.000|        29|        -|     2|        no|     -|        -|           -|          -|    -|
+    |  + compute_controller_Pipeline_VITIS_LOOP_43_2                   |     -|  4.20|       11|    110.000|         -|        6|     -|    rewind|     -|  2 (~0%)|   128 (~0%)|  273 (~0%)|    -|
+    |   o VITIS_LOOP_43_2                                              |     -|  7.30|        9|     90.000|         5|        1|     5|       yes|     -|        -|           -|          -|    -|
+    |  + compute_controller_Pipeline_VITIS_LOOP_43_21                  |     -|  4.20|       11|    110.000|         -|        6|     -|    rewind|     -|  2 (~0%)|   134 (~0%)|  315 (~0%)|    -|
+    |   o VITIS_LOOP_43_2                                              |     -|  7.30|        9|     90.000|         5|        1|     5|       yes|     -|        -|           -|          -|    -|
+    +------------------------------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+------+---------+------------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* AP_MEMORY
++------------------+-----------+----------+
+| Port             | Direction | Bitwidth |
++------------------+-----------+----------+
+| in_buf_address0  | out       | 7        |
+| in_buf_q0        | in        | 8        |
+| out_buf_address0 | out       | 6        |
+| out_buf_address1 | out       | 6        |
+| out_buf_d0       | out       | 8        |
+| out_buf_d1       | out       | 8        |
++------------------+-----------+----------+
+
+* Other Ports
++---------------------+---------+-----------+----------+
+| Port                | Mode    | Direction | Bitwidth |
++---------------------+---------+-----------+----------+
+| compute_done        | ap_vld  | out       | 1        |
+| compute_instruction | ap_none | in        | 32       |
+| compute_ready       | ap_vld  | out       | 1        |
+| compute_start       | ap_none | in        | 1        |
+| dbg_mac_complete    | ap_vld  | out       | 1        |
+| dbg_mac_ready       | ap_vld  | out       | 1        |
+| dbg_mac_start       | ap_vld  | out       | 1        |
+| dbg_req_head        | ap_vld  | out       | 8        |
+| dbg_req_instruction | ap_vld  | out       | 32       |
+| dbg_req_layer       | ap_vld  | out       | 8        |
+| dbg_req_op          | ap_vld  | out       | 8        |
+| dbg_req_tile        | ap_vld  | out       | 8        |
+| dbg_state           | ap_vld  | out       | 8        |
+| error               | ap_vld  | out       | 1        |
+| mem_op              | ap_vld  | out       | 32       |
+| mem_read_request    | ap_vld  | out       | 1        |
+| mem_transfer_done   | ap_none | in        | 1        |
+| mem_write_request   | ap_vld  | out       | 1        |
+| reset               | ap_none | in        | 1        |
++---------------------+---------+-----------+----------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------------------------------+
+| Interface | Type       | Ports                             |
++-----------+------------+-----------------------------------+
+| ap_clk    | clock      | ap_clk                            |
+| ap_rst    | reset      | ap_rst                            |
+| ap_ctrl   | ap_ctrl_hs | ap_done ap_idle ap_ready ap_start |
++-----------+------------+-----------------------------------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++---------------------+-----------+-----------------------+
+| Argument            | Direction | Datatype              |
++---------------------+-----------+-----------------------+
+| reset               | in        | bool                  |
+| compute_start       | in        | bool                  |
+| compute_instruction | in        | unsigned int          |
+| compute_ready       | out       | bool&                 |
+| compute_done        | out       | bool&                 |
+| mem_transfer_done   | in        | bool                  |
+| mem_read_request    | out       | bool&                 |
+| mem_write_request   | out       | bool&                 |
+| mem_op              | out       | unsigned int&         |
+| in_buf              | in        | unsigned char const * |
+| out_buf             | out       | unsigned char*        |
+| dbg_state           | out       | ComputeState&         |
+| dbg_req_instruction | out       | unsigned int&         |
+| dbg_req_op          | out       | unsigned char&        |
+| dbg_req_layer       | out       | unsigned char&        |
+| dbg_req_head        | out       | unsigned char&        |
+| dbg_req_tile        | out       | unsigned char&        |
+| dbg_mac_start       | out       | bool&                 |
+| dbg_mac_ready       | out       | bool&                 |
+| dbg_mac_complete    | out       | bool&                 |
+| error               | out       | bool&                 |
++---------------------+-----------+-----------------------+
+
+* SW-to-HW Mapping
++---------------------+----------------------------+---------+----------+
+| Argument            | HW Interface               | HW Type | HW Usage |
++---------------------+----------------------------+---------+----------+
+| reset               | reset                      | port    |          |
+| compute_start       | compute_start              | port    |          |
+| compute_instruction | compute_instruction        | port    |          |
+| compute_ready       | compute_ready              | port    |          |
+| compute_ready       | compute_ready_ap_vld       | port    |          |
+| compute_done        | compute_done               | port    |          |
+| compute_done        | compute_done_ap_vld        | port    |          |
+| mem_transfer_done   | mem_transfer_done          | port    |          |
+| mem_read_request    | mem_read_request           | port    |          |
+| mem_read_request    | mem_read_request_ap_vld    | port    |          |
+| mem_write_request   | mem_write_request          | port    |          |
+| mem_write_request   | mem_write_request_ap_vld   | port    |          |
+| mem_op              | mem_op                     | port    |          |
+| mem_op              | mem_op_ap_vld              | port    |          |
+| in_buf              | in_buf_address0            | port    | offset   |
+| in_buf              | in_buf_ce0                 | port    |          |
+| in_buf              | in_buf_q0                  | port    |          |
+| out_buf             | out_buf_address0           | port    | offset   |
+| out_buf             | out_buf_ce0                | port    |          |
+| out_buf             | out_buf_we0                | port    |          |
+| out_buf             | out_buf_d0                 | port    |          |
+| out_buf             | out_buf_address1           | port    | offset   |
+| out_buf             | out_buf_ce1                | port    |          |
+| out_buf             | out_buf_we1                | port    |          |
+| out_buf             | out_buf_d1                 | port    |          |
+| dbg_state           | dbg_state                  | port    |          |
+| dbg_state           | dbg_state_ap_vld           | port    |          |
+| dbg_req_instruction | dbg_req_instruction        | port    |          |
+| dbg_req_instruction | dbg_req_instruction_ap_vld | port    |          |
+| dbg_req_op          | dbg_req_op                 | port    |          |
+| dbg_req_op          | dbg_req_op_ap_vld          | port    |          |
+| dbg_req_layer       | dbg_req_layer              | port    |          |
+| dbg_req_layer       | dbg_req_layer_ap_vld       | port    |          |
+| dbg_req_head        | dbg_req_head               | port    |          |
+| dbg_req_head        | dbg_req_head_ap_vld        | port    |          |
+| dbg_req_tile        | dbg_req_tile               | port    |          |
+| dbg_req_tile        | dbg_req_tile_ap_vld        | port    |          |
+| dbg_mac_start       | dbg_mac_start              | port    |          |
+| dbg_mac_start       | dbg_mac_start_ap_vld       | port    |          |
+| dbg_mac_ready       | dbg_mac_ready              | port    |          |
+| dbg_mac_ready       | dbg_mac_ready_ap_vld       | port    |          |
+| dbg_mac_complete    | dbg_mac_complete           | port    |          |
+| dbg_mac_complete    | dbg_mac_complete_ap_vld    | port    |          |
+| error               | error                      | port    |          |
+| error               | error_ap_vld               | port    |          |
++---------------------+----------------------------+---------+----------+
+
+
+================================================================
+== Bind Op Report
+================================================================
++------------------------------------------------------------------+-----+--------+------------------------+--------+-----------+---------+
+| Name                                                             | DSP | Pragma | Variable               | Op     | Impl      | Latency |
++------------------------------------------------------------------+-----+--------+------------------------+--------+-----------+---------+
+| + compute_controller                                             | 4   |        |                        |        |           |         |
+|   icmp_ln247_fu_1739_p2                                          |     |        | icmp_ln247             | seteq  | auto      | 0       |
+|   icmp_ln248_fu_1745_p2                                          |     |        | icmp_ln248             | seteq  | auto      | 0       |
+|   grp_fu_1703_p2                                                 |     |        | xor_ln441              | xor    | auto      | 0       |
+|   select_ln441_fu_1865_p3                                        |     |        | select_ln441           | select | auto_sel  | 0       |
+|   and_ln441_fu_1871_p2                                           |     |        | and_ln441              | and    | auto      | 0       |
+|   select_ln441_1_fu_1876_p3                                      |     |        | select_ln441_1         | select | auto_sel  | 0       |
+|   or_ln29_fu_1891_p2                                             |     |        | or_ln29                | or     | auto      | 0       |
+|   xor_ln29_fu_1897_p2                                            |     |        | xor_ln29               | xor    | auto      | 0       |
+|   xor_ln32_fu_1909_p2                                            |     |        | xor_ln32               | xor    | auto      | 0       |
+|   do_compute_fu_1915_p2                                          |     |        | do_compute             | and    | auto      | 0       |
+|   icmp_ln40_fu_2042_p2                                           |     |        | icmp_ln40              | setlt  | auto      | 0       |
+|   mul_7s_6ns_7_1_1_U55                                           |     |        | empty                  | mul    | auto      | 0       |
+|   mul_6s_5ns_6_1_1_U56                                           |     |        | empty_27               | mul    | auto      | 0       |
+|   add_ln40_fu_2088_p2                                            |     |        | add_ln40               | add    | fabric    | 0       |
+|   grp_fu_1703_p2                                                 |     |        | xor_ln358              | xor    | auto      | 0       |
+|   select_ln358_fu_2102_p3                                        |     |        | select_ln358           | select | auto_sel  | 0       |
+|   icmp_ln320_fu_1847_p2                                          |     |        | icmp_ln320             | seteq  | auto      | 0       |
+|   or_ln320_fu_1853_p2                                            |     |        | or_ln320               | or     | auto      | 0       |
+|   add_ln333_fu_2153_p2                                           |     |        | add_ln333              | add    | fabric    | 0       |
+|   icmp_ln333_fu_2158_p2                                          |     |        | icmp_ln333             | setlt  | auto      | 0       |
+|   xor_ln333_fu_2164_p2                                           |     |        | xor_ln333              | xor    | auto      | 0       |
+|   next_state_1_cast_cast_fu_2171_p3                              |     |        | next_state_1_cast_cast | select | auto_sel  | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_367_4                  | 0   |        |                        |        |           |         |
+|    icmp_ln367_fu_131_p2                                          |     |        | icmp_ln367             | seteq  | auto      | 0       |
+|    add_ln367_fu_137_p2                                           |     |        | add_ln367              | add    | fabric    | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_372_5                  | 0   |        |                        |        |           |         |
+|    icmp_ln372_fu_116_p2                                          |     |        | icmp_ln372             | seteq  | auto      | 0       |
+|    add_ln372_fu_154_p2                                           |     |        | add_ln372              | add    | fabric    | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_378_6_VITIS_LOOP_379_7 | 0   |        |                        |        |           |         |
+|    icmp_ln378_fu_187_p2                                          |     |        | icmp_ln378             | seteq  | auto      | 0       |
+|    add_ln378_fu_193_p2                                           |     |        | add_ln378              | add    | fabric    | 0       |
+|    icmp_ln379_fu_205_p2                                          |     |        | icmp_ln379             | seteq  | auto      | 0       |
+|    select_ln378_fu_211_p3                                        |     |        | select_ln378           | select | auto_sel  | 0       |
+|    add_ln378_1_fu_219_p2                                         |     |        | add_ln378_1            | add    | fabric    | 0       |
+|    select_ln378_1_fu_225_p3                                      |     |        | select_ln378_1         | select | auto_sel  | 0       |
+|    or_ln381_fu_265_p2                                            |     |        | or_ln381               | or     | auto      | 0       |
+|    icmp_ln381_fu_271_p2                                          |     |        | icmp_ln381             | seteq  | auto      | 0       |
+|    add_ln387_fu_277_p2                                           |     |        | add_ln387              | add    | fabric    | 0       |
+|    nibble_idx_fu_357_p2                                          |     |        | nibble_idx             | add    | fabric    | 0       |
+|    sub_ln131_fu_371_p2                                           |     |        | sub_ln131              | sub    | fabric    | 0       |
+|    sub_ln131_1_fu_387_p2                                         |     |        | sub_ln131_1            | sub    | fabric    | 0       |
+|    select_ln131_fu_403_p3                                        |     |        | select_ln131           | select | auto_sel  | 0       |
+|    nibble_fu_471_p3                                              |     |        | nibble                 | select | auto_sel  | 0       |
+|    storemerge_fu_479_p3                                          |     |        | storemerge             | select | auto_sel  | 0       |
+|    add_ln379_fu_426_p2                                           |     |        | add_ln379              | add    | fabric    | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_391_8                  | 0   |        |                        |        |           |         |
+|    icmp_ln391_fu_72_p2                                           |     |        | icmp_ln391             | seteq  | auto      | 0       |
+|    add_ln391_fu_78_p2                                            |     |        | add_ln391              | add    | fabric    | 0       |
+|    nibble_fu_102_p3                                              |     |        | nibble                 | select | auto_sel  | 0       |
+|    icmp_ln393_fu_112_p2                                          |     |        | icmp_ln393             | seteq  | auto      | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_395_9                  | 0   |        |                        |        |           |         |
+|    icmp_ln395_fu_64_p2                                           |     |        | icmp_ln395             | seteq  | auto      | 0       |
+|    add_ln395_fu_95_p2                                            |     |        | add_ln395              | add    | fabric    | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_407_10                 | 0   |        |                        |        |           |         |
+|    icmp_ln407_fu_121_p2                                          |     |        | icmp_ln407             | seteq  | auto      | 0       |
+|    add_ln407_fu_127_p2                                           |     |        | add_ln407              | add    | fabric    | 0       |
+|    icmp_ln408_fu_133_p2                                          |     |        | icmp_ln408             | seteq  | auto      | 0       |
+|    v_fu_139_p3                                                   |     |        | v                      | select | auto_sel  | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_43_2                   | 2   |        |                        |        |           |         |
+|    add_ln45_fu_232_p2                                            |     |        | add_ln45               | add    | fabric    | 0       |
+|    mul_8s_4s_12_1_1_U22                                          |     |        | mul_ln46               | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_32_4_1_U24                               | 1   |        | mul_ln46_1             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U24                               | 1   |        | sext_ln46_4            | sext   | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U24                               | 1   |        | add_ln46               | add    | dsp_slice | 3       |
+|    acc_4_fu_324_p2                                               |     |        | acc_4                  | add    | fabric    | 0       |
+|    icmp_ln43_fu_252_p2                                           |     |        | icmp_ln43              | setlt  | auto      | 0       |
+|    mul_8s_4s_12_1_1_U23                                          |     |        | mul_ln46_2             | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_32_4_1_U25                               | 1   |        | mul_ln46_3             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U25                               | 1   |        | sext_ln46_9            | sext   | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U25                               | 1   |        | add_ln46_2             | add    | dsp_slice | 3       |
+|    acc_5_fu_330_p2                                               |     |        | acc_5                  | add    | fabric    | 0       |
+|    add_ln43_fu_258_p2                                            |     |        | add_ln43               | add    | fabric    | 0       |
+|  + compute_controller_Pipeline_VITIS_LOOP_43_21                  | 2   |        |                        |        |           |         |
+|    add_ln45_fu_390_p2                                            |     |        | add_ln45               | add    | fabric    | 0       |
+|    add_ln45_1_fu_272_p2                                          |     |        | add_ln45_1             | add    | fabric    | 0       |
+|    mul_8s_4s_12_1_1_U39                                          |     |        | mul_ln46               | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_32_4_1_U41                               | 1   |        | mul_ln46_1             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U41                               | 1   |        | sext_ln46_4            | sext   | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U41                               | 1   |        | add_ln46               | add    | dsp_slice | 3       |
+|    acc_2_fu_443_p2                                               |     |        | acc_2                  | add    | fabric    | 0       |
+|    icmp_ln43_fu_301_p2                                           |     |        | icmp_ln43              | setlt  | auto      | 0       |
+|    add_ln45_2_fu_311_p2                                          |     |        | add_ln45_2             | add    | fabric    | 0       |
+|    add_ln45_3_fu_339_p2                                          |     |        | add_ln45_3             | add    | fabric    | 0       |
+|    mul_8s_4s_12_1_1_U40                                          |     |        | mul_ln46_2             | mul    | auto      | 0       |
+|    mac_muladd_8s_4s_12s_32_4_1_U42                               | 1   |        | mul_ln46_3             | mul    | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U42                               | 1   |        | sext_ln46_9            | sext   | dsp_slice | 3       |
+|    mac_muladd_8s_4s_12s_32_4_1_U42                               | 1   |        | add_ln46_2             | add    | dsp_slice | 3       |
+|    acc_3_fu_449_p2                                               |     |        | acc_3                  | add    | fabric    | 0       |
+|    add_ln43_fu_360_p2                                            |     |        | add_ln43               | add    | fabric    | 0       |
++------------------------------------------------------------------+-----+--------+------------------------+--------+-----------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
++-----------------------------------------------------------------------------+---------+------+------+------+--------+-------------------------------------------------------------------------+------+---------+------------------+
+| Name                                                                        | Usage   | Type | BRAM | URAM | Pragma | Variable                                                                | Impl | Latency | Bitwidth, Depth, |
+|                                                                             |         |      |      |      |        |                                                                         |      |         | Banks            |
++-----------------------------------------------------------------------------+---------+------+------+------+--------+-------------------------------------------------------------------------+------+---------+------------------+
+| + compute_controller                                                        |         |      | 0    | 0    |        |                                                                         |      |         |                  |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_U  | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3  | auto | 1       | 8, 6, 1          |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_U  | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2  | auto | 1       | 8, 6, 1          |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_U  | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1  | auto | 1       | 8, 6, 1          |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_U    | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u    | auto | 1       | 8, 6, 1          |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_U  | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9  | auto | 1       | 4, 28, 1         |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_U  | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8  | auto | 1       | 4, 28, 1         |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_U  | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7  | auto | 1       | 4, 28, 1         |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_U  | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6  | auto | 1       | 4, 28, 1         |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11_U | ram_t2p |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11 | auto | 1       | 4, 2, 1          |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10_U | ram_1p  |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10 | auto | 1       | 4, 2, 1          |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_U  | ram_1p  |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5  | auto | 1       | 32, 2, 1         |
+|   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_U  | ram_1p  |      |      |      |        | compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4  | auto | 1       | 32, 2, 1         |
++-----------------------------------------------------------------------------+---------+------+------+------+--------+-------------------------------------------------------------------------+------+---------+------------------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
+| Type            | Options                                                  | Location                                                                                                   |
++-----------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
+| INLINE          |                                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:18 in mac_architecture               |
+| ARRAY_PARTITION | variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1      | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:19 in mac_architecture, vectorA      |
+| ARRAY_PARTITION | variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1      | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:20 in mac_architecture, matrixB      |
+| ARRAY_PARTITION | variable=bias cyclic factor=MAC_OUT_UNROLL dim=1         | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:21 in mac_architecture, bias         |
+| ARRAY_PARTITION | variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1 | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:22 in mac_architecture, accum_vector |
+| RESET           | variable = busy                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:25 in mac_architecture               |
+| UNROLL          | factor=MAC_OUT_UNROLL                                    | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41 in mac_architecture               |
+| UNROLL          | factor=MAC_VEC_UNROLL                                    | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:44 in mac_architecture               |
+| UNROLL          |                                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:75 in requant_d_model_int32_to_int8  |
+| INLINE          | off                                                      | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:98 in layer_norm                     |
+| UNROLL          |                                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:122 in layer_norm                    |
+| PIPELINE        | ii=1                                                     | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:140 in ffn_pre_act                   |
+| UNROLL          | factor=4                                                 | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:143 in ffn_pre_act                   |
+| PIPELINE        | ii=1                                                     | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:159 in ffn_act_relu                  |
+| INLINE          | off                                                      | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:176 in ffn_post_act                  |
+| PIPELINE        | ii=1                                                     | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:178 in ffn_post_act                  |
+| UNROLL          | factor=4                                                 | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:181 in ffn_post_act                  |
+| UNROLL          |                                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:198 in res_add                       |
+| INLINE          | off                                                      | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:239 in compute_controller            |
+| RESET           | variable = state                                         | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:242 in compute_controller            |
+| ARRAY_PARTITION | variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1      | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:255 in compute_controller, vectorA   |
+| ARRAY_PARTITION | variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1      | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:256 in compute_controller, matrixB   |
+| ARRAY_PARTITION | variable=bias cyclic factor=MAC_OUT_UNROLL dim=1         | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:257 in compute_controller, bias      |
+| ARRAY_PARTITION | variable=out cyclic factor=MAC_OUT_UNROLL dim=1          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:258 in compute_controller, out       |
+| UNROLL          |                                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:287 in compute_controller            |
+| UNROLL          |                                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:291 in compute_controller            |
+| UNROLL          |                                                          | ../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:295 in compute_controller            |
++-----------------+----------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
+
+

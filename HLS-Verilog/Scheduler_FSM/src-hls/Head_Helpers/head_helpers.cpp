@@ -388,14 +388,12 @@ bool run_single_head(
 
 bool drive_group_head_phase(
     HeadCtx     (&head_ctx_ref)[HEADS_PARALLEL], // [BOTH]:  Tracks current group only
-    int         base_head_idx,                  // [INPUT]: Global base index of this group
     int         layer_idx,                      // [INPUT]: Current Layer ID
     bool        start,                          // [INPUT]: Start the driving phase
     ControlMemSpace ctrl_mem,                   // [INPUT]: Control memory space for WL
     bool     &error                             // [OUTPUT]: Error flag from weight_stager
 ){
 #pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
-    (void)base_head_idx; // placeholder until per-lane re-init uses this
 
     bool group_finished = true; // assume finished unless any head is still active
 

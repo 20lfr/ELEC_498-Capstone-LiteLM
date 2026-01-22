@@ -732,7 +732,7 @@ void scheduler_hls(
 
       // Drive current head group; compute handshake handled externally
       attn_group_done =
-          drive_group_head_phase(head_group, group_base, layer_idx, start_head_group, ctrl_mem, error);
+          drive_group_head_phase(head_group, layer_idx, start_head_group, ctrl_mem, error);
 
       // Copy results back into the full context
       for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {

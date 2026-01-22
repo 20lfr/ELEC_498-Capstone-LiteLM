@@ -146,6 +146,15 @@ int main() {
     int8_t valueA_mem[D_MODEL] = {};
     uint8_t in_buf[compute_buf::IN_BUF_BYTES] = {};
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
+    ComputeState dbg_state = ComputeState::IDLE;
+    uint32_t dbg_req_instruction = 0;
+    uint8_t dbg_req_op = 0;
+    uint8_t dbg_req_layer = 0;
+    uint8_t dbg_req_head = 0;
+    uint8_t dbg_req_tile = 0;
+    bool dbg_mac_start = false;
+    bool dbg_mac_ready = false;
+    bool dbg_mac_complete = false;
     int4_t full_weights[D_MODEL * D_MODEL] = {};
     int32_t expected_full[D_MODEL] = {};
     int32_t full_accum[D_MODEL] = {};
@@ -271,6 +280,15 @@ int main() {
             mem_op,
             in_buf,
             out_buf,
+            dbg_state,
+            dbg_req_instruction,
+            dbg_req_op,
+            dbg_req_layer,
+            dbg_req_head,
+            dbg_req_tile,
+            dbg_mac_start,
+            dbg_mac_ready,
+            dbg_mac_complete,
             error);
 
         const uint8_t op_field = static_cast<uint8_t>(compute_instruction & 0xFFu);
