@@ -6,6 +6,20 @@
 
 using int4_t = ap_int<4>;
 
+constexpr int max2_constexpr(int a, int b) {
+    return (a > b) ? a : b;
+}
+constexpr int min2_constexpr(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
+constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
+constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
+
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, 4);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, 4);
+
 void compute_controller(
     bool        reset,               // [INPUT] Reset signal
 
@@ -24,6 +38,17 @@ void compute_controller(
     // Flat input/output buffers
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
+
+    // Debug visibility
+    ComputeState &dbg_state,
+    uint32_t    &dbg_req_instruction,
+    uint8_t     &dbg_req_op,
+    uint8_t     &dbg_req_layer,
+    uint8_t     &dbg_req_head,
+    uint8_t     &dbg_req_tile,
+    bool        &dbg_mac_start,
+    bool        &dbg_mac_ready,
+    bool        &dbg_mac_complete,
 
     bool        &error               // [OUTPUT] Error flag on invalid request
 );

@@ -17,9 +17,30 @@ module compute_controller_tb;
     localparam int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
     localparam int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
     localparam int CONTEXT_LENGTH = 16; // Context window length
+    localparam int VECTOR_MAX = (D_MODEL > D_FFN) ? D_MODEL : D_FFN;
+    localparam int ACCUM_MAX = (D_TILE_WO > D_TILE_W1)
+                               ? ((D_TILE_WO > D_TILE_W2) ? D_TILE_WO : D_TILE_W2)
+                               : ((D_TILE_W1 > D_TILE_W2) ? D_TILE_W1 : D_TILE_W2);
+    localparam int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
+    localparam int DBG_VECTOR_AW = (VECTOR_MAX > 1) ? $clog2(VECTOR_MAX) : 1;
+    localparam int DBG_ACCUM_AW = (ACCUM_MAX > 1) ? $clog2(ACCUM_MAX) : 1;
+    localparam int DBG_MATRIX_AW = (MATRIX_MAX > 1) ? $clog2(MATRIX_MAX) : 1;
+
+    localparam int IN_BUF_BYTES = 128;
+    localparam int OUT_BUF_BYTES = 64;
+
+    localparam int OUT_PROJ_ACT_BYTES = D_MODEL;
+    localparam int OUT_PROJ_W_NIBBLES = D_MODEL * D_TILE_WO;
+    localparam int OUT_PROJ_W_BYTES = (OUT_PROJ_W_NIBBLES + 1) / 2;
+    localparam int OUT_PROJ_B_NIBBLES = D_TILE_WO;
+    localparam int OUT_PROJ_B_BYTES = (OUT_PROJ_B_NIBBLES + 1) / 2;
+    localparam int OUT_PROJ_ACT_OFFSET = 0;
+    localparam int OUT_PROJ_W_OFFSET = OUT_PROJ_ACT_OFFSET + OUT_PROJ_ACT_BYTES;
+    localparam int OUT_PROJ_B_OFFSET = OUT_PROJ_W_OFFSET + OUT_PROJ_W_BYTES;
 
     localparam int CLK_PERIOD = 10; // in nanoseconds
     localparam int MAX_CYCLES = 8000;
+    localparam logic [7:0] CMP_OUT_PROJ = 8'h0E;
 
 
     // Signals
@@ -47,6 +68,7 @@ module compute_controller_tb;
     logic mem_busy;
     int mem_timer;
     int pending_tile;
+    int mem_done_hold;
 
     // DUT Signals
     logic ap_start;
@@ -67,36 +89,86 @@ module compute_controller_tb;
     logic mem_write_request_ap_vld;
     logic [31:0] mem_op;
     logic mem_op_ap_vld;
-    logic [2:0] OUT_PROJ_valueA_address0;
-    logic OUT_PROJ_valueA_ce0;
-    logic [7:0] OUT_PROJ_valueA_q0;
-    logic [2:0] OUT_PROJ_valueA_address1;
-    logic OUT_PROJ_valueA_ce1;
-    logic [7:0] OUT_PROJ_valueA_q1;
-    logic [3:0] OUT_PROJ_valueB_address0;
-    logic OUT_PROJ_valueB_ce0;
-    logic [3:0] OUT_PROJ_valueB_q0;
-    logic [3:0] OUT_PROJ_valueB_address1;
-    logic OUT_PROJ_valueB_ce1;
-    logic [3:0] OUT_PROJ_valueB_q1;
-    logic [0:0] OUT_PROJ_accum_address0;
-    logic OUT_PROJ_accum_ce0;
-    logic OUT_PROJ_accum_we0;
-    logic [31:0] OUT_PROJ_accum_d0;
-    logic [0:0] OUT_PROJ_accum_address1;
-    logic OUT_PROJ_accum_ce1;
-    logic OUT_PROJ_accum_we1;
-    logic [31:0] OUT_PROJ_accum_d1;
+    logic [6:0] in_buf_address0;
+    logic in_buf_ce0;
+    logic [7:0] in_buf_q0;
+    logic [5:0] out_buf_address0;
+    logic out_buf_ce0;
+    logic out_buf_we0;
+    logic [7:0] out_buf_d0;
+    logic [5:0] out_buf_address1;
+    logic out_buf_ce1;
+    logic out_buf_we1;
+    logic [7:0] out_buf_d1;
     logic [0:0] error;
     logic error_ap_vld;
+    logic [7:0] dbg_state;
+    logic dbg_state_ap_vld;
+    logic [31:0] dbg_req_instruction;
+    logic dbg_req_instruction_ap_vld;
+    logic [7:0] dbg_req_op;
+    logic dbg_req_op_ap_vld;
+    logic [7:0] dbg_req_layer;
+    logic dbg_req_layer_ap_vld;
+    logic [7:0] dbg_req_head;
+    logic dbg_req_head_ap_vld;
+    logic [7:0] dbg_req_tile;
+    logic dbg_req_tile_ap_vld;
+    logic dbg_mac_start;
+    logic dbg_mac_start_ap_vld;
+    logic dbg_mac_ready;
+    logic dbg_mac_ready_ap_vld;
+    logic dbg_mac_complete;
+    logic dbg_mac_complete_ap_vld;
+    logic [7:0] dbg_state_lat;
+    logic [31:0] dbg_req_instruction_lat;
+    logic [7:0] dbg_req_op_lat;
+    logic [7:0] dbg_req_layer_lat;
+    logic [7:0] dbg_req_head_lat;
+    logic [7:0] dbg_req_tile_lat;
+    logic dbg_mac_start_lat;
+    logic dbg_mac_ready_lat;
+    logic dbg_mac_complete_lat;
+    logic [DBG_VECTOR_AW-1:0] dbg_vectorA_address0;
+    logic dbg_vectorA_ce0;
+    logic dbg_vectorA_we0;
+    logic [15:0] dbg_vectorA_d0;
+    logic [DBG_VECTOR_AW-1:0] dbg_vectorA_address1;
+    logic dbg_vectorA_ce1;
+    logic dbg_vectorA_we1;
+    logic [15:0] dbg_vectorA_d1;
+    logic [DBG_MATRIX_AW-1:0] dbg_matrixB_address0;
+    logic dbg_matrixB_ce0;
+    logic dbg_matrixB_we0;
+    logic [3:0] dbg_matrixB_d0;
+    logic [DBG_MATRIX_AW-1:0] dbg_matrixB_address1;
+    logic dbg_matrixB_ce1;
+    logic dbg_matrixB_we1;
+    logic [3:0] dbg_matrixB_d1;
+    logic [DBG_ACCUM_AW-1:0] dbg_bias_address0;
+    logic dbg_bias_ce0;
+    logic dbg_bias_we0;
+    logic [3:0] dbg_bias_d0;
+    logic [DBG_ACCUM_AW-1:0] dbg_bias_address1;
+    logic dbg_bias_ce1;
+    logic dbg_bias_we1;
+    logic [3:0] dbg_bias_d1;
+    logic [DBG_ACCUM_AW-1:0] dbg_out_address0;
+    logic dbg_out_ce0;
+    logic dbg_out_we0;
+    logic [31:0] dbg_out_d0;
+    logic [DBG_ACCUM_AW-1:0] dbg_out_address1;
+    logic dbg_out_ce1;
+    logic dbg_out_we1;
+    logic [31:0] dbg_out_d1;
 
     // Simple memory model for OUT_PROJ inputs/outputs.
     logic [7:0] full_valueA [0:D_MODEL-1];
     logic [3:0] full_weights [0:D_MODEL*D_MODEL-1];
-    logic [7:0] valueA_mem [0:D_MODEL-1];
-    logic [3:0] valueB_mem [0:D_MODEL*D_TILE_WO-1];
-    logic [31:0] accum_mem [0:D_TILE_WO-1];
+    logic [3:0] full_bias [0:D_MODEL-1];
     logic [31:0] full_accum [0:D_MODEL-1];
+    logic [7:0] in_buf_mem [0:IN_BUF_BYTES-1];
+    logic [7:0] out_buf_mem [0:OUT_BUF_BYTES-1];
 
 
     // Responses we need:
@@ -129,7 +201,7 @@ module compute_controller_tb;
 
       for (i = 0; i < D_MODEL; i = i + 1) begin
         full_valueA[i] = i + 1;
-        valueA_mem[i] = full_valueA[i];
+        full_bias[i] = 4'd1;
         full_accum[i] = 32'd0;
       end
 
@@ -139,44 +211,89 @@ module compute_controller_tb;
         end
       end
 
-      for (t = 0; t < D_TILE_WO; t = t + 1) begin
-        for (j = 0; j < D_MODEL; j = j + 1) begin
-          valueB_mem[t * D_MODEL + j] = full_weights[t * D_MODEL + j];
-        end
-        accum_mem[t] = 32'd0;
+      for (i = 0; i < IN_BUF_BYTES; i = i + 1) begin
+        in_buf_mem[i] = 8'd0;
+      end
+
+      for (i = 0; i < OUT_BUF_BYTES; i = i + 1) begin
+        out_buf_mem[i] = 8'd0;
       end
     end
 
+    task automatic write_i4_to_in_buf(input int nibble_idx, input logic [3:0] value);
+      int byte_addr;
+      begin
+        byte_addr = nibble_idx / 2;
+        if ((nibble_idx % 2) != 0) begin
+          in_buf_mem[byte_addr] = {value, in_buf_mem[byte_addr][3:0]};
+        end else begin
+          in_buf_mem[byte_addr] = {in_buf_mem[byte_addr][7:4], value};
+        end
+      end
+    endtask
+
+    function automatic logic [31:0] read_i32_from_out_buf(input int byte_addr);
+      read_i32_from_out_buf = {out_buf_mem[byte_addr + 3],
+                               out_buf_mem[byte_addr + 2],
+                               out_buf_mem[byte_addr + 1],
+                               out_buf_mem[byte_addr + 0]};
+    endfunction
 
 
-    always_ff @(posedge ap_clk) begin : OUT_PROJ_mem_model
+    always_ff @(posedge ap_clk) begin : buffer_mem_model
       if (ap_rst) begin
-        OUT_PROJ_valueA_q0 <= '0;
-        OUT_PROJ_valueA_q1 <= '0;
-        OUT_PROJ_valueB_q0 <= '0;
-        OUT_PROJ_valueB_q1 <= '0;
+        in_buf_q0 <= '0;
       end else begin
-        if (OUT_PROJ_valueA_ce0) begin
-          OUT_PROJ_valueA_q0 <= valueA_mem[OUT_PROJ_valueA_address0];
+        if (in_buf_ce0) begin
+          in_buf_q0 <= in_buf_mem[in_buf_address0];
         end
-        if (OUT_PROJ_valueA_ce1) begin
-          OUT_PROJ_valueA_q1 <= valueA_mem[OUT_PROJ_valueA_address1];
+        if (out_buf_ce0 && out_buf_we0) begin
+          out_buf_mem[out_buf_address0] <= out_buf_d0;
         end
+        if (out_buf_ce1 && out_buf_we1) begin
+          out_buf_mem[out_buf_address1] <= out_buf_d1;
+        end
+      end
+    end
 
-
-        if (OUT_PROJ_valueB_ce0) begin
-          OUT_PROJ_valueB_q0 <= valueB_mem[OUT_PROJ_valueB_address0];
+    always_ff @(posedge ap_clk) begin : dbg_latch
+      if (ap_rst) begin
+        dbg_state_lat <= '0;
+        dbg_req_instruction_lat <= '0;
+        dbg_req_op_lat <= '0;
+        dbg_req_layer_lat <= '0;
+        dbg_req_head_lat <= '0;
+        dbg_req_tile_lat <= '0;
+        dbg_mac_start_lat <= 1'b0;
+        dbg_mac_ready_lat <= 1'b0;
+        dbg_mac_complete_lat <= 1'b0;
+      end else begin
+        if (dbg_state_ap_vld) begin
+          dbg_state_lat <= dbg_state;
         end
-        if (OUT_PROJ_valueB_ce1) begin
-          OUT_PROJ_valueB_q1 <= valueB_mem[OUT_PROJ_valueB_address1];
+        if (dbg_req_instruction_ap_vld) begin
+          dbg_req_instruction_lat <= dbg_req_instruction;
         end
-
-
-        if (OUT_PROJ_accum_ce0 && OUT_PROJ_accum_we0) begin
-          accum_mem[OUT_PROJ_accum_address0] <= OUT_PROJ_accum_d0;
+        if (dbg_req_op_ap_vld) begin
+          dbg_req_op_lat <= dbg_req_op;
         end
-        if (OUT_PROJ_accum_ce1 && OUT_PROJ_accum_we1) begin
-          accum_mem[OUT_PROJ_accum_address1] <= OUT_PROJ_accum_d1;
+        if (dbg_req_layer_ap_vld) begin
+          dbg_req_layer_lat <= dbg_req_layer;
+        end
+        if (dbg_req_head_ap_vld) begin
+          dbg_req_head_lat <= dbg_req_head;
+        end
+        if (dbg_req_tile_ap_vld) begin
+          dbg_req_tile_lat <= dbg_req_tile;
+        end
+        if (dbg_mac_start_ap_vld) begin
+          dbg_mac_start_lat <= dbg_mac_start;
+        end
+        if (dbg_mac_ready_ap_vld) begin
+          dbg_mac_ready_lat <= dbg_mac_ready;
+        end
+        if (dbg_mac_complete_ap_vld) begin
+          dbg_mac_complete_lat <= dbg_mac_complete;
         end
       end
     end
@@ -189,35 +306,57 @@ module compute_controller_tb;
         mem_timer <= 0;
         mem_pending <= MEM_NONE;
         pending_tile <= 0;
+        mem_done_hold <= 0;
       end else begin
-        mem_transfer_done <= 1'b0;
+        mem_transfer_done <= (mem_done_hold != 0);
+        if (mem_done_hold != 0) begin
+          mem_done_hold <= mem_done_hold - 1;
+        end
 
         if (mem_busy) begin
           if (mem_timer == 0) begin
             mem_transfer_done <= 1'b1;
+            mem_done_hold <= 2;
             mem_busy <= 1'b0;
             if (mem_pending == MEM_READ) begin
               int out_base;
               int t;
               int j;
-              for (j = 0; j < D_MODEL; j = j + 1) begin
-                valueA_mem[j] <= full_valueA[j];
+              for (j = 0; j < IN_BUF_BYTES; j = j + 1) begin
+                in_buf_mem[j] = 8'd0;
               end
-              if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
-                out_base = pending_tile * D_TILE_WO;
-                for (t = 0; t < D_TILE_WO; t = t + 1) begin
+
+              case (mem_op[7:0])
+                CMP_OUT_PROJ: begin
                   for (j = 0; j < D_MODEL; j = j + 1) begin
-                    valueB_mem[t * D_MODEL + j] <= full_weights[(out_base + t) * D_MODEL + j];
+                    in_buf_mem[OUT_PROJ_ACT_OFFSET + j] = full_valueA[j];
+                  end
+                  if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
+                    out_base = pending_tile * D_TILE_WO;
+                    for (t = 0; t < D_TILE_WO; t = t + 1) begin
+                      for (j = 0; j < D_MODEL; j = j + 1) begin
+                        write_i4_to_in_buf(
+                          (OUT_PROJ_W_OFFSET * 2) + (t * D_MODEL) + j,
+                          full_weights[(out_base + t) * D_MODEL + j]);
+                      end
+                    end
+                    for (t = 0; t < D_TILE_WO; t = t + 1) begin
+                      write_i4_to_in_buf(
+                        (OUT_PROJ_B_OFFSET * 2) + t,
+                        full_bias[out_base + t]);
+                    end
                   end
                 end
-              end
+                default: begin
+                end
+              endcase
             end else if (mem_pending == MEM_WRITE) begin
               int out_base;
               int t;
               if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
                 out_base = pending_tile * D_TILE_WO;
                 for (t = 0; t < D_TILE_WO; t = t + 1) begin
-                  full_accum[out_base + t] <= accum_mem[t];
+                  full_accum[out_base + t] <= read_i32_from_out_buf(t * 4);
                 end
               end
             end
@@ -230,12 +369,12 @@ module compute_controller_tb;
             mem_busy <= 1'b1;
             mem_timer <= MEM_LAT - 1;
             mem_pending <= MEM_READ;
-            pending_tile <= mem_op_ap_vld ? mem_op[31:24] : OUT_PROJ_counter;
+            pending_tile <= mem_op[31:24];
           end else if (mem_write_request) begin
             mem_busy <= 1'b1;
             mem_timer <= MEM_LAT - 1;
             mem_pending <= MEM_WRITE;
-            pending_tile <= mem_op_ap_vld ? mem_op[31:24] : OUT_PROJ_counter;
+            pending_tile <= mem_op[31:24];
           end
         end
       end
@@ -251,20 +390,14 @@ module compute_controller_tb;
       compute_start = 1'b0;
       compute_instruction = 32'd0;
       mem_transfer_done = 1'b0;
-      OUT_PROJ_valueA_q0 = 8'd0;
-      OUT_PROJ_valueA_q1 = 8'd0;
-      OUT_PROJ_valueB_q0 = 4'd0;
-      OUT_PROJ_valueB_q1 = 4'd0;
+      in_buf_q0 = 8'd0;
       reset_hold_ctr = 0;
 
       $display("Default DUT inputs:");
       $display("  ap_clk=%0b ap_rst=%0b ap_start=%0b reset=%0b", ap_clk, ap_rst, ap_start, reset);
       $display("  compute_start=%0b compute_instruction=0x%08x mem_transfer_done=%0b",
                compute_start, compute_instruction, mem_transfer_done);
-      $display("  OUT_PROJ_valueA_q0=0x%0h OUT_PROJ_valueA_q1=0x%0h",
-               OUT_PROJ_valueA_q0, OUT_PROJ_valueA_q1);
-      $display("  OUT_PROJ_valueB_q0=0x%0h OUT_PROJ_valueB_q1=0x%0h",
-               OUT_PROJ_valueB_q0, OUT_PROJ_valueB_q1);
+      $display("  in_buf_q0=0x%0h", in_buf_q0);
 
 
 
@@ -313,6 +446,18 @@ module compute_controller_tb;
           end
 
         endcase
+
+        $display("cycle=%0d state=%0d req_instr=0x%08x req_op=0x%02x req_layer=%0d req_head=%0d req_tile=%0d mac_start=%0d mac_ready=%0d mac_complete=%0d",
+                 cycles,
+                 dbg_state_lat,
+                 dbg_req_instruction_lat,
+                 dbg_req_op_lat,
+                 dbg_req_layer_lat,
+                 $signed(dbg_req_head_lat),
+                 $signed(dbg_req_tile_lat),
+                 dbg_mac_start_lat,
+                 dbg_mac_ready_lat,
+                 dbg_mac_complete_lat);
       end
     end
 
@@ -339,26 +484,35 @@ module compute_controller_tb;
         .mem_write_request_ap_vld(mem_write_request_ap_vld),
         .mem_op(mem_op),
         .mem_op_ap_vld(mem_op_ap_vld),
-        .OUT_PROJ_valueA_address0(OUT_PROJ_valueA_address0),
-        .OUT_PROJ_valueA_ce0(OUT_PROJ_valueA_ce0),
-        .OUT_PROJ_valueA_q0(OUT_PROJ_valueA_q0),
-        .OUT_PROJ_valueA_address1(OUT_PROJ_valueA_address1),
-        .OUT_PROJ_valueA_ce1(OUT_PROJ_valueA_ce1),
-        .OUT_PROJ_valueA_q1(OUT_PROJ_valueA_q1),
-        .OUT_PROJ_valueB_address0(OUT_PROJ_valueB_address0),
-        .OUT_PROJ_valueB_ce0(OUT_PROJ_valueB_ce0),
-        .OUT_PROJ_valueB_q0(OUT_PROJ_valueB_q0),
-        .OUT_PROJ_valueB_address1(OUT_PROJ_valueB_address1),
-        .OUT_PROJ_valueB_ce1(OUT_PROJ_valueB_ce1),
-        .OUT_PROJ_valueB_q1(OUT_PROJ_valueB_q1),
-        .OUT_PROJ_accum_address0(OUT_PROJ_accum_address0),
-        .OUT_PROJ_accum_ce0(OUT_PROJ_accum_ce0),
-        .OUT_PROJ_accum_we0(OUT_PROJ_accum_we0),
-        .OUT_PROJ_accum_d0(OUT_PROJ_accum_d0),
-        .OUT_PROJ_accum_address1(OUT_PROJ_accum_address1),
-        .OUT_PROJ_accum_ce1(OUT_PROJ_accum_ce1),
-        .OUT_PROJ_accum_we1(OUT_PROJ_accum_we1),
-        .OUT_PROJ_accum_d1(OUT_PROJ_accum_d1),
+        .in_buf_address0(in_buf_address0),
+        .in_buf_ce0(in_buf_ce0),
+        .in_buf_q0(in_buf_q0),
+        .out_buf_address0(out_buf_address0),
+        .out_buf_ce0(out_buf_ce0),
+        .out_buf_we0(out_buf_we0),
+        .out_buf_d0(out_buf_d0),
+        .out_buf_address1(out_buf_address1),
+        .out_buf_ce1(out_buf_ce1),
+        .out_buf_we1(out_buf_we1),
+        .out_buf_d1(out_buf_d1),
+        .dbg_state(dbg_state),
+        .dbg_state_ap_vld(dbg_state_ap_vld),
+        .dbg_req_instruction(dbg_req_instruction),
+        .dbg_req_instruction_ap_vld(dbg_req_instruction_ap_vld),
+        .dbg_req_op(dbg_req_op),
+        .dbg_req_op_ap_vld(dbg_req_op_ap_vld),
+        .dbg_req_layer(dbg_req_layer),
+        .dbg_req_layer_ap_vld(dbg_req_layer_ap_vld),
+        .dbg_req_head(dbg_req_head),
+        .dbg_req_head_ap_vld(dbg_req_head_ap_vld),
+        .dbg_req_tile(dbg_req_tile),
+        .dbg_req_tile_ap_vld(dbg_req_tile_ap_vld),
+        .dbg_mac_start(dbg_mac_start),
+        .dbg_mac_start_ap_vld(dbg_mac_start_ap_vld),
+        .dbg_mac_ready(dbg_mac_ready),
+        .dbg_mac_ready_ap_vld(dbg_mac_ready_ap_vld),
+        .dbg_mac_complete(dbg_mac_complete),
+        .dbg_mac_complete_ap_vld(dbg_mac_complete_ap_vld),
         .error(error),
         .error_ap_vld(error_ap_vld)
     );

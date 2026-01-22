@@ -1,0 +1,24 @@
+{
+  "0": {
+    "basicblocks": 64,
+    "calls": "",
+    "control_depth": 2,
+    "def_use_depth": 7,
+    "file": "compute_controller.cpp",
+    "fileloc": 207,
+    "instructions": 648,
+    "loads": {
+      "G": 55,
+      "L": 2,
+      "T": 3
+    },
+    "memory_accesses": 50,
+    "name": "compute_controller",
+    "stores": {
+      "G": 183,
+      "L": 2,
+      "T": 36
+    },
+    "total_instructions": 648
+  }
+}

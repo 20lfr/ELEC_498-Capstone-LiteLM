@@ -1,0 +1,1981 @@
+
+
+================================================================
+== Vitis HLS Report for 'compute_controller_Pipeline_VITIS_LOOP_43_2'
+================================================================
+* Date:           Wed Jan 21 19:44:11 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  3.104 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval |                    Pipeline                    |
+    |   min   |   max   |    min   |    max   | min | max |                      Type                      |
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |       11|       11|  0.110 us|  0.110 us|    6|    6|  loop auto-rewind stp (delay=0 clock cycles(s))|
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                   |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |     Loop Name     |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_43_2  |        9|        9|         5|          1|          1|     5|       yes|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     2|       -|       -|    -|
+|Expression       |        -|     -|       0|     116|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     0|       0|      80|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|      45|    -|
+|Register         |        -|     -|     128|      32|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     2|     128|     273|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|    ~0|      ~0|      ~0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +----------------------+------------------+---------+----+---+----+-----+
+    |       Instance       |      Module      | BRAM_18K| DSP| FF| LUT| URAM|
+    +----------------------+------------------+---------+----+---+----+-----+
+    |mul_8s_4s_12_1_1_U22  |mul_8s_4s_12_1_1  |        0|   0|  0|  40|    0|
+    |mul_8s_4s_12_1_1_U23  |mul_8s_4s_12_1_1  |        0|   0|  0|  40|    0|
+    +----------------------+------------------+---------+----+---+----+-----+
+    |Total                 |                  |        0|   0|  0|  80|    0|
+    +----------------------+------------------+---------+----+---+----+-----+
+
+    * DSP: 
+    +---------------------------------+-----------------------------+--------------+
+    |             Instance            |            Module           |  Expression  |
+    +---------------------------------+-----------------------------+--------------+
+    |mac_muladd_8s_4s_12s_32_4_1_U24  |mac_muladd_8s_4s_12s_32_4_1  |  i0 + i1 * i2|
+    |mac_muladd_8s_4s_12s_32_4_1_U25  |mac_muladd_8s_4s_12s_32_4_1  |  i0 + i1 * i2|
+    +---------------------------------+-----------------------------+--------------+
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------------+----------+----+---+----+------------+------------+
+    |    Variable Name    | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +---------------------+----------+----+---+----+------------+------------+
+    |acc_4_fu_324_p2      |         +|   0|  0|  39|          32|          32|
+    |acc_5_fu_330_p2      |         +|   0|  0|  39|          32|          32|
+    |add_ln43_fu_258_p2   |         +|   0|  0|  12|           5|           3|
+    |add_ln45_fu_232_p2   |         +|   0|  0|  12|           5|           5|
+    |icmp_ln43_fu_252_p2  |      icmp|   0|  0|  12|           5|           5|
+    |ap_enable_pp0        |       xor|   0|  0|   2|           1|           2|
+    +---------------------+----------+----+---+----+------------+------------+
+    |Total                |          |   0|  0| 116|          80|          79|
+    +---------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +----------------------------------+----+-----------+-----+-----------+
+    |               Name               | LUT| Input Size| Bits| Total Bits|
+    +----------------------------------+----+-----------+-----+-----------+
+    |acc_1_fu_64                       |   9|          2|   32|         64|
+    |ap_done_int                       |   9|          2|    1|          2|
+    |ap_loop_exit_ready_pp0_iter4_reg  |   9|          2|    1|          2|
+    |ap_sig_allocacmp_i_2              |   9|          2|    5|         10|
+    |i_fu_68                           |   9|          2|    5|         10|
+    +----------------------------------+----+-----------+-----+-----------+
+    |Total                             |  45|         10|   44|         88|
+    +----------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +----------------------------------+----+----+-----+-----------+
+    |               Name               | FF | LUT| Bits| Const Bits|
+    +----------------------------------+----+----+-----+-----------+
+    |acc_1_fu_64                       |  32|   0|   32|          0|
+    |ap_CS_fsm                         |   1|   0|    1|          0|
+    |ap_done_reg                       |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1           |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter2           |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter3           |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter4           |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter1_reg  |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter2_reg  |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter3_reg  |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter4_reg  |   1|   0|    1|          0|
+    |i_fu_68                           |   5|   0|    5|          0|
+    |icmp_ln43_reg_394                 |   1|   0|    1|          0|
+    |zext_ln42_reg_372                 |   3|   0|   64|         61|
+    |zext_ln42_reg_372_pp0_iter1_reg   |   3|   0|   64|         61|
+    |zext_ln45_reg_378                 |   5|   0|   64|         59|
+    |zext_ln45_reg_378_pp0_iter1_reg   |   5|   0|   64|         59|
+    |icmp_ln43_reg_394                 |  64|  32|    1|          0|
+    +----------------------------------+----+----+-----+-----------+
+    |Total                             | 128|  32|  305|        240|
+    +----------------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++---------------------------------------------------------------------------------+-----+-----+------------+------------------------------------------------------------------------+--------------+
+|                                    RTL Ports                                    | Dir | Bits|  Protocol  |                              Source Object                             |    C Type    |
++---------------------------------------------------------------------------------+-----+-----+------------+------------------------------------------------------------------------+--------------+
+|ap_clk                                                                           |   in|    1|  ap_ctrl_hs|                             compute_controller_Pipeline_VITIS_LOOP_43_2|  return value|
+|ap_rst                                                                           |   in|    1|  ap_ctrl_hs|                             compute_controller_Pipeline_VITIS_LOOP_43_2|  return value|
+|ap_start                                                                         |   in|    1|  ap_ctrl_hs|                             compute_controller_Pipeline_VITIS_LOOP_43_2|  return value|
+|ap_done                                                                          |  out|    1|  ap_ctrl_hs|                             compute_controller_Pipeline_VITIS_LOOP_43_2|  return value|
+|ap_idle                                                                          |  out|    1|  ap_ctrl_hs|                             compute_controller_Pipeline_VITIS_LOOP_43_2|  return value|
+|ap_ready                                                                         |  out|    1|  ap_ctrl_hs|                             compute_controller_Pipeline_VITIS_LOOP_43_2|  return value|
+|sext_ln42                                                                        |   in|    4|     ap_none|                                                               sext_ln42|        scalar|
+|mul_ln45                                                                         |   in|    5|     ap_none|                                                                mul_ln45|        scalar|
+|acc_2_out                                                                        |  out|   32|      ap_vld|                                                               acc_2_out|       pointer|
+|acc_2_out_ap_vld                                                                 |  out|    1|      ap_vld|                                                               acc_2_out|       pointer|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_address0  |  out|    5|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_q0        |   in|    4|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0  |  out|    3|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_q0        |   in|    8|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_address0  |  out|    5|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_q0        |   in|    4|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0  |  out|    3|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_q0        |   in|    8|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_address0  |  out|    5|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_q0        |   in|    4|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0  |  out|    3|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_q0        |   in|    8|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_address0  |  out|    5|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0       |  out|    1|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_q0        |   in|    4|   ap_memory|  compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0    |  out|    3|   ap_memory|    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0         |  out|    1|   ap_memory|    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_q0          |   in|    8|   ap_memory|    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u|         array|
++---------------------------------------------------------------------------------+-----+-----+------------+------------------------------------------------------------------------+--------------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 2
+IsDatapathOnly: 2
+HasWiredReturn: 1
+HasMFsm: 2
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
++ Individual pipeline summary: 
+  * Pipeline-0: initiation interval (II) = 1, depth = 5
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 5
+* Pipeline : 1
+  Pipeline-0 : II = 1, D = 5, States = { 1 2 3 4 5 }
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 
+3 --> 4 
+4 --> 5 
+5 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 1.89>
+ST_1 : Operation 8 [1/1] (0.00ns)   --->   "%acc_1 = alloca i32 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 8 'alloca' 'acc_1' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 9 [1/1] (0.00ns)   --->   "%i = alloca i32 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 9 'alloca' 'i' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 10 [1/1] (0.00ns)   --->   "%mul_ln45_read = read i5 @_ssdm_op_Read.ap_auto.i5, i5 %mul_ln45"   --->   Operation 10 'read' 'mul_ln45_read' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 11 [1/1] (0.00ns)   --->   "%sext_ln42_read = read i4 @_ssdm_op_Read.ap_auto.i4, i4 %sext_ln42"   --->   Operation 11 'read' 'sext_ln42_read' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 12 [1/1] (0.00ns)   --->   "%sext_ln42_cast = sext i4 %sext_ln42_read"   --->   Operation 12 'sext' 'sext_ln42_cast' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 13 [1/1] (0.42ns)   --->   "%store_ln43 = store i5 0, i5 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 13 'store' 'store_ln43' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 14 [1/1] (0.42ns)   --->   "%store_ln42 = store i32 %sext_ln42_cast, i32 %acc_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 14 'store' 'store_ln42' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 15 [1/1] (0.00ns)   --->   "%br_ln0 = br void %for.body19.i.0.0.split"   --->   Operation 15 'br' 'br_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 16 [1/1] (0.00ns)   --->   "%i_2 = load i5 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 16 'load' 'i_2' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 17 [1/1] (0.00ns)   --->   "%lshr_ln5 = partselect i3 @_ssdm_op_PartSelect.i3.i5.i32.i32, i5 %i_2, i32 2, i32 4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 17 'partselect' 'lshr_ln5' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 18 [1/1] (0.00ns)   --->   "%zext_ln42_3 = zext i3 %lshr_ln5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 18 'zext' 'zext_ln42_3' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 19 [1/1] (0.00ns)   --->   "%zext_ln42 = zext i3 %lshr_ln5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 19 'zext' 'zext_ln42' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 20 [1/1] (0.78ns)   --->   "%add_ln45 = add i5 %zext_ln42_3, i5 %mul_ln45_read" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 20 'add' 'add_ln45' <Predicate = true> <Delay = 0.78> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.78> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 21 [1/1] (0.00ns)   --->   "%zext_ln45 = zext i5 %add_ln45" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 21 'zext' 'zext_ln45' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 22 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27 = getelementptr i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8, i64 0, i64 %zext_ln45" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 22 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 23 [2/2] (0.67ns)   --->   "%w_4 = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 23 'load' 'w_4' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_1 : Operation 24 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2, i64 0, i64 %zext_ln42" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 24 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 25 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 25 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_1 : Operation 26 [1/1] (0.00ns)   --->   "%or_ln3 = bitconcatenate i5 @_ssdm_op_BitConcatenate.i5.i3.i2, i3 %lshr_ln5, i2 2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 26 'bitconcatenate' 'or_ln3' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 27 [1/1] (0.78ns)   --->   "%icmp_ln43 = icmp_ult  i5 %or_ln3, i5 22" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 27 'icmp' 'icmp_ln43' <Predicate = true> <Delay = 0.78> <CoreInst = "Cmp">   --->   Core 9 'Cmp' <Latency = 0> <II = 1> <Delay = 0.78> <FuncUnit> <Opcode : 'seteq' 'setne' 'setle' 'setge' 'setlt' 'setgt'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 28 [1/1] (0.00ns)   --->   "%br_ln43 = br i1 %icmp_ln43, void %for.cond.cleanup18.i.0.exitStub, void %for.body19.i.0.2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 28 'br' 'br_ln43' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 29 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33 = getelementptr i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6, i64 0, i64 %zext_ln45" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 29 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_1 : Operation 30 [2/2] (0.67ns)   --->   "%w_6 = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 30 'load' 'w_6' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_1 : Operation 31 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u, i64 0, i64 %zext_ln42" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 31 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_1 : Operation 32 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 32 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_1 : Operation 33 [1/1] (0.78ns)   --->   "%add_ln43 = add i5 %i_2, i5 4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 33 'add' 'add_ln43' <Predicate = (icmp_ln43)> <Delay = 0.78> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.78> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 34 [1/1] (0.42ns)   --->   "%store_ln43 = store i5 %add_ln43, i5 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 34 'store' 'store_ln43' <Predicate = (icmp_ln43)> <Delay = 0.42>
+
+State 2 <SV = 1> <Delay = 1.67>
+ST_2 : Operation 35 [1/2] ( I:0.67ns O:0.67ns )   --->   "%w_4 = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 35 'load' 'w_4' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_2 : Operation 36 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 36 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_2 : Operation 37 [1/1] (0.00ns)   --->   "%sext_ln46_1 = sext i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 37 'sext' 'sext_ln46_1' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 38 [1/1] (0.00ns)   --->   "%sext_ln46_2 = sext i4 %w_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 38 'sext' 'sext_ln46_2' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 39 [3/3] (0.99ns) (grouped into DSP with root node add_ln46)   --->   "%mul_ln46_1 = mul i12 %sext_ln46_1, i12 %sext_ln46_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 39 'mul' 'mul_ln46_1' <Predicate = true> <Delay = 0.99> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_2 : Operation 40 [1/2] ( I:0.67ns O:0.67ns )   --->   "%w_6 = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 40 'load' 'w_6' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_2 : Operation 41 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 41 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_2 : Operation 42 [1/1] (0.00ns)   --->   "%sext_ln46_6 = sext i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 42 'sext' 'sext_ln46_6' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_2 : Operation 43 [1/1] (0.00ns)   --->   "%sext_ln46_7 = sext i4 %w_6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 43 'sext' 'sext_ln46_7' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_2 : Operation 44 [3/3] (0.99ns) (grouped into DSP with root node add_ln46_2)   --->   "%mul_ln46_3 = mul i12 %sext_ln46_6, i12 %sext_ln46_7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 44 'mul' 'mul_ln46_3' <Predicate = (icmp_ln43)> <Delay = 0.99> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+
+State 3 <SV = 2> <Delay = 0.99>
+ST_3 : Operation 45 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24 = getelementptr i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9, i64 0, i64 %zext_ln45" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 45 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 46 [2/2] (0.67ns)   --->   "%w = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 46 'load' 'w' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_3 : Operation 47 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3, i64 0, i64 %zext_ln42" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 47 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 48 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 48 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_3 : Operation 49 [2/3] (0.99ns) (grouped into DSP with root node add_ln46)   --->   "%mul_ln46_1 = mul i12 %sext_ln46_1, i12 %sext_ln46_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 49 'mul' 'mul_ln46_1' <Predicate = true> <Delay = 0.99> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_3 : Operation 50 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30 = getelementptr i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7, i64 0, i64 %zext_ln45" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 50 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_3 : Operation 51 [2/2] (0.67ns)   --->   "%w_5 = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 51 'load' 'w_5' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_3 : Operation 52 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1, i64 0, i64 %zext_ln42" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 52 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_3 : Operation 53 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 53 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_3 : Operation 54 [2/3] (0.99ns) (grouped into DSP with root node add_ln46_2)   --->   "%mul_ln46_3 = mul i12 %sext_ln46_6, i12 %sext_ln46_7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 54 'mul' 'mul_ln46_3' <Predicate = (icmp_ln43)> <Delay = 0.99> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+
+State 4 <SV = 3> <Delay = 2.97>
+ST_4 : Operation 55 [1/2] ( I:0.67ns O:0.67ns )   --->   "%w = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 55 'load' 'w' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_4 : Operation 56 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 56 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_4 : Operation 57 [1/1] (0.00ns)   --->   "%sext_ln46 = sext i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 57 'sext' 'sext_ln46' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 58 [1/1] (0.00ns)   --->   "%sext_ln45 = sext i4 %w" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 58 'sext' 'sext_ln45' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 59 [1/1] (1.65ns)   --->   "%mul_ln46 = mul i12 %sext_ln46, i12 %sext_ln45" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 59 'mul' 'mul_ln46' <Predicate = true> <Delay = 1.65> <CoreInst = "Multiplier">   --->   Core 3 'Multiplier' <Latency = 0> <II = 1> <Delay = 1.65> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 60 [1/1] (0.00ns)   --->   "%sext_ln46_3 = sext i12 %mul_ln46" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 60 'sext' 'sext_ln46_3' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 61 [1/3] (0.00ns) (grouped into DSP with root node add_ln46)   --->   "%mul_ln46_1 = mul i12 %sext_ln46_1, i12 %sext_ln46_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 61 'mul' 'mul_ln46_1' <Predicate = true> <Delay = 0.00> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_4 : Operation 62 [1/1] (0.00ns) (grouped into DSP with root node add_ln46)   --->   "%sext_ln46_4 = sext i12 %mul_ln46_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 62 'sext' 'sext_ln46_4' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 63 [2/2] (0.64ns) (root node of the DSP)   --->   "%add_ln46 = add i32 %sext_ln46_3, i32 %sext_ln46_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 63 'add' 'add_ln46' <Predicate = true> <Delay = 0.64> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_4 : Operation 64 [1/2] ( I:0.67ns O:0.67ns )   --->   "%w_5 = load i5 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 64 'load' 'w_5' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 4> <Depth = 28> <RAM>
+ST_4 : Operation 65 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32 = load i3 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 65 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32' <Predicate = (icmp_ln43)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 6> <RAM>
+ST_4 : Operation 66 [1/1] (0.00ns)   --->   "%sext_ln46_5 = sext i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 66 'sext' 'sext_ln46_5' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_4 : Operation 67 [1/1] (0.00ns)   --->   "%sext_ln45_1 = sext i4 %w_5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:45->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 67 'sext' 'sext_ln45_1' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_4 : Operation 68 [1/1] (1.65ns)   --->   "%mul_ln46_2 = mul i12 %sext_ln46_5, i12 %sext_ln45_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 68 'mul' 'mul_ln46_2' <Predicate = (icmp_ln43)> <Delay = 1.65> <CoreInst = "Multiplier">   --->   Core 3 'Multiplier' <Latency = 0> <II = 1> <Delay = 1.65> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 69 [1/1] (0.00ns)   --->   "%sext_ln46_8 = sext i12 %mul_ln46_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 69 'sext' 'sext_ln46_8' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_4 : Operation 70 [1/3] (0.00ns) (grouped into DSP with root node add_ln46_2)   --->   "%mul_ln46_3 = mul i12 %sext_ln46_6, i12 %sext_ln46_7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 70 'mul' 'mul_ln46_3' <Predicate = (icmp_ln43)> <Delay = 0.00> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_4 : Operation 71 [1/1] (0.00ns) (grouped into DSP with root node add_ln46_2)   --->   "%sext_ln46_9 = sext i12 %mul_ln46_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 71 'sext' 'sext_ln46_9' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_4 : Operation 72 [2/2] (0.64ns) (root node of the DSP)   --->   "%add_ln46_2 = add i32 %sext_ln46_8, i32 %sext_ln46_9" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 72 'add' 'add_ln46_2' <Predicate = (icmp_ln43)> <Delay = 0.64> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+
+State 5 <SV = 4> <Delay = 3.10>
+ST_5 : Operation 73 [1/1] (0.00ns)   --->   "%acc = load i32 %acc_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 73 'load' 'acc' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 74 [1/1] (0.00ns)   --->   "%specpipeline_ln42 = specpipeline void @_ssdm_op_SpecPipeline, i32 4294967295, i32 0, i32 0, i32 0, void @empty_0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 74 'specpipeline' 'specpipeline_ln42' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 75 [1/1] (0.00ns)   --->   "%specloopname_ln43 = specloopname void @_ssdm_op_SpecLoopName, void @empty" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 75 'specloopname' 'specloopname_ln43' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 76 [1/2] (0.64ns) (root node of the DSP)   --->   "%add_ln46 = add i32 %sext_ln46_3, i32 %sext_ln46_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 76 'add' 'add_ln46' <Predicate = true> <Delay = 0.64> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_5 : Operation 77 [1/1] (1.01ns)   --->   "%acc_4 = add i32 %add_ln46, i32 %acc" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 77 'add' 'acc_4' <Predicate = true> <Delay = 1.01> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 1.01> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 78 [1/1] (0.00ns)   --->   "%speclooptripcount_ln0 = speclooptripcount void @_ssdm_op_SpecLoopTripCount, i64 5, i64 5, i64 5"   --->   Operation 78 'speclooptripcount' 'speclooptripcount_ln0' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 79 [1/2] (0.64ns) (root node of the DSP)   --->   "%add_ln46_2 = add i32 %sext_ln46_8, i32 %sext_ln46_9" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 79 'add' 'add_ln46_2' <Predicate = (icmp_ln43)> <Delay = 0.64> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_5 : Operation 80 [1/1] (1.01ns)   --->   "%acc_5 = add i32 %add_ln46_2, i32 %acc_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 80 'add' 'acc_5' <Predicate = (icmp_ln43)> <Delay = 1.01> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 1.01> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 81 [1/1] (0.42ns)   --->   "%store_ln42 = store i32 %acc_5, i32 %acc_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 81 'store' 'store_ln42' <Predicate = (icmp_ln43)> <Delay = 0.42>
+ST_5 : Operation 82 [1/1] (0.00ns)   --->   "%br_ln43 = br void %for.body19.i.0.0.split" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 82 'br' 'br_ln43' <Predicate = (icmp_ln43)> <Delay = 0.00>
+ST_5 : Operation 83 [1/1] (0.00ns)   --->   "%write_ln46 = write void @_ssdm_op_Write.ap_auto.i32P0A, i32 %acc_2_out, i32 %acc_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435]   --->   Operation 83 'write' 'write_ln46' <Predicate = (!icmp_ln43)> <Delay = 0.00>
+ST_5 : Operation 84 [1/1] (0.42ns)   --->   "%ret_ln0 = ret"   --->   Operation 84 'ret' 'ret_ln0' <Predicate = (!icmp_ln43)> <Delay = 0.42>
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+STG Binding: 
+---------------- STG Properties BEGIN ----------------
+- Is combinational: 0
+- Is one-state seq: 0
+- Is datapath-only: 0
+- Is pipelined: 0
+- Is top level: 0
+Port [ Return ] is wired: 1; IO mode=ap_ctrl_hs:ce=0
+Port [ sext_ln42]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=0; pingpong=0; private_global=0; IO mode=ap_none:ce=0
+Port [ mul_ln45]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=0; pingpong=0; private_global=0; IO mode=ap_none:ce=0
+Port [ acc_2_out]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+---------------- STG Properties END ------------------
+
+---------------- Datapath Model BEGIN ----------------
+
+<LifeTime>
+<method=bitvector/>
+acc_1                                                                   (alloca           ) [ 011111]
+i                                                                       (alloca           ) [ 010000]
+mul_ln45_read                                                           (read             ) [ 000000]
+sext_ln42_read                                                          (read             ) [ 000000]
+sext_ln42_cast                                                          (sext             ) [ 000000]
+store_ln43                                                              (store            ) [ 000000]
+store_ln42                                                              (store            ) [ 000000]
+br_ln0                                                                  (br               ) [ 000000]
+i_2                                                                     (load             ) [ 000000]
+lshr_ln5                                                                (partselect       ) [ 000000]
+zext_ln42_3                                                             (zext             ) [ 000000]
+zext_ln42                                                               (zext             ) [ 011100]
+add_ln45                                                                (add              ) [ 000000]
+zext_ln45                                                               (zext             ) [ 011100]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27 (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28 (getelementptr    ) [ 011000]
+or_ln3                                                                  (bitconcatenate   ) [ 000000]
+icmp_ln43                                                               (icmp             ) [ 011111]
+br_ln43                                                                 (br               ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33 (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34 (getelementptr    ) [ 011000]
+add_ln43                                                                (add              ) [ 000000]
+store_ln43                                                              (store            ) [ 000000]
+w_4                                                                     (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29 (load             ) [ 000000]
+sext_ln46_1                                                             (sext             ) [ 010110]
+sext_ln46_2                                                             (sext             ) [ 010110]
+w_6                                                                     (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35 (load             ) [ 000000]
+sext_ln46_6                                                             (sext             ) [ 010110]
+sext_ln46_7                                                             (sext             ) [ 010110]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24 (getelementptr    ) [ 010010]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25 (getelementptr    ) [ 010010]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30 (getelementptr    ) [ 010010]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31 (getelementptr    ) [ 010010]
+w                                                                       (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26 (load             ) [ 000000]
+sext_ln46                                                               (sext             ) [ 000000]
+sext_ln45                                                               (sext             ) [ 000000]
+mul_ln46                                                                (mul              ) [ 000000]
+sext_ln46_3                                                             (sext             ) [ 010001]
+mul_ln46_1                                                              (mul              ) [ 000000]
+sext_ln46_4                                                             (sext             ) [ 010001]
+w_5                                                                     (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32 (load             ) [ 000000]
+sext_ln46_5                                                             (sext             ) [ 000000]
+sext_ln45_1                                                             (sext             ) [ 000000]
+mul_ln46_2                                                              (mul              ) [ 000000]
+sext_ln46_8                                                             (sext             ) [ 010001]
+mul_ln46_3                                                              (mul              ) [ 000000]
+sext_ln46_9                                                             (sext             ) [ 010001]
+acc                                                                     (load             ) [ 000000]
+specpipeline_ln42                                                       (specpipeline     ) [ 000000]
+specloopname_ln43                                                       (specloopname     ) [ 000000]
+add_ln46                                                                (add              ) [ 000000]
+acc_4                                                                   (add              ) [ 000000]
+speclooptripcount_ln0                                                   (speclooptripcount) [ 000000]
+add_ln46_2                                                              (add              ) [ 000000]
+acc_5                                                                   (add              ) [ 000000]
+store_ln42                                                              (store            ) [ 000000]
+br_ln43                                                                 (br               ) [ 000000]
+write_ln46                                                              (write            ) [ 000000]
+ret_ln0                                                                 (ret              ) [ 000000]
+</LifeTime>
+
+<model>
+
+<comp_list>
+<comp id="0" class="1000" name="sext_ln42">
+<pin_list>
+<pin id="1" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="sext_ln42"/></StgValue>
+</bind>
+</comp>
+
+<comp id="2" class="1000" name="mul_ln45">
+<pin_list>
+<pin id="3" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="mul_ln45"/></StgValue>
+</bind>
+</comp>
+
+<comp id="4" class="1000" name="acc_2_out">
+<pin_list>
+<pin id="5" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="acc_2_out"/></StgValue>
+</bind>
+</comp>
+
+<comp id="6" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9">
+<pin_list>
+<pin id="7" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="8" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3">
+<pin_list>
+<pin id="9" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="10" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8">
+<pin_list>
+<pin id="11" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="12" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2">
+<pin_list>
+<pin id="13" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="14" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7">
+<pin_list>
+<pin id="15" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="16" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1">
+<pin_list>
+<pin id="17" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="18" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6">
+<pin_list>
+<pin id="19" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="20" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u">
+<pin_list>
+<pin id="21" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="22" class="1001" name="const_22">
+<pin_list>
+<pin id="23" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="24" class="1001" name="const_24">
+<pin_list>
+<pin id="25" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_Read.ap_auto.i5"/></StgValue>
+</bind>
+</comp>
+
+<comp id="26" class="1001" name="const_26">
+<pin_list>
+<pin id="27" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_Read.ap_auto.i4"/></StgValue>
+</bind>
+</comp>
+
+<comp id="28" class="1001" name="const_28">
+<pin_list>
+<pin id="29" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="30" class="1001" name="const_30">
+<pin_list>
+<pin id="31" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_PartSelect.i3.i5.i32.i32"/></StgValue>
+</bind>
+</comp>
+
+<comp id="32" class="1001" name="const_32">
+<pin_list>
+<pin id="33" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="34" class="1001" name="const_34">
+<pin_list>
+<pin id="35" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="36" class="1001" name="const_36">
+<pin_list>
+<pin id="37" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="38" class="1001" name="const_38">
+<pin_list>
+<pin id="39" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_BitConcatenate.i5.i3.i2"/></StgValue>
+</bind>
+</comp>
+
+<comp id="40" class="1001" name="const_40">
+<pin_list>
+<pin id="41" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="42" class="1001" name="const_42">
+<pin_list>
+<pin id="43" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="44" class="1001" name="const_44">
+<pin_list>
+<pin id="45" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="46" class="1001" name="const_46">
+<pin_list>
+<pin id="47" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecPipeline"/></StgValue>
+</bind>
+</comp>
+
+<comp id="48" class="1001" name="const_48">
+<pin_list>
+<pin id="49" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="50" class="1001" name="const_50">
+<pin_list>
+<pin id="51" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="52" class="1001" name="const_52">
+<pin_list>
+<pin id="53" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_0"/></StgValue>
+</bind>
+</comp>
+
+<comp id="54" class="1001" name="const_54">
+<pin_list>
+<pin id="55" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecLoopName"/></StgValue>
+</bind>
+</comp>
+
+<comp id="56" class="1001" name="const_56">
+<pin_list>
+<pin id="57" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty"/></StgValue>
+</bind>
+</comp>
+
+<comp id="58" class="1001" name="const_58">
+<pin_list>
+<pin id="59" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecLoopTripCount"/></StgValue>
+</bind>
+</comp>
+
+<comp id="60" class="1001" name="const_60">
+<pin_list>
+<pin id="61" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="62" class="1001" name="const_62">
+<pin_list>
+<pin id="63" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_Write.ap_auto.i32P0A"/></StgValue>
+</bind>
+</comp>
+
+<comp id="64" class="1004" name="acc_1_fu_64">
+<pin_list>
+<pin id="65" dir="0" index="0" bw="1" slack="0"/>
+<pin id="66" dir="1" index="1" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="acc_1/1 "/>
+</bind>
+</comp>
+
+<comp id="68" class="1004" name="i_fu_68">
+<pin_list>
+<pin id="69" dir="0" index="0" bw="1" slack="0"/>
+<pin id="70" dir="1" index="1" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="i/1 "/>
+</bind>
+</comp>
+
+<comp id="72" class="1004" name="mul_ln45_read_read_fu_72">
+<pin_list>
+<pin id="73" dir="0" index="0" bw="5" slack="0"/>
+<pin id="74" dir="0" index="1" bw="5" slack="0"/>
+<pin id="75" dir="1" index="2" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="read(1150) " fcode="read"/>
+<opset="mul_ln45_read/1 "/>
+</bind>
+</comp>
+
+<comp id="78" class="1004" name="sext_ln42_read_read_fu_78">
+<pin_list>
+<pin id="79" dir="0" index="0" bw="4" slack="0"/>
+<pin id="80" dir="0" index="1" bw="4" slack="0"/>
+<pin id="81" dir="1" index="2" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="read(1150) " fcode="read"/>
+<opset="sext_ln42_read/1 "/>
+</bind>
+</comp>
+
+<comp id="84" class="1004" name="write_ln46_write_fu_84">
+<pin_list>
+<pin id="85" dir="0" index="0" bw="0" slack="0"/>
+<pin id="86" dir="0" index="1" bw="32" slack="0"/>
+<pin id="87" dir="0" index="2" bw="32" slack="0"/>
+<pin id="88" dir="1" index="3" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="write(1151) " fcode="write"/>
+<opset="write_ln46/5 "/>
+</bind>
+</comp>
+
+<comp id="91" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27_gep_fu_91">
+<pin_list>
+<pin id="92" dir="0" index="0" bw="4" slack="0"/>
+<pin id="93" dir="0" index="1" bw="1" slack="0"/>
+<pin id="94" dir="0" index="2" bw="5" slack="0"/>
+<pin id="95" dir="1" index="3" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27/1 "/>
+</bind>
+</comp>
+
+<comp id="98" class="1004" name="grp_access_fu_98">
+<pin_list>
+<pin id="99" dir="0" index="0" bw="5" slack="0"/>
+<pin id="100" dir="0" index="1" bw="4" slack="2147483647"/>
+<pin id="101" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="102" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="w_4/1 "/>
+</bind>
+</comp>
+
+<comp id="104" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28_gep_fu_104">
+<pin_list>
+<pin id="105" dir="0" index="0" bw="8" slack="0"/>
+<pin id="106" dir="0" index="1" bw="1" slack="0"/>
+<pin id="107" dir="0" index="2" bw="3" slack="0"/>
+<pin id="108" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28/1 "/>
+</bind>
+</comp>
+
+<comp id="111" class="1004" name="grp_access_fu_111">
+<pin_list>
+<pin id="112" dir="0" index="0" bw="3" slack="0"/>
+<pin id="113" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="114" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="115" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29/1 "/>
+</bind>
+</comp>
+
+<comp id="117" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33_gep_fu_117">
+<pin_list>
+<pin id="118" dir="0" index="0" bw="4" slack="0"/>
+<pin id="119" dir="0" index="1" bw="1" slack="0"/>
+<pin id="120" dir="0" index="2" bw="5" slack="0"/>
+<pin id="121" dir="1" index="3" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33/1 "/>
+</bind>
+</comp>
+
+<comp id="124" class="1004" name="grp_access_fu_124">
+<pin_list>
+<pin id="125" dir="0" index="0" bw="5" slack="0"/>
+<pin id="126" dir="0" index="1" bw="4" slack="2147483647"/>
+<pin id="127" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="128" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="w_6/1 "/>
+</bind>
+</comp>
+
+<comp id="130" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34_gep_fu_130">
+<pin_list>
+<pin id="131" dir="0" index="0" bw="8" slack="0"/>
+<pin id="132" dir="0" index="1" bw="1" slack="0"/>
+<pin id="133" dir="0" index="2" bw="3" slack="0"/>
+<pin id="134" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34/1 "/>
+</bind>
+</comp>
+
+<comp id="137" class="1004" name="grp_access_fu_137">
+<pin_list>
+<pin id="138" dir="0" index="0" bw="3" slack="0"/>
+<pin id="139" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="140" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="141" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35/1 "/>
+</bind>
+</comp>
+
+<comp id="143" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24_gep_fu_143">
+<pin_list>
+<pin id="144" dir="0" index="0" bw="4" slack="0"/>
+<pin id="145" dir="0" index="1" bw="1" slack="0"/>
+<pin id="146" dir="0" index="2" bw="5" slack="2"/>
+<pin id="147" dir="1" index="3" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24/3 "/>
+</bind>
+</comp>
+
+<comp id="150" class="1004" name="grp_access_fu_150">
+<pin_list>
+<pin id="151" dir="0" index="0" bw="5" slack="0"/>
+<pin id="152" dir="0" index="1" bw="4" slack="2147483647"/>
+<pin id="153" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="154" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="w/3 "/>
+</bind>
+</comp>
+
+<comp id="156" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25_gep_fu_156">
+<pin_list>
+<pin id="157" dir="0" index="0" bw="8" slack="0"/>
+<pin id="158" dir="0" index="1" bw="1" slack="0"/>
+<pin id="159" dir="0" index="2" bw="3" slack="2"/>
+<pin id="160" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25/3 "/>
+</bind>
+</comp>
+
+<comp id="163" class="1004" name="grp_access_fu_163">
+<pin_list>
+<pin id="164" dir="0" index="0" bw="3" slack="0"/>
+<pin id="165" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="166" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="167" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26/3 "/>
+</bind>
+</comp>
+
+<comp id="169" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30_gep_fu_169">
+<pin_list>
+<pin id="170" dir="0" index="0" bw="4" slack="0"/>
+<pin id="171" dir="0" index="1" bw="1" slack="0"/>
+<pin id="172" dir="0" index="2" bw="5" slack="2"/>
+<pin id="173" dir="1" index="3" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30/3 "/>
+</bind>
+</comp>
+
+<comp id="176" class="1004" name="grp_access_fu_176">
+<pin_list>
+<pin id="177" dir="0" index="0" bw="5" slack="0"/>
+<pin id="178" dir="0" index="1" bw="4" slack="2147483647"/>
+<pin id="179" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="180" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="w_5/3 "/>
+</bind>
+</comp>
+
+<comp id="182" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31_gep_fu_182">
+<pin_list>
+<pin id="183" dir="0" index="0" bw="8" slack="0"/>
+<pin id="184" dir="0" index="1" bw="1" slack="0"/>
+<pin id="185" dir="0" index="2" bw="3" slack="2"/>
+<pin id="186" dir="1" index="3" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31/3 "/>
+</bind>
+</comp>
+
+<comp id="189" class="1004" name="grp_access_fu_189">
+<pin_list>
+<pin id="190" dir="0" index="0" bw="3" slack="0"/>
+<pin id="191" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="192" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="193" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32/3 "/>
+</bind>
+</comp>
+
+<comp id="195" class="1004" name="sext_ln42_cast_fu_195">
+<pin_list>
+<pin id="196" dir="0" index="0" bw="4" slack="0"/>
+<pin id="197" dir="1" index="1" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln42_cast/1 "/>
+</bind>
+</comp>
+
+<comp id="199" class="1004" name="store_ln43_store_fu_199">
+<pin_list>
+<pin id="200" dir="0" index="0" bw="1" slack="0"/>
+<pin id="201" dir="0" index="1" bw="5" slack="0"/>
+<pin id="202" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln43/1 "/>
+</bind>
+</comp>
+
+<comp id="204" class="1004" name="store_ln42_store_fu_204">
+<pin_list>
+<pin id="205" dir="0" index="0" bw="4" slack="0"/>
+<pin id="206" dir="0" index="1" bw="32" slack="0"/>
+<pin id="207" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln42/1 "/>
+</bind>
+</comp>
+
+<comp id="209" class="1004" name="i_2_load_fu_209">
+<pin_list>
+<pin id="210" dir="0" index="0" bw="5" slack="0"/>
+<pin id="211" dir="1" index="1" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="i_2/1 "/>
+</bind>
+</comp>
+
+<comp id="212" class="1004" name="lshr_ln5_fu_212">
+<pin_list>
+<pin id="213" dir="0" index="0" bw="3" slack="0"/>
+<pin id="214" dir="0" index="1" bw="5" slack="0"/>
+<pin id="215" dir="0" index="2" bw="3" slack="0"/>
+<pin id="216" dir="0" index="3" bw="4" slack="0"/>
+<pin id="217" dir="1" index="4" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="partselect(1002) " fcode="partselect"/>
+<opset="lshr_ln5/1 "/>
+</bind>
+</comp>
+
+<comp id="222" class="1004" name="zext_ln42_3_fu_222">
+<pin_list>
+<pin id="223" dir="0" index="0" bw="3" slack="0"/>
+<pin id="224" dir="1" index="1" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln42_3/1 "/>
+</bind>
+</comp>
+
+<comp id="226" class="1004" name="zext_ln42_fu_226">
+<pin_list>
+<pin id="227" dir="0" index="0" bw="3" slack="0"/>
+<pin id="228" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln42/1 "/>
+</bind>
+</comp>
+
+<comp id="232" class="1004" name="add_ln45_fu_232">
+<pin_list>
+<pin id="233" dir="0" index="0" bw="3" slack="0"/>
+<pin id="234" dir="0" index="1" bw="5" slack="0"/>
+<pin id="235" dir="1" index="2" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln45/1 "/>
+</bind>
+</comp>
+
+<comp id="238" class="1004" name="zext_ln45_fu_238">
+<pin_list>
+<pin id="239" dir="0" index="0" bw="5" slack="0"/>
+<pin id="240" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln45/1 "/>
+</bind>
+</comp>
+
+<comp id="244" class="1004" name="or_ln3_fu_244">
+<pin_list>
+<pin id="245" dir="0" index="0" bw="5" slack="0"/>
+<pin id="246" dir="0" index="1" bw="3" slack="0"/>
+<pin id="247" dir="0" index="2" bw="2" slack="0"/>
+<pin id="248" dir="1" index="3" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="bitconcatenate(1004) " fcode="bitconcatenate"/>
+<opset="or_ln3/1 "/>
+</bind>
+</comp>
+
+<comp id="252" class="1004" name="icmp_ln43_fu_252">
+<pin_list>
+<pin id="253" dir="0" index="0" bw="5" slack="0"/>
+<pin id="254" dir="0" index="1" bw="5" slack="0"/>
+<pin id="255" dir="1" index="2" bw="1" slack="1"/>
+</pin_list>
+<bind>
+<opcode="icmp(45) " fcode="icmp"/>
+<opset="icmp_ln43/1 "/>
+</bind>
+</comp>
+
+<comp id="258" class="1004" name="add_ln43_fu_258">
+<pin_list>
+<pin id="259" dir="0" index="0" bw="5" slack="0"/>
+<pin id="260" dir="0" index="1" bw="4" slack="0"/>
+<pin id="261" dir="1" index="2" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln43/1 "/>
+</bind>
+</comp>
+
+<comp id="264" class="1004" name="store_ln43_store_fu_264">
+<pin_list>
+<pin id="265" dir="0" index="0" bw="5" slack="0"/>
+<pin id="266" dir="0" index="1" bw="5" slack="0"/>
+<pin id="267" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln43/1 "/>
+</bind>
+</comp>
+
+<comp id="269" class="1004" name="sext_ln46_1_fu_269">
+<pin_list>
+<pin id="270" dir="0" index="0" bw="8" slack="0"/>
+<pin id="271" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46_1/2 "/>
+</bind>
+</comp>
+
+<comp id="273" class="1004" name="sext_ln46_2_fu_273">
+<pin_list>
+<pin id="274" dir="0" index="0" bw="4" slack="0"/>
+<pin id="275" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46_2/2 "/>
+</bind>
+</comp>
+
+<comp id="277" class="1004" name="sext_ln46_6_fu_277">
+<pin_list>
+<pin id="278" dir="0" index="0" bw="8" slack="0"/>
+<pin id="279" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46_6/2 "/>
+</bind>
+</comp>
+
+<comp id="281" class="1004" name="sext_ln46_7_fu_281">
+<pin_list>
+<pin id="282" dir="0" index="0" bw="4" slack="0"/>
+<pin id="283" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46_7/2 "/>
+</bind>
+</comp>
+
+<comp id="285" class="1004" name="sext_ln46_fu_285">
+<pin_list>
+<pin id="286" dir="0" index="0" bw="8" slack="0"/>
+<pin id="287" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46/4 "/>
+</bind>
+</comp>
+
+<comp id="289" class="1004" name="sext_ln45_fu_289">
+<pin_list>
+<pin id="290" dir="0" index="0" bw="4" slack="0"/>
+<pin id="291" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln45/4 "/>
+</bind>
+</comp>
+
+<comp id="293" class="1004" name="mul_ln46_fu_293">
+<pin_list>
+<pin id="294" dir="0" index="0" bw="8" slack="0"/>
+<pin id="295" dir="0" index="1" bw="4" slack="0"/>
+<pin id="296" dir="1" index="2" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="mul(12) " fcode="mul"/>
+<opset="mul_ln46/4 "/>
+</bind>
+</comp>
+
+<comp id="299" class="1004" name="sext_ln46_3_fu_299">
+<pin_list>
+<pin id="300" dir="0" index="0" bw="12" slack="0"/>
+<pin id="301" dir="1" index="1" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46_3/4 "/>
+</bind>
+</comp>
+
+<comp id="303" class="1004" name="sext_ln46_5_fu_303">
+<pin_list>
+<pin id="304" dir="0" index="0" bw="8" slack="0"/>
+<pin id="305" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46_5/4 "/>
+</bind>
+</comp>
+
+<comp id="307" class="1004" name="sext_ln45_1_fu_307">
+<pin_list>
+<pin id="308" dir="0" index="0" bw="4" slack="0"/>
+<pin id="309" dir="1" index="1" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln45_1/4 "/>
+</bind>
+</comp>
+
+<comp id="311" class="1004" name="mul_ln46_2_fu_311">
+<pin_list>
+<pin id="312" dir="0" index="0" bw="8" slack="0"/>
+<pin id="313" dir="0" index="1" bw="4" slack="0"/>
+<pin id="314" dir="1" index="2" bw="12" slack="0"/>
+</pin_list>
+<bind>
+<opcode="mul(12) " fcode="mul"/>
+<opset="mul_ln46_2/4 "/>
+</bind>
+</comp>
+
+<comp id="317" class="1004" name="sext_ln46_8_fu_317">
+<pin_list>
+<pin id="318" dir="0" index="0" bw="12" slack="0"/>
+<pin id="319" dir="1" index="1" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln46_8/4 "/>
+</bind>
+</comp>
+
+<comp id="321" class="1004" name="acc_load_fu_321">
+<pin_list>
+<pin id="322" dir="0" index="0" bw="32" slack="4"/>
+<pin id="323" dir="1" index="1" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="acc/5 "/>
+</bind>
+</comp>
+
+<comp id="324" class="1004" name="acc_4_fu_324">
+<pin_list>
+<pin id="325" dir="0" index="0" bw="13" slack="0"/>
+<pin id="326" dir="0" index="1" bw="32" slack="0"/>
+<pin id="327" dir="1" index="2" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="acc_4/5 "/>
+</bind>
+</comp>
+
+<comp id="330" class="1004" name="acc_5_fu_330">
+<pin_list>
+<pin id="331" dir="0" index="0" bw="13" slack="0"/>
+<pin id="332" dir="0" index="1" bw="32" slack="0"/>
+<pin id="333" dir="1" index="2" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="acc_5/5 "/>
+</bind>
+</comp>
+
+<comp id="335" class="1004" name="store_ln42_store_fu_335">
+<pin_list>
+<pin id="336" dir="0" index="0" bw="32" slack="0"/>
+<pin id="337" dir="0" index="1" bw="32" slack="4"/>
+<pin id="338" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln42/5 "/>
+</bind>
+</comp>
+
+<comp id="340" class="1007" name="grp_fu_340">
+<pin_list>
+<pin id="341" dir="0" index="0" bw="8" slack="0"/>
+<pin id="342" dir="0" index="1" bw="4" slack="0"/>
+<pin id="343" dir="0" index="2" bw="12" slack="0"/>
+<pin id="344" dir="1" index="3" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="muladd(1172) " fcode="muladd"/>
+<opset="mul_ln46_1/2 sext_ln46_4/4 add_ln46/4 "/>
+</bind>
+</comp>
+
+<comp id="349" class="1007" name="grp_fu_349">
+<pin_list>
+<pin id="350" dir="0" index="0" bw="8" slack="0"/>
+<pin id="351" dir="0" index="1" bw="4" slack="0"/>
+<pin id="352" dir="0" index="2" bw="12" slack="0"/>
+<pin id="353" dir="1" index="3" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opcode="muladd(1172) " fcode="muladd"/>
+<opset="mul_ln46_3/2 sext_ln46_9/4 add_ln46_2/4 "/>
+</bind>
+</comp>
+
+<comp id="358" class="1005" name="acc_1_reg_358">
+<pin_list>
+<pin id="359" dir="0" index="0" bw="32" slack="0"/>
+<pin id="360" dir="1" index="1" bw="32" slack="0"/>
+</pin_list>
+<bind>
+<opset="acc_1 "/>
+</bind>
+</comp>
+
+<comp id="365" class="1005" name="i_reg_365">
+<pin_list>
+<pin id="366" dir="0" index="0" bw="5" slack="0"/>
+<pin id="367" dir="1" index="1" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opset="i "/>
+</bind>
+</comp>
+
+<comp id="372" class="1005" name="zext_ln42_reg_372">
+<pin_list>
+<pin id="373" dir="0" index="0" bw="64" slack="2"/>
+<pin id="374" dir="1" index="1" bw="64" slack="2"/>
+</pin_list>
+<bind>
+<opset="zext_ln42 "/>
+</bind>
+</comp>
+
+<comp id="378" class="1005" name="zext_ln45_reg_378">
+<pin_list>
+<pin id="379" dir="0" index="0" bw="64" slack="2"/>
+<pin id="380" dir="1" index="1" bw="64" slack="2"/>
+</pin_list>
+<bind>
+<opset="zext_ln45 "/>
+</bind>
+</comp>
+
+<comp id="384" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27_reg_384">
+<pin_list>
+<pin id="385" dir="0" index="0" bw="5" slack="1"/>
+<pin id="386" dir="1" index="1" bw="5" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27 "/>
+</bind>
+</comp>
+
+<comp id="389" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28_reg_389">
+<pin_list>
+<pin id="390" dir="0" index="0" bw="3" slack="1"/>
+<pin id="391" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28 "/>
+</bind>
+</comp>
+
+<comp id="394" class="1005" name="icmp_ln43_reg_394">
+<pin_list>
+<pin id="395" dir="0" index="0" bw="1" slack="1"/>
+<pin id="396" dir="1" index="1" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<opset="icmp_ln43 "/>
+</bind>
+</comp>
+
+<comp id="398" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33_reg_398">
+<pin_list>
+<pin id="399" dir="0" index="0" bw="5" slack="1"/>
+<pin id="400" dir="1" index="1" bw="5" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33 "/>
+</bind>
+</comp>
+
+<comp id="403" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34_reg_403">
+<pin_list>
+<pin id="404" dir="0" index="0" bw="3" slack="1"/>
+<pin id="405" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34 "/>
+</bind>
+</comp>
+
+<comp id="408" class="1005" name="sext_ln46_1_reg_408">
+<pin_list>
+<pin id="409" dir="0" index="0" bw="12" slack="1"/>
+<pin id="410" dir="1" index="1" bw="12" slack="1"/>
+</pin_list>
+<bind>
+<opset="sext_ln46_1 "/>
+</bind>
+</comp>
+
+<comp id="413" class="1005" name="sext_ln46_2_reg_413">
+<pin_list>
+<pin id="414" dir="0" index="0" bw="12" slack="1"/>
+<pin id="415" dir="1" index="1" bw="12" slack="1"/>
+</pin_list>
+<bind>
+<opset="sext_ln46_2 "/>
+</bind>
+</comp>
+
+<comp id="418" class="1005" name="sext_ln46_6_reg_418">
+<pin_list>
+<pin id="419" dir="0" index="0" bw="12" slack="1"/>
+<pin id="420" dir="1" index="1" bw="12" slack="1"/>
+</pin_list>
+<bind>
+<opset="sext_ln46_6 "/>
+</bind>
+</comp>
+
+<comp id="423" class="1005" name="sext_ln46_7_reg_423">
+<pin_list>
+<pin id="424" dir="0" index="0" bw="12" slack="1"/>
+<pin id="425" dir="1" index="1" bw="12" slack="1"/>
+</pin_list>
+<bind>
+<opset="sext_ln46_7 "/>
+</bind>
+</comp>
+
+<comp id="428" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24_reg_428">
+<pin_list>
+<pin id="429" dir="0" index="0" bw="5" slack="1"/>
+<pin id="430" dir="1" index="1" bw="5" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24 "/>
+</bind>
+</comp>
+
+<comp id="433" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25_reg_433">
+<pin_list>
+<pin id="434" dir="0" index="0" bw="3" slack="1"/>
+<pin id="435" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25 "/>
+</bind>
+</comp>
+
+<comp id="438" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30_reg_438">
+<pin_list>
+<pin id="439" dir="0" index="0" bw="5" slack="1"/>
+<pin id="440" dir="1" index="1" bw="5" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30 "/>
+</bind>
+</comp>
+
+<comp id="443" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31_reg_443">
+<pin_list>
+<pin id="444" dir="0" index="0" bw="3" slack="1"/>
+<pin id="445" dir="1" index="1" bw="3" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31 "/>
+</bind>
+</comp>
+
+<comp id="448" class="1005" name="sext_ln46_3_reg_448">
+<pin_list>
+<pin id="449" dir="0" index="0" bw="32" slack="1"/>
+<pin id="450" dir="1" index="1" bw="32" slack="1"/>
+</pin_list>
+<bind>
+<opset="sext_ln46_3 "/>
+</bind>
+</comp>
+
+<comp id="453" class="1005" name="sext_ln46_8_reg_453">
+<pin_list>
+<pin id="454" dir="0" index="0" bw="32" slack="1"/>
+<pin id="455" dir="1" index="1" bw="32" slack="1"/>
+</pin_list>
+<bind>
+<opset="sext_ln46_8 "/>
+</bind>
+</comp>
+
+</comp_list>
+
+<net_list>
+<net id="67"><net_src comp="22" pin="0"/><net_sink comp="64" pin=0"/></net>
+
+<net id="71"><net_src comp="22" pin="0"/><net_sink comp="68" pin=0"/></net>
+
+<net id="76"><net_src comp="24" pin="0"/><net_sink comp="72" pin=0"/></net>
+
+<net id="77"><net_src comp="2" pin="0"/><net_sink comp="72" pin=1"/></net>
+
+<net id="82"><net_src comp="26" pin="0"/><net_sink comp="78" pin=0"/></net>
+
+<net id="83"><net_src comp="0" pin="0"/><net_sink comp="78" pin=1"/></net>
+
+<net id="89"><net_src comp="62" pin="0"/><net_sink comp="84" pin=0"/></net>
+
+<net id="90"><net_src comp="4" pin="0"/><net_sink comp="84" pin=1"/></net>
+
+<net id="96"><net_src comp="10" pin="0"/><net_sink comp="91" pin=0"/></net>
+
+<net id="97"><net_src comp="36" pin="0"/><net_sink comp="91" pin=1"/></net>
+
+<net id="103"><net_src comp="91" pin="3"/><net_sink comp="98" pin=0"/></net>
+
+<net id="109"><net_src comp="12" pin="0"/><net_sink comp="104" pin=0"/></net>
+
+<net id="110"><net_src comp="36" pin="0"/><net_sink comp="104" pin=1"/></net>
+
+<net id="116"><net_src comp="104" pin="3"/><net_sink comp="111" pin=0"/></net>
+
+<net id="122"><net_src comp="18" pin="0"/><net_sink comp="117" pin=0"/></net>
+
+<net id="123"><net_src comp="36" pin="0"/><net_sink comp="117" pin=1"/></net>
+
+<net id="129"><net_src comp="117" pin="3"/><net_sink comp="124" pin=0"/></net>
+
+<net id="135"><net_src comp="20" pin="0"/><net_sink comp="130" pin=0"/></net>
+
+<net id="136"><net_src comp="36" pin="0"/><net_sink comp="130" pin=1"/></net>
+
+<net id="142"><net_src comp="130" pin="3"/><net_sink comp="137" pin=0"/></net>
+
+<net id="148"><net_src comp="6" pin="0"/><net_sink comp="143" pin=0"/></net>
+
+<net id="149"><net_src comp="36" pin="0"/><net_sink comp="143" pin=1"/></net>
+
+<net id="155"><net_src comp="143" pin="3"/><net_sink comp="150" pin=0"/></net>
+
+<net id="161"><net_src comp="8" pin="0"/><net_sink comp="156" pin=0"/></net>
+
+<net id="162"><net_src comp="36" pin="0"/><net_sink comp="156" pin=1"/></net>
+
+<net id="168"><net_src comp="156" pin="3"/><net_sink comp="163" pin=0"/></net>
+
+<net id="174"><net_src comp="14" pin="0"/><net_sink comp="169" pin=0"/></net>
+
+<net id="175"><net_src comp="36" pin="0"/><net_sink comp="169" pin=1"/></net>
+
+<net id="181"><net_src comp="169" pin="3"/><net_sink comp="176" pin=0"/></net>
+
+<net id="187"><net_src comp="16" pin="0"/><net_sink comp="182" pin=0"/></net>
+
+<net id="188"><net_src comp="36" pin="0"/><net_sink comp="182" pin=1"/></net>
+
+<net id="194"><net_src comp="182" pin="3"/><net_sink comp="189" pin=0"/></net>
+
+<net id="198"><net_src comp="78" pin="2"/><net_sink comp="195" pin=0"/></net>
+
+<net id="203"><net_src comp="28" pin="0"/><net_sink comp="199" pin=0"/></net>
+
+<net id="208"><net_src comp="195" pin="1"/><net_sink comp="204" pin=0"/></net>
+
+<net id="218"><net_src comp="30" pin="0"/><net_sink comp="212" pin=0"/></net>
+
+<net id="219"><net_src comp="209" pin="1"/><net_sink comp="212" pin=1"/></net>
+
+<net id="220"><net_src comp="32" pin="0"/><net_sink comp="212" pin=2"/></net>
+
+<net id="221"><net_src comp="34" pin="0"/><net_sink comp="212" pin=3"/></net>
+
+<net id="225"><net_src comp="212" pin="4"/><net_sink comp="222" pin=0"/></net>
+
+<net id="229"><net_src comp="212" pin="4"/><net_sink comp="226" pin=0"/></net>
+
+<net id="230"><net_src comp="226" pin="1"/><net_sink comp="104" pin=2"/></net>
+
+<net id="231"><net_src comp="226" pin="1"/><net_sink comp="130" pin=2"/></net>
+
+<net id="236"><net_src comp="222" pin="1"/><net_sink comp="232" pin=0"/></net>
+
+<net id="237"><net_src comp="72" pin="2"/><net_sink comp="232" pin=1"/></net>
+
+<net id="241"><net_src comp="232" pin="2"/><net_sink comp="238" pin=0"/></net>
+
+<net id="242"><net_src comp="238" pin="1"/><net_sink comp="91" pin=2"/></net>
+
+<net id="243"><net_src comp="238" pin="1"/><net_sink comp="117" pin=2"/></net>
+
+<net id="249"><net_src comp="38" pin="0"/><net_sink comp="244" pin=0"/></net>
+
+<net id="250"><net_src comp="212" pin="4"/><net_sink comp="244" pin=1"/></net>
+
+<net id="251"><net_src comp="40" pin="0"/><net_sink comp="244" pin=2"/></net>
+
+<net id="256"><net_src comp="244" pin="3"/><net_sink comp="252" pin=0"/></net>
+
+<net id="257"><net_src comp="42" pin="0"/><net_sink comp="252" pin=1"/></net>
+
+<net id="262"><net_src comp="209" pin="1"/><net_sink comp="258" pin=0"/></net>
+
+<net id="263"><net_src comp="44" pin="0"/><net_sink comp="258" pin=1"/></net>
+
+<net id="268"><net_src comp="258" pin="2"/><net_sink comp="264" pin=0"/></net>
+
+<net id="272"><net_src comp="111" pin="3"/><net_sink comp="269" pin=0"/></net>
+
+<net id="276"><net_src comp="98" pin="3"/><net_sink comp="273" pin=0"/></net>
+
+<net id="280"><net_src comp="137" pin="3"/><net_sink comp="277" pin=0"/></net>
+
+<net id="284"><net_src comp="124" pin="3"/><net_sink comp="281" pin=0"/></net>
+
+<net id="288"><net_src comp="163" pin="3"/><net_sink comp="285" pin=0"/></net>
+
+<net id="292"><net_src comp="150" pin="3"/><net_sink comp="289" pin=0"/></net>
+
+<net id="297"><net_src comp="285" pin="1"/><net_sink comp="293" pin=0"/></net>
+
+<net id="298"><net_src comp="289" pin="1"/><net_sink comp="293" pin=1"/></net>
+
+<net id="302"><net_src comp="293" pin="2"/><net_sink comp="299" pin=0"/></net>
+
+<net id="306"><net_src comp="189" pin="3"/><net_sink comp="303" pin=0"/></net>
+
+<net id="310"><net_src comp="176" pin="3"/><net_sink comp="307" pin=0"/></net>
+
+<net id="315"><net_src comp="303" pin="1"/><net_sink comp="311" pin=0"/></net>
+
+<net id="316"><net_src comp="307" pin="1"/><net_sink comp="311" pin=1"/></net>
+
+<net id="320"><net_src comp="311" pin="2"/><net_sink comp="317" pin=0"/></net>
+
+<net id="328"><net_src comp="321" pin="1"/><net_sink comp="324" pin=1"/></net>
+
+<net id="329"><net_src comp="324" pin="2"/><net_sink comp="84" pin=2"/></net>
+
+<net id="334"><net_src comp="324" pin="2"/><net_sink comp="330" pin=1"/></net>
+
+<net id="339"><net_src comp="330" pin="2"/><net_sink comp="335" pin=0"/></net>
+
+<net id="345"><net_src comp="269" pin="1"/><net_sink comp="340" pin=0"/></net>
+
+<net id="346"><net_src comp="273" pin="1"/><net_sink comp="340" pin=1"/></net>
+
+<net id="347"><net_src comp="299" pin="1"/><net_sink comp="340" pin=2"/></net>
+
+<net id="348"><net_src comp="340" pin="3"/><net_sink comp="324" pin=0"/></net>
+
+<net id="354"><net_src comp="277" pin="1"/><net_sink comp="349" pin=0"/></net>
+
+<net id="355"><net_src comp="281" pin="1"/><net_sink comp="349" pin=1"/></net>
+
+<net id="356"><net_src comp="317" pin="1"/><net_sink comp="349" pin=2"/></net>
+
+<net id="357"><net_src comp="349" pin="3"/><net_sink comp="330" pin=0"/></net>
+
+<net id="361"><net_src comp="64" pin="1"/><net_sink comp="358" pin=0"/></net>
+
+<net id="362"><net_src comp="358" pin="1"/><net_sink comp="204" pin=1"/></net>
+
+<net id="363"><net_src comp="358" pin="1"/><net_sink comp="321" pin=0"/></net>
+
+<net id="364"><net_src comp="358" pin="1"/><net_sink comp="335" pin=1"/></net>
+
+<net id="368"><net_src comp="68" pin="1"/><net_sink comp="365" pin=0"/></net>
+
+<net id="369"><net_src comp="365" pin="1"/><net_sink comp="199" pin=1"/></net>
+
+<net id="370"><net_src comp="365" pin="1"/><net_sink comp="209" pin=0"/></net>
+
+<net id="371"><net_src comp="365" pin="1"/><net_sink comp="264" pin=1"/></net>
+
+<net id="375"><net_src comp="226" pin="1"/><net_sink comp="372" pin=0"/></net>
+
+<net id="376"><net_src comp="372" pin="1"/><net_sink comp="156" pin=2"/></net>
+
+<net id="377"><net_src comp="372" pin="1"/><net_sink comp="182" pin=2"/></net>
+
+<net id="381"><net_src comp="238" pin="1"/><net_sink comp="378" pin=0"/></net>
+
+<net id="382"><net_src comp="378" pin="1"/><net_sink comp="143" pin=2"/></net>
+
+<net id="383"><net_src comp="378" pin="1"/><net_sink comp="169" pin=2"/></net>
+
+<net id="387"><net_src comp="91" pin="3"/><net_sink comp="384" pin=0"/></net>
+
+<net id="388"><net_src comp="384" pin="1"/><net_sink comp="98" pin=0"/></net>
+
+<net id="392"><net_src comp="104" pin="3"/><net_sink comp="389" pin=0"/></net>
+
+<net id="393"><net_src comp="389" pin="1"/><net_sink comp="111" pin=0"/></net>
+
+<net id="397"><net_src comp="252" pin="2"/><net_sink comp="394" pin=0"/></net>
+
+<net id="401"><net_src comp="117" pin="3"/><net_sink comp="398" pin=0"/></net>
+
+<net id="402"><net_src comp="398" pin="1"/><net_sink comp="124" pin=0"/></net>
+
+<net id="406"><net_src comp="130" pin="3"/><net_sink comp="403" pin=0"/></net>
+
+<net id="407"><net_src comp="403" pin="1"/><net_sink comp="137" pin=0"/></net>
+
+<net id="411"><net_src comp="269" pin="1"/><net_sink comp="408" pin=0"/></net>
+
+<net id="412"><net_src comp="408" pin="1"/><net_sink comp="340" pin=0"/></net>
+
+<net id="416"><net_src comp="273" pin="1"/><net_sink comp="413" pin=0"/></net>
+
+<net id="417"><net_src comp="413" pin="1"/><net_sink comp="340" pin=1"/></net>
+
+<net id="421"><net_src comp="277" pin="1"/><net_sink comp="418" pin=0"/></net>
+
+<net id="422"><net_src comp="418" pin="1"/><net_sink comp="349" pin=0"/></net>
+
+<net id="426"><net_src comp="281" pin="1"/><net_sink comp="423" pin=0"/></net>
+
+<net id="427"><net_src comp="423" pin="1"/><net_sink comp="349" pin=1"/></net>
+
+<net id="431"><net_src comp="143" pin="3"/><net_sink comp="428" pin=0"/></net>
+
+<net id="432"><net_src comp="428" pin="1"/><net_sink comp="150" pin=0"/></net>
+
+<net id="436"><net_src comp="156" pin="3"/><net_sink comp="433" pin=0"/></net>
+
+<net id="437"><net_src comp="433" pin="1"/><net_sink comp="163" pin=0"/></net>
+
+<net id="441"><net_src comp="169" pin="3"/><net_sink comp="438" pin=0"/></net>
+
+<net id="442"><net_src comp="438" pin="1"/><net_sink comp="176" pin=0"/></net>
+
+<net id="446"><net_src comp="182" pin="3"/><net_sink comp="443" pin=0"/></net>
+
+<net id="447"><net_src comp="443" pin="1"/><net_sink comp="189" pin=0"/></net>
+
+<net id="451"><net_src comp="299" pin="1"/><net_sink comp="448" pin=0"/></net>
+
+<net id="452"><net_src comp="448" pin="1"/><net_sink comp="340" pin=0"/></net>
+
+<net id="456"><net_src comp="317" pin="1"/><net_sink comp="453" pin=0"/></net>
+
+<net id="457"><net_src comp="453" pin="1"/><net_sink comp="349" pin=0"/></net>
+
+</net_list>
+
+</model> 
+---------------- Datapath Model END ------------------
+
+* FSMD analyzer results:
+  - Output states:
+	Port: acc_2_out | {5 }
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u | {}
+ - Input state : 
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : sext_ln42 | {1 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : mul_ln45 | {1 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9 | {3 4 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3 | {3 4 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8 | {1 2 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2 | {1 2 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7 | {3 4 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1 | {3 4 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6 | {1 2 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_43_2 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u | {1 2 }
+  - Chain level:
+	State 1
+		store_ln43 : 1
+		store_ln42 : 1
+		i_2 : 1
+		lshr_ln5 : 2
+		zext_ln42_3 : 3
+		zext_ln42 : 3
+		add_ln45 : 4
+		zext_ln45 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27 : 6
+		w_4 : 7
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29 : 5
+		or_ln3 : 3
+		icmp_ln43 : 4
+		br_ln43 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33 : 6
+		w_6 : 7
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35 : 5
+		add_ln43 : 2
+		store_ln43 : 3
+	State 2
+		sext_ln46_1 : 1
+		sext_ln46_2 : 1
+		mul_ln46_1 : 2
+		sext_ln46_6 : 1
+		sext_ln46_7 : 1
+		mul_ln46_3 : 2
+	State 3
+		w : 1
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26 : 1
+		w_5 : 1
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32 : 1
+	State 4
+		sext_ln46 : 1
+		sext_ln45 : 1
+		mul_ln46 : 2
+		sext_ln46_3 : 3
+		sext_ln46_4 : 1
+		add_ln46 : 4
+		sext_ln46_5 : 1
+		sext_ln45_1 : 1
+		mul_ln46_2 : 2
+		sext_ln46_8 : 3
+		sext_ln46_9 : 1
+		add_ln46_2 : 4
+	State 5
+		acc_4 : 1
+		acc_5 : 2
+		store_ln42 : 3
+		write_ln46 : 2
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+
+* Functional unit list:
+|----------|---------------------------|---------|---------|---------|
+| Operation|      Functional Unit      |   DSP   |    FF   |   LUT   |
+|----------|---------------------------|---------|---------|---------|
+|          |      add_ln45_fu_232      |    0    |    0    |    12   |
+|    add   |      add_ln43_fu_258      |    0    |    0    |    12   |
+|          |        acc_4_fu_324       |    0    |    0    |    39   |
+|          |        acc_5_fu_330       |    0    |    0    |    39   |
+|----------|---------------------------|---------|---------|---------|
+|    mul   |      mul_ln46_fu_293      |    0    |    0    |    40   |
+|          |     mul_ln46_2_fu_311     |    0    |    0    |    40   |
+|----------|---------------------------|---------|---------|---------|
+|   icmp   |      icmp_ln43_fu_252     |    0    |    0    |    12   |
+|----------|---------------------------|---------|---------|---------|
+|  muladd  |         grp_fu_340        |    1    |    0    |    0    |
+|          |         grp_fu_349        |    1    |    0    |    0    |
+|----------|---------------------------|---------|---------|---------|
+|   read   |  mul_ln45_read_read_fu_72 |    0    |    0    |    0    |
+|          | sext_ln42_read_read_fu_78 |    0    |    0    |    0    |
+|----------|---------------------------|---------|---------|---------|
+|   write  |   write_ln46_write_fu_84  |    0    |    0    |    0    |
+|----------|---------------------------|---------|---------|---------|
+|          |   sext_ln42_cast_fu_195   |    0    |    0    |    0    |
+|          |     sext_ln46_1_fu_269    |    0    |    0    |    0    |
+|          |     sext_ln46_2_fu_273    |    0    |    0    |    0    |
+|          |     sext_ln46_6_fu_277    |    0    |    0    |    0    |
+|          |     sext_ln46_7_fu_281    |    0    |    0    |    0    |
+|   sext   |      sext_ln46_fu_285     |    0    |    0    |    0    |
+|          |      sext_ln45_fu_289     |    0    |    0    |    0    |
+|          |     sext_ln46_3_fu_299    |    0    |    0    |    0    |
+|          |     sext_ln46_5_fu_303    |    0    |    0    |    0    |
+|          |     sext_ln45_1_fu_307    |    0    |    0    |    0    |
+|          |     sext_ln46_8_fu_317    |    0    |    0    |    0    |
+|----------|---------------------------|---------|---------|---------|
+|partselect|      lshr_ln5_fu_212      |    0    |    0    |    0    |
+|----------|---------------------------|---------|---------|---------|
+|          |     zext_ln42_3_fu_222    |    0    |    0    |    0    |
+|   zext   |      zext_ln42_fu_226     |    0    |    0    |    0    |
+|          |      zext_ln45_fu_238     |    0    |    0    |    0    |
+|----------|---------------------------|---------|---------|---------|
+|bitconcatenate|       or_ln3_fu_244       |    0    |    0    |    0    |
+|----------|---------------------------|---------|---------|---------|
+|   Total  |                           |    2    |    0    |   194   |
+|----------|---------------------------|---------|---------|---------|
+
+Memories:
+N/A
+
+* Register list:
++-------------------------------------------------------------------------------+--------+
+|                                                                               |   FF   |
++-------------------------------------------------------------------------------+--------+
+|                                 acc_1_reg_358                                 |   32   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24_reg_428|    5   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25_reg_433|    3   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27_reg_384|    5   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28_reg_389|    3   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30_reg_438|    5   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31_reg_443|    3   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33_reg_398|    5   |
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34_reg_403|    3   |
+|                                   i_reg_365                                   |    5   |
+|                               icmp_ln43_reg_394                               |    1   |
+|                              sext_ln46_1_reg_408                              |   12   |
+|                              sext_ln46_2_reg_413                              |   12   |
+|                              sext_ln46_3_reg_448                              |   32   |
+|                              sext_ln46_6_reg_418                              |   12   |
+|                              sext_ln46_7_reg_423                              |   12   |
+|                              sext_ln46_8_reg_453                              |   32   |
+|                               zext_ln42_reg_372                               |   64   |
+|                               zext_ln45_reg_378                               |   64   |
++-------------------------------------------------------------------------------+--------+
+|                                     Total                                     |   310  |
++-------------------------------------------------------------------------------+--------+
+
+* Multiplexer (MUX) list: 
+|-------------------|------|------|------|--------||---------||---------||---------|
+|        Comp       |  Pin | Size |  BW  | S x BW ||  Delay  ||    FF   ||   LUT   |
+|-------------------|------|------|------|--------||---------||---------||---------|
+|  grp_access_fu_98 |  p0  |   2  |   5  |   10   ||    0    ||    9    |
+| grp_access_fu_111 |  p0  |   2  |   3  |    6   ||    0    ||    9    |
+| grp_access_fu_124 |  p0  |   2  |   5  |   10   ||    0    ||    9    |
+| grp_access_fu_137 |  p0  |   2  |   3  |    6   ||    0    ||    9    |
+| grp_access_fu_150 |  p0  |   2  |   5  |   10   ||    0    ||    9    |
+| grp_access_fu_163 |  p0  |   2  |   3  |    6   ||    0    ||    9    |
+| grp_access_fu_176 |  p0  |   2  |   5  |   10   ||    0    ||    9    |
+| grp_access_fu_189 |  p0  |   2  |   3  |    6   ||    0    ||    9    |
+|     grp_fu_340    |  p0  |   3  |   8  |   24   ||    0    ||    14   |
+|     grp_fu_340    |  p1  |   2  |   4  |    8   ||    0    ||    9    |
+|     grp_fu_349    |  p0  |   3  |   8  |   24   ||    0    ||    14   |
+|     grp_fu_349    |  p1  |   2  |   4  |    8   ||    0    ||    9    |
+|-------------------|------|------|------|--------||---------||---------||---------|
+|       Total       |      |      |      |   128  ||  5.222  ||    0    ||   118   |
+|-------------------|------|------|------|--------||---------||---------||---------|
+
+
+
+* Summary:
++-----------+--------+--------+--------+--------+
+|           |   DSP  |  Delay |   FF   |   LUT  |
++-----------+--------+--------+--------+--------+
+|  Function |    2   |    -   |    0   |   194  |
+|   Memory  |    -   |    -   |    -   |    -   |
+|Multiplexer|    -   |    5   |    0   |   118  |
+|  Register |    -   |    -   |   310  |    -   |
++-----------+--------+--------+--------+--------+
+|   Total   |    2   |    5   |   310  |   312  |
++-----------+--------+--------+--------+--------+
