@@ -7,7 +7,7 @@ if {${::AESL::PGuard_rtl_comp_handler}} {
 
 
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler compute_controller_mac_muladd_8s_4s_12s_32_4_1 BINDTYPE {op} TYPE {all} IMPL {dsp_slice} LATENCY 3
+	::AP::rtl_comp_handler compute_controller_mac_muladd_8s_4s_12s_13_4_1 BINDTYPE {op} TYPE {all} IMPL {dsp_slice} LATENCY 3
 }
 
 
@@ -22,14 +22,33 @@ if {${::AESL::PGuard_autoexp_gen}} {
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 31 \
+    id 92 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 93 \
     name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9 \
     reset_level 1 \
     sync_rst true \
     dir I \
     corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9 \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_address0 { O 5 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_q0 { I 4 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_q0 { I 8 vector } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9'"
@@ -41,17 +60,17 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 32 \
-    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3 \
+    id 94 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28 \
     reset_level 1 \
     sync_rst true \
     dir I \
-    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3 \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28 \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0 { O 3 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_q0 { I 8 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28_q0 { I 4 vector } } \
 } "
 } else {
-puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3'"
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28'"
 }
 }
 
@@ -60,14 +79,14 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 33 \
+    id 95 \
     name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8 \
     reset_level 1 \
     sync_rst true \
     dir I \
     corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8 \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_address0 { O 5 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_q0 { I 4 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_q0 { I 8 vector } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8'"
@@ -79,17 +98,17 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 34 \
-    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2 \
+    id 96 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27 \
     reset_level 1 \
     sync_rst true \
     dir I \
-    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2 \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27 \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0 { O 3 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_q0 { I 8 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27_q0 { I 4 vector } } \
 } "
 } else {
-puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2'"
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27'"
 }
 }
 
@@ -98,14 +117,14 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 35 \
+    id 97 \
     name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7 \
     reset_level 1 \
     sync_rst true \
     dir I \
     corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7 \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_address0 { O 5 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_q0 { I 4 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_q0 { I 8 vector } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7'"
@@ -117,17 +136,17 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 36 \
-    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1 \
+    id 98 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26 \
     reset_level 1 \
     sync_rst true \
     dir I \
-    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1 \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26 \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0 { O 3 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_q0 { I 8 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26_q0 { I 4 vector } } \
 } "
 } else {
-puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1'"
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26'"
 }
 }
 
@@ -136,14 +155,14 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 37 \
+    id 99 \
     name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6 \
     reset_level 1 \
     sync_rst true \
     dir I \
     corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6 \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_address0 { O 5 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_q0 { I 4 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_q0 { I 8 vector } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6'"
@@ -155,14 +174,223 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 38 \
+    id 100 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 101 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 102 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 103 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 104 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 105 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 106 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 107 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 108 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 109 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 110 \
+    name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20 \
+    op interface \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20_address0 { O 10 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 111 \
     name compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u \
     reset_level 1 \
     sync_rst true \
     dir I \
     corename compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u \
     op interface \
-    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0 { O 3 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_q0 { I 8 vector } } \
+    ports { compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0 { O 4 vector } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0 { O 1 bit } compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_q0 { I 8 vector } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u'"
@@ -170,10 +398,238 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 }
 
 
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 112 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11_address0 { O 10 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 113 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_address0 { O 4 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 114 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10_address0 { O 10 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 115 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_address0 { O 4 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 116 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9_address0 { O 10 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 117 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_address0 { O 4 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 118 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8_address0 { O 10 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 119 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_address0 { O 4 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 120 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7_address0 { O 10 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 121 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_address0 { O 4 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 122 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6 \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6 \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6_address0 { O 10 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6_q0 { I 4 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6'"
+}
+}
+
+
+# XIL_BRAM:
+if {${::AESL::PGuard_autoexp_gen}} {
+if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
+eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
+    id 123 \
+    name p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E \
+    reset_level 1 \
+    sync_rst true \
+    dir I \
+    corename p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E \
+    op interface \
+    ports { p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_address0 { O 4 vector } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0 { O 1 bit } p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_q0 { I 8 vector } } \
+} "
+} else {
+puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E'"
+}
+}
+
+
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 28 \
+    id 89 \
     name sext_ln42 \
     type other \
     dir I \
@@ -188,30 +644,30 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 29 \
-    name mul_ln45 \
+    id 90 \
+    name mul_ln43 \
     type other \
     dir I \
     reset_level 1 \
     sync_rst true \
-    corename dc_mul_ln45 \
+    corename dc_mul_ln43 \
     op interface \
-    ports { mul_ln45 { I 5 vector } } \
+    ports { mul_ln43 { I 9 vector } } \
 } "
 }
 
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 30 \
-    name acc_2_out \
+    id 91 \
+    name acc_1_out \
     type other \
     dir O \
     reset_level 1 \
     sync_rst true \
-    corename dc_acc_2_out \
+    corename dc_acc_1_out \
     op interface \
-    ports { acc_2_out { O 32 vector } acc_2_out_ap_vld { O 1 bit } } \
+    ports { acc_1_out { O 19 vector } acc_1_out_ap_vld { O 1 bit } } \
 } "
 }
 

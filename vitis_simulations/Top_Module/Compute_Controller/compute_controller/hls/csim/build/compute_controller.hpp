@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../top_params.hpp"
-#include "compute_buffer_layout.hpp"
 #include <cstdint>
 
 using int4_t = ap_int<4>;
@@ -17,8 +16,8 @@ constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
 constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
 constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
 
-constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, 4);
-constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, 4);
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, 16);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, 16);
 
 void compute_controller(
     bool        reset,               // [INPUT] Reset signal

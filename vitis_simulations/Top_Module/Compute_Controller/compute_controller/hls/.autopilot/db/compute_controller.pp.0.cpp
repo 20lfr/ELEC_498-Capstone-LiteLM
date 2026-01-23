@@ -6529,7 +6529,7 @@ constexpr int NUM_W1_TILES = 4;
 constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 8;
+constexpr int D_MODEL = 192;
 constexpr int D_FFN = 22;
 constexpr int D_HEADS = D_MODEL / NUM_HEADS;
 constexpr int D_TILE_WO = D_MODEL / NUM_WO_TILES;
@@ -6840,13 +6840,8 @@ struct ControlMemSpace {
 
     uint32_t reserved_debug = 0;
 };
-# 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp" 2
-# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_buffer_layout.hpp" 1
 
 
-
-# 1 "/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/ap_int.h" 1
-# 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_buffer_layout.hpp" 2
 
 
 namespace compute_buf {
@@ -7028,7 +7023,7 @@ inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
 }
 
 }
-# 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp" 2
+# 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp" 2
 
 
 using int4_t = ap_int<4>;
@@ -7044,8 +7039,8 @@ constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
 constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
 constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
 
-constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, 4);
-constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, 4);
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, 16);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, 16);
 
 __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     bool reset,
@@ -7443,18 +7438,16 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
             switch (req.op) {
                 case ComputeOp::CMP_OUT_PROJ: {
                     VITIS_LOOP_367_4: for (int i = 0; i < D_MODEL; ++i) {
-
-                        vectorA[i] = static_cast<int16_t>(
+#pragma HLS PIPELINE II=1
+ vectorA[i] = static_cast<int16_t>(
                             compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i));
                     }
                     VITIS_LOOP_372_5: for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
-
-                        vectorA[i] = 0;
+#pragma HLS PIPELINE II=1
+ vectorA[i] = 0;
                     }
-
-
-                    VITIS_LOOP_378_6: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
-                        VITIS_LOOP_379_7: for (int i = 0; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_376_6: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
+                        VITIS_LOOP_377_7: for (int i = 0; i < VECTOR_MAX; ++i) {
 
                             if (out_idx < D_TILE_WO && i < D_MODEL) {
                                 const int w_idx = (out_idx * D_MODEL) + i;
@@ -7466,13 +7459,13 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                             }
                         }
                     }
-                    VITIS_LOOP_391_8: for (int i = 0; i < D_TILE_WO; ++i) {
-
-                        bias[i] = compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::B * 2) + i);
+                    VITIS_LOOP_389_8: for (int i = 0; i < D_TILE_WO; ++i) {
+#pragma HLS PIPELINE II=1
+ bias[i] = compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::B * 2) + i);
                     }
-                    VITIS_LOOP_395_9: for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
-
-                        bias[i] = 0;
+                    VITIS_LOOP_393_9: for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
+#pragma HLS PIPELINE II=1
+ bias[i] = 0;
                     }
 
                     if(mac_ready && !mac_start && !mac_complete) {
@@ -7482,7 +7475,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                     else mac_start = false;
 
                     if (mac_complete) {
-                        VITIS_LOOP_407_10: for (int t = 0; t < D_TILE_WO; ++t) {
+                        VITIS_LOOP_405_10: for (int t = 0; t < D_TILE_WO; ++t) {
                             compute_buf::write_i32(out_buf, t * 4, out[t]);
                         }
                         next_state = ComputeState::MEM_WRITEBACK;

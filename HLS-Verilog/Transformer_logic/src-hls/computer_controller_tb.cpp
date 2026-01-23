@@ -19,13 +19,12 @@ void init_inputs(
     int4_t full_bias[D_MODEL]
 ) {
     for (int i = 0; i < D_MODEL; ++i) {
-        valueA[i] = static_cast<int8_t>(i + 1);
-        full_bias[i] = int4_t(1);
+        valueA[i] = static_cast<int8_t>(127);
+        full_bias[i] = int4_t(7);
     }
     for (int out = 0; out < D_MODEL; ++out) {
         for (int i = 0; i < D_MODEL; ++i) {
-            const int sign = (out % 2 == 0) ? 1 : -1;
-            full_weights[out * D_MODEL + i] = int4_t(sign);
+            full_weights[out * D_MODEL + i] = int4_t(7);
         }
     }
 }

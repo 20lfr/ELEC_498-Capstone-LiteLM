@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="18.215001 us"></ZoomEndTime>
-      <Cursor1Time time="7.425579 us"></Cursor1Time>
+      <ZoomEndTime time="1,000.000001 us"></ZoomEndTime>
+      <Cursor1Time time="1,000.000000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="229"></NameColumnWidth>
+      <NameColumnWidth column_width="205"></NameColumnWidth>
       <ValueColumnWidth column_width="60"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="72" />
+   <WVObjectSize size="77" />
    <wvobject type="logic" fp_name="/compute_controller_tb/ap_clk">
       <obj_property name="ElementShortName">ap_clk</obj_property>
       <obj_property name="ObjectShortName">ap_clk</obj_property>
@@ -116,6 +116,18 @@
       <obj_property name="ElementShortName">mem_write_request_ap_vld</obj_property>
       <obj_property name="ObjectShortName">mem_write_request_ap_vld</obj_property>
    </wvobject>
+   <wvobject type="logic" fp_name="/compute_controller_tb/done_seen">
+      <obj_property name="ElementShortName">done_seen</obj_property>
+      <obj_property name="ObjectShortName">done_seen</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/compute_done">
+      <obj_property name="ElementShortName">compute_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/OUT_PROJ_counter">
+      <obj_property name="ElementShortName">OUT_PROJ_counter[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_counter[31:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/compute_instruction">
       <obj_property name="ElementShortName">compute_instruction[31:0]</obj_property>
       <obj_property name="ObjectShortName">compute_instruction[31:0]</obj_property>
@@ -127,6 +139,10 @@
       <obj_property name="ElementShortName">pending_tile[31:0]</obj_property>
       <obj_property name="ObjectShortName">pending_tile[31:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/compute_start">
+      <obj_property name="ElementShortName">compute_start[0:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_start[0:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/mem_op">
       <obj_property name="ElementShortName">mem_op[31:0]</obj_property>
@@ -150,41 +166,29 @@
       <obj_property name="ElementShortName">mem_transfer_done[0:0]</obj_property>
       <obj_property name="ObjectShortName">mem_transfer_done[0:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/dbg_state">
-      <obj_property name="ElementShortName">dbg_state[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dbg_state[7:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
+   <wvobject type="array" fp_name="/compute_controller_tb/dbg_state_lat">
+      <obj_property name="ElementShortName">dbg_state_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_state_lat[7:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_instruction">
-      <obj_property name="ElementShortName">dbg_req_instruction[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dbg_req_instruction[31:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
+   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_instruction_lat">
+      <obj_property name="ElementShortName">dbg_req_instruction_lat[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_instruction_lat[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_op">
-      <obj_property name="ElementShortName">dbg_req_op[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dbg_req_op[7:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
+   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_op_lat">
+      <obj_property name="ElementShortName">dbg_req_op_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_op_lat[7:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_layer">
-      <obj_property name="ElementShortName">dbg_req_layer[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dbg_req_layer[7:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
+   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_layer_lat">
+      <obj_property name="ElementShortName">dbg_req_layer_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_layer_lat[7:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_head">
-      <obj_property name="ElementShortName">dbg_req_head[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dbg_req_head[7:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
+   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_head_lat">
+      <obj_property name="ElementShortName">dbg_req_head_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_head_lat[7:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_tile">
-      <obj_property name="ElementShortName">dbg_req_tile[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dbg_req_tile[7:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
+   <wvobject type="array" fp_name="/compute_controller_tb/dbg_req_tile_lat">
+      <obj_property name="ElementShortName">dbg_req_tile_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_tile_lat[7:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/compute_controller_tb/dbg_mac_start">
       <obj_property name="ElementShortName">dbg_mac_start</obj_property>
@@ -203,12 +207,16 @@
       <obj_property name="ObjectShortName">pending_tile[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/in_buf_address0">
-      <obj_property name="ElementShortName">in_buf_address0[6:0]</obj_property>
-      <obj_property name="ObjectShortName">in_buf_address0[6:0]</obj_property>
+      <obj_property name="ElementShortName">in_buf_address0[12:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_address0[12:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/in_buf_mem">
-      <obj_property name="ElementShortName">in_buf_mem[0:127][7:0]</obj_property>
-      <obj_property name="ObjectShortName">in_buf_mem[0:127][7:0]</obj_property>
+      <obj_property name="ElementShortName">in_buf_mem[0:4919][7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_mem[0:4919][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/out_buf_mem">
+      <obj_property name="ElementShortName">out_buf_mem[0:767][7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_mem[0:767][7:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/compute_controller_tb/in_buf_ce0">
       <obj_property name="ElementShortName">in_buf_ce0</obj_property>
@@ -223,114 +231,47 @@
       <obj_property name="ObjectShortName">out_buf_d0[7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_valueA">
-      <obj_property name="ElementShortName">full_valueA[0:7][7:0]</obj_property>
-      <obj_property name="ObjectShortName">full_valueA[0:7][7:0]</obj_property>
+      <obj_property name="ElementShortName">full_valueA[0:191][7:0]</obj_property>
+      <obj_property name="ObjectShortName">full_valueA[0:191][7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_weights">
-      <obj_property name="ElementShortName">full_weights[0:63][3:0]</obj_property>
-      <obj_property name="ObjectShortName">full_weights[0:63][3:0]</obj_property>
+      <obj_property name="ElementShortName">full_weights[0:36863][3:0]</obj_property>
+      <obj_property name="ObjectShortName">full_weights[0:36863][3:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum">
-      <obj_property name="ElementShortName">full_accum[0:7][31:0]</obj_property>
-      <obj_property name="ObjectShortName">full_accum[0:7][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[0]">
-         <obj_property name="ElementShortName">[0][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[1]">
-         <obj_property name="ElementShortName">[1][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[2]">
-         <obj_property name="ElementShortName">[2][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[3]">
-         <obj_property name="ElementShortName">[3][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[4]">
-         <obj_property name="ElementShortName">[4][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[5]">
-         <obj_property name="ElementShortName">[5][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[6]">
-         <obj_property name="ElementShortName">[6][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[7]">
-         <obj_property name="ElementShortName">[7][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[0]">
-         <obj_property name="ElementShortName">[0][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[1]">
-         <obj_property name="ElementShortName">[1][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[2]">
-         <obj_property name="ElementShortName">[2][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[3]">
-         <obj_property name="ElementShortName">[3][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[4]">
-         <obj_property name="ElementShortName">[4][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[5]">
-         <obj_property name="ElementShortName">[5][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[6]">
-         <obj_property name="ElementShortName">[6][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[7]">
-         <obj_property name="ElementShortName">[7][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
-      </wvobject>
+      <obj_property name="ElementShortName">full_accum[0:191][31:0]</obj_property>
+      <obj_property name="ObjectShortName">full_accum[0:191][31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum[0]">
       <obj_property name="ElementShortName">[0][31:0]</obj_property>
       <obj_property name="ObjectShortName">[0][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum[1]">
       <obj_property name="ElementShortName">[1][31:0]</obj_property>
       <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum[2]">
       <obj_property name="ElementShortName">[2][31:0]</obj_property>
       <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum[3]">
       <obj_property name="ElementShortName">[3][31:0]</obj_property>
       <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum[4]">
       <obj_property name="ElementShortName">[4][31:0]</obj_property>
       <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum[5]">
       <obj_property name="ElementShortName">[5][31:0]</obj_property>
       <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/NUM_HEADS">
       <obj_property name="ElementShortName">NUM_HEADS[31:0]</obj_property>
