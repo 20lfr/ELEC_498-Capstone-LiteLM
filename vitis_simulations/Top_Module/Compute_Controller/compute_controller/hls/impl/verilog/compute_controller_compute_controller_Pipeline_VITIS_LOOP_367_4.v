@@ -16,6 +16,30 @@ module compute_controller_compute_controller_Pipeline_VITIS_LOOP_367_4 (
         in_buf_address0,
         in_buf_ce0,
         in_buf_q0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_address0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_d0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_address0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_d0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_address0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_we0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_d0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_address0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_we0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_d0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_address0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_we0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_d0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_address0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_we0,
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_d0,
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0,
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0,
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0,
@@ -31,7 +55,31 @@ module compute_controller_compute_controller_Pipeline_VITIS_LOOP_367_4 (
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0,
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0,
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0,
-        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_d0
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_d0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_address0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_we0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_d0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_address0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_we0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_d0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_address0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_we0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_d0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_address0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_we0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_d0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_address0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_we0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_d0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_address0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0,
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_d0
 );
 
 parameter    ap_ST_fsm_pp0_stage0 = 1'd1;
@@ -42,25 +90,73 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [6:0] in_buf_address0;
+output  [12:0] in_buf_address0;
 output   in_buf_ce0;
 input  [7:0] in_buf_q0;
-output  [2:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_address0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0;
+output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_d0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_address0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0;
+output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_d0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_address0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_we0;
+output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_d0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_address0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_we0;
+output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_d0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_address0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_we0;
+output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_d0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_address0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0;
+output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_we0;
+output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_d0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0;
 output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_d0;
-output  [2:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_we0;
 output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_d0;
-output  [2:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0;
 output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_d0;
-output  [2:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0;
+output  [3:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0;
 output   compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0;
 output  [7:0] compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_d0;
+output  [3:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_address0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_we0;
+output  [7:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_d0;
+output  [3:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_address0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_we0;
+output  [7:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_d0;
+output  [3:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_address0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_we0;
+output  [7:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_d0;
+output  [3:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_address0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_we0;
+output  [7:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_d0;
+output  [3:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_address0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_we0;
+output  [7:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_d0;
+output  [3:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_address0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0;
+output   p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0;
+output  [7:0] p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_d0;
 
 reg ap_idle;
 
@@ -70,31 +166,54 @@ wire    ap_enable_reg_pp0_iter0;
 reg    ap_enable_reg_pp0_iter1;
 reg    ap_idle_pp0;
 wire    ap_block_pp0_stage0_subdone;
-wire   [0:0] icmp_ln367_fu_131_p2;
+wire   [0:0] icmp_ln367_fu_349_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [1:0] trunc_ln367_1_fu_147_p1;
-reg   [1:0] trunc_ln367_1_reg_196;
+wire   [3:0] trunc_ln367_fu_361_p1;
+reg   [3:0] trunc_ln367_reg_448;
 wire    ap_block_pp0_stage0_11001;
-reg   [0:0] tmp_reg_200;
-wire   [63:0] zext_ln127_fu_159_p1;
+reg   [3:0] lshr_ln_reg_452;
+wire   [63:0] zext_ln573_fu_375_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln367_fu_179_p1;
-reg   [3:0] i_fu_50;
-wire   [3:0] add_ln367_fu_137_p2;
+wire   [63:0] zext_ln367_fu_419_p1;
+reg   [7:0] i_18_fu_100;
+wire   [7:0] add_ln367_fu_355_p2;
 wire    ap_loop_init;
-reg   [3:0] ap_sig_allocacmp_i_4;
+reg   [7:0] ap_sig_allocacmp_i;
 reg    in_buf_ce0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_we0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_we0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_we0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_we0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_we0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0_local;
 reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0_local;
 reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0_local;
 reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_we0_local;
 reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0_local;
 reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0_local;
 reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0_local;
-reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0_local;
-reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0_local;
-wire   [2:0] trunc_ln367_fu_143_p1;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_we0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_we0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_we0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_we0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0_local;
+reg    compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0_local;
+reg    p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0_local;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -109,7 +228,7 @@ wire    ap_ce_reg;
 initial begin
 #0 ap_CS_fsm = 1'd1;
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
-#0 i_fu_50 = 4'd0;
+#0 i_18_fu_100 = 8'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -162,23 +281,23 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        if (((icmp_ln367_fu_131_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_fu_50 <= add_ln367_fu_137_p2;
+        if (((icmp_ln367_fu_349_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
+            i_18_fu_100 <= add_ln367_fu_355_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_50 <= 4'd0;
+            i_18_fu_100 <= 8'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        tmp_reg_200 <= ap_sig_allocacmp_i_4[32'd2];
-        trunc_ln367_1_reg_196 <= trunc_ln367_1_fu_147_p1;
+        lshr_ln_reg_452 <= {{ap_sig_allocacmp_i[7:4]}};
+        trunc_ln367_reg_448 <= trunc_ln367_fu_361_p1;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln367_fu_131_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((icmp_ln367_fu_349_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -194,7 +313,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((ap_idle_pp0 == 1'b1) & (ap_start_int == 1'b0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((ap_start_int == 1'b0) & (ap_idle_pp0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_idle = 1'b1;
     end else begin
         ap_idle = 1'b0;
@@ -218,10 +337,10 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_4 = 4'd0;
+    if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        ap_sig_allocacmp_i = 8'd0;
     end else begin
-        ap_sig_allocacmp_i_4 = i_fu_50;
+        ap_sig_allocacmp_i = i_18_fu_100;
     end
 end
 
@@ -234,7 +353,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln367_1_reg_196 == 2'd2) & (1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd8))) begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0_local = 1'b1;
     end else begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0_local = 1'b0;
@@ -250,7 +369,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln367_1_reg_196 == 2'd1) & (1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd7))) begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_we0_local = 1'b1;
     end else begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_we0_local = 1'b0;
@@ -266,10 +385,106 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln367_1_reg_196 == 2'd0) & (1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd6))) begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0_local = 1'b1;
     end else begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd5))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_we0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd4))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_we0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd3))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_we0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd2))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_we0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd1))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd0))) begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0_local = 1'b1;
+    end else begin
+        compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0_local = 1'b0;
     end
 end
 
@@ -282,7 +497,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln367_1_reg_196 == 2'd3) & (1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd9))) begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0_local = 1'b1;
     end else begin
         compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0_local = 1'b0;
@@ -298,6 +513,102 @@ always @ (*) begin
 end
 
 always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd14))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_we0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd13))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_we0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd12))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_we0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd11))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_we0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd10))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_we0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln367_reg_448 == 4'd15))) begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0_local = 1'b1;
+    end else begin
+        p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_pp0_stage0 : begin
             ap_NS_fsm = ap_ST_fsm_pp0_stage0;
@@ -308,7 +619,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln367_fu_137_p2 = (ap_sig_allocacmp_i_4 + 4'd1);
+assign add_ln367_fu_355_p2 = (ap_sig_allocacmp_i + 8'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -328,7 +639,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0 = zext_ln367_fu_179_p1;
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_address0 = zext_ln367_fu_419_p1;
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_ce0_local;
 
@@ -336,7 +647,7 @@ assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_d0
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0_local;
 
-assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0 = zext_ln367_fu_179_p1;
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_address0 = zext_ln367_fu_419_p1;
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_ce0_local;
 
@@ -344,7 +655,7 @@ assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_d0
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2_we0_local;
 
-assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0 = zext_ln367_fu_179_p1;
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_address0 = zext_ln367_fu_419_p1;
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_ce0_local;
 
@@ -352,7 +663,55 @@ assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_d0
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3_we0_local;
 
-assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0 = zext_ln367_fu_179_p1;
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_address0 = zext_ln367_fu_419_p1;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_ce0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_d0 = in_buf_q0;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4_we0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_address0 = zext_ln367_fu_419_p1;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_ce0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_d0 = in_buf_q0;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5_we0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_address0 = zext_ln367_fu_419_p1;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_ce0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_d0 = in_buf_q0;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6_we0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_address0 = zext_ln367_fu_419_p1;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_ce0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_d0 = in_buf_q0;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7_we0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_address0 = zext_ln367_fu_419_p1;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_ce0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_d0 = in_buf_q0;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_address0 = zext_ln367_fu_419_p1;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_ce0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_d0 = in_buf_q0;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0_local;
+
+assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_address0 = zext_ln367_fu_419_p1;
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0_local;
 
@@ -360,18 +719,64 @@ assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_d0 =
 
 assign compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0 = compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0_local;
 
-assign icmp_ln367_fu_131_p2 = ((ap_sig_allocacmp_i_4 == 4'd8) ? 1'b1 : 1'b0);
+assign icmp_ln367_fu_349_p2 = ((ap_sig_allocacmp_i == 8'd192) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln127_fu_159_p1;
+assign in_buf_address0 = zext_ln573_fu_375_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
-assign trunc_ln367_1_fu_147_p1 = ap_sig_allocacmp_i_4[1:0];
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_address0 = zext_ln367_fu_419_p1;
 
-assign trunc_ln367_fu_143_p1 = ap_sig_allocacmp_i_4[2:0];
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_ce0_local;
 
-assign zext_ln127_fu_159_p1 = trunc_ln367_fu_143_p1;
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_d0 = in_buf_q0;
 
-assign zext_ln367_fu_179_p1 = tmp_reg_200;
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_we0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1_we0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_address0 = zext_ln367_fu_419_p1;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_ce0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_d0 = in_buf_q0;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_we0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2_we0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_address0 = zext_ln367_fu_419_p1;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_ce0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_d0 = in_buf_q0;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_we0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3_we0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_address0 = zext_ln367_fu_419_p1;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_ce0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_d0 = in_buf_q0;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_we0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4_we0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_address0 = zext_ln367_fu_419_p1;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_ce0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_d0 = in_buf_q0;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_we0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5_we0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_address0 = zext_ln367_fu_419_p1;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_ce0_local;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_d0 = in_buf_q0;
+
+assign p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0 = p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0_local;
+
+assign trunc_ln367_fu_361_p1 = ap_sig_allocacmp_i[3:0];
+
+assign zext_ln367_fu_419_p1 = lshr_ln_reg_452;
+
+assign zext_ln573_fu_375_p1 = ap_sig_allocacmp_i;
 
 endmodule //compute_controller_compute_controller_Pipeline_VITIS_LOOP_367_4

@@ -365,16 +365,14 @@ void compute_controller(
             switch (req.op) {
                 case ComputeOp::CMP_OUT_PROJ: {
                     for (int i = 0; i < D_MODEL; ++i) {
-// #pragma HLS UNROLL factor=MAC_VEC_UNROLL
+#pragma HLS PIPELINE II=1
                         vectorA[i] = static_cast<int16_t>(
                             compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i));
                     }
                     for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
-// #pragma HLS UNROLL factor=MAC_VEC_UNROLL
+#pragma HLS PIPELINE II=1
                         vectorA[i] = 0;
                     }
-
-
                     for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
                         for (int i = 0; i < VECTOR_MAX; ++i) {
 // #pragma HLS UNROLL factor=MAC_VEC_UNROLL
@@ -389,11 +387,11 @@ void compute_controller(
                         }
                     }
                     for (int i = 0; i < D_TILE_WO; ++i) {
-// #pragma HLS UNROLL factor=MAC_OUT_UNROLL
+#pragma HLS PIPELINE II=1
                         bias[i] = compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::B * 2) + i);
                     }
                     for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
-// #pragma HLS UNROLL factor=MAC_OUT_UNROLL
+#pragma HLS PIPELINE II=1
                         bias[i] = 0;
                     }
 

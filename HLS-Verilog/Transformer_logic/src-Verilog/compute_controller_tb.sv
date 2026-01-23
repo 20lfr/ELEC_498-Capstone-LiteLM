@@ -10,7 +10,7 @@ module compute_controller_tb;
     localparam int NUM_W2_TILES    = 4;
     localparam int NUM_LOGIT_TILES = 2;
 
-    localparam int D_MODEL = 8; // Number of heads processed in parallel
+    localparam int D_MODEL = 192; // Number of heads processed in parallel
     localparam int D_FFN   = 22; // Feed-Forward hidden layer size
     localparam int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
     localparam int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
@@ -26,8 +26,10 @@ module compute_controller_tb;
     localparam int DBG_ACCUM_AW = (ACCUM_MAX > 1) ? $clog2(ACCUM_MAX) : 1;
     localparam int DBG_MATRIX_AW = (MATRIX_MAX > 1) ? $clog2(MATRIX_MAX) : 1;
 
-    localparam int IN_BUF_BYTES = 128;
-    localparam int OUT_BUF_BYTES = 64;
+    localparam int IN_BUF_BYTES = 4920;
+    localparam int OUT_BUF_BYTES = 768;
+    localparam int IN_BUF_ADDR_W = 13;
+    localparam int OUT_BUF_ADDR_W = 10;
 
     localparam int OUT_PROJ_ACT_BYTES = D_MODEL;
     localparam int OUT_PROJ_W_NIBBLES = D_MODEL * D_TILE_WO;
@@ -49,6 +51,7 @@ module compute_controller_tb;
     always #(CLK_PERIOD/2) ap_clk = ~ap_clk;
 
     logic [31:0]OUT_PROJ_counter = 0;
+    logic done_seen = 1'b0;
     typedef enum logic [1:0] {
         SETUP           =   2'b00,
         OUT_PROJ_SEND  = 2'b01,
@@ -89,14 +92,14 @@ module compute_controller_tb;
     logic mem_write_request_ap_vld;
     logic [31:0] mem_op;
     logic mem_op_ap_vld;
-    logic [6:0] in_buf_address0;
+    logic [IN_BUF_ADDR_W-1:0] in_buf_address0;
     logic in_buf_ce0;
     logic [7:0] in_buf_q0;
-    logic [5:0] out_buf_address0;
+    logic [OUT_BUF_ADDR_W-1:0] out_buf_address0;
     logic out_buf_ce0;
     logic out_buf_we0;
     logic [7:0] out_buf_d0;
-    logic [5:0] out_buf_address1;
+    logic [OUT_BUF_ADDR_W-1:0] out_buf_address1;
     logic out_buf_ce1;
     logic out_buf_we1;
     logic [7:0] out_buf_d1;
@@ -200,14 +203,14 @@ module compute_controller_tb;
       int j;
 
       for (i = 0; i < D_MODEL; i = i + 1) begin
-        full_valueA[i] = i + 1;
-        full_bias[i] = 4'd1;
+        full_valueA[i] = 8'h7f;
+        full_bias[i] = 4'h7;
         full_accum[i] = 32'd0;
       end
 
       for (t = 0; t < D_MODEL; t = t + 1) begin
         for (j = 0; j < D_MODEL; j = j + 1) begin
-          full_weights[t * D_MODEL + j] = ((t % 2) != 0) ? 4'hF : 4'h1;
+          full_weights[t * D_MODEL + j] = 4'h7;
         end
       end
 
@@ -381,35 +384,22 @@ module compute_controller_tb;
       
     end
 
-    initial begin : stimulus
-      int cycles = 0;
-      // Default inputs to the DUT.
-      ap_start = 1'b0;
-      ap_rst = 1'b1;
-      reset = 1'b0;
-      compute_start = 1'b0;
-      compute_instruction = 32'd0;
-      mem_transfer_done = 1'b0;
-      in_buf_q0 = 8'd0;
-      reset_hold_ctr = 0;
+    always_ff @(posedge ap_clk) begin
+      if (compute_done_ap_vld && compute_done) begin
+          done_seen <= 1'b1;
+      end
+      if (compute_start && !compute_ready) begin
+          compute_start <= 1'b0;
+      end
+    end
 
-      $display("Default DUT inputs:");
-      $display("  ap_clk=%0b ap_rst=%0b ap_start=%0b reset=%0b", ap_clk, ap_rst, ap_start, reset);
-      $display("  compute_start=%0b compute_instruction=0x%08x mem_transfer_done=%0b",
-               compute_start, compute_instruction, mem_transfer_done);
-      $display("  in_buf_q0=0x%0h", in_buf_q0);
-
-
-
-      @(posedge ap_clk);
-
-      for(cycles = 0; cycles < MAX_CYCLES; cycles++) begin
-        @(posedge ap_clk);
-
-        case (compute_state)
+    always_ff @(posedge ap_clk) begin : TB_FSM_controling_compute
+      case (compute_state)
           SETUP: begin
               // Initialize signals
               OUT_PROJ_counter <= 0;
+              done_seen <= 1'b0;
+              compute_start <= 1'b0;
               if (reset_hold_ctr >= (RESET_HOLD_CYCLES - 1)) begin
                   ap_rst <= 1'b0;
                   ap_start <= 1'b1;
@@ -435,17 +425,49 @@ module compute_controller_tb;
             if (OUT_PROJ_counter == NUM_WO_TILES) begin
               compute_state <= DONE;
             end
-            if (compute_done && OUT_PROJ_counter < NUM_WO_TILES) begin
+            if (done_seen && OUT_PROJ_counter < NUM_WO_TILES) begin
               OUT_PROJ_counter <= OUT_PROJ_counter + 1;
               compute_state <= OUT_PROJ_SEND;
+              done_seen <= 1'b0;
             end
           end
           DONE: begin
               // Finish simulation
               $finish;
           end
+      endcase
+    end
 
-        endcase
+    initial begin : stimulus
+      int cycles = 0;
+      // Default inputs to the DUT.
+      ap_start = 1'b0;
+      ap_rst = 1'b1;
+      reset = 1'b0;
+      compute_start = 1'b0;
+      compute_instruction = 32'd0;
+      mem_transfer_done = 1'b0;
+      in_buf_q0 = 8'd0;
+      reset_hold_ctr = 0;
+
+      $display("Default DUT inputs:");
+      $display("  ap_clk=%0b ap_rst=%0b ap_start=%0b reset=%0b", ap_clk, ap_rst, ap_start, reset);
+      $display("  compute_start=%0b compute_instruction=0x%08x mem_transfer_done=%0b",
+               compute_start, compute_instruction, mem_transfer_done);
+      $display("  in_buf_q0=0x%0h", in_buf_q0);
+
+
+
+      @(posedge ap_clk);
+
+      for(cycles = 0; cycles < MAX_CYCLES; cycles++) begin
+        @(posedge ap_clk);
+        
+
+        if (compute_state == DONE) begin
+          $display("Testbench completed after %0d cycles.", cycles);
+          $finish;
+        end
 
         $display("cycle=%0d state=%0d req_instr=0x%08x req_op=0x%02x req_layer=%0d req_head=%0d req_tile=%0d mac_start=%0d mac_ready=%0d mac_complete=%0d",
                  cycles,

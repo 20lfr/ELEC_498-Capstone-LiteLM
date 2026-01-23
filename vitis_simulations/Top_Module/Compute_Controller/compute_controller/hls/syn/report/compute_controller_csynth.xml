@@ -18,28 +18,28 @@
 <PipelineType>no</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>6.950</EstimatedClockPeriod>
+<EstimatedClockPeriod>4.449</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
-<Best-caseLatency>2</Best-caseLatency>
-<Average-caseLatency>19</Average-caseLatency>
-<Worst-caseLatency>211</Worst-caseLatency>
-<Best-caseRealTimeLatency>20.000 ns</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>0.190 us</Average-caseRealTimeLatency>
-<Worst-caseRealTimeLatency>2.110 us</Worst-caseRealTimeLatency>
-<Interval-min>3</Interval-min>
-<Interval-max>212</Interval-max>
+<Best-caseLatency>279</Best-caseLatency>
+<Average-caseLatency>805</Average-caseLatency>
+<Worst-caseLatency>10765</Worst-caseLatency>
+<Best-caseRealTimeLatency>2.790 us</Best-caseRealTimeLatency>
+<Average-caseRealTimeLatency>8.050 us</Average-caseRealTimeLatency>
+<Worst-caseRealTimeLatency>0.108 ms</Worst-caseRealTimeLatency>
+<Interval-min>280</Interval-min>
+<Interval-max>10766</Interval-max>
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
 <VITIS_LOOP_40_1>
 <Slack>7.30</Slack>
-<TripCount>2</TripCount>
+<TripCount>3</TripCount>
 <isPerfectNested>0</isPerfectNested>
-<Latency>61</Latency>
-<AbsoluteTimeLatency>610</AbsoluteTimeLatency>
-<IterationLatency>29</IterationLatency>
+<Latency>918</Latency>
+<AbsoluteTimeLatency>9180</AbsoluteTimeLatency>
+<IterationLatency>306</IterationLatency>
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
@@ -54,7 +54,7 @@
 <Name>VITIS_LOOP_40_1</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:435</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
 </VITIS_LOOP_40_1>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
@@ -62,10 +62,10 @@
 
 <AreaEstimates>
 <Resources>
-<BRAM_18K>0</BRAM_18K>
-<DSP>4</DSP>
-<FF>1095</FF>
-<LUT>3723</LUT>
+<BRAM_18K>16</BRAM_18K>
+<DSP>128</DSP>
+<FF>3939</FF>
+<LUT>72099</LUT>
 <URAM>0</URAM>
 </Resources>
 <AvailableResources>
@@ -320,7 +320,7 @@
 <IOProtocol>ap_memory</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>7</Bits>
+<Bits>13</Bits>
 <Attribute>address</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -356,7 +356,7 @@
 <IOProtocol>ap_memory</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>6</Bits>
+<Bits>10</Bits>
 <Attribute>address</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -404,7 +404,7 @@
 <IOProtocol>ap_memory</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>6</Bits>
+<Bits>10</Bits>
 <Attribute>address</Attribute>
 <CType>int</CType>
 </RtlPorts>
