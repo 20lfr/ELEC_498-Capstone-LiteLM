@@ -1,46 +1,43 @@
 {
   "0": {
-    "basicblocks": 131,
-    "calls": "4 5 4 5 4 4 5 4 4 5 1 3 3 2 4 5 4 5 4 4 5 4 4 5",
+    "basicblocks": 287,
+    "calls": "8 1 8 1 8 8 1 8 8 1 8 8 1 5 2 13 5 10 5 4 14 11 2 13 5 14 11 13 13 13 6 10 11 11 9 7 13 13 13 13 12 7 11 2 13 10 8 1 8 1 8 8 1 8 8 1",
     "control_depth": 3,
     "def_use_depth": 19,
     "file": "compute_controller.cpp",
-    "fileloc": 207,
-    "instructions": 13114,
+    "fileloc": 171,
+    "instructions": 26341,
     "loads": {
-      "G": 571,
-      "L": 2
+      "G": 587,
+      "L": 3
     },
-    "memory_accesses": 523,
+    "memory_accesses": 573,
     "name": "compute_controller",
     "stores": {
-      "G": 9513,
+      "G": 22344,
       "T": 32
     },
-    "total_instructions": 13291
+    "total_instructions": 56880
   },
   "1": {
-    "basicblocks": 1,
+    "basicblocks": 4,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 2,
-    "file": "top_params.hpp",
-    "fileloc": 572,
-    "instructions": 4,
-    "loads": {
-      "L": 1
-    },
+    "def_use_depth": 1,
+    "file": "compute_controller.hpp",
+    "fileloc": 11,
+    "instructions": 6,
     "memory_accesses": 0,
-    "name": "read_i8",
-    "total_instructions": 4
+    "name": "min2_constexpr",
+    "total_instructions": 6
   },
-  "2": {
+  "10": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 1,
     "file": "top_params.hpp",
-    "fileloc": 623,
+    "fileloc": 626,
     "instructions": 23,
     "memory_accesses": 0,
     "name": "write_i32",
@@ -49,13 +46,76 @@
     },
     "total_instructions": 23
   },
-  "3": {
+  "11": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 2,
+    "file": "top_params.hpp",
+    "fileloc": 575,
+    "instructions": 4,
+    "loads": {
+      "L": 1
+    },
+    "memory_accesses": 0,
+    "name": "read_i8",
+    "total_instructions": 4
+  },
+  "12": {
+    "basicblocks": 1156,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 6,
+    "file": "compute_controller.cpp",
+    "fileloc": 62,
+    "instructions": 3657,
+    "loads": {
+      "G": 192
+    },
+    "memory_accesses": 0,
+    "name": "REQUANT_D_MODEL_int32_to_int8",
+    "stores": {
+      "G": 576
+    },
+    "total_instructions": 3657
+  },
+  "13": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 6,
+    "file": "top_params.hpp",
+    "fileloc": 594,
+    "instructions": 26,
+    "loads": {
+      "L": 4
+    },
+    "memory_accesses": 0,
+    "name": "read_i32",
+    "total_instructions": 26
+  },
+  "14": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "top_params.hpp",
+    "fileloc": 620,
+    "instructions": 11,
+    "memory_accesses": 0,
+    "name": "write_i16",
+    "stores": {
+      "L": 2
+    },
+    "total_instructions": 11
+  },
+  "2": {
     "basicblocks": 4,
     "calls": "",
     "control_depth": 0,
     "def_use_depth": 2,
     "file": "top_params.hpp",
-    "fileloc": 576,
+    "fileloc": 579,
     "instructions": 15,
     "loads": {
       "L": 1
@@ -67,7 +127,89 @@
     },
     "total_instructions": 15
   },
+  "3": {
+    "basicblocks": 2179,
+    "calls": "",
+    "control_depth": 11,
+    "def_use_depth": 102,
+    "file": "hls_sqrt_apfixed.h",
+    "fileloc": 19,
+    "instructions": 4384,
+    "memory_accesses": 3,
+    "name": "sqrt_fixed<32, 16>",
+    "stores": {
+      "L": 3
+    },
+    "total_instructions": 4384
+  },
   "4": {
+    "basicblocks": 8,
+    "calls": "",
+    "control_depth": 2,
+    "def_use_depth": 3,
+    "file": "compute_controller.cpp",
+    "fileloc": 133,
+    "instructions": 21,
+    "loads": {
+      "G": 1
+    },
+    "memory_accesses": 3,
+    "name": "FFN_ACT_RELU",
+    "stores": {
+      "G": 2
+    },
+    "total_instructions": 21
+  },
+  "5": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "top_params.hpp",
+    "fileloc": 587,
+    "instructions": 12,
+    "loads": {
+      "L": 2
+    },
+    "memory_accesses": 0,
+    "name": "read_i16",
+    "total_instructions": 12
+  },
+  "6": {
+    "basicblocks": 9874,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "compute_controller.cpp",
+    "fileloc": 92,
+    "instructions": 18789,
+    "loads": {
+      "G": 579,
+      "L": 1
+    },
+    "memory_accesses": 3,
+    "name": "LAYER_NORM",
+    "stores": {
+      "G": 192
+    },
+    "total_instructions": 23175
+  },
+  "7": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "top_params.hpp",
+    "fileloc": 603,
+    "instructions": 4,
+    "memory_accesses": 0,
+    "name": "write_i8",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 4
+  },
+  "8": {
     "basicblocks": 4,
     "calls": "",
     "control_depth": 0,
@@ -79,16 +221,22 @@
     "name": "max2_constexpr",
     "total_instructions": 6
   },
-  "5": {
-    "basicblocks": 4,
+  "9": {
+    "basicblocks": 964,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "compute_controller.hpp",
-    "fileloc": 11,
-    "instructions": 6,
+    "def_use_depth": 3,
+    "file": "compute_controller.cpp",
+    "fileloc": 149,
+    "instructions": 3076,
+    "loads": {
+      "G": 384
+    },
     "memory_accesses": 0,
-    "name": "min2_constexpr",
-    "total_instructions": 6
+    "name": "RES_ADD",
+    "stores": {
+      "G": 192
+    },
+    "total_instructions": 3076
   }
 }

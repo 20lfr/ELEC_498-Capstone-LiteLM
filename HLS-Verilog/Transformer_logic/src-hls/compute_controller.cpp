@@ -1,5 +1,6 @@
 #include "compute_controller.hpp"
 #include <ap_fixed.h>
+#include <hls_math.h>
 
 
 // MAC Architecture
@@ -8,7 +9,7 @@ void MAC_ARCHITECTURE(
     bool &ready,
     const int16_t vectorA[VECTOR_MAX],
     const int4_t matrixB[MATRIX_MAX],
-    const int4_t bias[ACCUM_MAX],
+    const int32_t bias[ACCUM_MAX],
     bool &complete,
     int32_t accum_vector[ACCUM_MAX]
 ) {
@@ -36,7 +37,7 @@ void MAC_ARCHITECTURE(
         // Perform the actual computation
         for (int out = 0; out < ACCUM_MAX; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
-            int32_t acc = static_cast<int32_t>(bias[out]);
+            int32_t acc = bias[out];
             for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL factor=MAC_VEC_UNROLL
                 const int4_t w = matrixB[out * VECTOR_MAX + i];
@@ -113,9 +114,11 @@ void LAYER_NORM(
     ap_fixed<32, 16> mean = sum_fx / D_MODEL;
     ap_fixed<32, 16> square_mean = square_fx / D_MODEL;
     ap_fixed<32, 16> variance = square_mean - mean * mean;
-    ap_fixed<32, 16> v = (variance * variance) + ap_fixed<32, 16>(epsilon);
-    // ap_fixed<32, 16> inv_std = ap_fixed<32, 16>(1) / hls::sqrt(v);
-    ap_fixed<32, 16> inv_std = 1;
+    if (variance < 0) {
+        variance = 0;
+    }
+    ap_fixed<32, 16> v = variance + ap_fixed<32, 16>(epsilon);
+    ap_fixed<32, 16> inv_std = ap_fixed<32, 16>(1) / hls::sqrt(v);
 
 
     for (int i = 0; i < D_MODEL; ++i) {
@@ -126,30 +129,6 @@ void LAYER_NORM(
     }
 }
 
-// Assume int4_t is a signed 4-bit type, e.g. typedef ap_int<4> int4_t;
-void FFN_PRE_ACT(
-    const int8_t  input[D_MODEL],              // activations (int8)
-    const int4_t  weights[D_MODEL * D_TILE_W1],    // weights (int4)
-    const int4_t  bias[D_TILE_W1],                 // bias per output neuron
-    const int16_t scale[D_TILE_W1],                // per-neuron scale in Q0.15
-    int16_t       output[D_TILE_W1]                // pre-activation in int16 (e.g. Q1.15-ish)
-) {
-    const int16_t ACT_MIN = -32768;   // clamp range for pre-activation
-    const int16_t ACT_MAX =  32767;
-    for (int i = 0; i < D_TILE_W1; ++i) {
-#pragma HLS PIPELINE II=1
-        int32_t acc = static_cast<int32_t>(bias[i]);
-        for (int j = 0; j < D_MODEL; ++j) {
-#pragma HLS UNROLL factor=4  // or tune this based on resources
-            const int4_t w = weights[i * D_MODEL + j];
-            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
-        }
-        int32_t scaled = (acc * static_cast<int32_t>(scale[i])) >> 15;
-        if (scaled > ACT_MAX)       scaled = ACT_MAX;
-        else if (scaled < ACT_MIN)  scaled = ACT_MIN;
-        output[i] = static_cast<int16_t>(scaled);
-    }
-}
 
 void FFN_ACT_RELU(
     const int16_t input[D_FFN],   // pre-activation in some Q format (e.g., Q1.15-ish)
@@ -166,28 +145,6 @@ void FFN_ACT_RELU(
     }
 }
  
-void FFN_POST_ACT(
-    const int16_t input[D_FFN],               // ReLU'ed activations (int16, fixed-point)
-    const int4_t  weights[D_FFN * D_TILE_W2],   // W2, stored as [D_TILE_W2 x D_FFN]
-    const int4_t  bias[D_TILE_W2],              // bias for each output dim
-    const int16_t scale[D_TILE_W2],             // per-output scale in Q0.15
-    int32_t        output[D_TILE_W2]             // back to int8 activations
-) {
-#pragma HLS INLINE off
-    for (int i = 0; i < D_TILE_W2; ++i) {
-#pragma HLS PIPELINE II=1
-        int32_t acc = static_cast<int32_t>(bias[i]);
-        for (int j = 0; j < D_FFN; ++j) {
-#pragma HLS UNROLL factor=4   // tune this based on area/timing
-            const int4_t w = weights[i * D_FFN + j];  // row-major: row i, col j
-            acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
-        } 
-
-        // Apply scaling
-        int32_t scaled = (acc * static_cast<int32_t>(scale[i]));
-        output[i] = static_cast<int32_t>(scaled); 
-    }
-}
 
 void RES_ADD(
     const int8_t input[D_MODEL],
@@ -196,7 +153,14 @@ void RES_ADD(
 ) { 
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
-        output[i] = input[i] + residual[i];
+        const int16_t sum = static_cast<int16_t>(input[i]) + static_cast<int16_t>(residual[i]);
+        int16_t sat = sum;
+        if (sat > 127) {
+            sat = 127;
+        } else if (sat < -128) {
+            sat = -128;
+        }
+        output[i] = static_cast<int8_t>(sat);
     }
 }
 
@@ -246,15 +210,17 @@ void compute_controller(
     // Outputs based on current state (before any transition).
     compute_ready = (state == ComputeState::IDLE);
     compute_done  = (state == ComputeState::DONE);
-    
-    // mem_op        = 0;
+
+    // For MAC operations!!
     static int16_t vectorA[VECTOR_MAX];
     static int4_t matrixB[MATRIX_MAX];
-    static int4_t bias[ACCUM_MAX];
+    static int32_t bias[ACCUM_MAX];
+    static int16_t scale[ACCUM_MAX];
     static int32_t out[ACCUM_MAX];
 #pragma HLS ARRAY_PARTITION variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_OUT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=scale cyclic factor=MAC_OUT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=out cyclic factor=MAC_OUT_UNROLL dim=1
     bool mac_start = false;
     static bool mac_ready = true;
@@ -262,6 +228,38 @@ void compute_controller(
     static bool capture_pending = false;
 
     
+
+
+    // For Layer Norms!!!
+    static int8_t x_act[D_MODEL];
+    static int32_t ln_gamma[D_MODEL];
+    static int32_t ln_beta[D_MODEL];
+    static int32_t ln_epsilon;
+    static int32_t y_act[D_MODEL];
+    static int8_t y_resid[D_MODEL];
+#pragma HLS ARRAY_PARTITION variable=x_act cyclic factor=MAX_CYCLIC_SIZE dim=1
+#pragma HLS ARRAY_PARTITION variable=ln_gamma cyclic factor=MAX_CYCLIC_SIZE dim=1
+#pragma HLS ARRAY_PARTITION variable=ln_beta cyclic factor=MAX_CYCLIC_SIZE dim=1
+#pragma HLS ARRAY_PARTITION variable=y_act cyclic factor=MAX_CYCLIC_SIZE dim=1
+#pragma HLS ARRAY_PARTITION variable=y_resid cyclic factor=MAX_CYCLIC_SIZE dim=1
+
+    // For Residual Add!!!
+    static int8_t residual[D_MODEL];
+#pragma HLS ARRAY_PARTITION variable=residual cyclic factor=MAX_CYCLIC_SIZE dim=1
+
+    // For Requant!!!
+    static int32_t x32[D_MODEL];
+    static int8_t   y8[D_MODEL];
+#pragma HLS ARRAY_PARTITION variable=x32 cyclic factor=MAX_CYCLIC_SIZE dim=1
+#pragma HLS ARRAY_PARTITION variable=y8 cyclic factor=MAX_CYCLIC_SIZE dim=1
+
+    // For FFN activation (ReLU)!!!
+    static int16_t ffn_intermediate[D_FFN];
+    static int16_t ffn_act_out[D_FFN];
+#pragma HLS ARRAY_PARTITION variable=ffn_intermediate cyclic factor=MAX_CYCLIC_SIZE dim=1
+#pragma HLS ARRAY_PARTITION variable=ffn_act_out cyclic factor=MAX_CYCLIC_SIZE dim=1
+
+
     if (!mac_ready && mac_start && !mac_complete) {
         mac_start = false;
     } 
@@ -299,6 +297,25 @@ void compute_controller(
         for (int i = 0; i < ACCUM_MAX; ++i) {
 #pragma HLS UNROLL
             bias[i] = 0;
+            scale[i] = 0;
+            out[i] = 0;
+        }
+        for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS UNROLL
+            x_act[i] = 0;
+            ln_gamma[i] = 0;
+            ln_beta[i] = 0;
+            y_act[i] = 0;
+            y_resid[i] = 0;
+            residual[i] = 0;
+            x32[i] = 0;
+            y8[i] = 0;
+        }
+        ln_epsilon = 0;
+        for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS UNROLL
+            ffn_intermediate[i] = 0;
+            ffn_act_out[i] = 0;
         }
 
         return;
@@ -312,11 +329,45 @@ void compute_controller(
             if (compute_start) {
                 mac_start = false;
                 mac_complete = false;
+                for (int i = 0; i < VECTOR_MAX; ++i) {
+#pragma HLS UNROLL
+                    vectorA[i] = 0;
+                }
+                for (int i = 0; i < MATRIX_MAX; ++i) {
+#pragma HLS UNROLL
+                    matrixB[i] = 0;
+                }
+                for (int i = 0; i < ACCUM_MAX; ++i) {
+#pragma HLS UNROLL
+                    bias[i] = 0;
+                    scale[i] = 0;
+                    out[i] = 0;
+                }
+                for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS UNROLL
+                    x_act[i] = 0;
+                    ln_gamma[i] = 0;
+                    ln_beta[i] = 0;
+                    y_act[i] = 0;
+                    y_resid[i] = 0;
+                    residual[i] = 0;
+                    x32[i] = 0;
+                    y8[i] = 0;
+                }
+                ln_epsilon = 0;
+                for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS UNROLL
+                    ffn_intermediate[i] = 0;
+                    ffn_act_out[i] = 0;
+                }
                 req.instruction     = compute_instruction;
                 req.op              = static_cast<ComputeOp>(compute_instruction & 0xFFu);
                 req.layer_idx       = (compute_instruction >> 8) & 0xFFu;
                 req.head_idx        = (compute_instruction >> 16) & 0xFFu;
                 req.tile_idx        = (compute_instruction >> 24) & 0xFFu;
+
+
+
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
             }
             break;
@@ -339,13 +390,14 @@ void compute_controller(
                 req.op == ComputeOp::CMP_REQUANT1 || 
                 req.op == ComputeOp::CMP_RESID0 || 
                 req.op == ComputeOp::CMP_LN0 || 
-                req.op == ComputeOp::CMP_REQUANT3 || 
+                req.op == ComputeOp::CMP_HEAD_REQUANT || 
                 req.op == ComputeOp::CMP_FFN_W1 || 
                 req.op == ComputeOp::CMP_FFN_ACT || 
                 req.op == ComputeOp::CMP_FFN_W2 || 
-                req.op == ComputeOp::CMP_REQUANT4 || 
+                req.op == ComputeOp::CMP_REQUANT3 || 
                 req.op == ComputeOp::CMP_RESID1 || 
                 req.op == ComputeOp::CMP_LN1 || 
+                req.op == ComputeOp::CMP_REQUANT4 || 
                 req.op == ComputeOp::CMP_DEQUANT || 
                 req.op == ComputeOp::CMP_LOGITS) {
                 
@@ -372,7 +424,7 @@ void compute_controller(
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
                         vectorA[i] = static_cast<int16_t>(
-                            compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i));
+                            compute_buf::read_i8(in_buf, compute_buf::FfnW1Layout::X + i));
                     }
                     for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
@@ -393,12 +445,14 @@ void compute_controller(
                     }
                     for (int i = 0; i < D_TILE_WO; ++i) {
 #pragma HLS PIPELINE II=1
-                        bias[i] = compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::B * 2) + i);
+                        bias[i] = compute_buf::read_i32(in_buf, compute_buf::OutProjLayout::B + (i * 4));
                     }
                     for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
 #pragma HLS PIPELINE II=1
                         bias[i] = 0;
                     }
+                    
+                    
                     // MAC pulse control
                     if(mac_ready && !mac_start && !mac_complete) {
                         mac_start = true;
@@ -414,16 +468,217 @@ void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_REQUANT1:
-                case ComputeOp::CMP_RESID0:
-                case ComputeOp::CMP_LN0:
+                case ComputeOp::CMP_HEAD_REQUANT:
                 case ComputeOp::CMP_REQUANT3:
-                case ComputeOp::CMP_FFN_W1:
-                case ComputeOp::CMP_FFN_ACT:
-                case ComputeOp::CMP_FFN_W2:
-                case ComputeOp::CMP_REQUANT4:
-                case ComputeOp::CMP_RESID1:
-                case ComputeOp::CMP_LN1:
-                case ComputeOp::CMP_DEQUANT:
+                case ComputeOp::CMP_REQUANT4: {
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        x32[i] = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::X + (i * 4));
+                    }
+                    const int32_t M = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::M);
+                    const int32_t n = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::N);
+                    const int32_t z_out = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::Z);
+
+                    REQUANT_D_MODEL_int32_to_int8(
+                        x32,
+                        M,
+                        n,
+                        z_out,
+                        y8
+                    );
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        compute_buf::write_i8(out_buf, compute_buf::RequantLayout::X + i, y8[i]);
+                    }
+                    next_state = ComputeState::MEM_WRITEBACK;
+                    break;
+                }
+                case ComputeOp::CMP_RESID0:
+                case ComputeOp::CMP_RESID1:{
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        x_act[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::X + i));
+                        residual[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::R + i));
+                    }
+
+                    RES_ADD(
+                        x_act,
+                        residual,
+                        y_resid
+                    );
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        compute_buf::write_i8(out_buf, compute_buf::ResidLayout::X + i, y_resid[i]);
+                    }
+                    next_state = ComputeState::MEM_WRITEBACK;
+                    break;
+                }
+                case ComputeOp::CMP_LN0:
+                case ComputeOp::CMP_LN1: {
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        // Setup X
+                        x_act[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::LayerNormLayout::X + i));
+                        // Setup GAMMA
+                        ln_gamma[i] = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4)));
+                        // Setup BETA
+                        ln_beta[i] = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::BETA + (i * 4)));
+                    }
+                    // Setup EPSILON
+                    ln_epsilon = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::EPS));
+
+                    LAYER_NORM(
+                        x_act,
+                        ln_gamma,
+                        ln_beta,
+                        ln_epsilon,
+                        y_act
+                    );
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        compute_buf::write_i32(out_buf, compute_buf::LayerNormLayout::X + (i * 4), y_act[i]);
+                    }
+                    next_state = ComputeState::MEM_WRITEBACK;
+                    break;
+                }
+                case ComputeOp::CMP_FFN_W1:{
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        vectorA[i] = static_cast<int16_t>(
+                            compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i));
+                    }
+                    for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
+#pragma HLS PIPELINE II=1
+                        vectorA[i] = 0;
+                    }
+                    for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
+                        for (int i = 0; i < VECTOR_MAX; ++i) {
+// #pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                            if (out_idx < D_TILE_W1 && i < D_MODEL) {
+                                const int w_idx = (out_idx * D_MODEL) + i;
+                                matrixB[(out_idx * VECTOR_MAX) + i] = compute_buf::read_i4(
+                                    in_buf,
+                                    (compute_buf::FfnW1Layout::W * 2) + w_idx);
+                            } else {
+                                matrixB[(out_idx * VECTOR_MAX) + i] = 0;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < D_TILE_W1; ++i) {
+#pragma HLS PIPELINE II=1
+                        bias[i] = compute_buf::read_i32(in_buf, compute_buf::FfnW1Layout::B + (i * 4));
+                    }
+                    for (int i = D_TILE_W1; i < ACCUM_MAX; ++i) {
+#pragma HLS PIPELINE II=1
+                        bias[i] = 0;
+                    }
+                    for (int i = 0; i < D_TILE_W1; ++i) {
+#pragma HLS PIPELINE II=1
+                        scale[i] = compute_buf::read_i16(in_buf, compute_buf::FfnW1Layout::S + (i * 2));
+                    }
+                    for (int i = D_TILE_W1; i < ACCUM_MAX; ++i) {
+#pragma HLS PIPELINE II=1
+                        scale[i] = 0;
+                    }
+                    // MAC pulse control
+                    if(mac_ready && !mac_start && !mac_complete) {
+                        mac_start = true;
+                    }
+                    if (mac_complete) {
+
+                        // Do Scaling before RELU 
+                        for (int t = 0; t < D_TILE_W1; ++t) {
+                            const int64_t prod = static_cast<int64_t>(out[t]) * static_cast<int64_t>(scale[t]);
+                            const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
+                            int32_t scaled = static_cast<int32_t>(rounded >> 15);
+                            if (scaled > 32767) {
+                                scaled = 32767;
+                            } else if (scaled < -32768) {
+                                scaled = -32768;
+                            }
+                            compute_buf::write_i16(out_buf, t * 2, static_cast<int16_t>(scaled));
+                        }
+                        next_state = ComputeState::MEM_WRITEBACK;
+                    } else {
+                        next_state = ComputeState::EXECUTE;
+                    }
+                    break;
+                }
+                case ComputeOp::CMP_FFN_ACT:{
+                    for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS PIPELINE II=1
+                        ffn_intermediate[i] = compute_buf::read_i16(in_buf, compute_buf::FfnActLayout::X + (i * 2));
+                    }
+                    FFN_ACT_RELU(
+                        ffn_intermediate,
+                        ffn_act_out
+                    );
+                    for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS PIPELINE II=1
+                        compute_buf::write_i16(out_buf, compute_buf::FfnActLayout::X + (i * 2), ffn_act_out[i]);
+                    }
+                    next_state = ComputeState::MEM_WRITEBACK;
+                    break;
+                }
+                case ComputeOp::CMP_FFN_W2:{
+                    for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS PIPELINE II=1
+                        vectorA[i] = compute_buf::read_i16(
+                            in_buf, compute_buf::FfnW2Layout::X + (i * 2));
+                    }
+                    for (int i = D_FFN; i < VECTOR_MAX; ++i) {
+#pragma HLS PIPELINE II=1
+                        vectorA[i] = 0;
+                    }
+                    for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) { 
+                        for (int i = 0; i < VECTOR_MAX; ++i) {
+// #pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                            if (out_idx < D_TILE_W2 && i < D_FFN) {
+                                const int w_idx = (out_idx * D_FFN) + i;
+                                matrixB[(out_idx * VECTOR_MAX) + i] = compute_buf::read_i4(
+                                    in_buf,
+                                    (compute_buf::FfnW2Layout::W * 2) + w_idx);
+                            } else {
+                                matrixB[(out_idx * VECTOR_MAX) + i] = 0;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < D_TILE_W2; ++i) {
+#pragma HLS PIPELINE II=1
+                        bias[i] = compute_buf::read_i32(in_buf, compute_buf::FfnW2Layout::B + (i * 4));
+                    }
+                    for (int i = D_TILE_W2; i < ACCUM_MAX; ++i) {
+#pragma HLS PIPELINE II=1
+                        bias[i] = 0;
+                    }
+                    for (int i = 0; i < D_TILE_W2; ++i) {
+#pragma HLS PIPELINE II=1
+                        scale[i] = compute_buf::read_i16(in_buf, compute_buf::FfnW2Layout::S + (i * 2));
+                    }
+                    for (int i = D_TILE_W2; i < ACCUM_MAX; ++i) {
+#pragma HLS PIPELINE II=1
+                        scale[i] = 0;
+                    }
+                    // MAC pulse control
+                    if(mac_ready && !mac_start && !mac_complete) {
+                        mac_start = true;
+                    }
+                    if (mac_complete) {
+                        for (int t = 0; t < D_TILE_W2; ++t) {
+                            const int64_t prod = static_cast<int64_t>(out[t]) * static_cast<int64_t>(scale[t]);
+                            const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
+                            int32_t scaled = static_cast<int32_t>(rounded >> 15);
+                            compute_buf::write_i32(out_buf, t * 4, scaled);
+                        }
+                        next_state = ComputeState::MEM_WRITEBACK;
+                    } else {
+                        next_state = ComputeState::EXECUTE;
+                    }
+                    break;
+                }
+                case ComputeOp::CMP_DEQUANT:{
+                    break;
+                }
                 case ComputeOp::CMP_LOGITS:
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;

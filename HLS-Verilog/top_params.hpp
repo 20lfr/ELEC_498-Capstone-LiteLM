@@ -148,7 +148,7 @@ enum SchedState {
     S_REQUANT1,        // 6
     S_RES_ADD_1,       // 7
     S_LAYER_NORM_1,    // 8
-    S_REQUANT2,        // 9
+    S_HEAD_REQUANT,    // 9
     S_FFN,             // 10
     S_REQUANT3,        // 11
     S_RES_ADD_2,       // 12
@@ -190,62 +190,64 @@ enum class HeadPhase : uint8_t {
     VALUE_SCALE_CLAMP, // 10
     ATT_SOFTMAX,       // 11
     ATT_VALUE,         // 12
-    REQUANT2,          // 13
+    HEAD_REQUANT,      // 13
     DONE               // 14
 };
 
 enum ComputeOp : uint8_t {
-    CMP_NONE = 0,           // 0 
+    CMP_NONE = 0, // 0
+
     // Attention ops
-    CMP_Q,                  // 1
-    CMP_K,                  // 2
-    CMP_K_REQUANT,          // 3
-    CMP_V,                  // 4
-    CMP_V_REQUANT,          // 5
-    CMP_REQUANT_Q,          // 6
-    CMP_ATT_SCORES,         // 7
-    CMP_VALUE_SCALE,        // 8
-    CMP_SOFTMAX,            // 9
-    CMP_ATT_VALUE,          // 10
-    CMP_REQUANT2,           // 11
+    CMP_Q = 1,          // 1
+    CMP_K = 2,          // 2
+    CMP_K_REQUANT = 3,  // 3
+    CMP_V = 4,          // 4
+    CMP_V_REQUANT = 5,  // 5
+    CMP_REQUANT_Q = 6,  // 6
+    CMP_ATT_SCORES = 7, // 7
+    CMP_VALUE_SCALE = 8, // 8
+    CMP_SOFTMAX = 9,    // 9
+    CMP_ATT_VALUE = 10, // 10
+
     // Scheduler-level ops
-    CMP_HEAD_REQUANT,       // 12
-    CMP_CONCAT,             // 13
-    CMP_OUT_PROJ,           // 14
-    CMP_REQUANT1,           // 15
-    CMP_RESID0,             // 16
-    CMP_LN0,                // 17
-    CMP_REQUANT3,           // 18
-    CMP_FFN_W1,             // 19
-    CMP_FFN_ACT,            // 20
-    CMP_FFN_W2,             // 21
-    CMP_REQUANT4,           // 22
-    CMP_RESID1,             // 23
-    CMP_LN1,                // 24
-    CMP_DEQUANT,            // 25
-    CMP_LOGITS,             // 26
-    // LayerNorm micro-ops (three-phase: reduction, scalar, elementwise)
+    CMP_HEAD_REQUANT = 11, // 11 (pre-FFN requant)
+    // NOTE: opcode 12 reserved (legacy CMP_HEAD_REQUANT).
+    CMP_CONCAT = 13,       // 13
+    CMP_OUT_PROJ = 14,     // 14
+    CMP_REQUANT1 = 15,     // 15
+    CMP_RESID0 = 16,       // 16
+    CMP_LN0 = 17,          // 17
+    CMP_REQUANT3 = 18,     // 18
+    CMP_FFN_W1 = 19,       // 19
+    CMP_FFN_ACT = 20,      // 20
+    CMP_FFN_W2 = 21,       // 21
+    CMP_REQUANT4 = 22,     // 22
+    CMP_RESID1 = 23,       // 23
+    CMP_LN1 = 24,          // 24
+    CMP_DEQUANT = 25,      // 25
+    CMP_LOGITS = 26,       // 26
+
     // LayerNorm fine-grain micro-ops (per-step)
-    CMP_LN0_SUM,            // 27
-    CMP_LN0_SUMSQ,          // 28
-    CMP_LN0_MEAN,           // 29
-    CMP_LN0_EYY,            // 30
-    CMP_LN0_VAR,            // 31
-    CMP_LN0_VAR_EPS,        // 32
-    CMP_LN0_INV_STD,        // 33
-    CMP_LN0_NORM,           // 34
-    CMP_LN0_SCALE,          // 35
-    CMP_LN0_SHIFT,          // 36
-    CMP_LN1_SUM,            // 37
-    CMP_LN1_SUMSQ,          // 38
-    CMP_LN1_MEAN,           // 39
-    CMP_LN1_EYY,            // 40
-    CMP_LN1_VAR,            // 41
-    CMP_LN1_VAR_EPS,        // 42
-    CMP_LN1_INV_STD,        // 43
-    CMP_LN1_NORM,           // 44
-    CMP_LN1_SCALE,          // 45
-    CMP_LN1_SHIFT           // 46
+    CMP_LN0_SUM = 27,      // 27
+    CMP_LN0_SUMSQ = 28,    // 28
+    CMP_LN0_MEAN = 29,     // 29
+    CMP_LN0_EYY = 30,      // 30
+    CMP_LN0_VAR = 31,      // 31
+    CMP_LN0_VAR_EPS = 32,  // 32
+    CMP_LN0_INV_STD = 33,  // 33
+    CMP_LN0_NORM = 34,     // 34
+    CMP_LN0_SCALE = 35,    // 35
+    CMP_LN0_SHIFT = 36,    // 36
+    CMP_LN1_SUM = 37,      // 37
+    CMP_LN1_SUMSQ = 38,    // 38
+    CMP_LN1_MEAN = 39,     // 39
+    CMP_LN1_EYY = 40,      // 40
+    CMP_LN1_VAR = 41,      // 41
+    CMP_LN1_VAR_EPS = 42,  // 42
+    CMP_LN1_INV_STD = 43,  // 43
+    CMP_LN1_NORM = 44,     // 44
+    CMP_LN1_SCALE = 45,    // 45
+    CMP_LN1_SHIFT = 46     // 46
 };
 
 enum DmaSel : uint8_t {
@@ -262,6 +264,12 @@ enum DmaSel : uint8_t {
     DMASEL_W2,          // 10
     DMASEL_WLOGIT       // 11
 };
+
+enum class ComputeErrorCodes {
+    IncorrectRequest, 
+    InvalidComputationForamt
+};
+
 
 struct HeadCtx {
     int  layer_stamp   = -1;
@@ -296,7 +304,7 @@ struct HeadCtx {
     bool val_scale_started  = false;
     bool softmax_started    = false;
     bool att_value_started  = false;
-    bool requant2_started   = false;
+    bool head_requant_started   = false;
 
     bool q_compute_done          = false;
     bool k_compute_done          = false;
@@ -308,7 +316,7 @@ struct HeadCtx {
     bool val_scale_compute_done  = false;
     bool softmax_compute_done    = false;
     bool att_value_compute_done  = false;
-    bool requant2_compute_done   = false;
+    bool head_requant_compute_done   = false;
 
     bool q_dma_done          = false;
     bool k_dma_done          = false;
@@ -318,7 +326,6 @@ struct HeadCtx {
     bool att_scores_dma_done = false;
     bool att_value_dma_done  = false;
 };
-
 
 
 // ------------------------------------------------------------
@@ -433,8 +440,7 @@ constexpr int max2(int a, int b) {
 constexpr int OUT_PROJ_ACT_BYTES = D_MODEL;
 constexpr int OUT_PROJ_W_NIBBLES = D_MODEL * D_TILE_WO;
 constexpr int OUT_PROJ_W_BYTES = div_ceil(OUT_PROJ_W_NIBBLES, 2);
-constexpr int OUT_PROJ_B_NIBBLES = D_TILE_WO;
-constexpr int OUT_PROJ_B_BYTES = div_ceil(OUT_PROJ_B_NIBBLES, 2);
+constexpr int OUT_PROJ_B_BYTES = D_TILE_WO * 4;
 constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
 
 constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
@@ -443,16 +449,14 @@ constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
 
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
-constexpr int FFN_W1_B_NIBBLES = D_TILE_W1;
-constexpr int FFN_W1_B_BYTES = div_ceil(FFN_W1_B_NIBBLES, 2);
+constexpr int FFN_W1_B_BYTES = D_TILE_W1 * 4;
 constexpr int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES + (D_TILE_W1 * 2);
 
 constexpr int FFN_ACT_IN_BYTES = D_FFN * 2;
 
 constexpr int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
 constexpr int FFN_W2_W_BYTES = div_ceil(FFN_W2_W_NIBBLES, 2);
-constexpr int FFN_W2_B_NIBBLES = D_TILE_W2;
-constexpr int FFN_W2_B_BYTES = div_ceil(FFN_W2_B_NIBBLES, 2);
+constexpr int FFN_W2_B_BYTES = D_TILE_W2 * 4;
 constexpr int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES + (D_TILE_W2 * 2);
 
 constexpr int IN_BUF_BYTES = max2(
@@ -532,6 +536,7 @@ struct FfnW2Layout {
     static constexpr int B = W + FFN_W2_W_BYTES;
     static constexpr int S = B + FFN_W2_B_BYTES;
 };
+
 
 // -------------------------------
 // Byte helpers (little-endian)

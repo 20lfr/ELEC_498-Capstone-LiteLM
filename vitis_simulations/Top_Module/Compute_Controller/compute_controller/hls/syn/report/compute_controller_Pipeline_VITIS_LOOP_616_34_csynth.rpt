@@ -1,0 +1,198 @@
+
+
+================================================================
+== Vitis HLS Report for 'compute_controller_Pipeline_VITIS_LOOP_616_34'
+================================================================
+* Date:           Sat Jan 24 18:01:23 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  2.403 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval |                    Pipeline                    |
+    |   min   |   max   |    min   |    max   | min | max |                      Type                      |
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |       24|       24|  0.240 us|  0.240 us|   23|   23|  loop auto-rewind stp (delay=0 clock cycles(s))|
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                     |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |      Loop Name      |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_616_34  |       22|       22|         2|          1|          1|    22|       yes|
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|      26|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|       0|      65|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|      36|    -|
+|Register         |        -|     -|      13|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     0|      13|     127|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|     0|      ~0|      ~0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +----------------------------+-----------------------+---------+----+---+----+-----+
+    |          Instance          |         Module        | BRAM_18K| DSP| FF| LUT| URAM|
+    +----------------------------+-----------------------+---------+----+---+----+-----+
+    |sparsemux_33_4_15_1_1_U167  |sparsemux_33_4_15_1_1  |        0|   0|  0|  65|    0|
+    +----------------------------+-----------------------+---------+----+---+----+-----+
+    |Total                       |                       |        0|   0|  0|  65|    0|
+    +----------------------------+-----------------------+---------+----+---+----+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +----------------------+----------+----+---+----+------------+------------+
+    |     Variable Name    | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +----------------------+----------+----+---+----+------------+------------+
+    |add_ln616_fu_367_p2   |         +|   0|  0|  12|           5|           1|
+    |icmp_ln616_fu_361_p2  |      icmp|   0|  0|  12|           5|           5|
+    |ap_enable_pp0         |       xor|   0|  0|   2|           1|           2|
+    +----------------------+----------+----+---+----+------------+------------+
+    |Total                 |          |   0|  0|  26|          11|           8|
+    +----------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------+----+-----------+-----+-----------+
+    |           Name          | LUT| Input Size| Bits| Total Bits|
+    +-------------------------+----+-----------+-----+-----------+
+    |ap_done_int              |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1  |   9|          2|    1|          2|
+    |ap_sig_allocacmp_i_6     |   9|          2|    5|         10|
+    |i_fu_116                 |   9|          2|    5|         10|
+    +-------------------------+----+-----------+-----+-----------+
+    |Total                    |  36|          8|   12|         24|
+    +-------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------+---+----+-----+-----------+
+    |           Name          | FF| LUT| Bits| Const Bits|
+    +-------------------------+---+----+-----+-----------+
+    |ap_CS_fsm                |  1|   0|    1|          0|
+    |ap_done_reg              |  1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1  |  1|   0|    1|          0|
+    |i_6_reg_532              |  5|   0|    5|          0|
+    |i_fu_116                 |  5|   0|    5|          0|
+    +-------------------------+---+----+-----+-----------+
+    |Total                    | 13|   0|   13|          0|
+    +-------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-----------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+|                                           RTL Ports                                           | Dir | Bits|  Protocol  |                                     Source Object                                    |    C Type    |
++-----------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+|ap_clk                                                                                         |   in|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_616_34|  return value|
+|ap_rst                                                                                         |   in|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_616_34|  return value|
+|ap_start                                                                                       |   in|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_616_34|  return value|
+|ap_done                                                                                        |  out|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_616_34|  return value|
+|ap_idle                                                                                        |  out|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_616_34|  return value|
+|ap_ready                                                                                       |  out|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_616_34|  return value|
+|out_buf_address0                                                                               |  out|   10|   ap_memory|                                                                               out_buf|         array|
+|out_buf_ce0                                                                                    |  out|    1|   ap_memory|                                                                               out_buf|         array|
+|out_buf_we0                                                                                    |  out|    1|   ap_memory|                                                                               out_buf|         array|
+|out_buf_d0                                                                                     |  out|    8|   ap_memory|                                                                               out_buf|         array|
+|out_buf_address1                                                                               |  out|   10|   ap_memory|                                                                               out_buf|         array|
+|out_buf_ce1                                                                                    |  out|    1|   ap_memory|                                                                               out_buf|         array|
+|out_buf_we1                                                                                    |  out|    1|   ap_memory|                                                                               out_buf|         array|
+|out_buf_d1                                                                                     |  out|    8|   ap_memory|                                                                               out_buf|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_168_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_168|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_168_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_168|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_168_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_168|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_167_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_167|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_167_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_167|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_167_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_167|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_166_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_166|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_166_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_166|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_166_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_166|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_165_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_165|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_165_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_165|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_165_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_165|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_164_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_164|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_164_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_164|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_164_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_164|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_163_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_163|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_163_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_163|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_163_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_163|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_162_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_162|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_162_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_162|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_162_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_162|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_161_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_161|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_161_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_161|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_161_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_161|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_160_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_160|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_160_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_160|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_160_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_160|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_159_address0              |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_159|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_159_ce0                   |  out|    1|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_159|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_159_q0                    |   in|   15|   ap_memory|              compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_159|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_89_address0  |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_89|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_89_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_89|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_89_q0        |   in|   15|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_89|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_88_address0  |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_88|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_88_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_88|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_88_q0        |   in|   15|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_88|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_87_address0  |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_87|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_87_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_87|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_87_q0        |   in|   15|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_87|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_86_address0  |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_86|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_86_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_86|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_86_q0        |   in|   15|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_86|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_85_address0  |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_85|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_85_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_85|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_85_q0        |   in|   15|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_85|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_84_address0  |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_84|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_84_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_84|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_84_q0        |   in|   15|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_84|         array|
++-----------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+

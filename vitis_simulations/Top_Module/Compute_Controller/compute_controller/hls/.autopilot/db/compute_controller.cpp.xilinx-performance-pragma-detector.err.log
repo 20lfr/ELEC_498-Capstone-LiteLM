@@ -1,0 +1,60 @@
+In file included from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:3:
+In file included from /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/hls_math.h:1053:
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:91:72: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_cos_K0 type=ROM_1P impl=LUTRAM
+                                                                       ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:92:72: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_cos_K1 type=ROM_1P impl=LUTRAM
+                                                                       ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:93:72: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_cos_K2 type=ROM_1P impl=LUTRAM
+                                                                       ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:94:72: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_cos_K3 type=ROM_1P impl=LUTRAM
+                                                                       ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:95:72: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_cos_K4 type=ROM_1P impl=LUTRAM
+                                                                       ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:125:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::cos_K0 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:126:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::cos_K1 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:127:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::cos_K2 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:128:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::cos_K3 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:129:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::cos_K4 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:130:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_K0 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:131:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_K1 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:132:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_K2 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:133:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_K3 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:134:68: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=fourth_order_double::sin_K4 type=ROM_1P impl=LUTRAM
+                                                                   ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:184:71: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=second_order_float::sin_cos_K0 type=ROM_1P impl=LUTRAM
+                                                                      ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:185:71: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=second_order_float::sin_cos_K1 type=ROM_1P impl=LUTRAM
+                                                                      ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:186:71: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=second_order_float::sin_cos_K2 type=ROM_1P impl=LUTRAM
+                                                                      ^
+/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_hotbm_apfixed.h:213:67: error: Invalid Directive: for current device, ROM_1P + LUTRAM is invalid combination for BIND_STORAGE's option 'type + impl'
+#pragma HLS BIND_STORAGE variable=second_order_float::cos_K0 type=ROM_1P impl=LUTRAM
+                                                                  ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]

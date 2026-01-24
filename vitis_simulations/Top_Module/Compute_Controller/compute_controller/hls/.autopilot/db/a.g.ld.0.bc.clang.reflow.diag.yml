@@ -1,33 +1,49 @@
 --- !Missed
 Pass:            inline
 Name:            NeverInline
-DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
-                   Line: 15, Column: 28 }
-Function:        _Z16MAC_ARCHITECTUREbRbPKsPK6ap_intILi4EES5_S_Pi
+DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/hls_math.h, 
+                   Line: 1268, Column: 12 }
+Function:        _ZN3hls4sqrtILi32ELi16EEE8ap_fixedIXT_EXT0_EL9ap_q_mode5EL9ap_o_mode3ELi0EES4_
 Args:            
-  - Callee:          'max2_constexpr(int, int)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
-                       Line: 8, Column: 0 }
+  - Callee:          'ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0> sqrt_fixed<32, 16>(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>)'
+    DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h, 
+                       Line: 20, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'MAC_ARCHITECTURE(bool, bool&, short const*, ap_int<4> const*, ap_int<4> const*, bool&, int*)'
-    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 14, Column: 0 }
+  - Caller:          'ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0> hls::sqrt<32, 16>(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>)'
+    DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/hls_math.h, 
+                       Line: 1267, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
-                   Line: 19, Column: 32 }
-Function:        _Z16MAC_ARCHITECTUREbRbPKsPK6ap_intILi4EES5_S_Pi
+                   Line: 15, Column: 28 }
+Function:        _Z16MAC_ARCHITECTUREbRbPKsPK6ap_intILi4EEPKiS_Pi
+Args:            
+  - Callee:          'max2_constexpr(int, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
+                       Line: 8, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'MAC_ARCHITECTURE(bool, bool&, short const*, ap_int<4> const*, int const*, bool&, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 15, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
+                   Line: 20, Column: 32 }
+Function:        _Z16MAC_ARCHITECTUREbRbPKsPK6ap_intILi4EEPKiS_Pi
 Args:            
   - Callee:          'min2_constexpr(int, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
                        Line: 11, Column: 0 }
   - String:          ' not inlined into '
-  - Caller:          'MAC_ARCHITECTURE(bool, bool&, short const*, ap_int<4> const*, ap_int<4> const*, bool&, int*)'
+  - Caller:          'MAC_ARCHITECTURE(bool, bool&, short const*, ap_int<4> const*, int const*, bool&, int*)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 14, Column: 0 }
+                       Line: 15, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -43,14 +59,14 @@ Args:
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
-                   Line: 19, Column: 32 }
+                   Line: 20, Column: 32 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'min2_constexpr(int, int)'
@@ -59,85 +75,269 @@ Args:
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Passed
 Pass:            inline
 Name:            AlwaysInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 438, Column: 13 }
+                   Line: 690, Column: 13 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Inlining function '''
-  - Callee:          'MAC_ARCHITECTURE(bool, bool&, short const*, ap_int<4> const*, ap_int<4> const*, bool&, int*)'
+  - Callee:          'MAC_ARCHITECTURE(bool, bool&, short const*, ap_int<4> const*, int const*, bool&, int*)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 14, Column: 0 }
+                       Line: 15, Column: 0 }
   - String:          ''' into '''
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ''''
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 375, Column: 29 }
+                   Line: 427, Column: 29 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'compute_buf::read_i8(unsigned char const*, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 572, Column: 0 }
+                       Line: 575, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 386, Column: 71 }
+                   Line: 438, Column: 71 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'compute_buf::read_i4(unsigned char const*, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 576, Column: 0 }
+                       Line: 579, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 411, Column: 29 }
+                   Line: 448, Column: 12 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::read_i32(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 594, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 462, Column: 29 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'compute_buf::write_i32(unsigned char*, int, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 623, Column: 0 }
+                       Line: 626, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 482, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'REQUANT_D_MODEL_int32_to_int8(int const*, int, int, int, signed char*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 69, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 491, Column: 2 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::write_i8(unsigned char*, int, signed char)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 603, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 504, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'RES_ADD(signed char const*, signed char const*, signed char*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 153, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 530, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'LAYER_NORM(signed char const*, int const*, int const*, int, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 98, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 577, Column: 13 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::read_i16(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 587, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 599, Column: 29 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::write_i16(unsigned char*, int, short)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 620, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 612, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'FFN_ACT_RELU(short const*, short*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 136, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Passed
+Pass:            reflow-infer-unroll
+Name:            ImplicitUnroll
+DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h, 
+                   Line: 271, Column: 27 }
+Function:        _Z10sqrt_fixedILi32ELi16EE8ap_fixedIXT_EXT0_EL9ap_q_mode5EL9ap_o_mode3ELi0EES3_
+Args:            
+  - String:          'Loop '''
+  - LoopName:        VITIS_LOOP_271_2
+  - String:          ''' is marked as complete unroll implied by the pipeline pragma'
+...
+--- !Passed
+Pass:            reflow-infer-unroll
+Name:            ImplicitUnroll
+DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h, 
+                   Line: 243, Column: 27 }
+Function:        _Z10sqrt_fixedILi32ELi16EE8ap_fixedIXT_EXT0_EL9ap_q_mode5EL9ap_o_mode3ELi0EES3_
+Args:            
+  - String:          'Loop '''
+  - LoopName:        VITIS_LOOP_243_1
+  - String:          ''' is marked as complete unroll implied by the pipeline pragma'
 ...
 --- !Passed
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaFullyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_299_3
+  - LoopName:        VITIS_LOOP_315_5
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:299:27'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:315:27'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          compute_controller
+  - String:          ''' completely with a factor of '
+  - Factor:          '22'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_303_4
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:303:27'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          compute_controller
+  - String:          ''' completely with a factor of '
+  - Factor:          '192'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_297_3
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:297:27'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -148,13 +348,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaFullyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_295_2
+  - LoopName:        VITIS_LOOP_293_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:295:27'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:293:27'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -165,13 +365,98 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaFullyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_291_1
+  - LoopName:        VITIS_LOOP_289_1
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:291:27'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:289:27'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          compute_controller
+  - String:          ''' completely with a factor of '
+  - Factor:          '192'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_358_10
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:358:36'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          compute_controller
+  - String:          ''' completely with a factor of '
+  - Factor:          '22'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_346_9
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:346:35'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          compute_controller
+  - String:          ''' completely with a factor of '
+  - Factor:          '192'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_340_8
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:340:35'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          compute_controller
+  - String:          ''' completely with a factor of '
+  - Factor:          '48'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_336_7
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:336:35'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          compute_controller
+  - String:          ''' completely with a factor of '
+  - Factor:          '9216'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_332_6
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:332:35'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -182,13 +467,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_37_1
+  - LoopName:        VITIS_LOOP_38_1
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:37:26'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:38:26'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -201,13 +486,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -220,13 +505,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -239,13 +524,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -258,13 +543,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -277,13 +562,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -296,13 +581,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -315,13 +600,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -334,13 +619,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -353,13 +638,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -372,13 +657,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -391,13 +676,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -410,13 +695,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -429,13 +714,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -448,13 +733,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -467,13 +752,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -486,13 +771,13 @@ Args:
 Pass:            reflow-pragma-loop-unroll
 Name:            PragmaPartiallyUnroll
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Unrolling loop '''
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          ''' ('
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ') '
   - String:          'in function '''
   - String:          compute_controller
@@ -500,6 +785,107 @@ Args:
   - String:          ''
   - String:          'with a factor of '
   - Factor:          '16'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 98, Column: 0 }
+Function:        _Z10LAYER_NORMPKaPKiS2_iPi
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_124_2
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:124:23'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          LAYER_NORM
+  - String:          ''' completely with a factor of '
+  - Factor:          '192'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h, 
+                   Line: 20, Column: 0 }
+Function:        _Z10sqrt_fixedILi32ELi16EE8ap_fixedIXT_EXT0_EL9ap_q_mode5EL9ap_o_mode3ELi0EES3_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_271_2
+  - String:          ''' ('
+  - LoopLoc:         '/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:271:27'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          'sqrt_fixed<32, 16>'
+  - String:          ''' completely with a factor of '
+  - Factor:          '17'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h, 
+                   Line: 20, Column: 0 }
+Function:        _Z10sqrt_fixedILi32ELi16EE8ap_fixedIXT_EXT0_EL9ap_q_mode5EL9ap_o_mode3ELi0EES3_
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_243_1
+  - String:          ''' ('
+  - LoopLoc:         '/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:243:27'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          'sqrt_fixed<32, 16>'
+  - String:          ''' completely with a factor of '
+  - Factor:          '8'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 153, Column: 0 }
+Function:        _Z7RES_ADDPKaS0_Pa
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_154_1
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:154:23'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          RES_ADD
+  - String:          ''' completely with a factor of '
+  - Factor:          '192'
+...
+--- !Passed
+Pass:            reflow-pragma-loop-unroll
+Name:            PragmaFullyUnroll
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 69, Column: 0 }
+Function:        _Z29REQUANT_D_MODEL_int32_to_int8PKiiiiPa
+Args:            
+  - String:          'Unrolling loop '''
+  - LoopName:        VITIS_LOOP_75_1
+  - String:          ''' ('
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:75:22'
+  - String:          ') '
+  - String:          'in function '''
+  - String:          REQUANT_D_MODEL_int32_to_int8
+  - String:          ''' completely with a factor of '
+  - Factor:          '192'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/hls_math.h, 
+                   Line: 1268, Column: 12 }
+Function:        _ZN3hls4sqrtILi32ELi16EEE8ap_fixedIXT_EXT0_EL9ap_q_mode5EL9ap_o_mode3ELi0EES4_
+Args:            
+  - Callee:          'ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0> sqrt_fixed<32, 16>(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>)'
+    DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h, 
+                       Line: 20, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0> hls::sqrt<32, 16>(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>)'
+    DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/hls_math.h, 
+                       Line: 1267, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
@@ -514,14 +900,14 @@ Args:
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp, 
-                   Line: 19, Column: 32 }
+                   Line: 20, Column: 32 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'min2_constexpr(int, int)'
@@ -530,55 +916,183 @@ Args:
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 375, Column: 29 }
+                   Line: 427, Column: 29 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'compute_buf::read_i8(unsigned char const*, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 572, Column: 0 }
+                       Line: 575, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 386, Column: 71 }
+                   Line: 438, Column: 71 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'compute_buf::read_i4(unsigned char const*, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 576, Column: 0 }
+                       Line: 579, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
 Pass:            inline
 Name:            NeverInline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 411, Column: 29 }
+                   Line: 448, Column: 12 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::read_i32(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 594, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 462, Column: 29 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - Callee:          'compute_buf::write_i32(unsigned char*, int, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 623, Column: 0 }
+                       Line: 626, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 482, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'REQUANT_D_MODEL_int32_to_int8(int const*, int, int, int, signed char*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 69, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 491, Column: 2 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::write_i8(unsigned char*, int, signed char)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 603, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 504, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'RES_ADD(signed char const*, signed char const*, signed char*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 153, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 530, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'LAYER_NORM(signed char const*, int const*, int const*, int, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 98, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 577, Column: 13 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::read_i16(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 587, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 599, Column: 29 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::write_i16(unsigned char*, int, short)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 620, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 612, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'FFN_ACT_RELU(short const*, short*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 136, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
   - String:          ' because it should never be inlined (cost=never)'
 ...
 --- !Missed
@@ -588,7 +1102,7 @@ Function:        apatb_compute_controller_ir
 Args:            
   - Callee:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ' not inlined into '
   - Caller:          apatb_compute_controller_ir
   - String:          ' because it should never be inlined (cost=never)'
@@ -597,7 +1111,7 @@ Args:
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Inlining function '''
@@ -607,14 +1121,14 @@ Args:
   - String:          ''' into '''
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Inlining function '''
@@ -624,65 +1138,133 @@ Args:
   - String:          ''' into '''
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Inlining function '''
   - Callee:          'compute_buf::read_i8(unsigned char const*, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 572, Column: 0 }
+                       Line: 575, Column: 0 }
   - String:          ''' into '''
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Inlining function '''
   - Callee:          'compute_buf::read_i4(unsigned char const*, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 576, Column: 0 }
+                       Line: 579, Column: 0 }
   - String:          ''' into '''
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-inliner
 Name:            Inline
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 238, Column: 0 }
+                   Line: 202, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Inlining function '''
   - Callee:          'compute_buf::write_i32(unsigned char*, int, int)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
-                       Line: 623, Column: 0 }
+                       Line: 626, Column: 0 }
   - String:          ''' into '''
   - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
     DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                       Line: 238, Column: 0 }
+                       Line: 202, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            reflow-inliner
+Name:            Inline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'compute_buf::write_i8(unsigned char*, int, signed char)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 603, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            reflow-inliner
+Name:            Inline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'compute_buf::read_i16(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 587, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            reflow-inliner
+Name:            Inline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'compute_buf::write_i16(unsigned char*, int, short)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 620, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            reflow-inliner
+Name:            Inline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 202, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'FFN_ACT_RELU(short const*, short*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 136, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
   - String:          ''''
 ...
 --- !Passed
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 254, Column: 0 }
+                   Line: 219, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Applying '
@@ -703,7 +1285,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 253, Column: 0 }
+                   Line: 217, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Applying '
@@ -724,7 +1306,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 252, Column: 0 }
+                   Line: 216, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Applying '
@@ -745,7 +1327,7 @@ Args:
 Pass:            reflow-array-partition
 Name:            ArrayXform
 DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
-                   Line: 251, Column: 0 }
+                   Line: 215, Column: 0 }
 Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
 Args:            
   - String:          'Applying '
@@ -762,14 +1344,245 @@ Args:
   - Dim:             '1'
   - String:          .
 ...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 258, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E11ffn_act_out
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 257, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E16ffn_intermediate
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 252, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E2y8
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 251, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E3x32
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 247, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E8residual
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 239, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E7y_resid
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 238, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E5y_act
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 236, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E7ln_beta
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 235, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E8ln_gamma
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 234, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E5x_act
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
+--- !Passed
+Pass:            reflow-array-partition
+Name:            ArrayXform
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 218, Column: 0 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Applying '
+  - String:          array_partition
+  - String:          ' to '''
+  - UOName:          _ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E5scale
+  - String:          ''':'
+  - String:          ' '
+  - Mode:            Cyclic
+  - String:          ' partitioning'
+  - String:          ' with factor '
+  - Factor:          '16'
+  - String:          ' on dimension '
+  - Dim:             '1'
+  - String:          .
+...
 --- !HLSReportInfo
 Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_382_7
+  - LoopName:        VITIS_LOOP_105_1
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:382:43'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105:23'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -777,9 +1590,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_410_10
+  - LoopName:        VITIS_LOOP_634_38
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:410:44'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:634:44'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -787,9 +1600,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_667_43
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:667:44'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -797,9 +1610,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_555_27
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:555:44'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -807,9 +1620,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_590_32
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:590:44'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -817,9 +1630,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_434_14
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:434:44'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -827,9 +1640,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_461_17
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:461:44'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -837,9 +1650,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -847,9 +1660,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -857,9 +1670,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -867,9 +1680,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -877,9 +1690,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -887,9 +1700,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -897,9 +1710,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -907,9 +1720,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -917,9 +1730,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -927,9 +1740,9 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
 ...
 --- !HLSReportInfo
@@ -937,8 +1750,172 @@ Pass:            auto-loop-pipeline
 Name:            AutoLoopPipeline
 Args:            
   - String:          'automatically set the pipeline for Loop< '
-  - LoopName:        VITIS_LOOP_40_2
+  - LoopName:        VITIS_LOOP_41_2
   - String:          '> at '
-  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40:30'
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
   - String:          ' '
+...
+--- !HLSReportInfo
+Pass:            auto-loop-pipeline
+Name:            AutoLoopPipeline
+Args:            
+  - String:          'automatically set the pipeline for Loop< '
+  - LoopName:        VITIS_LOOP_41_2
+  - String:          '> at '
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
+  - String:          ' '
+...
+--- !HLSReportInfo
+Pass:            auto-loop-pipeline
+Name:            AutoLoopPipeline
+Args:            
+  - String:          'automatically set the pipeline for Loop< '
+  - LoopName:        VITIS_LOOP_41_2
+  - String:          '> at '
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
+  - String:          ' '
+...
+--- !HLSReportInfo
+Pass:            auto-loop-pipeline
+Name:            AutoLoopPipeline
+Args:            
+  - String:          'automatically set the pipeline for Loop< '
+  - LoopName:        VITIS_LOOP_41_2
+  - String:          '> at '
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
+  - String:          ' '
+...
+--- !HLSReportInfo
+Pass:            auto-loop-pipeline
+Name:            AutoLoopPipeline
+Args:            
+  - String:          'automatically set the pipeline for Loop< '
+  - LoopName:        VITIS_LOOP_41_2
+  - String:          '> at '
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
+  - String:          ' '
+...
+--- !HLSReportInfo
+Pass:            auto-loop-pipeline
+Name:            AutoLoopPipeline
+Args:            
+  - String:          'automatically set the pipeline for Loop< '
+  - LoopName:        VITIS_LOOP_41_2
+  - String:          '> at '
+  - LoopLoc:         '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:30'
+  - String:          ' '
+...
+--- !Passed
+Pass:            reflow-auto-inline-performance-driven
+Name:            AutoInlinePerf
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 523, Column: 60 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Automatically inlining function '''
+  - Callee:          'compute_buf::read_i32(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 594, Column: 0 }
+  - String:          ''' to improve effectiveness of pipeline pragma in function '''
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ''''
+...
+--- !Passed
+Pass:            reflow-auto-inline-performance-driven
+Name:            AutoInlinePerf
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 525, Column: 59 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - String:          'Automatically inlining function '''
+  - Callee:          'compute_buf::read_i32(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 594, Column: 0 }
+  - String:          ''' to improve effectiveness of pipeline pragma in function '''
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ''''
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/hls_math.h, 
+                   Line: 1268, Column: 12 }
+Function:        _Z10LAYER_NORMPKaPKiS2_iPi
+Args:            
+  - Callee:          'ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0> sqrt_fixed<32, 16>(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>)'
+    DebugLoc:        { File: /tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h, 
+                       Line: 20, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'LAYER_NORM(signed char const*, int const*, int const*, int, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 98, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 448, Column: 12 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'compute_buf::read_i32(unsigned char const*, int)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp, 
+                       Line: 594, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 482, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'REQUANT_D_MODEL_int32_to_int8(int const*, int, int, int, signed char*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 69, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 504, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'RES_ADD(signed char const*, signed char const*, signed char*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 153, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
+...
+--- !Missed
+Pass:            inline
+Name:            NeverInline
+DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                   Line: 530, Column: 21 }
+Function:        _Z18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_
+Args:            
+  - Callee:          'LAYER_NORM(signed char const*, int const*, int const*, int, int*)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 98, Column: 0 }
+  - String:          ' not inlined into '
+  - Caller:          'compute_controller(bool, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)'
+    DebugLoc:        { File: /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp, 
+                       Line: 202, Column: 0 }
+  - String:          ' because it should never be inlined (cost=never)'
 ...

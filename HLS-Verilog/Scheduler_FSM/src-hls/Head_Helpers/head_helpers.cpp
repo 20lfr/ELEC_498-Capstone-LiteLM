@@ -46,7 +46,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.v_requant_started  = false;
     ctx.v_writeback_started = false;
     ctx.requant_q_started  = false;
-    ctx.requant2_started   = false;
+    ctx.head_requant_started   = false;
 
     ctx.q_compute_done          = false;
     ctx.k_compute_done          = false;
@@ -58,7 +58,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.k_requant_compute_done  = false;
     ctx.v_requant_compute_done  = false;
     ctx.requant_q_compute_done  = false;
-    ctx.requant2_compute_done   = false;
+    ctx.head_requant_compute_done   = false;
     ctx.q_dma_done              = false;
     ctx.k_dma_done              = false;
     ctx.k_writeback_dma_done    = false;
@@ -133,7 +133,7 @@ bool run_single_head(
         if (ctx.val_scale_started && last_op == ComputeOp::CMP_VALUE_SCALE)     ctx.val_scale_compute_done  = true;
         if (ctx.softmax_started && last_op == ComputeOp::CMP_SOFTMAX)           ctx.softmax_compute_done    = true;
         if (ctx.att_value_started && last_op == ComputeOp::CMP_ATT_VALUE)       ctx.att_value_compute_done  = true;
-        if (ctx.requant2_started && last_op == ComputeOp::CMP_REQUANT2)         ctx.requant2_compute_done   = true;
+        if (ctx.head_requant_started && last_op == ComputeOp::CMP_HEAD_REQUANT)         ctx.head_requant_compute_done   = true;
     }
 
     // Drive phase machine
@@ -158,7 +158,7 @@ bool run_single_head(
                 ctx.v_requant_started  = false;
                 ctx.v_writeback_started = false;
                 ctx.requant_q_started  = false;
-                ctx.requant2_started   = false;
+                ctx.head_requant_started   = false;
                 ctx.q_compute_done          = false;
                 ctx.k_compute_done          = false;
                 ctx.v_compute_done          = false;
@@ -169,7 +169,7 @@ bool run_single_head(
                 ctx.k_requant_compute_done  = false;
                 ctx.v_requant_compute_done  = false;
                 ctx.requant_q_compute_done  = false;
-                ctx.requant2_compute_done   = false;
+                ctx.head_requant_compute_done   = false;
                 ctx.q_dma_done          = false;
                 ctx.k_dma_done          = false;
                 ctx.k_writeback_dma_done = false;
@@ -358,20 +358,20 @@ bool run_single_head(
                 ctx.compute_op    = pack_compute_op(ComputeOp::CMP_ATT_VALUE, layer_idx, ctx.head_idx, -1);
                 ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_ATT_VALUE, layer_idx, ctx.head_idx, -1);
             } else if (ctx.att_value_compute_done && ctx.att_value_started) {
-                ctx.phase = HeadPhase::REQUANT2;
+                ctx.phase = HeadPhase::HEAD_REQUANT;
                 ctx.att_value_started = false;
             }
             break;
         }
-        case HeadPhase::REQUANT2: {
-            if (ctx.compute_ready && !ctx.requant2_started) {
+        case HeadPhase::HEAD_REQUANT: {
+            if (ctx.compute_ready && !ctx.head_requant_started) {
                 ctx.compute_start   = true;
-                ctx.compute_op      = pack_compute_op(ComputeOp::CMP_REQUANT2, layer_idx, ctx.head_idx, -1);
-                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_REQUANT2, layer_idx, ctx.head_idx, -1);
-                ctx.requant2_started = true;
-            } else if (ctx.requant2_compute_done && ctx.requant2_started) {
+                ctx.compute_op      = pack_compute_op(ComputeOp::CMP_HEAD_REQUANT, layer_idx, ctx.head_idx, -1);
+                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_HEAD_REQUANT, layer_idx, ctx.head_idx, -1);
+                ctx.head_requant_started = true;
+            } else if (ctx.head_requant_compute_done && ctx.head_requant_started) {
                 ctx.phase = HeadPhase::DONE;
-                ctx.requant2_started = false;
+                ctx.head_requant_started = false;
             }
             break;
         }

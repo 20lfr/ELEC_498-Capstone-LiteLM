@@ -15,9 +15,10 @@ constexpr int min2_constexpr(int a, int b) {
 constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
 constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
 constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
+constexpr int MAX_CYCLIC_SIZE = 16;
 
-constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, 16);
-constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, 16);
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
 
 void compute_controller(
     bool        reset,               // [INPUT] Reset signal
@@ -49,5 +50,5 @@ void compute_controller(
     bool        &dbg_mac_ready,
     bool        &dbg_mac_complete,
 
-    bool        &error               // [OUTPUT] Error flag on invalid request
+    bool        &error               // [OUTPUT] Error flag on invalid_request
 );

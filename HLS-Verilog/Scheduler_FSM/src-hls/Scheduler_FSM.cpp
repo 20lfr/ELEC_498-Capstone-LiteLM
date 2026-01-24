@@ -288,8 +288,8 @@ void scheduler_hls(
 
   static bool requant1_compute_done;
 #pragma HLS reset variable = requant1_compute_done
-  static bool requant2_compute_done;
-#pragma HLS reset variable = requant2_compute_done
+  static bool head_requant_compute_done;
+#pragma HLS reset variable = head_requant_compute_done
   static bool requant3_compute_done;
 #pragma HLS reset variable = requant3_compute_done
   static bool requant4_compute_done;
@@ -317,8 +317,8 @@ void scheduler_hls(
 #pragma HLS reset variable = resid0_started
   static bool ln0_started;
 #pragma HLS reset variable = ln0_started
-  static bool requant2_started;
-#pragma HLS reset variable = requant2_started
+  static bool head_requant_started;
+#pragma HLS reset variable = head_requant_started
   enum class FfnStage : uint8_t { W1 = 0, ACT, W2 };
   static FfnStage ffn_stage;
 #pragma HLS reset variable = ffn_stage
@@ -398,12 +398,12 @@ void scheduler_hls(
     
     // Requant
     requant1_started = false;
-    requant2_started = false;
+    head_requant_started = false;
     requant3_started = false;
     requant4_started = false;
 
     requant1_compute_done = false;
-    requant2_compute_done = false;
+    head_requant_compute_done = false;
     requant3_compute_done = false;
     requant4_compute_done = false;
 
@@ -527,7 +527,7 @@ void scheduler_hls(
     if (st == S_REQUANT1 && requant1_started)     requant1_compute_done = true;
     if (st == S_RES_ADD_1 && resid0_started)      resid0_compute_done = true;
     if (st == S_LAYER_NORM_1 && ln0_started)      ln0_compute_done = true;
-    if (st == S_REQUANT2 && requant2_started)     requant2_compute_done = true;
+    if (st == S_HEAD_REQUANT && head_requant_started)     head_requant_compute_done = true;
     if (st == S_FFN && ffn_started) {
       if (ffn_stage == FfnStage::W1)              ffn_w1_compute_done = true;
       else if (ffn_stage == FfnStage::ACT)        ffn_act_compute_done = true;
@@ -554,12 +554,12 @@ void scheduler_hls(
 
         // Requant
         requant1_started = false;
-        requant2_started = false;
+        head_requant_started = false;
         requant3_started = false;
         requant4_started = false;
 
         requant1_compute_done = false;
-        requant2_compute_done = false;
+        head_requant_compute_done = false;
         requant3_compute_done = false;
         requant4_compute_done = false;
 
@@ -651,12 +651,12 @@ void scheduler_hls(
 
       // Requant
       requant1_started = false;
-      requant2_started = false;
+      head_requant_started = false;
       requant3_started = false;
       requant4_started = false;
 
       requant1_compute_done = false;
-      requant2_compute_done = false;
+      head_requant_compute_done = false;
       requant3_compute_done = false;
       requant4_compute_done = false;
 
@@ -844,19 +844,19 @@ void scheduler_hls(
                     layer_idx, compute_start, compute_op, ln0_ops);
       if (ln0_done) {
         ln0_phase = LnPhase::SUM;
-        st = S_REQUANT2;
+        st = S_HEAD_REQUANT;
       }
       break;
     }
-    case S_REQUANT2: {
-      if (!requant2_started && compute_ready) {
-        requant2_compute_done = false;
+    case S_HEAD_REQUANT: {
+      if (!head_requant_started && compute_ready) {
+        head_requant_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT2, layer_idx, -1, -1);
-        requant2_started = true;
-      } else if (requant2_started && requant2_compute_done) {
-        requant2_started = false;
-        requant2_compute_done = false;
+        compute_op = pack_compute_op(CMP_HEAD_REQUANT, layer_idx, -1, -1);
+        head_requant_started = true;
+      } else if (head_requant_started && head_requant_compute_done) {
+        head_requant_started = false;
+        head_requant_compute_done = false;
         st = S_FFN;
       }
       break;

@@ -19,4 +19,33 @@ obj/compute_controller.o: \
   /tools/Xilinx/2025.1/Vitis/include/ap_fixed.h \
   /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_base.h \
   /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_ref.h \
-  /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_special.h
+  /tools/Xilinx/2025.1/Vitis/include/etc/ap_fixed_special.h \
+  /tools/Xilinx/2025.1/Vitis/include/hls_math.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_hotbm_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/utils/x_hls_defines.h \
+  /tools/Xilinx/2025.1/Vitis/include/utils/hls_version.h \
+  /tools/Xilinx/2025.1/Vitis/include/utils/x_hls_utils.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_cordic_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_exp_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_log_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_sqrt_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_round_copysign_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_pow_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_diff_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_comparison_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_frexp_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_modf_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_isequal_isnotequal_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_all_any_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_select_bitselect_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_erf_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_fmod_rem_quo_remainder_divide_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_lgamma_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/utils/x_hls_traits.h \
+  /tools/Xilinx/2025.1/Vitis/include/hls_x_complex.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_tgamma_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_fract_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_mad_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_cbrt_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_hypot_apfixed.h \
+  /tools/Xilinx/2025.1/Vitis/include/etc/hls_ldexp_apfixed.h

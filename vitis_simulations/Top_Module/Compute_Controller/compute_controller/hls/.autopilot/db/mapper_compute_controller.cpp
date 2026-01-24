@@ -248,10 +248,10 @@ extern "C" void apatb_compute_controller_hw(char __xlx_apatb_param_reset, char _
 using hls::sim::createStream;
   // Collect __xlx_in_buf__tmp_vec
 std::vector<Byte<1>> __xlx_in_buf__tmp_vec;
-for (size_t i = 0; i < 4920; ++i){
+for (size_t i = 0; i < 5088; ++i){
 __xlx_in_buf__tmp_vec.push_back(((Byte<1>*)__xlx_apatb_param_in_buf)[i]);
 }
-  int __xlx_size_param_in_buf = 4920;
+  int __xlx_size_param_in_buf = 5088;
   int __xlx_offset_param_in_buf = 0;
   int __xlx_offset_byte_param_in_buf = 0*1;
   // Collect __xlx_out_buf__tmp_vec

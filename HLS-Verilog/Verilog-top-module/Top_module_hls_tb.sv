@@ -176,7 +176,7 @@ module transformer_top_tb;
     logic        k_writeback_dma_done;
     logic        k_dma_done;
     logic        q_dma_done;
-    logic        requant2_compute_done;
+    logic        head_requant_compute_done;
     logic        att_value_compute_done;
     logic        softmax_compute_done;
     logic        val_scale_compute_done;
@@ -187,7 +187,7 @@ module transformer_top_tb;
     logic        k_requant_compute_done;
     logic        k_compute_done;
     logic        q_compute_done;
-    logic        requant2_started;
+    logic        head_requant_started;
     logic        att_value_started;
     logic        softmax_started;
     logic        val_scale_started;
@@ -553,7 +553,7 @@ module transformer_top_tb;
             v_requant_started: 1'b0,
             v_writeback_started: 1'b0,
             requant_q_started: 1'b0,
-            requant2_started: 1'b0,
+            head_requant_started: 1'b0,
             q_compute_done: 1'b0,
             k_compute_done: 1'b0,
             v_compute_done: 1'b0,
@@ -564,7 +564,7 @@ module transformer_top_tb;
             k_requant_compute_done: 1'b0,
             v_requant_compute_done: 1'b0,
             requant_q_compute_done: 1'b0,
-            requant2_compute_done: 1'b0,
+            head_requant_compute_done: 1'b0,
             q_dma_done: 1'b0,
             k_dma_done: 1'b0,
             k_writeback_dma_done: 1'b0,
@@ -914,7 +914,7 @@ module transformer_top_tb;
       32'd6:  return "S_REQUANT1";
       32'd7:  return "S_RES_ADD_1";
       32'd8:  return "S_LN_1";
-      32'd9:  return "S_REQUANT2";
+      32'd9:  return "S_HEAD_RQ";
       32'd10: return "S_FFN";
       32'd11: return "S_REQUANT3";
       32'd12: return "S_RES_ADD_2";
@@ -939,8 +939,8 @@ module transformer_top_tb;
       8'd8:  return "VAL_SCL";
       8'd9:  return "SOFTMAX";
       8'd10: return "ATT_VAL";
-      8'd11: return "RQ2";
-      8'd12: return "HEAD_RQ";
+      8'd11: return "HEAD_RQ";
+      8'd12: return "RESV";
       8'd13: return "CONCAT";
       8'd14: return "OUT_PROJ";
       8'd15: return "RQ1";
