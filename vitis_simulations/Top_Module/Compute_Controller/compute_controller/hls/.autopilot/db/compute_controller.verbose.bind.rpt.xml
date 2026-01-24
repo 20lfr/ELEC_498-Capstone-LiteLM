@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'compute_controller'" level="0">
-<item name = "Date">Thu Jan 22 19:27:08 2026
+<item name = "Date">Sat Jan 24 12:07:30 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -31,31 +31,31 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_367_4_fu_30466">compute_controller_Pipeline_VITIS_LOOP_367_4, 194, 194, 1.940 us, 1.940 us, 193, 193, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7_fu_30504">compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7, 9218, 9218, 92.180 us, 92.180 us, 9217, 9217, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_389_8_fu_30542">compute_controller_Pipeline_VITIS_LOOP_389_8, 50, 50, 0.500 us, 0.500 us, 49, 49, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_405_10_fu_30580">compute_controller_Pipeline_VITIS_LOOP_405_10, 98, 98, 0.980 us, 0.980 us, 97, 97, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_2_fu_30618">compute_controller_Pipeline_VITIS_LOOP_43_2, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_21_fu_30690">compute_controller_Pipeline_VITIS_LOOP_43_21, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_22_fu_30762">compute_controller_Pipeline_VITIS_LOOP_43_22, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_23_fu_30834">compute_controller_Pipeline_VITIS_LOOP_43_23, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_24_fu_30906">compute_controller_Pipeline_VITIS_LOOP_43_24, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_25_fu_30978">compute_controller_Pipeline_VITIS_LOOP_43_25, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_26_fu_31050">compute_controller_Pipeline_VITIS_LOOP_43_26, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_27_fu_31122">compute_controller_Pipeline_VITIS_LOOP_43_27, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_28_fu_31194">compute_controller_Pipeline_VITIS_LOOP_43_28, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_29_fu_31266">compute_controller_Pipeline_VITIS_LOOP_43_29, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_210_fu_31338">compute_controller_Pipeline_VITIS_LOOP_43_210, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_211_fu_31410">compute_controller_Pipeline_VITIS_LOOP_43_211, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_212_fu_31482">compute_controller_Pipeline_VITIS_LOOP_43_212, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_213_fu_31554">compute_controller_Pipeline_VITIS_LOOP_43_213, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_214_fu_31626">compute_controller_Pipeline_VITIS_LOOP_43_214, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_215_fu_31698">compute_controller_Pipeline_VITIS_LOOP_43_215, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_375_4_fu_30580">compute_controller_Pipeline_VITIS_LOOP_375_4, 194, 194, 1.940 us, 1.940 us, 193, 193, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7_fu_30618">compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7, 9218, 9218, 92.180 us, 92.180 us, 9217, 9217, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_397_8_fu_30656">compute_controller_Pipeline_VITIS_LOOP_397_8, 50, 50, 0.500 us, 0.500 us, 49, 49, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_413_10_fu_30694">compute_controller_Pipeline_VITIS_LOOP_413_10, 98, 98, 0.980 us, 0.980 us, 97, 97, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_2_fu_30732">compute_controller_Pipeline_VITIS_LOOP_47_2, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_21_fu_30804">compute_controller_Pipeline_VITIS_LOOP_47_21, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_22_fu_30876">compute_controller_Pipeline_VITIS_LOOP_47_22, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_23_fu_30948">compute_controller_Pipeline_VITIS_LOOP_47_23, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_24_fu_31020">compute_controller_Pipeline_VITIS_LOOP_47_24, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_25_fu_31092">compute_controller_Pipeline_VITIS_LOOP_47_25, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_26_fu_31164">compute_controller_Pipeline_VITIS_LOOP_47_26, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_27_fu_31236">compute_controller_Pipeline_VITIS_LOOP_47_27, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_28_fu_31308">compute_controller_Pipeline_VITIS_LOOP_47_28, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_29_fu_31380">compute_controller_Pipeline_VITIS_LOOP_47_29, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_210_fu_31452">compute_controller_Pipeline_VITIS_LOOP_47_210, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_211_fu_31524">compute_controller_Pipeline_VITIS_LOOP_47_211, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_212_fu_31596">compute_controller_Pipeline_VITIS_LOOP_47_212, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_213_fu_31668">compute_controller_Pipeline_VITIS_LOOP_47_213, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_214_fu_31740">compute_controller_Pipeline_VITIS_LOOP_47_214, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_215_fu_31812">compute_controller_Pipeline_VITIS_LOOP_47_215, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">
 <keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
-<column name="- VITIS_LOOP_40_1">918, 918, 306, -, -, 3, no</column>
+<column name="- VITIS_LOOP_44_1">918, 918, 306, -, -, 3, no</column>
 </table>
 </item>
 </section>

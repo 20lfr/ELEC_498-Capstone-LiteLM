@@ -5,124 +5,124 @@
 <ModuleName>compute_controller</ModuleName>
 <InstancesList>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_367_4_fu_30466</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_367_4</ModuleName>
-<IsCompInst>true</IsCompInst>
-<ID>30466</ID>
-</Instance>
-<Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7_fu_30504</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</ModuleName>
-<IsCompInst>true</IsCompInst>
-<ID>30504</ID>
-</Instance>
-<Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_389_8_fu_30542</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_389_8</ModuleName>
-<IsCompInst>true</IsCompInst>
-<ID>30542</ID>
-</Instance>
-<Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_405_10_fu_30580</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_405_10</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_375_4_fu_30580</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_375_4</ModuleName>
 <IsCompInst>true</IsCompInst>
 <ID>30580</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_2_fu_30618</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_2</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7_fu_30618</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</ModuleName>
 <IsCompInst>true</IsCompInst>
 <ID>30618</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_21_fu_30690</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_21</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_397_8_fu_30656</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_397_8</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>30690</ID>
+<ID>30656</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_22_fu_30762</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_22</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_413_10_fu_30694</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_413_10</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>30762</ID>
+<ID>30694</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_23_fu_30834</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_23</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_2_fu_30732</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_2</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>30834</ID>
+<ID>30732</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_24_fu_30906</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_24</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_21_fu_30804</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_21</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>30906</ID>
+<ID>30804</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_25_fu_30978</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_25</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_22_fu_30876</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_22</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>30978</ID>
+<ID>30876</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_26_fu_31050</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_26</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_23_fu_30948</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_23</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31050</ID>
+<ID>30948</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_27_fu_31122</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_27</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_24_fu_31020</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_24</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31122</ID>
+<ID>31020</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_28_fu_31194</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_28</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_25_fu_31092</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_25</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31194</ID>
+<ID>31092</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_29_fu_31266</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_29</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_26_fu_31164</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_26</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31266</ID>
+<ID>31164</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_210_fu_31338</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_210</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_27_fu_31236</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_27</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31338</ID>
+<ID>31236</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_211_fu_31410</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_211</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_28_fu_31308</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_28</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31410</ID>
+<ID>31308</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_212_fu_31482</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_212</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_29_fu_31380</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_29</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31482</ID>
+<ID>31380</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_213_fu_31554</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_213</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_210_fu_31452</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_210</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31554</ID>
+<ID>31452</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_214_fu_31626</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_214</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_211_fu_31524</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_211</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31626</ID>
+<ID>31524</ID>
 </Instance>
 <Instance>
-<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_43_215_fu_31698</InstName>
-<ModuleName>compute_controller_Pipeline_VITIS_LOOP_43_215</ModuleName>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_212_fu_31596</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_212</ModuleName>
 <IsCompInst>true</IsCompInst>
-<ID>31698</ID>
+<ID>31596</ID>
+</Instance>
+<Instance>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_213_fu_31668</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_213</ModuleName>
+<IsCompInst>true</IsCompInst>
+<ID>31668</ID>
+</Instance>
+<Instance>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_214_fu_31740</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_214</ModuleName>
+<IsCompInst>true</IsCompInst>
+<ID>31740</ID>
+</Instance>
+<Instance>
+<InstName>grp_compute_controller_Pipeline_VITIS_LOOP_47_215_fu_31812</InstName>
+<ModuleName>compute_controller_Pipeline_VITIS_LOOP_47_215</ModuleName>
+<IsCompInst>true</IsCompInst>
+<ID>31812</ID>
 </Instance>
 </InstancesList>
 </TopModule>
@@ -130,9 +130,9 @@
 
 <ModuleInformation>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_367_4</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_375_4</Name>
 <Loops>
-<VITIS_LOOP_367_4></VITIS_LOOP_367_4>
+<VITIS_LOOP_375_4></VITIS_LOOP_375_4>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -152,8 +152,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_367_4>
-<Name>VITIS_LOOP_367_4</Name>
+<VITIS_LOOP_375_4>
+<Name>VITIS_LOOP_375_4</Name>
 <Slack>7.30</Slack>
 <TripCount>192</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -165,19 +165,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_367_4>
+</VITIS_LOOP_375_4>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:572~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:370</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:572~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:378</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_367_4>
-<Name>VITIS_LOOP_367_4</Name>
+<VITIS_LOOP_375_4>
+<Name>VITIS_LOOP_375_4</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:367</SourceLocation>
-</VITIS_LOOP_367_4>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:375</SourceLocation>
+</VITIS_LOOP_375_4>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -203,7 +203,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_367_4</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_375_4</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -214,7 +214,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_367_4</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_375_4</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -225,7 +225,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_367_4</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_375_4</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -236,7 +236,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_367_4</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_375_4</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -247,7 +247,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_367_4</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_375_4</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -258,7 +258,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_367_4</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_375_4</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1007,9 +1007,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</Name>
 <Loops>
-<VITIS_LOOP_376_6_VITIS_LOOP_377_7></VITIS_LOOP_376_6_VITIS_LOOP_377_7>
+<VITIS_LOOP_384_6_VITIS_LOOP_385_7></VITIS_LOOP_384_6_VITIS_LOOP_385_7>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -1029,8 +1029,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_376_6_VITIS_LOOP_377_7>
-<Name>VITIS_LOOP_376_6_VITIS_LOOP_377_7</Name>
+<VITIS_LOOP_384_6_VITIS_LOOP_385_7>
+<Name>VITIS_LOOP_384_6_VITIS_LOOP_385_7</Name>
 <Slack>7.30</Slack>
 <TripCount>9216</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -1042,19 +1042,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_376_6_VITIS_LOOP_377_7>
+</VITIS_LOOP_384_6_VITIS_LOOP_385_7>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:377</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:385</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_376_6_VITIS_LOOP_377_7>
-<Name>VITIS_LOOP_376_6_VITIS_LOOP_377_7</Name>
+<VITIS_LOOP_384_6_VITIS_LOOP_385_7>
+<Name>VITIS_LOOP_384_6_VITIS_LOOP_385_7</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:376</SourceLocation>
-</VITIS_LOOP_376_6_VITIS_LOOP_377_7>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:384</SourceLocation>
+</VITIS_LOOP_384_6_VITIS_LOOP_385_7>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -1080,7 +1080,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1091,7 +1091,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1102,7 +1102,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1113,7 +1113,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1124,7 +1124,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1135,7 +1135,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1884,9 +1884,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_389_8</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_397_8</Name>
 <Loops>
-<VITIS_LOOP_389_8></VITIS_LOOP_389_8>
+<VITIS_LOOP_397_8></VITIS_LOOP_397_8>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -1906,8 +1906,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_389_8>
-<Name>VITIS_LOOP_389_8</Name>
+<VITIS_LOOP_397_8>
+<Name>VITIS_LOOP_397_8</Name>
 <Slack>7.30</Slack>
 <TripCount>48</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -1919,19 +1919,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_389_8>
+</VITIS_LOOP_397_8>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:389</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:397</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_389_8>
-<Name>VITIS_LOOP_389_8</Name>
+<VITIS_LOOP_397_8>
+<Name>VITIS_LOOP_397_8</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:389</SourceLocation>
-</VITIS_LOOP_389_8>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:397</SourceLocation>
+</VITIS_LOOP_397_8>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -1957,7 +1957,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_389_8</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_397_8</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1968,7 +1968,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_389_8</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_397_8</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1979,7 +1979,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_389_8</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_397_8</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -1990,7 +1990,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_389_8</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_397_8</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2001,7 +2001,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_389_8</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_397_8</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2012,7 +2012,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_389_8</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_397_8</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2761,9 +2761,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_405_10</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_413_10</Name>
 <Loops>
-<VITIS_LOOP_405_10></VITIS_LOOP_405_10>
+<VITIS_LOOP_413_10></VITIS_LOOP_413_10>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -2783,8 +2783,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_405_10>
-<Name>VITIS_LOOP_405_10</Name>
+<VITIS_LOOP_413_10>
+<Name>VITIS_LOOP_413_10</Name>
 <Slack>7.30</Slack>
 <TripCount>48</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -2796,19 +2796,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_405_10>
+</VITIS_LOOP_413_10>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:405</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:413</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_405_10>
-<Name>VITIS_LOOP_405_10</Name>
+<VITIS_LOOP_413_10>
+<Name>VITIS_LOOP_413_10</Name>
 <IssueType>II Violation</IssueType>
 <ViolationType>Resource Limitation</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:405</SourceLocation>
-</VITIS_LOOP_405_10>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:413</SourceLocation>
+</VITIS_LOOP_413_10>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -2834,7 +2834,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_405_10</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_413_10</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2845,7 +2845,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_405_10</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_413_10</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2856,7 +2856,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_405_10</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_413_10</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2867,7 +2867,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_405_10</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_413_10</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2878,7 +2878,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_405_10</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_413_10</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -2889,7 +2889,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_405_10</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_413_10</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -3517,9 +3517,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_2</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_2</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -3539,8 +3539,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -3552,19 +3552,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -3590,7 +3590,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_2</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_2</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -3601,7 +3601,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_2</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_2</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -3612,7 +3612,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_2</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_2</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -3623,7 +3623,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_2</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_2</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -3634,7 +3634,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_2</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_2</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -3645,7 +3645,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_2</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_2</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -3655,8 +3655,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42</name>
-<Object>sext_ln42</Object>
+<name>sext_ln46</name>
+<Object>sext_ln46</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -3666,8 +3666,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43</name>
-<Object>mul_ln43</Object>
+<name>mul_ln47</name>
+<Object>mul_ln47</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -4757,9 +4757,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_21</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_21</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -4779,8 +4779,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -4792,19 +4792,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -4830,7 +4830,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_21</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_21</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -4841,7 +4841,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_21</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_21</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -4852,7 +4852,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_21</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_21</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -4863,7 +4863,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_21</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_21</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -4874,7 +4874,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_21</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_21</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -4885,7 +4885,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_21</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_21</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -4895,8 +4895,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_1</name>
-<Object>sext_ln42_1</Object>
+<name>sext_ln46_1</name>
+<Object>sext_ln46_1</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -4906,8 +4906,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43_1</name>
-<Object>mul_ln43_1</Object>
+<name>mul_ln47_1</name>
+<Object>mul_ln47_1</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -5997,9 +5997,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_22</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_22</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -6019,8 +6019,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -6032,19 +6032,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -6070,7 +6070,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_22</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_22</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -6081,7 +6081,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_22</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_22</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -6092,7 +6092,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_22</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_22</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -6103,7 +6103,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_22</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_22</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -6114,7 +6114,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_22</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_22</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -6125,7 +6125,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_22</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_22</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -6135,8 +6135,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_2</name>
-<Object>sext_ln42_2</Object>
+<name>sext_ln46_2</name>
+<Object>sext_ln46_2</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -6146,8 +6146,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43_2</name>
-<Object>mul_ln43_2</Object>
+<name>mul_ln47_2</name>
+<Object>mul_ln47_2</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -7237,9 +7237,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_23</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_23</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -7259,8 +7259,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -7272,19 +7272,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -7310,7 +7310,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_23</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_23</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -7321,7 +7321,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_23</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_23</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -7332,7 +7332,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_23</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_23</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -7343,7 +7343,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_23</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_23</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -7354,7 +7354,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_23</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_23</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -7365,7 +7365,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_23</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_23</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -7375,8 +7375,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_3</name>
-<Object>sext_ln42_3</Object>
+<name>sext_ln46_3</name>
+<Object>sext_ln46_3</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -7386,8 +7386,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43_3</name>
-<Object>mul_ln43_3</Object>
+<name>mul_ln47_3</name>
+<Object>mul_ln47_3</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -8477,9 +8477,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_24</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_24</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -8499,8 +8499,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -8512,19 +8512,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -8550,7 +8550,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_24</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_24</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -8561,7 +8561,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_24</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_24</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -8572,7 +8572,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_24</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_24</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -8583,7 +8583,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_24</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_24</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -8594,7 +8594,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_24</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_24</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -8605,7 +8605,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_24</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_24</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -8615,8 +8615,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_4</name>
-<Object>sext_ln42_4</Object>
+<name>sext_ln46_4</name>
+<Object>sext_ln46_4</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -8626,8 +8626,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43_4</name>
-<Object>mul_ln43_4</Object>
+<name>mul_ln47_4</name>
+<Object>mul_ln47_4</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -9717,9 +9717,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_25</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_25</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -9739,8 +9739,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -9752,19 +9752,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -9790,7 +9790,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_25</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_25</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -9801,7 +9801,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_25</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_25</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -9812,7 +9812,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_25</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_25</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -9823,7 +9823,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_25</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_25</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -9834,7 +9834,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_25</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_25</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -9845,7 +9845,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_25</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_25</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -9855,8 +9855,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_5</name>
-<Object>sext_ln42_5</Object>
+<name>sext_ln46_5</name>
+<Object>sext_ln46_5</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -9866,8 +9866,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43_5</name>
-<Object>mul_ln43_5</Object>
+<name>mul_ln47_5</name>
+<Object>mul_ln47_5</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -10957,9 +10957,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_26</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_26</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -10979,8 +10979,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -10992,19 +10992,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -11030,7 +11030,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_26</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_26</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -11041,7 +11041,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_26</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_26</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -11052,7 +11052,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_26</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_26</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -11063,7 +11063,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_26</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_26</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -11074,7 +11074,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_26</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_26</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -11085,7 +11085,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_26</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_26</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -11095,8 +11095,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_6</name>
-<Object>sext_ln42_6</Object>
+<name>sext_ln46_6</name>
+<Object>sext_ln46_6</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -11106,8 +11106,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43_6</name>
-<Object>mul_ln43_6</Object>
+<name>mul_ln47_6</name>
+<Object>mul_ln47_6</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -12197,9 +12197,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_27</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_27</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -12219,8 +12219,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -12232,19 +12232,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -12270,7 +12270,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_27</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_27</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -12281,7 +12281,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_27</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_27</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -12292,7 +12292,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_27</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_27</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -12303,7 +12303,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_27</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_27</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -12314,7 +12314,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_27</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_27</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -12325,7 +12325,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_27</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_27</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -12335,8 +12335,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_7</name>
-<Object>sext_ln42_7</Object>
+<name>sext_ln46_7</name>
+<Object>sext_ln46_7</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -12346,8 +12346,8 @@
 <Attribute>data</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>mul_ln43_7</name>
-<Object>mul_ln43_7</Object>
+<name>mul_ln47_7</name>
+<Object>mul_ln47_7</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -13437,9 +13437,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_28</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_28</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -13459,8 +13459,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -13472,19 +13472,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -13510,7 +13510,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_28</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_28</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -13521,7 +13521,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_28</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_28</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -13532,7 +13532,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_28</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_28</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -13543,7 +13543,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_28</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_28</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -13554,7 +13554,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_28</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_28</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -13565,7 +13565,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_28</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_28</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -13575,8 +13575,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_8</name>
-<Object>sext_ln42_8</Object>
+<name>sext_ln46_8</name>
+<Object>sext_ln46_8</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -14677,9 +14677,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_29</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_29</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -14699,8 +14699,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -14712,19 +14712,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -14750,7 +14750,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_29</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_29</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -14761,7 +14761,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_29</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_29</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -14772,7 +14772,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_29</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_29</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -14783,7 +14783,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_29</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_29</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -14794,7 +14794,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_29</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_29</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -14805,7 +14805,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_29</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_29</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -14815,8 +14815,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_9</name>
-<Object>sext_ln42_9</Object>
+<name>sext_ln46_9</name>
+<Object>sext_ln46_9</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -15917,9 +15917,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_210</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_210</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -15939,8 +15939,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -15952,19 +15952,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -15990,7 +15990,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_210</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_210</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -16001,7 +16001,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_210</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_210</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -16012,7 +16012,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_210</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_210</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -16023,7 +16023,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_210</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_210</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -16034,7 +16034,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_210</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_210</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -16045,7 +16045,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_210</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_210</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -16055,8 +16055,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_10</name>
-<Object>sext_ln42_10</Object>
+<name>sext_ln46_10</name>
+<Object>sext_ln46_10</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -17157,9 +17157,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_211</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_211</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -17179,8 +17179,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -17192,19 +17192,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -17230,7 +17230,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_211</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_211</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -17241,7 +17241,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_211</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_211</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -17252,7 +17252,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_211</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_211</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -17263,7 +17263,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_211</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_211</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -17274,7 +17274,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_211</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_211</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -17285,7 +17285,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_211</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_211</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -17295,8 +17295,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_11</name>
-<Object>sext_ln42_11</Object>
+<name>sext_ln46_11</name>
+<Object>sext_ln46_11</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -18397,9 +18397,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_212</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_212</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -18419,8 +18419,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -18432,19 +18432,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -18470,7 +18470,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_212</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_212</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -18481,7 +18481,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_212</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_212</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -18492,7 +18492,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_212</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_212</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -18503,7 +18503,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_212</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_212</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -18514,7 +18514,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_212</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_212</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -18525,7 +18525,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_212</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_212</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -18535,8 +18535,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_12</name>
-<Object>sext_ln42_12</Object>
+<name>sext_ln46_12</name>
+<Object>sext_ln46_12</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -19637,9 +19637,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_213</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_213</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -19659,8 +19659,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -19672,19 +19672,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -19710,7 +19710,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_213</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_213</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -19721,7 +19721,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_213</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_213</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -19732,7 +19732,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_213</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_213</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -19743,7 +19743,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_213</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_213</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -19754,7 +19754,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_213</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_213</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -19765,7 +19765,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_213</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_213</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -19775,8 +19775,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_13</name>
-<Object>sext_ln42_13</Object>
+<name>sext_ln46_13</name>
+<Object>sext_ln46_13</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -20877,9 +20877,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_214</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_214</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -20899,8 +20899,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -20912,19 +20912,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -20950,7 +20950,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_214</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_214</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -20961,7 +20961,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_214</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_214</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -20972,7 +20972,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_214</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_214</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -20983,7 +20983,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_214</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_214</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -20994,7 +20994,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_214</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_214</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -21005,7 +21005,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_214</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_214</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -21015,8 +21015,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_14</name>
-<Object>sext_ln42_14</Object>
+<name>sext_ln46_14</name>
+<Object>sext_ln46_14</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -22117,9 +22117,9 @@
 </InterfaceSummary>
 </Module>
 <Module>
-<Name>compute_controller_Pipeline_VITIS_LOOP_43_215</Name>
+<Name>compute_controller_Pipeline_VITIS_LOOP_47_215</Name>
 <Loops>
-<VITIS_LOOP_43_2></VITIS_LOOP_43_2>
+<VITIS_LOOP_47_2></VITIS_LOOP_47_2>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -22139,8 +22139,8 @@
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <Slack>7.30</Slack>
 <TripCount>12</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -22152,19 +22152,19 @@
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
 </InstanceList>
-</VITIS_LOOP_43_2>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:46~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_43_2>
-<Name>VITIS_LOOP_43_2</Name>
+<VITIS_LOOP_47_2>
+<Name>VITIS_LOOP_47_2</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:43~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_43_2>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:47~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_47_2>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -22190,7 +22190,7 @@
 <InterfaceSummary>
 <RtlPorts>
 <name>ap_clk</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_215</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_215</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -22201,7 +22201,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_rst</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_215</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_215</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -22212,7 +22212,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_start</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_215</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_215</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -22223,7 +22223,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_done</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_215</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_215</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -22234,7 +22234,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_idle</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_215</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_215</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -22245,7 +22245,7 @@
 </RtlPorts>
 <RtlPorts>
 <name>ap_ready</name>
-<Object>compute_controller_Pipeline_VITIS_LOOP_43_215</Object>
+<Object>compute_controller_Pipeline_VITIS_LOOP_47_215</Object>
 <Type>return value</Type>
 <Scope></Scope>
 <IOProtocol>ap_ctrl_hs</IOProtocol>
@@ -22255,8 +22255,8 @@
 <Attribute>control</Attribute>
 </RtlPorts>
 <RtlPorts>
-<name>sext_ln42_15</name>
-<Object>sext_ln42_15</Object>
+<name>sext_ln46_15</name>
+<Object>sext_ln46_15</Object>
 <Type>scalar</Type>
 <Scope></Scope>
 <IOProtocol>ap_none</IOProtocol>
@@ -23359,7 +23359,7 @@
 <Module>
 <Name>compute_controller</Name>
 <Loops>
-<VITIS_LOOP_40_1></VITIS_LOOP_40_1>
+<VITIS_LOOP_44_1></VITIS_LOOP_44_1>
 </Loops>
 <PerformanceEstimates>
 <SummaryOfTimingAnalysis>
@@ -23369,18 +23369,18 @@
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <Best-caseLatency>279</Best-caseLatency>
-<Average-caseLatency>805</Average-caseLatency>
+<Average-caseLatency>1115</Average-caseLatency>
 <Worst-caseLatency>10765</Worst-caseLatency>
 <Best-caseRealTimeLatency>2.790 us</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>8.050 us</Average-caseRealTimeLatency>
+<Average-caseRealTimeLatency>11.150 us</Average-caseRealTimeLatency>
 <Worst-caseRealTimeLatency>0.108 ms</Worst-caseRealTimeLatency>
 <PipelineInitiationInterval>280 ~ 10766</PipelineInitiationInterval>
 <PipelineType>no</PipelineType>
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
-<VITIS_LOOP_40_1>
-<Name>VITIS_LOOP_40_1</Name>
+<VITIS_LOOP_44_1>
+<Name>VITIS_LOOP_44_1</Name>
 <Slack>7.30</Slack>
 <TripCount>3</TripCount>
 <isPerfectNested>0</isPerfectNested>
@@ -23391,36 +23391,36 @@
 <PipelineType>no</PipelineType>
 <PerformancePragma>-</PerformancePragma>
 <InstanceList>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_2_fu_30618</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_21_fu_30690</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_22_fu_30762</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_23_fu_30834</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_24_fu_30906</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_25_fu_30978</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_26_fu_31050</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_27_fu_31122</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_28_fu_31194</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_29_fu_31266</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_210_fu_31338</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_211_fu_31410</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_212_fu_31482</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_213_fu_31554</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_214_fu_31626</Instance>
-<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_43_215_fu_31698</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_2_fu_30732</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_21_fu_30804</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_22_fu_30876</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_23_fu_30948</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_24_fu_31020</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_25_fu_31092</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_26_fu_31164</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_27_fu_31236</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_28_fu_31308</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_29_fu_31380</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_210_fu_31452</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_211_fu_31524</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_212_fu_31596</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_213_fu_31668</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_214_fu_31740</Instance>
+<Instance>grp_compute_controller_Pipeline_VITIS_LOOP_47_215_fu_31812</Instance>
 </InstanceList>
-</VITIS_LOOP_40_1>
+</VITIS_LOOP_44_1>
 </SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:207</SourceLocation>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:210</SourceLocation>
 <SummaryOfLoopViolations>
-<VITIS_LOOP_40_1>
-<Name>VITIS_LOOP_40_1</Name>
+<VITIS_LOOP_44_1>
+<Name>VITIS_LOOP_44_1</Name>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:40~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:433</SourceLocation>
-</VITIS_LOOP_40_1>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:44~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:441</SourceLocation>
+</VITIS_LOOP_44_1>
 </SummaryOfLoopViolations>
 </SummaryOfViolations>
 </PerformanceEstimates>
@@ -23432,10 +23432,10 @@
 <DSP>128</DSP>
 <AVAIL_DSP>1248</AVAIL_DSP>
 <UTIL_DSP>10</UTIL_DSP>
-<FF>3939</FF>
+<FF>3936</FF>
 <AVAIL_FF>234240</AVAIL_FF>
 <UTIL_FF>1</UTIL_FF>
-<LUT>72099</LUT>
+<LUT>72110</LUT>
 <AVAIL_LUT>117120</AVAIL_LUT>
 <UTIL_LUT>61</UTIL_LUT>
 <URAM>0</URAM>

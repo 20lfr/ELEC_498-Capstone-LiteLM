@@ -5,18 +5,18 @@
     "control_depth": 2,
     "def_use_depth": 9,
     "file": "compute_controller.cpp",
-    "fileloc": 207,
-    "instructions": 12524,
+    "fileloc": 210,
+    "instructions": 12529,
     "loads": {
-      "G": 561,
+      "G": 562,
       "T": 3
     },
     "memory_accesses": 586,
     "name": "compute_controller",
     "stores": {
-      "G": 9556,
+      "G": 9557,
       "T": 36
     },
-    "total_instructions": 12524
+    "total_instructions": 12529
   }
 }

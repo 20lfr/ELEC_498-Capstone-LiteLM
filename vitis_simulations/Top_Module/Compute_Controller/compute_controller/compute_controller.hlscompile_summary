@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "Thu Jan 22 19:24:38 2026",
- "timestampMillis": "1769127878734",
+ "dateTimestamp": "Sat Jan 24 12:05:00 2026",
+ "timestampMillis": "1769274300895",
  "buildStep": {
-  "cmdId": "06c8bd0e-053c-4d5b-bced-d1f89d5bb372",
+  "cmdId": "450f2d3b-481d-43ae-8e7e-65d07f33851d",
   "name": "v++",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/logs/compute_controller.steps.log",
   "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg --work_dir compute_controller ",
@@ -38,10 +38,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Thu Jan 22 19:24:38 2026",
- "timestampMillis": "1769127878735",
+ "dateTimestamp": "Sat Jan 24 12:05:00 2026",
+ "timestampMillis": "1769274300895",
  "status": {
-  "cmdId": "06c8bd0e-053c-4d5b-bced-d1f89d5bb372",
+  "cmdId": "450f2d3b-481d-43ae-8e7e-65d07f33851d",
   "state": "CS_RUNNING"
  }
 }
@@ -49,8 +49,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "Thu Jan 22 19:24:42 2026",
- "timestampMillis": "1769127882629",
+ "dateTimestamp": "Sat Jan 24 12:05:04 2026",
+ "timestampMillis": "1769274304749",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -87,10 +87,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "Thu Jan 22 19:24:42 2026",
- "timestampMillis": "1769127882630",
+ "dateTimestamp": "Sat Jan 24 12:05:04 2026",
+ "timestampMillis": "1769274304750",
  "buildStep": {
-  "cmdId": "21c5872f-916f-4c66-a2d0-c0b98170956e",
+  "cmdId": "280a98b2-526a-470d-b41b-49cf49ce5b8d",
   "name": "",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/hls.log",
   "commandLine": "",
@@ -103,10 +103,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Thu Jan 22 19:24:42 2026",
- "timestampMillis": "1769127882630",
+ "dateTimestamp": "Sat Jan 24 12:05:04 2026",
+ "timestampMillis": "1769274304750",
  "status": {
-  "cmdId": "21c5872f-916f-4c66-a2d0-c0b98170956e",
+  "cmdId": "280a98b2-526a-470d-b41b-49cf49ce5b8d",
   "state": "CS_RUNNING"
  }
 }
@@ -114,8 +114,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:24:42 2026",
- "timestampMillis": "1769127882630",
+ "dateTimestamp": "Sat Jan 24 12:05:04 2026",
+ "timestampMillis": "1769274304750",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/hls_data.json",
   "name": "",
@@ -128,8 +128,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:24:42 2026",
- "timestampMillis": "1769127882630",
+ "dateTimestamp": "Sat Jan 24 12:05:04 2026",
+ "timestampMillis": "1769274304750",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth.rpt",
   "name": "",
@@ -142,8 +142,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:24:42 2026",
- "timestampMillis": "1769127882631",
+ "dateTimestamp": "Sat Jan 24 12:05:04 2026",
+ "timestampMillis": "1769274304751",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/syn/report/csynth.xml",
   "name": "",
@@ -156,8 +156,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:27:25 2026",
- "timestampMillis": "1769128045281",
+ "dateTimestamp": "Sat Jan 24 12:07:47 2026",
+ "timestampMillis": "1769274467606",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls",
   "name": "",
@@ -170,8 +170,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:27:25 2026",
- "timestampMillis": "1769128045282",
+ "dateTimestamp": "Sat Jan 24 12:07:47 2026",
+ "timestampMillis": "1769274467606",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls",
   "name": "",
@@ -184,8 +184,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:27:25 2026",
- "timestampMillis": "1769128045282",
+ "dateTimestamp": "Sat Jan 24 12:07:47 2026",
+ "timestampMillis": "1769274467607",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls",
   "name": "",
@@ -198,10 +198,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Thu Jan 22 19:27:25 2026",
- "timestampMillis": "1769128045282",
+ "dateTimestamp": "Sat Jan 24 12:07:47 2026",
+ "timestampMillis": "1769274467607",
  "status": {
-  "cmdId": "21c5872f-916f-4c66-a2d0-c0b98170956e",
+  "cmdId": "280a98b2-526a-470d-b41b-49cf49ce5b8d",
   "state": "CS_PASSED"
  }
 }
@@ -209,10 +209,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Thu Jan 22 19:27:25 2026",
- "timestampMillis": "1769128045738",
+ "dateTimestamp": "Sat Jan 24 12:07:48 2026",
+ "timestampMillis": "1769274468046",
  "status": {
-  "cmdId": "06c8bd0e-053c-4d5b-bced-d1f89d5bb372",
+  "cmdId": "450f2d3b-481d-43ae-8e7e-65d07f33851d",
   "state": "CS_PASSED"
  }
 }
@@ -220,8 +220,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:27:25 2026",
- "timestampMillis": "1769128045757",
+ "dateTimestamp": "Sat Jan 24 12:07:48 2026",
+ "timestampMillis": "1769274468065",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/reports/v++_compile_compute_controller_guidance.html",
   "name": "",
@@ -234,8 +234,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Thu Jan 22 19:27:25 2026",
- "timestampMillis": "1769128045757",
+ "dateTimestamp": "Sat Jan 24 12:07:48 2026",
+ "timestampMillis": "1769274468065",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/reports/.db/v++_compile_compute_controller_guidance.pb3",
   "name": "",
