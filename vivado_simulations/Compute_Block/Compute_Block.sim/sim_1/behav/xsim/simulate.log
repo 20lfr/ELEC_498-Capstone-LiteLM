@@ -8234,4 +8234,3 @@ cycle=7996 state=3 req_instr=0x00ff010e req_op=0x0e req_layer=1 req_head=-1 req_
 cycle=7997 state=3 req_instr=0x00ff010e req_op=0x0e req_layer=1 req_head=-1 req_tile=0 mac_start=0 mac_ready=1 mac_complete=0
 cycle=7998 state=3 req_instr=0x00ff010e req_op=0x0e req_layer=1 req_head=-1 req_tile=0 mac_start=0 mac_ready=1 mac_complete=0
 cycle=7999 state=3 req_instr=0x00ff010e req_op=0x0e req_layer=1 req_head=-1 req_tile=0 mac_start=0 mac_ready=1 mac_complete=0
-$finish called at time : 1321005 ns : File "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/compute_controller_tb.sv" Line 436

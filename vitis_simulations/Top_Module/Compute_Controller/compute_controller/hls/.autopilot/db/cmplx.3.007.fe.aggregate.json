@@ -1,12 +1,12 @@
 {
   "0": {
-    "basicblocks": 122,
+    "basicblocks": 120,
     "calls": "",
     "control_depth": 2,
     "def_use_depth": 20,
     "file": "compute_controller.cpp",
-    "fileloc": 210,
-    "instructions": 12511,
+    "fileloc": 207,
+    "instructions": 12509,
     "loads": {
       "G": 562,
       "T": 3
@@ -17,6 +17,6 @@
       "G": 9557,
       "T": 36
     },
-    "total_instructions": 12511
+    "total_instructions": 12509
   }
 }

@@ -38,192 +38,192 @@ Diagnostics:
         Length:          0
         ReplacementText: 'VITIS_LOOP_1248_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_44_1:  '
-    FileOffset:      44
+    Message:         'Added loop label VITIS_LOOP_37_1:  '
+    FileOffset:      37
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          976599
+        Offset:          976478
         Length:          0
-        ReplacementText: 'VITIS_LOOP_44_1: '
+        ReplacementText: 'VITIS_LOOP_37_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_47_2:  '
-    FileOffset:      47
+    Message:         'Added loop label VITIS_LOOP_40_2:  '
+    FileOffset:      40
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          976744
+        Offset:          976623
         Length:          0
-        ReplacementText: 'VITIS_LOOP_47_2: '
+        ReplacementText: 'VITIS_LOOP_40_2: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_77_1:  '
-    FileOffset:      77
+    Message:         'Added loop label VITIS_LOOP_74_1:  '
+    FileOffset:      74
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          977311
+        Offset:          977196
         Length:          0
-        ReplacementText: 'VITIS_LOOP_77_1: '
+        ReplacementText: 'VITIS_LOOP_74_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_107_1:  '
-    FileOffset:      107
+    Message:         'Added loop label VITIS_LOOP_104_1:  '
+    FileOffset:      104
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          978041
+        Offset:          977926
         Length:          0
-        ReplacementText: 'VITIS_LOOP_107_1: '
+        ReplacementText: 'VITIS_LOOP_104_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_124_2:  '
-    FileOffset:      124
+    Message:         'Added loop label VITIS_LOOP_121_2:  '
+    FileOffset:      121
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          978558
+        Offset:          978443
         Length:          0
-        ReplacementText: 'VITIS_LOOP_124_2: '
+        ReplacementText: 'VITIS_LOOP_121_2: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_142_1:  '
+    Message:         'Added loop label VITIS_LOOP_139_1:  '
+    FileOffset:      139
+    FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
+    Replacements:    
+      - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
+        Offset:          979009
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_139_1: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_142_2:  '
     FileOffset:      142
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          979124
+        Offset:          979127
         Length:          0
-        ReplacementText: 'VITIS_LOOP_142_1: '
+        ReplacementText: 'VITIS_LOOP_142_2: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_145_2:  '
-    FileOffset:      145
+    Message:         'Added loop label VITIS_LOOP_158_1:  '
+    FileOffset:      158
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          979242
+        Offset:          979638
         Length:          0
-        ReplacementText: 'VITIS_LOOP_145_2: '
+        ReplacementText: 'VITIS_LOOP_158_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_161_1:  '
-    FileOffset:      161
+    Message:         'Added loop label VITIS_LOOP_177_1:  '
+    FileOffset:      177
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          979753
+        Offset:          980056
         Length:          0
-        ReplacementText: 'VITIS_LOOP_161_1: '
+        ReplacementText: 'VITIS_LOOP_177_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_180_1:  '
+    Message:         'Added loop label VITIS_LOOP_180_2:  '
     FileOffset:      180
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          980171
+        Offset:          980174
         Length:          0
-        ReplacementText: 'VITIS_LOOP_180_1: '
+        ReplacementText: 'VITIS_LOOP_180_2: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_183_2:  '
-    FileOffset:      183
+    Message:         'Added loop label VITIS_LOOP_197_1:  '
+    FileOffset:      197
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          980289
+        Offset:          980609
         Length:          0
-        ReplacementText: 'VITIS_LOOP_183_2: '
+        ReplacementText: 'VITIS_LOOP_197_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_200_1:  '
-    FileOffset:      200
+    Message:         'Added loop label VITIS_LOOP_291_1:  '
+    FileOffset:      291
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          980724
+        Offset:          983139
         Length:          0
-        ReplacementText: 'VITIS_LOOP_200_1: '
+        ReplacementText: 'VITIS_LOOP_291_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_294_1:  '
-    FileOffset:      294
+    Message:         'Added loop label VITIS_LOOP_295_2:  '
+    FileOffset:      295
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          983254
+        Offset:          983232
         Length:          0
-        ReplacementText: 'VITIS_LOOP_294_1: '
+        ReplacementText: 'VITIS_LOOP_295_2: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_298_2:  '
-    FileOffset:      298
+    Message:         'Added loop label VITIS_LOOP_299_3:  '
+    FileOffset:      299
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          983347
+        Offset:          983325
         Length:          0
-        ReplacementText: 'VITIS_LOOP_298_2: '
+        ReplacementText: 'VITIS_LOOP_299_3: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_302_3:  '
-    FileOffset:      302
+    Message:         'Added loop label VITIS_LOOP_372_4:  '
+    FileOffset:      372
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          983440
+        Offset:          986075
         Length:          0
-        ReplacementText: 'VITIS_LOOP_302_3: '
+        ReplacementText: 'VITIS_LOOP_372_4: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_375_4:  '
-    FileOffset:      375
+    Message:         'Added loop label VITIS_LOOP_377_5:  '
+    FileOffset:      377
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          986190
+        Offset:          986311
         Length:          0
-        ReplacementText: 'VITIS_LOOP_375_4: '
+        ReplacementText: 'VITIS_LOOP_377_5: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_380_5:  '
-    FileOffset:      380
+    Message:         'Added loop label VITIS_LOOP_381_6:  '
+    FileOffset:      381
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          986426
+        Offset:          986441
         Length:          0
-        ReplacementText: 'VITIS_LOOP_380_5: '
+        ReplacementText: 'VITIS_LOOP_381_6: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_384_6:  '
-    FileOffset:      384
+    Message:         'Added loop label VITIS_LOOP_382_7:  '
+    FileOffset:      382
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          986556
+        Offset:          986521
         Length:          0
-        ReplacementText: 'VITIS_LOOP_384_6: '
+        ReplacementText: 'VITIS_LOOP_382_7: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_385_7:  '
-    FileOffset:      385
+    Message:         'Added loop label VITIS_LOOP_394_8:  '
+    FileOffset:      394
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          986636
+        Offset:          987132
         Length:          0
-        ReplacementText: 'VITIS_LOOP_385_7: '
+        ReplacementText: 'VITIS_LOOP_394_8: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_397_8:  '
-    FileOffset:      397
+    Message:         'Added loop label VITIS_LOOP_398_9:  '
+    FileOffset:      398
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          987247
+        Offset:          987320
         Length:          0
-        ReplacementText: 'VITIS_LOOP_397_8: '
+        ReplacementText: 'VITIS_LOOP_398_9: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_401_9:  '
-    FileOffset:      401
+    Message:         'Added loop label VITIS_LOOP_410_10:  '
+    FileOffset:      410
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          987435
+        Offset:          987627
         Length:          0
-        ReplacementText: 'VITIS_LOOP_401_9: '
-  - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_413_10:  '
-    FileOffset:      413
-    FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
-    Replacements:    
-      - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp
-        Offset:          987742
-        Length:          0
-        ReplacementText: 'VITIS_LOOP_413_10: '
+        ReplacementText: 'VITIS_LOOP_410_10: '
 ...

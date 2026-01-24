@@ -19,27 +19,20 @@ void MAC_ARCHITECTURE(
 #pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
 
     static bool busy = false;
-    static bool computing = false;  // NEW: track if we're in computation cycle
+    static bool compute_done = false;
 #pragma HLS reset variable = busy
-#pragma HLS reset variable = computing
+#pragma HLS reset variable = compute_done
 
     // Drop ready immediately when a start pulse is present
     ready = (!busy) && (!start);
-    complete = false;
+    complete = compute_done;
 
     const bool do_compute = (!busy && start);
-    
+
     if (do_compute) {
         busy = true;
-        computing = true;  // Start computation next cycle
-    } else if (busy && computing) {
-        // Computation completes this cycle
-        computing = false;
-        busy = false;
-        complete = true;
-    }
-
-    if (computing) {
+        compute_done = false;
+        
         // Perform the actual computation
         for (int out = 0; out < ACCUM_MAX; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
@@ -51,11 +44,15 @@ void MAC_ARCHITECTURE(
             }
             accum_vector[out] = acc;
         }
+        
+        // Signal completion for next cycle
+        compute_done = true;
+    } else if (compute_done) {
+        // Clear flags after complete pulse
+        compute_done = false;
+        busy = false;
     }
 }
-
-
-
 
 // ---------------------------------------------------------------------------
 // Compute kernels
@@ -402,13 +399,10 @@ void compute_controller(
 #pragma HLS PIPELINE II=1
                         bias[i] = 0;
                     }
-
                     // MAC pulse control
                     if(mac_ready && !mac_start && !mac_complete) {
                         mac_start = true;
                     }
-
-
                     if (mac_complete) {
                         for (int t = 0; t < D_TILE_WO; ++t) {
                             compute_buf::write_i32(out_buf, t * 4, out[t]);

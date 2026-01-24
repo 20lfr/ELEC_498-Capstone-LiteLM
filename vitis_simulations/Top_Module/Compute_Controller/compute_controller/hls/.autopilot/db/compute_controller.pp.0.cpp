@@ -7095,41 +7095,45 @@ void MAC_ARCHITECTURE(
 #pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
 
  static bool busy = false;
-    static bool computing = false;
+    static bool compute_done = false;
 #pragma HLS reset variable = busy
-#pragma HLS reset variable = computing
+#pragma HLS reset variable = compute_done
 
 
  ready = (!busy) && (!start);
-    complete = false;
+    complete = compute_done;
 
     const bool do_compute = (!busy && start);
 
     if (do_compute) {
         busy = true;
-        computing = true;
-    } else if (busy && computing) {
+        compute_done = false;
 
-        computing = false;
-        busy = false;
-        complete = true;
-    }
 
-    if (computing) {
-
-        VITIS_LOOP_44_1: for (int out = 0; out < ACCUM_MAX; ++out) {
+        VITIS_LOOP_37_1: for (int out = 0; out < ACCUM_MAX; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
  int32_t acc = static_cast<int32_t>(bias[out]);
-            VITIS_LOOP_47_2: for (int i = 0; i < VECTOR_MAX; ++i) {
+            VITIS_LOOP_40_2: for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL factor=MAC_VEC_UNROLL
  const int4_t w = matrixB[out * VECTOR_MAX + i];
                 acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
             }
             accum_vector[out] = acc;
         }
+
+
+        compute_done = true;
+    } else if (compute_done) {
+
+        compute_done = false;
+        busy = false;
     }
 }
-# 64 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
+
+
+
+
+
 void REQUANT_D_MODEL_int32_to_int8(
     const int32_t x32[D_MODEL],
     const int32_t M,
@@ -7143,7 +7147,7 @@ void REQUANT_D_MODEL_int32_to_int8(
 
 
 
-    VITIS_LOOP_77_1: for (int t = 0; t < D_MODEL; ++t) {
+    VITIS_LOOP_74_1: for (int t = 0; t < D_MODEL; ++t) {
 #pragma HLS UNROLL
  int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
         int64_t rounded = 1LL << (n - 1);
@@ -7173,7 +7177,7 @@ void LAYER_NORM(
  int32_t sum = 0;
     int32_t square = 0;
 
-    VITIS_LOOP_107_1: for (int i = 0; i < D_MODEL; ++i) {
+    VITIS_LOOP_104_1: for (int i = 0; i < D_MODEL; ++i) {
         sum += static_cast<int32_t>(x[i]);
         square += static_cast<int32_t>(x[i]) * static_cast<int32_t>(x[i]);
     }
@@ -7190,7 +7194,7 @@ void LAYER_NORM(
     ap_fixed<32, 16> inv_std = 1;
 
 
-    VITIS_LOOP_124_2: for (int i = 0; i < D_MODEL; ++i) {
+    VITIS_LOOP_121_2: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  ap_fixed<32, 16> normalized = (ap_fixed<32, 16>(x[i]) - mean) * inv_std;
         ap_fixed<32, 16> scaled = (normalized * ap_fixed<32, 16>(gamma[i])) + ap_fixed<32, 16>(beta[i]);
@@ -7208,10 +7212,10 @@ void FFN_PRE_ACT(
 ) {
     const int16_t ACT_MIN = -32768;
     const int16_t ACT_MAX = 32767;
-    VITIS_LOOP_142_1: for (int i = 0; i < D_TILE_W1; ++i) {
+    VITIS_LOOP_139_1: for (int i = 0; i < D_TILE_W1; ++i) {
 #pragma HLS PIPELINE II=1
  int32_t acc = static_cast<int32_t>(bias[i]);
-        VITIS_LOOP_145_2: for (int j = 0; j < D_MODEL; ++j) {
+        VITIS_LOOP_142_2: for (int j = 0; j < D_MODEL; ++j) {
 #pragma HLS UNROLL factor=4
  const int4_t w = weights[i * D_MODEL + j];
             acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
@@ -7227,7 +7231,7 @@ void FFN_ACT_RELU(
     const int16_t input[D_FFN],
     int16_t output[D_FFN]
 ) {
-    VITIS_LOOP_161_1: for (int i = 0; i < D_FFN; ++i) {
+    VITIS_LOOP_158_1: for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS PIPELINE II=1
  int16_t v = input[i];
         if (v < 0) {
@@ -7246,10 +7250,10 @@ void FFN_POST_ACT(
     int32_t output[D_TILE_W2]
 ) {
 #pragma HLS INLINE off
- VITIS_LOOP_180_1: for (int i = 0; i < D_TILE_W2; ++i) {
+ VITIS_LOOP_177_1: for (int i = 0; i < D_TILE_W2; ++i) {
 #pragma HLS PIPELINE II=1
  int32_t acc = static_cast<int32_t>(bias[i]);
-        VITIS_LOOP_183_2: for (int j = 0; j < D_FFN; ++j) {
+        VITIS_LOOP_180_2: for (int j = 0; j < D_FFN; ++j) {
 #pragma HLS UNROLL factor=4
  const int4_t w = weights[i * D_FFN + j];
             acc += static_cast<int32_t>(input[j]) * static_cast<int32_t>(w);
@@ -7266,7 +7270,7 @@ void RES_ADD(
     const int8_t residual[D_MODEL],
     int8_t output[D_MODEL]
 ) {
-    VITIS_LOOP_200_1: for (int i = 0; i < D_MODEL; ++i) {
+    VITIS_LOOP_197_1: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  output[i] = input[i] + residual[i];
     }
@@ -7310,7 +7314,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=compute_controller
-# 241 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
+# 238 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
 
 #pragma HLS INLINE off
 
@@ -7364,15 +7368,15 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
         mac_complete = false;
         capture_pending = false;
 
-        VITIS_LOOP_294_1: for (int i = 0; i < VECTOR_MAX; ++i) {
+        VITIS_LOOP_291_1: for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL
  vectorA[i] = 0;
         }
-        VITIS_LOOP_298_2: for (int i = 0; i < MATRIX_MAX; ++i) {
+        VITIS_LOOP_295_2: for (int i = 0; i < MATRIX_MAX; ++i) {
 #pragma HLS UNROLL
  matrixB[i] = 0;
         }
-        VITIS_LOOP_302_3: for (int i = 0; i < ACCUM_MAX; ++i) {
+        VITIS_LOOP_299_3: for (int i = 0; i < ACCUM_MAX; ++i) {
 #pragma HLS UNROLL
  bias[i] = 0;
         }
@@ -7445,17 +7449,17 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
         case ComputeState::EXECUTE: {
             switch (req.op) {
                 case ComputeOp::CMP_OUT_PROJ: {
-                    VITIS_LOOP_375_4: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_372_4: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = static_cast<int16_t>(
                             compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i));
                     }
-                    VITIS_LOOP_380_5: for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_377_5: for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = 0;
                     }
-                    VITIS_LOOP_384_6: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
-                        VITIS_LOOP_385_7: for (int i = 0; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_381_6: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
+                        VITIS_LOOP_382_7: for (int i = 0; i < VECTOR_MAX; ++i) {
 
                             if (out_idx < D_TILE_WO && i < D_MODEL) {
                                 const int w_idx = (out_idx * D_MODEL) + i;
@@ -7467,11 +7471,11 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                             }
                         }
                     }
-                    VITIS_LOOP_397_8: for (int i = 0; i < D_TILE_WO; ++i) {
+                    VITIS_LOOP_394_8: for (int i = 0; i < D_TILE_WO; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::B * 2) + i);
                     }
-                    VITIS_LOOP_401_9: for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
+                    VITIS_LOOP_398_9: for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = 0;
                     }
@@ -7483,7 +7487,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
 
 
                     if (mac_complete) {
-                        VITIS_LOOP_413_10: for (int t = 0; t < D_TILE_WO; ++t) {
+                        VITIS_LOOP_410_10: for (int t = 0; t < D_TILE_WO; ++t) {
                             compute_buf::write_i32(out_buf, t * 4, out[t]);
                         }
                         next_state = ComputeState::MEM_WRITEBACK;

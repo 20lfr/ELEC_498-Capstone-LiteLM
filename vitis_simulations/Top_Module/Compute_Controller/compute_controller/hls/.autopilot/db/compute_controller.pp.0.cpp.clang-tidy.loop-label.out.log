@@ -18,108 +18,108 @@
       ^~~
       VITIS_LOOP_1248_1: 
 /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:4571:7: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7120:9: warning: Added loop label VITIS_LOOP_44_1:   [xilinx-label-all-loops]
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7113:9: warning: Added loop label VITIS_LOOP_37_1:   [xilinx-label-all-loops]
         for (int out = 0; out < ACCUM_MAX; ++out) {
         ^~~
-        VITIS_LOOP_44_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7120:9: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7123:13: warning: Added loop label VITIS_LOOP_47_2:   [xilinx-label-all-loops]
+        VITIS_LOOP_37_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7113:9: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7116:13: warning: Added loop label VITIS_LOOP_40_2:   [xilinx-label-all-loops]
             for (int i = 0; i < VECTOR_MAX; ++i) {
             ^~~
-            VITIS_LOOP_47_2: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7123:13: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7146:5: warning: Added loop label VITIS_LOOP_77_1:   [xilinx-label-all-loops]
+            VITIS_LOOP_40_2: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7116:13: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7150:5: warning: Added loop label VITIS_LOOP_74_1:   [xilinx-label-all-loops]
     for (int t = 0; t < D_MODEL; ++t) {
     ^~~
-    VITIS_LOOP_77_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7146:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7176:5: warning: Added loop label VITIS_LOOP_107_1:   [xilinx-label-all-loops]
+    VITIS_LOOP_74_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7150:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7180:5: warning: Added loop label VITIS_LOOP_104_1:   [xilinx-label-all-loops]
     for (int i = 0; i < D_MODEL; ++i) {
     ^~~
-    VITIS_LOOP_107_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7176:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7193:5: warning: Added loop label VITIS_LOOP_124_2:   [xilinx-label-all-loops]
+    VITIS_LOOP_104_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7180:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7197:5: warning: Added loop label VITIS_LOOP_121_2:   [xilinx-label-all-loops]
     for (int i = 0; i < D_MODEL; ++i) {
     ^~~
-    VITIS_LOOP_124_2: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7193:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7211:5: warning: Added loop label VITIS_LOOP_142_1:   [xilinx-label-all-loops]
+    VITIS_LOOP_121_2: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7197:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7215:5: warning: Added loop label VITIS_LOOP_139_1:   [xilinx-label-all-loops]
     for (int i = 0; i < D_TILE_W1; ++i) {
     ^~~
-    VITIS_LOOP_142_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7211:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7214:9: warning: Added loop label VITIS_LOOP_145_2:   [xilinx-label-all-loops]
+    VITIS_LOOP_139_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7215:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7218:9: warning: Added loop label VITIS_LOOP_142_2:   [xilinx-label-all-loops]
         for (int j = 0; j < D_MODEL; ++j) {
         ^~~
-        VITIS_LOOP_145_2: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7214:9: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7230:5: warning: Added loop label VITIS_LOOP_161_1:   [xilinx-label-all-loops]
+        VITIS_LOOP_142_2: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7218:9: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7234:5: warning: Added loop label VITIS_LOOP_158_1:   [xilinx-label-all-loops]
     for (int i = 0; i < D_FFN; ++i) {
     ^~~
-    VITIS_LOOP_161_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7230:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7249:2: warning: Added loop label VITIS_LOOP_180_1:   [xilinx-label-all-loops]
+    VITIS_LOOP_158_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7234:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7253:2: warning: Added loop label VITIS_LOOP_177_1:   [xilinx-label-all-loops]
  for (int i = 0; i < D_TILE_W2; ++i) {
  ^~~
- VITIS_LOOP_180_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7249:2: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7252:9: warning: Added loop label VITIS_LOOP_183_2:   [xilinx-label-all-loops]
+ VITIS_LOOP_177_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7253:2: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7256:9: warning: Added loop label VITIS_LOOP_180_2:   [xilinx-label-all-loops]
         for (int j = 0; j < D_FFN; ++j) {
         ^~~
-        VITIS_LOOP_183_2: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7252:9: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7269:5: warning: Added loop label VITIS_LOOP_200_1:   [xilinx-label-all-loops]
+        VITIS_LOOP_180_2: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7256:9: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7273:5: warning: Added loop label VITIS_LOOP_197_1:   [xilinx-label-all-loops]
     for (int i = 0; i < D_MODEL; ++i) {
     ^~~
-    VITIS_LOOP_200_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7269:5: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7367:9: warning: Added loop label VITIS_LOOP_294_1:   [xilinx-label-all-loops]
+    VITIS_LOOP_197_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7273:5: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7371:9: warning: Added loop label VITIS_LOOP_291_1:   [xilinx-label-all-loops]
         for (int i = 0; i < VECTOR_MAX; ++i) {
         ^~~
-        VITIS_LOOP_294_1: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7367:9: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7371:9: warning: Added loop label VITIS_LOOP_298_2:   [xilinx-label-all-loops]
+        VITIS_LOOP_291_1: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7371:9: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7375:9: warning: Added loop label VITIS_LOOP_295_2:   [xilinx-label-all-loops]
         for (int i = 0; i < MATRIX_MAX; ++i) {
         ^~~
-        VITIS_LOOP_298_2: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7371:9: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7375:9: warning: Added loop label VITIS_LOOP_302_3:   [xilinx-label-all-loops]
+        VITIS_LOOP_295_2: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7375:9: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7379:9: warning: Added loop label VITIS_LOOP_299_3:   [xilinx-label-all-loops]
         for (int i = 0; i < ACCUM_MAX; ++i) {
         ^~~
-        VITIS_LOOP_302_3: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7375:9: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7448:21: warning: Added loop label VITIS_LOOP_375_4:   [xilinx-label-all-loops]
+        VITIS_LOOP_299_3: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7379:9: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7452:21: warning: Added loop label VITIS_LOOP_372_4:   [xilinx-label-all-loops]
                     for (int i = 0; i < D_MODEL; ++i) {
                     ^~~
-                    VITIS_LOOP_375_4: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7448:21: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7453:21: warning: Added loop label VITIS_LOOP_380_5:   [xilinx-label-all-loops]
+                    VITIS_LOOP_372_4: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7452:21: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7457:21: warning: Added loop label VITIS_LOOP_377_5:   [xilinx-label-all-loops]
                     for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
                     ^~~
-                    VITIS_LOOP_380_5: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7453:21: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7457:21: warning: Added loop label VITIS_LOOP_384_6:   [xilinx-label-all-loops]
+                    VITIS_LOOP_377_5: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7457:21: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7461:21: warning: Added loop label VITIS_LOOP_381_6:   [xilinx-label-all-loops]
                     for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
                     ^~~
-                    VITIS_LOOP_384_6: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7457:21: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7458:25: warning: Added loop label VITIS_LOOP_385_7:   [xilinx-label-all-loops]
+                    VITIS_LOOP_381_6: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7461:21: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7462:25: warning: Added loop label VITIS_LOOP_382_7:   [xilinx-label-all-loops]
                         for (int i = 0; i < VECTOR_MAX; ++i) {
                         ^~~
-                        VITIS_LOOP_385_7: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7458:25: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7470:21: warning: Added loop label VITIS_LOOP_397_8:   [xilinx-label-all-loops]
+                        VITIS_LOOP_382_7: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7462:25: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7474:21: warning: Added loop label VITIS_LOOP_394_8:   [xilinx-label-all-loops]
                     for (int i = 0; i < D_TILE_WO; ++i) {
                     ^~~
-                    VITIS_LOOP_397_8: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7470:21: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7474:21: warning: Added loop label VITIS_LOOP_401_9:   [xilinx-label-all-loops]
+                    VITIS_LOOP_394_8: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7474:21: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7478:21: warning: Added loop label VITIS_LOOP_398_9:   [xilinx-label-all-loops]
                     for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
                     ^~~
-                    VITIS_LOOP_401_9: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7474:21: note: FIX-IT applied suggested code changes
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7486:25: warning: Added loop label VITIS_LOOP_413_10:   [xilinx-label-all-loops]
+                    VITIS_LOOP_398_9: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7478:21: note: FIX-IT applied suggested code changes
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7490:25: warning: Added loop label VITIS_LOOP_410_10:   [xilinx-label-all-loops]
                         for (int t = 0; t < D_TILE_WO; ++t) {
                         ^~~
-                        VITIS_LOOP_413_10: 
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7486:25: note: FIX-IT applied suggested code changes
+                        VITIS_LOOP_410_10: 
+/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/hls/.autopilot/db/compute_controller.pp.0.cpp:7490:25: note: FIX-IT applied suggested code changes

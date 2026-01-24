@@ -1,14 +1,14 @@
 {
   "0": {
-    "basicblocks": 134,
-    "calls": "1 4 1 4 1 1 4 1 1 4 2 3 3 5 1 4 1 4 1 1 4 1 1 4",
+    "basicblocks": 131,
+    "calls": "4 5 4 5 4 4 5 4 4 5 1 3 3 2 4 5 4 5 4 4 5 4 4 5",
     "control_depth": 3,
     "def_use_depth": 19,
     "file": "compute_controller.cpp",
-    "fileloc": 210,
-    "instructions": 13118,
+    "fileloc": 207,
+    "instructions": 13114,
     "loads": {
-      "G": 572,
+      "G": 571,
       "L": 2
     },
     "memory_accesses": 523,
@@ -17,21 +17,9 @@
       "G": 9513,
       "T": 32
     },
-    "total_instructions": 13295
+    "total_instructions": 13291
   },
   "1": {
-    "basicblocks": 4,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "compute_controller.hpp",
-    "fileloc": 8,
-    "instructions": 6,
-    "memory_accesses": 0,
-    "name": "max2_constexpr",
-    "total_instructions": 6
-  },
-  "2": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -45,6 +33,21 @@
     "memory_accesses": 0,
     "name": "read_i8",
     "total_instructions": 4
+  },
+  "2": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "top_params.hpp",
+    "fileloc": 623,
+    "instructions": 23,
+    "memory_accesses": 0,
+    "name": "write_i32",
+    "stores": {
+      "L": 4
+    },
+    "total_instructions": 23
   },
   "3": {
     "basicblocks": 4,
@@ -70,25 +73,22 @@
     "control_depth": 0,
     "def_use_depth": 1,
     "file": "compute_controller.hpp",
+    "fileloc": 8,
+    "instructions": 6,
+    "memory_accesses": 0,
+    "name": "max2_constexpr",
+    "total_instructions": 6
+  },
+  "5": {
+    "basicblocks": 4,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 1,
+    "file": "compute_controller.hpp",
     "fileloc": 11,
     "instructions": 6,
     "memory_accesses": 0,
     "name": "min2_constexpr",
     "total_instructions": 6
-  },
-  "5": {
-    "basicblocks": 1,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 1,
-    "file": "top_params.hpp",
-    "fileloc": 623,
-    "instructions": 23,
-    "memory_accesses": 0,
-    "name": "write_i32",
-    "stores": {
-      "L": 4
-    },
-    "total_instructions": 23
   }
 }
