@@ -3,9 +3,6 @@
 
 
 // MAC Architecture
-
-
-
 void MAC_ARCHITECTURE(
     bool start,
     bool &ready,
@@ -22,21 +19,28 @@ void MAC_ARCHITECTURE(
 #pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
 
     static bool busy = false;
+    static bool computing = false;  // NEW: track if we're in computation cycle
 #pragma HLS reset variable = busy
+#pragma HLS reset variable = computing
 
-    // Drop ready immediately when a start pulse is present so the handshake
-    // shows the MAC is busy even for single-cycle computes.
+    // Drop ready immediately when a start pulse is present
     ready = (!busy) && (!start);
     complete = false;
 
     const bool do_compute = (!busy && start);
+    
     if (do_compute) {
         busy = true;
-    } else if (busy) {
+        computing = true;  // Start computation next cycle
+    } else if (busy && computing) {
+        // Computation completes this cycle
+        computing = false;
         busy = false;
+        complete = true;
     }
 
-    if (do_compute) {
+    if (computing) {
+        // Perform the actual computation
         for (int out = 0; out < ACCUM_MAX; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
             int32_t acc = static_cast<int32_t>(bias[out]);
@@ -47,7 +51,6 @@ void MAC_ARCHITECTURE(
             }
             accum_vector[out] = acc;
         }
-        complete = true;
     }
 }
 
@@ -260,6 +263,11 @@ void compute_controller(
     static bool mac_ready = true;
     static bool mac_complete = false;
     static bool capture_pending = false;
+
+    
+    if (!mac_ready && mac_start && !mac_complete) {
+        mac_start = false;
+    } 
     
 
     if (reset) {
@@ -395,11 +403,11 @@ void compute_controller(
                         bias[i] = 0;
                     }
 
+                    // MAC pulse control
                     if(mac_ready && !mac_start && !mac_complete) {
                         mac_start = true;
-                        mac_complete = false;
                     }
-                    else mac_start = false;
+
 
                     if (mac_complete) {
                         for (int t = 0; t < D_TILE_WO; ++t) {

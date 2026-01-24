@@ -9,7 +9,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>18</integer>
+      <integer>15</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -25,7 +25,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>19</integer>
+      <integer>16</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -41,7 +41,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>20</integer>
+      <integer>17</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -57,7 +57,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>21</integer>
+      <integer>18</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -73,7 +73,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>22</integer>
+      <integer>19</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -89,7 +89,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>25</integer>
+      <integer>23</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -105,7 +105,23 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>41</integer>
+      <integer>24</integer>
+      <key>column</key>
+      <integer>9</integer>
+      <key>message</key>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=reset_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=MAC_ARCHITECTURE_XLX_SEP_ PragmaOptions=variable = computing_XLX_SEP_</string>
+      <key>ID</key>
+      <integer>5471</integer>
+      <key>WarningOption</key>
+      <string>dump-hls-pragmas</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
+      <key>line</key>
+      <integer>45</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -121,7 +137,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>44</integer>
+      <integer>48</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -137,7 +153,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>75</integer>
+      <integer>78</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -153,7 +169,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>98</integer>
+      <integer>101</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -169,7 +185,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>122</integer>
+      <integer>125</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -185,7 +201,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>140</integer>
+      <integer>143</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -201,7 +217,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>143</integer>
+      <integer>146</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -217,7 +233,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>159</integer>
+      <integer>162</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -233,7 +249,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>176</integer>
+      <integer>179</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -249,7 +265,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>178</integer>
+      <integer>181</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -265,7 +281,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>181</integer>
+      <integer>184</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -281,7 +297,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>198</integer>
+      <integer>201</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -313,7 +329,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>239</integer>
+      <integer>242</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -329,7 +345,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>242</integer>
+      <integer>245</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -345,7 +361,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>255</integer>
+      <integer>258</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -361,7 +377,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>256</integer>
+      <integer>259</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -377,7 +393,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>257</integer>
+      <integer>260</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -393,43 +409,11 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>258</integer>
+      <integer>261</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
       <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=array_partition_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=compute_controller_XLX_SEP_ PragmaOptions=variable=out cyclic factor=MAC_OUT_UNROLL dim=1_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
-      <key>line</key>
-      <integer>287</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=compute_controller_XLX_SEP_ PragmaOptions=_XLX_SEP_</string>
-      <key>ID</key>
-      <integer>5471</integer>
-      <key>WarningOption</key>
-      <string>dump-hls-pragmas</string>
-    </dict>
-    <dict>
-      <key>level</key>
-      <string>warning</string>
-      <key>filename</key>
-      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
-      <key>line</key>
-      <integer>291</integer>
-      <key>column</key>
-      <integer>9</integer>
-      <key>message</key>
-      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=compute_controller_XLX_SEP_ PragmaOptions=_XLX_SEP_</string>
       <key>ID</key>
       <integer>5471</integer>
       <key>WarningOption</key>
@@ -457,7 +441,39 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>368</integer>
+      <integer>299</integer>
+      <key>column</key>
+      <integer>9</integer>
+      <key>message</key>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=compute_controller_XLX_SEP_ PragmaOptions=_XLX_SEP_</string>
+      <key>ID</key>
+      <integer>5471</integer>
+      <key>WarningOption</key>
+      <string>dump-hls-pragmas</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
+      <key>line</key>
+      <integer>303</integer>
+      <key>column</key>
+      <integer>9</integer>
+      <key>message</key>
+      <string>HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=compute_controller_XLX_SEP_ PragmaOptions=_XLX_SEP_</string>
+      <key>ID</key>
+      <integer>5471</integer>
+      <key>WarningOption</key>
+      <string>dump-hls-pragmas</string>
+    </dict>
+    <dict>
+      <key>level</key>
+      <string>warning</string>
+      <key>filename</key>
+      <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
+      <key>line</key>
+      <integer>376</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -473,7 +489,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>373</integer>
+      <integer>381</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -489,7 +505,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>390</integer>
+      <integer>398</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>
@@ -505,7 +521,7 @@
       <key>filename</key>
       <string>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp</string>
       <key>line</key>
-      <integer>394</integer>
+      <integer>402</integer>
       <key>column</key>
       <integer>9</integer>
       <key>message</key>

@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'compute_controller'" level="0">
-<item name = "Date">Thu Jan 22 19:27:21 2026
+<item name = "Date">Sat Jan 24 12:07:43 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -31,31 +31,31 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_367_4_fu_30466">compute_controller_Pipeline_VITIS_LOOP_367_4, 194, 194, 1.940 us, 1.940 us, 193, 193, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7_fu_30504">compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7, 9218, 9218, 92.180 us, 92.180 us, 9217, 9217, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_389_8_fu_30542">compute_controller_Pipeline_VITIS_LOOP_389_8, 50, 50, 0.500 us, 0.500 us, 49, 49, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_405_10_fu_30580">compute_controller_Pipeline_VITIS_LOOP_405_10, 98, 98, 0.980 us, 0.980 us, 97, 97, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_2_fu_30618">compute_controller_Pipeline_VITIS_LOOP_43_2, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_21_fu_30690">compute_controller_Pipeline_VITIS_LOOP_43_21, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_22_fu_30762">compute_controller_Pipeline_VITIS_LOOP_43_22, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_23_fu_30834">compute_controller_Pipeline_VITIS_LOOP_43_23, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_24_fu_30906">compute_controller_Pipeline_VITIS_LOOP_43_24, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_25_fu_30978">compute_controller_Pipeline_VITIS_LOOP_43_25, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_26_fu_31050">compute_controller_Pipeline_VITIS_LOOP_43_26, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_27_fu_31122">compute_controller_Pipeline_VITIS_LOOP_43_27, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_28_fu_31194">compute_controller_Pipeline_VITIS_LOOP_43_28, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_29_fu_31266">compute_controller_Pipeline_VITIS_LOOP_43_29, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_210_fu_31338">compute_controller_Pipeline_VITIS_LOOP_43_210, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_211_fu_31410">compute_controller_Pipeline_VITIS_LOOP_43_211, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_212_fu_31482">compute_controller_Pipeline_VITIS_LOOP_43_212, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_213_fu_31554">compute_controller_Pipeline_VITIS_LOOP_43_213, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_214_fu_31626">compute_controller_Pipeline_VITIS_LOOP_43_214, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_215_fu_31698">compute_controller_Pipeline_VITIS_LOOP_43_215, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_375_4_fu_30580">compute_controller_Pipeline_VITIS_LOOP_375_4, 194, 194, 1.940 us, 1.940 us, 193, 193, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7_fu_30618">compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7, 9218, 9218, 92.180 us, 92.180 us, 9217, 9217, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_397_8_fu_30656">compute_controller_Pipeline_VITIS_LOOP_397_8, 50, 50, 0.500 us, 0.500 us, 49, 49, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_413_10_fu_30694">compute_controller_Pipeline_VITIS_LOOP_413_10, 98, 98, 0.980 us, 0.980 us, 97, 97, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_2_fu_30732">compute_controller_Pipeline_VITIS_LOOP_47_2, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_21_fu_30804">compute_controller_Pipeline_VITIS_LOOP_47_21, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_22_fu_30876">compute_controller_Pipeline_VITIS_LOOP_47_22, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_23_fu_30948">compute_controller_Pipeline_VITIS_LOOP_47_23, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_24_fu_31020">compute_controller_Pipeline_VITIS_LOOP_47_24, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_25_fu_31092">compute_controller_Pipeline_VITIS_LOOP_47_25, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_26_fu_31164">compute_controller_Pipeline_VITIS_LOOP_47_26, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_27_fu_31236">compute_controller_Pipeline_VITIS_LOOP_47_27, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_28_fu_31308">compute_controller_Pipeline_VITIS_LOOP_47_28, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_29_fu_31380">compute_controller_Pipeline_VITIS_LOOP_47_29, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_210_fu_31452">compute_controller_Pipeline_VITIS_LOOP_47_210, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_211_fu_31524">compute_controller_Pipeline_VITIS_LOOP_47_211, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_212_fu_31596">compute_controller_Pipeline_VITIS_LOOP_47_212, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_213_fu_31668">compute_controller_Pipeline_VITIS_LOOP_47_213, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_214_fu_31740">compute_controller_Pipeline_VITIS_LOOP_47_214, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_215_fu_31812">compute_controller_Pipeline_VITIS_LOOP_47_215, 17, 17, 0.170 us, 0.170 us, 13, 13, loop auto-rewind stp (delay=0 clock cycles(s))</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">
 <keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
-<column name="- VITIS_LOOP_40_1">918, 918, 306, -, -, 3, no</column>
+<column name="- VITIS_LOOP_44_1">918, 918, 306, -, -, 3, no</column>
 </table>
 </item>
 </section>
@@ -68,12 +68,12 @@
 <item name = "Summary"><table name="" hasTotal="1">
 <keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
 <column name="DSP">-, -, -, -, -</column>
-<column name="Expression">-, -, 0, 541, -</column>
+<column name="Expression">-, -, 0, 547, -</column>
 <column name="FIFO">-, -, -, -, -</column>
 <column name="Instance">-, 128, 2151, 10515, -</column>
 <column name="Memory">16, -, 688, 64, 0</column>
-<column name="Multiplexer">-, -, 0, 60979, -</column>
-<column name="Register">-, -, 1100, -, -</column>
+<column name="Multiplexer">-, -, 0, 60984, -</column>
+<column name="Register">-, -, 1097, -, -</column>
 <specialColumn name="Available">288, 1248, 234240, 117120, 64</specialColumn>
 <specialColumn name="Utilization (%)">5, 10, 1, 61, 0</specialColumn>
 </table>
@@ -82,26 +82,26 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="1">
 <keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_367_4_fu_30466">compute_controller_Pipeline_VITIS_LOOP_367_4, 0, 0, 19, 68, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7_fu_30504">compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7, 0, 0, 46, 266, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_389_8_fu_30542">compute_controller_Pipeline_VITIS_LOOP_389_8, 0, 0, 16, 68, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_405_10_fu_30580">compute_controller_Pipeline_VITIS_LOOP_405_10, 0, 0, 22, 219, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_2_fu_30618">compute_controller_Pipeline_VITIS_LOOP_43_2, 0, 8, 127, 606, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_21_fu_30690">compute_controller_Pipeline_VITIS_LOOP_43_21, 0, 8, 127, 622, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_210_fu_31338">compute_controller_Pipeline_VITIS_LOOP_43_210, 0, 8, 129, 623, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_211_fu_31410">compute_controller_Pipeline_VITIS_LOOP_43_211, 0, 8, 129, 623, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_212_fu_31482">compute_controller_Pipeline_VITIS_LOOP_43_212, 0, 8, 129, 606, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_213_fu_31554">compute_controller_Pipeline_VITIS_LOOP_43_213, 0, 8, 129, 623, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_214_fu_31626">compute_controller_Pipeline_VITIS_LOOP_43_214, 0, 8, 129, 623, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_215_fu_31698">compute_controller_Pipeline_VITIS_LOOP_43_215, 0, 8, 129, 623, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_22_fu_30762">compute_controller_Pipeline_VITIS_LOOP_43_22, 0, 8, 127, 622, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_23_fu_30834">compute_controller_Pipeline_VITIS_LOOP_43_23, 0, 8, 127, 622, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_24_fu_30906">compute_controller_Pipeline_VITIS_LOOP_43_24, 0, 8, 127, 606, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_25_fu_30978">compute_controller_Pipeline_VITIS_LOOP_43_25, 0, 8, 127, 622, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_26_fu_31050">compute_controller_Pipeline_VITIS_LOOP_43_26, 0, 8, 127, 622, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_27_fu_31122">compute_controller_Pipeline_VITIS_LOOP_43_27, 0, 8, 127, 622, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_28_fu_31194">compute_controller_Pipeline_VITIS_LOOP_43_28, 0, 8, 129, 606, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_29_fu_31266">compute_controller_Pipeline_VITIS_LOOP_43_29, 0, 8, 129, 623, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_375_4_fu_30580">compute_controller_Pipeline_VITIS_LOOP_375_4, 0, 0, 19, 68, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7_fu_30618">compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7, 0, 0, 46, 266, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_397_8_fu_30656">compute_controller_Pipeline_VITIS_LOOP_397_8, 0, 0, 16, 68, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_413_10_fu_30694">compute_controller_Pipeline_VITIS_LOOP_413_10, 0, 0, 22, 219, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_2_fu_30732">compute_controller_Pipeline_VITIS_LOOP_47_2, 0, 8, 127, 606, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_21_fu_30804">compute_controller_Pipeline_VITIS_LOOP_47_21, 0, 8, 127, 622, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_210_fu_31452">compute_controller_Pipeline_VITIS_LOOP_47_210, 0, 8, 129, 623, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_211_fu_31524">compute_controller_Pipeline_VITIS_LOOP_47_211, 0, 8, 129, 623, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_212_fu_31596">compute_controller_Pipeline_VITIS_LOOP_47_212, 0, 8, 129, 606, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_213_fu_31668">compute_controller_Pipeline_VITIS_LOOP_47_213, 0, 8, 129, 623, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_214_fu_31740">compute_controller_Pipeline_VITIS_LOOP_47_214, 0, 8, 129, 623, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_215_fu_31812">compute_controller_Pipeline_VITIS_LOOP_47_215, 0, 8, 129, 623, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_22_fu_30876">compute_controller_Pipeline_VITIS_LOOP_47_22, 0, 8, 127, 622, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_23_fu_30948">compute_controller_Pipeline_VITIS_LOOP_47_23, 0, 8, 127, 622, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_24_fu_31020">compute_controller_Pipeline_VITIS_LOOP_47_24, 0, 8, 127, 606, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_25_fu_31092">compute_controller_Pipeline_VITIS_LOOP_47_25, 0, 8, 127, 622, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_26_fu_31164">compute_controller_Pipeline_VITIS_LOOP_47_26, 0, 8, 127, 622, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_27_fu_31236">compute_controller_Pipeline_VITIS_LOOP_47_27, 0, 8, 127, 622, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_28_fu_31308">compute_controller_Pipeline_VITIS_LOOP_47_28, 0, 8, 129, 606, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_29_fu_31380">compute_controller_Pipeline_VITIS_LOOP_47_29, 0, 8, 129, 623, 0</column>
 </table>
 </item>
 <item name = "DSP"><table name="" hasTotal="0">
@@ -182,31 +182,33 @@
 </item>
 <item name = "Expression"><table name="" hasTotal="1">
 <keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
-<column name="add_ln333_fu_32676_p2">+, 0, 0, 15, 8, 5</column>
-<column name="add_ln40_fu_32029_p2">+, 0, 0, 13, 6, 5</column>
-<column name="p_udiv1167_fu_32379_p2">-, 0, 0, 17, 10, 10</column>
-<column name="p_udiv1244_fu_32414_p2">-, 0, 0, 17, 10, 10</column>
-<column name="p_udiv1321_fu_32449_p2">-, 0, 0, 17, 10, 10</column>
-<column name="p_udiv1398_fu_32484_p2">-, 0, 0, 17, 10, 10</column>
-<column name="p_udiv1475_fu_32513_p2">-, 0, 0, 17, 10, 10</column>
-<column name="p_udiv1552_fu_32548_p2">-, 0, 0, 17, 10, 10</column>
-<column name="p_udiv1629_fu_32577_p2">-, 0, 0, 17, 10, 10</column>
-<column name="p_udiv1706_fu_32606_p2">-, 0, 0, 17, 10, 10</column>
-<column name="sub_ln43_1_fu_32111_p2">-, 0, 0, 16, 9, 9</column>
-<column name="sub_ln43_2_fu_32160_p2">-, 0, 0, 16, 9, 9</column>
-<column name="sub_ln43_3_fu_32189_p2">-, 0, 0, 16, 9, 9</column>
-<column name="sub_ln43_4_fu_32238_p2">-, 0, 0, 16, 9, 9</column>
-<column name="sub_ln43_5_fu_32296_p2">-, 0, 0, 16, 9, 9</column>
-<column name="sub_ln43_6_fu_32325_p2">-, 0, 0, 16, 9, 9</column>
-<column name="sub_ln43_7_fu_32354_p2">-, 0, 0, 16, 9, 9</column>
-<column name="sub_ln43_fu_32066_p2">-, 0, 0, 16, 9, 9</column>
-<column name="and_ln439_fu_31938_p2">and, 0, 0, 2, 1, 1</column>
-<column name="do_compute_fu_31982_p2">and, 0, 0, 2, 1, 1</column>
-<column name="icmp_ln247_fu_31806_p2">icmp, 0, 0, 15, 8, 1</column>
-<column name="icmp_ln248_fu_31812_p2">icmp, 0, 0, 15, 8, 3</column>
-<column name="icmp_ln320_fu_31914_p2">icmp, 0, 0, 39, 32, 32</column>
-<column name="icmp_ln333_fu_32681_p2">icmp, 0, 0, 15, 8, 4</column>
-<column name="icmp_ln40_fu_32008_p2">icmp, 0, 0, 13, 6, 6</column>
+<column name="add_ln341_fu_32815_p2">+, 0, 0, 15, 8, 5</column>
+<column name="add_ln44_fu_32401_p2">+, 0, 0, 13, 6, 5</column>
+<column name="p_udiv1167_fu_32522_p2">-, 0, 0, 17, 10, 10</column>
+<column name="p_udiv1244_fu_32557_p2">-, 0, 0, 17, 10, 10</column>
+<column name="p_udiv1321_fu_32592_p2">-, 0, 0, 17, 10, 10</column>
+<column name="p_udiv1398_fu_32623_p2">-, 0, 0, 17, 10, 10</column>
+<column name="p_udiv1475_fu_32652_p2">-, 0, 0, 17, 10, 10</column>
+<column name="p_udiv1552_fu_32683_p2">-, 0, 0, 17, 10, 10</column>
+<column name="p_udiv1629_fu_32712_p2">-, 0, 0, 17, 10, 10</column>
+<column name="p_udiv1706_fu_32741_p2">-, 0, 0, 17, 10, 10</column>
+<column name="sub_ln47_1_fu_32244_p2">-, 0, 0, 16, 9, 9</column>
+<column name="sub_ln47_2_fu_32293_p2">-, 0, 0, 16, 9, 9</column>
+<column name="sub_ln47_3_fu_32322_p2">-, 0, 0, 16, 9, 9</column>
+<column name="sub_ln47_4_fu_32371_p2">-, 0, 0, 16, 9, 9</column>
+<column name="sub_ln47_5_fu_32435_p2">-, 0, 0, 16, 9, 9</column>
+<column name="sub_ln47_6_fu_32464_p2">-, 0, 0, 16, 9, 9</column>
+<column name="sub_ln47_7_fu_32493_p2">-, 0, 0, 16, 9, 9</column>
+<column name="sub_ln47_fu_32195_p2">-, 0, 0, 16, 9, 9</column>
+<column name="and_ln447_fu_32052_p2">and, 0, 0, 2, 1, 1</column>
+<column name="ap_condition_3931">and, 0, 0, 2, 1, 1</column>
+<column name="do_compute_fu_32106_p2">and, 0, 0, 2, 1, 1</column>
+<column name="mac_start_fu_32069_p2">and, 0, 0, 2, 1, 1</column>
+<column name="icmp_ln250_fu_31920_p2">icmp, 0, 0, 15, 8, 1</column>
+<column name="icmp_ln251_fu_31926_p2">icmp, 0, 0, 15, 8, 3</column>
+<column name="icmp_ln328_fu_32028_p2">icmp, 0, 0, 39, 32, 32</column>
+<column name="icmp_ln341_fu_32820_p2">icmp, 0, 0, 15, 8, 4</column>
+<column name="icmp_ln44_fu_32148_p2">icmp, 0, 0, 13, 6, 6</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1_we0">or, 0, 0, 2, 1, 1</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20_we0">or, 0, 0, 2, 1, 1</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21_we0">or, 0, 0, 2, 1, 1</column>
@@ -237,8 +239,8 @@
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8_we0">or, 0, 0, 2, 1, 1</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_we0">or, 0, 0, 2, 1, 1</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0">or, 0, 0, 2, 1, 1</column>
-<column name="or_ln29_fu_31958_p2">or, 0, 0, 2, 1, 1</column>
-<column name="or_ln320_fu_31920_p2">or, 0, 0, 2, 1, 1</column>
+<column name="or_ln27_fu_32082_p2">or, 0, 0, 2, 1, 1</column>
+<column name="or_ln328_fu_32034_p2">or, 0, 0, 2, 1, 1</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10_we0">or, 0, 0, 2, 1, 1</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11_we0">or, 0, 0, 2, 1, 1</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_12_we0">or, 0, 0, 2, 1, 1</column>
@@ -257,29 +259,30 @@
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8_we0">or, 0, 0, 2, 1, 1</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9_we0">or, 0, 0, 2, 1, 1</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0">or, 0, 0, 2, 1, 1</column>
-<column name="next_state_1_cast_cast_fu_32694_p3">select, 0, 0, 3, 1, 2</column>
-<column name="select_ln358_fu_32625_p3">select, 0, 0, 2, 1, 2</column>
-<column name="select_ln439_1_fu_31943_p3">select, 0, 0, 3, 1, 3</column>
-<column name="select_ln439_fu_31932_p3">select, 0, 0, 32, 1, 1</column>
-<column name="grp_fu_31770_p2">xor, 0, 0, 2, 1, 2</column>
-<column name="xor_ln29_fu_31964_p2">xor, 0, 0, 2, 1, 2</column>
-<column name="xor_ln32_fu_31976_p2">xor, 0, 0, 2, 1, 2</column>
-<column name="xor_ln333_fu_32687_p2">xor, 0, 0, 2, 1, 2</column>
+<column name="next_state_1_cast_cast_fu_32833_p3">select, 0, 0, 3, 1, 2</column>
+<column name="select_ln366_fu_32764_p3">select, 0, 0, 2, 1, 2</column>
+<column name="select_ln447_1_fu_32057_p3">select, 0, 0, 3, 1, 3</column>
+<column name="select_ln447_fu_32046_p3">select, 0, 0, 32, 1, 1</column>
+<column name="grp_fu_31884_p2">xor, 0, 0, 2, 1, 2</column>
+<column name="xor_ln27_fu_32088_p2">xor, 0, 0, 2, 1, 2</column>
+<column name="xor_ln30_fu_32100_p2">xor, 0, 0, 2, 1, 2</column>
+<column name="xor_ln341_fu_32826_p2">xor, 0, 0, 2, 1, 2</column>
+<column name="xor_ln407_fu_32064_p2">xor, 0, 0, 2, 1, 2</column>
 </table>
 </item>
 <item name = "Multiplexer"><table name="" hasTotal="1">
 <keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
 <column name="ap_NS_fsm">2693, 614, 1, 614</column>
-<column name="ap_phi_mux_compute_done_new_0_phi_fu_30367_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_compute_ready_new_0_phi_fu_30356_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mac_complete_flag_2_phi_fu_30447_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mac_complete_new_2_phi_fu_30458_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_op_flag_1_phi_fu_30424_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_op_new_1_phi_fu_30435_p4">9, 2, 32, 64</column>
-<column name="ap_phi_mux_mem_read_request_flag_1_phi_fu_30378_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_read_request_new_1_phi_fu_30389_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_write_request_flag_1_phi_fu_30401_p4">9, 2, 1, 2</column>
-<column name="ap_phi_mux_mem_write_request_new_1_phi_fu_30412_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_compute_done_new_0_phi_fu_30481_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_compute_ready_new_0_phi_fu_30470_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mac_complete_flag_3_phi_fu_30561_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mac_complete_new_3_phi_fu_30572_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_op_flag_1_phi_fu_30538_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_op_new_1_phi_fu_30549_p4">9, 2, 32, 64</column>
+<column name="ap_phi_mux_mem_read_request_flag_1_phi_fu_30492_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_read_request_new_1_phi_fu_30503_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_write_request_flag_1_phi_fu_30515_p4">9, 2, 1, 2</column>
+<column name="ap_phi_mux_mem_write_request_new_1_phi_fu_30526_p4">9, 2, 1, 2</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10_address0">9, 2, 2, 4</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10_ce0">9, 2, 1, 2</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11_address0">9, 2, 2, 4</column>
@@ -470,8 +473,8 @@
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_ce0">89, 18, 1, 18</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_d0">9, 2, 8, 16</column>
 <column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_we0">9, 2, 1, 2</column>
-<column name="compute_done_new_0_reg_30364">9, 2, 1, 2</column>
-<column name="compute_ready_new_0_reg_30353">9, 2, 1, 2</column>
+<column name="compute_done_new_0_reg_30478">9, 2, 1, 2</column>
+<column name="compute_ready_new_0_reg_30467">9, 2, 1, 2</column>
 <column name="dbg_req_head">14, 3, 8, 24</column>
 <column name="dbg_req_instruction">14, 3, 32, 96</column>
 <column name="dbg_req_layer">14, 3, 8, 24</column>
@@ -481,24 +484,24 @@
 <column name="error">20, 4, 1, 4</column>
 <column name="in_buf_address0">20, 4, 13, 52</column>
 <column name="in_buf_ce0">20, 4, 1, 4</column>
-<column name="mac_complete_flag_1_reg_30316">14, 3, 1, 3</column>
-<column name="mac_complete_flag_2_reg_30444">9, 2, 1, 2</column>
-<column name="mac_complete_loc_1_reg_30028">20, 4, 1, 4</column>
-<column name="mac_complete_new_2_reg_30455">9, 2, 1, 2</column>
+<column name="mac_complete_flag_2_reg_30379">14, 3, 1, 3</column>
+<column name="mac_complete_flag_3_reg_30558">9, 2, 1, 2</column>
+<column name="mac_complete_loc_2_reg_30047">20, 4, 1, 4</column>
+<column name="mac_complete_new_3_reg_30569">9, 2, 1, 2</column>
 <column name="mac_ready">9, 2, 1, 2</column>
-<column name="mac_ready_loc_0_reg_30002">20, 4, 1, 4</column>
-<column name="mac_start_1_reg_29873">9, 2, 1, 2</column>
-<column name="mac_start_reg_30060">14, 3, 1, 3</column>
-<column name="mem_op_flag_1_reg_30421">9, 2, 1, 2</column>
-<column name="mem_op_new_0_reg_29967">9, 2, 32, 64</column>
-<column name="mem_op_new_1_reg_30432">9, 2, 32, 64</column>
-<column name="mem_read_request_flag_1_reg_30375">9, 2, 1, 2</column>
-<column name="mem_read_request_new_1_reg_30386">9, 2, 1, 2</column>
-<column name="mem_write_request_flag_1_reg_30398">9, 2, 1, 2</column>
-<column name="mem_write_request_new_1_reg_30409">9, 2, 1, 2</column>
-<column name="next_state_1_reg_29891">14, 3, 3, 9</column>
-<column name="next_state_2_reg_30098">43, 8, 8, 64</column>
-<column name="out_fu_19412">9, 2, 6, 12</column>
+<column name="mac_ready_loc_0_reg_30017">20, 4, 1, 4</column>
+<column name="mac_start_1_reg_29875">14, 3, 1, 3</column>
+<column name="mac_start_2_reg_30084">14, 3, 1, 3</column>
+<column name="mem_op_flag_1_reg_30535">9, 2, 1, 2</column>
+<column name="mem_op_new_0_reg_29976">9, 2, 32, 64</column>
+<column name="mem_op_new_1_reg_30546">9, 2, 32, 64</column>
+<column name="mem_read_request_flag_1_reg_30489">9, 2, 1, 2</column>
+<column name="mem_read_request_new_1_reg_30500">9, 2, 1, 2</column>
+<column name="mem_write_request_flag_1_reg_30512">9, 2, 1, 2</column>
+<column name="mem_write_request_new_1_reg_30523">9, 2, 1, 2</column>
+<column name="next_state_1_reg_29892">14, 3, 3, 9</column>
+<column name="next_state_2_reg_30127">43, 8, 8, 64</column>
+<column name="out_fu_19414">9, 2, 6, 12</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10_address0">89, 18, 10, 180</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10_address0_local">1533, 289, 10, 2890</column>
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10_address1_local">1533, 289, 10, 2890</column>
@@ -615,126 +618,128 @@
 <column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_we0">9, 2, 1, 2</column>
 <column name="req_head_idx">9, 2, 8, 16</column>
 <column name="req_instruction">9, 2, 32, 64</column>
-<column name="req_instruction_loc_0_reg_29911">20, 4, 32, 128</column>
+<column name="req_instruction_loc_0_reg_29912">20, 4, 32, 128</column>
 <column name="req_layer_idx">9, 2, 8, 16</column>
 <column name="req_op">14, 3, 8, 24</column>
-<column name="req_op_loc_0_reg_29939">26, 5, 8, 40</column>
+<column name="req_op_loc_0_reg_29944">26, 5, 8, 40</column>
 <column name="req_tile_idx">9, 2, 8, 16</column>
 <column name="state">9, 2, 8, 16</column>
 </table>
 </item>
 <item name = "Register"><table name="" hasTotal="1">
 <keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
-<column name="acc_14_reg_33131">4, 0, 4, 0</column>
-<column name="acc_16_reg_33151">4, 0, 4, 0</column>
-<column name="acc_17_reg_33171">4, 0, 4, 0</column>
-<column name="acc_19_reg_33193">4, 0, 4, 0</column>
-<column name="acc_20_reg_33237">4, 0, 4, 0</column>
-<column name="acc_22_reg_33252">4, 0, 4, 0</column>
-<column name="acc_23_reg_33267">4, 0, 4, 0</column>
-<column name="acc_24_reg_33282">4, 0, 4, 0</column>
-<column name="acc_25_reg_33297">4, 0, 4, 0</column>
-<column name="acc_26_reg_33312">4, 0, 4, 0</column>
-<column name="acc_27_reg_33327">4, 0, 4, 0</column>
-<column name="acc_28_reg_33342">4, 0, 4, 0</column>
-<column name="acc_29_reg_33357">4, 0, 4, 0</column>
-<column name="acc_30_reg_33372">4, 0, 4, 0</column>
-<column name="acc_31_reg_33387">4, 0, 4, 0</column>
-<column name="acc_reg_33116">4, 0, 4, 0</column>
+<column name="acc_14_reg_33276">4, 0, 4, 0</column>
+<column name="acc_16_reg_33296">4, 0, 4, 0</column>
+<column name="acc_17_reg_33316">4, 0, 4, 0</column>
+<column name="acc_19_reg_33338">4, 0, 4, 0</column>
+<column name="acc_20_reg_33382">4, 0, 4, 0</column>
+<column name="acc_22_reg_33397">4, 0, 4, 0</column>
+<column name="acc_23_reg_33412">4, 0, 4, 0</column>
+<column name="acc_24_reg_33427">4, 0, 4, 0</column>
+<column name="acc_25_reg_33442">4, 0, 4, 0</column>
+<column name="acc_26_reg_33457">4, 0, 4, 0</column>
+<column name="acc_27_reg_33472">4, 0, 4, 0</column>
+<column name="acc_28_reg_33487">4, 0, 4, 0</column>
+<column name="acc_29_reg_33502">4, 0, 4, 0</column>
+<column name="acc_30_reg_33517">4, 0, 4, 0</column>
+<column name="acc_31_reg_33532">4, 0, 4, 0</column>
+<column name="acc_reg_33261">4, 0, 4, 0</column>
 <column name="ap_CS_fsm">613, 0, 613, 0</column>
 <column name="busy">1, 0, 1, 0</column>
 <column name="capture_pending">1, 0, 1, 0</column>
-<column name="compute_done_new_0_reg_30364">1, 0, 1, 0</column>
-<column name="compute_instruction_read_reg_32818">32, 0, 32, 0</column>
-<column name="compute_ready_new_0_reg_30353">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_367_4_fu_30466_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_376_6_VITIS_LOOP_377_7_fu_30504_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_389_8_fu_30542_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_405_10_fu_30580_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_210_fu_31338_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_211_fu_31410_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_212_fu_31482_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_213_fu_31554_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_214_fu_31626_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_215_fu_31698_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_21_fu_30690_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_22_fu_30762_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_23_fu_30834_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_24_fu_30906_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_25_fu_30978_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_26_fu_31050_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_27_fu_31122_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_28_fu_31194_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_29_fu_31266_ap_start_reg">1, 0, 1, 0</column>
-<column name="grp_compute_controller_Pipeline_VITIS_LOOP_43_2_fu_30618_ap_start_reg">1, 0, 1, 0</column>
-<column name="icmp_ln247_reg_32939">1, 0, 1, 0</column>
-<column name="icmp_ln248_reg_32944">1, 0, 1, 0</column>
-<column name="lshr_ln4_reg_33055">2, 0, 2, 0</column>
+<column name="compute_done_new_0_reg_30478">1, 0, 1, 0</column>
+<column name="compute_instruction_read_reg_32957">32, 0, 32, 0</column>
+<column name="compute_ready_new_0_reg_30467">1, 0, 1, 0</column>
+<column name="computing">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_375_4_fu_30580_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_384_6_VITIS_LOOP_385_7_fu_30618_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_397_8_fu_30656_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_413_10_fu_30694_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_210_fu_31452_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_211_fu_31524_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_212_fu_31596_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_213_fu_31668_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_214_fu_31740_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_215_fu_31812_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_21_fu_30804_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_22_fu_30876_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_23_fu_30948_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_24_fu_31020_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_25_fu_31092_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_26_fu_31164_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_27_fu_31236_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_28_fu_31308_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_29_fu_31380_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_compute_controller_Pipeline_VITIS_LOOP_47_2_fu_30732_ap_start_reg">1, 0, 1, 0</column>
+<column name="icmp_ln250_reg_33078">1, 0, 1, 0</column>
+<column name="icmp_ln251_reg_33083">1, 0, 1, 0</column>
+<column name="lshr_ln4_reg_33200">2, 0, 2, 0</column>
 <column name="mac_complete">1, 0, 1, 0</column>
-<column name="mac_complete_flag_1_reg_30316">1, 0, 1, 0</column>
-<column name="mac_complete_flag_2_reg_30444">1, 0, 1, 0</column>
-<column name="mac_complete_load_reg_32986">1, 0, 1, 0</column>
-<column name="mac_complete_loc_1_reg_30028">1, 0, 1, 0</column>
-<column name="mac_complete_new_2_reg_30455">1, 0, 1, 0</column>
+<column name="mac_complete_flag_2_reg_30379">1, 0, 1, 0</column>
+<column name="mac_complete_flag_3_reg_30558">1, 0, 1, 0</column>
+<column name="mac_complete_load_reg_33129">1, 0, 1, 0</column>
+<column name="mac_complete_loc_2_reg_30047">1, 0, 1, 0</column>
+<column name="mac_complete_new_2_reg_30422">1, 0, 1, 0</column>
+<column name="mac_complete_new_3_reg_30569">1, 0, 1, 0</column>
 <column name="mac_ready">1, 0, 1, 0</column>
-<column name="mac_ready_load_reg_32974">1, 0, 1, 0</column>
-<column name="mac_ready_loc_0_reg_30002">1, 0, 1, 0</column>
-<column name="mac_start_1_reg_29873">1, 0, 1, 0</column>
-<column name="mac_start_reg_30060">1, 0, 1, 0</column>
-<column name="mem_op_flag_0_reg_30278">1, 0, 1, 0</column>
-<column name="mem_op_flag_1_reg_30421">1, 0, 1, 0</column>
-<column name="mem_op_new_0_reg_29967">32, 0, 32, 0</column>
-<column name="mem_op_new_1_reg_30432">32, 0, 32, 0</column>
-<column name="mem_read_request_flag_0_reg_30130">1, 0, 1, 0</column>
-<column name="mem_read_request_flag_1_reg_30375">1, 0, 1, 0</column>
-<column name="mem_read_request_new_0_reg_30168">1, 0, 1, 0</column>
-<column name="mem_read_request_new_1_reg_30386">1, 0, 1, 0</column>
-<column name="mem_transfer_done_read_reg_32809">1, 0, 1, 0</column>
-<column name="mem_write_request_flag_0_reg_30204">1, 0, 1, 0</column>
-<column name="mem_write_request_flag_1_reg_30398">1, 0, 1, 0</column>
-<column name="mem_write_request_new_0_reg_30242">1, 0, 1, 0</column>
-<column name="mem_write_request_new_1_reg_30409">1, 0, 1, 0</column>
-<column name="next_state_1_reg_29891">3, 0, 3, 0</column>
-<column name="next_state_2_reg_30098">8, 0, 8, 0</column>
-<column name="out_1_reg_33038">6, 0, 6, 0</column>
-<column name="out_fu_19412">6, 0, 6, 0</column>
-<column name="p_udiv1167_reg_33287">4, 0, 10, 6</column>
-<column name="p_udiv1244_reg_33302">7, 0, 10, 3</column>
-<column name="p_udiv1321_reg_33317">6, 0, 10, 4</column>
-<column name="p_udiv1398_reg_33332">6, 0, 10, 4</column>
-<column name="p_udiv1475_reg_33347">4, 0, 10, 6</column>
-<column name="p_udiv1552_reg_33362">7, 0, 10, 3</column>
-<column name="p_udiv1629_reg_33377">4, 0, 10, 6</column>
-<column name="p_udiv1706_reg_33392">4, 0, 10, 6</column>
+<column name="mac_ready_load_reg_33117">1, 0, 1, 0</column>
+<column name="mac_ready_loc_0_reg_30017">1, 0, 1, 0</column>
+<column name="mac_start_1_reg_29875">1, 0, 1, 0</column>
+<column name="mac_start_2_reg_30084">1, 0, 1, 0</column>
+<column name="mac_start_reg_33156">1, 0, 1, 0</column>
+<column name="mem_op_flag_0_reg_30335">1, 0, 1, 0</column>
+<column name="mem_op_flag_1_reg_30535">1, 0, 1, 0</column>
+<column name="mem_op_new_0_reg_29976">32, 0, 32, 0</column>
+<column name="mem_op_new_1_reg_30546">32, 0, 32, 0</column>
+<column name="mem_read_request_flag_0_reg_30163">1, 0, 1, 0</column>
+<column name="mem_read_request_flag_1_reg_30489">1, 0, 1, 0</column>
+<column name="mem_read_request_new_0_reg_30207">1, 0, 1, 0</column>
+<column name="mem_read_request_new_1_reg_30500">1, 0, 1, 0</column>
+<column name="mem_transfer_done_read_reg_32948">1, 0, 1, 0</column>
+<column name="mem_write_request_flag_0_reg_30249">1, 0, 1, 0</column>
+<column name="mem_write_request_flag_1_reg_30512">1, 0, 1, 0</column>
+<column name="mem_write_request_new_0_reg_30293">1, 0, 1, 0</column>
+<column name="mem_write_request_new_1_reg_30523">1, 0, 1, 0</column>
+<column name="next_state_1_reg_29892">3, 0, 3, 0</column>
+<column name="next_state_2_reg_30127">8, 0, 8, 0</column>
+<column name="out_fu_19414">6, 0, 6, 0</column>
+<column name="p_udiv1167_reg_33432">4, 0, 10, 6</column>
+<column name="p_udiv1244_reg_33447">7, 0, 10, 3</column>
+<column name="p_udiv1321_reg_33462">6, 0, 10, 4</column>
+<column name="p_udiv1398_reg_33477">6, 0, 10, 4</column>
+<column name="p_udiv1475_reg_33492">4, 0, 10, 6</column>
+<column name="p_udiv1552_reg_33507">7, 0, 10, 3</column>
+<column name="p_udiv1629_reg_33522">4, 0, 10, 6</column>
+<column name="p_udiv1706_reg_33537">4, 0, 10, 6</column>
 <column name="req_head_idx">8, 0, 8, 0</column>
 <column name="req_instruction">32, 0, 32, 0</column>
-<column name="req_instruction_load_reg_32949">32, 0, 32, 0</column>
-<column name="req_instruction_loc_0_reg_29911">32, 0, 32, 0</column>
+<column name="req_instruction_load_reg_33088">32, 0, 32, 0</column>
+<column name="req_instruction_loc_0_reg_29912">32, 0, 32, 0</column>
 <column name="req_layer_idx">8, 0, 8, 0</column>
 <column name="req_op">8, 0, 8, 0</column>
-<column name="req_op_load_reg_32962">8, 0, 8, 0</column>
-<column name="req_op_loc_0_reg_29939">8, 0, 8, 0</column>
+<column name="req_op_load_reg_33103">8, 0, 8, 0</column>
+<column name="req_op_loc_0_reg_29944">8, 0, 8, 0</column>
 <column name="req_tile_idx">8, 0, 8, 0</column>
-<column name="reset_read_reg_32834">1, 0, 1, 0</column>
+<column name="reset_read_reg_32973">1, 0, 1, 0</column>
 <column name="state">8, 0, 8, 0</column>
-<column name="sub_ln43_1_reg_33136">6, 0, 9, 3</column>
-<column name="sub_ln43_2_reg_33161">5, 0, 9, 4</column>
-<column name="sub_ln43_3_reg_33176">5, 0, 9, 4</column>
-<column name="sub_ln43_4_reg_33205">4, 0, 9, 5</column>
-<column name="sub_ln43_5_reg_33242">6, 0, 9, 3</column>
-<column name="sub_ln43_6_reg_33257">4, 0, 9, 5</column>
-<column name="sub_ln43_7_reg_33272">4, 0, 9, 5</column>
-<column name="sub_ln43_reg_33121">3, 0, 9, 6</column>
-<column name="tmp_10_reg_33198">2, 0, 2, 0</column>
-<column name="tmp_12_reg_33210">1, 0, 1, 0</column>
-<column name="tmp_18_reg_33224">1, 0, 1, 0</column>
-<column name="tmp_1_reg_33186">3, 0, 3, 0</column>
-<column name="tmp_2_reg_33218">2, 0, 2, 0</column>
-<column name="tmp_6_reg_33156">3, 0, 3, 0</column>
-<column name="tmp_s_reg_33146">4, 0, 4, 0</column>
-<column name="xor_ln29_reg_33022">1, 0, 1, 0</column>
-<column name="zext_ln302_reg_33013">3, 0, 8, 5</column>
-<column name="zext_ln40_reg_33076">2, 0, 64, 62</column>
+<column name="sub_ln47_1_reg_33281">6, 0, 9, 3</column>
+<column name="sub_ln47_2_reg_33306">5, 0, 9, 4</column>
+<column name="sub_ln47_3_reg_33321">5, 0, 9, 4</column>
+<column name="sub_ln47_4_reg_33350">4, 0, 9, 5</column>
+<column name="sub_ln47_5_reg_33387">6, 0, 9, 3</column>
+<column name="sub_ln47_6_reg_33402">4, 0, 9, 5</column>
+<column name="sub_ln47_7_reg_33417">4, 0, 9, 5</column>
+<column name="sub_ln47_reg_33266">3, 0, 9, 6</column>
+<column name="tmp_10_reg_33343">2, 0, 2, 0</column>
+<column name="tmp_12_reg_33355">1, 0, 1, 0</column>
+<column name="tmp_18_reg_33369">1, 0, 1, 0</column>
+<column name="tmp_1_reg_33331">3, 0, 3, 0</column>
+<column name="tmp_2_reg_33363">2, 0, 2, 0</column>
+<column name="tmp_6_reg_33301">3, 0, 3, 0</column>
+<column name="tmp_s_reg_33291">4, 0, 4, 0</column>
+<column name="xor_ln27_reg_33173">1, 0, 1, 0</column>
+<column name="zext_ln310_reg_33162">3, 0, 8, 5</column>
+<column name="zext_ln44_reg_33221">2, 0, 64, 62</column>
 </table>
 </item>
 </section>

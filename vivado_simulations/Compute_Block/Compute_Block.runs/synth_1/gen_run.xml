@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="synth_1" LaunchPart="xck26-sfvc784-2LV-c" LaunchTime="1769128658">
-  <File Type="VDS-TIMINGSUMMARY" Name="compute_controller_timing_summary_synth.rpt"/>
   <File Type="RDS-DCP" Name="compute_controller.dcp"/>
-  <File Type="RDS-UTIL-PB" Name="compute_controller_utilization_synth.pb"/>
-  <File Type="RDS-UTIL" Name="compute_controller_utilization_synth.rpt"/>
-  <File Type="RDS-PROPCONSTRS" Name="compute_controller_drc_synth.rpt"/>
   <File Type="RDS-RDS" Name="compute_controller.vds"/>
   <File Type="REPORTS-TCL" Name="compute_controller_reports.tcl"/>
-  <File Type="VDS-TIMING-PB" Name="compute_controller_timing_summary_synth.pb"/>
   <File Type="PA-TCL" Name="compute_controller.tcl"/>
+  <File Type="RDS-UTIL" Name="compute_controller_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="compute_controller_utilization_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
     <File Path="$PPRDIR/../../HLS-Verilog/Transformer_logic/src-Verilog/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_367_4.v">
