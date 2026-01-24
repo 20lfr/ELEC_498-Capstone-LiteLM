@@ -1719,5 +1719,5 @@ out_buf[768]:
 compute_controller_tb: PASS
 INFO: [SIM 211-1] CSim done with 0 errors.
 INFO: [SIM 211-3] *************** CSIM finish ***************
-INFO: [HLS 200-112] Total CPU user time: 4.15 seconds. Total CPU system time: 0.96 seconds. Total elapsed time: 5.42 seconds; peak allocated memory: 445.102 MB.
-INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 9s
+INFO: [HLS 200-112] Total CPU user time: 4.12 seconds. Total CPU system time: 0.95 seconds. Total elapsed time: 5.02 seconds; peak allocated memory: 445.102 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 8s
