@@ -22,7 +22,7 @@ static const char* phase_str(HeadPhase phase) {
         case HeadPhase::VALUE_SCALE_CLAMP: return "VAL_SCL";
         case HeadPhase::ATT_SOFTMAX: return "SOFT";
         case HeadPhase::ATT_VALUE: return "ATT_VAL";
-        case HeadPhase::REQUANT2: return "RQ2";
+        case HeadPhase::HEAD_REQUANT: return "HEAD_RQ";
         case HeadPhase::DONE: return "DONE";
         default: return "?";
     }

@@ -1,22 +1,62 @@
 # This script segment is generated automatically by AutoPilot
 
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9_RAM_AUbkb BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
 }
 
 
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29_RAM_ArcU BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_99_RAM_ArcU BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
 }
 
 
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39_RAM_AHfu BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_149_RAM_Hfu BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
 }
 
 
 if {${::AESL::PGuard_rtl_comp_handler}} {
-	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_19_RAM_AXh4 BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_69_RAM_AXh4 BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_178_RAM_bdk BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_172_RAM_bjl BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_168_RAM_btn BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_162_RAM_bzo BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_40_RAM_AbZs BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20_RAM_Acfu BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39_RAM_Acvx BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
+}
+
+
+if {${::AESL::PGuard_rtl_comp_handler}} {
+	::AP::rtl_comp_handler compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_189_RAM_dhF BINDTYPE {storage} TYPE {ram} IMPL {auto} LATENCY 2 ALLOW_PRAGMA 1
 }
 
 
@@ -32,14 +72,14 @@ set axilite_register_dict [dict create]
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 902 \
+    id 1629 \
     name in_buf \
     reset_level 1 \
     sync_rst true \
     dir I \
     corename in_buf \
     op interface \
-    ports { in_buf_address0 { O 13 vector } in_buf_ce0 { O 1 bit } in_buf_q0 { I 8 vector } } \
+    ports { in_buf_address0 { O 13 vector } in_buf_ce0 { O 1 bit } in_buf_q0 { I 8 vector } in_buf_address1 { O 13 vector } in_buf_ce1 { O 1 bit } in_buf_q1 { I 8 vector } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'in_buf'"
@@ -51,7 +91,7 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 903 \
+    id 1630 \
     name out_buf \
     reset_level 1 \
     sync_rst true \
@@ -69,7 +109,7 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 893 \
+    id 1620 \
     name reset \
     type other \
     dir I \
@@ -84,7 +124,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 894 \
+    id 1621 \
     name compute_start \
     type other \
     dir I \
@@ -99,7 +139,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 895 \
+    id 1622 \
     name compute_instruction \
     type other \
     dir I \
@@ -114,7 +154,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 896 \
+    id 1623 \
     name compute_ready \
     type other \
     dir O \
@@ -129,7 +169,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 897 \
+    id 1624 \
     name compute_done \
     type other \
     dir O \
@@ -144,7 +184,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 898 \
+    id 1625 \
     name mem_transfer_done \
     type other \
     dir I \
@@ -159,7 +199,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 899 \
+    id 1626 \
     name mem_read_request \
     type other \
     dir O \
@@ -174,7 +214,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 900 \
+    id 1627 \
     name mem_write_request \
     type other \
     dir O \
@@ -189,7 +229,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 901 \
+    id 1628 \
     name mem_op \
     type other \
     dir O \
@@ -204,7 +244,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 904 \
+    id 1631 \
     name dbg_state \
     type other \
     dir O \
@@ -219,7 +259,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 905 \
+    id 1632 \
     name dbg_req_instruction \
     type other \
     dir O \
@@ -234,7 +274,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 906 \
+    id 1633 \
     name dbg_req_op \
     type other \
     dir O \
@@ -249,7 +289,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 907 \
+    id 1634 \
     name dbg_req_layer \
     type other \
     dir O \
@@ -264,7 +304,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 908 \
+    id 1635 \
     name dbg_req_head \
     type other \
     dir O \
@@ -279,7 +319,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 909 \
+    id 1636 \
     name dbg_req_tile \
     type other \
     dir O \
@@ -294,7 +334,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 910 \
+    id 1637 \
     name dbg_mac_start \
     type other \
     dir O \
@@ -309,7 +349,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 911 \
+    id 1638 \
     name dbg_mac_ready \
     type other \
     dir O \
@@ -324,7 +364,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 912 \
+    id 1639 \
     name dbg_mac_complete \
     type other \
     dir O \
@@ -339,7 +379,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 913 \
+    id 1640 \
     name error \
     type other \
     dir O \

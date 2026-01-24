@@ -1537,7 +1537,7 @@ void apatb_compute_controller_hw(hls::sim::Byte<1> __xlx_apatb_param_reset, hls:
   };
   port19.param = { __xlx_apatb_param_in_buf };
   port19.mname = { "in_buf" };
-  port19.nbytes = { 4920 };
+  port19.nbytes = { 5088 };
 
 #ifdef USE_BINARY_TV_FILE
   static hls::sim::Memory<hls::sim::Input, hls::sim::Output> port20 {

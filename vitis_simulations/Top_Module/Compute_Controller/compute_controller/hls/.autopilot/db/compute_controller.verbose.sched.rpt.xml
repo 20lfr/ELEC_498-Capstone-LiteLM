@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'compute_controller'" level="0">
-<item name = "Date">Sat Jan 24 12:51:10 2026
+<item name = "Date">Sat Jan 24 18:01:14 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 4.449 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 7.278 ns, 2.70 ns</column>
 </table>
 </item>
 </section>
@@ -24,7 +24,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">279, 10765, 2.790 us, 0.108 ms, 280, 10766, no</column>
+<column name="">1, 10785, 10.000 ns, 0.108 ms, 2, 10786, no</column>
 </table>
 </item>
 <item name = "Detail">
@@ -35,7 +35,7 @@
 </item>
 <item name = "Loop"><table name="" hasTotal="0">
 <keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
-<column name="- VITIS_LOOP_37_1">918, 918, 306, -, -, 3, no</column>
+<column name="- VITIS_LOOP_38_1">918, 918, 306, -, -, 3, no</column>
 </table>
 </item>
 </section>

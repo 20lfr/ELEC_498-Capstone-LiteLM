@@ -42,7 +42,58 @@ module compute_controller_tb;
 
     localparam int CLK_PERIOD = 10; // in nanoseconds
     localparam int MAX_CYCLES = 8000;
-    localparam logic [7:0] CMP_OUT_PROJ = 8'h0E;
+
+
+    // localparam logic [7:0] CMP_NONE        = 8'h00;
+    // localparam logic [7:0] CMP_Q           = 8'h01;
+    // localparam logic [7:0] CMP_K           = 8'h02;
+    // localparam logic [7:0] CMP_K_REQUANT   = 8'h03;
+    // localparam logic [7:0] CMP_V           = 8'h04;
+    // localparam logic [7:0] CMP_V_REQUANT   = 8'h05;
+    // localparam logic [7:0] CMP_REQUANT_Q   = 8'h06;
+    // localparam logic [7:0] CMP_ATT_SCORES  = 8'h07;
+    // localparam logic [7:0] CMP_VALUE_SCALE = 8'h08;
+    // localparam logic [7:0] CMP_SOFTMAX     = 8'h09;
+    // localparam logic [7:0] CMP_ATT_VALUE   = 8'h0A;
+    // localparam logic [7:0] CMP_HEAD_REQUANT = 8'h0B;
+    // localparam logic [7:0] CMP_RESV_0C      = 8'h0C;
+    // localparam logic [7:0] CMP_CONCAT      = 8'h0D;
+
+
+    localparam logic [7:0] CMP_OUT_PROJ    = 8'h0E;
+    localparam logic [7:0] CMP_REQUANT1    = 8'h0F;
+    localparam logic [7:0] CMP_RESID0      = 8'h10;
+    localparam logic [7:0] CMP_LN0         = 8'h11;
+    localparam logic [7:0] CMP_REQUANT3    = 8'h12;
+    localparam logic [7:0] CMP_FFN_W1      = 8'h13;
+    localparam logic [7:0] CMP_FFN_ACT     = 8'h14;
+    localparam logic [7:0] CMP_FFN_W2      = 8'h15;
+    localparam logic [7:0] CMP_REQUANT4    = 8'h16;
+    localparam logic [7:0] CMP_RESID1      = 8'h17;
+    localparam logic [7:0] CMP_LN1         = 8'h18;
+    localparam logic [7:0] CMP_DEQUANT     = 8'h19;
+    localparam logic [7:0] CMP_LOGITS      = 8'h1A;
+    localparam logic [7:0] CMP_LN0_SUM     = 8'h1B;
+    localparam logic [7:0] CMP_LN0_SUMSQ   = 8'h1C;
+    localparam logic [7:0] CMP_LN0_MEAN    = 8'h1D;
+    localparam logic [7:0] CMP_LN0_EYY     = 8'h1E;
+    localparam logic [7:0] CMP_LN0_VAR     = 8'h1F;
+    localparam logic [7:0] CMP_LN0_VAR_EPS = 8'h20;
+    localparam logic [7:0] CMP_LN0_INV_STD = 8'h21;
+    localparam logic [7:0] CMP_LN0_NORM    = 8'h22;
+    localparam logic [7:0] CMP_LN0_SCALE   = 8'h23;
+    localparam logic [7:0] CMP_LN0_SHIFT   = 8'h24;
+    localparam logic [7:0] CMP_LN1_SUM     = 8'h25;
+    localparam logic [7:0] CMP_LN1_SUMSQ   = 8'h26;
+    localparam logic [7:0] CMP_LN1_MEAN    = 8'h27;
+    localparam logic [7:0] CMP_LN1_EYY     = 8'h28;
+    localparam logic [7:0] CMP_LN1_VAR     = 8'h29;
+    localparam logic [7:0] CMP_LN1_VAR_EPS = 8'h2A;
+    localparam logic [7:0] CMP_LN1_INV_STD = 8'h2B;
+    localparam logic [7:0] CMP_LN1_NORM    = 8'h2C;
+    localparam logic [7:0] CMP_LN1_SCALE   = 8'h2D;
+    localparam logic [7:0] CMP_LN1_SHIFT   = 8'h2E;
+
 
 
     // Signals

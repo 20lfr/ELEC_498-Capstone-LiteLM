@@ -56,7 +56,6 @@ static const char *op_name(ComputeOp op) {
     case CMP_VALUE_SCALE:  return "VALUE_SCALE";
     case CMP_SOFTMAX:      return "SOFTMAX";
     case CMP_ATT_VALUE:    return "ATT_VALUE";
-    case CMP_REQUANT2:     return "RQ2";
     case CMP_HEAD_REQUANT: return "HEAD_RQ";
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";

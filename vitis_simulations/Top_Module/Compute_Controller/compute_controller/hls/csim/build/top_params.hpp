@@ -263,6 +263,12 @@ enum DmaSel : uint8_t {
     DMASEL_WLOGIT       // 11
 };
 
+enum class ComputeErrorCodes {
+    IncorrectRequest, 
+    InvalidComputationForamt
+};
+
+
 struct HeadCtx {
     int  layer_stamp   = -1;
     int  head_idx      = -1;
@@ -318,7 +324,6 @@ struct HeadCtx {
     bool att_scores_dma_done = false;
     bool att_value_dma_done  = false;
 };
-
 
 
 // ------------------------------------------------------------
@@ -466,8 +471,7 @@ constexpr int max2(int a, int b) {
 constexpr int OUT_PROJ_ACT_BYTES = D_MODEL;
 constexpr int OUT_PROJ_W_NIBBLES = D_MODEL * D_TILE_WO;
 constexpr int OUT_PROJ_W_BYTES = div_ceil(OUT_PROJ_W_NIBBLES, 2);
-constexpr int OUT_PROJ_B_NIBBLES = D_TILE_WO;
-constexpr int OUT_PROJ_B_BYTES = div_ceil(OUT_PROJ_B_NIBBLES, 2);
+constexpr int OUT_PROJ_B_BYTES = D_TILE_WO * 4;
 constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
 
 constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
@@ -476,16 +480,14 @@ constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
 
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
-constexpr int FFN_W1_B_NIBBLES = D_TILE_W1;
-constexpr int FFN_W1_B_BYTES = div_ceil(FFN_W1_B_NIBBLES, 2);
+constexpr int FFN_W1_B_BYTES = D_TILE_W1 * 4;
 constexpr int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES + (D_TILE_W1 * 2);
 
 constexpr int FFN_ACT_IN_BYTES = D_FFN * 2;
 
 constexpr int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
 constexpr int FFN_W2_W_BYTES = div_ceil(FFN_W2_W_NIBBLES, 2);
-constexpr int FFN_W2_B_NIBBLES = D_TILE_W2;
-constexpr int FFN_W2_B_BYTES = div_ceil(FFN_W2_B_NIBBLES, 2);
+constexpr int FFN_W2_B_BYTES = D_TILE_W2 * 4;
 constexpr int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES + (D_TILE_W2 * 2);
 
 constexpr int IN_BUF_BYTES = max2(
@@ -565,6 +567,7 @@ struct FfnW2Layout {
     static constexpr int B = W + FFN_W2_W_BYTES;
     static constexpr int S = B + FFN_W2_B_BYTES;
 };
+
 
 // -------------------------------
 // Byte helpers (little-endian)

@@ -1,0 +1,2519 @@
+
+
+================================================================
+== Vitis HLS Report for 'LAYER_NORM_Pipeline_VITIS_LOOP_105_1'
+================================================================
+* Date:           Sat Jan 24 18:01:23 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  2.446 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval |                    Pipeline                    |
+    |   min   |   max   |    min   |    max   | min | max |                      Type                      |
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |      197|      197|  1.970 us|  1.970 us|  193|  193|  loop auto-rewind stp (delay=0 clock cycles(s))|
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                    |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |      Loop Name     |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_105_1  |      195|      195|         5|          1|          1|   192|       yes|
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     1|       -|       -|    -|
+|Expression       |        -|     -|       0|      55|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|       0|      65|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|      63|    -|
+|Register         |        -|     -|     125|      32|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     1|     125|     215|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|    ~0|      ~0|      ~0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +---------------------------+----------------------+---------+----+---+----+-----+
+    |          Instance         |        Module        | BRAM_18K| DSP| FF| LUT| URAM|
+    +---------------------------+----------------------+---------+----+---+----+-----+
+    |sparsemux_33_4_8_1_1_U340  |sparsemux_33_4_8_1_1  |        0|   0|  0|  65|    0|
+    +---------------------------+----------------------+---------+----+---+----+-----+
+    |Total                      |                      |        0|   0|  0|  65|    0|
+    +---------------------------+----------------------+---------+----+---+----+-----+
+
+    * DSP: 
+    +----------------------------------+-----------------------------+--------------+
+    |             Instance             |            Module           |  Expression  |
+    +----------------------------------+-----------------------------+--------------+
+    |mac_muladd_8s_8s_23s_23_4_1_U341  |mac_muladd_8s_8s_23s_23_4_1  |  i0 * i0 + i1|
+    +----------------------------------+-----------------------------+--------------+
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +----------------------+----------+----+---+----+------------+------------+
+    |     Variable Name    | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +----------------------+----------+----+---+----+------------+------------+
+    |add_ln105_fu_368_p2   |         +|   0|  0|  15|           8|           1|
+    |sum_192_fu_491_p2     |         +|   0|  0|  23|          16|          16|
+    |icmp_ln105_fu_362_p2  |      icmp|   0|  0|  15|           8|           8|
+    |ap_enable_pp0         |       xor|   0|  0|   2|           1|           2|
+    +----------------------+----------+----+---+----+------------+------------+
+    |Total                 |          |   0|  0|  55|          33|          27|
+    +----------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +---------------------------+----+-----------+-----+-----------+
+    |            Name           | LUT| Input Size| Bits| Total Bits|
+    +---------------------------+----+-----------+-----+-----------+
+    |ap_done_int                |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter4    |   9|          2|    1|          2|
+    |ap_sig_allocacmp_i_25      |   9|          2|    8|         16|
+    |ap_sig_allocacmp_square_2  |   9|          2|   23|         46|
+    |i_fu_118                   |   9|          2|    8|         16|
+    |square_fu_114              |   9|          2|   23|         46|
+    |sum_fu_110                 |   9|          2|   16|         32|
+    +---------------------------+----+-----------+-----+-----------+
+    |Total                      |  63|         14|   80|        160|
+    +---------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +----------------------------------+----+----+-----+-----------+
+    |               Name               | FF | LUT| Bits| Const Bits|
+    +----------------------------------+----+----+-----+-----------+
+    |ap_CS_fsm                         |   1|   0|    1|          0|
+    |ap_done_reg                       |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1           |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter2           |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter3           |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter4           |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter1_reg  |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter2_reg  |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter3_reg  |   1|   0|    1|          0|
+    |i_fu_118                          |   8|   0|    8|          0|
+    |icmp_ln105_reg_549                |   1|   0|    1|          0|
+    |square_fu_114                     |  23|   0|   23|          0|
+    |sum_fu_110                        |  16|   0|   16|          0|
+    |trunc_ln105_1_reg_553             |   4|   0|    4|          0|
+    |icmp_ln105_reg_549                |  64|  32|    1|          0|
+    +----------------------------------+----+----+-----+-----------+
+    |Total                             | 125|  32|   62|          0|
+    +----------------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-----------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+|                                           RTL Ports                                           | Dir | Bits|  Protocol  |                                     Source Object                                    |    C Type    |
++-----------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+|ap_clk                                                                                         |   in|    1|  ap_ctrl_hs|                                                  LAYER_NORM_Pipeline_VITIS_LOOP_105_1|  return value|
+|ap_rst                                                                                         |   in|    1|  ap_ctrl_hs|                                                  LAYER_NORM_Pipeline_VITIS_LOOP_105_1|  return value|
+|ap_start                                                                                       |   in|    1|  ap_ctrl_hs|                                                  LAYER_NORM_Pipeline_VITIS_LOOP_105_1|  return value|
+|ap_done                                                                                        |  out|    1|  ap_ctrl_hs|                                                  LAYER_NORM_Pipeline_VITIS_LOOP_105_1|  return value|
+|ap_idle                                                                                        |  out|    1|  ap_ctrl_hs|                                                  LAYER_NORM_Pipeline_VITIS_LOOP_105_1|  return value|
+|ap_ready                                                                                       |  out|    1|  ap_ctrl_hs|                                                  LAYER_NORM_Pipeline_VITIS_LOOP_105_1|  return value|
+|square_out                                                                                     |  out|   16|      ap_vld|                                                                            square_out|       pointer|
+|square_out_ap_vld                                                                              |  out|    1|      ap_vld|                                                                            square_out|       pointer|
+|sum_out                                                                                        |  out|   16|      ap_vld|                                                                               sum_out|       pointer|
+|sum_out_ap_vld                                                                                 |  out|    1|      ap_vld|                                                                               sum_out|       pointer|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30_address0               |  out|    4|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30_ce0                    |  out|    1|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30|         array|
+|compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30_q0                     |   in|    8|   ap_memory|               compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47_address0  |  out|    4|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47_q0        |   in|    8|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46_address0  |  out|    4|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46_q0        |   in|    8|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45_address0  |  out|    4|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45_q0        |   in|    8|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44_address0  |  out|    4|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44_q0        |   in|    8|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43_address0  |  out|    4|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43_q0        |   in|    8|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42_address0  |  out|    4|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42_ce0       |  out|    1|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42|         array|
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42_q0        |   in|    8|   ap_memory|  p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42|         array|
++-----------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 2
+IsDatapathOnly: 2
+HasWiredReturn: 1
+HasMFsm: 2
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
++ Individual pipeline summary: 
+  * Pipeline-0: initiation interval (II) = 1, depth = 5
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 5
+* Pipeline : 1
+  Pipeline-0 : II = 1, D = 5, States = { 1 2 3 4 5 }
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 
+3 --> 4 
+4 --> 5 
+5 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 1.61>
+ST_1 : Operation 8 [1/1] (0.00ns)   --->   "%sum = alloca i32 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:102]   --->   Operation 8 'alloca' 'sum' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 9 [1/1] (0.00ns)   --->   "%square = alloca i32 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:103]   --->   Operation 9 'alloca' 'square' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 10 [1/1] (0.00ns)   --->   "%i = alloca i32 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 10 'alloca' 'i' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 11 [1/1] (0.42ns)   --->   "%store_ln105 = store i8 0, i8 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 11 'store' 'store_ln105' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 12 [1/1] (0.42ns)   --->   "%store_ln103 = store i23 0, i23 %square" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:103]   --->   Operation 12 'store' 'store_ln103' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 13 [1/1] (0.42ns)   --->   "%store_ln102 = store i16 0, i16 %sum" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:102]   --->   Operation 13 'store' 'store_ln102' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 14 [1/1] (0.00ns)   --->   "%br_ln0 = br void %for.inc"   --->   Operation 14 'br' 'br_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 15 [1/1] (0.00ns)   --->   "%i_25 = load i8 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 15 'load' 'i_25' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 16 [1/1] (0.76ns)   --->   "%icmp_ln105 = icmp_eq  i8 %i_25, i8 192" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 16 'icmp' 'icmp_ln105' <Predicate = true> <Delay = 0.76> <CoreInst = "Cmp">   --->   Core 9 'Cmp' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'seteq' 'setne' 'setle' 'setge' 'setlt' 'setgt'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 17 [1/1] (0.76ns)   --->   "%add_ln105 = add i8 %i_25, i8 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 17 'add' 'add_ln105' <Predicate = true> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 18 [1/1] (0.00ns)   --->   "%br_ln105 = br i1 %icmp_ln105, void %for.inc.split, void %for.end_ifconv.exitStub" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 18 'br' 'br_ln105' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 19 [1/1] (0.00ns)   --->   "%trunc_ln105_1 = trunc i8 %i_25" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 19 'trunc' 'trunc_ln105_1' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 20 [1/1] (0.00ns)   --->   "%lshr_ln = partselect i4 @_ssdm_op_PartSelect.i4.i8.i32.i32, i8 %i_25, i32 4, i32 7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:102]   --->   Operation 20 'partselect' 'lshr_ln' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 21 [1/1] (0.00ns)   --->   "%zext_ln102 = zext i4 %lshr_ln" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:102]   --->   Operation 21 'zext' 'zext_ln102' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 22 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 22 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 23 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 23 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 24 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 24 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 25 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 25 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 26 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 26 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 27 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 27 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 28 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 28 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 29 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 29 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 30 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 30 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 31 [1/1] (0.00ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448 = getelementptr i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 31 'getelementptr' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 32 [1/1] (0.00ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822 = getelementptr i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 32 'getelementptr' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 33 [1/1] (0.00ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823 = getelementptr i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 33 'getelementptr' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 34 [1/1] (0.00ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824 = getelementptr i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 34 'getelementptr' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 35 [1/1] (0.00ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825 = getelementptr i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 35 'getelementptr' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 36 [1/1] (0.00ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826 = getelementptr i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 36 'getelementptr' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 37 [1/1] (0.00ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827 = getelementptr i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42, i64 0, i64 %zext_ln102" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 37 'getelementptr' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_1 : Operation 38 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 38 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 39 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 39 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 40 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 40 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 41 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 41 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 42 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 42 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 43 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 43 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 44 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 44 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 45 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 45 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 46 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 46 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 47 [2/2] (0.67ns)   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 47 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 48 [2/2] (0.67ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 48 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 49 [2/2] (0.67ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 49 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 50 [2/2] (0.67ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 50 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 51 [2/2] (0.67ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 51 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 52 [2/2] (0.67ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 52 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 53 [2/2] (0.67ns)   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 53 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_1 : Operation 54 [1/1] (0.42ns)   --->   "%store_ln105 = store i8 %add_ln105, i8 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 54 'store' 'store_ln105' <Predicate = (!icmp_ln105)> <Delay = 0.42>
+
+State 2 <SV = 1> <Delay = 2.44>
+ST_2 : Operation 55 [1/1] (0.00ns)   --->   "%sum_load = load i16 %sum" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 55 'load' 'sum_load' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_2 : Operation 56 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 56 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 57 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 57 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 58 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 58 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 59 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 59 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 60 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 60 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 61 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 61 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 62 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 62 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 63 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 63 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 64 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 64 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 65 [1/2] ( I:0.67ns O:0.67ns )   --->   "%compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458 = load i4 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 65 'load' 'compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 66 [1/2] ( I:0.67ns O:0.67ns )   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 66 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 67 [1/2] ( I:0.67ns O:0.67ns )   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 67 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 68 [1/2] ( I:0.67ns O:0.67ns )   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 68 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 69 [1/2] ( I:0.67ns O:0.67ns )   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 69 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 70 [1/2] ( I:0.67ns O:0.67ns )   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 70 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 71 [1/2] ( I:0.67ns O:0.67ns )   --->   "%p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833 = load i4 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 71 'load' 'p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833' <Predicate = (!icmp_ln105)> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 12> <RAM>
+ST_2 : Operation 72 [1/1] (0.48ns)   --->   "%tmp_47 = sparsemux i8 @_ssdm_op_SparseMux.ap_auto.16i8.i8.i4, i4 0, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449, i4 1, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450, i4 2, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451, i4 3, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452, i4 4, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453, i4 5, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454, i4 6, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455, i4 7, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456, i4 8, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457, i4 9, i8 %compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458, i4 10, i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828, i4 11, i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829, i4 12, i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830, i4 13, i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831, i4 14, i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832, i4 15, i8 %p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833, i8 0, i4 %trunc_ln105_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 72 'sparsemux' 'tmp_47' <Predicate = (!icmp_ln105)> <Delay = 0.48> <CoreInst = "BinarySparseMux_DontCare">   --->   Core 149 'BinarySparseMux_DontCare' <Latency = 0> <II = 1> <Delay = 0.48> <FuncUnit> <Opcode : 'sparsemux'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 73 [1/1] (0.00ns)   --->   "%sext_ln106 = sext i8 %tmp_47" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 73 'sext' 'sext_ln106' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_2 : Operation 74 [1/1] (0.85ns)   --->   "%sum_192 = add i16 %sext_ln106, i16 %sum_load" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:106]   --->   Operation 74 'add' 'sum_192' <Predicate = (!icmp_ln105)> <Delay = 0.85> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.85> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 75 [3/3] (0.99ns) (grouped into DSP with root node square_3)   --->   "%mul_ln107 = mul i16 %sext_ln106, i16 %sext_ln106" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:107]   --->   Operation 75 'mul' 'mul_ln107' <Predicate = (!icmp_ln105)> <Delay = 0.99> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_2 : Operation 76 [1/1] (0.42ns)   --->   "%store_ln102 = store i16 %sum_192, i16 %sum" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:102]   --->   Operation 76 'store' 'store_ln102' <Predicate = (!icmp_ln105)> <Delay = 0.42>
+
+State 3 <SV = 2> <Delay = 0.99>
+ST_3 : Operation 77 [2/3] (0.99ns) (grouped into DSP with root node square_3)   --->   "%mul_ln107 = mul i16 %sext_ln106, i16 %sext_ln106" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:107]   --->   Operation 77 'mul' 'mul_ln107' <Predicate = (!icmp_ln105)> <Delay = 0.99> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+
+State 4 <SV = 3> <Delay = 0.64>
+ST_4 : Operation 78 [1/1] (0.00ns)   --->   "%square_2 = load i23 %square" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:107]   --->   Operation 78 'load' 'square_2' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 79 [1/1] (0.00ns)   --->   "%trunc_ln105 = trunc i23 %square_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 79 'trunc' 'trunc_ln105' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 80 [1/3] (0.00ns) (grouped into DSP with root node square_3)   --->   "%mul_ln107 = mul i16 %sext_ln106, i16 %sext_ln106" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:107]   --->   Operation 80 'mul' 'mul_ln107' <Predicate = (!icmp_ln105)> <Delay = 0.00> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_4 : Operation 81 [1/1] (0.00ns) (grouped into DSP with root node square_3)   --->   "%sext_ln107 = sext i16 %mul_ln107" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:107]   --->   Operation 81 'sext' 'sext_ln107' <Predicate = (!icmp_ln105)> <Delay = 0.00>
+ST_4 : Operation 82 [2/2] (0.64ns) (root node of the DSP)   --->   "%square_3 = add i23 %sext_ln107, i23 %square_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:107]   --->   Operation 82 'add' 'square_3' <Predicate = (!icmp_ln105)> <Delay = 0.64> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_4 : Operation 89 [1/1] (0.00ns)   --->   "%sum_load_1 = load i16 %sum"   --->   Operation 89 'load' 'sum_load_1' <Predicate = (icmp_ln105)> <Delay = 0.00>
+ST_4 : Operation 90 [1/1] (0.00ns)   --->   "%write_ln105 = write void @_ssdm_op_Write.ap_auto.i16P0A, i16 %square_out, i16 %trunc_ln105" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 90 'write' 'write_ln105' <Predicate = (icmp_ln105)> <Delay = 0.00>
+ST_4 : Operation 91 [1/1] (0.00ns)   --->   "%write_ln0 = write void @_ssdm_op_Write.ap_auto.i16P0A, i16 %sum_out, i16 %sum_load_1"   --->   Operation 91 'write' 'write_ln0' <Predicate = (icmp_ln105)> <Delay = 0.00>
+ST_4 : Operation 92 [1/1] (0.42ns)   --->   "%ret_ln0 = ret"   --->   Operation 92 'ret' 'ret_ln0' <Predicate = (icmp_ln105)> <Delay = 0.42>
+
+State 5 <SV = 4> <Delay = 1.07>
+ST_5 : Operation 83 [1/1] (0.00ns)   --->   "%specpipeline_ln102 = specpipeline void @_ssdm_op_SpecPipeline, i32 4294967295, i32 0, i32 0, i32 0, void @empty_15" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:102]   --->   Operation 83 'specpipeline' 'specpipeline_ln102' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 84 [1/1] (0.00ns)   --->   "%speclooptripcount_ln102 = speclooptripcount void @_ssdm_op_SpecLoopTripCount, i64 192, i64 192, i64 192" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:102]   --->   Operation 84 'speclooptripcount' 'speclooptripcount_ln102' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 85 [1/1] (0.00ns)   --->   "%specloopname_ln105 = specloopname void @_ssdm_op_SpecLoopName, void @empty_24" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 85 'specloopname' 'specloopname_ln105' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 86 [1/2] (0.64ns) (root node of the DSP)   --->   "%square_3 = add i23 %sext_ln107, i23 %square_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:107]   --->   Operation 86 'add' 'square_3' <Predicate = true> <Delay = 0.64> <CoreInst = "DSP48">   --->   Core 124 'DSP48' <Latency = 3> <II = 1> <Delay = 0.53> <IPBlock> <Opcode : 'add' 'sub' 'mul' 'select'> <InPorts = 0> <OutPorts = 1> <Sync> <CReg>
+ST_5 : Operation 87 [1/1] (0.42ns)   --->   "%store_ln103 = store i23 %square_3, i23 %square" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:103]   --->   Operation 87 'store' 'store_ln103' <Predicate = true> <Delay = 0.42>
+ST_5 : Operation 88 [1/1] (0.00ns)   --->   "%br_ln105 = br void %for.inc" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:105]   --->   Operation 88 'br' 'br_ln105' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+STG Binding: 
+---------------- STG Properties BEGIN ----------------
+- Is combinational: 0
+- Is one-state seq: 0
+- Is datapath-only: 0
+- Is pipelined: 0
+- Is top level: 0
+Port [ Return ] is wired: 1; IO mode=ap_ctrl_hs:ce=0
+Port [ square_out]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ sum_out]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+Port [ p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42]:  wired=1; compound=1; hidden=0; nouse=0; global=1; static=1; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[13]; IO mode=ap_memory:ce=0
+---------------- STG Properties END ------------------
+
+---------------- Datapath Model BEGIN ----------------
+
+<LifeTime>
+<method=bitvector/>
+sum                                                                                   (alloca           ) [ 011110]
+square                                                                                (alloca           ) [ 011111]
+i                                                                                     (alloca           ) [ 010000]
+store_ln105                                                                           (store            ) [ 000000]
+store_ln103                                                                           (store            ) [ 000000]
+store_ln102                                                                           (store            ) [ 000000]
+br_ln0                                                                                (br               ) [ 000000]
+i_25                                                                                  (load             ) [ 000000]
+icmp_ln105                                                                            (icmp             ) [ 011110]
+add_ln105                                                                             (add              ) [ 000000]
+br_ln105                                                                              (br               ) [ 000000]
+trunc_ln105_1                                                                         (trunc            ) [ 011000]
+lshr_ln                                                                               (partselect       ) [ 000000]
+zext_ln102                                                                            (zext             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447             (getelementptr    ) [ 011000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448             (getelementptr    ) [ 011000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822 (getelementptr    ) [ 011000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823 (getelementptr    ) [ 011000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824 (getelementptr    ) [ 011000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825 (getelementptr    ) [ 011000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826 (getelementptr    ) [ 011000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827 (getelementptr    ) [ 011000]
+store_ln105                                                                           (store            ) [ 000000]
+sum_load                                                                              (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457             (load             ) [ 000000]
+compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458             (load             ) [ 000000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828 (load             ) [ 000000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829 (load             ) [ 000000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830 (load             ) [ 000000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831 (load             ) [ 000000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832 (load             ) [ 000000]
+p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833 (load             ) [ 000000]
+tmp_47                                                                                (sparsemux        ) [ 000000]
+sext_ln106                                                                            (sext             ) [ 010110]
+sum_192                                                                               (add              ) [ 000000]
+store_ln102                                                                           (store            ) [ 000000]
+square_2                                                                              (load             ) [ 010001]
+trunc_ln105                                                                           (trunc            ) [ 000000]
+mul_ln107                                                                             (mul              ) [ 000000]
+sext_ln107                                                                            (sext             ) [ 010001]
+specpipeline_ln102                                                                    (specpipeline     ) [ 000000]
+speclooptripcount_ln102                                                               (speclooptripcount) [ 000000]
+specloopname_ln105                                                                    (specloopname     ) [ 000000]
+square_3                                                                              (add              ) [ 000000]
+store_ln103                                                                           (store            ) [ 000000]
+br_ln105                                                                              (br               ) [ 000000]
+sum_load_1                                                                            (load             ) [ 000000]
+write_ln105                                                                           (write            ) [ 000000]
+write_ln0                                                                             (write            ) [ 000000]
+ret_ln0                                                                               (ret              ) [ 000000]
+</LifeTime>
+
+<model>
+
+<comp_list>
+<comp id="0" class="1000" name="square_out">
+<pin_list>
+<pin id="1" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="square_out"/></StgValue>
+</bind>
+</comp>
+
+<comp id="2" class="1000" name="sum_out">
+<pin_list>
+<pin id="3" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="sum_out"/></StgValue>
+</bind>
+</comp>
+
+<comp id="4" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39">
+<pin_list>
+<pin id="5" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="6" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38">
+<pin_list>
+<pin id="7" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="8" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37">
+<pin_list>
+<pin id="9" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="10" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36">
+<pin_list>
+<pin id="11" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="12" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35">
+<pin_list>
+<pin id="13" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="14" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34">
+<pin_list>
+<pin id="15" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="16" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33">
+<pin_list>
+<pin id="17" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="18" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32">
+<pin_list>
+<pin id="19" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="20" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31">
+<pin_list>
+<pin id="21" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="22" class="1000" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30">
+<pin_list>
+<pin id="23" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="24" class="1000" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47">
+<pin_list>
+<pin id="25" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="26" class="1000" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46">
+<pin_list>
+<pin id="27" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="28" class="1000" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45">
+<pin_list>
+<pin id="29" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="30" class="1000" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44">
+<pin_list>
+<pin id="31" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="32" class="1000" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43">
+<pin_list>
+<pin id="33" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="34" class="1000" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42">
+<pin_list>
+<pin id="35" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42"/><MemPortTyVec>1 3 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="36" class="1001" name="const_36">
+<pin_list>
+<pin id="37" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="38" class="1001" name="const_38">
+<pin_list>
+<pin id="39" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="40" class="1001" name="const_40">
+<pin_list>
+<pin id="41" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="42" class="1001" name="const_42">
+<pin_list>
+<pin id="43" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="44" class="1001" name="const_44">
+<pin_list>
+<pin id="45" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="46" class="1001" name="const_46">
+<pin_list>
+<pin id="47" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="48" class="1001" name="const_48">
+<pin_list>
+<pin id="49" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_PartSelect.i4.i8.i32.i32"/></StgValue>
+</bind>
+</comp>
+
+<comp id="50" class="1001" name="const_50">
+<pin_list>
+<pin id="51" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="52" class="1001" name="const_52">
+<pin_list>
+<pin id="53" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="54" class="1001" name="const_54">
+<pin_list>
+<pin id="55" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="56" class="1001" name="const_56">
+<pin_list>
+<pin id="57" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SparseMux.ap_auto.16i8.i8.i4"/></StgValue>
+</bind>
+</comp>
+
+<comp id="58" class="1001" name="const_58">
+<pin_list>
+<pin id="59" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="60" class="1001" name="const_60">
+<pin_list>
+<pin id="61" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="62" class="1001" name="const_62">
+<pin_list>
+<pin id="63" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="64" class="1001" name="const_64">
+<pin_list>
+<pin id="65" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="66" class="1001" name="const_66">
+<pin_list>
+<pin id="67" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="68" class="1001" name="const_68">
+<pin_list>
+<pin id="69" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="70" class="1001" name="const_70">
+<pin_list>
+<pin id="71" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="72" class="1001" name="const_72">
+<pin_list>
+<pin id="73" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="74" class="1001" name="const_74">
+<pin_list>
+<pin id="75" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="76" class="1001" name="const_76">
+<pin_list>
+<pin id="77" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="78" class="1001" name="const_78">
+<pin_list>
+<pin id="79" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="80" class="1001" name="const_80">
+<pin_list>
+<pin id="81" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="82" class="1001" name="const_82">
+<pin_list>
+<pin id="83" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="84" class="1001" name="const_84">
+<pin_list>
+<pin id="85" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="86" class="1001" name="const_86">
+<pin_list>
+<pin id="87" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="88" class="1001" name="const_88">
+<pin_list>
+<pin id="89" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="90" class="1001" name="const_90">
+<pin_list>
+<pin id="91" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="92" class="1001" name="const_92">
+<pin_list>
+<pin id="93" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecPipeline"/></StgValue>
+</bind>
+</comp>
+
+<comp id="94" class="1001" name="const_94">
+<pin_list>
+<pin id="95" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="96" class="1001" name="const_96">
+<pin_list>
+<pin id="97" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="98" class="1001" name="const_98">
+<pin_list>
+<pin id="99" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_15"/></StgValue>
+</bind>
+</comp>
+
+<comp id="100" class="1001" name="const_100">
+<pin_list>
+<pin id="101" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecLoopTripCount"/></StgValue>
+</bind>
+</comp>
+
+<comp id="102" class="1001" name="const_102">
+<pin_list>
+<pin id="103" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="104" class="1001" name="const_104">
+<pin_list>
+<pin id="105" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecLoopName"/></StgValue>
+</bind>
+</comp>
+
+<comp id="106" class="1001" name="const_106">
+<pin_list>
+<pin id="107" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_24"/></StgValue>
+</bind>
+</comp>
+
+<comp id="108" class="1001" name="const_108">
+<pin_list>
+<pin id="109" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_Write.ap_auto.i16P0A"/></StgValue>
+</bind>
+</comp>
+
+<comp id="110" class="1004" name="sum_fu_110">
+<pin_list>
+<pin id="111" dir="0" index="0" bw="1" slack="0"/>
+<pin id="112" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="sum/1 "/>
+</bind>
+</comp>
+
+<comp id="114" class="1004" name="square_fu_114">
+<pin_list>
+<pin id="115" dir="0" index="0" bw="1" slack="0"/>
+<pin id="116" dir="1" index="1" bw="23" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="square/1 "/>
+</bind>
+</comp>
+
+<comp id="118" class="1004" name="i_fu_118">
+<pin_list>
+<pin id="119" dir="0" index="0" bw="1" slack="0"/>
+<pin id="120" dir="1" index="1" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="i/1 "/>
+</bind>
+</comp>
+
+<comp id="122" class="1004" name="write_ln105_write_fu_122">
+<pin_list>
+<pin id="123" dir="0" index="0" bw="0" slack="0"/>
+<pin id="124" dir="0" index="1" bw="16" slack="0"/>
+<pin id="125" dir="0" index="2" bw="16" slack="0"/>
+<pin id="126" dir="1" index="3" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="write(1151) " fcode="write"/>
+<opset="write_ln105/4 "/>
+</bind>
+</comp>
+
+<comp id="129" class="1004" name="write_ln0_write_fu_129">
+<pin_list>
+<pin id="130" dir="0" index="0" bw="0" slack="0"/>
+<pin id="131" dir="0" index="1" bw="16" slack="0"/>
+<pin id="132" dir="0" index="2" bw="16" slack="0"/>
+<pin id="133" dir="1" index="3" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="write(1151) " fcode="write"/>
+<opset="write_ln0/4 "/>
+</bind>
+</comp>
+
+<comp id="136" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439_gep_fu_136">
+<pin_list>
+<pin id="137" dir="0" index="0" bw="8" slack="0"/>
+<pin id="138" dir="0" index="1" bw="1" slack="0"/>
+<pin id="139" dir="0" index="2" bw="4" slack="0"/>
+<pin id="140" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439/1 "/>
+</bind>
+</comp>
+
+<comp id="143" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440_gep_fu_143">
+<pin_list>
+<pin id="144" dir="0" index="0" bw="8" slack="0"/>
+<pin id="145" dir="0" index="1" bw="1" slack="0"/>
+<pin id="146" dir="0" index="2" bw="4" slack="0"/>
+<pin id="147" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440/1 "/>
+</bind>
+</comp>
+
+<comp id="150" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441_gep_fu_150">
+<pin_list>
+<pin id="151" dir="0" index="0" bw="8" slack="0"/>
+<pin id="152" dir="0" index="1" bw="1" slack="0"/>
+<pin id="153" dir="0" index="2" bw="4" slack="0"/>
+<pin id="154" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441/1 "/>
+</bind>
+</comp>
+
+<comp id="157" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442_gep_fu_157">
+<pin_list>
+<pin id="158" dir="0" index="0" bw="8" slack="0"/>
+<pin id="159" dir="0" index="1" bw="1" slack="0"/>
+<pin id="160" dir="0" index="2" bw="4" slack="0"/>
+<pin id="161" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442/1 "/>
+</bind>
+</comp>
+
+<comp id="164" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443_gep_fu_164">
+<pin_list>
+<pin id="165" dir="0" index="0" bw="8" slack="0"/>
+<pin id="166" dir="0" index="1" bw="1" slack="0"/>
+<pin id="167" dir="0" index="2" bw="4" slack="0"/>
+<pin id="168" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443/1 "/>
+</bind>
+</comp>
+
+<comp id="171" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444_gep_fu_171">
+<pin_list>
+<pin id="172" dir="0" index="0" bw="8" slack="0"/>
+<pin id="173" dir="0" index="1" bw="1" slack="0"/>
+<pin id="174" dir="0" index="2" bw="4" slack="0"/>
+<pin id="175" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444/1 "/>
+</bind>
+</comp>
+
+<comp id="178" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445_gep_fu_178">
+<pin_list>
+<pin id="179" dir="0" index="0" bw="8" slack="0"/>
+<pin id="180" dir="0" index="1" bw="1" slack="0"/>
+<pin id="181" dir="0" index="2" bw="4" slack="0"/>
+<pin id="182" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445/1 "/>
+</bind>
+</comp>
+
+<comp id="185" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446_gep_fu_185">
+<pin_list>
+<pin id="186" dir="0" index="0" bw="8" slack="0"/>
+<pin id="187" dir="0" index="1" bw="1" slack="0"/>
+<pin id="188" dir="0" index="2" bw="4" slack="0"/>
+<pin id="189" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446/1 "/>
+</bind>
+</comp>
+
+<comp id="192" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447_gep_fu_192">
+<pin_list>
+<pin id="193" dir="0" index="0" bw="8" slack="0"/>
+<pin id="194" dir="0" index="1" bw="1" slack="0"/>
+<pin id="195" dir="0" index="2" bw="4" slack="0"/>
+<pin id="196" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447/1 "/>
+</bind>
+</comp>
+
+<comp id="199" class="1004" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448_gep_fu_199">
+<pin_list>
+<pin id="200" dir="0" index="0" bw="8" slack="0"/>
+<pin id="201" dir="0" index="1" bw="1" slack="0"/>
+<pin id="202" dir="0" index="2" bw="4" slack="0"/>
+<pin id="203" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448/1 "/>
+</bind>
+</comp>
+
+<comp id="206" class="1004" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822_gep_fu_206">
+<pin_list>
+<pin id="207" dir="0" index="0" bw="8" slack="0"/>
+<pin id="208" dir="0" index="1" bw="1" slack="0"/>
+<pin id="209" dir="0" index="2" bw="4" slack="0"/>
+<pin id="210" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822/1 "/>
+</bind>
+</comp>
+
+<comp id="213" class="1004" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823_gep_fu_213">
+<pin_list>
+<pin id="214" dir="0" index="0" bw="8" slack="0"/>
+<pin id="215" dir="0" index="1" bw="1" slack="0"/>
+<pin id="216" dir="0" index="2" bw="4" slack="0"/>
+<pin id="217" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823/1 "/>
+</bind>
+</comp>
+
+<comp id="220" class="1004" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824_gep_fu_220">
+<pin_list>
+<pin id="221" dir="0" index="0" bw="8" slack="0"/>
+<pin id="222" dir="0" index="1" bw="1" slack="0"/>
+<pin id="223" dir="0" index="2" bw="4" slack="0"/>
+<pin id="224" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824/1 "/>
+</bind>
+</comp>
+
+<comp id="227" class="1004" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825_gep_fu_227">
+<pin_list>
+<pin id="228" dir="0" index="0" bw="8" slack="0"/>
+<pin id="229" dir="0" index="1" bw="1" slack="0"/>
+<pin id="230" dir="0" index="2" bw="4" slack="0"/>
+<pin id="231" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825/1 "/>
+</bind>
+</comp>
+
+<comp id="234" class="1004" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826_gep_fu_234">
+<pin_list>
+<pin id="235" dir="0" index="0" bw="8" slack="0"/>
+<pin id="236" dir="0" index="1" bw="1" slack="0"/>
+<pin id="237" dir="0" index="2" bw="4" slack="0"/>
+<pin id="238" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826/1 "/>
+</bind>
+</comp>
+
+<comp id="241" class="1004" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827_gep_fu_241">
+<pin_list>
+<pin id="242" dir="0" index="0" bw="8" slack="0"/>
+<pin id="243" dir="0" index="1" bw="1" slack="0"/>
+<pin id="244" dir="0" index="2" bw="4" slack="0"/>
+<pin id="245" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827/1 "/>
+</bind>
+</comp>
+
+<comp id="248" class="1004" name="grp_access_fu_248">
+<pin_list>
+<pin id="249" dir="0" index="0" bw="4" slack="0"/>
+<pin id="250" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="251" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="252" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449/1 "/>
+</bind>
+</comp>
+
+<comp id="254" class="1004" name="grp_access_fu_254">
+<pin_list>
+<pin id="255" dir="0" index="0" bw="4" slack="0"/>
+<pin id="256" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="257" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="258" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450/1 "/>
+</bind>
+</comp>
+
+<comp id="260" class="1004" name="grp_access_fu_260">
+<pin_list>
+<pin id="261" dir="0" index="0" bw="4" slack="0"/>
+<pin id="262" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="263" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="264" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451/1 "/>
+</bind>
+</comp>
+
+<comp id="266" class="1004" name="grp_access_fu_266">
+<pin_list>
+<pin id="267" dir="0" index="0" bw="4" slack="0"/>
+<pin id="268" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="269" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="270" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452/1 "/>
+</bind>
+</comp>
+
+<comp id="272" class="1004" name="grp_access_fu_272">
+<pin_list>
+<pin id="273" dir="0" index="0" bw="4" slack="0"/>
+<pin id="274" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="275" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="276" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453/1 "/>
+</bind>
+</comp>
+
+<comp id="278" class="1004" name="grp_access_fu_278">
+<pin_list>
+<pin id="279" dir="0" index="0" bw="4" slack="0"/>
+<pin id="280" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="281" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="282" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454/1 "/>
+</bind>
+</comp>
+
+<comp id="284" class="1004" name="grp_access_fu_284">
+<pin_list>
+<pin id="285" dir="0" index="0" bw="4" slack="0"/>
+<pin id="286" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="287" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="288" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455/1 "/>
+</bind>
+</comp>
+
+<comp id="290" class="1004" name="grp_access_fu_290">
+<pin_list>
+<pin id="291" dir="0" index="0" bw="4" slack="0"/>
+<pin id="292" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="293" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="294" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456/1 "/>
+</bind>
+</comp>
+
+<comp id="296" class="1004" name="grp_access_fu_296">
+<pin_list>
+<pin id="297" dir="0" index="0" bw="4" slack="0"/>
+<pin id="298" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="299" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="300" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457/1 "/>
+</bind>
+</comp>
+
+<comp id="302" class="1004" name="grp_access_fu_302">
+<pin_list>
+<pin id="303" dir="0" index="0" bw="4" slack="0"/>
+<pin id="304" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="305" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="306" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458/1 "/>
+</bind>
+</comp>
+
+<comp id="308" class="1004" name="grp_access_fu_308">
+<pin_list>
+<pin id="309" dir="0" index="0" bw="4" slack="0"/>
+<pin id="310" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="311" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="312" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828/1 "/>
+</bind>
+</comp>
+
+<comp id="314" class="1004" name="grp_access_fu_314">
+<pin_list>
+<pin id="315" dir="0" index="0" bw="4" slack="0"/>
+<pin id="316" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="317" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="318" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829/1 "/>
+</bind>
+</comp>
+
+<comp id="320" class="1004" name="grp_access_fu_320">
+<pin_list>
+<pin id="321" dir="0" index="0" bw="4" slack="0"/>
+<pin id="322" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="323" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="324" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830/1 "/>
+</bind>
+</comp>
+
+<comp id="326" class="1004" name="grp_access_fu_326">
+<pin_list>
+<pin id="327" dir="0" index="0" bw="4" slack="0"/>
+<pin id="328" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="329" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="330" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831/1 "/>
+</bind>
+</comp>
+
+<comp id="332" class="1004" name="grp_access_fu_332">
+<pin_list>
+<pin id="333" dir="0" index="0" bw="4" slack="0"/>
+<pin id="334" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="335" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="336" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832/1 "/>
+</bind>
+</comp>
+
+<comp id="338" class="1004" name="grp_access_fu_338">
+<pin_list>
+<pin id="339" dir="0" index="0" bw="4" slack="0"/>
+<pin id="340" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="341" dir="0" index="2" bw="0" slack="2147483647"/>
+<pin id="342" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833/1 "/>
+</bind>
+</comp>
+
+<comp id="344" class="1004" name="store_ln105_store_fu_344">
+<pin_list>
+<pin id="345" dir="0" index="0" bw="1" slack="0"/>
+<pin id="346" dir="0" index="1" bw="8" slack="0"/>
+<pin id="347" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln105/1 "/>
+</bind>
+</comp>
+
+<comp id="349" class="1004" name="store_ln103_store_fu_349">
+<pin_list>
+<pin id="350" dir="0" index="0" bw="1" slack="0"/>
+<pin id="351" dir="0" index="1" bw="23" slack="0"/>
+<pin id="352" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln103/1 "/>
+</bind>
+</comp>
+
+<comp id="354" class="1004" name="store_ln102_store_fu_354">
+<pin_list>
+<pin id="355" dir="0" index="0" bw="1" slack="0"/>
+<pin id="356" dir="0" index="1" bw="16" slack="0"/>
+<pin id="357" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln102/1 "/>
+</bind>
+</comp>
+
+<comp id="359" class="1004" name="i_25_load_fu_359">
+<pin_list>
+<pin id="360" dir="0" index="0" bw="8" slack="0"/>
+<pin id="361" dir="1" index="1" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="i_25/1 "/>
+</bind>
+</comp>
+
+<comp id="362" class="1004" name="icmp_ln105_fu_362">
+<pin_list>
+<pin id="363" dir="0" index="0" bw="8" slack="0"/>
+<pin id="364" dir="0" index="1" bw="8" slack="0"/>
+<pin id="365" dir="1" index="2" bw="1" slack="1"/>
+</pin_list>
+<bind>
+<opcode="icmp(45) " fcode="icmp"/>
+<opset="icmp_ln105/1 "/>
+</bind>
+</comp>
+
+<comp id="368" class="1004" name="add_ln105_fu_368">
+<pin_list>
+<pin id="369" dir="0" index="0" bw="8" slack="0"/>
+<pin id="370" dir="0" index="1" bw="1" slack="0"/>
+<pin id="371" dir="1" index="2" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln105/1 "/>
+</bind>
+</comp>
+
+<comp id="374" class="1004" name="trunc_ln105_1_fu_374">
+<pin_list>
+<pin id="375" dir="0" index="0" bw="8" slack="0"/>
+<pin id="376" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opcode="trunc(33) " fcode="trunc"/>
+<opset="trunc_ln105_1/1 "/>
+</bind>
+</comp>
+
+<comp id="378" class="1004" name="lshr_ln_fu_378">
+<pin_list>
+<pin id="379" dir="0" index="0" bw="4" slack="0"/>
+<pin id="380" dir="0" index="1" bw="8" slack="0"/>
+<pin id="381" dir="0" index="2" bw="4" slack="0"/>
+<pin id="382" dir="0" index="3" bw="4" slack="0"/>
+<pin id="383" dir="1" index="4" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="partselect(1002) " fcode="partselect"/>
+<opset="lshr_ln/1 "/>
+</bind>
+</comp>
+
+<comp id="388" class="1004" name="zext_ln102_fu_388">
+<pin_list>
+<pin id="389" dir="0" index="0" bw="4" slack="0"/>
+<pin id="390" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln102/1 "/>
+</bind>
+</comp>
+
+<comp id="408" class="1004" name="store_ln105_store_fu_408">
+<pin_list>
+<pin id="409" dir="0" index="0" bw="8" slack="0"/>
+<pin id="410" dir="0" index="1" bw="8" slack="0"/>
+<pin id="411" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln105/1 "/>
+</bind>
+</comp>
+
+<comp id="413" class="1004" name="sum_load_load_fu_413">
+<pin_list>
+<pin id="414" dir="0" index="0" bw="16" slack="1"/>
+<pin id="415" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="sum_load/2 "/>
+</bind>
+</comp>
+
+<comp id="416" class="1004" name="tmp_47_fu_416">
+<pin_list>
+<pin id="417" dir="0" index="0" bw="8" slack="0"/>
+<pin id="418" dir="0" index="1" bw="4" slack="0"/>
+<pin id="419" dir="0" index="2" bw="8" slack="0"/>
+<pin id="420" dir="0" index="3" bw="4" slack="0"/>
+<pin id="421" dir="0" index="4" bw="8" slack="0"/>
+<pin id="422" dir="0" index="5" bw="4" slack="0"/>
+<pin id="423" dir="0" index="6" bw="8" slack="0"/>
+<pin id="424" dir="0" index="7" bw="4" slack="0"/>
+<pin id="425" dir="0" index="8" bw="8" slack="0"/>
+<pin id="426" dir="0" index="9" bw="4" slack="0"/>
+<pin id="427" dir="0" index="10" bw="8" slack="0"/>
+<pin id="428" dir="0" index="11" bw="4" slack="0"/>
+<pin id="429" dir="0" index="12" bw="8" slack="0"/>
+<pin id="430" dir="0" index="13" bw="4" slack="0"/>
+<pin id="431" dir="0" index="14" bw="8" slack="0"/>
+<pin id="432" dir="0" index="15" bw="4" slack="0"/>
+<pin id="433" dir="0" index="16" bw="8" slack="0"/>
+<pin id="434" dir="0" index="17" bw="4" slack="0"/>
+<pin id="435" dir="0" index="18" bw="8" slack="0"/>
+<pin id="436" dir="0" index="19" bw="4" slack="0"/>
+<pin id="437" dir="0" index="20" bw="8" slack="0"/>
+<pin id="438" dir="0" index="21" bw="4" slack="0"/>
+<pin id="439" dir="0" index="22" bw="8" slack="0"/>
+<pin id="440" dir="0" index="23" bw="4" slack="0"/>
+<pin id="441" dir="0" index="24" bw="8" slack="0"/>
+<pin id="442" dir="0" index="25" bw="4" slack="0"/>
+<pin id="443" dir="0" index="26" bw="8" slack="0"/>
+<pin id="444" dir="0" index="27" bw="4" slack="0"/>
+<pin id="445" dir="0" index="28" bw="8" slack="0"/>
+<pin id="446" dir="0" index="29" bw="4" slack="0"/>
+<pin id="447" dir="0" index="30" bw="8" slack="0"/>
+<pin id="448" dir="0" index="31" bw="4" slack="0"/>
+<pin id="449" dir="0" index="32" bw="8" slack="0"/>
+<pin id="450" dir="0" index="33" bw="8" slack="0"/>
+<pin id="451" dir="0" index="34" bw="4" slack="1"/>
+<pin id="452" dir="1" index="35" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sparsemux(1197) " fcode="sparsemux"/>
+<opset="tmp_47/2 "/>
+</bind>
+</comp>
+
+<comp id="487" class="1004" name="sext_ln106_fu_487">
+<pin_list>
+<pin id="488" dir="0" index="0" bw="8" slack="0"/>
+<pin id="489" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln106/2 "/>
+</bind>
+</comp>
+
+<comp id="491" class="1004" name="sum_192_fu_491">
+<pin_list>
+<pin id="492" dir="0" index="0" bw="8" slack="0"/>
+<pin id="493" dir="0" index="1" bw="16" slack="0"/>
+<pin id="494" dir="1" index="2" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="sum_192/2 "/>
+</bind>
+</comp>
+
+<comp id="497" class="1004" name="store_ln102_store_fu_497">
+<pin_list>
+<pin id="498" dir="0" index="0" bw="16" slack="0"/>
+<pin id="499" dir="0" index="1" bw="16" slack="1"/>
+<pin id="500" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln102/2 "/>
+</bind>
+</comp>
+
+<comp id="502" class="1004" name="square_2_load_fu_502">
+<pin_list>
+<pin id="503" dir="0" index="0" bw="23" slack="3"/>
+<pin id="504" dir="1" index="1" bw="23" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="square_2/4 "/>
+</bind>
+</comp>
+
+<comp id="505" class="1004" name="trunc_ln105_fu_505">
+<pin_list>
+<pin id="506" dir="0" index="0" bw="23" slack="0"/>
+<pin id="507" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="trunc(33) " fcode="trunc"/>
+<opset="trunc_ln105/4 "/>
+</bind>
+</comp>
+
+<comp id="510" class="1004" name="store_ln103_store_fu_510">
+<pin_list>
+<pin id="511" dir="0" index="0" bw="23" slack="0"/>
+<pin id="512" dir="0" index="1" bw="23" slack="4"/>
+<pin id="513" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln103/5 "/>
+</bind>
+</comp>
+
+<comp id="514" class="1004" name="sum_load_1_load_fu_514">
+<pin_list>
+<pin id="515" dir="0" index="0" bw="16" slack="3"/>
+<pin id="516" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="sum_load_1/4 "/>
+</bind>
+</comp>
+
+<comp id="518" class="1007" name="grp_fu_518">
+<pin_list>
+<pin id="519" dir="0" index="0" bw="8" slack="0"/>
+<pin id="520" dir="0" index="1" bw="8" slack="0"/>
+<pin id="521" dir="0" index="2" bw="23" slack="0"/>
+<pin id="522" dir="1" index="3" bw="23" slack="0"/>
+</pin_list>
+<bind>
+<opcode="muladd(1172) " fcode="muladd"/>
+<opset="mul_ln107/2 sext_ln107/4 square_3/4 "/>
+</bind>
+</comp>
+
+<comp id="527" class="1005" name="sum_reg_527">
+<pin_list>
+<pin id="528" dir="0" index="0" bw="16" slack="0"/>
+<pin id="529" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opset="sum "/>
+</bind>
+</comp>
+
+<comp id="535" class="1005" name="square_reg_535">
+<pin_list>
+<pin id="536" dir="0" index="0" bw="23" slack="0"/>
+<pin id="537" dir="1" index="1" bw="23" slack="0"/>
+</pin_list>
+<bind>
+<opset="square "/>
+</bind>
+</comp>
+
+<comp id="542" class="1005" name="i_reg_542">
+<pin_list>
+<pin id="543" dir="0" index="0" bw="8" slack="0"/>
+<pin id="544" dir="1" index="1" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opset="i "/>
+</bind>
+</comp>
+
+<comp id="549" class="1005" name="icmp_ln105_reg_549">
+<pin_list>
+<pin id="550" dir="0" index="0" bw="1" slack="1"/>
+<pin id="551" dir="1" index="1" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<opset="icmp_ln105 "/>
+</bind>
+</comp>
+
+<comp id="553" class="1005" name="trunc_ln105_1_reg_553">
+<pin_list>
+<pin id="554" dir="0" index="0" bw="4" slack="1"/>
+<pin id="555" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="trunc_ln105_1 "/>
+</bind>
+</comp>
+
+<comp id="558" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439_reg_558">
+<pin_list>
+<pin id="559" dir="0" index="0" bw="4" slack="1"/>
+<pin id="560" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439 "/>
+</bind>
+</comp>
+
+<comp id="563" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440_reg_563">
+<pin_list>
+<pin id="564" dir="0" index="0" bw="4" slack="1"/>
+<pin id="565" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440 "/>
+</bind>
+</comp>
+
+<comp id="568" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441_reg_568">
+<pin_list>
+<pin id="569" dir="0" index="0" bw="4" slack="1"/>
+<pin id="570" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441 "/>
+</bind>
+</comp>
+
+<comp id="573" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442_reg_573">
+<pin_list>
+<pin id="574" dir="0" index="0" bw="4" slack="1"/>
+<pin id="575" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442 "/>
+</bind>
+</comp>
+
+<comp id="578" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443_reg_578">
+<pin_list>
+<pin id="579" dir="0" index="0" bw="4" slack="1"/>
+<pin id="580" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443 "/>
+</bind>
+</comp>
+
+<comp id="583" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444_reg_583">
+<pin_list>
+<pin id="584" dir="0" index="0" bw="4" slack="1"/>
+<pin id="585" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444 "/>
+</bind>
+</comp>
+
+<comp id="588" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445_reg_588">
+<pin_list>
+<pin id="589" dir="0" index="0" bw="4" slack="1"/>
+<pin id="590" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445 "/>
+</bind>
+</comp>
+
+<comp id="593" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446_reg_593">
+<pin_list>
+<pin id="594" dir="0" index="0" bw="4" slack="1"/>
+<pin id="595" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446 "/>
+</bind>
+</comp>
+
+<comp id="598" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447_reg_598">
+<pin_list>
+<pin id="599" dir="0" index="0" bw="4" slack="1"/>
+<pin id="600" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447 "/>
+</bind>
+</comp>
+
+<comp id="603" class="1005" name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448_reg_603">
+<pin_list>
+<pin id="604" dir="0" index="0" bw="4" slack="1"/>
+<pin id="605" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448 "/>
+</bind>
+</comp>
+
+<comp id="608" class="1005" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822_reg_608">
+<pin_list>
+<pin id="609" dir="0" index="0" bw="4" slack="1"/>
+<pin id="610" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822 "/>
+</bind>
+</comp>
+
+<comp id="613" class="1005" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823_reg_613">
+<pin_list>
+<pin id="614" dir="0" index="0" bw="4" slack="1"/>
+<pin id="615" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823 "/>
+</bind>
+</comp>
+
+<comp id="618" class="1005" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824_reg_618">
+<pin_list>
+<pin id="619" dir="0" index="0" bw="4" slack="1"/>
+<pin id="620" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824 "/>
+</bind>
+</comp>
+
+<comp id="623" class="1005" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825_reg_623">
+<pin_list>
+<pin id="624" dir="0" index="0" bw="4" slack="1"/>
+<pin id="625" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825 "/>
+</bind>
+</comp>
+
+<comp id="628" class="1005" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826_reg_628">
+<pin_list>
+<pin id="629" dir="0" index="0" bw="4" slack="1"/>
+<pin id="630" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826 "/>
+</bind>
+</comp>
+
+<comp id="633" class="1005" name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827_reg_633">
+<pin_list>
+<pin id="634" dir="0" index="0" bw="4" slack="1"/>
+<pin id="635" dir="1" index="1" bw="4" slack="1"/>
+</pin_list>
+<bind>
+<opset="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827 "/>
+</bind>
+</comp>
+
+<comp id="638" class="1005" name="sext_ln106_reg_638">
+<pin_list>
+<pin id="639" dir="0" index="0" bw="16" slack="1"/>
+<pin id="640" dir="1" index="1" bw="16" slack="1"/>
+</pin_list>
+<bind>
+<opset="sext_ln106 "/>
+</bind>
+</comp>
+
+<comp id="644" class="1005" name="square_2_reg_644">
+<pin_list>
+<pin id="645" dir="0" index="0" bw="23" slack="1"/>
+<pin id="646" dir="1" index="1" bw="23" slack="1"/>
+</pin_list>
+<bind>
+<opset="square_2 "/>
+</bind>
+</comp>
+
+</comp_list>
+
+<net_list>
+<net id="113"><net_src comp="36" pin="0"/><net_sink comp="110" pin=0"/></net>
+
+<net id="117"><net_src comp="36" pin="0"/><net_sink comp="114" pin=0"/></net>
+
+<net id="121"><net_src comp="36" pin="0"/><net_sink comp="118" pin=0"/></net>
+
+<net id="127"><net_src comp="108" pin="0"/><net_sink comp="122" pin=0"/></net>
+
+<net id="128"><net_src comp="0" pin="0"/><net_sink comp="122" pin=1"/></net>
+
+<net id="134"><net_src comp="108" pin="0"/><net_sink comp="129" pin=0"/></net>
+
+<net id="135"><net_src comp="2" pin="0"/><net_sink comp="129" pin=1"/></net>
+
+<net id="141"><net_src comp="4" pin="0"/><net_sink comp="136" pin=0"/></net>
+
+<net id="142"><net_src comp="54" pin="0"/><net_sink comp="136" pin=1"/></net>
+
+<net id="148"><net_src comp="6" pin="0"/><net_sink comp="143" pin=0"/></net>
+
+<net id="149"><net_src comp="54" pin="0"/><net_sink comp="143" pin=1"/></net>
+
+<net id="155"><net_src comp="8" pin="0"/><net_sink comp="150" pin=0"/></net>
+
+<net id="156"><net_src comp="54" pin="0"/><net_sink comp="150" pin=1"/></net>
+
+<net id="162"><net_src comp="10" pin="0"/><net_sink comp="157" pin=0"/></net>
+
+<net id="163"><net_src comp="54" pin="0"/><net_sink comp="157" pin=1"/></net>
+
+<net id="169"><net_src comp="12" pin="0"/><net_sink comp="164" pin=0"/></net>
+
+<net id="170"><net_src comp="54" pin="0"/><net_sink comp="164" pin=1"/></net>
+
+<net id="176"><net_src comp="14" pin="0"/><net_sink comp="171" pin=0"/></net>
+
+<net id="177"><net_src comp="54" pin="0"/><net_sink comp="171" pin=1"/></net>
+
+<net id="183"><net_src comp="16" pin="0"/><net_sink comp="178" pin=0"/></net>
+
+<net id="184"><net_src comp="54" pin="0"/><net_sink comp="178" pin=1"/></net>
+
+<net id="190"><net_src comp="18" pin="0"/><net_sink comp="185" pin=0"/></net>
+
+<net id="191"><net_src comp="54" pin="0"/><net_sink comp="185" pin=1"/></net>
+
+<net id="197"><net_src comp="20" pin="0"/><net_sink comp="192" pin=0"/></net>
+
+<net id="198"><net_src comp="54" pin="0"/><net_sink comp="192" pin=1"/></net>
+
+<net id="204"><net_src comp="22" pin="0"/><net_sink comp="199" pin=0"/></net>
+
+<net id="205"><net_src comp="54" pin="0"/><net_sink comp="199" pin=1"/></net>
+
+<net id="211"><net_src comp="24" pin="0"/><net_sink comp="206" pin=0"/></net>
+
+<net id="212"><net_src comp="54" pin="0"/><net_sink comp="206" pin=1"/></net>
+
+<net id="218"><net_src comp="26" pin="0"/><net_sink comp="213" pin=0"/></net>
+
+<net id="219"><net_src comp="54" pin="0"/><net_sink comp="213" pin=1"/></net>
+
+<net id="225"><net_src comp="28" pin="0"/><net_sink comp="220" pin=0"/></net>
+
+<net id="226"><net_src comp="54" pin="0"/><net_sink comp="220" pin=1"/></net>
+
+<net id="232"><net_src comp="30" pin="0"/><net_sink comp="227" pin=0"/></net>
+
+<net id="233"><net_src comp="54" pin="0"/><net_sink comp="227" pin=1"/></net>
+
+<net id="239"><net_src comp="32" pin="0"/><net_sink comp="234" pin=0"/></net>
+
+<net id="240"><net_src comp="54" pin="0"/><net_sink comp="234" pin=1"/></net>
+
+<net id="246"><net_src comp="34" pin="0"/><net_sink comp="241" pin=0"/></net>
+
+<net id="247"><net_src comp="54" pin="0"/><net_sink comp="241" pin=1"/></net>
+
+<net id="253"><net_src comp="136" pin="3"/><net_sink comp="248" pin=0"/></net>
+
+<net id="259"><net_src comp="143" pin="3"/><net_sink comp="254" pin=0"/></net>
+
+<net id="265"><net_src comp="150" pin="3"/><net_sink comp="260" pin=0"/></net>
+
+<net id="271"><net_src comp="157" pin="3"/><net_sink comp="266" pin=0"/></net>
+
+<net id="277"><net_src comp="164" pin="3"/><net_sink comp="272" pin=0"/></net>
+
+<net id="283"><net_src comp="171" pin="3"/><net_sink comp="278" pin=0"/></net>
+
+<net id="289"><net_src comp="178" pin="3"/><net_sink comp="284" pin=0"/></net>
+
+<net id="295"><net_src comp="185" pin="3"/><net_sink comp="290" pin=0"/></net>
+
+<net id="301"><net_src comp="192" pin="3"/><net_sink comp="296" pin=0"/></net>
+
+<net id="307"><net_src comp="199" pin="3"/><net_sink comp="302" pin=0"/></net>
+
+<net id="313"><net_src comp="206" pin="3"/><net_sink comp="308" pin=0"/></net>
+
+<net id="319"><net_src comp="213" pin="3"/><net_sink comp="314" pin=0"/></net>
+
+<net id="325"><net_src comp="220" pin="3"/><net_sink comp="320" pin=0"/></net>
+
+<net id="331"><net_src comp="227" pin="3"/><net_sink comp="326" pin=0"/></net>
+
+<net id="337"><net_src comp="234" pin="3"/><net_sink comp="332" pin=0"/></net>
+
+<net id="343"><net_src comp="241" pin="3"/><net_sink comp="338" pin=0"/></net>
+
+<net id="348"><net_src comp="38" pin="0"/><net_sink comp="344" pin=0"/></net>
+
+<net id="353"><net_src comp="40" pin="0"/><net_sink comp="349" pin=0"/></net>
+
+<net id="358"><net_src comp="42" pin="0"/><net_sink comp="354" pin=0"/></net>
+
+<net id="366"><net_src comp="359" pin="1"/><net_sink comp="362" pin=0"/></net>
+
+<net id="367"><net_src comp="44" pin="0"/><net_sink comp="362" pin=1"/></net>
+
+<net id="372"><net_src comp="359" pin="1"/><net_sink comp="368" pin=0"/></net>
+
+<net id="373"><net_src comp="46" pin="0"/><net_sink comp="368" pin=1"/></net>
+
+<net id="377"><net_src comp="359" pin="1"/><net_sink comp="374" pin=0"/></net>
+
+<net id="384"><net_src comp="48" pin="0"/><net_sink comp="378" pin=0"/></net>
+
+<net id="385"><net_src comp="359" pin="1"/><net_sink comp="378" pin=1"/></net>
+
+<net id="386"><net_src comp="50" pin="0"/><net_sink comp="378" pin=2"/></net>
+
+<net id="387"><net_src comp="52" pin="0"/><net_sink comp="378" pin=3"/></net>
+
+<net id="391"><net_src comp="378" pin="4"/><net_sink comp="388" pin=0"/></net>
+
+<net id="392"><net_src comp="388" pin="1"/><net_sink comp="136" pin=2"/></net>
+
+<net id="393"><net_src comp="388" pin="1"/><net_sink comp="143" pin=2"/></net>
+
+<net id="394"><net_src comp="388" pin="1"/><net_sink comp="150" pin=2"/></net>
+
+<net id="395"><net_src comp="388" pin="1"/><net_sink comp="157" pin=2"/></net>
+
+<net id="396"><net_src comp="388" pin="1"/><net_sink comp="164" pin=2"/></net>
+
+<net id="397"><net_src comp="388" pin="1"/><net_sink comp="171" pin=2"/></net>
+
+<net id="398"><net_src comp="388" pin="1"/><net_sink comp="178" pin=2"/></net>
+
+<net id="399"><net_src comp="388" pin="1"/><net_sink comp="185" pin=2"/></net>
+
+<net id="400"><net_src comp="388" pin="1"/><net_sink comp="192" pin=2"/></net>
+
+<net id="401"><net_src comp="388" pin="1"/><net_sink comp="199" pin=2"/></net>
+
+<net id="402"><net_src comp="388" pin="1"/><net_sink comp="206" pin=2"/></net>
+
+<net id="403"><net_src comp="388" pin="1"/><net_sink comp="213" pin=2"/></net>
+
+<net id="404"><net_src comp="388" pin="1"/><net_sink comp="220" pin=2"/></net>
+
+<net id="405"><net_src comp="388" pin="1"/><net_sink comp="227" pin=2"/></net>
+
+<net id="406"><net_src comp="388" pin="1"/><net_sink comp="234" pin=2"/></net>
+
+<net id="407"><net_src comp="388" pin="1"/><net_sink comp="241" pin=2"/></net>
+
+<net id="412"><net_src comp="368" pin="2"/><net_sink comp="408" pin=0"/></net>
+
+<net id="453"><net_src comp="56" pin="0"/><net_sink comp="416" pin=0"/></net>
+
+<net id="454"><net_src comp="58" pin="0"/><net_sink comp="416" pin=1"/></net>
+
+<net id="455"><net_src comp="248" pin="3"/><net_sink comp="416" pin=2"/></net>
+
+<net id="456"><net_src comp="60" pin="0"/><net_sink comp="416" pin=3"/></net>
+
+<net id="457"><net_src comp="254" pin="3"/><net_sink comp="416" pin=4"/></net>
+
+<net id="458"><net_src comp="62" pin="0"/><net_sink comp="416" pin=5"/></net>
+
+<net id="459"><net_src comp="260" pin="3"/><net_sink comp="416" pin=6"/></net>
+
+<net id="460"><net_src comp="64" pin="0"/><net_sink comp="416" pin=7"/></net>
+
+<net id="461"><net_src comp="266" pin="3"/><net_sink comp="416" pin=8"/></net>
+
+<net id="462"><net_src comp="66" pin="0"/><net_sink comp="416" pin=9"/></net>
+
+<net id="463"><net_src comp="272" pin="3"/><net_sink comp="416" pin=10"/></net>
+
+<net id="464"><net_src comp="68" pin="0"/><net_sink comp="416" pin=11"/></net>
+
+<net id="465"><net_src comp="278" pin="3"/><net_sink comp="416" pin=12"/></net>
+
+<net id="466"><net_src comp="70" pin="0"/><net_sink comp="416" pin=13"/></net>
+
+<net id="467"><net_src comp="284" pin="3"/><net_sink comp="416" pin=14"/></net>
+
+<net id="468"><net_src comp="72" pin="0"/><net_sink comp="416" pin=15"/></net>
+
+<net id="469"><net_src comp="290" pin="3"/><net_sink comp="416" pin=16"/></net>
+
+<net id="470"><net_src comp="74" pin="0"/><net_sink comp="416" pin=17"/></net>
+
+<net id="471"><net_src comp="296" pin="3"/><net_sink comp="416" pin=18"/></net>
+
+<net id="472"><net_src comp="76" pin="0"/><net_sink comp="416" pin=19"/></net>
+
+<net id="473"><net_src comp="302" pin="3"/><net_sink comp="416" pin=20"/></net>
+
+<net id="474"><net_src comp="78" pin="0"/><net_sink comp="416" pin=21"/></net>
+
+<net id="475"><net_src comp="308" pin="3"/><net_sink comp="416" pin=22"/></net>
+
+<net id="476"><net_src comp="80" pin="0"/><net_sink comp="416" pin=23"/></net>
+
+<net id="477"><net_src comp="314" pin="3"/><net_sink comp="416" pin=24"/></net>
+
+<net id="478"><net_src comp="82" pin="0"/><net_sink comp="416" pin=25"/></net>
+
+<net id="479"><net_src comp="320" pin="3"/><net_sink comp="416" pin=26"/></net>
+
+<net id="480"><net_src comp="84" pin="0"/><net_sink comp="416" pin=27"/></net>
+
+<net id="481"><net_src comp="326" pin="3"/><net_sink comp="416" pin=28"/></net>
+
+<net id="482"><net_src comp="86" pin="0"/><net_sink comp="416" pin=29"/></net>
+
+<net id="483"><net_src comp="332" pin="3"/><net_sink comp="416" pin=30"/></net>
+
+<net id="484"><net_src comp="88" pin="0"/><net_sink comp="416" pin=31"/></net>
+
+<net id="485"><net_src comp="338" pin="3"/><net_sink comp="416" pin=32"/></net>
+
+<net id="486"><net_src comp="90" pin="0"/><net_sink comp="416" pin=33"/></net>
+
+<net id="490"><net_src comp="416" pin="35"/><net_sink comp="487" pin=0"/></net>
+
+<net id="495"><net_src comp="487" pin="1"/><net_sink comp="491" pin=0"/></net>
+
+<net id="496"><net_src comp="413" pin="1"/><net_sink comp="491" pin=1"/></net>
+
+<net id="501"><net_src comp="491" pin="2"/><net_sink comp="497" pin=0"/></net>
+
+<net id="508"><net_src comp="502" pin="1"/><net_sink comp="505" pin=0"/></net>
+
+<net id="509"><net_src comp="505" pin="1"/><net_sink comp="122" pin=2"/></net>
+
+<net id="517"><net_src comp="514" pin="1"/><net_sink comp="129" pin=2"/></net>
+
+<net id="523"><net_src comp="487" pin="1"/><net_sink comp="518" pin=0"/></net>
+
+<net id="524"><net_src comp="487" pin="1"/><net_sink comp="518" pin=1"/></net>
+
+<net id="525"><net_src comp="502" pin="1"/><net_sink comp="518" pin=2"/></net>
+
+<net id="526"><net_src comp="518" pin="3"/><net_sink comp="510" pin=0"/></net>
+
+<net id="530"><net_src comp="110" pin="1"/><net_sink comp="527" pin=0"/></net>
+
+<net id="531"><net_src comp="527" pin="1"/><net_sink comp="354" pin=1"/></net>
+
+<net id="532"><net_src comp="527" pin="1"/><net_sink comp="413" pin=0"/></net>
+
+<net id="533"><net_src comp="527" pin="1"/><net_sink comp="497" pin=1"/></net>
+
+<net id="534"><net_src comp="527" pin="1"/><net_sink comp="514" pin=0"/></net>
+
+<net id="538"><net_src comp="114" pin="1"/><net_sink comp="535" pin=0"/></net>
+
+<net id="539"><net_src comp="535" pin="1"/><net_sink comp="349" pin=1"/></net>
+
+<net id="540"><net_src comp="535" pin="1"/><net_sink comp="502" pin=0"/></net>
+
+<net id="541"><net_src comp="535" pin="1"/><net_sink comp="510" pin=1"/></net>
+
+<net id="545"><net_src comp="118" pin="1"/><net_sink comp="542" pin=0"/></net>
+
+<net id="546"><net_src comp="542" pin="1"/><net_sink comp="344" pin=1"/></net>
+
+<net id="547"><net_src comp="542" pin="1"/><net_sink comp="359" pin=0"/></net>
+
+<net id="548"><net_src comp="542" pin="1"/><net_sink comp="408" pin=1"/></net>
+
+<net id="552"><net_src comp="362" pin="2"/><net_sink comp="549" pin=0"/></net>
+
+<net id="556"><net_src comp="374" pin="1"/><net_sink comp="553" pin=0"/></net>
+
+<net id="557"><net_src comp="553" pin="1"/><net_sink comp="416" pin=34"/></net>
+
+<net id="561"><net_src comp="136" pin="3"/><net_sink comp="558" pin=0"/></net>
+
+<net id="562"><net_src comp="558" pin="1"/><net_sink comp="248" pin=0"/></net>
+
+<net id="566"><net_src comp="143" pin="3"/><net_sink comp="563" pin=0"/></net>
+
+<net id="567"><net_src comp="563" pin="1"/><net_sink comp="254" pin=0"/></net>
+
+<net id="571"><net_src comp="150" pin="3"/><net_sink comp="568" pin=0"/></net>
+
+<net id="572"><net_src comp="568" pin="1"/><net_sink comp="260" pin=0"/></net>
+
+<net id="576"><net_src comp="157" pin="3"/><net_sink comp="573" pin=0"/></net>
+
+<net id="577"><net_src comp="573" pin="1"/><net_sink comp="266" pin=0"/></net>
+
+<net id="581"><net_src comp="164" pin="3"/><net_sink comp="578" pin=0"/></net>
+
+<net id="582"><net_src comp="578" pin="1"/><net_sink comp="272" pin=0"/></net>
+
+<net id="586"><net_src comp="171" pin="3"/><net_sink comp="583" pin=0"/></net>
+
+<net id="587"><net_src comp="583" pin="1"/><net_sink comp="278" pin=0"/></net>
+
+<net id="591"><net_src comp="178" pin="3"/><net_sink comp="588" pin=0"/></net>
+
+<net id="592"><net_src comp="588" pin="1"/><net_sink comp="284" pin=0"/></net>
+
+<net id="596"><net_src comp="185" pin="3"/><net_sink comp="593" pin=0"/></net>
+
+<net id="597"><net_src comp="593" pin="1"/><net_sink comp="290" pin=0"/></net>
+
+<net id="601"><net_src comp="192" pin="3"/><net_sink comp="598" pin=0"/></net>
+
+<net id="602"><net_src comp="598" pin="1"/><net_sink comp="296" pin=0"/></net>
+
+<net id="606"><net_src comp="199" pin="3"/><net_sink comp="603" pin=0"/></net>
+
+<net id="607"><net_src comp="603" pin="1"/><net_sink comp="302" pin=0"/></net>
+
+<net id="611"><net_src comp="206" pin="3"/><net_sink comp="608" pin=0"/></net>
+
+<net id="612"><net_src comp="608" pin="1"/><net_sink comp="308" pin=0"/></net>
+
+<net id="616"><net_src comp="213" pin="3"/><net_sink comp="613" pin=0"/></net>
+
+<net id="617"><net_src comp="613" pin="1"/><net_sink comp="314" pin=0"/></net>
+
+<net id="621"><net_src comp="220" pin="3"/><net_sink comp="618" pin=0"/></net>
+
+<net id="622"><net_src comp="618" pin="1"/><net_sink comp="320" pin=0"/></net>
+
+<net id="626"><net_src comp="227" pin="3"/><net_sink comp="623" pin=0"/></net>
+
+<net id="627"><net_src comp="623" pin="1"/><net_sink comp="326" pin=0"/></net>
+
+<net id="631"><net_src comp="234" pin="3"/><net_sink comp="628" pin=0"/></net>
+
+<net id="632"><net_src comp="628" pin="1"/><net_sink comp="332" pin=0"/></net>
+
+<net id="636"><net_src comp="241" pin="3"/><net_sink comp="633" pin=0"/></net>
+
+<net id="637"><net_src comp="633" pin="1"/><net_sink comp="338" pin=0"/></net>
+
+<net id="641"><net_src comp="487" pin="1"/><net_sink comp="638" pin=0"/></net>
+
+<net id="642"><net_src comp="638" pin="1"/><net_sink comp="518" pin=0"/></net>
+
+<net id="643"><net_src comp="638" pin="1"/><net_sink comp="518" pin=1"/></net>
+
+<net id="647"><net_src comp="502" pin="1"/><net_sink comp="644" pin=0"/></net>
+
+<net id="648"><net_src comp="644" pin="1"/><net_sink comp="518" pin=1"/></net>
+
+</net_list>
+
+</model> 
+---------------- Datapath Model END ------------------
+
+* FSMD analyzer results:
+  - Output states:
+	Port: square_out | {4 }
+	Port: sum_out | {4 }
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31 | {}
+	Port: compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30 | {}
+	Port: p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47 | {}
+	Port: p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46 | {}
+	Port: p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45 | {}
+	Port: p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44 | {}
+	Port: p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43 | {}
+	Port: p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42 | {}
+ - Input state : 
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43 | {1 2 }
+	Port: LAYER_NORM_Pipeline_VITIS_LOOP_105_1 : p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42 | {1 2 }
+  - Chain level:
+	State 1
+		store_ln105 : 1
+		store_ln103 : 1
+		store_ln102 : 1
+		i_25 : 1
+		icmp_ln105 : 2
+		add_ln105 : 2
+		br_ln105 : 3
+		trunc_ln105_1 : 2
+		lshr_ln : 2
+		zext_ln102 : 3
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448 : 4
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822 : 4
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823 : 4
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824 : 4
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825 : 4
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826 : 4
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827 : 4
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1449 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1450 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1451 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1452 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1453 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1454 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1455 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1456 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1457 : 5
+		compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1458 : 5
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_828 : 5
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_829 : 5
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_830 : 5
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_831 : 5
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_832 : 5
+		p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_833 : 5
+		store_ln105 : 3
+	State 2
+		tmp_47 : 1
+		sext_ln106 : 2
+		sum_192 : 3
+		mul_ln107 : 3
+		store_ln102 : 4
+	State 3
+	State 4
+		trunc_ln105 : 1
+		sext_ln107 : 1
+		square_3 : 2
+		write_ln105 : 2
+		write_ln0 : 1
+	State 5
+		store_ln103 : 1
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+
+* Functional unit list:
+|----------|--------------------------|---------|---------|---------|
+| Operation|      Functional Unit     |   DSP   |    FF   |   LUT   |
+|----------|--------------------------|---------|---------|---------|
+| sparsemux|       tmp_47_fu_416      |    0    |    0    |    65   |
+|----------|--------------------------|---------|---------|---------|
+|    add   |     add_ln105_fu_368     |    0    |    0    |    15   |
+|          |      sum_192_fu_491      |    0    |    0    |    23   |
+|----------|--------------------------|---------|---------|---------|
+|   icmp   |     icmp_ln105_fu_362    |    0    |    0    |    15   |
+|----------|--------------------------|---------|---------|---------|
+|  muladd  |        grp_fu_518        |    1    |    0    |    0    |
+|----------|--------------------------|---------|---------|---------|
+|   write  | write_ln105_write_fu_122 |    0    |    0    |    0    |
+|          |  write_ln0_write_fu_129  |    0    |    0    |    0    |
+|----------|--------------------------|---------|---------|---------|
+|   trunc  |   trunc_ln105_1_fu_374   |    0    |    0    |    0    |
+|          |    trunc_ln105_fu_505    |    0    |    0    |    0    |
+|----------|--------------------------|---------|---------|---------|
+|partselect|      lshr_ln_fu_378      |    0    |    0    |    0    |
+|----------|--------------------------|---------|---------|---------|
+|   zext   |     zext_ln102_fu_388    |    0    |    0    |    0    |
+|----------|--------------------------|---------|---------|---------|
+|   sext   |     sext_ln106_fu_487    |    0    |    0    |    0    |
+|----------|--------------------------|---------|---------|---------|
+|   Total  |                          |    1    |    0    |   118   |
+|----------|--------------------------|---------|---------|---------|
+
+Memories:
+N/A
+
+* Register list:
++---------------------------------------------------------------------------------------------+--------+
+|                                                                                             |   FF   |
++---------------------------------------------------------------------------------------------+--------+
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1439_reg_558      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1440_reg_563      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1441_reg_568      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1442_reg_573      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1443_reg_578      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1444_reg_583      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1445_reg_588      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1446_reg_593      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1447_reg_598      |    4   |
+|      compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1448_reg_603      |    4   |
+|                                          i_reg_542                                          |    8   |
+|                                      icmp_ln105_reg_549                                     |    1   |
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_822_reg_608|    4   |
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_823_reg_613|    4   |
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_824_reg_618|    4   |
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_825_reg_623|    4   |
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_826_reg_628|    4   |
+|p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_827_reg_633|    4   |
+|                                      sext_ln106_reg_638                                     |   16   |
+|                                       square_2_reg_644                                      |   23   |
+|                                        square_reg_535                                       |   23   |
+|                                         sum_reg_527                                         |   16   |
+|                                    trunc_ln105_1_reg_553                                    |    4   |
++---------------------------------------------------------------------------------------------+--------+
+|                                            Total                                            |   155  |
++---------------------------------------------------------------------------------------------+--------+
+
+* Multiplexer (MUX) list: 
+|-------------------|------|------|------|--------||---------||---------||---------|
+|        Comp       |  Pin | Size |  BW  | S x BW ||  Delay  ||    FF   ||   LUT   |
+|-------------------|------|------|------|--------||---------||---------||---------|
+| grp_access_fu_248 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_254 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_260 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_266 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_272 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_278 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_284 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_290 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_296 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_302 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_308 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_314 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_320 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_326 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_332 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+| grp_access_fu_338 |  p0  |   2  |   4  |    8   ||    0    ||    9    |
+|     grp_fu_518    |  p0  |   2  |   8  |   16   ||    0    ||    9    |
+|     grp_fu_518    |  p1  |   3  |   8  |   24   ||    0    ||    14   |
+|-------------------|------|------|------|--------||---------||---------||---------|
+|       Total       |      |      |      |   168  ||  7.735  ||    0    ||   167   |
+|-------------------|------|------|------|--------||---------||---------||---------|
+
+
+
+* Summary:
++-----------+--------+--------+--------+--------+
+|           |   DSP  |  Delay |   FF   |   LUT  |
++-----------+--------+--------+--------+--------+
+|  Function |    1   |    -   |    0   |   118  |
+|   Memory  |    -   |    -   |    -   |    -   |
+|Multiplexer|    -   |    7   |    0   |   167  |
+|  Register |    -   |    -   |   155  |    -   |
++-----------+--------+--------+--------+--------+
+|   Total   |    1   |    7   |   155  |   285  |
++-----------+--------+--------+--------+--------+

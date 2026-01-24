@@ -2,45 +2,55 @@
     <item name="Total Instructions per Compilation Phase">
         <table>
             <keys size="4">Phase, Step, Instructions, Description</keys>
-            <column name="Compile/Link">,    929, After all functions are compiled and linked into a single design</column>
+            <column name="Compile/Link">,  9450, After all functions are compiled and linked into a single design</column>
             <column name="">, , </column>
             <column name="Unroll/Inline">, , After user unroll and inline pragmas are applied</column>
-            <column name="">(1) unroll, 13291, user unroll pragmas are applied</column>
-            <column name="">(2) simplification, 13032, simplification of applied user unroll pragmas</column>
-            <column name="">(3) inline, 12469, user inline pragmas are applied</column>
-            <column name="">(4) simplification, 12457, simplification of applied user inline pragmas</column>
+            <column name="">(1) unroll, 56880, user unroll pragmas are applied</column>
+            <column name="">(2) simplification, 40108, simplification of applied user unroll pragmas</column>
+            <column name="">(3) inline, 38349, user inline pragmas are applied</column>
+            <column name="">(4) simplification, 38321, simplification of applied user inline pragmas</column>
             <column name="">, , </column>
             <column name="Array/Struct">, , After user array partition and struct aggregate/disaggregate pragmas are applied</column>
-            <column name="">(1) array partition, 24909, user array partition pragmas are applied</column>
-            <column name="">(2) simplification, 12509, simplification of applied user array partition &amp; struct aggregate/disaggregate pragmas</column>
-            <column name="">(3) aggregate/disaggregate , 12509, user struct aggregate/disaggregate pragmas are applied</column>
-            <column name="">(4) array reshape, 12509, apply array reshape pragmas</column>
-            <column name="">(5) access patterns, 12526, array access pattern optmizations</column>
+            <column name="">(1) array partition, 52679, user array partition pragmas are applied</column>
+            <column name="">(2) simplification, 40133, simplification of applied user array partition &amp; struct aggregate/disaggregate pragmas</column>
+            <column name="">(3) aggregate/disaggregate , 40133, user struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(4) array reshape, 40133, apply array reshape pragmas</column>
+            <column name="">(5) access patterns, 40132, array access pattern optmizations</column>
             <column name="">, , </column>
             <column name="Performance">, , After transformations are applied to meet performance pragma targets</column>
-            <column name="">(1) loop simplification, 12526, loop and instruction simplification</column>
-            <column name="">(2) parallelization, 12510, loops are unrolled or pipelined to meet performance targets</column>
-            <column name="">(3) array partition, 12509, arrays are partitioned to meet performance targets</column>
-            <column name="">(4) simplification, 12509, simplification of design after performance transformations</column>
+            <column name="">(1) loop simplification, 40132, loop and instruction simplification</column>
+            <column name="">(2) parallelization, 40110, loops are unrolled or pipelined to meet performance targets</column>
+            <column name="">(3) array partition, 40103, arrays are partitioned to meet performance targets</column>
+            <column name="">(4) simplification, 40103, simplification of design after performance transformations</column>
             <column name="">, , </column>
             <column name="HW Transforms">, , After hardware transfomations</column>
-            <column name="">(1) lowering, 12551, initial conversion to HW specific instructions</column>
-            <column name="">(2) optimizations, 12640, high level synthesis optimizations</column>
+            <column name="">(1) lowering, 40145, initial conversion to HW specific instructions</column>
+            <column name="">(2) optimizations, 40337, high level synthesis optimizations</column>
         </table>
     </item>
     <item name="Instructions per Function for each Compilation Phase">
         <hiertable>
             <header size="7" col0="Function" col1="Location" col2="Compile/Link" col3="Unroll/Inline" col4="Array/Struct" col5="Performance" col6="HW Transforms"/>
             <rows>
-                <row id="0" col0="compute_controller" col1="compute_controller.cpp:207" col2="929" col3="12457" col4="12526" col5="12509" col6="12640">
-                    <row id="3" col0="max2_constexpr" col1="compute_controller.hpp:8" col2="36" col2_disp=" 36 (6 calls)" col3="" col4="" col5="" col6=""/>
-                    <row id="6" col0="min2_constexpr" col1="compute_controller.hpp:11" col2="24" col2_disp=" 24 (4 calls)" col3="" col4="" col5="" col6=""/>
-                    <row id="1" col0="read_i8" col1="top_params.hpp:572" col2="4" col3="" col4="" col5="" col6=""/>
-                    <row id="5" col0="read_i4" col1="top_params.hpp:576" col2="184" col2_disp="184 (2 calls)" col3="" col4="" col5="" col6=""/>
-                    <row id="2" col0="write_i32" col1="top_params.hpp:623" col2="28" col3="" col4="" col5="" col6=""/>
-                    <row id="4" col0="MAC_ARCHITECTURE" col1="compute_controller.cpp:6" col2="157" col3="" col4="" col5="" col6="">
-                        <row id="3" col0="max2_constexpr" col1="compute_controller.hpp:8" col2="36" col2_disp=" 36 (6 calls)" col3="" col4="" col5="" col6=""/>
-                        <row id="6" col0="min2_constexpr" col1="compute_controller.hpp:11" col2="24" col2_disp=" 24 (4 calls)" col3="" col4="" col5="" col6=""/>
+                <row id="0" col0="compute_controller" col1="compute_controller.cpp:171" col2="9450" col3="38321" col4="40132" col5="40103" col6="40337">
+                    <row id="2" col0="max2_constexpr" col1="compute_controller.hpp:8" col2="48" col2_disp="  48 (8 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="14" col0="min2_constexpr" col1="compute_controller.hpp:11" col2="30" col2_disp="  30 (5 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="1" col0="read_i16" col1="top_params.hpp:587" col2="60" col2_disp="  60 (4 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="4" col0="read_i4" col1="top_params.hpp:579" col2="276" col2_disp=" 276 (3 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="12" col0="read_i32" col1="top_params.hpp:594" col2="270" col2_disp=" 270 (10 calls)" col3="260" col3_disp="  260 (10 calls)" col4="260" col4_disp="  260 (10 calls)" col5="208" col5_disp="  208 (8 calls)" col6="208" col6_disp="  208 (8 calls)"/>
+                    <row id="10" col0="write_i32" col1="top_params.hpp:626" col2="84" col2_disp="  84 (3 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="3" col0="FFN_ACT_RELU" col1="compute_controller.cpp:133" col2="24" col3="" col4="" col5="" col6=""/>
+                    <row id="15" col0="write_i16" col1="top_params.hpp:620" col2="32" col2_disp="  32 (2 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="5" col0="read_i8" col1="top_params.hpp:575" col2="20" col2_disp="  20 (5 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="8" col0="LAYER_NORM" col1="compute_controller.cpp:92" col2="7204" col3="7769" col4="7772" col5="7770" col6="7773">
+                        <row id="13" col0="sqrt_fixed&lt;32, 16&gt;" col1="hls_sqrt_apfixed.h:19" col2="" col3="1392" col4="1360" col5="1360" col6="1361"/>
+                    </row>
+                    <row id="7" col0="RES_ADD" col1="compute_controller.cpp:149" col2="37" col3="2113" col4="2113" col5="2113" col6="2113"/>
+                    <row id="9" col0="write_i8" col1="top_params.hpp:603" col2="8" col2_disp="   8 (2 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="11" col0="REQUANT_D_MODEL_int32_to_int8" col1="compute_controller.cpp:62" col2="42" col3="2502" col4="2502" col5="2502" col6="2502"/>
+                    <row id="6" col0="MAC_ARCHITECTURE" col1="compute_controller.cpp:7" col2="150" col3="" col4="" col5="" col6="">
+                        <row id="2" col0="max2_constexpr" col1="compute_controller.hpp:8" col2="36" col2_disp="  36 (6 calls)" col3="" col4="" col5="" col6=""/>
+                        <row id="14" col0="min2_constexpr" col1="compute_controller.hpp:11" col2="24" col2_disp="  24 (4 calls)" col3="" col4="" col5="" col6=""/>
                     </row>
                 </row>
             </rows>
