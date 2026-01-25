@@ -46875,7 +46875,7 @@
 					<Obj>
 						<type>0</type>
 						<id>807</id>
-						<name>or_ln127_2</name>
+						<name>or_ln127_1</name>
 						<fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</fileName>
 						<fileDirectory>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module</fileDirectory>
 						<lineNumber>127</lineNumber>
@@ -166596,7 +166596,7 @@
 			</second>
 		</item>
 		<item>
-			<first>or_ln127_2_fu_14498</first>
+			<first>or_ln127_1_fu_14498</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>

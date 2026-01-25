@@ -10838,10 +10838,10 @@ if.end.i.1_ifconv:126 %head_ctx_ref_q_compute_done_1_3 = or i1 %head_ctx_ref_q_c
 
 <Node id="807" bw="1" op_0_bw="1" op_1_bw="1">
 <![CDATA[
-if.end.i.1_ifconv:127 %or_ln127_2 = and i1 %and_ln127_1, i1 %not_sel_tmp45
+if.end.i.1_ifconv:127 %or_ln127_1 = and i1 %and_ln127_1, i1 %not_sel_tmp45
 
 ]]></Node>
-<StgValue><ssdm name="or_ln127_2"/></StgValue>
+<StgValue><ssdm name="or_ln127_1"/></StgValue>
 </operation>
 
 <operation id="658" st_id="1" stage="1" lat="1">
@@ -10854,7 +10854,7 @@ if.end.i.1_ifconv:127 %or_ln127_2 = and i1 %and_ln127_1, i1 %not_sel_tmp45
 
 <Node id="808" bw="1" op_0_bw="1" op_1_bw="1">
 <![CDATA[
-if.end.i.1_ifconv:128 %head_ctx_ref_k_compute_done_1_3 = or i1 %head_ctx_ref_k_compute_done_1_1, i1 %or_ln127_2
+if.end.i.1_ifconv:128 %head_ctx_ref_k_compute_done_1_3 = or i1 %head_ctx_ref_k_compute_done_1_1, i1 %or_ln127_1
 
 ]]></Node>
 <StgValue><ssdm name="head_ctx_ref_k_compute_done_1_3"/></StgValue>

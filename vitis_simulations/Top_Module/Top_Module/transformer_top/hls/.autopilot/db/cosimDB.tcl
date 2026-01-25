@@ -24,20 +24,20 @@ set RtlHierarchyInfo {[
 			{"Name" : "wl_start", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "wl_addr_sel", "Type" : "Vld", "Direction" : "O",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "wl_addr_sel", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "wl_addr_sel", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "wl_layer", "Type" : "Vld", "Direction" : "O"},
 			{"Name" : "wl_head", "Type" : "Vld", "Direction" : "O",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "wl_head", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "wl_head", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "wl_tile", "Type" : "Vld", "Direction" : "O",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "wl_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "wl_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "compute_ready", "Type" : "None", "Direction" : "I"},
 			{"Name" : "compute_done", "Type" : "None", "Direction" : "I"},
 			{"Name" : "compute_start", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "compute_op", "Type" : "Vld", "Direction" : "O",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "compute_op", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "compute_op", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "head_ctx_ref_0", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "head_ctx_ref_1", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "head_ctx_ref_2", "Type" : "OVld", "Direction" : "IO"},
@@ -107,146 +107,140 @@ set RtlHierarchyInfo {[
 			{"Name" : "ctrl_mem_reserved_debug", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "st", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "st", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "st", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "layer_idx", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "layer_idx", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "layer_idx", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "attn_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "attn_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "attn_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "group_idx", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "group_idx", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "group_idx", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "start_head_group", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "start_head_group", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "start_head_group", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "requant1_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "requant1_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
-			{"Name" : "head_requant_started", "Type" : "OVld", "Direction" : "IO",
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant1_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+			{"Name" : "requant2_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "head_requant_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant2_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "requant3_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "requant3_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant3_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "requant4_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "requant4_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant4_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "requant1_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "requant1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
-			{"Name" : "head_requant_compute_done", "Type" : "OVld", "Direction" : "IO",
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+			{"Name" : "requant2_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "head_requant_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant2_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "requant3_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "requant3_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant3_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "requant4_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "requant4_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "requant4_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "concat_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "concat_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "concat_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "concat_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "concat_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "concat_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "outproj_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "outproj_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "outproj_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "outproj_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "outproj_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "outproj_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "wo_dma_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "wo_dma_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "wo_dma_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w1_dma_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w1_dma_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w1_dma_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w2_dma_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w2_dma_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w2_dma_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "resid0_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "resid0_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "resid0_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "resid0_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "resid0_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "resid0_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ln0_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ln0_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ln0_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ln0_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ln0_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
-			{"Name" : "ln0_phase", "Type" : "OVld", "Direction" : "IO",
-				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ln0_phase", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ln0_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ffn_w1_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ffn_w1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ffn_w1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ffn_act_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ffn_act_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ffn_act_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ffn_w2_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ffn_w2_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ffn_w2_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ffn_stage", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ffn_stage", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ffn_stage", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ffn_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ffn_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ffn_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "resid1_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "resid1_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "resid1_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "resid1_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "resid1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "resid1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ln1_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ln1_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ln1_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "ln1_compute_done", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ln1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
-			{"Name" : "ln1_phase", "Type" : "OVld", "Direction" : "IO",
-				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "ln1_phase", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "ln1_compute_done", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "axis_last_seen", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "axis_last_seen", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "axis_last_seen", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "stream_done_seen", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "stream_done_seen", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "stream_done_seen", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "stream_started", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "stream_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "stream_started", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "wo_tile", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "wo_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "wo_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "wo_dma_busy", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "wo_dma_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "wo_dma_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "wo_comp_busy", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "wo_comp_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "wo_comp_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w1_tile", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w1_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w1_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w1_dma_busy", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w1_dma_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w1_dma_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w1_comp_busy", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w1_comp_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w1_comp_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w2_tile", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w2_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w2_tile", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w2_dma_busy", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w2_dma_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w2_dma_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]},
 			{"Name" : "w2_comp_busy", "Type" : "OVld", "Direction" : "IO",
 				"SubConnect" : [
-					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13859", "Port" : "w2_comp_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]}]},
-	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859", "Parent" : "0", "Child" : ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+					{"ID" : "1", "SubInstance" : "grp_scheduler_hls_fu_13855", "Port" : "w2_comp_busy", "Inst_start_state" : "2", "Inst_end_state" : "3"}]}]},
+	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855", "Parent" : "0", "Child" : ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
 		"CDFG" : "scheduler_hls",
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1", "real_start" : "0",
@@ -286,11 +280,11 @@ set RtlHierarchyInfo {[
 			{"Name" : "group_idx", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "start_head_group", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "requant1_started", "Type" : "OVld", "Direction" : "IO"},
-			{"Name" : "head_requant_started", "Type" : "OVld", "Direction" : "IO"},
+			{"Name" : "requant2_started", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "requant3_started", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "requant4_started", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "requant1_compute_done", "Type" : "OVld", "Direction" : "IO"},
-			{"Name" : "head_requant_compute_done", "Type" : "OVld", "Direction" : "IO"},
+			{"Name" : "requant2_compute_done", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "requant3_compute_done", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "requant4_compute_done", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "concat_compute_done", "Type" : "OVld", "Direction" : "IO"},
@@ -304,7 +298,6 @@ set RtlHierarchyInfo {[
 			{"Name" : "resid0_compute_done", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "ln0_started", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "ln0_compute_done", "Type" : "OVld", "Direction" : "IO"},
-			{"Name" : "ln0_phase", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "ffn_w1_compute_done", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "ffn_act_compute_done", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "ffn_w2_compute_done", "Type" : "OVld", "Direction" : "IO"},
@@ -314,7 +307,6 @@ set RtlHierarchyInfo {[
 			{"Name" : "resid1_compute_done", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "ln1_started", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "ln1_compute_done", "Type" : "OVld", "Direction" : "IO"},
-			{"Name" : "ln1_phase", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "axis_last_seen", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "stream_done_seen", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "stream_started", "Type" : "OVld", "Direction" : "IO"},
@@ -327,7 +319,7 @@ set RtlHierarchyInfo {[
 			{"Name" : "w2_tile", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "w2_dma_busy", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "w2_comp_busy", "Type" : "OVld", "Direction" : "IO"}]},
-	{"ID" : "2", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.call_ret_drive_group_head_phase_fu_30444", "Parent" : "1",
+	{"ID" : "2", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.call_ret_drive_group_head_phase_fu_20904", "Parent" : "1",
 		"CDFG" : "drive_group_head_phase",
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "0", "ap_start" : "0", "ap_ready" : "1", "ap_done" : "0", "ap_continue" : "0", "ap_idle" : "0", "real_start" : "0",
@@ -436,13 +428,13 @@ set RtlHierarchyInfo {[
 			{"Name" : "p_read93", "Type" : "None", "Direction" : "I"},
 			{"Name" : "layer_idx", "Type" : "None", "Direction" : "I"},
 			{"Name" : "start_r", "Type" : "None", "Direction" : "I"}]},
-	{"ID" : "3", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_1_1_1_U95", "Parent" : "1"},
-	{"ID" : "4", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_1_1_1_U96", "Parent" : "1"},
-	{"ID" : "5", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_1_1_1_U97", "Parent" : "1"},
-	{"ID" : "6", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_1_1_1_U98", "Parent" : "1"},
-	{"ID" : "7", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_1_1_1_U99", "Parent" : "1"},
-	{"ID" : "8", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_1_1_1_U100", "Parent" : "1"},
-	{"ID" : "9", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_254_1_1_U101", "Parent" : "1"},
-	{"ID" : "10", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_254_1_1_U102", "Parent" : "1"},
-	{"ID" : "11", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_254_1_1_U103", "Parent" : "1"},
-	{"ID" : "12", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13859.sparsemux_7_2_254_1_1_U104", "Parent" : "1"}]}
+	{"ID" : "3", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_1_1_1_U95", "Parent" : "1"},
+	{"ID" : "4", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_1_1_1_U96", "Parent" : "1"},
+	{"ID" : "5", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_1_1_1_U97", "Parent" : "1"},
+	{"ID" : "6", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_1_1_1_U98", "Parent" : "1"},
+	{"ID" : "7", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_1_1_1_U99", "Parent" : "1"},
+	{"ID" : "8", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_1_1_1_U100", "Parent" : "1"},
+	{"ID" : "9", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_254_1_1_U101", "Parent" : "1"},
+	{"ID" : "10", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_254_1_1_U102", "Parent" : "1"},
+	{"ID" : "11", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_254_1_1_U103", "Parent" : "1"},
+	{"ID" : "12", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.grp_scheduler_hls_fu_13855.sparsemux_7_2_254_1_1_U104", "Parent" : "1"}]}

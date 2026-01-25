@@ -46875,7 +46875,7 @@
             <Obj>
               <type>0</type>
               <id>807</id>
-              <name>or_ln127_2</name>
+              <name>or_ln127_1</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp</fileName>
               <fileDirectory>../.</fileDirectory>
               <lineNumber>127</lineNumber>
@@ -46907,7 +46907,7 @@
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>or_ln127_2_fu_14498_p2</rtlName>
+              <rtlName>or_ln127_1_fu_14498_p2</rtlName>
               <control>auto</control>
               <opType>and</opType>
               <implIndex>auto</implIndex>
@@ -152090,7 +152090,7 @@
           </second>
         </item>
         <item>
-          <first>or_ln127_2_fu_14498_p2 ( and ) </first>
+          <first>or_ln127_1_fu_14498_p2 ( and ) </first>
           <second>
             <count>4</count>
             <item_version>0</item_version>
@@ -164974,7 +164974,7 @@
           </second>
         </item>
         <item>
-          <first>or_ln127_2_fu_14498_p2 ( and ) </first>
+          <first>or_ln127_1_fu_14498_p2 ( and ) </first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -186648,7 +186648,7 @@
         </second>
       </item>
       <item>
-        <first>or_ln127_2_fu_14498</first>
+        <first>or_ln127_1_fu_14498</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>

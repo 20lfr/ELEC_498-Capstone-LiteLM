@@ -8,5 +8,3 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capst
 INFO: [VRFC 10-311] analyzing module transformer_top_sparsemux_7_2_1_1_1
 INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/verilog/transformer_top_sparsemux_7_2_254_1_1.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module transformer_top_sparsemux_7_2_254_1_1
-INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module transformer_top_tb

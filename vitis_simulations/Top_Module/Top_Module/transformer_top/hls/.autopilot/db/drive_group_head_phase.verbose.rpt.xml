@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'drive_group_head_phase'" level="0">
-<item name = "Date">Sat Jan 24 18:42:10 2026
+<item name = "Date">Sun Jan 25 12:43:39 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">transformer_top</item>
@@ -232,7 +232,7 @@
 <column name="not_sel_tmp45_fu_14443_p2">and, 0, 0, 2, 1, 1</column>
 <column name="or_ln126_1_fu_14449_p2">and, 0, 0, 2, 1, 1</column>
 <column name="or_ln126_fu_12065_p2">and, 0, 0, 2, 1, 1</column>
-<column name="or_ln127_2_fu_14498_p2">and, 0, 0, 2, 1, 1</column>
+<column name="or_ln127_1_fu_14498_p2">and, 0, 0, 2, 1, 1</column>
 <column name="or_ln127_fu_12114_p2">and, 0, 0, 2, 1, 1</column>
 <column name="or_ln128_1_fu_14547_p2">and, 0, 0, 2, 1, 1</column>
 <column name="or_ln128_fu_12163_p2">and, 0, 0, 2, 1, 1</column>
