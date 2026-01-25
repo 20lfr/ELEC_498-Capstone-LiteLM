@@ -1075,7 +1075,7 @@ wire   [0:0] and_ln126_1_fu_14311_p2;
 wire   [0:0] not_sel_tmp45_fu_14443_p2;
 wire   [0:0] or_ln126_1_fu_14449_p2;
 wire   [0:0] and_ln127_1_fu_14323_p2;
-wire   [0:0] or_ln127_2_fu_14498_p2;
+wire   [0:0] or_ln127_1_fu_14498_p2;
 wire   [0:0] and_ln128_1_fu_14335_p2;
 wire   [0:0] or_ln128_1_fu_14547_p2;
 wire   [0:0] and_ln129_1_fu_14347_p2;
@@ -5339,7 +5339,7 @@ assign head_ctx_ref_head_requant_compute_done_1_3_fu_14940_p2 = (or_ln136_1_fu_1
 
 assign head_ctx_ref_k_compute_done_0_2_fu_12120_p2 = (or_ln127_fu_12114_p2 | ap_phi_mux_head_ctx_ref_k_compute_done_0_0_phi_fu_1141_p4);
 
-assign head_ctx_ref_k_compute_done_1_3_fu_14504_p2 = (or_ln127_2_fu_14498_p2 | ap_phi_mux_head_ctx_ref_k_compute_done_1_1_phi_fu_6306_p4);
+assign head_ctx_ref_k_compute_done_1_3_fu_14504_p2 = (or_ln127_1_fu_14498_p2 | ap_phi_mux_head_ctx_ref_k_compute_done_1_1_phi_fu_6306_p4);
 
 assign head_ctx_ref_k_dma_done_0_3_fu_11651_p3 = ((or_ln104_fu_11391_p2[0:0] == 1'b1) ? and_ln114_fu_11415_p2 : or_ln106_fu_11511_p2);
 
@@ -5521,7 +5521,7 @@ assign or_ln126_1_fu_14449_p2 = (not_sel_tmp45_fu_14443_p2 & and_ln126_1_fu_1431
 
 assign or_ln126_fu_12065_p2 = (not_sel_tmp1_fu_12059_p2 & and_ln126_fu_11927_p2);
 
-assign or_ln127_2_fu_14498_p2 = (not_sel_tmp45_fu_14443_p2 & and_ln127_1_fu_14323_p2);
+assign or_ln127_1_fu_14498_p2 = (not_sel_tmp45_fu_14443_p2 & and_ln127_1_fu_14323_p2);
 
 assign or_ln127_fu_12114_p2 = (not_sel_tmp1_fu_12059_p2 & and_ln127_fu_11939_p2);
 

@@ -6,21 +6,6 @@
 
 constexpr int NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
 
-
-// Drive a three-phase LayerNorm using the shared compute interface.
-// Returns true once PASS2 completes and phase is set to DONE.
-bool LayerNorm(
-    LnPhase   &phase,
-    bool      &ln_started,
-    bool      &ln_compute_done,
-    bool       compute_ready,
-    int        layer_idx,
-    bool      &compute_start,
-    uint32_t  &compute_op,
-    const ComputeOp ops[10]
-);
-
-
 // ------------------------------------------------------------
 // Scheduler FSM top-level
 // ------------------------------------------------------------

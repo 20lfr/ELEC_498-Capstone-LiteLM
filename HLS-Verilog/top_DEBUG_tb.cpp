@@ -17,7 +17,7 @@ static const char *state_name(SchedState st) {
     case S_REQUANT1:        return "S_RQ1";
     case S_RES_ADD_1:       return "S_RES_ADD_1";
     case S_LAYER_NORM_1:    return "S_LN_1";
-    case S_HEAD_REQUANT:    return "S_HEAD_RQ";
+    case S_REQUANT2:        return "S_RQ2";
     case S_FFN:             return "S_FFN";
     case S_REQUANT3:        return "S_RQ3";
     case S_RES_ADD_2:       return "S_RES_ADD_2";
@@ -57,27 +57,6 @@ static const char *op_name(ComputeOp op) {
     case CMP_LN1:          return "LN1";
     case CMP_DEQUANT:      return "DEQUANT";
     case CMP_LOGITS:       return "LOGITS";
-    case CMP_LN0_SUM:      return "LN0_SUM";
-    case CMP_LN0_SUMSQ:    return "LN0_Q";
-    case CMP_LN0_MEAN:     return "LN0_MEAN";
-    case CMP_LN0_EYY:      return "LN0_EYY";
-    case CMP_LN0_VAR:      return "LN0_VAR";
-    case CMP_LN0_VAR_EPS:  return "LN0_VEPS";
-    case CMP_LN0_INV_STD:  return "LN0_INV";
-    case CMP_LN0_NORM:     return "LN0_NORM";
-    case CMP_LN0_SCALE:    return "LN0_SCL";
-    case CMP_LN0_SHIFT:    return "LN0_SHF";
-    case CMP_LN1_SUM:      return "LN1_SUM";
-    case CMP_LN1_SUMSQ:    return "LN1_Q";
-    case CMP_LN1_MEAN:     return "LN1_MEAN";
-    case CMP_LN1_EYY:      return "LN1_EYY";
-    case CMP_LN1_VAR:      return "LN1_VAR";
-    case CMP_LN1_VAR_EPS:  return "LN1_VEPS";
-    case CMP_LN1_INV_STD:  return "LN1_INV";
-    case CMP_LN1_NORM:     return "LN1_NORM";
-    case CMP_LN1_SCALE:    return "LN1_SCL";
-    case CMP_LN1_SHIFT:    return "LN1_SHF";
-    default:               return "UNK";
     }
 }
 

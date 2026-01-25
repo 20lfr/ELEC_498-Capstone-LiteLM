@@ -923,7 +923,7 @@ attribute shreg_extract : string;
     signal not_sel_tmp45_fu_14443_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal or_ln126_1_fu_14449_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln127_1_fu_14323_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal or_ln127_2_fu_14498_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal or_ln127_1_fu_14498_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln128_1_fu_14335_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal or_ln128_1_fu_14547_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln129_1_fu_14347_p2 : STD_LOGIC_VECTOR (0 downto 0);
@@ -5792,7 +5792,7 @@ begin
     head_ctx_ref_head_requant_compute_done_0_2_fu_12556_p2 <= (or_ln136_fu_12550_p2 or ap_phi_mux_head_ctx_ref_head_requant_compute_done_0_0_phi_fu_1240_p4);
     head_ctx_ref_head_requant_compute_done_1_3_fu_14940_p2 <= (or_ln136_1_fu_14934_p2 or ap_phi_mux_head_ctx_ref_head_requant_compute_done_1_1_phi_fu_6405_p4);
     head_ctx_ref_k_compute_done_0_2_fu_12120_p2 <= (or_ln127_fu_12114_p2 or ap_phi_mux_head_ctx_ref_k_compute_done_0_0_phi_fu_1141_p4);
-    head_ctx_ref_k_compute_done_1_3_fu_14504_p2 <= (or_ln127_2_fu_14498_p2 or ap_phi_mux_head_ctx_ref_k_compute_done_1_1_phi_fu_6306_p4);
+    head_ctx_ref_k_compute_done_1_3_fu_14504_p2 <= (or_ln127_1_fu_14498_p2 or ap_phi_mux_head_ctx_ref_k_compute_done_1_1_phi_fu_6306_p4);
     head_ctx_ref_k_dma_done_0_3_fu_11651_p3 <= 
         and_ln114_fu_11415_p2 when (or_ln104_fu_11391_p2(0) = '1') else 
         or_ln106_fu_11511_p2;
@@ -5911,7 +5911,7 @@ begin
     or_ln111_fu_11601_p2 <= (ap_phi_mux_head_ctx_ref_att_value_dma_done_0_0_phi_fu_1317_p4 or and_ln111_fu_11595_p2);
     or_ln126_1_fu_14449_p2 <= (not_sel_tmp45_fu_14443_p2 and and_ln126_1_fu_14311_p2);
     or_ln126_fu_12065_p2 <= (not_sel_tmp1_fu_12059_p2 and and_ln126_fu_11927_p2);
-    or_ln127_2_fu_14498_p2 <= (not_sel_tmp45_fu_14443_p2 and and_ln127_1_fu_14323_p2);
+    or_ln127_1_fu_14498_p2 <= (not_sel_tmp45_fu_14443_p2 and and_ln127_1_fu_14323_p2);
     or_ln127_fu_12114_p2 <= (not_sel_tmp1_fu_12059_p2 and and_ln127_fu_11939_p2);
     or_ln128_1_fu_14547_p2 <= (not_sel_tmp45_fu_14443_p2 and and_ln128_1_fu_14335_p2);
     or_ln128_fu_12163_p2 <= (not_sel_tmp1_fu_12059_p2 and and_ln128_fu_11951_p2);

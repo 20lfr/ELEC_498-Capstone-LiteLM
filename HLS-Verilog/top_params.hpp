@@ -148,7 +148,7 @@ enum SchedState {
     S_REQUANT1,        // 6
     S_RES_ADD_1,       // 7
     S_LAYER_NORM_1,    // 8
-    S_HEAD_REQUANT,    // 9
+    S_REQUANT2,        // 9
     S_FFN,             // 10
     S_REQUANT3,        // 11
     S_RES_ADD_2,       // 12
@@ -156,21 +156,6 @@ enum SchedState {
     S_REQUANT4,        // 14
     S_LOOP_CHECK,      // 15
     S_STREAM_OUT       // 16
-};
-
-// LayerNorm micro-FSM phases (numbered per algorithm steps)
-enum class LnPhase : uint8_t {
-    SUM = 0,      // 1) S = sum_i y_i
-    SUMSQ,        // 2) Q = sum_i y_i^2
-    MEAN,         // 3) mu = S / d
-    EYY,          // 4) E[y^2] = Q / d
-    VAR,          // 5) sigma2 = E[y^2] - mu^2
-    VAR_EPS,      // 6) v = sigma2 + eps
-    INV_STD,      // 7) inv_std = 1 / sqrt(v)
-    NORM,         // 8) y_hat[i] = (y_i - mu) * inv_std
-    SCALE,        // 9) z_i = gamma_i * y_hat[i]
-    SHIFT,        // 10) o_i = z_i + beta_i
-    DONE
 };
 
 // ------------------------------------------------------------
@@ -226,28 +211,6 @@ enum ComputeOp : uint8_t {
     CMP_LN1 = 24,          // 24
     CMP_DEQUANT = 25,      // 25
     CMP_LOGITS = 26,       // 26
-
-    // LayerNorm fine-grain micro-ops (per-step)
-    CMP_LN0_SUM = 27,      // 27
-    CMP_LN0_SUMSQ = 28,    // 28
-    CMP_LN0_MEAN = 29,     // 29
-    CMP_LN0_EYY = 30,      // 30
-    CMP_LN0_VAR = 31,      // 31
-    CMP_LN0_VAR_EPS = 32,  // 32
-    CMP_LN0_INV_STD = 33,  // 33
-    CMP_LN0_NORM = 34,     // 34
-    CMP_LN0_SCALE = 35,    // 35
-    CMP_LN0_SHIFT = 36,    // 36
-    CMP_LN1_SUM = 37,      // 37
-    CMP_LN1_SUMSQ = 38,    // 38
-    CMP_LN1_MEAN = 39,     // 39
-    CMP_LN1_EYY = 40,      // 40
-    CMP_LN1_VAR = 41,      // 41
-    CMP_LN1_VAR_EPS = 42,  // 42
-    CMP_LN1_INV_STD = 43,  // 43
-    CMP_LN1_NORM = 44,     // 44
-    CMP_LN1_SCALE = 45,    // 45
-    CMP_LN1_SHIFT = 46     // 46
 };
 
 enum DmaSel : uint8_t {

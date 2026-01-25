@@ -6548,7 +6548,7 @@ enum SchedState {
     S_REQUANT1,
     S_RES_ADD_1,
     S_LAYER_NORM_1,
-    S_HEAD_REQUANT,
+    S_REQUANT2,
     S_FFN,
     S_REQUANT3,
     S_RES_ADD_2,
@@ -6556,21 +6556,6 @@ enum SchedState {
     S_REQUANT4,
     S_LOOP_CHECK,
     S_STREAM_OUT
-};
-
-
-enum class LnPhase : uint8_t {
-    SUM = 0,
-    SUMSQ,
-    MEAN,
-    EYY,
-    VAR,
-    VAR_EPS,
-    INV_STD,
-    NORM,
-    SCALE,
-    SHIFT,
-    DONE
 };
 
 
@@ -6626,28 +6611,6 @@ enum ComputeOp : uint8_t {
     CMP_LN1 = 24,
     CMP_DEQUANT = 25,
     CMP_LOGITS = 26,
-
-
-    CMP_LN0_SUM = 27,
-    CMP_LN0_SUMSQ = 28,
-    CMP_LN0_MEAN = 29,
-    CMP_LN0_EYY = 30,
-    CMP_LN0_VAR = 31,
-    CMP_LN0_VAR_EPS = 32,
-    CMP_LN0_INV_STD = 33,
-    CMP_LN0_NORM = 34,
-    CMP_LN0_SCALE = 35,
-    CMP_LN0_SHIFT = 36,
-    CMP_LN1_SUM = 37,
-    CMP_LN1_SUMSQ = 38,
-    CMP_LN1_MEAN = 39,
-    CMP_LN1_EYY = 40,
-    CMP_LN1_VAR = 41,
-    CMP_LN1_VAR_EPS = 42,
-    CMP_LN1_INV_STD = 43,
-    CMP_LN1_NORM = 44,
-    CMP_LN1_SCALE = 45,
-    CMP_LN1_SHIFT = 46
 };
 
 enum DmaSel : uint8_t {

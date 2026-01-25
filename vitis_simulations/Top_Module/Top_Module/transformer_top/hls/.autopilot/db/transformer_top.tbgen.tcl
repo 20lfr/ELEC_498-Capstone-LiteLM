@@ -401,11 +401,11 @@ set ArgLastReadFirstWriteLatency {
 		group_idx {Type IO LastRead -1 FirstWrite -1}
 		start_head_group {Type IO LastRead -1 FirstWrite -1}
 		requant1_started {Type IO LastRead -1 FirstWrite -1}
-		head_requant_started {Type IO LastRead -1 FirstWrite -1}
+		requant2_started {Type IO LastRead -1 FirstWrite -1}
 		requant3_started {Type IO LastRead -1 FirstWrite -1}
 		requant4_started {Type IO LastRead -1 FirstWrite -1}
 		requant1_compute_done {Type IO LastRead -1 FirstWrite -1}
-		head_requant_compute_done {Type IO LastRead -1 FirstWrite -1}
+		requant2_compute_done {Type IO LastRead -1 FirstWrite -1}
 		requant3_compute_done {Type IO LastRead -1 FirstWrite -1}
 		requant4_compute_done {Type IO LastRead -1 FirstWrite -1}
 		concat_compute_done {Type IO LastRead -1 FirstWrite -1}
@@ -419,7 +419,6 @@ set ArgLastReadFirstWriteLatency {
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
 		ln0_compute_done {Type IO LastRead -1 FirstWrite -1}
-		ln0_phase {Type IO LastRead -1 FirstWrite -1}
 		ffn_w1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ffn_act_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ffn_w2_compute_done {Type IO LastRead -1 FirstWrite -1}
@@ -429,7 +428,6 @@ set ArgLastReadFirstWriteLatency {
 		resid1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
-		ln1_phase {Type IO LastRead -1 FirstWrite -1}
 		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
@@ -468,11 +466,11 @@ set ArgLastReadFirstWriteLatency {
 		group_idx {Type IO LastRead -1 FirstWrite -1}
 		start_head_group {Type IO LastRead -1 FirstWrite -1}
 		requant1_started {Type IO LastRead -1 FirstWrite -1}
-		head_requant_started {Type IO LastRead -1 FirstWrite -1}
+		requant2_started {Type IO LastRead -1 FirstWrite -1}
 		requant3_started {Type IO LastRead -1 FirstWrite -1}
 		requant4_started {Type IO LastRead -1 FirstWrite -1}
 		requant1_compute_done {Type IO LastRead -1 FirstWrite -1}
-		head_requant_compute_done {Type IO LastRead -1 FirstWrite -1}
+		requant2_compute_done {Type IO LastRead -1 FirstWrite -1}
 		requant3_compute_done {Type IO LastRead -1 FirstWrite -1}
 		requant4_compute_done {Type IO LastRead -1 FirstWrite -1}
 		concat_compute_done {Type IO LastRead -1 FirstWrite -1}
@@ -486,7 +484,6 @@ set ArgLastReadFirstWriteLatency {
 		resid0_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln0_started {Type IO LastRead -1 FirstWrite -1}
 		ln0_compute_done {Type IO LastRead -1 FirstWrite -1}
-		ln0_phase {Type IO LastRead -1 FirstWrite -1}
 		ffn_w1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ffn_act_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ffn_w2_compute_done {Type IO LastRead -1 FirstWrite -1}
@@ -496,7 +493,6 @@ set ArgLastReadFirstWriteLatency {
 		resid1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
-		ln1_phase {Type IO LastRead -1 FirstWrite -1}
 		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}

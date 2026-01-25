@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="40.111696 us"></ZoomEndTime>
-      <Cursor1Time time="24.108584 us"></Cursor1Time>
+      <ZoomStartTime time="2,286.734 ns"></ZoomStartTime>
+      <ZoomEndTime time="5,789.060 ns"></ZoomEndTime>
+      <Cursor1Time time="3,985.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="183"></NameColumnWidth>
-      <ValueColumnWidth column_width="60"></ValueColumnWidth>
+      <NameColumnWidth column_width="241"></NameColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="140" />
    <wvobject type="logic" fp_name="/transformer_top_tb/ap_clk">
@@ -170,6 +170,196 @@
    <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct">
       <obj_property name="ElementShortName">head_ctx_ref_0_struct</obj_property>
       <obj_property name="ObjectShortName">head_ctx_ref_0_struct</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.att_value_dma_done">
+         <obj_property name="ElementShortName">.att_value_dma_done</obj_property>
+         <obj_property name="ObjectShortName">.att_value_dma_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.att_scores_dma_done">
+         <obj_property name="ElementShortName">.att_scores_dma_done</obj_property>
+         <obj_property name="ObjectShortName">.att_scores_dma_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.v_writeback_dma_done">
+         <obj_property name="ElementShortName">.v_writeback_dma_done</obj_property>
+         <obj_property name="ObjectShortName">.v_writeback_dma_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.v_dma_done">
+         <obj_property name="ElementShortName">.v_dma_done</obj_property>
+         <obj_property name="ObjectShortName">.v_dma_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.k_writeback_dma_done">
+         <obj_property name="ElementShortName">.k_writeback_dma_done</obj_property>
+         <obj_property name="ObjectShortName">.k_writeback_dma_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.k_dma_done">
+         <obj_property name="ElementShortName">.k_dma_done</obj_property>
+         <obj_property name="ObjectShortName">.k_dma_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.q_dma_done">
+         <obj_property name="ElementShortName">.q_dma_done</obj_property>
+         <obj_property name="ObjectShortName">.q_dma_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.head_requant_compute_done">
+         <obj_property name="ElementShortName">.head_requant_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.head_requant_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.att_value_compute_done">
+         <obj_property name="ElementShortName">.att_value_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.att_value_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.softmax_compute_done">
+         <obj_property name="ElementShortName">.softmax_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.softmax_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.val_scale_compute_done">
+         <obj_property name="ElementShortName">.val_scale_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.val_scale_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.att_scores_compute_done">
+         <obj_property name="ElementShortName">.att_scores_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.att_scores_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.requant_q_compute_done">
+         <obj_property name="ElementShortName">.requant_q_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.requant_q_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.v_requant_compute_done">
+         <obj_property name="ElementShortName">.v_requant_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.v_requant_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.v_compute_done">
+         <obj_property name="ElementShortName">.v_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.v_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.k_requant_compute_done">
+         <obj_property name="ElementShortName">.k_requant_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.k_requant_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.k_compute_done">
+         <obj_property name="ElementShortName">.k_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.k_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.q_compute_done">
+         <obj_property name="ElementShortName">.q_compute_done</obj_property>
+         <obj_property name="ObjectShortName">.q_compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.head_requant_started">
+         <obj_property name="ElementShortName">.head_requant_started</obj_property>
+         <obj_property name="ObjectShortName">.head_requant_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.att_value_started">
+         <obj_property name="ElementShortName">.att_value_started</obj_property>
+         <obj_property name="ObjectShortName">.att_value_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.softmax_started">
+         <obj_property name="ElementShortName">.softmax_started</obj_property>
+         <obj_property name="ObjectShortName">.softmax_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.val_scale_started">
+         <obj_property name="ElementShortName">.val_scale_started</obj_property>
+         <obj_property name="ObjectShortName">.val_scale_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.att_scores_started">
+         <obj_property name="ElementShortName">.att_scores_started</obj_property>
+         <obj_property name="ObjectShortName">.att_scores_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.requant_q_started">
+         <obj_property name="ElementShortName">.requant_q_started</obj_property>
+         <obj_property name="ObjectShortName">.requant_q_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.v_writeback_started">
+         <obj_property name="ElementShortName">.v_writeback_started</obj_property>
+         <obj_property name="ObjectShortName">.v_writeback_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.v_requant_started">
+         <obj_property name="ElementShortName">.v_requant_started</obj_property>
+         <obj_property name="ObjectShortName">.v_requant_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.v_started">
+         <obj_property name="ElementShortName">.v_started</obj_property>
+         <obj_property name="ObjectShortName">.v_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.k_writeback_started">
+         <obj_property name="ElementShortName">.k_writeback_started</obj_property>
+         <obj_property name="ObjectShortName">.k_writeback_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.k_requant_started">
+         <obj_property name="ElementShortName">.k_requant_started</obj_property>
+         <obj_property name="ObjectShortName">.k_requant_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.k_started">
+         <obj_property name="ElementShortName">.k_started</obj_property>
+         <obj_property name="ObjectShortName">.k_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.q_started">
+         <obj_property name="ElementShortName">.q_started</obj_property>
+         <obj_property name="ObjectShortName">.q_started</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.start_head">
+         <obj_property name="ElementShortName">.start_head</obj_property>
+         <obj_property name="ObjectShortName">.start_head</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.dma_done">
+         <obj_property name="ElementShortName">.dma_done</obj_property>
+         <obj_property name="ObjectShortName">.dma_done</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_head">
+         <obj_property name="ElementShortName">.wl_head[31:0]</obj_property>
+         <obj_property name="ObjectShortName">.wl_head[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_layer">
+         <obj_property name="ElementShortName">.wl_layer[31:0]</obj_property>
+         <obj_property name="ObjectShortName">.wl_layer[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_addr_sel">
+         <obj_property name="ElementShortName">.wl_addr_sel[7:0]</obj_property>
+         <obj_property name="ObjectShortName">.wl_addr_sel[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_start">
+         <obj_property name="ElementShortName">.wl_start</obj_property>
+         <obj_property name="ObjectShortName">.wl_start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_ready">
+         <obj_property name="ElementShortName">.wl_ready</obj_property>
+         <obj_property name="ObjectShortName">.wl_ready</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.last_wl_addr">
+         <obj_property name="ElementShortName">.last_wl_addr[7:0]</obj_property>
+         <obj_property name="ObjectShortName">.last_wl_addr[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.last_compute_op">
+         <obj_property name="ElementShortName">.last_compute_op[31:0]</obj_property>
+         <obj_property name="ObjectShortName">.last_compute_op[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.compute_op">
+         <obj_property name="ElementShortName">.compute_op[31:0]</obj_property>
+         <obj_property name="ObjectShortName">.compute_op[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.compute_start">
+         <obj_property name="ElementShortName">.compute_start</obj_property>
+         <obj_property name="ObjectShortName">.compute_start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.compute_done">
+         <obj_property name="ElementShortName">.compute_done</obj_property>
+         <obj_property name="ObjectShortName">.compute_done</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.compute_ready">
+         <obj_property name="ElementShortName">.compute_ready</obj_property>
+         <obj_property name="ObjectShortName">.compute_ready</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.phase">
+         <obj_property name="ElementShortName">.phase[7:0]</obj_property>
+         <obj_property name="ObjectShortName">.phase[7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.head_idx">
+         <obj_property name="ElementShortName">.head_idx[31:0]</obj_property>
+         <obj_property name="ObjectShortName">.head_idx[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.layer_stamp">
+         <obj_property name="ElementShortName">.layer_stamp[31:0]</obj_property>
+         <obj_property name="ObjectShortName">.layer_stamp[31:0]</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/head_phase_dbg">
       <obj_property name="ElementShortName">head_phase_dbg[0:3][7:0]</obj_property>
@@ -194,6 +384,22 @@
          <obj_property name="ElementShortName">[3][7:0]</obj_property>
          <obj_property name="ObjectShortName">[3][7:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_phase_dbg[0]">
+         <obj_property name="ElementShortName">[0][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_phase_dbg[1]">
+         <obj_property name="ElementShortName">[1][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_phase_dbg[2]">
+         <obj_property name="ElementShortName">[2][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/transformer_top_tb/head_phase_dbg[3]">
+         <obj_property name="ElementShortName">[3][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][7:0]</obj_property>
       </wvobject>
    </wvobject>
    <wvobject type="array" fp_name="/transformer_top_tb/axis_in_valid">
