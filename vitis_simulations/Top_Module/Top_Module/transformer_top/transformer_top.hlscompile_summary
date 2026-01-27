@@ -9,10 +9,10 @@
 <ENTRY>
 {
  "type": "ET_CmdStep",
- "dateTimestamp": "Sun Jan 25 12:43:03 2026",
- "timestampMillis": "1769362983904",
+ "dateTimestamp": "Sun Jan 25 12:54:40 2026",
+ "timestampMillis": "1769363680393",
  "buildStep": {
-  "cmdId": "cf6c017f-5b37-4a17-bcc2-2535346e5105",
+  "cmdId": "1e0182a2-7522-49e5-884a-8697621708bd",
   "name": "v++",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/logs/transformer_top.steps.log",
   "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg --work_dir transformer_top ",
@@ -38,10 +38,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Jan 25 12:43:03 2026",
- "timestampMillis": "1769362983904",
+ "dateTimestamp": "Sun Jan 25 12:54:40 2026",
+ "timestampMillis": "1769363680393",
  "status": {
-  "cmdId": "cf6c017f-5b37-4a17-bcc2-2535346e5105",
+  "cmdId": "1e0182a2-7522-49e5-884a-8697621708bd",
   "state": "CS_RUNNING"
  }
 }
@@ -49,8 +49,8 @@
 <ENTRY>
 {
  "type": "ET_FlowMetaData",
- "dateTimestamp": "Sun Jan 25 12:43:07 2026",
- "timestampMillis": "1769362987766",
+ "dateTimestamp": "Sun Jan 25 12:54:44 2026",
+ "timestampMillis": "1769363684353",
  "buildSummary": {
   "hardwarePlatform": "",
   "hardwareDsa": "",
@@ -95,10 +95,10 @@
 <ENTRY>
 {
  "type": "ET_SubCmdStep",
- "dateTimestamp": "Sun Jan 25 12:43:07 2026",
- "timestampMillis": "1769362987767",
+ "dateTimestamp": "Sun Jan 25 12:54:44 2026",
+ "timestampMillis": "1769363684354",
  "buildStep": {
-  "cmdId": "d2805a4e-cf31-4744-8e73-f95770a79abb",
+  "cmdId": "0359faff-0abd-49ad-905c-8210bc5d0bd5",
   "name": "",
   "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/hls.log",
   "commandLine": "",
@@ -111,10 +111,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Jan 25 12:43:07 2026",
- "timestampMillis": "1769362987767",
+ "dateTimestamp": "Sun Jan 25 12:54:44 2026",
+ "timestampMillis": "1769363684354",
  "status": {
-  "cmdId": "d2805a4e-cf31-4744-8e73-f95770a79abb",
+  "cmdId": "0359faff-0abd-49ad-905c-8210bc5d0bd5",
   "state": "CS_RUNNING"
  }
 }
@@ -122,8 +122,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:07 2026",
- "timestampMillis": "1769362987767",
+ "dateTimestamp": "Sun Jan 25 12:54:44 2026",
+ "timestampMillis": "1769363684354",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/hls_data.json",
   "name": "",
@@ -136,8 +136,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:07 2026",
- "timestampMillis": "1769362987767",
+ "dateTimestamp": "Sun Jan 25 12:54:44 2026",
+ "timestampMillis": "1769363684354",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth.rpt",
   "name": "",
@@ -150,8 +150,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:07 2026",
- "timestampMillis": "1769362987768",
+ "dateTimestamp": "Sun Jan 25 12:54:44 2026",
+ "timestampMillis": "1769363684354",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth.xml",
   "name": "",
@@ -164,8 +164,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:43 2026",
- "timestampMillis": "1769363023799",
+ "dateTimestamp": "Sun Jan 25 12:55:19 2026",
+ "timestampMillis": "1769363719432",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls",
   "name": "",
@@ -178,8 +178,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:43 2026",
- "timestampMillis": "1769363023799",
+ "dateTimestamp": "Sun Jan 25 12:55:19 2026",
+ "timestampMillis": "1769363719432",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls",
   "name": "",
@@ -192,8 +192,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:43 2026",
- "timestampMillis": "1769363023799",
+ "dateTimestamp": "Sun Jan 25 12:55:19 2026",
+ "timestampMillis": "1769363719432",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls",
   "name": "",
@@ -206,10 +206,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Jan 25 12:43:43 2026",
- "timestampMillis": "1769363023799",
+ "dateTimestamp": "Sun Jan 25 12:55:19 2026",
+ "timestampMillis": "1769363719433",
  "status": {
-  "cmdId": "d2805a4e-cf31-4744-8e73-f95770a79abb",
+  "cmdId": "0359faff-0abd-49ad-905c-8210bc5d0bd5",
   "state": "CS_PASSED"
  }
 }
@@ -217,10 +217,10 @@
 <ENTRY>
 {
  "type": "ET_Status",
- "dateTimestamp": "Sun Jan 25 12:43:44 2026",
- "timestampMillis": "1769363024039",
+ "dateTimestamp": "Sun Jan 25 12:55:19 2026",
+ "timestampMillis": "1769363719664",
  "status": {
-  "cmdId": "cf6c017f-5b37-4a17-bcc2-2535346e5105",
+  "cmdId": "1e0182a2-7522-49e5-884a-8697621708bd",
   "state": "CS_PASSED"
  }
 }
@@ -228,8 +228,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:44 2026",
- "timestampMillis": "1769363024058",
+ "dateTimestamp": "Sun Jan 25 12:55:19 2026",
+ "timestampMillis": "1769363719681",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/reports/v++_compile_transformer_top_guidance.html",
   "name": "",
@@ -242,8 +242,8 @@
 <ENTRY>
 {
  "type": "ET_Report",
- "dateTimestamp": "Sun Jan 25 12:43:44 2026",
- "timestampMillis": "1769363024059",
+ "dateTimestamp": "Sun Jan 25 12:55:19 2026",
+ "timestampMillis": "1769363719682",
  "report": {
   "path": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/reports/.db/v++_compile_transformer_top_guidance.pb3",
   "name": "",

@@ -60,7 +60,7 @@ static const char *op_name(ComputeOp op) {
     case CMP_VALUE_SCALE:  return "VALUE_SCALE";
     case CMP_SOFTMAX:      return "SOFTMAX";
     case CMP_ATT_VALUE:    return "ATT_VALUE";
-    case CMP_HEAD_REQUANT: return "HEAD_RQ";
+    case CMP_REQUANT2:     return "RQ2";
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
     case CMP_REQUANT1:     return "RQ1";
@@ -75,26 +75,6 @@ static const char *op_name(ComputeOp op) {
     case CMP_LN1:          return "LN1";
     case CMP_DEQUANT:      return "DEQUANT";
     case CMP_LOGITS:       return "LOGITS";
-    case CMP_LN0_SUM:      return "LN0_SUM";
-    case CMP_LN0_SUMSQ:    return "LN0_Q";
-    case CMP_LN0_MEAN:     return "LN0_MEAN";
-    case CMP_LN0_EYY:      return "LN0_EYY";
-    case CMP_LN0_VAR:      return "LN0_VAR";
-    case CMP_LN0_VAR_EPS:  return "LN0_VEPS";
-    case CMP_LN0_INV_STD:  return "LN0_INV";
-    case CMP_LN0_NORM:     return "LN0_NORM";
-    case CMP_LN0_SCALE:    return "LN0_SCL";
-    case CMP_LN0_SHIFT:    return "LN0_SHF";
-    case CMP_LN1_SUM:      return "LN1_SUM";
-    case CMP_LN1_SUMSQ:    return "LN1_Q";
-    case CMP_LN1_MEAN:     return "LN1_MEAN";
-    case CMP_LN1_EYY:      return "LN1_EYY";
-    case CMP_LN1_VAR:      return "LN1_VAR";
-    case CMP_LN1_VAR_EPS:  return "LN1_VEPS";
-    case CMP_LN1_INV_STD:  return "LN1_INV";
-    case CMP_LN1_NORM:     return "LN1_NORM";
-    case CMP_LN1_SCALE:    return "LN1_SCL";
-    case CMP_LN1_SHIFT:    return "LN1_SHF";
     default:               return "UNK";
     }
 }
@@ -276,7 +256,7 @@ int main() {
     steps.push_back({ComputeOp::CMP_REQUANT1, 0});
     steps.push_back({ComputeOp::CMP_RESID0, 0});
     steps.push_back({ComputeOp::CMP_LN0, 0});
-    steps.push_back({ComputeOp::CMP_HEAD_REQUANT, 0});
+    steps.push_back({ComputeOp::CMP_REQUANT2, 0});
     for (int t = 0; t < NUM_W1_TILES; ++t) {
         steps.push_back({ComputeOp::CMP_FFN_W1, t});
     }
@@ -360,7 +340,7 @@ int main() {
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, 0);
                             break;
                         }
-                        case ComputeOp::CMP_HEAD_REQUANT: {
+                        case ComputeOp::CMP_REQUANT2: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::RequantLayout::X + (i * 4), ln0_out[i]);
                             }
@@ -488,7 +468,7 @@ int main() {
                             }
                             break;
                         }
-                        case ComputeOp::CMP_HEAD_REQUANT: {
+                        case ComputeOp::CMP_REQUANT2: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 head_requant_out[i] = compute_buf::read_i8(out_buf, compute_buf::RequantLayout::X + i);
                             }

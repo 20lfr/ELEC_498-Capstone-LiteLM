@@ -202,15 +202,16 @@ enum ComputeOp : uint8_t {
     CMP_REQUANT1 = 15,     // 15
     CMP_RESID0 = 16,       // 16
     CMP_LN0 = 17,          // 17
-    CMP_REQUANT3 = 18,     // 18
+    CMP_REQUANT2 = 18,     // 18
     CMP_FFN_W1 = 19,       // 19
     CMP_FFN_ACT = 20,      // 20
     CMP_FFN_W2 = 21,       // 21
-    CMP_REQUANT4 = 22,     // 22
+    CMP_REQUANT3 = 22,     // 22
     CMP_RESID1 = 23,       // 23
     CMP_LN1 = 24,          // 24
-    CMP_DEQUANT = 25,      // 25
-    CMP_LOGITS = 26,       // 26
+    CMP_REQUANT4 = 25,     // 25
+    CMP_DEQUANT = 26,      // 26
+    CMP_LOGITS = 27,       // 27
 };
 
 enum DmaSel : uint8_t {

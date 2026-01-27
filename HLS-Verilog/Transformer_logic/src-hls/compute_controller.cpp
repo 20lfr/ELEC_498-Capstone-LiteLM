@@ -1,6 +1,7 @@
 #include "compute_controller.hpp"
 #include <ap_fixed.h>
 #include <hls_math.h>
+#include <cstdio>
 
 
 // MAC Architecture
@@ -109,23 +110,79 @@ void LAYER_NORM(
     // mean     = sum / D_MODEL;
     // variance = (square / D_MODEL) - (mean * mean);
 
-    ap_fixed<32, 16> sum_fx = sum;
-    ap_fixed<32, 16> square_fx = square;
+    ap_fixed<32,16> sum_fx = sum;
+
+    ap_int<32> sum_fx_bits = sum_fx.range(31, 0);
+    std::printf("sum_fx: %f 0x%08x (signed=%d)\n",
+                (float)sum_fx,
+                (unsigned)sum_fx_bits,
+                (int)sum_fx_bits);
+
+    ap_fixed<32, 19> square_fx = square;
+    ap_int<32> square_fx_bits = square_fx.range(31, 0);
+    std::printf("square_fx: %f 0x%08x (signed=%d)\n",
+                (float)square_fx,
+                (unsigned)square_fx_bits,
+                (int)square_fx_bits);
+
     ap_fixed<32, 16> mean = sum_fx / D_MODEL;
-    ap_fixed<32, 16> square_mean = square_fx / D_MODEL;
-    ap_fixed<32, 16> variance = square_mean - mean * mean;
+    ap_int<32> mean_bits = mean.range(31, 0);
+    std::printf("mean: %f 0x%08x (signed=%d)\n",
+                (float)mean,
+                (unsigned)mean_bits,
+                (int)mean_bits);
+
+    ap_fixed<32, 19> square_mean = square_fx / D_MODEL;
+    ap_int<32> square_mean_bits = square_mean.range(31, 0);
+    std::printf("square_mean: %f 0x%08x (signed=%d)\n",
+                (float)square_mean,
+                (unsigned)square_mean_bits,
+                (int)square_mean_bits);
+
+    ap_fixed<32, 19> variance = square_mean - mean * mean;
+    ap_int<32> variance_bits = variance.range(31, 0);
+    std::printf("variance: %f 0x%08x (signed=%d)\n",
+                (float)variance,
+                (unsigned)variance_bits,
+                (int)variance_bits);
+    
+    
     if (variance < 0) {
         variance = 0;
     }
-    ap_fixed<32, 16> v = variance + ap_fixed<32, 16>(epsilon);
-    ap_fixed<32, 16> inv_std = ap_fixed<32, 16>(1) / hls::sqrt(v);
+    ap_fixed<32, 19> v = variance + ap_fixed<32, 19>(epsilon);
+    ap_int<32> v_bits = v.range(31, 0);
+    std::printf("v: %f 0x%08x (signed=%d)\n",
+                (float)v,
+                (unsigned)v_bits,
+                (int)v_bits);
+
+    ap_fixed<32, 19> inv_std = ap_fixed<32, 19>(1) / hls::sqrt(v);
+    ap_int<32> inv_std_bits = inv_std.range(31, 0);
+    std::printf("inv_std: %f 0x%08x (signed=%d)\n",
+                (float)inv_std,
+                (unsigned)inv_std_bits,
+                (int)inv_std_bits);
 
 
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL          
-        ap_fixed<32, 16> normalized = (ap_fixed<32, 16>(x[i]) - mean) * inv_std;
-        ap_fixed<32, 16> scaled = (normalized * ap_fixed<32, 16>(gamma[i])) + ap_fixed<32, 16>(beta[i]);
-        y[i] = static_cast<int32_t>(scaled);
+        ap_fixed<32, 19> normalized = (ap_fixed<32, 19>(x[i]) - mean) * inv_std;
+        ap_int<32> normalized_bits = normalized.range(31, 0);
+        std::printf("ln_cycle[%d] normalized: %f 0x%08x (signed=%d)\n",
+                    i,
+                    (float)normalized,
+                    (unsigned)normalized_bits,
+                    (int)normalized_bits);
+
+        ap_fixed<32, 19> scaled = (normalized * ap_fixed<32, 19>(gamma[i])) + ap_fixed<32, 19>(beta[i]);
+        ap_int<32> scaled_bits = scaled.range(31, 0);
+        std::printf("ln_cycle[%d] scaled: %f 0x%08x (signed=%d)\n",
+                    i,
+                    (float)scaled,
+                    (unsigned)scaled_bits,
+                    (int)scaled_bits);
+        y[i] = (int32_t)scaled; // Storing RAW int32_t (DO NOT STATIC_CAST)
     }
 }
 
@@ -390,7 +447,7 @@ void compute_controller(
                 req.op == ComputeOp::CMP_REQUANT1 || 
                 req.op == ComputeOp::CMP_RESID0 || 
                 req.op == ComputeOp::CMP_LN0 || 
-                req.op == ComputeOp::CMP_HEAD_REQUANT || 
+                req.op == ComputeOp::CMP_REQUANT2 || 
                 req.op == ComputeOp::CMP_FFN_W1 || 
                 req.op == ComputeOp::CMP_FFN_ACT || 
                 req.op == ComputeOp::CMP_FFN_W2 || 
@@ -468,7 +525,7 @@ void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_REQUANT1:
-                case ComputeOp::CMP_HEAD_REQUANT:
+                case ComputeOp::CMP_REQUANT2:
                 case ComputeOp::CMP_REQUANT3:
                 case ComputeOp::CMP_REQUANT4: {
                     for (int i = 0; i < D_MODEL; ++i) {
