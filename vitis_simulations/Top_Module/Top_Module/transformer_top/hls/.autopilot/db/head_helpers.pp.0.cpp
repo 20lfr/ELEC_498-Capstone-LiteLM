@@ -6532,7 +6532,7 @@ constexpr int NUM_W1_TILES = 4;
 constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 192;
+constexpr int D_MODEL = 8;
 constexpr int D_FFN = 22;
 constexpr int D_HEADS = D_MODEL / NUM_HEADS;
 constexpr int D_TILE_WO = D_MODEL / NUM_WO_TILES;
@@ -6546,19 +6546,20 @@ enum SchedState {
     S_IDLE,
     S_STREAM_IN,
     S_LAYER_COUNT,
+    S_LAYER_NORM_0,
+    S_REQUANT1,
     S_ATTENTION_HEADS,
     S_HEAD_CONCAT,
     S_OUT_PROJECTION,
-    S_REQUANT1,
+    S_REQUANT2,
     S_RES_ADD_1,
     S_LAYER_NORM_1,
-    S_REQUANT2,
-    S_FFN,
     S_REQUANT3,
-    S_RES_ADD_2,
-    S_LAYER_NORM_2,
+    S_FFN,
     S_REQUANT4,
+    S_RES_ADD_2,
     S_LOOP_CHECK,
+    S_FINAL_NORM,
     S_STREAM_OUT
 };
 
@@ -6586,36 +6587,36 @@ enum class HeadPhase : uint8_t {
 enum ComputeOp : uint8_t {
     CMP_NONE = 0,
 
-
-    CMP_Q = 1,
-    CMP_K = 2,
-    CMP_K_REQUANT = 3,
-    CMP_V = 4,
-    CMP_V_REQUANT = 5,
-    CMP_REQUANT_Q = 6,
-    CMP_ATT_SCORES = 7,
-    CMP_VALUE_SCALE = 8,
-    CMP_SOFTMAX = 9,
-    CMP_ATT_VALUE = 10,
+    CMP_LN0 = 1,
+    CMP_REQUANT1 = 2,
 
 
-    CMP_HEAD_REQUANT = 11,
+    CMP_Q = 3,
+    CMP_K = 4,
+    CMP_K_REQUANT = 5,
+    CMP_V = 6,
+    CMP_V_REQUANT = 7,
+    CMP_REQUANT_Q = 8,
+    CMP_ATT_SCORES = 9,
+    CMP_VALUE_SCALE = 10,
+    CMP_SOFTMAX = 11,
+    CMP_ATT_VALUE = 12,
 
-    CMP_CONCAT = 13,
-    CMP_OUT_PROJ = 14,
-    CMP_REQUANT1 = 15,
+
+    CMP_HEAD_REQUANT = 13,
+    CMP_CONCAT = 14,
+    CMP_OUT_PROJ = 15,
     CMP_RESID0 = 16,
-    CMP_LN0 = 17,
-    CMP_REQUANT2 = 18,
-    CMP_FFN_W1 = 19,
-    CMP_FFN_ACT = 20,
-    CMP_FFN_W2 = 21,
-    CMP_REQUANT3 = 22,
-    CMP_RESID1 = 23,
-    CMP_LN1 = 24,
-    CMP_REQUANT4 = 25,
-    CMP_DEQUANT = 26,
-    CMP_LOGITS = 27,
+    CMP_REQUANT2 = 17,
+    CMP_FFN_W1 = 18,
+    CMP_FFN_ACT = 29,
+    CMP_FFN_W2 = 20,
+    CMP_REQUANT3 = 21,
+    CMP_RESID1 = 22,
+    CMP_LN1 = 23,
+    CMP_REQUANT4 = 24,
+    CMP_DEQUANT = 25,
+    CMP_LOGITS = 26,
 };
 
 enum DmaSel : uint8_t {

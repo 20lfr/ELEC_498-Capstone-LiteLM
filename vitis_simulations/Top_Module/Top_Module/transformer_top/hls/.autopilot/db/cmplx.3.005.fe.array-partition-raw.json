@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 84,
-    "calls": "2",
+    "calls": "3",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
@@ -18,7 +18,7 @@
       "L": 2,
       "T": 20
     },
-    "total_instructions": 5725
+    "total_instructions": 5759
   },
   "1": {
     "basicblocks": 1,
@@ -27,37 +27,17 @@
     "def_use_depth": 4,
     "file": "head_helpers.cpp",
     "fileloc": 20,
-    "instructions": 54,
+    "instructions": 101,
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
       "L": 47
     },
-    "total_instructions": 54
+    "total_instructions": 101
   },
   "2": {
-    "basicblocks": 740,
-    "calls": "4 4 4 4 1 1 3 4 4 4 4",
-    "control_depth": 4,
-    "def_use_depth": 4,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 36,
-    "instructions": 3388,
-    "loads": {
-      "G": 68,
-      "L": 286
-    },
-    "memory_accesses": 141,
-    "name": "scheduler_hls",
-    "stores": {
-      "G": 249,
-      "L": 454
-    },
-    "total_instructions": 5467
-  },
-  "3": {
     "basicblocks": 306,
-    "calls": "1 1",
+    "calls": "4 4",
     "control_depth": 0,
     "def_use_depth": 5,
     "file": "head_helpers.cpp",
@@ -73,6 +53,26 @@
     },
     "total_instructions": 1163
   },
+  "3": {
+    "basicblocks": 748,
+    "calls": "1 1 1 1 4 4 2 1 1 1 1",
+    "control_depth": 4,
+    "def_use_depth": 4,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 36,
+    "instructions": 3422,
+    "loads": {
+      "G": 71,
+      "L": 286
+    },
+    "memory_accesses": 141,
+    "name": "scheduler_hls",
+    "stores": {
+      "G": 263,
+      "L": 456
+    },
+    "total_instructions": 5501
+  },
   "4": {
     "basicblocks": 1,
     "calls": "",
@@ -80,12 +80,12 @@
     "def_use_depth": 4,
     "file": "head_helpers.cpp",
     "fileloc": 20,
-    "instructions": 101,
+    "instructions": 54,
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
       "L": 47
     },
-    "total_instructions": 101
+    "total_instructions": 54
   }
 }

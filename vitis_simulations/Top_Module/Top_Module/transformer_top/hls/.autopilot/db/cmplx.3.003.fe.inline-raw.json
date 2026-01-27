@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 86,
-    "calls": "3",
+    "calls": "2",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
@@ -18,7 +18,7 @@
       "L": 2,
       "T": 20
     },
-    "total_instructions": 4507
+    "total_instructions": 4541
   },
   "1": {
     "basicblocks": 1,
@@ -27,17 +27,37 @@
     "def_use_depth": 4,
     "file": "head_helpers.cpp",
     "fileloc": 20,
-    "instructions": 54,
+    "instructions": 101,
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
       "L": 47
     },
-    "total_instructions": 54
+    "total_instructions": 101
   },
   "2": {
+    "basicblocks": 231,
+    "calls": "1 1 1 1 4 4 3 1 1 1 1",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 36,
+    "instructions": 2073,
+    "loads": {
+      "G": 71,
+      "L": 192
+    },
+    "memory_accesses": 47,
+    "name": "scheduler_hls",
+    "stores": {
+      "G": 267,
+      "L": 315
+    },
+    "total_instructions": 4249
+  },
+  "3": {
     "basicblocks": 308,
-    "calls": "1 1",
+    "calls": "4 4",
     "control_depth": 0,
     "def_use_depth": 5,
     "file": "head_helpers.cpp",
@@ -53,26 +73,6 @@
     },
     "total_instructions": 1260
   },
-  "3": {
-    "basicblocks": 223,
-    "calls": "4 4 4 4 1 1 2 4 4 4 4",
-    "control_depth": 0,
-    "def_use_depth": 4,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 36,
-    "instructions": 2039,
-    "loads": {
-      "G": 68,
-      "L": 192
-    },
-    "memory_accesses": 47,
-    "name": "scheduler_hls",
-    "stores": {
-      "G": 253,
-      "L": 313
-    },
-    "total_instructions": 4215
-  },
   "4": {
     "basicblocks": 1,
     "calls": "",
@@ -80,12 +80,12 @@
     "def_use_depth": 4,
     "file": "head_helpers.cpp",
     "fileloc": 20,
-    "instructions": 101,
+    "instructions": 54,
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
       "L": 47
     },
-    "total_instructions": 101
+    "total_instructions": 54
   }
 }

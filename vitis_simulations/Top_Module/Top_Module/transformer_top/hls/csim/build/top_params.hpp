@@ -128,7 +128,7 @@ constexpr int NUM_W1_TILES    = 4;
 constexpr int NUM_W2_TILES    = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 192; // Number of heads processed in parallel
+constexpr int D_MODEL = 8; // Number of heads processed in parallel
 constexpr int D_FFN   = 22; // Feed-Forward hidden layer size
 constexpr int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
 constexpr int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
@@ -142,20 +142,21 @@ enum SchedState {
     S_IDLE,            // 0
     S_STREAM_IN,       // 1
     S_LAYER_COUNT,     // 2
-    S_ATTENTION_HEADS, // 3
-    S_HEAD_CONCAT,     // 4
-    S_OUT_PROJECTION,  // 5
-    S_REQUANT1,        // 6
-    S_RES_ADD_1,       // 7
-    S_LAYER_NORM_1,    // 8
-    S_REQUANT2,        // 9
-    S_FFN,             // 10
+    S_LAYER_NORM_0,    // 3
+    S_REQUANT1,        // 4
+    S_ATTENTION_HEADS, // 5
+    S_HEAD_CONCAT,     // 6
+    S_OUT_PROJECTION,  // 7
+    S_REQUANT2,        // 8
+    S_RES_ADD_1,       // 9
+    S_LAYER_NORM_1,    // 10
     S_REQUANT3,        // 11
-    S_RES_ADD_2,       // 12
-    S_LAYER_NORM_2,    // 13
-    S_REQUANT4,        // 14
+    S_FFN,             // 12
+    S_REQUANT4,        // 13
+    S_RES_ADD_2,       // 14
     S_LOOP_CHECK,      // 15
-    S_STREAM_OUT       // 16
+    S_FINAL_NORM,      // 16
+    S_STREAM_OUT       // 17
 };
 
 // ------------------------------------------------------------
@@ -180,38 +181,38 @@ enum class HeadPhase : uint8_t {
 };
 
 enum ComputeOp : uint8_t {
-    CMP_NONE = 0, // 0
+    CMP_NONE      = 0,  // 0
+
+    CMP_LN0       = 1, // 17
+    CMP_REQUANT1  = 2, // 15
 
     // Attention ops
-    CMP_Q = 1,          // 1
-    CMP_K = 2,          // 2
-    CMP_K_REQUANT = 3,  // 3
-    CMP_V = 4,          // 4
-    CMP_V_REQUANT = 5,  // 5
-    CMP_REQUANT_Q = 6,  // 6
-    CMP_ATT_SCORES = 7, // 7
-    CMP_VALUE_SCALE = 8, // 8
-    CMP_SOFTMAX = 9,    // 9
-    CMP_ATT_VALUE = 10, // 10
+    CMP_Q         = 3,  // 1
+    CMP_K         = 4,  // 2
+    CMP_K_REQUANT = 5,  // 3
+    CMP_V         = 6,  // 4
+    CMP_V_REQUANT = 7,  // 5
+    CMP_REQUANT_Q = 8,  // 6
+    CMP_ATT_SCORES  = 9,  // 7
+    CMP_VALUE_SCALE = 10,  // 8
+    CMP_SOFTMAX     = 11,  // 9
+    CMP_ATT_VALUE   = 12, // 10
 
     // Scheduler-level ops
-    CMP_HEAD_REQUANT = 11, // 11 (pre-FFN requant)
-    // NOTE: opcode 12 reserved (legacy CMP_HEAD_REQUANT).
-    CMP_CONCAT = 13,       // 13
-    CMP_OUT_PROJ = 14,     // 14
-    CMP_REQUANT1 = 15,     // 15
-    CMP_RESID0 = 16,       // 16
-    CMP_LN0 = 17,          // 17
-    CMP_REQUANT2 = 18,     // 18
-    CMP_FFN_W1 = 19,       // 19
-    CMP_FFN_ACT = 20,      // 20
-    CMP_FFN_W2 = 21,       // 21
-    CMP_REQUANT3 = 22,     // 22
-    CMP_RESID1 = 23,       // 23
-    CMP_LN1 = 24,          // 24
-    CMP_REQUANT4 = 25,     // 25
-    CMP_DEQUANT = 26,      // 26
-    CMP_LOGITS = 27,       // 27
+    CMP_HEAD_REQUANT = 13, 
+    CMP_CONCAT       = 14, // 13
+    CMP_OUT_PROJ     = 15, // 14
+    CMP_RESID0       = 16, // 16
+    CMP_REQUANT2     = 17, // 18
+    CMP_FFN_W1       = 18, // 19
+    CMP_FFN_ACT      = 29, // 20
+    CMP_FFN_W2       = 20, // 21
+    CMP_REQUANT3     = 21, // 22
+    CMP_RESID1       = 22, // 23
+    CMP_LN1          = 23, // 24
+    CMP_REQUANT4     = 24, // 25
+    CMP_DEQUANT      = 25, // 26
+    CMP_LOGITS       = 26, // 27
 };
 
 enum DmaSel : uint8_t {

@@ -16,14 +16,15 @@ static const char *state_name(SchedState st) {
     case S_OUT_PROJECTION:  return "S_OUT_PROJ";
     case S_REQUANT1:        return "S_RQ1";
     case S_RES_ADD_1:       return "S_RES_ADD_1";
-    case S_LAYER_NORM_1:    return "S_LN_1";
+    case S_LAYER_NORM_0:    return "S_LN_0";
     case S_HEAD_REQUANT:    return "S_HEAD_RQ";
     case S_FFN:             return "S_FFN";
     case S_REQUANT3:        return "S_RQ3";
     case S_RES_ADD_2:       return "S_RES_ADD_2";
-    case S_LAYER_NORM_2:    return "S_LN_2";
+    case S_LAYER_NORM_1:    return "S_LN_1";
     case S_REQUANT4:        return "S_RQ4";
     case S_LOOP_CHECK:      return "S_LOOP_CHECK";
+    case S_FINAL_NORM:      return "S_FINAL_NORM";
     case S_STREAM_OUT:      return "S_STREAM_OUT";
     default:                return "UNKNOWN";
     }
