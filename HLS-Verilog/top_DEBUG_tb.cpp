@@ -48,13 +48,14 @@ static const char *op_name(ComputeOp op) {
     case CMP_REQUANT1:     return "RQ1";
     case CMP_RESID0:       return "RESID0";
     case CMP_LN0:          return "LN0";
-    case CMP_REQUANT3:     return "RQ3";
+    case CMP_REQUANT2:     return "RQ2";
     case CMP_FFN_W1:       return "FFN_W1";
     case CMP_FFN_ACT:      return "FFN_ACT";
     case CMP_FFN_W2:       return "FFN_W2";
-    case CMP_REQUANT4:     return "RQ4";
+    case CMP_REQUANT3:     return "RQ3";
     case CMP_RESID1:       return "RESID1";
     case CMP_LN1:          return "LN1";
+    case CMP_REQUANT4:     return "RQ4";
     case CMP_DEQUANT:      return "DEQUANT";
     case CMP_LOGITS:       return "LOGITS";
     }

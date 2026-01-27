@@ -6608,15 +6608,16 @@ enum ComputeOp : uint8_t {
     CMP_REQUANT1 = 15,
     CMP_RESID0 = 16,
     CMP_LN0 = 17,
-    CMP_REQUANT3 = 18,
+    CMP_REQUANT2 = 18,
     CMP_FFN_W1 = 19,
     CMP_FFN_ACT = 20,
     CMP_FFN_W2 = 21,
-    CMP_REQUANT4 = 22,
+    CMP_REQUANT3 = 22,
     CMP_RESID1 = 23,
     CMP_LN1 = 24,
-    CMP_DEQUANT = 25,
-    CMP_LOGITS = 26,
+    CMP_REQUANT4 = 25,
+    CMP_DEQUANT = 26,
+    CMP_LOGITS = 27,
 };
 
 enum DmaSel : uint8_t {
@@ -7744,7 +7745,7 @@ void scheduler_hls(
       if (!requant2_started && compute_ready) {
         requant2_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_HEAD_REQUANT, layer_idx, -1, -1);
+        compute_op = pack_compute_op(CMP_REQUANT2, layer_idx, -1, -1);
         requant2_started = true;
       } else if (requant2_started && requant2_compute_done) {
         requant2_started = false;

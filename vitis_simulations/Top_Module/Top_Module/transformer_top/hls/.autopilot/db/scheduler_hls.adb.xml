@@ -4917,7 +4917,7 @@ sw.bb350:1 %br_ln816 = br i1 %or_ln816, void %if.then352, void %if.else354
 
 <Node id="389" bw="17" op_0_bw="17" op_1_bw="1" op_2_bw="8" op_3_bw="8">
 <![CDATA[
-if.then352:0 %or_ln33_9 = bitconcatenate i17 @_ssdm_op_BitConcatenate.i17.i1.i8.i8, i1 1, i8 %trunc_ln33, i8 22
+if.then352:0 %or_ln33_9 = bitconcatenate i17 @_ssdm_op_BitConcatenate.i17.i1.i8.i8, i1 1, i8 %trunc_ln33, i8 25
 
 ]]></Node>
 <StgValue><ssdm name="or_ln33_9"/></StgValue>
@@ -5577,7 +5577,7 @@ sw.bb323:1 %br_ln777 = br i1 %or_ln777, void %if.then325, void %if.else327
 
 <Node id="437" bw="17" op_0_bw="17" op_1_bw="1" op_2_bw="8" op_3_bw="8">
 <![CDATA[
-if.then325:0 %or_ln33_6 = bitconcatenate i17 @_ssdm_op_BitConcatenate.i17.i1.i8.i8, i1 1, i8 %trunc_ln33, i8 18
+if.then325:0 %or_ln33_6 = bitconcatenate i17 @_ssdm_op_BitConcatenate.i17.i1.i8.i8, i1 1, i8 %trunc_ln33, i8 22
 
 ]]></Node>
 <StgValue><ssdm name="or_ln33_6"/></StgValue>
@@ -7004,7 +7004,7 @@ sw.bb252:1 %br_ln682 = br i1 %or_ln682, void %if.then254, void %if.else256
 
 <Node id="530" bw="17" op_0_bw="17" op_1_bw="1" op_2_bw="8" op_3_bw="8">
 <![CDATA[
-if.then254:0 %or_ln33_5 = bitconcatenate i17 @_ssdm_op_BitConcatenate.i17.i1.i8.i8, i1 1, i8 %trunc_ln33, i8 11
+if.then254:0 %or_ln33_5 = bitconcatenate i17 @_ssdm_op_BitConcatenate.i17.i1.i8.i8, i1 1, i8 %trunc_ln33, i8 18
 
 ]]></Node>
 <StgValue><ssdm name="or_ln33_5"/></StgValue>

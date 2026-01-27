@@ -8260,15 +8260,15 @@ assign or_ln33_3_fu_23186_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd16}};
 
 assign or_ln33_4_fu_23132_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd17}};
 
-assign or_ln33_5_fu_23078_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd11}};
+assign or_ln33_5_fu_23078_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd18}};
 
-assign or_ln33_6_fu_22794_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd18}};
+assign or_ln33_6_fu_22794_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd22}};
 
 assign or_ln33_7_fu_22740_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd23}};
 
 assign or_ln33_8_fu_22686_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd24}};
 
-assign or_ln33_9_fu_22632_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd22}};
+assign or_ln33_9_fu_22632_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd25}};
 
 assign or_ln33_s_fu_22856_p4 = {{{{1'd1}, {trunc_ln33_fu_21872_p1}}}, {8'd20}};
 

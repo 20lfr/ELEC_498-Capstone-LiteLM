@@ -40,7 +40,7 @@ INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/
 INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
 INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(5)
 INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/vitis-comp.json
-INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 3.83 seconds. CPU system time: 0.77 seconds. Elapsed time: 4.58 seconds; current allocated memory: 445.191 MB.
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 3.91 seconds. CPU system time: 0.76 seconds. Elapsed time: 4.67 seconds; current allocated memory: 445.191 MB.
 INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' ... 
 INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp' ... 
 INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' ... 
@@ -49,7 +49,7 @@ WARNING: [HLS 207-5292] unused parameter 'error' (/home/luka/Scripting/ELEC_498-
 INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' ... 
 INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' ... 
 WARNING: [HLS 207-5292] unused parameter 'dbg_ctrl_mem' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:60:22)
-INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 10.61 seconds. CPU system time: 2.85 seconds. Elapsed time: 13.46 seconds; current allocated memory: 448.074 MB.
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 10.14 seconds. CPU system time: 2.73 seconds. Elapsed time: 12.85 seconds; current allocated memory: 448.074 MB.
 INFO: [HLS 200-777] Using interface defaults for 'Vivado' flow target.
 INFO: [HLS 200-1995] There were 3,361 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
 INFO: [HLS 200-1995] There were 5,670 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
@@ -139,13 +139,13 @@ INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_2' with compact=bi
 INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_1' with compact=bit mode in 254-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:79:0)
 INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_0' with compact=bit mode in 254-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:79:0)
 INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:545:15 
-INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 6.02 seconds. CPU system time: 0.72 seconds. Elapsed time: 7.35 seconds; current allocated memory: 451.020 MB.
-INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 451.020 MB.
+INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 5.69 seconds. CPU system time: 0.65 seconds. Elapsed time: 7.15 seconds; current allocated memory: 450.988 MB.
+INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 450.988 MB.
 INFO: [HLS 200-10] Starting code transformations ...
-INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 0.15 seconds. CPU system time: 0 seconds. Elapsed time: 0.16 seconds; current allocated memory: 454.777 MB.
+INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 0.19 seconds. CPU system time: 0 seconds. Elapsed time: 0.19 seconds; current allocated memory: 454.797 MB.
 INFO: [HLS 200-10] Checking synthesizability ...
 INFO: [XFORM 203-602] Inlining function 'init_head_ctx.1' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:229) automatically.
-INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 0.21 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.22 seconds; current allocated memory: 459.027 MB.
+INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 0.23 seconds. CPU system time: 0 seconds. Elapsed time: 0.24 seconds; current allocated memory: 459.039 MB.
 INFO: [XFORM 203-602] Inlining function 'init_head_ctx.1' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:229) automatically.
 INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp:20:9) in function 'transformer_top'... converting 3 basic blocks.
 INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:545:15) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:545:15) in function 'scheduler_hls'... converting 3 basic blocks.
@@ -157,8 +157,8 @@ INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Sc
 INFO: [XFORM 203-602] Inlining function 'init_head_ctx' into 'drive_group_head_phase' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:91->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:413) automatically.
 INFO: [XFORM 203-602] Inlining function 'init_head_ctx' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:555) automatically.
 INFO: [XFORM 203-11] Balancing expressions in function 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:55)...18 expression(s) balanced.
-INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 0.77 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.79 seconds; current allocated memory: 487.629 MB.
-INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 0.62 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.65 seconds; current allocated memory: 527.363 MB.
+INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 0.75 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.77 seconds; current allocated memory: 487.367 MB.
+INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 0.6 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.63 seconds; current allocated memory: 527.348 MB.
 INFO: [HLS 200-10] Starting hardware synthesis ...
 INFO: [HLS 200-10] Synthesizing 'transformer_top' ...
 INFO: [HLS 200-10] ----------------------------------------------------------------
@@ -166,25 +166,25 @@ INFO: [HLS 200-42] -- Implementing module 'drive_group_head_phase'
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [SCHED 204-11] Starting scheduling ...
 INFO: [SCHED 204-11] Finished scheduling.
-INFO: [HLS 200-111] Finished Scheduling: CPU user time: 2.37 seconds. CPU system time: 0.05 seconds. Elapsed time: 2.43 seconds; current allocated memory: 551.695 MB.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 2.42 seconds. CPU system time: 0.06 seconds. Elapsed time: 2.47 seconds; current allocated memory: 554.617 MB.
 INFO: [BIND 205-100] Starting micro-architecture generation ...
 INFO: [BIND 205-101] Performing variable lifetime analysis.
 INFO: [BIND 205-101] Exploring resource sharing.
 INFO: [BIND 205-101] Binding ...
 INFO: [BIND 205-100] Finished micro-architecture generation.
-INFO: [HLS 200-111] Finished Binding: CPU user time: 0.37 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.38 seconds; current allocated memory: 567.699 MB.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.38 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.4 seconds; current allocated memory: 570.621 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-42] -- Implementing module 'scheduler_hls' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [SCHED 204-11] Starting scheduling ...
 INFO: [SCHED 204-11] Finished scheduling.
-INFO: [HLS 200-111] Finished Scheduling: CPU user time: 1.39 seconds. CPU system time: 0.03 seconds. Elapsed time: 1.43 seconds; current allocated memory: 593.430 MB.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 1.44 seconds. CPU system time: 0.03 seconds. Elapsed time: 1.47 seconds; current allocated memory: 593.801 MB.
 INFO: [BIND 205-100] Starting micro-architecture generation ...
 INFO: [BIND 205-101] Performing variable lifetime analysis.
 INFO: [BIND 205-101] Exploring resource sharing.
 INFO: [BIND 205-101] Binding ...
 INFO: [BIND 205-100] Finished micro-architecture generation.
-INFO: [HLS 200-111] Finished Binding: CPU user time: 1.11 seconds. CPU system time: 0.02 seconds. Elapsed time: 1.13 seconds; current allocated memory: 609.434 MB.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 1.15 seconds. CPU system time: 0.01 seconds. Elapsed time: 1.17 seconds; current allocated memory: 609.805 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-42] -- Implementing module 'transformer_top' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
@@ -197,18 +197,18 @@ WARNING: [HLS 200-1016] The critical path in module 'transformer_top' consists o
 
 Resolution: For help on HLS 200-1016 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1016.html
 INFO: [SCHED 204-11] Finished scheduling.
-INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.45 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.48 seconds; current allocated memory: 609.434 MB.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.45 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.48 seconds; current allocated memory: 609.805 MB.
 INFO: [BIND 205-100] Starting micro-architecture generation ...
 INFO: [BIND 205-101] Performing variable lifetime analysis.
 INFO: [BIND 205-101] Exploring resource sharing.
 INFO: [BIND 205-101] Binding ...
 INFO: [BIND 205-100] Finished micro-architecture generation.
-INFO: [HLS 200-111] Finished Binding: CPU user time: 0.29 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.29 seconds; current allocated memory: 609.434 MB.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.26 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.26 seconds; current allocated memory: 609.805 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-10] -- Generating RTL for module 'drive_group_head_phase' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [RTGEN 206-100] Finished creating RTL model for 'drive_group_head_phase'.
-INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.66 seconds. CPU system time: 0.04 seconds. Elapsed time: 0.71 seconds; current allocated memory: 647.066 MB.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.62 seconds. CPU system time: 0.06 seconds. Elapsed time: 0.68 seconds; current allocated memory: 647.352 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-10] -- Generating RTL for module 'scheduler_hls' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
@@ -260,7 +260,7 @@ WARNING: [RTGEN 206-101] Register 'w2_comp_busy' is power-on initialization.
 INFO: [RTGEN 206-100] Generating core module 'sparsemux_7_2_1_1_1': 6 instance(s).
 INFO: [RTGEN 206-100] Generating core module 'sparsemux_7_2_254_1_1': 4 instance(s).
 INFO: [RTGEN 206-100] Finished creating RTL model for 'scheduler_hls'.
-INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.63 seconds. CPU system time: 0.13 seconds. Elapsed time: 1.77 seconds; current allocated memory: 737.363 MB.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.54 seconds. CPU system time: 0.13 seconds. Elapsed time: 1.67 seconds; current allocated memory: 737.668 MB.
 INFO: [HLS 200-10] ----------------------------------------------------------------
 INFO: [HLS 200-10] -- Generating RTL for module 'transformer_top' 
 INFO: [HLS 200-10] ----------------------------------------------------------------
@@ -349,11 +349,11 @@ WARNING: [RTGEN 206-101] Register 'ctrl_mem_reserved_debug' is power-on initiali
 WARNING: [RTGEN 206-101] Port 'transformer_top/dbg_ctrl_mem' has no fanin or fanout and is left dangling.
                Please use C simulation to confirm this function argument can be read from or written to.
 INFO: [RTGEN 206-100] Finished creating RTL model for 'transformer_top'.
-INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.27 seconds. CPU system time: 0.11 seconds. Elapsed time: 1.37 seconds; current allocated memory: 784.305 MB.
-INFO: [HLS 200-111] Finished Generating all RTL models: CPU user time: 0.48 seconds. CPU system time: 0.09 seconds. Elapsed time: 0.57 seconds; current allocated memory: 811.320 MB.
-INFO: [HLS 200-111] Finished Updating report files: CPU user time: 0.85 seconds. CPU system time: 0.08 seconds. Elapsed time: 0.93 seconds; current allocated memory: 825.801 MB.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.22 seconds. CPU system time: 0.1 seconds. Elapsed time: 1.32 seconds; current allocated memory: 784.699 MB.
+INFO: [HLS 200-111] Finished Generating all RTL models: CPU user time: 0.45 seconds. CPU system time: 0.08 seconds. Elapsed time: 0.53 seconds; current allocated memory: 811.719 MB.
+INFO: [HLS 200-111] Finished Updating report files: CPU user time: 0.77 seconds. CPU system time: 0.07 seconds. Elapsed time: 0.84 seconds; current allocated memory: 826.195 MB.
 INFO: [VHDL 208-304] Generating VHDL RTL for transformer_top.
 INFO: [VLOG 209-307] Generating Verilog RTL for transformer_top.
 INFO: [HLS 200-789] **** Estimated Fmax: 124.12 MHz
-INFO: [HLS 200-112] Total CPU user time: 33.17 seconds. Total CPU system time: 5.01 seconds. Total elapsed time: 38.8 seconds; peak allocated memory: 825.801 MB.
-INFO: [v++ 60-791] Total elapsed time: 0h 0m 42s
+INFO: [HLS 200-112] Total CPU user time: 32.3 seconds. Total CPU system time: 4.8 seconds. Total elapsed time: 37.88 seconds; peak allocated memory: 826.195 MB.
+INFO: [v++ 60-791] Total elapsed time: 0h 0m 41s

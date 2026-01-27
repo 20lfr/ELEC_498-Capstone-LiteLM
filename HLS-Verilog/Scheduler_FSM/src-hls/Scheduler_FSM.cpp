@@ -683,7 +683,7 @@ void scheduler_hls(
       if (!requant2_started && compute_ready) {
         requant2_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_HEAD_REQUANT, layer_idx, -1, -1);
+        compute_op = pack_compute_op(CMP_REQUANT2, layer_idx, -1, -1);
         requant2_started = true;
       } else if (requant2_started && requant2_compute_done) {
         requant2_started = false;

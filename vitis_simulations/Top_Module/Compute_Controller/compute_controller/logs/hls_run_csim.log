@@ -14,89 +14,33 @@ INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498
 INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp' to the project
 INFO: [HLS 200-1465] Applying config ini 'tb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(11)
 INFO: [HLS 200-10] Adding test bench file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'tb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding test bench file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp' to the project
 INFO: [HLS 200-1465] Applying config ini 'syn.top=compute_controller' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(7)
 INFO: [HLS 200-1465] Applying config ini 'flow_target=vivado' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(4)
 INFO: [HLS 200-1505] Using flow_target 'vivado'
 Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
 INFO: [HLS 200-1465] Applying config ini 'part=xck26-sfvc784-2LV-c' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(1)
 INFO: [HLS 200-1611] Setting target device to 'xck26-sfvc784-2LV-c'
-INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(12)
+INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(13)
 INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
 INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(5)
 INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/vitis-comp.json
 INFO: [SIM 211-2] *************** CSIM start ***************
 INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
 INFO: [HLS 200-2036] Building debug C Simulation binaries
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp in debug mode
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:78:10: error: use of undeclared identifier 'CMP_LN0_SUM'
-    case CMP_LN0_SUM:      return "LN0_SUM";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:79:10: error: use of undeclared identifier 'CMP_LN0_SUMSQ'
-    case CMP_LN0_SUMSQ:    return "LN0_Q";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:80:10: error: use of undeclared identifier 'CMP_LN0_MEAN'
-    case CMP_LN0_MEAN:     return "LN0_MEAN";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:81:10: error: use of undeclared identifier 'CMP_LN0_EYY'
-    case CMP_LN0_EYY:      return "LN0_EYY";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:82:10: error: use of undeclared identifier 'CMP_LN0_VAR'
-    case CMP_LN0_VAR:      return "LN0_VAR";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:83:10: error: use of undeclared identifier 'CMP_LN0_VAR_EPS'
-    case CMP_LN0_VAR_EPS:  return "LN0_VEPS";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:84:10: error: use of undeclared identifier 'CMP_LN0_INV_STD'
-    case CMP_LN0_INV_STD:  return "LN0_INV";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:85:10: error: use of undeclared identifier 'CMP_LN0_NORM'
-    case CMP_LN0_NORM:     return "LN0_NORM";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:86:10: error: use of undeclared identifier 'CMP_LN0_SCALE'; did you mean 'CMP_VALUE_SCALE'?
-    case CMP_LN0_SCALE:    return "LN0_SCL";
-         ^~~~~~~~~~~~~
-         CMP_VALUE_SCALE
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:193:5: note: 'CMP_VALUE_SCALE' declared here
-    CMP_VALUE_SCALE = 8, // 8
-    ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:87:10: error: use of undeclared identifier 'CMP_LN0_SHIFT'
-    case CMP_LN0_SHIFT:    return "LN0_SHF";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:88:10: error: use of undeclared identifier 'CMP_LN1_SUM'
-    case CMP_LN1_SUM:      return "LN1_SUM";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:89:10: error: use of undeclared identifier 'CMP_LN1_SUMSQ'
-    case CMP_LN1_SUMSQ:    return "LN1_Q";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:90:10: error: use of undeclared identifier 'CMP_LN1_MEAN'
-    case CMP_LN1_MEAN:     return "LN1_MEAN";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:91:10: error: use of undeclared identifier 'CMP_LN1_EYY'
-    case CMP_LN1_EYY:      return "LN1_EYY";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:92:10: error: use of undeclared identifier 'CMP_LN1_VAR'
-    case CMP_LN1_VAR:      return "LN1_VAR";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:93:10: error: use of undeclared identifier 'CMP_LN1_VAR_EPS'
-    case CMP_LN1_VAR_EPS:  return "LN1_VEPS";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:94:10: error: use of undeclared identifier 'CMP_LN1_INV_STD'
-    case CMP_LN1_INV_STD:  return "LN1_INV";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:95:10: error: use of undeclared identifier 'CMP_LN1_NORM'
-    case CMP_LN1_NORM:     return "LN1_NORM";
-         ^
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:96:10: error: use of undeclared identifier 'CMP_LN1_SCALE'; did you mean 'CMP_VALUE_SCALE'?
-    case CMP_LN1_SCALE:    return "LN1_SCL";
-         ^~~~~~~~~~~~~
-         CMP_VALUE_SCALE
-../../../../../../../HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:193:5: note: 'CMP_VALUE_SCALE' declared here
-    CMP_VALUE_SCALE = 8, // 8
-    ^
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
-20 errors generated.
-make: *** [csim.mk:88: obj/computer_controller_tb.o] Error 1
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp in debug mode
+   Generating csim.exe
+ld.lld: error: duplicate symbol: main
+>>> defined at computer_controller_layer_norm_tb.cpp:167 (../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp:167)
+>>>            obj/computer_controller_layer_norm_tb.o:(main)
+>>> defined at computer_controller_tb.cpp:167 (../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp:167)
+>>>            obj/computer_controller_tb.o:(.text+0x0)
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+make: *** [Makefile.rules:349: csim.exe] Error 1
 ERROR: [SIM 211-100] 'csim_design' failed: compilation error(s).
 INFO: [SIM 211-3] *************** CSIM finish ***************
 ERROR: 4
-INFO: [HLS 200-112] Total CPU user time: 3.71 seconds. Total CPU system time: 0.88 seconds. Total elapsed time: 4.85 seconds; peak allocated memory: 445.102 MB.
+INFO: [HLS 200-112] Total CPU user time: 13.3 seconds. Total CPU system time: 1.24 seconds. Total elapsed time: 14.52 seconds; peak allocated memory: 445.039 MB.

@@ -1,0 +1,158 @@
+<ENTRY>
+{
+ "thisFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/compute_controller/compute_controller.hlsrun_csim_summary",
+ "connectId": "",
+ "serverToken": "",
+ "timestamp": "0"
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_CmdStep",
+ "dateTimestamp": "Sun Jan 25 18:58:24 2026",
+ "timestampMillis": "1769385504596",
+ "buildStep": {
+  "cmdId": "9b6fc034-401c-467d-83a5-ffd713457b33",
+  "name": "vitis-run",
+  "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/compute_controller/logs/compute_controller.steps.log",
+  "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/vitis-run  --mode hls --csim --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg --work_dir compute_controller ",
+  "args": [
+   "--mode",
+   "hls",
+   "--csim",
+   "--config",
+   "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg",
+   "--work_dir",
+   "compute_controller"
+  ],
+  "iniFiles": [],
+  "cwd": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Sun Jan 25 18:58:24 2026",
+ "timestampMillis": "1769385504596",
+ "status": {
+  "cmdId": "9b6fc034-401c-467d-83a5-ffd713457b33",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_FlowMetaData",
+ "dateTimestamp": "Sun Jan 25 18:58:28 2026",
+ "timestampMillis": "1769385508394",
+ "buildSummary": {
+  "hardwarePlatform": "",
+  "hardwareDsa": "",
+  "platformDirectory": "",
+  "runtime": "",
+  "systemConfig": "",
+  "flow": "BF_RUN",
+  "target": "TT_HLS_C_SIM",
+  "kernels": [
+   {
+    "base": {
+     "type": "KERNEL",
+     "name": "compute_controller",
+     "file": "",
+     "reports": [],
+     "uuid": ""
+    },
+    "sources": [
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp"
+    ],
+    "psSources": [],
+    "cuNames": [],
+    "type": "HLS",
+    "frequency": 0,
+    "freqUnits": ""
+   }
+  ],
+  "toolVersion": "2025.1"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_SubCmdStep",
+ "dateTimestamp": "Sun Jan 25 18:58:28 2026",
+ "timestampMillis": "1769385508395",
+ "buildStep": {
+  "cmdId": "62e0ee84-6e88-4409-8acd-94888bd0b763",
+  "name": "",
+  "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/compute_controller/hls/hls.log",
+  "commandLine": "",
+  "args": [],
+  "iniFiles": [],
+  "cwd": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Sun Jan 25 18:58:28 2026",
+ "timestampMillis": "1769385508395",
+ "status": {
+  "cmdId": "62e0ee84-6e88-4409-8acd-94888bd0b763",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Sun Jan 25 18:58:37 2026",
+ "timestampMillis": "1769385517964",
+ "status": {
+  "cmdId": "62e0ee84-6e88-4409-8acd-94888bd0b763",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Sun Jan 25 18:58:38 2026",
+ "timestampMillis": "1769385518079",
+ "status": {
+  "cmdId": "9b6fc034-401c-467d-83a5-ffd713457b33",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Sun Jan 25 18:58:38 2026",
+ "timestampMillis": "1769385518079",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "HTML",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Sun Jan 25 18:58:38 2026",
+ "timestampMillis": "1769385518079",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "BINARY_PROTOBUF",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
