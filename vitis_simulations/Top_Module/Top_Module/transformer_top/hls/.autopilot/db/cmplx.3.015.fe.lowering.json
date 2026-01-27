@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 84,
-    "calls": "2",
+    "calls": "4",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
@@ -18,7 +18,7 @@
       "L": 2,
       "T": 20
     },
-    "total_instructions": 4310
+    "total_instructions": 4344
   },
   "1": {
     "basicblocks": 1,
@@ -36,24 +36,22 @@
     "total_instructions": 54
   },
   "2": {
-    "basicblocks": 244,
-    "calls": "3 3 3 3 1 1 4 3 3 3 3",
-    "control_depth": 2,
-    "def_use_depth": 8,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 36,
-    "instructions": 2547,
+    "basicblocks": 299,
+    "calls": "1 1",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "head_helpers.cpp",
+    "fileloc": 389,
+    "instructions": 1049,
     "loads": {
-      "G": 68,
-      "L": 114
+      "L": 154
     },
-    "memory_accesses": 3,
-    "name": "scheduler_hls",
+    "memory_accesses": 0,
+    "name": "drive_group_head_phase",
     "stores": {
-      "G": 249,
-      "L": 278
+      "L": 328
     },
-    "total_instructions": 3956
+    "total_instructions": 1157
   },
   "3": {
     "basicblocks": 1,
@@ -71,21 +69,23 @@
     "total_instructions": 18
   },
   "4": {
-    "basicblocks": 299,
-    "calls": "1 1",
-    "control_depth": 0,
-    "def_use_depth": 5,
-    "file": "head_helpers.cpp",
-    "fileloc": 389,
-    "instructions": 1049,
+    "basicblocks": 252,
+    "calls": "3 3 3 3 1 1 2 3 3 3 3",
+    "control_depth": 2,
+    "def_use_depth": 8,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 36,
+    "instructions": 2581,
     "loads": {
-      "L": 154
+      "G": 71,
+      "L": 114
     },
-    "memory_accesses": 0,
-    "name": "drive_group_head_phase",
+    "memory_accesses": 3,
+    "name": "scheduler_hls",
     "stores": {
-      "L": 328
+      "G": 263,
+      "L": 280
     },
-    "total_instructions": 1157
+    "total_instructions": 3990
   }
 }

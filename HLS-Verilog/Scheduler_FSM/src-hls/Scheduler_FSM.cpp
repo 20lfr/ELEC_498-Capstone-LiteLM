@@ -166,6 +166,8 @@ void scheduler_hls(
 #pragma HLS reset variable = ln1_started
   static bool requant4_started;
 #pragma HLS reset variable = requant4_started
+  static bool final_norm_started;
+#pragma HLS reset variable = final_norm_started
   static bool stream_started;
 #pragma HLS reset variable = stream_started
   static int wo_tile;
@@ -198,6 +200,8 @@ void scheduler_hls(
 #pragma HLS reset variable = axis_last_seen
   static bool stream_done_seen;
 #pragma HLS reset variable = stream_done_seen
+  static bool final_norm_compute_done;
+#pragma HLS reset variable = final_norm_compute_done
 // POST-HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -271,6 +275,8 @@ void scheduler_hls(
     resid1_compute_done = false;
     ln1_started = false;
     ln1_compute_done = false;
+    final_norm_started = false;
+    final_norm_compute_done = false;
     axis_last_seen = false;
     stream_done_seen = false;
 
@@ -358,7 +364,7 @@ void scheduler_hls(
     if (st == S_OUT_PROJECTION && outproj_started) outproj_compute_done = true;
     if (st == S_REQUANT1 && requant1_started)     requant1_compute_done = true;
     if (st == S_RES_ADD_1 && resid0_started)      resid0_compute_done = true;
-    if (st == S_LAYER_NORM_1 && ln0_started)      ln0_compute_done = true;
+    if (st == S_LAYER_NORM_0 && ln0_started)      ln0_compute_done = true;
     if (st == S_REQUANT2 && requant2_started)     requant2_compute_done = true;
     if (st == S_FFN && ffn_started) {
       if (ffn_stage == FfnStage::W1)              ffn_w1_compute_done = true;
@@ -367,8 +373,9 @@ void scheduler_hls(
     }
     if (st == S_REQUANT3 && requant3_started)     requant3_compute_done = true;
     if (st == S_RES_ADD_2 && resid1_started)      resid1_compute_done = true;
-    if (st == S_LAYER_NORM_2 && ln1_started)      ln1_compute_done = true;
+    if (st == S_LAYER_NORM_1 && ln1_started)      ln1_compute_done = true;
     if (st == S_REQUANT4 && requant4_started)     requant4_compute_done = true;
+    if (st == S_FINAL_NORM && final_norm_started) final_norm_compute_done = true;
   }
 
   switch (st) {
@@ -420,6 +427,8 @@ void scheduler_hls(
         resid1_compute_done = false;
         ln1_started = false;
         ln1_compute_done = false;
+        final_norm_started = false;
+        final_norm_compute_done = false;
 
         // Global progress/tiles
         stream_started = false;
@@ -516,6 +525,8 @@ void scheduler_hls(
       resid1_compute_done = false;
       ln1_started = false;
       ln1_compute_done = false;
+      final_norm_started = false;
+      final_norm_compute_done = false;
 
       // Global progress/tiles
       wo_tile = 0;
@@ -536,9 +547,35 @@ void scheduler_hls(
       wl_tile = 0;
       wl_layer = 0;
       done = false;
-      st = S_ATTENTION_HEADS;
+      st = S_LAYER_NORM_0;
 
       break;}
+    case S_LAYER_NORM_0: {
+      if (!ln0_started && compute_ready) {
+        ln0_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(CMP_LN0, layer_idx, -1, -1);
+        ln0_started = true;
+      } else if (ln0_started && ln0_compute_done) {
+        ln0_started = false;
+        ln0_compute_done = false;
+        st = S_REQUANT1;
+      }
+      break;
+    }
+    case S_REQUANT1: {
+      if (!requant1_started && compute_ready) {
+        requant1_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(CMP_REQUANT1, layer_idx, -1, -1);
+        requant1_started = true;
+      } else if (requant1_started && requant1_compute_done) {
+        requant1_started = false;
+        requant1_compute_done = false;
+        st = S_ATTENTION_HEADS;
+      }
+      break;
+    }
     case S_ATTENTION_HEADS: {
       // Multiple, parallel attention
 
@@ -612,7 +649,7 @@ void scheduler_hls(
     case S_OUT_PROJECTION: {
       if (wo_tile >= NUM_WO_TILES) {
         resid0_started = false;
-        st = S_REQUANT1;
+        st = S_REQUANT2;
         break;
       }
 
@@ -640,15 +677,15 @@ void scheduler_hls(
       }
       break;
     }
-    case S_REQUANT1: {
-      if (!requant1_started && compute_ready) {
-        requant1_compute_done = false;
+    case S_REQUANT2: {
+      if (!requant2_started && compute_ready) {
+        requant2_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT1, layer_idx, -1, -1);
-        requant1_started = true;
-      } else if (requant1_started && requant1_compute_done) {
-        requant1_started = false;
-        requant1_compute_done = false;
+        compute_op = pack_compute_op(CMP_REQUANT2, layer_idx, -1, -1);
+        requant2_started = true;
+      } else if (requant2_started && requant2_compute_done) {
+        requant2_started = false;
+        requant2_compute_done = false;
         st = S_RES_ADD_1;
       }
       break;
@@ -667,27 +704,27 @@ void scheduler_hls(
       break;
     }
     case S_LAYER_NORM_1: {
-      if (!ln0_started && compute_ready) {
-        ln0_compute_done = false;
+      if (!ln1_started && compute_ready) {
+        ln1_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_LN0, layer_idx, -1, -1);
-        ln0_started = true;
-      } else if (ln0_started && ln0_compute_done) {
-        ln0_started = false;
-        ln0_compute_done = false;
-        st = S_REQUANT2;
+        compute_op = pack_compute_op(CMP_LN1, layer_idx, -1, -1);
+        ln1_started = true;
+      } else if (ln1_started && ln1_compute_done) {
+        ln1_started = false;
+        ln1_compute_done = false;
+        st = S_REQUANT3;
       }
       break;
     }
-    case S_REQUANT2: {
-      if (!requant2_started && compute_ready) {
-        requant2_compute_done = false;
+    case S_REQUANT3: {
+      if (!requant3_started && compute_ready) {
+        requant3_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT2, layer_idx, -1, -1);
-        requant2_started = true;
-      } else if (requant2_started && requant2_compute_done) {
-        requant2_started = false;
-        requant2_compute_done = false;
+        compute_op = pack_compute_op(CMP_REQUANT3, layer_idx, -1, -1);
+        requant3_started = true;
+      } else if (requant3_started && requant3_compute_done) {
+        requant3_started = false;
+        requant3_compute_done = false;
         st = S_FFN;
       }
       break;
@@ -743,7 +780,7 @@ void scheduler_hls(
           if (w2_tile >= NUM_W2_TILES) {
             ffn_started = false;
             ffn_stage = FfnStage::W1;
-            st = S_REQUANT3;
+            st = S_REQUANT4;
             break;
           }
 
@@ -774,15 +811,15 @@ void scheduler_hls(
       }
         break;
     }
-    case S_REQUANT3: {
-      if (!requant3_started && compute_ready) {
-        requant3_compute_done = false;
+    case S_REQUANT4: {
+      if (!requant4_started && compute_ready) {
+        requant4_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT3, layer_idx, -1, -1);
-        requant3_started = true;
-      } else if (requant3_started && requant3_compute_done) {
-        requant3_started = false;
-        requant3_compute_done = false;
+        compute_op = pack_compute_op(CMP_REQUANT4, layer_idx, -1, -1);
+        requant4_started = true;
+      } else if (requant4_started && requant4_compute_done) {
+        requant4_started = false;
+        requant4_compute_done = false;
         st = S_RES_ADD_2;
       }
       break;
@@ -796,32 +833,6 @@ void scheduler_hls(
       } else if (resid1_started && resid1_compute_done) {
         resid1_started = false;
         resid1_compute_done = false;
-        st = S_LAYER_NORM_2;
-      }
-      break;
-    }
-    case S_LAYER_NORM_2: {
-      if (!ln1_started && compute_ready) {
-        ln1_compute_done = false;
-        compute_start = 1;
-        compute_op = pack_compute_op(CMP_LN1, layer_idx, -1, -1);
-        ln1_started = true;
-      } else if (ln1_started && ln1_compute_done) {
-        ln1_started = false;
-        ln1_compute_done = false;
-        st = S_REQUANT4;
-      }
-      break;
-    }
-    case S_REQUANT4: {
-      if (!requant4_started && compute_ready) {
-        requant4_compute_done = false;
-        compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT4, layer_idx, -1, -1);
-        requant4_started = true;
-      } else if (requant4_started && requant4_compute_done) {
-        requant4_started = false;
-        requant4_compute_done = false;
         st = S_LOOP_CHECK;
       }
       break;
@@ -831,8 +842,24 @@ void scheduler_hls(
         layer_idx++;
         st = S_LAYER_COUNT;
       } else {
-        st = S_STREAM_OUT;
+        final_norm_started = false;
+        final_norm_compute_done = false;
+        st = S_FINAL_NORM;
         stream_started = false;
+      }
+      break;
+    }
+    case S_FINAL_NORM: {
+      if (!final_norm_started && compute_ready) {
+        final_norm_compute_done = false;
+        compute_start = 1;
+        // Reuse LN1 opcode for the terminal norm.
+        compute_op = pack_compute_op(CMP_LN1, layer_idx, -1, -1);
+        final_norm_started = true;
+      } else if (final_norm_started && final_norm_compute_done) {
+        final_norm_started = false;
+        final_norm_compute_done = false;
+        st = S_STREAM_OUT;
       }
       break;
     }

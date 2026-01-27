@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'drive_group_head_phase'" level="0">
-<item name = "Date">Sun Jan 25 12:55:15 2026
+<item name = "Date">Tue Jan 27 17:53:08 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">transformer_top</item>
@@ -268,20 +268,20 @@
 <column name="icmp_ln110_fu_11571_p2">icmp, 0, 0, 12, 4, 3</column>
 <column name="icmp_ln111_1_fu_13973_p2">icmp, 0, 0, 12, 4, 3</column>
 <column name="icmp_ln111_fu_11589_p2">icmp, 0, 0, 12, 4, 3</column>
-<column name="icmp_ln126_1_fu_14305_p2">icmp, 0, 0, 15, 8, 1</column>
-<column name="icmp_ln126_fu_11921_p2">icmp, 0, 0, 15, 8, 1</column>
-<column name="icmp_ln127_1_fu_14317_p2">icmp, 0, 0, 15, 8, 2</column>
-<column name="icmp_ln127_fu_11933_p2">icmp, 0, 0, 15, 8, 2</column>
-<column name="icmp_ln128_1_fu_14329_p2">icmp, 0, 0, 15, 8, 2</column>
-<column name="icmp_ln128_fu_11945_p2">icmp, 0, 0, 15, 8, 2</column>
+<column name="icmp_ln126_1_fu_14305_p2">icmp, 0, 0, 15, 8, 2</column>
+<column name="icmp_ln126_fu_11921_p2">icmp, 0, 0, 15, 8, 2</column>
+<column name="icmp_ln127_1_fu_14317_p2">icmp, 0, 0, 15, 8, 3</column>
+<column name="icmp_ln127_fu_11933_p2">icmp, 0, 0, 15, 8, 3</column>
+<column name="icmp_ln128_1_fu_14329_p2">icmp, 0, 0, 15, 8, 3</column>
+<column name="icmp_ln128_fu_11945_p2">icmp, 0, 0, 15, 8, 3</column>
 <column name="icmp_ln129_1_fu_14341_p2">icmp, 0, 0, 15, 8, 3</column>
 <column name="icmp_ln129_fu_11957_p2">icmp, 0, 0, 15, 8, 3</column>
 <column name="icmp_ln130_1_fu_14353_p2">icmp, 0, 0, 15, 8, 3</column>
 <column name="icmp_ln130_fu_11969_p2">icmp, 0, 0, 15, 8, 3</column>
-<column name="icmp_ln131_1_fu_14365_p2">icmp, 0, 0, 15, 8, 3</column>
-<column name="icmp_ln131_fu_11981_p2">icmp, 0, 0, 15, 8, 3</column>
-<column name="icmp_ln132_1_fu_14377_p2">icmp, 0, 0, 15, 8, 3</column>
-<column name="icmp_ln132_fu_11993_p2">icmp, 0, 0, 15, 8, 3</column>
+<column name="icmp_ln131_1_fu_14365_p2">icmp, 0, 0, 15, 8, 4</column>
+<column name="icmp_ln131_fu_11981_p2">icmp, 0, 0, 15, 8, 4</column>
+<column name="icmp_ln132_1_fu_14377_p2">icmp, 0, 0, 15, 8, 4</column>
+<column name="icmp_ln132_fu_11993_p2">icmp, 0, 0, 15, 8, 4</column>
 <column name="icmp_ln133_1_fu_14389_p2">icmp, 0, 0, 15, 8, 4</column>
 <column name="icmp_ln133_fu_12005_p2">icmp, 0, 0, 15, 8, 4</column>
 <column name="icmp_ln134_1_fu_14401_p2">icmp, 0, 0, 15, 8, 4</column>

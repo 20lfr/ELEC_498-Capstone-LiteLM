@@ -71,7 +71,8 @@ void REQUANT_D_MODEL_int32_to_int8(
 
     // Original Integer Requant Formula (for each element in vector):
     /*
-         y[t] = saturate_to_int8( (x[t] * M) + 2^(n-1)/(2^n) + z_out )
+         y[t] = saturate_to_int8( (x[t] * M)/(2^n) + 2^(n-1) + z_out )
+         y = rounded(x * R)
     */
     for (int t = 0; t < D_MODEL; ++t) {
 #pragma HLS UNROLL
@@ -118,7 +119,7 @@ void LAYER_NORM(
                 (unsigned)sum_fx_bits,
                 (int)sum_fx_bits);
 
-    ap_fixed<32, 19> square_fx = square;
+    ap_fixed<32, 19> square_fx = square; // Q19.13     (123.123 * scale) >> 13, 
     ap_int<32> square_fx_bits = square_fx.range(31, 0);
     std::printf("square_fx: %f 0x%08x (signed=%d)\n",
                 (float)square_fx,

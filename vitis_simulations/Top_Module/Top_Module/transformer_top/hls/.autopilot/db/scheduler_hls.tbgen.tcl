@@ -203,6 +203,8 @@ set ArgLastReadFirstWriteLatency {
 		resid1_compute_done {Type IO LastRead -1 FirstWrite -1}
 		ln1_started {Type IO LastRead -1 FirstWrite -1}
 		ln1_compute_done {Type IO LastRead -1 FirstWrite -1}
+		final_norm_started {Type IO LastRead -1 FirstWrite -1}
+		final_norm_compute_done {Type IO LastRead -1 FirstWrite -1}
 		axis_last_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_done_seen {Type IO LastRead -1 FirstWrite -1}
 		stream_started {Type IO LastRead -1 FirstWrite -1}
