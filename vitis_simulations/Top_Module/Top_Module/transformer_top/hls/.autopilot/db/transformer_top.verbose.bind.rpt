@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'transformer_top'
 ================================================================
-* Date:           Tue Jan 27 18:52:41 2026
+* Date:           Tue Jan 27 20:15:10 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        transformer_top
@@ -20,7 +20,7 @@
     +--------+----------+----------+------------+
     |  Clock |  Target  | Estimated| Uncertainty|
     +--------+----------+----------+------------+
-    |ap_clk  |  10.00 ns|  8.057 ns|     2.70 ns|
+    |ap_clk  |  10.00 ns|  8.095 ns|     2.70 ns|
     +--------+----------+----------+------------+
 
 + Latency: 
@@ -123,14 +123,14 @@ ST_1 : Operation 41 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void
 ST_1 : Operation 42 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i1 %compute_start, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 42 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 43 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i32 %compute_instruction"   --->   Operation 43 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 44 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i32 %compute_instruction, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 44 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 45 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i254 %head_ctx_ref_0"   --->   Operation 45 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 46 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i254 %head_ctx_ref_0, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 46 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 47 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i254 %head_ctx_ref_1"   --->   Operation 47 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 48 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i254 %head_ctx_ref_1, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 48 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 49 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i254 %head_ctx_ref_2"   --->   Operation 49 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 50 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i254 %head_ctx_ref_2, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 50 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 51 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i254 %head_ctx_ref_3"   --->   Operation 51 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 52 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i254 %head_ctx_ref_3, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 52 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 45 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i214 %head_ctx_ref_0"   --->   Operation 45 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 46 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i214 %head_ctx_ref_0, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 46 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 47 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i214 %head_ctx_ref_1"   --->   Operation 47 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 48 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i214 %head_ctx_ref_1, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 48 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 49 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i214 %head_ctx_ref_2"   --->   Operation 49 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 50 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i214 %head_ctx_ref_2, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 50 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 51 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i214 %head_ctx_ref_3"   --->   Operation 51 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 52 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i214 %head_ctx_ref_3, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 52 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 53 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i1 %stream_ready"   --->   Operation 53 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 54 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i1 %stream_ready, void @empty_0, i32 0, i32 0, void @empty, i32 0, i32 0, void @empty, void @empty, void @empty, i32 0, i32 0, i32 0, i32 0, void @empty, void @empty, i32 4294967295, i32 0, i32 0"   --->   Operation 54 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 55 [1/1] (0.00ns)   --->   "%specbitsmap_ln0 = specbitsmap void @_ssdm_op_SpecBitsMap, i1 %stream_start"   --->   Operation 55 'specbitsmap' 'specbitsmap_ln0' <Predicate = true> <Delay = 0.00>
@@ -362,20 +362,20 @@ ST_1 : Operation 280 [1/1] (0.00ns)   --->   "%trunc_ln166 = trunc i32 %select_l
 ST_1 : Operation 281 [1/1] (0.00ns)   --->   "%or_ln = bitconcatenate i32 @_ssdm_op_BitConcatenate.i32.i30.i1.i1, i30 %tmp, i1 1, i1 %trunc_ln166" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:166->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 281 'bitconcatenate' 'or_ln' <Predicate = (ctrl_chip_en_read & and_ln165)> <Delay = 0.00>
 ST_1 : Operation 282 [1/1] (0.80ns)   --->   "%br_ln167 = br void %_Z19ControlMemInterfaceR15ControlMemSpace10ControlRegjRjbbbb.exit" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:167->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 282 'br' 'br_ln167' <Predicate = (ctrl_chip_en_read & and_ln165)> <Delay = 0.80>
 
-State 2 <SV = 1> <Delay = 8.05>
+State 2 <SV = 1> <Delay = 8.09>
 ST_2 : Operation 283 [1/1] (0.00ns)   --->   "%ctrl_mem_irq_enable_loc_1 = phi i3 %trunc_ln163, void %if.then3.i, i3 %trunc_ln163, void %if.then11.i, i3 %trunc_ln163, void %sw.bb32.i.i, i3 %trunc_ln163, void %sw.bb31.i.i, i3 %trunc_ln163, void %sw.bb30.i.i, i3 %trunc_ln163, void %sw.bb29.i.i, i3 %trunc_ln163, void %sw.bb28.i.i, i3 %trunc_ln163, void %sw.bb27.i.i, i3 %trunc_ln163, void %sw.bb26.i.i, i3 %trunc_ln163, void %sw.bb25.i.i, i3 %trunc_ln163, void %sw.bb24.i.i, i3 %trunc_ln163, void %sw.bb23.i.i, i3 %trunc_ln163, void %sw.bb22.i.i, i3 %trunc_ln163, void %sw.bb21.i.i, i3 %trunc_ln163, void %sw.bb20.i.i, i3 %trunc_ln163, void %sw.bb19.i.i, i3 %trunc_ln163, void %sw.bb18.i.i, i3 %trunc_ln163, void %sw.bb17.i.i, i3 %trunc_ln163, void %sw.bb16.i.i, i3 %trunc_ln163, void %sw.bb15.i.i, i3 %trunc_ln163, void %sw.bb14.i.i, i3 %trunc_ln163, void %sw.bb13.i.i, i3 %trunc_ln163, void %sw.bb12.i.i, i3 %trunc_ln163, void %sw.bb11.i.i, i3 %trunc_ln163, void %sw.bb10.i.i, i3 %trunc_ln163, void %sw.bb9.i.i, i3 %trunc_ln163, void %sw.bb8.i.i, i3 %trunc_ln163, void %sw.bb7.i.i, i3 %trunc_ln163, void %sw.bb6.i.i, i3 %trunc_ln163, void %sw.bb5.i.i, i3 %trunc_ln4_1, void %sw.bb4.i.i, i3 %trunc_ln163, void %sw.bb3.i.i, i3 %trunc_ln163, void %sw.bb2.i.i, i3 %trunc_ln163, void %sw.bb1.i.i, i3 %trunc_ln163, void %sw.bb.i.i, i3 %trunc_ln163, void %if.else.i, i3 %trunc_ln163, void %if.then5.i, i3 %trunc_ln163, void %entry, i3 %trunc_ln163, void %sw.bb32.i99.i, i3 %trunc_ln163, void %sw.bb31.i97.i, i3 %trunc_ln163, void %sw.bb30.i95.i, i3 %trunc_ln163, void %sw.bb29.i93.i, i3 %trunc_ln163, void %sw.bb28.i91.i, i3 %trunc_ln163, void %sw.bb27.i89.i, i3 %trunc_ln163, void %sw.bb26.i87.i, i3 %trunc_ln163, void %sw.bb25.i85.i, i3 %trunc_ln163, void %sw.bb24.i83.i, i3 %trunc_ln163, void %sw.bb23.i81.i, i3 %trunc_ln163, void %sw.bb22.i79.i, i3 %trunc_ln163, void %sw.bb21.i77.i, i3 %trunc_ln163, void %sw.bb20.i75.i, i3 %trunc_ln163, void %sw.bb19.i73.i, i3 %trunc_ln163, void %sw.bb18.i71.i, i3 %trunc_ln163, void %sw.bb17.i69.i, i3 %trunc_ln163, void %sw.bb16.i67.i, i3 %trunc_ln163, void %sw.bb15.i65.i, i3 %trunc_ln163, void %sw.bb14.i63.i, i3 %trunc_ln163, void %sw.bb13.i61.i, i3 %trunc_ln163, void %sw.bb12.i59.i, i3 %trunc_ln163, void %sw.bb11.i57.i, i3 %trunc_ln163, void %sw.bb10.i55.i, i3 %trunc_ln163, void %sw.bb9.i53.i, i3 %trunc_ln163, void %sw.bb8.i51.i, i3 %trunc_ln163, void %sw.bb7.i49.i, i3 %trunc_ln163, void %sw.bb6.i47.i, i3 %trunc_ln163, void %sw.bb5.i45.i, i3 %trunc_ln163, void %sw.bb4.i43.i, i3 %trunc_ln163, void %sw.bb3.i41.i, i3 %trunc_ln163, void %sw.bb2.i39.i, i3 %trunc_ln163, void %sw.bb1.i37.i, i3 %trunc_ln163, void %sw.bb.i35.i, i3 %trunc_ln163, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:163->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 283 'phi' 'ctrl_mem_irq_enable_loc_1' <Predicate = true> <Delay = 0.00>
 ST_2 : Operation 284 [1/1] (0.00ns)   --->   "%ctrl_mem_status_new_1 = phi i32 %or_ln, void %if.then3.i, i32 0, void %if.then11.i, i32 0, void %sw.bb32.i.i, i32 0, void %sw.bb31.i.i, i32 0, void %sw.bb30.i.i, i32 0, void %sw.bb29.i.i, i32 0, void %sw.bb28.i.i, i32 0, void %sw.bb27.i.i, i32 0, void %sw.bb26.i.i, i32 0, void %sw.bb25.i.i, i32 0, void %sw.bb24.i.i, i32 0, void %sw.bb23.i.i, i32 0, void %sw.bb22.i.i, i32 0, void %sw.bb21.i.i, i32 0, void %sw.bb20.i.i, i32 0, void %sw.bb19.i.i, i32 0, void %sw.bb18.i.i, i32 0, void %sw.bb17.i.i, i32 0, void %sw.bb16.i.i, i32 0, void %sw.bb15.i.i, i32 0, void %sw.bb14.i.i, i32 0, void %sw.bb13.i.i, i32 0, void %sw.bb12.i.i, i32 0, void %sw.bb11.i.i, i32 0, void %sw.bb10.i.i, i32 0, void %sw.bb9.i.i, i32 0, void %sw.bb8.i.i, i32 0, void %sw.bb7.i.i, i32 0, void %sw.bb6.i.i, i32 0, void %sw.bb5.i.i, i32 0, void %sw.bb4.i.i, i32 0, void %sw.bb3.i.i, i32 %and_ln65, void %sw.bb2.i.i, i32 0, void %sw.bb1.i.i, i32 0, void %sw.bb.i.i, i32 0, void %if.else.i, i32 %or_ln1, void %if.then5.i, i32 0, void %entry, i32 0, void %sw.bb32.i99.i, i32 0, void %sw.bb31.i97.i, i32 0, void %sw.bb30.i95.i, i32 0, void %sw.bb29.i93.i, i32 0, void %sw.bb28.i91.i, i32 0, void %sw.bb27.i89.i, i32 0, void %sw.bb26.i87.i, i32 0, void %sw.bb25.i85.i, i32 0, void %sw.bb24.i83.i, i32 0, void %sw.bb23.i81.i, i32 0, void %sw.bb22.i79.i, i32 0, void %sw.bb21.i77.i, i32 0, void %sw.bb20.i75.i, i32 0, void %sw.bb19.i73.i, i32 0, void %sw.bb18.i71.i, i32 0, void %sw.bb17.i69.i, i32 0, void %sw.bb16.i67.i, i32 0, void %sw.bb15.i65.i, i32 0, void %sw.bb14.i63.i, i32 0, void %sw.bb13.i61.i, i32 0, void %sw.bb12.i59.i, i32 0, void %sw.bb11.i57.i, i32 0, void %sw.bb10.i55.i, i32 0, void %sw.bb9.i53.i, i32 0, void %sw.bb8.i51.i, i32 0, void %sw.bb7.i49.i, i32 0, void %sw.bb6.i47.i, i32 0, void %sw.bb5.i45.i, i32 0, void %sw.bb4.i43.i, i32 0, void %sw.bb3.i41.i, i32 0, void %sw.bb2.i39.i, i32 0, void %sw.bb1.i37.i, i32 0, void %sw.bb.i35.i, i32 0, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:166->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 284 'phi' 'ctrl_mem_status_new_1' <Predicate = true> <Delay = 0.00>
 ST_2 : Operation 285 [1/1] (0.00ns)   --->   "%ctrl_data_out_new_0 = phi i32 0, void %if.then3.i, i32 0, void %if.then11.i, i32 0, void %sw.bb32.i.i, i32 0, void %sw.bb31.i.i, i32 0, void %sw.bb30.i.i, i32 0, void %sw.bb29.i.i, i32 0, void %sw.bb28.i.i, i32 0, void %sw.bb27.i.i, i32 0, void %sw.bb26.i.i, i32 0, void %sw.bb25.i.i, i32 0, void %sw.bb24.i.i, i32 0, void %sw.bb23.i.i, i32 0, void %sw.bb22.i.i, i32 0, void %sw.bb21.i.i, i32 0, void %sw.bb20.i.i, i32 0, void %sw.bb19.i.i, i32 0, void %sw.bb18.i.i, i32 0, void %sw.bb17.i.i, i32 0, void %sw.bb16.i.i, i32 0, void %sw.bb15.i.i, i32 0, void %sw.bb14.i.i, i32 0, void %sw.bb13.i.i, i32 0, void %sw.bb12.i.i, i32 0, void %sw.bb11.i.i, i32 0, void %sw.bb10.i.i, i32 0, void %sw.bb9.i.i, i32 0, void %sw.bb8.i.i, i32 0, void %sw.bb7.i.i, i32 0, void %sw.bb6.i.i, i32 0, void %sw.bb5.i.i, i32 0, void %sw.bb4.i.i, i32 0, void %sw.bb3.i.i, i32 0, void %sw.bb2.i.i, i32 0, void %sw.bb1.i.i, i32 0, void %sw.bb.i.i, i32 0, void %if.else.i, i32 0, void %if.then5.i, i32 0, void %entry, i32 %select_ln163_19, void %sw.bb32.i99.i, i32 %select_ln163_18, void %sw.bb31.i97.i, i32 %select_ln163_17, void %sw.bb30.i95.i, i32 %select_ln163_16, void %sw.bb29.i93.i, i32 %select_ln163_15, void %sw.bb28.i91.i, i32 %select_ln163_14, void %sw.bb27.i89.i, i32 %select_ln163_13, void %sw.bb26.i87.i, i32 %select_ln163_12, void %sw.bb25.i85.i, i32 %select_ln163_11, void %sw.bb24.i83.i, i32 %select_ln163_10, void %sw.bb23.i81.i, i32 %select_ln163_32, void %sw.bb22.i79.i, i32 %select_ln163_31, void %sw.bb21.i77.i, i32 %select_ln163_30, void %sw.bb20.i75.i, i32 %select_ln163_29, void %sw.bb19.i73.i, i32 %select_ln163_28, void %sw.bb18.i71.i, i32 %select_ln163_27, void %sw.bb17.i69.i, i32 %select_ln163_26, void %sw.bb16.i67.i, i32 %select_ln163_25, void %sw.bb15.i65.i, i32 %select_ln163_24, void %sw.bb14.i63.i, i32 %select_ln163_9, void %sw.bb13.i61.i, i32 %select_ln163_8, void %sw.bb12.i59.i, i32 %select_ln163_23, void %sw.bb11.i57.i, i32 %select_ln163_22, void %sw.bb10.i55.i, i32 %select_ln163_21, void %sw.bb9.i53.i, i32 %select_ln163_7, void %sw.bb8.i51.i, i32 %select_ln163_6, void %sw.bb7.i49.i, i32 %select_ln163_5, void %sw.bb6.i47.i, i32 %select_ln163_4, void %sw.bb5.i45.i, i32 %select_ln163_1, void %sw.bb4.i43.i, i32 %select_ln163, void %sw.bb3.i41.i, i32 %select_ln163_3, void %sw.bb2.i39.i, i32 %select_ln163_2, void %sw.bb1.i37.i, i32 %select_ln163_20, void %sw.bb.i35.i, i32 0, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:163->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 285 'phi' 'ctrl_data_out_new_0' <Predicate = true> <Delay = 0.00>
 ST_2 : Operation 286 [1/1] (0.00ns)   --->   "%p_0 = phi i2 %trunc_ln163_1, void %if.then3.i, i2 %trunc_ln163_1, void %if.then11.i, i2 %trunc_ln163_1, void %sw.bb32.i.i, i2 %trunc_ln163_1, void %sw.bb31.i.i, i2 %trunc_ln163_1, void %sw.bb30.i.i, i2 %trunc_ln163_1, void %sw.bb29.i.i, i2 %trunc_ln163_1, void %sw.bb28.i.i, i2 %trunc_ln163_1, void %sw.bb27.i.i, i2 %trunc_ln163_1, void %sw.bb26.i.i, i2 %trunc_ln163_1, void %sw.bb25.i.i, i2 %trunc_ln163_1, void %sw.bb24.i.i, i2 %trunc_ln163_1, void %sw.bb23.i.i, i2 %trunc_ln163_1, void %sw.bb22.i.i, i2 %trunc_ln163_1, void %sw.bb21.i.i, i2 %trunc_ln163_1, void %sw.bb20.i.i, i2 %trunc_ln163_1, void %sw.bb19.i.i, i2 %trunc_ln163_1, void %sw.bb18.i.i, i2 %trunc_ln163_1, void %sw.bb17.i.i, i2 %trunc_ln163_1, void %sw.bb16.i.i, i2 %trunc_ln163_1, void %sw.bb15.i.i, i2 %trunc_ln163_1, void %sw.bb14.i.i, i2 %trunc_ln163_1, void %sw.bb13.i.i, i2 %trunc_ln163_1, void %sw.bb12.i.i, i2 %trunc_ln163_1, void %sw.bb11.i.i, i2 %trunc_ln163_1, void %sw.bb10.i.i, i2 %trunc_ln163_1, void %sw.bb9.i.i, i2 %trunc_ln163_1, void %sw.bb8.i.i, i2 %trunc_ln163_1, void %sw.bb7.i.i, i2 %trunc_ln163_1, void %sw.bb6.i.i, i2 %trunc_ln163_1, void %sw.bb5.i.i, i2 %trunc_ln163_1, void %sw.bb4.i.i, i2 %trunc_ln163_1, void %sw.bb3.i.i, i2 %trunc_ln163_1, void %sw.bb2.i.i, i2 %trunc_ln163_1, void %sw.bb1.i.i, i2 %trunc_ln4, void %sw.bb.i.i, i2 %trunc_ln163_1, void %if.else.i, i2 %trunc_ln163_1, void %if.then5.i, i2 %trunc_ln163_1, void %entry, i2 %trunc_ln163_1, void %sw.bb32.i99.i, i2 %trunc_ln163_1, void %sw.bb31.i97.i, i2 %trunc_ln163_1, void %sw.bb30.i95.i, i2 %trunc_ln163_1, void %sw.bb29.i93.i, i2 %trunc_ln163_1, void %sw.bb28.i91.i, i2 %trunc_ln163_1, void %sw.bb27.i89.i, i2 %trunc_ln163_1, void %sw.bb26.i87.i, i2 %trunc_ln163_1, void %sw.bb25.i85.i, i2 %trunc_ln163_1, void %sw.bb24.i83.i, i2 %trunc_ln163_1, void %sw.bb23.i81.i, i2 %trunc_ln163_1, void %sw.bb22.i79.i, i2 %trunc_ln163_1, void %sw.bb21.i77.i, i2 %trunc_ln163_1, void %sw.bb20.i75.i, i2 %trunc_ln163_1, void %sw.bb19.i73.i, i2 %trunc_ln163_1, void %sw.bb18.i71.i, i2 %trunc_ln163_1, void %sw.bb17.i69.i, i2 %trunc_ln163_1, void %sw.bb16.i67.i, i2 %trunc_ln163_1, void %sw.bb15.i65.i, i2 %trunc_ln163_1, void %sw.bb14.i63.i, i2 %trunc_ln163_1, void %sw.bb13.i61.i, i2 %trunc_ln163_1, void %sw.bb12.i59.i, i2 %trunc_ln163_1, void %sw.bb11.i57.i, i2 %trunc_ln163_1, void %sw.bb10.i55.i, i2 %trunc_ln163_1, void %sw.bb9.i53.i, i2 %trunc_ln163_1, void %sw.bb8.i51.i, i2 %trunc_ln163_1, void %sw.bb7.i49.i, i2 %trunc_ln163_1, void %sw.bb6.i47.i, i2 %trunc_ln163_1, void %sw.bb5.i45.i, i2 %trunc_ln163_1, void %sw.bb4.i43.i, i2 %trunc_ln163_1, void %sw.bb3.i41.i, i2 %trunc_ln163_1, void %sw.bb2.i39.i, i2 %trunc_ln163_1, void %sw.bb1.i37.i, i2 %trunc_ln163_1, void %sw.bb.i35.i, i2 %trunc_ln163_1, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:163->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 286 'phi' 'p_0' <Predicate = true> <Delay = 0.00>
 ST_2 : Operation 287 [1/1] (0.00ns)   --->   "%wl_start_read = read i1 @_ssdm_op_Read.ap_auto.i1P0A, i1 %wl_start" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 287 'read' 'wl_start_read' <Predicate = true> <Delay = 0.00>
 ST_2 : Operation 288 [1/1] (0.00ns)   --->   "%compute_start_read = read i1 @_ssdm_op_Read.ap_auto.i1P0A, i1 %compute_start" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 288 'read' 'compute_start_read' <Predicate = true> <Delay = 0.00>
-ST_2 : Operation 289 [1/1] (0.00ns)   --->   "%head_ctx_ref_0_read = read i254 @_ssdm_op_Read.ap_auto.i254P0A, i254 %head_ctx_ref_0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 289 'read' 'head_ctx_ref_0_read' <Predicate = true> <Delay = 0.00>
-ST_2 : Operation 290 [1/1] (0.00ns)   --->   "%head_ctx_ref_1_read = read i254 @_ssdm_op_Read.ap_auto.i254P0A, i254 %head_ctx_ref_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 290 'read' 'head_ctx_ref_1_read' <Predicate = true> <Delay = 0.00>
-ST_2 : Operation 291 [1/1] (0.00ns)   --->   "%head_ctx_ref_2_read = read i254 @_ssdm_op_Read.ap_auto.i254P0A, i254 %head_ctx_ref_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 291 'read' 'head_ctx_ref_2_read' <Predicate = true> <Delay = 0.00>
-ST_2 : Operation 292 [1/1] (0.00ns)   --->   "%head_ctx_ref_3_read = read i254 @_ssdm_op_Read.ap_auto.i254P0A, i254 %head_ctx_ref_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 292 'read' 'head_ctx_ref_3_read' <Predicate = true> <Delay = 0.00>
-ST_2 : Operation 293 [2/2] (8.05ns)   --->   "%call_ret = call i1053 @scheduler_hls, i2 %p_0, i1 %axis_in_valid_read, i1 %axis_in_last_read, i1 %dma_done_read, i1 %wl_ready_read, i32 %wl_instruction, i1 %wl_start_read, i1 %compute_ready_read, i1 %compute_done_read, i254 %head_ctx_ref_0_read, i254 %head_ctx_ref_1_read, i254 %head_ctx_ref_2_read, i254 %head_ctx_ref_3_read, i1 %compute_start_read, i32 %compute_instruction, i1 %stream_ready_read, i1 %stream_done_read, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i1 %final_norm_started, i1 %final_norm_compute_done, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 293 'call' 'call_ret' <Predicate = true> <Delay = 8.05> <CoreType = "Generic">   --->   Generic Core
+ST_2 : Operation 289 [1/1] (0.00ns)   --->   "%head_ctx_ref_0_read = read i214 @_ssdm_op_Read.ap_auto.i214P0A, i214 %head_ctx_ref_0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 289 'read' 'head_ctx_ref_0_read' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 290 [1/1] (0.00ns)   --->   "%head_ctx_ref_1_read = read i214 @_ssdm_op_Read.ap_auto.i214P0A, i214 %head_ctx_ref_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 290 'read' 'head_ctx_ref_1_read' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 291 [1/1] (0.00ns)   --->   "%head_ctx_ref_2_read = read i214 @_ssdm_op_Read.ap_auto.i214P0A, i214 %head_ctx_ref_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 291 'read' 'head_ctx_ref_2_read' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 292 [1/1] (0.00ns)   --->   "%head_ctx_ref_3_read = read i214 @_ssdm_op_Read.ap_auto.i214P0A, i214 %head_ctx_ref_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 292 'read' 'head_ctx_ref_3_read' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 293 [2/2] (8.09ns)   --->   "%call_ret = call i893 @scheduler_hls, i2 %p_0, i1 %axis_in_valid_read, i1 %axis_in_last_read, i1 %dma_done_read, i1 %wl_ready_read, i32 %wl_instruction, i1 %wl_start_read, i1 %compute_ready_read, i1 %compute_done_read, i214 %head_ctx_ref_0_read, i214 %head_ctx_ref_1_read, i214 %head_ctx_ref_2_read, i214 %head_ctx_ref_3_read, i1 %compute_start_read, i32 %compute_instruction, i1 %stream_ready_read, i1 %stream_done_read, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i1 %final_norm_started, i1 %final_norm_compute_done, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 293 'call' 'call_ret' <Predicate = true> <Delay = 8.09> <CoreType = "Generic">   --->   Generic Core
 
-State 3 <SV = 2> <Delay = 4.31>
+State 3 <SV = 2> <Delay = 4.39>
 ST_3 : Operation 294 [1/1] (0.00ns)   --->   "%ctrl_mem_control_flag_1 = phi i1 %xor_ln163, void %if.then3.i, i1 %xor_ln163, void %if.then11.i, i1 %xor_ln163, void %sw.bb32.i.i, i1 %xor_ln163, void %sw.bb31.i.i, i1 %xor_ln163, void %sw.bb30.i.i, i1 %xor_ln163, void %sw.bb29.i.i, i1 %xor_ln163, void %sw.bb28.i.i, i1 %xor_ln163, void %sw.bb27.i.i, i1 %xor_ln163, void %sw.bb26.i.i, i1 %xor_ln163, void %sw.bb25.i.i, i1 %xor_ln163, void %sw.bb24.i.i, i1 %xor_ln163, void %sw.bb23.i.i, i1 %xor_ln163, void %sw.bb22.i.i, i1 %xor_ln163, void %sw.bb21.i.i, i1 %xor_ln163, void %sw.bb20.i.i, i1 %xor_ln163, void %sw.bb19.i.i, i1 %xor_ln163, void %sw.bb18.i.i, i1 %xor_ln163, void %sw.bb17.i.i, i1 %xor_ln163, void %sw.bb16.i.i, i1 %xor_ln163, void %sw.bb15.i.i, i1 %xor_ln163, void %sw.bb14.i.i, i1 %xor_ln163, void %sw.bb13.i.i, i1 %xor_ln163, void %sw.bb12.i.i, i1 %xor_ln163, void %sw.bb11.i.i, i1 %xor_ln163, void %sw.bb10.i.i, i1 %xor_ln163, void %sw.bb9.i.i, i1 %xor_ln163, void %sw.bb8.i.i, i1 %xor_ln163, void %sw.bb7.i.i, i1 %xor_ln163, void %sw.bb6.i.i, i1 %xor_ln163, void %sw.bb5.i.i, i1 %xor_ln163, void %sw.bb4.i.i, i1 %xor_ln163, void %sw.bb3.i.i, i1 %xor_ln163, void %sw.bb2.i.i, i1 %xor_ln163, void %sw.bb1.i.i, i1 1, void %sw.bb.i.i, i1 %xor_ln163, void %if.else.i, i1 %xor_ln163, void %if.then5.i, i1 %xor_ln163, void %entry, i1 %xor_ln163, void %sw.bb32.i99.i, i1 %xor_ln163, void %sw.bb31.i97.i, i1 %xor_ln163, void %sw.bb30.i95.i, i1 %xor_ln163, void %sw.bb29.i93.i, i1 %xor_ln163, void %sw.bb28.i91.i, i1 %xor_ln163, void %sw.bb27.i89.i, i1 %xor_ln163, void %sw.bb26.i87.i, i1 %xor_ln163, void %sw.bb25.i85.i, i1 %xor_ln163, void %sw.bb24.i83.i, i1 %xor_ln163, void %sw.bb23.i81.i, i1 %xor_ln163, void %sw.bb22.i79.i, i1 %xor_ln163, void %sw.bb21.i77.i, i1 %xor_ln163, void %sw.bb20.i75.i, i1 %xor_ln163, void %sw.bb19.i73.i, i1 %xor_ln163, void %sw.bb18.i71.i, i1 %xor_ln163, void %sw.bb17.i69.i, i1 %xor_ln163, void %sw.bb16.i67.i, i1 %xor_ln163, void %sw.bb15.i65.i, i1 %xor_ln163, void %sw.bb14.i63.i, i1 %xor_ln163, void %sw.bb13.i61.i, i1 %xor_ln163, void %sw.bb12.i59.i, i1 %xor_ln163, void %sw.bb11.i57.i, i1 %xor_ln163, void %sw.bb10.i55.i, i1 %xor_ln163, void %sw.bb9.i53.i, i1 %xor_ln163, void %sw.bb8.i51.i, i1 %xor_ln163, void %sw.bb7.i49.i, i1 %xor_ln163, void %sw.bb6.i47.i, i1 %xor_ln163, void %sw.bb5.i45.i, i1 %xor_ln163, void %sw.bb4.i43.i, i1 %xor_ln163, void %sw.bb3.i41.i, i1 %xor_ln163, void %sw.bb2.i39.i, i1 %xor_ln163, void %sw.bb1.i37.i, i1 %xor_ln163, void %sw.bb.i35.i, i1 %xor_ln163, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:163->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 294 'phi' 'ctrl_mem_control_flag_1' <Predicate = true> <Delay = 0.00>
 ST_3 : Operation 295 [1/1] (0.00ns)   --->   "%ctrl_mem_control_new_1 = phi i32 1, void %if.then3.i, i32 1, void %if.then11.i, i32 1, void %sw.bb32.i.i, i32 1, void %sw.bb31.i.i, i32 1, void %sw.bb30.i.i, i32 1, void %sw.bb29.i.i, i32 1, void %sw.bb28.i.i, i32 1, void %sw.bb27.i.i, i32 1, void %sw.bb26.i.i, i32 1, void %sw.bb25.i.i, i32 1, void %sw.bb24.i.i, i32 1, void %sw.bb23.i.i, i32 1, void %sw.bb22.i.i, i32 1, void %sw.bb21.i.i, i32 1, void %sw.bb20.i.i, i32 1, void %sw.bb19.i.i, i32 1, void %sw.bb18.i.i, i32 1, void %sw.bb17.i.i, i32 1, void %sw.bb16.i.i, i32 1, void %sw.bb15.i.i, i32 1, void %sw.bb14.i.i, i32 1, void %sw.bb13.i.i, i32 1, void %sw.bb12.i.i, i32 1, void %sw.bb11.i.i, i32 1, void %sw.bb10.i.i, i32 1, void %sw.bb9.i.i, i32 1, void %sw.bb8.i.i, i32 1, void %sw.bb7.i.i, i32 1, void %sw.bb6.i.i, i32 1, void %sw.bb5.i.i, i32 1, void %sw.bb4.i.i, i32 1, void %sw.bb3.i.i, i32 1, void %sw.bb2.i.i, i32 1, void %sw.bb1.i.i, i32 %ctrl_data_in_read, void %sw.bb.i.i, i32 1, void %if.else.i, i32 1, void %if.then5.i, i32 1, void %entry, i32 1, void %sw.bb32.i99.i, i32 1, void %sw.bb31.i97.i, i32 1, void %sw.bb30.i95.i, i32 1, void %sw.bb29.i93.i, i32 1, void %sw.bb28.i91.i, i32 1, void %sw.bb27.i89.i, i32 1, void %sw.bb26.i87.i, i32 1, void %sw.bb25.i85.i, i32 1, void %sw.bb24.i83.i, i32 1, void %sw.bb23.i81.i, i32 1, void %sw.bb22.i79.i, i32 1, void %sw.bb21.i77.i, i32 1, void %sw.bb20.i75.i, i32 1, void %sw.bb19.i73.i, i32 1, void %sw.bb18.i71.i, i32 1, void %sw.bb17.i69.i, i32 1, void %sw.bb16.i67.i, i32 1, void %sw.bb15.i65.i, i32 1, void %sw.bb14.i63.i, i32 1, void %sw.bb13.i61.i, i32 1, void %sw.bb12.i59.i, i32 1, void %sw.bb11.i57.i, i32 1, void %sw.bb10.i55.i, i32 1, void %sw.bb9.i53.i, i32 1, void %sw.bb8.i51.i, i32 1, void %sw.bb7.i49.i, i32 1, void %sw.bb6.i47.i, i32 1, void %sw.bb5.i45.i, i32 1, void %sw.bb4.i43.i, i32 1, void %sw.bb3.i41.i, i32 1, void %sw.bb2.i39.i, i32 1, void %sw.bb1.i37.i, i32 1, void %sw.bb.i35.i, i32 1, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:4]   --->   Operation 295 'phi' 'ctrl_mem_control_new_1' <Predicate = true> <Delay = 0.00>
 ST_3 : Operation 296 [1/1] (0.00ns)   --->   "%ctrl_mem_irq_status_flag_1 = phi i1 %xor_ln163, void %if.then3.i, i1 %xor_ln163, void %if.then11.i, i1 %xor_ln163, void %sw.bb32.i.i, i1 %xor_ln163, void %sw.bb31.i.i, i1 %xor_ln163, void %sw.bb30.i.i, i1 %xor_ln163, void %sw.bb29.i.i, i1 %xor_ln163, void %sw.bb28.i.i, i1 %xor_ln163, void %sw.bb27.i.i, i1 %xor_ln163, void %sw.bb26.i.i, i1 %xor_ln163, void %sw.bb25.i.i, i1 %xor_ln163, void %sw.bb24.i.i, i1 %xor_ln163, void %sw.bb23.i.i, i1 %xor_ln163, void %sw.bb22.i.i, i1 %xor_ln163, void %sw.bb21.i.i, i1 %xor_ln163, void %sw.bb20.i.i, i1 %xor_ln163, void %sw.bb19.i.i, i1 %xor_ln163, void %sw.bb18.i.i, i1 %xor_ln163, void %sw.bb17.i.i, i1 %xor_ln163, void %sw.bb16.i.i, i1 %xor_ln163, void %sw.bb15.i.i, i1 %xor_ln163, void %sw.bb14.i.i, i1 %xor_ln163, void %sw.bb13.i.i, i1 %xor_ln163, void %sw.bb12.i.i, i1 %xor_ln163, void %sw.bb11.i.i, i1 %xor_ln163, void %sw.bb10.i.i, i1 %xor_ln163, void %sw.bb9.i.i, i1 %xor_ln163, void %sw.bb8.i.i, i1 %xor_ln163, void %sw.bb7.i.i, i1 %xor_ln163, void %sw.bb6.i.i, i1 %xor_ln163, void %sw.bb5.i.i, i1 %xor_ln163, void %sw.bb4.i.i, i1 1, void %sw.bb3.i.i, i1 %xor_ln163, void %sw.bb2.i.i, i1 %xor_ln163, void %sw.bb1.i.i, i1 %xor_ln163, void %sw.bb.i.i, i1 %xor_ln163, void %if.else.i, i1 %xor_ln163, void %if.then5.i, i1 %xor_ln163, void %entry, i1 %xor_ln163, void %sw.bb32.i99.i, i1 %xor_ln163, void %sw.bb31.i97.i, i1 %xor_ln163, void %sw.bb30.i95.i, i1 %xor_ln163, void %sw.bb29.i93.i, i1 %xor_ln163, void %sw.bb28.i91.i, i1 %xor_ln163, void %sw.bb27.i89.i, i1 %xor_ln163, void %sw.bb26.i87.i, i1 %xor_ln163, void %sw.bb25.i85.i, i1 %xor_ln163, void %sw.bb24.i83.i, i1 %xor_ln163, void %sw.bb23.i81.i, i1 %xor_ln163, void %sw.bb22.i79.i, i1 %xor_ln163, void %sw.bb21.i77.i, i1 %xor_ln163, void %sw.bb20.i75.i, i1 %xor_ln163, void %sw.bb19.i73.i, i1 %xor_ln163, void %sw.bb18.i71.i, i1 %xor_ln163, void %sw.bb17.i69.i, i1 %xor_ln163, void %sw.bb16.i67.i, i1 %xor_ln163, void %sw.bb15.i65.i, i1 %xor_ln163, void %sw.bb14.i63.i, i1 %xor_ln163, void %sw.bb13.i61.i, i1 %xor_ln163, void %sw.bb12.i59.i, i1 %xor_ln163, void %sw.bb11.i57.i, i1 %xor_ln163, void %sw.bb10.i55.i, i1 %xor_ln163, void %sw.bb9.i53.i, i1 %xor_ln163, void %sw.bb8.i51.i, i1 %xor_ln163, void %sw.bb7.i49.i, i1 %xor_ln163, void %sw.bb6.i47.i, i1 %xor_ln163, void %sw.bb5.i45.i, i1 %xor_ln163, void %sw.bb4.i43.i, i1 %xor_ln163, void %sw.bb3.i41.i, i1 %xor_ln163, void %sw.bb2.i39.i, i1 %xor_ln163, void %sw.bb1.i37.i, i1 %xor_ln163, void %sw.bb.i35.i, i1 %xor_ln163, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:163->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:109]   --->   Operation 296 'phi' 'ctrl_mem_irq_status_flag_1' <Predicate = true> <Delay = 0.00>
@@ -444,21 +444,21 @@ ST_3 : Operation 358 [1/1] (0.00ns)   --->   "%ctrl_mem_reserved_debug_flag_1 = 
 ST_3 : Operation 359 [1/1] (0.00ns)   --->   "%ctrl_mem_reserved_debug_new_1 = phi i32 0, void %if.then3.i, i32 0, void %if.then11.i, i32 %ctrl_data_in_read, void %sw.bb32.i.i, i32 0, void %sw.bb31.i.i, i32 0, void %sw.bb30.i.i, i32 0, void %sw.bb29.i.i, i32 0, void %sw.bb28.i.i, i32 0, void %sw.bb27.i.i, i32 0, void %sw.bb26.i.i, i32 0, void %sw.bb25.i.i, i32 0, void %sw.bb24.i.i, i32 0, void %sw.bb23.i.i, i32 0, void %sw.bb22.i.i, i32 0, void %sw.bb21.i.i, i32 0, void %sw.bb20.i.i, i32 0, void %sw.bb19.i.i, i32 0, void %sw.bb18.i.i, i32 0, void %sw.bb17.i.i, i32 0, void %sw.bb16.i.i, i32 0, void %sw.bb15.i.i, i32 0, void %sw.bb14.i.i, i32 0, void %sw.bb13.i.i, i32 0, void %sw.bb12.i.i, i32 0, void %sw.bb11.i.i, i32 0, void %sw.bb10.i.i, i32 0, void %sw.bb9.i.i, i32 0, void %sw.bb8.i.i, i32 0, void %sw.bb7.i.i, i32 0, void %sw.bb6.i.i, i32 0, void %sw.bb5.i.i, i32 0, void %sw.bb4.i.i, i32 0, void %sw.bb3.i.i, i32 0, void %sw.bb2.i.i, i32 0, void %sw.bb1.i.i, i32 0, void %sw.bb.i.i, i32 0, void %if.else.i, i32 0, void %if.then5.i, i32 0, void %entry, i32 0, void %sw.bb32.i99.i, i32 0, void %sw.bb31.i97.i, i32 0, void %sw.bb30.i95.i, i32 0, void %sw.bb29.i93.i, i32 0, void %sw.bb28.i91.i, i32 0, void %sw.bb27.i89.i, i32 0, void %sw.bb26.i87.i, i32 0, void %sw.bb25.i85.i, i32 0, void %sw.bb24.i83.i, i32 0, void %sw.bb23.i81.i, i32 0, void %sw.bb22.i79.i, i32 0, void %sw.bb21.i77.i, i32 0, void %sw.bb20.i75.i, i32 0, void %sw.bb19.i73.i, i32 0, void %sw.bb18.i71.i, i32 0, void %sw.bb17.i69.i, i32 0, void %sw.bb16.i67.i, i32 0, void %sw.bb15.i65.i, i32 0, void %sw.bb14.i63.i, i32 0, void %sw.bb13.i61.i, i32 0, void %sw.bb12.i59.i, i32 0, void %sw.bb11.i57.i, i32 0, void %sw.bb10.i55.i, i32 0, void %sw.bb9.i53.i, i32 0, void %sw.bb8.i51.i, i32 0, void %sw.bb7.i49.i, i32 0, void %sw.bb6.i47.i, i32 0, void %sw.bb5.i45.i, i32 0, void %sw.bb4.i43.i, i32 0, void %sw.bb3.i41.i, i32 0, void %sw.bb2.i39.i, i32 0, void %sw.bb1.i37.i, i32 0, void %sw.bb.i35.i, i32 0, void %if.then9.i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:4]   --->   Operation 359 'phi' 'ctrl_mem_reserved_debug_new_1' <Predicate = true> <Delay = 0.00>
 ST_3 : Operation 360 [1/1] (0.00ns)   --->   "%ctrl_data_out_flag_0 = phi i1 0, void %if.then3.i, i1 1, void %if.then11.i, i1 1, void %sw.bb32.i.i, i1 1, void %sw.bb31.i.i, i1 1, void %sw.bb30.i.i, i1 1, void %sw.bb29.i.i, i1 1, void %sw.bb28.i.i, i1 1, void %sw.bb27.i.i, i1 1, void %sw.bb26.i.i, i1 1, void %sw.bb25.i.i, i1 1, void %sw.bb24.i.i, i1 1, void %sw.bb23.i.i, i1 1, void %sw.bb22.i.i, i1 1, void %sw.bb21.i.i, i1 1, void %sw.bb20.i.i, i1 1, void %sw.bb19.i.i, i1 1, void %sw.bb18.i.i, i1 1, void %sw.bb17.i.i, i1 1, void %sw.bb16.i.i, i1 1, void %sw.bb15.i.i, i1 1, void %sw.bb14.i.i, i1 1, void %sw.bb13.i.i, i1 1, void %sw.bb12.i.i, i1 1, void %sw.bb11.i.i, i1 1, void %sw.bb10.i.i, i1 1, void %sw.bb9.i.i, i1 1, void %sw.bb8.i.i, i1 1, void %sw.bb7.i.i, i1 1, void %sw.bb6.i.i, i1 1, void %sw.bb5.i.i, i1 1, void %sw.bb4.i.i, i1 1, void %sw.bb3.i.i, i1 1, void %sw.bb2.i.i, i1 1, void %sw.bb1.i.i, i1 1, void %sw.bb.i.i, i1 1, void %if.else.i, i1 0, void %if.then5.i, i1 0, void %entry, i1 1, void %sw.bb32.i99.i, i1 1, void %sw.bb31.i97.i, i1 1, void %sw.bb30.i95.i, i1 1, void %sw.bb29.i93.i, i1 1, void %sw.bb28.i91.i, i1 1, void %sw.bb27.i89.i, i1 1, void %sw.bb26.i87.i, i1 1, void %sw.bb25.i85.i, i1 1, void %sw.bb24.i83.i, i1 1, void %sw.bb23.i81.i, i1 1, void %sw.bb22.i79.i, i1 1, void %sw.bb21.i77.i, i1 1, void %sw.bb20.i75.i, i1 1, void %sw.bb19.i73.i, i1 1, void %sw.bb18.i71.i, i1 1, void %sw.bb17.i69.i, i1 1, void %sw.bb16.i67.i, i1 1, void %sw.bb15.i65.i, i1 1, void %sw.bb14.i63.i, i1 1, void %sw.bb13.i61.i, i1 1, void %sw.bb12.i59.i, i1 1, void %sw.bb11.i57.i, i1 1, void %sw.bb10.i55.i, i1 1, void %sw.bb9.i53.i, i1 1, void %sw.bb8.i51.i, i1 1, void %sw.bb7.i49.i, i1 1, void %sw.bb6.i47.i, i1 1, void %sw.bb5.i45.i, i1 1, void %sw.bb4.i43.i, i1 1, void %sw.bb3.i41.i, i1 1, void %sw.bb2.i39.i, i1 1, void %sw.bb1.i37.i, i1 1, void %sw.bb.i35.i, i1 1, void %if.then9.i"   --->   Operation 360 'phi' 'ctrl_data_out_flag_0' <Predicate = true> <Delay = 0.00>
 ST_3 : Operation 361 [1/1] (0.00ns)   --->   "%trunc_ln122 = trunc i32 %ctrl_mem_irq_status_loc_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 361 'trunc' 'trunc_ln122' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 362 [1/2] (3.35ns)   --->   "%call_ret = call i1053 @scheduler_hls, i2 %p_0, i1 %axis_in_valid_read, i1 %axis_in_last_read, i1 %dma_done_read, i1 %wl_ready_read, i32 %wl_instruction, i1 %wl_start_read, i1 %compute_ready_read, i1 %compute_done_read, i254 %head_ctx_ref_0_read, i254 %head_ctx_ref_1_read, i254 %head_ctx_ref_2_read, i254 %head_ctx_ref_3_read, i1 %compute_start_read, i32 %compute_instruction, i1 %stream_ready_read, i1 %stream_done_read, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i1 %final_norm_started, i1 %final_norm_compute_done, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 362 'call' 'call_ret' <Predicate = true> <Delay = 3.35> <CoreType = "Generic">   --->   Generic Core
-ST_3 : Operation 363 [1/1] (0.00ns)   --->   "%newret = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 363 'extractvalue' 'newret' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 364 [1/1] (0.00ns)   --->   "%newret1 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 364 'extractvalue' 'newret1' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 365 [1/1] (0.00ns)   --->   "%newret2 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 365 'extractvalue' 'newret2' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 366 [1/1] (0.00ns)   --->   "%newret3 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 366 'extractvalue' 'newret3' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 367 [1/1] (0.00ns)   --->   "%done = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 367 'extractvalue' 'done' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 368 [1/1] (0.00ns)   --->   "%newret5 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 368 'extractvalue' 'newret5' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 369 [1/1] (0.00ns)   --->   "%newret6 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 369 'extractvalue' 'newret6' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 370 [1/1] (0.00ns)   --->   "%newret7 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 370 'extractvalue' 'newret7' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 371 [1/1] (0.00ns)   --->   "%newret8 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 371 'extractvalue' 'newret8' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 372 [1/1] (0.00ns)   --->   "%newret9 = extractvalue i1053 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 372 'extractvalue' 'newret9' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 373 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i254P0A, i254 %head_ctx_ref_0, i254 %newret6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 373 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 374 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i254P0A, i254 %head_ctx_ref_1, i254 %newret7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 374 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 375 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i254P0A, i254 %head_ctx_ref_2, i254 %newret8" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 375 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
-ST_3 : Operation 376 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i254P0A, i254 %head_ctx_ref_3, i254 %newret9" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 376 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 362 [1/2] (3.43ns)   --->   "%call_ret = call i893 @scheduler_hls, i2 %p_0, i1 %axis_in_valid_read, i1 %axis_in_last_read, i1 %dma_done_read, i1 %wl_ready_read, i32 %wl_instruction, i1 %wl_start_read, i1 %compute_ready_read, i1 %compute_done_read, i214 %head_ctx_ref_0_read, i214 %head_ctx_ref_1_read, i214 %head_ctx_ref_2_read, i214 %head_ctx_ref_3_read, i1 %compute_start_read, i32 %compute_instruction, i1 %stream_ready_read, i1 %stream_done_read, i5 %st, i32 %layer_idx, i1 %attn_started, i32 %group_idx, i1 %start_head_group, i1 %requant1_started, i1 %requant2_started, i1 %requant3_started, i1 %requant4_started, i1 %requant1_compute_done, i1 %requant2_compute_done, i1 %requant3_compute_done, i1 %requant4_compute_done, i1 %concat_compute_done, i1 %concat_started, i1 %outproj_started, i1 %outproj_compute_done, i1 %wo_dma_done, i1 %w1_dma_done, i1 %w2_dma_done, i1 %resid0_started, i1 %resid0_compute_done, i1 %ln0_started, i1 %ln0_compute_done, i1 %ffn_w1_compute_done, i1 %ffn_act_compute_done, i1 %ffn_w2_compute_done, i2 %ffn_stage, i1 %ffn_started, i1 %resid1_started, i1 %resid1_compute_done, i1 %ln1_started, i1 %ln1_compute_done, i1 %final_norm_started, i1 %final_norm_compute_done, i1 %axis_last_seen, i1 %stream_done_seen, i1 %stream_started, i32 %wo_tile, i1 %wo_dma_busy, i1 %wo_comp_busy, i32 %w1_tile, i1 %w1_dma_busy, i1 %w1_comp_busy, i32 %w2_tile, i1 %w2_dma_busy, i1 %w2_comp_busy" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 362 'call' 'call_ret' <Predicate = true> <Delay = 3.43> <CoreType = "Generic">   --->   Generic Core
+ST_3 : Operation 363 [1/1] (0.00ns)   --->   "%newret = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 363 'extractvalue' 'newret' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 364 [1/1] (0.00ns)   --->   "%newret1 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 364 'extractvalue' 'newret1' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 365 [1/1] (0.00ns)   --->   "%newret2 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 365 'extractvalue' 'newret2' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 366 [1/1] (0.00ns)   --->   "%newret3 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 366 'extractvalue' 'newret3' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 367 [1/1] (0.00ns)   --->   "%done = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 367 'extractvalue' 'done' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 368 [1/1] (0.00ns)   --->   "%newret5 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 368 'extractvalue' 'newret5' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 369 [1/1] (0.00ns)   --->   "%newret6 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 369 'extractvalue' 'newret6' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 370 [1/1] (0.00ns)   --->   "%newret7 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 370 'extractvalue' 'newret7' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 371 [1/1] (0.00ns)   --->   "%newret8 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 371 'extractvalue' 'newret8' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 372 [1/1] (0.00ns)   --->   "%newret9 = extractvalue i893 %call_ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 372 'extractvalue' 'newret9' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 373 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i214P0A, i214 %head_ctx_ref_0, i214 %newret6" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 373 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 374 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i214P0A, i214 %head_ctx_ref_1, i214 %newret7" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 374 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 375 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i214P0A, i214 %head_ctx_ref_2, i214 %newret8" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 375 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 376 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i214P0A, i214 %head_ctx_ref_3, i214 %newret9" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 376 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
 ST_3 : Operation 377 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i1P0A, i1 %axis_in_ready, i1 %newret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 377 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
 ST_3 : Operation 378 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i1P0A, i1 %wl_start, i1 %newret1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 378 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
 ST_3 : Operation 379 [1/1] (0.00ns)   --->   "%write_ln122 = write void @_ssdm_op_Write.ap_auto.i1P0A, i1 %compute_start, i1 %newret2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:122]   --->   Operation 379 'write' 'write_ln122' <Predicate = true> <Delay = 0.00>
@@ -2877,7 +2877,7 @@ ret_ln151                      (ret           ) [ 0000]
 <pin id="365" dir="1" index="0" bw="1" slack="0"/>
 </pin_list>
 <bind>
-<StgValue><ssdm name="_ssdm_op_Read.ap_auto.i254P0A"/></StgValue>
+<StgValue><ssdm name="_ssdm_op_Read.ap_auto.i214P0A"/></StgValue>
 </bind>
 </comp>
 
@@ -2904,7 +2904,7 @@ ret_ln151                      (ret           ) [ 0000]
 <pin id="371" dir="1" index="0" bw="1" slack="0"/>
 </pin_list>
 <bind>
-<StgValue><ssdm name="_ssdm_op_Write.ap_auto.i254P0A"/></StgValue>
+<StgValue><ssdm name="_ssdm_op_Write.ap_auto.i214P0A"/></StgValue>
 </bind>
 </comp>
 
@@ -3369,9 +3369,9 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="589" class="1004" name="head_ctx_ref_0_read_read_fu_589">
 <pin_list>
-<pin id="590" dir="0" index="0" bw="254" slack="0"/>
-<pin id="591" dir="0" index="1" bw="254" slack="0"/>
-<pin id="592" dir="1" index="2" bw="254" slack="0"/>
+<pin id="590" dir="0" index="0" bw="214" slack="0"/>
+<pin id="591" dir="0" index="1" bw="214" slack="0"/>
+<pin id="592" dir="1" index="2" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="read(1150) " fcode="read"/>
@@ -3381,9 +3381,9 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="595" class="1004" name="head_ctx_ref_1_read_read_fu_595">
 <pin_list>
-<pin id="596" dir="0" index="0" bw="254" slack="0"/>
-<pin id="597" dir="0" index="1" bw="254" slack="0"/>
-<pin id="598" dir="1" index="2" bw="254" slack="0"/>
+<pin id="596" dir="0" index="0" bw="214" slack="0"/>
+<pin id="597" dir="0" index="1" bw="214" slack="0"/>
+<pin id="598" dir="1" index="2" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="read(1150) " fcode="read"/>
@@ -3393,9 +3393,9 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="601" class="1004" name="head_ctx_ref_2_read_read_fu_601">
 <pin_list>
-<pin id="602" dir="0" index="0" bw="254" slack="0"/>
-<pin id="603" dir="0" index="1" bw="254" slack="0"/>
-<pin id="604" dir="1" index="2" bw="254" slack="0"/>
+<pin id="602" dir="0" index="0" bw="214" slack="0"/>
+<pin id="603" dir="0" index="1" bw="214" slack="0"/>
+<pin id="604" dir="1" index="2" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="read(1150) " fcode="read"/>
@@ -3405,9 +3405,9 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="607" class="1004" name="head_ctx_ref_3_read_read_fu_607">
 <pin_list>
-<pin id="608" dir="0" index="0" bw="254" slack="0"/>
-<pin id="609" dir="0" index="1" bw="254" slack="0"/>
-<pin id="610" dir="1" index="2" bw="254" slack="0"/>
+<pin id="608" dir="0" index="0" bw="214" slack="0"/>
+<pin id="609" dir="0" index="1" bw="214" slack="0"/>
+<pin id="610" dir="1" index="2" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="read(1150) " fcode="read"/>
@@ -3418,8 +3418,8 @@ ret_ln151                      (ret           ) [ 0000]
 <comp id="613" class="1004" name="write_ln122_write_fu_613">
 <pin_list>
 <pin id="614" dir="0" index="0" bw="0" slack="0"/>
-<pin id="615" dir="0" index="1" bw="254" slack="0"/>
-<pin id="616" dir="0" index="2" bw="254" slack="0"/>
+<pin id="615" dir="0" index="1" bw="214" slack="0"/>
+<pin id="616" dir="0" index="2" bw="214" slack="0"/>
 <pin id="617" dir="1" index="3" bw="0" slack="2147483647"/>
 </pin_list>
 <bind>
@@ -3431,8 +3431,8 @@ ret_ln151                      (ret           ) [ 0000]
 <comp id="620" class="1004" name="write_ln122_write_fu_620">
 <pin_list>
 <pin id="621" dir="0" index="0" bw="0" slack="0"/>
-<pin id="622" dir="0" index="1" bw="254" slack="0"/>
-<pin id="623" dir="0" index="2" bw="254" slack="0"/>
+<pin id="622" dir="0" index="1" bw="214" slack="0"/>
+<pin id="623" dir="0" index="2" bw="214" slack="0"/>
 <pin id="624" dir="1" index="3" bw="0" slack="2147483647"/>
 </pin_list>
 <bind>
@@ -3444,8 +3444,8 @@ ret_ln151                      (ret           ) [ 0000]
 <comp id="627" class="1004" name="write_ln122_write_fu_627">
 <pin_list>
 <pin id="628" dir="0" index="0" bw="0" slack="0"/>
-<pin id="629" dir="0" index="1" bw="254" slack="0"/>
-<pin id="630" dir="0" index="2" bw="254" slack="0"/>
+<pin id="629" dir="0" index="1" bw="214" slack="0"/>
+<pin id="630" dir="0" index="2" bw="214" slack="0"/>
 <pin id="631" dir="1" index="3" bw="0" slack="2147483647"/>
 </pin_list>
 <bind>
@@ -3457,8 +3457,8 @@ ret_ln151                      (ret           ) [ 0000]
 <comp id="634" class="1004" name="write_ln122_write_fu_634">
 <pin_list>
 <pin id="635" dir="0" index="0" bw="0" slack="0"/>
-<pin id="636" dir="0" index="1" bw="254" slack="0"/>
-<pin id="637" dir="0" index="2" bw="254" slack="0"/>
+<pin id="636" dir="0" index="1" bw="214" slack="0"/>
+<pin id="637" dir="0" index="2" bw="214" slack="0"/>
 <pin id="638" dir="1" index="3" bw="0" slack="2147483647"/>
 </pin_list>
 <bind>
@@ -15230,7 +15230,7 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="13846" class="1004" name="grp_scheduler_hls_fu_13846">
 <pin_list>
-<pin id="13847" dir="0" index="0" bw="1053" slack="0"/>
+<pin id="13847" dir="0" index="0" bw="893" slack="0"/>
 <pin id="13848" dir="0" index="1" bw="2" slack="0"/>
 <pin id="13849" dir="0" index="2" bw="1" slack="1"/>
 <pin id="13850" dir="0" index="3" bw="1" slack="1"/>
@@ -15240,10 +15240,10 @@ ret_ln151                      (ret           ) [ 0000]
 <pin id="13854" dir="0" index="7" bw="1" slack="0"/>
 <pin id="13855" dir="0" index="8" bw="1" slack="1"/>
 <pin id="13856" dir="0" index="9" bw="1" slack="1"/>
-<pin id="13857" dir="0" index="10" bw="254" slack="0"/>
-<pin id="13858" dir="0" index="11" bw="254" slack="0"/>
-<pin id="13859" dir="0" index="12" bw="254" slack="0"/>
-<pin id="13860" dir="0" index="13" bw="254" slack="0"/>
+<pin id="13857" dir="0" index="10" bw="214" slack="0"/>
+<pin id="13858" dir="0" index="11" bw="214" slack="0"/>
+<pin id="13859" dir="0" index="12" bw="214" slack="0"/>
+<pin id="13860" dir="0" index="13" bw="214" slack="0"/>
 <pin id="13861" dir="0" index="14" bw="1" slack="0"/>
 <pin id="13862" dir="0" index="15" bw="32" slack="0"/>
 <pin id="13863" dir="0" index="16" bw="1" slack="1"/>
@@ -15295,7 +15295,7 @@ ret_ln151                      (ret           ) [ 0000]
 <pin id="13909" dir="0" index="62" bw="32" slack="0"/>
 <pin id="13910" dir="0" index="63" bw="1" slack="0"/>
 <pin id="13911" dir="0" index="64" bw="1" slack="0"/>
-<pin id="13912" dir="1" index="65" bw="1053" slack="0"/>
+<pin id="13912" dir="1" index="65" bw="893" slack="0"/>
 </pin_list>
 <bind>
 <opcode="call(48) " fcode="call"/>
@@ -16368,7 +16368,7 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14563" class="1004" name="newret_fu_14563">
 <pin_list>
-<pin id="14564" dir="0" index="0" bw="1053" slack="0"/>
+<pin id="14564" dir="0" index="0" bw="893" slack="0"/>
 <pin id="14565" dir="1" index="1" bw="1" slack="0"/>
 </pin_list>
 <bind>
@@ -16379,7 +16379,7 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14568" class="1004" name="newret1_fu_14568">
 <pin_list>
-<pin id="14569" dir="0" index="0" bw="1053" slack="0"/>
+<pin id="14569" dir="0" index="0" bw="893" slack="0"/>
 <pin id="14570" dir="1" index="1" bw="1" slack="0"/>
 </pin_list>
 <bind>
@@ -16390,7 +16390,7 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14573" class="1004" name="newret2_fu_14573">
 <pin_list>
-<pin id="14574" dir="0" index="0" bw="1053" slack="0"/>
+<pin id="14574" dir="0" index="0" bw="893" slack="0"/>
 <pin id="14575" dir="1" index="1" bw="1" slack="0"/>
 </pin_list>
 <bind>
@@ -16401,7 +16401,7 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14578" class="1004" name="newret3_fu_14578">
 <pin_list>
-<pin id="14579" dir="0" index="0" bw="1053" slack="0"/>
+<pin id="14579" dir="0" index="0" bw="893" slack="0"/>
 <pin id="14580" dir="1" index="1" bw="1" slack="0"/>
 </pin_list>
 <bind>
@@ -16412,7 +16412,7 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14583" class="1004" name="done_fu_14583">
 <pin_list>
-<pin id="14584" dir="0" index="0" bw="1053" slack="0"/>
+<pin id="14584" dir="0" index="0" bw="893" slack="0"/>
 <pin id="14585" dir="1" index="1" bw="1" slack="0"/>
 </pin_list>
 <bind>
@@ -16423,7 +16423,7 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14588" class="1004" name="newret5_fu_14588">
 <pin_list>
-<pin id="14589" dir="0" index="0" bw="1053" slack="0"/>
+<pin id="14589" dir="0" index="0" bw="893" slack="0"/>
 <pin id="14590" dir="1" index="1" bw="32" slack="0"/>
 </pin_list>
 <bind>
@@ -16434,8 +16434,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14593" class="1004" name="newret6_fu_14593">
 <pin_list>
-<pin id="14594" dir="0" index="0" bw="1053" slack="0"/>
-<pin id="14595" dir="1" index="1" bw="254" slack="0"/>
+<pin id="14594" dir="0" index="0" bw="893" slack="0"/>
+<pin id="14595" dir="1" index="1" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="extractvalue(56) " fcode="extractvalue"/>
@@ -16445,8 +16445,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14598" class="1004" name="newret7_fu_14598">
 <pin_list>
-<pin id="14599" dir="0" index="0" bw="1053" slack="0"/>
-<pin id="14600" dir="1" index="1" bw="254" slack="0"/>
+<pin id="14599" dir="0" index="0" bw="893" slack="0"/>
+<pin id="14600" dir="1" index="1" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="extractvalue(56) " fcode="extractvalue"/>
@@ -16456,8 +16456,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14603" class="1004" name="newret8_fu_14603">
 <pin_list>
-<pin id="14604" dir="0" index="0" bw="1053" slack="0"/>
-<pin id="14605" dir="1" index="1" bw="254" slack="0"/>
+<pin id="14604" dir="0" index="0" bw="893" slack="0"/>
+<pin id="14605" dir="1" index="1" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="extractvalue(56) " fcode="extractvalue"/>
@@ -16467,8 +16467,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="14608" class="1004" name="newret9_fu_14608">
 <pin_list>
-<pin id="14609" dir="0" index="0" bw="1053" slack="0"/>
-<pin id="14610" dir="1" index="1" bw="254" slack="0"/>
+<pin id="14609" dir="0" index="0" bw="893" slack="0"/>
+<pin id="14610" dir="1" index="1" bw="214" slack="0"/>
 </pin_list>
 <bind>
 <opcode="extractvalue(56) " fcode="extractvalue"/>
@@ -17595,8 +17595,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="17787" class="1005" name="head_ctx_ref_0_read_reg_17787">
 <pin_list>
-<pin id="17788" dir="0" index="0" bw="254" slack="1"/>
-<pin id="17789" dir="1" index="1" bw="254" slack="1"/>
+<pin id="17788" dir="0" index="0" bw="214" slack="1"/>
+<pin id="17789" dir="1" index="1" bw="214" slack="1"/>
 </pin_list>
 <bind>
 <opset="head_ctx_ref_0_read "/>
@@ -17605,8 +17605,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="17792" class="1005" name="head_ctx_ref_1_read_reg_17792">
 <pin_list>
-<pin id="17793" dir="0" index="0" bw="254" slack="1"/>
-<pin id="17794" dir="1" index="1" bw="254" slack="1"/>
+<pin id="17793" dir="0" index="0" bw="214" slack="1"/>
+<pin id="17794" dir="1" index="1" bw="214" slack="1"/>
 </pin_list>
 <bind>
 <opset="head_ctx_ref_1_read "/>
@@ -17615,8 +17615,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="17797" class="1005" name="head_ctx_ref_2_read_reg_17797">
 <pin_list>
-<pin id="17798" dir="0" index="0" bw="254" slack="1"/>
-<pin id="17799" dir="1" index="1" bw="254" slack="1"/>
+<pin id="17798" dir="0" index="0" bw="214" slack="1"/>
+<pin id="17799" dir="1" index="1" bw="214" slack="1"/>
 </pin_list>
 <bind>
 <opset="head_ctx_ref_2_read "/>
@@ -17625,8 +17625,8 @@ ret_ln151                      (ret           ) [ 0000]
 
 <comp id="17802" class="1005" name="head_ctx_ref_3_read_reg_17802">
 <pin_list>
-<pin id="17803" dir="0" index="0" bw="254" slack="1"/>
-<pin id="17804" dir="1" index="1" bw="254" slack="1"/>
+<pin id="17803" dir="0" index="0" bw="214" slack="1"/>
+<pin id="17804" dir="1" index="1" bw="214" slack="1"/>
 </pin_list>
 <bind>
 <opset="head_ctx_ref_3_read "/>
@@ -29546,7 +29546,7 @@ ret_ln151                      (ret           ) [ 0000]
 |----------|-------------------------------------|---------|---------|---------|
 | Operation|           Functional Unit           |  Delay  |    FF   |   LUT   |
 |----------|-------------------------------------|---------|---------|---------|
-|   call   |      grp_scheduler_hls_fu_13846     | 22.1125 |   6673  |   6340  |
+|   call   |      grp_scheduler_hls_fu_13846     | 22.1125 |   5825  |   6016  |
 |----------|-------------------------------------|---------|---------|---------|
 |          |        select_ln163_fu_14209        |    0    |    0    |    32   |
 |          |       select_ln163_1_fu_14217       |    0    |    0    |    32   |
@@ -29687,7 +29687,7 @@ ret_ln151                      (ret           ) [ 0000]
 |          |           newret8_fu_14603          |    0    |    0    |    0    |
 |          |           newret9_fu_14608          |    0    |    0    |    0    |
 |----------|-------------------------------------|---------|---------|---------|
-|   Total  |                                     | 22.1125 |   6673  |   7602  |
+|   Total  |                                     | 22.1125 |   5825  |   7278  |
 |----------|-------------------------------------|---------|---------|---------|
 
 Memories:
@@ -29775,10 +29775,10 @@ N/A
 | ctrl_mem_zero_point_v_flag_1_reg_12879 |    1   |
 |  ctrl_mem_zero_point_v_new_1_reg_13030 |   32   |
 |         dma_done_read_reg_14997        |    1   |
-|      head_ctx_ref_0_read_reg_17787     |   254  |
-|      head_ctx_ref_1_read_reg_17792     |   254  |
-|      head_ctx_ref_2_read_reg_17797     |   254  |
-|      head_ctx_ref_3_read_reg_17802     |   254  |
+|      head_ctx_ref_0_read_reg_17787     |   214  |
+|      head_ctx_ref_1_read_reg_17792     |   214  |
+|      head_ctx_ref_2_read_reg_17797     |   214  |
+|      head_ctx_ref_3_read_reg_17802     |   214  |
 |            or_ln1_reg_17762            |   32   |
 |             or_ln_reg_17772            |   32   |
 |              p_0_reg_1267              |    2   |
@@ -29825,7 +29825,7 @@ N/A
 |         wl_start_read_reg_17777        |    1   |
 |           xor_ln163_reg_15025          |    1   |
 +----------------------------------------+--------+
-|                  Total                 |  3380  |
+|                  Total                 |  3220  |
 +----------------------------------------+--------+
 
 * Multiplexer (MUX) list: 
@@ -29836,13 +29836,13 @@ N/A
 |  ctrl_data_out_new_0_reg_1075  |  p0  |   3  |  32  |   96   ||    0    ||    9    |
 | ctrl_data_out_flag_0_reg_13623 |  p0  |   2  |   1  |    2   |
 |   grp_scheduler_hls_fu_13846   |  p7  |   2  |   1  |    2   ||    0    ||    9    |
-|   grp_scheduler_hls_fu_13846   |  p10 |   2  |  254 |   508  ||    0    ||    9    |
-|   grp_scheduler_hls_fu_13846   |  p11 |   2  |  254 |   508  ||    0    ||    9    |
-|   grp_scheduler_hls_fu_13846   |  p12 |   2  |  254 |   508  ||    0    ||    9    |
-|   grp_scheduler_hls_fu_13846   |  p13 |   2  |  254 |   508  ||    0    ||    9    |
+|   grp_scheduler_hls_fu_13846   |  p10 |   2  |  214 |   428  ||    0    ||    9    |
+|   grp_scheduler_hls_fu_13846   |  p11 |   2  |  214 |   428  ||    0    ||    9    |
+|   grp_scheduler_hls_fu_13846   |  p12 |   2  |  214 |   428  ||    0    ||    9    |
+|   grp_scheduler_hls_fu_13846   |  p13 |   2  |  214 |   428  ||    0    ||    9    |
 |   grp_scheduler_hls_fu_13846   |  p14 |   2  |   1  |    2   ||    0    ||    9    |
 |--------------------------------|------|------|------|--------||---------||---------||---------|
-|              Total             |      |      |      |  2198  ||  3.892  ||    0    ||    72   |
+|              Total             |      |      |      |  1878  ||  3.892  ||    0    ||    72   |
 |--------------------------------|------|------|------|--------||---------||---------||---------|
 
 
@@ -29851,10 +29851,10 @@ N/A
 +-----------+--------+--------+--------+
 |           |  Delay |   FF   |   LUT  |
 +-----------+--------+--------+--------+
-|  Function |   22   |  6673  |  7602  |
+|  Function |   22   |  5825  |  7278  |
 |   Memory  |    -   |    -   |    -   |
 |Multiplexer|    3   |    0   |   72   |
-|  Register |    -   |  3380  |    -   |
+|  Register |    -   |  3220  |    -   |
 +-----------+--------+--------+--------+
-|   Total   |   26   |  10053 |  7674  |
+|   Total   |   26   |  9045  |  7350  |
 +-----------+--------+--------+--------+

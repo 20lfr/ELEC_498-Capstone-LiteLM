@@ -34,17 +34,17 @@ port (
     compute_start_o_ap_vld : OUT STD_LOGIC;
     compute_instruction : OUT STD_LOGIC_VECTOR (31 downto 0);
     compute_instruction_ap_vld : OUT STD_LOGIC;
-    head_ctx_ref_0_i : IN STD_LOGIC_VECTOR (253 downto 0);
-    head_ctx_ref_0_o : OUT STD_LOGIC_VECTOR (253 downto 0);
+    head_ctx_ref_0_i : IN STD_LOGIC_VECTOR (213 downto 0);
+    head_ctx_ref_0_o : OUT STD_LOGIC_VECTOR (213 downto 0);
     head_ctx_ref_0_o_ap_vld : OUT STD_LOGIC;
-    head_ctx_ref_1_i : IN STD_LOGIC_VECTOR (253 downto 0);
-    head_ctx_ref_1_o : OUT STD_LOGIC_VECTOR (253 downto 0);
+    head_ctx_ref_1_i : IN STD_LOGIC_VECTOR (213 downto 0);
+    head_ctx_ref_1_o : OUT STD_LOGIC_VECTOR (213 downto 0);
     head_ctx_ref_1_o_ap_vld : OUT STD_LOGIC;
-    head_ctx_ref_2_i : IN STD_LOGIC_VECTOR (253 downto 0);
-    head_ctx_ref_2_o : OUT STD_LOGIC_VECTOR (253 downto 0);
+    head_ctx_ref_2_i : IN STD_LOGIC_VECTOR (213 downto 0);
+    head_ctx_ref_2_o : OUT STD_LOGIC_VECTOR (213 downto 0);
     head_ctx_ref_2_o_ap_vld : OUT STD_LOGIC;
-    head_ctx_ref_3_i : IN STD_LOGIC_VECTOR (253 downto 0);
-    head_ctx_ref_3_o : OUT STD_LOGIC_VECTOR (253 downto 0);
+    head_ctx_ref_3_i : IN STD_LOGIC_VECTOR (213 downto 0);
+    head_ctx_ref_3_o : OUT STD_LOGIC_VECTOR (213 downto 0);
     head_ctx_ref_3_o_ap_vld : OUT STD_LOGIC;
     stream_ready : IN STD_LOGIC_VECTOR (0 downto 0);
     stream_start : OUT STD_LOGIC_VECTOR (0 downto 0);
@@ -103,7 +103,7 @@ end;
 architecture behav of transformer_top is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.056513,HLS_SYN_LAT=3,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=7473,HLS_SYN_LUT=18511,HLS_VERSION=2025_1}";
+    "transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.095262,HLS_SYN_LAT=3,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=6753,HLS_SYN_LUT=17963,HLS_VERSION=2025_1}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_state1 : STD_LOGIC_VECTOR (2 downto 0) := "001";
@@ -247,10 +247,10 @@ architecture behav of transformer_top is
     signal ap_CS_fsm_state2 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state2 : signal is "none";
     signal compute_start_read_reg_17782 : STD_LOGIC_VECTOR (0 downto 0);
-    signal head_ctx_ref_0_read_reg_17787 : STD_LOGIC_VECTOR (253 downto 0);
-    signal head_ctx_ref_1_read_reg_17792 : STD_LOGIC_VECTOR (253 downto 0);
-    signal head_ctx_ref_2_read_reg_17797 : STD_LOGIC_VECTOR (253 downto 0);
-    signal head_ctx_ref_3_read_reg_17802 : STD_LOGIC_VECTOR (253 downto 0);
+    signal head_ctx_ref_0_read_reg_17787 : STD_LOGIC_VECTOR (213 downto 0);
+    signal head_ctx_ref_1_read_reg_17792 : STD_LOGIC_VECTOR (213 downto 0);
+    signal head_ctx_ref_2_read_reg_17797 : STD_LOGIC_VECTOR (213 downto 0);
+    signal head_ctx_ref_3_read_reg_17802 : STD_LOGIC_VECTOR (213 downto 0);
     signal grp_scheduler_hls_fu_13846_ap_start : STD_LOGIC;
     signal grp_scheduler_hls_fu_13846_ap_done : STD_LOGIC;
     signal grp_scheduler_hls_fu_13846_ap_idle : STD_LOGIC;
@@ -265,10 +265,10 @@ architecture behav of transformer_top is
     signal grp_scheduler_hls_fu_13846_ap_return_3 : STD_LOGIC_VECTOR (0 downto 0);
     signal grp_scheduler_hls_fu_13846_ap_return_4 : STD_LOGIC_VECTOR (0 downto 0);
     signal grp_scheduler_hls_fu_13846_ap_return_5 : STD_LOGIC_VECTOR (31 downto 0);
-    signal grp_scheduler_hls_fu_13846_ap_return_6 : STD_LOGIC_VECTOR (253 downto 0);
-    signal grp_scheduler_hls_fu_13846_ap_return_7 : STD_LOGIC_VECTOR (253 downto 0);
-    signal grp_scheduler_hls_fu_13846_ap_return_8 : STD_LOGIC_VECTOR (253 downto 0);
-    signal grp_scheduler_hls_fu_13846_ap_return_9 : STD_LOGIC_VECTOR (253 downto 0);
+    signal grp_scheduler_hls_fu_13846_ap_return_6 : STD_LOGIC_VECTOR (213 downto 0);
+    signal grp_scheduler_hls_fu_13846_ap_return_7 : STD_LOGIC_VECTOR (213 downto 0);
+    signal grp_scheduler_hls_fu_13846_ap_return_8 : STD_LOGIC_VECTOR (213 downto 0);
+    signal grp_scheduler_hls_fu_13846_ap_return_9 : STD_LOGIC_VECTOR (213 downto 0);
     signal ctrl_mem_irq_enable_loc_1_reg_705 : STD_LOGIC_VECTOR (2 downto 0);
     signal ctrl_chip_en_read_read_fu_394_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal and_ln165_fu_14481_p2 : STD_LOGIC_VECTOR (0 downto 0);
@@ -431,10 +431,10 @@ architecture behav of transformer_top is
         wl_start_read : IN STD_LOGIC_VECTOR (0 downto 0);
         compute_ready : IN STD_LOGIC_VECTOR (0 downto 0);
         compute_done : IN STD_LOGIC_VECTOR (0 downto 0);
-        p_read1 : IN STD_LOGIC_VECTOR (253 downto 0);
-        p_read2 : IN STD_LOGIC_VECTOR (253 downto 0);
-        p_read3 : IN STD_LOGIC_VECTOR (253 downto 0);
-        p_read4 : IN STD_LOGIC_VECTOR (253 downto 0);
+        p_read1 : IN STD_LOGIC_VECTOR (213 downto 0);
+        p_read2 : IN STD_LOGIC_VECTOR (213 downto 0);
+        p_read3 : IN STD_LOGIC_VECTOR (213 downto 0);
+        p_read4 : IN STD_LOGIC_VECTOR (213 downto 0);
         compute_start_read : IN STD_LOGIC_VECTOR (0 downto 0);
         compute_instruction : OUT STD_LOGIC_VECTOR (31 downto 0);
         compute_instruction_ap_vld : OUT STD_LOGIC;
@@ -446,10 +446,10 @@ architecture behav of transformer_top is
         ap_return_3 : OUT STD_LOGIC_VECTOR (0 downto 0);
         ap_return_4 : OUT STD_LOGIC_VECTOR (0 downto 0);
         ap_return_5 : OUT STD_LOGIC_VECTOR (31 downto 0);
-        ap_return_6 : OUT STD_LOGIC_VECTOR (253 downto 0);
-        ap_return_7 : OUT STD_LOGIC_VECTOR (253 downto 0);
-        ap_return_8 : OUT STD_LOGIC_VECTOR (253 downto 0);
-        ap_return_9 : OUT STD_LOGIC_VECTOR (253 downto 0) );
+        ap_return_6 : OUT STD_LOGIC_VECTOR (213 downto 0);
+        ap_return_7 : OUT STD_LOGIC_VECTOR (213 downto 0);
+        ap_return_8 : OUT STD_LOGIC_VECTOR (213 downto 0);
+        ap_return_9 : OUT STD_LOGIC_VECTOR (213 downto 0) );
     end component;
 
 

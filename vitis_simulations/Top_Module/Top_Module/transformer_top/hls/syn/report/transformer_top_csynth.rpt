@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'transformer_top'
 ================================================================
-* Date:           Tue Jan 27 18:52:45 2026
+* Date:           Tue Jan 27 20:15:14 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        transformer_top
@@ -20,7 +20,7 @@
     +--------+----------+----------+------------+
     |  Clock |  Target  | Estimated| Uncertainty|
     +--------+----------+----------+------------+
-    |ap_clk  |  10.00 ns|  8.057 ns|     2.70 ns|
+    |ap_clk  |  10.00 ns|  8.095 ns|     2.70 ns|
     +--------+----------+----------+------------+
 
 + Latency: 
@@ -56,16 +56,16 @@
 |DSP              |        -|     -|       -|       -|    -|
 |Expression       |        -|     -|       0|    1262|    -|
 |FIFO             |        -|     -|       -|       -|    -|
-|Instance         |        -|     -|    4164|   16424|    -|
+|Instance         |        -|     -|    3604|   15876|    -|
 |Memory           |        -|     -|       -|       -|    -|
 |Multiplexer      |        -|     -|       0|     825|    -|
-|Register         |        -|     -|    3309|       -|    -|
+|Register         |        -|     -|    3149|       -|    -|
 +-----------------+---------+------+--------+--------+-----+
-|Total            |        0|     0|    7473|   18511|    0|
+|Total            |        0|     0|    6753|   17963|    0|
 +-----------------+---------+------+--------+--------+-----+
 |Available        |      288|  1248|  234240|  117120|   64|
 +-----------------+---------+------+--------+--------+-----+
-|Utilization (%)  |        0|     0|       3|      15|    0|
+|Utilization (%)  |        0|     0|       2|      15|    0|
 +-----------------+---------+------+--------+--------+-----+
 
 + Detail: 
@@ -73,9 +73,9 @@
     +----------------------------+---------------+---------+----+------+-------+-----+
     |          Instance          |     Module    | BRAM_18K| DSP|  FF  |  LUT  | URAM|
     +----------------------------+---------------+---------+----+------+-------+-----+
-    |grp_scheduler_hls_fu_13846  |scheduler_hls  |        0|   0|  4164|  16424|    0|
+    |grp_scheduler_hls_fu_13846  |scheduler_hls  |        0|   0|  3604|  15876|    0|
     +----------------------------+---------------+---------+----+------+-------+-----+
-    |Total                       |               |        0|   0|  4164|  16424|    0|
+    |Total                       |               |        0|   0|  3604|  15876|    0|
     +----------------------------+---------------+---------+----+------+-------+-----+
 
     * DSP: 
@@ -341,10 +341,10 @@
     |ctrl_mem_zero_point_v_new_1_reg_13030     |   32|   0|   32|          0|
     |dma_done_read_reg_14997                   |    1|   0|    1|          0|
     |grp_scheduler_hls_fu_13846_ap_start_reg   |    1|   0|    1|          0|
-    |head_ctx_ref_0_read_reg_17787             |  254|   0|  254|          0|
-    |head_ctx_ref_1_read_reg_17792             |  254|   0|  254|          0|
-    |head_ctx_ref_2_read_reg_17797             |  254|   0|  254|          0|
-    |head_ctx_ref_3_read_reg_17802             |  254|   0|  254|          0|
+    |head_ctx_ref_0_read_reg_17787             |  214|   0|  214|          0|
+    |head_ctx_ref_1_read_reg_17792             |  214|   0|  214|          0|
+    |head_ctx_ref_2_read_reg_17797             |  214|   0|  214|          0|
+    |head_ctx_ref_3_read_reg_17802             |  214|   0|  214|          0|
     |p_0_reg_1267                              |    2|   0|    2|          0|
     |stream_done_read_reg_14972                |    1|   0|    1|          0|
     |stream_ready_read_reg_14977               |    1|   0|    1|          0|
@@ -352,7 +352,7 @@
     |wl_ready_read_reg_14992                   |    1|   0|    1|          0|
     |wl_start_read_reg_17777                   |    1|   0|    1|          0|
     +------------------------------------------+-----+----+-----+-----------+
-    |Total                                     | 3309|   0| 3309|          0|
+    |Total                                     | 3149|   0| 3149|          0|
     +------------------------------------------+-----+----+-----+-----------+
 
 
@@ -388,17 +388,17 @@
 |compute_start_o_ap_vld      |  out|     1|     ap_ovld|        compute_start|       pointer|
 |compute_instruction         |  out|    32|      ap_vld|  compute_instruction|       pointer|
 |compute_instruction_ap_vld  |  out|     1|      ap_vld|  compute_instruction|       pointer|
-|head_ctx_ref_0_i            |   in|   254|     ap_ovld|       head_ctx_ref_0|       pointer|
-|head_ctx_ref_0_o            |  out|   254|     ap_ovld|       head_ctx_ref_0|       pointer|
+|head_ctx_ref_0_i            |   in|   214|     ap_ovld|       head_ctx_ref_0|       pointer|
+|head_ctx_ref_0_o            |  out|   214|     ap_ovld|       head_ctx_ref_0|       pointer|
 |head_ctx_ref_0_o_ap_vld     |  out|     1|     ap_ovld|       head_ctx_ref_0|       pointer|
-|head_ctx_ref_1_i            |   in|   254|     ap_ovld|       head_ctx_ref_1|       pointer|
-|head_ctx_ref_1_o            |  out|   254|     ap_ovld|       head_ctx_ref_1|       pointer|
+|head_ctx_ref_1_i            |   in|   214|     ap_ovld|       head_ctx_ref_1|       pointer|
+|head_ctx_ref_1_o            |  out|   214|     ap_ovld|       head_ctx_ref_1|       pointer|
 |head_ctx_ref_1_o_ap_vld     |  out|     1|     ap_ovld|       head_ctx_ref_1|       pointer|
-|head_ctx_ref_2_i            |   in|   254|     ap_ovld|       head_ctx_ref_2|       pointer|
-|head_ctx_ref_2_o            |  out|   254|     ap_ovld|       head_ctx_ref_2|       pointer|
+|head_ctx_ref_2_i            |   in|   214|     ap_ovld|       head_ctx_ref_2|       pointer|
+|head_ctx_ref_2_o            |  out|   214|     ap_ovld|       head_ctx_ref_2|       pointer|
 |head_ctx_ref_2_o_ap_vld     |  out|     1|     ap_ovld|       head_ctx_ref_2|       pointer|
-|head_ctx_ref_3_i            |   in|   254|     ap_ovld|       head_ctx_ref_3|       pointer|
-|head_ctx_ref_3_o            |  out|   254|     ap_ovld|       head_ctx_ref_3|       pointer|
+|head_ctx_ref_3_i            |   in|   214|     ap_ovld|       head_ctx_ref_3|       pointer|
+|head_ctx_ref_3_o            |  out|   214|     ap_ovld|       head_ctx_ref_3|       pointer|
 |head_ctx_ref_3_o_ap_vld     |  out|     1|     ap_ovld|       head_ctx_ref_3|       pointer|
 |stream_ready                |   in|     1|     ap_none|         stream_ready|        scalar|
 |stream_start                |  out|     1|      ap_vld|         stream_start|       pointer|

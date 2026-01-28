@@ -16,7 +16,7 @@ set DLRegItemOffset 0
 set svuvm_can_support 1
 set cdfgNum 4
 set C_modelName {scheduler_hls}
-set C_modelType { int 1053 }
+set C_modelType { int 893 }
 set ap_memory_interface_dict [dict create]
 set C_modelArgList {
 	{ ctrl_mem_control int 2 regular  }
@@ -28,10 +28,10 @@ set C_modelArgList {
 	{ wl_start_read int 1 regular  }
 	{ compute_ready uint 1 regular  }
 	{ compute_done uint 1 regular  }
-	{ p_read1 int 254 regular  }
-	{ p_read2 int 254 regular  }
-	{ p_read3 int 254 regular  }
-	{ p_read4 int 254 regular  }
+	{ p_read1 int 214 regular  }
+	{ p_read2 int 214 regular  }
+	{ p_read3 int 214 regular  }
+	{ p_read4 int 214 regular  }
 	{ compute_start_read int 1 regular  }
 	{ compute_instruction int 32 regular {pointer 1}  }
 	{ stream_ready uint 1 regular  }
@@ -50,15 +50,15 @@ set C_modelArgMapList {[
  	{ "Name" : "wl_start_read", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "compute_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "compute_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read1", "interface" : "wire", "bitwidth" : 254, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read2", "interface" : "wire", "bitwidth" : 254, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read3", "interface" : "wire", "bitwidth" : 254, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read4", "interface" : "wire", "bitwidth" : 254, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read1", "interface" : "wire", "bitwidth" : 214, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read2", "interface" : "wire", "bitwidth" : 214, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read3", "interface" : "wire", "bitwidth" : 214, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read4", "interface" : "wire", "bitwidth" : 214, "direction" : "READONLY"} , 
  	{ "Name" : "compute_start_read", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "compute_instruction", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "stream_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "stream_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 1053} ]}
+ 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 893} ]}
 # RTL Port declarations: 
 set portNum 35
 set portList { 
@@ -78,10 +78,10 @@ set portList {
 	{ wl_start_read sc_in sc_lv 1 signal 6 } 
 	{ compute_ready sc_in sc_lv 1 signal 7 } 
 	{ compute_done sc_in sc_lv 1 signal 8 } 
-	{ p_read1 sc_in sc_lv 254 signal 9 } 
-	{ p_read2 sc_in sc_lv 254 signal 10 } 
-	{ p_read3 sc_in sc_lv 254 signal 11 } 
-	{ p_read4 sc_in sc_lv 254 signal 12 } 
+	{ p_read1 sc_in sc_lv 214 signal 9 } 
+	{ p_read2 sc_in sc_lv 214 signal 10 } 
+	{ p_read3 sc_in sc_lv 214 signal 11 } 
+	{ p_read4 sc_in sc_lv 214 signal 12 } 
 	{ compute_start_read sc_in sc_lv 1 signal 13 } 
 	{ compute_instruction sc_out sc_lv 32 signal 14 } 
 	{ compute_instruction_ap_vld sc_out sc_logic 1 outvld 14 } 
@@ -93,10 +93,10 @@ set portList {
 	{ ap_return_3 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_4 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_5 sc_out sc_lv 32 signal -1 } 
-	{ ap_return_6 sc_out sc_lv 254 signal -1 } 
-	{ ap_return_7 sc_out sc_lv 254 signal -1 } 
-	{ ap_return_8 sc_out sc_lv 254 signal -1 } 
-	{ ap_return_9 sc_out sc_lv 254 signal -1 } 
+	{ ap_return_6 sc_out sc_lv 214 signal -1 } 
+	{ ap_return_7 sc_out sc_lv 214 signal -1 } 
+	{ ap_return_8 sc_out sc_lv 214 signal -1 } 
+	{ ap_return_9 sc_out sc_lv 214 signal -1 } 
 }
 set NewPortList {[ 
 	{ "name": "ap_clk", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "clock", "bundle":{"name": "ap_clk", "role": "default" }} , 
@@ -115,10 +115,10 @@ set NewPortList {[
  	{ "name": "wl_start_read", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "wl_start_read", "role": "default" }} , 
  	{ "name": "compute_ready", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_ready", "role": "default" }} , 
  	{ "name": "compute_done", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_done", "role": "default" }} , 
- 	{ "name": "p_read1", "direction": "in", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "p_read1", "role": "default" }} , 
- 	{ "name": "p_read2", "direction": "in", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "p_read2", "role": "default" }} , 
- 	{ "name": "p_read3", "direction": "in", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "p_read3", "role": "default" }} , 
- 	{ "name": "p_read4", "direction": "in", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "p_read4", "role": "default" }} , 
+ 	{ "name": "p_read1", "direction": "in", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "p_read1", "role": "default" }} , 
+ 	{ "name": "p_read2", "direction": "in", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "p_read2", "role": "default" }} , 
+ 	{ "name": "p_read3", "direction": "in", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "p_read3", "role": "default" }} , 
+ 	{ "name": "p_read4", "direction": "in", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "p_read4", "role": "default" }} , 
  	{ "name": "compute_start_read", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start_read", "role": "default" }} , 
  	{ "name": "compute_instruction", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "compute_instruction", "role": "default" }} , 
  	{ "name": "compute_instruction_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_instruction", "role": "ap_vld" }} , 
@@ -130,10 +130,10 @@ set NewPortList {[
  	{ "name": "ap_return_3", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_3", "role": "default" }} , 
  	{ "name": "ap_return_4", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_4", "role": "default" }} , 
  	{ "name": "ap_return_5", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_5", "role": "default" }} , 
- 	{ "name": "ap_return_6", "direction": "out", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "ap_return_6", "role": "default" }} , 
- 	{ "name": "ap_return_7", "direction": "out", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "ap_return_7", "role": "default" }} , 
- 	{ "name": "ap_return_8", "direction": "out", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "ap_return_8", "role": "default" }} , 
- 	{ "name": "ap_return_9", "direction": "out", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "ap_return_9", "role": "default" }}  ]}
+ 	{ "name": "ap_return_6", "direction": "out", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "ap_return_6", "role": "default" }} , 
+ 	{ "name": "ap_return_7", "direction": "out", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "ap_return_7", "role": "default" }} , 
+ 	{ "name": "ap_return_8", "direction": "out", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "ap_return_8", "role": "default" }} , 
+ 	{ "name": "ap_return_9", "direction": "out", "datatype": "sc_lv", "bitwidth":214, "type": "signal", "bundle":{"name": "ap_return_9", "role": "default" }}  ]}
 
 set ArgLastReadFirstWriteLatency {
 	scheduler_hls {
@@ -224,14 +224,14 @@ set ArgLastReadFirstWriteLatency {
 		p_read19 {Type I LastRead 0 FirstWrite -1}
 		p_read20 {Type I LastRead 0 FirstWrite -1}
 		p_read21 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read_5 {Type I LastRead 0 FirstWrite -1}
+		p_read22 {Type I LastRead 0 FirstWrite -1}
+		p_read23 {Type I LastRead 0 FirstWrite -1}
 		p_read24 {Type I LastRead 0 FirstWrite -1}
 		p_read25 {Type I LastRead 0 FirstWrite -1}
-		p_read26 {Type I LastRead 0 FirstWrite -1}
-		p_read27 {Type I LastRead 0 FirstWrite -1}
 		p_read28 {Type I LastRead 0 FirstWrite -1}
 		p_read29 {Type I LastRead 0 FirstWrite -1}
+		p_read30 {Type I LastRead 0 FirstWrite -1}
+		p_read31 {Type I LastRead 0 FirstWrite -1}
 		p_read32 {Type I LastRead 0 FirstWrite -1}
 		p_read33 {Type I LastRead 0 FirstWrite -1}
 		p_read34 {Type I LastRead 0 FirstWrite -1}
@@ -290,10 +290,6 @@ set ArgLastReadFirstWriteLatency {
 		p_read87 {Type I LastRead 0 FirstWrite -1}
 		p_read88 {Type I LastRead 0 FirstWrite -1}
 		p_read89 {Type I LastRead 0 FirstWrite -1}
-		p_read90 {Type I LastRead 0 FirstWrite -1}
-		p_read91 {Type I LastRead 0 FirstWrite -1}
-		p_read92 {Type I LastRead 0 FirstWrite -1}
-		p_read93 {Type I LastRead 0 FirstWrite -1}
 		layer_idx {Type I LastRead 0 FirstWrite -1}
 		start_r {Type I LastRead 0 FirstWrite -1}}}
 
@@ -317,10 +313,10 @@ set Spec2ImplPortList {
 	wl_start_read { ap_none {  { wl_start_read in_data 0 1 } } }
 	compute_ready { ap_none {  { compute_ready in_data 0 1 } } }
 	compute_done { ap_none {  { compute_done in_data 0 1 } } }
-	p_read1 { ap_none {  { p_read1 in_data 0 254 } } }
-	p_read2 { ap_none {  { p_read2 in_data 0 254 } } }
-	p_read3 { ap_none {  { p_read3 in_data 0 254 } } }
-	p_read4 { ap_none {  { p_read4 in_data 0 254 } } }
+	p_read1 { ap_none {  { p_read1 in_data 0 214 } } }
+	p_read2 { ap_none {  { p_read2 in_data 0 214 } } }
+	p_read3 { ap_none {  { p_read3 in_data 0 214 } } }
+	p_read4 { ap_none {  { p_read4 in_data 0 214 } } }
 	compute_start_read { ap_none {  { compute_start_read in_data 0 1 } } }
 	compute_instruction { ap_vld {  { compute_instruction out_data 1 32 }  { compute_instruction_ap_vld out_vld 1 1 } } }
 	stream_ready { ap_none {  { stream_ready in_data 0 1 } } }

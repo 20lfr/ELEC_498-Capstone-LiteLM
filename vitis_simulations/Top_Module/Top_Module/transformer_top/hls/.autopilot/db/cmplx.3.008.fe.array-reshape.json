@@ -18,77 +18,77 @@
       "L": 2,
       "T": 20
     },
-    "total_instructions": 6630
+    "total_instructions": 6504
   },
   "1": {
-    "basicblocks": 516,
-    "calls": "3 3 3 3 2 2 4 3 3 3 3",
+    "basicblocks": 504,
+    "calls": "2 2 2 2 3 3 4 2 2 2 2",
     "control_depth": 2,
     "def_use_depth": 4,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 47,
-    "instructions": 3755,
+    "instructions": 3633,
     "loads": {
       "G": 71,
-      "L": 290
+      "L": 278
     },
-    "memory_accesses": 95,
+    "memory_accesses": 91,
     "name": "scheduler_hls",
     "stores": {
       "G": 263,
-      "L": 438
+      "L": 422
     },
-    "total_instructions": 6372
+    "total_instructions": 6246
   },
   "2": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 4,
+    "def_use_depth": 48,
     "file": "head_helpers.cpp",
-    "fileloc": 20,
-    "instructions": 54,
+    "fileloc": 29,
+    "instructions": 110,
+    "loads": {
+      "L": 1
+    },
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
-      "L": 47
+      "L": 1
     },
-    "total_instructions": 54
+    "total_instructions": 115
   },
   "3": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 50,
+    "def_use_depth": 4,
     "file": "head_helpers.cpp",
-    "fileloc": 20,
-    "instructions": 116,
-    "loads": {
-      "L": 1
-    },
+    "fileloc": 29,
+    "instructions": 52,
     "memory_accesses": 0,
     "name": "init_head_ctx",
     "stores": {
-      "L": 1
+      "L": 45
     },
-    "total_instructions": 122
+    "total_instructions": 52
   },
   "4": {
     "basicblocks": 299,
-    "calls": "2 2",
+    "calls": "3 3",
     "control_depth": 0,
     "def_use_depth": 5,
     "file": "head_helpers.cpp",
-    "fileloc": 389,
-    "instructions": 1049,
+    "fileloc": 395,
+    "instructions": 1125,
     "loads": {
-      "L": 154
+      "L": 170
     },
     "memory_accesses": 0,
     "name": "drive_group_head_phase",
     "stores": {
-      "L": 328
+      "L": 324
     },
-    "total_instructions": 1157
+    "total_instructions": 1229
   }
 }

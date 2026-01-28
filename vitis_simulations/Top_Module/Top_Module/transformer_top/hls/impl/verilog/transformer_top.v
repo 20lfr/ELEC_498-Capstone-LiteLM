@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.056513,HLS_SYN_LAT=3,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=7473,HLS_SYN_LUT=18511,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.095262,HLS_SYN_LAT=3,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=6753,HLS_SYN_LUT=17963,HLS_VERSION=2025_1}" *)
 
 module transformer_top (
         ap_clk,
@@ -126,17 +126,17 @@ output  [0:0] compute_start_o;
 output   compute_start_o_ap_vld;
 output  [31:0] compute_instruction;
 output   compute_instruction_ap_vld;
-input  [253:0] head_ctx_ref_0_i;
-output  [253:0] head_ctx_ref_0_o;
+input  [213:0] head_ctx_ref_0_i;
+output  [213:0] head_ctx_ref_0_o;
 output   head_ctx_ref_0_o_ap_vld;
-input  [253:0] head_ctx_ref_1_i;
-output  [253:0] head_ctx_ref_1_o;
+input  [213:0] head_ctx_ref_1_i;
+output  [213:0] head_ctx_ref_1_o;
 output   head_ctx_ref_1_o_ap_vld;
-input  [253:0] head_ctx_ref_2_i;
-output  [253:0] head_ctx_ref_2_o;
+input  [213:0] head_ctx_ref_2_i;
+output  [213:0] head_ctx_ref_2_o;
 output   head_ctx_ref_2_o_ap_vld;
-input  [253:0] head_ctx_ref_3_i;
-output  [253:0] head_ctx_ref_3_o;
+input  [213:0] head_ctx_ref_3_i;
+output  [213:0] head_ctx_ref_3_o;
 output   head_ctx_ref_3_o_ap_vld;
 input  [0:0] stream_ready;
 output  [0:0] stream_start;
@@ -311,10 +311,10 @@ wire   [31:0] or_ln_fu_14549_p4;
 reg   [0:0] wl_start_read_reg_17777;
 wire    ap_CS_fsm_state2;
 reg   [0:0] compute_start_read_reg_17782;
-reg   [253:0] head_ctx_ref_0_read_reg_17787;
-reg   [253:0] head_ctx_ref_1_read_reg_17792;
-reg   [253:0] head_ctx_ref_2_read_reg_17797;
-reg   [253:0] head_ctx_ref_3_read_reg_17802;
+reg   [213:0] head_ctx_ref_0_read_reg_17787;
+reg   [213:0] head_ctx_ref_1_read_reg_17792;
+reg   [213:0] head_ctx_ref_2_read_reg_17797;
+reg   [213:0] head_ctx_ref_3_read_reg_17802;
 wire    grp_scheduler_hls_fu_13846_ap_start;
 wire    grp_scheduler_hls_fu_13846_ap_done;
 wire    grp_scheduler_hls_fu_13846_ap_idle;
@@ -329,10 +329,10 @@ wire   [0:0] grp_scheduler_hls_fu_13846_ap_return_2;
 wire   [0:0] grp_scheduler_hls_fu_13846_ap_return_3;
 wire   [0:0] grp_scheduler_hls_fu_13846_ap_return_4;
 wire   [31:0] grp_scheduler_hls_fu_13846_ap_return_5;
-wire   [253:0] grp_scheduler_hls_fu_13846_ap_return_6;
-wire   [253:0] grp_scheduler_hls_fu_13846_ap_return_7;
-wire   [253:0] grp_scheduler_hls_fu_13846_ap_return_8;
-wire   [253:0] grp_scheduler_hls_fu_13846_ap_return_9;
+wire   [213:0] grp_scheduler_hls_fu_13846_ap_return_6;
+wire   [213:0] grp_scheduler_hls_fu_13846_ap_return_7;
+wire   [213:0] grp_scheduler_hls_fu_13846_ap_return_8;
+wire   [213:0] grp_scheduler_hls_fu_13846_ap_return_9;
 reg   [2:0] ctrl_mem_irq_enable_loc_1_reg_705;
 wire   [0:0] ctrl_chip_en_read_read_fu_394_p2;
 wire   [0:0] and_ln165_fu_14481_p2;

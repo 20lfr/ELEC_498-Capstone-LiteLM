@@ -6650,9 +6650,7 @@ struct HeadCtx {
 
     bool wl_ready = false;
     bool wl_start = false;
-    DmaSel wl_addr_sel = DmaSel::DMASEL_NONE;
-    int wl_layer = -1;
-    int wl_head = -1;
+    uint32_t wl_instruction = 0;
     bool dma_done = false;
 
     bool start_head = false;

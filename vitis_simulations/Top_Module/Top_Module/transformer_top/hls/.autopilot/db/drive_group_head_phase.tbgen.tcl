@@ -16,7 +16,7 @@ set DLRegItemOffset 0
 set svuvm_can_support 1
 set cdfgNum 4
 set C_modelName {drive_group_head_phase}
-set C_modelType { int 509 }
+set C_modelType { int 429 }
 set ap_memory_interface_dict [dict create]
 set C_modelArgList {
 	{ p_read int 32 regular  }
@@ -41,14 +41,14 @@ set C_modelArgList {
 	{ p_read19 int 1 regular  }
 	{ p_read20 int 1 regular  }
 	{ p_read21 int 1 regular  }
-	{ head_ctx_ref_wl_addr_sel_read int 4 regular  }
-	{ head_ctx_ref_wl_addr_sel_read_5 int 4 regular  }
-	{ p_read24 int 32 regular  }
-	{ p_read25 int 32 regular  }
-	{ p_read26 int 32 regular  }
-	{ p_read27 int 32 regular  }
+	{ p_read22 int 32 regular  }
+	{ p_read23 int 32 regular  }
+	{ p_read24 int 1 regular  }
+	{ p_read25 int 1 regular  }
 	{ p_read28 int 1 regular  }
 	{ p_read29 int 1 regular  }
+	{ p_read30 int 1 regular  }
+	{ p_read31 int 1 regular  }
 	{ p_read32 int 1 regular  }
 	{ p_read33 int 1 regular  }
 	{ p_read34 int 1 regular  }
@@ -107,10 +107,6 @@ set C_modelArgList {
 	{ p_read87 int 1 regular  }
 	{ p_read88 int 1 regular  }
 	{ p_read89 int 1 regular  }
-	{ p_read90 int 1 regular  }
-	{ p_read91 int 1 regular  }
-	{ p_read92 int 1 regular  }
-	{ p_read93 int 1 regular  }
 	{ layer_idx int 32 regular  }
 	{ start_r uint 1 regular  }
 }
@@ -140,14 +136,14 @@ set C_modelArgMapList {[
  	{ "Name" : "p_read19", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read20", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read21", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "head_ctx_ref_wl_addr_sel_read", "interface" : "wire", "bitwidth" : 4, "direction" : "READONLY"} , 
- 	{ "Name" : "head_ctx_ref_wl_addr_sel_read_5", "interface" : "wire", "bitwidth" : 4, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read24", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read25", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read26", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read27", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read22", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read23", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read24", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read25", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read28", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read29", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read30", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "p_read31", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read32", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read33", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read34", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
@@ -206,15 +202,11 @@ set C_modelArgMapList {[
  	{ "Name" : "p_read87", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read88", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "p_read89", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read90", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read91", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read92", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "p_read93", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "layer_idx", "interface" : "wire", "bitwidth" : 32, "direction" : "READONLY"} , 
  	{ "Name" : "start_r", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
- 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 509} ]}
+ 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 429} ]}
 # RTL Port declarations: 
-set portNum 191
+set portNum 183
 set portList { 
 	{ ap_ready sc_out sc_logic 1 ready -1 } 
 	{ p_read sc_in sc_lv 32 signal 0 } 
@@ -239,14 +231,14 @@ set portList {
 	{ p_read19 sc_in sc_lv 1 signal 19 } 
 	{ p_read20 sc_in sc_lv 1 signal 20 } 
 	{ p_read21 sc_in sc_lv 1 signal 21 } 
-	{ head_ctx_ref_wl_addr_sel_read sc_in sc_lv 4 signal 22 } 
-	{ head_ctx_ref_wl_addr_sel_read_5 sc_in sc_lv 4 signal 23 } 
-	{ p_read24 sc_in sc_lv 32 signal 24 } 
-	{ p_read25 sc_in sc_lv 32 signal 25 } 
-	{ p_read26 sc_in sc_lv 32 signal 26 } 
-	{ p_read27 sc_in sc_lv 32 signal 27 } 
-	{ p_read28 sc_in sc_lv 1 signal 28 } 
-	{ p_read29 sc_in sc_lv 1 signal 29 } 
+	{ p_read22 sc_in sc_lv 32 signal 22 } 
+	{ p_read23 sc_in sc_lv 32 signal 23 } 
+	{ p_read24 sc_in sc_lv 1 signal 24 } 
+	{ p_read25 sc_in sc_lv 1 signal 25 } 
+	{ p_read28 sc_in sc_lv 1 signal 26 } 
+	{ p_read29 sc_in sc_lv 1 signal 27 } 
+	{ p_read30 sc_in sc_lv 1 signal 28 } 
+	{ p_read31 sc_in sc_lv 1 signal 29 } 
 	{ p_read32 sc_in sc_lv 1 signal 30 } 
 	{ p_read33 sc_in sc_lv 1 signal 31 } 
 	{ p_read34 sc_in sc_lv 1 signal 32 } 
@@ -305,12 +297,8 @@ set portList {
 	{ p_read87 sc_in sc_lv 1 signal 85 } 
 	{ p_read88 sc_in sc_lv 1 signal 86 } 
 	{ p_read89 sc_in sc_lv 1 signal 87 } 
-	{ p_read90 sc_in sc_lv 1 signal 88 } 
-	{ p_read91 sc_in sc_lv 1 signal 89 } 
-	{ p_read92 sc_in sc_lv 1 signal 90 } 
-	{ p_read93 sc_in sc_lv 1 signal 91 } 
-	{ layer_idx sc_in sc_lv 32 signal 92 } 
-	{ start_r sc_in sc_lv 1 signal 93 } 
+	{ layer_idx sc_in sc_lv 32 signal 88 } 
+	{ start_r sc_in sc_lv 1 signal 89 } 
 	{ ap_return_0 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_1 sc_out sc_lv 32 signal -1 } 
 	{ ap_return_2 sc_out sc_lv 32 signal -1 } 
@@ -334,12 +322,12 @@ set portList {
 	{ ap_return_20 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_21 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_22 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_23 sc_out sc_lv 8 signal -1 } 
-	{ ap_return_24 sc_out sc_lv 8 signal -1 } 
-	{ ap_return_25 sc_out sc_lv 32 signal -1 } 
-	{ ap_return_26 sc_out sc_lv 32 signal -1 } 
-	{ ap_return_27 sc_out sc_lv 32 signal -1 } 
-	{ ap_return_28 sc_out sc_lv 32 signal -1 } 
+	{ ap_return_23 sc_out sc_lv 32 signal -1 } 
+	{ ap_return_24 sc_out sc_lv 32 signal -1 } 
+	{ ap_return_25 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_26 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_27 sc_out sc_lv 1 signal -1 } 
+	{ ap_return_28 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_29 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_30 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_31 sc_out sc_lv 1 signal -1 } 
@@ -402,10 +390,6 @@ set portList {
 	{ ap_return_88 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_89 sc_out sc_lv 1 signal -1 } 
 	{ ap_return_90 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_91 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_92 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_93 sc_out sc_lv 1 signal -1 } 
-	{ ap_return_94 sc_out sc_lv 1 signal -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
 }
 set NewPortList {[ 
@@ -432,14 +416,14 @@ set NewPortList {[
  	{ "name": "p_read19", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read19", "role": "default" }} , 
  	{ "name": "p_read20", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read20", "role": "default" }} , 
  	{ "name": "p_read21", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read21", "role": "default" }} , 
- 	{ "name": "head_ctx_ref_wl_addr_sel_read", "direction": "in", "datatype": "sc_lv", "bitwidth":4, "type": "signal", "bundle":{"name": "head_ctx_ref_wl_addr_sel_read", "role": "default" }} , 
- 	{ "name": "head_ctx_ref_wl_addr_sel_read_5", "direction": "in", "datatype": "sc_lv", "bitwidth":4, "type": "signal", "bundle":{"name": "head_ctx_ref_wl_addr_sel_read_5", "role": "default" }} , 
- 	{ "name": "p_read24", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read24", "role": "default" }} , 
- 	{ "name": "p_read25", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read25", "role": "default" }} , 
- 	{ "name": "p_read26", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read26", "role": "default" }} , 
- 	{ "name": "p_read27", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read27", "role": "default" }} , 
+ 	{ "name": "p_read22", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read22", "role": "default" }} , 
+ 	{ "name": "p_read23", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "p_read23", "role": "default" }} , 
+ 	{ "name": "p_read24", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read24", "role": "default" }} , 
+ 	{ "name": "p_read25", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read25", "role": "default" }} , 
  	{ "name": "p_read28", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read28", "role": "default" }} , 
  	{ "name": "p_read29", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read29", "role": "default" }} , 
+ 	{ "name": "p_read30", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read30", "role": "default" }} , 
+ 	{ "name": "p_read31", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read31", "role": "default" }} , 
  	{ "name": "p_read32", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read32", "role": "default" }} , 
  	{ "name": "p_read33", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read33", "role": "default" }} , 
  	{ "name": "p_read34", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read34", "role": "default" }} , 
@@ -498,10 +482,6 @@ set NewPortList {[
  	{ "name": "p_read87", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read87", "role": "default" }} , 
  	{ "name": "p_read88", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read88", "role": "default" }} , 
  	{ "name": "p_read89", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read89", "role": "default" }} , 
- 	{ "name": "p_read90", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read90", "role": "default" }} , 
- 	{ "name": "p_read91", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read91", "role": "default" }} , 
- 	{ "name": "p_read92", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read92", "role": "default" }} , 
- 	{ "name": "p_read93", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "p_read93", "role": "default" }} , 
  	{ "name": "layer_idx", "direction": "in", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "layer_idx", "role": "default" }} , 
  	{ "name": "start_r", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "start_r", "role": "default" }} , 
  	{ "name": "ap_return_0", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_0", "role": "default" }} , 
@@ -527,12 +507,12 @@ set NewPortList {[
  	{ "name": "ap_return_20", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_20", "role": "default" }} , 
  	{ "name": "ap_return_21", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_21", "role": "default" }} , 
  	{ "name": "ap_return_22", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_22", "role": "default" }} , 
- 	{ "name": "ap_return_23", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "ap_return_23", "role": "default" }} , 
- 	{ "name": "ap_return_24", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "ap_return_24", "role": "default" }} , 
- 	{ "name": "ap_return_25", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_25", "role": "default" }} , 
- 	{ "name": "ap_return_26", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_26", "role": "default" }} , 
- 	{ "name": "ap_return_27", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_27", "role": "default" }} , 
- 	{ "name": "ap_return_28", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_28", "role": "default" }} , 
+ 	{ "name": "ap_return_23", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_23", "role": "default" }} , 
+ 	{ "name": "ap_return_24", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "ap_return_24", "role": "default" }} , 
+ 	{ "name": "ap_return_25", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_25", "role": "default" }} , 
+ 	{ "name": "ap_return_26", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_26", "role": "default" }} , 
+ 	{ "name": "ap_return_27", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_27", "role": "default" }} , 
+ 	{ "name": "ap_return_28", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_28", "role": "default" }} , 
  	{ "name": "ap_return_29", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_29", "role": "default" }} , 
  	{ "name": "ap_return_30", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_30", "role": "default" }} , 
  	{ "name": "ap_return_31", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_31", "role": "default" }} , 
@@ -595,10 +575,6 @@ set NewPortList {[
  	{ "name": "ap_return_88", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_88", "role": "default" }} , 
  	{ "name": "ap_return_89", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_89", "role": "default" }} , 
  	{ "name": "ap_return_90", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_90", "role": "default" }} , 
- 	{ "name": "ap_return_91", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_91", "role": "default" }} , 
- 	{ "name": "ap_return_92", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_92", "role": "default" }} , 
- 	{ "name": "ap_return_93", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_93", "role": "default" }} , 
- 	{ "name": "ap_return_94", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "ap_return_94", "role": "default" }} , 
  	{ "name": "ap_rst", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "reset", "bundle":{"name": "ap_rst", "role": "default" }}  ]}
 
 set ArgLastReadFirstWriteLatency {
@@ -625,14 +601,14 @@ set ArgLastReadFirstWriteLatency {
 		p_read19 {Type I LastRead 0 FirstWrite -1}
 		p_read20 {Type I LastRead 0 FirstWrite -1}
 		p_read21 {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read {Type I LastRead 0 FirstWrite -1}
-		head_ctx_ref_wl_addr_sel_read_5 {Type I LastRead 0 FirstWrite -1}
+		p_read22 {Type I LastRead 0 FirstWrite -1}
+		p_read23 {Type I LastRead 0 FirstWrite -1}
 		p_read24 {Type I LastRead 0 FirstWrite -1}
 		p_read25 {Type I LastRead 0 FirstWrite -1}
-		p_read26 {Type I LastRead 0 FirstWrite -1}
-		p_read27 {Type I LastRead 0 FirstWrite -1}
 		p_read28 {Type I LastRead 0 FirstWrite -1}
 		p_read29 {Type I LastRead 0 FirstWrite -1}
+		p_read30 {Type I LastRead 0 FirstWrite -1}
+		p_read31 {Type I LastRead 0 FirstWrite -1}
 		p_read32 {Type I LastRead 0 FirstWrite -1}
 		p_read33 {Type I LastRead 0 FirstWrite -1}
 		p_read34 {Type I LastRead 0 FirstWrite -1}
@@ -691,10 +667,6 @@ set ArgLastReadFirstWriteLatency {
 		p_read87 {Type I LastRead 0 FirstWrite -1}
 		p_read88 {Type I LastRead 0 FirstWrite -1}
 		p_read89 {Type I LastRead 0 FirstWrite -1}
-		p_read90 {Type I LastRead 0 FirstWrite -1}
-		p_read91 {Type I LastRead 0 FirstWrite -1}
-		p_read92 {Type I LastRead 0 FirstWrite -1}
-		p_read93 {Type I LastRead 0 FirstWrite -1}
 		layer_idx {Type I LastRead 0 FirstWrite -1}
 		start_r {Type I LastRead 0 FirstWrite -1}}}
 
@@ -731,14 +703,14 @@ set Spec2ImplPortList {
 	p_read19 { ap_none {  { p_read19 in_data 0 1 } } }
 	p_read20 { ap_none {  { p_read20 in_data 0 1 } } }
 	p_read21 { ap_none {  { p_read21 in_data 0 1 } } }
-	head_ctx_ref_wl_addr_sel_read { ap_none {  { head_ctx_ref_wl_addr_sel_read in_data 0 4 } } }
-	head_ctx_ref_wl_addr_sel_read_5 { ap_none {  { head_ctx_ref_wl_addr_sel_read_5 in_data 0 4 } } }
-	p_read24 { ap_none {  { p_read24 in_data 0 32 } } }
-	p_read25 { ap_none {  { p_read25 in_data 0 32 } } }
-	p_read26 { ap_none {  { p_read26 in_data 0 32 } } }
-	p_read27 { ap_none {  { p_read27 in_data 0 32 } } }
+	p_read22 { ap_none {  { p_read22 in_data 0 32 } } }
+	p_read23 { ap_none {  { p_read23 in_data 0 32 } } }
+	p_read24 { ap_none {  { p_read24 in_data 0 1 } } }
+	p_read25 { ap_none {  { p_read25 in_data 0 1 } } }
 	p_read28 { ap_none {  { p_read28 in_data 0 1 } } }
 	p_read29 { ap_none {  { p_read29 in_data 0 1 } } }
+	p_read30 { ap_none {  { p_read30 in_data 0 1 } } }
+	p_read31 { ap_none {  { p_read31 in_data 0 1 } } }
 	p_read32 { ap_none {  { p_read32 in_data 0 1 } } }
 	p_read33 { ap_none {  { p_read33 in_data 0 1 } } }
 	p_read34 { ap_none {  { p_read34 in_data 0 1 } } }
@@ -797,10 +769,6 @@ set Spec2ImplPortList {
 	p_read87 { ap_none {  { p_read87 in_data 0 1 } } }
 	p_read88 { ap_none {  { p_read88 in_data 0 1 } } }
 	p_read89 { ap_none {  { p_read89 in_data 0 1 } } }
-	p_read90 { ap_none {  { p_read90 in_data 0 1 } } }
-	p_read91 { ap_none {  { p_read91 in_data 0 1 } } }
-	p_read92 { ap_none {  { p_read92 in_data 0 1 } } }
-	p_read93 { ap_none {  { p_read93 in_data 0 1 } } }
 	layer_idx { ap_none {  { layer_idx in_data 0 32 } } }
 	start_r { ap_none {  { start_r in_data 0 1 } } }
 }

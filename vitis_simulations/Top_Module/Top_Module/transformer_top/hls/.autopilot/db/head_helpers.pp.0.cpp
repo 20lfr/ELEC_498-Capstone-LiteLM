@@ -6653,9 +6653,7 @@ struct HeadCtx {
 
     bool wl_ready = false;
     bool wl_start = false;
-    DmaSel wl_addr_sel = DmaSel::DMASEL_NONE;
-    int wl_layer = -1;
-    int wl_head = -1;
+    uint32_t wl_instruction = 0;
     bool dma_done = false;
 
     bool start_head = false;
@@ -7063,6 +7061,15 @@ static inline uint32_t pack_compute_op(ComputeOp op, int layer, int head, int ti
     return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
+static inline uint32_t pack_dma_op(DmaSel op, int layer, int head, int tile) {
+#pragma HLS INLINE
+ const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
+    const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
+    const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
+    const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
+    return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
+}
+
 static inline ComputeOp unpack_compute_op(uint32_t packed_op) {
 #pragma HLS INLINE
  return static_cast<ComputeOp>(packed_op & 0xFFu);
@@ -7080,9 +7087,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.last_wl_addr = DmaSel::DMASEL_NONE;
     ctx.wl_ready = false;
     ctx.wl_start = false;
-    ctx.wl_addr_sel = DmaSel::DMASEL_NONE;
-    ctx.wl_layer = -1;
-    ctx.wl_head = -1;
+    ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, head_idx, -1);
     ctx.dma_done = false;
     ctx.start_head = false;
     ctx.q_started = false;
@@ -7118,7 +7123,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.att_scores_dma_done = false;
     ctx.att_value_dma_done = false;
 }
-# 80 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
+# 87 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
 bool run_single_head(
     HeadCtx &ctx,
     int layer_idx,
@@ -7134,7 +7139,7 @@ bool run_single_head(
     }
     if (!ctx.wl_ready && ctx.wl_start){
         ctx.wl_start = false;
-        ctx.wl_addr_sel = DmaSel::DMASEL_NONE;
+        ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, ctx.head_idx, -1);
     }
 
     if (!ctx.compute_ready && ctx.compute_start){
@@ -7187,7 +7192,7 @@ bool run_single_head(
                 ctx.compute_done = false;
                 ctx.compute_start = false;
                 ctx.wl_start = false;
-                ctx.wl_addr_sel = DmaSel::DMASEL_NONE;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, ctx.head_idx, -1);
                 ctx.q_started = false;
                 ctx.k_started = false;
                 ctx.v_started = false;
@@ -7223,15 +7228,14 @@ bool run_single_head(
                 ctx.last_wl_addr = DmaSel::DMASEL_NONE;
                 ctx.phase = HeadPhase::Q;
 
-                ctx.wl_layer = layer_idx;
-                ctx.wl_head = ctx.head_idx;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, ctx.head_idx, -1);
             }
             break;
         }
         case HeadPhase::Q: {
             if (ctx.wl_ready && !ctx.q_started){
                 ctx.wl_start = true;
-                ctx.wl_addr_sel = DmaSel::DMASEL_WQ;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_WQ, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_WQ;
                 ctx.q_started = true;
             }
@@ -7250,7 +7254,7 @@ bool run_single_head(
         case HeadPhase::K: {
             if (ctx.wl_ready && !ctx.k_started) {
                 ctx.wl_start = true;
-                ctx.wl_addr_sel = DmaSel::DMASEL_WK;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_WK, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_WK;
                 ctx.k_started = true;
             }
@@ -7281,7 +7285,7 @@ bool run_single_head(
         case HeadPhase::K_WRITEBACK: {
             if (ctx.wl_ready && !ctx.k_writeback_started) {
                 ctx.wl_start = true;
-                ctx.wl_addr_sel = DmaSel::DMASEL_K_WRITE;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_K_WRITE, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_K_WRITE;
                 ctx.k_writeback_started = true;
             } else if (ctx.k_writeback_dma_done && ctx.k_writeback_started) {
@@ -7293,7 +7297,7 @@ bool run_single_head(
         case HeadPhase::V: {
             if (ctx.wl_ready && !ctx.v_started) {
                 ctx.wl_start = true;
-                ctx.wl_addr_sel = DmaSel::DMASEL_WV;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_WV, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_WV;
                 ctx.v_started = true;
             }
@@ -7324,7 +7328,7 @@ bool run_single_head(
         case HeadPhase::V_WRITEBACK: {
             if (ctx.wl_ready && !ctx.v_writeback_started) {
                 ctx.wl_start = true;
-                ctx.wl_addr_sel = DmaSel::DMASEL_V_WRITE;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_V_WRITE, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_V_WRITE;
                 ctx.v_writeback_started = true;
             } else if (ctx.v_writeback_dma_done && ctx.v_writeback_started) {
@@ -7348,7 +7352,7 @@ bool run_single_head(
         case HeadPhase::ATT_SCORES: {
             if (ctx.wl_ready && !ctx.att_scores_started) {
                 ctx.wl_start = true;
-                ctx.wl_addr_sel = DmaSel::DMASEL_CTX_K;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_CTX_K, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_CTX_K;
                 ctx.att_scores_started = true;
             }
@@ -7390,7 +7394,7 @@ bool run_single_head(
         case HeadPhase::ATT_VALUE: {
             if (ctx.wl_ready && !ctx.att_value_started) {
                 ctx.wl_start = true;
-                ctx.wl_addr_sel = DmaSel::DMASEL_CTX_V;
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_CTX_V, layer_idx, ctx.head_idx, -1);
                 ctx.last_wl_addr = DmaSel::DMASEL_CTX_V;
                 ctx.att_value_started = true;
             }
@@ -7439,7 +7443,7 @@ bool drive_group_head_phase(
 
  bool group_finished = true;
 
-    VITIS_LOOP_400_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+    VITIS_LOOP_406_1: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  HeadCtx &ctx = head_ctx_ref[lane];
 

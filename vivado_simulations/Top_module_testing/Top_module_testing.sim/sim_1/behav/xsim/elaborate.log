@@ -7,17 +7,17 @@ WARNING: [XSIM 43-3431] One or more environment variables have been detected whi
 Starting static elaboration
 Pass Through NonSizing Optimizer
 WARNING: [VRFC 10-3818] variable 'seen_attn' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:111]
-WARNING: [VRFC 10-2921] 'seen_attn' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:291]
+WARNING: [VRFC 10-2921] 'seen_attn' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:289]
 WARNING: [VRFC 10-3818] variable 'seen_concat' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:112]
-WARNING: [VRFC 10-3818] variable 'irq_inference_done' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:251]
-WARNING: [VRFC 10-2921] 'irq_inference_done' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:495]
+WARNING: [VRFC 10-3818] variable 'irq_inference_done' is driven by invalid combination of procedural drivers [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:249]
+WARNING: [VRFC 10-2921] 'irq_inference_done' driven by this always_ff block should not be driven by any other process [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_module_hls_tb.sv:493]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis
 Time Resolution for simulation is 1ps
 Compiling module xil_defaultlib.transformer_top_drive_group_head...
 Compiling module xil_defaultlib.transformer_top_sparsemux_7_2_1_...
-Compiling module xil_defaultlib.transformer_top_sparsemux_7_2_25...
+Compiling module xil_defaultlib.transformer_top_sparsemux_7_2_21...
 Compiling module xil_defaultlib.transformer_top_scheduler_hls
 Compiling module xil_defaultlib.transformer_top
 Compiling module xil_defaultlib.transformer_top_tb
