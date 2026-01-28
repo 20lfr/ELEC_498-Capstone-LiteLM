@@ -24,15 +24,12 @@ set C_modelArgList {
 	{ axis_in_ready int 1 regular {pointer 1}  }
 	{ dma_done uint 1 regular  }
 	{ wl_ready uint 1 regular  }
+	{ wl_instruction int 32 regular {pointer 1}  }
 	{ wl_start int 1 regular {pointer 2}  }
-	{ wl_addr_sel int 8 regular {pointer 1}  }
-	{ wl_layer int 32 regular {pointer 1}  }
-	{ wl_head int 32 regular {pointer 1}  }
-	{ wl_tile int 32 regular {pointer 1}  }
 	{ compute_ready uint 1 regular  }
 	{ compute_done uint 1 regular  }
 	{ compute_start int 1 regular {pointer 2}  }
-	{ compute_op int 32 regular {pointer 1}  }
+	{ compute_instruction int 32 regular {pointer 1}  }
 	{ head_ctx_ref_0 int 254 regular {pointer 2}  }
 	{ head_ctx_ref_1 int 254 regular {pointer 2}  }
 	{ head_ctx_ref_2 int 254 regular {pointer 2}  }
@@ -77,15 +74,12 @@ set C_modelArgMapList {[
  	{ "Name" : "axis_in_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} , 
  	{ "Name" : "dma_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "wl_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
+ 	{ "Name" : "wl_instruction", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "wl_start", "interface" : "wire", "bitwidth" : 1, "direction" : "READWRITE"} , 
- 	{ "Name" : "wl_addr_sel", "interface" : "wire", "bitwidth" : 8, "direction" : "WRITEONLY"} , 
- 	{ "Name" : "wl_layer", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
- 	{ "Name" : "wl_head", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
- 	{ "Name" : "wl_tile", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "compute_ready", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "compute_done", "interface" : "wire", "bitwidth" : 1, "direction" : "READONLY"} , 
  	{ "Name" : "compute_start", "interface" : "wire", "bitwidth" : 1, "direction" : "READWRITE"} , 
- 	{ "Name" : "compute_op", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
+ 	{ "Name" : "compute_instruction", "interface" : "wire", "bitwidth" : 32, "direction" : "WRITEONLY"} , 
  	{ "Name" : "head_ctx_ref_0", "interface" : "wire", "bitwidth" : 254, "direction" : "READWRITE"} , 
  	{ "Name" : "head_ctx_ref_1", "interface" : "wire", "bitwidth" : 254, "direction" : "READWRITE"} , 
  	{ "Name" : "head_ctx_ref_2", "interface" : "wire", "bitwidth" : 254, "direction" : "READWRITE"} , 
@@ -121,7 +115,7 @@ set C_modelArgMapList {[
  	{ "Name" : "dbg_done", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} , 
  	{ "Name" : "dbg_error", "interface" : "wire", "bitwidth" : 1, "direction" : "WRITEONLY"} ]}
 # RTL Port declarations: 
-set portNum 93
+set portNum 87
 set portList { 
 	{ ap_clk sc_in sc_logic 1 clock -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
@@ -135,87 +129,81 @@ set portList {
 	{ axis_in_ready_ap_vld sc_out sc_logic 1 outvld 2 } 
 	{ dma_done sc_in sc_lv 1 signal 3 } 
 	{ wl_ready sc_in sc_lv 1 signal 4 } 
-	{ wl_start_i sc_in sc_lv 1 signal 5 } 
-	{ wl_start_o sc_out sc_lv 1 signal 5 } 
-	{ wl_start_o_ap_vld sc_out sc_logic 1 outvld 5 } 
-	{ wl_addr_sel sc_out sc_lv 8 signal 6 } 
-	{ wl_addr_sel_ap_vld sc_out sc_logic 1 outvld 6 } 
-	{ wl_layer sc_out sc_lv 32 signal 7 } 
-	{ wl_layer_ap_vld sc_out sc_logic 1 outvld 7 } 
-	{ wl_head sc_out sc_lv 32 signal 8 } 
-	{ wl_head_ap_vld sc_out sc_logic 1 outvld 8 } 
-	{ wl_tile sc_out sc_lv 32 signal 9 } 
-	{ wl_tile_ap_vld sc_out sc_logic 1 outvld 9 } 
-	{ compute_ready sc_in sc_lv 1 signal 10 } 
-	{ compute_done sc_in sc_lv 1 signal 11 } 
-	{ compute_start_i sc_in sc_lv 1 signal 12 } 
-	{ compute_start_o sc_out sc_lv 1 signal 12 } 
-	{ compute_start_o_ap_vld sc_out sc_logic 1 outvld 12 } 
-	{ compute_op sc_out sc_lv 32 signal 13 } 
-	{ compute_op_ap_vld sc_out sc_logic 1 outvld 13 } 
-	{ head_ctx_ref_0_i sc_in sc_lv 254 signal 14 } 
-	{ head_ctx_ref_0_o sc_out sc_lv 254 signal 14 } 
-	{ head_ctx_ref_0_o_ap_vld sc_out sc_logic 1 outvld 14 } 
-	{ head_ctx_ref_1_i sc_in sc_lv 254 signal 15 } 
-	{ head_ctx_ref_1_o sc_out sc_lv 254 signal 15 } 
-	{ head_ctx_ref_1_o_ap_vld sc_out sc_logic 1 outvld 15 } 
-	{ head_ctx_ref_2_i sc_in sc_lv 254 signal 16 } 
-	{ head_ctx_ref_2_o sc_out sc_lv 254 signal 16 } 
-	{ head_ctx_ref_2_o_ap_vld sc_out sc_logic 1 outvld 16 } 
-	{ head_ctx_ref_3_i sc_in sc_lv 254 signal 17 } 
-	{ head_ctx_ref_3_o sc_out sc_lv 254 signal 17 } 
-	{ head_ctx_ref_3_o_ap_vld sc_out sc_logic 1 outvld 17 } 
-	{ stream_ready sc_in sc_lv 1 signal 18 } 
-	{ stream_start sc_out sc_lv 1 signal 19 } 
-	{ stream_start_ap_vld sc_out sc_logic 1 outvld 19 } 
-	{ stream_done sc_in sc_lv 1 signal 20 } 
-	{ ctrl_addr sc_in sc_lv 32 signal 21 } 
-	{ ctrl_data_in sc_in sc_lv 32 signal 22 } 
-	{ ctrl_data_out sc_out sc_lv 32 signal 23 } 
-	{ ctrl_data_out_ap_vld sc_out sc_logic 1 outvld 23 } 
-	{ ctrl_read_en sc_in sc_lv 1 signal 24 } 
-	{ ctrl_write_en sc_in sc_lv 1 signal 25 } 
-	{ ctrl_chip_en sc_in sc_lv 1 signal 26 } 
-	{ ctrl_resetn_in sc_in sc_lv 1 signal 27 } 
-	{ irq_ps sc_out sc_lv 1 signal 28 } 
-	{ irq_ps_ap_vld sc_out sc_logic 1 outvld 28 } 
-	{ dbg_state sc_out sc_lv 32 signal 29 } 
-	{ dbg_state_ap_vld sc_out sc_logic 1 outvld 29 } 
-	{ dbg_ctrl_mem sc_in sc_lv 1056 signal 30 } 
-	{ control_reg sc_out sc_lv 32 signal 31 } 
-	{ control_reg_ap_vld sc_out sc_logic 1 outvld 31 } 
-	{ irq_status_reg sc_out sc_lv 32 signal 32 } 
-	{ irq_status_reg_ap_vld sc_out sc_logic 1 outvld 32 } 
-	{ irq_enable_reg sc_out sc_lv 32 signal 33 } 
-	{ irq_enable_reg_ap_vld sc_out sc_logic 1 outvld 33 } 
-	{ wq_base_addr sc_out sc_lv 32 signal 34 } 
-	{ wq_base_addr_ap_vld sc_out sc_logic 1 outvld 34 } 
-	{ wk_base_addr sc_out sc_lv 32 signal 35 } 
-	{ wk_base_addr_ap_vld sc_out sc_logic 1 outvld 35 } 
-	{ wv_base_addr sc_out sc_lv 32 signal 36 } 
-	{ wv_base_addr_ap_vld sc_out sc_logic 1 outvld 36 } 
-	{ wo_base_addr sc_out sc_lv 32 signal 37 } 
-	{ wo_base_addr_ap_vld sc_out sc_logic 1 outvld 37 } 
-	{ w1_base_addr sc_out sc_lv 32 signal 38 } 
-	{ w1_base_addr_ap_vld sc_out sc_logic 1 outvld 38 } 
-	{ w2_base_addr sc_out sc_lv 32 signal 39 } 
-	{ w2_base_addr_ap_vld sc_out sc_logic 1 outvld 39 } 
-	{ wq_head_stride sc_out sc_lv 32 signal 40 } 
-	{ wq_head_stride_ap_vld sc_out sc_logic 1 outvld 40 } 
-	{ wk_head_stride sc_out sc_lv 32 signal 41 } 
-	{ wk_head_stride_ap_vld sc_out sc_logic 1 outvld 41 } 
-	{ wv_head_stride sc_out sc_lv 32 signal 42 } 
-	{ wv_head_stride_ap_vld sc_out sc_logic 1 outvld 42 } 
-	{ wo_tile_stride sc_out sc_lv 32 signal 43 } 
-	{ wo_tile_stride_ap_vld sc_out sc_logic 1 outvld 43 } 
-	{ w1_tile_stride sc_out sc_lv 32 signal 44 } 
-	{ w1_tile_stride_ap_vld sc_out sc_logic 1 outvld 44 } 
-	{ w2_tile_stride sc_out sc_lv 32 signal 45 } 
-	{ w2_tile_stride_ap_vld sc_out sc_logic 1 outvld 45 } 
-	{ dbg_done sc_out sc_lv 1 signal 46 } 
-	{ dbg_done_ap_vld sc_out sc_logic 1 outvld 46 } 
-	{ dbg_error sc_out sc_lv 1 signal 47 } 
-	{ dbg_error_ap_vld sc_out sc_logic 1 outvld 47 } 
+	{ wl_instruction sc_out sc_lv 32 signal 5 } 
+	{ wl_instruction_ap_vld sc_out sc_logic 1 outvld 5 } 
+	{ wl_start_i sc_in sc_lv 1 signal 6 } 
+	{ wl_start_o sc_out sc_lv 1 signal 6 } 
+	{ wl_start_o_ap_vld sc_out sc_logic 1 outvld 6 } 
+	{ compute_ready sc_in sc_lv 1 signal 7 } 
+	{ compute_done sc_in sc_lv 1 signal 8 } 
+	{ compute_start_i sc_in sc_lv 1 signal 9 } 
+	{ compute_start_o sc_out sc_lv 1 signal 9 } 
+	{ compute_start_o_ap_vld sc_out sc_logic 1 outvld 9 } 
+	{ compute_instruction sc_out sc_lv 32 signal 10 } 
+	{ compute_instruction_ap_vld sc_out sc_logic 1 outvld 10 } 
+	{ head_ctx_ref_0_i sc_in sc_lv 254 signal 11 } 
+	{ head_ctx_ref_0_o sc_out sc_lv 254 signal 11 } 
+	{ head_ctx_ref_0_o_ap_vld sc_out sc_logic 1 outvld 11 } 
+	{ head_ctx_ref_1_i sc_in sc_lv 254 signal 12 } 
+	{ head_ctx_ref_1_o sc_out sc_lv 254 signal 12 } 
+	{ head_ctx_ref_1_o_ap_vld sc_out sc_logic 1 outvld 12 } 
+	{ head_ctx_ref_2_i sc_in sc_lv 254 signal 13 } 
+	{ head_ctx_ref_2_o sc_out sc_lv 254 signal 13 } 
+	{ head_ctx_ref_2_o_ap_vld sc_out sc_logic 1 outvld 13 } 
+	{ head_ctx_ref_3_i sc_in sc_lv 254 signal 14 } 
+	{ head_ctx_ref_3_o sc_out sc_lv 254 signal 14 } 
+	{ head_ctx_ref_3_o_ap_vld sc_out sc_logic 1 outvld 14 } 
+	{ stream_ready sc_in sc_lv 1 signal 15 } 
+	{ stream_start sc_out sc_lv 1 signal 16 } 
+	{ stream_start_ap_vld sc_out sc_logic 1 outvld 16 } 
+	{ stream_done sc_in sc_lv 1 signal 17 } 
+	{ ctrl_addr sc_in sc_lv 32 signal 18 } 
+	{ ctrl_data_in sc_in sc_lv 32 signal 19 } 
+	{ ctrl_data_out sc_out sc_lv 32 signal 20 } 
+	{ ctrl_data_out_ap_vld sc_out sc_logic 1 outvld 20 } 
+	{ ctrl_read_en sc_in sc_lv 1 signal 21 } 
+	{ ctrl_write_en sc_in sc_lv 1 signal 22 } 
+	{ ctrl_chip_en sc_in sc_lv 1 signal 23 } 
+	{ ctrl_resetn_in sc_in sc_lv 1 signal 24 } 
+	{ irq_ps sc_out sc_lv 1 signal 25 } 
+	{ irq_ps_ap_vld sc_out sc_logic 1 outvld 25 } 
+	{ dbg_state sc_out sc_lv 32 signal 26 } 
+	{ dbg_state_ap_vld sc_out sc_logic 1 outvld 26 } 
+	{ dbg_ctrl_mem sc_in sc_lv 1056 signal 27 } 
+	{ control_reg sc_out sc_lv 32 signal 28 } 
+	{ control_reg_ap_vld sc_out sc_logic 1 outvld 28 } 
+	{ irq_status_reg sc_out sc_lv 32 signal 29 } 
+	{ irq_status_reg_ap_vld sc_out sc_logic 1 outvld 29 } 
+	{ irq_enable_reg sc_out sc_lv 32 signal 30 } 
+	{ irq_enable_reg_ap_vld sc_out sc_logic 1 outvld 30 } 
+	{ wq_base_addr sc_out sc_lv 32 signal 31 } 
+	{ wq_base_addr_ap_vld sc_out sc_logic 1 outvld 31 } 
+	{ wk_base_addr sc_out sc_lv 32 signal 32 } 
+	{ wk_base_addr_ap_vld sc_out sc_logic 1 outvld 32 } 
+	{ wv_base_addr sc_out sc_lv 32 signal 33 } 
+	{ wv_base_addr_ap_vld sc_out sc_logic 1 outvld 33 } 
+	{ wo_base_addr sc_out sc_lv 32 signal 34 } 
+	{ wo_base_addr_ap_vld sc_out sc_logic 1 outvld 34 } 
+	{ w1_base_addr sc_out sc_lv 32 signal 35 } 
+	{ w1_base_addr_ap_vld sc_out sc_logic 1 outvld 35 } 
+	{ w2_base_addr sc_out sc_lv 32 signal 36 } 
+	{ w2_base_addr_ap_vld sc_out sc_logic 1 outvld 36 } 
+	{ wq_head_stride sc_out sc_lv 32 signal 37 } 
+	{ wq_head_stride_ap_vld sc_out sc_logic 1 outvld 37 } 
+	{ wk_head_stride sc_out sc_lv 32 signal 38 } 
+	{ wk_head_stride_ap_vld sc_out sc_logic 1 outvld 38 } 
+	{ wv_head_stride sc_out sc_lv 32 signal 39 } 
+	{ wv_head_stride_ap_vld sc_out sc_logic 1 outvld 39 } 
+	{ wo_tile_stride sc_out sc_lv 32 signal 40 } 
+	{ wo_tile_stride_ap_vld sc_out sc_logic 1 outvld 40 } 
+	{ w1_tile_stride sc_out sc_lv 32 signal 41 } 
+	{ w1_tile_stride_ap_vld sc_out sc_logic 1 outvld 41 } 
+	{ w2_tile_stride sc_out sc_lv 32 signal 42 } 
+	{ w2_tile_stride_ap_vld sc_out sc_logic 1 outvld 42 } 
+	{ dbg_done sc_out sc_lv 1 signal 43 } 
+	{ dbg_done_ap_vld sc_out sc_logic 1 outvld 43 } 
+	{ dbg_error sc_out sc_lv 1 signal 44 } 
+	{ dbg_error_ap_vld sc_out sc_logic 1 outvld 44 } 
 }
 set NewPortList {[ 
 	{ "name": "ap_clk", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "clock", "bundle":{"name": "ap_clk", "role": "default" }} , 
@@ -230,24 +218,18 @@ set NewPortList {[
  	{ "name": "axis_in_ready_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "axis_in_ready", "role": "ap_vld" }} , 
  	{ "name": "dma_done", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "dma_done", "role": "default" }} , 
  	{ "name": "wl_ready", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "wl_ready", "role": "default" }} , 
+ 	{ "name": "wl_instruction", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "wl_instruction", "role": "default" }} , 
+ 	{ "name": "wl_instruction_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "wl_instruction", "role": "ap_vld" }} , 
  	{ "name": "wl_start_i", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "wl_start", "role": "i" }} , 
  	{ "name": "wl_start_o", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "wl_start", "role": "o" }} , 
  	{ "name": "wl_start_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "wl_start", "role": "o_ap_vld" }} , 
- 	{ "name": "wl_addr_sel", "direction": "out", "datatype": "sc_lv", "bitwidth":8, "type": "signal", "bundle":{"name": "wl_addr_sel", "role": "default" }} , 
- 	{ "name": "wl_addr_sel_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "wl_addr_sel", "role": "ap_vld" }} , 
- 	{ "name": "wl_layer", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "wl_layer", "role": "default" }} , 
- 	{ "name": "wl_layer_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "wl_layer", "role": "ap_vld" }} , 
- 	{ "name": "wl_head", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "wl_head", "role": "default" }} , 
- 	{ "name": "wl_head_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "wl_head", "role": "ap_vld" }} , 
- 	{ "name": "wl_tile", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "wl_tile", "role": "default" }} , 
- 	{ "name": "wl_tile_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "wl_tile", "role": "ap_vld" }} , 
  	{ "name": "compute_ready", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_ready", "role": "default" }} , 
  	{ "name": "compute_done", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_done", "role": "default" }} , 
  	{ "name": "compute_start_i", "direction": "in", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start", "role": "i" }} , 
  	{ "name": "compute_start_o", "direction": "out", "datatype": "sc_lv", "bitwidth":1, "type": "signal", "bundle":{"name": "compute_start", "role": "o" }} , 
  	{ "name": "compute_start_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_start", "role": "o_ap_vld" }} , 
- 	{ "name": "compute_op", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "compute_op", "role": "default" }} , 
- 	{ "name": "compute_op_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_op", "role": "ap_vld" }} , 
+ 	{ "name": "compute_instruction", "direction": "out", "datatype": "sc_lv", "bitwidth":32, "type": "signal", "bundle":{"name": "compute_instruction", "role": "default" }} , 
+ 	{ "name": "compute_instruction_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "compute_instruction", "role": "ap_vld" }} , 
  	{ "name": "head_ctx_ref_0_i", "direction": "in", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "head_ctx_ref_0", "role": "i" }} , 
  	{ "name": "head_ctx_ref_0_o", "direction": "out", "datatype": "sc_lv", "bitwidth":254, "type": "signal", "bundle":{"name": "head_ctx_ref_0", "role": "o" }} , 
  	{ "name": "head_ctx_ref_0_o_ap_vld", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "outvld", "bundle":{"name": "head_ctx_ref_0", "role": "o_ap_vld" }} , 
@@ -319,15 +301,12 @@ set ArgLastReadFirstWriteLatency {
 		axis_in_ready {Type O LastRead -1 FirstWrite 2}
 		dma_done {Type I LastRead 0 FirstWrite -1}
 		wl_ready {Type I LastRead 0 FirstWrite -1}
+		wl_instruction {Type O LastRead -1 FirstWrite 1}
 		wl_start {Type IO LastRead 1 FirstWrite 2}
-		wl_addr_sel {Type O LastRead -1 FirstWrite 1}
-		wl_layer {Type O LastRead -1 FirstWrite 2}
-		wl_head {Type O LastRead -1 FirstWrite 1}
-		wl_tile {Type O LastRead -1 FirstWrite 1}
 		compute_ready {Type I LastRead 0 FirstWrite -1}
 		compute_done {Type I LastRead 0 FirstWrite -1}
 		compute_start {Type IO LastRead 1 FirstWrite 2}
-		compute_op {Type O LastRead -1 FirstWrite 1}
+		compute_instruction {Type O LastRead -1 FirstWrite 1}
 		head_ctx_ref_0 {Type IO LastRead 1 FirstWrite 2}
 		head_ctx_ref_1 {Type IO LastRead 1 FirstWrite 2}
 		head_ctx_ref_2 {Type IO LastRead 1 FirstWrite 2}
@@ -448,10 +427,8 @@ set ArgLastReadFirstWriteLatency {
 		axis_in_last {Type I LastRead 0 FirstWrite -1}
 		dma_done {Type I LastRead 0 FirstWrite -1}
 		wl_ready {Type I LastRead 0 FirstWrite -1}
+		wl_instruction {Type O LastRead -1 FirstWrite 1}
 		wl_start_read {Type I LastRead 0 FirstWrite -1}
-		wl_addr_sel {Type O LastRead -1 FirstWrite 1}
-		wl_head {Type O LastRead -1 FirstWrite 1}
-		wl_tile {Type O LastRead -1 FirstWrite 1}
 		compute_ready {Type I LastRead 0 FirstWrite -1}
 		compute_done {Type I LastRead 0 FirstWrite -1}
 		p_read1 {Type I LastRead 0 FirstWrite -1}
@@ -459,7 +436,7 @@ set ArgLastReadFirstWriteLatency {
 		p_read3 {Type I LastRead 0 FirstWrite -1}
 		p_read4 {Type I LastRead 0 FirstWrite -1}
 		compute_start_read {Type I LastRead 0 FirstWrite -1}
-		compute_op {Type O LastRead -1 FirstWrite 1}
+		compute_instruction {Type O LastRead -1 FirstWrite 1}
 		stream_ready {Type I LastRead 0 FirstWrite -1}
 		stream_done {Type I LastRead 0 FirstWrite -1}
 		st {Type IO LastRead -1 FirstWrite -1}
@@ -621,15 +598,12 @@ set Spec2ImplPortList {
 	axis_in_ready { ap_vld {  { axis_in_ready out_data 1 1 }  { axis_in_ready_ap_vld out_vld 1 1 } } }
 	dma_done { ap_none {  { dma_done in_data 0 1 } } }
 	wl_ready { ap_none {  { wl_ready in_data 0 1 } } }
+	wl_instruction { ap_vld {  { wl_instruction out_data 1 32 }  { wl_instruction_ap_vld out_vld 1 1 } } }
 	wl_start { ap_ovld {  { wl_start_i in_data 0 1 }  { wl_start_o out_data 1 1 }  { wl_start_o_ap_vld out_vld 1 1 } } }
-	wl_addr_sel { ap_vld {  { wl_addr_sel out_data 1 8 }  { wl_addr_sel_ap_vld out_vld 1 1 } } }
-	wl_layer { ap_vld {  { wl_layer out_data 1 32 }  { wl_layer_ap_vld out_vld 1 1 } } }
-	wl_head { ap_vld {  { wl_head out_data 1 32 }  { wl_head_ap_vld out_vld 1 1 } } }
-	wl_tile { ap_vld {  { wl_tile out_data 1 32 }  { wl_tile_ap_vld out_vld 1 1 } } }
 	compute_ready { ap_none {  { compute_ready in_data 0 1 } } }
 	compute_done { ap_none {  { compute_done in_data 0 1 } } }
 	compute_start { ap_ovld {  { compute_start_i in_data 0 1 }  { compute_start_o out_data 1 1 }  { compute_start_o_ap_vld out_vld 1 1 } } }
-	compute_op { ap_vld {  { compute_op out_data 1 32 }  { compute_op_ap_vld out_vld 1 1 } } }
+	compute_instruction { ap_vld {  { compute_instruction out_data 1 32 }  { compute_instruction_ap_vld out_vld 1 1 } } }
 	head_ctx_ref_0 { ap_ovld {  { head_ctx_ref_0_i in_data 0 254 }  { head_ctx_ref_0_o out_data 1 254 }  { head_ctx_ref_0_o_ap_vld out_vld 1 1 } } }
 	head_ctx_ref_1 { ap_ovld {  { head_ctx_ref_1_i in_data 0 254 }  { head_ctx_ref_1_o out_data 1 254 }  { head_ctx_ref_1_o_ap_vld out_vld 1 1 } } }
 	head_ctx_ref_2 { ap_ovld {  { head_ctx_ref_2_i in_data 0 254 }  { head_ctx_ref_2_o out_data 1 254 }  { head_ctx_ref_2_o_ap_vld out_vld 1 1 } } }

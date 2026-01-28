@@ -249,9 +249,7 @@ struct HeadCtx {
 
     bool    wl_ready    = false;                  // INPUT FROM WL 
     bool    wl_start    = false;                  // OUTPUT signal for head
-    DmaSel  wl_addr_sel = DmaSel::DMASEL_NONE; // OUTPUT signal for head
-    int     wl_layer    = -1;                      // OUTPUT signal for head
-    int     wl_head     = -1;                      // OUTPUT signal for head
+    uint32_t wl_instruction = 0;                  // OUTPUT packed DMA op|layer|head|tile
     bool    dma_done    = false;                  // INPUT FROM AXI-FULL 
 
     bool start_head = false;

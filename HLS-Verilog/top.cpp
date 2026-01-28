@@ -15,11 +15,8 @@ void transformer_top(
     bool        dma_done,                   // [INPUT]  DMA transfer completed (single-cycle pulse)
 
     bool        wl_ready,                 // [INPUT]  Weight loader ready for a new request
+    uint32_t    &wl_instruction,          // [OUTPUT] Packed dma op|layer|head|tile
     bool        &wl_start,                // [OUTPUT] Start weight load request
-    DmaSel      &wl_addr_sel,             // [OUTPUT] Select weight matrix/tile
-    int         &wl_layer,                // [OUTPUT] Layer index for DMA
-    int         &wl_head,                 // [OUTPUT] Head index (or -1 for non-head ops)
-    int         &wl_tile,                 // [OUTPUT] Tile index for large matrices
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
@@ -27,7 +24,7 @@ void transformer_top(
     bool compute_ready,                 // [INPUT]  Compute engine idle / ready for next op
     bool compute_done,                  // [INPUT]  Compute operation finished (one-shot)
     bool &compute_start,                // [OUTPUT] Trigger compute engine
-    uint32_t &compute_op,               // [OUTPUT] Packed op|layer|head|tile for compute
+    uint32_t &compute_instruction,               // [OUTPUT] Packed op|layer|head|tile for compute
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
     
     // ------------------------------------------------------------
@@ -129,16 +126,13 @@ void transformer_top(
         axis_in_ready,
         dma_done,
         wl_ready,
+        wl_instruction,
         wl_start,
-        wl_addr_sel,
-        wl_layer,
-        wl_head,
-        wl_tile,
         compute_ready,
         compute_done,
         head_ctx_ref,
         compute_start,
-        compute_op,
+        compute_instruction,
         stream_ready,
         stream_start,
         stream_done,

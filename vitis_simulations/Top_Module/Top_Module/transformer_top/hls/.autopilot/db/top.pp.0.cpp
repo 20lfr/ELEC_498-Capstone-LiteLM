@@ -7049,16 +7049,13 @@ void scheduler_hls(
     bool &axis_in_ready,
     bool dma_done,
     bool wl_ready,
+    uint32_t &wl_instruction,
     bool &wl_start,
-    DmaSel &wl_addr_sel,
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
     bool compute_ready,
     bool compute_done,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool &compute_start,
-    uint32_t &compute_op,
+    uint32_t &compute_instruction,
     bool stream_ready,
     bool &stream_start,
     bool stream_done,
@@ -7116,15 +7113,12 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool &axis_in_ready,
     bool dma_done,
     bool wl_ready,
+    uint32_t &wl_instruction,
     bool &wl_start,
-    DmaSel &wl_addr_sel,
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
     bool compute_ready,
     bool compute_done,
     bool &compute_start,
-    uint32_t &compute_op,
+    uint32_t &compute_instruction,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool stream_ready,
     bool &stream_start,
@@ -7177,11 +7171,8 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool dma_done,
 
     bool wl_ready,
+    uint32_t &wl_instruction,
     bool &wl_start,
-    DmaSel &wl_addr_sel,
-    int &wl_layer,
-    int &wl_head,
-    int &wl_tile,
 
 
 
@@ -7189,7 +7180,7 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool compute_ready,
     bool compute_done,
     bool &compute_start,
-    uint32_t &compute_op,
+    uint32_t &compute_instruction,
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
 
 
@@ -7241,7 +7232,7 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=transformer_top
-# 79 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+# 76 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
 
 #pragma HLS INLINE off
 
@@ -7295,16 +7286,13 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
         axis_in_ready,
         dma_done,
         wl_ready,
+        wl_instruction,
         wl_start,
-        wl_addr_sel,
-        wl_layer,
-        wl_head,
-        wl_tile,
         compute_ready,
         compute_done,
         head_ctx_ref,
         compute_start,
-        compute_op,
+        compute_instruction,
         stream_ready,
         stream_start,
         stream_done,

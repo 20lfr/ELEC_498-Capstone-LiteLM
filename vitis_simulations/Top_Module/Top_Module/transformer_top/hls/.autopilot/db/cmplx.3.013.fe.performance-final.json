@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 84,
-    "calls": "3",
+    "calls": "1",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
@@ -18,9 +18,44 @@
       "L": 2,
       "T": 20
     },
-    "total_instructions": 4248
+    "total_instructions": 4254
   },
   "1": {
+    "basicblocks": 252,
+    "calls": "3 3 3 3 2 2 4 3 3 3 3",
+    "control_depth": 2,
+    "def_use_depth": 43,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 47,
+    "instructions": 2587,
+    "loads": {
+      "G": 71,
+      "L": 114
+    },
+    "memory_accesses": 3,
+    "name": "scheduler_hls",
+    "stores": {
+      "G": 263,
+      "L": 262
+    },
+    "total_instructions": 3996
+  },
+  "2": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "head_helpers.cpp",
+    "fileloc": 20,
+    "instructions": 54,
+    "memory_accesses": 0,
+    "name": "init_head_ctx",
+    "stores": {
+      "L": 47
+    },
+    "total_instructions": 54
+  },
+  "3": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -35,9 +70,9 @@
     },
     "total_instructions": 18
   },
-  "2": {
+  "4": {
     "basicblocks": 299,
-    "calls": "4 4",
+    "calls": "2 2",
     "control_depth": 0,
     "def_use_depth": 5,
     "file": "head_helpers.cpp",
@@ -52,40 +87,5 @@
       "L": 328
     },
     "total_instructions": 1157
-  },
-  "3": {
-    "basicblocks": 252,
-    "calls": "1 1 1 1 4 4 2 1 1 1 1",
-    "control_depth": 2,
-    "def_use_depth": 43,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 36,
-    "instructions": 2581,
-    "loads": {
-      "G": 71,
-      "L": 114
-    },
-    "memory_accesses": 3,
-    "name": "scheduler_hls",
-    "stores": {
-      "G": 263,
-      "L": 280
-    },
-    "total_instructions": 3990
-  },
-  "4": {
-    "basicblocks": 1,
-    "calls": "",
-    "control_depth": 0,
-    "def_use_depth": 4,
-    "file": "head_helpers.cpp",
-    "fileloc": 20,
-    "instructions": 54,
-    "memory_accesses": 0,
-    "name": "init_head_ctx",
-    "stores": {
-      "L": 47
-    },
-    "total_instructions": 54
   }
 }

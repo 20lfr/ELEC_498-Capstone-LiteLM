@@ -1,12 +1,12 @@
 {
   "0": {
     "basicblocks": 84,
-    "calls": "1",
+    "calls": "3",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 356,
+    "instructions": 350,
     "loads": {
       "G": 38,
       "L": 2
@@ -21,24 +21,22 @@
     "total_instructions": 4072
   },
   "1": {
-    "basicblocks": 252,
-    "calls": "2 2 2 2 3 3 4 2 2 2 2",
-    "control_depth": 2,
-    "def_use_depth": 8,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 36,
-    "instructions": 2307,
+    "basicblocks": 299,
+    "calls": "4 4",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "head_helpers.cpp",
+    "fileloc": 389,
+    "instructions": 1049,
     "loads": {
-      "G": 71,
-      "L": 114
+      "L": 154
     },
-    "memory_accesses": 3,
-    "name": "scheduler_hls",
+    "memory_accesses": 0,
+    "name": "drive_group_head_phase",
     "stores": {
-      "G": 263,
-      "L": 280
+      "L": 328
     },
-    "total_instructions": 3716
+    "total_instructions": 1157
   },
   "2": {
     "basicblocks": 1,
@@ -56,6 +54,26 @@
     "total_instructions": 18
   },
   "3": {
+    "basicblocks": 252,
+    "calls": "2 2 2 2 4 4 1 2 2 2 2",
+    "control_depth": 2,
+    "def_use_depth": 8,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 47,
+    "instructions": 2313,
+    "loads": {
+      "G": 71,
+      "L": 114
+    },
+    "memory_accesses": 3,
+    "name": "scheduler_hls",
+    "stores": {
+      "G": 263,
+      "L": 262
+    },
+    "total_instructions": 3722
+  },
+  "4": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -69,23 +87,5 @@
       "L": 47
     },
     "total_instructions": 54
-  },
-  "4": {
-    "basicblocks": 299,
-    "calls": "3 3",
-    "control_depth": 0,
-    "def_use_depth": 5,
-    "file": "head_helpers.cpp",
-    "fileloc": 389,
-    "instructions": 1049,
-    "loads": {
-      "L": 154
-    },
-    "memory_accesses": 0,
-    "name": "drive_group_head_phase",
-    "stores": {
-      "L": 328
-    },
-    "total_instructions": 1157
   }
 }
