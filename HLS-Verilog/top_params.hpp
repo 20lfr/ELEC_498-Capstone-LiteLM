@@ -572,7 +572,7 @@ inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
 namespace head_buf {
 
 constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
-constexpr int QKV_W_BYTES = div_ceil(QKV_W_NIBBLES, 2);
+constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
 constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES;
 constexpr int QKV_OUT_BYTES = D_HEADS * 4;
 
@@ -591,23 +591,23 @@ constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
 constexpr int ATT_VALUE_IN_BYTES = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
 constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
 
-constexpr int IN_BUF_BYTES = max2(
+constexpr int IN_BUF_BYTES = compute_buf::max2(
     QKV_IN_BYTES,
-    max2(
+    compute_buf::max2(
         HEAD_REQUANT_IN_BYTES,
-        max2(
+        compute_buf::max2(
             ATT_SCORES_IN_BYTES,
-            max2(VALUE_SCALE_IN_BYTES,
-                max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
+            compute_buf::max2(VALUE_SCALE_IN_BYTES,
+                compute_buf::max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
 
-constexpr int OUT_BUF_BYTES = max2(
+constexpr int OUT_BUF_BYTES = compute_buf::max2(
     QKV_OUT_BYTES,
-    max2(
+    compute_buf::max2(
         HEAD_REQUANT_OUT_BYTES,
-        max2(
+        compute_buf::max2(
             ATT_SCORES_OUT_BYTES,
-            max2(VALUE_SCALE_OUT_BYTES,
-                max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
+            compute_buf::max2(VALUE_SCALE_OUT_BYTES,
+                compute_buf::max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
 
 struct QkvLayout {
     static constexpr int ACT = 0;
