@@ -5,7 +5,7 @@
 // ==============================================================
 `timescale 1ns / 1ps
 
-module transformer_top_sparsemux_7_2_254_1_1 (din0,din1,din2,def,sel,dout);
+module transformer_top_sparsemux_7_2_214_1_1 (din0,din1,din2,def,sel,dout);
 
 parameter din0_WIDTH = 1;
 
