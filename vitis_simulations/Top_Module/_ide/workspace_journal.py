@@ -33,3 +33,25 @@ comp.run(operation="C_SIMULATION")
 
 comp.run(operation="SYNTHESIS")
 
+comp = client.get_component(name="Compute_Controller_Layer_Norm")
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp = client.get_component(name="Compute_Controller")
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+
+comp.run(operation="C_SIMULATION")
+

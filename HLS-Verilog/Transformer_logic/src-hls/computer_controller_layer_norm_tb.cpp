@@ -165,10 +165,9 @@ void print_buffer(const char *label, const uint8_t *buf, int size) {
 void print_layer_norm_inputs(
     const int8_t x[D_MODEL],
     int32_t gamma,
-    int32_t beta,
     int32_t epsilon
 ) {
-    std::printf("LayerNorm x[%d]:", D_MODEL);
+    std::printf("LayerNorm x[%d] (epsilon=%d):", D_MODEL, static_cast<int>(epsilon));
     for (int i = 0; i < D_MODEL; ++i) {
         std::printf(" %d", static_cast<int>(x[i]));
     }
@@ -176,11 +175,6 @@ void print_layer_norm_inputs(
     std::printf("LayerNorm gamma[%d]:", D_MODEL);
     for (int i = 0; i < D_MODEL; ++i) {
         std::printf(" %d", static_cast<int>(gamma));
-    }
-    std::printf("\n");
-    std::printf("LayerNorm beta[%d]:", D_MODEL);
-    for (int i = 0; i < D_MODEL; ++i) {
-        std::printf(" %d", static_cast<int>(beta));
     }
     std::printf("\n");
     std::printf("LayerNorm epsilon: %d\n", static_cast<int>(epsilon));
@@ -303,7 +297,7 @@ int main() {
                 "MacS", "MacR", "MacC",
                 D_MODEL - 1);
 
-    print_layer_norm_inputs(valueA_mem, 1, 0, 1);
+    print_layer_norm_inputs(valueA_mem, 1, 1);
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
         const bool reset = (cycle < 2);
@@ -401,7 +395,6 @@ int main() {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i8(in_buf, compute_buf::LayerNormLayout::X + i, valueA_mem[i]);
                                 compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4), 1);
-                                compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::BETA + (i * 4), 0);
                             }
                             compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::EPS, 1);
                             if (!printed_in_buf) {
@@ -414,7 +407,6 @@ int main() {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i8(in_buf, compute_buf::LayerNormLayout::X + i, resid1_out[i]);
                                 compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4), 1);
-                                compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::BETA + (i * 4), 0);
                             }
                             compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::EPS, 1);
                             break;
@@ -573,6 +565,10 @@ int main() {
             }
         }
 
+        if (compute_start && compute_ready) {
+            print_buffer("in_buf (send)", in_buf, compute_buf::IN_BUF_BYTES);
+        }
+
         compute_controller(
             reset,
             compute_start,
@@ -595,6 +591,10 @@ int main() {
             dbg_mac_ready,
             dbg_mac_complete,
             error);
+
+        if (compute_done) {
+            print_buffer("out_buf (done)", out_buf, compute_buf::OUT_BUF_BYTES);
+        }
 
         const uint8_t op_field = static_cast<uint8_t>(compute_instruction & 0xFFu);
         const uint8_t layer_field = static_cast<uint8_t>((compute_instruction >> 8) & 0xFFu);

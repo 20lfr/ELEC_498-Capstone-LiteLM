@@ -71,8 +71,27 @@ void REQUANT_D_MODEL_int32_to_int8(
 
     // Original Integer Requant Formula (for each element in vector):
     /*
-         y[t] = saturate_to_int8( (x[t] * M)/(2^n) + 2^(n-1) + z_out )
-         y = rounded(x * R)
+        How to calculate M and n (offline, from quantization params)
+
+        Notation:
+          S_x   = input activation scale (int8)  -> max_abs_x / 127
+          S_w   = weight scale (int4)            -> max_abs_w / 7
+          S_out = desired output activation scale (int8) from calibration
+
+        Example: weighted matmul output (int32 accum -> int8)
+          S_accum = S_x * S_w
+          real_scale = S_accum / S_out
+          M = round(real_scale * 2^n)
+          n = chosen so M fits int32 (typically 0..31)
+
+        Example: RMS/LayerNorm output requant (fixed-point -> int8)
+          S_fixed = 2^-F (e.g., Q19.13 => F=13)
+          real_scale = S_fixed / S_out
+          M = round(real_scale * 2^n)
+          n = chosen so M fits int32
+
+        Runtime formula:
+          y[t] = saturate_to_int8( (x[t] * M + 2^(n-1)) >> n + z_out )
     */
     for (int t = 0; t < D_MODEL; ++t) {
 #pragma HLS UNROLL
@@ -91,33 +110,19 @@ void REQUANT_D_MODEL_int32_to_int8(
     }   
 }
 
-void LAYER_NORM(
+void RMS_NORM(
     const int8_t x[D_MODEL],        // input vector
     const int32_t gamma[D_MODEL],   // scale parameter
-    const int32_t beta[D_MODEL],    // shift parameter
-    const int32_t epsilon,          // Divide variance avoid parameter
-    int32_t y[D_MODEL]               // output vector
+    const int32_t epsilon,          // divide-by-zero guard
+    int32_t y[D_MODEL]              // output vector
 ) {
 #pragma HLS INLINE off
 
-    // Calculte mean:
-    int32_t sum = 0;
     int32_t square = 0;
 
     for (int i = 0; i < D_MODEL; ++i) {
-        sum += static_cast<int32_t>(x[i]);
         square += static_cast<int32_t>(x[i]) * static_cast<int32_t>(x[i]);
     }
-    // mean     = sum / D_MODEL;
-    // variance = (square / D_MODEL) - (mean * mean);
-
-    ap_fixed<32,16> sum_fx = sum;
-
-    ap_int<32> sum_fx_bits = sum_fx.range(31, 0);
-    std::printf("sum_fx: %f 0x%08x (signed=%d)\n",
-                (float)sum_fx,
-                (unsigned)sum_fx_bits,
-                (int)sum_fx_bits);
 
     ap_fixed<32, 19> square_fx = square; // Q19.13     (123.123 * scale) >> 13, 
     ap_int<32> square_fx_bits = square_fx.range(31, 0);
@@ -126,49 +131,35 @@ void LAYER_NORM(
                 (unsigned)square_fx_bits,
                 (int)square_fx_bits);
 
-    ap_fixed<32, 16> mean = sum_fx / D_MODEL;
-    ap_int<32> mean_bits = mean.range(31, 0);
-    std::printf("mean: %f 0x%08x (signed=%d)\n",
-                (float)mean,
-                (unsigned)mean_bits,
-                (int)mean_bits);
+    ap_fixed<32, 19> mean_square = square_fx / D_MODEL;
+    ap_int<32> mean_square_bits = mean_square.range(31, 0);
+    std::printf("mean_square: %f 0x%08x (signed=%d)\n",
+                (float)mean_square,
+                (unsigned)mean_square_bits,
+                (int)mean_square_bits);
 
-    ap_fixed<32, 19> square_mean = square_fx / D_MODEL;
-    ap_int<32> square_mean_bits = square_mean.range(31, 0);
-    std::printf("square_mean: %f 0x%08x (signed=%d)\n",
-                (float)square_mean,
-                (unsigned)square_mean_bits,
-                (int)square_mean_bits);
-
-    ap_fixed<32, 19> variance = square_mean - mean * mean;
-    ap_int<32> variance_bits = variance.range(31, 0);
-    std::printf("variance: %f 0x%08x (signed=%d)\n",
-                (float)variance,
-                (unsigned)variance_bits,
-                (int)variance_bits);
-    
-    
-    if (variance < 0) {
-        variance = 0;
+    if (mean_square < 0) {
+        mean_square = 0;
     }
-    ap_fixed<32, 19> v = variance + ap_fixed<32, 19>(epsilon);
+
+    ap_fixed<32, 19> v = mean_square + ap_fixed<32, 19>(epsilon);
     ap_int<32> v_bits = v.range(31, 0);
     std::printf("v: %f 0x%08x (signed=%d)\n",
                 (float)v,
                 (unsigned)v_bits,
                 (int)v_bits);
 
-    ap_fixed<32, 19> inv_std = ap_fixed<32, 19>(1) / hls::sqrt(v);
-    ap_int<32> inv_std_bits = inv_std.range(31, 0);
-    std::printf("inv_std: %f 0x%08x (signed=%d)\n",
-                (float)inv_std,
-                (unsigned)inv_std_bits,
-                (int)inv_std_bits);
+    ap_fixed<32, 19> inv_rms = ap_fixed<32, 19>(1) / hls::sqrt(v);
+    ap_int<32> inv_rms_bits = inv_rms.range(31, 0);
+    std::printf("inv_rms: %f 0x%08x (signed=%d)\n",
+                (float)inv_rms,
+                (unsigned)inv_rms_bits,
+                (int)inv_rms_bits);
 
 
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL          
-        ap_fixed<32, 19> normalized = (ap_fixed<32, 19>(x[i]) - mean) * inv_std;
+        ap_fixed<32, 19> normalized = ap_fixed<32, 19>(x[i]) * inv_rms;
         ap_int<32> normalized_bits = normalized.range(31, 0);
         std::printf("ln_cycle[%d] normalized: %f 0x%08x (signed=%d)\n",
                     i,
@@ -176,14 +167,20 @@ void LAYER_NORM(
                     (unsigned)normalized_bits,
                     (int)normalized_bits);
 
-        ap_fixed<32, 19> scaled = (normalized * ap_fixed<32, 19>(gamma[i])) + ap_fixed<32, 19>(beta[i]);
+        ap_fixed<32, 19> scaled = normalized * ap_fixed<32, 19>(gamma[i]);
         ap_int<32> scaled_bits = scaled.range(31, 0);
         std::printf("ln_cycle[%d] scaled: %f 0x%08x (signed=%d)\n",
                     i,
                     (float)scaled,
                     (unsigned)scaled_bits,
                     (int)scaled_bits);
-        y[i] = (int32_t)scaled; // Storing RAW int32_t (DO NOT STATIC_CAST)
+        
+        
+        y[i] = (int32_t)scaled_bits; // Store raw fixed-point bits (Q19.13)
+        std::printf("ln_cycle[%d] y_raw: %d 0x%08x\n",
+                    i,
+                    y[i],
+                    static_cast<unsigned>(y[i]));
     }
 }
 
@@ -291,13 +288,11 @@ void compute_controller(
     // For Layer Norms!!!
     static int8_t x_act[D_MODEL];
     static int32_t ln_gamma[D_MODEL];
-    static int32_t ln_beta[D_MODEL];
     static int32_t ln_epsilon;
     static int32_t y_act[D_MODEL];
     static int8_t y_resid[D_MODEL];
 #pragma HLS ARRAY_PARTITION variable=x_act cyclic factor=MAX_CYCLIC_SIZE dim=1
 #pragma HLS ARRAY_PARTITION variable=ln_gamma cyclic factor=MAX_CYCLIC_SIZE dim=1
-#pragma HLS ARRAY_PARTITION variable=ln_beta cyclic factor=MAX_CYCLIC_SIZE dim=1
 #pragma HLS ARRAY_PARTITION variable=y_act cyclic factor=MAX_CYCLIC_SIZE dim=1
 #pragma HLS ARRAY_PARTITION variable=y_resid cyclic factor=MAX_CYCLIC_SIZE dim=1
 
@@ -362,7 +357,6 @@ void compute_controller(
 #pragma HLS UNROLL
             x_act[i] = 0;
             ln_gamma[i] = 0;
-            ln_beta[i] = 0;
             y_act[i] = 0;
             y_resid[i] = 0;
             residual[i] = 0;
@@ -405,7 +399,6 @@ void compute_controller(
 #pragma HLS UNROLL
                     x_act[i] = 0;
                     ln_gamma[i] = 0;
-                    ln_beta[i] = 0;
                     y_act[i] = 0;
                     y_resid[i] = 0;
                     residual[i] = 0;
@@ -579,16 +572,13 @@ void compute_controller(
                         x_act[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::LayerNormLayout::X + i));
                         // Setup GAMMA
                         ln_gamma[i] = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4)));
-                        // Setup BETA
-                        ln_beta[i] = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::BETA + (i * 4)));
                     }
                     // Setup EPSILON
                     ln_epsilon = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::EPS));
 
-                    LAYER_NORM(
+                    RMS_NORM(
                         x_act,
                         ln_gamma,
-                        ln_beta,
                         ln_epsilon,
                         y_act
                     );

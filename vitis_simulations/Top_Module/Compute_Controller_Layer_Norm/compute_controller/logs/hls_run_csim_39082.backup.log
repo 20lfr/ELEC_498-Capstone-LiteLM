@@ -27,6 +27,7 @@ INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_
 INFO: [SIM 211-2] *************** CSIM start ***************
 INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
 INFO: [HLS 200-2036] Building debug C Simulation binaries
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp in debug mode
    Generating csim.exe
 D_MODEL=8 D_TILE_WO=2 NUM_WO_TILES=4
@@ -69,37 +70,37 @@ v: 1271.625000 0x009ef400 (signed=10417152)
 inv_rms: 0.027954 0x000000e5 (signed=229)
 ln_cycle[0] normalized: -1.789062 0xffffc6c0 (signed=-14656)
 ln_cycle[0] scaled: -1.789062 0xffffc6c0 (signed=-14656)
-ln_cycle[0] y_raw: -14656 0xffffc6c0
+ln_cycle[0] y: -1 0xffffffff
 ln_cycle[1] normalized: -0.894531 0xffffe360 (signed=-7328)
 ln_cycle[1] scaled: -0.894531 0xffffe360 (signed=-7328)
-ln_cycle[1] y_raw: -7328 0xffffe360
+ln_cycle[1] y: 0 0x00000000
 ln_cycle[2] normalized: -0.223633 0xfffff8d8 (signed=-1832)
 ln_cycle[2] scaled: -0.223633 0xfffff8d8 (signed=-1832)
-ln_cycle[2] y_raw: -1832 0xfffff8d8
+ln_cycle[2] y: 0 0x00000000
 ln_cycle[3] normalized: -0.027954 0xffffff1b (signed=-229)
 ln_cycle[3] scaled: -0.027954 0xffffff1b (signed=-229)
-ln_cycle[3] y_raw: -229 0xffffff1b
+ln_cycle[3] y: 0 0x00000000
 ln_cycle[4] normalized: 0.027954 0x000000e5 (signed=229)
 ln_cycle[4] scaled: 0.027954 0x000000e5 (signed=229)
-ln_cycle[4] y_raw: 229 0x000000e5
+ln_cycle[4] y: 0 0x00000000
 ln_cycle[5] normalized: 0.195679 0x00000643 (signed=1603)
 ln_cycle[5] scaled: 0.195679 0x00000643 (signed=1603)
-ln_cycle[5] y_raw: 1603 0x00000643
+ln_cycle[5] y: 0 0x00000000
 ln_cycle[6] normalized: 0.866577 0x00001bbb (signed=7099)
 ln_cycle[6] scaled: 0.866577 0x00001bbb (signed=7099)
-ln_cycle[6] y_raw: 7099 0x00001bbb
+ln_cycle[6] y: 0 0x00000000
 ln_cycle[7] normalized: 1.761108 0x0000385b (signed=14427)
 ln_cycle[7] scaled: 1.761108 0x0000385b (signed=14427)
-ln_cycle[7] y_raw: 14427 0x0000385b
+ln_cycle[7] y: 1 0x00000001
 8      0     0     0     0     0      0      0      1      LN0        0x00ff0101 LN0        1     -1    0     4       0x00ff0101 LN0      1     -1    0     0     1     0    
 9      0     0     0     0     0      0      0      1      -          0x00ff0101 LN0        1     -1    0     5       0x00ff0101 LN0      1     -1    0     0     1     0    
 10     0     0     0     1     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
 out_buf (LN0 done)[44]:
-  0000: c0 c6 ff ff 60 e3 ff ff d8 f8 ff ff 1b ff ff ff
-  0010: e5 00 00 00 43 06 00 00 bb 1b 00 00 5b 38 00 00
+  0000: ff ff ff ff 00 00 00 00 00 00 00 00 00 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00
 compute_controller_layer_norm_tb: PASS
 INFO: [SIM 211-1] CSim done with 0 errors.
 INFO: [SIM 211-3] *************** CSIM finish ***************
-INFO: [HLS 200-112] Total CPU user time: 10.21 seconds. Total CPU system time: 1.16 seconds. Total elapsed time: 11.32 seconds; peak allocated memory: 445.113 MB.
-INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 15s
+INFO: [HLS 200-112] Total CPU user time: 11.64 seconds. Total CPU system time: 1.23 seconds. Total elapsed time: 12.83 seconds; peak allocated memory: 445.105 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 16s
