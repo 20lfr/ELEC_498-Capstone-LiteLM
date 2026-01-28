@@ -23,7 +23,7 @@ __USE_VCXX_CLANG__ = 1
 
 ObjDir = obj
 
-HLS_SOURCES = ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
+HLS_SOURCES = ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp
 
 override TARGET := csim.exe
 
@@ -82,12 +82,6 @@ include ./Makefile.rules
 all: $(TARGET)
 
 
-
-$(ObjDir)/computer_controller_layer_norm_tb.o: ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp $(ObjDir)/.dir csim.mk
-	$(Echo) "   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp in $(BuildMode) mode" $(AVE_DIR_DLOG)
-	$(Verb)  $(CXX) -std=gnu++14 ${CCFLAG} -c -MMD -Wno-unknown-pragmas -Wno-unknown-pragmas  $(IFLAG) $(DFLAG) $< -o $@ ; \
-
--include $(ObjDir)/computer_controller_layer_norm_tb.d
 
 $(ObjDir)/computer_controller_tb.o: ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp $(ObjDir)/.dir csim.mk
 	$(Echo) "   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp in $(BuildMode) mode" $(AVE_DIR_DLOG)

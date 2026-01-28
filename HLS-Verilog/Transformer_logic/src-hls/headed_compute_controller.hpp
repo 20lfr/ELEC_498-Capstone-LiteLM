@@ -27,10 +27,17 @@ void headed_compute_controller(
     bool        &mem_write_request,        // [OUTPUT] Request memory manager
     uint32_t     &mem_op,             // [OUTPUT] Full Intruction Identifier for memory manager
 
-    // Data location INPUT signals from Memory Controller
-    int8_t      QKV_valueA[D_MODEL],                // [INPUT] Input actiQKV_vations for OUT_PROJ
-    int4_t      QKV_valueB[D_MODEL * D_HEADS],     // [INPUT] Weights for OUT_PROJ
-    int32_t     QKV_accum[D_TILE_WO],               // [OUTPUT] Output accumulators for OUT_PROJ
+    // Flat input/output buffers
+    const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+    uint8_t       out_buf[head_buf::OUT_BUF_BYTES],
+
+    // Debug visibility
+    ComputeState &dbg_state,
+    uint32_t    &dbg_req_instruction,
+    uint8_t     &dbg_req_op,
+    uint8_t     &dbg_req_layer,
+    uint8_t     &dbg_req_head,
+    uint8_t     &dbg_req_tile,
     
     bool        &error               // [OUTPUT] Error flag on invalid request
 );

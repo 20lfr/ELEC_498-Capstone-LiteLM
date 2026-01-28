@@ -410,7 +410,7 @@ constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PR
 
 constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
-constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
+constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
@@ -480,8 +480,7 @@ struct ResidLayout {
 struct LayerNormLayout {
     static constexpr int X = 0;
     static constexpr int GAMMA = X + D_MODEL;
-    static constexpr int BETA = GAMMA + (D_MODEL * 4);
-    static constexpr int EPS = BETA + (D_MODEL * 4);
+    static constexpr int EPS = GAMMA + (D_MODEL * 4);
 };
 
 struct FfnW1Layout {
@@ -566,3 +565,79 @@ inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
 }
 
 } // namespace compute_buf
+
+// ------------------------------------------------------------
+// Headed attention buffer layouts
+// ------------------------------------------------------------
+namespace head_buf {
+
+constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
+constexpr int QKV_W_BYTES = div_ceil(QKV_W_NIBBLES, 2);
+constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES;
+constexpr int QKV_OUT_BYTES = D_HEADS * 4;
+
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
+constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
+
+constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
+
+constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4) + 2;
+constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
+constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int ATT_VALUE_IN_BYTES = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
+
+constexpr int IN_BUF_BYTES = max2(
+    QKV_IN_BYTES,
+    max2(
+        HEAD_REQUANT_IN_BYTES,
+        max2(
+            ATT_SCORES_IN_BYTES,
+            max2(VALUE_SCALE_IN_BYTES,
+                max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
+
+constexpr int OUT_BUF_BYTES = max2(
+    QKV_OUT_BYTES,
+    max2(
+        HEAD_REQUANT_OUT_BYTES,
+        max2(
+            ATT_SCORES_OUT_BYTES,
+            max2(VALUE_SCALE_OUT_BYTES,
+                max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
+
+struct QkvLayout {
+    static constexpr int ACT = 0;
+    static constexpr int W = ACT + D_MODEL;
+};
+
+struct HeadRequantLayout {
+    static constexpr int X = 0;
+    static constexpr int M = X + (D_HEADS * 4);
+    static constexpr int N = M + 4;
+    static constexpr int Z = N + 4;
+};
+
+struct AttScoresLayout {
+    static constexpr int Q = 0;
+    static constexpr int K_CACHE = Q + D_HEADS;
+};
+
+struct ValueScaleLayout {
+    static constexpr int X = 0;
+    static constexpr int SCALE = X + (CONTEXT_LENGTH * 4);
+};
+
+struct SoftmaxLayout {
+    static constexpr int X = 0;
+};
+
+struct AttValueLayout {
+    static constexpr int WEIGHTS = 0;
+    static constexpr int V_CACHE = WEIGHTS + CONTEXT_LENGTH;
+};
+
+} // namespace head_buf
