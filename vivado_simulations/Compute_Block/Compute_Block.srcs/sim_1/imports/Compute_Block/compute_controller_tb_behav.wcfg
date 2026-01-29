@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="1,000.000001 us"></ZoomEndTime>
-      <Cursor1Time time="1,000.000000 us"></Cursor1Time>
+      <ZoomEndTime time="63.805001 us"></ZoomEndTime>
+      <Cursor1Time time="63.805000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="205"></NameColumnWidth>
+      <NameColumnWidth column_width="197"></NameColumnWidth>
       <ValueColumnWidth column_width="60"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="77" />
+   <WVObjectSize size="83" />
    <wvobject type="logic" fp_name="/compute_controller_tb/ap_clk">
       <obj_property name="ElementShortName">ap_clk</obj_property>
       <obj_property name="ObjectShortName">ap_clk</obj_property>
@@ -28,13 +28,9 @@
       <obj_property name="ElementShortName">ap_rst</obj_property>
       <obj_property name="ObjectShortName">ap_rst</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/OUT_PROJ_counter">
-      <obj_property name="ElementShortName">OUT_PROJ_counter[31:0]</obj_property>
-      <obj_property name="ObjectShortName">OUT_PROJ_counter[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/compute_state">
-      <obj_property name="ElementShortName">compute_state[1:0]</obj_property>
-      <obj_property name="ObjectShortName">compute_state[1:0]</obj_property>
+      <obj_property name="ElementShortName">compute_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_state[2:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/reset_hold_ctr">
       <obj_property name="ElementShortName">reset_hold_ctr[31:0]</obj_property>
@@ -124,10 +120,6 @@
       <obj_property name="ElementShortName">compute_done[0:0]</obj_property>
       <obj_property name="ObjectShortName">compute_done[0:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/compute_controller_tb/OUT_PROJ_counter">
-      <obj_property name="ElementShortName">OUT_PROJ_counter[31:0]</obj_property>
-      <obj_property name="ObjectShortName">OUT_PROJ_counter[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/compute_instruction">
       <obj_property name="ElementShortName">compute_instruction[31:0]</obj_property>
       <obj_property name="ObjectShortName">compute_instruction[31:0]</obj_property>
@@ -207,16 +199,16 @@
       <obj_property name="ObjectShortName">pending_tile[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/in_buf_address0">
-      <obj_property name="ElementShortName">in_buf_address0[12:0]</obj_property>
-      <obj_property name="ObjectShortName">in_buf_address0[12:0]</obj_property>
+      <obj_property name="ElementShortName">in_buf_address0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_address0[7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/in_buf_mem">
-      <obj_property name="ElementShortName">in_buf_mem[0:4919][7:0]</obj_property>
-      <obj_property name="ObjectShortName">in_buf_mem[0:4919][7:0]</obj_property>
+      <obj_property name="ElementShortName">in_buf_mem[0:128][7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_mem[0:128][7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/out_buf_mem">
-      <obj_property name="ElementShortName">out_buf_mem[0:767][7:0]</obj_property>
-      <obj_property name="ObjectShortName">out_buf_mem[0:767][7:0]</obj_property>
+      <obj_property name="ElementShortName">out_buf_mem[0:63][7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_mem[0:63][7:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/compute_controller_tb/in_buf_ce0">
       <obj_property name="ElementShortName">in_buf_ce0</obj_property>
@@ -231,17 +223,193 @@
       <obj_property name="ObjectShortName">out_buf_d0[7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_valueA">
-      <obj_property name="ElementShortName">full_valueA[0:191][7:0]</obj_property>
-      <obj_property name="ObjectShortName">full_valueA[0:191][7:0]</obj_property>
+      <obj_property name="ElementShortName">full_valueA[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">full_valueA[0:15][7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_weights">
-      <obj_property name="ElementShortName">full_weights[0:36863][3:0]</obj_property>
-      <obj_property name="ObjectShortName">full_weights[0:36863][3:0]</obj_property>
+      <obj_property name="ElementShortName">full_weights[0:255][3:0]</obj_property>
+      <obj_property name="ObjectShortName">full_weights[0:255][3:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum">
-      <obj_property name="ElementShortName">full_accum[0:191][31:0]</obj_property>
-      <obj_property name="ObjectShortName">full_accum[0:191][31:0]</obj_property>
+      <obj_property name="ElementShortName">full_accum[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">full_accum[0:15][31:0]</obj_property>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[0]">
+         <obj_property name="ElementShortName">[0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[1]">
+         <obj_property name="ElementShortName">[1][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[2]">
+         <obj_property name="ElementShortName">[2][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[3]">
+         <obj_property name="ElementShortName">[3][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[4]">
+         <obj_property name="ElementShortName">[4][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[5]">
+         <obj_property name="ElementShortName">[5][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[6]">
+         <obj_property name="ElementShortName">[6][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[7]">
+         <obj_property name="ElementShortName">[7][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[8]">
+         <obj_property name="ElementShortName">[8][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[8][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[9]">
+         <obj_property name="ElementShortName">[9][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[9][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[10]">
+         <obj_property name="ElementShortName">[10][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[10][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[11]">
+         <obj_property name="ElementShortName">[11][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[11][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[12]">
+         <obj_property name="ElementShortName">[12][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[12][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[13]">
+         <obj_property name="ElementShortName">[13][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[13][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[14]">
+         <obj_property name="ElementShortName">[14][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[14][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[15]">
+         <obj_property name="ElementShortName">[15][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[15][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[0]">
+         <obj_property name="ElementShortName">[0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[1]">
+         <obj_property name="ElementShortName">[1][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[2]">
+         <obj_property name="ElementShortName">[2][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[3]">
+         <obj_property name="ElementShortName">[3][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[4]">
+         <obj_property name="ElementShortName">[4][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[5]">
+         <obj_property name="ElementShortName">[5][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[6]">
+         <obj_property name="ElementShortName">[6][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[7]">
+         <obj_property name="ElementShortName">[7][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[8]">
+         <obj_property name="ElementShortName">[8][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[8][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[9]">
+         <obj_property name="ElementShortName">[9][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[9][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[10]">
+         <obj_property name="ElementShortName">[10][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[10][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[11]">
+         <obj_property name="ElementShortName">[11][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[11][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[12]">
+         <obj_property name="ElementShortName">[12][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[12][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[13]">
+         <obj_property name="ElementShortName">[13][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[13][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[14]">
+         <obj_property name="ElementShortName">[14][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[14][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/compute_controller_tb/full_accum[15]">
+         <obj_property name="ElementShortName">[15][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[15][31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq1_x">
+      <obj_property name="ElementShortName">rq1_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq2_x">
+      <obj_property name="ElementShortName">rq2_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq3_x">
+      <obj_property name="ElementShortName">rq3_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq4_x">
+      <obj_property name="ElementShortName">rq4_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq1_out">
+      <obj_property name="ElementShortName">rq1_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq2_out">
+      <obj_property name="ElementShortName">rq2_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq3_out">
+      <obj_property name="ElementShortName">rq3_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/compute_controller_tb/rq4_out">
+      <obj_property name="ElementShortName">rq4_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_out[0:15][7:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/compute_controller_tb/full_accum[0]">
       <obj_property name="ElementShortName">[0][31:0]</obj_property>
