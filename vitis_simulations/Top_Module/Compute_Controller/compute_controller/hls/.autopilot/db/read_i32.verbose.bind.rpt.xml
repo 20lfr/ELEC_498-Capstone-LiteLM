@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'read_i32'" level="0">
-<item name = "Date">Sat Jan 24 18:00:29 2026
+<item name = "Date">Wed Jan 28 19:35:27 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 2.057 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 2.010 ns, 2.70 ns</column>
 </table>
 </item>
 </section>

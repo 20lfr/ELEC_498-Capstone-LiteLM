@@ -46,13 +46,13 @@
           <constraint constraint_type="pragma interface" mode="ap_none" register_option="0"/>
         </hw>
       </arg>
-      <arg id="9" access_type="r" src_name="in_buf" src_type="unsigned char const *" src_isptr="1" src_bitwidth="8" src_size_or_depth="5088">
-        <hw hw_usage="data" hw_interface="BRAM" hw_name="in_buf" hw_bitwidth="8" hw_size_or_depth="5088" hw_kernel_support="false">
+      <arg id="9" access_type="r" src_name="in_buf" src_type="unsigned char const *" src_isptr="1" src_bitwidth="8" src_size_or_depth="129">
+        <hw hw_usage="data" hw_interface="BRAM" hw_name="in_buf" hw_bitwidth="8" hw_size_or_depth="129" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_memory" register_option="0"/>
         </hw>
       </arg>
-      <arg id="10" access_type="w" src_name="out_buf" src_type="unsigned char*" src_isptr="1" src_bitwidth="8" src_size_or_depth="768">
-        <hw hw_usage="data" hw_interface="BRAM" hw_name="out_buf" hw_bitwidth="8" hw_size_or_depth="768" hw_kernel_support="false">
+      <arg id="10" access_type="w" src_name="out_buf" src_type="unsigned char*" src_isptr="1" src_bitwidth="8" src_size_or_depth="64">
+        <hw hw_usage="data" hw_interface="BRAM" hw_name="out_buf" hw_bitwidth="8" hw_size_or_depth="64" hw_kernel_support="false">
           <constraint constraint_type="pragma interface" mode="ap_memory" register_option="0"/>
         </hw>
       </arg>

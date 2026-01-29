@@ -11,14 +11,14 @@ if {${::AESL::PGuard_autoexp_gen}} {
 if {${::AESL::PGuard_autoexp_gen}} {
 if {[info proc ::AESL_LIB_XILADAPTER::xil_bram_gen] == "::AESL_LIB_XILADAPTER::xil_bram_gen"} {
 eval "::AESL_LIB_XILADAPTER::xil_bram_gen { \
-    id 53 \
+    id 35 \
     name in_buf \
     reset_level 1 \
     sync_rst true \
     dir I \
     corename in_buf \
     op interface \
-    ports { in_buf_address0 { O 13 vector } in_buf_ce0 { O 1 bit } in_buf_q0 { I 8 vector } in_buf_address1 { O 13 vector } in_buf_ce1 { O 1 bit } in_buf_q1 { I 8 vector } } \
+    ports { in_buf_address0 { O 8 vector } in_buf_ce0 { O 1 bit } in_buf_q0 { I 8 vector } in_buf_address1 { O 8 vector } in_buf_ce1 { O 1 bit } in_buf_q1 { I 8 vector } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'in_buf'"
@@ -29,7 +29,7 @@ puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored ge
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 54 \
+    id 36 \
     name byte_addr \
     type other \
     dir I \
@@ -37,7 +37,7 @@ eval "cg_default_interface_gen_dc { \
     sync_rst true \
     corename dc_byte_addr \
     op interface \
-    ports { byte_addr { I 13 vector } } \
+    ports { byte_addr { I 7 vector } } \
 } "
 }
 
