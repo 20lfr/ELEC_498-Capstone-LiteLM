@@ -41,7 +41,39 @@ module compute_controller_tb;
     localparam int OUT_PROJ_B_OFFSET = OUT_PROJ_W_OFFSET + OUT_PROJ_W_BYTES;
 
     localparam int CLK_PERIOD = 10; // in nanoseconds
-    localparam int MAX_CYCLES = 8000;
+    localparam int MAX_CYCLES = 20000;
+
+    localparam int REQUANT_X_OFFSET = 0;
+    localparam int REQUANT_M_OFFSET = REQUANT_X_OFFSET + (D_MODEL * 4);
+    localparam int REQUANT_N_OFFSET = REQUANT_M_OFFSET + 4;
+    localparam int REQUANT_Z_OFFSET = REQUANT_N_OFFSET + 4;
+
+    localparam int RESID_X_OFFSET = 0;
+    localparam int RESID_R_OFFSET = RESID_X_OFFSET + D_MODEL;
+
+    localparam int LN_X_OFFSET = 0;
+    localparam int LN_GAMMA_OFFSET = LN_X_OFFSET + D_MODEL;
+    localparam int LN_EPS_OFFSET = LN_GAMMA_OFFSET + (D_MODEL * 4);
+
+    localparam int FFN_W1_X_OFFSET = 0;
+    localparam int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
+    localparam int FFN_W1_W_BYTES = (FFN_W1_W_NIBBLES + 1) / 2;
+    localparam int FFN_W1_B_BYTES = D_TILE_W1 * 4;
+    localparam int FFN_W1_S_BYTES = D_TILE_W1 * 2;
+    localparam int FFN_W1_W_OFFSET = FFN_W1_X_OFFSET + D_MODEL;
+    localparam int FFN_W1_B_OFFSET = FFN_W1_W_OFFSET + FFN_W1_W_BYTES;
+    localparam int FFN_W1_S_OFFSET = FFN_W1_B_OFFSET + FFN_W1_B_BYTES;
+
+    localparam int FFN_ACT_X_OFFSET = 0;
+
+    localparam int FFN_W2_X_OFFSET = 0;
+    localparam int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
+    localparam int FFN_W2_W_BYTES = (FFN_W2_W_NIBBLES + 1) / 2;
+    localparam int FFN_W2_B_BYTES = D_TILE_W2 * 4;
+    localparam int FFN_W2_S_BYTES = D_TILE_W2 * 2;
+    localparam int FFN_W2_W_OFFSET = FFN_W2_X_OFFSET + (D_FFN * 2);
+    localparam int FFN_W2_B_OFFSET = FFN_W2_W_OFFSET + FFN_W2_W_BYTES;
+    localparam int FFN_W2_S_OFFSET = FFN_W2_B_OFFSET + FFN_W2_B_BYTES;
 
 
     // localparam logic [7:0] CMP_NONE        = 8'h00;
@@ -61,39 +93,20 @@ module compute_controller_tb;
 
 
     // Align opcodes with top_params.hpp ComputeOp enum.
-    localparam logic [7:0] CMP_OUT_PROJ    = 8'h0F;
-    localparam logic [7:0] CMP_REQUANT1    = 8'h0F;
-    localparam logic [7:0] CMP_RESID0      = 8'h10;
-    localparam logic [7:0] CMP_LN0         = 8'h11;
-    localparam logic [7:0] CMP_REQUANT3    = 8'h12;
-    localparam logic [7:0] CMP_FFN_W1      = 8'h13;
-    localparam logic [7:0] CMP_FFN_ACT     = 8'h14;
-    localparam logic [7:0] CMP_FFN_W2      = 8'h15;
-    localparam logic [7:0] CMP_REQUANT4    = 8'h16;
-    localparam logic [7:0] CMP_RESID1      = 8'h17;
-    localparam logic [7:0] CMP_LN1         = 8'h18;
-    localparam logic [7:0] CMP_DEQUANT     = 8'h19;
-    localparam logic [7:0] CMP_LOGITS      = 8'h1A;
-    localparam logic [7:0] CMP_LN0_SUM     = 8'h1B;
-    localparam logic [7:0] CMP_LN0_SUMSQ   = 8'h1C;
-    localparam logic [7:0] CMP_LN0_MEAN    = 8'h1D;
-    localparam logic [7:0] CMP_LN0_EYY     = 8'h1E;
-    localparam logic [7:0] CMP_LN0_VAR     = 8'h1F;
-    localparam logic [7:0] CMP_LN0_VAR_EPS = 8'h20;
-    localparam logic [7:0] CMP_LN0_INV_STD = 8'h21;
-    localparam logic [7:0] CMP_LN0_NORM    = 8'h22;
-    localparam logic [7:0] CMP_LN0_SCALE   = 8'h23;
-    localparam logic [7:0] CMP_LN0_SHIFT   = 8'h24;
-    localparam logic [7:0] CMP_LN1_SUM     = 8'h25;
-    localparam logic [7:0] CMP_LN1_SUMSQ   = 8'h26;
-    localparam logic [7:0] CMP_LN1_MEAN    = 8'h27;
-    localparam logic [7:0] CMP_LN1_EYY     = 8'h28;
-    localparam logic [7:0] CMP_LN1_VAR     = 8'h29;
-    localparam logic [7:0] CMP_LN1_VAR_EPS = 8'h2A;
-    localparam logic [7:0] CMP_LN1_INV_STD = 8'h2B;
-    localparam logic [7:0] CMP_LN1_NORM    = 8'h2C;
-    localparam logic [7:0] CMP_LN1_SCALE   = 8'h2D;
-    localparam logic [7:0] CMP_LN1_SHIFT   = 8'h2E;
+    localparam logic [7:0] CMP_LN0       = 8'h01;
+    localparam logic [7:0] CMP_REQUANT1  = 8'h02;
+    localparam logic [7:0] CMP_OUT_PROJ  = 8'h0F;
+    localparam logic [7:0] CMP_RESID0    = 8'h10;
+    localparam logic [7:0] CMP_REQUANT2  = 8'h11;
+    localparam logic [7:0] CMP_FFN_W1    = 8'h12;
+    localparam logic [7:0] CMP_FFN_W2    = 8'h14;
+    localparam logic [7:0] CMP_REQUANT3  = 8'h15;
+    localparam logic [7:0] CMP_RESID1    = 8'h16;
+    localparam logic [7:0] CMP_LN1       = 8'h17;
+    localparam logic [7:0] CMP_REQUANT4  = 8'h18;
+    localparam logic [7:0] CMP_DEQUANT   = 8'h19;
+    localparam logic [7:0] CMP_LOGITS    = 8'h1A;
+    localparam logic [7:0] CMP_FFN_ACT   = 8'h1D;
 
 
 
@@ -102,13 +115,18 @@ module compute_controller_tb;
     logic ap_rst = 1'b1;
     always #(CLK_PERIOD/2) ap_clk = ~ap_clk;
 
-    logic [31:0]OUT_PROJ_counter = 0;
+    localparam int GAP_CYCLES = 50;
+    localparam int OP_COUNT = 12;
+    int op_index;
+    int op_tile;
+    int gap_ctr;
     logic done_seen = 1'b0;
-    typedef enum logic [1:0] {
-        SETUP           =   2'b00,
-        OUT_PROJ_SEND  = 2'b01,
-        OUTPROJ_WAIT   = 2'b10,
-        DONE            = 2'b11
+    typedef enum logic [2:0] {
+        SETUP      = 3'b000,
+        OP_SEND    = 3'b001,
+        OP_WAIT    = 3'b010,
+        GAP_WAIT   = 3'b011,
+        DONE       = 3'b100
     } compute_state_t;
     compute_state_t compute_state = SETUP;
     localparam int RESET_HOLD_CYCLES = 3;
@@ -124,6 +142,36 @@ module compute_controller_tb;
     int mem_timer;
     int pending_tile;
     int mem_done_hold;
+
+    function automatic logic [7:0] op_for_index(input int idx);
+      case (idx)
+        0: op_for_index = CMP_OUT_PROJ;
+        1: op_for_index = CMP_REQUANT1;
+        2: op_for_index = CMP_REQUANT2;
+        3: op_for_index = CMP_REQUANT3;
+        4: op_for_index = CMP_REQUANT4;
+        5: op_for_index = CMP_RESID0;
+        6: op_for_index = CMP_RESID1;
+        7: op_for_index = CMP_LN0;
+        8: op_for_index = CMP_LN1;
+        9: op_for_index = CMP_FFN_W1;
+        10: op_for_index = CMP_FFN_ACT;
+        11: op_for_index = CMP_FFN_W2;
+        default: op_for_index = CMP_OUT_PROJ;
+      endcase
+    endfunction
+
+    function automatic int tiles_for_op(input logic [7:0] op);
+      if (op == CMP_OUT_PROJ) begin
+        tiles_for_op = NUM_WO_TILES;
+      end else if (op == CMP_FFN_W1) begin
+        tiles_for_op = NUM_W1_TILES;
+      end else if (op == CMP_FFN_W2) begin
+        tiles_for_op = NUM_W2_TILES;
+      end else begin
+        tiles_for_op = 1;
+      end
+    endfunction
 
     // DUT Signals
     logic ap_start;
@@ -220,11 +268,61 @@ module compute_controller_tb;
     logic dbg_out_we1;
     logic [31:0] dbg_out_d1;
 
-    // Simple memory model for OUT_PROJ inputs/outputs.
+    // OUT_PROJ inputs/outputs.
     logic [7:0] full_valueA [0:D_MODEL-1];
     logic [3:0] full_weights [0:D_MODEL*D_MODEL-1];
     logic [31:0] full_bias [0:D_MODEL-1];
     logic [31:0] full_accum [0:D_MODEL-1];
+
+    // Requant inputs.
+    logic [31:0] rq1_x [0:D_MODEL-1];
+    logic [31:0] rq2_x [0:D_MODEL-1];
+    logic [31:0] rq3_x [0:D_MODEL-1];
+    logic [31:0] rq4_x [0:D_MODEL-1];
+    logic [31:0] rq1_M, rq1_N, rq1_Z;
+    logic [31:0] rq2_M, rq2_N, rq2_Z;
+    logic [31:0] rq3_M, rq3_N, rq3_Z;
+    logic [31:0] rq4_M, rq4_N, rq4_Z;
+    logic [7:0] rq1_out [0:D_MODEL-1];
+    logic [7:0] rq2_out [0:D_MODEL-1];
+    logic [7:0] rq3_out [0:D_MODEL-1];
+    logic [7:0] rq4_out [0:D_MODEL-1];
+
+    // Residual inputs/outputs.
+    logic [7:0] resid0_x [0:D_MODEL-1];
+    logic [7:0] resid0_r [0:D_MODEL-1];
+    logic [7:0] resid1_x [0:D_MODEL-1];
+    logic [7:0] resid1_r [0:D_MODEL-1];
+    logic [7:0] resid0_out [0:D_MODEL-1];
+    logic [7:0] resid1_out [0:D_MODEL-1];
+
+    // LayerNorm inputs/outputs.
+    logic [7:0] ln0_x [0:D_MODEL-1];
+    logic [31:0] ln0_gamma [0:D_MODEL-1];
+    logic [31:0] ln0_eps;
+    logic [7:0] ln1_x [0:D_MODEL-1];
+    logic [31:0] ln1_gamma [0:D_MODEL-1];
+    logic [31:0] ln1_eps;
+    logic [31:0] ln0_out [0:D_MODEL-1];
+    logic [31:0] ln1_out [0:D_MODEL-1];
+
+    // FFN W1 inputs/outputs.
+    logic [7:0] ffn1_x [0:D_MODEL-1];
+    logic [3:0] ffn1_w [0:(D_MODEL*D_MODEL)-1];
+    logic [31:0] ffn1_b [0:D_MODEL-1];
+    logic [15:0] ffn1_s [0:D_MODEL-1];
+    logic [15:0] ffn1_out [0:D_MODEL-1];
+
+    // FFN activation inputs/outputs.
+    logic [15:0] ffn_act_in [0:D_FFN-1];
+    logic [15:0] ffn_act_out [0:D_FFN-1];
+
+    // FFN W2 inputs/outputs.
+    logic [15:0] ffn2_x [0:D_FFN-1];
+    logic [3:0] ffn2_w [0:(D_FFN*D_FFN)-1];
+    logic [31:0] ffn2_b [0:D_FFN-1];
+    logic [15:0] ffn2_s [0:D_FFN-1];
+    logic [31:0] ffn2_out [0:(NUM_W2_TILES*D_TILE_W2)-1];
     logic [7:0] in_buf_mem [0:IN_BUF_BYTES-1];
     logic [7:0] out_buf_mem [0:OUT_BUF_BYTES-1];
 
@@ -261,12 +359,58 @@ module compute_controller_tb;
         full_valueA[i] = 8'h7f;
         full_bias[i] = 32'd7;
         full_accum[i] = 32'd0;
+        rq1_x[i] = (i * 3) - 20;
+        rq2_x[i] = (i * 2) + 5;
+        rq3_x[i] = 100 - (i * 4);
+        rq4_x[i] = (i * 5) - 11;
+        rq1_out[i] = 8'd0;
+        rq2_out[i] = 8'd0;
+        rq3_out[i] = 8'd0;
+        rq4_out[i] = 8'd0;
+        resid0_x[i] = i;
+        resid0_r[i] = i * 2;
+        resid1_x[i] = -i;
+        resid1_r[i] = i + 1;
+        resid0_out[i] = 8'd0;
+        resid1_out[i] = 8'd0;
+        ln0_x[i] = i + 1;
+        ln1_x[i] = i + 2;
+        ln0_gamma[i] = 32'd1;
+        ln1_gamma[i] = 32'd2;
+        ln0_out[i] = 32'd0;
+        ln1_out[i] = 32'd0;
+        ffn1_x[i] = i + 3;
+        ffn1_b[i] = 32'd7;
+        ffn1_s[i] = 16'h4000;
+        ffn1_out[i] = 16'd0;
       end
+
+      rq1_M = 32'd1; rq1_N = 32'd0; rq1_Z = 32'd0;
+      rq2_M = 32'd2; rq2_N = 32'd1; rq2_Z = 32'd0;
+      rq3_M = 32'd1; rq3_N = 32'd2; rq3_Z = 32'd0;
+      rq4_M = 32'd3; rq4_N = 32'd1; rq4_Z = 32'd0;
+      ln0_eps = 32'd1;
+      ln1_eps = 32'd2;
 
       for (t = 0; t < D_MODEL; t = t + 1) begin
         for (j = 0; j < D_MODEL; j = j + 1) begin
           full_weights[t * D_MODEL + j] = 4'h7;
+          ffn1_w[t * D_MODEL + j] = 4'h1;
         end
+      end
+
+      for (t = 0; t < D_FFN; t = t + 1) begin
+        ffn_act_in[t] = (t * 3) - 20;
+        ffn_act_out[t] = 16'd0;
+        ffn2_x[t] = (t * 2) + 1;
+        ffn2_b[t] = 32'd5;
+        ffn2_s[t] = 16'h4000;
+      end
+      for (t = 0; t < (D_FFN * D_FFN); t = t + 1) begin
+        ffn2_w[t] = 4'h1;
+      end
+      for (t = 0; t < (NUM_W2_TILES * D_TILE_W2); t = t + 1) begin
+        ffn2_out[t] = 32'd0;
       end
 
       for (i = 0; i < IN_BUF_BYTES; i = i + 1) begin
@@ -299,10 +443,22 @@ module compute_controller_tb;
       end
     endtask
 
+    task automatic write_i16_to_in_buf(input int byte_addr, input logic [15:0] value);
+      begin
+        in_buf_mem[byte_addr + 0] = value[7:0];
+        in_buf_mem[byte_addr + 1] = value[15:8];
+      end
+    endtask
+
     function automatic logic [31:0] read_i32_from_out_buf(input int byte_addr);
       read_i32_from_out_buf = {out_buf_mem[byte_addr + 3],
                                out_buf_mem[byte_addr + 2],
                                out_buf_mem[byte_addr + 1],
+                               out_buf_mem[byte_addr + 0]};
+    endfunction
+
+    function automatic logic [15:0] read_i16_from_out_buf(input int byte_addr);
+      read_i16_from_out_buf = {out_buf_mem[byte_addr + 1],
                                out_buf_mem[byte_addr + 0]};
     endfunction
 
@@ -418,18 +574,194 @@ module compute_controller_tb;
                     end
                   end
                 end
+                CMP_REQUANT1: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq1_x[j]);
+                  end
+                  write_i32_to_in_buf(REQUANT_M_OFFSET, rq1_M);
+                  write_i32_to_in_buf(REQUANT_N_OFFSET, rq1_N);
+                  write_i32_to_in_buf(REQUANT_Z_OFFSET, rq1_Z);
+                end
+                CMP_REQUANT2: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq2_x[j]);
+                  end
+                  write_i32_to_in_buf(REQUANT_M_OFFSET, rq2_M);
+                  write_i32_to_in_buf(REQUANT_N_OFFSET, rq2_N);
+                  write_i32_to_in_buf(REQUANT_Z_OFFSET, rq2_Z);
+                end
+                CMP_REQUANT3: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq3_x[j]);
+                  end
+                  write_i32_to_in_buf(REQUANT_M_OFFSET, rq3_M);
+                  write_i32_to_in_buf(REQUANT_N_OFFSET, rq3_N);
+                  write_i32_to_in_buf(REQUANT_Z_OFFSET, rq3_Z);
+                end
+                CMP_REQUANT4: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq4_x[j]);
+                  end
+                  write_i32_to_in_buf(REQUANT_M_OFFSET, rq4_M);
+                  write_i32_to_in_buf(REQUANT_N_OFFSET, rq4_N);
+                  write_i32_to_in_buf(REQUANT_Z_OFFSET, rq4_Z);
+                end
+                CMP_RESID0: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    in_buf_mem[RESID_X_OFFSET + j] = resid0_x[j];
+                    in_buf_mem[RESID_R_OFFSET + j] = resid0_r[j];
+                  end
+                end
+                CMP_RESID1: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    in_buf_mem[RESID_X_OFFSET + j] = resid1_x[j];
+                    in_buf_mem[RESID_R_OFFSET + j] = resid1_r[j];
+                  end
+                end
+                CMP_LN0: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    in_buf_mem[LN_X_OFFSET + j] = ln0_x[j];
+                    write_i32_to_in_buf(LN_GAMMA_OFFSET + (j * 4), ln0_gamma[j]);
+                  end
+                  write_i32_to_in_buf(LN_EPS_OFFSET, ln0_eps);
+                end
+                CMP_LN1: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    in_buf_mem[LN_X_OFFSET + j] = ln1_x[j];
+                    write_i32_to_in_buf(LN_GAMMA_OFFSET + (j * 4), ln1_gamma[j]);
+                  end
+                  write_i32_to_in_buf(LN_EPS_OFFSET, ln1_eps);
+                end
+                CMP_FFN_W1: begin
+                  for (j = 0; j < D_MODEL; j = j + 1) begin
+                    in_buf_mem[FFN_W1_X_OFFSET + j] = ffn1_x[j];
+                  end
+                  if ((pending_tile >= 0) && (pending_tile < NUM_W1_TILES)) begin
+                    out_base = pending_tile * D_TILE_W1;
+                    for (t = 0; t < D_TILE_W1; t = t + 1) begin
+                      for (j = 0; j < D_MODEL; j = j + 1) begin
+                        write_i4_to_in_buf(
+                          (FFN_W1_W_OFFSET * 2) + (t * D_MODEL) + j,
+                          ffn1_w[(out_base + t) * D_MODEL + j]);
+                      end
+                    end
+                    for (t = 0; t < D_TILE_W1; t = t + 1) begin
+                      write_i32_to_in_buf(
+                        FFN_W1_B_OFFSET + (t * 4),
+                        ffn1_b[out_base + t]);
+                      write_i16_to_in_buf(
+                        FFN_W1_S_OFFSET + (t * 2),
+                        ffn1_s[out_base + t]);
+                    end
+                  end
+                end
+                CMP_FFN_ACT: begin
+                  for (j = 0; j < D_FFN; j = j + 1) begin
+                    write_i16_to_in_buf(FFN_ACT_X_OFFSET + (j * 2), ffn_act_in[j]);
+                  end
+                end
+                CMP_FFN_W2: begin
+                  for (j = 0; j < D_FFN; j = j + 1) begin
+                    write_i16_to_in_buf(FFN_W2_X_OFFSET + (j * 2), ffn2_x[j]);
+                  end
+                  if ((pending_tile >= 0) && (pending_tile < NUM_W2_TILES)) begin
+                    out_base = pending_tile * D_TILE_W2;
+                    for (t = 0; t < D_TILE_W2; t = t + 1) begin
+                      for (j = 0; j < D_FFN; j = j + 1) begin
+                        write_i4_to_in_buf(
+                          (FFN_W2_W_OFFSET * 2) + (t * D_FFN) + j,
+                          ffn2_w[(out_base + t) * D_FFN + j]);
+                      end
+                    end
+                    for (t = 0; t < D_TILE_W2; t = t + 1) begin
+                      write_i32_to_in_buf(
+                        FFN_W2_B_OFFSET + (t * 4),
+                        ffn2_b[out_base + t]);
+                      write_i16_to_in_buf(
+                        FFN_W2_S_OFFSET + (t * 2),
+                        ffn2_s[out_base + t]);
+                    end
+                  end
+                end
                 default: begin
                 end
               endcase
             end else if (mem_pending == MEM_WRITE) begin
               int out_base;
               int t;
-              if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
-                out_base = pending_tile * D_TILE_WO;
-                for (t = 0; t < D_TILE_WO; t = t + 1) begin
-                  full_accum[out_base + t] <= read_i32_from_out_buf(t * 4);
+              case (mem_op[7:0])
+                CMP_OUT_PROJ: begin
+                  if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
+                    out_base = pending_tile * D_TILE_WO;
+                    for (t = 0; t < D_TILE_WO; t = t + 1) begin
+                      full_accum[out_base + t] <= read_i32_from_out_buf(t * 4);
+                    end
+                  end
                 end
-              end
+                CMP_REQUANT1: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    rq1_out[t] <= out_buf_mem[t];
+                  end
+                end
+                CMP_REQUANT2: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    rq2_out[t] <= out_buf_mem[t];
+                  end
+                end
+                CMP_REQUANT3: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    rq3_out[t] <= out_buf_mem[t];
+                  end
+                end
+                CMP_REQUANT4: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    rq4_out[t] <= out_buf_mem[t];
+                  end
+                end
+                CMP_RESID0: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    resid0_out[t] <= out_buf_mem[t];
+                  end
+                end
+                CMP_RESID1: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    resid1_out[t] <= out_buf_mem[t];
+                  end
+                end
+                CMP_LN0: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    ln0_out[t] <= read_i32_from_out_buf(t * 4);
+                  end
+                end
+                CMP_LN1: begin
+                  for (t = 0; t < D_MODEL; t = t + 1) begin
+                    ln1_out[t] <= read_i32_from_out_buf(t * 4);
+                  end
+                end
+                CMP_FFN_W1: begin
+                  if ((pending_tile >= 0) && (pending_tile < NUM_W1_TILES)) begin
+                    out_base = pending_tile * D_TILE_W1;
+                    for (t = 0; t < D_TILE_W1; t = t + 1) begin
+                      ffn1_out[out_base + t] <= read_i16_from_out_buf(t * 2);
+                    end
+                  end
+                end
+                CMP_FFN_ACT: begin
+                  for (t = 0; t < D_FFN; t = t + 1) begin
+                    ffn_act_out[t] <= read_i16_from_out_buf(t * 2);
+                  end
+                end
+                CMP_FFN_W2: begin
+                  if ((pending_tile >= 0) && (pending_tile < NUM_W2_TILES)) begin
+                    out_base = pending_tile * D_TILE_W2;
+                    for (t = 0; t < D_TILE_W2; t = t + 1) begin
+                      ffn2_out[out_base + t] <= read_i32_from_out_buf(t * 4);
+                    end
+                  end
+                end
+                default: begin
+                end
+              endcase
             end
             mem_pending <= MEM_NONE;
           end else begin
@@ -465,14 +797,16 @@ module compute_controller_tb;
       case (compute_state)
           SETUP: begin
               // Initialize signals
-              OUT_PROJ_counter <= 0;
               done_seen <= 1'b0;
               compute_start <= 1'b0;
+              op_index <= 0;
+              op_tile <= 0;
+              gap_ctr <= 0;
               if (reset_hold_ctr >= (RESET_HOLD_CYCLES - 1)) begin
                   ap_rst <= 1'b0;
                   ap_start <= 1'b1;
                   reset <= 1'b0;
-                  compute_state <= OUT_PROJ_SEND;
+                  compute_state <= OP_SEND;
               end else begin
                   ap_rst <= 1'b1;
                   ap_start <= 1'b0;
@@ -480,26 +814,42 @@ module compute_controller_tb;
                   reset_hold_ctr <= reset_hold_ctr + 1;
               end
           end
-          OUT_PROJ_SEND: begin
-              // Initialize signals for OUT_PROJ send
+          OP_SEND: begin
               reset <= 0;
+              compute_start <= 1'b0;
               if (compute_ready) begin
-                  compute_start <= 1;
+                  compute_start <= 1'b1;
                   // Instruction format: [31:24]=tile [23:16]=head [15:8]=layer [7:0]=op
-                  // Match HLS TB defaults: layer=1, head=-1 (0xFF), tile=counter.
-                  compute_instruction <= {OUT_PROJ_counter[7:0], 8'hFF, 8'h01, CMP_OUT_PROJ};
-                  compute_state <= OUTPROJ_WAIT;
+                  compute_instruction <= {op_tile[7:0], 8'hFF, 8'h01, op_for_index(op_index)};
+                  compute_state <= OP_WAIT;
               end
           end
-          OUTPROJ_WAIT: begin
-            if (OUT_PROJ_counter == NUM_WO_TILES) begin
-              compute_state <= DONE;
-            end
-            if (done_seen && OUT_PROJ_counter < NUM_WO_TILES) begin
-              OUT_PROJ_counter <= OUT_PROJ_counter + 1;
-              compute_state <= OUT_PROJ_SEND;
-              done_seen <= 1'b0;
-            end
+          OP_WAIT: begin
+              compute_start <= 1'b0;
+              if (done_seen) begin
+                  done_seen <= 1'b0;
+                  if ((op_tile + 1) < tiles_for_op(op_for_index(op_index))) begin
+                      op_tile <= op_tile + 1;
+                      compute_state <= OP_SEND;
+                  end else begin
+                      op_tile <= 0;
+                      if ((op_index + 1) >= OP_COUNT) begin
+                          compute_state <= DONE;
+                      end else begin
+                          op_index <= op_index + 1;
+                          gap_ctr <= GAP_CYCLES;
+                          compute_state <= GAP_WAIT;
+                      end
+                  end
+              end
+          end
+          GAP_WAIT: begin
+              compute_start <= 1'b0;
+              if (gap_ctr == 0) begin
+                  compute_state <= OP_SEND;
+              end else begin
+                  gap_ctr <= gap_ctr - 1;
+              end
           end
           DONE: begin
               // Finish simulation
@@ -509,7 +859,7 @@ module compute_controller_tb;
     end
 
     initial begin : stimulus
-      int cycles = 0;
+      automatic int cycles = 0;
       // Default inputs to the DUT.
       ap_start = 1'b0;
       ap_rst = 1'b1;
