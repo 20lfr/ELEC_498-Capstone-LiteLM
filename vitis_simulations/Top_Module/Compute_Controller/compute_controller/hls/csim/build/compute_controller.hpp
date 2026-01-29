@@ -5,21 +5,6 @@
 
 using int4_t = ap_int<4>;
 
-constexpr int max2_constexpr(int a, int b) {
-    return (a > b) ? a : b;
-}
-constexpr int min2_constexpr(int a, int b) {
-    return (a < b) ? a : b;
-}
-
-constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
-constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
-constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
-constexpr int MAX_CYCLIC_SIZE = 16;
-
-constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
-constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
-
 void compute_controller(
     bool        reset,               // [INPUT] Reset signal
 

@@ -41,7 +41,7 @@
           </Value>
           <direction>0</direction>
           <if_type>1</if_type>
-          <array_size>5088</array_size>
+          <array_size>129</array_size>
           <bit_vecs class_id="7" tracking_level="0" version="0">
             <count>0</count>
             <item_version>0</item_version>
@@ -73,7 +73,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <direction>0</direction>
           <if_type>0</if_type>
@@ -113,7 +113,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -135,10 +135,10 @@
             <Obj>
               <type>0</type>
               <id>5</id>
-              <name>zext_ln595</name>
+              <name>zext_ln575</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>595</lineNumber>
+              <lineNumber>575</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -154,13 +154,13 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>595</second>
+                      <second>575</second>
                     </item>
                   </second>
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>zext_ln595_fu_73_p1</rtlName>
+              <rtlName>zext_ln575_fu_73_p1</rtlName>
               <control></control>
               <opType></opType>
               <implIndex></implIndex>
@@ -194,7 +194,7 @@
               <name>in_buf_addr</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>595</lineNumber>
+              <lineNumber>575</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -210,7 +210,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>595</second>
+                      <second>575</second>
                     </item>
                   </second>
                 </item>
@@ -226,7 +226,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>8</bitwidth>
           </Value>
           <oprand_edges>
             <count>3</count>
@@ -252,7 +252,7 @@
               <name>in_buf_load</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>595</lineNumber>
+              <lineNumber>575</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -268,7 +268,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>595</second>
+                      <second>575</second>
                     </item>
                   </second>
                 </item>
@@ -305,10 +305,10 @@
             <Obj>
               <type>0</type>
               <id>8</id>
-              <name>add_ln596</name>
+              <name>add_ln576</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>596</lineNumber>
+              <lineNumber>576</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -324,13 +324,13 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>596</second>
+                      <second>576</second>
                     </item>
                   </second>
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>add_ln596_fu_78_p2</rtlName>
+              <rtlName>add_ln576_fu_78_p2</rtlName>
               <control>auto</control>
               <opType>add</opType>
               <implIndex>fabric</implIndex>
@@ -340,7 +340,7 @@
               <coreId>1</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -353,7 +353,7 @@
           <m_isOnCriticalPath>0</m_isOnCriticalPath>
           <m_isLCDNode>0</m_isLCDNode>
           <m_isStartOfPath>0</m_isStartOfPath>
-          <m_delay>0.82</m_delay>
+          <m_delay>0.77</m_delay>
           <m_topoIndex>5</m_topoIndex>
           <m_clusterGroupNumber>-1</m_clusterGroupNumber>
         </item>
@@ -362,10 +362,10 @@
             <Obj>
               <type>0</type>
               <id>9</id>
-              <name>zext_ln596</name>
+              <name>zext_ln576</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>596</lineNumber>
+              <lineNumber>576</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -381,13 +381,13 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>596</second>
+                      <second>576</second>
                     </item>
                   </second>
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>zext_ln596_fu_84_p1</rtlName>
+              <rtlName>zext_ln576_fu_84_p1</rtlName>
               <control></control>
               <opType></opType>
               <implIndex></implIndex>
@@ -421,7 +421,7 @@
               <name>in_buf_addr_1</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>596</lineNumber>
+              <lineNumber>576</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -437,7 +437,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>596</second>
+                      <second>576</second>
                     </item>
                   </second>
                 </item>
@@ -453,7 +453,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>8</bitwidth>
           </Value>
           <oprand_edges>
             <count>3</count>
@@ -479,7 +479,7 @@
               <name>in_buf_load_1</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>596</lineNumber>
+              <lineNumber>576</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -495,7 +495,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>596</second>
+                      <second>576</second>
                     </item>
                   </second>
                 </item>
@@ -532,10 +532,10 @@
             <Obj>
               <type>0</type>
               <id>12</id>
-              <name>add_ln597</name>
+              <name>add_ln577</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>597</lineNumber>
+              <lineNumber>577</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -551,13 +551,13 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>597</second>
+                      <second>577</second>
                     </item>
                   </second>
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>add_ln597_fu_89_p2</rtlName>
+              <rtlName>add_ln577_fu_89_p2</rtlName>
               <control>auto</control>
               <opType>add</opType>
               <implIndex>fabric</implIndex>
@@ -567,7 +567,7 @@
               <coreId>1</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -580,7 +580,7 @@
           <m_isOnCriticalPath>0</m_isOnCriticalPath>
           <m_isLCDNode>0</m_isLCDNode>
           <m_isStartOfPath>0</m_isStartOfPath>
-          <m_delay>0.82</m_delay>
+          <m_delay>0.77</m_delay>
           <m_topoIndex>9</m_topoIndex>
           <m_clusterGroupNumber>-1</m_clusterGroupNumber>
         </item>
@@ -589,10 +589,10 @@
             <Obj>
               <type>0</type>
               <id>13</id>
-              <name>zext_ln597</name>
+              <name>zext_ln577</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>597</lineNumber>
+              <lineNumber>577</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -608,13 +608,13 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>597</second>
+                      <second>577</second>
                     </item>
                   </second>
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>zext_ln597_fu_94_p1</rtlName>
+              <rtlName>zext_ln577_fu_94_p1</rtlName>
               <control></control>
               <opType></opType>
               <implIndex></implIndex>
@@ -648,7 +648,7 @@
               <name>in_buf_addr_2</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>597</lineNumber>
+              <lineNumber>577</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -664,7 +664,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>597</second>
+                      <second>577</second>
                     </item>
                   </second>
                 </item>
@@ -680,7 +680,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>8</bitwidth>
           </Value>
           <oprand_edges>
             <count>3</count>
@@ -706,7 +706,7 @@
               <name>in_buf_load_2</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>597</lineNumber>
+              <lineNumber>577</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -722,7 +722,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>597</second>
+                      <second>577</second>
                     </item>
                   </second>
                 </item>
@@ -759,10 +759,10 @@
             <Obj>
               <type>0</type>
               <id>16</id>
-              <name>add_ln598</name>
+              <name>add_ln578</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>598</lineNumber>
+              <lineNumber>578</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -778,13 +778,13 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>598</second>
+                      <second>578</second>
                     </item>
                   </second>
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>add_ln598_fu_99_p2</rtlName>
+              <rtlName>add_ln578_fu_99_p2</rtlName>
               <control>auto</control>
               <opType>add</opType>
               <implIndex>fabric</implIndex>
@@ -794,7 +794,7 @@
               <coreId>1</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <oprand_edges>
             <count>2</count>
@@ -807,7 +807,7 @@
           <m_isOnCriticalPath>0</m_isOnCriticalPath>
           <m_isLCDNode>0</m_isLCDNode>
           <m_isStartOfPath>0</m_isStartOfPath>
-          <m_delay>0.82</m_delay>
+          <m_delay>0.77</m_delay>
           <m_topoIndex>13</m_topoIndex>
           <m_clusterGroupNumber>-1</m_clusterGroupNumber>
         </item>
@@ -816,10 +816,10 @@
             <Obj>
               <type>0</type>
               <id>17</id>
-              <name>zext_ln598</name>
+              <name>zext_ln578</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>598</lineNumber>
+              <lineNumber>578</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -835,13 +835,13 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>598</second>
+                      <second>578</second>
                     </item>
                   </second>
                 </item>
               </inlineStackInfo>
               <originalName></originalName>
-              <rtlName>zext_ln598_fu_104_p1</rtlName>
+              <rtlName>zext_ln578_fu_104_p1</rtlName>
               <control></control>
               <opType></opType>
               <implIndex></implIndex>
@@ -875,7 +875,7 @@
               <name>in_buf_addr_3</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>598</lineNumber>
+              <lineNumber>578</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -891,7 +891,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>598</second>
+                      <second>578</second>
                     </item>
                   </second>
                 </item>
@@ -907,7 +907,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>8</bitwidth>
           </Value>
           <oprand_edges>
             <count>3</count>
@@ -933,7 +933,7 @@
               <name>in_buf_load_3</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>598</lineNumber>
+              <lineNumber>578</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -949,7 +949,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>598</second>
+                      <second>578</second>
                     </item>
                   </second>
                 </item>
@@ -989,7 +989,7 @@
               <name>v</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>599</lineNumber>
+              <lineNumber>579</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -1005,7 +1005,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>599</second>
+                      <second>579</second>
                     </item>
                   </second>
                 </item>
@@ -1046,10 +1046,10 @@
             <Obj>
               <type>0</type>
               <id>21</id>
-              <name>_ln600</name>
+              <name>_ln580</name>
               <fileName>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</fileName>
               <fileDirectory>../.</fileDirectory>
-              <lineNumber>600</lineNumber>
+              <lineNumber>580</lineNumber>
               <contextFuncName>read_i32</contextFuncName>
               <contextNormFuncName>read_i32</contextNormFuncName>
               <inlineStackInfo>
@@ -1065,7 +1065,7 @@
                         <first>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp</first>
                         <second>read_i32</second>
                       </first>
-                      <second>600</second>
+                      <second>580</second>
                     </item>
                   </second>
                 </item>
@@ -1158,7 +1158,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <const_type>0</const_type>
           <content>1</content>
@@ -1189,7 +1189,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <const_type>0</const_type>
           <content>2</content>
@@ -1220,7 +1220,7 @@
               <coreId>4294967295</coreId>
               <rtlModuleName></rtlModuleName>
             </Obj>
-            <bitwidth>13</bitwidth>
+            <bitwidth>7</bitwidth>
           </Value>
           <const_type>0</const_type>
           <content>3</content>
@@ -1719,13 +1719,13 @@
         <count>4</count>
         <item_version>0</item_version>
         <item class_id="36" tracking_level="0" version="0">
-          <first>add_ln596_fu_78_p2 ( + ) </first>
+          <first>add_ln576_fu_78_p2 ( + ) </first>
           <second class_id="37" tracking_level="0" version="0">
             <count>4</count>
             <item_version>0</item_version>
             <item class_id="38" tracking_level="0" version="0">
               <first>(0P0)</first>
-              <second>13</second>
+              <second>7</second>
             </item>
             <item>
               <first>(1P1)</first>
@@ -1737,18 +1737,18 @@
             </item>
             <item>
               <first>LUT</first>
-              <second>20</second>
+              <second>14</second>
             </item>
           </second>
         </item>
         <item>
-          <first>add_ln597_fu_89_p2 ( + ) </first>
+          <first>add_ln577_fu_89_p2 ( + ) </first>
           <second>
             <count>4</count>
             <item_version>0</item_version>
             <item>
               <first>(0P0)</first>
-              <second>13</second>
+              <second>7</second>
             </item>
             <item>
               <first>(1P1)</first>
@@ -1760,18 +1760,18 @@
             </item>
             <item>
               <first>LUT</first>
-              <second>20</second>
+              <second>14</second>
             </item>
           </second>
         </item>
         <item>
-          <first>add_ln598_fu_99_p2 ( + ) </first>
+          <first>add_ln578_fu_99_p2 ( + ) </first>
           <second>
             <count>4</count>
             <item_version>0</item_version>
             <item>
               <first>(0P0)</first>
-              <second>13</second>
+              <second>7</second>
             </item>
             <item>
               <first>(1P1)</first>
@@ -1783,7 +1783,7 @@
             </item>
             <item>
               <first>LUT</first>
-              <second>20</second>
+              <second>14</second>
             </item>
           </second>
         </item>
@@ -1914,11 +1914,11 @@
             </item>
             <item>
               <first>(1Bits)</first>
-              <second>13</second>
+              <second>8</second>
             </item>
             <item>
               <first>(2Count)</first>
-              <second>39</second>
+              <second>24</second>
             </item>
             <item>
               <first>FF</first>
@@ -1941,11 +1941,11 @@
             </item>
             <item>
               <first>(1Bits)</first>
-              <second>13</second>
+              <second>8</second>
             </item>
             <item>
               <first>(2Count)</first>
-              <second>39</second>
+              <second>24</second>
             </item>
             <item>
               <first>FF</first>
@@ -2025,7 +2025,7 @@
             <item_version>0</item_version>
             <item>
               <first>(Bits)</first>
-              <second>13</second>
+              <second>7</second>
             </item>
             <item>
               <first>(Consts)</first>
@@ -2033,7 +2033,7 @@
             </item>
             <item>
               <first>FF</first>
-              <second>13</second>
+              <second>7</second>
             </item>
           </second>
         </item>
@@ -2088,7 +2088,7 @@
         <count>3</count>
         <item_version>0</item_version>
         <item class_id="40" tracking_level="0" version="0">
-          <first>add_ln596_fu_78_p2 ( + ) </first>
+          <first>add_ln576_fu_78_p2 ( + ) </first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -2096,7 +2096,7 @@
           </second>
         </item>
         <item>
-          <first>add_ln597_fu_89_p2 ( + ) </first>
+          <first>add_ln577_fu_89_p2 ( + ) </first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -2104,7 +2104,7 @@
           </second>
         </item>
         <item>
-          <first>add_ln598_fu_99_p2 ( + ) </first>
+          <first>add_ln578_fu_99_p2 ( + ) </first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -2448,7 +2448,7 @@
       <count>12</count>
       <item_version>0</item_version>
       <item class_id="59" tracking_level="0" version="0">
-        <first>add_ln596_fu_78</first>
+        <first>add_ln576_fu_78</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>
@@ -2456,7 +2456,7 @@
         </second>
       </item>
       <item>
-        <first>add_ln597_fu_89</first>
+        <first>add_ln577_fu_89</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>
@@ -2464,7 +2464,7 @@
         </second>
       </item>
       <item>
-        <first>add_ln598_fu_99</first>
+        <first>add_ln578_fu_99</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>
@@ -2512,7 +2512,7 @@
         </second>
       </item>
       <item>
-        <first>zext_ln595_fu_73</first>
+        <first>zext_ln575_fu_73</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>
@@ -2520,7 +2520,7 @@
         </second>
       </item>
       <item>
-        <first>zext_ln596_fu_84</first>
+        <first>zext_ln576_fu_84</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>
@@ -2528,7 +2528,7 @@
         </second>
       </item>
       <item>
-        <first>zext_ln597_fu_94</first>
+        <first>zext_ln577_fu_94</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>
@@ -2536,7 +2536,7 @@
         </second>
       </item>
       <item>
-        <first>zext_ln598_fu_104</first>
+        <first>zext_ln578_fu_104</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>

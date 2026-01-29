@@ -6529,13 +6529,14 @@ constexpr int NUM_W1_TILES = 4;
 constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 192;
+constexpr int D_MODEL = 16;
 constexpr int D_FFN = 22;
 constexpr int D_HEADS = D_MODEL / NUM_HEADS;
 constexpr int D_TILE_WO = D_MODEL / NUM_WO_TILES;
 constexpr int D_TILE_W1 = D_MODEL / NUM_W1_TILES;
 constexpr int D_TILE_W2 = D_FFN / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16;
+constexpr int MAX_CYCLIC_SIZE = 16;
 
 
 
@@ -6543,35 +6544,21 @@ enum SchedState {
     S_IDLE,
     S_STREAM_IN,
     S_LAYER_COUNT,
+    S_LAYER_NORM_0,
+    S_REQUANT1,
     S_ATTENTION_HEADS,
     S_HEAD_CONCAT,
     S_OUT_PROJECTION,
-    S_REQUANT1,
+    S_REQUANT2,
     S_RES_ADD_1,
     S_LAYER_NORM_1,
-    S_REQUANT2,
-    S_FFN,
     S_REQUANT3,
-    S_RES_ADD_2,
-    S_LAYER_NORM_2,
+    S_FFN,
     S_REQUANT4,
+    S_RES_ADD_2,
     S_LOOP_CHECK,
+    S_FINAL_NORM,
     S_STREAM_OUT
-};
-
-
-enum class LnPhase : uint8_t {
-    SUM = 0,
-    SUMSQ,
-    MEAN,
-    EYY,
-    VAR,
-    VAR_EPS,
-    INV_STD,
-    NORM,
-    SCALE,
-    SHIFT,
-    DONE
 };
 
 
@@ -6591,62 +6578,43 @@ enum class HeadPhase : uint8_t {
     VALUE_SCALE_CLAMP,
     ATT_SOFTMAX,
     ATT_VALUE,
-    REQUANT2,
+    HEAD_REQUANT,
     DONE
 };
 
 enum ComputeOp : uint8_t {
     CMP_NONE = 0,
 
-    CMP_Q,
-    CMP_K,
-    CMP_K_REQUANT,
-    CMP_V,
-    CMP_V_REQUANT,
-    CMP_REQUANT_Q,
-    CMP_ATT_SCORES,
-    CMP_VALUE_SCALE,
-    CMP_SOFTMAX,
-    CMP_ATT_VALUE,
-    CMP_REQUANT2,
-
-    CMP_HEAD_REQUANT,
-    CMP_CONCAT,
-    CMP_OUT_PROJ,
-    CMP_REQUANT1,
-    CMP_RESID0,
-    CMP_LN0,
-    CMP_REQUANT3,
-    CMP_FFN_W1,
-    CMP_FFN_ACT,
-    CMP_FFN_W2,
-    CMP_REQUANT4,
-    CMP_RESID1,
-    CMP_LN1,
-    CMP_DEQUANT,
-    CMP_LOGITS,
+    CMP_LN0 = 1,
+    CMP_REQUANT1 = 2,
 
 
-    CMP_LN0_SUM,
-    CMP_LN0_SUMSQ,
-    CMP_LN0_MEAN,
-    CMP_LN0_EYY,
-    CMP_LN0_VAR,
-    CMP_LN0_VAR_EPS,
-    CMP_LN0_INV_STD,
-    CMP_LN0_NORM,
-    CMP_LN0_SCALE,
-    CMP_LN0_SHIFT,
-    CMP_LN1_SUM,
-    CMP_LN1_SUMSQ,
-    CMP_LN1_MEAN,
-    CMP_LN1_EYY,
-    CMP_LN1_VAR,
-    CMP_LN1_VAR_EPS,
-    CMP_LN1_INV_STD,
-    CMP_LN1_NORM,
-    CMP_LN1_SCALE,
-    CMP_LN1_SHIFT
+    CMP_Q = 3,
+    CMP_K = 4,
+    CMP_K_REQUANT = 5,
+    CMP_V = 6,
+    CMP_V_REQUANT = 7,
+    CMP_REQUANT_Q = 8,
+    CMP_ATT_SCORES = 9,
+    CMP_VALUE_SCALE = 10,
+    CMP_SOFTMAX = 11,
+    CMP_ATT_VALUE = 12,
+
+
+    CMP_HEAD_REQUANT = 13,
+    CMP_CONCAT = 14,
+    CMP_OUT_PROJ = 15,
+    CMP_RESID0 = 16,
+    CMP_REQUANT2 = 17,
+    CMP_FFN_W1 = 18,
+    CMP_FFN_ACT = 29,
+    CMP_FFN_W2 = 20,
+    CMP_REQUANT3 = 21,
+    CMP_RESID1 = 22,
+    CMP_LN1 = 23,
+    CMP_REQUANT4 = 24,
+    CMP_DEQUANT = 25,
+    CMP_LOGITS = 26,
 };
 
 enum DmaSel : uint8_t {
@@ -6683,9 +6651,7 @@ struct HeadCtx {
 
     bool wl_ready = false;
     bool wl_start = false;
-    DmaSel wl_addr_sel = DmaSel::DMASEL_NONE;
-    int wl_layer = -1;
-    int wl_head = -1;
+    uint32_t wl_instruction = 0;
     bool dma_done = false;
 
     bool start_head = false;
@@ -6703,7 +6669,7 @@ struct HeadCtx {
     bool val_scale_started = false;
     bool softmax_started = false;
     bool att_value_started = false;
-    bool requant2_started = false;
+    bool head_requant_started = false;
 
     bool q_compute_done = false;
     bool k_compute_done = false;
@@ -6715,7 +6681,7 @@ struct HeadCtx {
     bool val_scale_compute_done = false;
     bool softmax_compute_done = false;
     bool att_value_compute_done = false;
-    bool requant2_compute_done = false;
+    bool head_requant_compute_done = false;
 
     bool q_dma_done = false;
     bool k_dma_done = false;
@@ -6856,6 +6822,21 @@ struct ControlMemSpace {
 
 
 
+constexpr int max2_constexpr(int a, int b) {
+    return (a > b) ? a : b;
+}
+constexpr int min2_constexpr(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+
+
+constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
+constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
+constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
+
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
 namespace compute_buf {
 
 constexpr int div_ceil(int a, int b) {
@@ -6877,7 +6858,7 @@ constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PR
 
 constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
-constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
+constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
@@ -6947,8 +6928,7 @@ struct ResidLayout {
 struct LayerNormLayout {
     static constexpr int X = 0;
     static constexpr int GAMMA = X + D_MODEL;
-    static constexpr int BETA = GAMMA + (D_MODEL * 4);
-    static constexpr int EPS = BETA + (D_MODEL * 4);
+    static constexpr int EPS = GAMMA + (D_MODEL * 4);
 };
 
 struct FfnW1Layout {
@@ -7033,25 +7013,98 @@ inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
 }
 
 }
+
+
+
+
+constexpr int HEAD_VECTOR_MAX = compute_buf::max2(D_MODEL, compute_buf::max2(D_HEADS, CONTEXT_LENGTH));
+constexpr int HEAD_ACCUM_MAX = compute_buf::max2(D_HEADS, CONTEXT_LENGTH);
+constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
+
+constexpr int HEAD_MAC_VEC_UNROLL = min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int HEAD_MAC_OUT_UNROLL = min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
+
+
+
+namespace head_buf {
+
+constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
+constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
+constexpr int QKV_B_NIBBLES = D_HEADS;
+constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
+constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
+constexpr int QKV_OUT_BYTES = D_HEADS * 4;
+
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
+constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
+
+constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
+
+constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4) + 2;
+constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
+constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int ATT_VALUE_IN_BYTES = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
+
+constexpr int IN_BUF_BYTES = compute_buf::max2(
+    QKV_IN_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_IN_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_IN_BYTES,
+            compute_buf::max2(VALUE_SCALE_IN_BYTES,
+                compute_buf::max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
+
+constexpr int OUT_BUF_BYTES = compute_buf::max2(
+    QKV_OUT_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_OUT_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_OUT_BYTES,
+            compute_buf::max2(VALUE_SCALE_OUT_BYTES,
+                compute_buf::max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
+
+struct QkvLayout {
+    static constexpr int ACT = 0;
+    static constexpr int W = ACT + D_MODEL;
+    static constexpr int B = W + QKV_W_BYTES;
+};
+
+struct HeadRequantLayout {
+    static constexpr int X = 0;
+    static constexpr int M = X + (D_HEADS * 4);
+    static constexpr int N = M + 4;
+    static constexpr int Z = N + 4;
+};
+
+struct AttScoresLayout {
+    static constexpr int Q = 0;
+    static constexpr int K_CACHE = Q + D_HEADS;
+};
+
+struct ValueScaleLayout {
+    static constexpr int X = 0;
+    static constexpr int SCALE = X + (CONTEXT_LENGTH * 4);
+};
+
+struct SoftmaxLayout {
+    static constexpr int X = 0;
+};
+
+struct AttValueLayout {
+    static constexpr int WEIGHTS = 0;
+    static constexpr int V_CACHE = WEIGHTS + CONTEXT_LENGTH;
+};
+
+}
 # 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp" 2
 
 
 using int4_t = ap_int<4>;
-
-constexpr int max2_constexpr(int a, int b) {
-    return (a > b) ? a : b;
-}
-constexpr int min2_constexpr(int a, int b) {
-    return (a < b) ? a : b;
-}
-
-constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
-constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
-constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
-constexpr int MAX_CYCLIC_SIZE = 16;
-
-constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
-constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
 
 __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     bool reset,
@@ -30652,6 +30705,783 @@ namespace hls {
 
 };
 # 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp" 2
+# 1 "/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/cstdio" 1 3
+# 40 "/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/cstdio" 3
+
+
+# 1 "/usr/include/stdio.h" 1 3 4
+# 28 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h" 1 3 4
+# 29 "/usr/include/stdio.h" 2 3 4
+
+extern "C" {
+
+
+
+
+# 1 "/tools/Xilinx/2025.1/lnx64/tools/clang-3.9-csynth/lib/clang/7.0.0/include/stddef.h" 1 3 4
+# 35 "/usr/include/stdio.h" 2 3 4
+
+
+# 1 "/tools/Xilinx/2025.1/lnx64/tools/clang-3.9-csynth/lib/clang/7.0.0/include/stdarg.h" 1 3 4
+# 30 "/tools/Xilinx/2025.1/lnx64/tools/clang-3.9-csynth/lib/clang/7.0.0/include/stdarg.h" 3 4
+typedef __builtin_va_list va_list;
+# 48 "/tools/Xilinx/2025.1/lnx64/tools/clang-3.9-csynth/lib/clang/7.0.0/include/stdarg.h" 3 4
+typedef __builtin_va_list __gnuc_va_list;
+# 38 "/usr/include/stdio.h" 2 3 4
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h" 1 3 4
+
+
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h" 1 3 4
+# 13 "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h" 3 4
+typedef struct
+{
+  int __count;
+  union
+  {
+    unsigned int __wch;
+    char __wchb[4];
+  } __value;
+} __mbstate_t;
+# 6 "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h" 2 3 4
+
+
+
+
+typedef struct _G_fpos_t
+{
+  __off_t __pos;
+  __mbstate_t __state;
+} __fpos_t;
+# 41 "/usr/include/stdio.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h" 1 3 4
+# 10 "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h" 3 4
+typedef struct _G_fpos64_t
+{
+  __off64_t __pos;
+  __mbstate_t __state;
+} __fpos64_t;
+# 42 "/usr/include/stdio.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h" 1 3 4
+
+
+
+struct _IO_FILE;
+typedef struct _IO_FILE __FILE;
+# 43 "/usr/include/stdio.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h" 1 3 4
+
+
+
+struct _IO_FILE;
+
+
+typedef struct _IO_FILE FILE;
+# 44 "/usr/include/stdio.h" 2 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h" 1 3 4
+# 35 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h" 3 4
+struct _IO_FILE;
+struct _IO_marker;
+struct _IO_codecvt;
+struct _IO_wide_data;
+
+
+
+
+typedef void _IO_lock_t;
+
+
+
+
+
+struct _IO_FILE
+{
+  int _flags;
+
+
+  char *_IO_read_ptr;
+  char *_IO_read_end;
+  char *_IO_read_base;
+  char *_IO_write_base;
+  char *_IO_write_ptr;
+  char *_IO_write_end;
+  char *_IO_buf_base;
+  char *_IO_buf_end;
+
+
+  char *_IO_save_base;
+  char *_IO_backup_base;
+  char *_IO_save_end;
+
+  struct _IO_marker *_markers;
+
+  struct _IO_FILE *_chain;
+
+  int _fileno;
+  int _flags2;
+  __off_t _old_offset;
+
+
+  unsigned short _cur_column;
+  signed char _vtable_offset;
+  char _shortbuf[1];
+
+  _IO_lock_t *_lock;
+
+
+
+
+
+
+
+  __off64_t _offset;
+
+  struct _IO_codecvt *_codecvt;
+  struct _IO_wide_data *_wide_data;
+  struct _IO_FILE *_freeres_list;
+  void *_freeres_buf;
+  size_t __pad5;
+  int _mode;
+
+  char _unused2[15 * sizeof (int) - 4 * sizeof (void *) - sizeof (size_t)];
+};
+# 45 "/usr/include/stdio.h" 2 3 4
+
+
+# 1 "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h" 1 3 4
+# 27 "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h" 3 4
+typedef __ssize_t cookie_read_function_t (void *__cookie, char *__buf,
+                                          size_t __nbytes);
+
+
+
+
+
+
+
+typedef __ssize_t cookie_write_function_t (void *__cookie, const char *__buf,
+                                           size_t __nbytes);
+
+
+
+
+
+
+
+typedef int cookie_seek_function_t (void *__cookie, __off64_t *__pos, int __w);
+
+
+typedef int cookie_close_function_t (void *__cookie);
+
+
+
+
+
+
+typedef struct _IO_cookie_io_functions_t
+{
+  cookie_read_function_t *read;
+  cookie_write_function_t *write;
+  cookie_seek_function_t *seek;
+  cookie_close_function_t *close;
+} cookie_io_functions_t;
+# 48 "/usr/include/stdio.h" 2 3 4
+
+
+
+
+
+typedef __gnuc_va_list va_list;
+# 85 "/usr/include/stdio.h" 3 4
+typedef __fpos_t fpos_t;
+
+
+
+
+typedef __fpos64_t fpos64_t;
+# 129 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h" 1 3 4
+# 130 "/usr/include/stdio.h" 2 3 4
+# 149 "/usr/include/stdio.h" 3 4
+extern FILE *stdin;
+extern FILE *stdout;
+extern FILE *stderr;
+
+
+
+
+
+
+extern int remove (const char *__filename) noexcept (true);
+
+extern int rename (const char *__old, const char *__new) noexcept (true);
+
+
+
+extern int renameat (int __oldfd, const char *__old, int __newfd,
+       const char *__new) noexcept (true);
+# 176 "/usr/include/stdio.h" 3 4
+extern int renameat2 (int __oldfd, const char *__old, int __newfd,
+        const char *__new, unsigned int __flags) noexcept (true);
+
+
+
+
+
+
+extern int fclose (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+# 194 "/usr/include/stdio.h" 3 4
+extern FILE *tmpfile (void)
+  __attribute__ ((__malloc__)) ;
+# 206 "/usr/include/stdio.h" 3 4
+extern FILE *tmpfile64 (void)
+   __attribute__ ((__malloc__)) ;
+
+
+
+extern char *tmpnam (char[20]) noexcept (true) ;
+
+
+
+
+extern char *tmpnam_r (char __s[20]) noexcept (true) ;
+# 228 "/usr/include/stdio.h" 3 4
+extern char *tempnam (const char *__dir, const char *__pfx)
+   noexcept (true) __attribute__ ((__malloc__)) ;
+
+
+
+
+
+
+extern int fflush (FILE *__stream);
+# 245 "/usr/include/stdio.h" 3 4
+extern int fflush_unlocked (FILE *__stream);
+# 255 "/usr/include/stdio.h" 3 4
+extern int fcloseall (void);
+# 264 "/usr/include/stdio.h" 3 4
+extern FILE *fopen (const char *__restrict __filename,
+      const char *__restrict __modes)
+  __attribute__ ((__malloc__)) ;
+
+
+
+
+extern FILE *freopen (const char *__restrict __filename,
+        const char *__restrict __modes,
+        FILE *__restrict __stream) __attribute__ ((__nonnull__ (3)));
+# 289 "/usr/include/stdio.h" 3 4
+extern FILE *fopen64 (const char *__restrict __filename,
+        const char *__restrict __modes)
+  __attribute__ ((__malloc__)) ;
+extern FILE *freopen64 (const char *__restrict __filename,
+   const char *__restrict __modes,
+   FILE *__restrict __stream) __attribute__ ((__nonnull__ (3)));
+
+
+
+
+extern FILE *fdopen (int __fd, const char *__modes) noexcept (true)
+  __attribute__ ((__malloc__)) ;
+
+
+
+
+
+extern FILE *fopencookie (void *__restrict __magic_cookie,
+     const char *__restrict __modes,
+     cookie_io_functions_t __io_funcs) noexcept (true)
+  __attribute__ ((__malloc__)) ;
+
+
+
+
+extern FILE *fmemopen (void *__s, size_t __len, const char *__modes)
+  noexcept (true) __attribute__ ((__malloc__)) ;
+
+
+
+
+extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) noexcept (true)
+  __attribute__ ((__malloc__)) ;
+# 334 "/usr/include/stdio.h" 3 4
+extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) noexcept (true)
+  __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int setvbuf (FILE *__restrict __stream, char *__restrict __buf,
+      int __modes, size_t __n) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern void setbuffer (FILE *__restrict __stream, char *__restrict __buf,
+         size_t __size) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+extern void setlinebuf (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
+extern int fprintf (FILE *__restrict __stream,
+      const char *__restrict __format, ...) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int printf (const char *__restrict __format, ...);
+
+extern int sprintf (char *__restrict __s,
+      const char *__restrict __format, ...) noexcept (true);
+
+
+
+
+
+extern int vfprintf (FILE *__restrict __s, const char *__restrict __format,
+       __gnuc_va_list __arg) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int vprintf (const char *__restrict __format, __gnuc_va_list __arg);
+
+extern int vsprintf (char *__restrict __s, const char *__restrict __format,
+       __gnuc_va_list __arg) noexcept (true);
+
+
+
+extern int snprintf (char *__restrict __s, size_t __maxlen,
+       const char *__restrict __format, ...)
+     noexcept (true) __attribute__ ((__format__ (__printf__, 3, 4)));
+
+extern int vsnprintf (char *__restrict __s, size_t __maxlen,
+        const char *__restrict __format, __gnuc_va_list __arg)
+     noexcept (true) __attribute__ ((__format__ (__printf__, 3, 0)));
+
+
+
+
+
+extern int vasprintf (char **__restrict __ptr, const char *__restrict __f,
+        __gnuc_va_list __arg)
+     noexcept (true) __attribute__ ((__format__ (__printf__, 2, 0))) ;
+extern int __asprintf (char **__restrict __ptr,
+         const char *__restrict __fmt, ...)
+     noexcept (true) __attribute__ ((__format__ (__printf__, 2, 3))) ;
+extern int asprintf (char **__restrict __ptr,
+       const char *__restrict __fmt, ...)
+     noexcept (true) __attribute__ ((__format__ (__printf__, 2, 3))) ;
+
+
+
+
+extern int vdprintf (int __fd, const char *__restrict __fmt,
+       __gnuc_va_list __arg)
+     __attribute__ ((__format__ (__printf__, 2, 0)));
+extern int dprintf (int __fd, const char *__restrict __fmt, ...)
+     __attribute__ ((__format__ (__printf__, 2, 3)));
+
+
+
+
+
+
+
+extern int fscanf (FILE *__restrict __stream,
+     const char *__restrict __format, ...) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int scanf (const char *__restrict __format, ...) ;
+
+extern int sscanf (const char *__restrict __s,
+     const char *__restrict __format, ...) noexcept (true);
+# 442 "/usr/include/stdio.h" 3 4
+extern int fscanf (FILE *__restrict __stream, const char *__restrict __format, ...) __asm__ ("" "__isoc23_fscanf") __attribute__ ((__nonnull__ (1)));
+
+
+extern int scanf (const char *__restrict __format, ...) __asm__ ("" "__isoc23_scanf") ;
+
+extern int sscanf (const char *__restrict __s, const char *__restrict __format, ...) noexcept (true) __asm__ ("" "__isoc23_sscanf");
+# 490 "/usr/include/stdio.h" 3 4
+extern int vfscanf (FILE *__restrict __s, const char *__restrict __format,
+      __gnuc_va_list __arg)
+     __attribute__ ((__format__ (__scanf__, 2, 0))) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int vscanf (const char *__restrict __format, __gnuc_va_list __arg)
+     __attribute__ ((__format__ (__scanf__, 1, 0))) ;
+
+
+extern int vsscanf (const char *__restrict __s,
+      const char *__restrict __format, __gnuc_va_list __arg)
+     noexcept (true) __attribute__ ((__format__ (__scanf__, 2, 0)));
+
+
+
+
+
+
+extern int vfscanf (FILE *__restrict __s, const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc23_vfscanf")
+
+
+
+     __attribute__ ((__format__ (__scanf__, 2, 0))) __attribute__ ((__nonnull__ (1)));
+extern int vscanf (const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc23_vscanf")
+
+     __attribute__ ((__format__ (__scanf__, 1, 0))) ;
+extern int vsscanf (const char *__restrict __s, const char *__restrict __format, __gnuc_va_list __arg) noexcept (true) __asm__ ("" "__isoc23_vsscanf")
+
+
+
+     __attribute__ ((__format__ (__scanf__, 2, 0)));
+# 575 "/usr/include/stdio.h" 3 4
+extern int fgetc (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+extern int getc (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int getchar (void);
+
+
+
+
+
+
+extern int getc_unlocked (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+extern int getchar_unlocked (void);
+# 600 "/usr/include/stdio.h" 3 4
+extern int fgetc_unlocked (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+# 611 "/usr/include/stdio.h" 3 4
+extern int fputc (int __c, FILE *__stream) __attribute__ ((__nonnull__ (2)));
+extern int putc (int __c, FILE *__stream) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+extern int putchar (int __c);
+# 627 "/usr/include/stdio.h" 3 4
+extern int fputc_unlocked (int __c, FILE *__stream) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+
+
+extern int putc_unlocked (int __c, FILE *__stream) __attribute__ ((__nonnull__ (2)));
+extern int putchar_unlocked (int __c);
+
+
+
+
+
+
+extern int getw (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+
+
+extern int putw (int __w, FILE *__stream) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+
+
+extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
+                                                          __attribute__ ((__nonnull__ (3)));
+# 677 "/usr/include/stdio.h" 3 4
+extern char *fgets_unlocked (char *__restrict __s, int __n,
+        FILE *__restrict __stream)
+                                                   __attribute__ ((__nonnull__ (3)));
+# 694 "/usr/include/stdio.h" 3 4
+extern __ssize_t __getdelim (char **__restrict __lineptr,
+                             size_t *__restrict __n, int __delimiter,
+                             FILE *__restrict __stream) __attribute__ ((__nonnull__ (4)));
+extern __ssize_t getdelim (char **__restrict __lineptr,
+                           size_t *__restrict __n, int __delimiter,
+                           FILE *__restrict __stream) __attribute__ ((__nonnull__ (4)));
+
+
+
+
+
+
+
+extern __ssize_t getline (char **__restrict __lineptr,
+                          size_t *__restrict __n,
+                          FILE *__restrict __stream) __attribute__ ((__nonnull__ (3)));
+
+
+
+
+
+
+
+extern int fputs (const char *__restrict __s, FILE *__restrict __stream)
+  __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+extern int puts (const char *__s);
+
+
+
+
+
+
+extern int ungetc (int __c, FILE *__stream) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+
+extern size_t fread (void *__restrict __ptr, size_t __size,
+       size_t __n, FILE *__restrict __stream)
+  __attribute__ ((__nonnull__ (4)));
+
+
+
+
+extern size_t fwrite (const void *__restrict __ptr, size_t __size,
+        size_t __n, FILE *__restrict __s) __attribute__ ((__nonnull__ (4)));
+# 755 "/usr/include/stdio.h" 3 4
+extern int fputs_unlocked (const char *__restrict __s,
+      FILE *__restrict __stream) __attribute__ ((__nonnull__ (2)));
+# 766 "/usr/include/stdio.h" 3 4
+extern size_t fread_unlocked (void *__restrict __ptr, size_t __size,
+         size_t __n, FILE *__restrict __stream)
+  __attribute__ ((__nonnull__ (4)));
+extern size_t fwrite_unlocked (const void *__restrict __ptr, size_t __size,
+          size_t __n, FILE *__restrict __stream)
+  __attribute__ ((__nonnull__ (4)));
+
+
+
+
+
+
+
+extern int fseek (FILE *__stream, long int __off, int __whence)
+  __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern long int ftell (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern void rewind (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+# 803 "/usr/include/stdio.h" 3 4
+extern int fseeko (FILE *__stream, __off_t __off, int __whence)
+  __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern __off_t ftello (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+# 829 "/usr/include/stdio.h" 3 4
+extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos)
+  __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int fsetpos (FILE *__stream, const fpos_t *__pos) __attribute__ ((__nonnull__ (1)));
+# 851 "/usr/include/stdio.h" 3 4
+extern int fseeko64 (FILE *__stream, __off64_t __off, int __whence)
+  __attribute__ ((__nonnull__ (1)));
+extern __off64_t ftello64 (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+extern int fgetpos64 (FILE *__restrict __stream, fpos64_t *__restrict __pos)
+  __attribute__ ((__nonnull__ (1)));
+extern int fsetpos64 (FILE *__stream, const fpos64_t *__pos) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern void clearerr (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+extern int feof (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+extern int ferror (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern void clearerr_unlocked (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+extern int feof_unlocked (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+extern int ferror_unlocked (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
+extern void perror (const char *__s) __attribute__ ((__cold__));
+
+
+
+
+extern int fileno (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int fileno_unlocked (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+# 897 "/usr/include/stdio.h" 3 4
+extern int pclose (FILE *__stream) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern FILE *popen (const char *__command, const char *__modes)
+  __attribute__ ((__malloc__)) ;
+
+
+
+
+
+
+extern char *ctermid (char *__s) noexcept (true)
+                                     ;
+
+
+
+
+
+extern char *cuserid (char *__s)
+                                     ;
+
+
+
+
+struct obstack;
+
+
+extern int obstack_printf (struct obstack *__restrict __obstack,
+      const char *__restrict __format, ...)
+     noexcept (true) __attribute__ ((__format__ (__printf__, 2, 3)));
+extern int obstack_vprintf (struct obstack *__restrict __obstack,
+       const char *__restrict __format,
+       __gnuc_va_list __args)
+     noexcept (true) __attribute__ ((__format__ (__printf__, 2, 0)));
+
+
+
+
+
+
+
+extern void flockfile (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int ftrylockfile (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+
+
+extern void funlockfile (FILE *__stream) noexcept (true) __attribute__ ((__nonnull__ (1)));
+# 959 "/usr/include/stdio.h" 3 4
+extern int __uflow (FILE *);
+extern int __overflow (FILE *, int);
+# 983 "/usr/include/stdio.h" 3 4
+}
+# 43 "/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/cstdio" 2 3
+# 96 "/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/cstdio" 3
+namespace std
+{
+  using ::FILE;
+  using ::fpos_t;
+
+  using ::clearerr;
+  using ::fclose;
+  using ::feof;
+  using ::ferror;
+  using ::fflush;
+  using ::fgetc;
+  using ::fgetpos;
+  using ::fgets;
+  using ::fopen;
+  using ::fprintf;
+  using ::fputc;
+  using ::fputs;
+  using ::fread;
+  using ::freopen;
+  using ::fscanf;
+  using ::fseek;
+  using ::fsetpos;
+  using ::ftell;
+  using ::fwrite;
+  using ::getc;
+  using ::getchar;
+
+
+
+
+  using ::perror;
+  using ::printf;
+  using ::putc;
+  using ::putchar;
+  using ::puts;
+  using ::remove;
+  using ::rename;
+  using ::rewind;
+  using ::scanf;
+  using ::setbuf;
+  using ::setvbuf;
+  using ::sprintf;
+  using ::sscanf;
+  using ::tmpfile;
+
+  using ::tmpnam;
+
+  using ::ungetc;
+  using ::vfprintf;
+  using ::vprintf;
+  using ::vsprintf;
+}
+# 157 "/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/cstdio" 3
+namespace __gnu_cxx
+{
+# 175 "/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/cstdio" 3
+  using ::snprintf;
+  using ::vfscanf;
+  using ::vscanf;
+  using ::vsnprintf;
+  using ::vsscanf;
+
+}
+
+namespace std
+{
+  using ::__gnu_cxx::snprintf;
+  using ::__gnu_cxx::vfscanf;
+  using ::__gnu_cxx::vscanf;
+  using ::__gnu_cxx::vsnprintf;
+  using ::__gnu_cxx::vsscanf;
+}
+# 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp" 2
 
 
 
@@ -30686,10 +31516,10 @@ void MAC_ARCHITECTURE(
         compute_done = false;
 
 
-        VITIS_LOOP_38_1: for (int out = 0; out < ACCUM_MAX; ++out) {
+        VITIS_LOOP_39_1: for (int out = 0; out < ACCUM_MAX; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
  int32_t acc = bias[out];
-            VITIS_LOOP_41_2: for (int i = 0; i < VECTOR_MAX; ++i) {
+            VITIS_LOOP_42_2: for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL factor=MAC_VEC_UNROLL
  const int4_t w = matrixB[out * VECTOR_MAX + i];
                 acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
@@ -30718,12 +31548,8 @@ void REQUANT_D_MODEL_int32_to_int8(
 
     int8_t y8[D_MODEL]
 ) {
-
-
-
-
-
-    VITIS_LOOP_75_1: for (int t = 0; t < D_MODEL; ++t) {
+# 96 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
+    VITIS_LOOP_96_1: for (int t = 0; t < D_MODEL; ++t) {
 #pragma HLS UNROLL
  int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
         int64_t rounded = 1LL << (n - 1);
@@ -30740,43 +31566,48 @@ void REQUANT_D_MODEL_int32_to_int8(
     }
 }
 
-void LAYER_NORM(
+void RMS_NORM(
     const int8_t x[D_MODEL],
     const int32_t gamma[D_MODEL],
-    const int32_t beta[D_MODEL],
     const int32_t epsilon,
     int32_t y[D_MODEL]
 ) {
 #pragma HLS INLINE off
 
+ int32_t square = 0;
 
- int32_t sum = 0;
-    int32_t square = 0;
-
-    VITIS_LOOP_105_1: for (int i = 0; i < D_MODEL; ++i) {
-        sum += static_cast<int32_t>(x[i]);
+    VITIS_LOOP_123_1: for (int i = 0; i < D_MODEL; ++i) {
         square += static_cast<int32_t>(x[i]) * static_cast<int32_t>(x[i]);
     }
-
-
-
-    ap_fixed<32, 16> sum_fx = sum;
-    ap_fixed<32, 16> square_fx = square;
-    ap_fixed<32, 16> mean = sum_fx / D_MODEL;
-    ap_fixed<32, 16> square_mean = square_fx / D_MODEL;
-    ap_fixed<32, 16> variance = square_mean - mean * mean;
-    if (variance < 0) {
-        variance = 0;
+    ap_fixed<32, 19> square_fx = square;
+    ap_fixed<32, 19> mean_square = square_fx / D_MODEL;
+    if (mean_square < 0) {
+        mean_square = 0;
     }
-    ap_fixed<32, 16> v = variance + ap_fixed<32, 16>(epsilon);
-    ap_fixed<32, 16> inv_std = ap_fixed<32, 16>(1) / hls::sqrt(v);
-
-
-    VITIS_LOOP_124_2: for (int i = 0; i < D_MODEL; ++i) {
+    ap_fixed<32, 19> v = mean_square + ap_fixed<32, 19>(epsilon);
+    ap_fixed<32, 19> inv_rms = ap_fixed<32, 19>(1) / hls::sqrt(v);
+    VITIS_LOOP_133_2: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
- ap_fixed<32, 16> normalized = (ap_fixed<32, 16>(x[i]) - mean) * inv_std;
-        ap_fixed<32, 16> scaled = (normalized * ap_fixed<32, 16>(gamma[i])) + ap_fixed<32, 16>(beta[i]);
-        y[i] = static_cast<int32_t>(scaled);
+ ap_fixed<32, 19> normalized = ap_fixed<32, 19>(x[i]) * inv_rms;
+        ap_int<32> normalized_bits = normalized.range(31, 0);
+        std::printf("ln_cycle[%d] normalized: %f 0x%08x (signed=%d)\n",
+                    i,
+                    (float)normalized,
+                    (unsigned)normalized_bits,
+                    (int)normalized_bits);
+
+        ap_fixed<32, 19> scaled = normalized * ap_fixed<32, 19>(gamma[i]);
+        ap_int<32> scaled_bits = scaled.range(31, 0);
+        std::printf("ln_cycle[%d] scaled: %f 0x%08x (signed=%d)\n",
+                    i,
+                    (float)scaled,
+                    (unsigned)scaled_bits,
+                    (int)scaled_bits);
+        y[i] = (int32_t)scaled_bits;
+        std::printf("ln_cycle[%d] y_raw: %d 0x%08x\n",
+                    i,
+                    y[i],
+                    static_cast<unsigned>(y[i]));
     }
 }
 
@@ -30785,7 +31616,7 @@ void FFN_ACT_RELU(
     const int16_t input[D_FFN],
     int16_t output[D_FFN]
 ) {
-    VITIS_LOOP_137_1: for (int i = 0; i < D_FFN; ++i) {
+    VITIS_LOOP_163_1: for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS PIPELINE II=1
  int16_t v = input[i];
         if (v < 0) {
@@ -30802,7 +31633,7 @@ void RES_ADD(
     const int8_t residual[D_MODEL],
     int8_t output[D_MODEL]
 ) {
-    VITIS_LOOP_154_1: for (int i = 0; i < D_MODEL; ++i) {
+    VITIS_LOOP_180_1: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  const int16_t sum = static_cast<int16_t>(input[i]) + static_cast<int16_t>(residual[i]);
         int16_t sat = sum;
@@ -30853,7 +31684,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=compute_controller
-# 202 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
+# 228 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
 
 #pragma HLS INLINE off
 
@@ -30881,6 +31712,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
     static bool mac_ready = true;
     static bool mac_complete = false;
     static bool capture_pending = false;
+    static bool clear_pending = false;
 
 
 
@@ -30888,13 +31720,11 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
 
     static int8_t x_act[D_MODEL];
     static int32_t ln_gamma[D_MODEL];
-    static int32_t ln_beta[D_MODEL];
     static int32_t ln_epsilon;
     static int32_t y_act[D_MODEL];
     static int8_t y_resid[D_MODEL];
 #pragma HLS ARRAY_PARTITION variable=x_act cyclic factor=MAX_CYCLIC_SIZE dim=1
 #pragma HLS ARRAY_PARTITION variable=ln_gamma cyclic factor=MAX_CYCLIC_SIZE dim=1
-#pragma HLS ARRAY_PARTITION variable=ln_beta cyclic factor=MAX_CYCLIC_SIZE dim=1
 #pragma HLS ARRAY_PARTITION variable=y_act cyclic factor=MAX_CYCLIC_SIZE dim=1
 #pragma HLS ARRAY_PARTITION variable=y_resid cyclic factor=MAX_CYCLIC_SIZE dim=1
 
@@ -30940,26 +31770,26 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
         mac_ready = true;
         mac_complete = false;
         capture_pending = false;
+        clear_pending = false;
 
-        VITIS_LOOP_289_1: for (int i = 0; i < VECTOR_MAX; ++i) {
+        VITIS_LOOP_315_1: for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL
  vectorA[i] = 0;
         }
-        VITIS_LOOP_293_2: for (int i = 0; i < MATRIX_MAX; ++i) {
+        VITIS_LOOP_319_2: for (int i = 0; i < MATRIX_MAX; ++i) {
 #pragma HLS UNROLL
  matrixB[i] = 0;
         }
-        VITIS_LOOP_297_3: for (int i = 0; i < ACCUM_MAX; ++i) {
+        VITIS_LOOP_323_3: for (int i = 0; i < ACCUM_MAX; ++i) {
 #pragma HLS UNROLL
  bias[i] = 0;
             scale[i] = 0;
             out[i] = 0;
         }
-        VITIS_LOOP_303_4: for (int i = 0; i < D_MODEL; ++i) {
+        VITIS_LOOP_329_4: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  x_act[i] = 0;
             ln_gamma[i] = 0;
-            ln_beta[i] = 0;
             y_act[i] = 0;
             y_resid[i] = 0;
             residual[i] = 0;
@@ -30967,7 +31797,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
             y8[i] = 0;
         }
         ln_epsilon = 0;
-        VITIS_LOOP_315_5: for (int i = 0; i < D_FFN; ++i) {
+        VITIS_LOOP_340_5: for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS UNROLL
  ffn_intermediate[i] = 0;
             ffn_act_out[i] = 0;
@@ -30984,25 +31814,24 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
             if (compute_start) {
                 mac_start = false;
                 mac_complete = false;
-                VITIS_LOOP_332_6: for (int i = 0; i < VECTOR_MAX; ++i) {
+                VITIS_LOOP_357_6: for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL
  vectorA[i] = 0;
                 }
-                VITIS_LOOP_336_7: for (int i = 0; i < MATRIX_MAX; ++i) {
+                VITIS_LOOP_361_7: for (int i = 0; i < MATRIX_MAX; ++i) {
 #pragma HLS UNROLL
  matrixB[i] = 0;
                 }
-                VITIS_LOOP_340_8: for (int i = 0; i < ACCUM_MAX; ++i) {
+                VITIS_LOOP_365_8: for (int i = 0; i < ACCUM_MAX; ++i) {
 #pragma HLS UNROLL
  bias[i] = 0;
                     scale[i] = 0;
                     out[i] = 0;
                 }
-                VITIS_LOOP_346_9: for (int i = 0; i < D_MODEL; ++i) {
+                VITIS_LOOP_371_9: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
  x_act[i] = 0;
                     ln_gamma[i] = 0;
-                    ln_beta[i] = 0;
                     y_act[i] = 0;
                     y_resid[i] = 0;
                     residual[i] = 0;
@@ -31010,7 +31839,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                     y8[i] = 0;
                 }
                 ln_epsilon = 0;
-                VITIS_LOOP_358_10: for (int i = 0; i < D_FFN; ++i) {
+                VITIS_LOOP_382_10: for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS UNROLL
  ffn_intermediate[i] = 0;
                     ffn_act_out[i] = 0;
@@ -31020,10 +31849,15 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                 req.layer_idx = (compute_instruction >> 8) & 0xFFu;
                 req.head_idx = (compute_instruction >> 16) & 0xFFu;
                 req.tile_idx = (compute_instruction >> 24) & 0xFFu;
-
-
-
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
+            }
+
+            if (clear_pending && !compute_start) {
+                VITIS_LOOP_396_11: for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
+#pragma HLS PIPELINE II=1
+ out_buf[i] = 0;
+                }
+                clear_pending = false;
             }
             break;
         }
@@ -31076,17 +31910,17 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
         case ComputeState::EXECUTE: {
             switch (req.op) {
                 case ComputeOp::CMP_OUT_PROJ: {
-                    VITIS_LOOP_424_11: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_453_12: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = static_cast<int16_t>(
                             compute_buf::read_i8(in_buf, compute_buf::FfnW1Layout::X + i));
                     }
-                    VITIS_LOOP_429_12: for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_458_13: for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = 0;
                     }
-                    VITIS_LOOP_433_13: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
-                        VITIS_LOOP_434_14: for (int i = 0; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_462_14: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
+                        VITIS_LOOP_463_15: for (int i = 0; i < VECTOR_MAX; ++i) {
 
                             if (out_idx < D_TILE_WO && i < D_MODEL) {
                                 const int w_idx = (out_idx * D_MODEL) + i;
@@ -31098,11 +31932,11 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                             }
                         }
                     }
-                    VITIS_LOOP_446_15: for (int i = 0; i < D_TILE_WO; ++i) {
+                    VITIS_LOOP_475_16: for (int i = 0; i < D_TILE_WO; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = compute_buf::read_i32(in_buf, compute_buf::OutProjLayout::B + (i * 4));
                     }
-                    VITIS_LOOP_450_16: for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
+                    VITIS_LOOP_479_17: for (int i = D_TILE_WO; i < ACCUM_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = 0;
                     }
@@ -31113,7 +31947,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                         mac_start = true;
                     }
                     if (mac_complete) {
-                        VITIS_LOOP_461_17: for (int t = 0; t < D_TILE_WO; ++t) {
+                        VITIS_LOOP_490_18: for (int t = 0; t < D_TILE_WO; ++t) {
                             compute_buf::write_i32(out_buf, t * 4, out[t]);
                         }
                         next_state = ComputeState::MEM_WRITEBACK;
@@ -31126,7 +31960,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                 case ComputeOp::CMP_REQUANT2:
                 case ComputeOp::CMP_REQUANT3:
                 case ComputeOp::CMP_REQUANT4: {
-                    VITIS_LOOP_474_18: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_503_19: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  x32[i] = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::X + (i * 4));
                     }
@@ -31141,7 +31975,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                         z_out,
                         y8
                     );
-                    VITIS_LOOP_489_19: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_518_20: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  compute_buf::write_i8(out_buf, compute_buf::RequantLayout::X + i, y8[i]);
                     }
@@ -31150,7 +31984,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                 }
                 case ComputeOp::CMP_RESID0:
                 case ComputeOp::CMP_RESID1:{
-                    VITIS_LOOP_498_20: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_527_21: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  x_act[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::X + i));
                         residual[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::R + i));
@@ -31161,7 +31995,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                         residual,
                         y_resid
                     );
-                    VITIS_LOOP_509_21: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_538_22: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  compute_buf::write_i8(out_buf, compute_buf::ResidLayout::X + i, y_resid[i]);
                     }
@@ -31170,26 +32004,23 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                 }
                 case ComputeOp::CMP_LN0:
                 case ComputeOp::CMP_LN1: {
-                    VITIS_LOOP_518_22: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_547_23: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
 
  x_act[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::LayerNormLayout::X + i));
 
                         ln_gamma[i] = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4)));
-
-                        ln_beta[i] = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::BETA + (i * 4)));
                     }
 
                     ln_epsilon = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::EPS));
 
-                    LAYER_NORM(
+                    RMS_NORM(
                         x_act,
                         ln_gamma,
-                        ln_beta,
                         ln_epsilon,
                         y_act
                     );
-                    VITIS_LOOP_537_23: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_563_24: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  compute_buf::write_i32(out_buf, compute_buf::LayerNormLayout::X + (i * 4), y_act[i]);
                     }
@@ -31197,17 +32028,17 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_FFN_W1:{
-                    VITIS_LOOP_545_24: for (int i = 0; i < D_MODEL; ++i) {
+                    VITIS_LOOP_571_25: for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = static_cast<int16_t>(
                             compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i));
                     }
-                    VITIS_LOOP_550_25: for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_576_26: for (int i = D_MODEL; i < VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = 0;
                     }
-                    VITIS_LOOP_554_26: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
-                        VITIS_LOOP_555_27: for (int i = 0; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_580_27: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
+                        VITIS_LOOP_581_28: for (int i = 0; i < VECTOR_MAX; ++i) {
 
                             if (out_idx < D_TILE_W1 && i < D_MODEL) {
                                 const int w_idx = (out_idx * D_MODEL) + i;
@@ -31219,19 +32050,19 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                             }
                         }
                     }
-                    VITIS_LOOP_567_28: for (int i = 0; i < D_TILE_W1; ++i) {
+                    VITIS_LOOP_593_29: for (int i = 0; i < D_TILE_W1; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = compute_buf::read_i32(in_buf, compute_buf::FfnW1Layout::B + (i * 4));
                     }
-                    VITIS_LOOP_571_29: for (int i = D_TILE_W1; i < ACCUM_MAX; ++i) {
+                    VITIS_LOOP_597_30: for (int i = D_TILE_W1; i < ACCUM_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = 0;
                     }
-                    VITIS_LOOP_575_30: for (int i = 0; i < D_TILE_W1; ++i) {
+                    VITIS_LOOP_601_31: for (int i = 0; i < D_TILE_W1; ++i) {
 #pragma HLS PIPELINE II=1
  scale[i] = compute_buf::read_i16(in_buf, compute_buf::FfnW1Layout::S + (i * 2));
                     }
-                    VITIS_LOOP_579_31: for (int i = D_TILE_W1; i < ACCUM_MAX; ++i) {
+                    VITIS_LOOP_605_32: for (int i = D_TILE_W1; i < ACCUM_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  scale[i] = 0;
                     }
@@ -31242,7 +32073,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                     if (mac_complete) {
 
 
-                        VITIS_LOOP_590_32: for (int t = 0; t < D_TILE_W1; ++t) {
+                        VITIS_LOOP_616_33: for (int t = 0; t < D_TILE_W1; ++t) {
                             const int64_t prod = static_cast<int64_t>(out[t]) * static_cast<int64_t>(scale[t]);
                             const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
                             int32_t scaled = static_cast<int32_t>(rounded >> 15);
@@ -31260,7 +32091,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_FFN_ACT:{
-                    VITIS_LOOP_608_33: for (int i = 0; i < D_FFN; ++i) {
+                    VITIS_LOOP_634_34: for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS PIPELINE II=1
  ffn_intermediate[i] = compute_buf::read_i16(in_buf, compute_buf::FfnActLayout::X + (i * 2));
                     }
@@ -31268,7 +32099,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                         ffn_intermediate,
                         ffn_act_out
                     );
-                    VITIS_LOOP_616_34: for (int i = 0; i < D_FFN; ++i) {
+                    VITIS_LOOP_642_35: for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS PIPELINE II=1
  compute_buf::write_i16(out_buf, compute_buf::FfnActLayout::X + (i * 2), ffn_act_out[i]);
                     }
@@ -31276,17 +32107,17 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_FFN_W2:{
-                    VITIS_LOOP_624_35: for (int i = 0; i < D_FFN; ++i) {
+                    VITIS_LOOP_650_36: for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = compute_buf::read_i16(
                             in_buf, compute_buf::FfnW2Layout::X + (i * 2));
                     }
-                    VITIS_LOOP_629_36: for (int i = D_FFN; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_655_37: for (int i = D_FFN; i < VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  vectorA[i] = 0;
                     }
-                    VITIS_LOOP_633_37: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
-                        VITIS_LOOP_634_38: for (int i = 0; i < VECTOR_MAX; ++i) {
+                    VITIS_LOOP_659_38: for (int out_idx = 0; out_idx < ACCUM_MAX; ++out_idx) {
+                        VITIS_LOOP_660_39: for (int i = 0; i < VECTOR_MAX; ++i) {
 
                             if (out_idx < D_TILE_W2 && i < D_FFN) {
                                 const int w_idx = (out_idx * D_FFN) + i;
@@ -31298,19 +32129,19 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                             }
                         }
                     }
-                    VITIS_LOOP_646_39: for (int i = 0; i < D_TILE_W2; ++i) {
+                    VITIS_LOOP_672_40: for (int i = 0; i < D_TILE_W2; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = compute_buf::read_i32(in_buf, compute_buf::FfnW2Layout::B + (i * 4));
                     }
-                    VITIS_LOOP_650_40: for (int i = D_TILE_W2; i < ACCUM_MAX; ++i) {
+                    VITIS_LOOP_676_41: for (int i = D_TILE_W2; i < ACCUM_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  bias[i] = 0;
                     }
-                    VITIS_LOOP_654_41: for (int i = 0; i < D_TILE_W2; ++i) {
+                    VITIS_LOOP_680_42: for (int i = 0; i < D_TILE_W2; ++i) {
 #pragma HLS PIPELINE II=1
  scale[i] = compute_buf::read_i16(in_buf, compute_buf::FfnW2Layout::S + (i * 2));
                     }
-                    VITIS_LOOP_658_42: for (int i = D_TILE_W2; i < ACCUM_MAX; ++i) {
+                    VITIS_LOOP_684_43: for (int i = D_TILE_W2; i < ACCUM_MAX; ++i) {
 #pragma HLS PIPELINE II=1
  scale[i] = 0;
                     }
@@ -31319,7 +32150,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                         mac_start = true;
                     }
                     if (mac_complete) {
-                        VITIS_LOOP_667_43: for (int t = 0; t < D_TILE_W2; ++t) {
+                        VITIS_LOOP_693_44: for (int t = 0; t < D_TILE_W2; ++t) {
                             const int64_t prod = static_cast<int64_t>(out[t]) * static_cast<int64_t>(scale[t]);
                             const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
                             int32_t scaled = static_cast<int32_t>(rounded >> 15);
@@ -31352,6 +32183,7 @@ __attribute__((sdx_kernel("compute_controller", 0))) void compute_controller(
                 mem_write_request = false;
                 mem_op = 0;
                 mac_complete = false;
+                clear_pending = true;
                 next_state = ComputeState::DONE;
             }
             break;

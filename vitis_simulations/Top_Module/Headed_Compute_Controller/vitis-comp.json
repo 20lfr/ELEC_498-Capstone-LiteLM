@@ -1,0 +1,13 @@
+{
+  "name": "Headed_Compute_Controller",
+  "type": "HLS",
+  "configuration": {
+    "componentType": "HLS",
+    "configFiles": [
+      "hls_config.cfg"
+    ],
+    "work_dir": "headed_compute_controller"
+  },
+  "useSysrootToolchain": false,
+  "template": "empty_hls_component"
+}

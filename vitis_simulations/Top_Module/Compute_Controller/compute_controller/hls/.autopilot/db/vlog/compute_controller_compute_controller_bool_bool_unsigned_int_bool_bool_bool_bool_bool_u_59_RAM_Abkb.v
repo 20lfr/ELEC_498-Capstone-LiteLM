@@ -17,8 +17,8 @@ module compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bo
     reset, clk);
 
 parameter DataWidth = 16;
-parameter AddressWidth = 4;
-parameter AddressRange = 12;
+parameter AddressWidth = 1;
+parameter AddressRange = 2;
  
 input[AddressWidth-1:0] address0;
 input ce0;

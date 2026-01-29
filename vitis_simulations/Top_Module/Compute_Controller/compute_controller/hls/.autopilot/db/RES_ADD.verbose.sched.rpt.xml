@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'RES_ADD'" level="0">
-<item name = "Date">Sat Jan 24 18:00:34 2026
+<item name = "Date">Wed Jan 28 19:35:28 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 3.288 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 1.934 ns, 2.70 ns</column>
 </table>
 </item>
 </section>
@@ -24,7 +24,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">6, 6, 60.000 ns, 60.000 ns, 6, 6, no</column>
+<column name="">0, 0, 0 ns, 0 ns, 0, 0, no</column>
 </table>
 </item>
 <item name = "Detail">

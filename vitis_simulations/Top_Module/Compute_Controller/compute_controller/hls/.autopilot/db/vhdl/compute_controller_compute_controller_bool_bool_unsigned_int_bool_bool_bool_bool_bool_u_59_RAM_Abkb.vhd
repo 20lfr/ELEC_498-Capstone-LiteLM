@@ -12,8 +12,8 @@ entity compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bo
     generic(
         MEM_TYPE        : string    := "auto"; 
         DataWidth       : integer   := 16; 
-        AddressWidth    : integer   := 4;
-        AddressRange    : integer   := 12
+        AddressWidth    : integer   := 1;
+        AddressRange    : integer   := 2
     ); 
     port (
         address0    : in std_logic_vector(AddressWidth-1 downto 0); 

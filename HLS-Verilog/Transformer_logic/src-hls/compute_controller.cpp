@@ -123,40 +123,13 @@ void RMS_NORM(
     for (int i = 0; i < D_MODEL; ++i) {
         square += static_cast<int32_t>(x[i]) * static_cast<int32_t>(x[i]);
     }
-
     ap_fixed<32, 19> square_fx = square; // Q19.13     (123.123 * scale) >> 13, 
-    ap_int<32> square_fx_bits = square_fx.range(31, 0);
-    std::printf("square_fx: %f 0x%08x (signed=%d)\n",
-                (float)square_fx,
-                (unsigned)square_fx_bits,
-                (int)square_fx_bits);
-
     ap_fixed<32, 19> mean_square = square_fx / D_MODEL;
-    ap_int<32> mean_square_bits = mean_square.range(31, 0);
-    std::printf("mean_square: %f 0x%08x (signed=%d)\n",
-                (float)mean_square,
-                (unsigned)mean_square_bits,
-                (int)mean_square_bits);
-
     if (mean_square < 0) {
         mean_square = 0;
     }
-
     ap_fixed<32, 19> v = mean_square + ap_fixed<32, 19>(epsilon);
-    ap_int<32> v_bits = v.range(31, 0);
-    std::printf("v: %f 0x%08x (signed=%d)\n",
-                (float)v,
-                (unsigned)v_bits,
-                (int)v_bits);
-
-    ap_fixed<32, 19> inv_rms = ap_fixed<32, 19>(1) / hls::sqrt(v);
-    ap_int<32> inv_rms_bits = inv_rms.range(31, 0);
-    std::printf("inv_rms: %f 0x%08x (signed=%d)\n",
-                (float)inv_rms,
-                (unsigned)inv_rms_bits,
-                (int)inv_rms_bits);
-
-
+    ap_fixed<32, 19> inv_rms = ap_fixed<32, 19>(1) / hls::sqrt(v); //  NEED TO FIX THIS!!!
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL          
         ap_fixed<32, 19> normalized = ap_fixed<32, 19>(x[i]) * inv_rms;
@@ -168,14 +141,12 @@ void RMS_NORM(
                     (int)normalized_bits);
 
         ap_fixed<32, 19> scaled = normalized * ap_fixed<32, 19>(gamma[i]);
-        ap_int<32> scaled_bits = scaled.range(31, 0);
+        ap_int<32> scaled_bits = scaled.range(31, 0); 
         std::printf("ln_cycle[%d] scaled: %f 0x%08x (signed=%d)\n",
                     i,
                     (float)scaled,
                     (unsigned)scaled_bits,
                     (int)scaled_bits);
-        
-        
         y[i] = (int32_t)scaled_bits; // Store raw fixed-point bits (Q19.13)
         std::printf("ln_cycle[%d] y_raw: %d 0x%08x\n",
                     i,
@@ -281,6 +252,7 @@ void compute_controller(
     static bool mac_ready = true;
     static bool mac_complete = false;
     static bool capture_pending = false;
+    static bool clear_pending = false;
 
     
 
@@ -338,6 +310,7 @@ void compute_controller(
         mac_ready = true;
         mac_complete = false;
         capture_pending = false;
+        clear_pending = false;
 
         for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL
@@ -416,10 +389,15 @@ void compute_controller(
                 req.layer_idx       = (compute_instruction >> 8) & 0xFFu;
                 req.head_idx        = (compute_instruction >> 16) & 0xFFu;
                 req.tile_idx        = (compute_instruction >> 24) & 0xFFu;
-
-
-
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
+            }
+            // Clear output buffer when idling
+            if (clear_pending && !compute_start) {
+                for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
+#pragma HLS PIPELINE II=1
+                    out_buf[i] = 0;
+                }
+                clear_pending = false;
             }
             break;
         }
@@ -745,6 +723,7 @@ void compute_controller(
                 mem_write_request = false;
                 mem_op = 0;
                 mac_complete = false;
+                clear_pending = true;
                 next_state = ComputeState::DONE;
             }
             break;

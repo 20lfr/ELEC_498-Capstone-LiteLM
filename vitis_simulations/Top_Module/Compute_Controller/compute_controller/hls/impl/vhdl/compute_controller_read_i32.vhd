@@ -17,13 +17,13 @@ port (
     ap_idle : OUT STD_LOGIC;
     ap_ready : OUT STD_LOGIC;
     ap_ce : IN STD_LOGIC;
-    in_buf_address0 : OUT STD_LOGIC_VECTOR (12 downto 0);
+    in_buf_address0 : OUT STD_LOGIC_VECTOR (7 downto 0);
     in_buf_ce0 : OUT STD_LOGIC;
     in_buf_q0 : IN STD_LOGIC_VECTOR (7 downto 0);
-    in_buf_address1 : OUT STD_LOGIC_VECTOR (12 downto 0);
+    in_buf_address1 : OUT STD_LOGIC_VECTOR (7 downto 0);
     in_buf_ce1 : OUT STD_LOGIC;
     in_buf_q1 : IN STD_LOGIC_VECTOR (7 downto 0);
-    byte_addr : IN STD_LOGIC_VECTOR (12 downto 0);
+    byte_addr : IN STD_LOGIC_VECTOR (6 downto 0);
     ap_return : OUT STD_LOGIC_VECTOR (31 downto 0) );
 end;
 
@@ -37,9 +37,9 @@ architecture behav of compute_controller_read_i32 is
     constant ap_const_boolean_1 : BOOLEAN := true;
     constant ap_const_lv32_1 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000001";
     constant ap_const_boolean_0 : BOOLEAN := false;
-    constant ap_const_lv13_1 : STD_LOGIC_VECTOR (12 downto 0) := "0000000000001";
-    constant ap_const_lv13_2 : STD_LOGIC_VECTOR (12 downto 0) := "0000000000010";
-    constant ap_const_lv13_3 : STD_LOGIC_VECTOR (12 downto 0) := "0000000000011";
+    constant ap_const_lv7_1 : STD_LOGIC_VECTOR (6 downto 0) := "0000001";
+    constant ap_const_lv7_2 : STD_LOGIC_VECTOR (6 downto 0) := "0000010";
+    constant ap_const_lv7_3 : STD_LOGIC_VECTOR (6 downto 0) := "0000011";
 
 attribute shreg_extract : string;
     signal ap_CS_fsm : STD_LOGIC_VECTOR (1 downto 0) := "01";
@@ -54,25 +54,25 @@ attribute shreg_extract : string;
     attribute fsm_encoding of ap_CS_fsm_pp0_stage1 : signal is "none";
     signal ap_block_pp0_stage1_subdone : BOOLEAN;
     signal ap_enable_reg_pp0_iter0_reg : STD_LOGIC := '0';
-    signal byte_addr_read_reg_119 : STD_LOGIC_VECTOR (12 downto 0);
+    signal byte_addr_read_reg_119 : STD_LOGIC_VECTOR (6 downto 0);
     signal ap_block_pp0_stage0_11001 : BOOLEAN;
     signal in_buf_load_reg_135 : STD_LOGIC_VECTOR (7 downto 0);
     signal ap_block_pp0_stage1_11001 : BOOLEAN;
     signal in_buf_load_1_reg_140 : STD_LOGIC_VECTOR (7 downto 0);
     signal ap_block_pp0_stage0_subdone : BOOLEAN;
-    signal zext_ln595_fu_73_p1 : STD_LOGIC_VECTOR (63 downto 0);
+    signal zext_ln575_fu_73_p1 : STD_LOGIC_VECTOR (63 downto 0);
     signal ap_block_pp0_stage0 : BOOLEAN;
-    signal zext_ln596_fu_84_p1 : STD_LOGIC_VECTOR (63 downto 0);
-    signal zext_ln597_fu_94_p1 : STD_LOGIC_VECTOR (63 downto 0);
+    signal zext_ln576_fu_84_p1 : STD_LOGIC_VECTOR (63 downto 0);
+    signal zext_ln577_fu_94_p1 : STD_LOGIC_VECTOR (63 downto 0);
     signal ap_block_pp0_stage1 : BOOLEAN;
-    signal zext_ln598_fu_104_p1 : STD_LOGIC_VECTOR (63 downto 0);
+    signal zext_ln578_fu_104_p1 : STD_LOGIC_VECTOR (63 downto 0);
     signal in_buf_ce1_local : STD_LOGIC;
-    signal in_buf_address1_local : STD_LOGIC_VECTOR (12 downto 0);
+    signal in_buf_address1_local : STD_LOGIC_VECTOR (7 downto 0);
     signal in_buf_ce0_local : STD_LOGIC;
-    signal in_buf_address0_local : STD_LOGIC_VECTOR (12 downto 0);
-    signal add_ln596_fu_78_p2 : STD_LOGIC_VECTOR (12 downto 0);
-    signal add_ln597_fu_89_p2 : STD_LOGIC_VECTOR (12 downto 0);
-    signal add_ln598_fu_99_p2 : STD_LOGIC_VECTOR (12 downto 0);
+    signal in_buf_address0_local : STD_LOGIC_VECTOR (7 downto 0);
+    signal add_ln576_fu_78_p2 : STD_LOGIC_VECTOR (6 downto 0);
+    signal add_ln577_fu_89_p2 : STD_LOGIC_VECTOR (6 downto 0);
+    signal add_ln578_fu_99_p2 : STD_LOGIC_VECTOR (6 downto 0);
     signal ap_NS_fsm : STD_LOGIC_VECTOR (1 downto 0);
     signal ap_idle_pp0_0to0 : STD_LOGIC;
     signal ap_reset_idle_pp0 : STD_LOGIC;
@@ -166,9 +166,9 @@ begin
                 ap_NS_fsm <= "XX";
         end case;
     end process;
-    add_ln596_fu_78_p2 <= std_logic_vector(unsigned(byte_addr) + unsigned(ap_const_lv13_1));
-    add_ln597_fu_89_p2 <= std_logic_vector(unsigned(byte_addr_read_reg_119) + unsigned(ap_const_lv13_2));
-    add_ln598_fu_99_p2 <= std_logic_vector(unsigned(byte_addr_read_reg_119) + unsigned(ap_const_lv13_3));
+    add_ln576_fu_78_p2 <= std_logic_vector(unsigned(byte_addr) + unsigned(ap_const_lv7_1));
+    add_ln577_fu_89_p2 <= std_logic_vector(unsigned(byte_addr_read_reg_119) + unsigned(ap_const_lv7_2));
+    add_ln578_fu_99_p2 <= std_logic_vector(unsigned(byte_addr_read_reg_119) + unsigned(ap_const_lv7_3));
     ap_CS_fsm_pp0_stage0 <= ap_CS_fsm(0);
     ap_CS_fsm_pp0_stage1 <= ap_CS_fsm(1);
         ap_block_pp0_stage0 <= not((ap_const_boolean_1 = ap_const_boolean_1));
@@ -271,27 +271,27 @@ begin
     ap_return <= (((in_buf_q0 & in_buf_q1) & in_buf_load_1_reg_140) & in_buf_load_reg_135);
     in_buf_address0 <= in_buf_address0_local;
 
-    in_buf_address0_local_assign_proc : process(ap_CS_fsm_pp0_stage0, ap_enable_reg_pp0_iter0, ap_CS_fsm_pp0_stage1, ap_enable_reg_pp0_iter0_reg, ap_block_pp0_stage0, zext_ln596_fu_84_p1, ap_block_pp0_stage1, zext_ln598_fu_104_p1)
+    in_buf_address0_local_assign_proc : process(ap_CS_fsm_pp0_stage0, ap_enable_reg_pp0_iter0, ap_CS_fsm_pp0_stage1, ap_enable_reg_pp0_iter0_reg, ap_block_pp0_stage0, zext_ln576_fu_84_p1, ap_block_pp0_stage1, zext_ln578_fu_104_p1)
     begin
         if (((ap_enable_reg_pp0_iter0_reg = ap_const_logic_1) and (ap_const_boolean_0 = ap_block_pp0_stage1) and (ap_const_logic_1 = ap_CS_fsm_pp0_stage1))) then 
-            in_buf_address0_local <= zext_ln598_fu_104_p1(13 - 1 downto 0);
+            in_buf_address0_local <= zext_ln578_fu_104_p1(8 - 1 downto 0);
         elsif (((ap_const_boolean_0 = ap_block_pp0_stage0) and (ap_enable_reg_pp0_iter0 = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_pp0_stage0))) then 
-            in_buf_address0_local <= zext_ln596_fu_84_p1(13 - 1 downto 0);
+            in_buf_address0_local <= zext_ln576_fu_84_p1(8 - 1 downto 0);
         else 
-            in_buf_address0_local <= "XXXXXXXXXXXXX";
+            in_buf_address0_local <= "XXXXXXXX";
         end if; 
     end process;
 
     in_buf_address1 <= in_buf_address1_local;
 
-    in_buf_address1_local_assign_proc : process(ap_CS_fsm_pp0_stage0, ap_enable_reg_pp0_iter0, ap_CS_fsm_pp0_stage1, ap_enable_reg_pp0_iter0_reg, zext_ln595_fu_73_p1, ap_block_pp0_stage0, zext_ln597_fu_94_p1, ap_block_pp0_stage1)
+    in_buf_address1_local_assign_proc : process(ap_CS_fsm_pp0_stage0, ap_enable_reg_pp0_iter0, ap_CS_fsm_pp0_stage1, ap_enable_reg_pp0_iter0_reg, zext_ln575_fu_73_p1, ap_block_pp0_stage0, zext_ln577_fu_94_p1, ap_block_pp0_stage1)
     begin
         if (((ap_enable_reg_pp0_iter0_reg = ap_const_logic_1) and (ap_const_boolean_0 = ap_block_pp0_stage1) and (ap_const_logic_1 = ap_CS_fsm_pp0_stage1))) then 
-            in_buf_address1_local <= zext_ln597_fu_94_p1(13 - 1 downto 0);
+            in_buf_address1_local <= zext_ln577_fu_94_p1(8 - 1 downto 0);
         elsif (((ap_const_boolean_0 = ap_block_pp0_stage0) and (ap_enable_reg_pp0_iter0 = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_pp0_stage0))) then 
-            in_buf_address1_local <= zext_ln595_fu_73_p1(13 - 1 downto 0);
+            in_buf_address1_local <= zext_ln575_fu_73_p1(8 - 1 downto 0);
         else 
-            in_buf_address1_local <= "XXXXXXXXXXXXX";
+            in_buf_address1_local <= "XXXXXXXX";
         end if; 
     end process;
 
@@ -317,8 +317,8 @@ begin
         end if; 
     end process;
 
-    zext_ln595_fu_73_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(byte_addr),64));
-    zext_ln596_fu_84_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(add_ln596_fu_78_p2),64));
-    zext_ln597_fu_94_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(add_ln597_fu_89_p2),64));
-    zext_ln598_fu_104_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(add_ln598_fu_99_p2),64));
+    zext_ln575_fu_73_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(byte_addr),64));
+    zext_ln576_fu_84_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(add_ln576_fu_78_p2),64));
+    zext_ln577_fu_94_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(add_ln577_fu_89_p2),64));
+    zext_ln578_fu_104_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(add_ln578_fu_99_p2),64));
 end behav;

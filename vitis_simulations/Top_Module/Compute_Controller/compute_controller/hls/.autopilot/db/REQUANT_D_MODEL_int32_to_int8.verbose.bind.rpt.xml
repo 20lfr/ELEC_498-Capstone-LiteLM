@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'REQUANT_D_MODEL_int32_to_int8'" level="0">
-<item name = "Date">Sat Jan 24 18:00:37 2026
+<item name = "Date">Wed Jan 28 19:35:28 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">compute_controller</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 6.718 ns, 2.70 ns</column>
+<column name="ap_clk">10.00 ns, 6.041 ns, 2.70 ns</column>
 </table>
 </item>
 </section>
@@ -24,7 +24,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">7, 7, 70.000 ns, 70.000 ns, 7, 7, no</column>
+<column name="">1, 1, 10.000 ns, 10.000 ns, 1, 1, no</column>
 </table>
 </item>
 <item name = "Detail">

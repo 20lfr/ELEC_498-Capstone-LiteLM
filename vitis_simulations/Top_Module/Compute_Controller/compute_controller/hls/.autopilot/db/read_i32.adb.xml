@@ -29,9 +29,9 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="3" bw="13" op_0_bw="13" op_1_bw="13">
+<Node id="3" bw="7" op_0_bw="7" op_1_bw="7">
 <![CDATA[
-entry:0 %byte_addr_read = read i13 @_ssdm_op_Read.ap_auto.i13, i13 %byte_addr
+entry:0 %byte_addr_read = read i7 @_ssdm_op_Read.ap_auto.i7, i7 %byte_addr
 
 ]]></Node>
 <StgValue><ssdm name="byte_addr_read"/></StgValue>
@@ -44,12 +44,12 @@ entry:0 %byte_addr_read = read i13 @_ssdm_op_Read.ap_auto.i13, i13 %byte_addr
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="5" bw="64" op_0_bw="13">
+<Node id="5" bw="64" op_0_bw="7">
 <![CDATA[
-entry:2 %zext_ln595 = zext i13 %byte_addr_read
+entry:2 %zext_ln575 = zext i7 %byte_addr_read
 
 ]]></Node>
-<StgValue><ssdm name="zext_ln595"/></StgValue>
+<StgValue><ssdm name="zext_ln575"/></StgValue>
 </operation>
 
 <operation id="6" st_id="1" stage="1" lat="1">
@@ -59,9 +59,9 @@ entry:2 %zext_ln595 = zext i13 %byte_addr_read
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="6" bw="13" op_0_bw="8" op_1_bw="64" op_2_bw="64">
+<Node id="6" bw="8" op_0_bw="8" op_1_bw="64" op_2_bw="64">
 <![CDATA[
-entry:3 %in_buf_addr = getelementptr i8 %in_buf, i64 0, i64 %zext_ln595
+entry:3 %in_buf_addr = getelementptr i8 %in_buf, i64 0, i64 %zext_ln575
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_addr"/></StgValue>
@@ -74,9 +74,9 @@ entry:3 %in_buf_addr = getelementptr i8 %in_buf, i64 0, i64 %zext_ln595
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="7" bw="8" op_0_bw="13">
+<Node id="7" bw="8" op_0_bw="8">
 <![CDATA[
-entry:4 %in_buf_load = load i13 %in_buf_addr
+entry:4 %in_buf_load = load i8 %in_buf_addr
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load"/></StgValue>
@@ -89,12 +89,12 @@ entry:4 %in_buf_load = load i13 %in_buf_addr
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="8" bw="13" op_0_bw="13" op_1_bw="13">
+<Node id="8" bw="7" op_0_bw="7" op_1_bw="7">
 <![CDATA[
-entry:5 %add_ln596 = add i13 %byte_addr_read, i13 1
+entry:5 %add_ln576 = add i7 %byte_addr_read, i7 1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln596"/></StgValue>
+<StgValue><ssdm name="add_ln576"/></StgValue>
 </operation>
 
 <operation id="9" st_id="1" stage="1" lat="1">
@@ -104,12 +104,12 @@ entry:5 %add_ln596 = add i13 %byte_addr_read, i13 1
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="9" bw="64" op_0_bw="13">
+<Node id="9" bw="64" op_0_bw="7">
 <![CDATA[
-entry:6 %zext_ln596 = zext i13 %add_ln596
+entry:6 %zext_ln576 = zext i7 %add_ln576
 
 ]]></Node>
-<StgValue><ssdm name="zext_ln596"/></StgValue>
+<StgValue><ssdm name="zext_ln576"/></StgValue>
 </operation>
 
 <operation id="10" st_id="1" stage="1" lat="1">
@@ -119,9 +119,9 @@ entry:6 %zext_ln596 = zext i13 %add_ln596
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="10" bw="13" op_0_bw="8" op_1_bw="64" op_2_bw="64">
+<Node id="10" bw="8" op_0_bw="8" op_1_bw="64" op_2_bw="64">
 <![CDATA[
-entry:7 %in_buf_addr_1 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln596
+entry:7 %in_buf_addr_1 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln576
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_addr_1"/></StgValue>
@@ -134,9 +134,9 @@ entry:7 %in_buf_addr_1 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln596
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="11" bw="8" op_0_bw="13">
+<Node id="11" bw="8" op_0_bw="8">
 <![CDATA[
-entry:8 %in_buf_load_1 = load i13 %in_buf_addr_1
+entry:8 %in_buf_load_1 = load i8 %in_buf_addr_1
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load_1"/></StgValue>
@@ -152,9 +152,9 @@ entry:8 %in_buf_load_1 = load i13 %in_buf_addr_1
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="7" bw="8" op_0_bw="13">
+<Node id="7" bw="8" op_0_bw="8">
 <![CDATA[
-entry:4 %in_buf_load = load i13 %in_buf_addr
+entry:4 %in_buf_load = load i8 %in_buf_addr
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load"/></StgValue>
@@ -167,9 +167,9 @@ entry:4 %in_buf_load = load i13 %in_buf_addr
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="11" bw="8" op_0_bw="13">
+<Node id="11" bw="8" op_0_bw="8">
 <![CDATA[
-entry:8 %in_buf_load_1 = load i13 %in_buf_addr_1
+entry:8 %in_buf_load_1 = load i8 %in_buf_addr_1
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load_1"/></StgValue>
@@ -182,12 +182,12 @@ entry:8 %in_buf_load_1 = load i13 %in_buf_addr_1
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="12" bw="13" op_0_bw="13" op_1_bw="13">
+<Node id="12" bw="7" op_0_bw="7" op_1_bw="7">
 <![CDATA[
-entry:9 %add_ln597 = add i13 %byte_addr_read, i13 2
+entry:9 %add_ln577 = add i7 %byte_addr_read, i7 2
 
 ]]></Node>
-<StgValue><ssdm name="add_ln597"/></StgValue>
+<StgValue><ssdm name="add_ln577"/></StgValue>
 </operation>
 
 <operation id="15" st_id="2" stage="1" lat="1">
@@ -197,12 +197,12 @@ entry:9 %add_ln597 = add i13 %byte_addr_read, i13 2
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="13" bw="64" op_0_bw="13">
+<Node id="13" bw="64" op_0_bw="7">
 <![CDATA[
-entry:10 %zext_ln597 = zext i13 %add_ln597
+entry:10 %zext_ln577 = zext i7 %add_ln577
 
 ]]></Node>
-<StgValue><ssdm name="zext_ln597"/></StgValue>
+<StgValue><ssdm name="zext_ln577"/></StgValue>
 </operation>
 
 <operation id="16" st_id="2" stage="1" lat="1">
@@ -212,9 +212,9 @@ entry:10 %zext_ln597 = zext i13 %add_ln597
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="14" bw="13" op_0_bw="8" op_1_bw="64" op_2_bw="64">
+<Node id="14" bw="8" op_0_bw="8" op_1_bw="64" op_2_bw="64">
 <![CDATA[
-entry:11 %in_buf_addr_2 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln597
+entry:11 %in_buf_addr_2 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln577
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_addr_2"/></StgValue>
@@ -227,9 +227,9 @@ entry:11 %in_buf_addr_2 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln597
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="15" bw="8" op_0_bw="13">
+<Node id="15" bw="8" op_0_bw="8">
 <![CDATA[
-entry:12 %in_buf_load_2 = load i13 %in_buf_addr_2
+entry:12 %in_buf_load_2 = load i8 %in_buf_addr_2
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load_2"/></StgValue>
@@ -242,12 +242,12 @@ entry:12 %in_buf_load_2 = load i13 %in_buf_addr_2
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="16" bw="13" op_0_bw="13" op_1_bw="13">
+<Node id="16" bw="7" op_0_bw="7" op_1_bw="7">
 <![CDATA[
-entry:13 %add_ln598 = add i13 %byte_addr_read, i13 3
+entry:13 %add_ln578 = add i7 %byte_addr_read, i7 3
 
 ]]></Node>
-<StgValue><ssdm name="add_ln598"/></StgValue>
+<StgValue><ssdm name="add_ln578"/></StgValue>
 </operation>
 
 <operation id="19" st_id="2" stage="1" lat="1">
@@ -257,12 +257,12 @@ entry:13 %add_ln598 = add i13 %byte_addr_read, i13 3
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="17" bw="64" op_0_bw="13">
+<Node id="17" bw="64" op_0_bw="7">
 <![CDATA[
-entry:14 %zext_ln598 = zext i13 %add_ln598
+entry:14 %zext_ln578 = zext i7 %add_ln578
 
 ]]></Node>
-<StgValue><ssdm name="zext_ln598"/></StgValue>
+<StgValue><ssdm name="zext_ln578"/></StgValue>
 </operation>
 
 <operation id="20" st_id="2" stage="1" lat="1">
@@ -272,9 +272,9 @@ entry:14 %zext_ln598 = zext i13 %add_ln598
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="18" bw="13" op_0_bw="8" op_1_bw="64" op_2_bw="64">
+<Node id="18" bw="8" op_0_bw="8" op_1_bw="64" op_2_bw="64">
 <![CDATA[
-entry:15 %in_buf_addr_3 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln598
+entry:15 %in_buf_addr_3 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln578
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_addr_3"/></StgValue>
@@ -287,9 +287,9 @@ entry:15 %in_buf_addr_3 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln598
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="19" bw="8" op_0_bw="13">
+<Node id="19" bw="8" op_0_bw="8">
 <![CDATA[
-entry:16 %in_buf_load_3 = load i13 %in_buf_addr_3
+entry:16 %in_buf_load_3 = load i8 %in_buf_addr_3
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load_3"/></StgValue>
@@ -307,7 +307,7 @@ entry:16 %in_buf_load_3 = load i13 %in_buf_addr_3
 
 <Node id="4" bw="0" op_0_bw="0" op_1_bw="8" op_2_bw="0" op_3_bw="32" op_4_bw="32" op_5_bw="0" op_6_bw="32" op_7_bw="32" op_8_bw="0" op_9_bw="0" op_10_bw="0" op_11_bw="32" op_12_bw="32" op_13_bw="32" op_14_bw="32" op_15_bw="0" op_16_bw="0" op_17_bw="32" op_18_bw="32" op_19_bw="32">
 <![CDATA[
-entry:1 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %in_buf, void @empty_22, i32 0, i32 0, void @empty_15, i32 4294967295, i32 0, void @empty_15, void @empty_15, void @empty_15, i32 0, i32 0, i32 0, i32 0, void @empty_15, void @empty_15, i32 4294967295, i32 0, i32 0
+entry:1 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %in_buf, void @empty_20, i32 0, i32 0, void @empty_8, i32 4294967295, i32 0, void @empty_8, void @empty_8, void @empty_8, i32 0, i32 0, i32 0, i32 0, void @empty_8, void @empty_8, i32 4294967295, i32 0, i32 0
 
 ]]></Node>
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
@@ -320,9 +320,9 @@ entry:1 %specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %in_
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="15" bw="8" op_0_bw="13">
+<Node id="15" bw="8" op_0_bw="8">
 <![CDATA[
-entry:12 %in_buf_load_2 = load i13 %in_buf_addr_2
+entry:12 %in_buf_load_2 = load i8 %in_buf_addr_2
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load_2"/></StgValue>
@@ -335,9 +335,9 @@ entry:12 %in_buf_load_2 = load i13 %in_buf_addr_2
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="19" bw="8" op_0_bw="13">
+<Node id="19" bw="8" op_0_bw="8">
 <![CDATA[
-entry:16 %in_buf_load_3 = load i13 %in_buf_addr_3
+entry:16 %in_buf_load_3 = load i8 %in_buf_addr_3
 
 ]]></Node>
 <StgValue><ssdm name="in_buf_load_3"/></StgValue>
@@ -367,10 +367,10 @@ entry:17 %v = bitconcatenate i32 @_ssdm_op_BitConcatenate.i32.i8.i8.i8.i8, i8 %i
 
 <Node id="21" bw="0" op_0_bw="32">
 <![CDATA[
-entry:18 %ret_ln600 = ret i32 %v
+entry:18 %ret_ln580 = ret i32 %v
 
 ]]></Node>
-<StgValue><ssdm name="ret_ln600"/></StgValue>
+<StgValue><ssdm name="ret_ln580"/></StgValue>
 </operation>
 </state>
 </state_list>
@@ -388,31 +388,31 @@ entry:18 %ret_ln600 = ret i32 %v
 
 
 <dataflows>
-<dataflow id="35" from="_ssdm_op_Read.ap_auto.i13" to="byte_addr_read" fromId="34" toId="4">
+<dataflow id="35" from="_ssdm_op_Read.ap_auto.i7" to="byte_addr_read" fromId="34" toId="4">
 </dataflow>
 <dataflow id="36" from="byte_addr" to="byte_addr_read" fromId="33" toId="4">
 </dataflow>
-<dataflow id="37" from="byte_addr_read" to="zext_ln595" fromId="4" toId="5">
+<dataflow id="37" from="byte_addr_read" to="zext_ln575" fromId="4" toId="5">
 </dataflow>
 <dataflow id="38" from="in_buf" to="in_buf_addr" fromId="32" toId="6">
 </dataflow>
 <dataflow id="40" from="StgValue_39" to="in_buf_addr" fromId="39" toId="6">
 </dataflow>
-<dataflow id="41" from="zext_ln595" to="in_buf_addr" fromId="5" toId="6">
+<dataflow id="41" from="zext_ln575" to="in_buf_addr" fromId="5" toId="6">
 </dataflow>
 <dataflow id="42" from="in_buf_addr" to="in_buf_load" fromId="6" toId="7">
 </dataflow>
-<dataflow id="43" from="byte_addr_read" to="add_ln596" fromId="4" toId="8">
+<dataflow id="43" from="byte_addr_read" to="add_ln576" fromId="4" toId="8">
 </dataflow>
-<dataflow id="45" from="StgValue_44" to="add_ln596" fromId="44" toId="8">
+<dataflow id="45" from="StgValue_44" to="add_ln576" fromId="44" toId="8">
 </dataflow>
-<dataflow id="46" from="add_ln596" to="zext_ln596" fromId="8" toId="9">
+<dataflow id="46" from="add_ln576" to="zext_ln576" fromId="8" toId="9">
 </dataflow>
 <dataflow id="47" from="in_buf" to="in_buf_addr_1" fromId="32" toId="10">
 </dataflow>
 <dataflow id="48" from="StgValue_39" to="in_buf_addr_1" fromId="39" toId="10">
 </dataflow>
-<dataflow id="49" from="zext_ln596" to="in_buf_addr_1" fromId="9" toId="10">
+<dataflow id="49" from="zext_ln576" to="in_buf_addr_1" fromId="9" toId="10">
 </dataflow>
 <dataflow id="50" from="in_buf_addr_1" to="in_buf_load_1" fromId="10" toId="11">
 </dataflow>
@@ -420,31 +420,31 @@ entry:18 %ret_ln600 = ret i32 %v
 </dataflow>
 <dataflow id="52" from="in_buf_addr_1" to="in_buf_load_1" fromId="10" toId="13">
 </dataflow>
-<dataflow id="53" from="byte_addr_read" to="add_ln597" fromId="4" toId="14">
+<dataflow id="53" from="byte_addr_read" to="add_ln577" fromId="4" toId="14">
 </dataflow>
-<dataflow id="55" from="StgValue_54" to="add_ln597" fromId="54" toId="14">
+<dataflow id="55" from="StgValue_54" to="add_ln577" fromId="54" toId="14">
 </dataflow>
-<dataflow id="56" from="add_ln597" to="zext_ln597" fromId="14" toId="15">
+<dataflow id="56" from="add_ln577" to="zext_ln577" fromId="14" toId="15">
 </dataflow>
 <dataflow id="57" from="in_buf" to="in_buf_addr_2" fromId="32" toId="16">
 </dataflow>
 <dataflow id="58" from="StgValue_39" to="in_buf_addr_2" fromId="39" toId="16">
 </dataflow>
-<dataflow id="59" from="zext_ln597" to="in_buf_addr_2" fromId="15" toId="16">
+<dataflow id="59" from="zext_ln577" to="in_buf_addr_2" fromId="15" toId="16">
 </dataflow>
 <dataflow id="60" from="in_buf_addr_2" to="in_buf_load_2" fromId="16" toId="17">
 </dataflow>
-<dataflow id="61" from="byte_addr_read" to="add_ln598" fromId="4" toId="18">
+<dataflow id="61" from="byte_addr_read" to="add_ln578" fromId="4" toId="18">
 </dataflow>
-<dataflow id="63" from="StgValue_62" to="add_ln598" fromId="62" toId="18">
+<dataflow id="63" from="StgValue_62" to="add_ln578" fromId="62" toId="18">
 </dataflow>
-<dataflow id="64" from="add_ln598" to="zext_ln598" fromId="18" toId="19">
+<dataflow id="64" from="add_ln578" to="zext_ln578" fromId="18" toId="19">
 </dataflow>
 <dataflow id="65" from="in_buf" to="in_buf_addr_3" fromId="32" toId="20">
 </dataflow>
 <dataflow id="66" from="StgValue_39" to="in_buf_addr_3" fromId="39" toId="20">
 </dataflow>
-<dataflow id="67" from="zext_ln598" to="in_buf_addr_3" fromId="19" toId="20">
+<dataflow id="67" from="zext_ln578" to="in_buf_addr_3" fromId="19" toId="20">
 </dataflow>
 <dataflow id="68" from="in_buf_addr_3" to="in_buf_load_3" fromId="20" toId="21">
 </dataflow>
@@ -452,23 +452,23 @@ entry:18 %ret_ln600 = ret i32 %v
 </dataflow>
 <dataflow id="71" from="in_buf" to="specinterface_ln0" fromId="32" toId="22">
 </dataflow>
-<dataflow id="73" from="empty_22" to="specinterface_ln0" fromId="72" toId="22">
+<dataflow id="73" from="empty_20" to="specinterface_ln0" fromId="72" toId="22">
 </dataflow>
 <dataflow id="75" from="StgValue_74" to="specinterface_ln0" fromId="74" toId="22">
 </dataflow>
 <dataflow id="76" from="StgValue_74" to="specinterface_ln0" fromId="74" toId="22">
 </dataflow>
-<dataflow id="78" from="empty_15" to="specinterface_ln0" fromId="77" toId="22">
+<dataflow id="78" from="empty_8" to="specinterface_ln0" fromId="77" toId="22">
 </dataflow>
 <dataflow id="80" from="StgValue_79" to="specinterface_ln0" fromId="79" toId="22">
 </dataflow>
 <dataflow id="81" from="StgValue_74" to="specinterface_ln0" fromId="74" toId="22">
 </dataflow>
-<dataflow id="82" from="empty_15" to="specinterface_ln0" fromId="77" toId="22">
+<dataflow id="82" from="empty_8" to="specinterface_ln0" fromId="77" toId="22">
 </dataflow>
-<dataflow id="83" from="empty_15" to="specinterface_ln0" fromId="77" toId="22">
+<dataflow id="83" from="empty_8" to="specinterface_ln0" fromId="77" toId="22">
 </dataflow>
-<dataflow id="84" from="empty_15" to="specinterface_ln0" fromId="77" toId="22">
+<dataflow id="84" from="empty_8" to="specinterface_ln0" fromId="77" toId="22">
 </dataflow>
 <dataflow id="85" from="StgValue_74" to="specinterface_ln0" fromId="74" toId="22">
 </dataflow>
@@ -478,9 +478,9 @@ entry:18 %ret_ln600 = ret i32 %v
 </dataflow>
 <dataflow id="88" from="StgValue_74" to="specinterface_ln0" fromId="74" toId="22">
 </dataflow>
-<dataflow id="89" from="empty_15" to="specinterface_ln0" fromId="77" toId="22">
+<dataflow id="89" from="empty_8" to="specinterface_ln0" fromId="77" toId="22">
 </dataflow>
-<dataflow id="90" from="empty_15" to="specinterface_ln0" fromId="77" toId="22">
+<dataflow id="90" from="empty_8" to="specinterface_ln0" fromId="77" toId="22">
 </dataflow>
 <dataflow id="91" from="StgValue_79" to="specinterface_ln0" fromId="79" toId="22">
 </dataflow>
@@ -502,7 +502,7 @@ entry:18 %ret_ln600 = ret i32 %v
 </dataflow>
 <dataflow id="101" from="in_buf_load" to="v" fromId="12" toId="25">
 </dataflow>
-<dataflow id="102" from="v" to="ret_ln600" fromId="25" toId="26">
+<dataflow id="102" from="v" to="ret_ln580" fromId="25" toId="26">
 </dataflow>
 </dataflows>
 

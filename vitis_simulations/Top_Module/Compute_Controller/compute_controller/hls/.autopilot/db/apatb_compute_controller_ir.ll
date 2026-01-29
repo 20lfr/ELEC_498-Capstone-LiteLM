@@ -3,19 +3,18 @@ source_filename = "llvm-link"
 target datalayout = "e-m:e-i64:64-i128:128-i256:256-i512:512-i1024:1024-i2048:2048-i4096:4096-n8:16:32:64-S128-v16:16-v24:32-v32:32-v48:64-v96:128-v192:256-v256:256-v512:512-v1024:1024"
 target triple = "fpga64-xilinx-none"
 
-; Function Attrs: noinline
-define void @apatb_compute_controller_ir(i1 zeroext %reset, i1 zeroext %compute_start, i32 %compute_instruction, i1* noalias nocapture nonnull dereferenceable(1) %compute_ready, i1* noalias nocapture nonnull dereferenceable(1) %compute_done, i1 zeroext %mem_transfer_done, i1* noalias nocapture nonnull dereferenceable(1) %mem_read_request, i1* noalias nocapture nonnull dereferenceable(1) %mem_write_request, i32* noalias nocapture nonnull dereferenceable(4) %mem_op, i8* noalias nonnull readonly "fpga.decayed.dim.hint"="5088" %in_buf, i8* noalias nocapture nonnull "fpga.decayed.dim.hint"="768" %out_buf, i8* noalias nocapture nonnull dereferenceable(1) %dbg_state, i32* noalias nocapture nonnull dereferenceable(4) %dbg_req_instruction, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_op, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_layer, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_head, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_tile, i1* noalias nocapture nonnull dereferenceable(1) %dbg_mac_start, i1* noalias nocapture nonnull dereferenceable(1) %dbg_mac_ready, i1* noalias nocapture nonnull dereferenceable(1) %dbg_mac_complete, i1* noalias nocapture nonnull dereferenceable(1) %error) local_unnamed_addr #0 {
+; Function Attrs: noinline willreturn
+define void @apatb_compute_controller_ir(i1 zeroext %reset, i1 zeroext %compute_start, i32 %compute_instruction, i1* noalias nocapture nonnull dereferenceable(1) %compute_ready, i1* noalias nocapture nonnull dereferenceable(1) %compute_done, i1 zeroext %mem_transfer_done, i1* noalias nocapture nonnull dereferenceable(1) %mem_read_request, i1* noalias nocapture nonnull dereferenceable(1) %mem_write_request, i32* noalias nocapture nonnull dereferenceable(4) %mem_op, i8* noalias nonnull readonly "fpga.decayed.dim.hint"="129" %in_buf, i8* noalias nocapture nonnull "fpga.decayed.dim.hint"="64" %out_buf, i8* noalias nocapture nonnull dereferenceable(1) %dbg_state, i32* noalias nocapture nonnull dereferenceable(4) %dbg_req_instruction, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_op, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_layer, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_head, i8* noalias nocapture nonnull dereferenceable(1) %dbg_req_tile, i1* noalias nocapture nonnull dereferenceable(1) %dbg_mac_start, i1* noalias nocapture nonnull dereferenceable(1) %dbg_mac_ready, i1* noalias nocapture nonnull dereferenceable(1) %dbg_mac_complete, i1* noalias nocapture nonnull dereferenceable(1) %error) local_unnamed_addr #0 {
 entry:
   %compute_ready_copy = alloca i1, align 512
   %compute_done_copy = alloca i1, align 512
   %mem_read_request_copy = alloca i1, align 512
   %mem_write_request_copy = alloca i1, align 512
   %mem_op_copy = alloca i32, align 512
-  %0 = bitcast i8* %in_buf to [5088 x i8]*
-  %1 = call i8* @malloc(i64 5088)
-  %in_buf_copy = bitcast i8* %1 to [5088 x i8]*
-  %2 = bitcast i8* %out_buf to [768 x i8]*
-  %out_buf_copy = alloca [768 x i8], align 512
+  %0 = bitcast i8* %in_buf to [129 x i8]*
+  %in_buf_copy = alloca [129 x i8], align 512
+  %1 = bitcast i8* %out_buf to [64 x i8]*
+  %out_buf_copy = alloca [64 x i8], align 512
   %dbg_state_copy = alloca i8, align 512
   %dbg_req_instruction_copy = alloca i32, align 512
   %dbg_req_op_copy = alloca i8, align 512
@@ -26,23 +25,22 @@ entry:
   %dbg_mac_ready_copy = alloca i1, align 512
   %dbg_mac_complete_copy = alloca i1, align 512
   %error_copy = alloca i1, align 512
-  call fastcc void @copy_in(i1* nonnull %compute_ready, i1* nonnull align 512 %compute_ready_copy, i1* nonnull %compute_done, i1* nonnull align 512 %compute_done_copy, i1* nonnull %mem_read_request, i1* nonnull align 512 %mem_read_request_copy, i1* nonnull %mem_write_request, i1* nonnull align 512 %mem_write_request_copy, i32* nonnull %mem_op, i32* nonnull align 512 %mem_op_copy, [5088 x i8]* nonnull %0, [5088 x i8]* %in_buf_copy, [768 x i8]* nonnull %2, [768 x i8]* nonnull align 512 %out_buf_copy, i8* nonnull %dbg_state, i8* nonnull align 512 %dbg_state_copy, i32* nonnull %dbg_req_instruction, i32* nonnull align 512 %dbg_req_instruction_copy, i8* nonnull %dbg_req_op, i8* nonnull align 512 %dbg_req_op_copy, i8* nonnull %dbg_req_layer, i8* nonnull align 512 %dbg_req_layer_copy, i8* nonnull %dbg_req_head, i8* nonnull align 512 %dbg_req_head_copy, i8* nonnull %dbg_req_tile, i8* nonnull align 512 %dbg_req_tile_copy, i1* nonnull %dbg_mac_start, i1* nonnull align 512 %dbg_mac_start_copy, i1* nonnull %dbg_mac_ready, i1* nonnull align 512 %dbg_mac_ready_copy, i1* nonnull %dbg_mac_complete, i1* nonnull align 512 %dbg_mac_complete_copy, i1* nonnull %error, i1* nonnull align 512 %error_copy)
-  call void @apatb_compute_controller_hw(i1 %reset, i1 %compute_start, i32 %compute_instruction, i1* %compute_ready_copy, i1* %compute_done_copy, i1 %mem_transfer_done, i1* %mem_read_request_copy, i1* %mem_write_request_copy, i32* %mem_op_copy, [5088 x i8]* %in_buf_copy, [768 x i8]* %out_buf_copy, i8* %dbg_state_copy, i32* %dbg_req_instruction_copy, i8* %dbg_req_op_copy, i8* %dbg_req_layer_copy, i8* %dbg_req_head_copy, i8* %dbg_req_tile_copy, i1* %dbg_mac_start_copy, i1* %dbg_mac_ready_copy, i1* %dbg_mac_complete_copy, i1* %error_copy)
-  call void @copy_back(i1* %compute_ready, i1* %compute_ready_copy, i1* %compute_done, i1* %compute_done_copy, i1* %mem_read_request, i1* %mem_read_request_copy, i1* %mem_write_request, i1* %mem_write_request_copy, i32* %mem_op, i32* %mem_op_copy, [5088 x i8]* %0, [5088 x i8]* %in_buf_copy, [768 x i8]* %2, [768 x i8]* %out_buf_copy, i8* %dbg_state, i8* %dbg_state_copy, i32* %dbg_req_instruction, i32* %dbg_req_instruction_copy, i8* %dbg_req_op, i8* %dbg_req_op_copy, i8* %dbg_req_layer, i8* %dbg_req_layer_copy, i8* %dbg_req_head, i8* %dbg_req_head_copy, i8* %dbg_req_tile, i8* %dbg_req_tile_copy, i1* %dbg_mac_start, i1* %dbg_mac_start_copy, i1* %dbg_mac_ready, i1* %dbg_mac_ready_copy, i1* %dbg_mac_complete, i1* %dbg_mac_complete_copy, i1* %error, i1* %error_copy)
-  tail call void @free(i8* %1)
+  call fastcc void @copy_in(i1* nonnull %compute_ready, i1* nonnull align 512 %compute_ready_copy, i1* nonnull %compute_done, i1* nonnull align 512 %compute_done_copy, i1* nonnull %mem_read_request, i1* nonnull align 512 %mem_read_request_copy, i1* nonnull %mem_write_request, i1* nonnull align 512 %mem_write_request_copy, i32* nonnull %mem_op, i32* nonnull align 512 %mem_op_copy, [129 x i8]* nonnull %0, [129 x i8]* nonnull align 512 %in_buf_copy, [64 x i8]* nonnull %1, [64 x i8]* nonnull align 512 %out_buf_copy, i8* nonnull %dbg_state, i8* nonnull align 512 %dbg_state_copy, i32* nonnull %dbg_req_instruction, i32* nonnull align 512 %dbg_req_instruction_copy, i8* nonnull %dbg_req_op, i8* nonnull align 512 %dbg_req_op_copy, i8* nonnull %dbg_req_layer, i8* nonnull align 512 %dbg_req_layer_copy, i8* nonnull %dbg_req_head, i8* nonnull align 512 %dbg_req_head_copy, i8* nonnull %dbg_req_tile, i8* nonnull align 512 %dbg_req_tile_copy, i1* nonnull %dbg_mac_start, i1* nonnull align 512 %dbg_mac_start_copy, i1* nonnull %dbg_mac_ready, i1* nonnull align 512 %dbg_mac_ready_copy, i1* nonnull %dbg_mac_complete, i1* nonnull align 512 %dbg_mac_complete_copy, i1* nonnull %error, i1* nonnull align 512 %error_copy)
+  call void @apatb_compute_controller_hw(i1 %reset, i1 %compute_start, i32 %compute_instruction, i1* %compute_ready_copy, i1* %compute_done_copy, i1 %mem_transfer_done, i1* %mem_read_request_copy, i1* %mem_write_request_copy, i32* %mem_op_copy, [129 x i8]* %in_buf_copy, [64 x i8]* %out_buf_copy, i8* %dbg_state_copy, i32* %dbg_req_instruction_copy, i8* %dbg_req_op_copy, i8* %dbg_req_layer_copy, i8* %dbg_req_head_copy, i8* %dbg_req_tile_copy, i1* %dbg_mac_start_copy, i1* %dbg_mac_ready_copy, i1* %dbg_mac_complete_copy, i1* %error_copy)
+  call void @copy_back(i1* %compute_ready, i1* %compute_ready_copy, i1* %compute_done, i1* %compute_done_copy, i1* %mem_read_request, i1* %mem_read_request_copy, i1* %mem_write_request, i1* %mem_write_request_copy, i32* %mem_op, i32* %mem_op_copy, [129 x i8]* %0, [129 x i8]* %in_buf_copy, [64 x i8]* %1, [64 x i8]* %out_buf_copy, i8* %dbg_state, i8* %dbg_state_copy, i32* %dbg_req_instruction, i32* %dbg_req_instruction_copy, i8* %dbg_req_op, i8* %dbg_req_op_copy, i8* %dbg_req_layer, i8* %dbg_req_layer_copy, i8* %dbg_req_head, i8* %dbg_req_head_copy, i8* %dbg_req_tile, i8* %dbg_req_tile_copy, i1* %dbg_mac_start, i1* %dbg_mac_start_copy, i1* %dbg_mac_ready, i1* %dbg_mac_ready_copy, i1* %dbg_mac_complete, i1* %dbg_mac_complete_copy, i1* %error, i1* %error_copy)
   ret void
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @copy_in(i1* readonly, i1* align 512, i1* readonly, i1* align 512, i1* readonly, i1* align 512, i1* readonly, i1* align 512, i32* readonly, i32* align 512, [5088 x i8]* readonly, [5088 x i8]*, [768 x i8]* readonly, [768 x i8]* align 512, i8* readonly, i8* align 512, i32* readonly, i32* align 512, i8* readonly, i8* align 512, i8* readonly, i8* align 512, i8* readonly, i8* align 512, i8* readonly, i8* align 512, i1* readonly, i1* align 512, i1* readonly, i1* align 512, i1* readonly, i1* align 512, i1* readonly, i1* align 512) unnamed_addr #1 {
+define internal fastcc void @copy_in(i1* noalias readonly, i1* noalias align 512, i1* noalias readonly, i1* noalias align 512, i1* noalias readonly, i1* noalias align 512, i1* noalias readonly, i1* noalias align 512, i32* noalias readonly, i32* noalias align 512, [129 x i8]* noalias readonly, [129 x i8]* noalias align 512, [64 x i8]* noalias readonly, [64 x i8]* noalias align 512, i8* noalias readonly, i8* noalias align 512, i32* noalias readonly, i32* noalias align 512, i8* noalias readonly, i8* noalias align 512, i8* noalias readonly, i8* noalias align 512, i8* noalias readonly, i8* noalias align 512, i8* noalias readonly, i8* noalias align 512, i1* noalias readonly, i1* noalias align 512, i1* noalias readonly, i1* noalias align 512, i1* noalias readonly, i1* noalias align 512, i1* noalias readonly, i1* noalias align 512) unnamed_addr #1 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %1, i1* %0)
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %3, i1* %2)
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %5, i1* %4)
   call fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %7, i1* %6)
   call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %9, i32* %8)
-  call fastcc void @onebyonecpy_hls.p0a5088i8([5088 x i8]* %11, [5088 x i8]* %10)
-  call fastcc void @onebyonecpy_hls.p0a768i8([768 x i8]* align 512 %13, [768 x i8]* %12)
+  call fastcc void @onebyonecpy_hls.p0a129i8([129 x i8]* align 512 %11, [129 x i8]* %10)
+  call fastcc void @onebyonecpy_hls.p0a64i8([64 x i8]* align 512 %13, [64 x i8]* %12)
   call fastcc void @onebyonecpy_hls.p0i8(i8* align 512 %15, i8* %14)
   call fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %17, i32* %16)
   call fastcc void @onebyonecpy_hls.p0i8(i8* align 512 %19, i8* %18)
@@ -57,7 +55,7 @@ entry:
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0i1(i1* align 512 %dst, i1* readonly %src) unnamed_addr #2 {
+define internal fastcc void @onebyonecpy_hls.p0i1(i1* noalias align 512 %dst, i1* noalias readonly %src) unnamed_addr #2 {
 entry:
   %0 = icmp eq i1* %dst, null
   %1 = icmp eq i1* %src, null
@@ -76,7 +74,7 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0i32(i32* align 512 %dst, i32* readonly %src) unnamed_addr #2 {
+define internal fastcc void @onebyonecpy_hls.p0i32(i32* noalias align 512 %dst, i32* noalias readonly %src) unnamed_addr #2 {
 entry:
   %0 = icmp eq i32* %dst, null
   %1 = icmp eq i32* %src, null
@@ -93,15 +91,15 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0a5088i8([5088 x i8]* %dst, [5088 x i8]* readonly %src) unnamed_addr #2 {
+define internal fastcc void @onebyonecpy_hls.p0a129i8([129 x i8]* noalias align 512 %dst, [129 x i8]* noalias readonly %src) unnamed_addr #2 {
 entry:
-  %0 = icmp eq [5088 x i8]* %dst, null
-  %1 = icmp eq [5088 x i8]* %src, null
+  %0 = icmp eq [129 x i8]* %dst, null
+  %1 = icmp eq [129 x i8]* %src, null
   %2 = or i1 %0, %1
   br i1 %2, label %ret, label %copy
 
 copy:                                             ; preds = %entry
-  call void @arraycpy_hls.p0a5088i8([5088 x i8]* nonnull %dst, [5088 x i8]* nonnull %src, i64 5088)
+  call void @arraycpy_hls.p0a129i8([129 x i8]* nonnull %dst, [129 x i8]* nonnull %src, i64 129)
   br label %ret
 
 ret:                                              ; preds = %copy, %entry
@@ -109,10 +107,10 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define void @arraycpy_hls.p0a5088i8([5088 x i8]* %dst, [5088 x i8]* readonly %src, i64 %num) local_unnamed_addr #3 {
+define void @arraycpy_hls.p0a129i8([129 x i8]* %dst, [129 x i8]* readonly %src, i64 %num) local_unnamed_addr #3 {
 entry:
-  %0 = icmp eq [5088 x i8]* %src, null
-  %1 = icmp eq [5088 x i8]* %dst, null
+  %0 = icmp eq [129 x i8]* %src, null
+  %1 = icmp eq [129 x i8]* %dst, null
   %2 = or i1 %1, %0
   br i1 %2, label %ret, label %copy
 
@@ -125,8 +123,8 @@ for.loop.lr.ph:                                   ; preds = %copy
 
 for.loop:                                         ; preds = %for.loop, %for.loop.lr.ph
   %for.loop.idx2 = phi i64 [ 0, %for.loop.lr.ph ], [ %for.loop.idx.next, %for.loop ]
-  %dst.addr = getelementptr [5088 x i8], [5088 x i8]* %dst, i64 0, i64 %for.loop.idx2
-  %src.addr = getelementptr [5088 x i8], [5088 x i8]* %src, i64 0, i64 %for.loop.idx2
+  %dst.addr = getelementptr [129 x i8], [129 x i8]* %dst, i64 0, i64 %for.loop.idx2
+  %src.addr = getelementptr [129 x i8], [129 x i8]* %src, i64 0, i64 %for.loop.idx2
   %3 = load i8, i8* %src.addr, align 1
   store i8 %3, i8* %dst.addr, align 1
   %for.loop.idx.next = add nuw nsw i64 %for.loop.idx2, 1
@@ -141,15 +139,15 @@ ret:                                              ; preds = %copy.split, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0a768i8([768 x i8]* align 512 %dst, [768 x i8]* readonly %src) unnamed_addr #2 {
+define internal fastcc void @onebyonecpy_hls.p0a64i8([64 x i8]* noalias align 512 %dst, [64 x i8]* noalias readonly %src) unnamed_addr #2 {
 entry:
-  %0 = icmp eq [768 x i8]* %dst, null
-  %1 = icmp eq [768 x i8]* %src, null
+  %0 = icmp eq [64 x i8]* %dst, null
+  %1 = icmp eq [64 x i8]* %src, null
   %2 = or i1 %0, %1
   br i1 %2, label %ret, label %copy
 
 copy:                                             ; preds = %entry
-  call void @arraycpy_hls.p0a768i8([768 x i8]* nonnull %dst, [768 x i8]* nonnull %src, i64 768)
+  call void @arraycpy_hls.p0a64i8([64 x i8]* nonnull %dst, [64 x i8]* nonnull %src, i64 64)
   br label %ret
 
 ret:                                              ; preds = %copy, %entry
@@ -157,10 +155,10 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define void @arraycpy_hls.p0a768i8([768 x i8]* %dst, [768 x i8]* readonly %src, i64 %num) local_unnamed_addr #3 {
+define void @arraycpy_hls.p0a64i8([64 x i8]* %dst, [64 x i8]* readonly %src, i64 %num) local_unnamed_addr #3 {
 entry:
-  %0 = icmp eq [768 x i8]* %src, null
-  %1 = icmp eq [768 x i8]* %dst, null
+  %0 = icmp eq [64 x i8]* %src, null
+  %1 = icmp eq [64 x i8]* %dst, null
   %2 = or i1 %1, %0
   br i1 %2, label %ret, label %copy
 
@@ -173,8 +171,8 @@ for.loop.lr.ph:                                   ; preds = %copy
 
 for.loop:                                         ; preds = %for.loop, %for.loop.lr.ph
   %for.loop.idx2 = phi i64 [ 0, %for.loop.lr.ph ], [ %for.loop.idx.next, %for.loop ]
-  %dst.addr = getelementptr [768 x i8], [768 x i8]* %dst, i64 0, i64 %for.loop.idx2
-  %src.addr = getelementptr [768 x i8], [768 x i8]* %src, i64 0, i64 %for.loop.idx2
+  %dst.addr = getelementptr [64 x i8], [64 x i8]* %dst, i64 0, i64 %for.loop.idx2
+  %src.addr = getelementptr [64 x i8], [64 x i8]* %src, i64 0, i64 %for.loop.idx2
   %3 = load i8, i8* %src.addr, align 1
   store i8 %3, i8* %dst.addr, align 1
   %for.loop.idx.next = add nuw nsw i64 %for.loop.idx2, 1
@@ -189,7 +187,7 @@ ret:                                              ; preds = %copy.split, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @onebyonecpy_hls.p0i8(i8* align 512 %dst, i8* readonly %src) unnamed_addr #2 {
+define internal fastcc void @onebyonecpy_hls.p0i8(i8* noalias align 512 %dst, i8* noalias readonly %src) unnamed_addr #2 {
 entry:
   %0 = icmp eq i8* %dst, null
   %1 = icmp eq i8* %src, null
@@ -206,15 +204,15 @@ ret:                                              ; preds = %copy, %entry
 }
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @copy_out(i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i32*, i32* readonly align 512, [5088 x i8]*, [5088 x i8]* readonly, [768 x i8]*, [768 x i8]* readonly align 512, i8*, i8* readonly align 512, i32*, i32* readonly align 512, i8*, i8* readonly align 512, i8*, i8* readonly align 512, i8*, i8* readonly align 512, i8*, i8* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512) unnamed_addr #4 {
+define internal fastcc void @copy_out(i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i32* noalias, i32* noalias readonly align 512, [129 x i8]* noalias, [129 x i8]* noalias readonly align 512, [64 x i8]* noalias, [64 x i8]* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i32* noalias, i32* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512) unnamed_addr #4 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* %0, i1* align 512 %1)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %2, i1* align 512 %3)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %4, i1* align 512 %5)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %6, i1* align 512 %7)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %8, i32* align 512 %9)
-  call fastcc void @onebyonecpy_hls.p0a5088i8([5088 x i8]* %10, [5088 x i8]* %11)
-  call fastcc void @onebyonecpy_hls.p0a768i8([768 x i8]* %12, [768 x i8]* align 512 %13)
+  call fastcc void @onebyonecpy_hls.p0a129i8([129 x i8]* %10, [129 x i8]* align 512 %11)
+  call fastcc void @onebyonecpy_hls.p0a64i8([64 x i8]* %12, [64 x i8]* align 512 %13)
   call fastcc void @onebyonecpy_hls.p0i8(i8* %14, i8* align 512 %15)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %16, i32* align 512 %17)
   call fastcc void @onebyonecpy_hls.p0i8(i8* %18, i8* align 512 %19)
@@ -228,21 +226,17 @@ entry:
   ret void
 }
 
-declare i8* @malloc(i64) local_unnamed_addr
-
-declare void @free(i8*) local_unnamed_addr
-
-declare void @apatb_compute_controller_hw(i1, i1, i32, i1*, i1*, i1, i1*, i1*, i32*, [5088 x i8]*, [768 x i8]*, i8*, i32*, i8*, i8*, i8*, i8*, i1*, i1*, i1*, i1*)
+declare void @apatb_compute_controller_hw(i1, i1, i32, i1*, i1*, i1, i1*, i1*, i32*, [129 x i8]*, [64 x i8]*, i8*, i32*, i8*, i8*, i8*, i8*, i1*, i1*, i1*, i1*)
 
 ; Function Attrs: argmemonly noinline norecurse willreturn
-define internal fastcc void @copy_back(i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i32*, i32* readonly align 512, [5088 x i8]*, [5088 x i8]* readonly, [768 x i8]*, [768 x i8]* readonly align 512, i8*, i8* readonly align 512, i32*, i32* readonly align 512, i8*, i8* readonly align 512, i8*, i8* readonly align 512, i8*, i8* readonly align 512, i8*, i8* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512, i1*, i1* readonly align 512) unnamed_addr #4 {
+define internal fastcc void @copy_back(i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i32* noalias, i32* noalias readonly align 512, [129 x i8]* noalias, [129 x i8]* noalias readonly align 512, [64 x i8]* noalias, [64 x i8]* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i32* noalias, i32* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i8* noalias, i8* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512, i1* noalias, i1* noalias readonly align 512) unnamed_addr #4 {
 entry:
   call fastcc void @onebyonecpy_hls.p0i1(i1* %0, i1* align 512 %1)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %2, i1* align 512 %3)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %4, i1* align 512 %5)
   call fastcc void @onebyonecpy_hls.p0i1(i1* %6, i1* align 512 %7)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %8, i32* align 512 %9)
-  call fastcc void @onebyonecpy_hls.p0a768i8([768 x i8]* %12, [768 x i8]* align 512 %13)
+  call fastcc void @onebyonecpy_hls.p0a64i8([64 x i8]* %12, [64 x i8]* align 512 %13)
   call fastcc void @onebyonecpy_hls.p0i8(i8* %14, i8* align 512 %15)
   call fastcc void @onebyonecpy_hls.p0i32(i32* %16, i32* align 512 %17)
   call fastcc void @onebyonecpy_hls.p0i8(i8* %18, i8* align 512 %19)
@@ -258,17 +252,17 @@ entry:
 
 declare void @compute_controller_hw_stub(i1 zeroext, i1 zeroext, i32, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1 zeroext, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull, i32* noalias nocapture nonnull, i8* noalias nonnull readonly, i8* noalias nocapture nonnull, i8* noalias nocapture nonnull, i32* noalias nocapture nonnull, i8* noalias nocapture nonnull, i8* noalias nocapture nonnull, i8* noalias nocapture nonnull, i8* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull, i1* noalias nocapture nonnull)
 
-define void @compute_controller_hw_stub_wrapper(i1, i1, i32, i1*, i1*, i1, i1*, i1*, i32*, [5088 x i8]*, [768 x i8]*, i8*, i32*, i8*, i8*, i8*, i8*, i1*, i1*, i1*, i1*) #5 {
+define void @compute_controller_hw_stub_wrapper(i1, i1, i32, i1*, i1*, i1, i1*, i1*, i32*, [129 x i8]*, [64 x i8]*, i8*, i32*, i8*, i8*, i8*, i8*, i1*, i1*, i1*, i1*) #5 {
 entry:
-  call void @copy_out(i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %6, i1* null, i1* %7, i32* null, i32* %8, [5088 x i8]* null, [5088 x i8]* %9, [768 x i8]* null, [768 x i8]* %10, i8* null, i8* %11, i32* null, i32* %12, i8* null, i8* %13, i8* null, i8* %14, i8* null, i8* %15, i8* null, i8* %16, i1* null, i1* %17, i1* null, i1* %18, i1* null, i1* %19, i1* null, i1* %20)
-  %21 = bitcast [5088 x i8]* %9 to i8*
-  %22 = bitcast [768 x i8]* %10 to i8*
+  call void @copy_out(i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %6, i1* null, i1* %7, i32* null, i32* %8, [129 x i8]* null, [129 x i8]* %9, [64 x i8]* null, [64 x i8]* %10, i8* null, i8* %11, i32* null, i32* %12, i8* null, i8* %13, i8* null, i8* %14, i8* null, i8* %15, i8* null, i8* %16, i1* null, i1* %17, i1* null, i1* %18, i1* null, i1* %19, i1* null, i1* %20)
+  %21 = bitcast [129 x i8]* %9 to i8*
+  %22 = bitcast [64 x i8]* %10 to i8*
   call void @compute_controller_hw_stub(i1 %0, i1 %1, i32 %2, i1* %3, i1* %4, i1 %5, i1* %6, i1* %7, i32* %8, i8* %21, i8* %22, i8* %11, i32* %12, i8* %13, i8* %14, i8* %15, i8* %16, i1* %17, i1* %18, i1* %19, i1* %20)
-  call void @copy_in(i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %6, i1* null, i1* %7, i32* null, i32* %8, [5088 x i8]* null, [5088 x i8]* %9, [768 x i8]* null, [768 x i8]* %10, i8* null, i8* %11, i32* null, i32* %12, i8* null, i8* %13, i8* null, i8* %14, i8* null, i8* %15, i8* null, i8* %16, i1* null, i1* %17, i1* null, i1* %18, i1* null, i1* %19, i1* null, i1* %20)
+  call void @copy_in(i1* null, i1* %3, i1* null, i1* %4, i1* null, i1* %6, i1* null, i1* %7, i32* null, i32* %8, [129 x i8]* null, [129 x i8]* %9, [64 x i8]* null, [64 x i8]* %10, i8* null, i8* %11, i32* null, i32* %12, i8* null, i8* %13, i8* null, i8* %14, i8* null, i8* %15, i8* null, i8* %16, i1* null, i1* %17, i1* null, i1* %18, i1* null, i1* %19, i1* null, i1* %20)
   ret void
 }
 
-attributes #0 = { noinline "fpga.wrapper.func"="wrapper" }
+attributes #0 = { noinline willreturn "fpga.wrapper.func"="wrapper" }
 attributes #1 = { argmemonly noinline norecurse willreturn "fpga.wrapper.func"="copyin" }
 attributes #2 = { argmemonly noinline norecurse willreturn "fpga.wrapper.func"="onebyonecpy_hls" }
 attributes #3 = { argmemonly noinline norecurse willreturn "fpga.wrapper.func"="arraycpy_hls" }

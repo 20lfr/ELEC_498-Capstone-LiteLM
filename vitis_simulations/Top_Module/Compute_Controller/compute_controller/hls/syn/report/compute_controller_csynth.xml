@@ -23,49 +23,28 @@
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
 <Best-caseLatency>1</Best-caseLatency>
-<Average-caseLatency>416</Average-caseLatency>
-<Worst-caseLatency>10785</Worst-caseLatency>
+<Average-caseLatency>12</Average-caseLatency>
+<Worst-caseLatency>233</Worst-caseLatency>
 <Best-caseRealTimeLatency>10.000 ns</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>4.160 us</Average-caseRealTimeLatency>
-<Worst-caseRealTimeLatency>0.108 ms</Worst-caseRealTimeLatency>
+<Average-caseRealTimeLatency>0.120 us</Average-caseRealTimeLatency>
+<Worst-caseRealTimeLatency>2.330 us</Worst-caseRealTimeLatency>
 <Interval-min>2</Interval-min>
-<Interval-max>10786</Interval-max>
+<Interval-max>234</Interval-max>
 <PerformancePragma>-</PerformancePragma>
 </SummaryOfOverallLatency>
-<SummaryOfLoopLatency>
-<VITIS_LOOP_38_1>
-<Slack>7.30</Slack>
-<TripCount>3</TripCount>
-<isPerfectNested>0</isPerfectNested>
-<Latency>918</Latency>
-<AbsoluteTimeLatency>9180</AbsoluteTimeLatency>
-<IterationLatency>306</IterationLatency>
-<PerformancePragma>-</PerformancePragma>
-<InstanceList>
-</InstanceList>
-</VITIS_LOOP_38_1>
-</SummaryOfLoopLatency>
 <SummaryOfViolations>
 <IssueType>-</IssueType>
 <ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:171</SourceLocation>
-<SummaryOfLoopViolations>
-<VITIS_LOOP_38_1>
-<Name>VITIS_LOOP_38_1</Name>
-<IssueType>-</IssueType>
-<ViolationType>-</ViolationType>
-<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:38~/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:690</SourceLocation>
-</VITIS_LOOP_38_1>
-</SummaryOfLoopViolations>
+<SourceLocation>/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:197</SourceLocation>
 </SummaryOfViolations>
 </PerformanceEstimates>
 
 <AreaEstimates>
 <Resources>
-<BRAM_18K>16</BRAM_18K>
-<DSP>464</DSP>
-<FF>22055</FF>
-<LUT>213877</LUT>
+<BRAM_18K>0</BRAM_18K>
+<DSP>220</DSP>
+<FF>8059</FF>
+<LUT>30044</LUT>
 <URAM>0</URAM>
 </Resources>
 <AvailableResources>
@@ -320,7 +299,7 @@
 <IOProtocol>ap_memory</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>13</Bits>
+<Bits>8</Bits>
 <Attribute>address</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -356,7 +335,7 @@
 <IOProtocol>ap_memory</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>13</Bits>
+<Bits>8</Bits>
 <Attribute>address</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -392,7 +371,7 @@
 <IOProtocol>ap_memory</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>10</Bits>
+<Bits>6</Bits>
 <Attribute>address</Attribute>
 <CType>int</CType>
 </RtlPorts>
@@ -440,7 +419,7 @@
 <IOProtocol>ap_memory</IOProtocol>
 <IOConfig></IOConfig>
 <Dir>out</Dir>
-<Bits>10</Bits>
+<Bits>6</Bits>
 <Attribute>address</Attribute>
 <CType>int</CType>
 </RtlPorts>
