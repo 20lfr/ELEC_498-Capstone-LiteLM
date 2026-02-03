@@ -16,14 +16,15 @@ static const char *state_name(SchedState st) {
     case S_OUT_PROJECTION:  return "S_OUT_PROJ";
     case S_REQUANT1:        return "S_RQ1";
     case S_RES_ADD_1:       return "S_RES_ADD_1";
-    case S_LAYER_NORM_1:    return "S_LN_1";
+    case S_LAYER_NORM_0:    return "S_LN_0";
     case S_REQUANT2:        return "S_RQ2";
     case S_FFN:             return "S_FFN";
     case S_REQUANT3:        return "S_RQ3";
     case S_RES_ADD_2:       return "S_RES_ADD_2";
-    case S_LAYER_NORM_2:    return "S_LN_2";
+    case S_LAYER_NORM_1:    return "S_LN_1";
     case S_REQUANT4:        return "S_RQ4";
     case S_LOOP_CHECK:      return "S_LOOP_CHECK";
+    case S_FINAL_NORM:      return "S_FINAL_NORM";
     case S_STREAM_OUT:      return "S_STREAM_OUT";
     default:                return "UNKNOWN";
     }
@@ -42,43 +43,22 @@ static const char *op_name(ComputeOp op) {
     case CMP_VALUE_SCALE:  return "VALUE_SCALE";
     case CMP_SOFTMAX:      return "SOFTMAX";
     case CMP_ATT_VALUE:    return "ATT_VALUE";
-    case CMP_REQUANT2:     return "RQ2";
     case CMP_HEAD_REQUANT: return "HEAD_RQ";
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
     case CMP_REQUANT1:     return "RQ1";
     case CMP_RESID0:       return "RESID0";
     case CMP_LN0:          return "LN0";
-    case CMP_REQUANT3:     return "RQ3";
+    case CMP_REQUANT2:     return "RQ2";
     case CMP_FFN_W1:       return "FFN_W1";
     case CMP_FFN_ACT:      return "FFN_ACT";
     case CMP_FFN_W2:       return "FFN_W2";
-    case CMP_REQUANT4:     return "RQ4";
+    case CMP_REQUANT3:     return "RQ3";
     case CMP_RESID1:       return "RESID1";
     case CMP_LN1:          return "LN1";
+    case CMP_REQUANT4:     return "RQ4";
     case CMP_DEQUANT:      return "DEQUANT";
     case CMP_LOGITS:       return "LOGITS";
-    case CMP_LN0_SUM:      return "LN0_SUM";
-    case CMP_LN0_SUMSQ:    return "LN0_Q";
-    case CMP_LN0_MEAN:     return "LN0_MEAN";
-    case CMP_LN0_EYY:      return "LN0_EYY";
-    case CMP_LN0_VAR:      return "LN0_VAR";
-    case CMP_LN0_VAR_EPS:  return "LN0_VEPS";
-    case CMP_LN0_INV_STD:  return "LN0_INV";
-    case CMP_LN0_NORM:     return "LN0_NORM";
-    case CMP_LN0_SCALE:    return "LN0_SCL";
-    case CMP_LN0_SHIFT:    return "LN0_SHF";
-    case CMP_LN1_SUM:      return "LN1_SUM";
-    case CMP_LN1_SUMSQ:    return "LN1_Q";
-    case CMP_LN1_MEAN:     return "LN1_MEAN";
-    case CMP_LN1_EYY:      return "LN1_EYY";
-    case CMP_LN1_VAR:      return "LN1_VAR";
-    case CMP_LN1_VAR_EPS:  return "LN1_VEPS";
-    case CMP_LN1_INV_STD:  return "LN1_INV";
-    case CMP_LN1_NORM:     return "LN1_NORM";
-    case CMP_LN1_SCALE:    return "LN1_SCL";
-    case CMP_LN1_SHIFT:    return "LN1_SHF";
-    default:               return "UNK";
     }
 }
 
@@ -119,56 +99,67 @@ static const char *phase_name(HeadPhase ph) {
     case HeadPhase::VALUE_SCALE_CLAMP: return "SCL";
     case HeadPhase::ATT_SOFTMAX:       return "SMX";
     case HeadPhase::ATT_VALUE:         return "VAL";
-    case HeadPhase::REQUANT2:          return "RQ2";
+    case HeadPhase::HEAD_REQUANT:     return "HEAD_RQ";
     case HeadPhase::DONE:              return "DONE";
     default:                           return "UNK";
     }
 }
 
-static uint32_t compute_wl_address(
-    DmaSel sel,
-    int layer,
-    int head,
-    int tile,
-    const ControlMemSpace &ctrl
-) {
-    if (layer < 0) {
+struct DmaFields {
+    DmaSel sel;
+    int layer;
+    int head;
+    int tile;
+};
+
+static inline DmaFields decode_wl_instruction(uint32_t instr) {
+    DmaFields f;
+    f.sel = static_cast<DmaSel>(instr & 0xFFu);
+    f.layer = static_cast<int>((instr >> 8) & 0xFFu);
+    f.head = static_cast<int>(static_cast<int8_t>((instr >> 16) & 0xFFu));
+    f.tile = static_cast<int>(static_cast<int8_t>((instr >> 24) & 0xFFu));
+    return f;
+}
+
+static uint32_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) {
+    const DmaFields f = decode_wl_instruction(instr);
+    if (f.layer < 0) {
         return 0;
     }
-    const uint32_t layer_u = static_cast<uint32_t>(layer);
-    switch (sel) {
+    const uint32_t layer_u = static_cast<uint32_t>(f.layer);
+    switch (f.sel) {
     case DMASEL_WQ:
-        if (head < 0) return 0;
+        if (f.head < 0) return 0;
         return ctrl.wq_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.wq_head_stride;
+               static_cast<uint32_t>(f.head) * ctrl.wq_head_stride;
     case DMASEL_WK:
-        if (head < 0) return 0;
+        if (f.head < 0) return 0;
         return ctrl.wk_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.wk_head_stride;
+               static_cast<uint32_t>(f.head) * ctrl.wk_head_stride;
     case DMASEL_WV:
-        if (head < 0) return 0;
+        if (f.head < 0) return 0;
         return ctrl.wv_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.wv_head_stride;
+               static_cast<uint32_t>(f.head) * ctrl.wv_head_stride;
     case DMASEL_CTX_K:
-        if (head < 0) return 0;
+        if (f.head < 0) return 0;
         return ctrl.k_cache_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.k_cache_stride;
+               static_cast<uint32_t>(f.head) * ctrl.k_cache_stride;
     case DMASEL_CTX_V:
-        if (head < 0) return 0;
+        if (f.head < 0) return 0;
         return ctrl.v_cache_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.v_cache_stride;
+               static_cast<uint32_t>(f.head) * ctrl.v_cache_stride;
     case DMASEL_WO:
-        if (tile < 0) return 0;
+        if (f.tile < 0) return 0;
         return ctrl.wo_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(tile) * ctrl.wo_tile_stride;
+               static_cast<uint32_t>(f.tile) * ctrl.wo_tile_stride;
     case DMASEL_W1:
-        if (tile < 0) return 0;
+        if (f.tile < 0) return 0;
         return ctrl.w1_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(tile) * ctrl.w1_tile_stride;
+               static_cast<uint32_t>(f.tile) * ctrl.w1_tile_stride;
     case DMASEL_W2:
-        if (tile < 0) return 0;
+        if (f.tile < 0) return 0;
         return ctrl.w2_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(tile) * ctrl.w2_tile_stride;
+               static_cast<uint32_t>(f.tile) * ctrl.w2_tile_stride;
     default:
         return 0;
     }
@@ -290,10 +281,7 @@ int main() {
 
     bool wl_ready        = false;
     bool wl_start        = false;
-    DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
-    int  wl_layer        = 0;
-    int  wl_head         = 0;
-    int  wl_tile         = 0;
+    uint32_t wl_instruction = 0;
     HeadCtx head_ctx_ref[NUM_HEADS];
     bool dma_done        = false;
     bool wl_dma_request  = false;
@@ -309,7 +297,7 @@ int main() {
     bool compute_ready   = true;
     bool compute_done    = false;
     bool compute_start   = false;
-    uint32_t  compute_op      = 0;
+    uint32_t  compute_instruction = 0;
 
     bool head_lane_busy[HEADS_PARALLEL] = {false};
     int  head_lane_timer[HEADS_PARALLEL] = {0};
@@ -397,13 +385,12 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} dma_done=%s dma_addr=%s\n",
-                "Cycle", "Start", "Reset", "CompOp", "C_St", "C_Dn",
+    std::printf("%-8s %-6s %-6s %-6s %-6s %-12s %-12s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{Sel L H T} dma_addr=%s\n",
+                "Cycle", "Start", "Reset", "C_St", "WL_St", "CompInstr", "WlInstr", "C_Dn", "WLDn",
                 "CtrlAddr",
                 "CtrlDin", "CtrlDout", "Rd", "Wr", "CE", "RstN",
                 "DbgState", "WlReq", "WlAddr", "Seen", "IRQ", "IRQFlag", "IRQData",
                 "MemCtrl", "MemIRQ", "MemIRQEn",
-                "WLrdy", "WLstrt", "WLSel", "Layer", "Head", "Tile",
                 "DMADone", "DMAAddr");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
@@ -624,15 +611,12 @@ int main() {
             axis_in_ready,
             dma_done,
             wl_ready,
+            wl_instruction,
             wl_start,
-            wl_addr_sel,
-            wl_layer,
-            wl_head,
-            wl_tile,
             compute_ready,
             compute_done,
             compute_start,
-            compute_op,
+            compute_instruction,
             head_ctx_ref,
             stream_ready,
             stream_start,
@@ -668,21 +652,24 @@ int main() {
 
         if (wl_start && !dma_busy) {
             wl_dma_request = true;
-            wl_dma_address = compute_wl_address(wl_addr_sel, wl_layer, wl_head, wl_tile,
-                                                ctrl_shadow_mem);
+            wl_dma_address = compute_wl_address(wl_instruction, ctrl_shadow_mem);
             dma_busy  = true;
             dma_timer = DMA_LAT - 1;
         }
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%s %s %s %d %d %d} dma_done=%s dma_addr=0x%08X",
+        const DmaFields wl_fields = decode_wl_instruction(wl_instruction);
+        std::printf("%-8d %-6d %-6d %-6s %-6s 0x%08X 0x%08X %-6s %-6s | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%s %d %d %d} dma_addr=0x%08X",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
-                    compute_op,
                     dash_or(compute_start),
+                    dash_or(wl_start),
+                    compute_instruction,
+                    wl_instruction,
                     dash_or(compute_done),
+                    dash_or(dma_done),
                     static_cast<unsigned>(ctrl_addr),
                     ctrl_data_in,
                     ctrl_data_out,
@@ -700,16 +687,14 @@ int main() {
                     dbg_ctrl_mem.control,
                     dbg_ctrl_mem.irq_status,
                     dbg_ctrl_mem.irq_enable,
-                    dash_or(wl_ready),
-                    dash_or(wl_start),
-                    dma_name(wl_addr_sel),
-                    wl_layer,
-                    wl_head,
-                    wl_tile,
-                    dash_or(dma_done),
+                    dma_name(wl_fields.sel),
+                    wl_fields.layer,
+                    wl_fields.head,
+                    wl_fields.tile,
                     wl_dma_address);
         for (int i = 0; i < NUM_HEADS; ++i) {
             char buf[128];
+            const DmaFields head_fields = decode_wl_instruction(head_ctx_ref[i].wl_instruction);
             std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s 0x%08X %-2s %-4s %-2s",
                           i,
                           phase_name(head_ctx_ref[i].phase),
@@ -717,7 +702,7 @@ int main() {
                           dash_or(head_ctx_ref[i].compute_done),
                           head_ctx_ref[i].compute_op,
                           dash_or(head_ctx_ref[i].wl_start),
-                          dma_name(head_ctx_ref[i].wl_addr_sel),
+                          dma_name(head_fields.sel),
                           dash_or(head_ctx_ref[i].dma_done));
             std::printf(" %s", buf);
         }
@@ -754,7 +739,7 @@ int main() {
         if (!comp_busy && compute_start) {
             comp_busy  = true;
             comp_timer = COMP_LAT - 1;
-            if (decode_op(compute_op) == CMP_CONCAT) seen_concat = true;
+            if (decode_op(compute_instruction) == CMP_CONCAT) seen_concat = true;
         }
         if (stream_start) {
             stream_busy = true;

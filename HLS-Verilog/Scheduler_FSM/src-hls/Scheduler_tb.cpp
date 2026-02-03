@@ -16,14 +16,15 @@ static const char *state_name(SchedState st) {
     case S_OUT_PROJECTION:  return "S_OUT_PROJ";
     case S_REQUANT1:        return "S_RQ1";
     case S_RES_ADD_1:       return "S_RES_ADD_1";
-    case S_LAYER_NORM_1:    return "S_LN_1";
-    case S_REQUANT2:        return "S_RQ2";
+    case S_LAYER_NORM_0:    return "S_LN_0";
+    case S_HEAD_REQUANT:    return "S_HEAD_RQ";
     case S_FFN:             return "S_FFN";
     case S_REQUANT3:        return "S_RQ3";
     case S_RES_ADD_2:       return "S_RES_ADD_2";
-    case S_LAYER_NORM_2:    return "S_LN_2";
+    case S_LAYER_NORM_1:    return "S_LN_1";
     case S_REQUANT4:        return "S_RQ4";
     case S_LOOP_CHECK:      return "S_LOOP_CHECK";
+    case S_FINAL_NORM:      return "S_FINAL_NORM";
     case S_STREAM_OUT:      return "S_STREAM_OUT";
     default:                return "UNKNOWN";
     }
@@ -42,7 +43,6 @@ static const char *op_name(ComputeOp op) {
     case CMP_VALUE_SCALE:  return "VALUE_SCALE";
     case CMP_SOFTMAX:      return "SOFTMAX";
     case CMP_ATT_VALUE:    return "ATT_VALUE";
-    case CMP_REQUANT2:     return "RQ2";
     case CMP_HEAD_REQUANT: return "HEAD_RQ";
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
@@ -86,6 +86,9 @@ static inline ComputeOp decode_op(uint32_t packed_op) {
     return static_cast<ComputeOp>(packed_op & 0xFFu);
 }
 
+static inline DmaSel decode_wl_sel(uint32_t instr) {
+    return static_cast<DmaSel>(instr & 0xFFu);
+}
 static const char *dma_name(DmaSel sel) {
     switch (sel) {
     case DMASEL_NONE:   return "-";
@@ -119,7 +122,7 @@ static const char *phase_name(HeadPhase ph) {
     case HeadPhase::VALUE_SCALE_CLAMP: return "SCL";
     case HeadPhase::ATT_SOFTMAX:       return "SMX";
     case HeadPhase::ATT_VALUE:         return "VAL";
-    case HeadPhase::REQUANT2:          return "RQ2";
+    case HeadPhase::HEAD_REQUANT:     return "HEAD_RQ";
     case HeadPhase::DONE:              return "DONE";
     default:                           return "UNK";
     }
@@ -381,7 +384,7 @@ int main() {
                           dash_or(head_ctx_ref[i].compute_done),
                           op_name(decode_op(head_ctx_ref[i].compute_op)),
                           dash_or(head_ctx_ref[i].wl_ready),
-                          dma_name(head_ctx_ref[i].wl_addr_sel),
+                          dma_name(decode_wl_sel(head_ctx_ref[i].wl_instruction)),
                           dash_or(head_ctx_ref[i].q_dma_done),
                           dash_or(head_ctx_ref[i].dma_done));
             std::printf("%-54s", buf);

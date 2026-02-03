@@ -1,0 +1,3268 @@
+{
+  "Top": "compute_controller",
+  "RtlTop": "compute_controller",
+  "RtlPrefix": "",
+  "RtlSubPrefix": "compute_controller_",
+  "SourceLanguage": "cpp",
+  "HostMachineBits": "64",
+  "FunctionProtocol": "ap_ctrl_hs",
+  "ResetStyle": "control",
+  "Target": {
+    "Family": "zynquplus",
+    "Device": "xck26",
+    "Package": "-sfvc784",
+    "Speed": "-2LV-c",
+    "Triple": "fpga64-xilinx-none"
+  },
+  "Args": {
+    "reset": {
+      "index": "0",
+      "direction": "in",
+      "srcType": "bool",
+      "srcSize": "1",
+      "hwRefs": [{
+          "type": "port",
+          "interface": "reset",
+          "name": "reset",
+          "usage": "data",
+          "direction": "in"
+        }]
+    },
+    "compute_start": {
+      "index": "1",
+      "direction": "in",
+      "srcType": "bool",
+      "srcSize": "1",
+      "hwRefs": [{
+          "type": "port",
+          "interface": "compute_start",
+          "name": "compute_start",
+          "usage": "data",
+          "direction": "in"
+        }]
+    },
+    "compute_instruction": {
+      "index": "2",
+      "direction": "in",
+      "srcType": "unsigned int",
+      "srcSize": "32",
+      "hwRefs": [{
+          "type": "port",
+          "interface": "compute_instruction",
+          "name": "compute_instruction",
+          "usage": "data",
+          "direction": "in"
+        }]
+    },
+    "compute_ready": {
+      "index": "3",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "compute_ready",
+          "name": "compute_ready",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "compute_ready_ap_vld",
+          "name": "compute_ready_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "compute_done": {
+      "index": "4",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1"
+    },
+    "mem_transfer_done": {
+      "index": "5",
+      "direction": "in",
+      "srcType": "bool",
+      "srcSize": "1",
+      "hwRefs": [{
+          "type": "port",
+          "interface": "mem_transfer_done",
+          "name": "mem_transfer_done",
+          "usage": "data",
+          "direction": "in"
+        }]
+    },
+    "mem_read_request": {
+      "index": "6",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "mem_read_request",
+          "name": "mem_read_request",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "mem_read_request_ap_vld",
+          "name": "mem_read_request_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "mem_write_request": {
+      "index": "7",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "mem_write_request",
+          "name": "mem_write_request",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "mem_write_request_ap_vld",
+          "name": "mem_write_request_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "mem_op": {
+      "index": "8",
+      "direction": "out",
+      "srcType": "unsigned int&",
+      "srcSize": "32",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "mem_op",
+          "name": "mem_op",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "mem_op_ap_vld",
+          "name": "mem_op_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "in_buf": {
+      "index": "9",
+      "direction": "in",
+      "srcType": "unsigned char const *",
+      "srcSize": "8",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "in_buf_address0",
+          "name": "in_buf_address0",
+          "usage": "address",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "in_buf_ce0",
+          "name": "in_buf_ce0",
+          "usage": "control",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "in_buf_q0",
+          "name": "in_buf_q0",
+          "usage": "data",
+          "direction": "in"
+        },
+        {
+          "type": "port",
+          "interface": "in_buf_address1",
+          "name": "in_buf_address1",
+          "usage": "address",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "in_buf_ce1",
+          "name": "in_buf_ce1",
+          "usage": "control",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "in_buf_q1",
+          "name": "in_buf_q1",
+          "usage": "data",
+          "direction": "in"
+        }
+      ]
+    },
+    "out_buf": {
+      "index": "10",
+      "direction": "out",
+      "srcType": "unsigned char*",
+      "srcSize": "8",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "out_buf_address0",
+          "name": "out_buf_address0",
+          "usage": "address",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "out_buf_ce0",
+          "name": "out_buf_ce0",
+          "usage": "control",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "out_buf_we0",
+          "name": "out_buf_we0",
+          "usage": "control",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "out_buf_d0",
+          "name": "out_buf_d0",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "out_buf_address1",
+          "name": "out_buf_address1",
+          "usage": "address",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "out_buf_ce1",
+          "name": "out_buf_ce1",
+          "usage": "control",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "out_buf_we1",
+          "name": "out_buf_we1",
+          "usage": "control",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "out_buf_d1",
+          "name": "out_buf_d1",
+          "usage": "data",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_state": {
+      "index": "11",
+      "direction": "out",
+      "srcType": "ComputeState&",
+      "srcSize": "8",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_state",
+          "name": "dbg_state",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_state_ap_vld",
+          "name": "dbg_state_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_req_instruction": {
+      "index": "12",
+      "direction": "out",
+      "srcType": "unsigned int&",
+      "srcSize": "32",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_req_instruction",
+          "name": "dbg_req_instruction",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_req_instruction_ap_vld",
+          "name": "dbg_req_instruction_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_req_op": {
+      "index": "13",
+      "direction": "out",
+      "srcType": "unsigned char&",
+      "srcSize": "8",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_req_op",
+          "name": "dbg_req_op",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_req_op_ap_vld",
+          "name": "dbg_req_op_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_req_layer": {
+      "index": "14",
+      "direction": "out",
+      "srcType": "unsigned char&",
+      "srcSize": "8",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_req_layer",
+          "name": "dbg_req_layer",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_req_layer_ap_vld",
+          "name": "dbg_req_layer_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_req_head": {
+      "index": "15",
+      "direction": "out",
+      "srcType": "unsigned char&",
+      "srcSize": "8",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_req_head",
+          "name": "dbg_req_head",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_req_head_ap_vld",
+          "name": "dbg_req_head_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_req_tile": {
+      "index": "16",
+      "direction": "out",
+      "srcType": "unsigned char&",
+      "srcSize": "8",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_req_tile",
+          "name": "dbg_req_tile",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_req_tile_ap_vld",
+          "name": "dbg_req_tile_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_mac_start": {
+      "index": "17",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_mac_start",
+          "name": "dbg_mac_start",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_mac_start_ap_vld",
+          "name": "dbg_mac_start_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_mac_ready": {
+      "index": "18",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_mac_ready",
+          "name": "dbg_mac_ready",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_mac_ready_ap_vld",
+          "name": "dbg_mac_ready_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "dbg_mac_complete": {
+      "index": "19",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "dbg_mac_complete",
+          "name": "dbg_mac_complete",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "dbg_mac_complete_ap_vld",
+          "name": "dbg_mac_complete_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    },
+    "error": {
+      "index": "20",
+      "direction": "out",
+      "srcType": "bool&",
+      "srcSize": "1",
+      "hwRefs": [
+        {
+          "type": "port",
+          "interface": "error",
+          "name": "error",
+          "usage": "data",
+          "direction": "out"
+        },
+        {
+          "type": "port",
+          "interface": "error_ap_vld",
+          "name": "error_ap_vld",
+          "usage": "control",
+          "direction": "out"
+        }
+      ]
+    }
+  },
+  "HlsSolution": {
+    "FlowTarget": "vivado",
+    "ConfigTcl": ["config_export -format=ip_catalog"],
+    "ProfileOption": "0",
+    "ProfileType": "none",
+    "KernelName": "compute_controller"
+  },
+  "ClockInfo": {
+    "ClockName": "ap_clk",
+    "ClockPeriod": "10",
+    "Uncertainty": "2.7",
+    "IsCombinational": "0",
+    "II": "2 ~ 234",
+    "Latency": "1"
+  },
+  "Xdc": {"OocClocks": ["create_clock -name ap_clk -period 10.000 [get_ports ap_clk]"]},
+  "Ipx": {
+    "Vendor": "xilinx.com",
+    "Library": "hls",
+    "Name": "compute_controller",
+    "Version": "1.0",
+    "DisplayName": "Compute_controller",
+    "Revision": "2114456255",
+    "Description": "An IP generated by Vitis HLS",
+    "Taxonomy": "\/VITIS_HLS_IP",
+    "AutoFamilySupport": "",
+    "ZipFile": "xilinx_com_hls_compute_controller_1_0.zip"
+  },
+  "Files": {
+    "CSource": [
+      "..\/..\/..\/..\/..\/HLS-Verilog\/Transformer_logic\/src-hls\/compute_controller.hpp",
+      "..\/..\/..\/..\/..\/HLS-Verilog\/Transformer_logic\/src-hls\/compute_controller.cpp",
+      "..\/..\/..\/..\/..\/HLS-Verilog\/top_params.hpp"
+    ],
+    "TestBench": ["..\/..\/..\/..\/..\/HLS-Verilog\/Transformer_logic\/src-hls\/computer_controller_tb.cpp"],
+    "Vhdl": [
+      "impl\/vhdl\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_2.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_21.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_22.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_23.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_24.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_163_1.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_396_11.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_453_12.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_458_13.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_475_16.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_490_18.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_503_19.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_518_20.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_527_21.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_538_22.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_547_23.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_563_24.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_571_25.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_576_26.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_593_29.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_601_31.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_616_33.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_634_34.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_642_35.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_650_36.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_672_40.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_680_42.vhd",
+      "impl\/vhdl\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_693_44.vhd",
+      "impl\/vhdl\/compute_controller_flow_control_loop_pipe_sequential_init.vhd",
+      "impl\/vhdl\/compute_controller_mac_muladd_8s_8s_20s_20_4_1.vhd",
+      "impl\/vhdl\/compute_controller_mac_muladd_16s_4s_20s_21_4_1.vhd",
+      "impl\/vhdl\/compute_controller_mac_muladd_16s_4s_21s_21_4_1.vhd",
+      "impl\/vhdl\/compute_controller_mac_muladd_16s_4s_21s_32_4_1.vhd",
+      "impl\/vhdl\/compute_controller_mul_16s_4s_20_1_1.vhd",
+      "impl\/vhdl\/compute_controller_mul_27ns_21s_45_1_1.vhd",
+      "impl\/vhdl\/compute_controller_mul_32s_16s_48_1_1.vhd",
+      "impl\/vhdl\/compute_controller_mul_32s_32s_45_1_1.vhd",
+      "impl\/vhdl\/compute_controller_mul_32s_32s_64_1_1.vhd",
+      "impl\/vhdl\/compute_controller_read_i32.vhd",
+      "impl\/vhdl\/compute_controller_REQUANT_D_MODEL_int32_to_int8.vhd",
+      "impl\/vhdl\/compute_controller_RES_ADD.vhd",
+      "impl\/vhdl\/compute_controller_RMS_NORM.vhd",
+      "impl\/vhdl\/compute_controller_RMS_NORM_Pipeline_VITIS_LOOP_123_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_9_2_16_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_9_2_32_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_11_3_16_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_11_3_32_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_33_4_8_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_33_4_15_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_33_4_16_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sparsemux_33_4_32_1_1.vhd",
+      "impl\/vhdl\/compute_controller_sqrt_fixed_32_19_s.vhd",
+      "impl\/vhdl\/compute_controller_udiv_27s_23ns_27_31_seq_1.vhd",
+      "impl\/vhdl\/compute_controller.vhd"
+    ],
+    "Verilog": [
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi.dat",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi.v",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb.dat",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb.v",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU.dat",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU.v",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2.dat",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2.v",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4.dat",
+      "impl\/verilog\/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_2.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_21.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_22.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_23.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_24.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_163_1.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_396_11.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_453_12.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_458_13.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_475_16.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_490_18.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_503_19.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_518_20.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_527_21.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_538_22.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_547_23.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_563_24.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_571_25.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_576_26.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_593_29.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_601_31.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_616_33.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_634_34.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_642_35.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_650_36.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_672_40.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_680_42.v",
+      "impl\/verilog\/compute_controller_compute_controller_Pipeline_VITIS_LOOP_693_44.v",
+      "impl\/verilog\/compute_controller_flow_control_loop_pipe_sequential_init.v",
+      "impl\/verilog\/compute_controller_mac_muladd_8s_8s_20s_20_4_1.v",
+      "impl\/verilog\/compute_controller_mac_muladd_16s_4s_20s_21_4_1.v",
+      "impl\/verilog\/compute_controller_mac_muladd_16s_4s_21s_21_4_1.v",
+      "impl\/verilog\/compute_controller_mac_muladd_16s_4s_21s_32_4_1.v",
+      "impl\/verilog\/compute_controller_mul_16s_4s_20_1_1.v",
+      "impl\/verilog\/compute_controller_mul_27ns_21s_45_1_1.v",
+      "impl\/verilog\/compute_controller_mul_32s_16s_48_1_1.v",
+      "impl\/verilog\/compute_controller_mul_32s_32s_45_1_1.v",
+      "impl\/verilog\/compute_controller_mul_32s_32s_64_1_1.v",
+      "impl\/verilog\/compute_controller_read_i32.v",
+      "impl\/verilog\/compute_controller_REQUANT_D_MODEL_int32_to_int8.v",
+      "impl\/verilog\/compute_controller_RES_ADD.v",
+      "impl\/verilog\/compute_controller_RMS_NORM.v",
+      "impl\/verilog\/compute_controller_RMS_NORM_Pipeline_VITIS_LOOP_123_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_9_2_16_1_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_9_2_32_1_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_11_3_16_1_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_11_3_32_1_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_33_4_8_1_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_33_4_15_1_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_33_4_16_1_1.v",
+      "impl\/verilog\/compute_controller_sparsemux_33_4_32_1_1.v",
+      "impl\/verilog\/compute_controller_sqrt_fixed_32_19_s.v",
+      "impl\/verilog\/compute_controller_udiv_27s_23ns_27_31_seq_1.v",
+      "impl\/verilog\/compute_controller.v"
+    ],
+    "IpMisc": ["impl\/misc\/logo.png"],
+    "CsynthXml": "syn\/report\/csynth.xml",
+    "DebugDir": ".debug",
+    "KernelXml": ".autopilot\/db\/kernel.internal.xml",
+    "Xo": "",
+    "XoHlsDir": "",
+    "ProtoInst": [".debug\/compute_controller.protoinst"]
+  },
+  "SubcoreInfo": {
+    "HasXpmMemory": false,
+    "HasClockedDsp": false,
+    "Ip": [
+      
+    ]
+  },
+  "Interfaces": {
+    "ap_clk": {
+      "type": "clock",
+      "busTypeName": "clock",
+      "mode": "slave",
+      "busParams": {"ASSOCIATED_RESET": "ap_rst"},
+      "portMap": {"ap_clk": "CLK"},
+      "ports": ["ap_clk"]
+    },
+    "ap_rst": {
+      "type": "reset",
+      "busTypeName": "reset",
+      "mode": "slave",
+      "busParams": {"POLARITY": "ACTIVE_HIGH"},
+      "portMap": {"ap_rst": "RST"},
+      "ports": ["ap_rst"]
+    },
+    "ap_ctrl": {
+      "type": "ap_ctrl",
+      "busTypeName": "acc_handshake",
+      "mode": "slave",
+      "portMap": {
+        "ap_start": "start",
+        "ap_done": "done",
+        "ap_idle": "idle",
+        "ap_ready": "ready"
+      },
+      "ports": [
+        "ap_done",
+        "ap_idle",
+        "ap_ready",
+        "ap_start"
+      ]
+    },
+    "reset": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_none",
+      "mode": "slave",
+      "dataWidth": "1",
+      "portMap": {"reset": "DATA"},
+      "ports": ["reset"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "reset"
+        }]
+    },
+    "compute_start": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_none",
+      "mode": "slave",
+      "dataWidth": "1",
+      "portMap": {"compute_start": "DATA"},
+      "ports": ["compute_start"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "compute_start"
+        }]
+    },
+    "compute_instruction": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_none",
+      "mode": "slave",
+      "dataWidth": "32",
+      "portMap": {"compute_instruction": "DATA"},
+      "ports": ["compute_instruction"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "compute_instruction"
+        }]
+    },
+    "compute_ready": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"compute_ready": "DATA"},
+      "ports": ["compute_ready"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "compute_ready"
+        }]
+    },
+    "compute_done": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"compute_done": "DATA"},
+      "ports": ["compute_done"]
+    },
+    "mem_transfer_done": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_none",
+      "mode": "slave",
+      "dataWidth": "1",
+      "portMap": {"mem_transfer_done": "DATA"},
+      "ports": ["mem_transfer_done"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "mem_transfer_done"
+        }]
+    },
+    "mem_read_request": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"mem_read_request": "DATA"},
+      "ports": ["mem_read_request"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "mem_read_request"
+        }]
+    },
+    "mem_write_request": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"mem_write_request": "DATA"},
+      "ports": ["mem_write_request"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "mem_write_request"
+        }]
+    },
+    "mem_op": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "32",
+      "portMap": {"mem_op": "DATA"},
+      "ports": ["mem_op"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "mem_op"
+        }]
+    },
+    "in_buf_address0": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"in_buf_address0": "DATA"},
+      "ports": ["in_buf_address0"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "in_buf"
+        }]
+    },
+    "in_buf_q0": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "slave",
+      "dataWidth": "8",
+      "portMap": {"in_buf_q0": "DATA"},
+      "ports": ["in_buf_q0"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "in_buf"
+        }]
+    },
+    "in_buf_address1": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"in_buf_address1": "DATA"},
+      "ports": ["in_buf_address1"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "in_buf"
+        }]
+    },
+    "in_buf_q1": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "slave",
+      "dataWidth": "8",
+      "portMap": {"in_buf_q1": "DATA"},
+      "ports": ["in_buf_q1"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "in_buf"
+        }]
+    },
+    "out_buf_address0": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "master",
+      "dataWidth": "6",
+      "portMap": {"out_buf_address0": "DATA"},
+      "ports": ["out_buf_address0"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "out_buf"
+        }]
+    },
+    "out_buf_d0": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"out_buf_d0": "DATA"},
+      "ports": ["out_buf_d0"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "out_buf"
+        }]
+    },
+    "out_buf_address1": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "master",
+      "dataWidth": "6",
+      "portMap": {"out_buf_address1": "DATA"},
+      "ports": ["out_buf_address1"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "out_buf"
+        }]
+    },
+    "out_buf_d1": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_memory",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"out_buf_d1": "DATA"},
+      "ports": ["out_buf_d1"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_memory",
+          "register_option": "0",
+          "argName": "out_buf"
+        }]
+    },
+    "dbg_state": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"dbg_state": "DATA"},
+      "ports": ["dbg_state"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_state"
+        }]
+    },
+    "dbg_req_instruction": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "32",
+      "portMap": {"dbg_req_instruction": "DATA"},
+      "ports": ["dbg_req_instruction"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_req_instruction"
+        }]
+    },
+    "dbg_req_op": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"dbg_req_op": "DATA"},
+      "ports": ["dbg_req_op"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_req_op"
+        }]
+    },
+    "dbg_req_layer": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"dbg_req_layer": "DATA"},
+      "ports": ["dbg_req_layer"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_req_layer"
+        }]
+    },
+    "dbg_req_head": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"dbg_req_head": "DATA"},
+      "ports": ["dbg_req_head"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_req_head"
+        }]
+    },
+    "dbg_req_tile": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "8",
+      "portMap": {"dbg_req_tile": "DATA"},
+      "ports": ["dbg_req_tile"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_req_tile"
+        }]
+    },
+    "dbg_mac_start": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"dbg_mac_start": "DATA"},
+      "ports": ["dbg_mac_start"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_mac_start"
+        }]
+    },
+    "dbg_mac_ready": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"dbg_mac_ready": "DATA"},
+      "ports": ["dbg_mac_ready"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_mac_ready"
+        }]
+    },
+    "dbg_mac_complete": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"dbg_mac_complete": "DATA"},
+      "ports": ["dbg_mac_complete"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "dbg_mac_complete"
+        }]
+    },
+    "error": {
+      "type": "data",
+      "busTypeName": "data",
+      "protocol": "ap_vld",
+      "mode": "master",
+      "dataWidth": "1",
+      "portMap": {"error": "DATA"},
+      "ports": ["error"],
+      "constraints": [{
+          "constraint_type": "pragma interface",
+          "mode": "ap_none",
+          "register_option": "0",
+          "argName": "error"
+        }]
+    }
+  },
+  "RtlPorts": {
+    "ap_clk": {
+      "dir": "in",
+      "width": "1"
+    },
+    "ap_rst": {
+      "dir": "in",
+      "width": "1"
+    },
+    "ap_start": {
+      "dir": "in",
+      "width": "1"
+    },
+    "ap_done": {
+      "dir": "out",
+      "width": "1"
+    },
+    "ap_idle": {
+      "dir": "out",
+      "width": "1"
+    },
+    "ap_ready": {
+      "dir": "out",
+      "width": "1"
+    },
+    "reset": {
+      "dir": "in",
+      "width": "1"
+    },
+    "compute_start": {
+      "dir": "in",
+      "width": "1"
+    },
+    "compute_instruction": {
+      "dir": "in",
+      "width": "32"
+    },
+    "compute_ready": {
+      "dir": "out",
+      "width": "1"
+    },
+    "compute_ready_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "compute_done": {
+      "dir": "out",
+      "width": "1"
+    },
+    "compute_done_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "mem_transfer_done": {
+      "dir": "in",
+      "width": "1"
+    },
+    "mem_read_request": {
+      "dir": "out",
+      "width": "1"
+    },
+    "mem_read_request_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "mem_write_request": {
+      "dir": "out",
+      "width": "1"
+    },
+    "mem_write_request_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "mem_op": {
+      "dir": "out",
+      "width": "32"
+    },
+    "mem_op_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "in_buf_address0": {
+      "dir": "out",
+      "width": "8"
+    },
+    "in_buf_ce0": {
+      "dir": "out",
+      "width": "1"
+    },
+    "in_buf_q0": {
+      "dir": "in",
+      "width": "8"
+    },
+    "in_buf_address1": {
+      "dir": "out",
+      "width": "8"
+    },
+    "in_buf_ce1": {
+      "dir": "out",
+      "width": "1"
+    },
+    "in_buf_q1": {
+      "dir": "in",
+      "width": "8"
+    },
+    "out_buf_address0": {
+      "dir": "out",
+      "width": "6"
+    },
+    "out_buf_ce0": {
+      "dir": "out",
+      "width": "1"
+    },
+    "out_buf_we0": {
+      "dir": "out",
+      "width": "1"
+    },
+    "out_buf_d0": {
+      "dir": "out",
+      "width": "8"
+    },
+    "out_buf_address1": {
+      "dir": "out",
+      "width": "6"
+    },
+    "out_buf_ce1": {
+      "dir": "out",
+      "width": "1"
+    },
+    "out_buf_we1": {
+      "dir": "out",
+      "width": "1"
+    },
+    "out_buf_d1": {
+      "dir": "out",
+      "width": "8"
+    },
+    "dbg_state": {
+      "dir": "out",
+      "width": "8"
+    },
+    "dbg_state_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_req_instruction": {
+      "dir": "out",
+      "width": "32"
+    },
+    "dbg_req_instruction_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_req_op": {
+      "dir": "out",
+      "width": "8"
+    },
+    "dbg_req_op_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_req_layer": {
+      "dir": "out",
+      "width": "8"
+    },
+    "dbg_req_layer_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_req_head": {
+      "dir": "out",
+      "width": "8"
+    },
+    "dbg_req_head_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_req_tile": {
+      "dir": "out",
+      "width": "8"
+    },
+    "dbg_req_tile_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_mac_start": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_mac_start_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_mac_ready": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_mac_ready_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_mac_complete": {
+      "dir": "out",
+      "width": "1"
+    },
+    "dbg_mac_complete_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    },
+    "error": {
+      "dir": "out",
+      "width": "1"
+    },
+    "error_ap_vld": {
+      "dir": "out",
+      "width": "1"
+    }
+  },
+  "ModuleInfo": {
+    "Hierarchy": {
+      "ModuleName": "compute_controller",
+      "BindInstances": "icmp_ln237_fu_4010_p2 icmp_ln238_fu_4016_p2 xor_ln689_fu_4378_p2 mac_start_5_fu_4383_p2 xor_ln610_fu_4420_p2 mac_start_2_fu_4425_p2 xor_ln486_fu_4740_p2 mac_start_fu_4745_p2 or_ln29_fu_4683_p2 xor_ln29_fu_4689_p2 xor_ln32_fu_4711_p2 do_compute_fu_4717_p2 xor_ln444_fu_4848_p2 select_ln444_fu_4853_p3 icmp_ln405_fu_4176_p2 or_ln405_fu_4182_p2 icmp_ln197_fu_4194_p2 icmp_ln197_1_fu_4200_p2 or_ln197_fu_4206_p2 icmp_ln197_2_fu_4212_p2 or_ln197_1_fu_4218_p2 icmp_ln197_3_fu_4224_p2 or_ln197_2_fu_4230_p2 icmp_ln197_4_fu_4236_p2 or_ln197_3_fu_4242_p2 icmp_ln197_5_fu_4248_p2 or_ln197_4_fu_4254_p2 icmp_ln197_6_fu_4260_p2 or_ln197_5_fu_4266_p2 icmp_ln197_7_fu_4272_p2 or_ln197_6_fu_4278_p2 icmp_ln197_8_fu_4284_p2 or_ln197_7_fu_4290_p2 icmp_ln197_9_fu_4296_p2 or_ln197_8_fu_4302_p2 icmp_ln197_10_fu_4308_p2 or_ln197_9_fu_4314_p2 icmp_ln197_11_fu_4320_p2 or_ln197_10_fu_4326_p2 icmp_ln197_12_fu_4332_p2 or_ln197_11_fu_4338_p2 icmp_ln197_13_fu_4344_p2 or_ln197_12_fu_4350_p2 xor_ln395_fu_5710_p2 or_ln395_fu_5716_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_58_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_57_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_56_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_55_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_54_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_52_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_51_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_50_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_23_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_22_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_21_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_20_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_19_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_18_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_142_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_143_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_144_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_145_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_146_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_147_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_148_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_141_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_140_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_139_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_59_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_58_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_57_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_56_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_55_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_54_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_137_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_136_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_135_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_134_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_133_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_131_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_130_U compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_129_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_65_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_64_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_63_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_62_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_61_U p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_60_U",
+      "Instances": [
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_650_36",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_650_36_fu_2561",
+          "BindInstances": "icmp_ln650_fu_351_p2 add_ln650_fu_357_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_634_34",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_634_34_fu_2599",
+          "BindInstances": "icmp_ln634_fu_351_p2 add_ln634_fu_357_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_571_25",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_571_25_fu_2637",
+          "BindInstances": "icmp_ln571_fu_247_p2 add_ln571_fu_253_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_527_21",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_527_21_fu_2675",
+          "BindInstances": "icmp_ln527_fu_167_p2 add_ln527_fu_173_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_453_12",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_453_12_fu_2745",
+          "BindInstances": "icmp_ln453_fu_247_p2 add_ln453_fu_253_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39_fu_2783",
+          "BindInstances": "icmp_ln659_fu_377_p2 add_ln659_fu_383_p2 icmp_ln660_fu_395_p2 select_ln659_fu_401_p3 add_ln659_1_fu_409_p2 select_ln659_1_fu_415_p3 add_ln663_1_fu_475_p2 nibble_idx_fu_495_p2 nibble_fu_608_p3 add_ln660_fu_554_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_672_40",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_672_40_fu_2821",
+          "BindInstances": "icmp_ln672_fu_71_p2 add_ln672_fu_77_p2",
+          "Instances": [{
+              "ModuleName": "read_i32",
+              "InstanceName": "grp_read_i32_fu_56",
+              "BindInstances": "add_ln576_fu_78_p2 add_ln577_fu_89_p2 add_ln578_fu_99_p2"
+            }]
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_680_42",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_680_42_fu_2837",
+          "BindInstances": "icmp_ln680_fu_201_p2 add_ln680_fu_207_p2 add_ln682_fu_229_p2 add_ln569_fu_244_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_693_44",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_693_44_fu_2861",
+          "BindInstances": "icmp_ln693_fu_223_p2 add_ln693_fu_229_p2 sparsemux_11_3_32_1_1_U58 sparsemux_11_3_16_1_1_U59 mul_32s_16s_48_1_1_U57 select_ln695_fu_313_p3 rounded_fu_321_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_163_1",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_2877",
+          "BindInstances": "icmp_ln163_fu_546_p2 add_ln163_fu_552_p2 sparsemux_33_4_16_1_1_U91 select_ln166_fu_728_p3"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_642_35",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_642_35_fu_2945",
+          "BindInstances": "icmp_ln642_fu_361_p2 add_ln642_fu_367_p2 sparsemux_33_4_15_1_1_U125"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_576_26",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_576_26_fu_2983",
+          "BindInstances": "icmp_ln576_fu_112_p2 add_ln576_fu_136_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28_fu_2999",
+          "BindInstances": "icmp_ln580_fu_383_p2 add_ln580_fu_389_p2 icmp_ln581_fu_401_p2 select_ln580_fu_407_p3 add_ln580_1_fu_415_p2 select_ln580_1_fu_421_p3 or_ln583_fu_597_p2 add_ln589_1_fu_481_p2 nibble_fu_639_p3 storemerge496_fu_647_p3 add_ln581_fu_562_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_593_29",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_593_29_fu_3037",
+          "BindInstances": "icmp_ln593_fu_69_p2 add_ln593_fu_75_p2",
+          "Instances": [{
+              "ModuleName": "read_i32",
+              "InstanceName": "grp_read_i32_fu_54",
+              "BindInstances": "add_ln576_fu_78_p2 add_ln577_fu_89_p2 add_ln578_fu_99_p2"
+            }]
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_601_31",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_601_31_fu_3051",
+          "BindInstances": "icmp_ln601_fu_199_p2 add_ln601_fu_205_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_616_33",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_616_33_fu_3073",
+          "BindInstances": "icmp_ln616_fu_193_p2 add_ln616_fu_199_p2 sparsemux_9_2_32_1_1_U203 sparsemux_9_2_16_1_1_U204 mul_32s_16s_48_1_1_U202 select_ln618_fu_279_p3 rounded_fu_287_p2 icmp_ln620_fu_313_p2 icmp_ln622_fu_319_p2 select_ln625_fu_335_p3 or_ln625_fu_343_p2 v_fu_349_p3"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_547_23",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_547_23_fu_3087",
+          "BindInstances": "icmp_ln547_fu_191_p2 add_ln547_fu_197_p2 byte_addr_fu_224_p2 add_ln576_fu_269_p2 add_ln577_fu_279_p2"
+        },
+        {
+          "ModuleName": "read_i32",
+          "InstanceName": "grp_read_i32_fu_3157",
+          "BindInstances": "add_ln576_fu_78_p2 add_ln577_fu_89_p2 add_ln578_fu_99_p2"
+        },
+        {
+          "ModuleName": "RMS_NORM",
+          "InstanceName": "grp_RMS_NORM_fu_3168",
+          "BindInstances": "mean_square_fu_397_p3 v_fu_417_p2 udiv_27s_23ns_27_31_seq_1_U303 mul_27ns_21s_45_1_1_U271 mul_32s_32s_45_1_1_U287 mul_27ns_21s_45_1_1_U272 mul_27ns_21s_45_1_1_U273 mul_27ns_21s_45_1_1_U274 mul_27ns_21s_45_1_1_U275 mul_27ns_21s_45_1_1_U276 mul_27ns_21s_45_1_1_U277 mul_27ns_21s_45_1_1_U278 mul_27ns_21s_45_1_1_U279 mul_27ns_21s_45_1_1_U280 mul_27ns_21s_45_1_1_U281 mul_27ns_21s_45_1_1_U282 mul_27ns_21s_45_1_1_U283 mul_27ns_21s_45_1_1_U284 mul_27ns_21s_45_1_1_U285 mul_27ns_21s_45_1_1_U286 mul_32s_32s_45_1_1_U288 mul_32s_32s_45_1_1_U289 mul_32s_32s_45_1_1_U290 mul_32s_32s_45_1_1_U291 mul_32s_32s_45_1_1_U292 mul_32s_32s_45_1_1_U293 mul_32s_32s_45_1_1_U294 mul_32s_32s_45_1_1_U295 mul_32s_32s_45_1_1_U296 mul_32s_32s_45_1_1_U297 mul_32s_32s_45_1_1_U298 mul_32s_32s_45_1_1_U299 mul_32s_32s_45_1_1_U300 mul_32s_32s_45_1_1_U301 mul_32s_32s_45_1_1_U302",
+          "Instances": [
+            {
+              "ModuleName": "RMS_NORM_Pipeline_VITIS_LOOP_123_1",
+              "InstanceName": "grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140",
+              "BindInstances": "icmp_ln123_fu_224_p2 add_ln123_fu_230_p2 sparsemux_33_4_8_1_1_U249 mac_muladd_8s_8s_20s_20_4_1_U250 mac_muladd_8s_8s_20s_20_4_1_U250 mac_muladd_8s_8s_20s_20_4_1_U250"
+            },
+            {
+              "ModuleName": "sqrt_fixed_32_19_s",
+              "InstanceName": "grp_sqrt_fixed_32_19_s_fu_161",
+              "BindInstances": "icmp_ln258_fu_294_p2 add_ln263_fu_300_p2 x_l_I_1_fu_316_p3 select_ln216_fu_324_p3 select_ln216_1_fu_332_p3 icmp_ln258_1_fu_360_p2 sub_ln263_fu_366_p2 x_l_I_5_fu_392_p3 res_I_1_fu_400_p3 icmp_ln258_2_fu_436_p2 sub_ln263_1_fu_442_p2 x_l_I_7_fu_468_p3 res_I_3_fu_476_p3 icmp_ln258_3_fu_512_p2 sub_ln263_2_fu_518_p2 x_l_I_9_fu_544_p3 res_I_5_fu_552_p3 icmp_ln258_4_fu_588_p2 sub_ln263_3_fu_594_p2 x_l_I_11_fu_620_p3 res_I_7_fu_628_p3 icmp_ln258_5_fu_664_p2 sub_ln263_4_fu_670_p2 x_l_I_13_fu_696_p3 res_I_9_fu_704_p3 icmp_ln258_6_fu_756_p2 sub_ln263_5_fu_761_p2 x_l_I_15_fu_784_p3 res_I_11_fu_791_p3 icmp_ln258_7_fu_826_p2 sub_ln263_6_fu_832_p2 x_l_I_17_fu_858_p3 res_I_13_fu_866_p3 icmp_ln258_8_fu_890_p2 sub_ln263_7_fu_896_p2 x_l_I_19_fu_922_p3 res_I_15_fu_930_p3 icmp_ln295_fu_942_p2 icmp_ln295_1_fu_948_p2 icmp_ln295_2_fu_954_p2 and_ln295_fu_959_p2 icmp_ln308_fu_965_p2 x_l_I_20_fu_970_p2 x_l_I_3_fu_976_p3 x_l_FH_fu_984_p2 x_l_I_21_fu_990_p2 or_ln295_fu_996_p2 x_l_I_4_fu_1002_p3 x_l_FH_28_fu_1010_p3 res_FH_fu_1018_p3 icmp_ln295_3_fu_1062_p2 icmp_ln295_4_fu_1068_p2 icmp_ln295_5_fu_1074_p2 xor_ln295_fu_1080_p2 and_ln295_1_fu_1086_p2 icmp_ln308_1_fu_1092_p2 x_l_I_22_fu_1098_p2 x_l_I_23_fu_1234_p3 x_l_FH_3_fu_1104_p2 x_l_I_24_fu_1239_p2 or_ln295_1_fu_1110_p2 x_l_I_25_fu_1253_p3 x_l_FH_29_fu_1116_p3 res_FH_2_fu_1259_p3 icmp_ln295_6_fu_1285_p2 icmp_ln295_7_fu_1291_p2 icmp_ln295_8_fu_1297_p2 xor_ln295_1_fu_1302_p2 and_ln295_2_fu_1308_p2 icmp_ln308_2_fu_1314_p2 x_l_I_26_fu_1319_p2 x_l_I_27_fu_1325_p3 x_l_FH_5_fu_1333_p2 x_l_I_28_fu_1338_p2 or_ln295_2_fu_1354_p2 x_l_I_29_fu_1360_p3 x_l_FH_30_fu_1368_p3 res_FH_4_fu_1375_p3 icmp_ln295_9_fu_1403_p2 icmp_ln295_10_fu_1409_p2 icmp_ln295_11_fu_1415_p2 xor_ln295_2_fu_1421_p2 and_ln295_3_fu_1427_p2 icmp_ln308_3_fu_1433_p2 x_l_I_30_fu_1439_p2 x_l_I_31_fu_1445_p3 x_l_FH_7_fu_1453_p2 x_l_I_32_fu_1459_p2 or_ln295_3_fu_1475_p2 x_l_I_33_fu_1481_p3 x_l_FH_31_fu_1489_p3 res_FH_6_fu_1497_p3 icmp_ln295_12_fu_1525_p2 icmp_ln295_13_fu_1531_p2 icmp_ln295_14_fu_1537_p2 xor_ln295_3_fu_1543_p2 and_ln295_4_fu_1549_p2 icmp_ln308_4_fu_1555_p2 x_l_I_34_fu_1561_p2 x_l_I_35_fu_1587_p3 x_l_FH_9_fu_1567_p2 x_l_I_36_fu_1592_p2 or_ln295_4_fu_1573_p2 x_l_I_37_fu_1606_p3 x_l_FH_32_fu_1579_p3 res_FH_8_fu_1612_p3 icmp_ln295_15_fu_1638_p2 icmp_ln295_16_fu_1644_p2 icmp_ln295_17_fu_1650_p2 xor_ln295_4_fu_1655_p2 and_ln295_5_fu_1661_p2 icmp_ln308_5_fu_1667_p2 x_l_I_38_fu_1672_p2 x_l_I_39_fu_1678_p3 x_l_FH_11_fu_1686_p2 x_l_I_40_fu_1691_p2 or_ln295_5_fu_1707_p2 x_l_I_41_fu_1713_p3 x_l_FH_33_fu_1721_p3 res_FH_10_fu_1728_p3 icmp_ln295_18_fu_1756_p2 icmp_ln295_19_fu_1762_p2 icmp_ln295_20_fu_1768_p2 xor_ln295_5_fu_1774_p2 and_ln295_6_fu_1780_p2 icmp_ln308_6_fu_1786_p2 x_l_I_42_fu_1792_p2 x_l_I_43_fu_1798_p3 x_l_FH_13_fu_1806_p2 x_l_I_44_fu_1812_p2 or_ln295_6_fu_1828_p2 x_l_I_45_fu_1834_p3 x_l_FH_34_fu_1842_p3 res_FH_12_fu_1850_p3 icmp_ln295_21_fu_1886_p2 icmp_ln295_22_fu_1892_p2 icmp_ln295_23_fu_1898_p2 and_ln295_7_fu_1904_p2 x_l_FL_fu_1949_p2 x_l_I_46_fu_1910_p2 x_l_I_47_fu_1955_p3 xor_ln319_fu_1916_p2 x_l_FH_15_fu_1922_p2 x_l_I_48_fu_1960_p2 or_ln295_7_fu_1928_p2 x_l_I_49_fu_1974_p3 x_l_FH_35_fu_1934_p3 x_l_FL_12_fu_1980_p3 res_FH_14_fu_1987_p3 icmp_ln295_24_fu_2031_p2 icmp_ln295_25_fu_2037_p2 icmp_ln295_26_fu_2043_p2 icmp_ln295_27_fu_2048_p2 icmp_ln295_28_fu_2053_p2 xor_ln295_6_fu_2059_p2 and_ln295_8_fu_2065_p2 delta_fu_2071_p2 x_l_FL_2_fu_2077_p2 icmp_ln308_7_fu_2083_p2 and_ln308_fu_2088_p2 or_ln308_fu_2094_p2 x_l_I_50_fu_2100_p2 x_l_I_51_fu_2106_p3 p_neg8_fu_2114_p3 x_l_I_52_fu_2133_p2 or_ln295_8_fu_2149_p2 and_ln295_9_fu_2155_p2 or_ln295_9_fu_2161_p2 x_l_I_53_fu_2167_p3 x_l_FH_36_fu_2175_p3 x_l_FL_13_fu_2182_p3 res_FH_16_fu_2190_p3 icmp_ln295_29_fu_2236_p2 icmp_ln295_30_fu_2242_p2 icmp_ln295_31_fu_2248_p2 icmp_ln295_32_fu_2254_p2 icmp_ln295_33_fu_2260_p2 xor_ln295_7_fu_2266_p2 and_ln295_10_fu_2272_p2 delta_1_fu_2278_p2 x_l_FL_4_fu_2284_p2 icmp_ln308_8_fu_2290_p2 and_ln308_1_fu_2296_p2 or_ln308_1_fu_2302_p2 x_l_I_54_fu_2308_p2 x_l_I_55_fu_2314_p3 p_neg9_fu_2322_p3 x_l_I_56_fu_2342_p2 or_ln295_10_fu_2358_p2 and_ln295_11_fu_2364_p2 or_ln295_11_fu_2370_p2 x_l_I_57_fu_2376_p3 x_l_FH_37_fu_2384_p3 x_l_FL_14_fu_2392_p3 res_FH_18_fu_2400_p3 icmp_ln295_34_fu_2443_p2 icmp_ln295_35_fu_2449_p2 icmp_ln295_36_fu_2455_p2 icmp_ln295_37_fu_2461_p2 xor_ln295_8_fu_2467_p2 and_ln295_12_fu_2473_p2 delta_2_fu_2479_p2 x_l_FL_6_fu_2485_p2 icmp_ln308_9_fu_2491_p2 and_ln308_2_fu_2497_p2 or_ln308_2_fu_2503_p2 x_l_I_58_fu_2509_p2 x_l_I_59_fu_2515_p3 p_neg10_fu_2523_p3 or_ln295_12_fu_2543_p2 or_ln295_13_fu_2549_p2 x_l_I_60_fu_2555_p3 x_l_FH_38_fu_2563_p3 x_l_FL_15_fu_2571_p3 res_FH_20_fu_2595_p3 icmp_ln295_38_fu_2640_p2 icmp_ln295_39_fu_2645_p2 icmp_ln295_40_fu_2650_p2 icmp_ln295_41_fu_2655_p2 xor_ln295_9_fu_2660_p2 and_ln295_13_fu_2666_p2 delta_3_fu_2672_p2 x_l_FL_8_fu_2677_p2 icmp_ln308_10_fu_2682_p2 and_ln308_3_fu_2687_p2 or_ln308_3_fu_2693_p2 x_l_I_61_fu_2699_p2 x_l_I_62_fu_2704_p3 p_neg11_fu_2711_p3 or_ln295_14_fu_2740_p2 or_ln295_15_fu_2746_p2 x_l_I_63_fu_2752_p3 x_l_FH_39_fu_2760_p3 x_l_FL_16_fu_2767_p3 res_FH_22_fu_2774_p3 icmp_ln295_42_fu_2825_p2 icmp_ln295_43_fu_2831_p2 icmp_ln295_44_fu_2837_p2 icmp_ln295_45_fu_2843_p2 xor_ln295_10_fu_2849_p2 and_ln295_14_fu_2855_p2 delta_4_fu_2861_p2 x_l_FL_10_fu_2867_p2 icmp_ln308_11_fu_2873_p2 and_ln308_4_fu_2879_p2 or_ln308_4_fu_2885_p2 x_l_I_64_fu_2891_p2 x_l_I_65_fu_2897_p3 select_ln319_fu_2905_p3 sub_ln319_4_fu_2913_p2 x_l_FH_26_fu_2923_p2 or_ln295_16_fu_2939_p2 or_ln295_17_fu_2945_p2 x_l_FH_25_fu_2951_p3 x_l_FL_11_fu_2959_p3 res_FH_24_fu_2967_p3 icmp_ln295_46_fu_3006_p2 and_ln295_15_fu_3012_p2 icmp_ln295_47_fu_3018_p2 icmp_ln295_48_fu_3024_p2 icmp_ln295_49_fu_3030_p2 xor_ln295_11_fu_3036_p2 and_ln295_16_fu_3042_p2 or_ln295_18_fu_3058_p2 or_ln295_19_fu_3064_p2 res_FH_26_fu_3070_p3 add_ln338_fu_3082_p2 res_I_16_fu_3096_p2 res_I_17_fu_3101_p3 ap_return"
+            }
+          ]
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_563_24",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_563_24_fu_3269",
+          "BindInstances": "icmp_ln563_fu_275_p2 add_ln563_fu_281_p2 sparsemux_33_4_32_1_1_U356"
+        },
+        {
+          "ModuleName": "RES_ADD",
+          "InstanceName": "call_ln533_RES_ADD_fu_3291",
+          "BindInstances": "add_ln182_fu_126_p2 sum_fu_132_p2 icmp_ln184_fu_148_p2 icmp_ln186_fu_154_p2 select_ln189_fu_160_p3 or_ln189_fu_168_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9 add_ln182_2_fu_310_p2 sum_1_fu_316_p2 icmp_ln184_1_fu_332_p2 icmp_ln186_1_fu_338_p2 select_ln189_2_fu_344_p3 or_ln189_1_fu_352_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8 add_ln182_4_fu_374_p2 sum_2_fu_380_p2 icmp_ln184_2_fu_396_p2 icmp_ln186_2_fu_402_p2 select_ln189_4_fu_408_p3 or_ln189_2_fu_416_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7 add_ln182_6_fu_438_p2 sum_3_fu_444_p2 icmp_ln184_3_fu_460_p2 icmp_ln186_3_fu_466_p2 select_ln189_6_fu_472_p3 or_ln189_3_fu_480_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6 add_ln182_8_fu_502_p2 sum_4_fu_508_p2 icmp_ln184_4_fu_524_p2 icmp_ln186_4_fu_530_p2 select_ln189_8_fu_536_p3 or_ln189_4_fu_544_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5 add_ln182_10_fu_566_p2 sum_5_fu_572_p2 icmp_ln184_5_fu_588_p2 icmp_ln186_5_fu_594_p2 select_ln189_10_fu_600_p3 or_ln189_5_fu_608_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4 add_ln182_12_fu_630_p2 sum_6_fu_636_p2 icmp_ln184_6_fu_652_p2 icmp_ln186_6_fu_658_p2 select_ln189_12_fu_664_p3 or_ln189_6_fu_672_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3 add_ln182_14_fu_694_p2 sum_7_fu_700_p2 icmp_ln184_7_fu_716_p2 icmp_ln186_7_fu_722_p2 select_ln189_14_fu_728_p3 or_ln189_7_fu_736_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2 add_ln182_16_fu_758_p2 sum_8_fu_764_p2 icmp_ln184_8_fu_780_p2 icmp_ln186_8_fu_786_p2 select_ln189_16_fu_792_p3 or_ln189_8_fu_800_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1 add_ln182_18_fu_822_p2 sum_9_fu_828_p2 icmp_ln184_9_fu_844_p2 icmp_ln186_9_fu_850_p2 select_ln189_18_fu_856_p3 or_ln189_9_fu_864_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u add_ln182_20_fu_886_p2 sum_10_fu_892_p2 icmp_ln184_10_fu_908_p2 icmp_ln186_10_fu_914_p2 select_ln189_20_fu_920_p3 or_ln189_10_fu_928_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_17 add_ln182_22_fu_950_p2 sum_11_fu_956_p2 icmp_ln184_11_fu_972_p2 icmp_ln186_11_fu_978_p2 select_ln189_22_fu_984_p3 or_ln189_11_fu_992_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_16 add_ln182_24_fu_1014_p2 sum_12_fu_1020_p2 icmp_ln184_12_fu_1036_p2 icmp_ln186_12_fu_1042_p2 select_ln189_24_fu_1048_p3 or_ln189_12_fu_1056_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_15 add_ln182_26_fu_1078_p2 sum_13_fu_1084_p2 icmp_ln184_13_fu_1100_p2 icmp_ln186_13_fu_1106_p2 select_ln189_26_fu_1112_p3 or_ln189_13_fu_1120_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_14 add_ln182_28_fu_1142_p2 sum_14_fu_1148_p2 icmp_ln184_14_fu_1164_p2 icmp_ln186_14_fu_1170_p2 select_ln189_28_fu_1176_p3 or_ln189_14_fu_1184_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_13 add_ln182_30_fu_1206_p2 sum_15_fu_1212_p2 icmp_ln184_15_fu_1228_p2 icmp_ln186_15_fu_1234_p2 select_ln189_30_fu_1240_p3 or_ln189_15_fu_1248_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_12"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_538_22",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_538_22_fu_3391",
+          "BindInstances": "icmp_ln538_fu_223_p2 add_ln538_fu_229_p2 sparsemux_33_4_8_1_1_U456"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_503_19",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_503_19_fu_3413",
+          "BindInstances": "icmp_ln503_fu_117_p2 add_ln503_fu_123_p2",
+          "Instances": [{
+              "ModuleName": "read_i32",
+              "InstanceName": "grp_read_i32_fu_102",
+              "BindInstances": "add_ln576_fu_78_p2 add_ln577_fu_89_p2 add_ln578_fu_99_p2"
+            }]
+        },
+        {
+          "ModuleName": "REQUANT_D_MODEL_int32_to_int8",
+          "InstanceName": "grp_REQUANT_D_MODEL_int32_to_int8_fu_3451",
+          "BindInstances": "sub_fu_192_p2 rounded_fu_202_p2 mul_32s_32s_64_1_1_U491 add_ln100_fu_221_p2 ashr_ln100_fu_227_p2 shifted_fu_612_p2 icmp_ln103_fu_627_p2 icmp_ln105_fu_633_p2 select_ln103_16_fu_643_p3 or_ln103_fu_651_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29 mul_32s_32s_64_1_1_U492 add_ln100_1_fu_246_p2 ashr_ln100_1_fu_252_p2 shifted_16_fu_665_p2 icmp_ln103_1_fu_680_p2 icmp_ln105_1_fu_686_p2 select_ln103_17_fu_696_p3 or_ln103_1_fu_704_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28 mul_32s_32s_64_1_1_U493 add_ln100_2_fu_271_p2 ashr_ln100_2_fu_277_p2 shifted_17_fu_718_p2 icmp_ln103_2_fu_733_p2 icmp_ln105_2_fu_739_p2 select_ln103_18_fu_749_p3 or_ln103_2_fu_757_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27 mul_32s_32s_64_1_1_U494 add_ln100_3_fu_296_p2 ashr_ln100_3_fu_302_p2 shifted_18_fu_771_p2 icmp_ln103_3_fu_786_p2 icmp_ln105_3_fu_792_p2 select_ln103_19_fu_802_p3 or_ln103_3_fu_810_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26 mul_32s_32s_64_1_1_U495 add_ln100_4_fu_321_p2 ashr_ln100_4_fu_327_p2 shifted_19_fu_824_p2 icmp_ln103_4_fu_839_p2 icmp_ln105_4_fu_845_p2 select_ln103_20_fu_855_p3 or_ln103_4_fu_863_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25 mul_32s_32s_64_1_1_U496 add_ln100_5_fu_346_p2 ashr_ln100_5_fu_352_p2 shifted_20_fu_877_p2 icmp_ln103_5_fu_892_p2 icmp_ln105_5_fu_898_p2 select_ln103_21_fu_908_p3 or_ln103_5_fu_916_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24 mul_32s_32s_64_1_1_U497 add_ln100_6_fu_371_p2 ashr_ln100_6_fu_377_p2 shifted_21_fu_930_p2 icmp_ln103_6_fu_945_p2 icmp_ln105_6_fu_951_p2 select_ln103_22_fu_961_p3 or_ln103_6_fu_969_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23 mul_32s_32s_64_1_1_U498 add_ln100_7_fu_396_p2 ashr_ln100_7_fu_402_p2 shifted_22_fu_983_p2 icmp_ln103_7_fu_998_p2 icmp_ln105_7_fu_1004_p2 select_ln103_23_fu_1014_p3 or_ln103_7_fu_1022_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22 mul_32s_32s_64_1_1_U499 add_ln100_8_fu_421_p2 ashr_ln100_8_fu_427_p2 shifted_23_fu_1036_p2 icmp_ln103_8_fu_1051_p2 icmp_ln105_8_fu_1057_p2 select_ln103_24_fu_1067_p3 or_ln103_8_fu_1075_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21 mul_32s_32s_64_1_1_U500 add_ln100_9_fu_446_p2 ashr_ln100_9_fu_452_p2 shifted_24_fu_1089_p2 icmp_ln103_9_fu_1104_p2 icmp_ln105_9_fu_1110_p2 select_ln103_25_fu_1120_p3 or_ln103_9_fu_1128_p2 compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20 mul_32s_32s_64_1_1_U501 add_ln100_10_fu_471_p2 ashr_ln100_10_fu_477_p2 shifted_25_fu_1142_p2 icmp_ln103_10_fu_1157_p2 icmp_ln105_10_fu_1163_p2 select_ln103_26_fu_1173_p3 or_ln103_10_fu_1181_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_53 mul_32s_32s_64_1_1_U502 add_ln100_11_fu_496_p2 ashr_ln100_11_fu_502_p2 shifted_26_fu_1195_p2 icmp_ln103_11_fu_1210_p2 icmp_ln105_11_fu_1216_p2 select_ln103_27_fu_1226_p3 or_ln103_11_fu_1234_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_52 mul_32s_32s_64_1_1_U503 add_ln100_12_fu_521_p2 ashr_ln100_12_fu_527_p2 shifted_27_fu_1248_p2 icmp_ln103_12_fu_1263_p2 icmp_ln105_12_fu_1269_p2 select_ln103_28_fu_1279_p3 or_ln103_12_fu_1287_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_51 mul_32s_32s_64_1_1_U504 add_ln100_13_fu_546_p2 ashr_ln100_13_fu_552_p2 shifted_28_fu_1301_p2 icmp_ln103_13_fu_1316_p2 icmp_ln105_13_fu_1322_p2 select_ln103_29_fu_1332_p3 or_ln103_13_fu_1340_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_50 mul_32s_32s_64_1_1_U505 add_ln100_14_fu_571_p2 ashr_ln100_14_fu_577_p2 shifted_29_fu_1354_p2 icmp_ln103_14_fu_1369_p2 icmp_ln105_14_fu_1375_p2 select_ln103_30_fu_1385_p3 or_ln103_14_fu_1393_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_49 mul_32s_32s_64_1_1_U506 add_ln100_15_fu_596_p2 ashr_ln100_15_fu_602_p2 shifted_15_fu_1407_p2 icmp_ln103_15_fu_1422_p2 icmp_ln105_15_fu_1428_p2 select_ln103_31_fu_1438_p3 or_ln103_15_fu_1446_p2 p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_48"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_518_20",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_518_20_fu_3523",
+          "BindInstances": "icmp_ln518_fu_223_p2 add_ln518_fu_229_p2 sparsemux_33_4_8_1_1_U543"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_42_2",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3545",
+          "BindInstances": "mul_16s_4s_20_1_1_U613 mac_muladd_16s_4s_21s_21_4_1_U623 mac_muladd_16s_4s_21s_21_4_1_U623 mac_muladd_16s_4s_20s_21_4_1_U618 mac_muladd_16s_4s_20s_21_4_1_U618 mac_muladd_16s_4s_20s_21_4_1_U619 mac_muladd_16s_4s_20s_21_4_1_U619 mul_16s_4s_20_1_1_U614 mac_muladd_16s_4s_21s_32_4_1_U624 mac_muladd_16s_4s_21s_32_4_1_U624 mac_muladd_16s_4s_20s_21_4_1_U618 mac_muladd_16s_4s_21s_21_4_1_U623 mac_muladd_16s_4s_20s_21_4_1_U619 mac_muladd_16s_4s_21s_32_4_1_U624 icmp_ln42_fu_604_p2 mac_muladd_16s_4s_21s_21_4_1_U625 mac_muladd_16s_4s_21s_21_4_1_U625 mac_muladd_16s_4s_20s_21_4_1_U617 mac_muladd_16s_4s_20s_21_4_1_U617 mul_16s_4s_20_1_1_U612 mac_muladd_16s_4s_21s_21_4_1_U620 mac_muladd_16s_4s_21s_21_4_1_U620 mac_muladd_16s_4s_21s_32_4_1_U626 mac_muladd_16s_4s_21s_32_4_1_U626 mac_muladd_16s_4s_20s_21_4_1_U621 mac_muladd_16s_4s_20s_21_4_1_U621 mul_16s_4s_20_1_1_U615 mac_muladd_16s_4s_21s_21_4_1_U627 mac_muladd_16s_4s_21s_21_4_1_U627 mac_muladd_16s_4s_20s_21_4_1_U622 mac_muladd_16s_4s_20s_21_4_1_U622 mul_16s_4s_20_1_1_U616 mac_muladd_16s_4s_20s_21_4_1_U617 mac_muladd_16s_4s_21s_21_4_1_U620 mac_muladd_16s_4s_21s_32_4_1_U626 mac_muladd_16s_4s_20s_21_4_1_U622 mac_muladd_16s_4s_21s_21_4_1_U625 mac_muladd_16s_4s_20s_21_4_1_U621 mac_muladd_16s_4s_21s_21_4_1_U627 add_ln45_14_fu_849_p2 xor_ln42_fu_618_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_458_13",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_458_13_fu_3615",
+          "BindInstances": "icmp_ln458_fu_112_p2 add_ln458_fu_136_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15_fu_3631",
+          "BindInstances": "icmp_ln462_fu_383_p2 add_ln462_fu_389_p2 icmp_ln463_fu_401_p2 select_ln462_fu_407_p3 add_ln462_1_fu_415_p2 select_ln462_1_fu_421_p3 or_ln465_fu_597_p2 add_ln471_1_fu_481_p2 nibble_fu_639_p3 storemerge497_fu_647_p3 add_ln463_fu_562_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_475_16",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_475_16_fu_3669",
+          "BindInstances": "icmp_ln475_fu_69_p2 add_ln475_fu_75_p2",
+          "Instances": [{
+              "ModuleName": "read_i32",
+              "InstanceName": "grp_read_i32_fu_54",
+              "BindInstances": "add_ln576_fu_78_p2 add_ln577_fu_89_p2 add_ln578_fu_99_p2"
+            }]
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_490_18",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_490_18_fu_3683",
+          "BindInstances": "icmp_ln490_fu_147_p2 add_ln490_fu_153_p2 sparsemux_9_2_32_1_1_U606"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_42_21",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3693",
+          "BindInstances": "select_ln44_fu_583_p3 mul_16s_4s_20_1_1_U667 mac_muladd_16s_4s_21s_21_4_1_U677 mac_muladd_16s_4s_21s_21_4_1_U677 mac_muladd_16s_4s_20s_21_4_1_U672 mac_muladd_16s_4s_20s_21_4_1_U672 mac_muladd_16s_4s_20s_21_4_1_U673 mac_muladd_16s_4s_20s_21_4_1_U673 mul_16s_4s_20_1_1_U668 mac_muladd_16s_4s_21s_32_4_1_U678 mac_muladd_16s_4s_21s_32_4_1_U678 mac_muladd_16s_4s_20s_21_4_1_U672 mac_muladd_16s_4s_21s_21_4_1_U677 mac_muladd_16s_4s_20s_21_4_1_U673 mac_muladd_16s_4s_21s_32_4_1_U678 icmp_ln42_fu_616_p2 mac_muladd_16s_4s_21s_21_4_1_U679 mac_muladd_16s_4s_21s_21_4_1_U679 mac_muladd_16s_4s_20s_21_4_1_U671 mac_muladd_16s_4s_20s_21_4_1_U671 mul_16s_4s_20_1_1_U666 mac_muladd_16s_4s_21s_21_4_1_U674 mac_muladd_16s_4s_21s_21_4_1_U674 mac_muladd_16s_4s_21s_32_4_1_U680 mac_muladd_16s_4s_21s_32_4_1_U680 mac_muladd_16s_4s_20s_21_4_1_U675 mac_muladd_16s_4s_20s_21_4_1_U675 mul_16s_4s_20_1_1_U669 mac_muladd_16s_4s_21s_21_4_1_U681 mac_muladd_16s_4s_21s_21_4_1_U681 mac_muladd_16s_4s_20s_21_4_1_U676 mac_muladd_16s_4s_20s_21_4_1_U676 mul_16s_4s_20_1_1_U670 mac_muladd_16s_4s_20s_21_4_1_U671 mac_muladd_16s_4s_21s_21_4_1_U674 mac_muladd_16s_4s_21s_32_4_1_U680 mac_muladd_16s_4s_20s_21_4_1_U676 mac_muladd_16s_4s_21s_21_4_1_U679 mac_muladd_16s_4s_20s_21_4_1_U675 mac_muladd_16s_4s_21s_21_4_1_U681 add_ln45_30_fu_874_p2 xor_ln42_fu_630_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_42_22",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3763",
+          "BindInstances": "select_ln44_fu_585_p3 mul_16s_4s_20_1_1_U717 mac_muladd_16s_4s_21s_21_4_1_U727 mac_muladd_16s_4s_21s_21_4_1_U727 mac_muladd_16s_4s_20s_21_4_1_U722 mac_muladd_16s_4s_20s_21_4_1_U722 mac_muladd_16s_4s_20s_21_4_1_U723 mac_muladd_16s_4s_20s_21_4_1_U723 mul_16s_4s_20_1_1_U718 mac_muladd_16s_4s_21s_32_4_1_U728 mac_muladd_16s_4s_21s_32_4_1_U728 mac_muladd_16s_4s_20s_21_4_1_U722 mac_muladd_16s_4s_21s_21_4_1_U727 mac_muladd_16s_4s_20s_21_4_1_U723 mac_muladd_16s_4s_21s_32_4_1_U728 icmp_ln42_fu_618_p2 mac_muladd_16s_4s_21s_21_4_1_U729 mac_muladd_16s_4s_21s_21_4_1_U729 mac_muladd_16s_4s_20s_21_4_1_U721 mac_muladd_16s_4s_20s_21_4_1_U721 mul_16s_4s_20_1_1_U716 mac_muladd_16s_4s_21s_21_4_1_U724 mac_muladd_16s_4s_21s_21_4_1_U724 mac_muladd_16s_4s_21s_32_4_1_U730 mac_muladd_16s_4s_21s_32_4_1_U730 mac_muladd_16s_4s_20s_21_4_1_U725 mac_muladd_16s_4s_20s_21_4_1_U725 mul_16s_4s_20_1_1_U719 mac_muladd_16s_4s_21s_21_4_1_U731 mac_muladd_16s_4s_21s_21_4_1_U731 mac_muladd_16s_4s_20s_21_4_1_U726 mac_muladd_16s_4s_20s_21_4_1_U726 mul_16s_4s_20_1_1_U720 mac_muladd_16s_4s_20s_21_4_1_U721 mac_muladd_16s_4s_21s_21_4_1_U724 mac_muladd_16s_4s_21s_32_4_1_U730 mac_muladd_16s_4s_20s_21_4_1_U726 mac_muladd_16s_4s_21s_21_4_1_U729 mac_muladd_16s_4s_20s_21_4_1_U725 mac_muladd_16s_4s_21s_21_4_1_U731 add_ln45_44_fu_876_p2 xor_ln42_fu_632_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_42_23",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3833",
+          "BindInstances": "mul_16s_4s_20_1_1_U767 mac_muladd_16s_4s_21s_21_4_1_U777 mac_muladd_16s_4s_21s_21_4_1_U777 mac_muladd_16s_4s_20s_21_4_1_U772 mac_muladd_16s_4s_20s_21_4_1_U772 mac_muladd_16s_4s_20s_21_4_1_U773 mac_muladd_16s_4s_20s_21_4_1_U773 mul_16s_4s_20_1_1_U768 mac_muladd_16s_4s_21s_32_4_1_U778 mac_muladd_16s_4s_21s_32_4_1_U778 mac_muladd_16s_4s_20s_21_4_1_U772 mac_muladd_16s_4s_21s_21_4_1_U777 mac_muladd_16s_4s_20s_21_4_1_U773 mac_muladd_16s_4s_21s_32_4_1_U778 icmp_ln42_fu_626_p2 select_ln44_fu_671_p3 mac_muladd_16s_4s_21s_21_4_1_U779 mac_muladd_16s_4s_21s_21_4_1_U779 mac_muladd_16s_4s_20s_21_4_1_U771 mac_muladd_16s_4s_20s_21_4_1_U771 mul_16s_4s_20_1_1_U766 mac_muladd_16s_4s_21s_21_4_1_U774 mac_muladd_16s_4s_21s_21_4_1_U774 mac_muladd_16s_4s_21s_32_4_1_U780 mac_muladd_16s_4s_21s_32_4_1_U780 mac_muladd_16s_4s_20s_21_4_1_U775 mac_muladd_16s_4s_20s_21_4_1_U775 mul_16s_4s_20_1_1_U769 mac_muladd_16s_4s_21s_21_4_1_U781 mac_muladd_16s_4s_21s_21_4_1_U781 mac_muladd_16s_4s_20s_21_4_1_U776 mac_muladd_16s_4s_20s_21_4_1_U776 mul_16s_4s_20_1_1_U770 mac_muladd_16s_4s_20s_21_4_1_U771 mac_muladd_16s_4s_21s_21_4_1_U774 mac_muladd_16s_4s_21s_32_4_1_U780 mac_muladd_16s_4s_20s_21_4_1_U776 mac_muladd_16s_4s_21s_21_4_1_U779 mac_muladd_16s_4s_20s_21_4_1_U775 mac_muladd_16s_4s_21s_21_4_1_U781 add_ln45_28_fu_879_p2 xor_ln42_fu_640_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_42_24",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_3903",
+          "BindInstances": "select_ln44_fu_663_p3 mul_16s_4s_20_1_1_U817 mac_muladd_16s_4s_21s_21_4_1_U827 mac_muladd_16s_4s_21s_21_4_1_U827 mac_muladd_16s_4s_20s_21_4_1_U822 mac_muladd_16s_4s_20s_21_4_1_U822 mac_muladd_16s_4s_20s_21_4_1_U823 mac_muladd_16s_4s_20s_21_4_1_U823 mul_16s_4s_20_1_1_U818 mac_muladd_16s_4s_21s_32_4_1_U828 mac_muladd_16s_4s_21s_32_4_1_U828 mac_muladd_16s_4s_20s_21_4_1_U822 mac_muladd_16s_4s_21s_21_4_1_U827 mac_muladd_16s_4s_20s_21_4_1_U823 mac_muladd_16s_4s_21s_32_4_1_U828 icmp_ln42_fu_609_p2 mac_muladd_16s_4s_21s_21_4_1_U829 mac_muladd_16s_4s_21s_21_4_1_U829 mac_muladd_16s_4s_20s_21_4_1_U821 mac_muladd_16s_4s_20s_21_4_1_U821 mul_16s_4s_20_1_1_U816 mac_muladd_16s_4s_21s_21_4_1_U824 mac_muladd_16s_4s_21s_21_4_1_U824 mac_muladd_16s_4s_21s_32_4_1_U830 mac_muladd_16s_4s_21s_32_4_1_U830 mac_muladd_16s_4s_20s_21_4_1_U825 mac_muladd_16s_4s_20s_21_4_1_U825 mul_16s_4s_20_1_1_U819 mac_muladd_16s_4s_21s_21_4_1_U831 mac_muladd_16s_4s_21s_21_4_1_U831 mac_muladd_16s_4s_20s_21_4_1_U826 mac_muladd_16s_4s_20s_21_4_1_U826 mul_16s_4s_20_1_1_U820 mac_muladd_16s_4s_20s_21_4_1_U821 mac_muladd_16s_4s_21s_21_4_1_U824 mac_muladd_16s_4s_21s_32_4_1_U830 mac_muladd_16s_4s_20s_21_4_1_U826 mac_muladd_16s_4s_21s_21_4_1_U829 mac_muladd_16s_4s_20s_21_4_1_U825 mac_muladd_16s_4s_21s_21_4_1_U831 add_ln45_13_fu_881_p2 xor_ln42_fu_640_p2"
+        },
+        {
+          "ModuleName": "compute_controller_Pipeline_VITIS_LOOP_396_11",
+          "InstanceName": "grp_compute_controller_Pipeline_VITIS_LOOP_396_11_fu_3973",
+          "BindInstances": "icmp_ln396_fu_60_p2 add_ln396_fu_66_p2"
+        }
+      ]
+    },
+    "Info": {
+      "compute_controller_Pipeline_VITIS_LOOP_650_36": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "read_i32": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_672_40": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_680_42": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_693_44": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_634_34": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_163_1": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_642_35": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_571_25": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_576_26": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_593_29": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_601_31": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_616_33": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_547_23": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "RMS_NORM_Pipeline_VITIS_LOOP_123_1": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "sqrt_fixed_32_19_s": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "RMS_NORM": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "0",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_563_24": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_527_21": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "RES_ADD": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "0",
+        "isCombinational": "1",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_538_22": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_503_19": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "REQUANT_D_MODEL_int32_to_int8": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "0",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_518_20": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_453_12": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_458_13": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_475_16": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_490_18": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_2": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_21": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_22": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_23": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_24": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_396_11": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "1",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      },
+      "compute_controller": {
+        "FunctionProtocol": "ap_ctrl_hs",
+        "isTaskLevelControl": "0",
+        "isPipelined": "0",
+        "isCombinational": "0",
+        "isOneStateSeq": "0"
+      }
+    },
+    "Metrics": {
+      "compute_controller_Pipeline_VITIS_LOOP_650_36": {
+        "Latency": {
+          "LatencyBest": "24",
+          "LatencyAvg": "24",
+          "LatencyWorst": "24",
+          "PipelineII": "23",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.914"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_650_36",
+            "TripCount": "22",
+            "Latency": "22",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "13",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "62",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39": {
+        "Latency": {
+          "LatencyBest": "112",
+          "LatencyAvg": "112",
+          "LatencyWorst": "112",
+          "PipelineII": "111",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "5.165"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_659_38_VITIS_LOOP_660_39",
+            "TripCount": "110",
+            "Latency": "110",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "26",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "203",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "read_i32": {
+        "Latency": {
+          "LatencyBest": "2",
+          "LatencyAvg": "2",
+          "LatencyWorst": "2",
+          "PipelineII": "2",
+          "PipelineDepth": "3",
+          "PipelineType": "yes"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.010"
+        },
+        "Area": {
+          "FF": "27",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "104",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_672_40": {
+        "Latency": {
+          "LatencyBest": "13",
+          "LatencyAvg": "13",
+          "LatencyWorst": "13",
+          "PipelineII": "12",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.010"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_672_40",
+            "TripCount": "5",
+            "Latency": "11",
+            "PipelineII": "2",
+            "PipelineDepth": "4"
+          }],
+        "Area": {
+          "FF": "43",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "185",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_680_42": {
+        "Latency": {
+          "LatencyBest": "7",
+          "LatencyAvg": "7",
+          "LatencyWorst": "7",
+          "PipelineII": "6",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.453"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_680_42",
+            "TripCount": "5",
+            "Latency": "5",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "73",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "121",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_693_44": {
+        "Latency": {
+          "LatencyBest": "12",
+          "LatencyAvg": "12",
+          "LatencyWorst": "12",
+          "PipelineII": "11",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "6.181"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_693_44",
+            "TripCount": "5",
+            "Latency": "10",
+            "PipelineII": "2",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "DSP": "2",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "25",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "259",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_634_34": {
+        "Latency": {
+          "LatencyBest": "24",
+          "LatencyAvg": "24",
+          "LatencyWorst": "24",
+          "PipelineII": "23",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.914"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_634_34",
+            "TripCount": "22",
+            "Latency": "22",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "13",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "62",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_163_1": {
+        "Latency": {
+          "LatencyBest": "24",
+          "LatencyAvg": "24",
+          "LatencyWorst": "24",
+          "PipelineII": "23",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.138"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_163_1",
+            "TripCount": "22",
+            "Latency": "22",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "28",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "142",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_642_35": {
+        "Latency": {
+          "LatencyBest": "24",
+          "LatencyAvg": "24",
+          "LatencyWorst": "24",
+          "PipelineII": "23",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.843"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_642_35",
+            "TripCount": "22",
+            "Latency": "22",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "13",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "127",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_571_25": {
+        "Latency": {
+          "LatencyBest": "18",
+          "LatencyAvg": "18",
+          "LatencyWorst": "18",
+          "PipelineII": "17",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.914"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_571_25",
+            "TripCount": "16",
+            "Latency": "16",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "12",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "63",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_576_26": {
+        "Latency": {
+          "LatencyBest": "8",
+          "LatencyAvg": "8",
+          "LatencyWorst": "8",
+          "PipelineII": "7",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.893"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_576_26",
+            "TripCount": "6",
+            "Latency": "6",
+            "PipelineII": "1",
+            "PipelineDepth": "1"
+          }],
+        "Area": {
+          "FF": "7",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "51",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28": {
+        "Latency": {
+          "LatencyBest": "112",
+          "LatencyAvg": "112",
+          "LatencyWorst": "112",
+          "PipelineII": "111",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "3.772"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_580_27_VITIS_LOOP_581_28",
+            "TripCount": "110",
+            "Latency": "110",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "40",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "226",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_593_29": {
+        "Latency": {
+          "LatencyBest": "11",
+          "LatencyAvg": "11",
+          "LatencyWorst": "11",
+          "PipelineII": "10",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.010"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_593_29",
+            "TripCount": "4",
+            "Latency": "9",
+            "PipelineII": "2",
+            "PipelineDepth": "4"
+          }],
+        "Area": {
+          "FF": "41",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "187",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_601_31": {
+        "Latency": {
+          "LatencyBest": "6",
+          "LatencyAvg": "6",
+          "LatencyWorst": "6",
+          "PipelineII": "5",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.664"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_601_31",
+            "TripCount": "4",
+            "Latency": "4",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "72",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "96",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_616_33": {
+        "Latency": {
+          "LatencyBest": "6",
+          "LatencyAvg": "6",
+          "LatencyWorst": "6",
+          "PipelineII": "5",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "6.828"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_616_33",
+            "TripCount": "4",
+            "Latency": "4",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "DSP": "2",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "27",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "287",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_547_23": {
+        "Latency": {
+          "LatencyBest": "34",
+          "LatencyAvg": "34",
+          "LatencyWorst": "34",
+          "PipelineII": "33",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.445"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_547_23",
+            "TripCount": "16",
+            "Latency": "32",
+            "PipelineII": "2",
+            "PipelineDepth": "3"
+          }],
+        "Area": {
+          "FF": "32",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "165",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "RMS_NORM_Pipeline_VITIS_LOOP_123_1": {
+        "Latency": {
+          "LatencyBest": "20",
+          "LatencyAvg": "20",
+          "LatencyWorst": "20",
+          "PipelineII": "17",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.912"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_123_1",
+            "TripCount": "16",
+            "Latency": "18",
+            "PipelineII": "1",
+            "PipelineDepth": "4"
+          }],
+        "Area": {
+          "DSP": "1",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "34",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "146",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "sqrt_fixed_32_19_s": {
+        "Latency": {
+          "LatencyBest": "5",
+          "LatencyAvg": "5",
+          "LatencyWorst": "5",
+          "PipelineII": "1",
+          "PipelineDepth": "6",
+          "PipelineType": "yes"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "7.145"
+        },
+        "Area": {
+          "FF": "918",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "4667",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "3",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "RMS_NORM": {
+        "Latency": {
+          "LatencyBest": "61",
+          "LatencyAvg": "61",
+          "LatencyWorst": "61",
+          "PipelineII": "61",
+          "PipelineDepth": "",
+          "PipelineType": "no"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "7.145"
+        },
+        "Area": {
+          "DSP": "97",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "7",
+          "FF": "1421",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "6227",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "5",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_563_24": {
+        "Latency": {
+          "LatencyBest": "34",
+          "LatencyAvg": "34",
+          "LatencyWorst": "34",
+          "PipelineII": "33",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.893"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_563_24",
+            "TripCount": "16",
+            "Latency": "32",
+            "PipelineII": "2",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "28",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "187",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_527_21": {
+        "Latency": {
+          "LatencyBest": "18",
+          "LatencyAvg": "18",
+          "LatencyWorst": "18",
+          "PipelineII": "17",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.664"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_527_21",
+            "TripCount": "16",
+            "Latency": "16",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "12",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "63",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "RES_ADD": {
+        "Latency": {
+          "LatencyBest": "0",
+          "LatencyAvg": "0",
+          "LatencyWorst": "0",
+          "PipelineII": "0",
+          "PipelineDepth": "",
+          "PipelineType": "no"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.934"
+        },
+        "Area": {
+          "FF": "0",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "0",
+          "LUT": "1200",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "1",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_538_22": {
+        "Latency": {
+          "LatencyBest": "18",
+          "LatencyAvg": "18",
+          "LatencyWorst": "18",
+          "PipelineII": "17",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.893"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_538_22",
+            "TripCount": "16",
+            "Latency": "16",
+            "PipelineII": "1",
+            "PipelineDepth": "1"
+          }],
+        "Area": {
+          "FF": "7",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "117",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_503_19": {
+        "Latency": {
+          "LatencyBest": "35",
+          "LatencyAvg": "35",
+          "LatencyWorst": "35",
+          "PipelineII": "34",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.010"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_503_19",
+            "TripCount": "16",
+            "Latency": "33",
+            "PipelineII": "2",
+            "PipelineDepth": "4"
+          }],
+        "Area": {
+          "FF": "52",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "190",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "REQUANT_D_MODEL_int32_to_int8": {
+        "Latency": {
+          "LatencyBest": "1",
+          "LatencyAvg": "1",
+          "LatencyWorst": "1",
+          "PipelineII": "1",
+          "PipelineDepth": "",
+          "PipelineType": "no"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "6.041"
+        },
+        "Area": {
+          "DSP": "64",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "5",
+          "FF": "514",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "6616",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "5",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_518_20": {
+        "Latency": {
+          "LatencyBest": "18",
+          "LatencyAvg": "18",
+          "LatencyWorst": "18",
+          "PipelineII": "17",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.893"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_518_20",
+            "TripCount": "16",
+            "Latency": "16",
+            "PipelineII": "1",
+            "PipelineDepth": "1"
+          }],
+        "Area": {
+          "FF": "7",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "117",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_453_12": {
+        "Latency": {
+          "LatencyBest": "18",
+          "LatencyAvg": "18",
+          "LatencyWorst": "18",
+          "PipelineII": "17",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.914"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_453_12",
+            "TripCount": "16",
+            "Latency": "16",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "12",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "63",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_458_13": {
+        "Latency": {
+          "LatencyBest": "8",
+          "LatencyAvg": "8",
+          "LatencyWorst": "8",
+          "PipelineII": "7",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.893"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_458_13",
+            "TripCount": "6",
+            "Latency": "6",
+            "PipelineII": "1",
+            "PipelineDepth": "1"
+          }],
+        "Area": {
+          "FF": "7",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "51",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15": {
+        "Latency": {
+          "LatencyBest": "112",
+          "LatencyAvg": "112",
+          "LatencyWorst": "112",
+          "PipelineII": "111",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "3.772"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_462_14_VITIS_LOOP_463_15",
+            "TripCount": "110",
+            "Latency": "110",
+            "PipelineII": "1",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "40",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "226",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_475_16": {
+        "Latency": {
+          "LatencyBest": "11",
+          "LatencyAvg": "11",
+          "LatencyWorst": "11",
+          "PipelineII": "10",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "2.010"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_475_16",
+            "TripCount": "4",
+            "Latency": "9",
+            "PipelineII": "2",
+            "PipelineDepth": "4"
+          }],
+        "Area": {
+          "FF": "41",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "187",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_490_18": {
+        "Latency": {
+          "LatencyBest": "10",
+          "LatencyAvg": "10",
+          "LatencyWorst": "10",
+          "PipelineII": "9",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.777"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_490_18",
+            "TripCount": "4",
+            "Latency": "8",
+            "PipelineII": "2",
+            "PipelineDepth": "2"
+          }],
+        "Area": {
+          "FF": "24",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "139",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_2": {
+        "Latency": {
+          "LatencyBest": "9",
+          "LatencyAvg": "9",
+          "LatencyWorst": "9",
+          "PipelineII": "2",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "3.702"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_42_2",
+            "TripCount": "1",
+            "Latency": "7",
+            "PipelineII": "1",
+            "PipelineDepth": "7"
+          }],
+        "Area": {
+          "DSP": "11",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "181",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "307",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_21": {
+        "Latency": {
+          "LatencyBest": "9",
+          "LatencyAvg": "9",
+          "LatencyWorst": "9",
+          "PipelineII": "2",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "3.702"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_42_2",
+            "TripCount": "1",
+            "Latency": "7",
+            "PipelineII": "1",
+            "PipelineDepth": "7"
+          }],
+        "Area": {
+          "DSP": "11",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "250",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "341",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_22": {
+        "Latency": {
+          "LatencyBest": "9",
+          "LatencyAvg": "9",
+          "LatencyWorst": "9",
+          "PipelineII": "2",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "3.702"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_42_2",
+            "TripCount": "1",
+            "Latency": "7",
+            "PipelineII": "1",
+            "PipelineDepth": "7"
+          }],
+        "Area": {
+          "DSP": "11",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "251",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "342",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_23": {
+        "Latency": {
+          "LatencyBest": "9",
+          "LatencyAvg": "9",
+          "LatencyWorst": "9",
+          "PipelineII": "2",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "3.702"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_42_2",
+            "TripCount": "1",
+            "Latency": "7",
+            "PipelineII": "1",
+            "PipelineDepth": "7"
+          }],
+        "Area": {
+          "DSP": "11",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "251",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "342",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_42_24": {
+        "Latency": {
+          "LatencyBest": "9",
+          "LatencyAvg": "9",
+          "LatencyWorst": "9",
+          "PipelineII": "2",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "3.702"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_42_2",
+            "TripCount": "1",
+            "Latency": "7",
+            "PipelineII": "1",
+            "PipelineDepth": "7"
+          }],
+        "Area": {
+          "DSP": "11",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "~0",
+          "FF": "251",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "342",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller_Pipeline_VITIS_LOOP_396_11": {
+        "Latency": {
+          "LatencyBest": "66",
+          "LatencyAvg": "66",
+          "LatencyWorst": "66",
+          "PipelineII": "65",
+          "PipelineDepth": "",
+          "PipelineType": "loop auto-rewind stp (delay=0 clock cycles(s))"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "1.877"
+        },
+        "Loops": [{
+            "Name": "VITIS_LOOP_396_11",
+            "TripCount": "64",
+            "Latency": "64",
+            "PipelineII": "1",
+            "PipelineDepth": "1"
+          }],
+        "Area": {
+          "FF": "9",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "~0",
+          "LUT": "56",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "~0",
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "0",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "0",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      },
+      "compute_controller": {
+        "Latency": {
+          "LatencyBest": "1",
+          "LatencyAvg": "12",
+          "LatencyWorst": "233",
+          "PipelineIIMin": "2",
+          "PipelineIIMax": "234",
+          "PipelineII": "2 ~ 234",
+          "PipelineDepth": "",
+          "PipelineType": "no"
+        },
+        "Timing": {
+          "Target": "10.00",
+          "Uncertainty": "2.70",
+          "Estimate": "7.278"
+        },
+        "Area": {
+          "BRAM_18K": "0",
+          "AVAIL_BRAM": "288",
+          "UTIL_BRAM": "0",
+          "DSP": "220",
+          "AVAIL_DSP": "1248",
+          "UTIL_DSP": "17",
+          "FF": "8059",
+          "AVAIL_FF": "234240",
+          "UTIL_FF": "3",
+          "LUT": "30044",
+          "AVAIL_LUT": "117120",
+          "UTIL_LUT": "25",
+          "URAM": "0",
+          "AVAIL_URAM": "64",
+          "UTIL_URAM": "0"
+        }
+      }
+    }
+  },
+  "GenerateBdFiles": "0",
+  "GenData": {
+    "DataVersion": "0.2",
+    "Time": "2026-01-28 19:35:34 EST",
+    "ToolName": "vitis_hls",
+    "ToolVersion": "2025.1"
+  }
+}

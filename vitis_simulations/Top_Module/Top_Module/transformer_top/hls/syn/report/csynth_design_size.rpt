@@ -1,0 +1,72 @@
+================================================================
+== Design Size Report
+================================================================
+
+* Total Instructions per Compilation Phase
++---------------+-----------------------------+--------------+----------------------------------------------------------------------------------------+
+| Phase         | Step                        | Instructions | Description                                                                            |
++---------------+-----------------------------+--------------+----------------------------------------------------------------------------------------+
+| Compile/Link  |                             | 3,678        | After all functions are compiled and linked into a single design                       |
+|               |                             |              |                                                                                        |
+| Unroll/Inline |                             |              | After user unroll and inline pragmas are applied                                       |
+|               | (1) unroll                  | 5,815        | user unroll pragmas are applied                                                        |
+|               | (2) simplification          | 4,568        | simplification of applied user unroll pragmas                                          |
+|               | (3) inline                  | 4,530        | user inline pragmas are applied                                                        |
+|               | (4) simplification          | 4,349        | simplification of applied user inline pragmas                                          |
+|               |                             |              |                                                                                        |
+| Array/Struct  |                             |              | After user array partition and struct aggregate/disaggregate pragmas are applied       |
+|               | (1) array partition         | 5,693        | user array partition pragmas are applied                                               |
+|               | (2) simplification          | 4,924        | simplification of applied user array partition & struct aggregate/disaggregate pragmas |
+|               | (3) aggregate/disaggregate  | 8,704        | user struct aggregate/disaggregate pragmas are applied                                 |
+|               | (4) array reshape           | 6,504        | apply array reshape pragmas                                                            |
+|               | (5) access patterns         | 6,824        | array access pattern optmizations                                                      |
+|               |                             |              |                                                                                        |
+| Performance   |                             |              | After transformations are applied to meet performance pragma targets                   |
+|               | (1) loop simplification     | 5,016        | loop and instruction simplification                                                    |
+|               | (2) parallelization         | 5,016        | loops are unrolled or pipelined to meet performance targets                            |
+|               | (3) array partition         | 5,016        | arrays are partitioned to meet performance targets                                     |
+|               | (4) simplification          | 4,260        | simplification of design after performance transformations                             |
+|               |                             |              |                                                                                        |
+| HW Transforms |                             |              | After hardware transfomations                                                          |
+|               | (1) lowering                | 4,350        | initial conversion to HW specific instructions                                         |
+|               | (2) optimizations           | 4,088        | high level synthesis optimizations                                                     |
++---------------+-----------------------------+--------------+----------------------------------------------------------------------------------------+
+
+* Instructions per Function for each Compilation Phase
++------------------------------+-----------------------------+-----------------+-----------------+-----------------+-----------------+-----------------+
+| Function                     | Location                    | Compile/Link    | Unroll/Inline   | Array/Struct    | Performance     | HW Transforms   |
++------------------------------+-----------------------------+-----------------+-----------------+-----------------+-----------------+-----------------+
+| + transformer_top            | top.cpp:4                   | 3,678           | 4,349           | 6,824           | 4,260           | 4,088           |
+|  + ControlMemInterface       | ControlMemInterface.cpp:148 |  310            |                 |                 |                 |                 |
+|     init_mem_space           | ControlMemInterface.cpp:105 |   67            |                 |                 |                 |                 |
+|     is_valid_address         | ControlMemInterface.cpp:5   |    7            |                 |                 |                 |                 |
+|     ctrl_write               | ControlMemInterface.cpp:60  |  104            |                 |                 |                 |                 |
+|     ctrl_read                | ControlMemInterface.cpp:14  |  103            |                 |                 |                 |                 |
+|  + scheduler_hls             | Scheduler_FSM.cpp:47        | 3,276           | 4,059           | 6,566           | 4,002           | 3,738           |
+|   + init_head_ctx            | head_helpers.cpp:29         |  390 (3 calls)  |  880 (10 calls) |  992 (10 calls) |  256 (10 calls) |  256 (10 calls) |
+|      pack_compute_op         | head_helpers.cpp:6          |   72 (6 calls)  |                 |                 |                 |                 |
+|      pack_dma_op             | head_helpers.cpp:15         |   36 (3 calls)  |                 |                 |                 |                 |
+|     pack_compute_instruction | Scheduler_FSM.cpp:27        |  204 (17 calls) |                 |                 |                 |                 |
+|     pack_dma_op              | Scheduler_FSM.cpp:36        |   96 (8 calls)  |                 |                 |                 |                 |
+|     HeadCtx                  | top_params.hpp:239          |   91            |                 |                 |                 |                 |
+|   + drive_group_head_phase   | head_helpers.cpp:395        | 1,472           | 1,325           | 1,229           | 1,229           | 1,229           |
+|    + run_single_head         | head_helpers.cpp:87         | 1,435           |                 |                 |                 |                 |
+|     + init_head_ctx          | head_helpers.cpp:29         |  130            |                 |                 |                 |                 |
+|        pack_compute_op       | head_helpers.cpp:6          |   24 (2 calls)  |                 |                 |                 |                 |
+|        pack_dma_op           | head_helpers.cpp:15         |   12            |                 |                 |                 |                 |
+|       pack_dma_op            | head_helpers.cpp:15         |  120 (10 calls) |                 |                 |                 |                 |
+|       pack_compute_op        | head_helpers.cpp:6          |  288 (24 calls) |                 |                 |                 |                 |
+|       unpack_compute_op      | head_helpers.cpp:24         |    3            |                 |                 |                 |                 |
+|      init_head_ctx           | head_helpers.cpp:29         |                 |  104 (2 calls)  |  104 (2 calls)  |  104 (2 calls)  |  104 (2 calls)  |
+|  + irq_wizard                | IRQ_Wizard.cpp:15           |   29            |                 |                 |                 |                 |
+|     evaluate_irq             | IRQ_Wizard.cpp:8            |    8            |                 |                 |                 |                 |
++------------------------------+-----------------------------+-----------------+-----------------+-----------------+-----------------+-----------------+
+
+* Design Size Message Settings
++---------------------------------------------+--------+------------------------------------------------------------------+
+| Message Setting                             | Value  | Description                                                      |
++---------------------------------------------+--------+------------------------------------------------------------------+
+| config_compile -design_size_maximum_warning | 100000 | Show a warning when total design instructions exceeds this value |
++---------------------------------------------+--------+------------------------------------------------------------------+
+
+

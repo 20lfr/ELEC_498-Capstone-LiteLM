@@ -1,0 +1,73 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_REQUANT_D_MODEL_int32_to_int8.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_RES_ADD.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_RMS_NORM.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_RMS_NORM_Pipeline_VITIS_LOOP_123_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_163_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_396_11.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_2.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_21.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_22.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_23.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_42_24.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_453_12.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_458_13.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_475_16.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_490_18.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_503_19.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_518_20.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_527_21.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_538_22.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_547_23.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_563_24.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_571_25.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_576_26.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_593_29.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_601_31.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_616_33.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_634_34.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_642_35.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_650_36.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_672_40.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_680_42.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_Pipeline_VITIS_LOOP_693_44.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_flow_control_loop_pipe_sequential_init.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mac_muladd_16s_4s_20s_21_4_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mac_muladd_16s_4s_21s_21_4_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mac_muladd_16s_4s_21s_32_4_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mac_muladd_8s_8s_20s_20_4_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mul_16s_4s_20_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mul_27ns_21s_45_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mul_32s_16s_48_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mul_32s_32s_45_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_mul_32s_32s_64_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_read_i32.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_11_3_16_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_11_3_32_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_33_4_15_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_33_4_16_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_33_4_32_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_33_4_8_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_9_2_16_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sparsemux_9_2_32_1_1.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_sqrt_fixed_32_19_s.v" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/verilog/compute_controller_udiv_27s_23ns_27_31_seq_1.v" \
+
+sv xil_defaultlib  --include "../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef" \
+"../../../../../../HLS-Verilog/Transformer_logic/src-Verilog/compute_controller/compute_controller_tb.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

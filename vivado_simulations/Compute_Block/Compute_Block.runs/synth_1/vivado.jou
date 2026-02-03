@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Wed May 21 22:58:25 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Thu Jan 22 19:37:40 2026
+# Process ID         : 73475
+# Current directory  : /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vivado_simulations/Compute_Block/Compute_Block.runs/synth_1
+# Command line       : vivado -log compute_controller.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source compute_controller.tcl
+# Log file           : /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vivado_simulations/Compute_Block/Compute_Block.runs/synth_1/compute_controller.vds
+# Journal file       : /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vivado_simulations/Compute_Block/Compute_Block.runs/synth_1/vivado.jou
+# Running On         : luka-B550-UD-AC-Y1
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.3 LTS
+# Processor Detail   : AMD Ryzen 7 5700X3D 8-Core Processor
+# CPU Frequency      : 1750.000 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 33568 MB
+# Swap memory        : 8589 MB
+# Total Virtual      : 42158 MB
+# Available Virtual  : 29834 MB
+#-----------------------------------------------------------
+source compute_controller.tcl -notrace
