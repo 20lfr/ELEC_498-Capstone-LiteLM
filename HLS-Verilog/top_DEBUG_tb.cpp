@@ -316,6 +316,7 @@ int main() {
     bool seen_irq_done = false;
 
     ControlMemSpace dbg_ctrl_mem{};
+    StatusMemSpace dbg_status_mem{};
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
@@ -333,13 +334,13 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s %-6s %-6s | wl{%s %s %s %s %s %s} dma_done=%s dma_addr=%s\n",
-                "Cycle", "Start", "Reset", "CompOp", "C_St", "C_Dn",
-                "CtrlDin", 
+
+    std::printf("%-8s %-6s %-6s %-6s %-6s %-12s %-12s %-6s %-6s | %-10s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10u %-10s %-8s | wl{Sel L H T} dma_addr=%s\n",
+                "Cycle", "Start", "Reset", "C_St", "WL_St", "CompInstr", "WlInstr", "C_Dn", "DmaDn",
+                "CtrlDin",
                 "DbgState", "WlReq", "WlAddr", "Seen", "IRQ", "IRQFlag", "IRQData",
                 "MemCtrl", "MemIRQ", "MemIRQMsk", "Status", "ErrCd",
-                "WLrdy", "WLstrt", "WLSel", "Layer", "Head", "Tile",
-                "DMADone", "DMAAddr");
+                "DMAAddr");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
@@ -707,6 +708,7 @@ int main() {
             irq_ps,
             dbg_state, 
             dbg_ctrl_mem,
+            dbg_status_mem,
             control_reg,
             irq_status_reg,
             irq_enable_reg,
@@ -728,21 +730,24 @@ int main() {
 
         if (wl_start && !dma_busy) {
             wl_dma_request = true;
-            wl_dma_address = compute_wl_address(wl_addr_sel, wl_layer, wl_head, wl_tile,
-                                                ctrl_mem);
+            wl_dma_address = compute_wl_address(wl_instruction, dbg_ctrl_mem);
             dma_busy  = true;
             dma_timer = DMA_LAT - 1;
         }
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10s %-10u %-6s 0x%04X | wl{%s %s %s %d %d %d} dma_done=%s dma_addr=0x%08X",
+        const DmaFields wl_fields = decode_wl_instruction(wl_instruction);
+        std::printf("%-8d %-6d %-6d %-6s %-6s 0x%08X 0x%08X %-6s %-6s | %-10u | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10s %-10u %-10s 0x%04X | wl{%s %d %d %d} dma_addr=0x%08X",
                     cycle,
                     cntrl_start ? 1 : 0,
-                    cntrl_reset_n ? 1: 0,
-                    compute_op,
+                    cntrl_reset_n ? 1 : 0,
                     dash_or(compute_start),
+                    dash_or(wl_start),
+                    compute_instruction,
+                    wl_instruction,
                     dash_or(compute_done),
+                    dash_or(dma_done),
                     ctrl_data_in,
                     state_name(dbg_state),
                     dash_or(wl_dma_request),
@@ -756,13 +761,10 @@ int main() {
                     dbg_ctrl_mem.irq_mask,
                     status_name(status_mem.status),
                     status_mem.error_code,
-                    dash_or(wl_ready),
-                    dash_or(wl_start),
-                    dma_name(wl_addr_sel),
-                    wl_layer,
-                    wl_head,
-                    wl_tile,
-                    dash_or(dma_done),
+                    dma_name(wl_fields.sel),
+                    wl_fields.layer,
+                    wl_fields.head,
+                    wl_fields.tile,
                     wl_dma_address);
         for (int i = 0; i < NUM_HEADS; ++i) {
             char buf[128];

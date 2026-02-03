@@ -52,6 +52,7 @@ void transformer_top(
     // ------------------------------------------------------------
     SchedState  &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
+    StatusMemSpace &dbg_status_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
     uint32_t &irq_mask_reg,
