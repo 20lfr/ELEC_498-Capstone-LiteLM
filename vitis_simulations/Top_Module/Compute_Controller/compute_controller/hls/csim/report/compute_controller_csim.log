@@ -1,5 +1,6 @@
 INFO: [SIM 2] *************** CSIM start ***************
 INFO: [SIM 4] CSIM will launch CLANG as the compiler.
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp in debug mode
    Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp in debug mode
    Generating csim.exe
 D_MODEL=16 D_TILE_WO=4 NUM_WO_TILES=4
@@ -471,10 +472,10 @@ FFN_W1 out_buf (decoded):
   Y: -10 -10 -10 -10
 141    0     0     0     1     0      0      0      1      -          0x03ff0112 FFN_W1     1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
 142    0     0     1     0     0      0      0      1      -          0x03ff0112 FFN_W1     1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
-143    0     1     1     0     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     1       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
-144    0     0     0     0     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     2       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
-145    0     0     0     0     0      1      0      0      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     2       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
-146    0     0     0     0     0      1      0      0      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     2       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+143    0     1     1     0     0      0      0      0      -          0x00ff0113 FFN_ACT    1     -1    0     1       0x00ff0113 FFN_ACT  1     -1    0     0     1     0    
+144    0     0     0     0     0      0      0      0      -          0x00ff0113 FFN_ACT    1     -1    0     2       0x00ff0113 FFN_ACT  1     -1    0     0     1     0    
+145    0     0     0     0     0      1      0      0      FFN_ACT    0x00ff0113 FFN_ACT    1     -1    0     2       0x00ff0113 FFN_ACT  1     -1    0     0     1     0    
+146    0     0     0     0     0      1      0      0      FFN_ACT    0x00ff0113 FFN_ACT    1     -1    0     2       0x00ff0113 FFN_ACT  1     -1    0     0     1     0    
 in_buf (send)[129]:
   0000: d8 ff e5 ff f2 ff ff ff 0c 00 19 00 26 00 33 00
   0010: 40 00 4d 00 5a 00 67 00 74 00 81 00 8e 00 9b 00
@@ -487,9 +488,9 @@ in_buf (send)[129]:
   0080: 00
 FFN_ACT in_buf (decoded):
   X: -40 -27 -14 -1 12 25 38 51 64 77 90 103 116 129 142 155 168 181 194 207 220 233
-147    0     0     0     0     0      0      0      1      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     3       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
-148    0     0     0     0     0      0      0      1      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     4       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
-149    0     0     0     0     0      0      0      1      -          0x00ff011d FFN_ACT    1     -1    0     5       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+147    0     0     0     0     0      0      0      1      FFN_ACT    0x00ff0113 FFN_ACT    1     -1    0     3       0x00ff0113 FFN_ACT  1     -1    0     0     1     0    
+148    0     0     0     0     0      0      0      1      FFN_ACT    0x00ff0113 FFN_ACT    1     -1    0     4       0x00ff0113 FFN_ACT  1     -1    0     0     1     0    
+149    0     0     0     0     0      0      0      1      -          0x00ff0113 FFN_ACT    1     -1    0     5       0x00ff0113 FFN_ACT  1     -1    0     0     1     0    
 out_buf (done)[64]:
   0000: 00 00 00 00 00 00 00 00 0c 00 19 00 26 00 33 00
   0010: 40 00 4d 00 5a 00 67 00 74 00 81 00 8e 00 9b 00
@@ -497,8 +498,8 @@ out_buf (done)[64]:
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_ACT out_buf (decoded):
   Y: 0 0 0 0 12 25 38 51 64 77 90 103 116 129 142 155 168 181 194 207 220 233
-150    0     0     0     1     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
-151    0     0     1     0     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+150    0     0     0     1     0      0      0      0      -          0x00ff0113 FFN_ACT    1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+151    0     0     1     0     0      0      0      0      -          0x00ff0113 FFN_ACT    1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
 152    0     1     1     0     0      0      0      0      -          0x00ff0114 FFN_W2     1     -1    0     1       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
 153    0     0     0     0     0      0      0      0      -          0x00ff0114 FFN_W2     1     -1    0     2       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
 154    0     0     0     0     0      1      0      0      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     2       0x00ff0114 FFN_W2   1     -1    0     0     1     0    

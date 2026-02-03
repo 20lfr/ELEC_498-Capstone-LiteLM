@@ -1,0 +1,521 @@
+
+
+================================================================
+== Vitis HLS Report for 'SOFTMAX'
+================================================================
+* Date:           Fri Jan 30 15:25:10 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        headed_compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  6.730 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |       62|       95|  0.620 us|  0.950 us|   62|   95|       no|
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 42
+* Pipeline : 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 
+3 --> 4 
+4 --> 5 
+5 --> 6 
+6 --> 7 
+7 --> 8 41 
+8 --> 9 
+9 --> 10 
+10 --> 11 
+11 --> 12 
+12 --> 13 
+13 --> 14 
+14 --> 15 
+15 --> 16 
+16 --> 17 
+17 --> 18 
+18 --> 19 
+19 --> 20 
+20 --> 21 
+21 --> 22 
+22 --> 23 
+23 --> 24 
+24 --> 25 
+25 --> 26 
+26 --> 27 
+27 --> 28 
+28 --> 29 
+29 --> 30 
+30 --> 31 
+31 --> 32 
+32 --> 33 
+33 --> 34 
+34 --> 35 
+35 --> 36 
+36 --> 37 
+37 --> 38 
+38 --> 39 
+39 --> 40 
+40 --> 41 
+41 --> 42 
+42 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 0.00>
+ST_1 : Operation 43 [1/1] (0.00ns)   --->   "%sum_exp_loc = alloca i64 1"   --->   Operation 43 'alloca' 'sum_exp_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 44 [1/1] (0.00ns)   --->   "%exp_buf_loc = alloca i64 1"   --->   Operation 44 'alloca' 'exp_buf_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 45 [1/1] (0.00ns)   --->   "%exp_buf_1_loc = alloca i64 1"   --->   Operation 45 'alloca' 'exp_buf_1_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 46 [1/1] (0.00ns)   --->   "%exp_buf_2_loc = alloca i64 1"   --->   Operation 46 'alloca' 'exp_buf_2_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 47 [1/1] (0.00ns)   --->   "%exp_buf_3_loc = alloca i64 1"   --->   Operation 47 'alloca' 'exp_buf_3_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 48 [1/1] (0.00ns)   --->   "%exp_buf_4_loc = alloca i64 1"   --->   Operation 48 'alloca' 'exp_buf_4_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 49 [1/1] (0.00ns)   --->   "%exp_buf_5_loc = alloca i64 1"   --->   Operation 49 'alloca' 'exp_buf_5_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 50 [1/1] (0.00ns)   --->   "%exp_buf_6_loc = alloca i64 1"   --->   Operation 50 'alloca' 'exp_buf_6_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 51 [1/1] (0.00ns)   --->   "%exp_buf_7_loc = alloca i64 1"   --->   Operation 51 'alloca' 'exp_buf_7_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 52 [1/1] (0.00ns)   --->   "%exp_buf_8_loc = alloca i64 1"   --->   Operation 52 'alloca' 'exp_buf_8_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 53 [1/1] (0.00ns)   --->   "%exp_buf_9_loc = alloca i64 1"   --->   Operation 53 'alloca' 'exp_buf_9_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 54 [1/1] (0.00ns)   --->   "%exp_buf_10_loc = alloca i64 1"   --->   Operation 54 'alloca' 'exp_buf_10_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 55 [1/1] (0.00ns)   --->   "%exp_buf_11_loc = alloca i64 1"   --->   Operation 55 'alloca' 'exp_buf_11_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 56 [1/1] (0.00ns)   --->   "%exp_buf_12_loc = alloca i64 1"   --->   Operation 56 'alloca' 'exp_buf_12_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 57 [1/1] (0.00ns)   --->   "%exp_buf_13_loc = alloca i64 1"   --->   Operation 57 'alloca' 'exp_buf_13_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 58 [1/1] (0.00ns)   --->   "%exp_buf_14_loc = alloca i64 1"   --->   Operation 58 'alloca' 'exp_buf_14_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 59 [1/1] (0.00ns)   --->   "%exp_buf_15_loc = alloca i64 1"   --->   Operation 59 'alloca' 'exp_buf_15_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 60 [1/1] (0.00ns)   --->   "%max_val_1_loc = alloca i64 1"   --->   Operation 60 'alloca' 'max_val_1_loc' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 61 [2/2] (0.67ns)   --->   "%max_val = load i16 0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:231]   --->   Operation 61 'load' 'max_val' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 16> <Depth = 16> <RAM>
+
+State 2 <SV = 1> <Delay = 0.67>
+ST_2 : Operation 62 [1/2] ( I:0.67ns O:0.67ns )   --->   "%max_val = load i16 0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:231]   --->   Operation 62 'load' 'max_val' <Predicate = true> <Delay = 0.67> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 0.67> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 16> <Depth = 16> <RAM>
+
+State 3 <SV = 2> <Delay = 0.42>
+ST_3 : Operation 63 [2/2] (0.42ns)   --->   "%call_ln231 = call void @SOFTMAX_Pipeline_VITIS_LOOP_232_1, i16 %max_val, i16 %max_val_1_loc, i16 %soft_in" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:231]   --->   Operation 63 'call' 'call_ln231' <Predicate = true> <Delay = 0.42> <CoreType = "Generic">   --->   Generic Core
+
+State 4 <SV = 3> <Delay = 1.64>
+ST_4 : Operation 64 [1/2] (1.64ns)   --->   "%call_ln231 = call void @SOFTMAX_Pipeline_VITIS_LOOP_232_1, i16 %max_val, i16 %max_val_1_loc, i16 %soft_in" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:231]   --->   Operation 64 'call' 'call_ln231' <Predicate = true> <Delay = 1.64> <CoreType = "Generic">   --->   Generic Core
+
+State 5 <SV = 4> <Delay = 0.00>
+ST_5 : Operation 65 [1/1] (0.00ns)   --->   "%max_val_1_loc_load = load i16 %max_val_1_loc"   --->   Operation 65 'load' 'max_val_1_loc_load' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 66 [2/2] (0.00ns)   --->   "%call_ln0 = call void @SOFTMAX_Pipeline_VITIS_LOOP_245_2, i16 %max_val_1_loc_load, i16 %exp_buf_15_loc, i16 %exp_buf_14_loc, i16 %exp_buf_13_loc, i16 %exp_buf_12_loc, i16 %exp_buf_11_loc, i16 %exp_buf_10_loc, i16 %exp_buf_9_loc, i16 %exp_buf_8_loc, i16 %exp_buf_7_loc, i16 %exp_buf_6_loc, i16 %exp_buf_5_loc, i16 %exp_buf_4_loc, i16 %exp_buf_3_loc, i16 %exp_buf_2_loc, i16 %exp_buf_1_loc, i16 %exp_buf_loc, i19 %sum_exp_loc, i16 %soft_in, i15 %exp_lut_q15"   --->   Operation 66 'call' 'call_ln0' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Generic Core
+
+State 6 <SV = 5> <Delay = 0.00>
+ST_6 : Operation 67 [1/2] (0.00ns)   --->   "%call_ln0 = call void @SOFTMAX_Pipeline_VITIS_LOOP_245_2, i16 %max_val_1_loc_load, i16 %exp_buf_15_loc, i16 %exp_buf_14_loc, i16 %exp_buf_13_loc, i16 %exp_buf_12_loc, i16 %exp_buf_11_loc, i16 %exp_buf_10_loc, i16 %exp_buf_9_loc, i16 %exp_buf_8_loc, i16 %exp_buf_7_loc, i16 %exp_buf_6_loc, i16 %exp_buf_5_loc, i16 %exp_buf_4_loc, i16 %exp_buf_3_loc, i16 %exp_buf_2_loc, i16 %exp_buf_1_loc, i16 %exp_buf_loc, i19 %sum_exp_loc, i16 %soft_in, i15 %exp_lut_q15"   --->   Operation 67 'call' 'call_ln0' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Generic Core
+
+State 7 <SV = 6> <Delay = 1.46>
+ST_7 : Operation 68 [1/1] (0.00ns)   --->   "%exp_buf_15_loc_load = load i16 %exp_buf_15_loc"   --->   Operation 68 'load' 'exp_buf_15_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 69 [1/1] (0.00ns)   --->   "%exp_buf_14_loc_load = load i16 %exp_buf_14_loc"   --->   Operation 69 'load' 'exp_buf_14_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 70 [1/1] (0.00ns)   --->   "%exp_buf_13_loc_load = load i16 %exp_buf_13_loc"   --->   Operation 70 'load' 'exp_buf_13_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 71 [1/1] (0.00ns)   --->   "%exp_buf_12_loc_load = load i16 %exp_buf_12_loc"   --->   Operation 71 'load' 'exp_buf_12_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 72 [1/1] (0.00ns)   --->   "%exp_buf_11_loc_load = load i16 %exp_buf_11_loc"   --->   Operation 72 'load' 'exp_buf_11_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 73 [1/1] (0.00ns)   --->   "%exp_buf_10_loc_load = load i16 %exp_buf_10_loc"   --->   Operation 73 'load' 'exp_buf_10_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 74 [1/1] (0.00ns)   --->   "%exp_buf_9_loc_load = load i16 %exp_buf_9_loc"   --->   Operation 74 'load' 'exp_buf_9_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 75 [1/1] (0.00ns)   --->   "%exp_buf_8_loc_load = load i16 %exp_buf_8_loc"   --->   Operation 75 'load' 'exp_buf_8_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 76 [1/1] (0.00ns)   --->   "%exp_buf_7_loc_load = load i16 %exp_buf_7_loc"   --->   Operation 76 'load' 'exp_buf_7_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 77 [1/1] (0.00ns)   --->   "%exp_buf_6_loc_load = load i16 %exp_buf_6_loc"   --->   Operation 77 'load' 'exp_buf_6_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 78 [1/1] (0.00ns)   --->   "%exp_buf_5_loc_load = load i16 %exp_buf_5_loc"   --->   Operation 78 'load' 'exp_buf_5_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 79 [1/1] (0.00ns)   --->   "%exp_buf_4_loc_load = load i16 %exp_buf_4_loc"   --->   Operation 79 'load' 'exp_buf_4_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 80 [1/1] (0.00ns)   --->   "%exp_buf_3_loc_load = load i16 %exp_buf_3_loc"   --->   Operation 80 'load' 'exp_buf_3_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 81 [1/1] (0.00ns)   --->   "%exp_buf_2_loc_load = load i16 %exp_buf_2_loc"   --->   Operation 81 'load' 'exp_buf_2_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 82 [1/1] (0.00ns)   --->   "%exp_buf_1_loc_load = load i16 %exp_buf_1_loc"   --->   Operation 82 'load' 'exp_buf_1_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 83 [1/1] (0.00ns)   --->   "%exp_buf_loc_load = load i16 %exp_buf_loc"   --->   Operation 83 'load' 'exp_buf_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 84 [1/1] (0.00ns)   --->   "%sum_exp_loc_load = load i19 %sum_exp_loc"   --->   Operation 84 'load' 'sum_exp_loc_load' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 85 [1/1] (0.00ns)   --->   "%zext_ln245 = zext i19 %sum_exp_loc_load" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:245]   --->   Operation 85 'zext' 'zext_ln245' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 86 [1/1] (0.88ns)   --->   "%icmp_ln258 = icmp_eq  i19 %sum_exp_loc_load, i19 0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:258]   --->   Operation 86 'icmp' 'icmp_ln258' <Predicate = true> <Delay = 0.88> <CoreInst = "Cmp">   --->   Core 9 'Cmp' <Latency = 0> <II = 1> <Delay = 0.88> <FuncUnit> <Opcode : 'seteq' 'setne' 'setle' 'setge' 'setlt' 'setgt'> <InPorts = 2> <OutPorts = 1>
+ST_7 : Operation 87 [1/1] (0.42ns)   --->   "%br_ln258 = br i1 %icmp_ln258, void %if.then30, void %VITIS_LOOP_266_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:258]   --->   Operation 87 'br' 'br_ln258' <Predicate = true> <Delay = 0.42>
+ST_7 : Operation 88 [1/1] (0.00ns)   --->   "%lshr_ln = partselect i18 @_ssdm_op_PartSelect.i18.i19.i32.i32, i19 %sum_exp_loc_load, i32 1, i32 18" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 88 'partselect' 'lshr_ln' <Predicate = (!icmp_ln258)> <Delay = 0.00>
+ST_7 : Operation 89 [1/1] (0.00ns)   --->   "%zext_ln260 = zext i18 %lshr_ln" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 89 'zext' 'zext_ln260' <Predicate = (!icmp_ln258)> <Delay = 0.00>
+ST_7 : Operation 90 [1/1] (0.00ns)   --->   "%or_ln = bitconcatenate i31 @_ssdm_op_BitConcatenate.i31.i1.i30, i1 1, i30 %zext_ln260" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 90 'bitconcatenate' 'or_ln' <Predicate = (!icmp_ln258)> <Delay = 0.00>
+ST_7 : Operation 91 [35/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 91 'udiv' 'inv_sum_q15' <Predicate = (!icmp_ln258)> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 8 <SV = 7> <Delay = 1.46>
+ST_8 : Operation 92 [34/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 92 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 9 <SV = 8> <Delay = 1.46>
+ST_9 : Operation 93 [33/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 93 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 10 <SV = 9> <Delay = 1.46>
+ST_10 : Operation 94 [32/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 94 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 11 <SV = 10> <Delay = 1.46>
+ST_11 : Operation 95 [31/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 95 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 12 <SV = 11> <Delay = 1.46>
+ST_12 : Operation 96 [30/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 96 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 13 <SV = 12> <Delay = 1.46>
+ST_13 : Operation 97 [29/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 97 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 14 <SV = 13> <Delay = 1.46>
+ST_14 : Operation 98 [28/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 98 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 15 <SV = 14> <Delay = 1.46>
+ST_15 : Operation 99 [27/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 99 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 16 <SV = 15> <Delay = 1.46>
+ST_16 : Operation 100 [26/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 100 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 17 <SV = 16> <Delay = 1.46>
+ST_17 : Operation 101 [25/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 101 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 18 <SV = 17> <Delay = 1.46>
+ST_18 : Operation 102 [24/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 102 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 19 <SV = 18> <Delay = 1.46>
+ST_19 : Operation 103 [23/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 103 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 20 <SV = 19> <Delay = 1.46>
+ST_20 : Operation 104 [22/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 104 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 21 <SV = 20> <Delay = 1.46>
+ST_21 : Operation 105 [21/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 105 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 22 <SV = 21> <Delay = 1.46>
+ST_22 : Operation 106 [20/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 106 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 23 <SV = 22> <Delay = 1.46>
+ST_23 : Operation 107 [19/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 107 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 24 <SV = 23> <Delay = 1.46>
+ST_24 : Operation 108 [18/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 108 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 25 <SV = 24> <Delay = 1.46>
+ST_25 : Operation 109 [17/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 109 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 26 <SV = 25> <Delay = 1.46>
+ST_26 : Operation 110 [16/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 110 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 27 <SV = 26> <Delay = 1.46>
+ST_27 : Operation 111 [15/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 111 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 28 <SV = 27> <Delay = 1.46>
+ST_28 : Operation 112 [14/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 112 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 29 <SV = 28> <Delay = 1.46>
+ST_29 : Operation 113 [13/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 113 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 30 <SV = 29> <Delay = 1.46>
+ST_30 : Operation 114 [12/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 114 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 31 <SV = 30> <Delay = 1.46>
+ST_31 : Operation 115 [11/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 115 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 32 <SV = 31> <Delay = 1.46>
+ST_32 : Operation 116 [10/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 116 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 33 <SV = 32> <Delay = 1.46>
+ST_33 : Operation 117 [9/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 117 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 34 <SV = 33> <Delay = 1.46>
+ST_34 : Operation 118 [8/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 118 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 35 <SV = 34> <Delay = 1.46>
+ST_35 : Operation 119 [7/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 119 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 36 <SV = 35> <Delay = 1.46>
+ST_36 : Operation 120 [6/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 120 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 37 <SV = 36> <Delay = 1.46>
+ST_37 : Operation 121 [5/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 121 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 38 <SV = 37> <Delay = 1.46>
+ST_38 : Operation 122 [4/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 122 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 39 <SV = 38> <Delay = 1.46>
+ST_39 : Operation 123 [3/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 123 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 40 <SV = 39> <Delay = 1.46>
+ST_40 : Operation 124 [2/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 124 'udiv' 'inv_sum_q15' <Predicate = true> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+
+State 41 <SV = 40> <Delay = 6.72>
+ST_41 : Operation 125 [1/35] (1.46ns)   --->   "%inv_sum_q15 = udiv i31 %or_ln, i31 %zext_ln245" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 125 'udiv' 'inv_sum_q15' <Predicate = (!icmp_ln258)> <Delay = 1.46> <CoreInst = "DivnS_SEQ">   --->   Core 7 'DivnS_SEQ' <Latency = 34> <II = 31> <Delay = 1.46> <FuncUnit> <Opcode : 'udiv' 'sdiv' 'urem' 'srem'> <InPorts = 2> <OutPorts = 1>
+ST_41 : Operation 126 [1/1] (0.42ns)   --->   "%br_ln262 = br void %VITIS_LOOP_266_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:262]   --->   Operation 126 'br' 'br_ln262' <Predicate = (!icmp_ln258)> <Delay = 0.42>
+ST_41 : Operation 127 [1/1] (0.00ns)   --->   "%inv_sum_q15_1 = phi i31 %inv_sum_q15, void %if.then30, i31 0, void %entry"   --->   Operation 127 'phi' 'inv_sum_q15_1' <Predicate = true> <Delay = 0.00>
+ST_41 : Operation 128 [2/2] (4.83ns)   --->   "%call_ln260 = call void @SOFTMAX_Pipeline_VITIS_LOOP_266_3, i16 %exp_buf_loc_load, i16 %exp_buf_1_loc_load, i16 %exp_buf_2_loc_load, i16 %exp_buf_3_loc_load, i16 %exp_buf_4_loc_load, i16 %exp_buf_5_loc_load, i16 %exp_buf_6_loc_load, i16 %exp_buf_7_loc_load, i16 %exp_buf_8_loc_load, i16 %exp_buf_9_loc_load, i16 %exp_buf_10_loc_load, i16 %exp_buf_11_loc_load, i16 %exp_buf_12_loc_load, i16 %exp_buf_13_loc_load, i16 %exp_buf_14_loc_load, i16 %exp_buf_15_loc_load, i31 %inv_sum_q15_1, i15 %soft_out" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 128 'call' 'call_ln260' <Predicate = true> <Delay = 4.83> <CoreType = "Generic">   --->   Generic Core
+
+State 42 <SV = 41> <Delay = 1.64>
+ST_42 : Operation 129 [1/2] (1.64ns)   --->   "%call_ln260 = call void @SOFTMAX_Pipeline_VITIS_LOOP_266_3, i16 %exp_buf_loc_load, i16 %exp_buf_1_loc_load, i16 %exp_buf_2_loc_load, i16 %exp_buf_3_loc_load, i16 %exp_buf_4_loc_load, i16 %exp_buf_5_loc_load, i16 %exp_buf_6_loc_load, i16 %exp_buf_7_loc_load, i16 %exp_buf_8_loc_load, i16 %exp_buf_9_loc_load, i16 %exp_buf_10_loc_load, i16 %exp_buf_11_loc_load, i16 %exp_buf_12_loc_load, i16 %exp_buf_13_loc_load, i16 %exp_buf_14_loc_load, i16 %exp_buf_15_loc_load, i31 %inv_sum_q15_1, i15 %soft_out" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260]   --->   Operation 129 'call' 'call_ln260' <Predicate = true> <Delay = 1.64> <CoreType = "Generic">   --->   Generic Core
+ST_42 : Operation 130 [1/1] (0.00ns)   --->   "%ret_ln274 = ret" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:274]   --->   Operation 130 'ret' 'ret_ln274' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10.000ns, clock uncertainty: 2.700ns.
+
+ <State 1>: 0.000ns
+The critical path consists of the following:
+
+ <State 2>: 0.677ns
+The critical path consists of the following:
+	'load' operation 16 bit ('max_val', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:231) on array 'soft_in' [22]  (0.677 ns)
+
+ <State 3>: 0.427ns
+The critical path consists of the following:
+	'call' operation 0 bit ('call_ln231', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:231) to 'SOFTMAX_Pipeline_VITIS_LOOP_232_1' [23]  (0.427 ns)
+
+ <State 4>: 1.643ns
+The critical path consists of the following:
+	'call' operation 0 bit ('call_ln231', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:231) to 'SOFTMAX_Pipeline_VITIS_LOOP_232_1' [23]  (1.643 ns)
+
+ <State 5>: 0.000ns
+The critical path consists of the following:
+
+ <State 6>: 0.000ns
+The critical path consists of the following:
+
+ <State 7>: 1.468ns
+The critical path consists of the following:
+	'load' operation 19 bit ('sum_exp_loc_load') on local variable 'sum_exp_loc' [42]  (0.000 ns)
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 8>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 9>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 10>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 11>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 12>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 13>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 14>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 15>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 16>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 17>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 18>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 19>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 20>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 21>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 22>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 23>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 24>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 25>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 26>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 27>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 28>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 29>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 30>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 31>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 32>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 33>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 34>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 35>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 36>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 37>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 38>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 39>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 40>: 1.468ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+
+ <State 41>: 6.730ns
+The critical path consists of the following:
+	'udiv' operation 31 bit ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [50]  (1.468 ns)
+	multiplexor before 'phi' operation 31 bit ('inv_sum_q15') with incoming values : ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [53]  (0.427 ns)
+	'phi' operation 31 bit ('inv_sum_q15') with incoming values : ('inv_sum_q15', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) [53]  (0.000 ns)
+	'call' operation 0 bit ('call_ln260', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) to 'SOFTMAX_Pipeline_VITIS_LOOP_266_3' [54]  (4.835 ns)
+
+ <State 42>: 1.643ns
+The critical path consists of the following:
+	'call' operation 0 bit ('call_ln260', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:260) to 'SOFTMAX_Pipeline_VITIS_LOOP_266_3' [54]  (1.643 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+	State 5
+	State 6
+	State 7
+	State 8
+	State 9
+	State 10
+	State 11
+	State 12
+	State 13
+	State 14
+	State 15
+	State 16
+	State 17
+	State 18
+	State 19
+	State 20
+	State 21
+	State 22
+	State 23
+	State 24
+	State 25
+	State 26
+	State 27
+	State 28
+	State 29
+	State 30
+	State 31
+	State 32
+	State 33
+	State 34
+	State 35
+	State 36
+	State 37
+	State 38
+	State 39
+	State 40
+	State 41
+	State 42
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

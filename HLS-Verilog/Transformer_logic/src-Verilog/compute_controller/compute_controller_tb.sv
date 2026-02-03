@@ -99,6 +99,7 @@ module compute_controller_tb;
     localparam logic [7:0] CMP_RESID0    = 8'h10;
     localparam logic [7:0] CMP_REQUANT2  = 8'h11;
     localparam logic [7:0] CMP_FFN_W1    = 8'h12;
+    localparam logic [7:0] CMP_FFN_ACT   = 8'h13;
     localparam logic [7:0] CMP_FFN_W2    = 8'h14;
     localparam logic [7:0] CMP_REQUANT3  = 8'h15;
     localparam logic [7:0] CMP_RESID1    = 8'h16;
@@ -106,7 +107,7 @@ module compute_controller_tb;
     localparam logic [7:0] CMP_REQUANT4  = 8'h18;
     localparam logic [7:0] CMP_DEQUANT   = 8'h19;
     localparam logic [7:0] CMP_LOGITS    = 8'h1A;
-    localparam logic [7:0] CMP_FFN_ACT   = 8'h1D;
+    
 
 
 

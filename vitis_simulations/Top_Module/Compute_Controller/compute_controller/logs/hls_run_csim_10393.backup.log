@@ -1,0 +1,841 @@
+WARNING: [vitis-run 60-2507] Dispatch failed to load the system diagram library librdi_system_diagram. Diagrams will not be produced.
+  **** HLS Build v2025.1 6135595
+INFO: [HLS 200-2005] Using work_dir /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller 
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/vitis-comp.json
+INFO: [HLS 200-10] Creating and opening component '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller'.
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-2174] Applying component config ini file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'tb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding test bench file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_tb.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.top=compute_controller' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying config ini 'flow_target=vivado' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying config ini 'part=xck26-sfvc784-2LV-c' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xck26-sfvc784-2LV-c'
+INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(11)
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/hls_config.cfg(5)
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller/compute_controller/vitis-comp.json
+INFO: [SIM 211-2] *************** CSIM start ***************
+INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
+INFO: [HLS 200-2036] Building debug C Simulation binaries
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp in debug mode
+   Generating csim.exe
+D_MODEL=16 D_TILE_WO=4 NUM_WO_TILES=4
+valueA[16]: 11 -34 57 -80 2 -25 48 -71 94 -16 39 -62 85 -7 30 -53
+bias[16]: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+weights[16][16]:
+  out 0: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 1: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 2: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 3: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 4: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 5: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 6: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 7: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 8: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 9: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 10: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 11: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 12: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 13: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 14: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  out 15: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+Cycle  Rst   Start Ready Done  Err    MRead  MWrite MDone  MOp        Instr      Op    Layer Head  Tile  State   ReqInstr   ReqOp    ReqL  ReqH  ReqT  MacS  MacR  MacC  Acc[0:15]
+0      1     0     1     0     0      0      0      0      -          0x00000000 -          0     0     0     0       0x00000000 -        0     0     0     0     0     0    
+1      1     0     1     0     0      0      0      0      -          0x00000000 -          0     0     0     0       0x00000000 -        0     0     0     0     0     0    
+2      0     0     1     0     0      0      0      0      -          0x00000000 -          0     0     0     0       0x00000000 -        0     0     0     0     1     0    
+3      0     1     1     0     0      0      0      0      -          0x00ff010f OUT_PROJ   1     -1    0     1       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+4      0     0     0     0     0      0      0      0      -          0x00ff010f OUT_PROJ   1     -1    0     2       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+5      0     0     0     0     0      1      0      0      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     2       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+6      0     0     0     0     0      1      0      0      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     2       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: 0b de 39 b0 02 e7 30 b9 5e f0 27 c2 55 f9 1e cb
+  0010: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0020: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0030: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+OUT_PROJ in_buf (decoded):
+  ACT: 11 -34 57 -80 2 -25 48 -71 94 -16 39 -62 85 -7 30 -53
+  W: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  B: 7 7 7 7
+7      0     0     0     0     0      0      0      1      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     3       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+8      0     0     0     0     0      0      0      1      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     3       0x00ff010f OUT_PROJ 1     -1    0     1     0     0    
+9      0     0     0     0     0      0      0      1      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     3       0x00ff010f OUT_PROJ 1     -1    0     0     0     1    
+10     0     0     0     0     0      0      0      0      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     4       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+11     0     0     0     0     0      0      1      0      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     4       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+12     0     0     0     0     0      0      1      0      OUT_PROJ   0x00ff010f OUT_PROJ   1     -1    0     4       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+13     0     0     0     0     0      0      0      1      -          0x00ff010f OUT_PROJ   1     -1    0     5       0x00ff010f OUT_PROJ 1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: 85 00 00 00 85 00 00 00 85 00 00 00 85 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+OUT_PROJ out_buf (decoded):
+  Y: 133 133 133 133
+14     0     0     0     1     0      0      0      1      -          0x00ff010f OUT_PROJ   1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+15     0     0     1     0     0      0      0      1      -          0x00ff010f OUT_PROJ   1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+16     0     1     1     0     0      0      0      0      -          0x01ff010f OUT_PROJ   1     -1    1     1       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+17     0     0     0     0     0      0      0      0      -          0x01ff010f OUT_PROJ   1     -1    1     2       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+18     0     0     0     0     0      1      0      0      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     2       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+19     0     0     0     0     0      1      0      0      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     2       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+in_buf (send)[129]:
+  0000: 0b de 39 b0 02 e7 30 b9 5e f0 27 c2 55 f9 1e cb
+  0010: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0020: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0030: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+OUT_PROJ in_buf (decoded):
+  ACT: 11 -34 57 -80 2 -25 48 -71 94 -16 39 -62 85 -7 30 -53
+  W: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  B: 7 7 7 7
+20     0     0     0     0     0      0      0      1      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     3       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+21     0     0     0     0     0      0      0      1      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     3       0x01ff010f OUT_PROJ 1     -1    1     1     0     0    
+22     0     0     0     0     0      0      0      1      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     3       0x01ff010f OUT_PROJ 1     -1    1     0     0     1    
+23     0     0     0     0     0      0      0      0      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     4       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+24     0     0     0     0     0      0      1      0      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     4       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+25     0     0     0     0     0      0      1      0      OUT_PROJ   0x01ff010f OUT_PROJ   1     -1    1     4       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+26     0     0     0     0     0      0      0      1      -          0x01ff010f OUT_PROJ   1     -1    1     5       0x01ff010f OUT_PROJ 1     -1    1     0     1     0    
+out_buf (done)[64]:
+  0000: 85 00 00 00 85 00 00 00 85 00 00 00 85 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+OUT_PROJ out_buf (decoded):
+  Y: 133 133 133 133
+27     0     0     0     1     0      0      0      1      -          0x01ff010f OUT_PROJ   1     -1    1     0       0x00000000 -        0     0     0     0     1     0    
+28     0     0     1     0     0      0      0      1      -          0x01ff010f OUT_PROJ   1     -1    1     0       0x00000000 -        0     0     0     0     1     0    
+29     0     1     1     0     0      0      0      0      -          0x02ff010f OUT_PROJ   1     -1    2     1       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+30     0     0     0     0     0      0      0      0      -          0x02ff010f OUT_PROJ   1     -1    2     2       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+31     0     0     0     0     0      1      0      0      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     2       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+32     0     0     0     0     0      1      0      0      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     2       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+in_buf (send)[129]:
+  0000: 0b de 39 b0 02 e7 30 b9 5e f0 27 c2 55 f9 1e cb
+  0010: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0020: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0030: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+OUT_PROJ in_buf (decoded):
+  ACT: 11 -34 57 -80 2 -25 48 -71 94 -16 39 -62 85 -7 30 -53
+  W: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  B: 7 7 7 7
+33     0     0     0     0     0      0      0      1      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     3       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+34     0     0     0     0     0      0      0      1      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     3       0x02ff010f OUT_PROJ 1     -1    2     1     0     0    
+35     0     0     0     0     0      0      0      1      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     3       0x02ff010f OUT_PROJ 1     -1    2     0     0     1    
+36     0     0     0     0     0      0      0      0      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     4       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+37     0     0     0     0     0      0      1      0      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     4       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+38     0     0     0     0     0      0      1      0      OUT_PROJ   0x02ff010f OUT_PROJ   1     -1    2     4       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+39     0     0     0     0     0      0      0      1      -          0x02ff010f OUT_PROJ   1     -1    2     5       0x02ff010f OUT_PROJ 1     -1    2     0     1     0    
+out_buf (done)[64]:
+  0000: 85 00 00 00 85 00 00 00 85 00 00 00 85 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+OUT_PROJ out_buf (decoded):
+  Y: 133 133 133 133
+40     0     0     0     1     0      0      0      1      -          0x02ff010f OUT_PROJ   1     -1    2     0       0x00000000 -        0     0     0     0     1     0    
+41     0     0     1     0     0      0      0      1      -          0x02ff010f OUT_PROJ   1     -1    2     0       0x00000000 -        0     0     0     0     1     0    
+42     0     1     1     0     0      0      0      0      -          0x03ff010f OUT_PROJ   1     -1    3     1       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+43     0     0     0     0     0      0      0      0      -          0x03ff010f OUT_PROJ   1     -1    3     2       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+44     0     0     0     0     0      1      0      0      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     2       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+45     0     0     0     0     0      1      0      0      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     2       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+in_buf (send)[129]:
+  0000: 0b de 39 b0 02 e7 30 b9 5e f0 27 c2 55 f9 1e cb
+  0010: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0020: 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+  0030: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+OUT_PROJ in_buf (decoded):
+  ACT: 11 -34 57 -80 2 -25 48 -71 94 -16 39 -62 85 -7 30 -53
+  W: 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+  B: 7 7 7 7
+46     0     0     0     0     0      0      0      1      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     3       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+47     0     0     0     0     0      0      0      1      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     3       0x03ff010f OUT_PROJ 1     -1    3     1     0     0    
+48     0     0     0     0     0      0      0      1      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     3       0x03ff010f OUT_PROJ 1     -1    3     0     0     1    
+49     0     0     0     0     0      0      0      0      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     4       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+50     0     0     0     0     0      0      1      0      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     4       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+51     0     0     0     0     0      0      1      0      OUT_PROJ   0x03ff010f OUT_PROJ   1     -1    3     4       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+52     0     0     0     0     0      0      0      1      -          0x03ff010f OUT_PROJ   1     -1    3     5       0x03ff010f OUT_PROJ 1     -1    3     0     1     0    
+out_buf (done)[64]:
+  0000: 85 00 00 00 85 00 00 00 85 00 00 00 85 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+OUT_PROJ out_buf (decoded):
+  Y: 133 133 133 133
+53     0     0     0     1     0      0      0      1      -          0x03ff010f OUT_PROJ   1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
+54     0     0     1     0     0      0      0      1      -          0x03ff010f OUT_PROJ   1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
+55     0     1     1     0     0      0      0      0      -          0x00ff0102 RQ1        1     -1    0     1       0x00ff0102 RQ1      1     -1    0     0     1     0    
+56     0     0     0     0     0      0      0      0      -          0x00ff0102 RQ1        1     -1    0     2       0x00ff0102 RQ1      1     -1    0     0     1     0    
+57     0     0     0     0     0      1      0      0      RQ1        0x00ff0102 RQ1        1     -1    0     2       0x00ff0102 RQ1      1     -1    0     0     1     0    
+58     0     0     0     0     0      1      0      0      RQ1        0x00ff0102 RQ1        1     -1    0     2       0x00ff0102 RQ1      1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: f1 ff ff ff f8 ff ff ff ff ff ff ff 06 00 00 00
+  0010: 0d 00 00 00 14 00 00 00 1b 00 00 00 22 00 00 00
+  0020: 29 00 00 00 30 00 00 00 37 00 00 00 3e 00 00 00
+  0030: 45 00 00 00 4c 00 00 00 53 00 00 00 5a 00 00 00
+  0040: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+REQUANT in_buf (decoded):
+  X: -15 -8 -1 6 13 20 27 34 41 48 55 62 69 76 83 90
+  M: 1
+  N: 0
+  Z: 0
+59     0     0     0     0     0      0      0      1      RQ1        0x00ff0102 RQ1        1     -1    0     3       0x00ff0102 RQ1      1     -1    0     0     1     0    
+60     0     0     0     0     0      0      0      1      RQ1        0x00ff0102 RQ1        1     -1    0     4       0x00ff0102 RQ1      1     -1    0     0     1     0    
+61     0     0     0     0     0      0      0      1      -          0x00ff0102 RQ1        1     -1    0     5       0x00ff0102 RQ1      1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: f1 f8 ff 06 0d 14 1b 22 29 30 37 3e 45 4c 53 5a
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+REQUANT out_buf (decoded):
+  Y: -15 -8 -1 6 13 20 27 34 41 48 55 62 69 76 83 90
+62     0     0     0     1     0      0      0      0      -          0x00ff0102 RQ1        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+63     0     0     1     0     0      0      0      0      -          0x00ff0102 RQ1        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+64     0     1     1     0     0      0      0      0      -          0x00ff0110 RESID0     1     -1    0     1       0x00ff0110 RESID0   1     -1    0     0     1     0    
+65     0     0     0     0     0      0      0      0      -          0x00ff0110 RESID0     1     -1    0     2       0x00ff0110 RESID0   1     -1    0     0     1     0    
+66     0     0     0     0     0      1      0      0      RESID0     0x00ff0110 RESID0     1     -1    0     2       0x00ff0110 RESID0   1     -1    0     0     1     0    
+67     0     0     0     0     0      1      0      0      RESID0     0x00ff0110 RESID0     1     -1    0     2       0x00ff0110 RESID0   1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: 02 fc 04 fa 06 f8 08 f6 0a f4 0c f2 0e f0 10 ee
+  0010: fe 02 fc 04 fa 06 f8 08 f6 0a f4 0c f2 0e f0 10
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+RESID in_buf (decoded):
+  X: 2 -4 4 -6 6 -8 8 -10 10 -12 12 -14 14 -16 16 -18
+  R: -2 2 -4 4 -6 6 -8 8 -10 10 -12 12 -14 14 -16 16
+68     0     0     0     0     0      0      0      1      RESID0     0x00ff0110 RESID0     1     -1    0     3       0x00ff0110 RESID0   1     -1    0     0     1     0    
+69     0     0     0     0     0      0      0      1      RESID0     0x00ff0110 RESID0     1     -1    0     4       0x00ff0110 RESID0   1     -1    0     0     1     0    
+70     0     0     0     0     0      0      0      1      -          0x00ff0110 RESID0     1     -1    0     5       0x00ff0110 RESID0   1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: 00 fe 00 fe 00 fe 00 fe 00 fe 00 fe 00 fe 00 fe
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+RESID out_buf (decoded):
+  Y: 0 -2 0 -2 0 -2 0 -2 0 -2 0 -2 0 -2 0 -2
+71     0     0     0     1     0      0      0      0      -          0x00ff0110 RESID0     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+72     0     0     1     0     0      0      0      0      -          0x00ff0110 RESID0     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+73     0     1     1     0     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     1       0x00ff0101 LN0      1     -1    0     0     1     0    
+74     0     0     0     0     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     2       0x00ff0101 LN0      1     -1    0     0     1     0    
+75     0     0     0     0     0      1      0      0      LN0        0x00ff0101 LN0        1     -1    0     2       0x00ff0101 LN0      1     -1    0     0     1     0    
+76     0     0     0     0     0      1      0      0      LN0        0x00ff0101 LN0        1     -1    0     2       0x00ff0101 LN0      1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: 01 fd 03 fb 05 f9 07 f7 09 f5 0b f3 0d f1 0f ef
+  0010: 01 00 00 00 02 00 00 00 01 00 00 00 02 00 00 00
+  0020: 01 00 00 00 02 00 00 00 01 00 00 00 02 00 00 00
+  0030: 01 00 00 00 02 00 00 00 01 00 00 00 02 00 00 00
+  0040: 01 00 00 00 02 00 00 00 01 00 00 00 02 00 00 00
+  0050: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+LN in_buf (decoded):
+  X: 1 -3 3 -5 5 -7 7 -9 9 -11 11 -13 13 -15 15 -17
+  GAMMA: 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2
+  EPS: 2
+77     0     0     0     0     0      0      0      1      LN0        0x00ff0101 LN0        1     -1    0     3       0x00ff0101 LN0      1     -1    0     0     1     0    
+ln_cycle[0] normalized: 0.097534 0x0000031f (signed=799)
+ln_cycle[0] scaled: 0.097534 0x0000031f (signed=799)
+ln_cycle[0] y_raw: 799 0x0000031f
+ln_cycle[1] normalized: -0.292603 0xfffff6a3 (signed=-2397)
+ln_cycle[1] scaled: -0.585205 0xffffed46 (signed=-4794)
+ln_cycle[1] y_raw: -4794 0xffffed46
+ln_cycle[2] normalized: 0.292603 0x0000095d (signed=2397)
+ln_cycle[2] scaled: 0.292603 0x0000095d (signed=2397)
+ln_cycle[2] y_raw: 2397 0x0000095d
+ln_cycle[3] normalized: -0.487671 0xfffff065 (signed=-3995)
+ln_cycle[3] scaled: -0.975342 0xffffe0ca (signed=-7990)
+ln_cycle[3] y_raw: -7990 0xffffe0ca
+ln_cycle[4] normalized: 0.487671 0x00000f9b (signed=3995)
+ln_cycle[4] scaled: 0.487671 0x00000f9b (signed=3995)
+ln_cycle[4] y_raw: 3995 0x00000f9b
+ln_cycle[5] normalized: -0.682739 0xffffea27 (signed=-5593)
+ln_cycle[5] scaled: -1.365479 0xffffd44e (signed=-11186)
+ln_cycle[5] y_raw: -11186 0xffffd44e
+ln_cycle[6] normalized: 0.682739 0x000015d9 (signed=5593)
+ln_cycle[6] scaled: 0.682739 0x000015d9 (signed=5593)
+ln_cycle[6] y_raw: 5593 0x000015d9
+ln_cycle[7] normalized: -0.877808 0xffffe3e9 (signed=-7191)
+ln_cycle[7] scaled: -1.755615 0xffffc7d2 (signed=-14382)
+ln_cycle[7] y_raw: -14382 0xffffc7d2
+ln_cycle[8] normalized: 0.877808 0x00001c17 (signed=7191)
+ln_cycle[8] scaled: 0.877808 0x00001c17 (signed=7191)
+ln_cycle[8] y_raw: 7191 0x00001c17
+ln_cycle[9] normalized: -1.072876 0xffffddab (signed=-8789)
+ln_cycle[9] scaled: -2.145752 0xffffbb56 (signed=-17578)
+ln_cycle[9] y_raw: -17578 0xffffbb56
+ln_cycle[10] normalized: 1.072876 0x00002255 (signed=8789)
+ln_cycle[10] scaled: 1.072876 0x00002255 (signed=8789)
+ln_cycle[10] y_raw: 8789 0x00002255
+ln_cycle[11] normalized: -1.267944 0xffffd76d (signed=-10387)
+ln_cycle[11] scaled: -2.535889 0xffffaeda (signed=-20774)
+ln_cycle[11] y_raw: -20774 0xffffaeda
+ln_cycle[12] normalized: 1.267944 0x00002893 (signed=10387)
+ln_cycle[12] scaled: 1.267944 0x00002893 (signed=10387)
+ln_cycle[12] y_raw: 10387 0x00002893
+ln_cycle[13] normalized: -1.463013 0xffffd12f (signed=-11985)
+ln_cycle[13] scaled: -2.926025 0xffffa25e (signed=-23970)
+ln_cycle[13] y_raw: -23970 0xffffa25e
+ln_cycle[14] normalized: 1.463013 0x00002ed1 (signed=11985)
+ln_cycle[14] scaled: 1.463013 0x00002ed1 (signed=11985)
+ln_cycle[14] y_raw: 11985 0x00002ed1
+ln_cycle[15] normalized: -1.658081 0xffffcaf1 (signed=-13583)
+ln_cycle[15] scaled: -3.316162 0xffff95e2 (signed=-27166)
+ln_cycle[15] y_raw: -27166 0xffff95e2
+78     0     0     0     0     0      0      0      1      LN0        0x00ff0101 LN0        1     -1    0     4       0x00ff0101 LN0      1     -1    0     0     1     0    
+79     0     0     0     0     0      0      0      1      -          0x00ff0101 LN0        1     -1    0     5       0x00ff0101 LN0      1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: 1f 03 00 00 46 ed ff ff 5d 09 00 00 ca e0 ff ff
+  0010: 9b 0f 00 00 4e d4 ff ff d9 15 00 00 d2 c7 ff ff
+  0020: 17 1c 00 00 56 bb ff ff 55 22 00 00 da ae ff ff
+  0030: 93 28 00 00 5e a2 ff ff d1 2e 00 00 e2 95 ff ff
+LN out_buf (decoded):
+  Y: 799 -4794 2397 -7990 3995 -11186 5593 -14382 7191 -17578 8789 -20774 10387 -23970 11985 -27166
+80     0     0     0     1     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+81     0     0     1     0     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+82     0     1     1     0     0      0      0      0      -          0x00ff0111 RQ2        1     -1    0     1       0x00ff0111 RQ2      1     -1    0     0     1     0    
+83     0     0     0     0     0      0      0      0      -          0x00ff0111 RQ2        1     -1    0     2       0x00ff0111 RQ2      1     -1    0     0     1     0    
+84     0     0     0     0     0      1      0      0      RQ2        0x00ff0111 RQ2        1     -1    0     2       0x00ff0111 RQ2      1     -1    0     0     1     0    
+85     0     0     0     0     0      1      0      0      RQ2        0x00ff0111 RQ2        1     -1    0     2       0x00ff0111 RQ2      1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: 09 00 00 00 0e 00 00 00 13 00 00 00 18 00 00 00
+  0010: 1d 00 00 00 22 00 00 00 27 00 00 00 2c 00 00 00
+  0020: 31 00 00 00 36 00 00 00 3b 00 00 00 40 00 00 00
+  0030: 45 00 00 00 4a 00 00 00 4f 00 00 00 54 00 00 00
+  0040: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+REQUANT in_buf (decoded):
+  X: 9 14 19 24 29 34 39 44 49 54 59 64 69 74 79 84
+  M: 1
+  N: 0
+  Z: 0
+86     0     0     0     0     0      0      0      1      RQ2        0x00ff0111 RQ2        1     -1    0     3       0x00ff0111 RQ2      1     -1    0     0     1     0    
+87     0     0     0     0     0      0      0      1      RQ2        0x00ff0111 RQ2        1     -1    0     4       0x00ff0111 RQ2      1     -1    0     0     1     0    
+88     0     0     0     0     0      0      0      1      -          0x00ff0111 RQ2        1     -1    0     5       0x00ff0111 RQ2      1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: 09 0e 13 18 1d 22 27 2c 31 36 3b 40 45 4a 4f 54
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+REQUANT out_buf (decoded):
+  Y: 9 14 19 24 29 34 39 44 49 54 59 64 69 74 79 84
+89     0     0     0     1     0      0      0      0      -          0x00ff0111 RQ2        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+90     0     0     1     0     0      0      0      0      -          0x00ff0111 RQ2        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+91     0     1     1     0     0      0      0      0      -          0x00ff0112 FFN_W1     1     -1    0     1       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+92     0     0     0     0     0      0      0      0      -          0x00ff0112 FFN_W1     1     -1    0     2       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+93     0     0     0     0     0      1      0      0      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     2       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+94     0     0     0     0     0      1      0      0      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     2       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: 01 fe 03 fc 05 fa 07 f8 09 f6 0b f4 0d f2 0f f0
+  0010: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0020: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0030: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
+  0040: 00 40 00 40 00 40 00 40 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+FFN_W1 in_buf (decoded):
+  X: 1 -2 3 -4 5 -6 7 -8 9 -10 11 -12 13 -14 15 -16
+  W: 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  B: 5 5 5 5
+  S: 16384 16384 16384 16384
+95     0     0     0     0     0      0      0      1      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     3       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+96     0     0     0     0     0      0      0      1      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     3       0x00ff0112 FFN_W1   1     -1    0     1     0     0    
+97     0     0     0     0     0      0      0      1      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     3       0x00ff0112 FFN_W1   1     -1    0     0     0     1    
+98     0     0     0     0     0      0      0      0      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     4       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+99     0     0     0     0     0      0      1      0      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     4       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+100    0     0     0     0     0      0      1      0      FFN_W1     0x00ff0112 FFN_W1     1     -1    0     4       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+101    0     0     0     0     0      0      0      1      -          0x00ff0112 FFN_W1     1     -1    0     5       0x00ff0112 FFN_W1   1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: f6 ff f6 ff f6 ff f6 ff 00 00 00 00 00 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W1 out_buf (decoded):
+  Y: -10 -10 -10 -10
+102    0     0     0     1     0      0      0      1      -          0x00ff0112 FFN_W1     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+103    0     0     1     0     0      0      0      1      -          0x00ff0112 FFN_W1     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+104    0     1     1     0     0      0      0      0      -          0x01ff0112 FFN_W1     1     -1    1     1       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+105    0     0     0     0     0      0      0      0      -          0x01ff0112 FFN_W1     1     -1    1     2       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+106    0     0     0     0     0      1      0      0      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     2       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+107    0     0     0     0     0      1      0      0      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     2       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+in_buf (send)[129]:
+  0000: 01 fe 03 fc 05 fa 07 f8 09 f6 0b f4 0d f2 0f f0
+  0010: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0020: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0030: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
+  0040: 00 40 00 40 00 40 00 40 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+FFN_W1 in_buf (decoded):
+  X: 1 -2 3 -4 5 -6 7 -8 9 -10 11 -12 13 -14 15 -16
+  W: 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  B: 5 5 5 5
+  S: 16384 16384 16384 16384
+108    0     0     0     0     0      0      0      1      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     3       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+109    0     0     0     0     0      0      0      1      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     3       0x01ff0112 FFN_W1   1     -1    1     1     0     0    
+110    0     0     0     0     0      0      0      1      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     3       0x01ff0112 FFN_W1   1     -1    1     0     0     1    
+111    0     0     0     0     0      0      0      0      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     4       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+112    0     0     0     0     0      0      1      0      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     4       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+113    0     0     0     0     0      0      1      0      FFN_W1     0x01ff0112 FFN_W1     1     -1    1     4       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+114    0     0     0     0     0      0      0      1      -          0x01ff0112 FFN_W1     1     -1    1     5       0x01ff0112 FFN_W1   1     -1    1     0     1     0    
+out_buf (done)[64]:
+  0000: f6 ff f6 ff f6 ff f6 ff 00 00 00 00 00 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W1 out_buf (decoded):
+  Y: -10 -10 -10 -10
+115    0     0     0     1     0      0      0      1      -          0x01ff0112 FFN_W1     1     -1    1     0       0x00000000 -        0     0     0     0     1     0    
+116    0     0     1     0     0      0      0      1      -          0x01ff0112 FFN_W1     1     -1    1     0       0x00000000 -        0     0     0     0     1     0    
+117    0     1     1     0     0      0      0      0      -          0x02ff0112 FFN_W1     1     -1    2     1       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+118    0     0     0     0     0      0      0      0      -          0x02ff0112 FFN_W1     1     -1    2     2       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+119    0     0     0     0     0      1      0      0      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     2       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+120    0     0     0     0     0      1      0      0      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     2       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+in_buf (send)[129]:
+  0000: 01 fe 03 fc 05 fa 07 f8 09 f6 0b f4 0d f2 0f f0
+  0010: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0020: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0030: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
+  0040: 00 40 00 40 00 40 00 40 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+FFN_W1 in_buf (decoded):
+  X: 1 -2 3 -4 5 -6 7 -8 9 -10 11 -12 13 -14 15 -16
+  W: 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  B: 5 5 5 5
+  S: 16384 16384 16384 16384
+121    0     0     0     0     0      0      0      1      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     3       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+122    0     0     0     0     0      0      0      1      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     3       0x02ff0112 FFN_W1   1     -1    2     1     0     0    
+123    0     0     0     0     0      0      0      1      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     3       0x02ff0112 FFN_W1   1     -1    2     0     0     1    
+124    0     0     0     0     0      0      0      0      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     4       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+125    0     0     0     0     0      0      1      0      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     4       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+126    0     0     0     0     0      0      1      0      FFN_W1     0x02ff0112 FFN_W1     1     -1    2     4       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+127    0     0     0     0     0      0      0      1      -          0x02ff0112 FFN_W1     1     -1    2     5       0x02ff0112 FFN_W1   1     -1    2     0     1     0    
+out_buf (done)[64]:
+  0000: f6 ff f6 ff f6 ff f6 ff 00 00 00 00 00 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W1 out_buf (decoded):
+  Y: -10 -10 -10 -10
+128    0     0     0     1     0      0      0      1      -          0x02ff0112 FFN_W1     1     -1    2     0       0x00000000 -        0     0     0     0     1     0    
+129    0     0     1     0     0      0      0      1      -          0x02ff0112 FFN_W1     1     -1    2     0       0x00000000 -        0     0     0     0     1     0    
+130    0     1     1     0     0      0      0      0      -          0x03ff0112 FFN_W1     1     -1    3     1       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+131    0     0     0     0     0      0      0      0      -          0x03ff0112 FFN_W1     1     -1    3     2       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+132    0     0     0     0     0      1      0      0      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     2       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+133    0     0     0     0     0      1      0      0      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     2       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+in_buf (send)[129]:
+  0000: 01 fe 03 fc 05 fa 07 f8 09 f6 0b f4 0d f2 0f f0
+  0010: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0020: 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+  0030: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
+  0040: 00 40 00 40 00 40 00 40 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+FFN_W1 in_buf (decoded):
+  X: 1 -2 3 -4 5 -6 7 -8 9 -10 11 -12 13 -14 15 -16
+  W: 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  B: 5 5 5 5
+  S: 16384 16384 16384 16384
+134    0     0     0     0     0      0      0      1      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     3       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+135    0     0     0     0     0      0      0      1      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     3       0x03ff0112 FFN_W1   1     -1    3     1     0     0    
+136    0     0     0     0     0      0      0      1      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     3       0x03ff0112 FFN_W1   1     -1    3     0     0     1    
+137    0     0     0     0     0      0      0      0      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     4       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+138    0     0     0     0     0      0      1      0      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     4       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+139    0     0     0     0     0      0      1      0      FFN_W1     0x03ff0112 FFN_W1     1     -1    3     4       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+140    0     0     0     0     0      0      0      1      -          0x03ff0112 FFN_W1     1     -1    3     5       0x03ff0112 FFN_W1   1     -1    3     0     1     0    
+out_buf (done)[64]:
+  0000: f6 ff f6 ff f6 ff f6 ff 00 00 00 00 00 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W1 out_buf (decoded):
+  Y: -10 -10 -10 -10
+141    0     0     0     1     0      0      0      1      -          0x03ff0112 FFN_W1     1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
+142    0     0     1     0     0      0      0      1      -          0x03ff0112 FFN_W1     1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
+143    0     1     1     0     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     1       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+144    0     0     0     0     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     2       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+145    0     0     0     0     0      1      0      0      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     2       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+146    0     0     0     0     0      1      0      0      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     2       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: d8 ff e5 ff f2 ff ff ff 0c 00 19 00 26 00 33 00
+  0010: 40 00 4d 00 5a 00 67 00 74 00 81 00 8e 00 9b 00
+  0020: a8 00 b5 00 c2 00 cf 00 dc 00 e9 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+FFN_ACT in_buf (decoded):
+  X: -40 -27 -14 -1 12 25 38 51 64 77 90 103 116 129 142 155 168 181 194 207 220 233
+147    0     0     0     0     0      0      0      1      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     3       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+148    0     0     0     0     0      0      0      1      FFN_ACT    0x00ff011d FFN_ACT    1     -1    0     4       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+149    0     0     0     0     0      0      0      1      -          0x00ff011d FFN_ACT    1     -1    0     5       0x00ff011d FFN_ACT  1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: 00 00 00 00 00 00 00 00 0c 00 19 00 26 00 33 00
+  0010: 40 00 4d 00 5a 00 67 00 74 00 81 00 8e 00 9b 00
+  0020: a8 00 b5 00 c2 00 cf 00 dc 00 e9 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_ACT out_buf (decoded):
+  Y: 0 0 0 0 12 25 38 51 64 77 90 103 116 129 142 155 168 181 194 207 220 233
+150    0     0     0     1     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+151    0     0     1     0     0      0      0      0      -          0x00ff011d FFN_ACT    1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+152    0     1     1     0     0      0      0      0      -          0x00ff0114 FFN_W2     1     -1    0     1       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+153    0     0     0     0     0      0      0      0      -          0x00ff0114 FFN_W2     1     -1    0     2       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+154    0     0     0     0     0      1      0      0      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     2       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+155    0     0     0     0     0      1      0      0      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     2       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: e2 ff eb ff f4 ff fd ff 06 00 0f 00 18 00 21 00
+  0010: 2a 00 33 00 3c 00 45 00 4e 00 57 00 60 00 69 00
+  0020: 72 00 7b 00 84 00 8d 00 96 00 9f 00 22 22 22 22
+  0030: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0040: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0050: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0060: 22 22 22 04 00 00 00 04 00 00 00 04 00 00 00 04
+  0070: 00 00 00 04 00 00 00 00 40 00 40 00 40 00 40 00
+  0080: 40
+FFN_W2 in_buf (decoded):
+  X: -30 -21 -12 -3 6 15 24 33 42 51 60 69 78 87 96 105 114 123 132 141 150 159
+  W: 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  B: 4 4 4 4 4
+  S: 16384 16384 16384 16384 16384
+156    0     0     0     0     0      0      0      1      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     3       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+157    0     0     0     0     0      0      0      1      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     3       0x00ff0114 FFN_W2   1     -1    0     1     0     0    
+158    0     0     0     0     0      0      0      1      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     3       0x00ff0114 FFN_W2   1     -1    0     0     0     1    
+159    0     0     0     0     0      0      0      0      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     4       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+160    0     0     0     0     0      0      1      0      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     4       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+161    0     0     0     0     0      0      1      0      FFN_W2     0x00ff0114 FFN_W2     1     -1    0     4       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+162    0     0     0     0     0      0      0      1      -          0x00ff0114 FFN_W2     1     -1    0     5       0x00ff0114 FFN_W2   1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: 8d 05 00 00 8d 05 00 00 8d 05 00 00 8d 05 00 00
+  0010: 8d 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W2 out_buf (decoded):
+  Y: 1421 1421 1421 1421 1421
+163    0     0     0     1     0      0      0      1      -          0x00ff0114 FFN_W2     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+164    0     0     1     0     0      0      0      1      -          0x00ff0114 FFN_W2     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+165    0     1     1     0     0      0      0      0      -          0x01ff0114 FFN_W2     1     -1    1     1       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+166    0     0     0     0     0      0      0      0      -          0x01ff0114 FFN_W2     1     -1    1     2       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+167    0     0     0     0     0      1      0      0      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     2       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+168    0     0     0     0     0      1      0      0      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     2       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+in_buf (send)[129]:
+  0000: e2 ff eb ff f4 ff fd ff 06 00 0f 00 18 00 21 00
+  0010: 2a 00 33 00 3c 00 45 00 4e 00 57 00 60 00 69 00
+  0020: 72 00 7b 00 84 00 8d 00 96 00 9f 00 22 22 22 22
+  0030: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0040: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0050: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0060: 22 22 22 04 00 00 00 04 00 00 00 04 00 00 00 04
+  0070: 00 00 00 04 00 00 00 00 40 00 40 00 40 00 40 00
+  0080: 40
+FFN_W2 in_buf (decoded):
+  X: -30 -21 -12 -3 6 15 24 33 42 51 60 69 78 87 96 105 114 123 132 141 150 159
+  W: 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  B: 4 4 4 4 4
+  S: 16384 16384 16384 16384 16384
+169    0     0     0     0     0      0      0      1      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     3       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+170    0     0     0     0     0      0      0      1      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     3       0x01ff0114 FFN_W2   1     -1    1     1     0     0    
+171    0     0     0     0     0      0      0      1      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     3       0x01ff0114 FFN_W2   1     -1    1     0     0     1    
+172    0     0     0     0     0      0      0      0      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     4       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+173    0     0     0     0     0      0      1      0      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     4       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+174    0     0     0     0     0      0      1      0      FFN_W2     0x01ff0114 FFN_W2     1     -1    1     4       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+175    0     0     0     0     0      0      0      1      -          0x01ff0114 FFN_W2     1     -1    1     5       0x01ff0114 FFN_W2   1     -1    1     0     1     0    
+out_buf (done)[64]:
+  0000: 8d 05 00 00 8d 05 00 00 8d 05 00 00 8d 05 00 00
+  0010: 8d 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W2 out_buf (decoded):
+  Y: 1421 1421 1421 1421 1421
+176    0     0     0     1     0      0      0      1      -          0x01ff0114 FFN_W2     1     -1    1     0       0x00000000 -        0     0     0     0     1     0    
+177    0     0     1     0     0      0      0      1      -          0x01ff0114 FFN_W2     1     -1    1     0       0x00000000 -        0     0     0     0     1     0    
+178    0     1     1     0     0      0      0      0      -          0x02ff0114 FFN_W2     1     -1    2     1       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+179    0     0     0     0     0      0      0      0      -          0x02ff0114 FFN_W2     1     -1    2     2       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+180    0     0     0     0     0      1      0      0      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     2       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+181    0     0     0     0     0      1      0      0      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     2       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+in_buf (send)[129]:
+  0000: e2 ff eb ff f4 ff fd ff 06 00 0f 00 18 00 21 00
+  0010: 2a 00 33 00 3c 00 45 00 4e 00 57 00 60 00 69 00
+  0020: 72 00 7b 00 84 00 8d 00 96 00 9f 00 22 22 22 22
+  0030: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0040: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0050: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0060: 22 22 22 04 00 00 00 04 00 00 00 04 00 00 00 04
+  0070: 00 00 00 04 00 00 00 00 40 00 40 00 40 00 40 00
+  0080: 40
+FFN_W2 in_buf (decoded):
+  X: -30 -21 -12 -3 6 15 24 33 42 51 60 69 78 87 96 105 114 123 132 141 150 159
+  W: 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  B: 4 4 4 4 4
+  S: 16384 16384 16384 16384 16384
+182    0     0     0     0     0      0      0      1      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     3       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+183    0     0     0     0     0      0      0      1      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     3       0x02ff0114 FFN_W2   1     -1    2     1     0     0    
+184    0     0     0     0     0      0      0      1      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     3       0x02ff0114 FFN_W2   1     -1    2     0     0     1    
+185    0     0     0     0     0      0      0      0      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     4       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+186    0     0     0     0     0      0      1      0      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     4       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+187    0     0     0     0     0      0      1      0      FFN_W2     0x02ff0114 FFN_W2     1     -1    2     4       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+188    0     0     0     0     0      0      0      1      -          0x02ff0114 FFN_W2     1     -1    2     5       0x02ff0114 FFN_W2   1     -1    2     0     1     0    
+out_buf (done)[64]:
+  0000: 8d 05 00 00 8d 05 00 00 8d 05 00 00 8d 05 00 00
+  0010: 8d 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W2 out_buf (decoded):
+  Y: 1421 1421 1421 1421 1421
+189    0     0     0     1     0      0      0      1      -          0x02ff0114 FFN_W2     1     -1    2     0       0x00000000 -        0     0     0     0     1     0    
+190    0     0     1     0     0      0      0      1      -          0x02ff0114 FFN_W2     1     -1    2     0       0x00000000 -        0     0     0     0     1     0    
+191    0     1     1     0     0      0      0      0      -          0x03ff0114 FFN_W2     1     -1    3     1       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+192    0     0     0     0     0      0      0      0      -          0x03ff0114 FFN_W2     1     -1    3     2       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+193    0     0     0     0     0      1      0      0      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     2       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+194    0     0     0     0     0      1      0      0      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     2       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+in_buf (send)[129]:
+  0000: e2 ff eb ff f4 ff fd ff 06 00 0f 00 18 00 21 00
+  0010: 2a 00 33 00 3c 00 45 00 4e 00 57 00 60 00 69 00
+  0020: 72 00 7b 00 84 00 8d 00 96 00 9f 00 22 22 22 22
+  0030: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0040: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0050: 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+  0060: 22 22 22 04 00 00 00 04 00 00 00 04 00 00 00 04
+  0070: 00 00 00 04 00 00 00 00 40 00 40 00 40 00 40 00
+  0080: 40
+FFN_W2 in_buf (decoded):
+  X: -30 -21 -12 -3 6 15 24 33 42 51 60 69 78 87 96 105 114 123 132 141 150 159
+  W: 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  B: 4 4 4 4 4
+  S: 16384 16384 16384 16384 16384
+195    0     0     0     0     0      0      0      1      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     3       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+196    0     0     0     0     0      0      0      1      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     3       0x03ff0114 FFN_W2   1     -1    3     1     0     0    
+197    0     0     0     0     0      0      0      1      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     3       0x03ff0114 FFN_W2   1     -1    3     0     0     1    
+198    0     0     0     0     0      0      0      0      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     4       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+199    0     0     0     0     0      0      1      0      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     4       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+200    0     0     0     0     0      0      1      0      FFN_W2     0x03ff0114 FFN_W2     1     -1    3     4       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+201    0     0     0     0     0      0      0      1      -          0x03ff0114 FFN_W2     1     -1    3     5       0x03ff0114 FFN_W2   1     -1    3     0     1     0    
+out_buf (done)[64]:
+  0000: 8d 05 00 00 8d 05 00 00 8d 05 00 00 8d 05 00 00
+  0010: 8d 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+FFN_W2 out_buf (decoded):
+  Y: 1421 1421 1421 1421 1421
+202    0     0     0     1     0      0      0      1      -          0x03ff0114 FFN_W2     1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
+203    0     0     1     0     0      0      0      1      -          0x03ff0114 FFN_W2     1     -1    3     0       0x00000000 -        0     0     0     0     1     0    
+204    0     1     1     0     0      0      0      0      -          0x00ff0115 RQ3        1     -1    0     1       0x00ff0115 RQ3      1     -1    0     0     1     0    
+205    0     0     0     0     0      0      0      0      -          0x00ff0115 RQ3        1     -1    0     2       0x00ff0115 RQ3      1     -1    0     0     1     0    
+206    0     0     0     0     0      1      0      0      RQ3        0x00ff0115 RQ3        1     -1    0     2       0x00ff0115 RQ3      1     -1    0     0     1     0    
+207    0     0     0     0     0      1      0      0      RQ3        0x00ff0115 RQ3        1     -1    0     2       0x00ff0115 RQ3      1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: f9 ff ff ff fc ff ff ff ff ff ff ff 02 00 00 00
+  0010: 05 00 00 00 08 00 00 00 0b 00 00 00 0e 00 00 00
+  0020: 11 00 00 00 14 00 00 00 17 00 00 00 1a 00 00 00
+  0030: 1d 00 00 00 20 00 00 00 23 00 00 00 26 00 00 00
+  0040: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+REQUANT in_buf (decoded):
+  X: -7 -4 -1 2 5 8 11 14 17 20 23 26 29 32 35 38
+  M: 1
+  N: 0
+  Z: 0
+208    0     0     0     0     0      0      0      1      RQ3        0x00ff0115 RQ3        1     -1    0     3       0x00ff0115 RQ3      1     -1    0     0     1     0    
+209    0     0     0     0     0      0      0      1      RQ3        0x00ff0115 RQ3        1     -1    0     4       0x00ff0115 RQ3      1     -1    0     0     1     0    
+210    0     0     0     0     0      0      0      1      -          0x00ff0115 RQ3        1     -1    0     5       0x00ff0115 RQ3      1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: f9 fc ff 02 05 08 0b 0e 11 14 17 1a 1d 20 23 26
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+REQUANT out_buf (decoded):
+  Y: -7 -4 -1 2 5 8 11 14 17 20 23 26 29 32 35 38
+211    0     0     0     1     0      0      0      0      -          0x00ff0115 RQ3        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+212    0     0     1     0     0      0      0      0      -          0x00ff0115 RQ3        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+213    0     1     1     0     0      0      0      0      -          0x00ff0116 RESID1     1     -1    0     1       0x00ff0116 RESID1   1     -1    0     0     1     0    
+214    0     0     0     0     0      0      0      0      -          0x00ff0116 RESID1     1     -1    0     2       0x00ff0116 RESID1   1     -1    0     0     1     0    
+215    0     0     0     0     0      1      0      0      RESID1     0x00ff0116 RESID1     1     -1    0     2       0x00ff0116 RESID1   1     -1    0     0     1     0    
+216    0     0     0     0     0      1      0      0      RESID1     0x00ff0116 RESID1     1     -1    0     2       0x00ff0116 RESID1   1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: 04 fa 06 f8 08 f6 0a f4 0c f2 0e f0 10 ee 12 ec
+  0010: ff 04 fd 06 fb 08 f9 0a f7 0c f5 0e f3 10 f1 12
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+RESID in_buf (decoded):
+  X: 4 -6 6 -8 8 -10 10 -12 12 -14 14 -16 16 -18 18 -20
+  R: -1 4 -3 6 -5 8 -7 10 -9 12 -11 14 -13 16 -15 18
+217    0     0     0     0     0      0      0      1      RESID1     0x00ff0116 RESID1     1     -1    0     3       0x00ff0116 RESID1   1     -1    0     0     1     0    
+218    0     0     0     0     0      0      0      1      RESID1     0x00ff0116 RESID1     1     -1    0     4       0x00ff0116 RESID1   1     -1    0     0     1     0    
+219    0     0     0     0     0      0      0      1      -          0x00ff0116 RESID1     1     -1    0     5       0x00ff0116 RESID1   1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: 03 fe 03 fe 03 fe 03 fe 03 fe 03 fe 03 fe 03 fe
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+RESID out_buf (decoded):
+  Y: 3 -2 3 -2 3 -2 3 -2 3 -2 3 -2 3 -2 3 -2
+220    0     0     0     1     0      0      0      0      -          0x00ff0116 RESID1     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+221    0     0     1     0     0      0      0      0      -          0x00ff0116 RESID1     1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+222    0     1     1     0     0      0      0      0      -          0x00ff0117 LN1        1     -1    0     1       0x00ff0117 LN1      1     -1    0     0     1     0    
+223    0     0     0     0     0      0      0      0      -          0x00ff0117 LN1        1     -1    0     2       0x00ff0117 LN1      1     -1    0     0     1     0    
+224    0     0     0     0     0      1      0      0      LN1        0x00ff0117 LN1        1     -1    0     2       0x00ff0117 LN1      1     -1    0     0     1     0    
+225    0     0     0     0     0      1      0      0      LN1        0x00ff0117 LN1        1     -1    0     2       0x00ff0117 LN1      1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: 03 fb 05 f9 07 f7 09 f5 0b f3 0d f1 0f ef 11 ed
+  0010: 01 00 00 00 03 00 00 00 01 00 00 00 03 00 00 00
+  0020: 01 00 00 00 03 00 00 00 01 00 00 00 03 00 00 00
+  0030: 01 00 00 00 03 00 00 00 01 00 00 00 03 00 00 00
+  0040: 01 00 00 00 03 00 00 00 01 00 00 00 03 00 00 00
+  0050: 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+LN in_buf (decoded):
+  X: 3 -5 5 -7 7 -9 9 -11 11 -13 13 -15 15 -17 17 -19
+  GAMMA: 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3
+  EPS: 3
+226    0     0     0     0     0      0      0      1      LN1        0x00ff0117 LN1        1     -1    0     3       0x00ff0117 LN1      1     -1    0     0     1     0    
+ln_cycle[0] normalized: 0.247925 0x000007ef (signed=2031)
+ln_cycle[0] scaled: 0.247925 0x000007ef (signed=2031)
+ln_cycle[0] y_raw: 2031 0x000007ef
+ln_cycle[1] normalized: -0.413208 0xfffff2c7 (signed=-3385)
+ln_cycle[1] scaled: -1.239624 0xffffd855 (signed=-10155)
+ln_cycle[1] y_raw: -10155 0xffffd855
+ln_cycle[2] normalized: 0.413208 0x00000d39 (signed=3385)
+ln_cycle[2] scaled: 0.413208 0x00000d39 (signed=3385)
+ln_cycle[2] y_raw: 3385 0x00000d39
+ln_cycle[3] normalized: -0.578491 0xffffed7d (signed=-4739)
+ln_cycle[3] scaled: -1.735474 0xffffc877 (signed=-14217)
+ln_cycle[3] y_raw: -14217 0xffffc877
+ln_cycle[4] normalized: 0.578491 0x00001283 (signed=4739)
+ln_cycle[4] scaled: 0.578491 0x00001283 (signed=4739)
+ln_cycle[4] y_raw: 4739 0x00001283
+ln_cycle[5] normalized: -0.743774 0xffffe833 (signed=-6093)
+ln_cycle[5] scaled: -2.231323 0xffffb899 (signed=-18279)
+ln_cycle[5] y_raw: -18279 0xffffb899
+ln_cycle[6] normalized: 0.743774 0x000017cd (signed=6093)
+ln_cycle[6] scaled: 0.743774 0x000017cd (signed=6093)
+ln_cycle[6] y_raw: 6093 0x000017cd
+ln_cycle[7] normalized: -0.909058 0xffffe2e9 (signed=-7447)
+ln_cycle[7] scaled: -2.727173 0xffffa8bb (signed=-22341)
+ln_cycle[7] y_raw: -22341 0xffffa8bb
+ln_cycle[8] normalized: 0.909058 0x00001d17 (signed=7447)
+ln_cycle[8] scaled: 0.909058 0x00001d17 (signed=7447)
+ln_cycle[8] y_raw: 7447 0x00001d17
+ln_cycle[9] normalized: -1.074341 0xffffdd9f (signed=-8801)
+ln_cycle[9] scaled: -3.223022 0xffff98dd (signed=-26403)
+ln_cycle[9] y_raw: -26403 0xffff98dd
+ln_cycle[10] normalized: 1.074341 0x00002261 (signed=8801)
+ln_cycle[10] scaled: 1.074341 0x00002261 (signed=8801)
+ln_cycle[10] y_raw: 8801 0x00002261
+ln_cycle[11] normalized: -1.239624 0xffffd855 (signed=-10155)
+ln_cycle[11] scaled: -3.718872 0xffff88ff (signed=-30465)
+ln_cycle[11] y_raw: -30465 0xffff88ff
+ln_cycle[12] normalized: 1.239624 0x000027ab (signed=10155)
+ln_cycle[12] scaled: 1.239624 0x000027ab (signed=10155)
+ln_cycle[12] y_raw: 10155 0x000027ab
+ln_cycle[13] normalized: -1.404907 0xffffd30b (signed=-11509)
+ln_cycle[13] scaled: -4.214722 0xffff7921 (signed=-34527)
+ln_cycle[13] y_raw: -34527 0xffff7921
+ln_cycle[14] normalized: 1.404907 0x00002cf5 (signed=11509)
+ln_cycle[14] scaled: 1.404907 0x00002cf5 (signed=11509)
+ln_cycle[14] y_raw: 11509 0x00002cf5
+ln_cycle[15] normalized: -1.570190 0xffffcdc1 (signed=-12863)
+ln_cycle[15] scaled: -4.710571 0xffff6943 (signed=-38589)
+ln_cycle[15] y_raw: -38589 0xffff6943
+227    0     0     0     0     0      0      0      1      LN1        0x00ff0117 LN1        1     -1    0     4       0x00ff0117 LN1      1     -1    0     0     1     0    
+228    0     0     0     0     0      0      0      1      -          0x00ff0117 LN1        1     -1    0     5       0x00ff0117 LN1      1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: ef 07 00 00 55 d8 ff ff 39 0d 00 00 77 c8 ff ff
+  0010: 83 12 00 00 99 b8 ff ff cd 17 00 00 bb a8 ff ff
+  0020: 17 1d 00 00 dd 98 ff ff 61 22 00 00 ff 88 ff ff
+  0030: ab 27 00 00 21 79 ff ff f5 2c 00 00 43 69 ff ff
+LN out_buf (decoded):
+  Y: 2031 -10155 3385 -14217 4739 -18279 6093 -22341 7447 -26403 8801 -30465 10155 -34527 11509 -38589
+229    0     0     0     1     0      0      0      0      -          0x00ff0117 LN1        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+230    0     0     1     0     0      0      0      0      -          0x00ff0117 LN1        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+231    0     1     1     0     0      0      0      0      -          0x00ff0118 RQ4        1     -1    0     1       0x00ff0118 RQ4      1     -1    0     0     1     0    
+232    0     0     0     0     0      0      0      0      -          0x00ff0118 RQ4        1     -1    0     2       0x00ff0118 RQ4      1     -1    0     0     1     0    
+233    0     0     0     0     0      1      0      0      RQ4        0x00ff0118 RQ4        1     -1    0     2       0x00ff0118 RQ4      1     -1    0     0     1     0    
+234    0     0     0     0     0      1      0      0      RQ4        0x00ff0118 RQ4        1     -1    0     2       0x00ff0118 RQ4      1     -1    0     0     1     0    
+in_buf (send)[129]:
+  0000: ec ff ff ff f7 ff ff ff 02 00 00 00 0d 00 00 00
+  0010: 18 00 00 00 23 00 00 00 2e 00 00 00 39 00 00 00
+  0020: 44 00 00 00 4f 00 00 00 5a 00 00 00 65 00 00 00
+  0030: 70 00 00 00 7b 00 00 00 86 00 00 00 91 00 00 00
+  0040: 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+REQUANT in_buf (decoded):
+  X: -20 -9 2 13 24 35 46 57 68 79 90 101 112 123 134 145
+  M: 1
+  N: 1
+  Z: 0
+235    0     0     0     0     0      0      0      1      RQ4        0x00ff0118 RQ4        1     -1    0     3       0x00ff0118 RQ4      1     -1    0     0     1     0    
+236    0     0     0     0     0      0      0      1      RQ4        0x00ff0118 RQ4        1     -1    0     4       0x00ff0118 RQ4      1     -1    0     0     1     0    
+237    0     0     0     0     0      0      0      1      -          0x00ff0118 RQ4        1     -1    0     5       0x00ff0118 RQ4      1     -1    0     0     1     0    
+out_buf (done)[64]:
+  0000: f6 fc 01 07 0c 12 17 1d 22 28 2d 33 38 3e 43 49
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+REQUANT out_buf (decoded):
+  Y: -10 -4 1 7 12 18 23 29 34 40 45 51 56 62 67 73
+238    0     0     0     1     0      0      0      0      -          0x00ff0118 RQ4        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+compute_controller_tb: PASS
+INFO: [SIM 211-1] CSim done with 0 errors.
+INFO: [SIM 211-3] *************** CSIM finish ***************
+INFO: [HLS 200-112] Total CPU user time: 10.24 seconds. Total CPU system time: 1.18 seconds. Total elapsed time: 11.36 seconds; peak allocated memory: 445.070 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 15s

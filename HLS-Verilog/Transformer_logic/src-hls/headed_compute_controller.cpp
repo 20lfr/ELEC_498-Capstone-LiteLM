@@ -154,13 +154,12 @@ void MAC_HEAD_ARCHITECTURE(
 
 void VALUE_SCALE_CLAMP(
     const int32_t input[CONTEXT_LENGTH],
-    const int16_t scale_q15,               // Q1.15
     int16_t output[CONTEXT_LENGTH]         // Q1.15
 ) {
 #pragma HLS INLINE
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
 #pragma HLS PIPELINE II=1
-        int64_t prod = static_cast<int64_t>(input[i]) * static_cast<int64_t>(scale_q15); // Q2.30
+        int64_t prod = static_cast<int64_t>(input[i]) * static_cast<int64_t>(ATTN_SCALE_Q15); // Q2.30
         int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
         int32_t scaled = static_cast<int32_t>(rounded >> 15); // back to Q1.15
         if (scaled > 32767) {
@@ -236,7 +235,8 @@ void SOFTMAX(
             max_val = input[i];
         }
     }
-
+    std::printf("max_val: %d\n", max_val);
+    
     // 2) Compute exp_approx and sum
     uint16_t exp_buf[CONTEXT_LENGTH];
 #pragma HLS ARRAY_PARTITION variable=exp_buf complete dim=1
@@ -248,14 +248,19 @@ void SOFTMAX(
         uint16_t e_q15 = exp_approx_q15(diff);   // Q1.15
         exp_buf[i] = e_q15;
         sum_exp += e_q15;                        // up to CONTEXT_LENGTH * 32767
+        std::printf("exp_buf[%d]: %d\n", i, exp_buf[i]);
     }
+    std::printf("sum_exp: %d\n", sum_exp);
 
     // 3) Compute reciprocal of sum_exp in fixed-point (Q1.15)
     //   output = (e_q15 * inv_sum_q15) >> 15  -> Q1.15 again
     uint32_t inv_sum_q15 = 0;
     if (sum_exp > 0) {
-        inv_sum_q15 = (static_cast<uint32_t>(1) << 15) / sum_exp;  // integer division only
+        uint64_t num = (1ULL << 30);               // 2^30 = 2^15 (Q1.15) * 2^15 (reciprocal scale)
+        inv_sum_q15 = static_cast<uint32_t>((num + (sum_exp / 2)) / sum_exp); // rounded
+        std::printf("inv_sum_q15: %u\n", inv_sum_q15);
     }
+    
 
     // 4) Final probabilities
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
@@ -606,8 +611,7 @@ void headed_compute_controller(
 #pragma HLS PIPELINE II=1
                         val_in[t] = compute_buf::read_i32(in_buf, head_buf::ValueScaleLayout::X + (t * 4));
                     }
-                    const int16_t scale_q15 = compute_buf::read_i16(in_buf, head_buf::ValueScaleLayout::SCALE);
-                    VALUE_SCALE_CLAMP(val_in, scale_q15, val_scaled);
+                    VALUE_SCALE_CLAMP(val_in, val_scaled);
                     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
                         compute_buf::write_i16(out_buf, t * 2, val_scaled[t]);

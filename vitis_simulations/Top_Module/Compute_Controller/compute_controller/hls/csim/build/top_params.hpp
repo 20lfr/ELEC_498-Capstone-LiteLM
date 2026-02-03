@@ -136,6 +136,11 @@ constexpr int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
 constexpr int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16; // Context window length
 constexpr int MAX_CYCLIC_SIZE = 16; // << for UNROLL parallelism in MAC units
+
+// Q1.15 scaling factor for attention logits (1/sqrt(D_HEADS) * 2^15).
+// Update if D_HEADS changes.
+constexpr int16_t ATTN_SCALE_Q15 = 16384;
+
 // ------------------------------------------------------------
 // Scheduler state + helper enums
 // ------------------------------------------------------------
@@ -206,7 +211,7 @@ enum ComputeOp : uint8_t {
     CMP_RESID0       = 16, // 16
     CMP_REQUANT2     = 17, // 18
     CMP_FFN_W1       = 18, // 19
-    CMP_FFN_ACT      = 29, // 20
+    CMP_FFN_ACT      = 19, // 20
     CMP_FFN_W2       = 20, // 21
     CMP_REQUANT3     = 21, // 22
     CMP_RESID1       = 22, // 23
@@ -235,7 +240,6 @@ enum class ComputeErrorCodes {
     IncorrectRequest, 
     InvalidComputationForamt
 };
-
 
 struct HeadCtx {
     int  layer_stamp   = -1;
@@ -436,6 +440,7 @@ constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
 
 constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
 constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
+
 namespace compute_buf {
 
 constexpr int div_ceil(int a, int b) {
@@ -640,7 +645,7 @@ constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
 constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
 constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
 
-constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4) + 2;
+constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4);
 constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
 
 constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
@@ -687,7 +692,6 @@ struct AttScoresLayout {
 
 struct ValueScaleLayout {
     static constexpr int X = 0;
-    static constexpr int SCALE = X + (CONTEXT_LENGTH * 4);
 };
 
 struct SoftmaxLayout {
