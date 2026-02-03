@@ -186,6 +186,7 @@ void scheduler_hls(
     // AXI4-Lite CONTROL INTERFACE (PS → PL)
     // ------------------------------------------------------------
     ControlMemSpace ctrl_mem,
+    StatusMemSpace &status_mem,
 
     // ------------------------------------------------------------
     // AXI4-STREAM INPUT (INGRESS: PS → PL)
@@ -372,7 +373,7 @@ void scheduler_hls(
   const bool reset = !cntrl_reset_n;
   const bool busy = (st != S_IDLE);
   // Mirror busy into status bit 2 without clobbering other bits
-  ctrl_mem.status = (ctrl_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
+  status_mem.status = (status_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
   // Expose a start bit that auto-clears once we leave IDLE
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
 
@@ -468,7 +469,7 @@ void scheduler_hls(
   }
 
   // Default outputs
-  ctrl_mem.layer_index = layer_idx;
+  status_mem.layer_index = layer_idx;
   axis_in_ready = 0;
   if (!wl_ready && wl_start){
         wl_start      = false;

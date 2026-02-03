@@ -174,111 +174,41 @@ static uint32_t compute_wl_address(
     }
 }
 
-static void apply_ctrl_write(ControlReg addr, uint32_t data, ControlMemSpace &shadow) {
-    switch (addr) {
-    case ControlReg::CONTROL:
-        shadow.control = data;
-        break;
-    case ControlReg::IRQ_STATUS:
-        shadow.irq_status = data;
-        break;
-    case ControlReg::IRQ_ENABLE:
-        shadow.irq_enable = data;
-        break;
-    case ControlReg::LAYER_STRIDE:
-        shadow.layer_stride = data;
-        break;
-    case ControlReg::WQ_HEAD_STRIDE:
-        shadow.wq_head_stride = data;
-        break;
-    case ControlReg::WK_HEAD_STRIDE:
-        shadow.wk_head_stride = data;
-        break;
-    case ControlReg::WV_HEAD_STRIDE:
-        shadow.wv_head_stride = data;
-        break;
-    case ControlReg::K_CACHE_STRIDE:
-        shadow.k_cache_stride = data;
-        break;
-    case ControlReg::V_CACHE_STRIDE:
-        shadow.v_cache_stride = data;
-        break;
-    case ControlReg::WO_TILE_STRIDE:
-        shadow.wo_tile_stride = data;
-        break;
-    case ControlReg::W1_TILE_STRIDE:
-        shadow.w1_tile_stride = data;
-        break;
-    case ControlReg::W2_TILE_STRIDE:
-        shadow.w2_tile_stride = data;
-        break;
-    case ControlReg::WQ_BASE_ADDR:
-        shadow.wq_base_addr = data;
-        break;
-    case ControlReg::WK_BASE_ADDR:
-        shadow.wk_base_addr = data;
-        break;
-    case ControlReg::WV_BASE_ADDR:
-        shadow.wv_base_addr = data;
-        break;
-    case ControlReg::WO_BASE_ADDR:
-        shadow.wo_base_addr = data;
-        break;
-    case ControlReg::W1_BASE_ADDR:
-        shadow.w1_base_addr = data;
-        break;
-    case ControlReg::W2_BASE_ADDR:
-        shadow.w2_base_addr = data;
-        break;
-    case ControlReg::K_CACHE_ADDR:
-        shadow.k_cache_addr = data;
-        break;
-    case ControlReg::V_CACHE_ADDR:
-        shadow.v_cache_addr = data;
-        break;
-    default:
-        break;
+ControlMemSpace ctrl_mem_init(bool init) {
+    ControlMemSpace ctrl_mem{};
+    if(init) {
+        ctrl_mem.control = CTRL_RESETN_BIT;
+        ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
+        ctrl_mem.irq_clear = 0;
+        ctrl_mem.dma_layer_len = 0x000000100;
+        ctrl_mem.dma_head_len = 0x000000100;
+        ctrl_mem.dma_tile_len = 0x000000100;
+        ctrl_mem.layer_stride = 0x000000100;
+        ctrl_mem.wq_head_stride = 0x000000100;
+        ctrl_mem.wk_head_stride = 0x000000100;
+        ctrl_mem.wv_head_stride = 0x000000100;
+        ctrl_mem.k_cache_stride = 0x000000100;
+        ctrl_mem.v_cache_stride = 0x000000100;
+        ctrl_mem.wo_tile_stride = 0x000000100;
+        ctrl_mem.w1_tile_stride = 0x000000100;
+        ctrl_mem.w2_tile_stride = 0x000000100;
+        ctrl_mem.wq_base_addr = 0x000000100;
+        ctrl_mem.wk_base_addr = 0x000000100;
+        ctrl_mem.wv_base_addr = 0x000000100;
+        ctrl_mem.wo_base_addr = 0x000000100;
+        ctrl_mem.w1_base_addr = 0x000000100;
+        ctrl_mem.w2_base_addr = 0x000000100;
+        ctrl_mem.k_cache_addr = 0x000000100;
+        ctrl_mem.v_cache_addr = 0x000000100;
+        ctrl_mem.logit_scale_qv = 0x000000100;
+        ctrl_mem.scale_q = 0x000000100;
+        ctrl_mem.zero_point_q = 0x000000100;
+        ctrl_mem.scale_k = 0x000000100;
+        ctrl_mem.zero_point_k = 0x000000100;
+        ctrl_mem.scale_v = 0x000000100;
+        ctrl_mem.zero_point_v = 0x000000100;
     }
-}
-
-// Helpers to drive control interface transactions
-void ctrl_write(
-    ControlReg  addr,
-    uint32_t    data_in,
-    bool        resetn_in,
-    ControlReg  &ctrl_addr,
-    uint32_t    &ctrl_data_in,
-    uint32_t    &ctrl_data_out,
-    bool        &ctrl_read_en,
-    bool        &ctrl_write_en,
-    bool        &ctrl_chip_en,
-    bool        &ctrl_resetn_in
-) {
-    ctrl_addr      = addr;
-    ctrl_data_in   = data_in;
-    ctrl_data_out  = 0;
-    ctrl_read_en   = false;
-    ctrl_write_en  = true;
-    ctrl_chip_en   = true;
-    ctrl_resetn_in = resetn_in;
-}
-
-void ctrl_read(
-    ControlReg  addr,
-    bool        resetn_in,
-    ControlReg  &ctrl_addr,
-    uint32_t    &ctrl_data_in,
-    bool        &ctrl_read_en,
-    bool        &ctrl_write_en,
-    bool        &ctrl_chip_en,
-    bool        &ctrl_resetn_in
-) {
-    ctrl_addr      = addr;
-    ctrl_data_in   = 0;
-    ctrl_read_en   = true;
-    ctrl_chip_en   = true;
-    ctrl_write_en  = false;
-    ctrl_resetn_in = resetn_in;
+    return ctrl_mem;
 }
 
 int main() {
@@ -351,35 +281,23 @@ int main() {
     bool seen_attn       = false;
     bool seen_concat     = false;
     int  base_assign_step = 0;
-    enum class CtrlInitStage { AssertReset, DeassertReset, ProgramBases, AssertStart, ClearStart, Done };
+    enum class CtrlInitStage { TestCtrlInit, AssertReset, DeassertReset, ProgramBases, AssertStart, ClearStart, Done };
     CtrlInitStage ctrl_stage = CtrlInitStage::AssertReset;
     bool dbg_done = false;
     bool dbg_error = false;
 
-    ControlMemSpace ctrl_shadow_mem{};
-    ctrl_shadow_mem.control = 0;
+    ControlMemSpace ctrl_mem{};
+    StatusMemSpace status_mem{};
 
-    // DEBUG - UNUSED
-    ControlReg ctrl_addr = ControlReg::CONTROL;
     uint32_t ctrl_data_in = 0;
     uint32_t ctrl_data_out = 0;
-    bool ctrl_read_en    = false;
-    bool ctrl_write_en   = false;
-    bool ctrl_chip_en    = false; // gate writes until used
-    bool ctrl_resetn_in  = false;
     uint32_t ctrl_shadow_control = 0;
+    bool ctrl_resetn_in = false;
     int ctrl_gap_cycles = 0; // spacing between control bus transactions
     bool seen_irq_done = false;
 
-    auto issue_ctrl_write = [&](ControlReg addr, uint32_t data, bool resetn) {
-        ctrl_write(addr, data, resetn,
-                   ctrl_addr, ctrl_data_in, ctrl_data_out,
-                   ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
-        apply_ctrl_write(addr, data, ctrl_shadow_mem);
-        ctrl_shadow_control = ctrl_shadow_mem.control;
-    };
-
     ControlMemSpace dbg_ctrl_mem{};
+    StatusMemSpace dbg_status_mem{};
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
@@ -397,10 +315,9 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-10s %-10s %-8s %-8s %-8s %-8s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} dma_done=%s dma_addr=%s\n",
+    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} dma_done=%s dma_addr=%s\n",
                 "Cycle", "Start", "Reset", "CompOp", "C_St", "C_Dn",
-                "CtrlAddr",
-                "CtrlDin", "CtrlDout", "Rd", "Wr", "CE", "RstN",
+                "CtrlDin", 
                 "DbgState", "WlReq", "WlAddr", "Seen", "IRQ", "IRQFlag", "IRQData",
                 "MemCtrl", "MemIRQ", "MemIRQEn",
                 "WLrdy", "WLstrt", "WLSel", "Layer", "Head", "Tile",
@@ -409,23 +326,25 @@ int main() {
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
-        // Default idle control signals each cycle
-        ctrl_addr     = ControlReg::STATUS;
-        ctrl_data_in  = 0;
-        ctrl_read_en  = false;
-        ctrl_write_en = false;
-        ctrl_chip_en  = false;
-
         // Space out control transactions to model multi-cycle AXI-lite access
         if (ctrl_gap_cycles > 0) {
             ctrl_gap_cycles--;
+        } else if (ctrl_stage == CtrlInitStage::TestCtrlInit) {
+           ctrl_mem = ctrl_mem_init(true);
+           ctrl_stage = CtrlInitStage::AssertReset;
+           ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::AssertReset) {
-            issue_ctrl_write(ControlReg::CONTROL, 0x00000000, false);
+            ctrl_mem = ctrl_mem_init(false);
+            ctrl_mem.control = 0x00000000;
+            ctrl_data_in = 0x00000000;
+            ctrl_shadow_control = 0x00000000;
             ctrl_resetn_in = false;
             ctrl_stage = CtrlInitStage::DeassertReset;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::DeassertReset) {
-            issue_ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT, true);
+            ctrl_mem.control = CTRL_RESETN_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT;
             ctrl_resetn_in = true;
             ctrl_stage = CtrlInitStage::ProgramBases;
             ctrl_gap_cycles = 1;
@@ -433,55 +352,72 @@ int main() {
             // Program control-space base addresses and strides with reset asserted
             switch (base_assign_step) {
             case 0:
-                issue_ctrl_write(ControlReg::LAYER_STRIDE, 0x00001000, ctrl_resetn_in);
+                ctrl_mem.layer_stride = 0x00001000;
+                ctrl_data_in  = 0x00001000;
                 break;
             case 1:
-                issue_ctrl_write(ControlReg::WQ_HEAD_STRIDE, 0x00000100, ctrl_resetn_in);
+                ctrl_mem.wq_head_stride = 0x00000100;
+                ctrl_data_in  = 0x00000100;
                 break;
             case 2:
-                issue_ctrl_write(ControlReg::WK_HEAD_STRIDE, 0x00000100, ctrl_resetn_in);
+                ctrl_mem.wk_head_stride = 0x00000100;
+                ctrl_data_in  = 0x00000100;
                 break;
             case 3:
-                issue_ctrl_write(ControlReg::WV_HEAD_STRIDE, 0x00000100, ctrl_resetn_in);
+                ctrl_mem.wv_head_stride = 0x00000100;
+                ctrl_data_in  = 0x00000100;
                 break;
             case 4:
-                issue_ctrl_write(ControlReg::K_CACHE_STRIDE, 0x00000400, ctrl_resetn_in);
+                ctrl_mem.k_cache_stride = 0x00000400;
+                ctrl_data_in  = 0x00000400;
                 break;
             case 5:
-                issue_ctrl_write(ControlReg::V_CACHE_STRIDE, 0x00000400, ctrl_resetn_in);
+                ctrl_mem.v_cache_stride = 0x00000400;
+                ctrl_data_in  = 0x00000400;
                 break;
             case 6:
-                issue_ctrl_write(ControlReg::WO_TILE_STRIDE, 0x00000100, ctrl_resetn_in);
+                ctrl_mem.wo_tile_stride = 0x00000100;
+                ctrl_data_in  = 0x00000100;
                 break;
             case 7:
-                issue_ctrl_write(ControlReg::W1_TILE_STRIDE, 0x00000300, ctrl_resetn_in);
+                ctrl_mem.w1_tile_stride = 0x00000300;
+                ctrl_data_in  = 0x00000300;
                 break;
             case 8:
-                issue_ctrl_write(ControlReg::W2_TILE_STRIDE, 0x00000800, ctrl_resetn_in);
+                ctrl_mem.w2_tile_stride = 0x00000800;
+                ctrl_data_in  = 0x00000800;
                 break;
             case 9:
-                issue_ctrl_write(ControlReg::WQ_BASE_ADDR, 0x10000000, ctrl_resetn_in);
+                ctrl_mem.wq_base_addr = 0x10000000;
+                ctrl_data_in  = 0x10000000;
                 break;
             case 10:
-                issue_ctrl_write(ControlReg::WK_BASE_ADDR, 0x20000000, ctrl_resetn_in);
+                ctrl_mem.wk_base_addr = 0x20000000;
+                ctrl_data_in  = 0x20000000;
                 break;
             case 11:
-                issue_ctrl_write(ControlReg::WV_BASE_ADDR, 0x30000000, ctrl_resetn_in);
+                ctrl_mem.wv_base_addr = 0x30000000;
+                ctrl_data_in  = 0x30000000;
                 break;
             case 12:
-                issue_ctrl_write(ControlReg::K_CACHE_ADDR, 0x40000000, ctrl_resetn_in);
+                ctrl_mem.k_cache_addr = 0x40000000;
+                ctrl_data_in  = 0x40000000;
                 break;
             case 13:
-                issue_ctrl_write(ControlReg::V_CACHE_ADDR, 0x50000000, ctrl_resetn_in);
+                ctrl_mem.v_cache_addr = 0x50000000;
+                ctrl_data_in  = 0x50000000;
                 break;
             case 14:
-                issue_ctrl_write(ControlReg::WO_BASE_ADDR, 0x60000000, ctrl_resetn_in);
+                ctrl_mem.wo_base_addr = 0x60000000;
+                ctrl_data_in  = 0x60000000;
                 break;
             case 15:
-                issue_ctrl_write(ControlReg::W1_BASE_ADDR, 0x70000000, ctrl_resetn_in);
+                ctrl_mem.w1_base_addr = 0x70000000;
+                ctrl_data_in  = 0x70000000;
                 break;
             case 16:
-                issue_ctrl_write(ControlReg::W2_BASE_ADDR, 0x80000000, ctrl_resetn_in);
+                ctrl_mem.w2_base_addr = 0x80000000;
+                ctrl_data_in  = 0x80000000;
                 assign_base_addresses = true;
                 ctrl_stage = CtrlInitStage::AssertStart;
                 break;
@@ -495,7 +431,9 @@ int main() {
             }
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::AssertStart) {
-            issue_ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT | CTRL_START_BIT, true);
+            ctrl_mem.control = CTRL_RESETN_BIT | CTRL_START_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT | CTRL_START_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT | CTRL_START_BIT;
             ctrl_resetn_in = true;
             reset_released = true;
             start_pulsed   = true;
@@ -503,30 +441,24 @@ int main() {
             ctrl_stage = CtrlInitStage::ClearStart;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::ClearStart) {
-            issue_ctrl_write(ControlReg::CONTROL, CTRL_RESETN_BIT, ctrl_resetn_in);
+            ctrl_mem.control = CTRL_RESETN_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT;
+            ctrl_resetn_in = true;
             pending_start_clear = false;
             ctrl_stage = CtrlInitStage::Done;
             ctrl_gap_cycles = 1;
         } else if(seen_irq_done){
-            issue_ctrl_write(ControlReg::IRQ_STATUS, IRQ_CLEAR_BIT, ctrl_resetn_in);
+            ctrl_mem.irq_clear = IRQ_INFER_DONE_BIT;
+            ctrl_data_in = IRQ_INFER_DONE_BIT;
             ctrl_gap_cycles = 1;
             seen_irq_done = false;
         }
         else if(irq_ps){
-            ctrl_read(ControlReg::IRQ_STATUS, ctrl_resetn_in,
-                      ctrl_addr, ctrl_data_in,
-                      ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
             ctrl_gap_cycles = 1;
             irq_interupt_flagged = true;
-            interupt_data = ctrl_data_out;
+            interupt_data = status_mem.irq_status;
         } 
-        else {
-            // Periodically read status to observe scheduler (one transaction at a time)
-            ctrl_read(ControlReg::STATUS, ctrl_resetn_in,
-                      ctrl_addr, ctrl_data_in,
-                      ctrl_read_en, ctrl_write_en, ctrl_chip_en, ctrl_resetn_in);
-            ctrl_gap_cycles = 1;
-        }
 
         // Clear per-head compute_done pulse
         for (int i = 0; i < NUM_HEADS; ++i) {
@@ -637,16 +569,12 @@ int main() {
             stream_ready,
             stream_start,
             stream_done,
-            ctrl_addr,
-            ctrl_data_in,
-            ctrl_data_out,
-            ctrl_read_en,
-            ctrl_write_en,
-            ctrl_chip_en,
-            ctrl_resetn_in,
+            ctrl_mem,
+            status_mem,
             irq_ps,
             dbg_state, 
             dbg_ctrl_mem,
+            dbg_status_mem,
             control_reg,
             irq_status_reg,
             irq_enable_reg,
@@ -669,27 +597,21 @@ int main() {
         if (wl_start && !dma_busy) {
             wl_dma_request = true;
             wl_dma_address = compute_wl_address(wl_addr_sel, wl_layer, wl_head, wl_tile,
-                                                ctrl_shadow_mem);
+                                                ctrl_mem);
             dma_busy  = true;
             dma_timer = DMA_LAT - 1;
         }
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-10u %-10u %-8s %-8s %-8s %-8s | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%s %s %s %d %d %d} dma_done=%s dma_addr=0x%08X",
+        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%s %s %s %d %d %d} dma_done=%s dma_addr=0x%08X",
                     cycle,
                     cntrl_start ? 1 : 0,
-                    cntrl_reset_n ? 1 : 0,
+                    cntrl_reset_n ? 1: 0,
                     compute_op,
                     dash_or(compute_start),
                     dash_or(compute_done),
-                    static_cast<unsigned>(ctrl_addr),
                     ctrl_data_in,
-                    ctrl_data_out,
-                    dash_or(ctrl_read_en),
-                    dash_or(ctrl_write_en),
-                    dash_or(ctrl_chip_en),
-                    dash_or(ctrl_resetn_in),
                     state_name(dbg_state),
                     dash_or(wl_dma_request),
                     wl_dma_address,
@@ -698,8 +620,8 @@ int main() {
                     dash_or(irq_interupt_flagged),
                     interupt_data,
                     dbg_ctrl_mem.control,
-                    dbg_ctrl_mem.irq_status,
-                    dbg_ctrl_mem.irq_enable,
+                    dbg_status_mem.irq_status,
+                    dbg_ctrl_mem.irq_mask,
                     dash_or(wl_ready),
                     dash_or(wl_start),
                     dma_name(wl_addr_sel),
