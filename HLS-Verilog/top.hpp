@@ -3,7 +3,7 @@
 #include "top_params.hpp"
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
-#include "IRQ_Wizard/IRQ_Wizard.hpp"
+// IRQ_Wizard functionality now integrated into ControlMemInterface
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
 
 
@@ -34,7 +34,6 @@ void transformer_top(
     
     SchedState  &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
-    StatusMemSpace &dbg_status_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
     uint32_t &irq_mask_reg,

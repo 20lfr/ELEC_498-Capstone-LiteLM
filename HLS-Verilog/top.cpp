@@ -52,7 +52,6 @@ void transformer_top(
     // ------------------------------------------------------------
     SchedState  &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
-    StatusMemSpace &dbg_status_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
     uint32_t &irq_mask_reg,
@@ -80,9 +79,9 @@ void transformer_top(
 
     bool done               = false;    // Scheduler done flag
     bool error              = false;    // Scheduler error flag
-    ControlMemInterface ctrl_mem_interface;
+    static ControlMemInterface ctrl_mem_interface;
     ctrl_mem_interface.update_inputs(ctrl_mem);
-    static StatusMemSpace active_status_mem = ctrl_mem_interface.get_mutable_status();
+    StatusMemSpace &active_status_mem = ctrl_mem_interface.get_mutable_status();
 
     // Debugging mirrors
     control_reg   = ctrl_mem.control;
@@ -134,11 +133,14 @@ void transformer_top(
         dbg_state
     );
 
-    // IRQ WIZARD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    irq_ps = irq_wizard(active_status_mem.irq_status, ctrl_mem.irq_mask, done, error);
+    // IRQ COMPUTATION (integrated into ControlMemInterface)
+    irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask, done, error);
     dbg_done = done;
     dbg_error = error;
 
     // Update status memory
     status_mem = active_status_mem;
+
+    // Temporary Debug outputs
+    dbg_ctrl_mem = ctrl_mem;
 }

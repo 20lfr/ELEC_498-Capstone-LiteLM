@@ -174,45 +174,63 @@ static uint32_t compute_wl_address(
     }
 }
 
+// Helper to decode status register bits
+static const char *status_name(uint32_t status) {
+    if (status & STATUS_ERROR)    return "ERROR";
+    if (status & STATUS_BUSY_BIT) return "BUSY";
+    if (status & STATUS_IDLE)     return "IDLE";
+    return "-";
+}
+
+static const char *irq_name(uint32_t irq) {
+    if (irq & IRQ_ERROR_BIT)        return "ERROR";
+    if (irq & IRQ_INFER_DONE_BIT)   return "DONE";
+    return "-";
+}
+
 ControlMemSpace ctrl_mem_init(bool init) {
     ControlMemSpace ctrl_mem{};
     if(init) {
         ctrl_mem.control = CTRL_RESETN_BIT;
         ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
         ctrl_mem.irq_clear = 0;
-        ctrl_mem.dma_layer_len = 0x000000100;
-        ctrl_mem.dma_head_len = 0x000000100;
-        ctrl_mem.dma_tile_len = 0x000000100;
-        ctrl_mem.layer_stride = 0x000000100;
-        ctrl_mem.wq_head_stride = 0x000000100;
-        ctrl_mem.wk_head_stride = 0x000000100;
-        ctrl_mem.wv_head_stride = 0x000000100;
-        ctrl_mem.k_cache_stride = 0x000000100;
-        ctrl_mem.v_cache_stride = 0x000000100;
-        ctrl_mem.wo_tile_stride = 0x000000100;
-        ctrl_mem.w1_tile_stride = 0x000000100;
-        ctrl_mem.w2_tile_stride = 0x000000100;
-        ctrl_mem.wq_base_addr = 0x000000100;
-        ctrl_mem.wk_base_addr = 0x000000100;
-        ctrl_mem.wv_base_addr = 0x000000100;
-        ctrl_mem.wo_base_addr = 0x000000100;
-        ctrl_mem.w1_base_addr = 0x000000100;
-        ctrl_mem.w2_base_addr = 0x000000100;
-        ctrl_mem.k_cache_addr = 0x000000100;
-        ctrl_mem.v_cache_addr = 0x000000100;
-        ctrl_mem.logit_scale_qv = 0x000000100;
-        ctrl_mem.scale_q = 0x000000100;
-        ctrl_mem.zero_point_q = 0x000000100;
-        ctrl_mem.scale_k = 0x000000100;
-        ctrl_mem.zero_point_k = 0x000000100;
-        ctrl_mem.scale_v = 0x000000100;
-        ctrl_mem.zero_point_v = 0x000000100;
+        // DMA lengths (non-zero required)
+        ctrl_mem.dma_layer_len = 0x00000100;
+        ctrl_mem.dma_head_len  = 0x00000100;
+        ctrl_mem.dma_tile_len  = 0x00000100;
+        // Strides (non-zero required) - match OG testbench values
+        ctrl_mem.layer_stride    = 0x00001000;
+        ctrl_mem.wq_head_stride  = 0x00000100;
+        ctrl_mem.wk_head_stride  = 0x00000100;
+        ctrl_mem.wv_head_stride  = 0x00000100;
+        ctrl_mem.k_cache_stride  = 0x00000400;
+        ctrl_mem.v_cache_stride  = 0x00000400;
+        ctrl_mem.wo_tile_stride  = 0x00000100;
+        ctrl_mem.w1_tile_stride  = 0x00000300;
+        ctrl_mem.w2_tile_stride  = 0x00000800;
+        // Base addresses - MUST be 64-byte aligned (& 0x3F == 0)
+        ctrl_mem.wq_base_addr = 0x10000000;
+        ctrl_mem.wk_base_addr = 0x20000000;
+        ctrl_mem.wv_base_addr = 0x30000000;
+        ctrl_mem.wo_base_addr = 0x60000000;
+        ctrl_mem.w1_base_addr = 0x70000000;
+        ctrl_mem.w2_base_addr = 0x80000000;
+        ctrl_mem.k_cache_addr = 0x40000000;
+        ctrl_mem.v_cache_addr = 0x50000000;
+        // Quantization params
+        ctrl_mem.logit_scale_qv = 0x00000100;
+        ctrl_mem.scale_q        = 0x00000100;
+        ctrl_mem.zero_point_q   = 0x00000000;
+        ctrl_mem.scale_k        = 0x00000100;
+        ctrl_mem.zero_point_k   = 0x00000000;
+        ctrl_mem.scale_v        = 0x00000100;
+        ctrl_mem.zero_point_v   = 0x00000000;
     }
     return ctrl_mem;
 }
 
 int main() {
-    const int MAX_CYCLES = 750;
+    const int MAX_CYCLES = 800;
     const int COMP_LAT   = 3;
     const int DMA_LAT    = 3;
     const int AXIS_BEATS = 3;
@@ -281,8 +299,29 @@ int main() {
     bool seen_attn       = false;
     bool seen_concat     = false;
     int  base_assign_step = 0;
-    enum class CtrlInitStage { TestCtrlInit, AssertReset, DeassertReset, ProgramBases, AssertStart, ClearStart, Done };
-    CtrlInitStage ctrl_stage = CtrlInitStage::AssertReset;
+    enum class CtrlInitStage { 
+        TestCtrlInit,           // 0: Initialize with valid config
+        TestDmaZeroLen,         // 1: Test DMA zero-length error
+        TestDmaZeroLenCheck,    // 2: Verify error was flagged
+        TestDmaZeroLenClear,    // 3: Clear the error
+        TestZeroStride,         // 4: Test zero-stride error  
+        TestZeroStrideCheck,    // 5: Verify error was flagged
+        TestZeroStrideClear,    // 6: Clear the error
+        TestAlignment,          // 7: Test misaligned address error
+        TestAlignmentCheck,     // 8: Verify error was flagged
+        TestAlignmentClear,     // 9: Clear the error
+        AssertReset,            // 10: Normal operation begins
+        DeassertReset, 
+        ProgramBases, 
+        AssertStart, 
+        ClearStart, 
+        Done 
+    };
+    CtrlInitStage ctrl_stage = CtrlInitStage::TestCtrlInit;
+    // Test tracking
+    bool test_error_detected = false;
+    int  test_errors_passed = 0;
+    int  test_errors_failed = 0;
     bool dbg_done = false;
     bool dbg_error = false;
 
@@ -297,7 +336,6 @@ int main() {
     bool seen_irq_done = false;
 
     ControlMemSpace dbg_ctrl_mem{};
-    StatusMemSpace dbg_status_mem{};
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
@@ -315,11 +353,11 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s | wl{%s %s %s %s %s %s} dma_done=%s dma_addr=%s\n",
+    std::printf("%-8s %-6s %-6s %-10s %-6s %-6s | %-10s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10s %-6s %-6s | wl{%s %s %s %s %s %s} dma_done=%s dma_addr=%s\n",
                 "Cycle", "Start", "Reset", "CompOp", "C_St", "C_Dn",
                 "CtrlDin", 
                 "DbgState", "WlReq", "WlAddr", "Seen", "IRQ", "IRQFlag", "IRQData",
-                "MemCtrl", "MemIRQ", "MemIRQEn",
+                "MemCtrl", "MemIRQ", "MemIRQMsk", "Status", "ErrCd",
                 "WLrdy", "WLstrt", "WLSel", "Layer", "Head", "Tile",
                 "DMADone", "DMAAddr");
 
@@ -330,11 +368,99 @@ int main() {
         if (ctrl_gap_cycles > 0) {
             ctrl_gap_cycles--;
         } else if (ctrl_stage == CtrlInitStage::TestCtrlInit) {
-           ctrl_mem = ctrl_mem_init(true);
-           ctrl_stage = CtrlInitStage::AssertReset;
-           ctrl_gap_cycles = 1;
+            // Start with valid config
+            ctrl_mem = ctrl_mem_init(true);
+            ctrl_mem.control = CTRL_RESETN_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT;
+            ctrl_resetn_in = true;
+            std::printf("[TEST] Starting ControlMemInterface error tests...\n");
+            ctrl_stage = CtrlInitStage::TestDmaZeroLen;
+            ctrl_gap_cycles = 1;
+        } else if (ctrl_stage == CtrlInitStage::TestDmaZeroLen) {
+            ctrl_mem = ctrl_mem_init(true);  // Start fresh
+            ctrl_mem.dma_layer_len = 0;      // Inject error: zero length
+            std::printf("[TEST 1] Injecting dma_layer_len=0 (expect ERR_DMA_ZERO_LEN)\n");
+            ctrl_stage = CtrlInitStage::TestDmaZeroLenCheck;
+            ctrl_gap_cycles = 1;
+        } else if (ctrl_stage == CtrlInitStage::TestDmaZeroLenCheck) {
+            // Check if error was detected
+            if ((status_mem.irq_status & IRQ_ERROR_BIT) && status_mem.error_code == ERR_DMA_ZERO_LEN) {
+                std::printf("[TEST 1] PASS: ERR_DMA_ZERO_LEN detected (irq=0x%X, err=0x%X)\n",
+                            status_mem.irq_status, status_mem.error_code);
+                test_errors_passed++;
+            } else {
+                std::printf("[TEST 1] FAIL: Expected ERR_DMA_ZERO_LEN (irq=0x%X, err=0x%X)\n",
+                            status_mem.irq_status, status_mem.error_code);
+                test_errors_failed++;
+            }
+            // Clear the error
+            ctrl_mem.irq_clear = IRQ_ERROR_BIT;
+            ctrl_stage = CtrlInitStage::TestDmaZeroLenClear;
+            ctrl_gap_cycles = 1;
+        } else if (ctrl_stage == CtrlInitStage::TestDmaZeroLenClear) {
+            ctrl_mem.irq_clear = 0;  // One-shot clear
+            ctrl_mem = ctrl_mem_init(true);  // Restore valid config
+            ctrl_stage = CtrlInitStage::TestZeroStride;
+            ctrl_gap_cycles = 1;
+        
+        // ========== TEST 2: Zero Stride ==========
+        } else if (ctrl_stage == CtrlInitStage::TestZeroStride) {
+            ctrl_mem = ctrl_mem_init(true);  // Start fresh
+            ctrl_mem.layer_stride = 0;       // Inject error: zero stride
+            std::printf("[TEST 2] Injecting layer_stride=0 (expect ERR_DMA_ZERO_LEN)\n");
+            ctrl_stage = CtrlInitStage::TestZeroStrideCheck;
+            ctrl_gap_cycles = 1;
+        } else if (ctrl_stage == CtrlInitStage::TestZeroStrideCheck) {
+            if ((status_mem.irq_status & IRQ_ERROR_BIT) && status_mem.error_code == ERR_DMA_ZERO_LEN) {
+                std::printf("[TEST 2] PASS: Zero stride error detected (irq=0x%X, err=0x%X)\n",
+                            status_mem.irq_status, status_mem.error_code);
+                test_errors_passed++;
+            } else {
+                std::printf("[TEST 2] FAIL: Expected zero stride error (irq=0x%X, err=0x%X)\n",
+                            status_mem.irq_status, status_mem.error_code);
+                test_errors_failed++;
+            }
+            ctrl_mem.irq_clear = IRQ_ERROR_BIT;
+            ctrl_stage = CtrlInitStage::TestZeroStrideClear;
+            ctrl_gap_cycles = 1;
+        } else if (ctrl_stage == CtrlInitStage::TestZeroStrideClear) {
+            ctrl_mem.irq_clear = 0;
+            ctrl_mem = ctrl_mem_init(true);
+            ctrl_stage = CtrlInitStage::TestAlignment;
+            ctrl_gap_cycles = 1;
+        
+        // ========== TEST 3: Address Alignment ==========
+        } else if (ctrl_stage == CtrlInitStage::TestAlignment) {
+            ctrl_mem = ctrl_mem_init(true);  // Start fresh
+            ctrl_mem.wq_base_addr = 0x10000001;  // Inject error: not 64-byte aligned
+            std::printf("[TEST 3] Injecting wq_base_addr=0x10000001 (expect ERR_DMA_ALIGNMENT)\n");
+            ctrl_stage = CtrlInitStage::TestAlignmentCheck;
+            ctrl_gap_cycles = 1;
+        } else if (ctrl_stage == CtrlInitStage::TestAlignmentCheck) {
+            if ((status_mem.irq_status & IRQ_ERROR_BIT) && status_mem.error_code == ERR_DMA_ALIGNMENT) {
+                std::printf("[TEST 3] PASS: ERR_DMA_ALIGNMENT detected (irq=0x%X, err=0x%X)\n",
+                            status_mem.irq_status, status_mem.error_code);
+                test_errors_passed++;
+            } else {
+                std::printf("[TEST 3] FAIL: Expected ERR_DMA_ALIGNMENT (irq=0x%X, err=0x%X)\n",
+                            status_mem.irq_status, status_mem.error_code);
+                test_errors_failed++;
+            }
+            ctrl_mem.irq_clear = IRQ_ERROR_BIT;
+            ctrl_stage = CtrlInitStage::TestAlignmentClear;
+            ctrl_gap_cycles = 1;
+        } else if (ctrl_stage == CtrlInitStage::TestAlignmentClear) {
+            ctrl_mem.irq_clear = 0;
+            ctrl_mem = ctrl_mem_init(false);  
+            std::printf("[TEST] Error tests complete: %d passed, %d failed\n", 
+                        test_errors_passed, test_errors_failed);
+            ctrl_stage = CtrlInitStage::AssertReset;  // Continue to normal operation
+            ctrl_gap_cycles = 1;
+        
+        // ========== NORMAL OPERATION ==========
         } else if (ctrl_stage == CtrlInitStage::AssertReset) {
-            ctrl_mem = ctrl_mem_init(false);
+            ctrl_mem = ctrl_mem_init(false); // Restore default config
             ctrl_mem.control = 0x00000000;
             ctrl_data_in = 0x00000000;
             ctrl_shadow_control = 0x00000000;
@@ -352,72 +478,99 @@ int main() {
             // Program control-space base addresses and strides with reset asserted
             switch (base_assign_step) {
             case 0:
-                ctrl_mem.layer_stride = 0x00001000;
-                ctrl_data_in  = 0x00001000;
+                // Clear any pending interrupts during programming
+                ctrl_mem.irq_clear = IRQ_ERROR_BIT;
+                ctrl_data_in  = IRQ_ERROR_BIT;
                 break;
             case 1:
-                ctrl_mem.wq_head_stride = 0x00000100;
+                ctrl_mem.dma_layer_len = 0x00000100;
                 ctrl_data_in  = 0x00000100;
                 break;
             case 2:
-                ctrl_mem.wk_head_stride = 0x00000100;
+                ctrl_mem.dma_head_len = 0x00000100;
                 ctrl_data_in  = 0x00000100;
                 break;
             case 3:
-                ctrl_mem.wv_head_stride = 0x00000100;
+                ctrl_mem.dma_tile_len = 0x00000100;
                 ctrl_data_in  = 0x00000100;
                 break;
             case 4:
-                ctrl_mem.k_cache_stride = 0x00000400;
-                ctrl_data_in  = 0x00000400;
+                ctrl_mem.layer_stride = 0x00001000;
+                ctrl_data_in  = 0x00001000;
                 break;
             case 5:
-                ctrl_mem.v_cache_stride = 0x00000400;
-                ctrl_data_in  = 0x00000400;
+                ctrl_mem.wq_head_stride = 0x00000100;
+                ctrl_data_in  = 0x00000100;
                 break;
             case 6:
-                ctrl_mem.wo_tile_stride = 0x00000100;
+                ctrl_mem.wk_head_stride = 0x00000100;
                 ctrl_data_in  = 0x00000100;
                 break;
             case 7:
+                ctrl_mem.wv_head_stride = 0x00000100;
+                ctrl_data_in  = 0x00000100;
+                break;
+            case 8:
+                ctrl_mem.k_cache_stride = 0x00000400;
+                ctrl_data_in  = 0x00000400;
+                break;
+            case 9:
+                ctrl_mem.v_cache_stride = 0x00000400;
+                ctrl_data_in  = 0x00000400;
+                break;
+            case 10:
+                ctrl_mem.wo_tile_stride = 0x00000100;
+                ctrl_data_in  = 0x00000100;
+                break;
+            case 11:
                 ctrl_mem.w1_tile_stride = 0x00000300;
                 ctrl_data_in  = 0x00000300;
                 break;
-            case 8:
+            case 12:
                 ctrl_mem.w2_tile_stride = 0x00000800;
                 ctrl_data_in  = 0x00000800;
                 break;
-            case 9:
+            case 13:
                 ctrl_mem.wq_base_addr = 0x10000000;
                 ctrl_data_in  = 0x10000000;
                 break;
-            case 10:
+            case 14:
                 ctrl_mem.wk_base_addr = 0x20000000;
                 ctrl_data_in  = 0x20000000;
                 break;
-            case 11:
+            case 15:
                 ctrl_mem.wv_base_addr = 0x30000000;
                 ctrl_data_in  = 0x30000000;
                 break;
-            case 12:
+            case 16:
                 ctrl_mem.k_cache_addr = 0x40000000;
                 ctrl_data_in  = 0x40000000;
                 break;
-            case 13:
+            case 17:
                 ctrl_mem.v_cache_addr = 0x50000000;
                 ctrl_data_in  = 0x50000000;
                 break;
-            case 14:
+            case 18:
                 ctrl_mem.wo_base_addr = 0x60000000;
                 ctrl_data_in  = 0x60000000;
                 break;
-            case 15:
+            case 19:
                 ctrl_mem.w1_base_addr = 0x70000000;
                 ctrl_data_in  = 0x70000000;
                 break;
-            case 16:
+            case 20:
                 ctrl_mem.w2_base_addr = 0x80000000;
                 ctrl_data_in  = 0x80000000;
+                break;
+            case 21:
+                // Disabled interrupt clearing
+                ctrl_mem.irq_clear = 0;
+                ctrl_data_in  = 0;
+                break;
+            case 22:
+                // Enable interrupts
+                ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
+                ctrl_data_in  = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
                 assign_base_addresses = true;
                 ctrl_stage = CtrlInitStage::AssertStart;
                 break;
@@ -458,7 +611,7 @@ int main() {
             ctrl_gap_cycles = 1;
             irq_interupt_flagged = true;
             interupt_data = status_mem.irq_status;
-        } 
+        }
 
         // Clear per-head compute_done pulse
         for (int i = 0; i < NUM_HEADS; ++i) {
@@ -574,7 +727,6 @@ int main() {
             irq_ps,
             dbg_state, 
             dbg_ctrl_mem,
-            dbg_status_mem,
             control_reg,
             irq_status_reg,
             irq_enable_reg,
@@ -604,7 +756,7 @@ int main() {
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10u %-10u | wl{%s %s %s %d %d %d} dma_done=%s dma_addr=0x%08X",
+        std::printf("%-8d %-6d %-6d 0x%08X %-6s %-6s | %-10u | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10s %-10u %-6s 0x%04X | wl{%s %s %s %d %d %d} dma_done=%s dma_addr=0x%08X",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1: 0,
@@ -620,8 +772,10 @@ int main() {
                     dash_or(irq_interupt_flagged),
                     interupt_data,
                     dbg_ctrl_mem.control,
-                    dbg_status_mem.irq_status,
+                    irq_name(status_mem.irq_status),
                     dbg_ctrl_mem.irq_mask,
+                    status_name(status_mem.status),
+                    status_mem.error_code,
                     dash_or(wl_ready),
                     dash_or(wl_start),
                     dma_name(wl_addr_sel),
@@ -713,6 +867,13 @@ int main() {
     }
 
     bool ok = seen_stream_out && (idle_after_stream >= 4) && seen_attn && seen_concat;
+    bool error_tests_ok = (test_errors_passed == 3) && (test_errors_failed == 0);
+    
+    if (!error_tests_ok) {
+        std::fprintf(stderr, "ERROR: ControlMemInterface error tests: %d passed, %d failed (expected 3/0)\n",
+                     test_errors_passed, test_errors_failed);
+    }
+    
     if (!ok) {
         if (!seen_stream_out) std::fprintf(stderr, "ERROR: STREAM_OUT state never reached\n");
         if (idle_after_stream < 4) std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after STREAM_OUT\n");
@@ -720,7 +881,12 @@ int main() {
         if (!seen_concat)     std::fprintf(stderr, "ERROR: CONCAT compute op never issued\n");
         return 1;
     }
+    
+    if (!error_tests_ok) {
+        return 1;
+    }
 
+    std::printf("PASS: All ControlMemInterface error tests passed (%d/3)\n", test_errors_passed);
     std::printf("PASS: STREAM_OUT reached and FSM stayed IDLE for %d cycles after.\n",
                 idle_after_stream);
     return 0;

@@ -348,7 +348,7 @@ constexpr uint32_t ERR_DMA_ZERO_LEN     = 0x11;
 // Passed by value
 struct ControlMemSpace {
     uint32_t control        = CTRL_RESETN_BIT;  // cntrl_reset | cntrl_start
-    uint32_t irq_mask       = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
+    uint32_t irq_mask       = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear      = 0;
 
     uint32_t dma_layer_len  = 0;
