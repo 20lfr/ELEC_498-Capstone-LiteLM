@@ -64,7 +64,7 @@ void scheduler_hls(
     bool      wl_ready,         // [INPUT]  Weight loader ready for a new request
 
     uint32_t  &wl_instruction,
-    bool    &wl_start,        // [OUTPUT] Start weight load DMA
+    bool      &wl_start,        // [OUTPUT] Start weight load DMA
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)`

@@ -10,3 +10,7 @@ comp.run(operation="C_SIMULATION")
 comp = client.get_component(name="Headed_Compute_Controller")
 comp.run(operation="C_SIMULATION")
 
+client.delete_component(name="compute_block")
+
+client.delete_component(name="componentName")
+
