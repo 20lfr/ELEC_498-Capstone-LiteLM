@@ -52,12 +52,17 @@ void scheduler_hls(
     // ------------------------------------------------------------
     bool      dma_done,        // [INPUT]  DMA transfer completed (single-cycle pulse)
 
+<<<<<<< HEAD
     bool    wl_ready,         // [INPUT]  Weight loader ready for a new request
     bool    &wl_start,        // [OUTPUT] Start weight load DMA
     DmaSel  &wl_addr_sel,     // [OUTPUT] Select which matrix/tile (Q, K, V, K cache, V cache, WO, W1...)
     int     &wl_layer,        // [OUTPUT] Layer index for DMA
     int     &wl_head,         // [OUTPUT] Head index for DMA (or -1 for non-head ops)
     int     &wl_tile,         // [OUTPUT] Tile index for large matrices
+=======
+    uint32_t  &wl_instruction,
+    bool      &wl_start,        // [OUTPUT] Start weight load DMA
+>>>>>>> dda14f91 (Subject: Updating main for everyone)
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)`
