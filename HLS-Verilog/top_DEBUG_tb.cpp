@@ -316,7 +316,6 @@ int main() {
     bool seen_irq_done = false;
 
     ControlMemSpace dbg_ctrl_mem{};
-    StatusMemSpace dbg_status_mem{};
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
@@ -333,7 +332,6 @@ int main() {
     uint32_t wo_tile_stride     = 0;
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
-
 
     std::printf("%-8s %-6s %-6s %-6s %-6s %-12s %-12s %-6s %-6s | %-10s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10u %-10s %-8s | wl{Sel L H T} dma_addr=%s\n",
                 "Cycle", "Start", "Reset", "C_St", "WL_St", "CompInstr", "WlInstr", "C_Dn", "DmaDn",
@@ -708,7 +706,6 @@ int main() {
             irq_ps,
             dbg_state, 
             dbg_ctrl_mem,
-            dbg_status_mem,
             control_reg,
             irq_status_reg,
             irq_enable_reg,
