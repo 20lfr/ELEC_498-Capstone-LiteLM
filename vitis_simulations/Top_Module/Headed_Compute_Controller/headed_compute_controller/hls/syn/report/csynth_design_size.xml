@@ -1,0 +1,67 @@
+<design_size title="Design Size Report">
+    <item name="Total Instructions per Compilation Phase">
+        <table>
+            <keys size="4">Phase, Step, Instructions, Description</keys>
+            <column name="Compile/Link">, 1888, After all functions are compiled and linked into a single design</column>
+            <column name="">, , </column>
+            <column name="Unroll/Inline">, , After user unroll and inline pragmas are applied</column>
+            <column name="">(1) unroll, 2137, user unroll pragmas are applied</column>
+            <column name="">(2) simplification, 1754, simplification of applied user unroll pragmas</column>
+            <column name="">(3) inline, 1616, user inline pragmas are applied</column>
+            <column name="">(4) simplification, 1583, simplification of applied user inline pragmas</column>
+            <column name="">, , </column>
+            <column name="Array/Struct">, , After user array partition and struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(1) array partition, 3292, user array partition pragmas are applied</column>
+            <column name="">(2) simplification, 2288, simplification of applied user array partition &amp; struct aggregate/disaggregate pragmas</column>
+            <column name="">(3) aggregate/disaggregate , 2288, user struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(4) array reshape, 2288, apply array reshape pragmas</column>
+            <column name="">(5) access patterns, 2219, array access pattern optmizations</column>
+            <column name="">, , </column>
+            <column name="Performance">, , After transformations are applied to meet performance pragma targets</column>
+            <column name="">(1) loop simplification, 2215, loop and instruction simplification</column>
+            <column name="">(2) parallelization, 2125, loops are unrolled or pipelined to meet performance targets</column>
+            <column name="">(3) array partition, 2097, arrays are partitioned to meet performance targets</column>
+            <column name="">(4) simplification, 2097, simplification of design after performance transformations</column>
+            <column name="">, , </column>
+            <column name="HW Transforms">, , After hardware transfomations</column>
+            <column name="">(1) lowering, 2133, initial conversion to HW specific instructions</column>
+            <column name="">(2) optimizations, 2266, high level synthesis optimizations</column>
+        </table>
+    </item>
+    <item name="Instructions per Function for each Compilation Phase">
+        <hiertable>
+            <header size="7" col0="Function" col1="Location" col2="Compile/Link" col3="Unroll/Inline" col4="Array/Struct" col5="Performance" col6="HW Transforms"/>
+            <rows>
+                <row id="0" col0="headed_compute_controller" col1="headed_compute_controller.cpp:304" col2="1888" col3="1583" col4="2219" col5="2097" col6="2266">
+                    <row id="5" col0="max2" col1="top_params.hpp:450" col2="36" col2_disp="  36 (6 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="3" col0="min2_constexpr" col1="top_params.hpp:431" col2="24" col2_disp="  24 (4 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="14" col0="read_i8" col1="top_params.hpp:560" col2="20" col2_disp="  20 (5 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="9" col0="print_head_buffers" col1="headed_compute_controller.cpp:81" col2="198" col2_disp=" 198 (3 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="13" col0="write_i32" col1="top_params.hpp:611" col2="84" col2_disp="  84 (3 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="6" col0="read_i16" col1="top_params.hpp:572" col2="15" col3="" col4="" col5="" col6=""/>
+                    <row id="10" col0="SOFTMAX" col1="headed_compute_controller.cpp:221" col2="117" col3="66" col4="126" col5="108" col6="121">
+                        <row id="2" col0="exp_approx_q15" col1="headed_compute_controller.cpp:175" col2="19" col3="" col4="" col5="" col6=""/>
+                    </row>
+                    <row id="15" col0="write_i16" col1="top_params.hpp:605" col2="32" col2_disp="  32 (2 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="7" col0="read_i32" col1="top_params.hpp:579" col2="108" col2_disp=" 108 (4 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="8" col0="VALUE_SCALE_CLAMP" col1="headed_compute_controller.cpp:155" col2="34" col3="" col4="" col5="" col6=""/>
+                    <row id="4" col0="REQUANT_D_HEADS_int32_to_int8" col1="headed_compute_controller.cpp:277" col2="43" col3="" col4="" col5="" col6=""/>
+                    <row id="12" col0="write_i8" col1="top_params.hpp:588" col2="4" col3="" col4="" col5="" col6=""/>
+                    <row id="11" col0="read_i4" col1="top_params.hpp:564" col2="184" col2_disp=" 184 (2 calls)" col3="204" col3_disp=" 204 (17 calls)" col4="204" col4_disp=" 204 (17 calls)" col5="" col6=""/>
+                    <row id="1" col0="MAC_HEAD_ARCHITECTURE" col1="headed_compute_controller.cpp:110" col2="144" col3="" col4="" col5="" col6="">
+                        <row id="5" col0="max2" col1="top_params.hpp:450" col2="36" col2_disp="  36 (6 calls)" col3="" col4="" col5="" col6=""/>
+                        <row id="3" col0="min2_constexpr" col1="top_params.hpp:431" col2="24" col2_disp="  24 (4 calls)" col3="" col4="" col5="" col6=""/>
+                    </row>
+                </row>
+            </rows>
+            <notes/>
+        </hiertable>
+    </item>
+    <item name="Design Size Message Settings">
+        <table>
+            <keys size="3">Message Setting, Value, Description</keys>
+            <column name="config_compile -design_size_maximum_warning">100000, Show a warning when total design instructions exceeds this value</column>
+        </table>
+    </item>
+</design_size>
+

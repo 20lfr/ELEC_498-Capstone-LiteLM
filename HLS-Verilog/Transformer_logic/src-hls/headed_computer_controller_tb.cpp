@@ -131,11 +131,10 @@ void att_scores_expected(
 
 void value_scale_expected(
     const int32_t input[CONTEXT_LENGTH],
-    int16_t scale_q15,
     int16_t output[CONTEXT_LENGTH]
 ) {
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-        int64_t prod = static_cast<int64_t>(input[i]) * static_cast<int64_t>(scale_q15);
+        int64_t prod = static_cast<int64_t>(input[i]) * static_cast<int64_t>(ATTN_SCALE_Q15);
         int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
         int32_t scaled = static_cast<int32_t>(rounded >> 15);
         if (scaled > 32767) {
@@ -216,14 +215,15 @@ void softmax_expected(
         sum_exp += e_q15;
     }
 
-    uint32_t inv_sum_q30 = 0;
+    uint32_t inv_sum_q15 = 0;
     if (sum_exp > 0) {
-        inv_sum_q30 = (static_cast<uint32_t>(1) << 30) / sum_exp;
+        // Match DUT: reciprocal in Q1.15 using 2^30 / sum_exp (sum_exp is Q1.15)
+        inv_sum_q15 = (static_cast<uint32_t>(1) << 30) / sum_exp;
     }
 
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-        uint64_t tmp = static_cast<uint64_t>(exp_buf[i]) * static_cast<uint64_t>(inv_sum_q30);
-        uint16_t prob_q15 = static_cast<uint16_t>(tmp >> 30);
+        uint64_t tmp = static_cast<uint64_t>(exp_buf[i]) * static_cast<uint64_t>(inv_sum_q15);
+        uint16_t prob_q15 = static_cast<uint16_t>(tmp >> 15);
         if (prob_q15 > MAX_Q15) {
             prob_q15 = MAX_Q15;
         }
@@ -381,8 +381,7 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::ValueScaleLayout::X + (t * 4))));
         }
-        const int16_t scale = compute_buf::read_i16(in_buf, head_buf::ValueScaleLayout::SCALE);
-        std::printf("\n  SCALE: %d\n", static_cast<int>(scale));
+        std::printf("\n");
         break;
     }
     case ComputeOp::CMP_SOFTMAX: {
@@ -526,8 +525,6 @@ int main() {
 
     const int32_t rq_M = 3;
     const int32_t rq_N = 3;
-    const int16_t scale_q15 = 16384; // 0.5 in Q1.15
-
     const int MEM_LAT = 2;
     bool mem_busy = false;
     int mem_timer = 0;
@@ -562,7 +559,7 @@ int main() {
     requant_heads_expected(rq_k_in, rq_M, rq_N, exp_k_rq);
     requant_heads_expected(rq_v_in, rq_M, rq_N, exp_v_rq);
     att_scores_expected(att_q, att_k_cache, exp_att_scores);
-    value_scale_expected(val_scale_in, scale_q15, exp_val_scaled);
+    value_scale_expected(val_scale_in, exp_val_scaled);
     softmax_expected(softmax_in, exp_softmax);
     att_value_expected(att_weights_in, att_v_cache, exp_att_value);
     requant_heads_expected(rq_head_in, rq_M, rq_N, exp_head_rq);
@@ -693,7 +690,6 @@ int main() {
                             for (int t = 0; t < CONTEXT_LENGTH; ++t) {
                                 compute_buf::write_i32(in_buf, head_buf::ValueScaleLayout::X + (t * 4), val_scale_in[t]);
                             }
-                            compute_buf::write_i16(in_buf, head_buf::ValueScaleLayout::SCALE, scale_q15);
                             break;
                         }
                         case ComputeOp::CMP_SOFTMAX: {

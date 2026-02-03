@@ -1,0 +1,59 @@
+{
+  "0": {
+    "basicblocks": 302,
+    "calls": "1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2",
+    "control_depth": 2,
+    "def_use_depth": 13,
+    "file": "headed_compute_controller.cpp",
+    "fileloc": 304,
+    "instructions": 1976,
+    "loads": {
+      "G": 104,
+      "L": 17,
+      "T": 41
+    },
+    "memory_accesses": 385,
+    "name": "headed_compute_controller",
+    "stores": {
+      "G": 658,
+      "T": 49
+    },
+    "total_instructions": 2288
+  },
+  "1": {
+    "basicblocks": 28,
+    "calls": "",
+    "control_depth": 5,
+    "def_use_depth": 7,
+    "file": "headed_compute_controller.cpp",
+    "fileloc": 221,
+    "instructions": 108,
+    "loads": {
+      "G": 4
+    },
+    "memory_accesses": 5,
+    "name": "SOFTMAX",
+    "stores": {
+      "G": 1
+    },
+    "total_instructions": 108
+  },
+  "2": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "top_params.hpp",
+    "fileloc": 564,
+    "instructions": 12,
+    "loads": {
+      "L": 1
+    },
+    "memory_accesses": 0,
+    "name": "read_i4",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 12
+  }
+}
