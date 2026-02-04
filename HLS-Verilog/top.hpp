@@ -4,6 +4,7 @@
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
 #include "IRQ_Wizard/IRQ_Wizard.hpp"
+#include "Transformer_logic/src-hls/compute_controller.hpp"
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
 
 
@@ -13,14 +14,19 @@ void transformer_top(
     bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
     bool        dma_done,               // [INPUT]  DMA transfer completed (single-cycle pulse)
-    bool        wl_ready,                 // [INPUT]  Weight loader ready for a new request
-    uint32_t    &wl_instruction,          // [OUTPUT] Packed dma op|layer|head|tile
-    bool        &wl_start,                // [OUTPUT] Start weight load request
-    bool compute_ready,                 // [INPUT]  Compute engine idle / ready for next op
-    bool compute_done,                  // [INPUT]  Compute operation finished (one-shot)
-    bool &compute_start,                // [OUTPUT] Trigger compute engine
-    uint32_t &compute_instruction,               // [OUTPUT] Packed op|layer|head|tile for compute
-    HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
+    bool        wl_ready,               // [INPUT]  Weight loader ready for a new request
+    uint32_t    &wl_instruction,        // [OUTPUT] Packed dma op|layer|head|tile
+    bool        &wl_start,              // [OUTPUT] Start weight load request
+
+    // Compute Controller communication signals
+    bool        mem_transfer_done,      // [INPUT] Memory manager transfer complete
+    bool        &mem_read_request,      // [OUTPUT] Request memory manager read
+    bool        &mem_write_request,     // [OUTPUT] Request memory manager write
+    uint32_t    &mem_op,                // [OUTPUT] Opcode for memory manager
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
+
+    HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out)
     bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
     bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
     bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
@@ -33,7 +39,7 @@ void transformer_top(
     bool       ctrl_resetn_in,          // [INPUT]  AXI-lite active-low reset <- for clearing control mem ONLY
     bool        &irq_ps,
 
-    
+    // Debug (scheduler)
     SchedState  &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,
@@ -50,8 +56,24 @@ void transformer_top(
     uint32_t &wv_head_stride,
     uint32_t &wo_tile_stride,
     uint32_t &w1_tile_stride,
-    uint32_t &w2_tile_stride, 
-    
+    uint32_t &w2_tile_stride,
+
+    // Debug (compute controller)
+    bool     &dbg_compute_start,
+    uint32_t &dbg_compute_instruction,
+    bool     &dbg_compute_ready,
+    bool     &dbg_compute_done,
+    ComputeState &dbg_compute_state,
+    uint32_t &dbg_req_instruction,
+    uint8_t  &dbg_req_op,
+    uint8_t  &dbg_req_layer,
+    uint8_t  &dbg_req_head,
+    uint8_t  &dbg_req_tile,
+    bool     &dbg_mac_start,
+    bool     &dbg_mac_ready,
+    bool     &dbg_mac_complete,
+    bool     &dbg_ctrl_reset_asserted,
+
     bool &dbg_done,
     bool &dbg_error
 );

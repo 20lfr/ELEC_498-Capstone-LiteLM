@@ -27,7 +27,8 @@ INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_
 INFO: [SIM 211-2] *************** CSIM start ***************
 INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
 INFO: [HLS 200-2036] Building debug C Simulation binaries
-make: 'csim.exe' is up to date.
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp in debug mode
+   Generating csim.exe
 D_MODEL=16 D_HEADS=4 CONTEXT_LENGTH=16
 Q_ACT[16]: 1 -2 3 -4 5 -6 7 -8 9 -10 11 -12 13 -14 15 -16
 K_ACT[16]: -2 4 -4 6 -6 8 -8 10 -10 12 -12 14 -14 16 -16 18
@@ -490,25 +491,22 @@ SOFTMAX in_buf (decoded):
   X: -1200 -1105 -1010 -915 -820 -725 -630 -535 -440 -345 -250 -155 -60 35 130 225
 95     0     0     0     0     0      0      0      1      SOFTMAX    0xff00000b SOFTMAX    0     0     -1    3       0xff00000b SOFTMAX  0     0     -1   
 
-max_val: 225
-exp_buf[0]: 31267
-exp_buf[1]: 31390
-exp_buf[2]: 31513
-exp_buf[3]: 31636
-exp_buf[4]: 31636
-exp_buf[5]: 31760
-exp_buf[6]: 31884
-exp_buf[7]: 32009
-exp_buf[8]: 32009
-exp_buf[9]: 32134
-exp_buf[10]: 32260
-exp_buf[11]: 32386
-exp_buf[12]: 32386
-exp_buf[13]: 32513
-exp_buf[14]: 32640
-exp_buf[15]: 32767
-sum_exp: 512190
-inv_sum_q15: 2096
+diff[0] = -1425
+diff[1] = -1330
+diff[2] = -1235
+diff[3] = -1140
+diff[4] = -1045
+diff[5] = -950
+diff[6] = -855
+diff[7] = -760
+diff[8] = -665
+diff[9] = -570
+diff[10] = -475
+diff[11] = -380
+diff[12] = -285
+diff[13] = -190
+diff[14] = -95
+diff[15] = 0
 96     0     0     0     0     0      0      0      1      SOFTMAX    0xff00000b SOFTMAX    0     0     -1    4       0xff00000b SOFTMAX  0     0     -1   
 
 97     0     0     0     0     0      0      0      1      -          0xff00000b SOFTMAX    0     0     -1    5       0xff00000b SOFTMAX  0     0     -1   
@@ -635,5 +633,5 @@ out_buf (decoded): <no decoder>
 headed_compute_controller_tb: PASS
 INFO: [SIM 211-1] CSim done with 0 errors.
 INFO: [SIM 211-3] *************** CSIM finish ***************
-INFO: [HLS 200-112] Total CPU user time: 2.24 seconds. Total CPU system time: 0.73 seconds. Total elapsed time: 2.94 seconds; peak allocated memory: 445.137 MB.
-INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 6s
+INFO: [HLS 200-112] Total CPU user time: 3.67 seconds. Total CPU system time: 0.9 seconds. Total elapsed time: 4.56 seconds; peak allocated memory: 445.145 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 8s

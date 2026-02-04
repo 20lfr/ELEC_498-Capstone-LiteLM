@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'headed_compute_controller_Pipeline_VITIS_LOOP_646_30'
 ================================================================
-* Date:           Fri Jan 30 15:25:10 2026
+* Date:           Tue Feb  3 14:27:09 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        headed_compute_controller
@@ -160,7 +160,7 @@ Target clock period: 10.000ns, clock uncertainty: 2.700ns.
 The critical path consists of the following:
 	'store' operation 0 bit ('store_ln646', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:646) of constant 0 on local variable 'i', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:646 [18]  (0.427 ns)
 	'load' operation 9 bit ('i', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:646) on local variable 'i', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:646 [21]  (0.000 ns)
-	'store' operation 0 bit ('store_ln648', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:648) of constant 0 on array 'p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_16' [59]  (0.677 ns)
+	'store' operation 0 bit ('store_ln648', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:648) of constant 0 on array 'headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_25' [68]  (0.677 ns)
 	blocking operation 0.797 ns on control path)
 
 

@@ -109,8 +109,8 @@ void scheduler_hls(
 #pragma HLS reset variable = attn_done
   static bool attn_compute_done;
 #pragma HLS reset variable = attn_compute_done
-  static bool concat_compute_done;
-#pragma HLS reset variable = concat_compute_done
+  static bool concat_dma_done;
+#pragma HLS reset variable = concat_dma_done
   static bool outproj_compute_done;
 #pragma HLS reset variable = outproj_compute_done
   static bool resid0_compute_done;
@@ -254,7 +254,7 @@ void scheduler_hls(
 
 
     // Head concat
-    concat_compute_done = false;
+    concat_dma_done = false;
     concat_started = false;
 
     // Output projection
@@ -352,15 +352,16 @@ void scheduler_hls(
       if (ffn_stage == FfnStage::W1)      w1_dma_done = true;
       else if (ffn_stage == FfnStage::W2) w2_dma_done = true;
     }
+    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = true;
   } else {
     if (outproj_started && !wo_dma_busy) wo_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
+    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = false;
   }
 
   if (compute_done && !compute_start) {
     if (st == S_ATTENTION_HEADS && attn_started)  attn_compute_done = true;
-    if (st == S_HEAD_CONCAT && concat_started)    concat_compute_done = true;
     if (st == S_OUT_PROJECTION && outproj_started) outproj_compute_done = true;
     if (st == S_REQUANT1 && requant1_started)     requant1_compute_done = true;
     if (st == S_RES_ADD_1 && resid0_started)      resid0_compute_done = true;
@@ -404,7 +405,7 @@ void scheduler_hls(
 
         // Head concat
         concat_started = false;
-        concat_compute_done = false;
+        concat_dma_done = false;
 
         // Output projection
         outproj_started = false;
@@ -495,7 +496,7 @@ void scheduler_hls(
 
       // Head concat
       concat_started = false;
-      concat_compute_done = false;
+      concat_dma_done = false;
 
       // Output projection
       outproj_started = false;
@@ -545,7 +546,7 @@ void scheduler_hls(
       if (!ln0_started && compute_ready) {
         ln0_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_LN0, layer_idx, -1, -1);
+        compute_instruction = pack_compute_instruction(CMP_LN0, layer_idx, -1, -1);
         ln0_started = true;
       } else if (ln0_started && ln0_compute_done) {
         ln0_started = false;
@@ -625,18 +626,18 @@ void scheduler_hls(
       break;
     }
     case S_HEAD_CONCAT: {
-      if (!concat_started && compute_ready) {
-        concat_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_CONCAT, layer_idx, -1, -1);
+      if (!concat_started && wl_ready) {
+        concat_dma_done = false;
+        wl_start = 1;
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_CONCAT, layer_idx, -1, -1);
         concat_started = true;
-      } else if (concat_started && concat_compute_done) {
+      } else if (concat_started && concat_dma_done) {
         concat_started = false;
-        concat_compute_done = false;
+        concat_dma_done = false;
         st = S_OUT_PROJECTION;
       }
-      break; 
-    } 
+      break;
+    }
     case S_OUT_PROJECTION: {
       if (wo_tile >= NUM_WO_TILES) {
         resid0_started = false;
@@ -840,7 +841,7 @@ void scheduler_hls(
         final_norm_compute_done = false;
         compute_start = 1;
         // Reuse LN1 opcode for the terminal norm.
-        compute_instruction= pack_compute_instruction(CMP_LN1, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_FINAL_NORM, layer_idx, -1, -1);
         final_norm_started = true;
       } else if (final_norm_started && final_norm_compute_done) {
         final_norm_started = false;

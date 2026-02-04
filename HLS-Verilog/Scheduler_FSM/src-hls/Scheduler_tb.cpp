@@ -103,6 +103,7 @@ static const char *dma_name(DmaSel sel) {
     case DMASEL_W1:     return "W1";
     case DMASEL_W2:     return "W2";
     case DMASEL_WLOGIT: return "WLOGIT";
+    case DMASEL_CONCAT: return "CONCAT";
     default:            return "UNK";
     }
 }

@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'headed_compute_controller_Pipeline_VITIS_LOOP_640_29'
 ================================================================
-* Date:           Fri Jan 30 15:25:10 2026
+* Date:           Tue Feb  3 14:27:09 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        headed_compute_controller
@@ -156,7 +156,7 @@ The critical path consists of the following:
  <State 2>: 0.677ns
 The critical path consists of the following:
 	'load' operation 8 bit ('in_buf_load', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:561->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:642) on array 'in_buf' [34]  (0.677 ns)
-	'store' operation 0 bit ('store_ln642', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:642) of variable 'in_buf_load', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:561->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:642 on static variable 'p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_3' [43]  (0.000 ns)
+	'store' operation 0 bit ('store_ln642', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:642) of variable 'in_buf_load', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:561->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:642 on static variable 'p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_1' [37]  (0.000 ns)
 
 
 ============================================================

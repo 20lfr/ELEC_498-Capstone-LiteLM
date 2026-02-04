@@ -217,8 +217,9 @@ enum ComputeOp : uint8_t {
     CMP_RESID1       = 22, // 23
     CMP_LN1          = 23, // 24
     CMP_REQUANT4     = 24, // 25
-    CMP_DEQUANT      = 25, // 26
-    CMP_LOGITS       = 26, // 27
+    CMP_FINAL_NORM   = 25, // 26
+    CMP_DEQUANT      = 26, // 26
+    CMP_LOGITS       = 27, // 27
 };
 
 enum DmaSel : uint8_t {
@@ -233,7 +234,8 @@ enum DmaSel : uint8_t {
     DMASEL_WO,          // 8
     DMASEL_W1,          // 9
     DMASEL_W2,          // 10
-    DMASEL_WLOGIT       // 11
+    DMASEL_WLOGIT,      // 11
+    DMASEL_CONCAT       // 12
 };
 
 enum class ComputeErrorCodes {
@@ -301,7 +303,14 @@ struct HeadCtx {
 // ------------------------------------------------------------
 
 // Simple controller state machine.
-enum class ComputeState : uint8_t { IDLE = 0, CAPTURE_INSTRUCTION, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
+enum class ComputeState : uint8_t { 
+            IDLE = 0, 
+            CAPTURE_INSTRUCTION, 
+            WAIT_MEM, 
+            EXECUTE, 
+            MEM_WRITEBACK, 
+            DONE 
+};
 
 // Captured request from the scheduler.
 struct PendingRequest {

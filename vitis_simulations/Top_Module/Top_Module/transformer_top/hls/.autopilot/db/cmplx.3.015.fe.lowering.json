@@ -1,62 +1,61 @@
 {
   "0": {
-    "basicblocks": 84,
-    "calls": "2",
+    "basicblocks": 86,
+    "calls": "4 9",
     "control_depth": 0,
-    "def_use_depth": 3,
+    "def_use_depth": 8,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 348,
+    "instructions": 518,
     "loads": {
-      "G": 38,
+      "G": 44,
       "L": 2
     },
     "memory_accesses": 0,
     "name": "transformer_top",
     "stores": {
-      "G": 70,
-      "L": 2,
-      "T": 20
+      "G": 74,
+      "L": 4,
+      "T": 26
     },
-    "total_instructions": 4350
+    "total_instructions": 9656
   },
   "1": {
-    "basicblocks": 299,
-    "calls": "3 3",
+    "basicblocks": 1,
+    "calls": "",
     "control_depth": 0,
-    "def_use_depth": 5,
-    "file": "head_helpers.cpp",
-    "fileloc": 395,
-    "instructions": 1125,
+    "def_use_depth": 8,
+    "file": "compute_controller.cpp",
+    "fileloc": 63,
+    "instructions": 214,
     "loads": {
-      "L": 170
+      "G": 16
     },
     "memory_accesses": 0,
-    "name": "drive_group_head_phase",
+    "name": "REQUANT_D_MODEL_int32_to_int8",
     "stores": {
-      "L": 324
+      "G": 16
     },
-    "total_instructions": 1229
+    "total_instructions": 214
   },
   "2": {
-    "basicblocks": 252,
-    "calls": "4 4 4 4 3 3 1 4 4 4 4",
-    "control_depth": 2,
-    "def_use_depth": 8,
-    "file": "Scheduler_FSM.cpp",
-    "fileloc": 47,
-    "instructions": 2517,
+    "basicblocks": 3,
+    "calls": "7",
+    "control_depth": 0,
+    "def_use_depth": 7,
+    "file": "compute_controller.cpp",
+    "fileloc": 113,
+    "instructions": 283,
     "loads": {
-      "G": 71,
-      "L": 110
+      "G": 32,
+      "L": 1
     },
-    "memory_accesses": 3,
-    "name": "scheduler_hls",
+    "memory_accesses": 0,
+    "name": "RMS_NORM",
     "stores": {
-      "G": 263,
-      "L": 254
+      "G": 16
     },
-    "total_instructions": 4002
+    "total_instructions": 1391
   },
   "3": {
     "basicblocks": 1,
@@ -74,6 +73,74 @@
     "total_instructions": 52
   },
   "4": {
+    "basicblocks": 554,
+    "calls": "8 8 8 8 3 3 3 3 8 8 8 8",
+    "control_depth": 2,
+    "def_use_depth": 8,
+    "file": "Scheduler_FSM.cpp",
+    "fileloc": 47,
+    "instructions": 3672,
+    "loads": {
+      "G": 99,
+      "L": 274
+    },
+    "memory_accesses": 7,
+    "name": "scheduler_hls",
+    "stores": {
+      "G": 296,
+      "L": 546
+    },
+    "total_instructions": 4032
+  },
+  "5": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "top_params.hpp",
+    "fileloc": 588,
+    "instructions": 26,
+    "loads": {
+      "L": 4
+    },
+    "memory_accesses": 0,
+    "name": "read_i32",
+    "total_instructions": 26
+  },
+  "6": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "compute_controller.cpp",
+    "fileloc": 175,
+    "instructions": 177,
+    "loads": {
+      "G": 32
+    },
+    "memory_accesses": 0,
+    "name": "RES_ADD",
+    "stores": {
+      "G": 16
+    },
+    "total_instructions": 177
+  },
+  "7": {
+    "basicblocks": 131,
+    "calls": "",
+    "control_depth": 5,
+    "def_use_depth": 96,
+    "file": "hls_sqrt_apfixed.h",
+    "fileloc": 19,
+    "instructions": 1108,
+    "memory_accesses": 1,
+    "name": "sqrt_fixed<32, 19>",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 1108
+  },
+  "8": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -87,5 +154,25 @@
       "L": 1
     },
     "total_instructions": 19
+  },
+  "9": {
+    "basicblocks": 337,
+    "calls": "5 5 5 2 6 5 5 5 5 1 5",
+    "control_depth": 4,
+    "def_use_depth": 11,
+    "file": "compute_controller.cpp",
+    "fileloc": 197,
+    "instructions": 3116,
+    "loads": {
+      "G": 290,
+      "L": 20
+    },
+    "memory_accesses": 495,
+    "name": "compute_controller",
+    "stores": {
+      "G": 900,
+      "L": 47
+    },
+    "total_instructions": 5106
   }
 }

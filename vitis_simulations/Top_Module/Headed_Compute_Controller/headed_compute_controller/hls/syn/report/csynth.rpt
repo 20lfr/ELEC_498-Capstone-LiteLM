@@ -4,7 +4,7 @@
 == Synthesis Summary Report of 'headed_compute_controller'
 ================================================================
 + General Information: 
-    * Date:           Fri Jan 30 15:25:13 2026
+    * Date:           Tue Feb  3 14:27:13 2026
     * Version:        2025.1 (Build 6135595 on May 21 2025)
     * Project:        headed_compute_controller
     * Solution:       hls (Vivado IP Flow Target)

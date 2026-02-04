@@ -1,0 +1,1605 @@
+
+
+================================================================
+== Vitis HLS Report for 'compute_controller_Pipeline_VITIS_LOOP_684_42'
+================================================================
+* Date:           Tue Feb  3 19:41:28 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        transformer_top
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  2.453 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval |                    Pipeline                    |
+    |   min   |   max   |    min    |    max    | min | max |                      Type                      |
+    +---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+    |        7|        7|  70.000 ns|  70.000 ns|    6|    6|  loop auto-rewind stp (delay=0 clock cycles(s))|
+    +---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                     |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |      Loop Name      |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_684_42  |        5|        5|         2|          1|          1|     5|       yes|
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 2
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
++ Individual pipeline summary: 
+  * Pipeline-0: initiation interval (II) = 1, depth = 2
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 2
+* Pipeline : 1
+  Pipeline-0 : II = 1, D = 2, States = { 1 2 }
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 2.45>
+ST_1 : Operation 5 [1/1] (0.00ns)   --->   "%i = alloca i32 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 5 'alloca' 'i' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 6 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274 = alloca i32 1"   --->   Operation 6 'alloca' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 7 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273 = alloca i32 1"   --->   Operation 7 'alloca' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 8 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272 = alloca i32 1"   --->   Operation 8 'alloca' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 9 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271 = alloca i32 1"   --->   Operation 9 'alloca' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 10 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %in_buf, void @empty_12, i32 0, i32 0, void @empty_21, i32 4294967295, i32 0, void @empty_21, void @empty_21, void @empty_21, i32 0, i32 0, i32 0, i32 0, void @empty_21, void @empty_21, i32 4294967295, i32 0, i32 0"   --->   Operation 10 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 11 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_159 = read i16 @_ssdm_op_Read.ap_auto.i16, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_128"   --->   Operation 11 'read' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_159' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 12 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_160 = read i16 @_ssdm_op_Read.ap_auto.i16, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_127"   --->   Operation 12 'read' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_160' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 13 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_161 = read i16 @_ssdm_op_Read.ap_auto.i16, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126"   --->   Operation 13 'read' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_161' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 14 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_162 = read i16 @_ssdm_op_Read.ap_auto.i16, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125"   --->   Operation 14 'read' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_162' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 15 [1/1] (0.42ns)   --->   "%store_ln0 = store i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_162, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271"   --->   Operation 15 'store' 'store_ln0' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 16 [1/1] (0.42ns)   --->   "%store_ln0 = store i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_161, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272"   --->   Operation 16 'store' 'store_ln0' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 17 [1/1] (0.42ns)   --->   "%store_ln0 = store i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_160, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273"   --->   Operation 17 'store' 'store_ln0' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 18 [1/1] (0.42ns)   --->   "%store_ln0 = store i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_159, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274"   --->   Operation 18 'store' 'store_ln0' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 19 [1/1] (0.42ns)   --->   "%store_ln684 = store i3 0, i3 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 19 'store' 'store_ln684' <Predicate = true> <Delay = 0.42>
+ST_1 : Operation 20 [1/1] (0.00ns)   --->   "%br_ln0 = br void %for.inc680"   --->   Operation 20 'br' 'br_ln0' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 21 [1/1] (0.00ns)   --->   "%i_1 = load i3 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 21 'load' 'i_1' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 22 [1/1] (0.67ns)   --->   "%icmp_ln684 = icmp_eq  i3 %i_1, i3 5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 22 'icmp' 'icmp_ln684' <Predicate = true> <Delay = 0.67> <CoreInst = "Cmp">   --->   Core 9 'Cmp' <Latency = 0> <II = 1> <Delay = 0.67> <FuncUnit> <Opcode : 'seteq' 'setne' 'setle' 'setge' 'setlt' 'setgt'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 23 [1/1] (0.67ns)   --->   "%add_ln684 = add i3 %i_1, i3 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 23 'add' 'add_ln684' <Predicate = true> <Delay = 0.67> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.67> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 24 [1/1] (0.00ns)   --->   "%br_ln684 = br i1 %icmp_ln684, void %for.inc680.split, void %for.end692.exitStub" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 24 'br' 'br_ln684' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 25 [1/1] (0.00ns)   --->   "%shl_ln5 = bitconcatenate i4 @_ssdm_op_BitConcatenate.i4.i3.i1, i3 %i_1, i1 0" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 25 'bitconcatenate' 'shl_ln5' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 26 [1/1] (0.00ns)   --->   "%zext_ln686 = zext i4 %shl_ln5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 26 'zext' 'zext_ln686' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 27 [1/1] (0.00ns)   --->   "%zext_ln686_1 = zext i4 %shl_ln5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 27 'zext' 'zext_ln686_1' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 28 [1/1] (0.78ns)   --->   "%add_ln686 = add i5 %zext_ln686_1, i5 23" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 28 'add' 'add_ln686' <Predicate = (!icmp_ln684)> <Delay = 0.78> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.78> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 29 [1/1] (0.00ns)   --->   "%sext_ln582 = sext i5 %add_ln686" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:582->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 29 'sext' 'sext_ln582' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 30 [1/1] (0.00ns)   --->   "%zext_ln582 = zext i7 %sext_ln582" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:582->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 30 'zext' 'zext_ln582' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 31 [1/1] (0.00ns)   --->   "%in_buf_addr = getelementptr i8 %in_buf, i64 0, i64 %zext_ln582" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:582->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 31 'getelementptr' 'in_buf_addr' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 32 [2/2] (1.23ns)   --->   "%in_buf_load = load i8 %in_buf_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:582->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 32 'load' 'in_buf_load' <Predicate = (!icmp_ln684)> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_1 : Operation 33 [1/1] (0.76ns)   --->   "%add_ln583 = add i8 %zext_ln686, i8 120" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:583->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 33 'add' 'add_ln583' <Predicate = (!icmp_ln684)> <Delay = 0.76> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.76> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 34 [1/1] (0.00ns)   --->   "%zext_ln583 = zext i8 %add_ln583" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:583->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 34 'zext' 'zext_ln583' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 35 [1/1] (0.00ns)   --->   "%in_buf_addr_4 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln583" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:583->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 35 'getelementptr' 'in_buf_addr_4' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 36 [2/2] (1.23ns)   --->   "%in_buf_load_4 = load i8 %in_buf_addr_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:583->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 36 'load' 'in_buf_load_4' <Predicate = (!icmp_ln684)> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_1 : Operation 37 [1/1] (0.67ns)   --->   "%switch_ln686 = switch i3 %i_1, void %arrayidx679.case.4, i3 0, void %arrayidx679.case.0, i3 1, void %arrayidx679.case.1, i3 2, void %arrayidx679.case.2, i3 3, void %arrayidx679.case.3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 37 'switch' 'switch_ln686' <Predicate = (!icmp_ln684)> <Delay = 0.67>
+ST_1 : Operation 38 [1/1] (0.42ns)   --->   "%store_ln684 = store i3 %add_ln684, i3 %i" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 38 'store' 'store_ln684' <Predicate = (!icmp_ln684)> <Delay = 0.42>
+ST_1 : Operation 39 [1/1] (0.00ns)   --->   "%br_ln684 = br void %for.inc680" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 39 'br' 'br_ln684' <Predicate = (!icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 60 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_163 = load i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274"   --->   Operation 60 'load' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_163' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 61 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_164 = load i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273"   --->   Operation 61 'load' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_164' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 62 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_165 = load i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272"   --->   Operation 62 'load' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_165' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 63 [1/1] (0.00ns)   --->   "%compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166 = load i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271"   --->   Operation 63 'load' 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 64 [1/1] (0.00ns)   --->   "%write_ln0 = write void @_ssdm_op_Write.ap_auto.i16P0A, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_out, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166"   --->   Operation 64 'write' 'write_ln0' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 65 [1/1] (0.00ns)   --->   "%write_ln0 = write void @_ssdm_op_Write.ap_auto.i16P0A, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_out, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_165"   --->   Operation 65 'write' 'write_ln0' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 66 [1/1] (0.00ns)   --->   "%write_ln0 = write void @_ssdm_op_Write.ap_auto.i16P0A, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_out, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_164"   --->   Operation 66 'write' 'write_ln0' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 67 [1/1] (0.00ns)   --->   "%write_ln0 = write void @_ssdm_op_Write.ap_auto.i16P0A, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_out, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_163"   --->   Operation 67 'write' 'write_ln0' <Predicate = (icmp_ln684)> <Delay = 0.00>
+ST_1 : Operation 68 [1/1] (0.42ns)   --->   "%ret_ln0 = ret"   --->   Operation 68 'ret' 'ret_ln0' <Predicate = (icmp_ln684)> <Delay = 0.42>
+
+State 2 <SV = 1> <Delay = 1.66>
+ST_2 : Operation 40 [1/1] (0.00ns)   --->   "%specpipeline_ln685 = specpipeline void @_ssdm_op_SpecPipeline, i32 1, i32 0, i32 0, i32 0, void @empty_21" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:685]   --->   Operation 40 'specpipeline' 'specpipeline_ln685' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 41 [1/1] (0.00ns)   --->   "%speclooptripcount_ln684 = speclooptripcount void @_ssdm_op_SpecLoopTripCount, i64 5, i64 5, i64 5" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 41 'speclooptripcount' 'speclooptripcount_ln684' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 42 [1/1] (0.00ns)   --->   "%specloopname_ln684 = specloopname void @_ssdm_op_SpecLoopName, void @empty_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:684]   --->   Operation 42 'specloopname' 'specloopname_ln684' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 43 [1/2] ( I:1.23ns O:1.23ns )   --->   "%in_buf_load = load i8 %in_buf_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:582->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 43 'load' 'in_buf_load' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_2 : Operation 44 [1/2] ( I:1.23ns O:1.23ns )   --->   "%in_buf_load_4 = load i8 %in_buf_addr_4" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:583->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 44 'load' 'in_buf_load_4' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_2 : Operation 45 [1/1] (0.00ns)   --->   "%v = bitconcatenate i16 @_ssdm_op_BitConcatenate.i16.i8.i8, i8 %in_buf_load_4, i8 %in_buf_load" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:584->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 45 'bitconcatenate' 'v' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 46 [1/1] (0.00ns)   --->   "%store_ln686 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_61" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 46 'store' 'store_ln686' <Predicate = (i_1 == 3)> <Delay = 0.00>
+ST_2 : Operation 47 [1/1] (0.42ns)   --->   "%store_ln584 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:584->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 47 'store' 'store_ln584' <Predicate = (i_1 == 3)> <Delay = 0.42>
+ST_2 : Operation 48 [1/1] (0.00ns)   --->   "%br_ln686 = br void %arrayidx679.exit" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 48 'br' 'br_ln686' <Predicate = (i_1 == 3)> <Delay = 0.00>
+ST_2 : Operation 49 [1/1] (0.00ns)   --->   "%store_ln686 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_62" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 49 'store' 'store_ln686' <Predicate = (i_1 == 2)> <Delay = 0.00>
+ST_2 : Operation 50 [1/1] (0.42ns)   --->   "%store_ln584 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:584->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 50 'store' 'store_ln584' <Predicate = (i_1 == 2)> <Delay = 0.42>
+ST_2 : Operation 51 [1/1] (0.00ns)   --->   "%br_ln686 = br void %arrayidx679.exit" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 51 'br' 'br_ln686' <Predicate = (i_1 == 2)> <Delay = 0.00>
+ST_2 : Operation 52 [1/1] (0.00ns)   --->   "%store_ln686 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_63" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 52 'store' 'store_ln686' <Predicate = (i_1 == 1)> <Delay = 0.00>
+ST_2 : Operation 53 [1/1] (0.42ns)   --->   "%store_ln584 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:584->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 53 'store' 'store_ln584' <Predicate = (i_1 == 1)> <Delay = 0.42>
+ST_2 : Operation 54 [1/1] (0.00ns)   --->   "%br_ln686 = br void %arrayidx679.exit" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 54 'br' 'br_ln686' <Predicate = (i_1 == 1)> <Delay = 0.00>
+ST_2 : Operation 55 [1/1] (0.00ns)   --->   "%store_ln686 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_64" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 55 'store' 'store_ln686' <Predicate = (i_1 == 0)> <Delay = 0.00>
+ST_2 : Operation 56 [1/1] (0.42ns)   --->   "%store_ln584 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:584->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 56 'store' 'store_ln584' <Predicate = (i_1 == 0)> <Delay = 0.42>
+ST_2 : Operation 57 [1/1] (0.00ns)   --->   "%br_ln686 = br void %arrayidx679.exit" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 57 'br' 'br_ln686' <Predicate = (i_1 == 0)> <Delay = 0.00>
+ST_2 : Operation 58 [1/1] (0.00ns)   --->   "%store_ln686 = store i16 %v, i16 %compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_60" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 58 'store' 'store_ln686' <Predicate = (i_1 != 0 & i_1 != 1 & i_1 != 2 & i_1 != 3)> <Delay = 0.00>
+ST_2 : Operation 59 [1/1] (0.00ns)   --->   "%br_ln686 = br void %arrayidx679.exit" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:686]   --->   Operation 59 'br' 'br_ln686' <Predicate = (i_1 != 0 & i_1 != 1 & i_1 != 2 & i_1 != 3)> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+STG Binding: 
+---------------- STG Properties BEGIN ----------------
+- Is combinational: 0
+- Is one-state seq: 0
+- Is datapath-only: 0
+- Is pipelined: 0
+- Is top level: 0
+Port [ Return ] is wired: 1; IO mode=ap_ctrl_hs:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=0; pingpong=0; private_global=0; IO mode=ap_none:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=0; pingpong=0; private_global=0; IO mode=ap_none:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_127]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=0; pingpong=0; private_global=0; IO mode=ap_none:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_128]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=0; pingpong=0; private_global=0; IO mode=ap_none:ce=0
+Port [ in_buf]:  wired=1; compound=1; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[11]; IO mode=ap_memory:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_out]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_out]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_out]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_out]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_64]:  wired=1; compound=0; hidden=0; nouse=0; global=1; static=1; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_63]:  wired=1; compound=0; hidden=0; nouse=0; global=1; static=1; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_62]:  wired=1; compound=0; hidden=0; nouse=0; global=1; static=1; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_61]:  wired=1; compound=0; hidden=0; nouse=0; global=1; static=1; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+Port [ compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_60]:  wired=1; compound=0; hidden=0; nouse=0; global=1; static=1; extern=0; dir=1; type=0; pingpong=0; private_global=0; IO mode=ap_vld:ce=0
+---------------- STG Properties END ------------------
+
+---------------- Datapath Model BEGIN ----------------
+
+<LifeTime>
+<method=bitvector/>
+i                                                                            (alloca           ) [ 010]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274 (alloca           ) [ 011]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273 (alloca           ) [ 011]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272 (alloca           ) [ 011]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271 (alloca           ) [ 011]
+specinterface_ln0                                                            (specinterface    ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_159 (read             ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_160 (read             ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_161 (read             ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_162 (read             ) [ 000]
+store_ln0                                                                    (store            ) [ 000]
+store_ln0                                                                    (store            ) [ 000]
+store_ln0                                                                    (store            ) [ 000]
+store_ln0                                                                    (store            ) [ 000]
+store_ln684                                                                  (store            ) [ 000]
+br_ln0                                                                       (br               ) [ 000]
+i_1                                                                          (load             ) [ 011]
+icmp_ln684                                                                   (icmp             ) [ 010]
+add_ln684                                                                    (add              ) [ 000]
+br_ln684                                                                     (br               ) [ 000]
+shl_ln5                                                                      (bitconcatenate   ) [ 000]
+zext_ln686                                                                   (zext             ) [ 000]
+zext_ln686_1                                                                 (zext             ) [ 000]
+add_ln686                                                                    (add              ) [ 000]
+sext_ln582                                                                   (sext             ) [ 000]
+zext_ln582                                                                   (zext             ) [ 000]
+in_buf_addr                                                                  (getelementptr    ) [ 011]
+add_ln583                                                                    (add              ) [ 000]
+zext_ln583                                                                   (zext             ) [ 000]
+in_buf_addr_4                                                                (getelementptr    ) [ 011]
+switch_ln686                                                                 (switch           ) [ 000]
+store_ln684                                                                  (store            ) [ 000]
+br_ln684                                                                     (br               ) [ 000]
+specpipeline_ln685                                                           (specpipeline     ) [ 000]
+speclooptripcount_ln684                                                      (speclooptripcount) [ 000]
+specloopname_ln684                                                           (specloopname     ) [ 000]
+in_buf_load                                                                  (load             ) [ 000]
+in_buf_load_4                                                                (load             ) [ 000]
+v                                                                            (bitconcatenate   ) [ 000]
+store_ln686                                                                  (store            ) [ 000]
+store_ln584                                                                  (store            ) [ 000]
+br_ln686                                                                     (br               ) [ 000]
+store_ln686                                                                  (store            ) [ 000]
+store_ln584                                                                  (store            ) [ 000]
+br_ln686                                                                     (br               ) [ 000]
+store_ln686                                                                  (store            ) [ 000]
+store_ln584                                                                  (store            ) [ 000]
+br_ln686                                                                     (br               ) [ 000]
+store_ln686                                                                  (store            ) [ 000]
+store_ln584                                                                  (store            ) [ 000]
+br_ln686                                                                     (br               ) [ 000]
+store_ln686                                                                  (store            ) [ 000]
+br_ln686                                                                     (br               ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_163 (load             ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_164 (load             ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_165 (load             ) [ 000]
+compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166 (load             ) [ 000]
+write_ln0                                                                    (write            ) [ 000]
+write_ln0                                                                    (write            ) [ 000]
+write_ln0                                                                    (write            ) [ 000]
+write_ln0                                                                    (write            ) [ 000]
+ret_ln0                                                                      (ret              ) [ 000]
+</LifeTime>
+
+<model>
+
+<comp_list>
+<comp id="0" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125">
+<pin_list>
+<pin id="1" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125"/></StgValue>
+</bind>
+</comp>
+
+<comp id="2" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126">
+<pin_list>
+<pin id="3" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126"/></StgValue>
+</bind>
+</comp>
+
+<comp id="4" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_127">
+<pin_list>
+<pin id="5" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_127"/></StgValue>
+</bind>
+</comp>
+
+<comp id="6" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_128">
+<pin_list>
+<pin id="7" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_128"/></StgValue>
+</bind>
+</comp>
+
+<comp id="8" class="1000" name="in_buf">
+<pin_list>
+<pin id="9" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="in_buf"/><MemPortTyVec>1 1 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="10" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_out">
+<pin_list>
+<pin id="11" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_out"/></StgValue>
+</bind>
+</comp>
+
+<comp id="12" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_out">
+<pin_list>
+<pin id="13" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_out"/></StgValue>
+</bind>
+</comp>
+
+<comp id="14" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_out">
+<pin_list>
+<pin id="15" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_out"/></StgValue>
+</bind>
+</comp>
+
+<comp id="16" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_out">
+<pin_list>
+<pin id="17" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_out"/></StgValue>
+</bind>
+</comp>
+
+<comp id="18" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_64">
+<pin_list>
+<pin id="19" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_64"/></StgValue>
+</bind>
+</comp>
+
+<comp id="20" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_63">
+<pin_list>
+<pin id="21" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_63"/></StgValue>
+</bind>
+</comp>
+
+<comp id="22" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_62">
+<pin_list>
+<pin id="23" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_62"/></StgValue>
+</bind>
+</comp>
+
+<comp id="24" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_61">
+<pin_list>
+<pin id="25" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_61"/></StgValue>
+</bind>
+</comp>
+
+<comp id="26" class="1000" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_60">
+<pin_list>
+<pin id="27" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_60"/></StgValue>
+</bind>
+</comp>
+
+<comp id="28" class="1001" name="const_28">
+<pin_list>
+<pin id="29" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="30" class="1001" name="const_30">
+<pin_list>
+<pin id="31" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecInterface"/></StgValue>
+</bind>
+</comp>
+
+<comp id="32" class="1001" name="const_32">
+<pin_list>
+<pin id="33" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_12"/></StgValue>
+</bind>
+</comp>
+
+<comp id="34" class="1001" name="const_34">
+<pin_list>
+<pin id="35" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="36" class="1001" name="const_36">
+<pin_list>
+<pin id="37" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_21"/></StgValue>
+</bind>
+</comp>
+
+<comp id="38" class="1001" name="const_38">
+<pin_list>
+<pin id="39" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="40" class="1001" name="const_40">
+<pin_list>
+<pin id="41" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_Read.ap_auto.i16"/></StgValue>
+</bind>
+</comp>
+
+<comp id="42" class="1001" name="const_42">
+<pin_list>
+<pin id="43" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="44" class="1001" name="const_44">
+<pin_list>
+<pin id="45" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="46" class="1001" name="const_46">
+<pin_list>
+<pin id="47" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="48" class="1001" name="const_48">
+<pin_list>
+<pin id="49" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_BitConcatenate.i4.i3.i1"/></StgValue>
+</bind>
+</comp>
+
+<comp id="50" class="1001" name="const_50">
+<pin_list>
+<pin id="51" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="52" class="1001" name="const_52">
+<pin_list>
+<pin id="53" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="54" class="1001" name="const_54">
+<pin_list>
+<pin id="55" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="56" class="1001" name="const_56">
+<pin_list>
+<pin id="57" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="58" class="1001" name="const_58">
+<pin_list>
+<pin id="59" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="60" class="1001" name="const_60">
+<pin_list>
+<pin id="61" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="62" class="1001" name="const_62">
+<pin_list>
+<pin id="63" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecPipeline"/></StgValue>
+</bind>
+</comp>
+
+<comp id="64" class="1001" name="const_64">
+<pin_list>
+<pin id="65" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecLoopTripCount"/></StgValue>
+</bind>
+</comp>
+
+<comp id="66" class="1001" name="const_66">
+<pin_list>
+<pin id="67" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="68" class="1001" name="const_68">
+<pin_list>
+<pin id="69" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecLoopName"/></StgValue>
+</bind>
+</comp>
+
+<comp id="70" class="1001" name="const_70">
+<pin_list>
+<pin id="71" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_3"/></StgValue>
+</bind>
+</comp>
+
+<comp id="72" class="1001" name="const_72">
+<pin_list>
+<pin id="73" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_BitConcatenate.i16.i8.i8"/></StgValue>
+</bind>
+</comp>
+
+<comp id="74" class="1001" name="const_74">
+<pin_list>
+<pin id="75" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_Write.ap_auto.i16P0A"/></StgValue>
+</bind>
+</comp>
+
+<comp id="76" class="1004" name="i_fu_76">
+<pin_list>
+<pin id="77" dir="0" index="0" bw="1" slack="0"/>
+<pin id="78" dir="1" index="1" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="i/1 "/>
+</bind>
+</comp>
+
+<comp id="80" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_fu_80">
+<pin_list>
+<pin id="81" dir="0" index="0" bw="1" slack="0"/>
+<pin id="82" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274/1 "/>
+</bind>
+</comp>
+
+<comp id="84" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_fu_84">
+<pin_list>
+<pin id="85" dir="0" index="0" bw="1" slack="0"/>
+<pin id="86" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273/1 "/>
+</bind>
+</comp>
+
+<comp id="88" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_fu_88">
+<pin_list>
+<pin id="89" dir="0" index="0" bw="1" slack="0"/>
+<pin id="90" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272/1 "/>
+</bind>
+</comp>
+
+<comp id="92" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_fu_92">
+<pin_list>
+<pin id="93" dir="0" index="0" bw="1" slack="0"/>
+<pin id="94" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="alloca(26) " fcode="alloca"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271/1 "/>
+</bind>
+</comp>
+
+<comp id="96" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_159_read_fu_96">
+<pin_list>
+<pin id="97" dir="0" index="0" bw="16" slack="0"/>
+<pin id="98" dir="0" index="1" bw="16" slack="0"/>
+<pin id="99" dir="1" index="2" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="read(1150) " fcode="read"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_159/1 "/>
+</bind>
+</comp>
+
+<comp id="102" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_160_read_fu_102">
+<pin_list>
+<pin id="103" dir="0" index="0" bw="16" slack="0"/>
+<pin id="104" dir="0" index="1" bw="16" slack="0"/>
+<pin id="105" dir="1" index="2" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="read(1150) " fcode="read"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_160/1 "/>
+</bind>
+</comp>
+
+<comp id="108" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_161_read_fu_108">
+<pin_list>
+<pin id="109" dir="0" index="0" bw="16" slack="0"/>
+<pin id="110" dir="0" index="1" bw="16" slack="0"/>
+<pin id="111" dir="1" index="2" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="read(1150) " fcode="read"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_161/1 "/>
+</bind>
+</comp>
+
+<comp id="114" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_162_read_fu_114">
+<pin_list>
+<pin id="115" dir="0" index="0" bw="16" slack="0"/>
+<pin id="116" dir="0" index="1" bw="16" slack="0"/>
+<pin id="117" dir="1" index="2" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="read(1150) " fcode="read"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_162/1 "/>
+</bind>
+</comp>
+
+<comp id="120" class="1004" name="write_ln0_write_fu_120">
+<pin_list>
+<pin id="121" dir="0" index="0" bw="0" slack="0"/>
+<pin id="122" dir="0" index="1" bw="16" slack="0"/>
+<pin id="123" dir="0" index="2" bw="16" slack="0"/>
+<pin id="124" dir="1" index="3" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="write(1151) " fcode="write"/>
+<opset="write_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="127" class="1004" name="write_ln0_write_fu_127">
+<pin_list>
+<pin id="128" dir="0" index="0" bw="0" slack="0"/>
+<pin id="129" dir="0" index="1" bw="16" slack="0"/>
+<pin id="130" dir="0" index="2" bw="16" slack="0"/>
+<pin id="131" dir="1" index="3" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="write(1151) " fcode="write"/>
+<opset="write_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="134" class="1004" name="write_ln0_write_fu_134">
+<pin_list>
+<pin id="135" dir="0" index="0" bw="0" slack="0"/>
+<pin id="136" dir="0" index="1" bw="16" slack="0"/>
+<pin id="137" dir="0" index="2" bw="16" slack="0"/>
+<pin id="138" dir="1" index="3" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="write(1151) " fcode="write"/>
+<opset="write_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="141" class="1004" name="write_ln0_write_fu_141">
+<pin_list>
+<pin id="142" dir="0" index="0" bw="0" slack="0"/>
+<pin id="143" dir="0" index="1" bw="16" slack="0"/>
+<pin id="144" dir="0" index="2" bw="16" slack="0"/>
+<pin id="145" dir="1" index="3" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="write(1151) " fcode="write"/>
+<opset="write_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="148" class="1004" name="in_buf_addr_gep_fu_148">
+<pin_list>
+<pin id="149" dir="0" index="0" bw="8" slack="0"/>
+<pin id="150" dir="0" index="1" bw="1" slack="0"/>
+<pin id="151" dir="0" index="2" bw="7" slack="0"/>
+<pin id="152" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="in_buf_addr/1 "/>
+</bind>
+</comp>
+
+<comp id="155" class="1004" name="grp_access_fu_155">
+<pin_list>
+<pin id="156" dir="0" index="0" bw="8" slack="0"/>
+<pin id="157" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="158" dir="0" index="2" bw="0" slack="0"/>
+<pin id="160" dir="0" index="4" bw="8" slack="2147483647"/>
+<pin id="161" dir="0" index="5" bw="8" slack="2147483647"/>
+<pin id="162" dir="0" index="6" bw="0" slack="2147483647"/>
+<pin id="159" dir="1" index="3" bw="8" slack="0"/>
+<pin id="163" dir="1" index="7" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="in_buf_load/1 in_buf_load_4/1 "/>
+</bind>
+</comp>
+
+<comp id="165" class="1004" name="in_buf_addr_4_gep_fu_165">
+<pin_list>
+<pin id="166" dir="0" index="0" bw="8" slack="0"/>
+<pin id="167" dir="0" index="1" bw="1" slack="0"/>
+<pin id="168" dir="0" index="2" bw="8" slack="0"/>
+<pin id="169" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="in_buf_addr_4/1 "/>
+</bind>
+</comp>
+
+<comp id="173" class="1004" name="store_ln0_store_fu_173">
+<pin_list>
+<pin id="174" dir="0" index="0" bw="16" slack="0"/>
+<pin id="175" dir="0" index="1" bw="16" slack="0"/>
+<pin id="176" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="178" class="1004" name="store_ln0_store_fu_178">
+<pin_list>
+<pin id="179" dir="0" index="0" bw="16" slack="0"/>
+<pin id="180" dir="0" index="1" bw="16" slack="0"/>
+<pin id="181" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="183" class="1004" name="store_ln0_store_fu_183">
+<pin_list>
+<pin id="184" dir="0" index="0" bw="16" slack="0"/>
+<pin id="185" dir="0" index="1" bw="16" slack="0"/>
+<pin id="186" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="188" class="1004" name="store_ln0_store_fu_188">
+<pin_list>
+<pin id="189" dir="0" index="0" bw="16" slack="0"/>
+<pin id="190" dir="0" index="1" bw="16" slack="0"/>
+<pin id="191" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln0/1 "/>
+</bind>
+</comp>
+
+<comp id="193" class="1004" name="store_ln684_store_fu_193">
+<pin_list>
+<pin id="194" dir="0" index="0" bw="1" slack="0"/>
+<pin id="195" dir="0" index="1" bw="3" slack="0"/>
+<pin id="196" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln684/1 "/>
+</bind>
+</comp>
+
+<comp id="198" class="1004" name="i_1_load_fu_198">
+<pin_list>
+<pin id="199" dir="0" index="0" bw="3" slack="0"/>
+<pin id="200" dir="1" index="1" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="i_1/1 "/>
+</bind>
+</comp>
+
+<comp id="201" class="1004" name="icmp_ln684_fu_201">
+<pin_list>
+<pin id="202" dir="0" index="0" bw="3" slack="0"/>
+<pin id="203" dir="0" index="1" bw="3" slack="0"/>
+<pin id="204" dir="1" index="2" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="icmp(45) " fcode="icmp"/>
+<opset="icmp_ln684/1 "/>
+</bind>
+</comp>
+
+<comp id="207" class="1004" name="add_ln684_fu_207">
+<pin_list>
+<pin id="208" dir="0" index="0" bw="3" slack="0"/>
+<pin id="209" dir="0" index="1" bw="1" slack="0"/>
+<pin id="210" dir="1" index="2" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln684/1 "/>
+</bind>
+</comp>
+
+<comp id="213" class="1004" name="shl_ln5_fu_213">
+<pin_list>
+<pin id="214" dir="0" index="0" bw="4" slack="0"/>
+<pin id="215" dir="0" index="1" bw="3" slack="0"/>
+<pin id="216" dir="0" index="2" bw="1" slack="0"/>
+<pin id="217" dir="1" index="3" bw="4" slack="0"/>
+</pin_list>
+<bind>
+<opcode="bitconcatenate(1004) " fcode="bitconcatenate"/>
+<opset="shl_ln5/1 "/>
+</bind>
+</comp>
+
+<comp id="221" class="1004" name="zext_ln686_fu_221">
+<pin_list>
+<pin id="222" dir="0" index="0" bw="4" slack="0"/>
+<pin id="223" dir="1" index="1" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln686/1 "/>
+</bind>
+</comp>
+
+<comp id="225" class="1004" name="zext_ln686_1_fu_225">
+<pin_list>
+<pin id="226" dir="0" index="0" bw="4" slack="0"/>
+<pin id="227" dir="1" index="1" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln686_1/1 "/>
+</bind>
+</comp>
+
+<comp id="229" class="1004" name="add_ln686_fu_229">
+<pin_list>
+<pin id="230" dir="0" index="0" bw="4" slack="0"/>
+<pin id="231" dir="0" index="1" bw="5" slack="0"/>
+<pin id="232" dir="1" index="2" bw="5" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln686/1 "/>
+</bind>
+</comp>
+
+<comp id="235" class="1004" name="sext_ln582_fu_235">
+<pin_list>
+<pin id="236" dir="0" index="0" bw="5" slack="0"/>
+<pin id="237" dir="1" index="1" bw="7" slack="0"/>
+</pin_list>
+<bind>
+<opcode="sext(35) " fcode="sext"/>
+<opset="sext_ln582/1 "/>
+</bind>
+</comp>
+
+<comp id="239" class="1004" name="zext_ln582_fu_239">
+<pin_list>
+<pin id="240" dir="0" index="0" bw="5" slack="0"/>
+<pin id="241" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln582/1 "/>
+</bind>
+</comp>
+
+<comp id="244" class="1004" name="add_ln583_fu_244">
+<pin_list>
+<pin id="245" dir="0" index="0" bw="4" slack="0"/>
+<pin id="246" dir="0" index="1" bw="8" slack="0"/>
+<pin id="247" dir="1" index="2" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln583/1 "/>
+</bind>
+</comp>
+
+<comp id="250" class="1004" name="zext_ln583_fu_250">
+<pin_list>
+<pin id="251" dir="0" index="0" bw="8" slack="0"/>
+<pin id="252" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln583/1 "/>
+</bind>
+</comp>
+
+<comp id="255" class="1004" name="switch_ln686_fu_255">
+<pin_list>
+<pin id="256" dir="0" index="0" bw="3" slack="0"/>
+<pin id="257" dir="0" index="1" bw="1" slack="0"/>
+<pin id="258" dir="0" index="2" bw="1" slack="0"/>
+<pin id="259" dir="0" index="3" bw="3" slack="0"/>
+<pin id="260" dir="0" index="4" bw="3" slack="0"/>
+<pin id="261" dir="1" index="5" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="switch(3) " fcode="switch"/>
+<opset="switch_ln686/1 "/>
+</bind>
+</comp>
+
+<comp id="267" class="1004" name="store_ln684_store_fu_267">
+<pin_list>
+<pin id="268" dir="0" index="0" bw="3" slack="0"/>
+<pin id="269" dir="0" index="1" bw="3" slack="0"/>
+<pin id="270" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln684/1 "/>
+</bind>
+</comp>
+
+<comp id="272" class="1004" name="v_fu_272">
+<pin_list>
+<pin id="273" dir="0" index="0" bw="16" slack="0"/>
+<pin id="274" dir="0" index="1" bw="8" slack="0"/>
+<pin id="275" dir="0" index="2" bw="8" slack="0"/>
+<pin id="276" dir="1" index="3" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="bitconcatenate(1004) " fcode="bitconcatenate"/>
+<opset="v/2 "/>
+</bind>
+</comp>
+
+<comp id="280" class="1004" name="store_ln686_store_fu_280">
+<pin_list>
+<pin id="281" dir="0" index="0" bw="16" slack="0"/>
+<pin id="282" dir="0" index="1" bw="16" slack="0"/>
+<pin id="283" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln686/2 "/>
+</bind>
+</comp>
+
+<comp id="286" class="1004" name="store_ln584_store_fu_286">
+<pin_list>
+<pin id="287" dir="0" index="0" bw="16" slack="0"/>
+<pin id="288" dir="0" index="1" bw="16" slack="1"/>
+<pin id="289" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln584/2 "/>
+</bind>
+</comp>
+
+<comp id="291" class="1004" name="store_ln686_store_fu_291">
+<pin_list>
+<pin id="292" dir="0" index="0" bw="16" slack="0"/>
+<pin id="293" dir="0" index="1" bw="16" slack="0"/>
+<pin id="294" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln686/2 "/>
+</bind>
+</comp>
+
+<comp id="297" class="1004" name="store_ln584_store_fu_297">
+<pin_list>
+<pin id="298" dir="0" index="0" bw="16" slack="0"/>
+<pin id="299" dir="0" index="1" bw="16" slack="1"/>
+<pin id="300" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln584/2 "/>
+</bind>
+</comp>
+
+<comp id="302" class="1004" name="store_ln686_store_fu_302">
+<pin_list>
+<pin id="303" dir="0" index="0" bw="16" slack="0"/>
+<pin id="304" dir="0" index="1" bw="16" slack="0"/>
+<pin id="305" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln686/2 "/>
+</bind>
+</comp>
+
+<comp id="308" class="1004" name="store_ln584_store_fu_308">
+<pin_list>
+<pin id="309" dir="0" index="0" bw="16" slack="0"/>
+<pin id="310" dir="0" index="1" bw="16" slack="1"/>
+<pin id="311" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln584/2 "/>
+</bind>
+</comp>
+
+<comp id="313" class="1004" name="store_ln686_store_fu_313">
+<pin_list>
+<pin id="314" dir="0" index="0" bw="16" slack="0"/>
+<pin id="315" dir="0" index="1" bw="16" slack="0"/>
+<pin id="316" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln686/2 "/>
+</bind>
+</comp>
+
+<comp id="319" class="1004" name="store_ln584_store_fu_319">
+<pin_list>
+<pin id="320" dir="0" index="0" bw="16" slack="0"/>
+<pin id="321" dir="0" index="1" bw="16" slack="1"/>
+<pin id="322" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln584/2 "/>
+</bind>
+</comp>
+
+<comp id="324" class="1004" name="store_ln686_store_fu_324">
+<pin_list>
+<pin id="325" dir="0" index="0" bw="16" slack="0"/>
+<pin id="326" dir="0" index="1" bw="16" slack="0"/>
+<pin id="327" dir="1" index="2" bw="0" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="store(28) " fcode="store"/>
+<opset="store_ln686/2 "/>
+</bind>
+</comp>
+
+<comp id="330" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_163_load_fu_330">
+<pin_list>
+<pin id="331" dir="0" index="0" bw="16" slack="0"/>
+<pin id="332" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_163/1 "/>
+</bind>
+</comp>
+
+<comp id="334" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_164_load_fu_334">
+<pin_list>
+<pin id="335" dir="0" index="0" bw="16" slack="0"/>
+<pin id="336" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_164/1 "/>
+</bind>
+</comp>
+
+<comp id="338" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_165_load_fu_338">
+<pin_list>
+<pin id="339" dir="0" index="0" bw="16" slack="0"/>
+<pin id="340" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_165/1 "/>
+</bind>
+</comp>
+
+<comp id="342" class="1004" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166_load_fu_342">
+<pin_list>
+<pin id="343" dir="0" index="0" bw="16" slack="0"/>
+<pin id="344" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166/1 "/>
+</bind>
+</comp>
+
+<comp id="346" class="1005" name="i_reg_346">
+<pin_list>
+<pin id="347" dir="0" index="0" bw="3" slack="0"/>
+<pin id="348" dir="1" index="1" bw="3" slack="0"/>
+</pin_list>
+<bind>
+<opset="i "/>
+</bind>
+</comp>
+
+<comp id="353" class="1005" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_reg_353">
+<pin_list>
+<pin id="354" dir="0" index="0" bw="16" slack="0"/>
+<pin id="355" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274 "/>
+</bind>
+</comp>
+
+<comp id="360" class="1005" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_reg_360">
+<pin_list>
+<pin id="361" dir="0" index="0" bw="16" slack="0"/>
+<pin id="362" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273 "/>
+</bind>
+</comp>
+
+<comp id="367" class="1005" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_reg_367">
+<pin_list>
+<pin id="368" dir="0" index="0" bw="16" slack="0"/>
+<pin id="369" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272 "/>
+</bind>
+</comp>
+
+<comp id="374" class="1005" name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_reg_374">
+<pin_list>
+<pin id="375" dir="0" index="0" bw="16" slack="0"/>
+<pin id="376" dir="1" index="1" bw="16" slack="0"/>
+</pin_list>
+<bind>
+<opset="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271 "/>
+</bind>
+</comp>
+
+<comp id="381" class="1005" name="i_1_reg_381">
+<pin_list>
+<pin id="382" dir="0" index="0" bw="3" slack="1"/>
+<pin id="383" dir="1" index="1" bw="3" slack="2147483647"/>
+</pin_list>
+<bind>
+<opset="i_1 "/>
+</bind>
+</comp>
+
+<comp id="388" class="1005" name="in_buf_addr_reg_388">
+<pin_list>
+<pin id="389" dir="0" index="0" bw="8" slack="1"/>
+<pin id="390" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_addr "/>
+</bind>
+</comp>
+
+<comp id="393" class="1005" name="in_buf_addr_4_reg_393">
+<pin_list>
+<pin id="394" dir="0" index="0" bw="8" slack="1"/>
+<pin id="395" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_addr_4 "/>
+</bind>
+</comp>
+
+</comp_list>
+
+<net_list>
+<net id="79"><net_src comp="28" pin="0"/><net_sink comp="76" pin=0"/></net>
+
+<net id="83"><net_src comp="28" pin="0"/><net_sink comp="80" pin=0"/></net>
+
+<net id="87"><net_src comp="28" pin="0"/><net_sink comp="84" pin=0"/></net>
+
+<net id="91"><net_src comp="28" pin="0"/><net_sink comp="88" pin=0"/></net>
+
+<net id="95"><net_src comp="28" pin="0"/><net_sink comp="92" pin=0"/></net>
+
+<net id="100"><net_src comp="40" pin="0"/><net_sink comp="96" pin=0"/></net>
+
+<net id="101"><net_src comp="6" pin="0"/><net_sink comp="96" pin=1"/></net>
+
+<net id="106"><net_src comp="40" pin="0"/><net_sink comp="102" pin=0"/></net>
+
+<net id="107"><net_src comp="4" pin="0"/><net_sink comp="102" pin=1"/></net>
+
+<net id="112"><net_src comp="40" pin="0"/><net_sink comp="108" pin=0"/></net>
+
+<net id="113"><net_src comp="2" pin="0"/><net_sink comp="108" pin=1"/></net>
+
+<net id="118"><net_src comp="40" pin="0"/><net_sink comp="114" pin=0"/></net>
+
+<net id="119"><net_src comp="0" pin="0"/><net_sink comp="114" pin=1"/></net>
+
+<net id="125"><net_src comp="74" pin="0"/><net_sink comp="120" pin=0"/></net>
+
+<net id="126"><net_src comp="10" pin="0"/><net_sink comp="120" pin=1"/></net>
+
+<net id="132"><net_src comp="74" pin="0"/><net_sink comp="127" pin=0"/></net>
+
+<net id="133"><net_src comp="12" pin="0"/><net_sink comp="127" pin=1"/></net>
+
+<net id="139"><net_src comp="74" pin="0"/><net_sink comp="134" pin=0"/></net>
+
+<net id="140"><net_src comp="14" pin="0"/><net_sink comp="134" pin=1"/></net>
+
+<net id="146"><net_src comp="74" pin="0"/><net_sink comp="141" pin=0"/></net>
+
+<net id="147"><net_src comp="16" pin="0"/><net_sink comp="141" pin=1"/></net>
+
+<net id="153"><net_src comp="8" pin="0"/><net_sink comp="148" pin=0"/></net>
+
+<net id="154"><net_src comp="54" pin="0"/><net_sink comp="148" pin=1"/></net>
+
+<net id="164"><net_src comp="148" pin="3"/><net_sink comp="155" pin=2"/></net>
+
+<net id="170"><net_src comp="8" pin="0"/><net_sink comp="165" pin=0"/></net>
+
+<net id="171"><net_src comp="54" pin="0"/><net_sink comp="165" pin=1"/></net>
+
+<net id="172"><net_src comp="165" pin="3"/><net_sink comp="155" pin=0"/></net>
+
+<net id="177"><net_src comp="114" pin="2"/><net_sink comp="173" pin=0"/></net>
+
+<net id="182"><net_src comp="108" pin="2"/><net_sink comp="178" pin=0"/></net>
+
+<net id="187"><net_src comp="102" pin="2"/><net_sink comp="183" pin=0"/></net>
+
+<net id="192"><net_src comp="96" pin="2"/><net_sink comp="188" pin=0"/></net>
+
+<net id="197"><net_src comp="42" pin="0"/><net_sink comp="193" pin=0"/></net>
+
+<net id="205"><net_src comp="198" pin="1"/><net_sink comp="201" pin=0"/></net>
+
+<net id="206"><net_src comp="44" pin="0"/><net_sink comp="201" pin=1"/></net>
+
+<net id="211"><net_src comp="198" pin="1"/><net_sink comp="207" pin=0"/></net>
+
+<net id="212"><net_src comp="46" pin="0"/><net_sink comp="207" pin=1"/></net>
+
+<net id="218"><net_src comp="48" pin="0"/><net_sink comp="213" pin=0"/></net>
+
+<net id="219"><net_src comp="198" pin="1"/><net_sink comp="213" pin=1"/></net>
+
+<net id="220"><net_src comp="50" pin="0"/><net_sink comp="213" pin=2"/></net>
+
+<net id="224"><net_src comp="213" pin="3"/><net_sink comp="221" pin=0"/></net>
+
+<net id="228"><net_src comp="213" pin="3"/><net_sink comp="225" pin=0"/></net>
+
+<net id="233"><net_src comp="225" pin="1"/><net_sink comp="229" pin=0"/></net>
+
+<net id="234"><net_src comp="52" pin="0"/><net_sink comp="229" pin=1"/></net>
+
+<net id="238"><net_src comp="229" pin="2"/><net_sink comp="235" pin=0"/></net>
+
+<net id="242"><net_src comp="235" pin="1"/><net_sink comp="239" pin=0"/></net>
+
+<net id="243"><net_src comp="239" pin="1"/><net_sink comp="148" pin=2"/></net>
+
+<net id="248"><net_src comp="221" pin="1"/><net_sink comp="244" pin=0"/></net>
+
+<net id="249"><net_src comp="56" pin="0"/><net_sink comp="244" pin=1"/></net>
+
+<net id="253"><net_src comp="244" pin="2"/><net_sink comp="250" pin=0"/></net>
+
+<net id="254"><net_src comp="250" pin="1"/><net_sink comp="165" pin=2"/></net>
+
+<net id="262"><net_src comp="198" pin="1"/><net_sink comp="255" pin=0"/></net>
+
+<net id="263"><net_src comp="42" pin="0"/><net_sink comp="255" pin=1"/></net>
+
+<net id="264"><net_src comp="46" pin="0"/><net_sink comp="255" pin=2"/></net>
+
+<net id="265"><net_src comp="58" pin="0"/><net_sink comp="255" pin=3"/></net>
+
+<net id="266"><net_src comp="60" pin="0"/><net_sink comp="255" pin=4"/></net>
+
+<net id="271"><net_src comp="207" pin="2"/><net_sink comp="267" pin=0"/></net>
+
+<net id="277"><net_src comp="72" pin="0"/><net_sink comp="272" pin=0"/></net>
+
+<net id="278"><net_src comp="155" pin="3"/><net_sink comp="272" pin=1"/></net>
+
+<net id="279"><net_src comp="155" pin="7"/><net_sink comp="272" pin=2"/></net>
+
+<net id="284"><net_src comp="272" pin="3"/><net_sink comp="280" pin=0"/></net>
+
+<net id="285"><net_src comp="24" pin="0"/><net_sink comp="280" pin=1"/></net>
+
+<net id="290"><net_src comp="272" pin="3"/><net_sink comp="286" pin=0"/></net>
+
+<net id="295"><net_src comp="272" pin="3"/><net_sink comp="291" pin=0"/></net>
+
+<net id="296"><net_src comp="22" pin="0"/><net_sink comp="291" pin=1"/></net>
+
+<net id="301"><net_src comp="272" pin="3"/><net_sink comp="297" pin=0"/></net>
+
+<net id="306"><net_src comp="272" pin="3"/><net_sink comp="302" pin=0"/></net>
+
+<net id="307"><net_src comp="20" pin="0"/><net_sink comp="302" pin=1"/></net>
+
+<net id="312"><net_src comp="272" pin="3"/><net_sink comp="308" pin=0"/></net>
+
+<net id="317"><net_src comp="272" pin="3"/><net_sink comp="313" pin=0"/></net>
+
+<net id="318"><net_src comp="18" pin="0"/><net_sink comp="313" pin=1"/></net>
+
+<net id="323"><net_src comp="272" pin="3"/><net_sink comp="319" pin=0"/></net>
+
+<net id="328"><net_src comp="272" pin="3"/><net_sink comp="324" pin=0"/></net>
+
+<net id="329"><net_src comp="26" pin="0"/><net_sink comp="324" pin=1"/></net>
+
+<net id="333"><net_src comp="330" pin="1"/><net_sink comp="141" pin=2"/></net>
+
+<net id="337"><net_src comp="334" pin="1"/><net_sink comp="134" pin=2"/></net>
+
+<net id="341"><net_src comp="338" pin="1"/><net_sink comp="127" pin=2"/></net>
+
+<net id="345"><net_src comp="342" pin="1"/><net_sink comp="120" pin=2"/></net>
+
+<net id="349"><net_src comp="76" pin="1"/><net_sink comp="346" pin=0"/></net>
+
+<net id="350"><net_src comp="346" pin="1"/><net_sink comp="193" pin=1"/></net>
+
+<net id="351"><net_src comp="346" pin="1"/><net_sink comp="198" pin=0"/></net>
+
+<net id="352"><net_src comp="346" pin="1"/><net_sink comp="267" pin=1"/></net>
+
+<net id="356"><net_src comp="80" pin="1"/><net_sink comp="353" pin=0"/></net>
+
+<net id="357"><net_src comp="353" pin="1"/><net_sink comp="188" pin=1"/></net>
+
+<net id="358"><net_src comp="353" pin="1"/><net_sink comp="286" pin=1"/></net>
+
+<net id="359"><net_src comp="353" pin="1"/><net_sink comp="330" pin=0"/></net>
+
+<net id="363"><net_src comp="84" pin="1"/><net_sink comp="360" pin=0"/></net>
+
+<net id="364"><net_src comp="360" pin="1"/><net_sink comp="183" pin=1"/></net>
+
+<net id="365"><net_src comp="360" pin="1"/><net_sink comp="297" pin=1"/></net>
+
+<net id="366"><net_src comp="360" pin="1"/><net_sink comp="334" pin=0"/></net>
+
+<net id="370"><net_src comp="88" pin="1"/><net_sink comp="367" pin=0"/></net>
+
+<net id="371"><net_src comp="367" pin="1"/><net_sink comp="178" pin=1"/></net>
+
+<net id="372"><net_src comp="367" pin="1"/><net_sink comp="308" pin=1"/></net>
+
+<net id="373"><net_src comp="367" pin="1"/><net_sink comp="338" pin=0"/></net>
+
+<net id="377"><net_src comp="92" pin="1"/><net_sink comp="374" pin=0"/></net>
+
+<net id="378"><net_src comp="374" pin="1"/><net_sink comp="173" pin=1"/></net>
+
+<net id="379"><net_src comp="374" pin="1"/><net_sink comp="319" pin=1"/></net>
+
+<net id="380"><net_src comp="374" pin="1"/><net_sink comp="342" pin=0"/></net>
+
+<net id="384"><net_src comp="198" pin="1"/><net_sink comp="381" pin=0"/></net>
+
+<net id="391"><net_src comp="148" pin="3"/><net_sink comp="388" pin=0"/></net>
+
+<net id="392"><net_src comp="388" pin="1"/><net_sink comp="155" pin=2"/></net>
+
+<net id="396"><net_src comp="165" pin="3"/><net_sink comp="393" pin=0"/></net>
+
+<net id="397"><net_src comp="393" pin="1"/><net_sink comp="155" pin=0"/></net>
+
+</net_list>
+
+</model> 
+---------------- Datapath Model END ------------------
+
+* FSMD analyzer results:
+  - Output states:
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_out | {1 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_out | {1 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_out | {1 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_out | {1 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_64 | {2 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_63 | {2 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_62 | {2 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_61 | {2 }
+	Port: compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_60 | {2 }
+ - Input state : 
+	Port: compute_controller_Pipeline_VITIS_LOOP_684_42 : compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125 | {1 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_684_42 : compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126 | {1 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_684_42 : compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_127 | {1 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_684_42 : compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_128 | {1 }
+	Port: compute_controller_Pipeline_VITIS_LOOP_684_42 : in_buf | {1 2 }
+  - Chain level:
+	State 1
+		store_ln684 : 1
+		i_1 : 1
+		icmp_ln684 : 2
+		add_ln684 : 2
+		br_ln684 : 3
+		shl_ln5 : 2
+		zext_ln686 : 3
+		zext_ln686_1 : 3
+		add_ln686 : 4
+		sext_ln582 : 5
+		zext_ln582 : 6
+		in_buf_addr : 7
+		in_buf_load : 8
+		add_ln583 : 4
+		zext_ln583 : 5
+		in_buf_addr_4 : 6
+		in_buf_load_4 : 7
+		switch_ln686 : 2
+		store_ln684 : 3
+		compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_163 : 1
+		compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_164 : 1
+		compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_165 : 1
+		compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166 : 1
+		write_ln0 : 2
+		write_ln0 : 2
+		write_ln0 : 2
+		write_ln0 : 2
+	State 2
+		v : 1
+		store_ln686 : 2
+		store_ln584 : 2
+		store_ln686 : 2
+		store_ln584 : 2
+		store_ln686 : 2
+		store_ln584 : 2
+		store_ln686 : 2
+		store_ln584 : 2
+		store_ln686 : 2
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+
+* Functional unit list:
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+| Operation|                                      Functional Unit                                     |    FF   |   LUT   |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|          |                                     add_ln684_fu_207                                     |    0    |    10   |
+|    add   |                                     add_ln686_fu_229                                     |    0    |    12   |
+|          |                                     add_ln583_fu_244                                     |    0    |    15   |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|   icmp   |                                     icmp_ln684_fu_201                                    |    0    |    10   |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|          |  compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_159_read_fu_96 |    0    |    0    |
+|   read   | compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_160_read_fu_102 |    0    |    0    |
+|          | compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_161_read_fu_108 |    0    |    0    |
+|          | compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_162_read_fu_114 |    0    |    0    |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|          |                                  write_ln0_write_fu_120                                  |    0    |    0    |
+|   write  |                                  write_ln0_write_fu_127                                  |    0    |    0    |
+|          |                                  write_ln0_write_fu_134                                  |    0    |    0    |
+|          |                                  write_ln0_write_fu_141                                  |    0    |    0    |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|bitconcatenate|                                      shl_ln5_fu_213                                      |    0    |    0    |
+|          |                                         v_fu_272                                         |    0    |    0    |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|          |                                     zext_ln686_fu_221                                    |    0    |    0    |
+|   zext   |                                    zext_ln686_1_fu_225                                   |    0    |    0    |
+|          |                                     zext_ln582_fu_239                                    |    0    |    0    |
+|          |                                     zext_ln583_fu_250                                    |    0    |    0    |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|   sext   |                                     sext_ln582_fu_235                                    |    0    |    0    |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|  switch  |                                    switch_ln686_fu_255                                   |    0    |    0    |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+|   Total  |                                                                                          |    0    |    47   |
+|----------|------------------------------------------------------------------------------------------|---------|---------|
+
+Memories:
+N/A
+
+* Register list:
++------------------------------------------------------------------------------------+--------+
+|                                                                                    |   FF   |
++------------------------------------------------------------------------------------+--------+
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_reg_374|   16   |
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_reg_367|   16   |
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_reg_360|   16   |
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_274_reg_353|   16   |
+|                                     i_1_reg_381                                    |    3   |
+|                                      i_reg_346                                     |    3   |
+|                                in_buf_addr_4_reg_393                               |    8   |
+|                                 in_buf_addr_reg_388                                |    8   |
++------------------------------------------------------------------------------------+--------+
+|                                        Total                                       |   86   |
++------------------------------------------------------------------------------------+--------+
+
+* Multiplexer (MUX) list: 
+|-------------------|------|------|------|--------||---------||---------||---------|
+|        Comp       |  Pin | Size |  BW  | S x BW ||  Delay  ||    FF   ||   LUT   |
+|-------------------|------|------|------|--------||---------||---------||---------|
+| grp_access_fu_155 |  p0  |   2  |   8  |   16   ||    0    ||    9    |
+| grp_access_fu_155 |  p2  |   2  |   0  |    0   ||    0    ||    9    |
+|-------------------|------|------|------|--------||---------||---------||---------|
+|       Total       |      |      |      |   16   ||  0.854  ||    0    ||    18   |
+|-------------------|------|------|------|--------||---------||---------||---------|
+
+
+
+* Summary:
++-----------+--------+--------+--------+
+|           |  Delay |   FF   |   LUT  |
++-----------+--------+--------+--------+
+|  Function |    -   |    0   |   47   |
+|   Memory  |    -   |    -   |    -   |
+|Multiplexer|    0   |    0   |   18   |
+|  Register |    -   |   86   |    -   |
++-----------+--------+--------+--------+
+|   Total   |    0   |   86   |   65   |
++-----------+--------+--------+--------+

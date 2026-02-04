@@ -399,6 +399,7 @@ bool drive_group_head_phase(
     ControlMemSpace ctrl_mem,                   // [INPUT]: Control memory space for WL
     bool     &error                             // [OUTPUT]: Error flag from weight_stager
 ){
+#pragma HLS INLINE
 #pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
 
     bool group_finished = true; // assume finished unless any head is still active

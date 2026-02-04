@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'headed_compute_controller_Pipeline_VITIS_LOOP_568_18'
 ================================================================
-* Date:           Fri Jan 30 15:25:10 2026
+* Date:           Tue Feb  3 14:27:10 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        headed_compute_controller
@@ -126,13 +126,13 @@ Target clock period: 10.000ns, clock uncertainty: 2.700ns.
 The critical path consists of the following:
 	'store' operation 0 bit ('store_ln568', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568) of constant 0 on local variable 'h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568 [8]  (0.427 ns)
 	'load' operation 3 bit ('h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568) on local variable 'h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568 [11]  (0.000 ns)
-	'icmp' operation 1 bit ('icmp_ln568', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568) [12]  (0.673 ns)
+	'add' operation 3 bit ('add_ln568', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568) [13]  (0.673 ns)
 	'store' operation 0 bit ('store_ln568', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568) of variable 'add_ln568', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568 on local variable 'h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:568 [37]  (0.427 ns)
 
  <State 2>: 0.677ns
 The critical path consists of the following:
 	'load' operation 8 bit ('in_buf_load_19', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:561->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:570) on array 'in_buf' [22]  (0.677 ns)
-	'store' operation 0 bit ('store_ln570', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:570) of variable 'in_buf_load_19', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:561->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:570 on static variable 'headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_10' [34]  (0.000 ns)
+	'store' operation 0 bit ('store_ln570', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:570) of variable 'in_buf_load_19', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:561->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:570 on static variable 'headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_13' [31]  (0.000 ns)
 
 
 ============================================================

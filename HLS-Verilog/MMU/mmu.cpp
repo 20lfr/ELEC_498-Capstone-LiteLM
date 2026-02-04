@@ -113,6 +113,9 @@ uint16_t mmu_calc_dma_size(DmaSel sel, const ModelDims &dims, int tile) {
             // Placeholder: assume similar to WO
             return 0;
         }
+        case DmaSel::DMASEL_CONCAT: {
+            return 0;
+        }
         
         default:
             return 0;
@@ -1017,6 +1020,7 @@ const char* mmu_dma_name(DmaSel sel) {
         case DmaSel::DMASEL_W1: return "W1";
         case DmaSel::DMASEL_W2: return "W2";
         case DmaSel::DMASEL_WLOGIT: return "WLOGIT";
+        case DmaSel::DMASEL_CONCAT: return "CONCAT";
         default: return "UNKNOWN";
     }
 }
