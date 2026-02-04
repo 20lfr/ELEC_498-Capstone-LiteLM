@@ -1,0 +1,3 @@
+relativeroot=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/MMU-andy
+original_argv=--mode hls --csim --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/MMU-andy/hls_config.cfg --work_dir mmu_fsm 
+
