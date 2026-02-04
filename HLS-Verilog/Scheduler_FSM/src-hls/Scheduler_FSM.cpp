@@ -24,7 +24,7 @@
 //   9) z_i       = gamma_i * y_hat[i]
 //  10) o_i       = z_i + beta_i
 // Output: o_i
-static inline uint32_t pack_compute_instruction(ComputeOp op, int layer, int head, int tile) {
+static inline uint32_t pack_compute_op(ComputeOp op, int layer, int head, int tile) {
 #pragma HLS INLINE
   const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
   const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
@@ -33,16 +33,153 @@ static inline uint32_t pack_compute_instruction(ComputeOp op, int layer, int hea
   return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
-static inline uint32_t pack_dma_op(DmaSel op, int layer, int head, int tile) {
+bool LayerNorm(
+  LnPhase &phase, 
+  bool &ln_started, 
+  bool &ln_compute_done,
+  bool compute_ready, 
+  int layer_idx,
+  bool &compute_start, 
+  uint32_t &compute_op,
+  const ComputeOp ops[10]
+) {
 #pragma HLS INLINE
-  const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
-  const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
-  const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
-  const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
-  return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
+  switch (phase) {
+    case LnPhase::SUM: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[0], layer_idx, -1, -1); // SUM
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SUMSQ;
+      }
+      break;
+    }
+    case LnPhase::SUMSQ: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[1], layer_idx, -1, -1); // SUMSQ
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::MEAN;
+      }
+      break;
+    }
+    case LnPhase::MEAN: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[2], layer_idx, -1, -1); // MEAN
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::EYY;
+      }
+      break;
+    }
+    case LnPhase::EYY: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[3], layer_idx, -1, -1); // EYY
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::VAR;
+      }
+      break;
+    }
+    case LnPhase::VAR: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[4], layer_idx, -1, -1); // VAR
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::VAR_EPS;
+      }
+      break;
+    }
+    case LnPhase::VAR_EPS: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[5], layer_idx, -1, -1); // VAR_EPS
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::INV_STD;
+      }
+      break;
+    }
+    case LnPhase::INV_STD: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[6], layer_idx, -1, -1); // INV_STD
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::NORM;
+      }
+      break;
+    }
+    case LnPhase::NORM: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[7], layer_idx, -1, -1); // NORM
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SCALE;
+      }
+      break;
+    }
+    case LnPhase::SCALE: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[8], layer_idx, -1, -1); // SCALE
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::SHIFT;
+      }
+      break;
+    }
+    case LnPhase::SHIFT: {
+      if (!ln_started && compute_ready) {
+        ln_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(ops[9], layer_idx, -1, -1); // SHIFT
+        ln_started = true;
+      } else if (ln_started && ln_compute_done) {
+        ln_started = false;
+        ln_compute_done = false;
+        phase = LnPhase::DONE;
+      }
+      break;
+    }
+    case LnPhase::DONE:
+      return true;
+  }
+  return (phase == LnPhase::DONE);
 }
-
-
 
 void scheduler_hls(
     // ------------------------------------------------------------
@@ -61,10 +198,13 @@ void scheduler_hls(
     // Memory Management System (WEIGHT LOADER via DMA)
     // ------------------------------------------------------------
     bool      dma_done,        // [INPUT]  DMA transfer completed (single-cycle pulse)
-    bool      wl_ready,         // [INPUT]  Weight loader ready for a new request
 
-    uint32_t  &wl_instruction,
-    bool      &wl_start,        // [OUTPUT] Start weight load DMA
+    bool    wl_ready,         // [INPUT]  Weight loader ready for a new request
+    bool    &wl_start,        // [OUTPUT] Start weight load DMA
+    DmaSel  &wl_addr_sel,     // [OUTPUT] Select which matrix/tile (Q, K, V, K cache, V cache, WO, W1...)
+    int     &wl_layer,        // [OUTPUT] Layer index for DMA
+    int     &wl_head,         // [OUTPUT] Head index for DMA (or -1 for non-head ops)
+    int     &wl_tile,         // [OUTPUT] Tile index for large matrices
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)`
@@ -73,7 +213,7 @@ void scheduler_hls(
     bool compute_done,   // [INPUT]  Compute operation finished (one-shot)
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]  Per-head context (in/out)
     bool &compute_start, // [OUTPUT] Trigger compute engine
-    uint32_t &compute_instruction,     // [OUTPUT] Packed op|layer|head|tile for compute
+    uint32_t &compute_op,     // [OUTPUT] Packed op|layer|head|tile for compute
     // ------------------------------------------------------------
     // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
     // ------------------------------------------------------------
@@ -109,14 +249,16 @@ void scheduler_hls(
 #pragma HLS reset variable = attn_done
   static bool attn_compute_done;
 #pragma HLS reset variable = attn_compute_done
-  static bool concat_dma_done;
-#pragma HLS reset variable = concat_dma_done
+  static bool concat_compute_done;
+#pragma HLS reset variable = concat_compute_done
   static bool outproj_compute_done;
 #pragma HLS reset variable = outproj_compute_done
   static bool resid0_compute_done;
 #pragma HLS reset variable = resid0_compute_done
   static bool ln0_compute_done;
 #pragma HLS reset variable = ln0_compute_done
+  static LnPhase ln0_phase;
+#pragma HLS reset variable = ln0_phase
   static bool ffn_w1_compute_done;
 #pragma HLS reset variable = ffn_w1_compute_done
   static bool ffn_act_compute_done;
@@ -127,6 +269,22 @@ void scheduler_hls(
 #pragma HLS reset variable = resid1_compute_done
   static bool ln1_compute_done;
 #pragma HLS reset variable = ln1_compute_done
+  static LnPhase ln1_phase;
+#pragma HLS reset variable = ln1_phase
+  // Per-LN compute op tables (10 phases each)
+  static const ComputeOp ln0_ops[10] = {
+      ComputeOp::CMP_LN0_SUM,     ComputeOp::CMP_LN0_SUMSQ,
+      ComputeOp::CMP_LN0_MEAN,    ComputeOp::CMP_LN0_EYY,
+      ComputeOp::CMP_LN0_VAR,     ComputeOp::CMP_LN0_VAR_EPS,
+      ComputeOp::CMP_LN0_INV_STD, ComputeOp::CMP_LN0_NORM,
+      ComputeOp::CMP_LN0_SCALE,   ComputeOp::CMP_LN0_SHIFT};
+  static const ComputeOp ln1_ops[10] = {
+      ComputeOp::CMP_LN1_SUM,     ComputeOp::CMP_LN1_SUMSQ,
+      ComputeOp::CMP_LN1_MEAN,    ComputeOp::CMP_LN1_EYY,
+      ComputeOp::CMP_LN1_VAR,     ComputeOp::CMP_LN1_VAR_EPS,
+      ComputeOp::CMP_LN1_INV_STD, ComputeOp::CMP_LN1_NORM,
+      ComputeOp::CMP_LN1_SCALE,   ComputeOp::CMP_LN1_SHIFT};
+
   static bool requant1_compute_done;
 #pragma HLS reset variable = requant1_compute_done
   static bool requant2_compute_done;
@@ -173,8 +331,6 @@ void scheduler_hls(
 #pragma HLS reset variable = ln1_started
   static bool requant4_started;
 #pragma HLS reset variable = requant4_started
-  static bool final_norm_started;
-#pragma HLS reset variable = final_norm_started
   static bool stream_started;
 #pragma HLS reset variable = stream_started
   static int wo_tile;
@@ -207,8 +363,6 @@ void scheduler_hls(
 #pragma HLS reset variable = axis_last_seen
   static bool stream_done_seen;
 #pragma HLS reset variable = stream_done_seen
-  static bool final_norm_compute_done;
-#pragma HLS reset variable = final_norm_compute_done
 // POST-HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -254,7 +408,7 @@ void scheduler_hls(
 
 
     // Head concat
-    concat_dma_done = false;
+    concat_compute_done = false;
     concat_started = false;
 
     // Output projection
@@ -269,6 +423,7 @@ void scheduler_hls(
     resid0_compute_done = false;
     ln0_started = false;
     ln0_compute_done = false;
+    ln0_phase = LnPhase::SUM;
 
     // FFN
     ffn_w1_compute_done = false;
@@ -282,8 +437,7 @@ void scheduler_hls(
     resid1_compute_done = false;
     ln1_started = false;
     ln1_compute_done = false;
-    final_norm_started = false;
-    final_norm_compute_done = false;
+    ln1_phase = LnPhase::SUM;
     axis_last_seen = false;
     stream_done_seen = false;
 
@@ -301,11 +455,14 @@ void scheduler_hls(
 
     // Compute params
     compute_start = false;
-    compute_instruction= pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
+    compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, -1, -1);
 
     // Weight Stager and Loader params
-    wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
     wl_start = false;
+    wl_addr_sel = DmaSel::DMASEL_NONE;
+    wl_head = 0;
+    wl_tile = 0;
+    wl_layer = 0;
     done = false;
     error = false;
   }
@@ -314,13 +471,17 @@ void scheduler_hls(
   ctrl_mem.layer_index = layer_idx;
   axis_in_ready = 0;
   if (!wl_ready && wl_start){
-        wl_start = false;
-        wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
+        wl_start      = false;
+        wl_addr_sel   = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
   }
+  wl_layer = layer_idx;
   // wl_start = 0;
+  // wl_addr_sel = DmaSel::DMASEL_NONE;
   if (!compute_ready && compute_start){
       compute_start = false;
-      compute_instruction   = pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
+      compute_op    = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, -1, -1);
   }
   stream_start = 0;
   done = 0;
@@ -352,20 +513,19 @@ void scheduler_hls(
       if (ffn_stage == FfnStage::W1)      w1_dma_done = true;
       else if (ffn_stage == FfnStage::W2) w2_dma_done = true;
     }
-    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = true;
   } else {
     if (outproj_started && !wo_dma_busy) wo_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
-    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = false;
   }
 
   if (compute_done && !compute_start) {
     if (st == S_ATTENTION_HEADS && attn_started)  attn_compute_done = true;
+    if (st == S_HEAD_CONCAT && concat_started)    concat_compute_done = true;
     if (st == S_OUT_PROJECTION && outproj_started) outproj_compute_done = true;
     if (st == S_REQUANT1 && requant1_started)     requant1_compute_done = true;
     if (st == S_RES_ADD_1 && resid0_started)      resid0_compute_done = true;
-    if (st == S_LAYER_NORM_0 && ln0_started)      ln0_compute_done = true;
+    if (st == S_LAYER_NORM_1 && ln0_started)      ln0_compute_done = true;
     if (st == S_REQUANT2 && requant2_started)     requant2_compute_done = true;
     if (st == S_FFN && ffn_started) {
       if (ffn_stage == FfnStage::W1)              ffn_w1_compute_done = true;
@@ -374,9 +534,8 @@ void scheduler_hls(
     }
     if (st == S_REQUANT3 && requant3_started)     requant3_compute_done = true;
     if (st == S_RES_ADD_2 && resid1_started)      resid1_compute_done = true;
-    if (st == S_LAYER_NORM_1 && ln1_started)      ln1_compute_done = true;
+    if (st == S_LAYER_NORM_2 && ln1_started)      ln1_compute_done = true;
     if (st == S_REQUANT4 && requant4_started)     requant4_compute_done = true;
-    if (st == S_FINAL_NORM && final_norm_started) final_norm_compute_done = true;
   }
 
   switch (st) {
@@ -405,7 +564,7 @@ void scheduler_hls(
 
         // Head concat
         concat_started = false;
-        concat_dma_done = false;
+        concat_compute_done = false;
 
         // Output projection
         outproj_started = false;
@@ -416,6 +575,7 @@ void scheduler_hls(
         resid0_compute_done = false;
         ln0_started = false;
         ln0_compute_done = false;
+        ln0_phase = LnPhase::SUM;
 
         // FFN
         ffn_started = false;
@@ -428,8 +588,7 @@ void scheduler_hls(
         resid1_compute_done = false;
         ln1_started = false;
         ln1_compute_done = false;
-        final_norm_started = false;
-        final_norm_compute_done = false;
+        ln1_phase = LnPhase::SUM;
 
         // Global progress/tiles
         stream_started = false;
@@ -445,15 +604,21 @@ void scheduler_hls(
 
         // Weight Stager and Loader params
         wl_start = false;
-        wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_layer = 0;
 
         // Compute params
         compute_start = false;
-        compute_instruction= pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
+        compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, -1, -1);
 
         // Weight Stager and Loader params
         wl_start = false;
-        wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
+        wl_addr_sel = DmaSel::DMASEL_NONE;
+        wl_head = 0;
+        wl_tile = 0;
+        wl_layer = 0;
 
         done = false;
         error = false;
@@ -496,7 +661,7 @@ void scheduler_hls(
 
       // Head concat
       concat_started = false;
-      concat_dma_done = false;
+      concat_compute_done = false;
 
       // Output projection
       outproj_started = false;
@@ -507,6 +672,7 @@ void scheduler_hls(
       resid0_compute_done = false;
       ln0_started = false;
       ln0_compute_done = false;
+      ln0_phase = LnPhase::SUM;
 
       // FFN
       ffn_stage = FfnStage::W1;
@@ -520,8 +686,7 @@ void scheduler_hls(
       resid1_compute_done = false;
       ln1_started = false;
       ln1_compute_done = false;
-      final_norm_started = false;
-      final_norm_compute_done = false;
+      ln1_phase = LnPhase::SUM;
 
       // Global progress/tiles
       wo_tile = 0;
@@ -537,37 +702,14 @@ void scheduler_hls(
 
       // Weight Stager and Loader params
       wl_start = false;
-      wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
+      wl_addr_sel = DmaSel::DMASEL_NONE;
+      wl_head = 0;
+      wl_tile = 0;
+      wl_layer = 0;
       done = false;
-      st = S_LAYER_NORM_0;
+      st = S_ATTENTION_HEADS;
 
       break;}
-    case S_LAYER_NORM_0: {
-      if (!ln0_started && compute_ready) {
-        ln0_compute_done = false;
-        compute_start = 1;
-        compute_instruction = pack_compute_instruction(CMP_LN0, layer_idx, -1, -1);
-        ln0_started = true;
-      } else if (ln0_started && ln0_compute_done) {
-        ln0_started = false;
-        ln0_compute_done = false;
-        st = S_REQUANT1;
-      }
-      break;
-    }
-    case S_REQUANT1: {
-      if (!requant1_started && compute_ready) {
-        requant1_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT1, layer_idx, -1, -1);
-        requant1_started = true;
-      } else if (requant1_started && requant1_compute_done) {
-        requant1_started = false;
-        requant1_compute_done = false;
-        st = S_ATTENTION_HEADS;
-      }
-      break;
-    }
     case S_ATTENTION_HEADS: {
       // Multiple, parallel attention
 
@@ -589,7 +731,7 @@ void scheduler_hls(
 
       // Drive current head group; compute handshake handled externally
       attn_group_done =
-          drive_group_head_phase(head_group, layer_idx, start_head_group, ctrl_mem, error);
+          drive_group_head_phase(head_group, group_base, layer_idx, start_head_group, ctrl_mem, error);
 
       // Copy results back into the full context
       for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
@@ -626,29 +768,30 @@ void scheduler_hls(
       break;
     }
     case S_HEAD_CONCAT: {
-      if (!concat_started && wl_ready) {
-        concat_dma_done = false;
-        wl_start = 1;
-        wl_instruction = pack_dma_op(DmaSel::DMASEL_CONCAT, layer_idx, -1, -1);
+      if (!concat_started && compute_ready) {
+        concat_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(CMP_CONCAT, layer_idx, -1, -1);
         concat_started = true;
-      } else if (concat_started && concat_dma_done) {
+      } else if (concat_started && concat_compute_done) {
         concat_started = false;
-        concat_dma_done = false;
+        concat_compute_done = false;
         st = S_OUT_PROJECTION;
       }
-      break;
-    }
+      break; 
+    } 
     case S_OUT_PROJECTION: {
       if (wo_tile >= NUM_WO_TILES) {
         resid0_started = false;
-        st = S_REQUANT2;
+        st = S_REQUANT1;
         break;
       }
 
       if (!outproj_started && wl_ready) {
         wl_start = 1;
-
-        wl_instruction = pack_dma_op(DmaSel::DMASEL_WO, layer_idx, -1, wo_tile);
+        wl_addr_sel = DmaSel::DMASEL_WO;
+        wl_head = -1;
+        wl_tile = wo_tile;
         wo_dma_busy = true;
         outproj_started = true;
       } else if (outproj_started && wo_dma_busy && wo_dma_done) {
@@ -658,7 +801,7 @@ void scheduler_hls(
       } else if (outproj_started && wo_comp_busy && compute_ready) {
         outproj_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_OUT_PROJ, layer_idx, -1, wo_tile);
+        compute_op = pack_compute_op(CMP_OUT_PROJ, layer_idx, -1, wo_tile);
         wo_comp_busy = false;
       } else if (outproj_started && !wo_dma_busy && !wo_comp_busy &&
                 outproj_compute_done) {
@@ -668,15 +811,15 @@ void scheduler_hls(
       }
       break;
     }
-    case S_REQUANT2: {
-      if (!requant2_started && compute_ready) {
-        requant2_compute_done = false;
+    case S_REQUANT1: {
+      if (!requant1_started && compute_ready) {
+        requant1_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT2, layer_idx, -1, -1);
-        requant2_started = true;
-      } else if (requant2_started && requant2_compute_done) {
-        requant2_started = false;
-        requant2_compute_done = false;
+        compute_op = pack_compute_op(CMP_REQUANT1, layer_idx, -1, -1);
+        requant1_started = true;
+      } else if (requant1_started && requant1_compute_done) {
+        requant1_started = false;
+        requant1_compute_done = false;
         st = S_RES_ADD_1;
       }
       break;
@@ -685,7 +828,7 @@ void scheduler_hls(
       if (!resid0_started && compute_ready) {
         resid0_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_RESID0, layer_idx, -1, -1);
+        compute_op = pack_compute_op(CMP_RESID0, layer_idx, -1, -1);
         resid0_started = true;
       } else if (resid0_started && resid0_compute_done) {
         resid0_started = false;
@@ -695,27 +838,24 @@ void scheduler_hls(
       break;
     }
     case S_LAYER_NORM_1: {
-      if (!ln1_started && compute_ready) {
-        ln1_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_LN1, layer_idx, -1, -1);
-        ln1_started = true;
-      } else if (ln1_started && ln1_compute_done) {
-        ln1_started = false;
-        ln1_compute_done = false;
-        st = S_REQUANT3;
+      const bool ln0_done =
+          LayerNorm(ln0_phase, ln0_started, ln0_compute_done, compute_ready,
+                    layer_idx, compute_start, compute_op, ln0_ops);
+      if (ln0_done) {
+        ln0_phase = LnPhase::SUM;
+        st = S_REQUANT2;
       }
       break;
     }
-    case S_REQUANT3: {
-      if (!requant3_started && compute_ready) {
-        requant3_compute_done = false;
+    case S_REQUANT2: {
+      if (!requant2_started && compute_ready) {
+        requant2_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT3, layer_idx, -1, -1);
-        requant3_started = true;
-      } else if (requant3_started && requant3_compute_done) {
-        requant3_started = false;
-        requant3_compute_done = false;
+        compute_op = pack_compute_op(CMP_REQUANT2, layer_idx, -1, -1);
+        requant2_started = true;
+      } else if (requant2_started && requant2_compute_done) {
+        requant2_started = false;
+        requant2_compute_done = false;
         st = S_FFN;
       }
       break;
@@ -723,90 +863,91 @@ void scheduler_hls(
     case S_FFN: {
       // Serialize W1 -> ACT -> W2
       switch (ffn_stage) {
-        case FfnStage::W1: {
-          if (w1_tile >= NUM_W1_TILES) {
-            ffn_started = false;
-            ffn_stage = FfnStage::ACT;
-            break;
-          }
+      case FfnStage::W1:
+        if (w1_tile >= NUM_W1_TILES) {
+          ffn_started = false;
+          ffn_stage = FfnStage::ACT;
+          break;
+        }
 
-          if (!ffn_started && wl_ready) {
-            wl_start = 1;
-            wl_instruction = pack_dma_op(DmaSel::DMASEL_W1, layer_idx, -1, w1_tile);
-            w1_dma_busy = true;
-            ffn_started = true;
-          } else if (ffn_started && w1_dma_busy && (dma_done || w1_dma_done)) {
-            w1_dma_busy = false;
-            w1_dma_done = false;
-            w1_comp_busy = true;
-          } else if (ffn_started && w1_comp_busy && compute_ready) {
-            ffn_w1_compute_done = false;
-            compute_start = 1;
-            compute_instruction= pack_compute_instruction(CMP_FFN_W1, layer_idx, -1, w1_tile);
-            w1_comp_busy = false;
-          } else if (ffn_started && !w1_dma_busy && !w1_comp_busy &&
-                    ffn_w1_compute_done) {
-            ffn_started = false;
-            ffn_w1_compute_done = false;
-            w1_tile++;
-          }
-          break;
+        if (!ffn_started && wl_ready) {
+          wl_start = 1;
+          wl_addr_sel = DmaSel::DMASEL_W1;
+          wl_head = -1;
+          wl_tile = w1_tile;
+          w1_dma_busy = true;
+          ffn_started = true;
+        } else if (ffn_started && w1_dma_busy && (dma_done || w1_dma_done)) {
+          w1_dma_busy = false;
+          w1_dma_done = false;
+          w1_comp_busy = true;
+        } else if (ffn_started && w1_comp_busy && compute_ready) {
+          ffn_w1_compute_done = false;
+          compute_start = 1;
+          compute_op = pack_compute_op(CMP_FFN_W1, layer_idx, -1, w1_tile);
+          w1_comp_busy = false;
+        } else if (ffn_started && !w1_dma_busy && !w1_comp_busy &&
+                  ffn_w1_compute_done) {
+          ffn_started = false;
+          ffn_w1_compute_done = false;
+          w1_tile++;
         }
-        case FfnStage::ACT:{
-          if (!ffn_started && compute_ready) {
-            ffn_act_compute_done = false;
-            compute_start = 1;
-            compute_instruction= pack_compute_instruction(CMP_FFN_ACT, layer_idx, -1, -1);
-            ffn_started = true;
-          } else if (ffn_started && ffn_act_compute_done) {
-            ffn_started = false;
-            ffn_act_compute_done = false;
-            ffn_stage = FfnStage::W2;
-          }
-          break;
-        }
-        case FfnStage::W2: {
-          if (w2_tile >= NUM_W2_TILES) {
-            ffn_started = false;
-            ffn_stage = FfnStage::W1;
-            st = S_REQUANT4;
-            break;
-          }
-
-          if (!ffn_started && wl_ready) {
-            wl_start = 1;
-            wl_instruction = pack_dma_op(DmaSel::DMASEL_W2, layer_idx, -1, w2_tile);
-            w2_dma_busy = true;
-            ffn_started = true;
-          } else if (ffn_started && w2_dma_busy && (dma_done || w2_dma_done)) {
-            w2_dma_busy = false;
-            w2_dma_done = false;
-            w2_comp_busy = true;
-          } else if (ffn_started && w2_comp_busy && compute_ready) {
-            ffn_w2_compute_done = false;
-            compute_start = 1;
-            compute_instruction= pack_compute_instruction(CMP_FFN_W2, layer_idx, -1, w2_tile);
-            w2_comp_busy = false;
-          } else if (ffn_started && !w2_dma_busy && !w2_comp_busy &&
-                    ffn_w2_compute_done) {
-            ffn_started = false;
-            ffn_w2_compute_done = false;
-            w2_tile++;
-          }
-          break;
-        }
-      }
         break;
+      case FfnStage::ACT:
+        if (!ffn_started && compute_ready) {
+          ffn_act_compute_done = false;
+          compute_start = 1;
+          compute_op = pack_compute_op(CMP_FFN_ACT, layer_idx, -1, -1);
+          ffn_started = true;
+        } else if (ffn_started && ffn_act_compute_done) {
+          ffn_started = false;
+          ffn_act_compute_done = false;
+          ffn_stage = FfnStage::W2;
+        }
+        break;
+      case FfnStage::W2:
+        if (w2_tile >= NUM_W2_TILES) {
+          ffn_started = false;
+          ffn_stage = FfnStage::W1;
+          st = S_REQUANT3;
+          break;
+        }
+
+        if (!ffn_started && wl_ready) {
+          wl_start = 1;
+          wl_addr_sel = DmaSel::DMASEL_W2;
+          wl_head = -1;
+          wl_tile = w2_tile;
+          w2_dma_busy = true;
+          ffn_started = true;
+        } else if (ffn_started && w2_dma_busy && (dma_done || w2_dma_done)) {
+          w2_dma_busy = false;
+          w2_dma_done = false;
+          w2_comp_busy = true;
+        } else if (ffn_started && w2_comp_busy && compute_ready) {
+          ffn_w2_compute_done = false;
+          compute_start = 1;
+          compute_op = pack_compute_op(CMP_FFN_W2, layer_idx, -1, w2_tile);
+          w2_comp_busy = false;
+        } else if (ffn_started && !w2_dma_busy && !w2_comp_busy &&
+                  ffn_w2_compute_done) {
+          ffn_started = false;
+          ffn_w2_compute_done = false;
+          w2_tile++;
+        }
+        break;
+      }
+      break;
     }
-    case S_REQUANT4: {
-      if (!requant4_started && compute_ready) {
-        requant4_compute_done = false;
+    case S_REQUANT3: {
+      if (!requant3_started && compute_ready) {
+        requant3_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT4, layer_idx, -1, -1);
-        requant4_started = true;
-      } else if (requant4_started && requant4_compute_done) {
-        requant4_started = false;
-        requant4_compute_done = false;
+        compute_op = pack_compute_op(CMP_REQUANT3, layer_idx, -1, -1);
+        requant3_started = true;
+      } else if (requant3_started && requant3_compute_done) {
+        requant3_started = false;
+        requant3_compute_done = false;
         st = S_RES_ADD_2;
       }
       break;
@@ -815,11 +956,34 @@ void scheduler_hls(
       if (!resid1_started && compute_ready) {
         resid1_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_RESID1, layer_idx, -1, -1);
+        compute_op = pack_compute_op(CMP_RESID1, layer_idx, -1, -1);
         resid1_started = true;
       } else if (resid1_started && resid1_compute_done) {
         resid1_started = false;
         resid1_compute_done = false;
+        st = S_LAYER_NORM_2;
+      }
+      break;
+    }
+    case S_LAYER_NORM_2: {
+      const bool ln1_done =
+          LayerNorm(ln1_phase, ln1_started, ln1_compute_done, compute_ready,
+                    layer_idx, compute_start, compute_op, ln1_ops);
+      if (ln1_done) {
+        ln1_phase = LnPhase::SUM;
+        st = S_REQUANT4;
+      }
+      break;
+    }
+    case S_REQUANT4: {
+      if (!requant4_started && compute_ready) {
+        requant4_compute_done = false;
+        compute_start = 1;
+        compute_op = pack_compute_op(CMP_REQUANT4, layer_idx, -1, -1);
+        requant4_started = true;
+      } else if (requant4_started && requant4_compute_done) {
+        requant4_started = false;
+        requant4_compute_done = false;
         st = S_LOOP_CHECK;
       }
       break;
@@ -829,24 +993,8 @@ void scheduler_hls(
         layer_idx++;
         st = S_LAYER_COUNT;
       } else {
-        final_norm_started = false;
-        final_norm_compute_done = false;
-        st = S_FINAL_NORM;
-        stream_started = false;
-      }
-      break;
-    }
-    case S_FINAL_NORM: {
-      if (!final_norm_started && compute_ready) {
-        final_norm_compute_done = false;
-        compute_start = 1;
-        // Reuse LN1 opcode for the terminal norm.
-        compute_instruction= pack_compute_instruction(CMP_FINAL_NORM, layer_idx, -1, -1);
-        final_norm_started = true;
-      } else if (final_norm_started && final_norm_compute_done) {
-        final_norm_started = false;
-        final_norm_compute_done = false;
         st = S_STREAM_OUT;
+        stream_started = false;
       }
       break;
     }

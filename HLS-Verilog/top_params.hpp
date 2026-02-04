@@ -128,19 +128,13 @@ constexpr int NUM_W1_TILES    = 4;
 constexpr int NUM_W2_TILES    = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 16; // Number of heads processed in parallel
+constexpr int D_MODEL = 8; // Number of heads processed in parallel
 constexpr int D_FFN   = 22; // Feed-Forward hidden layer size
 constexpr int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
 constexpr int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
 constexpr int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
 constexpr int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16; // Context window length
-constexpr int MAX_CYCLIC_SIZE = 16; // << for UNROLL parallelism in MAC units
-
-// Q1.15 scaling factor for attention logits (1/sqrt(D_HEADS) * 2^15).
-// Update if D_HEADS changes.
-constexpr int16_t ATTN_SCALE_Q15 = 16384;
-
 // ------------------------------------------------------------
 // Scheduler state + helper enums
 // ------------------------------------------------------------
@@ -148,22 +142,37 @@ enum SchedState {
     S_IDLE,            // 0
     S_STREAM_IN,       // 1
     S_LAYER_COUNT,     // 2
-    S_LAYER_NORM_0,    // 3
-    S_REQUANT1,        // 4
-    S_ATTENTION_HEADS, // 5
-    S_HEAD_CONCAT,     // 6
-    S_OUT_PROJECTION,  // 7
-    S_REQUANT2,        // 8
-    S_RES_ADD_1,       // 9
-    S_LAYER_NORM_1,    // 10
+    S_ATTENTION_HEADS, // 3
+    S_HEAD_CONCAT,     // 4
+    S_OUT_PROJECTION,  // 5
+    S_REQUANT1,        // 6
+    S_RES_ADD_1,       // 7
+    S_LAYER_NORM_1,    // 8
+    S_REQUANT2,        // 9
+    S_FFN,             // 10
     S_REQUANT3,        // 11
-    S_FFN,             // 12
-    S_REQUANT4,        // 13
-    S_RES_ADD_2,       // 14
+    S_RES_ADD_2,       // 12
+    S_LAYER_NORM_2,    // 13
+    S_REQUANT4,        // 14
     S_LOOP_CHECK,      // 15
-    S_FINAL_NORM,      // 16
-    S_STREAM_OUT       // 17
+    S_STREAM_OUT       // 16
 };
+
+// LayerNorm micro-FSM phases (numbered per algorithm steps)
+enum class LnPhase : uint8_t {
+    SUM = 0,      // 1) S = sum_i y_i
+    SUMSQ,        // 2) Q = sum_i y_i^2
+    MEAN,         // 3) mu = S / d
+    EYY,          // 4) E[y^2] = Q / d
+    VAR,          // 5) sigma2 = E[y^2] - mu^2
+    VAR_EPS,      // 6) v = sigma2 + eps
+    INV_STD,      // 7) inv_std = 1 / sqrt(v)
+    NORM,         // 8) y_hat[i] = (y_i - mu) * inv_std
+    SCALE,        // 9) z_i = gamma_i * y_hat[i]
+    SHIFT,        // 10) o_i = z_i + beta_i
+    DONE
+};
+
 
 // ------------------------------------------------------------
 // Headed Attention and FSM enums
@@ -182,44 +191,61 @@ enum class HeadPhase : uint8_t {
     VALUE_SCALE_CLAMP, // 10
     ATT_SOFTMAX,       // 11
     ATT_VALUE,         // 12
-    HEAD_REQUANT,      // 13
+    REQUANT2,          // 13
     DONE               // 14
 };
 
 enum ComputeOp : uint8_t {
-    CMP_NONE      = 0,  // 0
-
-    CMP_LN0       = 1, // 17
-    CMP_REQUANT1  = 2, // 15
-
-    // Attention ops
-    CMP_Q         = 3,  // 1
-    CMP_K         = 4,  // 2
-    CMP_K_REQUANT = 5,  // 3
-    CMP_V         = 6,  // 4
-    CMP_V_REQUANT = 7,  // 5
-    CMP_REQUANT_Q = 8,  // 6
-    CMP_ATT_SCORES  = 9,  // 7
-    CMP_VALUE_SCALE = 10,  // 8
-    CMP_SOFTMAX     = 11,  // 9
-    CMP_ATT_VALUE   = 12, // 10
-
+    CMP_NONE = 0,           // 0 
+    CMP_Q,                  // 1
+    CMP_K,                  // 2
+    CMP_K_REQUANT,          // 3
+    CMP_V,                  // 4
+    CMP_V_REQUANT,          // 5
+    CMP_REQUANT_Q,          // 6
+    CMP_ATT_SCORES,         // 7
+    CMP_VALUE_SCALE,        // 8
+    CMP_SOFTMAX,            // 9
+    CMP_ATT_VALUE,          // 10
+    CMP_REQUANT2,           // 11
     // Scheduler-level ops
-    CMP_HEAD_REQUANT = 13, 
-    CMP_CONCAT       = 14, // 13
-    CMP_OUT_PROJ     = 15, // 14
-    CMP_RESID0       = 16, // 16
-    CMP_REQUANT2     = 17, // 18
-    CMP_FFN_W1       = 18, // 19
-    CMP_FFN_ACT      = 19, // 20
-    CMP_FFN_W2       = 20, // 21
-    CMP_REQUANT3     = 21, // 22
-    CMP_RESID1       = 22, // 23
-    CMP_LN1          = 23, // 24
-    CMP_REQUANT4     = 24, // 25
-    CMP_FINAL_NORM   = 25, // 26
-    CMP_DEQUANT      = 26, // 26
-    CMP_LOGITS       = 27, // 27
+    CMP_HEAD_REQUANT,       // 12
+    CMP_CONCAT,             // 13
+    CMP_OUT_PROJ,           // 14
+    CMP_REQUANT1,           // 15
+    CMP_RESID0,             // 16
+    CMP_LN0,                // 17
+    CMP_REQUANT3,           // 18
+    CMP_FFN_W1,             // 19
+    CMP_FFN_ACT,            // 20
+    CMP_FFN_W2,             // 21
+    CMP_REQUANT4,           // 22
+    CMP_RESID1,             // 23
+    CMP_LN1,                // 24
+    CMP_DEQUANT,            // 25
+    CMP_LOGITS,             // 26
+    // LayerNorm micro-ops (three-phase: reduction, scalar, elementwise)
+    // LayerNorm fine-grain micro-ops (per-step)
+    CMP_LN0_SUM,            // 27
+    CMP_LN0_SUMSQ,          // 28
+    CMP_LN0_MEAN,           // 29
+    CMP_LN0_EYY,            // 30
+    CMP_LN0_VAR,            // 31
+    CMP_LN0_VAR_EPS,        // 32
+    CMP_LN0_INV_STD,        // 33
+    CMP_LN0_NORM,           // 34
+    CMP_LN0_SCALE,          // 35
+    CMP_LN0_SHIFT,          // 36
+    CMP_LN1_SUM,            // 37
+    CMP_LN1_SUMSQ,          // 38
+    CMP_LN1_MEAN,           // 39
+    CMP_LN1_EYY,            // 40
+    CMP_LN1_VAR,            // 41
+    CMP_LN1_VAR_EPS,        // 42
+    CMP_LN1_INV_STD,        // 43
+    CMP_LN1_NORM,           // 44
+    CMP_LN1_SCALE,          // 45
+    CMP_LN1_SHIFT           // 46
 };
 
 enum DmaSel : uint8_t {
@@ -234,13 +260,7 @@ enum DmaSel : uint8_t {
     DMASEL_WO,          // 8
     DMASEL_W1,          // 9
     DMASEL_W2,          // 10
-    DMASEL_WLOGIT,      // 11
-    DMASEL_CONCAT       // 12
-};
-
-enum class ComputeErrorCodes {
-    IncorrectRequest, 
-    InvalidComputationForamt
+    DMASEL_WLOGIT       // 11
 };
 
 struct HeadCtx {
@@ -256,7 +276,9 @@ struct HeadCtx {
 
     bool    wl_ready    = false;                  // INPUT FROM WL 
     bool    wl_start    = false;                  // OUTPUT signal for head
-    uint32_t wl_instruction = 0;                  // OUTPUT packed DMA op|layer|head|tile
+    DmaSel  wl_addr_sel = DmaSel::DMASEL_NONE; // OUTPUT signal for head
+    int     wl_layer    = -1;                      // OUTPUT signal for head
+    int     wl_head     = -1;                      // OUTPUT signal for head
     bool    dma_done    = false;                  // INPUT FROM AXI-FULL 
 
     bool start_head = false;
@@ -274,7 +296,7 @@ struct HeadCtx {
     bool val_scale_started  = false;
     bool softmax_started    = false;
     bool att_value_started  = false;
-    bool head_requant_started   = false;
+    bool requant2_started   = false;
 
     bool q_compute_done          = false;
     bool k_compute_done          = false;
@@ -286,7 +308,7 @@ struct HeadCtx {
     bool val_scale_compute_done  = false;
     bool softmax_compute_done    = false;
     bool att_value_compute_done  = false;
-    bool head_requant_compute_done   = false;
+    bool requant2_compute_done   = false;
 
     bool q_dma_done          = false;
     bool k_dma_done          = false;
@@ -295,30 +317,6 @@ struct HeadCtx {
     bool v_writeback_dma_done = false;
     bool att_scores_dma_done = false;
     bool att_value_dma_done  = false;
-};
-
-
-// ------------------------------------------------------------
-// MAC state + helper structs
-// ------------------------------------------------------------
-
-// Simple controller state machine.
-enum class ComputeState : uint8_t { 
-            IDLE = 0, 
-            CAPTURE_INSTRUCTION, 
-            WAIT_MEM, 
-            EXECUTE, 
-            MEM_WRITEBACK, 
-            DONE 
-};
-
-// Captured request from the scheduler.
-struct PendingRequest {
-    uint32_t instruction    = 0x00000000;
-    ComputeOp op            = ComputeOp::CMP_NONE;
-    uint8_t layer_idx       = 0;
-    uint8_t head_idx        = 0;
-    uint8_t tile_idx        = 0;
 };
 
 
@@ -430,286 +428,3 @@ struct ControlMemSpace {
 
     uint32_t reserved_debug = 0;
 };
-
-// ---------------------------------------------------------------------------
-// Compute buffer layout (moved from compute_buffer_layout.hpp)
-// ---------------------------------------------------------------------------
-constexpr int max2_constexpr(int a, int b) {
-    return (a > b) ? a : b;
-}
-constexpr int min2_constexpr(int a, int b) {
-    return (a < b) ? a : b;
-}
-
-
-
-constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
-constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
-constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
-
-constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
-constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
-
-namespace compute_buf {
-
-constexpr int div_ceil(int a, int b) {
-    return (a + b - 1) / b;
-}
-
-constexpr int max2(int a, int b) {
-    return (a > b) ? a : b;
-}
-
-// -------------------------------
-// Input buffer size calculations
-// -------------------------------
-constexpr int OUT_PROJ_ACT_BYTES = D_MODEL;
-constexpr int OUT_PROJ_W_NIBBLES = D_MODEL * D_TILE_WO;
-constexpr int OUT_PROJ_W_BYTES = div_ceil(OUT_PROJ_W_NIBBLES, 2);
-constexpr int OUT_PROJ_B_BYTES = D_TILE_WO * 4;
-constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
-
-constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
-constexpr int RESID_IN_BYTES = D_MODEL * 2;
-constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
-
-constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
-constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
-constexpr int FFN_W1_B_BYTES = D_TILE_W1 * 4;
-constexpr int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES + (D_TILE_W1 * 2);
-
-constexpr int FFN_ACT_IN_BYTES = D_FFN * 2;
-
-constexpr int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
-constexpr int FFN_W2_W_BYTES = div_ceil(FFN_W2_W_NIBBLES, 2);
-constexpr int FFN_W2_B_BYTES = D_TILE_W2 * 4;
-constexpr int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES + (D_TILE_W2 * 2);
-
-constexpr int IN_BUF_BYTES = max2(
-    OUT_PROJ_IN_BYTES,
-    max2(
-        REQUANT_IN_BYTES,
-        max2(
-            RESID_IN_BYTES,
-            max2(
-                LN_IN_BYTES,
-                max2(FFN_W1_IN_BYTES,
-                    max2(FFN_ACT_IN_BYTES, FFN_W2_IN_BYTES))))));
-
-// -------------------------------
-// Output buffer size calculations
-// -------------------------------
-constexpr int OUT_PROJ_OUT_BYTES = D_TILE_WO * 4;
-constexpr int REQUANT_OUT_BYTES = D_MODEL;
-constexpr int RESID_OUT_BYTES = D_MODEL;
-constexpr int LN_OUT_BYTES = D_MODEL * 4;
-constexpr int FFN_W1_OUT_BYTES = D_TILE_W1 * 2;
-constexpr int FFN_ACT_OUT_BYTES = D_FFN * 2;
-constexpr int FFN_W2_OUT_BYTES = D_TILE_W2 * 4;
-
-constexpr int OUT_BUF_BYTES = max2(
-    OUT_PROJ_OUT_BYTES,
-    max2(
-        REQUANT_OUT_BYTES,
-        max2(
-            RESID_OUT_BYTES,
-            max2(
-                LN_OUT_BYTES,
-                max2(FFN_W1_OUT_BYTES, max2(FFN_ACT_OUT_BYTES, FFN_W2_OUT_BYTES))))));
-
-// -------------------------------
-// Per-op layouts (byte offsets)
-// -------------------------------
-struct OutProjLayout {
-    static constexpr int ACT = 0;
-    static constexpr int W = ACT + OUT_PROJ_ACT_BYTES;
-    static constexpr int B = W + OUT_PROJ_W_BYTES;
-};
-
-struct RequantLayout {
-    static constexpr int X = 0;
-    static constexpr int M = X + (D_MODEL * 4);
-    static constexpr int N = M + 4;
-    static constexpr int Z = N + 4;
-};
-
-struct ResidLayout {
-    static constexpr int X = 0;
-    static constexpr int R = X + D_MODEL;
-};
-
-struct LayerNormLayout {
-    static constexpr int X = 0;
-    static constexpr int GAMMA = X + D_MODEL;
-    static constexpr int EPS = GAMMA + (D_MODEL * 4);
-};
-
-struct FfnW1Layout {
-    static constexpr int X = 0;
-    static constexpr int W = X + D_MODEL;
-    static constexpr int B = W + FFN_W1_W_BYTES;
-    static constexpr int S = B + FFN_W1_B_BYTES;
-};
-
-struct FfnActLayout {
-    static constexpr int X = 0;
-};
-
-struct FfnW2Layout {
-    static constexpr int X = 0;
-    static constexpr int W = X + (D_FFN * 2);
-    static constexpr int B = W + FFN_W2_W_BYTES;
-    static constexpr int S = B + FFN_W2_B_BYTES;
-};
-
-
-// -------------------------------
-// Byte helpers (little-endian)
-// -------------------------------
-inline int8_t read_i8(const uint8_t *buf, int byte_addr) {
-    return static_cast<int8_t>(buf[byte_addr]);
-}
-
-inline ap_int<4> read_i4(const uint8_t *buf, int nibble_idx) {
-    const int byte_addr = nibble_idx / 2;
-    const uint8_t byte_val = buf[byte_addr];
-    const ap_uint<4> nibble = (nibble_idx & 1) ? ap_uint<4>(byte_val >> 4)
-                                               : ap_uint<4>(byte_val & 0xF);
-    return ap_int<4>(nibble);
-}
-
-inline int16_t read_i16(const uint8_t *buf, int byte_addr) {
-    const uint16_t lo = buf[byte_addr];
-    const uint16_t hi = buf[byte_addr + 1];
-    const uint16_t v = static_cast<uint16_t>((hi << 8) | lo);
-    return static_cast<int16_t>(v);
-}
-
-inline int32_t read_i32(const uint8_t *buf, int byte_addr) {
-    const uint32_t b0 = buf[byte_addr + 0];
-    const uint32_t b1 = buf[byte_addr + 1];
-    const uint32_t b2 = buf[byte_addr + 2];
-    const uint32_t b3 = buf[byte_addr + 3];
-    const uint32_t v = (b3 << 24) | (b2 << 16) | (b1 << 8) | b0;
-    return static_cast<int32_t>(v);
-}
-
-inline void write_i8(uint8_t *buf, int byte_addr, int8_t value) {
-    buf[byte_addr] = static_cast<uint8_t>(value);
-}
-
-inline void write_i4(uint8_t *buf, int nibble_idx, ap_int<4> value) {
-    const int byte_addr = nibble_idx / 2;
-    const ap_uint<4> nibble = ap_uint<4>(value);
-    uint8_t byte_val = buf[byte_addr];
-    if (nibble_idx & 1) {
-        byte_val = static_cast<uint8_t>((byte_val & 0x0F)
-                                         | (static_cast<uint8_t>(nibble) << 4));
-    } else {
-        byte_val = static_cast<uint8_t>((byte_val & 0xF0) | static_cast<uint8_t>(nibble));
-    }
-    buf[byte_addr] = byte_val;
-}
-
-inline void write_i16(uint8_t *buf, int byte_addr, int16_t value) {
-    const uint16_t v = static_cast<uint16_t>(value);
-    buf[byte_addr + 0] = static_cast<uint8_t>(v & 0xFFu);
-    buf[byte_addr + 1] = static_cast<uint8_t>((v >> 8) & 0xFFu);
-}
-
-inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
-    const uint32_t v = static_cast<uint32_t>(value);
-    buf[byte_addr + 0] = static_cast<uint8_t>(v & 0xFFu);
-    buf[byte_addr + 1] = static_cast<uint8_t>((v >> 8) & 0xFFu);
-    buf[byte_addr + 2] = static_cast<uint8_t>((v >> 16) & 0xFFu);
-    buf[byte_addr + 3] = static_cast<uint8_t>((v >> 24) & 0xFFu);
-}
-
-} // namespace compute_buf
-
-// ------------------------------------------------------------
-// Headed MAC sizing (compile-time maxima)
-// ------------------------------------------------------------
-constexpr int HEAD_VECTOR_MAX = compute_buf::max2(D_MODEL, compute_buf::max2(D_HEADS, CONTEXT_LENGTH));
-constexpr int HEAD_ACCUM_MAX = compute_buf::max2(D_HEADS, CONTEXT_LENGTH);
-constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
-
-constexpr int HEAD_MAC_VEC_UNROLL = min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
-constexpr int HEAD_MAC_OUT_UNROLL = min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
-// ------------------------------------------------------------
-// Headed attention buffer layouts
-// ------------------------------------------------------------
-namespace head_buf {
-
-constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
-constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
-constexpr int QKV_B_NIBBLES = D_HEADS;
-constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
-constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
-constexpr int QKV_OUT_BYTES = D_HEADS * 4;
-
-constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
-constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
-
-constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
-constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
-
-constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4);
-constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
-
-constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
-constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
-
-constexpr int ATT_VALUE_IN_BYTES = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
-constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
-
-constexpr int IN_BUF_BYTES = compute_buf::max2(
-    QKV_IN_BYTES,
-    compute_buf::max2(
-        HEAD_REQUANT_IN_BYTES,
-        compute_buf::max2(
-            ATT_SCORES_IN_BYTES,
-            compute_buf::max2(VALUE_SCALE_IN_BYTES,
-                compute_buf::max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
-
-constexpr int OUT_BUF_BYTES = compute_buf::max2(
-    QKV_OUT_BYTES,
-    compute_buf::max2(
-        HEAD_REQUANT_OUT_BYTES,
-        compute_buf::max2(
-            ATT_SCORES_OUT_BYTES,
-            compute_buf::max2(VALUE_SCALE_OUT_BYTES,
-                compute_buf::max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
-
-struct QkvLayout {
-    static constexpr int ACT = 0;
-    static constexpr int W = ACT + D_MODEL;
-    static constexpr int B = W + QKV_W_BYTES;
-};
-
-struct HeadRequantLayout {
-    static constexpr int X = 0;
-    static constexpr int M = X + (D_HEADS * 4);
-    static constexpr int N = M + 4;
-    static constexpr int Z = N + 4;
-};
-
-struct AttScoresLayout {
-    static constexpr int Q = 0;
-    static constexpr int K_CACHE = Q + D_HEADS;
-};
-
-struct ValueScaleLayout {
-    static constexpr int X = 0;
-};
-
-struct SoftmaxLayout {
-    static constexpr int X = 0;
-};
-
-struct AttValueLayout {
-    static constexpr int WEIGHTS = 0;
-    static constexpr int V_CACHE = WEIGHTS + CONTEXT_LENGTH;
-};
-
-} // namespace head_buf

@@ -2,7 +2,7 @@
   "configurations": [
     {
       "name": "Linux",
-      "compileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
+      "compileCommands": "${workspaceFolder}/vitis_simulations/Top_Module/compute_block/compile_commands.json",
       "includePath": [
         "${workspaceFolder}/**",
         "/tools/Xilinx/2025.1/Vitis/include/**",
