@@ -58,7 +58,9 @@ static const char *op_name(ComputeOp op) {
     case CMP_LN1:          return "LN1";
     case CMP_REQUANT4:     return "RQ4";
     case CMP_DEQUANT:      return "DEQUANT";
+    case CMP_FINAL_NORM:   return "FINAL_NORM";
     case CMP_LOGITS:       return "LOGITS";
+    default:               return "UNK";
     }
 }
 
@@ -80,6 +82,7 @@ static const char *dma_name(DmaSel sel) {
     case DMASEL_W1:     return "W1";
     case DMASEL_W2:     return "W2";
     case DMASEL_WLOGIT: return "WLOGIT";
+    case DMASEL_CONCAT: return "CONCAT";
     default:            return "UNK";
     }
 }
@@ -102,6 +105,271 @@ static const char *phase_name(HeadPhase ph) {
     case HeadPhase::HEAD_REQUANT:     return "HEAD_RQ";
     case HeadPhase::DONE:              return "DONE";
     default:                           return "UNK";
+    }
+}
+
+static void print_buffer(const char *label, const uint8_t *buf, int size) {
+    std::printf("%s[%d]:\n", label, size);
+    for (int i = 0; i < size; ++i) {
+        if ((i % 16) == 0) {
+            std::printf("  %04x:", i);
+        }
+        std::printf(" %02x", static_cast<unsigned>(buf[i]));
+        if ((i % 16) == 15 || i == size - 1) {
+            std::printf("\n");
+        }
+    }
+}
+
+static void print_ln_in_buf(const uint8_t *in_buf) {
+    std::printf("LN in_buf (decoded):\n  X:");
+    for (int i = 0; i < D_MODEL; ++i) {
+        std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::LayerNormLayout::X + i)));
+    }
+    std::printf("\n  GAMMA:");
+    for (int i = 0; i < D_MODEL; ++i) {
+        std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4))));
+    }
+    const int32_t eps = compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::EPS);
+    std::printf("\n  EPS: %d\n", static_cast<int>(eps));
+}
+
+static void print_ln_out_buf(const uint8_t *out_buf) {
+    std::printf("LN out_buf (decoded):\n  Y:");
+    for (int i = 0; i < D_MODEL; ++i) {
+        std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, compute_buf::LayerNormLayout::X + (i * 4))));
+    }
+    std::printf("\n");
+}
+
+static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
+    switch (op) {
+    case ComputeOp::CMP_OUT_PROJ: {
+        std::printf("OUT_PROJ in_buf (decoded):\n  ACT:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i)));
+        }
+        std::printf("\n  W:");
+        for (int i = 0; i < D_MODEL * D_TILE_WO; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::W * 2) + i)));
+        }
+        std::printf("\n  B:");
+        for (int i = 0; i < D_TILE_WO; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::OutProjLayout::B + (i * 4))));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_REQUANT1:
+    case ComputeOp::CMP_REQUANT2:
+    case ComputeOp::CMP_REQUANT3:
+    case ComputeOp::CMP_REQUANT4: {
+        std::printf("REQUANT in_buf (decoded):\n  X:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::RequantLayout::X + (i * 4))));
+        }
+        const int32_t M = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::M);
+        const int32_t N = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::N);
+        const int32_t Z = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::Z);
+        std::printf("\n  M: %d\n  N: %d\n  Z: %d\n", static_cast<int>(M), static_cast<int>(N), static_cast<int>(Z));
+        break;
+    }
+    case ComputeOp::CMP_RESID0:
+    case ComputeOp::CMP_RESID1: {
+        std::printf("RESID in_buf (decoded):\n  X:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::X + i)));
+        }
+        std::printf("\n  R:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::R + i)));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_LN0:
+    case ComputeOp::CMP_LN1:
+    case ComputeOp::CMP_FINAL_NORM:
+        print_ln_in_buf(in_buf);
+        break;
+    case ComputeOp::CMP_FFN_W1: {
+        std::printf("FFN_W1 in_buf (decoded):\n  X:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::FfnW1Layout::X + i)));
+        }
+        std::printf("\n  W:");
+        for (int i = 0; i < D_MODEL * D_TILE_W1; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::FfnW1Layout::W * 2) + i)));
+        }
+        std::printf("\n  B:");
+        for (int i = 0; i < D_TILE_W1; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::FfnW1Layout::B + (i * 4))));
+        }
+        std::printf("\n  S:");
+        for (int i = 0; i < D_TILE_W1; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnW1Layout::S + (i * 2))));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_FFN_ACT: {
+        std::printf("FFN_ACT in_buf (decoded):\n  X:");
+        for (int i = 0; i < D_FFN; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnActLayout::X + (i * 2))));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_FFN_W2: {
+        std::printf("FFN_W2 in_buf (decoded):\n  X:");
+        for (int i = 0; i < D_FFN; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnW2Layout::X + (i * 2))));
+        }
+        std::printf("\n  W:");
+        for (int i = 0; i < D_FFN * D_TILE_W2; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::FfnW2Layout::W * 2) + i)));
+        }
+        std::printf("\n  B:");
+        for (int i = 0; i < D_TILE_W2; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::FfnW2Layout::B + (i * 4))));
+        }
+        std::printf("\n  S:");
+        for (int i = 0; i < D_TILE_W2; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnW2Layout::S + (i * 2))));
+        }
+        std::printf("\n");
+        break;
+    }
+    default:
+        std::printf("in_buf (decoded): <no decoder>\n");
+        break;
+    }
+}
+
+static void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
+    switch (op) {
+    case ComputeOp::CMP_OUT_PROJ: {
+        std::printf("OUT_PROJ out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_TILE_WO; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_REQUANT1:
+    case ComputeOp::CMP_REQUANT2:
+    case ComputeOp::CMP_REQUANT3:
+    case ComputeOp::CMP_REQUANT4: {
+        std::printf("REQUANT out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::RequantLayout::X + i)));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_RESID0:
+    case ComputeOp::CMP_RESID1: {
+        std::printf("RESID out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::ResidLayout::X + i)));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_LN0:
+    case ComputeOp::CMP_LN1:
+    case ComputeOp::CMP_FINAL_NORM:
+        print_ln_out_buf(out_buf);
+        break;
+    case ComputeOp::CMP_FFN_W1: {
+        std::printf("FFN_W1 out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_TILE_W1; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(out_buf, i * 2)));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_FFN_ACT: {
+        std::printf("FFN_ACT out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_FFN; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(out_buf, compute_buf::FfnActLayout::X + (i * 2))));
+        }
+        std::printf("\n");
+        break;
+    }
+    case ComputeOp::CMP_FFN_W2: {
+        std::printf("FFN_W2 out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_TILE_W2; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
+        }
+        std::printf("\n");
+        break;
+    }
+    default:
+        std::printf("out_buf (decoded): <no decoder>\n");
+        break;
+    }
+}
+
+struct DmaFields {
+    DmaSel sel;
+    int layer;
+    int head;
+    int tile;
+};
+
+static inline DmaFields decode_wl_instruction(uint32_t instr) {
+    DmaFields f;
+    f.sel = static_cast<DmaSel>(instr & 0xFFu);
+    f.layer = static_cast<int>((instr >> 8) & 0xFFu);
+    f.head = static_cast<int>(static_cast<int8_t>((instr >> 16) & 0xFFu));
+    f.tile = static_cast<int>(static_cast<int8_t>((instr >> 24) & 0xFFu));
+    return f;
+}
+
+static uint32_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) {
+    const DmaFields f = decode_wl_instruction(instr);
+    if (f.layer < 0) {
+        return 0;
+    }
+    const uint32_t layer_u = static_cast<uint32_t>(f.layer);
+    switch (f.sel) {
+    case DMASEL_WQ:
+        if (f.head < 0) return 0;
+        return ctrl.wq_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.head) * ctrl.wq_head_stride;
+    case DMASEL_WK:
+        if (f.head < 0) return 0;
+        return ctrl.wk_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.head) * ctrl.wk_head_stride;
+    case DMASEL_WV:
+        if (f.head < 0) return 0;
+        return ctrl.wv_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.head) * ctrl.wv_head_stride;
+    case DMASEL_CTX_K:
+        if (f.head < 0) return 0;
+        return ctrl.k_cache_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.head) * ctrl.k_cache_stride;
+    case DMASEL_CTX_V:
+        if (f.head < 0) return 0;
+        return ctrl.v_cache_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.head) * ctrl.v_cache_stride;
+    case DMASEL_WO:
+        if (f.tile < 0) return 0;
+        return ctrl.wo_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.tile) * ctrl.wo_tile_stride;
+    case DMASEL_W1:
+        if (f.tile < 0) return 0;
+        return ctrl.w1_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.tile) * ctrl.w1_tile_stride;
+    case DMASEL_W2:
+        if (f.tile < 0) return 0;
+        return ctrl.w2_base_addr + layer_u * ctrl.layer_stride +
+               static_cast<uint32_t>(f.tile) * ctrl.w2_tile_stride;
+    case DMASEL_CONCAT:
+        return 0;
+    default:
+        return 0;
     }
 }
 
@@ -209,19 +477,27 @@ ControlMemSpace ctrl_mem_init(bool init) {
     return ctrl_mem;
 }
 
+static inline void write_i4(uint8_t *buf, int nibble_idx, int8_t value) {
+    const uint8_t v = static_cast<uint8_t>(value) & 0x0F;
+    const int byte_addr = nibble_idx / 2;
+    if (nibble_idx % 2) {
+        buf[byte_addr] = (buf[byte_addr] & 0x0F) | (v << 4);
+    } else {
+        buf[byte_addr] = (buf[byte_addr] & 0xF0) | v;
+    }
+}
+
 int main() {
-    const int MAX_CYCLES = 800;
+    const int MAX_CYCLES = 4000;
     const int COMP_LAT   = 3;
     const int DMA_LAT    = 3;
     const int AXIS_BEATS = 3;
+    const int MEM_LAT     = 5;
 
 
     bool wl_ready        = false;
     bool wl_start        = false;
-    DmaSel wl_addr_sel   = DmaSel::DMASEL_NONE;
-    int  wl_layer        = 0;
-    int  wl_head         = 0;
-    int  wl_tile         = 0;
+    uint32_t wl_instruction = 0;
     HeadCtx head_ctx_ref[NUM_HEADS];
     bool dma_done        = false;
     bool wl_dma_request  = false;
@@ -234,14 +510,62 @@ int main() {
     bool axis_feed_done  = false;
     bool axis_drive      = false;
 
-    bool compute_ready   = true;
-    bool compute_done    = false;
-    bool compute_start   = false;
-    uint32_t  compute_op      = 0;
+    bool mem_transfer_done = false;
+    bool mem_read_request  = false;
+    bool mem_write_request = false;
+    uint32_t mem_op         = 0;
+    uint32_t mem_op_latched = 0;
+    uint8_t in_buf[compute_buf::IN_BUF_BYTES] = {};
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
+    bool mem_busy = false;
+    int  mem_timer = 0;
+    enum class MemPending { None, Read, Write };
+    MemPending mem_pending = MemPending::None;
+
+    int8_t out_proj_act[D_MODEL] = {};
+    int8_t out_proj_w[D_MODEL * D_MODEL] = {};
+    int32_t out_proj_b[D_MODEL] = {};
+
+    int32_t rq1_x[D_MODEL] = {};
+    int32_t rq2_x[D_MODEL] = {};
+    int32_t rq3_x[D_MODEL] = {};
+    int32_t rq4_x[D_MODEL] = {};
+    int32_t rq1_M = 1, rq1_N = 0, rq1_Z = 0;
+    int32_t rq2_M = 2, rq2_N = 1, rq2_Z = 0;
+    int32_t rq3_M = 1, rq3_N = 2, rq3_Z = 0;
+    int32_t rq4_M = 3, rq4_N = 1, rq4_Z = 0;
+
+    int8_t resid0_x[D_MODEL] = {};
+    int8_t resid0_r[D_MODEL] = {};
+    int8_t resid1_x[D_MODEL] = {};
+    int8_t resid1_r[D_MODEL] = {};
+
+    int8_t ln0_x[D_MODEL] = {};
+    int8_t ln1_x[D_MODEL] = {};
+    int8_t final_norm_x[D_MODEL] = {};
+    int32_t ln0_gamma[D_MODEL] = {};
+    int32_t ln1_gamma[D_MODEL] = {};
+    int32_t final_norm_gamma[D_MODEL] = {};
+    int32_t ln0_eps = 1;
+    int32_t ln1_eps = 2;
+    int32_t final_norm_eps = 3;
+
+    int8_t ffn1_x[D_MODEL] = {};
+    int8_t ffn1_w[D_MODEL * D_MODEL] = {};
+    int32_t ffn1_b[D_MODEL] = {};
+    int16_t ffn1_s[D_MODEL] = {};
+
+    int16_t ffn_act_in[D_FFN] = {};
+
+    int16_t ffn2_x[D_FFN] = {};
+    int8_t  ffn2_w[D_FFN * D_FFN] = {};
+    int32_t ffn2_b[D_FFN] = {};
+    int16_t ffn2_s[D_FFN] = {};
 
     bool head_lane_busy[HEADS_PARALLEL] = {false};
     int  head_lane_timer[HEADS_PARALLEL] = {0};
     int  head_lane_active_idx[HEADS_PARALLEL] = {0};
+    bool head_start_seen[NUM_HEADS] = {false};
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
         head_lane_active_idx[lane] = -1;
     }
@@ -256,14 +580,11 @@ int main() {
     bool stream_start    = false;
     bool stream_done     = false;
 
-    uint32_t debug_compute_done = 0;
     SchedState dbg_state     = S_IDLE;
     bool irq_ps              = false;
     bool irq_interupt_flagged = false;
     uint32_t interupt_data = 0;
 
-    bool comp_busy       = false;
-    int  comp_timer      = 0;
     bool dma_busy        = false;
     int  dma_timer       = 0;
     bool stream_busy     = false;
@@ -304,10 +625,50 @@ int main() {
     int  test_errors_failed = 0;
     bool dbg_done = false;
     bool dbg_error = false;
-
+    
     ControlMemSpace ctrl_mem{};
     StatusMemSpace status_mem{};
+    
+    for (int i = 0; i < D_MODEL; ++i) {
+        out_proj_act[i] = static_cast<int8_t>(i + 1);
+        out_proj_b[i] = 7;
+        rq1_x[i] = (i * 3) - 20;
+        rq2_x[i] = (i * 2) + 5;
+        rq3_x[i] = 100 - (i * 4);
+        rq4_x[i] = (i * 5) - 11;
+        resid0_x[i] = static_cast<int8_t>(i);
+        resid0_r[i] = static_cast<int8_t>(i * 2);
+        resid1_x[i] = static_cast<int8_t>(-i);
+        resid1_r[i] = static_cast<int8_t>(i + 1);
+        ln0_x[i] = static_cast<int8_t>(i + 1);
+        ln1_x[i] = static_cast<int8_t>(i + 2);
+        final_norm_x[i] = static_cast<int8_t>(i + 3);
+        ln0_gamma[i] = 1;
+        ln1_gamma[i] = 2;
+        final_norm_gamma[i] = 3;
+        ffn1_x[i] = static_cast<int8_t>(i + 3);
+        ffn1_b[i] = 7;
+        ffn1_s[i] = 0x4000;
+    }
+    for (int r = 0; r < D_MODEL; ++r) {
+        for (int c = 0; c < D_MODEL; ++c) {
+            out_proj_w[r * D_MODEL + c] = static_cast<int8_t>((r + c) & 0x7);
+            ffn1_w[r * D_MODEL + c] = 1;
+        }
+    }
+    for (int i = 0; i < D_FFN; ++i) {
+        ffn_act_in[i] = static_cast<int16_t>((i * 3) - 20);
+        ffn2_x[i] = static_cast<int16_t>((i * 2) + 1);
+        ffn2_b[i] = 5;
+        ffn2_s[i] = 0x4000;
+    }
+    for (int r = 0; r < D_FFN; ++r) {
+        for (int c = 0; c < D_FFN; ++c) {
+            ffn2_w[r * D_FFN + c] = 1;
+        }
+    }
 
+    // DEBUG - UNUSED
     uint32_t ctrl_data_in = 0;
     uint32_t ctrl_data_out = 0;
     uint32_t ctrl_shadow_control = 0;
@@ -316,6 +677,21 @@ int main() {
     bool seen_irq_done = false;
 
     ControlMemSpace dbg_ctrl_mem{};
+
+    ComputeState dbg_compute_state = ComputeState::IDLE;
+    bool dbg_compute_start = false;
+    uint32_t dbg_compute_instruction = 0;
+    bool dbg_compute_ready = false;
+    bool dbg_compute_done = false;
+    uint32_t dbg_req_instruction = 0;
+    uint8_t dbg_req_op = 0;
+    uint8_t dbg_req_layer = 0;
+    uint8_t dbg_req_head = 0;
+    uint8_t dbg_req_tile = 0;
+    bool dbg_mac_start = false;
+    bool dbg_mac_ready = false;
+    bool dbg_mac_complete = false;
+    bool dbg_ctrl_reset_asserted = false;
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
@@ -333,12 +709,9 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-6s %-6s %-12s %-12s %-6s %-6s | %-10s | %-16s %-8s %-10s %-6s %-10s %-10s %-10s | %-10s %-10s %-10u %-10s %-8s | wl{Sel L H T} dma_addr=%s\n",
-                "Cycle", "Start", "Reset", "C_St", "WL_St", "CompInstr", "WlInstr", "C_Dn", "DmaDn",
-                "CtrlDin",
-                "DbgState", "WlReq", "WlAddr", "Seen", "IRQ", "IRQFlag", "IRQData",
-                "MemCtrl", "MemIRQ", "MemIRQMsk", "Status", "ErrCd",
-                "DMAAddr");
+    std::printf("%-8s %-6s %-6s %-6s %-10s %-6s %-10s %-6s %-10s %-6s %-6s %-13s | %-10s %-6s %-10s %-10s %-6s | Heads: [idx:phase  C_St C_Dn  CompInstr WL_St DMA   DMADn]\n",
+                "Cycle", "Start", "Reset", "CtrlR", "WlInstr", "DbgSt", "ReqInstr", "C_St", "CompInstr", "C_Rdy", "C_Dn", "DbgState",
+                "MemCtrl", "MemIRQ", "MemMsk", "Status", "ErrCd");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
@@ -630,17 +1003,6 @@ int main() {
             }
         }
 
-        // Complete outstanding main compute operations
-        compute_done = false;
-        if (comp_busy) {
-            if (comp_timer == 0) {
-                compute_done = true;
-                comp_busy    = false;
-            } else {
-                --comp_timer;
-            }
-        }
-
         // Complete outstanding DMA transfers
         dma_done = false;
         if (dma_busy) {
@@ -660,7 +1022,6 @@ int main() {
         }
 
         // Ready signals depend on busy flags
-        compute_ready = !comp_busy && !compute_done;
         for (int i = 0; i < NUM_HEADS; ++i) {
             int lane = i % HEADS_PARALLEL;
             head_ctx_ref[i].compute_ready = !head_lane_busy[lane];
@@ -682,21 +1043,163 @@ int main() {
             axis_in_last  = false;
         }
 
+        // Memory manager model for compute_controller
+        mem_transfer_done = false;
+        if (mem_busy) {
+            if (mem_timer == 0) {
+                mem_transfer_done = true;
+                mem_busy = false;
+                if (mem_pending == MemPending::Read) {
+                    const ComputeOp op = decode_op(mem_op_latched);
+                    const int tile = static_cast<int>(static_cast<int8_t>((mem_op_latched >> 24) & 0xFFu));
+                    for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
+                        in_buf[i] = 0;
+                    }
+                    switch (op) {
+                    case CMP_OUT_PROJ: {
+                        for (int i = 0; i < D_MODEL; ++i) {
+                            compute_buf::write_i8(in_buf, compute_buf::OutProjLayout::ACT + i, out_proj_act[i]);
+                        }
+                        if (tile >= 0 && tile < NUM_WO_TILES) {
+                            const int out_base = tile * D_TILE_WO;
+                            for (int t = 0; t < D_TILE_WO; ++t) {
+                                for (int i = 0; i < D_MODEL; ++i) {
+                                    write_i4(in_buf, (compute_buf::OutProjLayout::W * 2) + (t * D_MODEL) + i,
+                                             out_proj_w[(out_base + t) * D_MODEL + i]);
+                                }
+                                compute_buf::write_i32(in_buf, compute_buf::OutProjLayout::B + (t * 4), out_proj_b[out_base + t]);
+                            }
+                        }
+                        break;
+                    }
+                    case CMP_REQUANT1:
+                    case CMP_REQUANT2:
+                    case CMP_REQUANT3:
+                    case CMP_REQUANT4: {
+                        const int32_t *src = (op == CMP_REQUANT1) ? rq1_x
+                                           : (op == CMP_REQUANT2) ? rq2_x
+                                           : (op == CMP_REQUANT3) ? rq3_x
+                                           : rq4_x;
+                        const int32_t M = (op == CMP_REQUANT1) ? rq1_M
+                                         : (op == CMP_REQUANT2) ? rq2_M
+                                         : (op == CMP_REQUANT3) ? rq3_M
+                                         : rq4_M;
+                        const int32_t N = (op == CMP_REQUANT1) ? rq1_N
+                                         : (op == CMP_REQUANT2) ? rq2_N
+                                         : (op == CMP_REQUANT3) ? rq3_N
+                                         : rq4_N;
+                        const int32_t Z = (op == CMP_REQUANT1) ? rq1_Z
+                                         : (op == CMP_REQUANT2) ? rq2_Z
+                                         : (op == CMP_REQUANT3) ? rq3_Z
+                                         : rq4_Z;
+                        for (int i = 0; i < D_MODEL; ++i) {
+                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::X + (i * 4), src[i]);
+                        }
+                        compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, M);
+                        compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, N);
+                        compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, Z);
+                        break;
+                    }
+                    case CMP_RESID0:
+                    case CMP_RESID1: {
+                        const int8_t *x = (op == CMP_RESID0) ? resid0_x : resid1_x;
+                        const int8_t *r = (op == CMP_RESID0) ? resid0_r : resid1_r;
+                        for (int i = 0; i < D_MODEL; ++i) {
+                            compute_buf::write_i8(in_buf, compute_buf::ResidLayout::X + i, x[i]);
+                            compute_buf::write_i8(in_buf, compute_buf::ResidLayout::R + i, r[i]);
+                        }
+                        break;
+                    }
+                    case CMP_LN0:
+                    case CMP_LN1:
+                    case CMP_FINAL_NORM: {
+                        const int8_t *x = (op == CMP_LN0) ? ln0_x
+                                           : (op == CMP_LN1) ? ln1_x
+                                           : final_norm_x;
+                        const int32_t *gamma = (op == CMP_LN0) ? ln0_gamma
+                                             : (op == CMP_LN1) ? ln1_gamma
+                                             : final_norm_gamma;
+                        const int32_t eps = (op == CMP_LN0) ? ln0_eps
+                                         : (op == CMP_LN1) ? ln1_eps
+                                         : final_norm_eps;
+                        for (int i = 0; i < D_MODEL; ++i) {
+                            compute_buf::write_i8(in_buf, compute_buf::LayerNormLayout::X + i, x[i]);
+                            compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4), gamma[i]);
+                        }
+                        compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::EPS, eps);
+                        break;
+                    }
+                    case CMP_FFN_W1: {
+                        for (int i = 0; i < D_MODEL; ++i) {
+                            compute_buf::write_i8(in_buf, compute_buf::FfnW1Layout::X + i, ffn1_x[i]);
+                        }
+                        if (tile >= 0 && tile < NUM_W1_TILES) {
+                            const int out_base = tile * D_TILE_W1;
+                            for (int t = 0; t < D_TILE_W1; ++t) {
+                                for (int i = 0; i < D_MODEL; ++i) {
+                                    write_i4(in_buf, (compute_buf::FfnW1Layout::W * 2) + (t * D_MODEL) + i,
+                                             ffn1_w[(out_base + t) * D_MODEL + i]);
+                                }
+                                compute_buf::write_i32(in_buf, compute_buf::FfnW1Layout::B + (t * 4), ffn1_b[out_base + t]);
+                                compute_buf::write_i16(in_buf, compute_buf::FfnW1Layout::S + (t * 2), ffn1_s[out_base + t]);
+                            }
+                        }
+                        break;
+                    }
+                    case CMP_FFN_ACT: {
+                        for (int i = 0; i < D_FFN; ++i) {
+                            compute_buf::write_i16(in_buf, compute_buf::FfnActLayout::X + (i * 2), ffn_act_in[i]);
+                        }
+                        break;
+                    }
+                    case CMP_FFN_W2: {
+                        for (int i = 0; i < D_FFN; ++i) {
+                            compute_buf::write_i16(in_buf, compute_buf::FfnW2Layout::X + (i * 2), ffn2_x[i]);
+                        }
+                        if (tile >= 0 && tile < NUM_W2_TILES) {
+                            const int out_base = tile * D_TILE_W2;
+                            for (int t = 0; t < D_TILE_W2; ++t) {
+                                for (int i = 0; i < D_FFN; ++i) {
+                                    write_i4(in_buf, (compute_buf::FfnW2Layout::W * 2) + (t * D_FFN) + i,
+                                             ffn2_w[(out_base + t) * D_FFN + i]);
+                                }
+                                compute_buf::write_i32(in_buf, compute_buf::FfnW2Layout::B + (t * 4), ffn2_b[out_base + t]);
+                                compute_buf::write_i16(in_buf, compute_buf::FfnW2Layout::S + (t * 2), ffn2_s[out_base + t]);
+                            }
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                    print_buffer("in_buf (send)", in_buf, compute_buf::IN_BUF_BYTES);
+                    print_in_buf_decoded(op, in_buf);
+                }
+                if (mem_pending == MemPending::Write) {
+                    const ComputeOp op = decode_op(mem_op_latched);
+                    print_buffer("out_buf (done)", out_buf, compute_buf::OUT_BUF_BYTES);
+                    print_out_buf_decoded(op, out_buf);
+                }
+                mem_pending = MemPending::None;
+            } else {
+                --mem_timer;
+            }
+        }
+
         transformer_top(
             axis_in_valid,
             axis_in_last,
             axis_in_ready,
             dma_done,
             wl_ready,
+            wl_instruction,
             wl_start,
-            wl_addr_sel,
-            wl_layer,
-            wl_head,
-            wl_tile,
-            compute_ready,
-            compute_done,
-            compute_start,
-            compute_op,
+            mem_transfer_done,
+            mem_read_request,
+            mem_write_request,
+            mem_op,
+            in_buf,
+            out_buf,
             head_ctx_ref,
             stream_ready,
             stream_start,
@@ -721,9 +1224,41 @@ int main() {
             wo_tile_stride,
             w1_tile_stride,
             w2_tile_stride,
+            dbg_compute_start,
+            dbg_compute_instruction,
+            dbg_compute_ready,
+            dbg_compute_done,
+            dbg_compute_state,
+            dbg_req_instruction,
+            dbg_req_op,
+            dbg_req_layer,
+            dbg_req_head,
+            dbg_req_tile,
+            dbg_mac_start,
+            dbg_mac_ready,
+            dbg_mac_complete,
+            dbg_ctrl_reset_asserted,
             dbg_done,
             dbg_error
         );
+
+        if (wl_start && dbg_state == S_HEAD_CONCAT) {
+            seen_concat = true;
+        }
+
+        if (!mem_busy) {
+            if (mem_read_request) {
+                mem_busy = true;
+                mem_timer = MEM_LAT - 1;
+                mem_pending = MemPending::Read;
+                mem_op_latched = mem_op;
+            } else if (mem_write_request) {
+                mem_busy = true;
+                mem_timer = MEM_LAT - 1;
+                mem_pending = MemPending::Write;
+                mem_op_latched = mem_op;
+            }
+        }
 
         if (wl_start && !dma_busy) {
             wl_dma_request = true;
@@ -734,37 +1269,28 @@ int main() {
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        const DmaFields wl_fields = decode_wl_instruction(wl_instruction);
-        std::printf("%-8d %-6d %-6d %-6s %-6s 0x%08X 0x%08X %-6s %-6s | %-10u | %-16s %-8s 0x%08X %-6s %-10s %-10s 0x%08X | %-10u %-10s %-10u %-10s 0x%04X | wl{%s %d %d %d} dma_addr=0x%08X",
+        std::printf("%-8d %-6d %-6d %-6s 0x%08X %-6d 0x%08X %-6s 0x%08X %-6s %-6s %-13s | 0x%08X %-6s 0x%08X %-10s 0x%04X",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
-                    dash_or(compute_start),
-                    dash_or(wl_start),
-                    compute_instruction,
+                    dash_or(dbg_ctrl_reset_asserted),
                     wl_instruction,
-                    dash_or(compute_done),
-                    dash_or(dma_done),
-                    ctrl_data_in,
+                    static_cast<int>(dbg_compute_state),
+                    dbg_req_instruction,
+                    dash_or(dbg_compute_start),
+                    dbg_compute_instruction,
+                    dash_or(dbg_compute_ready),
+                    dash_or(dbg_compute_done),
                     state_name(dbg_state),
-                    dash_or(wl_dma_request),
-                    wl_dma_address,
-                    dash_or(seen_done),
-                    dash_or(irq_ps),
-                    dash_or(irq_interupt_flagged),
-                    interupt_data,
+                    // CtrlMemSpace/StatusMemSpace info:
                     dbg_ctrl_mem.control,
                     irq_name(status_mem.irq_status),
                     dbg_ctrl_mem.irq_mask,
                     status_name(status_mem.status),
-                    status_mem.error_code,
-                    dma_name(wl_fields.sel),
-                    wl_fields.layer,
-                    wl_fields.head,
-                    wl_fields.tile,
-                    wl_dma_address);
+                    status_mem.error_code);
         for (int i = 0; i < NUM_HEADS; ++i) {
             char buf[128];
+            const DmaFields head_fields = decode_wl_instruction(head_ctx_ref[i].wl_instruction);
             std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s 0x%08X %-2s %-4s %-2s",
                           i,
                           phase_name(head_ctx_ref[i].phase),
@@ -772,7 +1298,7 @@ int main() {
                           dash_or(head_ctx_ref[i].compute_done),
                           head_ctx_ref[i].compute_op,
                           dash_or(head_ctx_ref[i].wl_start),
-                          dma_name(head_ctx_ref[i].wl_addr_sel),
+                          dma_name(head_fields.sel),
                           dash_or(head_ctx_ref[i].dma_done));
             std::printf(" %s", buf);
         }
@@ -791,10 +1317,14 @@ int main() {
         // Launch head compute requests onto their dedicated lanes
         for (int i = 0; i < NUM_HEADS; ++i) {
             int lane = i % HEADS_PARALLEL;
-            if (head_ctx_ref[i].compute_start && !head_lane_busy[lane]) {
+            if (!head_ctx_ref[i].compute_start) {
+                head_start_seen[i] = false;
+            }
+            if (head_ctx_ref[i].compute_start && !head_start_seen[i] && !head_lane_busy[lane]) {
                 head_lane_busy[lane] = true;
                 head_lane_timer[lane] = COMP_LAT - 1;
                 head_lane_active_idx[lane] = i;
+                head_start_seen[i] = true;
                 ComputeOp launched_op = decode_op(head_ctx_ref[i].compute_op);
                 if (launched_op == CMP_ATT_SCORES) seen_attn = true;
             }
@@ -805,12 +1335,6 @@ int main() {
             }
         }
 
-        // Launch main compute request (non-head)
-        if (!comp_busy && compute_start) {
-            comp_busy  = true;
-            comp_timer = COMP_LAT - 1;
-            if (decode_op(compute_op) == CMP_CONCAT) seen_concat = true;
-        }
         if (stream_start) {
             stream_busy = true;
         }
@@ -857,7 +1381,7 @@ int main() {
         if (!seen_stream_out) std::fprintf(stderr, "ERROR: STREAM_OUT state never reached\n");
         if (idle_after_stream < 4) std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after STREAM_OUT\n");
         if (!seen_attn)       std::fprintf(stderr, "ERROR: ATT_SCORES compute op never issued\n");
-        if (!seen_concat)     std::fprintf(stderr, "ERROR: CONCAT compute op never issued\n");
+        if (!seen_concat)     std::fprintf(stderr, "ERROR: CONCAT DMA request never issued\n");
         return 1;
     }
     

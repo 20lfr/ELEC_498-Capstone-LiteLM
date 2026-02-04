@@ -86,6 +86,9 @@ static inline ComputeOp decode_op(uint32_t packed_op) {
     return static_cast<ComputeOp>(packed_op & 0xFFu);
 }
 
+static inline DmaSel decode_wl_sel(uint32_t instr) {
+    return static_cast<DmaSel>(instr & 0xFFu);
+}
 static const char *dma_name(DmaSel sel) {
     switch (sel) {
     case DMASEL_NONE:   return "-";
@@ -100,6 +103,7 @@ static const char *dma_name(DmaSel sel) {
     case DMASEL_W1:     return "W1";
     case DMASEL_W2:     return "W2";
     case DMASEL_WLOGIT: return "WLOGIT";
+    case DMASEL_CONCAT: return "CONCAT";
     default:            return "UNK";
     }
 }
@@ -381,7 +385,7 @@ int main() {
                           dash_or(head_ctx_ref[i].compute_done),
                           op_name(decode_op(head_ctx_ref[i].compute_op)),
                           dash_or(head_ctx_ref[i].wl_ready),
-                          dma_name(head_ctx_ref[i].wl_addr_sel),
+                          dma_name(decode_wl_sel(head_ctx_ref[i].wl_instruction)),
                           dash_or(head_ctx_ref[i].q_dma_done),
                           dash_or(head_ctx_ref[i].dma_done));
             std::printf("%-54s", buf);

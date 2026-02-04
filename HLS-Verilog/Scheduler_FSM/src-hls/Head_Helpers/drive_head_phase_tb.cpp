@@ -55,9 +55,14 @@ static const char* dma_str(DmaSel sel) {
         case DMASEL_W1: return "W1";
         case DMASEL_W2: return "W2";
         case DMASEL_WLOGIT: return "WL";
+        case DMASEL_CONCAT: return "CONCAT";
         case DMASEL_NONE:
         default: return "-";
     }
+}
+
+static inline DmaSel decode_wl_sel(uint32_t instr) {
+    return static_cast<DmaSel>(instr & 0xFFu);
 }
 
 int main() {
@@ -123,7 +128,7 @@ int main() {
             group_ctx[lane].wl_ready      = (dma_ctr[h] == 0);
             group_ctx[lane].dma_done      = (dma_ctr[h] == 1);
             group_ctx[lane].wl_start      = false; // clear outputs before evaluation
-            group_ctx[lane].wl_addr_sel   = DmaSel::DMASEL_NONE;
+            group_ctx[lane].wl_instruction = 0;
         }
         for (int lane = 0; lane < PAR; ++lane) {
             const int h = group_base + lane;
@@ -169,7 +174,7 @@ int main() {
                       << "|" << std::setw(4) << op_str(head_ctx[h].compute_op)
                       << "|" << std::setw(4) << (head_ctx[h].wl_ready ? "1" : "-")
                       << "|" << std::setw(4) << (head_ctx[h].wl_start ? "1" : "-")
-                      << "|" << std::setw(6) << dma_str(head_ctx[h].wl_addr_sel)
+                      << "|" << std::setw(6) << dma_str(decode_wl_sel(head_ctx[h].wl_instruction))
                       << "|" << std::setw(4) << (head_ctx[h].dma_done ? "1" : "-")
                       << "  ";
         }

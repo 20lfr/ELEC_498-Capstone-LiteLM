@@ -24,7 +24,7 @@
 //   9) z_i       = gamma_i * y_hat[i]
 //  10) o_i       = z_i + beta_i
 // Output: o_i
-static inline uint32_t pack_compute_op(ComputeOp op, int layer, int head, int tile) {
+static inline uint32_t pack_compute_instruction(ComputeOp op, int layer, int head, int tile) {
 #pragma HLS INLINE
   const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
   const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
@@ -32,6 +32,17 @@ static inline uint32_t pack_compute_op(ComputeOp op, int layer, int head, int ti
   const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
   return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
+
+static inline uint32_t pack_dma_op(DmaSel op, int layer, int head, int tile) {
+#pragma HLS INLINE
+  const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
+  const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
+  const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
+  const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
+  return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
+}
+
+
 
 void scheduler_hls(
     // ------------------------------------------------------------
@@ -51,18 +62,9 @@ void scheduler_hls(
     // Memory Management System (WEIGHT LOADER via DMA)
     // ------------------------------------------------------------
     bool      dma_done,        // [INPUT]  DMA transfer completed (single-cycle pulse)
-
-<<<<<<< HEAD
-    bool    wl_ready,         // [INPUT]  Weight loader ready for a new request
-    bool    &wl_start,        // [OUTPUT] Start weight load DMA
-    DmaSel  &wl_addr_sel,     // [OUTPUT] Select which matrix/tile (Q, K, V, K cache, V cache, WO, W1...)
-    int     &wl_layer,        // [OUTPUT] Layer index for DMA
-    int     &wl_head,         // [OUTPUT] Head index for DMA (or -1 for non-head ops)
-    int     &wl_tile,         // [OUTPUT] Tile index for large matrices
-=======
+    bool      wl_ready,         // [INPUT]  Weight loader ready for a new request
     uint32_t  &wl_instruction,
     bool      &wl_start,        // [OUTPUT] Start weight load DMA
->>>>>>> dda14f91 (Subject: Updating main for everyone)
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)`
@@ -71,7 +73,7 @@ void scheduler_hls(
     bool compute_done,   // [INPUT]  Compute operation finished (one-shot)
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]  Per-head context (in/out)
     bool &compute_start, // [OUTPUT] Trigger compute engine
-    uint32_t &compute_op,     // [OUTPUT] Packed op|layer|head|tile for compute
+    uint32_t &compute_instruction,     // [OUTPUT] Packed op|layer|head|tile for compute
     // ------------------------------------------------------------
     // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
     // ------------------------------------------------------------
@@ -107,8 +109,8 @@ void scheduler_hls(
 #pragma HLS reset variable = attn_done
   static bool attn_compute_done;
 #pragma HLS reset variable = attn_compute_done
-  static bool concat_compute_done;
-#pragma HLS reset variable = concat_compute_done
+  static bool concat_dma_done;
+#pragma HLS reset variable = concat_dma_done
   static bool outproj_compute_done;
 #pragma HLS reset variable = outproj_compute_done
   static bool resid0_compute_done;
@@ -252,7 +254,7 @@ void scheduler_hls(
 
 
     // Head concat
-    concat_compute_done = false;
+    concat_dma_done = false;
     concat_started = false;
 
     // Output projection
@@ -299,14 +301,11 @@ void scheduler_hls(
 
     // Compute params
     compute_start = false;
-    compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, -1, -1);
+    compute_instruction= pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
 
     // Weight Stager and Loader params
+    wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
     wl_start = false;
-    wl_addr_sel = DmaSel::DMASEL_NONE;
-    wl_head = 0;
-    wl_tile = 0;
-    wl_layer = 0;
     done = false;
     error = false;
   }
@@ -315,17 +314,13 @@ void scheduler_hls(
   status_mem.layer_index = layer_idx;
   axis_in_ready = 0;
   if (!wl_ready && wl_start){
-        wl_start      = false;
-        wl_addr_sel   = DmaSel::DMASEL_NONE;
-        wl_head = 0;
-        wl_tile = 0;
+        wl_start = false;
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
   }
-  wl_layer = layer_idx;
   // wl_start = 0;
-  // wl_addr_sel = DmaSel::DMASEL_NONE;
   if (!compute_ready && compute_start){
       compute_start = false;
-      compute_op    = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, -1, -1);
+      compute_instruction   = pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
   }
   stream_start = 0;
   done = 0;
@@ -357,15 +352,16 @@ void scheduler_hls(
       if (ffn_stage == FfnStage::W1)      w1_dma_done = true;
       else if (ffn_stage == FfnStage::W2) w2_dma_done = true;
     }
+    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = true;
   } else {
     if (outproj_started && !wo_dma_busy) wo_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
+    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = false;
   }
 
   if (compute_done && !compute_start) {
     if (st == S_ATTENTION_HEADS && attn_started)  attn_compute_done = true;
-    if (st == S_HEAD_CONCAT && concat_started)    concat_compute_done = true;
     if (st == S_OUT_PROJECTION && outproj_started) outproj_compute_done = true;
     if (st == S_REQUANT1 && requant1_started)     requant1_compute_done = true;
     if (st == S_RES_ADD_1 && resid0_started)      resid0_compute_done = true;
@@ -409,7 +405,7 @@ void scheduler_hls(
 
         // Head concat
         concat_started = false;
-        concat_compute_done = false;
+        concat_dma_done = false;
 
         // Output projection
         outproj_started = false;
@@ -449,21 +445,15 @@ void scheduler_hls(
 
         // Weight Stager and Loader params
         wl_start = false;
-        wl_addr_sel = DmaSel::DMASEL_NONE;
-        wl_head = 0;
-        wl_tile = 0;
-        wl_layer = 0;
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
 
         // Compute params
         compute_start = false;
-        compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
 
         // Weight Stager and Loader params
         wl_start = false;
-        wl_addr_sel = DmaSel::DMASEL_NONE;
-        wl_head = 0;
-        wl_tile = 0;
-        wl_layer = 0;
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
 
         done = false;
         error = false;
@@ -506,7 +496,7 @@ void scheduler_hls(
 
       // Head concat
       concat_started = false;
-      concat_compute_done = false;
+      concat_dma_done = false;
 
       // Output projection
       outproj_started = false;
@@ -547,10 +537,7 @@ void scheduler_hls(
 
       // Weight Stager and Loader params
       wl_start = false;
-      wl_addr_sel = DmaSel::DMASEL_NONE;
-      wl_head = 0;
-      wl_tile = 0;
-      wl_layer = 0;
+      wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
       done = false;
       st = S_LAYER_NORM_0;
 
@@ -559,7 +546,7 @@ void scheduler_hls(
       if (!ln0_started && compute_ready) {
         ln0_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_LN0, layer_idx, -1, -1);
+        compute_instruction = pack_compute_instruction(CMP_LN0, layer_idx, -1, -1);
         ln0_started = true;
       } else if (ln0_started && ln0_compute_done) {
         ln0_started = false;
@@ -572,7 +559,7 @@ void scheduler_hls(
       if (!requant1_started && compute_ready) {
         requant1_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT1, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_REQUANT1, layer_idx, -1, -1);
         requant1_started = true;
       } else if (requant1_started && requant1_compute_done) {
         requant1_started = false;
@@ -639,18 +626,18 @@ void scheduler_hls(
       break;
     }
     case S_HEAD_CONCAT: {
-      if (!concat_started && compute_ready) {
-        concat_compute_done = false;
-        compute_start = 1;
-        compute_op = pack_compute_op(CMP_CONCAT, layer_idx, -1, -1);
+      if (!concat_started && wl_ready) {
+        concat_dma_done = false;
+        wl_start = 1;
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_CONCAT, layer_idx, -1, -1);
         concat_started = true;
-      } else if (concat_started && concat_compute_done) {
+      } else if (concat_started && concat_dma_done) {
         concat_started = false;
-        concat_compute_done = false;
+        concat_dma_done = false;
         st = S_OUT_PROJECTION;
       }
-      break; 
-    } 
+      break;
+    }
     case S_OUT_PROJECTION: {
       if (wo_tile >= NUM_WO_TILES) {
         resid0_started = false;
@@ -660,9 +647,8 @@ void scheduler_hls(
 
       if (!outproj_started && wl_ready) {
         wl_start = 1;
-        wl_addr_sel = DmaSel::DMASEL_WO;
-        wl_head = -1;
-        wl_tile = wo_tile;
+
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_WO, layer_idx, -1, wo_tile);
         wo_dma_busy = true;
         outproj_started = true;
       } else if (outproj_started && wo_dma_busy && wo_dma_done) {
@@ -672,7 +658,7 @@ void scheduler_hls(
       } else if (outproj_started && wo_comp_busy && compute_ready) {
         outproj_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_OUT_PROJ, layer_idx, -1, wo_tile);
+        compute_instruction= pack_compute_instruction(CMP_OUT_PROJ, layer_idx, -1, wo_tile);
         wo_comp_busy = false;
       } else if (outproj_started && !wo_dma_busy && !wo_comp_busy &&
                 outproj_compute_done) {
@@ -686,7 +672,7 @@ void scheduler_hls(
       if (!requant2_started && compute_ready) {
         requant2_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT2, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_REQUANT2, layer_idx, -1, -1);
         requant2_started = true;
       } else if (requant2_started && requant2_compute_done) {
         requant2_started = false;
@@ -699,7 +685,7 @@ void scheduler_hls(
       if (!resid0_started && compute_ready) {
         resid0_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_RESID0, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_RESID0, layer_idx, -1, -1);
         resid0_started = true;
       } else if (resid0_started && resid0_compute_done) {
         resid0_started = false;
@@ -712,7 +698,7 @@ void scheduler_hls(
       if (!ln1_started && compute_ready) {
         ln1_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_LN1, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_LN1, layer_idx, -1, -1);
         ln1_started = true;
       } else if (ln1_started && ln1_compute_done) {
         ln1_started = false;
@@ -725,7 +711,7 @@ void scheduler_hls(
       if (!requant3_started && compute_ready) {
         requant3_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT3, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_REQUANT3, layer_idx, -1, -1);
         requant3_started = true;
       } else if (requant3_started && requant3_compute_done) {
         requant3_started = false;
@@ -746,9 +732,7 @@ void scheduler_hls(
 
           if (!ffn_started && wl_ready) {
             wl_start = 1;
-            wl_addr_sel = DmaSel::DMASEL_W1;
-            wl_head = -1;
-            wl_tile = w1_tile;
+            wl_instruction = pack_dma_op(DmaSel::DMASEL_W1, layer_idx, -1, w1_tile);
             w1_dma_busy = true;
             ffn_started = true;
           } else if (ffn_started && w1_dma_busy && (dma_done || w1_dma_done)) {
@@ -758,7 +742,7 @@ void scheduler_hls(
           } else if (ffn_started && w1_comp_busy && compute_ready) {
             ffn_w1_compute_done = false;
             compute_start = 1;
-            compute_op = pack_compute_op(CMP_FFN_W1, layer_idx, -1, w1_tile);
+            compute_instruction= pack_compute_instruction(CMP_FFN_W1, layer_idx, -1, w1_tile);
             w1_comp_busy = false;
           } else if (ffn_started && !w1_dma_busy && !w1_comp_busy &&
                     ffn_w1_compute_done) {
@@ -772,7 +756,7 @@ void scheduler_hls(
           if (!ffn_started && compute_ready) {
             ffn_act_compute_done = false;
             compute_start = 1;
-            compute_op = pack_compute_op(CMP_FFN_ACT, layer_idx, -1, -1);
+            compute_instruction= pack_compute_instruction(CMP_FFN_ACT, layer_idx, -1, -1);
             ffn_started = true;
           } else if (ffn_started && ffn_act_compute_done) {
             ffn_started = false;
@@ -791,9 +775,7 @@ void scheduler_hls(
 
           if (!ffn_started && wl_ready) {
             wl_start = 1;
-            wl_addr_sel = DmaSel::DMASEL_W2;
-            wl_head = -1;
-            wl_tile = w2_tile;
+            wl_instruction = pack_dma_op(DmaSel::DMASEL_W2, layer_idx, -1, w2_tile);
             w2_dma_busy = true;
             ffn_started = true;
           } else if (ffn_started && w2_dma_busy && (dma_done || w2_dma_done)) {
@@ -803,7 +785,7 @@ void scheduler_hls(
           } else if (ffn_started && w2_comp_busy && compute_ready) {
             ffn_w2_compute_done = false;
             compute_start = 1;
-            compute_op = pack_compute_op(CMP_FFN_W2, layer_idx, -1, w2_tile);
+            compute_instruction= pack_compute_instruction(CMP_FFN_W2, layer_idx, -1, w2_tile);
             w2_comp_busy = false;
           } else if (ffn_started && !w2_dma_busy && !w2_comp_busy &&
                     ffn_w2_compute_done) {
@@ -820,7 +802,7 @@ void scheduler_hls(
       if (!requant4_started && compute_ready) {
         requant4_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_REQUANT4, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_REQUANT4, layer_idx, -1, -1);
         requant4_started = true;
       } else if (requant4_started && requant4_compute_done) {
         requant4_started = false;
@@ -833,7 +815,7 @@ void scheduler_hls(
       if (!resid1_started && compute_ready) {
         resid1_compute_done = false;
         compute_start = 1;
-        compute_op = pack_compute_op(CMP_RESID1, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_RESID1, layer_idx, -1, -1);
         resid1_started = true;
       } else if (resid1_started && resid1_compute_done) {
         resid1_started = false;
@@ -859,7 +841,7 @@ void scheduler_hls(
         final_norm_compute_done = false;
         compute_start = 1;
         // Reuse LN1 opcode for the terminal norm.
-        compute_op = pack_compute_op(CMP_LN1, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_FINAL_NORM, layer_idx, -1, -1);
         final_norm_started = true;
       } else if (final_norm_started && final_norm_compute_done) {
         final_norm_started = false;
