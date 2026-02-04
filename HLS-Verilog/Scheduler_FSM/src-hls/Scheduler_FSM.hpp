@@ -11,6 +11,7 @@ constexpr int NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLE
 // ------------------------------------------------------------
 void scheduler_hls(
     ControlMemSpace ctrl_mem,
+    StatusMemSpace &status_mem,
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,

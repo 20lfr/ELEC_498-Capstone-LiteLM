@@ -1,8 +1,0 @@
-obj/Scheduler_FSM.o: \
-  ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp \
-  ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp \
-  ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp \
-  ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/../../../top_params.hpp \
-  ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/../../top_params.hpp \
-  ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/../../Weight_Loader-Stager/Weight_stager.hpp \
-  ../../../../../../../../HLS-Verilog/Scheduler_FSM/src-hls/../../Weight_Loader-Stager/../top_params.hpp

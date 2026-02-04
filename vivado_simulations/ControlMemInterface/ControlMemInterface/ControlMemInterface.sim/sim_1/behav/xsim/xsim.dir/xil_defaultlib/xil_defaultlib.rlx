@@ -1,7 +1,0 @@
-0.7
-2020.2
-May 21 2025
-22:59:56
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/Verilog/ControlMemInterface.v,1764629255,verilog,,,,ControlMemInterface,,uvm,../../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef,,,,,
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/Verilog/ControlMemInterface_tb.sv,1764629850,systemVerilog,,,,ControlMemInterface_tb,,uvm,../../../../../../../../../../../tools/Xilinx/2025.1/data/rsb/busdef,,,,,
-/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vivado_simulations/ControlMemInterface/ControlMemInterface/ControlMemInterface.sim/sim_1/behav/xsim/glbl.v,1741209010,verilog,,,,glbl,,uvm,,,,,,

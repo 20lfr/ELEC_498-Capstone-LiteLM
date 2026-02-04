@@ -1,3 +1,0 @@
-Time resolution is 1 ps
-ControlMemInterface_tb (SV) : all checks passed
-$finish called at time : 15 ns : File "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/Verilog/ControlMemInterface_tb.sv" Line 211

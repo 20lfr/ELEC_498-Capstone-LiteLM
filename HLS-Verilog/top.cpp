@@ -1,5 +1,4 @@
 #include "top.hpp"
-
 // Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
 void transformer_top(
     // ------------------------------------------------------------
@@ -42,13 +41,8 @@ void transformer_top(
     // ------------------------------------------------------------
     // AXI4-LITE INTERFACING (PL <-> PS)
     // ------------------------------------------------------------
-    ControlReg ctrl_addr,      // [INPUT]  AXI-lite address
-    uint32_t   ctrl_data_in,   // [INPUT]  AXI-lite write data
-    uint32_t   &ctrl_data_out, // [OUTPUT] AXI-lite read data
-    bool       ctrl_read_en,   // [INPUT]  AXI-lite read strobe
-    bool       ctrl_write_en,  // [INPUT]  AXI-lite write strobe
-    bool       ctrl_chip_en,   // [INPUT]  AXI-lite chip enable
-    bool       ctrl_resetn_in, // [INPUT]  AXI-lite active-low reset <- for clearing control mem ONLY
+    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
+    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
 
     // ------------------------------------------------------------
     // INTERUPT INTERFACING (PL → PS)
@@ -62,7 +56,7 @@ void transformer_top(
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
-    uint32_t &irq_enable_reg,
+    uint32_t &irq_mask_reg,
     uint32_t &wq_base_addr,
     uint32_t &wk_base_addr,
     uint32_t &wv_base_addr,
@@ -96,10 +90,17 @@ void transformer_top(
     bool &dbg_error
 ) {
 #pragma HLS INLINE off   
+#pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
+#pragma HLS INTERFACE s_axilite port=status_mem bundle=control
+#pragma HLS INTERFACE s_axilite port=return bundle=control
+#pragma HLS INTERFACE ap_none port=irq_ps
 
     bool done               = false;    // Scheduler done flag
     bool error              = false;    // Scheduler error flag
-    static ControlMemSpace ctrl_mem; 
+    static ControlMemInterface ctrl_mem_interface;
+    ctrl_mem_interface.update_inputs(ctrl_mem);
+    StatusMemSpace &active_status_mem = ctrl_mem_interface.get_mutable_status();
+
     static bool     compute_ready = false;
     static bool     compute_done = false;
     static bool     compute_start = false;
@@ -108,8 +109,8 @@ void transformer_top(
     dbg_ctrl_mem = ctrl_mem;
     dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);
     control_reg   = ctrl_mem.control;
-    irq_status_reg   = ctrl_mem.irq_status;
-    irq_enable_reg   = ctrl_mem.irq_enable;
+    irq_status_reg   = active_status_mem.irq_status;
+    irq_mask_reg   = ctrl_mem.irq_mask;
     wq_base_addr   = ctrl_mem.wq_base_addr;
     wk_base_addr   = ctrl_mem.wk_base_addr;
     wv_base_addr   = ctrl_mem.wv_base_addr;
@@ -134,23 +135,10 @@ void transformer_top(
         compute_instruction = 0;
     }
 
-
-    // Control Memory Address Space~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ControlMemInterface(
-        ctrl_mem,       // AXI-Lite mapped control memory
-        ctrl_addr,      // byte address for control/IRQ registers
-        ctrl_data_in,   // data from PS-side writes
-        ctrl_data_out,  // data returned on PS-side reads
-        ctrl_read_en,   // read strobe
-        ctrl_write_en,  // write strobe
-        ctrl_chip_en,   // chip enable gate
-        ctrl_resetn_in  // active-low reset
-    );
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
     scheduler_hls(
         ctrl_mem,
+        active_status_mem,
         axis_in_valid,
         axis_in_last,
         axis_in_ready,
@@ -170,8 +158,6 @@ void transformer_top(
         error,
         dbg_state
     );
-
-    
 
     compute_controller(
         ctrl_mem,               
@@ -199,13 +185,17 @@ void transformer_top(
         dbg_mac_complete,
         error               
     );
-    
 
-    // IRQ WIZARD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    irq_ps = irq_wizard(ctrl_mem, done, error);
+    // IRQ COMPUTATION (integrated into ControlMemInterface)
+    irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask, done, error);
     dbg_done = done;
     dbg_error = error;
 
+    // Update status memory
+    status_mem = active_status_mem;
+
+    // Temporary Debug outputs
+    dbg_ctrl_mem = ctrl_mem;
     dbg_compute_start = compute_start;
     dbg_compute_instruction = compute_instruction;
     dbg_compute_ready = compute_ready;

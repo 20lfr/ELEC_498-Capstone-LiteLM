@@ -1,2 +1,0 @@
-run_single_head
-scheduler_hls

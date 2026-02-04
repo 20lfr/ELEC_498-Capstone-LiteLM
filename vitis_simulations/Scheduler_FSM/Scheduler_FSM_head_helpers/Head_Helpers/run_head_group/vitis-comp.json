@@ -1,9 +1,0 @@
-{
-  "name": "run_head_group",
-  "type": "HLS",
-  "configuration": {
-    "componentType": "HLS",
-    "configFiles": ["..\/hls_config.cfg"],
-    "work_dir": "."
-  }
-}

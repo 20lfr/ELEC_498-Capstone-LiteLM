@@ -3,9 +3,9 @@
 #include "top_params.hpp"
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
-#include "IRQ_Wizard/IRQ_Wizard.hpp"
-#include "Transformer_logic/src-hls/compute_controller.hpp"
+// IRQ_Wizard functionality now integrated into ControlMemInterface
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
+#include "Transformer_logic/src-hls/compute_controller.hpp"
 
 
 // Top-level wrapper prototype
@@ -30,21 +30,16 @@ void transformer_top(
     bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
     bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
     bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
-    ControlReg ctrl_addr,               // [INPUT]  AXI-lite address
-    uint32_t   ctrl_data_in,            // [INPUT]  AXI-lite write data
-    uint32_t   &ctrl_data_out,          // [OUTPUT] AXI-lite read data
-    bool       ctrl_read_en,            // [INPUT]  AXI-lite read strobe
-    bool       ctrl_write_en,           // [INPUT]  AXI-lite write strobe
-    bool       ctrl_chip_en,            // [INPUT]  AXI-lite chip enable
-    bool       ctrl_resetn_in,          // [INPUT]  AXI-lite active-low reset <- for clearing control mem ONLY
-    bool        &irq_ps,
+    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
+    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
+    bool &irq_ps,                       // [OUTPUT] Interrupt signal
 
     // Debug (scheduler)
     SchedState  &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
-    uint32_t &irq_enable_reg,
+    uint32_t &irq_mask_reg,
     uint32_t &wq_base_addr,
     uint32_t &wk_base_addr,
     uint32_t &wv_base_addr,
