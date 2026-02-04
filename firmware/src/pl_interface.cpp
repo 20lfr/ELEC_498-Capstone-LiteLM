@@ -143,23 +143,27 @@ bool PLInterface::reset() {
     writeReg(PLReg::CONTROL, 0);  // Assert reset
     usleep(1000);
     writeReg(PLReg::CONTROL, CTRL_RESETN_BIT);  // Release reset
-    writeReg(PLReg::IRQ_MASK, 0);  // Disable IRQs
-    writeReg(PLReg::IRQ_CLEAR, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);  // Clear pending
-    usleep(100);
-    writeReg(PLReg::IRQ_CLEAR, 0);
+    
+    // irq_clear = !irq_enable_mask: disable IRQs, set clear high
+    writeReg(PLReg::IRQ_ENABLE_MASK, 0);
+    writeReg(PLReg::IRQ_CLEAR, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);
     usleep(1000);
     return true;
 }
 
 void PLInterface::beginConfig() {
-    writeReg(PLReg::IRQ_MASK, 0);
-    writeReg(PLReg::IRQ_CLEAR, 0xFFFFFFFF);  // Hold clear during config
+    // irq_clear = !irq_enable_mask during config writes
+    // Disable interrupts AND set clear high for defense-in-depth
+    writeReg(PLReg::IRQ_ENABLE_MASK, 0);                              // Disable IRQs
+    writeReg(PLReg::IRQ_CLEAR, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);   // Set clear high
 }
 
 void PLInterface::endConfig() {
-    writeReg(PLReg::IRQ_CLEAR, 0);  // Release clear
+    // irq_clear = !irq_enable_mask after config
+    // Enable interrupts AND clear the clear bit
+    writeReg(PLReg::IRQ_CLEAR, 0);                                    // Clear low
     usleep(100);
-    writeReg(PLReg::IRQ_MASK, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);  // Enable IRQs
+    writeReg(PLReg::IRQ_ENABLE_MASK, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);  // Enable IRQs
     usleep(100);
     
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {

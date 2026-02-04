@@ -25,8 +25,16 @@ namespace PLReg {
     
     // ControlMemSpace (PS->PL writes)
     constexpr uint32_t CONTROL         = CTRL_BASE + 0x00;
-    constexpr uint32_t IRQ_MASK        = CTRL_BASE + 0x04;
+    
+    // IRQ enable mask - write (IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT) to enable, 0 to disable
+    // Maps to: ctrl_mem.irq_enable_mask
+    constexpr uint32_t IRQ_ENABLE_MASK = CTRL_BASE + 0x04;
+    
+    // IRQ clear - write-1-to-clear
+    // Rule: irq_clear = !irq_enable_mask during config (both for defense-in-depth)
+    // Maps to: ctrl_mem.irq_clear
     constexpr uint32_t IRQ_CLEAR       = CTRL_BASE + 0x08;
+    
     constexpr uint32_t DMA_LAYER_LEN   = CTRL_BASE + 0x0C;
     constexpr uint32_t DMA_HEAD_LEN    = CTRL_BASE + 0x10;
     constexpr uint32_t DMA_TILE_LEN    = CTRL_BASE + 0x14;
