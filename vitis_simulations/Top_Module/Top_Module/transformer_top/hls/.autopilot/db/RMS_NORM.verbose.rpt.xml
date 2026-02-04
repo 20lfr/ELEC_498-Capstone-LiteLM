@@ -1,0 +1,217 @@
+<profile>
+
+<section name = "Vitis HLS Report for 'RMS_NORM'" level="0">
+<item name = "Date">Tue Feb  3 19:41:36 2026
+</item>
+<item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
+<item name = "Project">transformer_top</item>
+<item name = "Solution">hls (Vivado IP Flow Target)</item>
+<item name = "Product family">zynquplus</item>
+<item name = "Target device">xck26-sfvc784-2LV-c</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00 ns, 7.145 ns, 2.70 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">61, 61, 0.610 us, 0.610 us, 61, 61, no</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+<column name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140">RMS_NORM_Pipeline_VITIS_LOOP_123_1, 20, 20, 0.200 us, 0.200 us, 17, 17, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_sqrt_fixed_32_19_s_fu_161">sqrt_fixed_32_19_s, 5, 5, 50.000 ns, 50.000 ns, 1, 1, yes</column>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="DSP">-, -, -, -, -</column>
+<column name="Expression">-, -, 0, 66, -</column>
+<column name="FIFO">-, -, -, -, -</column>
+<column name="Instance">-, 97, 1286, 5965, -</column>
+<column name="Memory">-, -, -, -, -</column>
+<column name="Multiplexer">-, -, 0, 196, -</column>
+<column name="Register">-, -, 135, -, -</column>
+<specialColumn name="Available">288, 1248, 234240, 117120, 64</specialColumn>
+<specialColumn name="Utilization (%)">0, 7, ~0, 5, 0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140">RMS_NORM_Pipeline_VITIS_LOOP_123_1, 0, 1, 34, 146, 0</column>
+<column name="mul_27ns_21s_45_1_1_U302">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U303">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U304">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U305">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U306">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U307">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U308">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U309">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U310">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U311">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U312">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U313">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U314">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U315">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U316">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U317">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_32s_32s_45_1_1_U318">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U319">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U320">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U321">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U322">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U323">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U324">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U325">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U326">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U327">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U328">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U329">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U330">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U331">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U332">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U333">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="grp_sqrt_fixed_32_19_s_fu_161">sqrt_fixed_32_19_s, 0, 0, 918, 4667, 0</column>
+<column name="udiv_27s_23ns_27_31_seq_1_U334">udiv_27s_23ns_27_31_seq_1, 0, 0, 334, 192, 0</column>
+</table>
+</item>
+<item name = "DSP"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="10">Memory, Module, BRAM_18K, FF, LUT, URAM, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="8">Name, BRAM_18K, FF, LUT, URAM, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="v_fu_417_p2">+, 0, 0, 39, 32, 32</column>
+<column name="mean_square_fu_397_p3">select, 0, 0, 27, 1, 1</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="ap_NS_fsm">196, 43, 1, 43</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="ap_CS_fsm">42, 0, 42, 0</column>
+<column name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_ap_start_reg">1, 0, 1, 0</column>
+<column name="sext_ln_reg_1470">23, 0, 23, 0</column>
+<column name="square_loc_fu_130">19, 0, 19, 0</column>
+<column name="udiv_ln132_reg_1480">27, 0, 27, 0</column>
+<column name="v_reg_1465">23, 0, 32, 9</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="epsilon">in, 19, ap_none, epsilon, scalar</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30">in, 8, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41">in, 8, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_40">in, 8, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_40, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_39">in, 8, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_39, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38">in, 8, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37">in, 8, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36">in, 8, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90">in, 19, ap_none, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11">in, 19, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_10">in, 19, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_10, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9">in, 19, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_8">in, 19, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_8, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_7">in, 19, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_7, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_6">in, 19, ap_none, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_6, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_19">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_19, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_19_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_19, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_18">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_18, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_18_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_18, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_17">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_17, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_17_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_17, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_16">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_16, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_16_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_16, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_15">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_15, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_15_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_15, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_14">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_14, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_14_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_14, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_13">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_13, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_13_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_13, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_12">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_12, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_12_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_12, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_11">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_11, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_11_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_11, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_10">out, 32, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_10, pointer</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_10_ap_vld">out, 1, ap_vld, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_10, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35">out, 32, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35_ap_vld">out, 1, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34">out, 32, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34_ap_vld">out, 1, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33">out, 32, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33_ap_vld">out, 1, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32">out, 32, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_ap_vld">out, 1, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31">out, 32, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_ap_vld">out, 1, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30">out, 32, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30, pointer</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_ap_vld">out, 1, ap_vld, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30, pointer</column>
+</table>
+</item>
+</section>
+</profile>

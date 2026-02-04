@@ -34,14 +34,8 @@ module transformer_top_tb;
   logic [0:0] wl_start_i;
   logic [0:0] wl_start_o;
   logic       wl_start_o_ap_vld;
-  logic [7:0] wl_addr_sel;
-  logic       wl_addr_sel_ap_vld;
-  logic [31:0] wl_layer;
-  logic       wl_layer_ap_vld;
-  logic [31:0] wl_head;
-  logic       wl_head_ap_vld;
-  logic [31:0] wl_tile;
-  logic       wl_tile_ap_vld;
+  logic [31:0] wl_instruction;
+  logic        wl_instruction_ap_vld;
   logic [0:0] compute_ready;
   logic [0:0] compute_done;
   logic [0:0] compute_start_i;
@@ -58,8 +52,8 @@ module transformer_top_tb;
   logic axis_in_ready_ap_vld;
   logic [0:0] compute_start_o;
   logic compute_start_o_ap_vld;
-  logic [31:0] compute_op;
-  logic compute_op_ap_vld;
+  logic [31:0] compute_instruction;
+  logic        compute_instruction_ap_vld;
   logic [0:0] stream_start;
   logic stream_start_ap_vld;
   logic ctrl_data_out_ap_vld;
@@ -176,7 +170,7 @@ module transformer_top_tb;
     logic        k_writeback_dma_done;
     logic        k_dma_done;
     logic        q_dma_done;
-    logic        requant2_compute_done;
+    logic        head_requant_compute_done;
     logic        att_value_compute_done;
     logic        softmax_compute_done;
     logic        val_scale_compute_done;
@@ -187,7 +181,7 @@ module transformer_top_tb;
     logic        k_requant_compute_done;
     logic        k_compute_done;
     logic        q_compute_done;
-    logic        requant2_started;
+    logic        head_requant_started;
     logic        att_value_started;
     logic        softmax_started;
     logic        val_scale_started;
@@ -202,9 +196,7 @@ module transformer_top_tb;
     logic        q_started;
     logic        start_head;
     logic        dma_done;
-    logic [31:0] wl_head;
-    logic [31:0] wl_layer;
-    logic [7:0]  wl_addr_sel;
+    logic [31:0] wl_instruction;
     logic        wl_start;
     logic        wl_ready;
     logic [7:0]  last_wl_addr;
@@ -328,11 +320,11 @@ module transformer_top_tb;
       if (compute_start_o && compute_start_o_ap_vld && !comp_busy) begin
         comp_busy <= 1'b1;
         // LayerNorm ops run shorter (6 cycles), others ~24 cycles
-        is_ln_op = (compute_op[7:0] >= CMP_LN0_SUM) && (compute_op[7:0] <= CMP_LN1_SHIFT);
+        is_ln_op = (compute_instruction[7:0] >= CMP_LN0_SUM) && (compute_instruction[7:0] <= CMP_LN1_SHIFT);
         comp_lat_var = is_ln_op ? 30 : 30;
         comp_timer <= (comp_lat_var > 0) ? comp_lat_var - 1 : 0;
-        if (compute_op[7:0] == CMP_ATT_SCORES) seen_attn <= 1'b1;
-        if (compute_op[7:0] == CMP_CONCAT)     seen_concat <= 1'b1;
+        if (compute_instruction[7:0] == CMP_ATT_SCORES) seen_attn <= 1'b1;
+        if (compute_instruction[7:0] == CMP_CONCAT)     seen_concat <= 1'b1;
       end
 
       compute_ready <= !comp_busy && !compute_done;
@@ -399,7 +391,7 @@ module transformer_top_tb;
           dma_done_ctr <= dma_done_ctr - 1;
         end
       end
-      if (wl_start_o && wl_start_o_ap_vld && !dma_busy) begin
+      if (wl_start_o && wl_start_o_ap_vld && wl_instruction_ap_vld && !dma_busy) begin
         dma_busy  <= 1'b1;
         dma_lat_var = rand_dma_lat();
         dma_timer <= (dma_lat_var > 0) ? dma_lat_var - 1 : 0;
@@ -536,9 +528,7 @@ module transformer_top_tb;
             compute_op: 32'd0,
             wl_ready: 1'b0,
             wl_start: 1'b0,
-            wl_addr_sel: 8'd0,
-            wl_layer: 32'd0,
-            wl_head: 32'(hh),
+            wl_instruction: 32'd0,
             dma_done: 1'b0,
             start_head: 1'b0,
             q_started: 1'b0,
@@ -553,7 +543,7 @@ module transformer_top_tb;
             v_requant_started: 1'b0,
             v_writeback_started: 1'b0,
             requant_q_started: 1'b0,
-            requant2_started: 1'b0,
+            head_requant_started: 1'b0,
             q_compute_done: 1'b0,
             k_compute_done: 1'b0,
             v_compute_done: 1'b0,
@@ -564,7 +554,7 @@ module transformer_top_tb;
             k_requant_compute_done: 1'b0,
             v_requant_compute_done: 1'b0,
             requant_q_compute_done: 1'b0,
-            requant2_compute_done: 1'b0,
+            head_requant_compute_done: 1'b0,
             q_dma_done: 1'b0,
             k_dma_done: 1'b0,
             k_writeback_dma_done: 1'b0,
@@ -851,7 +841,7 @@ module transformer_top_tb;
                compute_start_o ? "1" : "-",
                compute_ready ? "1" : "-",
                compute_done ? "1" : "-",
-               compute_op);
+               compute_instruction);
       
       // Track done signal
       // if (ap_done) begin
@@ -914,7 +904,7 @@ module transformer_top_tb;
       32'd6:  return "S_REQUANT1";
       32'd7:  return "S_RES_ADD_1";
       32'd8:  return "S_LN_1";
-      32'd9:  return "S_REQUANT2";
+      32'd9:  return "S_HEAD_RQ";
       32'd10: return "S_FFN";
       32'd11: return "S_REQUANT3";
       32'd12: return "S_RES_ADD_2";
@@ -939,8 +929,8 @@ module transformer_top_tb;
       8'd8:  return "VAL_SCL";
       8'd9:  return "SOFTMAX";
       8'd10: return "ATT_VAL";
-      8'd11: return "RQ2";
-      8'd12: return "HEAD_RQ";
+      8'd11: return "HEAD_RQ";
+      8'd12: return "RESV";
       8'd13: return "CONCAT";
       8'd14: return "OUT_PROJ";
       8'd15: return "RQ1";
@@ -996,14 +986,8 @@ module transformer_top_tb;
     .wl_start_i(wl_start_i),
     .wl_start_o(wl_start_o),
     .wl_start_o_ap_vld(wl_start_o_ap_vld),
-    .wl_addr_sel(wl_addr_sel),
-    .wl_addr_sel_ap_vld(wl_addr_sel_ap_vld),
-    .wl_layer(wl_layer),
-    .wl_layer_ap_vld(wl_layer_ap_vld),
-    .wl_head(wl_head),
-    .wl_head_ap_vld(wl_head_ap_vld),
-    .wl_tile(wl_tile),
-    .wl_tile_ap_vld(wl_tile_ap_vld),
+    .wl_instruction(wl_instruction),
+    .wl_instruction_ap_vld(wl_instruction_ap_vld),
     .compute_ready(compute_ready),
     .compute_done(compute_done),
     .head_ctx_ref_0_i(head_ctx_ref_0_i),
@@ -1021,8 +1005,8 @@ module transformer_top_tb;
     .compute_start_i(compute_start_i),
     .compute_start_o(compute_start_o),
     .compute_start_o_ap_vld(compute_start_o_ap_vld),
-    .compute_op(compute_op),
-    .compute_op_ap_vld(compute_op_ap_vld),
+    .compute_instruction(compute_instruction),
+    .compute_instruction_ap_vld(compute_instruction_ap_vld),
     .stream_ready(stream_ready),
     .stream_start(stream_start),
     .stream_start_ap_vld(stream_start_ap_vld),

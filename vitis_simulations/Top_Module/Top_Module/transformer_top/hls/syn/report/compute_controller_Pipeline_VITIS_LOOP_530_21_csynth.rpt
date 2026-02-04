@@ -1,0 +1,206 @@
+
+
+================================================================
+== Vitis HLS Report for 'compute_controller_Pipeline_VITIS_LOOP_530_21'
+================================================================
+* Date:           Tue Feb  3 19:41:37 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        transformer_top
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  1.664 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval |                    Pipeline                    |
+    |   min   |   max   |    min   |    max   | min | max |                      Type                      |
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+    |       18|       18|  0.180 us|  0.180 us|   17|   17|  loop auto-rewind stp (delay=0 clock cycles(s))|
+    +---------+---------+----------+----------+-----+-----+------------------------------------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                     |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |      Loop Name      |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_530_21  |       16|       16|         2|          1|          1|    16|       yes|
+        +---------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|      27|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|       -|       -|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|      36|    -|
+|Register         |        -|     -|      12|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     0|      12|      63|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|     0|      ~0|      ~0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +----------------------+----------+----+---+----+------------+------------+
+    |     Variable Name    | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +----------------------+----------+----+---+----+------------+------------+
+    |add_ln530_fu_173_p2   |         +|   0|  0|  12|           5|           1|
+    |icmp_ln530_fu_167_p2  |      icmp|   0|  0|  13|           5|           6|
+    |ap_enable_pp0         |       xor|   0|  0|   2|           1|           2|
+    +----------------------+----------+----+---+----+------------+------------+
+    |Total                 |          |   0|  0|  27|          11|           9|
+    +----------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------+----+-----------+-----+-----------+
+    |           Name          | LUT| Input Size| Bits| Total Bits|
+    +-------------------------+----+-----------+-----+-----------+
+    |ap_done_int              |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1  |   9|          2|    1|          2|
+    |ap_sig_allocacmp_i       |   9|          2|    5|         10|
+    |i_2_fu_130               |   9|          2|    5|         10|
+    +-------------------------+----+-----------+-----+-----------+
+    |Total                    |  36|          8|   12|         24|
+    +-------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------+---+----+-----+-----------+
+    |           Name          | FF| LUT| Bits| Const Bits|
+    +-------------------------+---+----+-----+-----------+
+    |ap_CS_fsm                |  1|   0|    1|          0|
+    |ap_done_reg              |  1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1  |  1|   0|    1|          0|
+    |i_2_fu_130               |  5|   0|    5|          0|
+    |trunc_ln530_reg_442      |  4|   0|    4|          0|
+    +-------------------------+---+----+-----+-----------+
+    |Total                    | 12|   0|   12|          0|
+    +-------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++---------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+|                                          RTL Ports                                          | Dir | Bits|  Protocol  |                                     Source Object                                    |    C Type    |
++---------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+|ap_clk                                                                                       |   in|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_530_21|  return value|
+|ap_rst                                                                                       |   in|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_530_21|  return value|
+|ap_start                                                                                     |   in|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_530_21|  return value|
+|ap_done                                                                                      |  out|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_530_21|  return value|
+|ap_idle                                                                                      |  out|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_530_21|  return value|
+|ap_ready                                                                                     |  out|    1|  ap_ctrl_hs|                                         compute_controller_Pipeline_VITIS_LOOP_530_21|  return value|
+|in_buf_address0                                                                              |  out|    8|   ap_memory|                                                                                in_buf|         array|
+|in_buf_ce0                                                                                   |  out|    1|   ap_memory|                                                                                in_buf|         array|
+|in_buf_q0                                                                                    |   in|    8|   ap_memory|                                                                                in_buf|         array|
+|in_buf_address1                                                                              |  out|    8|   ap_memory|                                                                                in_buf|         array|
+|in_buf_ce1                                                                                   |  out|    1|   ap_memory|                                                                                in_buf|         array|
+|in_buf_q1                                                                                    |   in|    8|   ap_memory|                                                                                in_buf|         array|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_74                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_74|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_74_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_74|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_73                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_73|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_73_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_73|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_72                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_72|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_72_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_72|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_71                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_71|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_71_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_71|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_70                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_70|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_70_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_70|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_69                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_69|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_69_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_69|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_68                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_68|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_68_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_68|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_67                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_67|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_67_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_67|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_66                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_66|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_66_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_66|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_65                  |  out|    8|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_65|       pointer|
+|compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_65_ap_vld           |  out|    1|      ap_vld|           compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_65|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41         |  out|    8|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41_ap_vld  |  out|    1|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_5          |  out|    8|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_5|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_5_ap_vld   |  out|    1|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_5|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_40         |  out|    8|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_40|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_40_ap_vld  |  out|    1|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_40|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_4          |  out|    8|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_4|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_4_ap_vld   |  out|    1|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_4|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_39         |  out|    8|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_39|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_39_ap_vld  |  out|    1|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_39|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_3          |  out|    8|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_3|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_3_ap_vld   |  out|    1|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_3|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38         |  out|    8|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38_ap_vld  |  out|    1|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_2          |  out|    8|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_2|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_2_ap_vld   |  out|    1|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_2|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37         |  out|    8|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37_ap_vld  |  out|    1|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_1          |  out|    8|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_1|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_1_ap_vld   |  out|    1|      ap_vld|   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_1|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36         |  out|    8|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_ap_vld  |  out|    1|      ap_vld|  p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R            |  out|    8|      ap_vld|     p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R|       pointer|
+|p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_ap_vld     |  out|    1|      ap_vld|     p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R|       pointer|
++---------------------------------------------------------------------------------------------+-----+-----+------------+--------------------------------------------------------------------------------------+--------------+
+

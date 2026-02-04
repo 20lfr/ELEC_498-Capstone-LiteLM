@@ -1,0 +1,104 @@
+set SynModuleInfo {
+  {SRCNAME scheduler_hls MODELNAME scheduler_hls RTLNAME transformer_top_scheduler_hls
+    SUBMODULES {
+      {MODELNAME transformer_top_sparsemux_7_2_1_1_1 RTLNAME transformer_top_sparsemux_7_2_1_1_1 BINDTYPE op TYPE sparsemux IMPL onehotencoding_realdef}
+      {MODELNAME transformer_top_sparsemux_7_2_214_1_1 RTLNAME transformer_top_sparsemux_7_2_214_1_1 BINDTYPE op TYPE sparsemux IMPL onehotencoding_realdef}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_654_36 MODELNAME compute_controller_Pipeline_VITIS_LOOP_654_36 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_654_36
+    SUBMODULES {
+      {MODELNAME transformer_top_flow_control_loop_pipe_sequential_init RTLNAME transformer_top_flow_control_loop_pipe_sequential_init BINDTYPE interface TYPE internal_upc_flow_control INSTNAME transformer_top_flow_control_loop_pipe_sequential_init_U}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39 MODELNAME compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39}
+  {SRCNAME read_i32 MODELNAME read_i32 RTLNAME transformer_top_read_i32}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_676_40 MODELNAME compute_controller_Pipeline_VITIS_LOOP_676_40 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_676_40}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_684_42 MODELNAME compute_controller_Pipeline_VITIS_LOOP_684_42 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_684_42}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_697_44 MODELNAME compute_controller_Pipeline_VITIS_LOOP_697_44 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_697_44
+    SUBMODULES {
+      {MODELNAME transformer_top_mul_32s_16s_48_1_1 RTLNAME transformer_top_mul_32s_16s_48_1_1 BINDTYPE op TYPE mul IMPL auto LATENCY 0 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_sparsemux_11_3_32_1_1 RTLNAME transformer_top_sparsemux_11_3_32_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+      {MODELNAME transformer_top_sparsemux_11_3_16_1_1 RTLNAME transformer_top_sparsemux_11_3_16_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_638_34 MODELNAME compute_controller_Pipeline_VITIS_LOOP_638_34 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_638_34}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_163_1 MODELNAME compute_controller_Pipeline_VITIS_LOOP_163_1 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_163_1
+    SUBMODULES {
+      {MODELNAME transformer_top_sparsemux_33_4_16_1_1 RTLNAME transformer_top_sparsemux_33_4_16_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_646_35 MODELNAME compute_controller_Pipeline_VITIS_LOOP_646_35 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_646_35
+    SUBMODULES {
+      {MODELNAME transformer_top_sparsemux_33_4_15_1_1 RTLNAME transformer_top_sparsemux_33_4_15_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_575_25 MODELNAME compute_controller_Pipeline_VITIS_LOOP_575_25 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_575_25}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_580_26 MODELNAME compute_controller_Pipeline_VITIS_LOOP_580_26 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_580_26}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28 MODELNAME compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_597_29 MODELNAME compute_controller_Pipeline_VITIS_LOOP_597_29 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_597_29}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_605_31 MODELNAME compute_controller_Pipeline_VITIS_LOOP_605_31 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_605_31}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_620_33 MODELNAME compute_controller_Pipeline_VITIS_LOOP_620_33 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_620_33
+    SUBMODULES {
+      {MODELNAME transformer_top_sparsemux_9_2_32_1_1 RTLNAME transformer_top_sparsemux_9_2_32_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+      {MODELNAME transformer_top_sparsemux_9_2_16_1_1 RTLNAME transformer_top_sparsemux_9_2_16_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_551_23 MODELNAME compute_controller_Pipeline_VITIS_LOOP_551_23 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_551_23}
+  {SRCNAME RMS_NORM_Pipeline_VITIS_LOOP_123_1 MODELNAME RMS_NORM_Pipeline_VITIS_LOOP_123_1 RTLNAME transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_123_1
+    SUBMODULES {
+      {MODELNAME transformer_top_sparsemux_33_4_8_1_1 RTLNAME transformer_top_sparsemux_33_4_8_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+      {MODELNAME transformer_top_mac_muladd_8s_8s_20s_20_4_1 RTLNAME transformer_top_mac_muladd_8s_8s_20s_20_4_1 BINDTYPE op TYPE all IMPL dsp_slice LATENCY 3}
+    }
+  }
+  {SRCNAME {sqrt_fixed<32, 19>} MODELNAME sqrt_fixed_32_19_s RTLNAME transformer_top_sqrt_fixed_32_19_s}
+  {SRCNAME RMS_NORM MODELNAME RMS_NORM RTLNAME transformer_top_RMS_NORM
+    SUBMODULES {
+      {MODELNAME transformer_top_mul_27ns_21s_45_1_1 RTLNAME transformer_top_mul_27ns_21s_45_1_1 BINDTYPE op TYPE mul IMPL auto LATENCY 0 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_mul_32s_32s_45_1_1 RTLNAME transformer_top_mul_32s_32s_45_1_1 BINDTYPE op TYPE mul IMPL auto LATENCY 0 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_udiv_27s_23ns_27_31_seq_1 RTLNAME transformer_top_udiv_27s_23ns_27_31_seq_1 BINDTYPE op TYPE udiv IMPL auto_seq LATENCY 30 ALLOW_PRAGMA 1}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_567_24 MODELNAME compute_controller_Pipeline_VITIS_LOOP_567_24 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_567_24
+    SUBMODULES {
+      {MODELNAME transformer_top_sparsemux_33_4_32_1_1 RTLNAME transformer_top_sparsemux_33_4_32_1_1 BINDTYPE op TYPE sparsemux IMPL compactencoding_dontcare}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_530_21 MODELNAME compute_controller_Pipeline_VITIS_LOOP_530_21 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_530_21}
+  {SRCNAME RES_ADD MODELNAME RES_ADD RTLNAME transformer_top_RES_ADD}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_541_22 MODELNAME compute_controller_Pipeline_VITIS_LOOP_541_22 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_541_22}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_506_19 MODELNAME compute_controller_Pipeline_VITIS_LOOP_506_19 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_506_19}
+  {SRCNAME REQUANT_D_MODEL_int32_to_int8 MODELNAME REQUANT_D_MODEL_int32_to_int8 RTLNAME transformer_top_REQUANT_D_MODEL_int32_to_int8
+    SUBMODULES {
+      {MODELNAME transformer_top_mul_32s_32s_64_1_1 RTLNAME transformer_top_mul_32s_32s_64_1_1 BINDTYPE op TYPE mul IMPL auto LATENCY 0 ALLOW_PRAGMA 1}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_521_20 MODELNAME compute_controller_Pipeline_VITIS_LOOP_521_20 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_521_20}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_456_12 MODELNAME compute_controller_Pipeline_VITIS_LOOP_456_12 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_456_12}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_461_13 MODELNAME compute_controller_Pipeline_VITIS_LOOP_461_13 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_461_13}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15 MODELNAME compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_478_16 MODELNAME compute_controller_Pipeline_VITIS_LOOP_478_16 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_478_16}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_493_18 MODELNAME compute_controller_Pipeline_VITIS_LOOP_493_18 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_493_18}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_42_2 MODELNAME compute_controller_Pipeline_VITIS_LOOP_42_2 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_42_2
+    SUBMODULES {
+      {MODELNAME transformer_top_mul_16s_4s_20_1_1 RTLNAME transformer_top_mul_16s_4s_20_1_1 BINDTYPE op TYPE mul IMPL auto LATENCY 0 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_mac_muladd_16s_4s_20s_21_4_1 RTLNAME transformer_top_mac_muladd_16s_4s_20s_21_4_1 BINDTYPE op TYPE all IMPL dsp_slice LATENCY 3}
+      {MODELNAME transformer_top_mac_muladd_16s_4s_21s_21_4_1 RTLNAME transformer_top_mac_muladd_16s_4s_21s_21_4_1 BINDTYPE op TYPE all IMPL dsp_slice LATENCY 3}
+      {MODELNAME transformer_top_mac_muladd_16s_4s_21s_32_4_1 RTLNAME transformer_top_mac_muladd_16s_4s_21s_32_4_1 BINDTYPE op TYPE all IMPL dsp_slice LATENCY 3}
+    }
+  }
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_42_21 MODELNAME compute_controller_Pipeline_VITIS_LOOP_42_21 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_42_21}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_42_22 MODELNAME compute_controller_Pipeline_VITIS_LOOP_42_22 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_42_22}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_42_23 MODELNAME compute_controller_Pipeline_VITIS_LOOP_42_23 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_42_23}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_42_24 MODELNAME compute_controller_Pipeline_VITIS_LOOP_42_24 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_42_24}
+  {SRCNAME compute_controller_Pipeline_VITIS_LOOP_398_11 MODELNAME compute_controller_Pipeline_VITIS_LOOP_398_11 RTLNAME transformer_top_compute_controller_Pipeline_VITIS_LOOP_398_11}
+  {SRCNAME compute_controller MODELNAME compute_controller RTLNAME transformer_top_compute_controller
+    SUBMODULES {
+      {MODELNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bkb RTLNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bkb BINDTYPE storage TYPE ram IMPL auto LATENCY 2 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_hbi RTLNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_hbi BINDTYPE storage TYPE ram IMPL auto LATENCY 2 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_rcU RTLNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_rcU BINDTYPE storage TYPE ram IMPL auto LATENCY 2 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Xh4 RTLNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Xh4 BINDTYPE storage TYPE ram IMPL auto LATENCY 2 ALLOW_PRAGMA 1}
+      {MODELNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_3i2 RTLNAME transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_3i2 BINDTYPE storage TYPE ram IMPL auto LATENCY 2 ALLOW_PRAGMA 1}
+    }
+  }
+  {SRCNAME transformer_top MODELNAME transformer_top RTLNAME transformer_top IS_TOP 1}
+}

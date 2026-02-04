@@ -1,0 +1,1150 @@
+
+
+================================================================
+== Vitis HLS Report for 'compute_controller'
+================================================================
+* Date:           Wed Jan 28 19:35:32 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  7.278 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max   | min | max |   Type  |
+    +---------+---------+-----------+----------+-----+-----+---------+
+    |        1|      233|  10.000 ns|  2.330 us|    2|  234|       no|
+    +---------+---------+-----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+        |                                                                             |                                                                 |  Latency (cycles) |   Latency (absolute)  |  Interval |                    Pipeline                    |
+        |                                   Instance                                  |                              Module                             |   min   |   max   |    min    |    max    | min | max |                      Type                      |
+        +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+        |grp_compute_controller_Pipeline_VITIS_LOOP_650_36_fu_2561                    |compute_controller_Pipeline_VITIS_LOOP_650_36                    |       24|       24|   0.240 us|   0.240 us|   23|   23|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_634_34_fu_2599                    |compute_controller_Pipeline_VITIS_LOOP_634_34                    |       24|       24|   0.240 us|   0.240 us|   23|   23|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_571_25_fu_2637                    |compute_controller_Pipeline_VITIS_LOOP_571_25                    |       18|       18|   0.180 us|   0.180 us|   17|   17|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_527_21_fu_2675                    |compute_controller_Pipeline_VITIS_LOOP_527_21                    |       18|       18|   0.180 us|   0.180 us|   17|   17|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_453_12_fu_2745                    |compute_controller_Pipeline_VITIS_LOOP_453_12                    |       18|       18|   0.180 us|   0.180 us|   17|   17|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39_fu_2783  |compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39  |      112|      112|   1.120 us|   1.120 us|  111|  111|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_672_40_fu_2821                    |compute_controller_Pipeline_VITIS_LOOP_672_40                    |       13|       13|   0.130 us|   0.130 us|   12|   12|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_680_42_fu_2837                    |compute_controller_Pipeline_VITIS_LOOP_680_42                    |        7|        7|  70.000 ns|  70.000 ns|    6|    6|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_693_44_fu_2861                    |compute_controller_Pipeline_VITIS_LOOP_693_44                    |       12|       12|   0.120 us|   0.120 us|   11|   11|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_2877                     |compute_controller_Pipeline_VITIS_LOOP_163_1                     |       24|       24|   0.240 us|   0.240 us|   23|   23|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_642_35_fu_2945                    |compute_controller_Pipeline_VITIS_LOOP_642_35                    |       24|       24|   0.240 us|   0.240 us|   23|   23|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_576_26_fu_2983                    |compute_controller_Pipeline_VITIS_LOOP_576_26                    |        8|        8|  80.000 ns|  80.000 ns|    7|    7|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28_fu_2999  |compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28  |      112|      112|   1.120 us|   1.120 us|  111|  111|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_593_29_fu_3037                    |compute_controller_Pipeline_VITIS_LOOP_593_29                    |       11|       11|   0.110 us|   0.110 us|   10|   10|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_601_31_fu_3051                    |compute_controller_Pipeline_VITIS_LOOP_601_31                    |        6|        6|  60.000 ns|  60.000 ns|    5|    5|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_616_33_fu_3073                    |compute_controller_Pipeline_VITIS_LOOP_616_33                    |        6|        6|  60.000 ns|  60.000 ns|    5|    5|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_547_23_fu_3087                    |compute_controller_Pipeline_VITIS_LOOP_547_23                    |       34|       34|   0.340 us|   0.340 us|   33|   33|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_read_i32_fu_3157                                                         |read_i32                                                         |        2|        2|  20.000 ns|  20.000 ns|    2|    2|                                             yes|
+        |grp_RMS_NORM_fu_3168                                                         |RMS_NORM                                                         |       61|       61|   0.610 us|   0.610 us|   61|   61|                                              no|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_563_24_fu_3269                    |compute_controller_Pipeline_VITIS_LOOP_563_24                    |       34|       34|   0.340 us|   0.340 us|   33|   33|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |call_ln533_RES_ADD_fu_3291                                                   |RES_ADD                                                          |        0|        0|       0 ns|       0 ns|    0|    0|                                              no|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_538_22_fu_3391                    |compute_controller_Pipeline_VITIS_LOOP_538_22                    |       18|       18|   0.180 us|   0.180 us|   17|   17|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_503_19_fu_3413                    |compute_controller_Pipeline_VITIS_LOOP_503_19                    |       35|       35|   0.350 us|   0.350 us|   34|   34|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_REQUANT_D_MODEL_int32_to_int8_fu_3451                                    |REQUANT_D_MODEL_int32_to_int8                                    |        1|        1|  10.000 ns|  10.000 ns|    1|    1|                                              no|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_518_20_fu_3523                    |compute_controller_Pipeline_VITIS_LOOP_518_20                    |       18|       18|   0.180 us|   0.180 us|   17|   17|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3545                      |compute_controller_Pipeline_VITIS_LOOP_42_2                      |        9|        9|  90.000 ns|  90.000 ns|    2|    2|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_458_13_fu_3615                    |compute_controller_Pipeline_VITIS_LOOP_458_13                    |        8|        8|  80.000 ns|  80.000 ns|    7|    7|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15_fu_3631  |compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15  |      112|      112|   1.120 us|   1.120 us|  111|  111|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_475_16_fu_3669                    |compute_controller_Pipeline_VITIS_LOOP_475_16                    |       11|       11|   0.110 us|   0.110 us|   10|   10|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_490_18_fu_3683                    |compute_controller_Pipeline_VITIS_LOOP_490_18                    |       10|       10|   0.100 us|   0.100 us|    9|    9|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3693                     |compute_controller_Pipeline_VITIS_LOOP_42_21                     |        9|        9|  90.000 ns|  90.000 ns|    2|    2|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3763                     |compute_controller_Pipeline_VITIS_LOOP_42_22                     |        9|        9|  90.000 ns|  90.000 ns|    2|    2|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3833                     |compute_controller_Pipeline_VITIS_LOOP_42_23                     |        9|        9|  90.000 ns|  90.000 ns|    2|    2|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_3903                     |compute_controller_Pipeline_VITIS_LOOP_42_24                     |        9|        9|  90.000 ns|  90.000 ns|    2|    2|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        |grp_compute_controller_Pipeline_VITIS_LOOP_396_11_fu_3973                    |compute_controller_Pipeline_VITIS_LOOP_396_11                    |       66|       66|   0.660 us|   0.660 us|   65|   65|  loop auto-rewind stp (delay=0 clock cycles(s))|
+        +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|     477|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|   220|    3850|   19453|    -|
+|Memory           |        0|     -|    1162|      64|    0|
+|Multiplexer      |        -|     -|       0|   10050|    -|
+|Register         |        -|     -|    3047|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|   220|    8059|   30044|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|    17|       3|      25|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+----+------+------+-----+
+    |                                   Instance                                  |                              Module                             | BRAM_18K| DSP|  FF  |  LUT | URAM|
+    +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+----+------+------+-----+
+    |grp_REQUANT_D_MODEL_int32_to_int8_fu_3451                                    |REQUANT_D_MODEL_int32_to_int8                                    |        0|  64|   514|  6616|    0|
+    |call_ln533_RES_ADD_fu_3291                                                   |RES_ADD                                                          |        0|   0|     0|  1200|    0|
+    |grp_RMS_NORM_fu_3168                                                         |RMS_NORM                                                         |        0|  97|  1421|  6227|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_2877                     |compute_controller_Pipeline_VITIS_LOOP_163_1                     |        0|   0|    28|   142|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_396_11_fu_3973                    |compute_controller_Pipeline_VITIS_LOOP_396_11                    |        0|   0|     9|    56|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3545                      |compute_controller_Pipeline_VITIS_LOOP_42_2                      |        0|  11|   181|   307|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3693                     |compute_controller_Pipeline_VITIS_LOOP_42_21                     |        0|  11|   250|   341|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3763                     |compute_controller_Pipeline_VITIS_LOOP_42_22                     |        0|  11|   251|   342|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3833                     |compute_controller_Pipeline_VITIS_LOOP_42_23                     |        0|  11|   251|   342|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_3903                     |compute_controller_Pipeline_VITIS_LOOP_42_24                     |        0|  11|   251|   342|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_453_12_fu_2745                    |compute_controller_Pipeline_VITIS_LOOP_453_12                    |        0|   0|    12|    63|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_458_13_fu_3615                    |compute_controller_Pipeline_VITIS_LOOP_458_13                    |        0|   0|     7|    51|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15_fu_3631  |compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15  |        0|   0|    40|   226|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_475_16_fu_3669                    |compute_controller_Pipeline_VITIS_LOOP_475_16                    |        0|   0|    41|   187|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_490_18_fu_3683                    |compute_controller_Pipeline_VITIS_LOOP_490_18                    |        0|   0|    24|   139|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_503_19_fu_3413                    |compute_controller_Pipeline_VITIS_LOOP_503_19                    |        0|   0|    52|   190|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_518_20_fu_3523                    |compute_controller_Pipeline_VITIS_LOOP_518_20                    |        0|   0|     7|   117|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_527_21_fu_2675                    |compute_controller_Pipeline_VITIS_LOOP_527_21                    |        0|   0|    12|    63|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_538_22_fu_3391                    |compute_controller_Pipeline_VITIS_LOOP_538_22                    |        0|   0|     7|   117|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_547_23_fu_3087                    |compute_controller_Pipeline_VITIS_LOOP_547_23                    |        0|   0|    32|   165|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_563_24_fu_3269                    |compute_controller_Pipeline_VITIS_LOOP_563_24                    |        0|   0|    28|   187|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_571_25_fu_2637                    |compute_controller_Pipeline_VITIS_LOOP_571_25                    |        0|   0|    12|    63|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_576_26_fu_2983                    |compute_controller_Pipeline_VITIS_LOOP_576_26                    |        0|   0|     7|    51|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28_fu_2999  |compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28  |        0|   0|    40|   226|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_593_29_fu_3037                    |compute_controller_Pipeline_VITIS_LOOP_593_29                    |        0|   0|    41|   187|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_601_31_fu_3051                    |compute_controller_Pipeline_VITIS_LOOP_601_31                    |        0|   0|    72|    96|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_616_33_fu_3073                    |compute_controller_Pipeline_VITIS_LOOP_616_33                    |        0|   2|    27|   287|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_634_34_fu_2599                    |compute_controller_Pipeline_VITIS_LOOP_634_34                    |        0|   0|    13|    62|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_642_35_fu_2945                    |compute_controller_Pipeline_VITIS_LOOP_642_35                    |        0|   0|    13|   127|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_650_36_fu_2561                    |compute_controller_Pipeline_VITIS_LOOP_650_36                    |        0|   0|    13|    62|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39_fu_2783  |compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39  |        0|   0|    26|   203|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_672_40_fu_2821                    |compute_controller_Pipeline_VITIS_LOOP_672_40                    |        0|   0|    43|   185|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_680_42_fu_2837                    |compute_controller_Pipeline_VITIS_LOOP_680_42                    |        0|   0|    73|   121|    0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_693_44_fu_2861                    |compute_controller_Pipeline_VITIS_LOOP_693_44                    |        0|   2|    25|   259|    0|
+    |grp_read_i32_fu_3157                                                         |read_i32                                                         |        0|   0|    27|   104|    0|
+    +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+----+------+------+-----+
+    |Total                                                                        |                                                                 |        0| 220|  3850| 19453|    0|
+    +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+----+------+------+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    +----------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |                                         Memory                                         |                                      Module                                      | BRAM_18K| FF | LUT| URAM| Words| Bits| Banks| W*Bits*Banks|
+    +----------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_131_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_130_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_129_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_65_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_64_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_63_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_62_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_61_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_60_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_RAM_3i2  |        0|  15|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4  |        0|  30|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_137_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4  |        0|  30|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_136_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4  |        0|  30|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_135_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4  |        0|  30|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_134_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4  |        0|  30|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_133_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_RAM_Xh4  |        0|  30|   1|    0|     2|   15|     1|           30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_52_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_51_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_50_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_23_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_22_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_21_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_20_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_19_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_18_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_148_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_141_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_140_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_139_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_59_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_58_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_57_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_56_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_55_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_54_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_RAM_Ahbi  |        0|  16|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_58_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_57_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_56_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_55_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_54_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_142_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_143_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_144_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_145_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_146_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_147_U              |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_RAM_Abkb  |        0|  32|   1|    0|     2|   16|     1|           32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_U               |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_U  |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_RAM_ArcU  |        0|   8|   1|    0|     7|    4|     1|           28|
+    +----------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |Total                                                                                   |                                                                                  |        0|1162|  64|    0|   208|  816|    64|         1952|
+    +----------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +------------------------------------------------------------------------------------------+----------+----+---+----+------------+------------+
+    |                                       Variable Name                                      | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +------------------------------------------------------------------------------------------+----------+----+---+----+------------+------------+
+    |ap_block_state50_on_subcall_done                                                          |       and|   0|  0|   2|           1|           1|
+    |ap_block_state78_on_subcall_done                                                          |       and|   0|  0|   2|           1|           1|
+    |ap_condition_4602                                                                         |       and|   0|  0|   2|           1|           1|
+    |ap_condition_5821                                                                         |       and|   0|  0|   2|           1|           1|
+    |do_compute_fu_4717_p2                                                                     |       and|   0|  0|   2|           1|           1|
+    |mac_start_2_fu_4425_p2                                                                    |       and|   0|  0|   2|           1|           1|
+    |mac_start_5_fu_4383_p2                                                                    |       and|   0|  0|   2|           1|           1|
+    |mac_start_fu_4745_p2                                                                      |       and|   0|  0|   2|           1|           1|
+    |icmp_ln197_10_fu_4308_p2                                                                  |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_11_fu_4320_p2                                                                  |      icmp|   0|  0|  15|           8|           4|
+    |icmp_ln197_12_fu_4332_p2                                                                  |      icmp|   0|  0|  15|           8|           2|
+    |icmp_ln197_13_fu_4344_p2                                                                  |      icmp|   0|  0|  15|           8|           1|
+    |icmp_ln197_1_fu_4200_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_2_fu_4212_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_3_fu_4224_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_4_fu_4236_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_5_fu_4248_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_6_fu_4260_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_7_fu_4272_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_8_fu_4284_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_9_fu_4296_p2                                                                   |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln197_fu_4194_p2                                                                     |      icmp|   0|  0|  15|           8|           5|
+    |icmp_ln237_fu_4010_p2                                                                     |      icmp|   0|  0|  15|           8|           1|
+    |icmp_ln238_fu_4016_p2                                                                     |      icmp|   0|  0|  15|           8|           3|
+    |icmp_ln405_fu_4176_p2                                                                     |      icmp|   0|  0|  39|          32|          32|
+    |ap_block_state18_on_subcall_done                                                          |        or|   0|  0|   2|           1|           1|
+    |ap_block_state53_on_subcall_done                                                          |        or|   0|  0|   2|           1|           1|
+    |ap_predicate_op354_call_state50                                                           |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_129_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_130_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_131_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_133_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_134_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_135_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_136_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_137_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_139_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_140_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_141_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_142_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_143_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_144_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_145_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_146_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_147_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_148_we0              |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_50_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_51_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_52_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_54_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_55_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_56_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_57_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_58_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_we0               |        or|   0|  0|   2|           1|           1|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_we0               |        or|   0|  0|   2|           1|           1|
+    |or_ln197_10_fu_4326_p2                                                                    |        or|   0|  0|   2|           1|           1|
+    |or_ln197_11_fu_4338_p2                                                                    |        or|   0|  0|   2|           1|           1|
+    |or_ln197_12_fu_4350_p2                                                                    |        or|   0|  0|   2|           1|           1|
+    |or_ln197_1_fu_4218_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_2_fu_4230_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_3_fu_4242_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_4_fu_4254_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_5_fu_4266_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_6_fu_4278_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_7_fu_4290_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_8_fu_4302_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_9_fu_4314_p2                                                                     |        or|   0|  0|   2|           1|           1|
+    |or_ln197_fu_4206_p2                                                                       |        or|   0|  0|   2|           1|           1|
+    |or_ln29_fu_4683_p2                                                                        |        or|   0|  0|   2|           1|           1|
+    |or_ln395_fu_5716_p2                                                                       |        or|   0|  0|   2|           1|           1|
+    |or_ln405_fu_4182_p2                                                                       |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_18_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_19_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_20_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_21_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_22_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_23_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_54_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_55_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_56_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_57_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_58_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_59_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_60_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_61_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_62_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_63_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_64_we0  |        or|   0|  0|   2|           1|           1|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_65_we0  |        or|   0|  0|   2|           1|           1|
+    |select_ln444_fu_4853_p3                                                                   |    select|   0|  0|   2|           1|           2|
+    |xor_ln29_fu_4689_p2                                                                       |       xor|   0|  0|   2|           1|           2|
+    |xor_ln32_fu_4711_p2                                                                       |       xor|   0|  0|   2|           1|           2|
+    |xor_ln395_fu_5710_p2                                                                      |       xor|   0|  0|   2|           1|           2|
+    |xor_ln444_fu_4848_p2                                                                      |       xor|   0|  0|   2|           1|           2|
+    |xor_ln486_fu_4740_p2                                                                      |       xor|   0|  0|   2|           1|           2|
+    |xor_ln610_fu_4420_p2                                                                      |       xor|   0|  0|   2|           1|           2|
+    |xor_ln689_fu_4378_p2                                                                      |       xor|   0|  0|   2|           1|           2|
+    +------------------------------------------------------------------------------------------+----------+----+---+----+------------+------------+
+    |Total                                                                                     |          |   0|  0| 477|         259|         205|
+    +------------------------------------------------------------------------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-----------------------------------------------------------------------------------------------------+-----+-----------+-----+-----------+
+    |                                                 Name                                                | LUT | Input Size| Bits| Total Bits|
+    +-----------------------------------------------------------------------------------------------------+-----+-----------+-----+-----------+
+    |ap_NS_fsm                                                                                            |  432|         82|    1|         82|
+    |ap_phi_mux_compute_done_new_0_phi_fu_2403_p4                                                         |    9|          2|    1|          2|
+    |ap_phi_mux_compute_ready_new_0_phi_fu_2391_p4                                                        |    9|          2|    1|          2|
+    |ap_phi_mux_mac_complete_loc_1_phi_fu_2299_p18                                                        |    9|          2|    1|          2|
+    |ap_phi_mux_mac_ready_loc_0_phi_fu_2274_p18                                                           |    9|          2|    1|          2|
+    |ap_phi_mux_mac_start_3_phi_fu_1982_p26                                                               |    9|          2|    1|          2|
+    |ap_phi_mux_mac_start_4_phi_fu_2357_p18                                                               |    9|          2|    1|          2|
+    |ap_phi_mux_mem_op_flag_0_phi_fu_2210_p18                                                             |    9|          2|    1|          2|
+    |ap_phi_mux_mem_op_flag_1_phi_fu_2465_p4                                                              |    9|          2|    1|          2|
+    |ap_phi_mux_mem_op_new_1_phi_fu_2477_p4                                                               |    9|          2|   32|         64|
+    |ap_phi_mux_mem_read_request_flag_0_phi_fu_2075_p18                                                   |    9|          2|    1|          2|
+    |ap_phi_mux_mem_read_request_flag_1_phi_fu_2415_p4                                                    |    9|          2|    1|          2|
+    |ap_phi_mux_mem_read_request_new_1_phi_fu_2427_p4                                                     |    9|          2|    1|          2|
+    |ap_phi_mux_mem_write_request_flag_0_phi_fu_2141_p18                                                  |    9|          2|    1|          2|
+    |ap_phi_mux_mem_write_request_flag_1_phi_fu_2440_p4                                                   |    9|          2|    1|          2|
+    |ap_phi_mux_mem_write_request_new_1_phi_fu_2452_p4                                                    |    9|          2|    1|          2|
+    |ap_phi_mux_next_state_3_phi_fu_1937_p26                                                              |    9|          2|    3|          6|
+    |ap_phi_mux_next_state_4_phi_fu_2328_p18                                                              |    9|          2|    8|         16|
+    |ap_phi_mux_req_instruction_loc_1_phi_fu_2022_p18                                                     |    9|          2|   32|         64|
+    |ap_phi_mux_req_op_loc_1_phi_fu_2048_p18                                                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u                                 |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_12                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_124                             |   20|          4|   32|        128|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_125                             |   20|          4|   32|        128|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_126                             |   20|          4|   32|        128|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_127                             |   20|          4|   32|        128|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_128                             |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_129_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_129_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_129_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_129_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_13                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_130_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_130_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_130_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_130_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_131_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_131_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_131_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_131_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_132_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_133_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_133_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_133_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_133_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_134_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_134_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_134_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_134_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_135_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_135_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_135_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_135_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_136_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_136_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_136_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_136_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_137_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_137_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_137_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_137_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_d0                          |    9|          2|   15|         30|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_138_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_139_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_139_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_139_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_139_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_14                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_140_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_140_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_140_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_140_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_141_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_141_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_141_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_141_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_142_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_142_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_142_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_142_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_143_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_143_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_143_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_143_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_144_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_144_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_144_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_144_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_145_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_145_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_145_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_145_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_146_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_146_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_146_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_146_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_147_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_147_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_147_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_147_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_148_address0                    |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_148_ce0                         |   14|          3|    1|          3|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_148_d0                          |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_148_we0                         |    9|          2|    1|          2|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_15                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_16                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_17                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_18                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_19                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39                              |   14|          3|    8|         24|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_40                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_41                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_42                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_43                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_44                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_45                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_46                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_47                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_48                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_49                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_50_address0                     |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_50_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_50_d0                           |   20|          4|   16|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_50_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_51_address0                     |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_51_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_51_d0                           |   20|          4|   16|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_51_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_52_address0                     |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_52_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_52_d0                           |   20|          4|   16|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_52_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_address0                     |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_d0                           |   20|          4|   16|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_53_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_54_address0                     |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_54_ce0                          |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_54_d0                           |   31|          6|   16|         96|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_54_we0                          |   31|          6|    1|          6|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_55_address0                     |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_55_ce0                          |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_55_d0                           |   31|          6|   16|         96|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_55_we0                          |   31|          6|    1|          6|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_56_address0                     |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_56_ce0                          |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_56_d0                           |   31|          6|   16|         96|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_56_we0                          |   31|          6|    1|          6|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_57_address0                     |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_57_ce0                          |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_57_d0                           |   31|          6|   16|         96|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_57_we0                          |   31|          6|    1|          6|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_58_address0                     |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_58_ce0                          |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_58_d0                           |   31|          6|   16|         96|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_58_we0                          |   31|          6|    1|          6|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_address0                     |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_ce0                          |   59|         11|    1|         11|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_d0                           |   31|          6|   16|         96|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_59_we0                          |   31|          6|    1|          6|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_60                              |    9|          2|   16|         32|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_61                              |   14|          3|   16|         48|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_62                              |   14|          3|   16|         48|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_63                              |   14|          3|   16|         48|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_64                              |   14|          3|   16|         48|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_65                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_66                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_67                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_68                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_69                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_70                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_71                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_72                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_73                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_74                              |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_75                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_76                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_77                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_78                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_79                              |    9|          2|   32|         64|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_80_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_81_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_82_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_83_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_84_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_85_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_86_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_87_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_88_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_address0                     |   49|          9|    3|         27|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_address0_local               |   31|          6|    3|         18|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_address1_local               |   26|          5|    3|         15|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_ce0                          |   49|          9|    1|          9|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_d0                           |   20|          4|    4|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_89_we0                          |   20|          4|    1|          4|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9                               |    9|          2|    8|         16|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_90                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_91                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_92                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_93                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_94                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_95                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_96                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_97                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_98                              |    9|          2|   19|         38|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_99                              |    9|          2|   19|         38|
+    |compute_done_new_0_reg_2399                                                                          |    9|          2|    1|          2|
+    |compute_ready_new_0_reg_2387                                                                         |    9|          2|    1|          2|
+    |dbg_req_head                                                                                         |   14|          3|    8|         24|
+    |dbg_req_instruction                                                                                  |   14|          3|   32|         96|
+    |dbg_req_layer                                                                                        |   14|          3|    8|         24|
+    |dbg_req_op                                                                                           |   14|          3|    8|         24|
+    |dbg_req_tile                                                                                         |   14|          3|    8|         24|
+    |dbg_state                                                                                            |   14|          3|    8|         24|
+    |error                                                                                                |   20|          4|    1|          4|
+    |grp_read_i32_fu_3157_byte_addr                                                                       |   26|          5|    7|         35|
+    |in_buf_address0                                                                                      |   81|         17|    8|        136|
+    |in_buf_address1                                                                                      |   65|         12|    8|         96|
+    |in_buf_ce0                                                                                           |   81|         17|    1|         17|
+    |in_buf_ce1                                                                                           |   65|         12|    1|         12|
+    |mac_complete                                                                                         |    9|          2|    1|          2|
+    |mac_complete_loc_0_reg_2535                                                                          |    9|          2|    1|          2|
+    |mac_complete_loc_1_reg_2295                                                                          |   26|          5|    1|          5|
+    |mac_ready                                                                                            |    9|          2|    1|          2|
+    |mac_ready_loc_0_reg_2271                                                                             |   14|          3|    1|          3|
+    |mac_start_3_reg_1978                                                                                 |   37|          7|    1|          7|
+    |mac_start_4_reg_2353                                                                                 |    9|          2|    1|          2|
+    |mem_op_flag_1_reg_2461                                                                               |    9|          2|    1|          2|
+    |mem_op_new_0_reg_2239                                                                                |   14|          3|   32|         96|
+    |mem_op_new_1_reg_2473                                                                                |    9|          2|   32|         64|
+    |mem_read_request_flag_1_reg_2411                                                                     |    9|          2|    1|          2|
+    |mem_read_request_new_1_reg_2423                                                                      |    9|          2|    1|          2|
+    |mem_write_request_flag_1_reg_2436                                                                    |    9|          2|    1|          2|
+    |mem_write_request_new_1_reg_2448                                                                     |    9|          2|    1|          2|
+    |next_state_1_reg_2500                                                                                |    9|          2|    3|          6|
+    |next_state_3_reg_1931                                                                                |   14|          3|    3|          9|
+    |next_state_4_reg_2321                                                                                |   49|          9|    8|         72|
+    |out_buf_address0                                                                                     |   49|          9|    6|         54|
+    |out_buf_address1                                                                                     |   31|          6|    6|         36|
+    |out_buf_ce0                                                                                          |   49|          9|    1|          9|
+    |out_buf_ce1                                                                                          |   31|          6|    1|          6|
+    |out_buf_d0                                                                                           |   49|          9|    8|         72|
+    |out_buf_d1                                                                                           |   31|          6|    8|         48|
+    |out_buf_we0                                                                                          |   49|          9|    1|          9|
+    |out_buf_we1                                                                                          |   31|          6|    1|          6|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E                    |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1                  |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10                 |    9|          2|   19|         38|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11                 |    9|          2|   19|         38|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_12                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_13                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_14                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_15                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_16                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_17                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_18_address0        |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_18_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_18_d0              |   20|          4|   16|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_18_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_19_address0        |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_19_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_19_d0              |   20|          4|   16|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_19_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2                  |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_20_address0        |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_20_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_20_d0              |   20|          4|   16|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_20_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_21_address0        |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_21_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_21_d0              |   20|          4|   16|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_21_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_22_address0        |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_22_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_22_d0              |   20|          4|   16|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_22_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_23_address0        |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_23_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_23_d0              |   20|          4|   16|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_23_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_address0        |   49|          9|    3|         27|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_address0_local  |   20|          4|    3|         12|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_address1_local  |   20|          4|    3|         12|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_d0              |   20|          4|    4|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_24_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_address0        |   49|          9|    3|         27|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_address0_local  |   20|          4|    3|         12|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_address1_local  |   20|          4|    3|         12|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_d0              |   20|          4|    4|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_25_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_address0        |   49|          9|    3|         27|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_address0_local  |   31|          6|    3|         18|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_address1_local  |   26|          5|    3|         15|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_d0              |   20|          4|    4|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_26_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_address0        |   49|          9|    3|         27|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_address0_local  |   31|          6|    3|         18|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_address1_local  |   26|          5|    3|         15|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_d0              |   20|          4|    4|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_27_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_address0        |   49|          9|    3|         27|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_address0_local  |   31|          6|    3|         18|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_address1_local  |   26|          5|    3|         15|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_d0              |   20|          4|    4|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_28_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_address0        |   49|          9|    3|         27|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_address0_local  |   31|          6|    3|         18|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_address1_local  |   26|          5|    3|         15|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_ce0             |   49|          9|    1|          9|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_d0              |   20|          4|    4|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_29_we0             |   20|          4|    1|          4|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3                  |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_30                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_31                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_32                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_33                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_34                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_35                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_36                 |   14|          3|    8|         24|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_37                 |   14|          3|    8|         24|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_38                 |   14|          3|    8|         24|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_39                 |   14|          3|    8|         24|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4                  |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_40                 |   14|          3|    8|         24|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_41                 |   14|          3|    8|         24|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47                 |    9|          2|   32|         64|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_48                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_49                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5                  |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_50                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_51                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_52                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_53                 |    9|          2|    8|         16|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_54_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_54_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_54_d0              |    9|          2|   16|         32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_54_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_55_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_55_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_55_d0              |    9|          2|   16|         32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_55_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_56_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_56_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_56_d0              |    9|          2|   16|         32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_56_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_57_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_57_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_57_d0              |    9|          2|   16|         32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_57_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_58_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_58_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_58_d0              |    9|          2|   16|         32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_58_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_59_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_59_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_59_d0              |    9|          2|   16|         32|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_59_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6                  |    9|          2|   19|         38|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_60_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_60_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_60_d0              |    9|          2|   15|         30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_60_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_61_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_61_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_61_d0              |    9|          2|   15|         30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_61_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_62_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_62_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_62_d0              |    9|          2|   15|         30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_62_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_63_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_63_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_63_d0              |    9|          2|   15|         30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_63_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_64_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_64_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_64_d0              |    9|          2|   15|         30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_64_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_65_address0        |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_65_ce0             |   14|          3|    1|          3|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_65_d0              |    9|          2|   15|         30|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_65_we0             |    9|          2|    1|          2|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7                  |    9|          2|   19|         38|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8                  |    9|          2|   19|         38|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9                  |    9|          2|   19|         38|
+    |req_head_idx                                                                                         |    9|          2|    8|         16|
+    |req_instruction                                                                                      |    9|          2|   32|         64|
+    |req_instruction_loc_0_reg_2513                                                                       |    9|          2|   32|         64|
+    |req_instruction_loc_1_reg_2018                                                                       |   26|          5|   32|        160|
+    |req_layer_idx                                                                                        |    9|          2|    8|         16|
+    |req_op                                                                                               |   14|          3|    8|         24|
+    |req_op_loc_0_reg_2524                                                                                |    9|          2|    8|         16|
+    |req_op_loc_1_reg_2044                                                                                |   26|          5|    8|         40|
+    |req_tile_idx                                                                                         |    9|          2|    8|         16|
+    |state                                                                                                |    9|          2|    8|         16|
+    +-----------------------------------------------------------------------------------------------------+-----+-----------+-----+-----------+
+    |Total                                                                                                |10050|       2000| 3848|      10934|
+    +-----------------------------------------------------------------------------------------------------+-----+-----------+-----+-----------+
+
+    * Register: 
+    +------------------------------------------------------------------------------------------+----+----+-----+-----------+
+    |                                           Name                                           | FF | LUT| Bits| Const Bits|
+    +------------------------------------------------------------------------------------------+----+----+-----+-----------+
+    |M_reg_6906                                                                                |  32|   0|   32|          0|
+    |acc_11_loc_fu_992                                                                         |  32|   0|   32|          0|
+    |acc_15_loc_fu_988                                                                         |  32|   0|   32|          0|
+    |acc_18_loc_fu_984                                                                         |  32|   0|   32|          0|
+    |acc_3_loc_fu_1000                                                                         |  32|   0|   32|          0|
+    |acc_7_loc_fu_996                                                                          |  32|   0|   32|          0|
+    |ap_CS_fsm                                                                                 |  81|   0|   81|          0|
+    |busy                                                                                      |   1|   0|    1|          0|
+    |capture_pending                                                                           |   1|   0|    1|          0|
+    |clear_pending                                                                             |   1|   0|    1|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u                      |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_1                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_12                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_124                  |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_125                  |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_126                  |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_127                  |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_128                  |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_13                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_14                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_15                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_16                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_17                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_18                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_19                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_2                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_20                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_21                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_22                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_23                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_24                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_25                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_26                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_27                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_28                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_29                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_3                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_4                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_40                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_41                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_42                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_43                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_44                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_45                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_46                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_47                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_475_reg_6721         |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_476_reg_6727         |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_477_reg_6733         |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_478_reg_6739         |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_48                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_49                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_5                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_6                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_60                   |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_61                   |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_62                   |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_63                   |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_64                   |  16|   0|   16|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_65                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_66                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_67                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_68                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_69                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_7                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_70                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_71                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_72                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_73                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_74                   |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_75                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_76                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_77                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_78                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_79                   |  32|   0|   32|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_8                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_9                    |   8|   0|    8|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_90                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_91                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_92                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_93                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_94                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_95                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_96                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_97                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_98                   |  19|   0|   19|          0|
+    |compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_99                   |  19|   0|   19|          0|
+    |compute_done_load_reg_6979                                                                |   1|   0|    1|          0|
+    |compute_done_new_0_reg_2399                                                               |   1|   0|    1|          0|
+    |compute_done_r                                                                            |   1|   0|    1|          0|
+    |compute_instruction_read_reg_6555                                                         |  32|   0|   32|          0|
+    |compute_ready_new_0_reg_2387                                                              |   1|   0|    1|          0|
+    |compute_start_read_reg_6568                                                               |   1|   0|    1|          0|
+    |do_compute_reg_6984                                                                       |   1|   0|    1|          0|
+    |grp_REQUANT_D_MODEL_int32_to_int8_fu_3451_ap_start_reg                                    |   1|   0|    1|          0|
+    |grp_RMS_NORM_fu_3168_ap_start_reg                                                         |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_2877_ap_start_reg                     |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_396_11_fu_3973_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3693_ap_start_reg                     |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3763_ap_start_reg                     |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3833_ap_start_reg                     |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_3903_ap_start_reg                     |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3545_ap_start_reg                      |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_453_12_fu_2745_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_458_13_fu_3615_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_462_14_VITIS_LOOP_463_15_fu_3631_ap_start_reg  |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_475_16_fu_3669_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_490_18_fu_3683_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_503_19_fu_3413_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_518_20_fu_3523_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_527_21_fu_2675_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_538_22_fu_3391_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_547_23_fu_3087_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_563_24_fu_3269_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_571_25_fu_2637_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_576_26_fu_2983_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_580_27_VITIS_LOOP_581_28_fu_2999_ap_start_reg  |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_593_29_fu_3037_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_601_31_fu_3051_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_616_33_fu_3073_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_634_34_fu_2599_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_642_35_fu_2945_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_650_36_fu_2561_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_659_38_VITIS_LOOP_660_39_fu_2783_ap_start_reg  |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_672_40_fu_2821_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_680_42_fu_2837_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_compute_controller_Pipeline_VITIS_LOOP_693_44_fu_2861_ap_start_reg                    |   1|   0|    1|          0|
+    |grp_read_i32_fu_3157_ap_start_reg                                                         |   1|   0|    1|          0|
+    |icmp_ln237_reg_6660                                                                       |   1|   0|    1|          0|
+    |icmp_ln238_reg_6665                                                                       |   1|   0|    1|          0|
+    |mac_complete                                                                              |   1|   0|    1|          0|
+    |mac_complete_load_reg_6707                                                                |   1|   0|    1|          0|
+    |mac_complete_loc_0_reg_2535                                                               |   1|   0|    1|          0|
+    |mac_complete_loc_1_reg_2295                                                               |   1|   0|    1|          0|
+    |mac_ready                                                                                 |   1|   0|    1|          0|
+    |mac_ready_load_reg_6694                                                                   |   1|   0|    1|          0|
+    |mac_ready_loc_0_reg_2271                                                                  |   1|   0|    1|          0|
+    |mac_start_2_reg_6799                                                                      |   1|   0|    1|          0|
+    |mac_start_3_reg_1978                                                                      |   1|   0|    1|          0|
+    |mac_start_4_reg_2353                                                                      |   1|   0|    1|          0|
+    |mac_start_5_reg_6775                                                                      |   1|   0|    1|          0|
+    |mac_start_reg_6993                                                                        |   1|   0|    1|          0|
+    |mem_op_flag_0_reg_2205                                                                    |   1|   0|    1|          0|
+    |mem_op_flag_1_reg_2461                                                                    |   1|   0|    1|          0|
+    |mem_op_new_0_reg_2239                                                                     |  32|   0|   32|          0|
+    |mem_op_new_1_reg_2473                                                                     |  32|   0|   32|          0|
+    |mem_read_request_flag_0_reg_2070                                                          |   1|   0|    1|          0|
+    |mem_read_request_flag_1_reg_2411                                                          |   1|   0|    1|          0|
+    |mem_read_request_new_0_reg_2104                                                           |   1|   0|    1|          0|
+    |mem_read_request_new_1_reg_2423                                                           |   1|   0|    1|          0|
+    |mem_transfer_done_read_reg_6549                                                           |   1|   0|    1|          0|
+    |mem_write_request_flag_0_reg_2136                                                         |   1|   0|    1|          0|
+    |mem_write_request_flag_1_reg_2436                                                         |   1|   0|    1|          0|
+    |mem_write_request_new_0_reg_2170                                                          |   1|   0|    1|          0|
+    |mem_write_request_new_1_reg_2448                                                          |   1|   0|    1|          0|
+    |n_reg_6911                                                                                |  32|   0|   32|          0|
+    |next_state_1_reg_2500                                                                     |   3|   0|    3|          0|
+    |next_state_2_reg_2548                                                                     |   1|   0|    1|          0|
+    |next_state_3_reg_1931                                                                     |   3|   0|    3|          0|
+    |next_state_4_reg_2321                                                                     |   8|   0|    8|          0|
+    |next_state_reg_6655                                                                       |   8|   0|    8|          0|
+    |or_ln395_reg_7041                                                                         |   1|   0|    1|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E         |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_1       |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10      |  19|   0|   19|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11      |  19|   0|   19|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_12      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_13      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_14      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_15      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_16      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_17      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_2       |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_3       |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_30      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_31      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_32      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_33      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_34      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_35      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_36      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_37      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_38      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_39      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_4       |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_40      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_41      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_42      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_43      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_44      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_45      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_46      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_47      |  32|   0|   32|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_48      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_49      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_5       |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_50      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_51      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_52      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_53      |   8|   0|    8|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6       |  19|   0|   19|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7       |  19|   0|   19|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8       |  19|   0|   19|          0|
+    |p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9       |  19|   0|   19|          0|
+    |req_head_idx                                                                              |   8|   0|    8|          0|
+    |req_instruction                                                                           |  32|   0|   32|          0|
+    |req_instruction_load_reg_6670                                                             |  32|   0|   32|          0|
+    |req_instruction_loc_0_reg_2513                                                            |  32|   0|   32|          0|
+    |req_instruction_loc_1_reg_2018                                                            |  32|   0|   32|          0|
+    |req_layer_idx                                                                             |   8|   0|    8|          0|
+    |req_op                                                                                    |   8|   0|    8|          0|
+    |req_op_load_reg_6683                                                                      |   8|   0|    8|          0|
+    |req_op_loc_0_reg_2524                                                                     |   8|   0|    8|          0|
+    |req_op_loc_1_reg_2044                                                                     |   8|   0|    8|          0|
+    |req_tile_idx                                                                              |   8|   0|    8|          0|
+    |reset_read_reg_6573                                                                       |   1|   0|    1|          0|
+    |state                                                                                     |   8|   0|    8|          0|
+    |storemerge_reg_2486                                                                       |   1|   0|    1|          0|
+    |trunc_ln557_reg_6805                                                                      |  19|   0|   19|          0|
+    |xor_ln29_reg_6974                                                                         |   1|   0|    1|          0|
+    |z_out_reg_6916                                                                            |  32|   0|   32|          0|
+    |zext_ln251_reg_6969                                                                       |   3|   0|    8|          5|
+    |zext_ln349_reg_7036                                                                       |   1|   0|    8|          7|
+    +------------------------------------------------------------------------------------------+----+----+-----+-----------+
+    |Total                                                                                     |3047|   0| 3059|         12|
+    +------------------------------------------------------------------------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++----------------------------+-----+-----+------------+---------------------+--------------+
+|          RTL Ports         | Dir | Bits|  Protocol  |    Source Object    |    C Type    |
++----------------------------+-----+-----+------------+---------------------+--------------+
+|ap_clk                      |   in|    1|  ap_ctrl_hs|   compute_controller|  return value|
+|ap_rst                      |   in|    1|  ap_ctrl_hs|   compute_controller|  return value|
+|ap_start                    |   in|    1|  ap_ctrl_hs|   compute_controller|  return value|
+|ap_done                     |  out|    1|  ap_ctrl_hs|   compute_controller|  return value|
+|ap_idle                     |  out|    1|  ap_ctrl_hs|   compute_controller|  return value|
+|ap_ready                    |  out|    1|  ap_ctrl_hs|   compute_controller|  return value|
+|reset                       |   in|    1|     ap_none|                reset|        scalar|
+|compute_start               |   in|    1|     ap_none|        compute_start|        scalar|
+|compute_instruction         |   in|   32|     ap_none|  compute_instruction|        scalar|
+|compute_ready               |  out|    1|      ap_vld|        compute_ready|       pointer|
+|compute_ready_ap_vld        |  out|    1|      ap_vld|        compute_ready|       pointer|
+|compute_done                |  out|    1|      ap_vld|         compute_done|       pointer|
+|compute_done_ap_vld         |  out|    1|      ap_vld|         compute_done|       pointer|
+|mem_transfer_done           |   in|    1|     ap_none|    mem_transfer_done|        scalar|
+|mem_read_request            |  out|    1|      ap_vld|     mem_read_request|       pointer|
+|mem_read_request_ap_vld     |  out|    1|      ap_vld|     mem_read_request|       pointer|
+|mem_write_request           |  out|    1|      ap_vld|    mem_write_request|       pointer|
+|mem_write_request_ap_vld    |  out|    1|      ap_vld|    mem_write_request|       pointer|
+|mem_op                      |  out|   32|      ap_vld|               mem_op|       pointer|
+|mem_op_ap_vld               |  out|    1|      ap_vld|               mem_op|       pointer|
+|in_buf_address0             |  out|    8|   ap_memory|               in_buf|         array|
+|in_buf_ce0                  |  out|    1|   ap_memory|               in_buf|         array|
+|in_buf_q0                   |   in|    8|   ap_memory|               in_buf|         array|
+|in_buf_address1             |  out|    8|   ap_memory|               in_buf|         array|
+|in_buf_ce1                  |  out|    1|   ap_memory|               in_buf|         array|
+|in_buf_q1                   |   in|    8|   ap_memory|               in_buf|         array|
+|out_buf_address0            |  out|    6|   ap_memory|              out_buf|         array|
+|out_buf_ce0                 |  out|    1|   ap_memory|              out_buf|         array|
+|out_buf_we0                 |  out|    1|   ap_memory|              out_buf|         array|
+|out_buf_d0                  |  out|    8|   ap_memory|              out_buf|         array|
+|out_buf_address1            |  out|    6|   ap_memory|              out_buf|         array|
+|out_buf_ce1                 |  out|    1|   ap_memory|              out_buf|         array|
+|out_buf_we1                 |  out|    1|   ap_memory|              out_buf|         array|
+|out_buf_d1                  |  out|    8|   ap_memory|              out_buf|         array|
+|dbg_state                   |  out|    8|      ap_vld|            dbg_state|       pointer|
+|dbg_state_ap_vld            |  out|    1|      ap_vld|            dbg_state|       pointer|
+|dbg_req_instruction         |  out|   32|      ap_vld|  dbg_req_instruction|       pointer|
+|dbg_req_instruction_ap_vld  |  out|    1|      ap_vld|  dbg_req_instruction|       pointer|
+|dbg_req_op                  |  out|    8|      ap_vld|           dbg_req_op|       pointer|
+|dbg_req_op_ap_vld           |  out|    1|      ap_vld|           dbg_req_op|       pointer|
+|dbg_req_layer               |  out|    8|      ap_vld|        dbg_req_layer|       pointer|
+|dbg_req_layer_ap_vld        |  out|    1|      ap_vld|        dbg_req_layer|       pointer|
+|dbg_req_head                |  out|    8|      ap_vld|         dbg_req_head|       pointer|
+|dbg_req_head_ap_vld         |  out|    1|      ap_vld|         dbg_req_head|       pointer|
+|dbg_req_tile                |  out|    8|      ap_vld|         dbg_req_tile|       pointer|
+|dbg_req_tile_ap_vld         |  out|    1|      ap_vld|         dbg_req_tile|       pointer|
+|dbg_mac_start               |  out|    1|      ap_vld|        dbg_mac_start|       pointer|
+|dbg_mac_start_ap_vld        |  out|    1|      ap_vld|        dbg_mac_start|       pointer|
+|dbg_mac_ready               |  out|    1|      ap_vld|        dbg_mac_ready|       pointer|
+|dbg_mac_ready_ap_vld        |  out|    1|      ap_vld|        dbg_mac_ready|       pointer|
+|dbg_mac_complete            |  out|    1|      ap_vld|     dbg_mac_complete|       pointer|
+|dbg_mac_complete_ap_vld     |  out|    1|      ap_vld|     dbg_mac_complete|       pointer|
+|error                       |  out|    1|      ap_vld|                error|       pointer|
+|error_ap_vld                |  out|    1|      ap_vld|                error|       pointer|
++----------------------------+-----+-----+------------+---------------------+--------------+
+

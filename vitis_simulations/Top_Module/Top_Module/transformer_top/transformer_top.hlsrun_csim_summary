@@ -1,0 +1,168 @@
+<ENTRY>
+{
+ "thisFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/transformer_top.hlsrun_csim_summary",
+ "connectId": "",
+ "serverToken": "",
+ "timestamp": "0"
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_CmdStep",
+ "dateTimestamp": "Tue Feb  3 19:39:23 2026",
+ "timestampMillis": "1770165563077",
+ "buildStep": {
+  "cmdId": "f45a78ba-a51b-4099-a656-2faf5b8ccdfc",
+  "name": "vitis-run",
+  "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/logs/transformer_top.steps.log",
+  "commandLine": "/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/vitis-run  --mode hls --csim --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg --work_dir transformer_top ",
+  "args": [
+   "--mode",
+   "hls",
+   "--csim",
+   "--config",
+   "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg",
+   "--work_dir",
+   "transformer_top"
+  ],
+  "iniFiles": [],
+  "cwd": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Tue Feb  3 19:39:23 2026",
+ "timestampMillis": "1770165563077",
+ "status": {
+  "cmdId": "f45a78ba-a51b-4099-a656-2faf5b8ccdfc",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_FlowMetaData",
+ "dateTimestamp": "Tue Feb  3 19:39:26 2026",
+ "timestampMillis": "1770165566924",
+ "buildSummary": {
+  "hardwarePlatform": "",
+  "hardwareDsa": "",
+  "platformDirectory": "",
+  "runtime": "",
+  "systemConfig": "",
+  "flow": "BF_RUN",
+  "target": "TT_HLS_C_SIM",
+  "kernels": [
+   {
+    "base": {
+     "type": "KERNEL",
+     "name": "transformer_top",
+     "file": "",
+     "reports": [],
+     "uuid": ""
+    },
+    "sources": [
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp",
+     "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
+    ],
+    "psSources": [],
+    "cuNames": [],
+    "type": "HLS",
+    "frequency": 0,
+    "freqUnits": ""
+   }
+  ],
+  "toolVersion": "2025.1"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_SubCmdStep",
+ "dateTimestamp": "Tue Feb  3 19:39:26 2026",
+ "timestampMillis": "1770165566925",
+ "buildStep": {
+  "cmdId": "4f9cb9d1-8881-4b22-81c5-ba6aaaccba56",
+  "name": "",
+  "logFile": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/hls.log",
+  "commandLine": "",
+  "args": [],
+  "iniFiles": [],
+  "cwd": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Tue Feb  3 19:39:26 2026",
+ "timestampMillis": "1770165566925",
+ "status": {
+  "cmdId": "4f9cb9d1-8881-4b22-81c5-ba6aaaccba56",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Tue Feb  3 19:39:43 2026",
+ "timestampMillis": "1770165583846",
+ "status": {
+  "cmdId": "4f9cb9d1-8881-4b22-81c5-ba6aaaccba56",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Tue Feb  3 19:39:43 2026",
+ "timestampMillis": "1770165583968",
+ "status": {
+  "cmdId": "f45a78ba-a51b-4099-a656-2faf5b8ccdfc",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Tue Feb  3 19:39:43 2026",
+ "timestampMillis": "1770165583968",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "HTML",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Tue Feb  3 19:39:43 2026",
+ "timestampMillis": "1770165583968",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "BINARY_PROTOBUF",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>

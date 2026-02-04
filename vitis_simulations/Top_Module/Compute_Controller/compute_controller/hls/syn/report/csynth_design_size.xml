@@ -1,0 +1,67 @@
+<design_size title="Design Size Report">
+    <item name="Total Instructions per Compilation Phase">
+        <table>
+            <keys size="4">Phase, Step, Instructions, Description</keys>
+            <column name="Compile/Link">, 8669, After all functions are compiled and linked into a single design</column>
+            <column name="">, , </column>
+            <column name="Unroll/Inline">, , After user unroll and inline pragmas are applied</column>
+            <column name="">(1) unroll, 9664, user unroll pragmas are applied</column>
+            <column name="">(2) simplification, 4526, simplification of applied user unroll pragmas</column>
+            <column name="">(3) inline, 4202, user inline pragmas are applied</column>
+            <column name="">(4) simplification, 4171, simplification of applied user inline pragmas</column>
+            <column name="">, , </column>
+            <column name="Array/Struct">, , After user array partition and struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(1) array partition, 8712, user array partition pragmas are applied</column>
+            <column name="">(2) simplification, 5156, simplification of applied user array partition &amp; struct aggregate/disaggregate pragmas</column>
+            <column name="">(3) aggregate/disaggregate , 5156, user struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(4) array reshape, 5156, apply array reshape pragmas</column>
+            <column name="">(5) access patterns, 5130, array access pattern optmizations</column>
+            <column name="">, , </column>
+            <column name="Performance">, , After transformations are applied to meet performance pragma targets</column>
+            <column name="">(1) loop simplification, 5114, loop and instruction simplification</column>
+            <column name="">(2) parallelization, 5111, loops are unrolled or pipelined to meet performance targets</column>
+            <column name="">(3) array partition, 5104, arrays are partitioned to meet performance targets</column>
+            <column name="">(4) simplification, 5104, simplification of design after performance transformations</column>
+            <column name="">, , </column>
+            <column name="HW Transforms">, , After hardware transfomations</column>
+            <column name="">(1) lowering, 5146, initial conversion to HW specific instructions</column>
+            <column name="">(2) optimizations, 5291, high level synthesis optimizations</column>
+        </table>
+    </item>
+    <item name="Instructions per Function for each Compilation Phase">
+        <hiertable>
+            <header size="7" col0="Function" col1="Location" col2="Compile/Link" col3="Unroll/Inline" col4="Array/Struct" col5="Performance" col6="HW Transforms"/>
+            <rows>
+                <row id="0" col0="compute_controller" col1="compute_controller.cpp:197" col2="8669" col3="4171" col4="5130" col5="5104" col6="5291">
+                    <row id="10" col0="max2_constexpr" col1="top_params.hpp:424" col2="48" col2_disp="  48 (8 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="8" col0="min2_constexpr" col1="top_params.hpp:427" col2="30" col2_disp="  30 (5 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="11" col0="read_i16" col1="top_params.hpp:567" col2="60" col2_disp="  60 (4 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="2" col0="read_i4" col1="top_params.hpp:559" col2="276" col2_disp=" 276 (3 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="3" col0="read_i32" col1="top_params.hpp:574" col2="243" col2_disp=" 243 (9 calls)" col3="234" col3_disp=" 234 (9 calls)" col4="234" col4_disp=" 234 (9 calls)" col5="208" col5_disp=" 208 (8 calls)" col6="208" col6_disp=" 208 (8 calls)"/>
+                    <row id="4" col0="write_i32" col1="top_params.hpp:606" col2="84" col2_disp="  84 (3 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="13" col0="FFN_ACT_RELU" col1="compute_controller.cpp:159" col2="24" col3="" col4="" col5="" col6=""/>
+                    <row id="1" col0="write_i16" col1="top_params.hpp:600" col2="32" col2_disp="  32 (2 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="15" col0="read_i8" col1="top_params.hpp:555" col2="20" col2_disp="  20 (5 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="5" col0="RMS_NORM" col1="compute_controller.cpp:113" col2="6444" col3="1418" col4="1408" col5="1391" col6="1394">
+                        <row id="6" col0="sqrt_fixed&lt;32, 19&gt;" col1="hls_sqrt_apfixed.h:19" col2="" col3="1134" col4="1108" col5="1108" col6="1109"/>
+                    </row>
+                    <row id="14" col0="RES_ADD" col1="compute_controller.cpp:175" col2="37" col3="177" col4="177" col5="177" col6="177"/>
+                    <row id="9" col0="write_i8" col1="top_params.hpp:583" col2="8" col2_disp="   8 (2 calls)" col3="" col4="" col5="" col6=""/>
+                    <row id="12" col0="REQUANT_D_MODEL_int32_to_int8" col1="compute_controller.cpp:63" col2="42" col3="214" col4="214" col5="214" col6="214"/>
+                    <row id="7" col0="MAC_ARCHITECTURE" col1="compute_controller.cpp:8" col2="150" col3="" col4="" col5="" col6="">
+                        <row id="10" col0="max2_constexpr" col1="top_params.hpp:424" col2="36" col2_disp="  36 (6 calls)" col3="" col4="" col5="" col6=""/>
+                        <row id="8" col0="min2_constexpr" col1="top_params.hpp:427" col2="24" col2_disp="  24 (4 calls)" col3="" col4="" col5="" col6=""/>
+                    </row>
+                </row>
+            </rows>
+            <notes/>
+        </hiertable>
+    </item>
+    <item name="Design Size Message Settings">
+        <table>
+            <keys size="3">Message Setting, Value, Description</keys>
+            <column name="config_compile -design_size_maximum_warning">100000, Show a warning when total design instructions exceeds this value</column>
+        </table>
+    </item>
+</design_size>
+

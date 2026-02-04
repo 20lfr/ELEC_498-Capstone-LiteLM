@@ -1,0 +1,272 @@
+<profile>
+
+<section name = "Vitis HLS Report for 'headed_compute_controller_Pipeline_VITIS_LOOP_139_1'" level="0">
+<item name = "Date">Tue Feb  3 14:27:12 2026
+</item>
+<item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
+<item name = "Project">headed_compute_controller</item>
+<item name = "Solution">hls (Vivado IP Flow Target)</item>
+<item name = "Product family">zynquplus</item>
+<item name = "Target device">xck26-sfvc784-2LV-c</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00 ns, 3.265 ns, 2.70 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">22, 22, 0.220 us, 0.220 us, 17, 17, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+<column name="- VITIS_LOOP_139_1">20, 20, 6, 1, 1, 16, yes</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="DSP">-, 9, -, -, -</column>
+<column name="Expression">-, -, 0, 206, -</column>
+<column name="FIFO">-, -, -, -, -</column>
+<column name="Instance">-, 0, 0, 345, -</column>
+<column name="Memory">-, -, -, -, -</column>
+<column name="Multiplexer">-, -, 0, 36, -</column>
+<column name="Register">-, -, 477, 96, -</column>
+<specialColumn name="Available">288, 1248, 234240, 117120, 64</specialColumn>
+<specialColumn name="Utilization (%)">0, ~0, ~0, ~0, 0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="mul_8s_8s_16_1_1_U294">mul_8s_8s_16_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_8s_16_1_1_U295">mul_8s_8s_16_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_8s_16_1_1_U296">mul_8s_8s_16_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_8s_16_1_1_U297">mul_8s_8s_16_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_8s_16_1_1_U298">mul_8s_8s_16_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_8s_16_1_1_U299">mul_8s_8s_16_1_1, 0, 0, 0, 40, 0</column>
+<column name="mul_8s_8s_16_1_1_U300">mul_8s_8s_16_1_1, 0, 0, 0, 40, 0</column>
+<column name="sparsemux_33_4_4_1_1_U293">sparsemux_33_4_4_1_1, 0, 0, 0, 65, 0</column>
+</table>
+</item>
+<item name = "DSP"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U302">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U303">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U304">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U305">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U306">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U307">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U308">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_16s_17_4_1_U309">mac_muladd_8s_8s_16s_17_4_1, i0 + i1 * i2</column>
+<column name="mac_muladd_8s_8s_4s_16_4_1_U301">mac_muladd_8s_8s_4s_16_4_1, i0 * i1 + i2</column>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="10">Memory, Module, BRAM_18K, FF, LUT, URAM, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="8">Name, BRAM_18K, FF, LUT, URAM, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="acc_1_fu_923_p2">+, 0, 0, 27, 20, 20</column>
+<column name="add_ln139_fu_580_p2">+, 0, 0, 12, 5, 1</column>
+<column name="add_ln143_13_fu_903_p2">+, 0, 0, 25, 18, 18</column>
+<column name="add_ln143_14_fu_913_p2">+, 0, 0, 26, 19, 19</column>
+<column name="add_ln143_2_fu_845_p2">+, 0, 0, 25, 18, 18</column>
+<column name="add_ln143_5_fu_861_p2">+, 0, 0, 25, 18, 18</column>
+<column name="add_ln143_6_fu_871_p2">+, 0, 0, 26, 19, 19</column>
+<column name="add_ln143_9_fu_887_p2">+, 0, 0, 25, 18, 18</column>
+<column name="icmp_ln139_fu_574_p2">icmp, 0, 0, 13, 5, 6</column>
+<column name="ap_enable_pp0">xor, 0, 0, 2, 1, 2</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="ap_done_int">9, 2, 1, 2</column>
+<column name="ap_enable_reg_pp0_iter1">9, 2, 1, 2</column>
+<column name="ap_sig_allocacmp_out_1">9, 2, 5, 10</column>
+<column name="out_fu_170">9, 2, 5, 10</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="acc_reg_1211">4, 0, 4, 0</column>
+<column name="ap_CS_fsm">1, 0, 1, 0</column>
+<column name="ap_done_reg">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter1">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter2">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter3">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter4">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter5">1, 0, 1, 0</column>
+<column name="ap_loop_exit_ready_pp0_iter1_reg">1, 0, 1, 0</column>
+<column name="ap_loop_exit_ready_pp0_iter2_reg">1, 0, 1, 0</column>
+<column name="ap_loop_exit_ready_pp0_iter3_reg">1, 0, 1, 0</column>
+<column name="ap_loop_exit_ready_pp0_iter4_reg">1, 0, 1, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_138_reg_1129">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_139_reg_1134">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_140_reg_1139">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_141_reg_1144">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_142_reg_1149">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_143_reg_1154">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_144_reg_1159">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_145_reg_1164">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_146_reg_1169">16, 0, 16, 0</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_147_reg_1174">16, 0, 16, 0</column>
+<column name="out_fu_170">5, 0, 5, 0</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_59_reg_1104">16, 0, 16, 0</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_65_reg_1109">16, 0, 16, 0</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_66_reg_1114">16, 0, 16, 0</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_67_reg_1119">16, 0, 16, 0</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_68_reg_1124">16, 0, 16, 0</column>
+<column name="sext_ln139_cast_reg_1179">16, 0, 16, 0</column>
+<column name="trunc_ln139_reg_1207">4, 0, 4, 0</column>
+<column name="zext_ln139_reg_1188">5, 0, 64, 59</column>
+<column name="acc_reg_1211">64, 32, 4, 0</column>
+<column name="trunc_ln139_reg_1207">64, 32, 4, 0</column>
+<column name="zext_ln139_reg_1188">64, 32, 64, 59</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, headed_compute_controller_Pipeline_VITIS_LOOP_139_1, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, headed_compute_controller_Pipeline_VITIS_LOOP_139_1, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, headed_compute_controller_Pipeline_VITIS_LOOP_139_1, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, headed_compute_controller_Pipeline_VITIS_LOOP_139_1, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, headed_compute_controller_Pipeline_VITIS_LOOP_139_1, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, headed_compute_controller_Pipeline_VITIS_LOOP_139_1, return value</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_114">in, 4, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_114, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_115">in, 4, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_115, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_116">in, 4, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_116, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_117">in, 4, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_117, scalar</column>
+<column name="sext_ln139">in, 8, ap_none, sext_ln139, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_128">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_128, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_129">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_129, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_130">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_130, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_131">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_131, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_132">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_132, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_133">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_133, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_134">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_134, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_135">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_135, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_136">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_136, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_137">in, 8, ap_none, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_137, scalar</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_60">in, 8, ap_none, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_60, scalar</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_61">in, 8, ap_none, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_61, scalar</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_62">in, 8, ap_none, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_62, scalar</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_63">in, 8, ap_none, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_63, scalar</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_64">in, 8, ap_none, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_64, scalar</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_23">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_23, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_23_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_23, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_32_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_32, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_32_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_32, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_32_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_32, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_31_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_31, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_31_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_31, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_31_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_31, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_30_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_30, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_30_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_30, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_30_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_30, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_29_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_29, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_29_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_29, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_29_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_29, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_28_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_28, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_28_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_28, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_28_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_28, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_27_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_27, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_27_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_27, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_27_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_27, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_26_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_26, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_26_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_26, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_26_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_26, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_25_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_25, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_25_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_25, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_25_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_25, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_24_address0">out, 4, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_24, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_24_ce0">out, 1, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_24, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_24_q0">in, 8, ap_memory, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_24, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_17_address0">out, 4, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_17, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_17_ce0">out, 1, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_17, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_17_q0">in, 8, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_17, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_16_address0">out, 4, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_16, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_16_ce0">out, 1, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_16, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_16_q0">in, 8, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_16, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_15_address0">out, 4, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_15, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_15_ce0">out, 1, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_15, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_15_q0">in, 8, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_15, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_14_address0">out, 4, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_14, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_14_ce0">out, 1, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_14, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_14_q0">in, 8, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_14, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_13_address0">out, 4, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_13, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_13_ce0">out, 1, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_13, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_13_q0">in, 8, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_13, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_12_address0">out, 4, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_12, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_12_ce0">out, 1, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_12, array</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_12_q0">in, 8, ap_memory, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_12, array</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_22">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_22, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_22_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_22, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_21">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_21, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_21_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_21, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_20">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_20, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_20_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_20, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_19">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_19, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_19_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_19, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_18">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_18, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_18_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_18, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_17">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_17, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_17_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_17, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_16">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_16, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_16_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_16, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_15">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_15, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_15_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_15, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_14">out, 20, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_14, pointer</column>
+<column name="headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_14_ap_vld">out, 1, ap_vld, headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_14, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_11">out, 20, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_11, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_11_ap_vld">out, 1, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_11, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_10">out, 20, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_10, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_10_ap_vld">out, 1, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_10, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_9">out, 20, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_9, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_9_ap_vld">out, 1, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_9, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_8">out, 20, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_8, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_8_ap_vld">out, 1, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_8, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_7">out, 20, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_7, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_7_ap_vld">out, 1, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_7, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_6">out, 20, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_6, pointer</column>
+<column name="p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_6_ap_vld">out, 1, ap_vld, p_ZZ25headed_compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_6, pointer</column>
+</table>
+</item>
+</section>
+</profile>

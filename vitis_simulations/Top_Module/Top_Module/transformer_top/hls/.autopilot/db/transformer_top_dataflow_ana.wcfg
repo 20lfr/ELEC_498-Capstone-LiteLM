@@ -1,0 +1,1706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="transformer_top.wdb" id="1">
+         <top_modules>
+            <top_module name="apa_transformer_top_top" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0ns"></ZoomStartTime>
+      <ZoomEndTime time="2000ns"></ZoomEndTime>
+      <Cursor1Time time="0ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="257"></NameColumnWidth>
+      <ValueColumnWidth column_width="84"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="2" />
+   <wvobject type="group" fp_name="HLS Process Summary Group">
+      <obj_property name="label">HLS Process Summary</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top//AESL_inst_transformer_top_activity">
+         <obj_property name="label">AESL_inst_transformer_top_activity</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="UseFullPath">true</obj_property>
+         <obj_property name="ElementShortName">AESL_inst_transformer_top_activity</obj_property>
+         <obj_property name="ObjectShortName">AESL_inst_transformer_top_activity</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+         <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="CustomSignalColor">turquoise</obj_property>
+         <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+         <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top//AESL_inst_transformer_top_activity.dataflowTxWaveData.Cycles</obj_property>
+         <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top//AESL_inst_transformer_top_activity.dataflowTxWaveData.OutStanding</obj_property>
+         <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top//AESL_inst_transformer_top_activity.dataflowTxTooltipData</obj_property>
+         <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/grp_scheduler_hls_fu_14364_activity">
+            <obj_property name="label">grp_scheduler_hls_fu_14364_activity</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <obj_property name="UseFullPath">true</obj_property>
+            <obj_property name="ElementShortName">grp_scheduler_hls_fu_14364_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_scheduler_hls_fu_14364_activity</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+            <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+            <obj_property name="UseCustomSignalColor">true</obj_property>
+            <obj_property name="CustomSignalColor">turquoise</obj_property>
+            <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+            <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/grp_scheduler_hls_fu_14364_activity.dataflowTxWaveData.Cycles</obj_property>
+            <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/grp_scheduler_hls_fu_14364_activity.dataflowTxWaveData.OutStanding</obj_property>
+            <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/grp_scheduler_hls_fu_14364_activity.dataflowTxTooltipData</obj_property>
+         </wvobject>
+         <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_fu_14488_activity">
+            <obj_property name="label">grp_compute_controller_fu_14488_activity</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <obj_property name="UseFullPath">true</obj_property>
+            <obj_property name="ElementShortName">grp_compute_controller_fu_14488_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_fu_14488_activity</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+            <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+            <obj_property name="UseCustomSignalColor">true</obj_property>
+            <obj_property name="CustomSignalColor">turquoise</obj_property>
+            <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+            <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_fu_14488_activity.dataflowTxWaveData.Cycles</obj_property>
+            <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_fu_14488_activity.dataflowTxWaveData.OutStanding</obj_property>
+            <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_fu_14488_activity.dataflowTxTooltipData</obj_property>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity.dataflowTxTooltipData</obj_property>
+               <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/grp_read_i32_fu_56_activity">
+                  <obj_property name="label">grp_read_i32_fu_56_activity</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <obj_property name="UseFullPath">true</obj_property>
+                  <obj_property name="ElementShortName">grp_read_i32_fu_56_activity</obj_property>
+                  <obj_property name="ObjectShortName">grp_read_i32_fu_56_activity</obj_property>
+                  <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+                  <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+                  <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+                  <obj_property name="UseCustomSignalColor">true</obj_property>
+                  <obj_property name="CustomSignalColor">turquoise</obj_property>
+                  <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+                  <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/grp_read_i32_fu_56_activity.dataflowTxWaveData.Cycles</obj_property>
+                  <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/grp_read_i32_fu_56_activity.dataflowTxWaveData.OutStanding</obj_property>
+                  <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/grp_read_i32_fu_56_activity.dataflowTxTooltipData</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity.dataflowTxTooltipData</obj_property>
+               <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/grp_read_i32_fu_54_activity">
+                  <obj_property name="label">grp_read_i32_fu_54_activity</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <obj_property name="UseFullPath">true</obj_property>
+                  <obj_property name="ElementShortName">grp_read_i32_fu_54_activity</obj_property>
+                  <obj_property name="ObjectShortName">grp_read_i32_fu_54_activity</obj_property>
+                  <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+                  <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+                  <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+                  <obj_property name="UseCustomSignalColor">true</obj_property>
+                  <obj_property name="CustomSignalColor">turquoise</obj_property>
+                  <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+                  <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/grp_read_i32_fu_54_activity.dataflowTxWaveData.Cycles</obj_property>
+                  <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/grp_read_i32_fu_54_activity.dataflowTxWaveData.OutStanding</obj_property>
+                  <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/grp_read_i32_fu_54_activity.dataflowTxTooltipData</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/grp_read_i32_fu_3323_activity">
+               <obj_property name="label">grp_read_i32_fu_3323_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_read_i32_fu_3323_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_read_i32_fu_3323_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/grp_read_i32_fu_3323_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/grp_read_i32_fu_3323_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/grp_read_i32_fu_3323_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_fu_3334_activity">
+               <obj_property name="label">grp_RMS_NORM_fu_3334_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_RMS_NORM_fu_3334_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_RMS_NORM_fu_3334_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_fu_3334_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_fu_3334_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_fu_3334_activity.dataflowTxTooltipData</obj_property>
+               <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity">
+                  <obj_property name="label">grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <obj_property name="UseFullPath">true</obj_property>
+                  <obj_property name="ElementShortName">grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity</obj_property>
+                  <obj_property name="ObjectShortName">grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity</obj_property>
+                  <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+                  <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+                  <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+                  <obj_property name="UseCustomSignalColor">true</obj_property>
+                  <obj_property name="CustomSignalColor">turquoise</obj_property>
+                  <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+                  <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity.dataflowTxWaveData.Cycles</obj_property>
+                  <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity.dataflowTxWaveData.OutStanding</obj_property>
+                  <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity.dataflowTxTooltipData</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity.dataflowTxTooltipData</obj_property>
+               <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/grp_read_i32_fu_102_activity">
+                  <obj_property name="label">grp_read_i32_fu_102_activity</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <obj_property name="UseFullPath">true</obj_property>
+                  <obj_property name="ElementShortName">grp_read_i32_fu_102_activity</obj_property>
+                  <obj_property name="ObjectShortName">grp_read_i32_fu_102_activity</obj_property>
+                  <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+                  <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+                  <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+                  <obj_property name="UseCustomSignalColor">true</obj_property>
+                  <obj_property name="CustomSignalColor">turquoise</obj_property>
+                  <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+                  <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/grp_read_i32_fu_102_activity.dataflowTxWaveData.Cycles</obj_property>
+                  <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/grp_read_i32_fu_102_activity.dataflowTxWaveData.OutStanding</obj_property>
+                  <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/grp_read_i32_fu_102_activity.dataflowTxTooltipData</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity">
+               <obj_property name="label">grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity.dataflowTxTooltipData</obj_property>
+               <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/grp_read_i32_fu_54_activity">
+                  <obj_property name="label">grp_read_i32_fu_54_activity</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <obj_property name="UseFullPath">true</obj_property>
+                  <obj_property name="ElementShortName">grp_read_i32_fu_54_activity</obj_property>
+                  <obj_property name="ObjectShortName">grp_read_i32_fu_54_activity</obj_property>
+                  <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+                  <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+                  <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+                  <obj_property name="UseCustomSignalColor">true</obj_property>
+                  <obj_property name="CustomSignalColor">turquoise</obj_property>
+                  <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+                  <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/grp_read_i32_fu_54_activity.dataflowTxWaveData.Cycles</obj_property>
+                  <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/grp_read_i32_fu_54_activity.dataflowTxWaveData.OutStanding</obj_property>
+                  <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/grp_read_i32_fu_54_activity.dataflowTxTooltipData</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity">
+               <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <obj_property name="UseFullPath">true</obj_property>
+               <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="WaveformStyle">STYLE_ENUM_TRANSACTION</obj_property>
+               <obj_property name="EnumTransactionColorTable">0=blank ffff=blank 0bad=#FF0000</obj_property>
+               <obj_property name="UseCustomSignalColor">true</obj_property>
+               <obj_property name="CustomSignalColor">turquoise</obj_property>
+               <obj_property name="EnumTransactionValueTable">65535=blank</obj_property>
+               <obj_property name="Render_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity.dataflowTxWaveData.Cycles</obj_property>
+               <obj_property name="Value_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity.dataflowTxWaveData.OutStanding</obj_property>
+               <obj_property name="Detail_Data">/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity.dataflowTxTooltipData</obj_property>
+            </wvobject>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+   <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top//AESL_inst_transformer_top_activity">
+      <obj_property name="ElementShortName">AESL_inst_transformer_top_activity</obj_property>
+      <obj_property name="ObjectShortName">AESL_inst_transformer_top_activity</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="AESL_inst_transformer_top_group">
+      <obj_property name="label">AESL_inst_transformer_top</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/grp_scheduler_hls_fu_14364_activity">
+         <obj_property name="ElementShortName">grp_scheduler_hls_fu_14364_activity</obj_property>
+         <obj_property name="ObjectShortName">grp_scheduler_hls_fu_14364_activity</obj_property>
+      </wvobject>
+      <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_fu_14488_activity">
+         <obj_property name="ElementShortName">grp_compute_controller_fu_14488_activity</obj_property>
+         <obj_property name="ObjectShortName">grp_compute_controller_fu_14488_activity</obj_property>
+      </wvobject>
+      <wvobject type="group" fp_name="AESL_inst_transformer_top_Handshake_group">
+         <obj_property name="label">Block-level handshake</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/ap_start">
+            <obj_property name="ElementShortName">ap_start</obj_property>
+            <obj_property name="ObjectShortName">ap_start</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/ap_ready">
+            <obj_property name="ElementShortName">ap_ready</obj_property>
+            <obj_property name="ObjectShortName">ap_ready</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/ap_done">
+            <obj_property name="ElementShortName">ap_done</obj_property>
+            <obj_property name="ObjectShortName">ap_done</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject type="group" fp_name="grp_scheduler_hls_fu_14364_group">
+         <obj_property name="label">grp_scheduler_hls_fu_14364</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject type="group" fp_name="grp_scheduler_hls_fu_14364_Handshake_group">
+            <obj_property name="label">Block-level handshake</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/ap_start">
+               <obj_property name="ElementShortName">ap_start</obj_property>
+               <obj_property name="ObjectShortName">ap_start</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/ap_ready">
+               <obj_property name="ElementShortName">ap_ready</obj_property>
+               <obj_property name="ObjectShortName">ap_ready</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_scheduler_hls_fu_14364/ap_done">
+               <obj_property name="ElementShortName">ap_done</obj_property>
+               <obj_property name="ObjectShortName">ap_done</obj_property>
+            </wvobject>
+         </wvobject>
+      </wvobject>
+      <wvobject type="group" fp_name="grp_compute_controller_fu_14488_group">
+         <obj_property name="label">grp_compute_controller_fu_14488</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/grp_read_i32_fu_3323_activity">
+            <obj_property name="ElementShortName">grp_read_i32_fu_3323_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_read_i32_fu_3323_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_fu_3334_activity">
+            <obj_property name="ElementShortName">grp_RMS_NORM_fu_3334_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_RMS_NORM_fu_3334_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity">
+            <obj_property name="ElementShortName">grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_activity</obj_property>
+         </wvobject>
+         <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity">
+            <obj_property name="ElementShortName">grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity</obj_property>
+            <obj_property name="ObjectShortName">grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_activity</obj_property>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_fu_14488_Handshake_group">
+            <obj_property name="label">Block-level handshake</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/ap_start">
+               <obj_property name="ElementShortName">ap_start</obj_property>
+               <obj_property name="ObjectShortName">ap_start</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/ap_ready">
+               <obj_property name="ElementShortName">ap_ready</obj_property>
+               <obj_property name="ObjectShortName">ap_ready</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/ap_done">
+               <obj_property name="ElementShortName">ap_done</obj_property>
+               <obj_property name="ObjectShortName">ap_done</obj_property>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_654_36_fu_2727/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_638_34_fu_2765/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_575_25_fu_2803/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_530_21_fu_2841/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_456_12_fu_2911/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39_fu_2949/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/grp_read_i32_fu_56_activity">
+               <obj_property name="ElementShortName">grp_read_i32_fu_56_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_read_i32_fu_56_activity</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_read_i32_fu_56_group">
+               <obj_property name="label">grp_read_i32_fu_56</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="group" fp_name="grp_read_i32_fu_56_Handshake_group">
+                  <obj_property name="label">Block-level handshake</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/ap_start">
+                     <obj_property name="ElementShortName">ap_start</obj_property>
+                     <obj_property name="ObjectShortName">ap_start</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/ap_ready">
+                     <obj_property name="ElementShortName">ap_ready</obj_property>
+                     <obj_property name="ObjectShortName">ap_ready</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_676_40_fu_2987/grp_read_i32_fu_56/ap_done">
+                     <obj_property name="ElementShortName">ap_done</obj_property>
+                     <obj_property name="ObjectShortName">ap_done</obj_property>
+                  </wvobject>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_684_42_fu_3003/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_697_44_fu_3027/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_163_1_fu_3043/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_646_35_fu_3111/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_580_26_fu_3149/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28_fu_3165/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/grp_read_i32_fu_54_activity">
+               <obj_property name="ElementShortName">grp_read_i32_fu_54_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_read_i32_fu_54_activity</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_read_i32_fu_54_group">
+               <obj_property name="label">grp_read_i32_fu_54</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="group" fp_name="grp_read_i32_fu_54_Handshake_group">
+                  <obj_property name="label">Block-level handshake</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/ap_start">
+                     <obj_property name="ElementShortName">ap_start</obj_property>
+                     <obj_property name="ObjectShortName">ap_start</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/ap_ready">
+                     <obj_property name="ElementShortName">ap_ready</obj_property>
+                     <obj_property name="ObjectShortName">ap_ready</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_597_29_fu_3203/grp_read_i32_fu_54/ap_done">
+                     <obj_property name="ElementShortName">ap_done</obj_property>
+                     <obj_property name="ObjectShortName">ap_done</obj_property>
+                  </wvobject>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_605_31_fu_3217/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_620_33_fu_3239/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_551_23_fu_3253/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_read_i32_fu_3323_group">
+            <obj_property name="label">grp_read_i32_fu_3323</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_read_i32_fu_3323_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_read_i32_fu_3323/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_RMS_NORM_fu_3334_group">
+            <obj_property name="label">grp_RMS_NORM_fu_3334</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity">
+               <obj_property name="ElementShortName">grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_activity</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_RMS_NORM_fu_3334_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_group">
+               <obj_property name="label">grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="group" fp_name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_Handshake_group">
+                  <obj_property name="label">Block-level handshake</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/ap_start">
+                     <obj_property name="ElementShortName">ap_start</obj_property>
+                     <obj_property name="ObjectShortName">ap_start</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/ap_ready">
+                     <obj_property name="ElementShortName">ap_ready</obj_property>
+                     <obj_property name="ObjectShortName">ap_ready</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_RMS_NORM_fu_3334/grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140/ap_done">
+                     <obj_property name="ElementShortName">ap_done</obj_property>
+                     <obj_property name="ObjectShortName">ap_done</obj_property>
+                  </wvobject>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_567_24_fu_3435/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_541_22_fu_3557/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/grp_read_i32_fu_102_activity">
+               <obj_property name="ElementShortName">grp_read_i32_fu_102_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_read_i32_fu_102_activity</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_read_i32_fu_102_group">
+               <obj_property name="label">grp_read_i32_fu_102</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="group" fp_name="grp_read_i32_fu_102_Handshake_group">
+                  <obj_property name="label">Block-level handshake</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/ap_start">
+                     <obj_property name="ElementShortName">ap_start</obj_property>
+                     <obj_property name="ObjectShortName">ap_start</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/ap_ready">
+                     <obj_property name="ElementShortName">ap_ready</obj_property>
+                     <obj_property name="ObjectShortName">ap_ready</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_506_19_fu_3579/grp_read_i32_fu_102/ap_done">
+                     <obj_property name="ElementShortName">ap_done</obj_property>
+                     <obj_property name="ObjectShortName">ap_done</obj_property>
+                  </wvobject>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_group">
+            <obj_property name="label">grp_REQUANT_D_MODEL_int32_to_int8_fu_3617</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_REQUANT_D_MODEL_int32_to_int8_fu_3617_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_REQUANT_D_MODEL_int32_to_int8_fu_3617/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_521_20_fu_3689/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_2_fu_3711/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_461_13_fu_3781/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15_fu_3797/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="protoinst" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/grp_read_i32_fu_54_activity">
+               <obj_property name="ElementShortName">grp_read_i32_fu_54_activity</obj_property>
+               <obj_property name="ObjectShortName">grp_read_i32_fu_54_activity</obj_property>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject type="group" fp_name="grp_read_i32_fu_54_group">
+               <obj_property name="label">grp_read_i32_fu_54</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="group" fp_name="grp_read_i32_fu_54_Handshake_group">
+                  <obj_property name="label">Block-level handshake</obj_property>
+                  <obj_property name="DisplayName">label</obj_property>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/ap_start">
+                     <obj_property name="ElementShortName">ap_start</obj_property>
+                     <obj_property name="ObjectShortName">ap_start</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/ap_ready">
+                     <obj_property name="ElementShortName">ap_ready</obj_property>
+                     <obj_property name="ObjectShortName">ap_ready</obj_property>
+                  </wvobject>
+                  <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_478_16_fu_3835/grp_read_i32_fu_54/ap_done">
+                     <obj_property name="ElementShortName">ap_done</obj_property>
+                     <obj_property name="ObjectShortName">ap_done</obj_property>
+                  </wvobject>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_493_18_fu_3849/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_21_fu_3859/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_22_fu_3929/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_23_fu_3999/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_42_24_fu_4069/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_group">
+            <obj_property name="label">grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="group" fp_name="grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139_Handshake_group">
+               <obj_property name="label">Block-level handshake</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/ap_start">
+                  <obj_property name="ElementShortName">ap_start</obj_property>
+                  <obj_property name="ObjectShortName">ap_start</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/ap_ready">
+                  <obj_property name="ElementShortName">ap_ready</obj_property>
+                  <obj_property name="ObjectShortName">ap_ready</obj_property>
+               </wvobject>
+               <wvobject type="logic" fp_name="/apatb_transformer_top_top/AESL_inst_transformer_top/grp_compute_controller_fu_14488/grp_compute_controller_Pipeline_VITIS_LOOP_398_11_fu_4139/ap_done">
+                  <obj_property name="ElementShortName">ap_done</obj_property>
+                  <obj_property name="ObjectShortName">ap_done</obj_property>
+               </wvobject>
+            </wvobject>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+</wave_config>

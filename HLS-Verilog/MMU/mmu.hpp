@@ -2,7 +2,7 @@
 #ifndef MMU_HPP
 #define MMU_HPP
 
-#include "top_params.hpp"
+#include "../top_params.hpp"
 
 // Data types for buffer layout tracking
 enum class DataType : uint8_t {
@@ -227,97 +227,260 @@ struct MMUContext {
 };
 
 // Initialization
-void mmu_init(MMUContext &ctx, const ModelDims &dims);
-void mmu_reset(MMUContext &ctx);
-void mmu_set_kv_cache_bases(MMUContext &ctx, uint32_t k_base, uint32_t v_base);
+void mmu_init(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    const ModelDims &dims          // [INPUT] model dimensions
+);
+void mmu_reset(
+    MMUContext &ctx               // [INOUT] MMU state context
+);
+void mmu_set_kv_cache_bases(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t k_base,              // [INPUT] K-cache base address
+    uint32_t v_base               // [INPUT] V-cache base address
+);
 
 // Main FSM (call every cycle)
 void mmu_fsm(
-    MMUContext &ctx,
-    bool dma_ready, bool dma_done,
-    bool &dma_start, uint32_t &dma_addr, uint32_t &dma_len, bool &dma_is_write,
-    uint8_t &uram_bank, uint32_t &uram_offset,
-    bool buffer_ready, bool &buffer_valid, bool &transfer_done
+    MMUContext &ctx,              // [INOUT] MMU state context
+    bool dma_ready,               // [INPUT] DMA engine ready to accept a request
+    bool dma_done,                // [INPUT] DMA engine completed current transfer
+    bool &dma_start,              // [OUTPUT] pulse to start a DMA transfer
+    uint32_t &dma_addr,           // [OUTPUT] DMA base address
+    uint32_t &dma_len,            // [OUTPUT] DMA transfer length in bytes
+    bool &dma_is_write,           // [OUTPUT] DMA direction (true = write)
+    uint8_t &uram_bank,           // [OUTPUT] selected URAM bank for transfer
+    uint32_t &uram_offset,        // [OUTPUT] selected URAM offset in bytes
+    bool buffer_ready,            // [INPUT] compute buffer ready for transfer
+    bool &buffer_valid,           // [OUTPUT] assert when buffer transfer is valid
+    bool &transfer_done           // [OUTPUT] assert when transfer is complete
 );
 
 // Scheduler interface
-bool mmu_push_dma_request(MMUContext &ctx, uint32_t packed);
-bool mmu_push_dma_request_headed(MMUContext &ctx, uint32_t packed, int head);
+bool mmu_push_dma_request(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed               // [INPUT] packed DMA request
+);
+bool mmu_push_dma_request_headed(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed,              // [INPUT] packed DMA request
+    int head                      // [INPUT] head index override
+);
 
 // Compute controller interface
-bool mmu_request_input_buffer(MMUContext &ctx, uint32_t packed_op, int head);
-bool mmu_signal_output_ready(MMUContext &ctx, uint32_t packed_op, int head);
+bool mmu_request_input_buffer(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed_op,           // [INPUT] packed compute request
+    int head                      // [INPUT] head index for headed ops
+);
+bool mmu_signal_output_ready(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed_op,           // [INPUT] packed compute request
+    int head                      // [INPUT] head index for headed ops
+);
 
 // Buffer layouts
-InputBufferLayout  mmu_calc_input_layout(ComputeOp op, const ModelDims &dims);
-OutputBufferLayout mmu_calc_output_layout(ComputeOp op, const ModelDims &dims);
-WeightBlobLayout   mmu_calc_weight_blob(DmaSel sel, const ModelDims &dims);
+InputBufferLayout mmu_calc_input_layout(
+    ComputeOp op,                 // [INPUT] compute operation
+    const ModelDims &dims         // [INPUT] model dimensions
+);
+OutputBufferLayout mmu_calc_output_layout(
+    ComputeOp op,                 // [INPUT] compute operation
+    const ModelDims &dims         // [INPUT] model dimensions
+);
+WeightBlobLayout mmu_calc_weight_blob(
+    DmaSel sel,                   // [INPUT] DMA selector (weights type)
+    const ModelDims &dims         // [INPUT] model dimensions
+);
 
 // KV cache
-KVCacheAddr mmu_calc_kv_write_addr(const MMUContext &ctx, int layer, int head, bool is_v);
-KVCacheAddr mmu_calc_kv_read_addr(const MMUContext &ctx, int layer, int head, bool is_v);
-uint32_t    mmu_calc_kv_cache_size(const ModelDims &dims);
+KVCacheAddr mmu_calc_kv_write_addr(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    bool is_v                     // [INPUT] true for V-cache, false for K-cache
+);
+KVCacheAddr mmu_calc_kv_read_addr(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    bool is_v                     // [INPUT] true for V-cache, false for K-cache
+);
+uint32_t mmu_calc_kv_cache_size(
+    const ModelDims &dims         // [INPUT] model dimensions
+);
 
 // URAM cache
-bool     mmu_check_cache(const MMUContext &ctx, DmaSel sel, int layer, int head, int tile);
-uint32_t mmu_lookup_uram(const MMUContext &ctx, DmaSel sel, int layer, int head, int tile, uint8_t &bank);
-bool     mmu_allocate_uram(MMUContext &ctx, uint32_t size, uint8_t &bank, uint32_t &offset);
-void     mmu_commit_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int tile,
-                         uint8_t bank, uint32_t offset, uint32_t size);
-void     mmu_invalidate_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int tile);
+bool mmu_check_cache(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile                      // [INPUT] tile index
+);
+uint32_t mmu_lookup_uram(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile,                     // [INPUT] tile index
+    uint8_t &bank                 // [OUTPUT] selected URAM bank
+);
+bool mmu_allocate_uram(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t size,                // [INPUT] allocation size in bytes
+    uint8_t &bank,                // [OUTPUT] allocated URAM bank
+    uint32_t &offset              // [OUTPUT] allocated URAM offset in bytes
+);
+void mmu_commit_tile(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile,                     // [INPUT] tile index
+    uint8_t bank,                 // [INPUT] URAM bank to commit
+    uint32_t offset,              // [INPUT] URAM offset in bytes
+    uint32_t size                 // [INPUT] tile size in bytes
+);
+void mmu_invalidate_tile(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile                      // [INPUT] tile index
+);
 
 // Arbitration
-void mmu_request_head(MMUContext &ctx, int head);
-void mmu_release_head(MMUContext &ctx, int head);
-void mmu_arbitrate(MMUContext &ctx);
-int  mmu_granted_head(const MMUContext &ctx);
-bool mmu_is_granted(const MMUContext &ctx, int head);
+void mmu_request_head(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index requesting access
+);
+void mmu_release_head(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index releasing access
+);
+void mmu_arbitrate(
+    MMUContext &ctx               // [INOUT] MMU state context
+);
+int mmu_granted_head(
+    const MMUContext &ctx         // [INPUT] MMU state context
+);
+bool mmu_is_granted(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int head                      // [INPUT] head index to test
+);
 
 // Status flags
-void mmu_set_head_dma_done(MMUContext &ctx, int head);
-void mmu_set_head_compute_done(MMUContext &ctx, int head);
-void mmu_set_main_dma_done(MMUContext &ctx);
-void mmu_set_main_compute_done(MMUContext &ctx);
-bool mmu_get_head_dma_done(const MMUContext &ctx, int head);
-bool mmu_get_head_compute_done(const MMUContext &ctx, int head);
-bool mmu_get_main_dma_done(const MMUContext &ctx);
-bool mmu_get_main_compute_done(const MMUContext &ctx);
-void mmu_clear_head_dma_done(MMUContext &ctx, int head);
-void mmu_clear_head_compute_done(MMUContext &ctx, int head);
-void mmu_clear_main_dma_done(MMUContext &ctx);
-void mmu_clear_main_compute_done(MMUContext &ctx);
-void mmu_clear_all_flags(MMUContext &ctx);
+void mmu_set_head_dma_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index to mark DMA done
+);
+void mmu_set_head_compute_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index to mark compute done
+);
+void mmu_set_main_dma_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+);
+void mmu_set_main_compute_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+);
+bool mmu_get_head_dma_done(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int head                      // [INPUT] head index to query
+);
+bool mmu_get_head_compute_done(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int head                      // [INPUT] head index to query
+);
+bool mmu_get_main_dma_done(
+    const MMUContext &ctx         // [INPUT] MMU state context
+);
+bool mmu_get_main_compute_done(
+    const MMUContext &ctx         // [INPUT] MMU state context
+);
+void mmu_clear_head_dma_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index to clear
+);
+void mmu_clear_head_compute_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index to clear
+);
+void mmu_clear_main_dma_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+);
+void mmu_clear_main_compute_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+);
+void mmu_clear_all_flags(
+    MMUContext &ctx               // [INOUT] MMU state context
+);
 
 // Utilities
-bool mmu_is_headed_op(ComputeOp op);
-bool mmu_is_headed_dma(DmaSel sel);
-bool mmu_is_dma_write(DmaSel sel);
-uint32_t mmu_calc_dma_size(DmaSel sel, const ModelDims &dims, int tile);
-const char* mmu_state_name(MMUFsmState state);
+bool mmu_is_headed_op(
+    ComputeOp op                 // [INPUT] compute operation
+);
+bool mmu_is_headed_dma(
+    DmaSel sel                   // [INPUT] DMA selector
+);
+bool mmu_is_dma_write(
+    DmaSel sel                   // [INPUT] DMA selector
+);
+uint32_t mmu_calc_dma_size(
+    DmaSel sel,                  // [INPUT] DMA selector
+    const ModelDims &dims,       // [INPUT] model dimensions
+    int tile                     // [INPUT] tile index
+);
+const char* mmu_state_name(
+    MMUFsmState state            // [INPUT] FSM state
+);
 
 // Request packing helpers
-inline uint32_t mmu_pack_dma(DmaSel sel, int layer, int head, int tile) {
+inline uint32_t mmu_pack_dma(
+    DmaSel sel,                  // [INPUT] DMA selector
+    int layer,                   // [INPUT] layer index
+    int head,                    // [INPUT] head index
+    int tile                     // [INPUT] tile index
+) {
     return static_cast<uint32_t>(sel) |
            (static_cast<uint32_t>(layer) << 8) |
            (static_cast<uint32_t>(head) << 16) |
            (static_cast<uint32_t>(tile) << 24);
 }
 
-inline uint32_t mmu_pack_compute(ComputeOp op, int layer, int head, int tile) {
+inline uint32_t mmu_pack_compute(
+    ComputeOp op,                // [INPUT] compute operation
+    int layer,                   // [INPUT] layer index
+    int head,                    // [INPUT] head index
+    int tile                     // [INPUT] tile index
+) {
     return static_cast<uint32_t>(op) |
            (static_cast<uint32_t>(layer) << 8) |
            (static_cast<uint32_t>(head) << 16) |
            (static_cast<uint32_t>(tile) << 24);
 }
 
-inline void mmu_unpack_dma(uint32_t packed, DmaSel &sel, int &layer, int &head, int &tile) {
+inline void mmu_unpack_dma(
+    uint32_t packed,             // [INPUT] packed DMA request
+    DmaSel &sel,                 // [OUTPUT] DMA selector
+    int &layer,                  // [OUTPUT] layer index
+    int &head,                   // [OUTPUT] head index
+    int &tile                    // [OUTPUT] tile index
+) {
     sel   = static_cast<DmaSel>(packed & 0xFF);
     layer = (packed >> 8) & 0xFF;
     head  = (packed >> 16) & 0xFF;
     tile  = (packed >> 24) & 0xFF;
 }
 
-inline void mmu_unpack_compute(uint32_t packed, ComputeOp &op, int &layer, int &head, int &tile) {
+inline void mmu_unpack_compute(
+    uint32_t packed,             // [INPUT] packed compute request
+    ComputeOp &op,               // [OUTPUT] compute operation
+    int &layer,                  // [OUTPUT] layer index
+    int &head,                   // [OUTPUT] head index
+    int &tile                    // [OUTPUT] tile index
+) {
     op    = static_cast<ComputeOp>(packed & 0xFF);
     layer = (packed >> 8) & 0xFF;
     head  = (packed >> 16) & 0xFF;

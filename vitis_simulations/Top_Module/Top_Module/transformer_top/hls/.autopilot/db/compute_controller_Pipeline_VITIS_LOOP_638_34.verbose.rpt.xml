@@ -1,0 +1,190 @@
+<profile>
+
+<section name = "Vitis HLS Report for 'compute_controller_Pipeline_VITIS_LOOP_638_34'" level="0">
+<item name = "Date">Tue Feb  3 19:41:35 2026
+</item>
+<item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
+<item name = "Project">transformer_top</item>
+<item name = "Solution">hls (Vivado IP Flow Target)</item>
+<item name = "Product family">zynquplus</item>
+<item name = "Target device">xck26-sfvc784-2LV-c</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00 ns, 1.914 ns, 2.70 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">24, 24, 0.240 us, 0.240 us, 23, 23, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+<column name="- VITIS_LOOP_638_34">22, 22, 2, 1, 1, 22, yes</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="DSP">-, -, -, -, -</column>
+<column name="Expression">-, -, 0, 26, -</column>
+<column name="FIFO">-, -, -, -, -</column>
+<column name="Instance">-, -, -, -, -</column>
+<column name="Memory">-, -, -, -, -</column>
+<column name="Multiplexer">-, -, 0, 36, -</column>
+<column name="Register">-, -, 13, -, -</column>
+<specialColumn name="Available">288, 1248, 234240, 117120, 64</specialColumn>
+<specialColumn name="Utilization (%)">0, 0, ~0, ~0, 0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
+</table>
+</item>
+<item name = "DSP"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="10">Memory, Module, BRAM_18K, FF, LUT, URAM, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="8">Name, BRAM_18K, FF, LUT, URAM, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="add_ln638_fu_357_p2">+, 0, 0, 12, 5, 1</column>
+<column name="icmp_ln638_fu_351_p2">icmp, 0, 0, 12, 5, 5</column>
+<column name="ap_enable_pp0">xor, 0, 0, 2, 1, 2</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="ap_done_int">9, 2, 1, 2</column>
+<column name="ap_enable_reg_pp0_iter1">9, 2, 1, 2</column>
+<column name="ap_sig_allocacmp_i_5">9, 2, 5, 10</column>
+<column name="i_fu_106">9, 2, 5, 10</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="ap_CS_fsm">1, 0, 1, 0</column>
+<column name="ap_done_reg">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter1">1, 0, 1, 0</column>
+<column name="i_fu_106">5, 0, 5, 0</column>
+<column name="tmp_reg_497">1, 0, 1, 0</column>
+<column name="trunc_ln638_reg_493">4, 0, 4, 0</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, compute_controller_Pipeline_VITIS_LOOP_638_34, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, compute_controller_Pipeline_VITIS_LOOP_638_34, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, compute_controller_Pipeline_VITIS_LOOP_638_34, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, compute_controller_Pipeline_VITIS_LOOP_638_34, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, compute_controller_Pipeline_VITIS_LOOP_638_34, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, compute_controller_Pipeline_VITIS_LOOP_638_34, return value</column>
+<column name="in_buf_address0">out, 8, ap_memory, in_buf, array</column>
+<column name="in_buf_ce0">out, 1, ap_memory, in_buf, array</column>
+<column name="in_buf_q0">in, 8, ap_memory, in_buf, array</column>
+<column name="in_buf_address1">out, 8, ap_memory, in_buf, array</column>
+<column name="in_buf_ce1">out, 1, ap_memory, in_buf, array</column>
+<column name="in_buf_q1">in, 8, ap_memory, in_buf, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_address0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_ce0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_we0">out, 1, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139, array</column>
+<column name="compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_d0">out, 16, ap_memory, compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59_address0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59_ce0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59_we0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59_d0">out, 16, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58_address0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58_ce0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58_we0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58_d0">out, 16, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57_address0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57_ce0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57_we0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57_d0">out, 16, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56_address0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56_ce0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56_we0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56_d0">out, 16, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55_address0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55_ce0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55_we0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55_d0">out, 16, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54_address0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54_ce0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54_we0">out, 1, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54, array</column>
+<column name="p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54_d0">out, 16, ap_memory, p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54, array</column>
+</table>
+</item>
+</section>
+</profile>

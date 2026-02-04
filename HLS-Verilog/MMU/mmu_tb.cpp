@@ -1,5 +1,5 @@
 #include <cstdio>
-#include "mmu_v2.hpp"
+#include "mmu.hpp"
 
 static int tests = 0, passed = 0;
 
