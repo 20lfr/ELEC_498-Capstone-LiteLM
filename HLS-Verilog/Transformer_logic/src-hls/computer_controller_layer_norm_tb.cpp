@@ -569,8 +569,11 @@ int main() {
             print_buffer("in_buf (send)", in_buf, compute_buf::IN_BUF_BYTES);
         }
 
+        ControlMemSpace ctrl_mem{};
+        ctrl_mem.control = reset ? 0u : CTRL_RESETN_BIT;
+
         compute_controller(
-            reset,
+            ctrl_mem,
             compute_start,
             compute_instruction,
             compute_ready,

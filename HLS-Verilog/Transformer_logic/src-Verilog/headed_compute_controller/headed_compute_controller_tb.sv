@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module compute_controller_tb;
+module headed_compute_controller_tb;
 
   // Parameters
   localparam int NUM_HEADS       = 4;
@@ -16,7 +16,7 @@ module compute_controller_tb;
   localparam int CONTEXT_LENGTH = 16;
 
   localparam int CLK_PERIOD = 10;
-  localparam int MAX_CYCLES = 30000;
+  localparam int MAX_CYCLES = 20000;
 
   function automatic int max2(input int a, input int b);
     max2 = (a > b) ? a : b;

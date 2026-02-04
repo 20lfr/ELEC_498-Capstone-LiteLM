@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'headed_compute_controller_Pipeline_VITIS_LOOP_661_33'
 ================================================================
-* Date:           Fri Jan 30 15:25:10 2026
+* Date:           Tue Feb  3 14:27:09 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        headed_compute_controller
@@ -119,7 +119,7 @@ Target clock period: 10.000ns, clock uncertainty: 2.700ns.
 The critical path consists of the following:
 	'store' operation 0 bit ('store_ln661', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661) of constant 0 on local variable 'h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661 [6]  (0.427 ns)
 	'load' operation 5 bit ('h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661) on local variable 'h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661 [9]  (0.000 ns)
-	'add' operation 5 bit ('add_ln661', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661) [11]  (0.789 ns)
+	'icmp' operation 1 bit ('icmp_ln661', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661) [10]  (0.789 ns)
 	'store' operation 0 bit ('store_ln661', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661) of variable 'add_ln661', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661 on local variable 'h', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:661 [34]  (0.427 ns)
 
 

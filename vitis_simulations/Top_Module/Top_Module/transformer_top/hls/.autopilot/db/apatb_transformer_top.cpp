@@ -35,14 +35,18 @@ using namespace std;
 #define AUTOTB_TVOUT_wl_instruction "../tv/cdatafile/c.transformer_top.autotvout_wl_instruction.dat"
 #define AUTOTB_TVIN_wl_start "../tv/cdatafile/c.transformer_top.autotvin_wl_start.dat"
 #define AUTOTB_TVOUT_wl_start "../tv/cdatafile/c.transformer_top.autotvout_wl_start.dat"
-#define AUTOTB_TVIN_compute_ready "../tv/cdatafile/c.transformer_top.autotvin_compute_ready.dat"
-#define AUTOTB_TVOUT_compute_ready "../tv/cdatafile/c.transformer_top.autotvout_compute_ready.dat"
-#define AUTOTB_TVIN_compute_done "../tv/cdatafile/c.transformer_top.autotvin_compute_done.dat"
-#define AUTOTB_TVOUT_compute_done "../tv/cdatafile/c.transformer_top.autotvout_compute_done.dat"
-#define AUTOTB_TVIN_compute_start "../tv/cdatafile/c.transformer_top.autotvin_compute_start.dat"
-#define AUTOTB_TVOUT_compute_start "../tv/cdatafile/c.transformer_top.autotvout_compute_start.dat"
-#define AUTOTB_TVIN_compute_instruction "../tv/cdatafile/c.transformer_top.autotvin_compute_instruction.dat"
-#define AUTOTB_TVOUT_compute_instruction "../tv/cdatafile/c.transformer_top.autotvout_compute_instruction.dat"
+#define AUTOTB_TVIN_mem_transfer_done "../tv/cdatafile/c.transformer_top.autotvin_mem_transfer_done.dat"
+#define AUTOTB_TVOUT_mem_transfer_done "../tv/cdatafile/c.transformer_top.autotvout_mem_transfer_done.dat"
+#define AUTOTB_TVIN_mem_read_request "../tv/cdatafile/c.transformer_top.autotvin_mem_read_request.dat"
+#define AUTOTB_TVOUT_mem_read_request "../tv/cdatafile/c.transformer_top.autotvout_mem_read_request.dat"
+#define AUTOTB_TVIN_mem_write_request "../tv/cdatafile/c.transformer_top.autotvin_mem_write_request.dat"
+#define AUTOTB_TVOUT_mem_write_request "../tv/cdatafile/c.transformer_top.autotvout_mem_write_request.dat"
+#define AUTOTB_TVIN_mem_op "../tv/cdatafile/c.transformer_top.autotvin_mem_op.dat"
+#define AUTOTB_TVOUT_mem_op "../tv/cdatafile/c.transformer_top.autotvout_mem_op.dat"
+#define AUTOTB_TVIN_in_buf "../tv/cdatafile/c.transformer_top.autotvin_in_buf.dat"
+#define AUTOTB_TVOUT_in_buf "../tv/cdatafile/c.transformer_top.autotvout_in_buf.dat"
+#define AUTOTB_TVIN_out_buf "../tv/cdatafile/c.transformer_top.autotvin_out_buf.dat"
+#define AUTOTB_TVOUT_out_buf "../tv/cdatafile/c.transformer_top.autotvout_out_buf.dat"
 #define AUTOTB_TVIN_head_ctx_ref_0 "../tv/cdatafile/c.transformer_top.autotvin_head_ctx_ref_0.dat"
 #define AUTOTB_TVOUT_head_ctx_ref_0 "../tv/cdatafile/c.transformer_top.autotvout_head_ctx_ref_0.dat"
 #define AUTOTB_TVIN_head_ctx_ref_1 "../tv/cdatafile/c.transformer_top.autotvin_head_ctx_ref_1.dat"
@@ -107,6 +111,34 @@ using namespace std;
 #define AUTOTB_TVOUT_w1_tile_stride "../tv/cdatafile/c.transformer_top.autotvout_w1_tile_stride.dat"
 #define AUTOTB_TVIN_w2_tile_stride "../tv/cdatafile/c.transformer_top.autotvin_w2_tile_stride.dat"
 #define AUTOTB_TVOUT_w2_tile_stride "../tv/cdatafile/c.transformer_top.autotvout_w2_tile_stride.dat"
+#define AUTOTB_TVIN_dbg_compute_start "../tv/cdatafile/c.transformer_top.autotvin_dbg_compute_start.dat"
+#define AUTOTB_TVOUT_dbg_compute_start "../tv/cdatafile/c.transformer_top.autotvout_dbg_compute_start.dat"
+#define AUTOTB_TVIN_dbg_compute_instruction "../tv/cdatafile/c.transformer_top.autotvin_dbg_compute_instruction.dat"
+#define AUTOTB_TVOUT_dbg_compute_instruction "../tv/cdatafile/c.transformer_top.autotvout_dbg_compute_instruction.dat"
+#define AUTOTB_TVIN_dbg_compute_ready "../tv/cdatafile/c.transformer_top.autotvin_dbg_compute_ready.dat"
+#define AUTOTB_TVOUT_dbg_compute_ready "../tv/cdatafile/c.transformer_top.autotvout_dbg_compute_ready.dat"
+#define AUTOTB_TVIN_dbg_compute_done "../tv/cdatafile/c.transformer_top.autotvin_dbg_compute_done.dat"
+#define AUTOTB_TVOUT_dbg_compute_done "../tv/cdatafile/c.transformer_top.autotvout_dbg_compute_done.dat"
+#define AUTOTB_TVIN_dbg_compute_state "../tv/cdatafile/c.transformer_top.autotvin_dbg_compute_state.dat"
+#define AUTOTB_TVOUT_dbg_compute_state "../tv/cdatafile/c.transformer_top.autotvout_dbg_compute_state.dat"
+#define AUTOTB_TVIN_dbg_req_instruction "../tv/cdatafile/c.transformer_top.autotvin_dbg_req_instruction.dat"
+#define AUTOTB_TVOUT_dbg_req_instruction "../tv/cdatafile/c.transformer_top.autotvout_dbg_req_instruction.dat"
+#define AUTOTB_TVIN_dbg_req_op "../tv/cdatafile/c.transformer_top.autotvin_dbg_req_op.dat"
+#define AUTOTB_TVOUT_dbg_req_op "../tv/cdatafile/c.transformer_top.autotvout_dbg_req_op.dat"
+#define AUTOTB_TVIN_dbg_req_layer "../tv/cdatafile/c.transformer_top.autotvin_dbg_req_layer.dat"
+#define AUTOTB_TVOUT_dbg_req_layer "../tv/cdatafile/c.transformer_top.autotvout_dbg_req_layer.dat"
+#define AUTOTB_TVIN_dbg_req_head "../tv/cdatafile/c.transformer_top.autotvin_dbg_req_head.dat"
+#define AUTOTB_TVOUT_dbg_req_head "../tv/cdatafile/c.transformer_top.autotvout_dbg_req_head.dat"
+#define AUTOTB_TVIN_dbg_req_tile "../tv/cdatafile/c.transformer_top.autotvin_dbg_req_tile.dat"
+#define AUTOTB_TVOUT_dbg_req_tile "../tv/cdatafile/c.transformer_top.autotvout_dbg_req_tile.dat"
+#define AUTOTB_TVIN_dbg_mac_start "../tv/cdatafile/c.transformer_top.autotvin_dbg_mac_start.dat"
+#define AUTOTB_TVOUT_dbg_mac_start "../tv/cdatafile/c.transformer_top.autotvout_dbg_mac_start.dat"
+#define AUTOTB_TVIN_dbg_mac_ready "../tv/cdatafile/c.transformer_top.autotvin_dbg_mac_ready.dat"
+#define AUTOTB_TVOUT_dbg_mac_ready "../tv/cdatafile/c.transformer_top.autotvout_dbg_mac_ready.dat"
+#define AUTOTB_TVIN_dbg_mac_complete "../tv/cdatafile/c.transformer_top.autotvin_dbg_mac_complete.dat"
+#define AUTOTB_TVOUT_dbg_mac_complete "../tv/cdatafile/c.transformer_top.autotvout_dbg_mac_complete.dat"
+#define AUTOTB_TVIN_dbg_ctrl_reset_asserted "../tv/cdatafile/c.transformer_top.autotvin_dbg_ctrl_reset_asserted.dat"
+#define AUTOTB_TVOUT_dbg_ctrl_reset_asserted "../tv/cdatafile/c.transformer_top.autotvout_dbg_ctrl_reset_asserted.dat"
 #define AUTOTB_TVIN_dbg_done "../tv/cdatafile/c.transformer_top.autotvin_dbg_done.dat"
 #define AUTOTB_TVOUT_dbg_done "../tv/cdatafile/c.transformer_top.autotvout_dbg_done.dat"
 #define AUTOTB_TVIN_dbg_error "../tv/cdatafile/c.transformer_top.autotvin_dbg_error.dat"
@@ -117,8 +149,10 @@ using namespace std;
 #define AUTOTB_TVOUT_PC_axis_in_ready "../tv/rtldatafile/rtl.transformer_top.autotvout_axis_in_ready.dat"
 #define AUTOTB_TVOUT_PC_wl_instruction "../tv/rtldatafile/rtl.transformer_top.autotvout_wl_instruction.dat"
 #define AUTOTB_TVOUT_PC_wl_start "../tv/rtldatafile/rtl.transformer_top.autotvout_wl_start.dat"
-#define AUTOTB_TVOUT_PC_compute_start "../tv/rtldatafile/rtl.transformer_top.autotvout_compute_start.dat"
-#define AUTOTB_TVOUT_PC_compute_instruction "../tv/rtldatafile/rtl.transformer_top.autotvout_compute_instruction.dat"
+#define AUTOTB_TVOUT_PC_mem_read_request "../tv/rtldatafile/rtl.transformer_top.autotvout_mem_read_request.dat"
+#define AUTOTB_TVOUT_PC_mem_write_request "../tv/rtldatafile/rtl.transformer_top.autotvout_mem_write_request.dat"
+#define AUTOTB_TVOUT_PC_mem_op "../tv/rtldatafile/rtl.transformer_top.autotvout_mem_op.dat"
+#define AUTOTB_TVOUT_PC_out_buf "../tv/rtldatafile/rtl.transformer_top.autotvout_out_buf.dat"
 #define AUTOTB_TVOUT_PC_head_ctx_ref_0 "../tv/rtldatafile/rtl.transformer_top.autotvout_head_ctx_ref_0.dat"
 #define AUTOTB_TVOUT_PC_head_ctx_ref_1 "../tv/rtldatafile/rtl.transformer_top.autotvout_head_ctx_ref_1.dat"
 #define AUTOTB_TVOUT_PC_head_ctx_ref_2 "../tv/rtldatafile/rtl.transformer_top.autotvout_head_ctx_ref_2.dat"
@@ -127,6 +161,7 @@ using namespace std;
 #define AUTOTB_TVOUT_PC_ctrl_data_out "../tv/rtldatafile/rtl.transformer_top.autotvout_ctrl_data_out.dat"
 #define AUTOTB_TVOUT_PC_irq_ps "../tv/rtldatafile/rtl.transformer_top.autotvout_irq_ps.dat"
 #define AUTOTB_TVOUT_PC_dbg_state "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_state.dat"
+#define AUTOTB_TVOUT_PC_dbg_ctrl_mem "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_ctrl_mem.dat"
 #define AUTOTB_TVOUT_PC_control_reg "../tv/rtldatafile/rtl.transformer_top.autotvout_control_reg.dat"
 #define AUTOTB_TVOUT_PC_irq_status_reg "../tv/rtldatafile/rtl.transformer_top.autotvout_irq_status_reg.dat"
 #define AUTOTB_TVOUT_PC_irq_enable_reg "../tv/rtldatafile/rtl.transformer_top.autotvout_irq_enable_reg.dat"
@@ -142,6 +177,20 @@ using namespace std;
 #define AUTOTB_TVOUT_PC_wo_tile_stride "../tv/rtldatafile/rtl.transformer_top.autotvout_wo_tile_stride.dat"
 #define AUTOTB_TVOUT_PC_w1_tile_stride "../tv/rtldatafile/rtl.transformer_top.autotvout_w1_tile_stride.dat"
 #define AUTOTB_TVOUT_PC_w2_tile_stride "../tv/rtldatafile/rtl.transformer_top.autotvout_w2_tile_stride.dat"
+#define AUTOTB_TVOUT_PC_dbg_compute_start "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_compute_start.dat"
+#define AUTOTB_TVOUT_PC_dbg_compute_instruction "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_compute_instruction.dat"
+#define AUTOTB_TVOUT_PC_dbg_compute_ready "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_compute_ready.dat"
+#define AUTOTB_TVOUT_PC_dbg_compute_done "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_compute_done.dat"
+#define AUTOTB_TVOUT_PC_dbg_compute_state "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_compute_state.dat"
+#define AUTOTB_TVOUT_PC_dbg_req_instruction "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_req_instruction.dat"
+#define AUTOTB_TVOUT_PC_dbg_req_op "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_req_op.dat"
+#define AUTOTB_TVOUT_PC_dbg_req_layer "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_req_layer.dat"
+#define AUTOTB_TVOUT_PC_dbg_req_head "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_req_head.dat"
+#define AUTOTB_TVOUT_PC_dbg_req_tile "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_req_tile.dat"
+#define AUTOTB_TVOUT_PC_dbg_mac_start "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_mac_start.dat"
+#define AUTOTB_TVOUT_PC_dbg_mac_ready "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_mac_ready.dat"
+#define AUTOTB_TVOUT_PC_dbg_mac_complete "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_mac_complete.dat"
+#define AUTOTB_TVOUT_PC_dbg_ctrl_reset_asserted "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_ctrl_reset_asserted.dat"
 #define AUTOTB_TVOUT_PC_dbg_done "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_done.dat"
 #define AUTOTB_TVOUT_PC_dbg_error "../tv/rtldatafile/rtl.transformer_top.autotvout_dbg_error.dat"
 
@@ -1347,10 +1396,10 @@ namespace hls::sim
 
 
 extern "C"
-void transformer_top_hw_stub_wrapper(hls::sim::Byte<1>, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<4>, hls::sim::Byte<4>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*);
+void transformer_top_hw_stub_wrapper(hls::sim::Byte<1>, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, void*, void*, void*, hls::sim::Byte<1>, void*, hls::sim::Byte<1>, hls::sim::Byte<4>, hls::sim::Byte<4>, void*, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, hls::sim::Byte<1>, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*);
 
 extern "C"
-void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid, hls::sim::Byte<1> __xlx_apatb_param_axis_in_last, void* __xlx_apatb_param_axis_in_ready, hls::sim::Byte<1> __xlx_apatb_param_dma_done, hls::sim::Byte<1> __xlx_apatb_param_wl_ready, void* __xlx_apatb_param_wl_instruction, void* __xlx_apatb_param_wl_start, hls::sim::Byte<1> __xlx_apatb_param_compute_ready, hls::sim::Byte<1> __xlx_apatb_param_compute_done, void* __xlx_apatb_param_compute_start, void* __xlx_apatb_param_compute_instruction, void* __xlx_apatb_param_head_ctx_ref_0, void* __xlx_apatb_param_head_ctx_ref_1, void* __xlx_apatb_param_head_ctx_ref_2, void* __xlx_apatb_param_head_ctx_ref_3, hls::sim::Byte<1> __xlx_apatb_param_stream_ready, void* __xlx_apatb_param_stream_start, hls::sim::Byte<1> __xlx_apatb_param_stream_done, hls::sim::Byte<4> __xlx_apatb_param_ctrl_addr, hls::sim::Byte<4> __xlx_apatb_param_ctrl_data_in, void* __xlx_apatb_param_ctrl_data_out, hls::sim::Byte<1> __xlx_apatb_param_ctrl_read_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_write_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_chip_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_resetn_in, void* __xlx_apatb_param_irq_ps, void* __xlx_apatb_param_dbg_state, void* __xlx_apatb_param_dbg_ctrl_mem, void* __xlx_apatb_param_control_reg, void* __xlx_apatb_param_irq_status_reg, void* __xlx_apatb_param_irq_enable_reg, void* __xlx_apatb_param_wq_base_addr, void* __xlx_apatb_param_wk_base_addr, void* __xlx_apatb_param_wv_base_addr, void* __xlx_apatb_param_wo_base_addr, void* __xlx_apatb_param_w1_base_addr, void* __xlx_apatb_param_w2_base_addr, void* __xlx_apatb_param_wq_head_stride, void* __xlx_apatb_param_wk_head_stride, void* __xlx_apatb_param_wv_head_stride, void* __xlx_apatb_param_wo_tile_stride, void* __xlx_apatb_param_w1_tile_stride, void* __xlx_apatb_param_w2_tile_stride, void* __xlx_apatb_param_dbg_done, void* __xlx_apatb_param_dbg_error)
+void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid, hls::sim::Byte<1> __xlx_apatb_param_axis_in_last, void* __xlx_apatb_param_axis_in_ready, hls::sim::Byte<1> __xlx_apatb_param_dma_done, hls::sim::Byte<1> __xlx_apatb_param_wl_ready, void* __xlx_apatb_param_wl_instruction, void* __xlx_apatb_param_wl_start, hls::sim::Byte<1> __xlx_apatb_param_mem_transfer_done, void* __xlx_apatb_param_mem_read_request, void* __xlx_apatb_param_mem_write_request, void* __xlx_apatb_param_mem_op, void* __xlx_apatb_param_in_buf, void* __xlx_apatb_param_out_buf, void* __xlx_apatb_param_head_ctx_ref_0, void* __xlx_apatb_param_head_ctx_ref_1, void* __xlx_apatb_param_head_ctx_ref_2, void* __xlx_apatb_param_head_ctx_ref_3, hls::sim::Byte<1> __xlx_apatb_param_stream_ready, void* __xlx_apatb_param_stream_start, hls::sim::Byte<1> __xlx_apatb_param_stream_done, hls::sim::Byte<4> __xlx_apatb_param_ctrl_addr, hls::sim::Byte<4> __xlx_apatb_param_ctrl_data_in, void* __xlx_apatb_param_ctrl_data_out, hls::sim::Byte<1> __xlx_apatb_param_ctrl_read_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_write_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_chip_en, hls::sim::Byte<1> __xlx_apatb_param_ctrl_resetn_in, void* __xlx_apatb_param_irq_ps, void* __xlx_apatb_param_dbg_state, void* __xlx_apatb_param_dbg_ctrl_mem, void* __xlx_apatb_param_control_reg, void* __xlx_apatb_param_irq_status_reg, void* __xlx_apatb_param_irq_enable_reg, void* __xlx_apatb_param_wq_base_addr, void* __xlx_apatb_param_wk_base_addr, void* __xlx_apatb_param_wv_base_addr, void* __xlx_apatb_param_wo_base_addr, void* __xlx_apatb_param_w1_base_addr, void* __xlx_apatb_param_w2_base_addr, void* __xlx_apatb_param_wq_head_stride, void* __xlx_apatb_param_wk_head_stride, void* __xlx_apatb_param_wv_head_stride, void* __xlx_apatb_param_wo_tile_stride, void* __xlx_apatb_param_w1_tile_stride, void* __xlx_apatb_param_w2_tile_stride, void* __xlx_apatb_param_dbg_compute_start, void* __xlx_apatb_param_dbg_compute_instruction, void* __xlx_apatb_param_dbg_compute_ready, void* __xlx_apatb_param_dbg_compute_done, void* __xlx_apatb_param_dbg_compute_state, void* __xlx_apatb_param_dbg_req_instruction, void* __xlx_apatb_param_dbg_req_op, void* __xlx_apatb_param_dbg_req_layer, void* __xlx_apatb_param_dbg_req_head, void* __xlx_apatb_param_dbg_req_tile, void* __xlx_apatb_param_dbg_mac_start, void* __xlx_apatb_param_dbg_mac_ready, void* __xlx_apatb_param_dbg_mac_complete, void* __xlx_apatb_param_dbg_ctrl_reset_asserted, void* __xlx_apatb_param_dbg_done, void* __xlx_apatb_param_dbg_error)
 {
   static hls::sim::Register port0 {
     .name = "axis_in_valid",
@@ -1433,50 +1482,51 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
   port6.param = __xlx_apatb_param_wl_start;
 
   static hls::sim::Register port7 {
-    .name = "compute_ready",
+    .name = "mem_transfer_done",
     .width = 1,
 #ifdef POST_CHECK
 #else
     .owriter = nullptr,
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_ready),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_mem_transfer_done),
 #endif
   };
-  port7.param = &__xlx_apatb_param_compute_ready;
+  port7.param = &__xlx_apatb_param_mem_transfer_done;
 
   static hls::sim::Register port8 {
-    .name = "compute_done",
+    .name = "mem_read_request",
     .width = 1,
 #ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_mem_read_request),
 #else
-    .owriter = nullptr,
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_done),
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_mem_read_request),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_mem_read_request),
 #endif
   };
-  port8.param = &__xlx_apatb_param_compute_done;
+  port8.param = __xlx_apatb_param_mem_read_request;
 
   static hls::sim::Register port9 {
-    .name = "compute_start",
+    .name = "mem_write_request",
     .width = 1,
 #ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_compute_start),
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_mem_write_request),
 #else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_compute_start),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_start),
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_mem_write_request),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_mem_write_request),
 #endif
   };
-  port9.param = __xlx_apatb_param_compute_start;
+  port9.param = __xlx_apatb_param_mem_write_request;
 
   static hls::sim::Register port10 {
-    .name = "compute_instruction",
+    .name = "mem_op",
     .width = 32,
 #ifdef POST_CHECK
-    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_compute_instruction),
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_mem_op),
 #else
-    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_compute_instruction),
-    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_compute_instruction),
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_mem_op),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_mem_op),
 #endif
   };
-  port10.param = __xlx_apatb_param_compute_instruction;
+  port10.param = __xlx_apatb_param_mem_op;
 
   static hls::sim::Register port11 {
     .name = "head_ctx_ref_0",
@@ -1666,8 +1716,9 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     .name = "dbg_ctrl_mem",
     .width = 1056,
 #ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_ctrl_mem),
 #else
-    .owriter = nullptr,
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_ctrl_mem),
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_ctrl_mem),
 #endif
   };
@@ -1854,6 +1905,174 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
   port42.param = __xlx_apatb_param_w2_tile_stride;
 
   static hls::sim::Register port43 {
+    .name = "dbg_compute_start",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_compute_start),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_compute_start),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_compute_start),
+#endif
+  };
+  port43.param = __xlx_apatb_param_dbg_compute_start;
+
+  static hls::sim::Register port44 {
+    .name = "dbg_compute_instruction",
+    .width = 32,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_compute_instruction),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_compute_instruction),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_compute_instruction),
+#endif
+  };
+  port44.param = __xlx_apatb_param_dbg_compute_instruction;
+
+  static hls::sim::Register port45 {
+    .name = "dbg_compute_ready",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_compute_ready),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_compute_ready),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_compute_ready),
+#endif
+  };
+  port45.param = __xlx_apatb_param_dbg_compute_ready;
+
+  static hls::sim::Register port46 {
+    .name = "dbg_compute_done",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_compute_done),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_compute_done),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_compute_done),
+#endif
+  };
+  port46.param = __xlx_apatb_param_dbg_compute_done;
+
+  static hls::sim::Register port47 {
+    .name = "dbg_compute_state",
+    .width = 8,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_compute_state),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_compute_state),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_compute_state),
+#endif
+  };
+  port47.param = __xlx_apatb_param_dbg_compute_state;
+
+  static hls::sim::Register port48 {
+    .name = "dbg_req_instruction",
+    .width = 32,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_req_instruction),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_req_instruction),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_req_instruction),
+#endif
+  };
+  port48.param = __xlx_apatb_param_dbg_req_instruction;
+
+  static hls::sim::Register port49 {
+    .name = "dbg_req_op",
+    .width = 8,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_req_op),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_req_op),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_req_op),
+#endif
+  };
+  port49.param = __xlx_apatb_param_dbg_req_op;
+
+  static hls::sim::Register port50 {
+    .name = "dbg_req_layer",
+    .width = 8,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_req_layer),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_req_layer),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_req_layer),
+#endif
+  };
+  port50.param = __xlx_apatb_param_dbg_req_layer;
+
+  static hls::sim::Register port51 {
+    .name = "dbg_req_head",
+    .width = 8,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_req_head),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_req_head),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_req_head),
+#endif
+  };
+  port51.param = __xlx_apatb_param_dbg_req_head;
+
+  static hls::sim::Register port52 {
+    .name = "dbg_req_tile",
+    .width = 8,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_req_tile),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_req_tile),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_req_tile),
+#endif
+  };
+  port52.param = __xlx_apatb_param_dbg_req_tile;
+
+  static hls::sim::Register port53 {
+    .name = "dbg_mac_start",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_mac_start),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_mac_start),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_mac_start),
+#endif
+  };
+  port53.param = __xlx_apatb_param_dbg_mac_start;
+
+  static hls::sim::Register port54 {
+    .name = "dbg_mac_ready",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_mac_ready),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_mac_ready),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_mac_ready),
+#endif
+  };
+  port54.param = __xlx_apatb_param_dbg_mac_ready;
+
+  static hls::sim::Register port55 {
+    .name = "dbg_mac_complete",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_mac_complete),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_mac_complete),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_mac_complete),
+#endif
+  };
+  port55.param = __xlx_apatb_param_dbg_mac_complete;
+
+  static hls::sim::Register port56 {
+    .name = "dbg_ctrl_reset_asserted",
+    .width = 1,
+#ifdef POST_CHECK
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_dbg_ctrl_reset_asserted),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_dbg_ctrl_reset_asserted),
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_ctrl_reset_asserted),
+#endif
+  };
+  port56.param = __xlx_apatb_param_dbg_ctrl_reset_asserted;
+
+  static hls::sim::Register port57 {
     .name = "dbg_done",
     .width = 1,
 #ifdef POST_CHECK
@@ -1863,9 +2082,9 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_done),
 #endif
   };
-  port43.param = __xlx_apatb_param_dbg_done;
+  port57.param = __xlx_apatb_param_dbg_done;
 
-  static hls::sim::Register port44 {
+  static hls::sim::Register port58 {
     .name = "dbg_error",
     .width = 1,
 #ifdef POST_CHECK
@@ -1875,7 +2094,66 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     .iwriter = new hls::sim::Writer(AUTOTB_TVIN_dbg_error),
 #endif
   };
-  port44.param = __xlx_apatb_param_dbg_error;
+  port58.param = __xlx_apatb_param_dbg_error;
+
+#ifdef USE_BINARY_TV_FILE
+  static hls::sim::Memory<hls::sim::Input, hls::sim::Output> port59 {
+#else
+  static hls::sim::Memory<hls::sim::Reader, hls::sim::Writer> port59 {
+#endif
+    .width = 8,
+    .asize = 1,
+    .hbm = false,
+    .name = { "in_buf" },
+#ifdef POST_CHECK
+#else
+    .owriter = nullptr,
+#ifdef USE_BINARY_TV_FILE
+    .iwriter = new hls::sim::Output(AUTOTB_TVIN_in_buf),
+#else
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_in_buf),
+#endif
+#endif
+    .hasWrite = { false },
+    .max_nbytes = { 0 },
+  };
+  port59.param = { __xlx_apatb_param_in_buf };
+  port59.mname = { "in_buf" };
+  port59.nbytes = { 129 };
+
+#ifdef USE_BINARY_TV_FILE
+  static hls::sim::Memory<hls::sim::Input, hls::sim::Output> port60 {
+#else
+  static hls::sim::Memory<hls::sim::Reader, hls::sim::Writer> port60 {
+#endif
+    .width = 8,
+    .asize = 1,
+    .hbm = false,
+    .name = { "out_buf" },
+#ifdef POST_CHECK
+#ifdef USE_BINARY_TV_FILE
+    .reader = new hls::sim::Input(AUTOTB_TVOUT_PC_out_buf),
+#else
+    .reader = new hls::sim::Reader(AUTOTB_TVOUT_PC_out_buf),
+#endif
+#else
+#ifdef USE_BINARY_TV_FILE
+    .owriter = new hls::sim::Output(AUTOTB_TVOUT_out_buf),
+#else
+    .owriter = new hls::sim::Writer(AUTOTB_TVOUT_out_buf),
+#endif
+#ifdef USE_BINARY_TV_FILE
+    .iwriter = new hls::sim::Output(AUTOTB_TVIN_out_buf),
+#else
+    .iwriter = new hls::sim::Writer(AUTOTB_TVIN_out_buf),
+#endif
+#endif
+    .hasWrite = { true },
+    .max_nbytes = { 0 },
+  };
+  port60.param = { __xlx_apatb_param_out_buf };
+  port60.mname = { "out_buf" };
+  port60.nbytes = { 64 };
 
   try {
 #ifdef POST_CHECK
@@ -1883,6 +2161,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     check(port2);
     check(port5);
     check(port6);
+    check(port8);
     check(port9);
     check(port10);
     check(port11);
@@ -1893,6 +2172,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     check(port20);
     check(port25);
     check(port26);
+    check(port27);
     check(port28);
     check(port29);
     check(port30);
@@ -1910,6 +2190,21 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     check(port42);
     check(port43);
     check(port44);
+    check(port45);
+    check(port46);
+    check(port47);
+    check(port48);
+    check(port49);
+    check(port50);
+    check(port51);
+    check(port52);
+    check(port53);
+    check(port54);
+    check(port55);
+    check(port56);
+    check(port57);
+    check(port58);
+    check(port60);
 #else
     static hls::sim::RefTCL tcl("../tv/cdatafile/ref.tcl");
     tcl.containsVLA = 0;
@@ -1959,6 +2254,22 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     dump(port42, port42.iwriter, tcl.AESL_transaction);
     dump(port43, port43.iwriter, tcl.AESL_transaction);
     dump(port44, port44.iwriter, tcl.AESL_transaction);
+    dump(port45, port45.iwriter, tcl.AESL_transaction);
+    dump(port46, port46.iwriter, tcl.AESL_transaction);
+    dump(port47, port47.iwriter, tcl.AESL_transaction);
+    dump(port48, port48.iwriter, tcl.AESL_transaction);
+    dump(port49, port49.iwriter, tcl.AESL_transaction);
+    dump(port50, port50.iwriter, tcl.AESL_transaction);
+    dump(port51, port51.iwriter, tcl.AESL_transaction);
+    dump(port52, port52.iwriter, tcl.AESL_transaction);
+    dump(port53, port53.iwriter, tcl.AESL_transaction);
+    dump(port54, port54.iwriter, tcl.AESL_transaction);
+    dump(port55, port55.iwriter, tcl.AESL_transaction);
+    dump(port56, port56.iwriter, tcl.AESL_transaction);
+    dump(port57, port57.iwriter, tcl.AESL_transaction);
+    dump(port58, port58.iwriter, tcl.AESL_transaction);
+    dump(port59, port59.iwriter, tcl.AESL_transaction);
+    dump(port60, port60.iwriter, tcl.AESL_transaction);
     port0.doTCL(tcl);
     port1.doTCL(tcl);
     port2.doTCL(tcl);
@@ -2004,12 +2315,29 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     port42.doTCL(tcl);
     port43.doTCL(tcl);
     port44.doTCL(tcl);
+    port45.doTCL(tcl);
+    port46.doTCL(tcl);
+    port47.doTCL(tcl);
+    port48.doTCL(tcl);
+    port49.doTCL(tcl);
+    port50.doTCL(tcl);
+    port51.doTCL(tcl);
+    port52.doTCL(tcl);
+    port53.doTCL(tcl);
+    port54.doTCL(tcl);
+    port55.doTCL(tcl);
+    port56.doTCL(tcl);
+    port57.doTCL(tcl);
+    port58.doTCL(tcl);
+    port59.doTCL(tcl);
+    port60.doTCL(tcl);
     CodeState = CALL_C_DUT;
-    transformer_top_hw_stub_wrapper(__xlx_apatb_param_axis_in_valid, __xlx_apatb_param_axis_in_last, __xlx_apatb_param_axis_in_ready, __xlx_apatb_param_dma_done, __xlx_apatb_param_wl_ready, __xlx_apatb_param_wl_instruction, __xlx_apatb_param_wl_start, __xlx_apatb_param_compute_ready, __xlx_apatb_param_compute_done, __xlx_apatb_param_compute_start, __xlx_apatb_param_compute_instruction, __xlx_apatb_param_head_ctx_ref_0, __xlx_apatb_param_head_ctx_ref_1, __xlx_apatb_param_head_ctx_ref_2, __xlx_apatb_param_head_ctx_ref_3, __xlx_apatb_param_stream_ready, __xlx_apatb_param_stream_start, __xlx_apatb_param_stream_done, __xlx_apatb_param_ctrl_addr, __xlx_apatb_param_ctrl_data_in, __xlx_apatb_param_ctrl_data_out, __xlx_apatb_param_ctrl_read_en, __xlx_apatb_param_ctrl_write_en, __xlx_apatb_param_ctrl_chip_en, __xlx_apatb_param_ctrl_resetn_in, __xlx_apatb_param_irq_ps, __xlx_apatb_param_dbg_state, __xlx_apatb_param_dbg_ctrl_mem, __xlx_apatb_param_control_reg, __xlx_apatb_param_irq_status_reg, __xlx_apatb_param_irq_enable_reg, __xlx_apatb_param_wq_base_addr, __xlx_apatb_param_wk_base_addr, __xlx_apatb_param_wv_base_addr, __xlx_apatb_param_wo_base_addr, __xlx_apatb_param_w1_base_addr, __xlx_apatb_param_w2_base_addr, __xlx_apatb_param_wq_head_stride, __xlx_apatb_param_wk_head_stride, __xlx_apatb_param_wv_head_stride, __xlx_apatb_param_wo_tile_stride, __xlx_apatb_param_w1_tile_stride, __xlx_apatb_param_w2_tile_stride, __xlx_apatb_param_dbg_done, __xlx_apatb_param_dbg_error);
+    transformer_top_hw_stub_wrapper(__xlx_apatb_param_axis_in_valid, __xlx_apatb_param_axis_in_last, __xlx_apatb_param_axis_in_ready, __xlx_apatb_param_dma_done, __xlx_apatb_param_wl_ready, __xlx_apatb_param_wl_instruction, __xlx_apatb_param_wl_start, __xlx_apatb_param_mem_transfer_done, __xlx_apatb_param_mem_read_request, __xlx_apatb_param_mem_write_request, __xlx_apatb_param_mem_op, __xlx_apatb_param_in_buf, __xlx_apatb_param_out_buf, __xlx_apatb_param_head_ctx_ref_0, __xlx_apatb_param_head_ctx_ref_1, __xlx_apatb_param_head_ctx_ref_2, __xlx_apatb_param_head_ctx_ref_3, __xlx_apatb_param_stream_ready, __xlx_apatb_param_stream_start, __xlx_apatb_param_stream_done, __xlx_apatb_param_ctrl_addr, __xlx_apatb_param_ctrl_data_in, __xlx_apatb_param_ctrl_data_out, __xlx_apatb_param_ctrl_read_en, __xlx_apatb_param_ctrl_write_en, __xlx_apatb_param_ctrl_chip_en, __xlx_apatb_param_ctrl_resetn_in, __xlx_apatb_param_irq_ps, __xlx_apatb_param_dbg_state, __xlx_apatb_param_dbg_ctrl_mem, __xlx_apatb_param_control_reg, __xlx_apatb_param_irq_status_reg, __xlx_apatb_param_irq_enable_reg, __xlx_apatb_param_wq_base_addr, __xlx_apatb_param_wk_base_addr, __xlx_apatb_param_wv_base_addr, __xlx_apatb_param_wo_base_addr, __xlx_apatb_param_w1_base_addr, __xlx_apatb_param_w2_base_addr, __xlx_apatb_param_wq_head_stride, __xlx_apatb_param_wk_head_stride, __xlx_apatb_param_wv_head_stride, __xlx_apatb_param_wo_tile_stride, __xlx_apatb_param_w1_tile_stride, __xlx_apatb_param_w2_tile_stride, __xlx_apatb_param_dbg_compute_start, __xlx_apatb_param_dbg_compute_instruction, __xlx_apatb_param_dbg_compute_ready, __xlx_apatb_param_dbg_compute_done, __xlx_apatb_param_dbg_compute_state, __xlx_apatb_param_dbg_req_instruction, __xlx_apatb_param_dbg_req_op, __xlx_apatb_param_dbg_req_layer, __xlx_apatb_param_dbg_req_head, __xlx_apatb_param_dbg_req_tile, __xlx_apatb_param_dbg_mac_start, __xlx_apatb_param_dbg_mac_ready, __xlx_apatb_param_dbg_mac_complete, __xlx_apatb_param_dbg_ctrl_reset_asserted, __xlx_apatb_param_dbg_done, __xlx_apatb_param_dbg_error);
     CodeState = DUMP_OUTPUTS;
     dump(port2, port2.owriter, tcl.AESL_transaction);
     dump(port5, port5.owriter, tcl.AESL_transaction);
     dump(port6, port6.owriter, tcl.AESL_transaction);
+    dump(port8, port8.owriter, tcl.AESL_transaction);
     dump(port9, port9.owriter, tcl.AESL_transaction);
     dump(port10, port10.owriter, tcl.AESL_transaction);
     dump(port11, port11.owriter, tcl.AESL_transaction);
@@ -2020,6 +2348,7 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     dump(port20, port20.owriter, tcl.AESL_transaction);
     dump(port25, port25.owriter, tcl.AESL_transaction);
     dump(port26, port26.owriter, tcl.AESL_transaction);
+    dump(port27, port27.owriter, tcl.AESL_transaction);
     dump(port28, port28.owriter, tcl.AESL_transaction);
     dump(port29, port29.owriter, tcl.AESL_transaction);
     dump(port30, port30.owriter, tcl.AESL_transaction);
@@ -2037,6 +2366,21 @@ void apatb_transformer_top_hw(hls::sim::Byte<1> __xlx_apatb_param_axis_in_valid,
     dump(port42, port42.owriter, tcl.AESL_transaction);
     dump(port43, port43.owriter, tcl.AESL_transaction);
     dump(port44, port44.owriter, tcl.AESL_transaction);
+    dump(port45, port45.owriter, tcl.AESL_transaction);
+    dump(port46, port46.owriter, tcl.AESL_transaction);
+    dump(port47, port47.owriter, tcl.AESL_transaction);
+    dump(port48, port48.owriter, tcl.AESL_transaction);
+    dump(port49, port49.owriter, tcl.AESL_transaction);
+    dump(port50, port50.owriter, tcl.AESL_transaction);
+    dump(port51, port51.owriter, tcl.AESL_transaction);
+    dump(port52, port52.owriter, tcl.AESL_transaction);
+    dump(port53, port53.owriter, tcl.AESL_transaction);
+    dump(port54, port54.owriter, tcl.AESL_transaction);
+    dump(port55, port55.owriter, tcl.AESL_transaction);
+    dump(port56, port56.owriter, tcl.AESL_transaction);
+    dump(port57, port57.owriter, tcl.AESL_transaction);
+    dump(port58, port58.owriter, tcl.AESL_transaction);
+    dump(port60, port60.owriter, tcl.AESL_transaction);
     tcl.AESL_transaction++;
 #endif
   } catch (const hls::sim::SimException &e) {

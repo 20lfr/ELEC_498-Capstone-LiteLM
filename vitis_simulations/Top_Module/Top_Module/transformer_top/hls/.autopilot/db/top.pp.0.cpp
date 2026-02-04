@@ -6529,13 +6529,19 @@ constexpr int NUM_W1_TILES = 4;
 constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 8;
+constexpr int D_MODEL = 16;
 constexpr int D_FFN = 22;
 constexpr int D_HEADS = D_MODEL / NUM_HEADS;
 constexpr int D_TILE_WO = D_MODEL / NUM_WO_TILES;
 constexpr int D_TILE_W1 = D_MODEL / NUM_W1_TILES;
 constexpr int D_TILE_W2 = D_FFN / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16;
+constexpr int MAX_CYCLIC_SIZE = 16;
+
+
+
+constexpr int16_t ATTN_SCALE_Q15 = 16384;
+
 
 
 
@@ -6606,14 +6612,15 @@ enum ComputeOp : uint8_t {
     CMP_RESID0 = 16,
     CMP_REQUANT2 = 17,
     CMP_FFN_W1 = 18,
-    CMP_FFN_ACT = 29,
+    CMP_FFN_ACT = 19,
     CMP_FFN_W2 = 20,
     CMP_REQUANT3 = 21,
     CMP_RESID1 = 22,
     CMP_LN1 = 23,
     CMP_REQUANT4 = 24,
-    CMP_DEQUANT = 25,
-    CMP_LOGITS = 26,
+    CMP_FINAL_NORM = 25,
+    CMP_DEQUANT = 26,
+    CMP_LOGITS = 27,
 };
 
 enum DmaSel : uint8_t {
@@ -6628,14 +6635,14 @@ enum DmaSel : uint8_t {
     DMASEL_WO,
     DMASEL_W1,
     DMASEL_W2,
-    DMASEL_WLOGIT
+    DMASEL_WLOGIT,
+    DMASEL_CONCAT
 };
 
 enum class ComputeErrorCodes {
     IncorrectRequest,
     InvalidComputationForamt
 };
-
 
 struct HeadCtx {
     int layer_stamp = -1;
@@ -6697,7 +6704,14 @@ struct HeadCtx {
 
 
 
-enum class ComputeState : uint8_t { IDLE = 0, CAPTURE_INSTRUCTION, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
+enum class ComputeState : uint8_t {
+            IDLE = 0,
+            CAPTURE_INSTRUCTION,
+            WAIT_MEM,
+            EXECUTE,
+            MEM_WRITEBACK,
+            DONE
+};
 
 
 struct PendingRequest {
@@ -6821,6 +6835,22 @@ struct ControlMemSpace {
 
 
 
+constexpr int max2_constexpr(int a, int b) {
+    return (a > b) ? a : b;
+}
+constexpr int min2_constexpr(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+
+
+constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
+constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
+constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
+
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
+
 namespace compute_buf {
 
 constexpr int div_ceil(int a, int b) {
@@ -6842,7 +6872,7 @@ constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PR
 
 constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
-constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
+constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
@@ -6912,8 +6942,7 @@ struct ResidLayout {
 struct LayerNormLayout {
     static constexpr int X = 0;
     static constexpr int GAMMA = X + D_MODEL;
-    static constexpr int BETA = GAMMA + (D_MODEL * 4);
-    static constexpr int EPS = BETA + (D_MODEL * 4);
+    static constexpr int EPS = GAMMA + (D_MODEL * 4);
 };
 
 struct FfnW1Layout {
@@ -6996,6 +7025,93 @@ inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
     buf[byte_addr + 2] = static_cast<uint8_t>((v >> 16) & 0xFFu);
     buf[byte_addr + 3] = static_cast<uint8_t>((v >> 24) & 0xFFu);
 }
+
+}
+
+
+
+
+constexpr int HEAD_VECTOR_MAX = compute_buf::max2(D_MODEL, compute_buf::max2(D_HEADS, CONTEXT_LENGTH));
+constexpr int HEAD_ACCUM_MAX = compute_buf::max2(D_HEADS, CONTEXT_LENGTH);
+constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
+
+constexpr int HEAD_MAC_VEC_UNROLL = min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int HEAD_MAC_OUT_UNROLL = min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
+
+
+
+namespace head_buf {
+
+constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
+constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
+constexpr int QKV_B_NIBBLES = D_HEADS;
+constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
+constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
+constexpr int QKV_OUT_BYTES = D_HEADS * 4;
+
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
+constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
+
+constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
+
+constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4);
+constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
+constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int ATT_VALUE_IN_BYTES = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
+
+constexpr int IN_BUF_BYTES = compute_buf::max2(
+    QKV_IN_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_IN_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_IN_BYTES,
+            compute_buf::max2(VALUE_SCALE_IN_BYTES,
+                compute_buf::max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
+
+constexpr int OUT_BUF_BYTES = compute_buf::max2(
+    QKV_OUT_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_OUT_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_OUT_BYTES,
+            compute_buf::max2(VALUE_SCALE_OUT_BYTES,
+                compute_buf::max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
+
+struct QkvLayout {
+    static constexpr int ACT = 0;
+    static constexpr int W = ACT + D_MODEL;
+    static constexpr int B = W + QKV_W_BYTES;
+};
+
+struct HeadRequantLayout {
+    static constexpr int X = 0;
+    static constexpr int M = X + (D_HEADS * 4);
+    static constexpr int N = M + 4;
+    static constexpr int Z = N + 4;
+};
+
+struct AttScoresLayout {
+    static constexpr int Q = 0;
+    static constexpr int K_CACHE = Q + D_HEADS;
+};
+
+struct ValueScaleLayout {
+    static constexpr int X = 0;
+};
+
+struct SoftmaxLayout {
+    static constexpr int X = 0;
+};
+
+struct AttValueLayout {
+    static constexpr int WEIGHTS = 0;
+    static constexpr int V_CACHE = WEIGHTS + CONTEXT_LENGTH;
+};
 
 }
 # 4 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
@@ -7101,6 +7217,47 @@ void ControlMemInterface(
 
 bool irq_wizard(ControlMemSpace &mem, bool infer_done, bool error);
 # 7 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
+# 1 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp" 1
+
+
+
+
+
+using int4_t = ap_int<4>;
+
+void compute_controller(
+    ControlMemSpace ctrl_mem,
+
+
+    bool compute_start,
+    uint32_t compute_instruction,
+    bool &compute_ready,
+    bool &compute_done,
+
+
+    bool mem_transfer_done,
+    bool &mem_read_request,
+    bool &mem_write_request,
+    uint32_t &mem_op,
+
+
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES],
+
+
+    ComputeState &dbg_state,
+    uint32_t &dbg_req_instruction,
+    uint8_t &dbg_req_op,
+    uint8_t &dbg_req_layer,
+    uint8_t &dbg_req_head,
+    uint8_t &dbg_req_tile,
+    bool &dbg_mac_start,
+    bool &dbg_mac_ready,
+    bool &dbg_mac_complete,
+
+    bool &error
+);
+# 8 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp" 2
 
 
 
@@ -7113,10 +7270,15 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     bool wl_ready,
     uint32_t &wl_instruction,
     bool &wl_start,
-    bool compute_ready,
-    bool compute_done,
-    bool &compute_start,
-    uint32_t &compute_instruction,
+
+
+    bool mem_transfer_done,
+    bool &mem_read_request,
+    bool &mem_write_request,
+    uint32_t &mem_op,
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES],
+
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
     bool stream_ready,
     bool &stream_start,
@@ -7148,6 +7310,22 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     uint32_t &wo_tile_stride,
     uint32_t &w1_tile_stride,
     uint32_t &w2_tile_stride,
+
+
+    bool &dbg_compute_start,
+    uint32_t &dbg_compute_instruction,
+    bool &dbg_compute_ready,
+    bool &dbg_compute_done,
+    ComputeState &dbg_compute_state,
+    uint32_t &dbg_req_instruction,
+    uint8_t &dbg_req_op,
+    uint8_t &dbg_req_layer,
+    uint8_t &dbg_req_head,
+    uint8_t &dbg_req_tile,
+    bool &dbg_mac_start,
+    bool &dbg_mac_ready,
+    bool &dbg_mac_complete,
+    bool &dbg_ctrl_reset_asserted,
 
     bool &dbg_done,
     bool &dbg_error
@@ -7166,19 +7344,24 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
 
-    bool dma_done,
 
+
+    bool dma_done,
     bool wl_ready,
     uint32_t &wl_instruction,
     bool &wl_start,
 
 
+    bool mem_transfer_done,
+    bool &mem_read_request,
+    bool &mem_write_request,
+    uint32_t &mem_op,
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES],
 
 
-    bool compute_ready,
-    bool compute_done,
-    bool &compute_start,
-    uint32_t &compute_instruction,
+
+
     HeadCtx (&head_ctx_ref)[NUM_HEADS],
 
 
@@ -7225,21 +7408,41 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     uint32_t &w1_tile_stride,
     uint32_t &w2_tile_stride,
 
+
+    bool &dbg_compute_start,
+    uint32_t &dbg_compute_instruction,
+    bool &dbg_compute_ready,
+    bool &dbg_compute_done,
+    ComputeState &dbg_compute_state,
+    uint32_t &dbg_req_instruction,
+    uint8_t &dbg_req_op,
+    uint8_t &dbg_req_layer,
+    uint8_t &dbg_req_head,
+    uint8_t &dbg_req_tile,
+    bool &dbg_mac_start,
+    bool &dbg_mac_ready,
+    bool &dbg_mac_complete,
+    bool &dbg_ctrl_reset_asserted,
+
     bool &dbg_done,
     bool &dbg_error
 ) {
 #line 1 "directive"
 #pragma HLSDIRECTIVE TOP name=transformer_top
-# 76 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+# 97 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
 
 #pragma HLS INLINE off
 
  bool done = false;
     bool error = false;
     static ControlMemSpace ctrl_mem;
+    static bool compute_ready = false;
+    static bool compute_done = false;
+    static bool compute_start = false;
+    static uint32_t compute_instruction = 0;
 
-
-
+    dbg_ctrl_mem = ctrl_mem;
+    dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);
     control_reg = ctrl_mem.control;
     irq_status_reg = ctrl_mem.irq_status;
     irq_enable_reg = ctrl_mem.irq_enable;
@@ -7257,9 +7460,14 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
     w2_tile_stride = ctrl_mem.w2_tile_stride;
 
 
-    if (ctrl_mem.control & !CTRL_RESETN_BIT) {
+    if ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u) {
         done = false;
         error = false;
+
+        compute_ready = true;
+        compute_done = false;
+        compute_start = false;
+        compute_instruction = 0;
     }
 
 
@@ -7301,9 +7509,42 @@ __attribute__((sdx_kernel("transformer_top", 0))) void transformer_top(
 
 
 
+    compute_controller(
+        ctrl_mem,
+        compute_start,
+        compute_instruction,
+        compute_ready,
+        compute_done,
+
+        mem_transfer_done,
+        mem_read_request,
+        mem_write_request,
+        mem_op,
+        in_buf,
+        out_buf,
+
+
+        dbg_compute_state,
+        dbg_req_instruction,
+        dbg_req_op,
+        dbg_req_layer,
+        dbg_req_head,
+        dbg_req_tile,
+        dbg_mac_start,
+        dbg_mac_ready,
+        dbg_mac_complete,
+        error
+    );
+
+
 
     irq_ps = irq_wizard(ctrl_mem, done, error);
     dbg_done = done;
     dbg_error = error;
+
+    dbg_compute_start = compute_start;
+    dbg_compute_instruction = compute_instruction;
+    dbg_compute_ready = compute_ready;
+    dbg_compute_done = compute_done;
 
 }

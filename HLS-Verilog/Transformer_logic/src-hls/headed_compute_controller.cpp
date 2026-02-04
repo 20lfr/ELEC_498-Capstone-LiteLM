@@ -2,7 +2,7 @@
 #include <cstdio>
 
 
-// LEGACT HEAD ARCHITECTURE BELOWvvvvvvvvvvvvvvvvvvvvvvv
+// LEGACY HEAD ARCHITECTURE BELOWvvvvvvvvvvvvvvvvvvvvvvv
 void MAC_QKV(
     const int8_t valueA[D_MODEL],
     const int4_t valueB[D_MODEL * D_HEADS],
@@ -76,7 +76,7 @@ void ATT_VALUES(
     }
 }
 
-// LEGACT HEAD ARCHITECTURE ABOVE^^^^^^^^^^^^
+// LEGACY HEAD ARCHITECTURE ABOVE^^^^^^^^^^^^
 
 static void print_head_buffers(
     const char *label,
@@ -235,7 +235,6 @@ void SOFTMAX(
             max_val = input[i];
         }
     }
-    std::printf("max_val: %d\n", max_val);
     
     // 2) Compute exp_approx and sum
     uint16_t exp_buf[CONTEXT_LENGTH];
@@ -245,12 +244,11 @@ void SOFTMAX(
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
 #pragma HLS PIPELINE II=1
         int16_t diff = static_cast<int16_t>(input[i] - max_val);
+        printf("diff[%d] = %d\n", i, static_cast<int>(diff));
         uint16_t e_q15 = exp_approx_q15(diff);   // Q1.15
         exp_buf[i] = e_q15;
         sum_exp += e_q15;                        // up to CONTEXT_LENGTH * 32767
-        std::printf("exp_buf[%d]: %d\n", i, exp_buf[i]);
     }
-    std::printf("sum_exp: %d\n", sum_exp);
 
     // 3) Compute reciprocal of sum_exp in fixed-point (Q1.15)
     //   output = (e_q15 * inv_sum_q15) >> 15  -> Q1.15 again
@@ -258,7 +256,6 @@ void SOFTMAX(
     if (sum_exp > 0) {
         uint64_t num = (1ULL << 30);               // 2^30 = 2^15 (Q1.15) * 2^15 (reciprocal scale)
         inv_sum_q15 = static_cast<uint32_t>((num + (sum_exp / 2)) / sum_exp); // rounded
-        std::printf("inv_sum_q15: %u\n", inv_sum_q15);
     }
     
 

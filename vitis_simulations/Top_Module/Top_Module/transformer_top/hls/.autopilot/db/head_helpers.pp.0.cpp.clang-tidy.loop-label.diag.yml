@@ -38,12 +38,12 @@ Diagnostics:
         Length:          0
         ReplacementText: 'VITIS_LOOP_1248_1: '
   - DiagnosticName:  xilinx-label-all-loops
-    Message:         'Added loop label VITIS_LOOP_406_1:  '
-    FileOffset:      406
+    Message:         'Added loop label VITIS_LOOP_407_1:  '
+    FileOffset:      407
     FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp
     Replacements:    
       - FilePath:        /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/.autopilot/db/head_helpers.pp.0.cpp
-        Offset:          992445
+        Offset:          995792
         Length:          0
-        ReplacementText: 'VITIS_LOOP_406_1: '
+        ReplacementText: 'VITIS_LOOP_407_1: '
 ...

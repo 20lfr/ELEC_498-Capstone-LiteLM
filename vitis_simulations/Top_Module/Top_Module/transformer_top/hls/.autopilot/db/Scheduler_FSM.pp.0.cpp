@@ -6534,13 +6534,19 @@ constexpr int NUM_W1_TILES = 4;
 constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 8;
+constexpr int D_MODEL = 16;
 constexpr int D_FFN = 22;
 constexpr int D_HEADS = D_MODEL / NUM_HEADS;
 constexpr int D_TILE_WO = D_MODEL / NUM_WO_TILES;
 constexpr int D_TILE_W1 = D_MODEL / NUM_W1_TILES;
 constexpr int D_TILE_W2 = D_FFN / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16;
+constexpr int MAX_CYCLIC_SIZE = 16;
+
+
+
+constexpr int16_t ATTN_SCALE_Q15 = 16384;
+
 
 
 
@@ -6611,14 +6617,15 @@ enum ComputeOp : uint8_t {
     CMP_RESID0 = 16,
     CMP_REQUANT2 = 17,
     CMP_FFN_W1 = 18,
-    CMP_FFN_ACT = 29,
+    CMP_FFN_ACT = 19,
     CMP_FFN_W2 = 20,
     CMP_REQUANT3 = 21,
     CMP_RESID1 = 22,
     CMP_LN1 = 23,
     CMP_REQUANT4 = 24,
-    CMP_DEQUANT = 25,
-    CMP_LOGITS = 26,
+    CMP_FINAL_NORM = 25,
+    CMP_DEQUANT = 26,
+    CMP_LOGITS = 27,
 };
 
 enum DmaSel : uint8_t {
@@ -6633,14 +6640,14 @@ enum DmaSel : uint8_t {
     DMASEL_WO,
     DMASEL_W1,
     DMASEL_W2,
-    DMASEL_WLOGIT
+    DMASEL_WLOGIT,
+    DMASEL_CONCAT
 };
 
 enum class ComputeErrorCodes {
     IncorrectRequest,
     InvalidComputationForamt
 };
-
 
 struct HeadCtx {
     int layer_stamp = -1;
@@ -6702,7 +6709,14 @@ struct HeadCtx {
 
 
 
-enum class ComputeState : uint8_t { IDLE = 0, CAPTURE_INSTRUCTION, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
+enum class ComputeState : uint8_t {
+            IDLE = 0,
+            CAPTURE_INSTRUCTION,
+            WAIT_MEM,
+            EXECUTE,
+            MEM_WRITEBACK,
+            DONE
+};
 
 
 struct PendingRequest {
@@ -6826,6 +6840,22 @@ struct ControlMemSpace {
 
 
 
+constexpr int max2_constexpr(int a, int b) {
+    return (a > b) ? a : b;
+}
+constexpr int min2_constexpr(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+
+
+constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
+constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
+constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
+
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
+
 namespace compute_buf {
 
 constexpr int div_ceil(int a, int b) {
@@ -6847,7 +6877,7 @@ constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PR
 
 constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
-constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
+constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
@@ -6917,8 +6947,7 @@ struct ResidLayout {
 struct LayerNormLayout {
     static constexpr int X = 0;
     static constexpr int GAMMA = X + D_MODEL;
-    static constexpr int BETA = GAMMA + (D_MODEL * 4);
-    static constexpr int EPS = BETA + (D_MODEL * 4);
+    static constexpr int EPS = GAMMA + (D_MODEL * 4);
 };
 
 struct FfnW1Layout {
@@ -7001,6 +7030,93 @@ inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
     buf[byte_addr + 2] = static_cast<uint8_t>((v >> 16) & 0xFFu);
     buf[byte_addr + 3] = static_cast<uint8_t>((v >> 24) & 0xFFu);
 }
+
+}
+
+
+
+
+constexpr int HEAD_VECTOR_MAX = compute_buf::max2(D_MODEL, compute_buf::max2(D_HEADS, CONTEXT_LENGTH));
+constexpr int HEAD_ACCUM_MAX = compute_buf::max2(D_HEADS, CONTEXT_LENGTH);
+constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
+
+constexpr int HEAD_MAC_VEC_UNROLL = min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int HEAD_MAC_OUT_UNROLL = min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
+
+
+
+namespace head_buf {
+
+constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
+constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
+constexpr int QKV_B_NIBBLES = D_HEADS;
+constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
+constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
+constexpr int QKV_OUT_BYTES = D_HEADS * 4;
+
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
+constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
+
+constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
+
+constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4);
+constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
+constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int ATT_VALUE_IN_BYTES = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
+
+constexpr int IN_BUF_BYTES = compute_buf::max2(
+    QKV_IN_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_IN_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_IN_BYTES,
+            compute_buf::max2(VALUE_SCALE_IN_BYTES,
+                compute_buf::max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
+
+constexpr int OUT_BUF_BYTES = compute_buf::max2(
+    QKV_OUT_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_OUT_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_OUT_BYTES,
+            compute_buf::max2(VALUE_SCALE_OUT_BYTES,
+                compute_buf::max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
+
+struct QkvLayout {
+    static constexpr int ACT = 0;
+    static constexpr int W = ACT + D_MODEL;
+    static constexpr int B = W + QKV_W_BYTES;
+};
+
+struct HeadRequantLayout {
+    static constexpr int X = 0;
+    static constexpr int M = X + (D_HEADS * 4);
+    static constexpr int N = M + 4;
+    static constexpr int Z = N + 4;
+};
+
+struct AttScoresLayout {
+    static constexpr int Q = 0;
+    static constexpr int K_CACHE = Q + D_HEADS;
+};
+
+struct ValueScaleLayout {
+    static constexpr int X = 0;
+};
+
+struct SoftmaxLayout {
+    static constexpr int X = 0;
+};
+
+struct AttValueLayout {
+    static constexpr int WEIGHTS = 0;
+    static constexpr int V_CACHE = WEIGHTS + CONTEXT_LENGTH;
+};
 
 }
 # 5 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp" 2
@@ -7168,8 +7284,8 @@ void scheduler_hls(
 #pragma HLS reset variable = attn_done
  static bool attn_compute_done;
 #pragma HLS reset variable = attn_compute_done
- static bool concat_compute_done;
-#pragma HLS reset variable = concat_compute_done
+ static bool concat_dma_done;
+#pragma HLS reset variable = concat_dma_done
  static bool outproj_compute_done;
 #pragma HLS reset variable = outproj_compute_done
  static bool resid0_compute_done;
@@ -7313,7 +7429,7 @@ void scheduler_hls(
 
 
 
-    concat_compute_done = false;
+    concat_dma_done = false;
     concat_started = false;
 
 
@@ -7411,15 +7527,16 @@ void scheduler_hls(
       if (ffn_stage == FfnStage::W1) w1_dma_done = true;
       else if (ffn_stage == FfnStage::W2) w2_dma_done = true;
     }
+    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = true;
   } else {
     if (outproj_started && !wo_dma_busy) wo_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
+    if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = false;
   }
 
   if (compute_done && !compute_start) {
     if (st == S_ATTENTION_HEADS && attn_started) attn_compute_done = true;
-    if (st == S_HEAD_CONCAT && concat_started) concat_compute_done = true;
     if (st == S_OUT_PROJECTION && outproj_started) outproj_compute_done = true;
     if (st == S_REQUANT1 && requant1_started) requant1_compute_done = true;
     if (st == S_RES_ADD_1 && resid0_started) resid0_compute_done = true;
@@ -7463,7 +7580,7 @@ void scheduler_hls(
 
 
         concat_started = false;
-        concat_compute_done = false;
+        concat_dma_done = false;
 
 
         outproj_started = false;
@@ -7536,7 +7653,7 @@ void scheduler_hls(
       group_idx = 0;
 
       start_head_group = true;
-      VITIS_LOOP_480_2: for (int i = 0; i < NUM_HEADS; ++i){
+      VITIS_LOOP_481_2: for (int i = 0; i < NUM_HEADS; ++i){
 #pragma HLS UNROLL
  init_head_ctx(head_ctx_ref[i], layer_idx, i);
       }
@@ -7554,7 +7671,7 @@ void scheduler_hls(
 
 
       concat_started = false;
-      concat_compute_done = false;
+      concat_dma_done = false;
 
 
       outproj_started = false;
@@ -7604,7 +7721,7 @@ void scheduler_hls(
       if (!ln0_started && compute_ready) {
         ln0_compute_done = false;
         compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_LN0, layer_idx, -1, -1);
+        compute_instruction = pack_compute_instruction(CMP_LN0, layer_idx, -1, -1);
         ln0_started = true;
       } else if (ln0_started && ln0_compute_done) {
         ln0_started = false;
@@ -7634,7 +7751,7 @@ void scheduler_hls(
 #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
 
 
- VITIS_LOOP_578_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+ VITIS_LOOP_579_3: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
         if (h < NUM_HEADS) {
@@ -7650,7 +7767,7 @@ void scheduler_hls(
           drive_group_head_phase(head_group, layer_idx, start_head_group, ctrl_mem, error);
 
 
-      VITIS_LOOP_594_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+      VITIS_LOOP_595_4: for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
  const int h = group_base + lane;
           if (h < NUM_HEADS) {
@@ -7684,14 +7801,14 @@ void scheduler_hls(
       break;
     }
     case S_HEAD_CONCAT: {
-      if (!concat_started && compute_ready) {
-        concat_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_CONCAT, layer_idx, -1, -1);
+      if (!concat_started && wl_ready) {
+        concat_dma_done = false;
+        wl_start = 1;
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_CONCAT, layer_idx, -1, -1);
         concat_started = true;
-      } else if (concat_started && concat_compute_done) {
+      } else if (concat_started && concat_dma_done) {
         concat_started = false;
-        concat_compute_done = false;
+        concat_dma_done = false;
         st = S_OUT_PROJECTION;
       }
       break;
@@ -7899,7 +8016,7 @@ void scheduler_hls(
         final_norm_compute_done = false;
         compute_start = 1;
 
-        compute_instruction= pack_compute_instruction(CMP_LN1, layer_idx, -1, -1);
+        compute_instruction= pack_compute_instruction(CMP_FINAL_NORM, layer_idx, -1, -1);
         final_norm_started = true;
       } else if (final_norm_started && final_norm_compute_done) {
         final_norm_started = false;

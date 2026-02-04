@@ -133,25 +133,25 @@ void RMS_NORM(
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL          
         ap_fixed<32, 19> normalized = ap_fixed<32, 19>(x[i]) * inv_rms;
-        ap_int<32> normalized_bits = normalized.range(31, 0);
-        std::printf("ln_cycle[%d] normalized: %f 0x%08x (signed=%d)\n",
-                    i,
-                    (float)normalized,
-                    (unsigned)normalized_bits,
-                    (int)normalized_bits);
+        // ap_int<32> normalized_bits = normalized.range(31, 0);
+        // std::printf("ln_cycle[%d] normalized: %f 0x%08x (signed=%d)\n",
+        //             i,
+        //             (float)normalized,
+        //             (unsigned)normalized_bits,
+        //             (int)normalized_bits);
 
         ap_fixed<32, 19> scaled = normalized * ap_fixed<32, 19>(gamma[i]);
         ap_int<32> scaled_bits = scaled.range(31, 0); 
-        std::printf("ln_cycle[%d] scaled: %f 0x%08x (signed=%d)\n",
-                    i,
-                    (float)scaled,
-                    (unsigned)scaled_bits,
-                    (int)scaled_bits);
+        // std::printf("ln_cycle[%d] scaled: %f 0x%08x (signed=%d)\n",
+        //             i,
+        //             (float)scaled,
+        //             (unsigned)scaled_bits,
+        //             (int)scaled_bits);
         y[i] = (int32_t)scaled_bits; // Store raw fixed-point bits (Q19.13)
-        std::printf("ln_cycle[%d] y_raw: %d 0x%08x\n",
-                    i,
-                    y[i],
-                    static_cast<unsigned>(y[i]));
+        // std::printf("ln_cycle[%d] y_raw: %d 0x%08x\n",
+        //             i,
+        //             y[i],
+        //             static_cast<unsigned>(y[i]));
     }
 }
 
@@ -195,7 +195,7 @@ void RES_ADD(
 // Top-level compute controller
 // ---------------------------------------------------------------------------
 void compute_controller(
-    bool        reset,               // [INPUT] Reset signal
+    ControlMemSpace ctrl_mem,          // [INPUT] Control memory snapshot
 
     // FSM communication signals
     bool        compute_start,       // [INPUT] Start signal for compute
@@ -227,6 +227,8 @@ void compute_controller(
     bool        &error               // [OUTPUT] Error flag on invalid request
 ) {
 #pragma HLS INLINE off
+
+    const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
 
     static ComputeState state = ComputeState::IDLE;
 #pragma HLS reset variable = state
@@ -290,7 +292,7 @@ void compute_controller(
     } 
     
 
-    if (reset) {
+    if (!reset_n) {
         state = ComputeState::IDLE;
         req = PendingRequest{};
         error = false;
@@ -428,6 +430,7 @@ void compute_controller(
                 req.op == ComputeOp::CMP_LN1 || 
                 req.op == ComputeOp::CMP_REQUANT4 || 
                 req.op == ComputeOp::CMP_DEQUANT || 
+                req.op == ComputeOp::CMP_FINAL_NORM || 
                 req.op == ComputeOp::CMP_LOGITS) {
                 
                 error = false; // Clear stale errors on a new request.
@@ -543,7 +546,8 @@ void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_LN0:
-                case ComputeOp::CMP_LN1: {
+                case ComputeOp::CMP_LN1: 
+                case ComputeOp::CMP_FINAL_NORM: {
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
                         // Setup X

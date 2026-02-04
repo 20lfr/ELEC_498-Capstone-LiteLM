@@ -55,6 +55,7 @@ static const char* dma_str(DmaSel sel) {
         case DMASEL_W1: return "W1";
         case DMASEL_W2: return "W2";
         case DMASEL_WLOGIT: return "WL";
+        case DMASEL_CONCAT: return "CONCAT";
         case DMASEL_NONE:
         default: return "-";
     }

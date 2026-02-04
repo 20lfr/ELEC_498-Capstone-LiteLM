@@ -3,7 +3,7 @@
 ================================================================
 == Vitis HLS Report for 'headed_compute_controller_Pipeline_VITIS_LOOP_520_12'
 ================================================================
-* Date:           Fri Jan 30 15:25:11 2026
+* Date:           Tue Feb  3 14:27:10 2026
 
 * Version:        2025.1 (Build 6135595 on May 21 2025)
 * Project:        headed_compute_controller
@@ -141,7 +141,7 @@ The critical path consists of the following:
 The critical path consists of the following:
 	'load' operation 8 bit ('byte_val', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:566->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:522) on array 'in_buf' [27]  (0.677 ns)
 	'select' operation 4 bit ('nibble', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:567->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:522) [30]  (0.391 ns)
-	'store' operation 0 bit ('store_ln522', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:522) of variable 'nibble', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:567->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:522 on static variable 'headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_34' [42]  (0.000 ns)
+	'store' operation 0 bit ('store_ln522', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:522) of variable 'nibble', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:567->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/headed_compute_controller.cpp:522 on static variable 'headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_36' [36]  (0.000 ns)
 
 
 ============================================================

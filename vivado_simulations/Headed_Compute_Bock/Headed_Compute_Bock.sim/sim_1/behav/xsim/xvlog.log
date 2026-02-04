@@ -1,0 +1,103 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_SOFTMAX.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_SOFTMAX
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_232_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_232_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_245_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_245_2
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_245_2_exp_lut_q15_ROM_AUTO_1R.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_245_2_exp_lut_q15_ROM_AUTO_1R
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_266_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_266_3
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_flow_control_loop_pipe_sequential_init.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_flow_control_loop_pipe_sequential_init
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_139_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_139_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_160_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_160_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_440_6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_440_6
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_496_7.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_496_7
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_500_8.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_500_8
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_506_9.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_506_9
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_510_10.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_510_10
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_520_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_520_12
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_534_14.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_534_14
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_548_15.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_548_15
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_555_16.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_555_16
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_564_17.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_564_17
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_568_18.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_568_18
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_574_19.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_574_19
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_578_20.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_578_20
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_589_22.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_589_22
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_599_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_599_23
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_610_24.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_610_24
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_615_25.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_615_25
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_622_26.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_622_26
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_627_27.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_627_27
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_636_28.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_636_28
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_640_29.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_640_29
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_646_30.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_646_30
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_650_31.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_650_31
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_661_33.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_661_33
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_672_34.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_Pipeline_VITIS_LOOP_672_34
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33_RAMbkb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_headed_compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_b_33_RAMbkb
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_mac_muladd_8s_8s_16s_17_4_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_mac_muladd_8s_8s_16s_17_4_1_DSP48_0
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_mac_muladd_8s_8s_16s_17_4_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_mac_muladd_8s_8s_4s_16_4_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_mac_muladd_8s_8s_4s_16_4_1_DSP48_0
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_mac_muladd_8s_8s_4s_16_4_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_mul_31s_16ns_31_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_mul_31s_16ns_31_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_mul_32s_32s_64_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_mul_32s_32s_64_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_mul_8s_8s_16_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_mul_8s_8s_16_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_soft_out_RAM_AUTO_1R1W.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_soft_out_RAM_AUTO_1R1W
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_sparsemux_33_4_16_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_sparsemux_33_4_16_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_sparsemux_33_4_20_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_sparsemux_33_4_20_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_sparsemux_33_4_4_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_sparsemux_33_4_4_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_sparsemux_7_2_15_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_sparsemux_7_2_15_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_sparsemux_9_2_20_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_sparsemux_9_2_20_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_sparsemux_9_2_8_1_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_sparsemux_9_2_8_1_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_udiv_31ns_19ns_31_35_seq_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_udiv_31ns_19ns_31_35_seq_1_divseq
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_udiv_31ns_19ns_31_35_seq_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_val_in_RAM_AUTO_1R1W.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_val_in_RAM_AUTO_1R1W
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_val_scaled_RAM_AUTO_1R1W.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module headed_compute_controller_val_scaled_RAM_AUTO_1R1W

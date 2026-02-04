@@ -24,8 +24,7 @@ reg [DataWidth-1:0] rom0[0:AddressRange-1];
 
 
 initial begin
-     
-    $readmemh("./headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_245_2_exp_lut_q15_ROM_AUTO_1R.dat", rom0);
+    $readmemh("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-Verilog/headed_compute_controller/verilog/headed_compute_controller_SOFTMAX_Pipeline_VITIS_LOOP_245_2_exp_lut_q15_ROM_AUTO_1R.dat", rom0);
 end
 
   

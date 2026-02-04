@@ -1,57 +1,61 @@
 {
   "0": {
-    "basicblocks": 86,
-    "calls": "4",
+    "basicblocks": 88,
+    "calls": "6 9",
     "control_depth": 0,
     "def_use_depth": 3,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 292,
+    "instructions": 430,
     "loads": {
-      "G": 57,
+      "G": 77,
       "L": 2
     },
     "memory_accesses": 0,
     "name": "transformer_top",
     "stores": {
-      "G": 70,
-      "L": 2,
-      "T": 20
+      "G": 74,
+      "L": 4,
+      "T": 58
     },
-    "total_instructions": 4530
+    "total_instructions": 8808
   },
   "1": {
-    "basicblocks": 308,
-    "calls": "3 3",
+    "basicblocks": 3,
+    "calls": "8",
     "control_depth": 0,
-    "def_use_depth": 5,
-    "file": "head_helpers.cpp",
-    "fileloc": 395,
-    "instructions": 1224,
+    "def_use_depth": 7,
+    "file": "compute_controller.cpp",
+    "fileloc": 113,
+    "instructions": 284,
     "loads": {
-      "L": 177
+      "G": 33,
+      "L": 1
     },
-    "memory_accesses": 0,
-    "name": "drive_group_head_phase",
+    "memory_accesses": 1,
+    "name": "RMS_NORM",
     "stores": {
-      "L": 324
+      "G": 16
     },
-    "total_instructions": 1328
+    "total_instructions": 1418
   },
   "2": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 4,
-    "file": "head_helpers.cpp",
-    "fileloc": 29,
-    "instructions": 97,
-    "memory_accesses": 0,
-    "name": "init_head_ctx",
-    "stores": {
-      "L": 45
+    "def_use_depth": 8,
+    "file": "compute_controller.cpp",
+    "fileloc": 63,
+    "instructions": 214,
+    "loads": {
+      "G": 16
     },
-    "total_instructions": 97
+    "memory_accesses": 0,
+    "name": "REQUANT_D_MODEL_int32_to_int8",
+    "stores": {
+      "G": 16
+    },
+    "total_instructions": 214
   },
   "3": {
     "basicblocks": 1,
@@ -69,23 +73,106 @@
     "total_instructions": 52
   },
   "4": {
-    "basicblocks": 231,
-    "calls": "2 2 2 2 3 3 1 2 2 2 2",
+    "basicblocks": 1,
+    "calls": "",
     "control_depth": 0,
     "def_use_depth": 4,
+    "file": "head_helpers.cpp",
+    "fileloc": 29,
+    "instructions": 97,
+    "memory_accesses": 0,
+    "name": "init_head_ctx",
+    "stores": {
+      "L": 45
+    },
+    "total_instructions": 97
+  },
+  "5": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "compute_controller.cpp",
+    "fileloc": 175,
+    "instructions": 177,
+    "loads": {
+      "G": 32
+    },
+    "memory_accesses": 0,
+    "name": "RES_ADD",
+    "stores": {
+      "G": 16
+    },
+    "total_instructions": 177
+  },
+  "6": {
+    "basicblocks": 542,
+    "calls": "4 4 4 4 3 3 3 3 4 4 4 4",
+    "control_depth": 0,
+    "def_use_depth": 5,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 47,
-    "instructions": 2030,
+    "instructions": 3190,
     "loads": {
-      "G": 71,
-      "L": 184
+      "G": 99,
+      "L": 356
     },
     "memory_accesses": 45,
     "name": "scheduler_hls",
     "stores": {
-      "G": 267,
-      "L": 287
+      "G": 300,
+      "L": 579
     },
-    "total_instructions": 4238
+    "total_instructions": 4174
+  },
+  "7": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 6,
+    "file": "top_params.hpp",
+    "fileloc": 588,
+    "instructions": 26,
+    "loads": {
+      "L": 4
+    },
+    "memory_accesses": 0,
+    "name": "read_i32",
+    "total_instructions": 26
+  },
+  "8": {
+    "basicblocks": 157,
+    "calls": "",
+    "control_depth": 5,
+    "def_use_depth": 96,
+    "file": "hls_sqrt_apfixed.h",
+    "fileloc": 19,
+    "instructions": 1134,
+    "memory_accesses": 1,
+    "name": "sqrt_fixed<32, 19>",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 1134
+  },
+  "9": {
+    "basicblocks": 121,
+    "calls": "7 7 7 7 1 5 7 7 7 7 2 7",
+    "control_depth": 2,
+    "def_use_depth": 19,
+    "file": "compute_controller.cpp",
+    "fileloc": 197,
+    "instructions": 2161,
+    "loads": {
+      "G": 198,
+      "L": 19
+    },
+    "memory_accesses": 239,
+    "name": "compute_controller",
+    "stores": {
+      "G": 681,
+      "L": 50
+    },
+    "total_instructions": 4204
   }
 }

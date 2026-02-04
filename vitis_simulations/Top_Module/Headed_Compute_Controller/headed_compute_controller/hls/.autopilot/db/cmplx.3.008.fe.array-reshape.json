@@ -1,7 +1,7 @@
 {
   "0": {
     "basicblocks": 302,
-    "calls": "1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2",
+    "calls": "2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
     "control_depth": 2,
     "def_use_depth": 13,
     "file": "headed_compute_controller.cpp",
@@ -21,24 +21,6 @@
     "total_instructions": 2288
   },
   "1": {
-    "basicblocks": 28,
-    "calls": "",
-    "control_depth": 5,
-    "def_use_depth": 7,
-    "file": "headed_compute_controller.cpp",
-    "fileloc": 221,
-    "instructions": 108,
-    "loads": {
-      "G": 4
-    },
-    "memory_accesses": 5,
-    "name": "SOFTMAX",
-    "stores": {
-      "G": 1
-    },
-    "total_instructions": 108
-  },
-  "2": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -55,5 +37,23 @@
       "L": 1
     },
     "total_instructions": 12
+  },
+  "2": {
+    "basicblocks": 28,
+    "calls": "",
+    "control_depth": 5,
+    "def_use_depth": 7,
+    "file": "headed_compute_controller.cpp",
+    "fileloc": 221,
+    "instructions": 108,
+    "loads": {
+      "G": 4
+    },
+    "memory_accesses": 5,
+    "name": "SOFTMAX",
+    "stores": {
+      "G": 1
+    },
+    "total_instructions": 108
   }
 }

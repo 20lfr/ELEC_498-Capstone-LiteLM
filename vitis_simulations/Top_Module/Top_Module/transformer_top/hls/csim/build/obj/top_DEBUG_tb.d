@@ -26,4 +26,6 @@ obj/top_DEBUG_tb.o: ../../../../../../../HLS-Verilog/top_DEBUG_tb.cpp \
   ../../../../../../../HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp \
   ../../../../../../../HLS-Verilog/ControlMemInterface/../top_params.hpp \
   ../../../../../../../HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp \
-  ../../../../../../../HLS-Verilog/IRQ_Wizard/../top_params.hpp
+  ../../../../../../../HLS-Verilog/IRQ_Wizard/../top_params.hpp \
+  ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp \
+  ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp

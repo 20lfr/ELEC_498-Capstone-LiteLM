@@ -68,7 +68,8 @@ enum class DmaSel : uint8_t {
     DMASEL_WO = 8,         // 0x08
     DMASEL_W1 = 9,         // 0x09
     DMASEL_W2 = 10,        // 0x0A
-    DMASEL_WLOGIT = 11     // 0x0B
+    DMASEL_WLOGIT = 11,    // 0x0B
+    DMASEL_CONCAT = 12     // 0x0C
 };
 
 // FSM Memory Request: <31:24 tile><23:16 head><15:8 layer><7:0 mem_request>

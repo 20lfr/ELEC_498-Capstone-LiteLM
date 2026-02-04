@@ -3407,7 +3407,7 @@ window.onload = function () { addSorting(); }
 <center><h1>Design Guidance Report</h1></center><center><table class="header" border="0">
 <tr><td><b>Copyright</b></td><td>Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.</td></tr>
 <tr><td><b>Tool Version</b></td><td>xcd v.2025.1 (lin64) Build 0 </td></tr>
-<tr><td><b>Date</b></td><td>Tue Jan 27 20:15:15 2026</td></tr>
+<tr><td><b>Date</b></td><td>Tue Feb  3 19:41:43 2026</td></tr>
 <tr><td><b>Host</b></td><td>luka-B550-UD-AC-Y1 running 64-bit Ubuntu 24.04.3 LTS</td></tr>
 <tr><td><b>Command</b></td><td>/tools/Xilinx/2025.1/Vitis/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg --work_dir transformer_top </td></tr>
 </table></center><br>
@@ -3416,9 +3416,9 @@ window.onload = function () { addSorting(); }
 <tr><td><a href="#VIOLATION DETAILS">2 VIOLATION DETAILS</a></tr></td>
 </table>
 <a name="REPORT SUMMARY"></a><h1>1 REPORT SUMMARY</h1>
-<pre>Violations found: 3
+<pre>Violations found: 40
 </pre>
-<pre>Rule Specs Violated: 1
+<pre>Rule Specs Violated: 2
 </pre>
 <a name="VIOLATION DETAILS"></a><h1>2 VIOLATION DETAILS</h1>
 <table border="1">
@@ -3434,38 +3434,442 @@ window.onload = function () { addSorting(); }
 <th align="left" width="380">Resolution</th>
 </tr>
 <tr>
-<td align="left">1</td>
-<td align="left">Kernel</td>
-<td align="left">WARNING</td>
+<td align="left">29</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
 <td align="left"><undefined></td>
-<td align="left">HLS Kernel Related</td>
-<td align="left">Accelerator.transformer_top.Kernel</td>
-<td align="left">Estimated clock period (8.095 ns) exceeds the target (target clock period: 10.000 ns, clock uncertainty: 2.700 ns, effective delay budget: 7.300 ns).
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_461_13'
 </td>
 <td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
 </tr>
 <tr>
-<td align="left">2</td>
-<td align="left">Kernel</td>
-<td align="left">WARNING</td>
+<td align="left">23</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
 <td align="left"><undefined></td>
-<td align="left">HLS Kernel Related</td>
-<td align="left">Accelerator.transformer_top.Kernel</td>
-<td align="left">The critical path in module 'transformer_top' consists of the following:
-	'phi' operation 2 bit ('p_0', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp#line=163">ControlMemInterface.cpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp#line=109">top.cpp</a>) with incoming values : ('trunc_ln4', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp#line=4">top.cpp</a>) ('trunc_ln163_1', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp#line=163">ControlMemInterface.cpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp#line=109">top.cpp</a>) [550]  (0.000 ns)
-	'call' operation 893 bit ('call_ret', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp#line=122">top.cpp</a>) to 'scheduler_hls' [558]  (8.095 ns)
-
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 2, Depth = 2, loop 'VITIS_LOOP_567_24'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_638_34'
 </td>
 <td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
 </tr>
 <tr>
 <td align="left">3</td>
 <td align="left">Kernel</td>
+<td align="left">WARNING</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Kernel Related</td>
+<td align="left">Accelerator.transformer_top.Kernel</td>
+<td align="left">The II Violation in module 'read_i32' (function 'read_i32'): Unable to schedule 'load' operation 8 bit ('in_buf_load_1', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=590">top_params.hpp</a>) on array 'in_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'in_buf'.
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">28</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_456_12'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">22</td>
+<td align="left">Kernel</td>
+<td align="left">WARNING</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Kernel Related</td>
+<td align="left">Accelerator.transformer_top.Kernel</td>
+<td align="left">The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_567_24' (loop 'VITIS_LOOP_567_24'): Unable to schedule 'store' operation 0 bit ('out_buf_addr_4_write_ln623', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=623">top_params.hpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp#line=569">compute_controller.cpp</a>) of variable 'trunc_ln', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=623">top_params.hpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp#line=569">compute_controller.cpp</a> on array 'out_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'out_buf'.
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 2, Depth = 2, loop 'VITIS_LOOP_697_44'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_663_38_VITIS_LOOP_664_39'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">37</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">31</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_478_16'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_620_33'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_646_35'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">36</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">30</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_465_14_VITIS_LOOP_466_15'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_605_31'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_163_1'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">39</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_398_11'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">25</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_541_22'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">19</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 2, Depth = 3, loop 'VITIS_LOOP_551_23'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_676_40'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">38</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">24</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_530_21'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">18</td>
+<td align="left">Kernel</td>
+<td align="left">WARNING</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Kernel Related</td>
+<td align="left">Accelerator.transformer_top.Kernel</td>
+<td align="left">The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_551_23' (loop 'VITIS_LOOP_551_23'): Unable to schedule 'load' operation 8 bit ('in_buf_load_4', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=589">top_params.hpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp#line=556">compute_controller.cpp</a>) on array 'in_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'in_buf'.
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 2, Depth = 3, function 'read_i32'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">33</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 2, Depth = 2, loop 'VITIS_LOOP_493_18'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">27</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_521_20'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_580_26'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">Kernel</td>
+<td align="left">WARNING</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Kernel Related</td>
+<td align="left">Accelerator.transformer_top.Kernel</td>
+<td align="left">The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_697_44' (loop 'VITIS_LOOP_697_44'): Unable to schedule 'store' operation 0 bit ('out_buf_addr_1_write_ln623', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=623">top_params.hpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp#line=701">compute_controller.cpp</a>) of variable 'trunc_ln623_2', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=623">top_params.hpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp#line=701">compute_controller.cpp</a> on array 'out_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'out_buf'.
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">32</td>
+<td align="left">Kernel</td>
+<td align="left">WARNING</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Kernel Related</td>
+<td align="left">Accelerator.transformer_top.Kernel</td>
+<td align="left">The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_493_18' (loop 'VITIS_LOOP_493_18'): Unable to schedule 'store' operation 0 bit ('out_buf_addr_6_write_ln623', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=623">top_params.hpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp#line=494">compute_controller.cpp</a>) of variable 'trunc_ln623_1', <a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp#line=623">top_params.hpp</a>-><a href="file:///home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp#line=494">compute_controller.cpp</a> on array 'out_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'out_buf'.
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">26</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_506_19'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_575_25'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_684_42'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">35</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">21</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 6, function 'sqrt_fixed<32, 19>'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_597_29'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_654_36'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">40</td>
+<td align="left">Kernel</td>
 <td align="left">ADVISORY</td>
 <td align="left"><undefined></td>
 <td align="left">HLS Kernel Related</td>
 <td align="left">Accelerator.transformer_top.Kernel</td>
-<td align="left">**** Estimated Fmax: 123.53 MHz
+<td align="left">**** Estimated Fmax: 137.40 MHz
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">34</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">20</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 4, loop 'VITIS_LOOP_123_1'
+</td>
+<td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left">Throughput</td>
+<td align="left">ADVISORY</td>
+<td align="left"><undefined></td>
+<td align="left">HLS Throughput Related</td>
+<td align="left">Accelerator.transformer_top.Throughput</td>
+<td align="left">Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_584_27_VITIS_LOOP_585_28'
 </td>
 <td align="left"><a href="http:///docs.xilinx.com/access/sources/dita/map?Doc_Version=2025.1%20English&url=ug1399-vitis-hls">Vitis HLS User Guide (UG1399)</a></td>
 </tr>

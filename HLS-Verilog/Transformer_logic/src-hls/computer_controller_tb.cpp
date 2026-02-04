@@ -821,8 +821,11 @@ int main() {
 
         (void)op_pre;
 
+        ControlMemSpace ctrl_mem{};
+        ctrl_mem.control = reset ? 0u : CTRL_RESETN_BIT;
+
         compute_controller(
-            reset,
+            ctrl_mem,
             compute_start,
             compute_instruction,
             compute_ready,

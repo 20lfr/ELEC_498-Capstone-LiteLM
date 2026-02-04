@@ -6528,13 +6528,19 @@ constexpr int NUM_W1_TILES = 4;
 constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
-constexpr int D_MODEL = 8;
+constexpr int D_MODEL = 16;
 constexpr int D_FFN = 22;
 constexpr int D_HEADS = D_MODEL / NUM_HEADS;
 constexpr int D_TILE_WO = D_MODEL / NUM_WO_TILES;
 constexpr int D_TILE_W1 = D_MODEL / NUM_W1_TILES;
 constexpr int D_TILE_W2 = D_FFN / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16;
+constexpr int MAX_CYCLIC_SIZE = 16;
+
+
+
+constexpr int16_t ATTN_SCALE_Q15 = 16384;
+
 
 
 
@@ -6605,14 +6611,15 @@ enum ComputeOp : uint8_t {
     CMP_RESID0 = 16,
     CMP_REQUANT2 = 17,
     CMP_FFN_W1 = 18,
-    CMP_FFN_ACT = 29,
+    CMP_FFN_ACT = 19,
     CMP_FFN_W2 = 20,
     CMP_REQUANT3 = 21,
     CMP_RESID1 = 22,
     CMP_LN1 = 23,
     CMP_REQUANT4 = 24,
-    CMP_DEQUANT = 25,
-    CMP_LOGITS = 26,
+    CMP_FINAL_NORM = 25,
+    CMP_DEQUANT = 26,
+    CMP_LOGITS = 27,
 };
 
 enum DmaSel : uint8_t {
@@ -6627,14 +6634,14 @@ enum DmaSel : uint8_t {
     DMASEL_WO,
     DMASEL_W1,
     DMASEL_W2,
-    DMASEL_WLOGIT
+    DMASEL_WLOGIT,
+    DMASEL_CONCAT
 };
 
 enum class ComputeErrorCodes {
     IncorrectRequest,
     InvalidComputationForamt
 };
-
 
 struct HeadCtx {
     int layer_stamp = -1;
@@ -6696,7 +6703,14 @@ struct HeadCtx {
 
 
 
-enum class ComputeState : uint8_t { IDLE = 0, CAPTURE_INSTRUCTION, WAIT_MEM, EXECUTE, MEM_WRITEBACK, DONE };
+enum class ComputeState : uint8_t {
+            IDLE = 0,
+            CAPTURE_INSTRUCTION,
+            WAIT_MEM,
+            EXECUTE,
+            MEM_WRITEBACK,
+            DONE
+};
 
 
 struct PendingRequest {
@@ -6820,6 +6834,22 @@ struct ControlMemSpace {
 
 
 
+constexpr int max2_constexpr(int a, int b) {
+    return (a > b) ? a : b;
+}
+constexpr int min2_constexpr(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+
+
+constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
+constexpr int ACCUM_MAX = max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
+constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
+
+constexpr int MAC_VEC_UNROLL = min2_constexpr(VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int MAC_OUT_UNROLL = min2_constexpr(ACCUM_MAX, MAX_CYCLIC_SIZE);
+
 namespace compute_buf {
 
 constexpr int div_ceil(int a, int b) {
@@ -6841,7 +6871,7 @@ constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PR
 
 constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
-constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + (D_MODEL * 4) + 4;
+constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
@@ -6911,8 +6941,7 @@ struct ResidLayout {
 struct LayerNormLayout {
     static constexpr int X = 0;
     static constexpr int GAMMA = X + D_MODEL;
-    static constexpr int BETA = GAMMA + (D_MODEL * 4);
-    static constexpr int EPS = BETA + (D_MODEL * 4);
+    static constexpr int EPS = GAMMA + (D_MODEL * 4);
 };
 
 struct FfnW1Layout {
@@ -6995,6 +7024,93 @@ inline void write_i32(uint8_t *buf, int byte_addr, int32_t value) {
     buf[byte_addr + 2] = static_cast<uint8_t>((v >> 16) & 0xFFu);
     buf[byte_addr + 3] = static_cast<uint8_t>((v >> 24) & 0xFFu);
 }
+
+}
+
+
+
+
+constexpr int HEAD_VECTOR_MAX = compute_buf::max2(D_MODEL, compute_buf::max2(D_HEADS, CONTEXT_LENGTH));
+constexpr int HEAD_ACCUM_MAX = compute_buf::max2(D_HEADS, CONTEXT_LENGTH);
+constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
+
+constexpr int HEAD_MAC_VEC_UNROLL = min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
+constexpr int HEAD_MAC_OUT_UNROLL = min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
+
+
+
+namespace head_buf {
+
+constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
+constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
+constexpr int QKV_B_NIBBLES = D_HEADS;
+constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
+constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
+constexpr int QKV_OUT_BYTES = D_HEADS * 4;
+
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
+constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
+
+constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
+
+constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4);
+constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
+constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
+
+constexpr int ATT_VALUE_IN_BYTES = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
+
+constexpr int IN_BUF_BYTES = compute_buf::max2(
+    QKV_IN_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_IN_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_IN_BYTES,
+            compute_buf::max2(VALUE_SCALE_IN_BYTES,
+                compute_buf::max2(SOFTMAX_IN_BYTES, ATT_VALUE_IN_BYTES)))));
+
+constexpr int OUT_BUF_BYTES = compute_buf::max2(
+    QKV_OUT_BYTES,
+    compute_buf::max2(
+        HEAD_REQUANT_OUT_BYTES,
+        compute_buf::max2(
+            ATT_SCORES_OUT_BYTES,
+            compute_buf::max2(VALUE_SCALE_OUT_BYTES,
+                compute_buf::max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
+
+struct QkvLayout {
+    static constexpr int ACT = 0;
+    static constexpr int W = ACT + D_MODEL;
+    static constexpr int B = W + QKV_W_BYTES;
+};
+
+struct HeadRequantLayout {
+    static constexpr int X = 0;
+    static constexpr int M = X + (D_HEADS * 4);
+    static constexpr int N = M + 4;
+    static constexpr int Z = N + 4;
+};
+
+struct AttScoresLayout {
+    static constexpr int Q = 0;
+    static constexpr int K_CACHE = Q + D_HEADS;
+};
+
+struct ValueScaleLayout {
+    static constexpr int X = 0;
+};
+
+struct SoftmaxLayout {
+    static constexpr int X = 0;
+};
+
+struct AttValueLayout {
+    static constexpr int WEIGHTS = 0;
+    static constexpr int V_CACHE = WEIGHTS + CONTEXT_LENGTH;
+};
 
 }
 # 3 "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp" 2

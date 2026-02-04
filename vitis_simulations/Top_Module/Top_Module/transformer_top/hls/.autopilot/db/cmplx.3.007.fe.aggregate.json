@@ -1,46 +1,134 @@
 {
   "0": {
-    "basicblocks": 84,
-    "calls": "1",
+    "basicblocks": 86,
+    "calls": "6 3",
     "control_depth": 0,
-    "def_use_depth": 3,
+    "def_use_depth": 4,
     "file": "top.cpp",
     "fileloc": 4,
-    "instructions": 258,
+    "instructions": 562,
     "loads": {
-      "G": 38,
-      "L": 2
+      "G": 44,
+      "L": 2,
+      "T": 33
     },
     "memory_accesses": 0,
     "name": "transformer_top",
     "stores": {
-      "G": 70,
-      "L": 2,
-      "T": 20
+      "G": 74,
+      "L": 4,
+      "T": 58
     },
-    "total_instructions": 8704
+    "total_instructions": 14198
   },
   "1": {
-    "basicblocks": 504,
-    "calls": "2 2 2 2 3 3 4 2 2 2 2",
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 5,
+    "file": "compute_controller.cpp",
+    "fileloc": 175,
+    "instructions": 177,
+    "loads": {
+      "G": 32
+    },
+    "memory_accesses": 0,
+    "name": "RES_ADD",
+    "stores": {
+      "G": 16
+    },
+    "total_instructions": 177
+  },
+  "2": {
+    "basicblocks": 3,
+    "calls": "9",
+    "control_depth": 0,
+    "def_use_depth": 7,
+    "file": "compute_controller.cpp",
+    "fileloc": 113,
+    "instructions": 283,
+    "loads": {
+      "G": 32,
+      "L": 1
+    },
+    "memory_accesses": 16,
+    "name": "RMS_NORM",
+    "stores": {
+      "G": 16
+    },
+    "total_instructions": 1391
+  },
+  "3": {
+    "basicblocks": 337,
+    "calls": "5 5 5 5 2 1 5 5 5 5 8 5",
+    "control_depth": 4,
+    "def_use_depth": 20,
+    "file": "compute_controller.cpp",
+    "fileloc": 197,
+    "instructions": 3142,
+    "loads": {
+      "G": 290,
+      "L": 16
+    },
+    "memory_accesses": 562,
+    "name": "compute_controller",
+    "stores": {
+      "G": 900,
+      "L": 47
+    },
+    "total_instructions": 5158
+  },
+  "4": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 4,
+    "file": "head_helpers.cpp",
+    "fileloc": 29,
+    "instructions": 52,
+    "memory_accesses": 0,
+    "name": "init_head_ctx",
+    "stores": {
+      "L": 45
+    },
+    "total_instructions": 52
+  },
+  "5": {
+    "basicblocks": 1,
+    "calls": "",
+    "control_depth": 0,
+    "def_use_depth": 6,
+    "file": "top_params.hpp",
+    "fileloc": 588,
+    "instructions": 26,
+    "loads": {
+      "L": 4
+    },
+    "memory_accesses": 0,
+    "name": "read_i32",
+    "total_instructions": 26
+  },
+  "6": {
+    "basicblocks": 806,
+    "calls": "7 7 7 7 4 4 4 4 7 7 7 7",
     "control_depth": 2,
     "def_use_depth": 5,
     "file": "Scheduler_FSM.cpp",
     "fileloc": 47,
-    "instructions": 4177,
+    "instructions": 5334,
     "loads": {
-      "G": 71,
-      "L": 454
+      "G": 99,
+      "L": 618
     },
     "memory_accesses": 91,
     "name": "scheduler_hls",
     "stores": {
-      "G": 263,
-      "L": 422
+      "G": 296,
+      "L": 714
     },
-    "total_instructions": 8446
+    "total_instructions": 8478
   },
-  "2": {
+  "7": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
@@ -58,37 +146,37 @@
     },
     "total_instructions": 367
   },
-  "3": {
+  "8": {
     "basicblocks": 1,
     "calls": "",
     "control_depth": 0,
-    "def_use_depth": 4,
-    "file": "head_helpers.cpp",
-    "fileloc": 29,
-    "instructions": 52,
-    "memory_accesses": 0,
-    "name": "init_head_ctx",
-    "stores": {
-      "L": 45
-    },
-    "total_instructions": 52
-  },
-  "4": {
-    "basicblocks": 299,
-    "calls": "3 3",
-    "control_depth": 0,
-    "def_use_depth": 5,
-    "file": "head_helpers.cpp",
-    "fileloc": 395,
-    "instructions": 1125,
+    "def_use_depth": 8,
+    "file": "compute_controller.cpp",
+    "fileloc": 63,
+    "instructions": 214,
     "loads": {
-      "L": 170
+      "G": 16
     },
     "memory_accesses": 0,
-    "name": "drive_group_head_phase",
+    "name": "REQUANT_D_MODEL_int32_to_int8",
     "stores": {
-      "L": 324
+      "G": 16
     },
-    "total_instructions": 1229
+    "total_instructions": 214
+  },
+  "9": {
+    "basicblocks": 131,
+    "calls": "",
+    "control_depth": 5,
+    "def_use_depth": 96,
+    "file": "hls_sqrt_apfixed.h",
+    "fileloc": 19,
+    "instructions": 1108,
+    "memory_accesses": 1,
+    "name": "sqrt_fixed<32, 19>",
+    "stores": {
+      "L": 1
+    },
+    "total_instructions": 1108
   }
 }

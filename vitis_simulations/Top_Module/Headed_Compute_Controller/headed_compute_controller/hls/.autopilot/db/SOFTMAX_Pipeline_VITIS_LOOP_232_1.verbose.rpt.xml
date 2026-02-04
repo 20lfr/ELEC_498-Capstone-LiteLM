@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vitis HLS Report for 'SOFTMAX_Pipeline_VITIS_LOOP_232_1'" level="0">
-<item name = "Date">Fri Jan 30 15:25:12 2026
+<item name = "Date">Tue Feb  3 14:27:11 2026
 </item>
 <item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
 <item name = "Project">headed_compute_controller</item>
