@@ -1,6 +1,6 @@
 #pragma once
-#ifndef MMU_HPP
-#define MMU_HPP
+#ifndef MMU_V2_HPP
+#define MMU_V2_HPP
 
 #include "top_params.hpp"
 
@@ -13,7 +13,7 @@ enum class DataType : uint8_t {
     DTYPE_INT32 = 4
 };
 
-// Model dimensions 
+// Model dimensions (initialized from top_params.hpp constexpr)
 struct ModelDims {
     uint16_t d_model     = D_MODEL;
     uint16_t d_ffn       = D_FFN;

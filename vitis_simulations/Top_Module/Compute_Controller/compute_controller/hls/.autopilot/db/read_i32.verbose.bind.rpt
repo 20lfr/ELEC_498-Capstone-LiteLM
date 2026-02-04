@@ -1,0 +1,704 @@
+
+
+================================================================
+== Vitis HLS Report for 'read_i32'
+================================================================
+* Date:           Wed Jan 28 19:35:27 2026
+
+* Version:        2025.1 (Build 6135595 on May 21 2025)
+* Project:        compute_controller
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  2.010 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max    | min | max |   Type  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |        2|        2|  20.000 ns|  20.000 ns|    2|    2|      yes|
+    +---------+---------+-----------+-----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 2
+HasVarLatency: 0
+IsPipeline: 1
+IsRtlPipelined: 1
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
++ Individual pipeline summary: 
+  * Pipeline-0: initiation interval (II) = 2, depth = 3
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 3
+* Pipeline : 1
+  Pipeline-0 : II = 2, D = 3, States = { 1 2 3 }
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 
+3 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 2.01>
+ST_1 : Operation 4 [1/1] (0.00ns)   --->   "%byte_addr_read = read i7 @_ssdm_op_Read.ap_auto.i7, i7 %byte_addr"   --->   Operation 4 'read' 'byte_addr_read' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 5 [1/1] (0.00ns)   --->   "%zext_ln575 = zext i7 %byte_addr_read" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:575]   --->   Operation 5 'zext' 'zext_ln575' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 6 [1/1] (0.00ns)   --->   "%in_buf_addr = getelementptr i8 %in_buf, i64 0, i64 %zext_ln575" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:575]   --->   Operation 6 'getelementptr' 'in_buf_addr' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 7 [2/2] (1.23ns)   --->   "%in_buf_load = load i8 %in_buf_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:575]   --->   Operation 7 'load' 'in_buf_load' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_1 : Operation 8 [1/1] (0.77ns)   --->   "%add_ln576 = add i7 %byte_addr_read, i7 1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:576]   --->   Operation 8 'add' 'add_ln576' <Predicate = true> <Delay = 0.77> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.77> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 9 [1/1] (0.00ns)   --->   "%zext_ln576 = zext i7 %add_ln576" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:576]   --->   Operation 9 'zext' 'zext_ln576' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 10 [1/1] (0.00ns)   --->   "%in_buf_addr_1 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln576" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:576]   --->   Operation 10 'getelementptr' 'in_buf_addr_1' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 11 [2/2] (1.23ns)   --->   "%in_buf_load_1 = load i8 %in_buf_addr_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:576]   --->   Operation 11 'load' 'in_buf_load_1' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+
+State 2 <SV = 1> <Delay = 2.01>
+ST_2 : Operation 12 [1/2] ( I:1.23ns O:1.23ns )   --->   "%in_buf_load = load i8 %in_buf_addr" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:575]   --->   Operation 12 'load' 'in_buf_load' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_2 : Operation 13 [1/2] ( I:1.23ns O:1.23ns )   --->   "%in_buf_load_1 = load i8 %in_buf_addr_1" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:576]   --->   Operation 13 'load' 'in_buf_load_1' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_2 : Operation 14 [1/1] (0.77ns)   --->   "%add_ln577 = add i7 %byte_addr_read, i7 2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:577]   --->   Operation 14 'add' 'add_ln577' <Predicate = true> <Delay = 0.77> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.77> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 15 [1/1] (0.00ns)   --->   "%zext_ln577 = zext i7 %add_ln577" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:577]   --->   Operation 15 'zext' 'zext_ln577' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 16 [1/1] (0.00ns)   --->   "%in_buf_addr_2 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln577" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:577]   --->   Operation 16 'getelementptr' 'in_buf_addr_2' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 17 [2/2] (1.23ns)   --->   "%in_buf_load_2 = load i8 %in_buf_addr_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:577]   --->   Operation 17 'load' 'in_buf_load_2' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_2 : Operation 18 [1/1] (0.77ns)   --->   "%add_ln578 = add i7 %byte_addr_read, i7 3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:578]   --->   Operation 18 'add' 'add_ln578' <Predicate = true> <Delay = 0.77> <CoreInst = "Adder">   --->   Core 1 'Adder' <Latency = 0> <II = 1> <Delay = 0.77> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 19 [1/1] (0.00ns)   --->   "%zext_ln578 = zext i7 %add_ln578" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:578]   --->   Operation 19 'zext' 'zext_ln578' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 20 [1/1] (0.00ns)   --->   "%in_buf_addr_3 = getelementptr i8 %in_buf, i64 0, i64 %zext_ln578" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:578]   --->   Operation 20 'getelementptr' 'in_buf_addr_3' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 21 [2/2] (1.23ns)   --->   "%in_buf_load_3 = load i8 %in_buf_addr_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:578]   --->   Operation 21 'load' 'in_buf_load_3' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+
+State 3 <SV = 2> <Delay = 1.23>
+ST_3 : Operation 22 [1/1] (0.00ns)   --->   "%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i8 %in_buf, void @empty_20, i32 0, i32 0, void @empty_8, i32 4294967295, i32 0, void @empty_8, void @empty_8, void @empty_8, i32 0, i32 0, i32 0, i32 0, void @empty_8, void @empty_8, i32 4294967295, i32 0, i32 0"   --->   Operation 22 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 23 [1/2] ( I:1.23ns O:1.23ns )   --->   "%in_buf_load_2 = load i8 %in_buf_addr_2" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:577]   --->   Operation 23 'load' 'in_buf_load_2' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_3 : Operation 24 [1/2] ( I:1.23ns O:1.23ns )   --->   "%in_buf_load_3 = load i8 %in_buf_addr_3" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:578]   --->   Operation 24 'load' 'in_buf_load_3' <Predicate = true> <Delay = 1.23> <CoreInst = "RAM">   --->   Core 82 'RAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 129> <RAM>
+ST_3 : Operation 25 [1/1] (0.00ns)   --->   "%v = bitconcatenate i32 @_ssdm_op_BitConcatenate.i32.i8.i8.i8.i8, i8 %in_buf_load_3, i8 %in_buf_load_2, i8 %in_buf_load_1, i8 %in_buf_load" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:579]   --->   Operation 25 'bitconcatenate' 'v' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 26 [1/1] (0.00ns)   --->   "%ret_ln580 = ret i32 %v" [/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:580]   --->   Operation 26 'ret' 'ret_ln580' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+STG Binding: 
+---------------- STG Properties BEGIN ----------------
+- Is combinational: 0
+- Is one-state seq: 0
+- Is datapath-only: 0
+- Is pipelined: 1
+- Is top level: 0
+Port [ Return ] is wired: 1; IO mode=ap_ctrl_hs:ce=0
+Port [ in_buf]:  wired=1; compound=1; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=1; pingpong=0; private_global=0; MemPort=[11]; IO mode=ap_memory:ce=0
+Port [ byte_addr]:  wired=1; compound=0; hidden=0; nouse=0; global=0; static=0; extern=0; dir=0; type=0; pingpong=0; private_global=0; IO mode=ap_none:ce=0
+---------------- STG Properties END ------------------
+
+---------------- Datapath Model BEGIN ----------------
+
+<LifeTime>
+<method=bitvector/>
+byte_addr_read    (read          ) [ 0010]
+zext_ln575        (zext          ) [ 0000]
+in_buf_addr       (getelementptr ) [ 0010]
+add_ln576         (add           ) [ 0000]
+zext_ln576        (zext          ) [ 0000]
+in_buf_addr_1     (getelementptr ) [ 0010]
+in_buf_load       (load          ) [ 0101]
+in_buf_load_1     (load          ) [ 0101]
+add_ln577         (add           ) [ 0000]
+zext_ln577        (zext          ) [ 0000]
+in_buf_addr_2     (getelementptr ) [ 0101]
+add_ln578         (add           ) [ 0000]
+zext_ln578        (zext          ) [ 0000]
+in_buf_addr_3     (getelementptr ) [ 0101]
+specinterface_ln0 (specinterface ) [ 0000]
+in_buf_load_2     (load          ) [ 0000]
+in_buf_load_3     (load          ) [ 0000]
+v                 (bitconcatenate) [ 0000]
+ret_ln580         (ret           ) [ 0000]
+</LifeTime>
+
+<model>
+
+<comp_list>
+<comp id="0" class="1000" name="in_buf">
+<pin_list>
+<pin id="1" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="in_buf"/><MemPortTyVec>1 1 </MemPortTyVec>
+</StgValue>
+</bind>
+</comp>
+
+<comp id="2" class="1000" name="byte_addr">
+<pin_list>
+<pin id="3" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="byte_addr"/></StgValue>
+</bind>
+</comp>
+
+<comp id="4" class="1001" name="const_4">
+<pin_list>
+<pin id="5" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_Read.ap_auto.i7"/></StgValue>
+</bind>
+</comp>
+
+<comp id="6" class="1001" name="const_6">
+<pin_list>
+<pin id="7" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="8" class="1001" name="const_8">
+<pin_list>
+<pin id="9" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="10" class="1001" name="const_10">
+<pin_list>
+<pin id="11" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="12" class="1001" name="const_12">
+<pin_list>
+<pin id="13" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="14" class="1001" name="const_14">
+<pin_list>
+<pin id="15" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_SpecInterface"/></StgValue>
+</bind>
+</comp>
+
+<comp id="16" class="1001" name="const_16">
+<pin_list>
+<pin id="17" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_20"/></StgValue>
+</bind>
+</comp>
+
+<comp id="18" class="1001" name="const_18">
+<pin_list>
+<pin id="19" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="20" class="1001" name="const_20">
+<pin_list>
+<pin id="21" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="empty_8"/></StgValue>
+</bind>
+</comp>
+
+<comp id="22" class="1001" name="const_22">
+<pin_list>
+<pin id="23" dir="1" index="0" bw="1" slack="2147483647"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name=""/></StgValue>
+</bind>
+</comp>
+
+<comp id="24" class="1001" name="const_24">
+<pin_list>
+<pin id="25" dir="1" index="0" bw="1" slack="0"/>
+</pin_list>
+<bind>
+<StgValue><ssdm name="_ssdm_op_BitConcatenate.i32.i8.i8.i8.i8"/></StgValue>
+</bind>
+</comp>
+
+<comp id="26" class="1004" name="byte_addr_read_read_fu_26">
+<pin_list>
+<pin id="27" dir="0" index="0" bw="7" slack="0"/>
+<pin id="28" dir="0" index="1" bw="7" slack="0"/>
+<pin id="29" dir="1" index="2" bw="7" slack="0"/>
+</pin_list>
+<bind>
+<opcode="read(1150) " fcode="read"/>
+<opset="byte_addr_read/1 "/>
+</bind>
+</comp>
+
+<comp id="32" class="1004" name="in_buf_addr_gep_fu_32">
+<pin_list>
+<pin id="33" dir="0" index="0" bw="8" slack="0"/>
+<pin id="34" dir="0" index="1" bw="1" slack="0"/>
+<pin id="35" dir="0" index="2" bw="7" slack="0"/>
+<pin id="36" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="in_buf_addr/1 "/>
+</bind>
+</comp>
+
+<comp id="39" class="1004" name="grp_access_fu_39">
+<pin_list>
+<pin id="40" dir="0" index="0" bw="8" slack="0"/>
+<pin id="41" dir="0" index="1" bw="8" slack="2147483647"/>
+<pin id="42" dir="0" index="2" bw="0" slack="0"/>
+<pin id="44" dir="0" index="4" bw="8" slack="2147483647"/>
+<pin id="45" dir="0" index="5" bw="8" slack="2147483647"/>
+<pin id="46" dir="0" index="6" bw="0" slack="2147483647"/>
+<pin id="43" dir="1" index="3" bw="8" slack="0"/>
+<pin id="47" dir="1" index="7" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="load(27) " fcode="load"/>
+<opset="in_buf_load/1 in_buf_load_1/1 in_buf_load_2/2 in_buf_load_3/2 "/>
+</bind>
+</comp>
+
+<comp id="49" class="1004" name="in_buf_addr_1_gep_fu_49">
+<pin_list>
+<pin id="50" dir="0" index="0" bw="8" slack="0"/>
+<pin id="51" dir="0" index="1" bw="1" slack="0"/>
+<pin id="52" dir="0" index="2" bw="7" slack="0"/>
+<pin id="53" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="in_buf_addr_1/1 "/>
+</bind>
+</comp>
+
+<comp id="57" class="1004" name="in_buf_addr_2_gep_fu_57">
+<pin_list>
+<pin id="58" dir="0" index="0" bw="8" slack="0"/>
+<pin id="59" dir="0" index="1" bw="1" slack="0"/>
+<pin id="60" dir="0" index="2" bw="7" slack="0"/>
+<pin id="61" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="in_buf_addr_2/2 "/>
+</bind>
+</comp>
+
+<comp id="65" class="1004" name="in_buf_addr_3_gep_fu_65">
+<pin_list>
+<pin id="66" dir="0" index="0" bw="8" slack="0"/>
+<pin id="67" dir="0" index="1" bw="1" slack="0"/>
+<pin id="68" dir="0" index="2" bw="7" slack="0"/>
+<pin id="69" dir="1" index="3" bw="8" slack="0"/>
+</pin_list>
+<bind>
+<opcode="getelementptr(29) " fcode="getelementptr"/>
+<opset="in_buf_addr_3/2 "/>
+</bind>
+</comp>
+
+<comp id="73" class="1004" name="zext_ln575_fu_73">
+<pin_list>
+<pin id="74" dir="0" index="0" bw="7" slack="0"/>
+<pin id="75" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln575/1 "/>
+</bind>
+</comp>
+
+<comp id="78" class="1004" name="add_ln576_fu_78">
+<pin_list>
+<pin id="79" dir="0" index="0" bw="7" slack="0"/>
+<pin id="80" dir="0" index="1" bw="1" slack="0"/>
+<pin id="81" dir="1" index="2" bw="7" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln576/1 "/>
+</bind>
+</comp>
+
+<comp id="84" class="1004" name="zext_ln576_fu_84">
+<pin_list>
+<pin id="85" dir="0" index="0" bw="7" slack="0"/>
+<pin id="86" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln576/1 "/>
+</bind>
+</comp>
+
+<comp id="89" class="1004" name="add_ln577_fu_89">
+<pin_list>
+<pin id="90" dir="0" index="0" bw="7" slack="1"/>
+<pin id="91" dir="0" index="1" bw="3" slack="0"/>
+<pin id="92" dir="1" index="2" bw="7" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln577/2 "/>
+</bind>
+</comp>
+
+<comp id="94" class="1004" name="zext_ln577_fu_94">
+<pin_list>
+<pin id="95" dir="0" index="0" bw="7" slack="0"/>
+<pin id="96" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln577/2 "/>
+</bind>
+</comp>
+
+<comp id="99" class="1004" name="add_ln578_fu_99">
+<pin_list>
+<pin id="100" dir="0" index="0" bw="7" slack="1"/>
+<pin id="101" dir="0" index="1" bw="3" slack="0"/>
+<pin id="102" dir="1" index="2" bw="7" slack="0"/>
+</pin_list>
+<bind>
+<opcode="add(8) " fcode="add"/>
+<opset="add_ln578/2 "/>
+</bind>
+</comp>
+
+<comp id="104" class="1004" name="zext_ln578_fu_104">
+<pin_list>
+<pin id="105" dir="0" index="0" bw="7" slack="0"/>
+<pin id="106" dir="1" index="1" bw="64" slack="0"/>
+</pin_list>
+<bind>
+<opcode="zext(34) " fcode="zext"/>
+<opset="zext_ln578/2 "/>
+</bind>
+</comp>
+
+<comp id="109" class="1004" name="v_fu_109">
+<pin_list>
+<pin id="110" dir="0" index="0" bw="32" slack="0"/>
+<pin id="111" dir="0" index="1" bw="8" slack="0"/>
+<pin id="112" dir="0" index="2" bw="8" slack="0"/>
+<pin id="113" dir="0" index="3" bw="8" slack="1"/>
+<pin id="114" dir="0" index="4" bw="8" slack="1"/>
+<pin id="115" dir="1" index="5" bw="32" slack="2147483647"/>
+</pin_list>
+<bind>
+<opcode="bitconcatenate(1004) " fcode="bitconcatenate"/>
+<opset="v/3 "/>
+</bind>
+</comp>
+
+<comp id="119" class="1005" name="byte_addr_read_reg_119">
+<pin_list>
+<pin id="120" dir="0" index="0" bw="7" slack="1"/>
+<pin id="121" dir="1" index="1" bw="7" slack="1"/>
+</pin_list>
+<bind>
+<opset="byte_addr_read "/>
+</bind>
+</comp>
+
+<comp id="125" class="1005" name="in_buf_addr_reg_125">
+<pin_list>
+<pin id="126" dir="0" index="0" bw="8" slack="1"/>
+<pin id="127" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_addr "/>
+</bind>
+</comp>
+
+<comp id="130" class="1005" name="in_buf_addr_1_reg_130">
+<pin_list>
+<pin id="131" dir="0" index="0" bw="8" slack="1"/>
+<pin id="132" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_addr_1 "/>
+</bind>
+</comp>
+
+<comp id="135" class="1005" name="in_buf_load_reg_135">
+<pin_list>
+<pin id="136" dir="0" index="0" bw="8" slack="1"/>
+<pin id="137" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_load "/>
+</bind>
+</comp>
+
+<comp id="140" class="1005" name="in_buf_load_1_reg_140">
+<pin_list>
+<pin id="141" dir="0" index="0" bw="8" slack="1"/>
+<pin id="142" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_load_1 "/>
+</bind>
+</comp>
+
+<comp id="145" class="1005" name="in_buf_addr_2_reg_145">
+<pin_list>
+<pin id="146" dir="0" index="0" bw="8" slack="1"/>
+<pin id="147" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_addr_2 "/>
+</bind>
+</comp>
+
+<comp id="150" class="1005" name="in_buf_addr_3_reg_150">
+<pin_list>
+<pin id="151" dir="0" index="0" bw="8" slack="1"/>
+<pin id="152" dir="1" index="1" bw="8" slack="1"/>
+</pin_list>
+<bind>
+<opset="in_buf_addr_3 "/>
+</bind>
+</comp>
+
+</comp_list>
+
+<net_list>
+<net id="30"><net_src comp="4" pin="0"/><net_sink comp="26" pin=0"/></net>
+
+<net id="31"><net_src comp="2" pin="0"/><net_sink comp="26" pin=1"/></net>
+
+<net id="37"><net_src comp="0" pin="0"/><net_sink comp="32" pin=0"/></net>
+
+<net id="38"><net_src comp="6" pin="0"/><net_sink comp="32" pin=1"/></net>
+
+<net id="48"><net_src comp="32" pin="3"/><net_sink comp="39" pin=2"/></net>
+
+<net id="54"><net_src comp="0" pin="0"/><net_sink comp="49" pin=0"/></net>
+
+<net id="55"><net_src comp="6" pin="0"/><net_sink comp="49" pin=1"/></net>
+
+<net id="56"><net_src comp="49" pin="3"/><net_sink comp="39" pin=0"/></net>
+
+<net id="62"><net_src comp="0" pin="0"/><net_sink comp="57" pin=0"/></net>
+
+<net id="63"><net_src comp="6" pin="0"/><net_sink comp="57" pin=1"/></net>
+
+<net id="64"><net_src comp="57" pin="3"/><net_sink comp="39" pin=2"/></net>
+
+<net id="70"><net_src comp="0" pin="0"/><net_sink comp="65" pin=0"/></net>
+
+<net id="71"><net_src comp="6" pin="0"/><net_sink comp="65" pin=1"/></net>
+
+<net id="72"><net_src comp="65" pin="3"/><net_sink comp="39" pin=0"/></net>
+
+<net id="76"><net_src comp="26" pin="2"/><net_sink comp="73" pin=0"/></net>
+
+<net id="77"><net_src comp="73" pin="1"/><net_sink comp="32" pin=2"/></net>
+
+<net id="82"><net_src comp="26" pin="2"/><net_sink comp="78" pin=0"/></net>
+
+<net id="83"><net_src comp="8" pin="0"/><net_sink comp="78" pin=1"/></net>
+
+<net id="87"><net_src comp="78" pin="2"/><net_sink comp="84" pin=0"/></net>
+
+<net id="88"><net_src comp="84" pin="1"/><net_sink comp="49" pin=2"/></net>
+
+<net id="93"><net_src comp="10" pin="0"/><net_sink comp="89" pin=1"/></net>
+
+<net id="97"><net_src comp="89" pin="2"/><net_sink comp="94" pin=0"/></net>
+
+<net id="98"><net_src comp="94" pin="1"/><net_sink comp="57" pin=2"/></net>
+
+<net id="103"><net_src comp="12" pin="0"/><net_sink comp="99" pin=1"/></net>
+
+<net id="107"><net_src comp="99" pin="2"/><net_sink comp="104" pin=0"/></net>
+
+<net id="108"><net_src comp="104" pin="1"/><net_sink comp="65" pin=2"/></net>
+
+<net id="116"><net_src comp="24" pin="0"/><net_sink comp="109" pin=0"/></net>
+
+<net id="117"><net_src comp="39" pin="3"/><net_sink comp="109" pin=1"/></net>
+
+<net id="118"><net_src comp="39" pin="7"/><net_sink comp="109" pin=2"/></net>
+
+<net id="122"><net_src comp="26" pin="2"/><net_sink comp="119" pin=0"/></net>
+
+<net id="123"><net_src comp="119" pin="1"/><net_sink comp="89" pin=0"/></net>
+
+<net id="124"><net_src comp="119" pin="1"/><net_sink comp="99" pin=0"/></net>
+
+<net id="128"><net_src comp="32" pin="3"/><net_sink comp="125" pin=0"/></net>
+
+<net id="129"><net_src comp="125" pin="1"/><net_sink comp="39" pin=2"/></net>
+
+<net id="133"><net_src comp="49" pin="3"/><net_sink comp="130" pin=0"/></net>
+
+<net id="134"><net_src comp="130" pin="1"/><net_sink comp="39" pin=0"/></net>
+
+<net id="138"><net_src comp="39" pin="7"/><net_sink comp="135" pin=0"/></net>
+
+<net id="139"><net_src comp="135" pin="1"/><net_sink comp="109" pin=4"/></net>
+
+<net id="143"><net_src comp="39" pin="3"/><net_sink comp="140" pin=0"/></net>
+
+<net id="144"><net_src comp="140" pin="1"/><net_sink comp="109" pin=3"/></net>
+
+<net id="148"><net_src comp="57" pin="3"/><net_sink comp="145" pin=0"/></net>
+
+<net id="149"><net_src comp="145" pin="1"/><net_sink comp="39" pin=2"/></net>
+
+<net id="153"><net_src comp="65" pin="3"/><net_sink comp="150" pin=0"/></net>
+
+<net id="154"><net_src comp="150" pin="1"/><net_sink comp="39" pin=0"/></net>
+
+</net_list>
+
+</model> 
+---------------- Datapath Model END ------------------
+
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+	Port: read_i32 : in_buf | {1 2 3 }
+	Port: read_i32 : byte_addr | {1 }
+  - Chain level:
+	State 1
+		in_buf_addr : 1
+		in_buf_load : 2
+		zext_ln576 : 1
+		in_buf_addr_1 : 2
+		in_buf_load_1 : 3
+	State 2
+		zext_ln577 : 1
+		in_buf_addr_2 : 2
+		in_buf_load_2 : 3
+		zext_ln578 : 1
+		in_buf_addr_3 : 2
+		in_buf_load_3 : 3
+	State 3
+		v : 1
+		ret_ln580 : 2
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+
+* Functional unit list:
+|----------|---------------------------|---------|---------|
+| Operation|      Functional Unit      |    FF   |   LUT   |
+|----------|---------------------------|---------|---------|
+|          |      add_ln576_fu_78      |    0    |    14   |
+|    add   |      add_ln577_fu_89      |    0    |    14   |
+|          |      add_ln578_fu_99      |    0    |    14   |
+|----------|---------------------------|---------|---------|
+|   read   | byte_addr_read_read_fu_26 |    0    |    0    |
+|----------|---------------------------|---------|---------|
+|          |      zext_ln575_fu_73     |    0    |    0    |
+|   zext   |      zext_ln576_fu_84     |    0    |    0    |
+|          |      zext_ln577_fu_94     |    0    |    0    |
+|          |     zext_ln578_fu_104     |    0    |    0    |
+|----------|---------------------------|---------|---------|
+|bitconcatenate|          v_fu_109         |    0    |    0    |
+|----------|---------------------------|---------|---------|
+|   Total  |                           |    0    |    42   |
+|----------|---------------------------|---------|---------|
+
+Memories:
+N/A
+
+* Register list:
++----------------------+--------+
+|                      |   FF   |
++----------------------+--------+
+|byte_addr_read_reg_119|    7   |
+| in_buf_addr_1_reg_130|    8   |
+| in_buf_addr_2_reg_145|    8   |
+| in_buf_addr_3_reg_150|    8   |
+|  in_buf_addr_reg_125 |    8   |
+| in_buf_load_1_reg_140|    8   |
+|  in_buf_load_reg_135 |    8   |
++----------------------+--------+
+|         Total        |   55   |
++----------------------+--------+
+
+* Multiplexer (MUX) list: 
+|------------------|------|------|------|--------||---------||---------||---------|
+|       Comp       |  Pin | Size |  BW  | S x BW ||  Delay  ||    FF   ||   LUT   |
+|------------------|------|------|------|--------||---------||---------||---------|
+| grp_access_fu_39 |  p0  |   4  |   8  |   32   ||    0    ||    20   |
+| grp_access_fu_39 |  p2  |   4  |   0  |    0   ||    0    ||    20   |
+|------------------|------|------|------|--------||---------||---------||---------|
+|       Total      |      |      |      |   32   ||   1.05  ||    0    ||    40   |
+|------------------|------|------|------|--------||---------||---------||---------|
+
+
+
+* Summary:
++-----------+--------+--------+--------+
+|           |  Delay |   FF   |   LUT  |
++-----------+--------+--------+--------+
+|  Function |    -   |    0   |   42   |
+|   Memory  |    -   |    -   |    -   |
+|Multiplexer|    1   |    0   |   40   |
+|  Register |    -   |   55   |    -   |
++-----------+--------+--------+--------+
+|   Total   |    1   |   55   |   82   |
++-----------+--------+--------+--------+

@@ -12,22 +12,24 @@ void transformer_top(
     // ------------------------------------------------------------
     // Memory Management System (WEIGHT LOADER via DMA)
     // ------------------------------------------------------------
-    bool        dma_done,                   // [INPUT]  DMA transfer completed (single-cycle pulse)
 
+    // FSM communication signals
+    bool        dma_done,                   // [INPUT]  DMA transfer completed (single-cycle pulse)
     bool        wl_ready,                 // [INPUT]  Weight loader ready for a new request
+    uint32_t    &wl_instruction,          // [OUTPUT] Packed dma op|layer|head|tile
     bool        &wl_start,                // [OUTPUT] Start weight load request
-    DmaSel      &wl_addr_sel,             // [OUTPUT] Select weight matrix/tile
-    int         &wl_layer,                // [OUTPUT] Layer index for DMA
-    int         &wl_head,                 // [OUTPUT] Head index (or -1 for non-head ops)
-    int         &wl_tile,                 // [OUTPUT] Tile index for large matrices
+
+    // Compute Controller communication signals
+    bool        mem_transfer_done,   // [INPUT] Memory manager transfer complete
+    bool        &mem_read_request,   // [OUTPUT] Request memory manager read
+    bool        &mem_write_request,  // [OUTPUT] Request memory manager write
+    uint32_t    &mem_op,             // [OUTPUT] Opcode for memory manager
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
     // ------------------------------------------------------------
-    bool compute_ready,                 // [INPUT]  Compute engine idle / ready for next op
-    bool compute_done,                  // [INPUT]  Compute operation finished (one-shot)
-    bool &compute_start,                // [OUTPUT] Trigger compute engine
-    uint32_t &compute_op,               // [OUTPUT] Packed op|layer|head|tile for compute
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
     
     // ------------------------------------------------------------
@@ -74,6 +76,22 @@ void transformer_top(
     uint32_t &w1_tile_stride,
     uint32_t &w2_tile_stride,
 
+    // Debug (compute controller)
+    bool     &dbg_compute_start,
+    uint32_t &dbg_compute_instruction,
+    bool     &dbg_compute_ready,
+    bool     &dbg_compute_done,
+    ComputeState &dbg_compute_state,
+    uint32_t &dbg_req_instruction,
+    uint8_t  &dbg_req_op,
+    uint8_t  &dbg_req_layer,
+    uint8_t  &dbg_req_head,
+    uint8_t  &dbg_req_tile,
+    bool     &dbg_mac_start,
+    bool     &dbg_mac_ready,
+    bool     &dbg_mac_complete,
+    bool     &dbg_ctrl_reset_asserted,
+
     bool &dbg_done,
     bool &dbg_error
 ) {
@@ -82,9 +100,13 @@ void transformer_top(
     bool done               = false;    // Scheduler done flag
     bool error              = false;    // Scheduler error flag
     static ControlMemSpace ctrl_mem; 
-
-
+    static bool     compute_ready = false;
+    static bool     compute_done = false;
+    static bool     compute_start = false;
+    static uint32_t compute_instruction = 0;
     // Debugging mirrors
+    dbg_ctrl_mem = ctrl_mem;
+    dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);
     control_reg   = ctrl_mem.control;
     irq_status_reg   = ctrl_mem.irq_status;
     irq_enable_reg   = ctrl_mem.irq_enable;
@@ -102,9 +124,14 @@ void transformer_top(
     w2_tile_stride   = ctrl_mem.w2_tile_stride;
 
     // Clear handshake state on external resetn deassert.
-    if (ctrl_mem.control & !CTRL_RESETN_BIT) {
+    if ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u) {
         done          = false;
         error         = false;
+
+        compute_ready = true;
+        compute_done  = false;
+        compute_start = false;
+        compute_instruction = 0;
     }
 
 
@@ -129,16 +156,13 @@ void transformer_top(
         axis_in_ready,
         dma_done,
         wl_ready,
+        wl_instruction,
         wl_start,
-        wl_addr_sel,
-        wl_layer,
-        wl_head,
-        wl_tile,
         compute_ready,
         compute_done,
         head_ctx_ref,
         compute_start,
-        compute_op,
+        compute_instruction,
         stream_ready,
         stream_start,
         stream_done,
@@ -149,9 +173,42 @@ void transformer_top(
 
     
 
+    compute_controller(
+        ctrl_mem,               
+        compute_start,       
+        compute_instruction,      
+        compute_ready,
+        compute_done,
+
+        mem_transfer_done,   
+        mem_read_request,   
+        mem_write_request,  
+        mem_op,    
+        in_buf,
+        out_buf,
+
+        //DEBUG VISIBILITY
+        dbg_compute_state,
+        dbg_req_instruction,
+        dbg_req_op,
+        dbg_req_layer,
+        dbg_req_head,
+        dbg_req_tile,
+        dbg_mac_start,
+        dbg_mac_ready,
+        dbg_mac_complete,
+        error               
+    );
+    
+
     // IRQ WIZARD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     irq_ps = irq_wizard(ctrl_mem, done, error);
     dbg_done = done;
     dbg_error = error;
+
+    dbg_compute_start = compute_start;
+    dbg_compute_instruction = compute_instruction;
+    dbg_compute_ready = compute_ready;
+    dbg_compute_done = compute_done;
 
 }

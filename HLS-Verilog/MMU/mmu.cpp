@@ -1,5 +1,6 @@
-#include "mmu.hpp"
+#include "mmu_v2.hpp"
 
+// Initialization
 void mmu_init(MMUContext &ctx, const ModelDims &dims) {
 #pragma HLS INLINE
     ctx.dims = dims;

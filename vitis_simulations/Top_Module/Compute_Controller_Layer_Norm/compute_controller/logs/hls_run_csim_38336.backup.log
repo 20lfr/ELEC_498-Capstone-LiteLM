@@ -1,0 +1,98 @@
+WARNING: [vitis-run 60-2507] Dispatch failed to load the system diagram library librdi_system_diagram. Diagrams will not be produced.
+  **** HLS Build v2025.1 6135595
+INFO: [HLS 200-2005] Using work_dir /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/compute_controller 
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/compute_controller/vitis-comp.json
+INFO: [HLS 200-10] Creating and opening component '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/compute_controller'.
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-2174] Applying component config ini file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'tb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding test bench file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.top=compute_controller' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying config ini 'flow_target=vivado' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying config ini 'part=xck26-sfvc784-2LV-c' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xck26-sfvc784-2LV-c'
+INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(12)
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/hls_config.cfg(5)
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Compute_Controller_Layer_Norm/compute_controller/vitis-comp.json
+INFO: [SIM 211-2] *************** CSIM start ***************
+INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
+INFO: [HLS 200-2036] Building debug C Simulation binaries
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/computer_controller_layer_norm_tb.cpp in debug mode
+   Compiling ../../../../../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp in debug mode
+   Generating csim.exe
+D_MODEL=8 D_TILE_WO=2 NUM_WO_TILES=4
+valueA[8]: -64 -32 -8 -1 1 7 31 63
+bias[8]: 7 7 7 7 7 7 7 7
+weights[8][8]:
+  out 0: 7 7 7 7 7 7 7 7
+  out 1: 7 7 7 7 7 7 7 7
+  out 2: 7 7 7 7 7 7 7 7
+  out 3: 7 7 7 7 7 7 7 7
+  out 4: 7 7 7 7 7 7 7 7
+  out 5: 7 7 7 7 7 7 7 7
+  out 6: 7 7 7 7 7 7 7 7
+  out 7: 7 7 7 7 7 7 7 7
+Cycle  Rst   Start Ready Done  Err    MRead  MWrite MDone  MOp        Instr      Op    Layer Head  Tile  State   ReqInstr   ReqOp    ReqL  ReqH  ReqT  MacS  MacR  MacC  Acc[0:7]
+LayerNorm x[8]: -64 -32 -8 -1 1 7 31 63
+LayerNorm gamma[8]: 1 1 1 1 1 1 1 1
+LayerNorm epsilon: 1
+0      1     0     1     0     0      0      0      0      -          0x00000000 -          0     0     0     0       0x00000000 -        0     0     0     0     0     0    
+1      1     0     1     0     0      0      0      0      -          0x00000000 -          0     0     0     0       0x00000000 -        0     0     0     0     0     0    
+2      0     0     1     0     0      0      0      0      -          0x00000000 -          0     0     0     0       0x00000000 -        0     0     0     0     1     0    
+3      0     1     1     0     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     1       0x00ff0101 LN0      1     -1    0     0     1     0    
+4      0     0     0     0     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     2       0x00ff0101 LN0      1     -1    0     0     1     0    
+5      0     0     0     0     0      1      0      0      LN0        0x00ff0101 LN0        1     -1    0     2       0x00ff0101 LN0      1     -1    0     0     1     0    
+6      0     0     0     0     0      1      0      0      LN0        0x00ff0101 LN0        1     -1    0     2       0x00ff0101 LN0      1     -1    0     0     1     0    
+in_buf (LN0 request)[129]:
+  0000: c0 e0 f8 ff 01 07 1f 3f 01 00 00 00 01 00 00 00
+  0010: 01 00 00 00 01 00 00 00 01 00 00 00 01 00 00 00
+  0020: 01 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00
+  0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0080: 00
+7      0     0     0     0     0      0      0      1      LN0        0x00ff0101 LN0        1     -1    0     3       0x00ff0101 LN0      1     -1    0     0     1     0    
+square_fx: 10165.000000 0x04f6a000 (signed=83271680)
+mean_square: 1270.625000 0x009ed400 (signed=10408960)
+v: 1271.625000 0x009ef400 (signed=10417152)
+inv_rms: 0.027954 0x000000e5 (signed=229)
+ln_cycle[0] normalized: -1.789062 0xffffc6c0 (signed=-14656)
+ln_cycle[0] scaled: -1.789062 0xffffc6c0 (signed=-14656)
+ln_cycle[1] normalized: -0.894531 0xffffe360 (signed=-7328)
+ln_cycle[1] scaled: -0.894531 0xffffe360 (signed=-7328)
+ln_cycle[2] normalized: -0.223633 0xfffff8d8 (signed=-1832)
+ln_cycle[2] scaled: -0.223633 0xfffff8d8 (signed=-1832)
+ln_cycle[3] normalized: -0.027954 0xffffff1b (signed=-229)
+ln_cycle[3] scaled: -0.027954 0xffffff1b (signed=-229)
+ln_cycle[4] normalized: 0.027954 0x000000e5 (signed=229)
+ln_cycle[4] scaled: 0.027954 0x000000e5 (signed=229)
+ln_cycle[5] normalized: 0.195679 0x00000643 (signed=1603)
+ln_cycle[5] scaled: 0.195679 0x00000643 (signed=1603)
+ln_cycle[6] normalized: 0.866577 0x00001bbb (signed=7099)
+ln_cycle[6] scaled: 0.866577 0x00001bbb (signed=7099)
+ln_cycle[7] normalized: 1.761108 0x0000385b (signed=14427)
+ln_cycle[7] scaled: 1.761108 0x0000385b (signed=14427)
+8      0     0     0     0     0      0      0      1      LN0        0x00ff0101 LN0        1     -1    0     4       0x00ff0101 LN0      1     -1    0     0     1     0    
+9      0     0     0     0     0      0      0      1      -          0x00ff0101 LN0        1     -1    0     5       0x00ff0101 LN0      1     -1    0     0     1     0    
+10     0     0     0     1     0      0      0      0      -          0x00ff0101 LN0        1     -1    0     0       0x00000000 -        0     0     0     0     1     0    
+out_buf (LN0 done)[44]:
+  0000: ff ff ff ff 00 00 00 00 00 00 00 00 00 00 00 00
+  0010: 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00
+  0020: 00 00 00 00 00 00 00 00 00 00 00 00
+compute_controller_layer_norm_tb: PASS
+INFO: [SIM 211-1] CSim done with 0 errors.
+INFO: [SIM 211-3] *************** CSIM finish ***************
+INFO: [HLS 200-112] Total CPU user time: 11.6 seconds. Total CPU system time: 1.24 seconds. Total elapsed time: 12.79 seconds; peak allocated memory: 445.105 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 16s

@@ -1,0 +1,217 @@
+<profile>
+
+<section name = "Vitis HLS Report for 'RMS_NORM'" level="0">
+<item name = "Date">Wed Jan 28 19:35:30 2026
+</item>
+<item name = "Version">2025.1 (Build 6135595 on May 21 2025)</item>
+<item name = "Project">compute_controller</item>
+<item name = "Solution">hls (Vivado IP Flow Target)</item>
+<item name = "Product family">zynquplus</item>
+<item name = "Target device">xck26-sfvc784-2LV-c</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00 ns, 7.145 ns, 2.70 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">61, 61, 0.610 us, 0.610 us, 61, 61, no</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+<column name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140">RMS_NORM_Pipeline_VITIS_LOOP_123_1, 20, 20, 0.200 us, 0.200 us, 17, 17, loop auto-rewind stp (delay=0 clock cycles(s))</column>
+<column name="grp_sqrt_fixed_32_19_s_fu_161">sqrt_fixed_32_19_s, 5, 5, 50.000 ns, 50.000 ns, 1, 1, yes</column>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="DSP">-, -, -, -, -</column>
+<column name="Expression">-, -, 0, 66, -</column>
+<column name="FIFO">-, -, -, -, -</column>
+<column name="Instance">-, 97, 1286, 5965, -</column>
+<column name="Memory">-, -, -, -, -</column>
+<column name="Multiplexer">-, -, 0, 196, -</column>
+<column name="Register">-, -, 135, -, -</column>
+<specialColumn name="Available">288, 1248, 234240, 117120, 64</specialColumn>
+<specialColumn name="Utilization (%)">0, 7, ~0, 5, 0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140">RMS_NORM_Pipeline_VITIS_LOOP_123_1, 0, 1, 34, 146, 0</column>
+<column name="mul_27ns_21s_45_1_1_U271">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U272">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U273">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U274">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U275">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U276">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U277">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U278">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U279">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U280">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U281">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U282">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U283">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U284">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U285">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_27ns_21s_45_1_1_U286">mul_27ns_21s_45_1_1, 0, 2, 0, 40, 0</column>
+<column name="mul_32s_32s_45_1_1_U287">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U288">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U289">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U290">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U291">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U292">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U293">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U294">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U295">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U296">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U297">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U298">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U299">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U300">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U301">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="mul_32s_32s_45_1_1_U302">mul_32s_32s_45_1_1, 0, 4, 0, 20, 0</column>
+<column name="grp_sqrt_fixed_32_19_s_fu_161">sqrt_fixed_32_19_s, 0, 0, 918, 4667, 0</column>
+<column name="udiv_27s_23ns_27_31_seq_1_U303">udiv_27s_23ns_27_31_seq_1, 0, 0, 334, 192, 0</column>
+</table>
+</item>
+<item name = "DSP"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="10">Memory, Module, BRAM_18K, FF, LUT, URAM, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="8">Name, BRAM_18K, FF, LUT, URAM, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="v_fu_417_p2">+, 0, 0, 39, 32, 32</column>
+<column name="mean_square_fu_397_p3">select, 0, 0, 27, 1, 1</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="ap_NS_fsm">196, 43, 1, 43</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="ap_CS_fsm">42, 0, 42, 0</column>
+<column name="grp_RMS_NORM_Pipeline_VITIS_LOOP_123_1_fu_140_ap_start_reg">1, 0, 1, 0</column>
+<column name="sext_ln_reg_1470">23, 0, 23, 0</column>
+<column name="square_loc_fu_130">19, 0, 19, 0</column>
+<column name="udiv_ln132_reg_1480">27, 0, 27, 0</column>
+<column name="v_reg_1465">23, 0, 32, 9</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, RMS_NORM, return value</column>
+<column name="epsilon">in, 19, ap_none, epsilon, scalar</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_39, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_38, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_37, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_36, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_35, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_34, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_33, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_32, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_31, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30">in, 8, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_30, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_41">in, 8, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_41, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_40">in, 8, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_40, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_39">in, 8, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_39, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_38">in, 8, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_38, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_37">in, 8, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_37, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_36">in, 8, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_36, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_99">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_99, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_98">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_98, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_97">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_97, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_96">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_96, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_95">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_95, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_94">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_94, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_93">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_93, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_92">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_92, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_91">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_91, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_90">in, 19, ap_none, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_90, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11">in, 19, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_11, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10">in, 19, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_10, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9">in, 19, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_9, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8">in, 19, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_8, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7">in, 19, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_7, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6">in, 19, ap_none, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_6, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_19">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_19, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_19_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_19, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_18">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_18, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_18_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_18, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_17">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_17, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_17_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_17, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_16">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_16, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_16_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_16, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_15">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_15, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_15_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_15, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_14">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_14, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_14_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_14, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_13">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_13, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_13_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_13, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_12">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_12, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_12_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_12, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_11, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10">out, 32, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10, pointer</column>
+<column name="compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10_ap_vld">out, 1, ap_vld, compute_controller_bool_bool_unsigned_int_bool_bool_bool_bool_bool_u_10, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_35">out, 32, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_35, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_35_ap_vld">out, 1, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_35, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_34">out, 32, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_34, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_34_ap_vld">out, 1, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_34, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_33">out, 32, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_33, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_33_ap_vld">out, 1, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_33, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_32">out, 32, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_32, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_32_ap_vld">out, 1, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_32, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_31">out, 32, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_31, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_31_ap_vld">out, 1, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_31, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_30">out, 32, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_30, pointer</column>
+<column name="p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_30_ap_vld">out, 1, ap_vld, p_ZZ18compute_controllerbbjRbS_bS_S_RjPKhPhR12ComputeStateS0_RhS6_S6_S6_S_S_S_S_E_30, pointer</column>
+</table>
+</item>
+</section>
+</profile>

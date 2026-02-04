@@ -89,6 +89,10 @@ void weight_stager(
                 addr_latched = ctrl_mem.w2_base_addr + wl_layer * ctrl_mem.layer_stride + wl_tile * ctrl_mem.w2_tile_stride;
                 memory_request = true;
                 break;
+            case DmaSel::DMASEL_CONCAT:
+                addr_latched = 0;
+                memory_request = true;
+                break;
             default:
                 addr_latched = 0;
                 memory_request = false;

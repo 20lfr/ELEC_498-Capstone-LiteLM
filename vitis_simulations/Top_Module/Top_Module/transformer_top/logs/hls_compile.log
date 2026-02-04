@@ -1,0 +1,1483 @@
+WARNING: [v++ 60-2507] Dispatch failed to load the system diagram library librdi_system_diagram. Diagrams will not be produced.
+  **** HLS Build v2025.1 6135595
+INFO: [HLS 200-2005] Using work_dir /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top 
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/vitis-comp.json
+INFO: [HLS 200-10] Creating and opening component '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top'.
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-2174] Applying component config ini file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_params.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(13)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(14)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(15)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(16)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(17)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(18)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(19)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.hpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(20)
+INFO: [HLS 200-10] Adding design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'tb.file=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(21)
+INFO: [HLS 200-10] Adding test bench file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp' to the project
+INFO: [HLS 200-1465] Applying config ini 'syn.top=transformer_top' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying config ini 'flow_target=vivado' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying config ini 'part=xck26-sfvc784-2LV-c' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xck26-sfvc784-2LV-c'
+INFO: [HLS 200-1465] Applying config ini 'clock=10ns' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(22)
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [HLS 200-1465] Applying config ini 'package.output.format=ip_catalog' from /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/hls_config.cfg(5)
+INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/vitis-comp.json
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 4.3 seconds. CPU system time: 0.93 seconds. Elapsed time: 5.21 seconds; current allocated memory: 445.203 MB.
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp' ... 
+WARNING: [HLS 207-1016] unknown warning group '-Wmisleading-indentation', ignored (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:16:34)
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp' ... 
+WARNING: [HLS 207-5292] unused parameter 'ctrl_mem' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:91:21)
+WARNING: [HLS 207-5292] unused parameter 'error' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:92:11)
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file '/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp' ... 
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 29.53 seconds. CPU system time: 4.38 seconds. Elapsed time: 33.91 seconds; current allocated memory: 453.402 MB.
+INFO: [HLS 200-777] Using interface defaults for 'Vivado' flow target.
+INFO: [HLS 200-1995] There were 12,054 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 14,008 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 9,168 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 8,808 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 8,599 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 14,545 instructions in the design after the 'Array/Struct (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 10,220 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 14,198 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 11,896 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 12,174 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 10,300 instructions in the design after the 'Performance' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 10,297 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 10,290 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 9,536 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 9,656 instructions in the design after the 'HW Transforms (step 1)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 200-1995] There were 9,538 instructions in the design after the 'HW Transforms (step 2)' phase of compilation. See the Design Size Report for more details (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module/transformer_top/hls/syn/report/csynth_design_size.rpt:2)
+INFO: [HLS 214-131] Inlining function 'init_mem_space(ControlMemSpace&)' into 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:163:16)
+INFO: [HLS 214-131] Inlining function 'ctrl_write(ControlMemSpace&, ControlReg, unsigned int)' into 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:180:9)
+INFO: [HLS 214-131] Inlining function 'ctrl_read(ControlMemSpace const&, ControlReg)' into 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp:177:20)
+INFO: [HLS 214-131] Inlining function 'pack_compute_op(ComputeOp, int, int, int)' into 'init_head_ctx(HeadCtx&, int, int)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:36:22)
+INFO: [HLS 214-131] Inlining function 'pack_dma_op(DmaSel, int, int, int)' into 'init_head_ctx(HeadCtx&, int, int)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:41:26)
+INFO: [HLS 214-131] Inlining function 'pack_dma_op(DmaSel, int, int, int)' into 'run_single_head(HeadCtx&, int, bool, ControlMemSpace, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:102:30)
+INFO: [HLS 214-131] Inlining function 'pack_compute_op(ComputeOp, int, int, int)' into 'run_single_head(HeadCtx&, int, bool, ControlMemSpace, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:376:39)
+INFO: [HLS 214-131] Inlining function 'unpack_compute_op(unsigned int)' into 'run_single_head(HeadCtx&, int, bool, ControlMemSpace, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:132:35)
+INFO: [HLS 214-131] Inlining function 'run_single_head(HeadCtx&, int, bool, ControlMemSpace, bool&)' into 'drive_group_head_phase(HeadCtx (&) [2], int, bool, ControlMemSpace, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:420:36)
+INFO: [HLS 214-131] Inlining function 'pack_compute_instruction(ComputeOp, int, int, int)' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:304:26)
+INFO: [HLS 214-131] Inlining function 'pack_dma_op(DmaSel, int, int, int) (.1)' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:778:30)
+INFO: [HLS 214-131] Inlining function 'drive_group_head_phase(HeadCtx (&) [2], int, bool, ControlMemSpace, bool&)' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:592:11)
+INFO: [HLS 214-131] Inlining function 'MAC_ARCHITECTURE(bool, bool&, short const*, ap_int<4> const*, int const*, bool&, int*)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:720:13)
+INFO: [HLS 214-131] Inlining function 'ControlMemInterface(ControlMemSpace&, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool)' into 'transformer_top(bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, unsigned int&, bool&, bool&, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:139:5)
+INFO: [HLS 214-131] Inlining function 'irq_wizard(ControlMemSpace&, bool, bool)' into 'transformer_top(bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, unsigned int&, bool&, bool&, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:205:14)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_271_2' is marked as complete unroll implied by the pipeline pragma (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:271:27)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_243_1' is marked as complete unroll implied by the pipeline pragma (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:243:27)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_384_10' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:384:36) in function 'compute_controller' completely with a factor of 22 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_373_9' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:373:35) in function 'compute_controller' completely with a factor of 16 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_367_8' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:367:35) in function 'compute_controller' completely with a factor of 5 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_363_7' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:363:35) in function 'compute_controller' completely with a factor of 110 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_359_6' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:359:35) in function 'compute_controller' completely with a factor of 22 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-359] Unrolling loop 'VITIS_LOOP_39_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:39:26) in function 'compute_controller': changing partial unrolling into complete unrolling since the unrolling factor (=5) is no less than the loop trip count (=5). (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_39_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:39:26) in function 'compute_controller' completely with a factor of 5 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-188] Unrolling loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42:30) in function 'compute_controller' partially with a factor of 16 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_342_5' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:342:27) in function 'compute_controller' completely with a factor of 22 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_331_4' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:331:27) in function 'compute_controller' completely with a factor of 16 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_325_3' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:325:27) in function 'compute_controller' completely with a factor of 5 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_321_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:321:27) in function 'compute_controller' completely with a factor of 110 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_317_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:317:27) in function 'compute_controller' completely with a factor of 22 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_133_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:133:23) in function 'RMS_NORM' completely with a factor of 16 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:118:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_271_2' (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:271:27) in function 'sqrt_fixed<32, 19>' completely with a factor of 14 (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:20:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_243_1' (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:243:27) in function 'sqrt_fixed<32, 19>' completely with a factor of 10 (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:20:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_180_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:180:23) in function 'RES_ADD' completely with a factor of 16 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:179:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_96_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:96:22) in function 'REQUANT_D_MODEL_int32_to_int8' completely with a factor of 16 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:70:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_481_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:481:25) in function 'scheduler_hls' completely with a factor of 4 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:95:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_595_4' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:595:25) in function 'scheduler_hls' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:95:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_407_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:407:23) in function 'scheduler_hls' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:95:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_579_3' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:579:20) in function 'scheduler_hls' completely with a factor of 2 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:95:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_239_1' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:239:23) in function 'scheduler_hls' completely with a factor of 4 (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:95:0)
+INFO: [HLS 214-178] Inlining function 'HeadCtx::HeadCtx()' into 'scheduler_hls(ControlMemSpace, bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool, HeadCtx (&) [4], bool&, unsigned int&, bool, bool&, bool, bool&, bool&, SchedState&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:95:0)
+INFO: [HLS 214-178] Inlining function 'max2_constexpr(int, int)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'min2_constexpr(int, int)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'compute_buf::read_i8(unsigned char const*, int)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'compute_buf::read_i4(unsigned char const*, int)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'compute_buf::write_i32(unsigned char*, int, int)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'compute_buf::write_i8(unsigned char*, int, signed char)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'compute_buf::read_i16(unsigned char const*, int)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'compute_buf::write_i16(unsigned char*, int, short)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function 'FFN_ACT_RELU(short const*, short*)' into 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:228:0)
+INFO: [HLS 214-178] Inlining function '(anonymous namespace)::is_valid_address(unsigned int)' into 'transformer_top(bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, unsigned int&, bool&, bool&, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-178] Inlining function '(anonymous namespace)::evaluate_irq(ControlMemSpace const&)' into 'transformer_top(bool, bool, bool&, bool, bool, unsigned int&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, HeadCtx (&) [4], bool, bool&, bool, ControlReg, unsigned int, unsigned int&, bool, bool, bool, bool, bool&, SchedState&, ControlMemSpace&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, unsigned int&, bool&, unsigned int&, bool&, bool&, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E3out': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:247:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E4bias': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:245:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E7matrixB': Cyclic partitioning with factor 16 on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:244:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E7vectorA': Cyclic partitioning with factor 16 on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:243:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E11ffn_act_out': Cyclic partitioning with factor 16 on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:285:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E16ffn_intermediate': Cyclic partitioning with factor 16 on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:284:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E2y8': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:279:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E3x32': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:278:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E8residual': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:274:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E7y_resid': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:267:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E5y_act': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:266:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E8ln_gamma': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:264:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E5x_act': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:263:0)
+INFO: [HLS 214-248] Applying array_partition to '_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_RhS7_S7_S7_S0_S0_S0_S0_E5scale': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:246:0)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.layer_stamp': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.head_idx': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.phase': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_ready': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_start': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.compute_op': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.last_compute_op': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.last_wl_addr': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_ready': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_start': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.wl_instruction': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.start_head': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.q_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_requant_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_writeback_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_requant_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_writeback_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.requant_q_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_scores_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.val_scale_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.softmax_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_value_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.head_requant_started': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.q_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_requant_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_requant_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.requant_q_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_scores_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.val_scale_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.softmax_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_value_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.head_requant_compute_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.q_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.k_writeback_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.v_writeback_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_scores_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_group.att_value_dma_done': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15)
+INFO: [HLS 214-248] Applying array_partition to 'head_ctx_ref': Complete partitioning on dimension 1. (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'dbg_ctrl_mem' with compact=bit mode in 1056-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_3' with compact=bit mode in 214-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_2' with compact=bit mode in 214-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_1' with compact=bit mode in 214-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-241] Aggregating scalar variable 'head_ctx_ref_0' with compact=bit mode in 214-bits (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp:97:0)
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_123_1> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:123:23 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_664_39> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:664:44 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_697_44> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:697:44 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_585_28> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:585:44 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_620_33> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:620:44 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_466_15> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:466:44 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_493_18> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:493:44 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_42_2> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:42:30 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15 
+INFO: [HLS 214-364] Automatically inlining function 'compute_buf::read_i32(unsigned char const*, int)' to improve effectiveness of pipeline pragma in function 'compute_controller(ControlMemSpace, bool, unsigned int, bool&, bool&, bool, bool&, bool&, unsigned int&, unsigned char const*, unsigned char*, ComputeState&, unsigned int&, unsigned char&, unsigned char&, unsigned char&, unsigned char&, bool&, bool&, bool&, bool&)' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:556:60)
+INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 9 seconds. CPU system time: 0.89 seconds. Elapsed time: 12.9 seconds; current allocated memory: 457.137 MB.
+INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 457.137 MB.
+INFO: [HLS 200-10] Starting code transformations ...
+INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 0.76 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.76 seconds; current allocated memory: 467.668 MB.
+INFO: [HLS 200-10] Checking synthesizability ...
+INFO: [XFORM 203-602] Inlining function 'init_head_ctx.1' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:241) automatically.
+INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 1.5 seconds. CPU system time: 0 seconds. Elapsed time: 1.52 seconds; current allocated memory: 474.883 MB.
+WARNING: [XFORM 203-561] Updating loop upper bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop lower bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop upper bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop lower bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop upper bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop lower bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop upper bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop lower bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop upper bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+WARNING: [XFORM 203-561] Updating loop lower bound from 2 to 1 for loop 'VITIS_LOOP_42_2' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:41:10) in function 'compute_controller'.
+INFO: [XFORM 203-602] Inlining function 'init_head_ctx.1' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:241) automatically.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp:20:9) in function 'transformer_top'... converting 3 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:21:9) to (/tools/Xilinx/2025.1/Vitis/common/technology/autopilot/etc/hls_sqrt_apfixed.h:349:1) in function 'sqrt_fixed<32, 19>'... converting 101 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:575:15) in function 'scheduler_hls'... converting 3 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:51:21) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:328:7) in function 'scheduler_hls'... converting 7 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:334:21) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:363:20) in function 'scheduler_hls'... converting 21 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:405:7) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:612:13) in function 'scheduler_hls'... converting 21 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:100:23) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:147:5) in function 'scheduler_hls'... converting 11 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:100:23) to (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp:147:5) in function 'scheduler_hls'... converting 11 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:466:53) in function 'compute_controller'... converting 3 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:585:53) in function 'compute_controller'... converting 3 basic blocks.
+INFO: [XFORM 203-602] Inlining function 'init_head_ctx' into 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:585) automatically.
+INFO: [XFORM 203-11] Balancing expressions in function 'scheduler_hls' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp:67)...5 expression(s) balanced.
+INFO: [XFORM 203-11] Balancing expressions in function 'compute_controller' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:25:5)...105 expression(s) balanced.
+INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 3.89 seconds. CPU system time: 0.03 seconds. Elapsed time: 3.91 seconds; current allocated memory: 506.879 MB.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_465_14'(/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:465:40) and 'VITIS_LOOP_466_15'(/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:466:44) in function 'compute_controller' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_584_27'(/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:584:40) and 'VITIS_LOOP_585_28'(/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:585:44) in function 'compute_controller' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_663_38'(/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:663:40) and 'VITIS_LOOP_664_39'(/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:664:44) in function 'compute_controller' into perfectly nested loops.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_465_14' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:465:40) in function 'compute_controller'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_584_27' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:584:40) in function 'compute_controller'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_663_38' (/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:663:40) in function 'compute_controller'.
+INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 2.63 seconds. CPU system time: 0.18 seconds. Elapsed time: 2.81 seconds; current allocated memory: 924.812 MB.
+INFO: [HLS 200-10] Starting hardware synthesis ...
+INFO: [HLS 200-10] Synthesizing 'transformer_top' ...
+WARNING: [SYN 201-103] Legalizing function name 'sqrt_fixed<32, 19>' to 'sqrt_fixed_32_19_s'.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'scheduler_hls' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 7.07 seconds. CPU system time: 0.11 seconds. Elapsed time: 7.19 seconds; current allocated memory: 1001.484 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 2.04 seconds. CPU system time: 0.03 seconds. Elapsed time: 2.07 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_654_36' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_654_36'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_654_36'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.37 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.4 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_663_38_VITIS_LOOP_664_39'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_663_38_VITIS_LOOP_664_39'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.05 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'read_i32' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining function 'read_i32'.
+WARNING: [HLS 200-885] The II Violation in module 'read_i32' (function 'read_i32'): Unable to schedule 'load' operation 8 bit ('in_buf_load_1', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:590) on array 'in_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'in_buf'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 3, function 'read_i32'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_676_40' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_676_40'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_676_40'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_684_42' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_684_42'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_684_42'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_697_44' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_697_44'.
+WARNING: [HLS 200-885] The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_697_44' (loop 'VITIS_LOOP_697_44'): Unable to schedule 'store' operation 0 bit ('out_buf_addr_1_write_ln623', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:623->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:701) of variable 'trunc_ln623_2', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:623->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:701 on array 'out_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'out_buf'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 2, Depth = 2, loop 'VITIS_LOOP_697_44'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_638_34' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_638_34'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_638_34'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_163_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_163_1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_163_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.05 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_646_35' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_646_35'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_646_35'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_575_25' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_575_25'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_575_25'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_580_26' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_580_26'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_580_26'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_584_27_VITIS_LOOP_585_28'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_584_27_VITIS_LOOP_585_28'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_597_29' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_597_29'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_597_29'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_605_31' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_605_31'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_605_31'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_620_33' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_620_33'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_620_33'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_551_23' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_551_23'.
+WARNING: [HLS 200-885] The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_551_23' (loop 'VITIS_LOOP_551_23'): Unable to schedule 'load' operation 8 bit ('in_buf_load_4', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:589->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:556) on array 'in_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'in_buf'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 3, loop 'VITIS_LOOP_551_23'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'RMS_NORM_Pipeline_VITIS_LOOP_123_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=square_3) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_123_1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 4, loop 'VITIS_LOOP_123_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'sqrt_fixed_32_19_s' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining function 'sqrt_fixed<32, 19>'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 6, function 'sqrt_fixed<32, 19>'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.31 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.31 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.05 seconds. CPU system time: 0 seconds. Elapsed time: 0.05 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'RMS_NORM' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.11 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.12 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_567_24' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_567_24'.
+WARNING: [HLS 200-885] The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_567_24' (loop 'VITIS_LOOP_567_24'): Unable to schedule 'store' operation 0 bit ('out_buf_addr_4_write_ln623', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:623->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:569) of variable 'trunc_ln', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:623->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:569 on array 'out_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'out_buf'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 2, loop 'VITIS_LOOP_567_24'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_530_21' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_530_21'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_530_21'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'RES_ADD' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.06 seconds. CPU system time: 0 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_541_22' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_541_22'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_541_22'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_506_19' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_506_19'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_506_19'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'REQUANT_D_MODEL_int32_to_int8' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.13 seconds. CPU system time: 0 seconds. Elapsed time: 0.13 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_521_20' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_521_20'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_521_20'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_456_12' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_456_12'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 2, loop 'VITIS_LOOP_456_12'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_461_13' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_461_13'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_461_13'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_465_14_VITIS_LOOP_466_15'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_465_14_VITIS_LOOP_466_15'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_478_16' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_478_16'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 4, loop 'VITIS_LOOP_478_16'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_493_18' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_493_18'.
+WARNING: [HLS 200-885] The II Violation in module 'compute_controller_Pipeline_VITIS_LOOP_493_18' (loop 'VITIS_LOOP_493_18'): Unable to schedule 'store' operation 0 bit ('out_buf_addr_6_write_ln623', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:623->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:494) of variable 'trunc_ln623_1', /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/../../top_params.hpp:623->/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp:494 on array 'out_buf' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'out_buf'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2025.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 2, Depth = 2, loop 'VITIS_LOOP_493_18'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_42_2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_3) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_2) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_1) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_13) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_12) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_11) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_10) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_6) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_8) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_7) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_42_2'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.06 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.05 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_42_21' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_19) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_18) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_17) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_16) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_29) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_28) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_27) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_26) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_22) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_24) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_23) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_42_2'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.07 seconds. CPU system time: 0 seconds. Elapsed time: 0.07 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_42_22' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_33) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_32) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_31) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_43) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_42) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_40) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_39) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_38) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_37) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_36) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_42_2'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.07 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.07 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_42_23' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_18) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_17) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_16) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_27) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_26) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_25) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_24) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_23) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_22) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_21) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_42_2'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.06 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.07 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_42_24' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_3) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_2) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_1) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_12) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_11) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_10) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_9) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_8) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_7) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=add_ln45_6) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_42_2'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 7, loop 'VITIS_LOOP_42_2'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.07 seconds. CPU system time: 0 seconds. Elapsed time: 0.07 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller_Pipeline_VITIS_LOOP_398_11' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_398_11'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'VITIS_LOOP_398_11'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'compute_controller' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.22 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.22 seconds; current allocated memory: 1017.488 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.09 seconds. CPU system time: 0 seconds. Elapsed time: 0.09 seconds; current allocated memory: 1017.488 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'transformer_top' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.39 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.42 seconds; current allocated memory: 1.017 GB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.28 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.28 seconds; current allocated memory: 1.017 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'scheduler_hls' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+WARNING: [RTGEN 206-101] Register 'st' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'layer_idx' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'attn_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'group_idx' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'start_head_group' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant1_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant2_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant3_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant4_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant2_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant3_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'requant4_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'concat_dma_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'concat_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'outproj_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'outproj_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_dma_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_dma_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_dma_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid0_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid0_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln0_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln0_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_w1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_act_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_w2_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_stage' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ffn_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid1_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'resid1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln1_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ln1_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'final_norm_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'final_norm_compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'axis_last_seen' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'stream_done_seen' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'stream_started' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_tile' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_dma_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'wo_comp_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_tile' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_dma_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w1_comp_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_tile' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_dma_busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'w2_comp_busy' is power-on initialization.
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_7_2_1_1_1': 7 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_7_2_214_1_1': 4 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'scheduler_hls'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 2.11 seconds. CPU system time: 0.19 seconds. Elapsed time: 2.3 seconds; current allocated memory: 1.170 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_654_36' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_654_36' pipeline 'VITIS_LOOP_654_36' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_654_36'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.07 seconds. CPU system time: 0.17 seconds. Elapsed time: 1.25 seconds; current allocated memory: 1.241 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39' pipeline 'VITIS_LOOP_663_38_VITIS_LOOP_664_39' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_663_38_VITIS_LOOP_664_39'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.07 seconds; current allocated memory: 1.241 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'read_i32' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'read_i32' pipeline 'read_i32' pipeline type 'function pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'read_i32'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.241 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_676_40' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_676_40' pipeline 'VITIS_LOOP_676_40' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_676_40'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1.241 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_684_42' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_684_42' pipeline 'VITIS_LOOP_684_42' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_684_42'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 1.241 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_697_44' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_16s_48_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_11_3_16_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_11_3_32_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_697_44'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.241 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_638_34' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_638_34' pipeline 'VITIS_LOOP_638_34' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_638_34'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.241 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_163_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_163_1' pipeline 'VITIS_LOOP_163_1' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_33_4_16_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_163_1'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.242 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_646_35' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_646_35' pipeline 'VITIS_LOOP_646_35' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_33_4_15_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_646_35'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.08 seconds; current allocated memory: 1.246 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_575_25' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_575_25' pipeline 'VITIS_LOOP_575_25' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_575_25'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.248 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_580_26' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_580_26'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.250 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28' pipeline 'VITIS_LOOP_584_27_VITIS_LOOP_585_28' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_584_27_VITIS_LOOP_585_28'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.05 seconds; current allocated memory: 1.251 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_597_29' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_597_29' pipeline 'VITIS_LOOP_597_29' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_597_29'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.254 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_605_31' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_605_31' pipeline 'VITIS_LOOP_605_31' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_605_31'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.255 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_620_33' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_620_33' pipeline 'VITIS_LOOP_620_33' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_16s_48_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_9_2_16_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_9_2_32_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_620_33'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.256 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_551_23' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_551_23' pipeline 'VITIS_LOOP_551_23' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_551_23'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.258 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'RMS_NORM_Pipeline_VITIS_LOOP_123_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'RMS_NORM_Pipeline_VITIS_LOOP_123_1' pipeline 'VITIS_LOOP_123_1' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_8s_8s_20s_20_4_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_33_4_8_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'RMS_NORM_Pipeline_VITIS_LOOP_123_1'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.260 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'sqrt_fixed_32_19_s' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'sqrt_fixed_32_19_s'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.11 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.11 seconds; current allocated memory: 1.261 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'RMS_NORM' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'mul_27ns_21s_45_1_1': 16 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_32s_45_1_1': 16 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'udiv_27s_23ns_27_31_seq_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'RMS_NORM'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.19 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.23 seconds; current allocated memory: 1.272 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_567_24' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_33_4_32_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_567_24'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.07 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.1 seconds; current allocated memory: 1.274 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_530_21' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_530_21' pipeline 'VITIS_LOOP_530_21' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_530_21'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.280 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'RES_ADD' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'RES_ADD'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.07 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.08 seconds; current allocated memory: 1.282 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_541_22' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_33_4_8_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_541_22'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.09 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.1 seconds; current allocated memory: 1.287 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_506_19' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_506_19' pipeline 'VITIS_LOOP_506_19' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_506_19'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.04 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.289 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'REQUANT_D_MODEL_int32_to_int8' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_32s_64_1_1': 16 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'REQUANT_D_MODEL_int32_to_int8'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.07 seconds. CPU system time: 0 seconds. Elapsed time: 0.07 seconds; current allocated memory: 1.290 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_521_20' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_33_4_8_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_521_20'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.11 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.13 seconds; current allocated memory: 1.296 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_456_12' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_456_12' pipeline 'VITIS_LOOP_456_12' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_456_12'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.299 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_461_13' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_461_13'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.301 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15' pipeline 'VITIS_LOOP_465_14_VITIS_LOOP_466_15' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_465_14_VITIS_LOOP_466_15'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.06 seconds. CPU system time: 0 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.302 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_478_16' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_478_16' pipeline 'VITIS_LOOP_478_16' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_478_16'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.07 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.08 seconds; current allocated memory: 1.305 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_493_18' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_9_2_32_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_493_18'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.06 seconds; current allocated memory: 1.306 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_42_2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_42_2' pipeline 'VITIS_LOOP_42_2' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_20s_21_4_1': 5 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_21_4_1': 4 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_32_4_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_16s_4s_20_1_1': 5 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_42_2'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.07 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.09 seconds; current allocated memory: 1.307 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_42_21' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_42_21' pipeline 'VITIS_LOOP_42_2' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_20s_21_4_1': 5 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_21_4_1': 4 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_32_4_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_16s_4s_20_1_1': 5 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_42_21'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.12 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.13 seconds; current allocated memory: 1.312 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_42_22' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_42_22' pipeline 'VITIS_LOOP_42_2' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_20s_21_4_1': 5 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_21_4_1': 4 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_32_4_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_16s_4s_20_1_1': 5 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_42_22'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.12 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.13 seconds; current allocated memory: 1.316 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_42_23' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_42_23' pipeline 'VITIS_LOOP_42_2' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_20s_21_4_1': 5 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_21_4_1': 4 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_32_4_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_16s_4s_20_1_1': 5 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_42_23'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.11 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.13 seconds; current allocated memory: 1.321 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_42_24' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'compute_controller_Pipeline_VITIS_LOOP_42_24' pipeline 'VITIS_LOOP_42_2' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_20s_21_4_1': 5 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_21_4_1': 4 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mac_muladd_16s_4s_21s_32_4_1': 2 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_16s_4s_20_1_1': 5 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_42_24'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.1 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.12 seconds; current allocated memory: 1.326 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller_Pipeline_VITIS_LOOP_398_11' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller_Pipeline_VITIS_LOOP_398_11'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.09 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.1 seconds; current allocated memory: 1.331 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'compute_controller' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+WARNING: [RTGEN 206-101] Register 'state' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'req_instruction' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'req_op' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'mac_ready' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'mac_complete' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_64' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_63' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_62' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_61' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_79' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_78' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_77' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_76' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'req_layer_idx' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'req_head_idx' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'req_tile_idx' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'capture_pending' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'clear_pending' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_127' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_128' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_60' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_75' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_40' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_39' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_10' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_8' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_7' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_6' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_19' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_18' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_17' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_16' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_15' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_14' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_13' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_12' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_11' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_10' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_9' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_8' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_7' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_6' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_5' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_4' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_3' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_2' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_1' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_17' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_16' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_15' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_14' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_13' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_12' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_74' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_73' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_72' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_71' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_70' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_69' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_68' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_67' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_66' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_65' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_5' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_4' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_3' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_2' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_1' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_48' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_47' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_46' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_45' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_44' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_43' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_42' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_41' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_40' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_47' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_46' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_45' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_44' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_43' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_42' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_29' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_28' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_27' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_26' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_25' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_24' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_23' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_22' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_21' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_20' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48' is power-on initialization.
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bkb' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_cud' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_dEe' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_eOg' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_54_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_fYi' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_53_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_g8j' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_52_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_hbi' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_51_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_ibs' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_50_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_jbC' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_58_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_kbM' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_23_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPlbW' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_22_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPmb6' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_21_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPncg' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_20_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPocq' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_19_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPpcA' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_18_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPqcK' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_rcU' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_sc4' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_tde' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_udo' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_vdy' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_84_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_wdI' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_83_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_xdS' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_82_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_yd2' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_81_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_zec' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_80_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Aem' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPBew' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_28_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPCeG' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_27_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPDeQ' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_26_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPEe0' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_25_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPFfa' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPGfk' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Hfu' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_IfE' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_JfO' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_KfY' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Lf8' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Mgi' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Ngs' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_OgC' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_PgM' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_QgW' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_59_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPRg6' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_58_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPShg' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_57_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPThq' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_56_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPUhA' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_55_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPVhK' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_54_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPWhU' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Xh4' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Yie' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Zio' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_0iy' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_1iI' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_133_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_2iS' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_132_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_3i2' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_131_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_4jc' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_130_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_5jm' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_129_RAM_AUTO_1R1W' to 'compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_6jw' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_65_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjP7jG' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_64_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjP8jQ' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_63_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjP9j0' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_62_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPbak' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_61_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPbbk' due to the length limit 80
+INFO: [SYN 201-210] Renamed object name 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_60_RAM_AUTO_1R1W' to 'compute_controller_p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPbck' due to the length limit 80
+WARNING: [RTGEN 206-101] Register 'busy' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_done_1' is power-on initialization.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'compute_controller'.
+INFO: [RTMG 210-278] Implementing memory 'transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_bkb' using auto RAMs.
+INFO: [RTMG 210-278] Implementing memory 'transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_hbi' using auto RAMs.
+INFO: [RTMG 210-278] Implementing memory 'transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_rcU' using auto RAMs.
+INFO: [RTMG 210-278] Implementing memory 'transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_Xh4' using auto RAMs.
+INFO: [RTMG 210-278] Implementing memory 'transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_3i2' using auto RAMs.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.29 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.31 seconds; current allocated memory: 1.339 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'transformer_top' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/axis_in_valid' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/axis_in_last' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/axis_in_ready' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dma_done' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wl_ready' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wl_instruction' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wl_start' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/mem_transfer_done' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/mem_read_request' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/mem_write_request' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/mem_op' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/in_buf' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/out_buf' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_0' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_1' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_2' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/head_ctx_ref_3' to 'ap_ovld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/stream_ready' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/stream_start' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/stream_done' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_addr' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_data_in' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_data_out' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_read_en' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_write_en' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_chip_en' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/ctrl_resetn_in' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/irq_ps' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_state' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_ctrl_mem' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/control_reg' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/irq_status_reg' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/irq_enable_reg' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wq_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wk_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wv_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wo_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w1_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w2_base_addr' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wq_head_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wk_head_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wv_head_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/wo_tile_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w1_tile_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/w2_tile_stride' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_compute_start' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_compute_instruction' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_compute_ready' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_compute_done' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_compute_state' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_req_instruction' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_req_op' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_req_layer' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_req_head' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_req_tile' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_mac_start' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_mac_ready' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_mac_complete' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_ctrl_reset_asserted' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_done' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'transformer_top/dbg_error' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on function 'transformer_top' to 'ap_ctrl_hs'.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_control' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_layer_index' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_status' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_irq_status' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_irq_enable' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_dma_layer_len' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_dma_head_len' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_dma_tile_len' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_layer_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wq_head_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wk_head_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wv_head_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_k_cache_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_v_cache_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wo_tile_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w1_tile_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w2_tile_stride' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wq_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wk_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wv_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_wo_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w1_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_w2_base_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_k_cache_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_v_cache_addr' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_logit_scale_qv' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_scale_q' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_zero_point_q' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_scale_k' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_zero_point_k' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_scale_v' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_zero_point_v' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'ctrl_mem_reserved_debug' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_ready' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_done' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_start' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'compute_instruction' is power-on initialization.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'transformer_top'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1 seconds. CPU system time: 0.07 seconds. Elapsed time: 1.07 seconds; current allocated memory: 1.376 GB.
+INFO: [HLS 200-111] Finished Generating all RTL models: CPU user time: 0.69 seconds. CPU system time: 0.14 seconds. Elapsed time: 0.83 seconds; current allocated memory: 1.411 GB.
+INFO: [HLS 200-111] Finished Updating report files: CPU user time: 1.97 seconds. CPU system time: 0.11 seconds. Elapsed time: 2.08 seconds; current allocated memory: 1.447 GB.
+INFO: [VHDL 208-304] Generating VHDL RTL for transformer_top.
+INFO: [VLOG 209-307] Generating Verilog RTL for transformer_top.
+INFO: [HLS 200-789] **** Estimated Fmax: 137.40 MHz
+INFO: [HLS 200-112] Total CPU user time: 74.05 seconds. Total CPU system time: 7.88 seconds. Total elapsed time: 84.96 seconds; peak allocated memory: 1.447 GB.
+INFO: [v++ 60-791] Total elapsed time: 0h 1m 28s
