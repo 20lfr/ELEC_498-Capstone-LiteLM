@@ -1,3 +1,0 @@
-relativeroot=/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module
-original_argv=-c --mode hls --config /home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/FSM_and_Control_FSM_top_module/hls_config.cfg --work_dir transformer_top 
-

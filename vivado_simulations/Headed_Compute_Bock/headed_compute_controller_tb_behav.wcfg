@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="headed_compute_controller_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="headed_compute_controller_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="61.225001 us"></ZoomEndTime>
+      <Cursor1Time time="30.499036 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="185"></NameColumnWidth>
+      <ValueColumnWidth column_width="60"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="155" />
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/ap_clk">
+      <obj_property name="ElementShortName">ap_clk</obj_property>
+      <obj_property name="ObjectShortName">ap_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/ap_rst">
+      <obj_property name="ElementShortName">ap_rst</obj_property>
+      <obj_property name="ObjectShortName">ap_rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/op_index">
+      <obj_property name="ElementShortName">op_index[31:0]</obj_property>
+      <obj_property name="ObjectShortName">op_index[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/gap_ctr">
+      <obj_property name="ElementShortName">gap_ctr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">gap_ctr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/done_seen">
+      <obj_property name="ElementShortName">done_seen</obj_property>
+      <obj_property name="ObjectShortName">done_seen</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/compute_state">
+      <obj_property name="ElementShortName">compute_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_state[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/reset_hold_ctr">
+      <obj_property name="ElementShortName">reset_hold_ctr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">reset_hold_ctr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/mem_pending">
+      <obj_property name="ElementShortName">mem_pending[1:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_pending[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/mem_busy">
+      <obj_property name="ElementShortName">mem_busy</obj_property>
+      <obj_property name="ObjectShortName">mem_busy</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/mem_timer">
+      <obj_property name="ElementShortName">mem_timer[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_timer[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/mem_done_hold">
+      <obj_property name="ElementShortName">mem_done_hold[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_done_hold[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/ap_start">
+      <obj_property name="ElementShortName">ap_start</obj_property>
+      <obj_property name="ObjectShortName">ap_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/ap_done">
+      <obj_property name="ElementShortName">ap_done</obj_property>
+      <obj_property name="ObjectShortName">ap_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/ap_idle">
+      <obj_property name="ElementShortName">ap_idle</obj_property>
+      <obj_property name="ObjectShortName">ap_idle</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/ap_ready">
+      <obj_property name="ElementShortName">ap_ready</obj_property>
+      <obj_property name="ObjectShortName">ap_ready</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/reset">
+      <obj_property name="ElementShortName">reset[0:0]</obj_property>
+      <obj_property name="ObjectShortName">reset[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/compute_start">
+      <obj_property name="ElementShortName">compute_start[0:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_start[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/compute_instruction">
+      <obj_property name="ElementShortName">compute_instruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_instruction[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/compute_ready">
+      <obj_property name="ElementShortName">compute_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/compute_ready_ap_vld">
+      <obj_property name="ElementShortName">compute_ready_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">compute_ready_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/compute_done">
+      <obj_property name="ElementShortName">compute_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">compute_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/compute_done_ap_vld">
+      <obj_property name="ElementShortName">compute_done_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">compute_done_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/mem_transfer_done">
+      <obj_property name="ElementShortName">mem_transfer_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_transfer_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/mem_read_request">
+      <obj_property name="ElementShortName">mem_read_request[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_read_request[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/mem_read_request_ap_vld">
+      <obj_property name="ElementShortName">mem_read_request_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">mem_read_request_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/mem_write_request">
+      <obj_property name="ElementShortName">mem_write_request[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_write_request[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/mem_write_request_ap_vld">
+      <obj_property name="ElementShortName">mem_write_request_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">mem_write_request_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/mem_op">
+      <obj_property name="ElementShortName">mem_op[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_op[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/mem_op_ap_vld">
+      <obj_property name="ElementShortName">mem_op_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">mem_op_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/in_buf_address0">
+      <obj_property name="ElementShortName">in_buf_address0[6:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_address0[6:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/in_buf_ce0">
+      <obj_property name="ElementShortName">in_buf_ce0</obj_property>
+      <obj_property name="ObjectShortName">in_buf_ce0</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/in_buf_q0">
+      <obj_property name="ElementShortName">in_buf_q0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_q0[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/in_buf_address1">
+      <obj_property name="ElementShortName">in_buf_address1[6:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_address1[6:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/in_buf_ce1">
+      <obj_property name="ElementShortName">in_buf_ce1</obj_property>
+      <obj_property name="ObjectShortName">in_buf_ce1</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/in_buf_q1">
+      <obj_property name="ElementShortName">in_buf_q1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_q1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/out_buf_address0">
+      <obj_property name="ElementShortName">out_buf_address0[5:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_address0[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/out_buf_ce0">
+      <obj_property name="ElementShortName">out_buf_ce0</obj_property>
+      <obj_property name="ObjectShortName">out_buf_ce0</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/out_buf_we0">
+      <obj_property name="ElementShortName">out_buf_we0</obj_property>
+      <obj_property name="ObjectShortName">out_buf_we0</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/out_buf_d0">
+      <obj_property name="ElementShortName">out_buf_d0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_d0[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/out_buf_address1">
+      <obj_property name="ElementShortName">out_buf_address1[5:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_address1[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/out_buf_ce1">
+      <obj_property name="ElementShortName">out_buf_ce1</obj_property>
+      <obj_property name="ObjectShortName">out_buf_ce1</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/out_buf_we1">
+      <obj_property name="ElementShortName">out_buf_we1</obj_property>
+      <obj_property name="ObjectShortName">out_buf_we1</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/out_buf_d1">
+      <obj_property name="ElementShortName">out_buf_d1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_d1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/error">
+      <obj_property name="ElementShortName">error[0:0]</obj_property>
+      <obj_property name="ObjectShortName">error[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/headed_compute_controller_tb/error_ap_vld">
+      <obj_property name="ElementShortName">error_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">error_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/dbg_state_lat">
+      <obj_property name="ElementShortName">dbg_state_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_state_lat[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/dbg_req_instruction_lat">
+      <obj_property name="ElementShortName">dbg_req_instruction_lat[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_instruction_lat[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/dbg_req_op_lat">
+      <obj_property name="ElementShortName">dbg_req_op_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_op_lat[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/dbg_req_layer_lat">
+      <obj_property name="ElementShortName">dbg_req_layer_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_layer_lat[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/dbg_req_head_lat">
+      <obj_property name="ElementShortName">dbg_req_head_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_head_lat[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/dbg_req_tile_lat">
+      <obj_property name="ElementShortName">dbg_req_tile_lat[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_tile_lat[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/q_act">
+      <obj_property name="ElementShortName">q_act[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">q_act[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/k_act">
+      <obj_property name="ElementShortName">k_act[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">k_act[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/v_act">
+      <obj_property name="ElementShortName">v_act[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">v_act[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/wq">
+      <obj_property name="ElementShortName">wq[0:63][3:0]</obj_property>
+      <obj_property name="ObjectShortName">wq[0:63][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/wk">
+      <obj_property name="ElementShortName">wk[0:63][3:0]</obj_property>
+      <obj_property name="ObjectShortName">wk[0:63][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/wv">
+      <obj_property name="ElementShortName">wv[0:63][3:0]</obj_property>
+      <obj_property name="ObjectShortName">wv[0:63][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/bq">
+      <obj_property name="ElementShortName">bq[0:3][3:0]</obj_property>
+      <obj_property name="ObjectShortName">bq[0:3][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/bk">
+      <obj_property name="ElementShortName">bk[0:3][3:0]</obj_property>
+      <obj_property name="ObjectShortName">bk[0:3][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/bv">
+      <obj_property name="ElementShortName">bv[0:3][3:0]</obj_property>
+      <obj_property name="ObjectShortName">bv[0:3][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_k_x">
+      <obj_property name="ElementShortName">rq_k_x[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_k_x[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_v_x">
+      <obj_property name="ElementShortName">rq_v_x[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_v_x[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_q_x">
+      <obj_property name="ElementShortName">rq_q_x[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_q_x[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_head_x">
+      <obj_property name="ElementShortName">rq_head_x[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_head_x[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_k_M">
+      <obj_property name="ElementShortName">rq_k_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_k_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_k_N">
+      <obj_property name="ElementShortName">rq_k_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_k_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_k_Z">
+      <obj_property name="ElementShortName">rq_k_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_k_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_v_M">
+      <obj_property name="ElementShortName">rq_v_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_v_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_v_N">
+      <obj_property name="ElementShortName">rq_v_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_v_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_v_Z">
+      <obj_property name="ElementShortName">rq_v_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_v_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_q_M">
+      <obj_property name="ElementShortName">rq_q_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_q_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_q_N">
+      <obj_property name="ElementShortName">rq_q_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_q_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_q_Z">
+      <obj_property name="ElementShortName">rq_q_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_q_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_head_M">
+      <obj_property name="ElementShortName">rq_head_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_head_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_head_N">
+      <obj_property name="ElementShortName">rq_head_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_head_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/rq_head_Z">
+      <obj_property name="ElementShortName">rq_head_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq_head_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/att_q">
+      <obj_property name="ElementShortName">att_q[0:3][7:0]</obj_property>
+      <obj_property name="ObjectShortName">att_q[0:3][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/att_k_cache">
+      <obj_property name="ElementShortName">att_k_cache[0:63][7:0]</obj_property>
+      <obj_property name="ObjectShortName">att_k_cache[0:63][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/val_scale_in">
+      <obj_property name="ElementShortName">val_scale_in[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">val_scale_in[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/softmax_in">
+      <obj_property name="ElementShortName">softmax_in[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">softmax_in[0:15][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/att_weights">
+      <obj_property name="ElementShortName">att_weights[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">att_weights[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/att_v_cache">
+      <obj_property name="ElementShortName">att_v_cache[0:63][7:0]</obj_property>
+      <obj_property name="ObjectShortName">att_v_cache[0:63][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/q_out">
+      <obj_property name="ElementShortName">q_out[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">q_out[0:3][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/k_out">
+      <obj_property name="ElementShortName">k_out[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">k_out[0:3][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/k_rq_out">
+      <obj_property name="ElementShortName">k_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="ObjectShortName">k_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/v_out">
+      <obj_property name="ElementShortName">v_out[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">v_out[0:3][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/v_rq_out">
+      <obj_property name="ElementShortName">v_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="ObjectShortName">v_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/q_rq_out">
+      <obj_property name="ElementShortName">q_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="ObjectShortName">q_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/att_scores_out">
+      <obj_property name="ElementShortName">att_scores_out[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">att_scores_out[0:15][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/val_scale_out">
+      <obj_property name="ElementShortName">val_scale_out[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">val_scale_out[0:15][15:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/softmax_out">
+      <obj_property name="ElementShortName">softmax_out[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">softmax_out[0:15][15:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/att_value_out">
+      <obj_property name="ElementShortName">att_value_out[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">att_value_out[0:3][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/head_rq_out">
+      <obj_property name="ElementShortName">head_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="ObjectShortName">head_rq_out[0:3][7:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/in_buf_mem">
+      <obj_property name="ElementShortName">in_buf_mem[0:79][7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_mem[0:79][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/out_buf_mem">
+      <obj_property name="ElementShortName">out_buf_mem[0:63][7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_mem[0:63][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/NUM_HEADS">
+      <obj_property name="ElementShortName">NUM_HEADS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_HEADS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/NUM_LAYERS">
+      <obj_property name="ElementShortName">NUM_LAYERS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_LAYERS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/NUM_WO_TILES">
+      <obj_property name="ElementShortName">NUM_WO_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_WO_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/NUM_W1_TILES">
+      <obj_property name="ElementShortName">NUM_W1_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_W1_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/NUM_W2_TILES">
+      <obj_property name="ElementShortName">NUM_W2_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_W2_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/NUM_LOGIT_TILES">
+      <obj_property name="ElementShortName">NUM_LOGIT_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_LOGIT_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/D_MODEL">
+      <obj_property name="ElementShortName">D_MODEL[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_MODEL[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/D_FFN">
+      <obj_property name="ElementShortName">D_FFN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_FFN[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/D_HEADS">
+      <obj_property name="ElementShortName">D_HEADS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_HEADS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CONTEXT_LENGTH">
+      <obj_property name="ElementShortName">CONTEXT_LENGTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CONTEXT_LENGTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CLK_PERIOD">
+      <obj_property name="ElementShortName">CLK_PERIOD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_PERIOD[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/MAX_CYCLES">
+      <obj_property name="ElementShortName">MAX_CYCLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MAX_CYCLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_W_NIBBLES">
+      <obj_property name="ElementShortName">QKV_W_NIBBLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_W_NIBBLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_W_BYTES">
+      <obj_property name="ElementShortName">QKV_W_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_W_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_B_NIBBLES">
+      <obj_property name="ElementShortName">QKV_B_NIBBLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_B_NIBBLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_B_BYTES">
+      <obj_property name="ElementShortName">QKV_B_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_B_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_IN_BYTES">
+      <obj_property name="ElementShortName">QKV_IN_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_IN_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_OUT_BYTES">
+      <obj_property name="ElementShortName">QKV_OUT_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_OUT_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/HEAD_REQUANT_IN_BYTES">
+      <obj_property name="ElementShortName">HEAD_REQUANT_IN_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEAD_REQUANT_IN_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/HEAD_REQUANT_OUT_BYTES">
+      <obj_property name="ElementShortName">HEAD_REQUANT_OUT_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEAD_REQUANT_OUT_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_SCORES_IN_BYTES">
+      <obj_property name="ElementShortName">ATT_SCORES_IN_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_SCORES_IN_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_SCORES_OUT_BYTES">
+      <obj_property name="ElementShortName">ATT_SCORES_OUT_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_SCORES_OUT_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/VALUE_SCALE_IN_BYTES">
+      <obj_property name="ElementShortName">VALUE_SCALE_IN_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">VALUE_SCALE_IN_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/VALUE_SCALE_OUT_BYTES">
+      <obj_property name="ElementShortName">VALUE_SCALE_OUT_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">VALUE_SCALE_OUT_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/SOFTMAX_IN_BYTES">
+      <obj_property name="ElementShortName">SOFTMAX_IN_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SOFTMAX_IN_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/SOFTMAX_OUT_BYTES">
+      <obj_property name="ElementShortName">SOFTMAX_OUT_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SOFTMAX_OUT_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_VALUE_IN_BYTES">
+      <obj_property name="ElementShortName">ATT_VALUE_IN_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_VALUE_IN_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_VALUE_OUT_BYTES">
+      <obj_property name="ElementShortName">ATT_VALUE_OUT_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_VALUE_OUT_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/IN_BUF_BYTES">
+      <obj_property name="ElementShortName">IN_BUF_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IN_BUF_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/OUT_BUF_BYTES">
+      <obj_property name="ElementShortName">OUT_BUF_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_BUF_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/IN_BUF_ADDR_W">
+      <obj_property name="ElementShortName">IN_BUF_ADDR_W[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IN_BUF_ADDR_W[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/OUT_BUF_ADDR_W">
+      <obj_property name="ElementShortName">OUT_BUF_ADDR_W[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_BUF_ADDR_W[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_ACT_OFFSET">
+      <obj_property name="ElementShortName">QKV_ACT_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_ACT_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_W_OFFSET">
+      <obj_property name="ElementShortName">QKV_W_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_W_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/QKV_B_OFFSET">
+      <obj_property name="ElementShortName">QKV_B_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">QKV_B_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/HEAD_RQ_X_OFFSET">
+      <obj_property name="ElementShortName">HEAD_RQ_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEAD_RQ_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/HEAD_RQ_M_OFFSET">
+      <obj_property name="ElementShortName">HEAD_RQ_M_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEAD_RQ_M_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/HEAD_RQ_N_OFFSET">
+      <obj_property name="ElementShortName">HEAD_RQ_N_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEAD_RQ_N_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/HEAD_RQ_Z_OFFSET">
+      <obj_property name="ElementShortName">HEAD_RQ_Z_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEAD_RQ_Z_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_SCORES_Q_OFFSET">
+      <obj_property name="ElementShortName">ATT_SCORES_Q_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_SCORES_Q_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_SCORES_KCACHE_OFFSET">
+      <obj_property name="ElementShortName">ATT_SCORES_KCACHE_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_SCORES_KCACHE_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/VALUE_SCALE_X_OFFSET">
+      <obj_property name="ElementShortName">VALUE_SCALE_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">VALUE_SCALE_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/SOFTMAX_X_OFFSET">
+      <obj_property name="ElementShortName">SOFTMAX_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SOFTMAX_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_VALUE_W_OFFSET">
+      <obj_property name="ElementShortName">ATT_VALUE_W_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_VALUE_W_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/ATT_VALUE_V_OFFSET">
+      <obj_property name="ElementShortName">ATT_VALUE_V_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ATT_VALUE_V_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_Q">
+      <obj_property name="ElementShortName">CMP_Q[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_Q[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_K">
+      <obj_property name="ElementShortName">CMP_K[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_K[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_K_REQUANT">
+      <obj_property name="ElementShortName">CMP_K_REQUANT[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_K_REQUANT[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_V">
+      <obj_property name="ElementShortName">CMP_V[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_V[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_V_REQUANT">
+      <obj_property name="ElementShortName">CMP_V_REQUANT[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_V_REQUANT[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_REQUANT_Q">
+      <obj_property name="ElementShortName">CMP_REQUANT_Q[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_REQUANT_Q[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_ATT_SCORES">
+      <obj_property name="ElementShortName">CMP_ATT_SCORES[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_ATT_SCORES[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_VALUE_SCALE">
+      <obj_property name="ElementShortName">CMP_VALUE_SCALE[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_VALUE_SCALE[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_SOFTMAX">
+      <obj_property name="ElementShortName">CMP_SOFTMAX[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_SOFTMAX[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_ATT_VALUE">
+      <obj_property name="ElementShortName">CMP_ATT_VALUE[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_ATT_VALUE[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/CMP_HEAD_REQUANT">
+      <obj_property name="ElementShortName">CMP_HEAD_REQUANT[7:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_HEAD_REQUANT[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/GAP_CYCLES">
+      <obj_property name="ElementShortName">GAP_CYCLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">GAP_CYCLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/OP_COUNT">
+      <obj_property name="ElementShortName">OP_COUNT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OP_COUNT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/RESET_HOLD_CYCLES">
+      <obj_property name="ElementShortName">RESET_HOLD_CYCLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RESET_HOLD_CYCLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/headed_compute_controller_tb/MEM_LAT">
+      <obj_property name="ElementShortName">MEM_LAT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_LAT[31:0]</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,1408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="transformer_top_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="transformer_top_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="230.595001 us"></ZoomEndTime>
+      <Cursor1Time time="119.495000 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="290"></NameColumnWidth>
+      <ValueColumnWidth column_width="65"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="332" />
+   <wvobject type="logic" fp_name="/transformer_top_tb/ap_clk">
+      <obj_property name="ElementShortName">ap_clk</obj_property>
+      <obj_property name="ObjectShortName">ap_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/ap_rst">
+      <obj_property name="ElementShortName">ap_rst</obj_property>
+      <obj_property name="ObjectShortName">ap_rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/ap_start">
+      <obj_property name="ElementShortName">ap_start</obj_property>
+      <obj_property name="ObjectShortName">ap_start</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_addr">
+      <obj_property name="ElementShortName">ctrl_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_data_in">
+      <obj_property name="ElementShortName">ctrl_data_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_data_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_data_out">
+      <obj_property name="ElementShortName">ctrl_data_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_data_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_read_en">
+      <obj_property name="ElementShortName">ctrl_read_en[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_read_en[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_write_en">
+      <obj_property name="ElementShortName">ctrl_write_en[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_write_en[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_chip_en">
+      <obj_property name="ElementShortName">ctrl_chip_en[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_chip_en[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_resetn_in">
+      <obj_property name="ElementShortName">ctrl_resetn_in[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_resetn_in[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/axis_in_valid">
+      <obj_property name="ElementShortName">axis_in_valid[0:0]</obj_property>
+      <obj_property name="ObjectShortName">axis_in_valid[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/axis_in_last">
+      <obj_property name="ElementShortName">axis_in_last[0:0]</obj_property>
+      <obj_property name="ObjectShortName">axis_in_last[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dma_done">
+      <obj_property name="ElementShortName">dma_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wl_ready">
+      <obj_property name="ElementShortName">wl_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wl_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_transfer_done">
+      <obj_property name="ElementShortName">mem_transfer_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_transfer_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/mem_read_request_ap_vld">
+      <obj_property name="ElementShortName">mem_read_request_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">mem_read_request_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/mem_write_request_ap_vld">
+      <obj_property name="ElementShortName">mem_write_request_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">mem_write_request_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_op">
+      <obj_property name="ElementShortName">mem_op[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_op[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/mem_op_ap_vld">
+      <obj_property name="ElementShortName">mem_op_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">mem_op_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/in_buf_address0">
+      <obj_property name="ElementShortName">in_buf_address0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_address0[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/in_buf_ce0">
+      <obj_property name="ElementShortName">in_buf_ce0</obj_property>
+      <obj_property name="ObjectShortName">in_buf_ce0</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/in_buf_q0">
+      <obj_property name="ElementShortName">in_buf_q0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_q0[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/in_buf_address1">
+      <obj_property name="ElementShortName">in_buf_address1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_address1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/in_buf_ce1">
+      <obj_property name="ElementShortName">in_buf_ce1</obj_property>
+      <obj_property name="ObjectShortName">in_buf_ce1</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/in_buf_q1">
+      <obj_property name="ElementShortName">in_buf_q1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_q1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/out_buf_address0">
+      <obj_property name="ElementShortName">out_buf_address0[5:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_address0[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/out_buf_ce0">
+      <obj_property name="ElementShortName">out_buf_ce0</obj_property>
+      <obj_property name="ObjectShortName">out_buf_ce0</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/out_buf_we0">
+      <obj_property name="ElementShortName">out_buf_we0</obj_property>
+      <obj_property name="ObjectShortName">out_buf_we0</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/out_buf_d0">
+      <obj_property name="ElementShortName">out_buf_d0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_d0[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/out_buf_address1">
+      <obj_property name="ElementShortName">out_buf_address1[5:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_address1[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/out_buf_ce1">
+      <obj_property name="ElementShortName">out_buf_ce1</obj_property>
+      <obj_property name="ObjectShortName">out_buf_ce1</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/out_buf_we1">
+      <obj_property name="ElementShortName">out_buf_we1</obj_property>
+      <obj_property name="ObjectShortName">out_buf_we1</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/out_buf_d1">
+      <obj_property name="ElementShortName">out_buf_d1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_d1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wl_start_i">
+      <obj_property name="ElementShortName">wl_start_i[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wl_start_i[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wl_start_o">
+      <obj_property name="ElementShortName">wl_start_o[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wl_start_o[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wl_start_o_ap_vld">
+      <obj_property name="ElementShortName">wl_start_o_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wl_start_o_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wl_instruction">
+      <obj_property name="ElementShortName">wl_instruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wl_instruction[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wl_instruction_ap_vld">
+      <obj_property name="ElementShortName">wl_instruction_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wl_instruction_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/stream_ready">
+      <obj_property name="ElementShortName">stream_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">stream_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/stream_done">
+      <obj_property name="ElementShortName">stream_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">stream_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/ap_done">
+      <obj_property name="ElementShortName">ap_done</obj_property>
+      <obj_property name="ObjectShortName">ap_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/ap_idle">
+      <obj_property name="ElementShortName">ap_idle</obj_property>
+      <obj_property name="ObjectShortName">ap_idle</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/ap_ready">
+      <obj_property name="ElementShortName">ap_ready</obj_property>
+      <obj_property name="ObjectShortName">ap_ready</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/irq_status_reg">
+      <obj_property name="ElementShortName">irq_status_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">irq_status_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_error">
+      <obj_property name="ElementShortName">dbg_error[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_error[0:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_state">
+      <obj_property name="ElementShortName">dbg_state[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_state[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_start">
+      <obj_property name="ElementShortName">dbg_compute_start[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_start[0:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_done">
+      <obj_property name="ElementShortName">dbg_compute_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_instruction">
+      <obj_property name="ElementShortName">dbg_compute_instruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_instruction[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_ready">
+      <obj_property name="ElementShortName">dbg_compute_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_done">
+      <obj_property name="ElementShortName">dbg_compute_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_state">
+      <obj_property name="ElementShortName">dbg_compute_state[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_state[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_req_instruction">
+      <obj_property name="ElementShortName">dbg_req_instruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_instruction[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_transfer_done">
+      <obj_property name="ElementShortName">mem_transfer_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_transfer_done[0:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_read_request">
+      <obj_property name="ElementShortName">mem_read_request[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_read_request[0:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_write_request">
+      <obj_property name="ElementShortName">mem_write_request[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_write_request[0:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_req_op">
+      <obj_property name="ElementShortName">dbg_req_op[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_op[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_phase_dbg">
+      <obj_property name="ElementShortName">head_phase_dbg[0:3][7:0]</obj_property>
+      <obj_property name="ObjectShortName">head_phase_dbg[0:3][7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_0_struct">
+      <obj_property name="ElementShortName">head_ctx_ref_0_struct</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_0_struct</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_start">
+      <obj_property name="ElementShortName">.wl_start</obj_property>
+      <obj_property name="ObjectShortName">.wl_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_start">
+      <obj_property name="ElementShortName">.wl_start</obj_property>
+      <obj_property name="ObjectShortName">.wl_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/head_ctx_ref_0_struct.wl_start">
+      <obj_property name="ElementShortName">.wl_start</obj_property>
+      <obj_property name="ObjectShortName">.wl_start</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_wl_stall">
+      <obj_property name="ElementShortName">head_wl_stall[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_wl_stall[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_dma_inflight">
+      <obj_property name="ElementShortName">head_dma_inflight[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_dma_inflight[0:3]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_1_struct">
+      <obj_property name="ElementShortName">head_ctx_ref_1_struct</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_1_struct</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln0_out">
+      <obj_property name="ElementShortName">ln0_out[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln0_out[0:15][31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq1_out">
+      <obj_property name="ElementShortName">rq1_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_out[0:15][7:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq2_out">
+      <obj_property name="ElementShortName">rq2_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_out[0:15][7:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid0_out">
+      <obj_property name="ElementShortName">resid0_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid0_out[0:15][7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln1_out">
+      <obj_property name="ElementShortName">ln1_out[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln1_out[0:15][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq3_out">
+      <obj_property name="ElementShortName">rq3_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_out[0:15][7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn1_out">
+      <obj_property name="ElementShortName">ffn1_out[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn1_out[0:15][15:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn_act_out">
+      <obj_property name="ElementShortName">ffn_act_out[0:21][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn_act_out[0:21][15:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn2_out">
+      <obj_property name="ElementShortName">ffn2_out[0:19][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn2_out[0:19][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq4_out">
+      <obj_property name="ElementShortName">rq4_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_out[0:15][7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid1_out">
+      <obj_property name="ElementShortName">resid1_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid1_out[0:15][7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/final_norm_out">
+      <obj_property name="ElementShortName">final_norm_out[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">final_norm_out[0:15][31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_req_layer">
+      <obj_property name="ElementShortName">dbg_req_layer[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_layer[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/dbg_req_layer_ap_vld">
+      <obj_property name="ElementShortName">dbg_req_layer_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_layer_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_req_head">
+      <obj_property name="ElementShortName">dbg_req_head[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_head[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_req_tile">
+      <obj_property name="ElementShortName">dbg_req_tile[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_req_tile[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_mac_start">
+      <obj_property name="ElementShortName">dbg_mac_start[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_mac_start[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_mac_ready">
+      <obj_property name="ElementShortName">dbg_mac_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_mac_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_mac_complete">
+      <obj_property name="ElementShortName">dbg_mac_complete[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_mac_complete[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_ctrl_reset_asserted">
+      <obj_property name="ElementShortName">dbg_ctrl_reset_asserted[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_ctrl_reset_asserted[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/axis_in_ready">
+      <obj_property name="ElementShortName">axis_in_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">axis_in_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/axis_in_ready_ap_vld">
+      <obj_property name="ElementShortName">axis_in_ready_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">axis_in_ready_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/stream_start">
+      <obj_property name="ElementShortName">stream_start[0:0]</obj_property>
+      <obj_property name="ObjectShortName">stream_start[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/stream_start_ap_vld">
+      <obj_property name="ElementShortName">stream_start_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">stream_start_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/ctrl_data_out_ap_vld">
+      <obj_property name="ElementShortName">ctrl_data_out_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">ctrl_data_out_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_ctrl_mem">
+      <obj_property name="ElementShortName">dbg_ctrl_mem[1055:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_ctrl_mem[1055:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/dbg_ctrl_mem_ap_vld">
+      <obj_property name="ElementShortName">dbg_ctrl_mem_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">dbg_ctrl_mem_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/control_reg">
+      <obj_property name="ElementShortName">control_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">control_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/control_reg_ap_vld">
+      <obj_property name="ElementShortName">control_reg_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">control_reg_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/irq_status_reg">
+      <obj_property name="ElementShortName">irq_status_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">irq_status_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/irq_status_reg_ap_vld">
+      <obj_property name="ElementShortName">irq_status_reg_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">irq_status_reg_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/irq_enable_reg">
+      <obj_property name="ElementShortName">irq_enable_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">irq_enable_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/irq_enable_reg_ap_vld">
+      <obj_property name="ElementShortName">irq_enable_reg_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">irq_enable_reg_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wq_base_addr">
+      <obj_property name="ElementShortName">wq_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wq_base_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wq_base_addr_ap_vld">
+      <obj_property name="ElementShortName">wq_base_addr_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wq_base_addr_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wk_base_addr">
+      <obj_property name="ElementShortName">wk_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wk_base_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wk_base_addr_ap_vld">
+      <obj_property name="ElementShortName">wk_base_addr_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wk_base_addr_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wv_base_addr">
+      <obj_property name="ElementShortName">wv_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wv_base_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wv_base_addr_ap_vld">
+      <obj_property name="ElementShortName">wv_base_addr_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wv_base_addr_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wq_head_stride">
+      <obj_property name="ElementShortName">wq_head_stride[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wq_head_stride[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wq_head_stride_ap_vld">
+      <obj_property name="ElementShortName">wq_head_stride_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wq_head_stride_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wk_head_stride">
+      <obj_property name="ElementShortName">wk_head_stride[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wk_head_stride[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wk_head_stride_ap_vld">
+      <obj_property name="ElementShortName">wk_head_stride_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wk_head_stride_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wv_head_stride">
+      <obj_property name="ElementShortName">wv_head_stride[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wv_head_stride[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wv_head_stride_ap_vld">
+      <obj_property name="ElementShortName">wv_head_stride_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wv_head_stride_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wo_base_addr">
+      <obj_property name="ElementShortName">wo_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wo_base_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wo_base_addr_ap_vld">
+      <obj_property name="ElementShortName">wo_base_addr_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wo_base_addr_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/w1_base_addr">
+      <obj_property name="ElementShortName">w1_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">w1_base_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/w1_base_addr_ap_vld">
+      <obj_property name="ElementShortName">w1_base_addr_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">w1_base_addr_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/w2_base_addr">
+      <obj_property name="ElementShortName">w2_base_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">w2_base_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/w2_base_addr_ap_vld">
+      <obj_property name="ElementShortName">w2_base_addr_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">w2_base_addr_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/wo_tile_stride">
+      <obj_property name="ElementShortName">wo_tile_stride[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wo_tile_stride[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/wo_tile_stride_ap_vld">
+      <obj_property name="ElementShortName">wo_tile_stride_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">wo_tile_stride_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/w1_tile_stride">
+      <obj_property name="ElementShortName">w1_tile_stride[31:0]</obj_property>
+      <obj_property name="ObjectShortName">w1_tile_stride[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/w1_tile_stride_ap_vld">
+      <obj_property name="ElementShortName">w1_tile_stride_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">w1_tile_stride_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/w2_tile_stride">
+      <obj_property name="ElementShortName">w2_tile_stride[31:0]</obj_property>
+      <obj_property name="ObjectShortName">w2_tile_stride[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/w2_tile_stride_ap_vld">
+      <obj_property name="ElementShortName">w2_tile_stride_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">w2_tile_stride_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/irq_ps">
+      <obj_property name="ElementShortName">irq_ps[0:0]</obj_property>
+      <obj_property name="ObjectShortName">irq_ps[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/irq_ps_ap_vld">
+      <obj_property name="ElementShortName">irq_ps_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">irq_ps_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_done">
+      <obj_property name="ElementShortName">dbg_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/dbg_done_ap_vld">
+      <obj_property name="ElementShortName">dbg_done_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">dbg_done_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_error">
+      <obj_property name="ElementShortName">dbg_error[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_error[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/dbg_error_ap_vld">
+      <obj_property name="ElementShortName">dbg_error_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">dbg_error_ap_vld</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/dma_busy">
+      <obj_property name="ElementShortName">dma_busy</obj_property>
+      <obj_property name="ObjectShortName">dma_busy</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dma_timer">
+      <obj_property name="ElementShortName">dma_timer[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_timer[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/stream_busy">
+      <obj_property name="ElementShortName">stream_busy</obj_property>
+      <obj_property name="ObjectShortName">stream_busy</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/start_pulsed">
+      <obj_property name="ElementShortName">start_pulsed</obj_property>
+      <obj_property name="ObjectShortName">start_pulsed</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/pending_start_clear">
+      <obj_property name="ElementShortName">pending_start_clear</obj_property>
+      <obj_property name="ObjectShortName">pending_start_clear</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/reset_released">
+      <obj_property name="ElementShortName">reset_released</obj_property>
+      <obj_property name="ObjectShortName">reset_released</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/reset_low_written">
+      <obj_property name="ElementShortName">reset_low_written</obj_property>
+      <obj_property name="ObjectShortName">reset_low_written</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/seen_done">
+      <obj_property name="ElementShortName">seen_done</obj_property>
+      <obj_property name="ObjectShortName">seen_done</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/post_done_cycles">
+      <obj_property name="ElementShortName">post_done_cycles[31:0]</obj_property>
+      <obj_property name="ObjectShortName">post_done_cycles[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/seen_idle_after">
+      <obj_property name="ElementShortName">seen_idle_after</obj_property>
+      <obj_property name="ObjectShortName">seen_idle_after</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/seen_concat">
+      <obj_property name="ElementShortName">seen_concat</obj_property>
+      <obj_property name="ObjectShortName">seen_concat</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/axis_sent">
+      <obj_property name="ElementShortName">axis_sent[31:0]</obj_property>
+      <obj_property name="ObjectShortName">axis_sent[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/axis_feed_done">
+      <obj_property name="ElementShortName">axis_feed_done</obj_property>
+      <obj_property name="ObjectShortName">axis_feed_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/axis_drive">
+      <obj_property name="ElementShortName">axis_drive</obj_property>
+      <obj_property name="ObjectShortName">axis_drive</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_shadow_control">
+      <obj_property name="ElementShortName">ctrl_shadow_control[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_shadow_control[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_gap_cycles">
+      <obj_property name="ElementShortName">ctrl_gap_cycles[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_gap_cycles[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/assign_base_addresses">
+      <obj_property name="ElementShortName">assign_base_addresses</obj_property>
+      <obj_property name="ObjectShortName">assign_base_addresses</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/base_assign_step">
+      <obj_property name="ElementShortName">base_assign_step[31:0]</obj_property>
+      <obj_property name="ObjectShortName">base_assign_step[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_stage">
+      <obj_property name="ElementShortName">ctrl_stage[2:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_stage[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/idle_after_done">
+      <obj_property name="ElementShortName">idle_after_done[31:0]</obj_property>
+      <obj_property name="ObjectShortName">idle_after_done[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/axis_last_stretch_active">
+      <obj_property name="ElementShortName">axis_last_stretch_active</obj_property>
+      <obj_property name="ObjectShortName">axis_last_stretch_active</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/axis_last_stretch_ctr">
+      <obj_property name="ElementShortName">axis_last_stretch_ctr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">axis_last_stretch_ctr[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/seen_irq_done">
+      <obj_property name="ElementShortName">seen_irq_done</obj_property>
+      <obj_property name="ObjectShortName">seen_irq_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/irq_interupt_flagged">
+      <obj_property name="ElementShortName">irq_interupt_flagged</obj_property>
+      <obj_property name="ObjectShortName">irq_interupt_flagged</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/interupt_data">
+      <obj_property name="ElementShortName">interupt_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">interupt_data[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ctrl_data_out_shadow">
+      <obj_property name="ElementShortName">ctrl_data_out_shadow[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ctrl_data_out_shadow[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_op_dbg">
+      <obj_property name="ElementShortName">head_op_dbg[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">head_op_dbg[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_last_op_dbg">
+      <obj_property name="ElementShortName">head_last_op_dbg[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">head_last_op_dbg[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_shadow">
+      <obj_property name="ElementShortName">head_ctx_shadow[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_shadow[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_busy_ctr">
+      <obj_property name="ElementShortName">head_busy_ctr[0:3][3:0]</obj_property>
+      <obj_property name="ObjectShortName">head_busy_ctr[0:3][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_inflight">
+      <obj_property name="ElementShortName">head_inflight[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_inflight[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_done_hold">
+      <obj_property name="ElementShortName">head_done_hold[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_done_hold[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_done_ctr">
+      <obj_property name="ElementShortName">head_done_ctr[0:3][2:0]</obj_property>
+      <obj_property name="ObjectShortName">head_done_ctr[0:3][2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_compute_ready">
+      <obj_property name="ElementShortName">head_compute_ready[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_compute_ready[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_compute_done">
+      <obj_property name="ElementShortName">head_compute_done[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_compute_done[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_dma_ctr">
+      <obj_property name="ElementShortName">head_dma_ctr[0:3][3:0]</obj_property>
+      <obj_property name="ObjectShortName">head_dma_ctr[0:3][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_dma_inflight">
+      <obj_property name="ElementShortName">head_dma_inflight[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_dma_inflight[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_dma_done_hold">
+      <obj_property name="ElementShortName">head_dma_done_hold[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_dma_done_hold[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_dma_done_ctr">
+      <obj_property name="ElementShortName">head_dma_done_ctr[0:3][6:0]</obj_property>
+      <obj_property name="ObjectShortName">head_dma_done_ctr[0:3][6:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_dma_done">
+      <obj_property name="ElementShortName">head_dma_done[0:3]</obj_property>
+      <obj_property name="ObjectShortName">head_dma_done[0:3]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_ready_lat">
+      <obj_property name="ElementShortName">dbg_compute_ready_lat[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_ready_lat[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dbg_compute_done_lat">
+      <obj_property name="ElementShortName">dbg_compute_done_lat[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_compute_done_lat[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/in_buf_mem">
+      <obj_property name="ElementShortName">in_buf_mem[0:128][7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_buf_mem[0:128][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/out_buf_mem">
+      <obj_property name="ElementShortName">out_buf_mem[0:63][7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buf_mem[0:63][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_pending">
+      <obj_property name="ElementShortName">mem_pending[1:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_pending[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/mem_busy">
+      <obj_property name="ElementShortName">mem_busy</obj_property>
+      <obj_property name="ObjectShortName">mem_busy</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_timer">
+      <obj_property name="ElementShortName">mem_timer[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_timer[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/mem_done_hold">
+      <obj_property name="ElementShortName">mem_done_hold[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_done_hold[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/pending_tile">
+      <obj_property name="ElementShortName">pending_tile[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pending_tile[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/full_valueA">
+      <obj_property name="ElementShortName">full_valueA[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">full_valueA[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/full_weights">
+      <obj_property name="ElementShortName">full_weights[0:255][3:0]</obj_property>
+      <obj_property name="ObjectShortName">full_weights[0:255][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/full_bias">
+      <obj_property name="ElementShortName">full_bias[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">full_bias[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq1_x">
+      <obj_property name="ElementShortName">rq1_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq2_x">
+      <obj_property name="ElementShortName">rq2_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq3_x">
+      <obj_property name="ElementShortName">rq3_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq4_x">
+      <obj_property name="ElementShortName">rq4_x[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_x[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq1_M">
+      <obj_property name="ElementShortName">rq1_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq1_N">
+      <obj_property name="ElementShortName">rq1_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq1_Z">
+      <obj_property name="ElementShortName">rq1_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq2_M">
+      <obj_property name="ElementShortName">rq2_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq2_N">
+      <obj_property name="ElementShortName">rq2_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq2_Z">
+      <obj_property name="ElementShortName">rq2_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq3_M">
+      <obj_property name="ElementShortName">rq3_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq3_N">
+      <obj_property name="ElementShortName">rq3_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq3_Z">
+      <obj_property name="ElementShortName">rq3_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq4_M">
+      <obj_property name="ElementShortName">rq4_M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq4_N">
+      <obj_property name="ElementShortName">rq4_N[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_N[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq4_Z">
+      <obj_property name="ElementShortName">rq4_Z[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_Z[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/full_accum">
+      <obj_property name="ElementShortName">full_accum[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">full_accum[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq1_out">
+      <obj_property name="ElementShortName">rq1_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq1_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq2_out">
+      <obj_property name="ElementShortName">rq2_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq2_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq3_out">
+      <obj_property name="ElementShortName">rq3_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq3_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/rq4_out">
+      <obj_property name="ElementShortName">rq4_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">rq4_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid0_out">
+      <obj_property name="ElementShortName">resid0_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid0_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid1_out">
+      <obj_property name="ElementShortName">resid1_out[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid1_out[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln0_out">
+      <obj_property name="ElementShortName">ln0_out[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln0_out[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln1_out">
+      <obj_property name="ElementShortName">ln1_out[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln1_out[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid0_x">
+      <obj_property name="ElementShortName">resid0_x[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid0_x[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid0_r">
+      <obj_property name="ElementShortName">resid0_r[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid0_r[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid1_x">
+      <obj_property name="ElementShortName">resid1_x[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid1_x[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/resid1_r">
+      <obj_property name="ElementShortName">resid1_r[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">resid1_r[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln0_x">
+      <obj_property name="ElementShortName">ln0_x[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">ln0_x[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln1_x">
+      <obj_property name="ElementShortName">ln1_x[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">ln1_x[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln0_gamma">
+      <obj_property name="ElementShortName">ln0_gamma[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln0_gamma[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln1_gamma">
+      <obj_property name="ElementShortName">ln1_gamma[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln1_gamma[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln0_eps">
+      <obj_property name="ElementShortName">ln0_eps[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln0_eps[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ln1_eps">
+      <obj_property name="ElementShortName">ln1_eps[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ln1_eps[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn1_x">
+      <obj_property name="ElementShortName">ffn1_x[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn1_x[0:15][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn1_w">
+      <obj_property name="ElementShortName">ffn1_w[0:255][3:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn1_w[0:255][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn1_b">
+      <obj_property name="ElementShortName">ffn1_b[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn1_b[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn1_s">
+      <obj_property name="ElementShortName">ffn1_s[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn1_s[0:15][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn1_out">
+      <obj_property name="ElementShortName">ffn1_out[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn1_out[0:15][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn_act_in">
+      <obj_property name="ElementShortName">ffn_act_in[0:21][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn_act_in[0:21][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn_act_out">
+      <obj_property name="ElementShortName">ffn_act_out[0:21][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn_act_out[0:21][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn2_x">
+      <obj_property name="ElementShortName">ffn2_x[0:21][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn2_x[0:21][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn2_w">
+      <obj_property name="ElementShortName">ffn2_w[0:483][3:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn2_w[0:483][3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn2_b">
+      <obj_property name="ElementShortName">ffn2_b[0:21][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn2_b[0:21][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn2_s">
+      <obj_property name="ElementShortName">ffn2_s[0:21][15:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn2_s[0:21][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/ffn2_out">
+      <obj_property name="ElementShortName">ffn2_out[0:19][31:0]</obj_property>
+      <obj_property name="ObjectShortName">ffn2_out[0:19][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/dma_done_hold">
+      <obj_property name="ElementShortName">dma_done_hold</obj_property>
+      <obj_property name="ObjectShortName">dma_done_hold</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/dma_done_ctr">
+      <obj_property name="ElementShortName">dma_done_ctr[2:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_done_ctr[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/stream_done_hold">
+      <obj_property name="ElementShortName">stream_done_hold</obj_property>
+      <obj_property name="ObjectShortName">stream_done_hold</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/stream_done_ctr">
+      <obj_property name="ElementShortName">stream_done_ctr[2:0]</obj_property>
+      <obj_property name="ObjectShortName">stream_done_ctr[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/transformer_top_tb/irq_inference_done">
+      <obj_property name="ElementShortName">irq_inference_done</obj_property>
+      <obj_property name="ObjectShortName">irq_inference_done</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_1_struct">
+      <obj_property name="ElementShortName">head_ctx_ref_1_struct</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_1_struct</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_2_struct">
+      <obj_property name="ElementShortName">head_ctx_ref_2_struct</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_2_struct</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/head_ctx_ref_3_struct">
+      <obj_property name="ElementShortName">head_ctx_ref_3_struct</obj_property>
+      <obj_property name="ObjectShortName">head_ctx_ref_3_struct</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CLK_PERIOD">
+      <obj_property name="ElementShortName">CLK_PERIOD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_PERIOD[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/MAX_CYCLES">
+      <obj_property name="ElementShortName">MAX_CYCLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MAX_CYCLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/COMP_LAT">
+      <obj_property name="ElementShortName">COMP_LAT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">COMP_LAT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/COMP_LAT_MIN">
+      <obj_property name="ElementShortName">COMP_LAT_MIN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">COMP_LAT_MIN[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/COMP_LAT_MAX">
+      <obj_property name="ElementShortName">COMP_LAT_MAX[31:0]</obj_property>
+      <obj_property name="ObjectShortName">COMP_LAT_MAX[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/DMA_LAT">
+      <obj_property name="ElementShortName">DMA_LAT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DMA_LAT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/DMA_LAT_MIN">
+      <obj_property name="ElementShortName">DMA_LAT_MIN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DMA_LAT_MIN[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/DMA_LAT_MAX">
+      <obj_property name="ElementShortName">DMA_LAT_MAX[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DMA_LAT_MAX[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/AXIS_BEATS">
+      <obj_property name="ElementShortName">AXIS_BEATS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">AXIS_BEATS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/NUM_HEADS">
+      <obj_property name="ElementShortName">NUM_HEADS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_HEADS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/NUM_LAYERS">
+      <obj_property name="ElementShortName">NUM_LAYERS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_LAYERS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/NUM_WO_TILES">
+      <obj_property name="ElementShortName">NUM_WO_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_WO_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/NUM_W1_TILES">
+      <obj_property name="ElementShortName">NUM_W1_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_W1_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/NUM_W2_TILES">
+      <obj_property name="ElementShortName">NUM_W2_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_W2_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/NUM_LOGIT_TILES">
+      <obj_property name="ElementShortName">NUM_LOGIT_TILES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_LOGIT_TILES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/D_MODEL">
+      <obj_property name="ElementShortName">D_MODEL[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_MODEL[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/D_FFN">
+      <obj_property name="ElementShortName">D_FFN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_FFN[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/D_HEADS">
+      <obj_property name="ElementShortName">D_HEADS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_HEADS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/D_TILE_WO">
+      <obj_property name="ElementShortName">D_TILE_WO[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_TILE_WO[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/D_TILE_W1">
+      <obj_property name="ElementShortName">D_TILE_W1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_TILE_W1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/D_TILE_W2">
+      <obj_property name="ElementShortName">D_TILE_W2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">D_TILE_W2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CONTEXT_LENGTH">
+      <obj_property name="ElementShortName">CONTEXT_LENGTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CONTEXT_LENGTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/IN_BUF_BYTES">
+      <obj_property name="ElementShortName">IN_BUF_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IN_BUF_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_BUF_BYTES">
+      <obj_property name="ElementShortName">OUT_BUF_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_BUF_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/IN_BUF_ADDR_W">
+      <obj_property name="ElementShortName">IN_BUF_ADDR_W[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IN_BUF_ADDR_W[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_BUF_ADDR_W">
+      <obj_property name="ElementShortName">OUT_BUF_ADDR_W[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_BUF_ADDR_W[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_PROJ_ACT_BYTES">
+      <obj_property name="ElementShortName">OUT_PROJ_ACT_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_ACT_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_PROJ_W_NIBBLES">
+      <obj_property name="ElementShortName">OUT_PROJ_W_NIBBLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_W_NIBBLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_PROJ_W_BYTES">
+      <obj_property name="ElementShortName">OUT_PROJ_W_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_W_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_PROJ_B_BYTES">
+      <obj_property name="ElementShortName">OUT_PROJ_B_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_B_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_PROJ_ACT_OFFSET">
+      <obj_property name="ElementShortName">OUT_PROJ_ACT_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_ACT_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_PROJ_W_OFFSET">
+      <obj_property name="ElementShortName">OUT_PROJ_W_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_W_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/OUT_PROJ_B_OFFSET">
+      <obj_property name="ElementShortName">OUT_PROJ_B_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUT_PROJ_B_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/REQUANT_X_OFFSET">
+      <obj_property name="ElementShortName">REQUANT_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REQUANT_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/REQUANT_M_OFFSET">
+      <obj_property name="ElementShortName">REQUANT_M_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REQUANT_M_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/REQUANT_N_OFFSET">
+      <obj_property name="ElementShortName">REQUANT_N_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REQUANT_N_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/REQUANT_Z_OFFSET">
+      <obj_property name="ElementShortName">REQUANT_Z_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REQUANT_Z_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/RESID_X_OFFSET">
+      <obj_property name="ElementShortName">RESID_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RESID_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/RESID_R_OFFSET">
+      <obj_property name="ElementShortName">RESID_R_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RESID_R_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/LN_X_OFFSET">
+      <obj_property name="ElementShortName">LN_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">LN_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/LN_GAMMA_OFFSET">
+      <obj_property name="ElementShortName">LN_GAMMA_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">LN_GAMMA_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/LN_EPS_OFFSET">
+      <obj_property name="ElementShortName">LN_EPS_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">LN_EPS_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_X_OFFSET">
+      <obj_property name="ElementShortName">FFN_W1_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_W_NIBBLES">
+      <obj_property name="ElementShortName">FFN_W1_W_NIBBLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_W_NIBBLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_W_BYTES">
+      <obj_property name="ElementShortName">FFN_W1_W_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_W_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_B_BYTES">
+      <obj_property name="ElementShortName">FFN_W1_B_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_B_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_S_BYTES">
+      <obj_property name="ElementShortName">FFN_W1_S_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_S_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_W_OFFSET">
+      <obj_property name="ElementShortName">FFN_W1_W_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_W_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_B_OFFSET">
+      <obj_property name="ElementShortName">FFN_W1_B_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_B_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W1_S_OFFSET">
+      <obj_property name="ElementShortName">FFN_W1_S_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W1_S_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_ACT_X_OFFSET">
+      <obj_property name="ElementShortName">FFN_ACT_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_ACT_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_X_OFFSET">
+      <obj_property name="ElementShortName">FFN_W2_X_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_X_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_W_NIBBLES">
+      <obj_property name="ElementShortName">FFN_W2_W_NIBBLES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_W_NIBBLES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_W_BYTES">
+      <obj_property name="ElementShortName">FFN_W2_W_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_W_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_B_BYTES">
+      <obj_property name="ElementShortName">FFN_W2_B_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_B_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_S_BYTES">
+      <obj_property name="ElementShortName">FFN_W2_S_BYTES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_S_BYTES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_W_OFFSET">
+      <obj_property name="ElementShortName">FFN_W2_W_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_W_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_B_OFFSET">
+      <obj_property name="ElementShortName">FFN_W2_B_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_B_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/FFN_W2_S_OFFSET">
+      <obj_property name="ElementShortName">FFN_W2_S_OFFSET[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FFN_W2_S_OFFSET[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/MEM_LAT">
+      <obj_property name="ElementShortName">MEM_LAT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_LAT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/HEADS_TOTAL">
+      <obj_property name="ElementShortName">HEADS_TOTAL[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEADS_TOTAL[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/HEADS_PAR">
+      <obj_property name="ElementShortName">HEADS_PAR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEADS_PAR[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_ATT_SCORES">
+      <obj_property name="ElementShortName">CMP_ATT_SCORES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_ATT_SCORES[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_CONCAT">
+      <obj_property name="ElementShortName">CMP_CONCAT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_CONCAT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0">
+      <obj_property name="ElementShortName">CMP_LN0[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_REQUANT1">
+      <obj_property name="ElementShortName">CMP_REQUANT1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_REQUANT1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_OUT_PROJ">
+      <obj_property name="ElementShortName">CMP_OUT_PROJ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_OUT_PROJ[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_RESID0">
+      <obj_property name="ElementShortName">CMP_RESID0[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_RESID0[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_REQUANT2">
+      <obj_property name="ElementShortName">CMP_REQUANT2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_REQUANT2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_FFN_W1">
+      <obj_property name="ElementShortName">CMP_FFN_W1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_FFN_W1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_FFN_ACT">
+      <obj_property name="ElementShortName">CMP_FFN_ACT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_FFN_ACT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_FFN_W2">
+      <obj_property name="ElementShortName">CMP_FFN_W2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_FFN_W2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_REQUANT3">
+      <obj_property name="ElementShortName">CMP_REQUANT3[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_REQUANT3[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_RESID1">
+      <obj_property name="ElementShortName">CMP_RESID1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_RESID1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1">
+      <obj_property name="ElementShortName">CMP_LN1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_REQUANT4">
+      <obj_property name="ElementShortName">CMP_REQUANT4[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_REQUANT4[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_SUM">
+      <obj_property name="ElementShortName">CMP_LN0_SUM[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_SUM[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_SUMSQ">
+      <obj_property name="ElementShortName">CMP_LN0_SUMSQ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_SUMSQ[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_MEAN">
+      <obj_property name="ElementShortName">CMP_LN0_MEAN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_MEAN[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_EYY">
+      <obj_property name="ElementShortName">CMP_LN0_EYY[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_EYY[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_VAR">
+      <obj_property name="ElementShortName">CMP_LN0_VAR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_VAR[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_VAR_EPS">
+      <obj_property name="ElementShortName">CMP_LN0_VAR_EPS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_VAR_EPS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_INV_STD">
+      <obj_property name="ElementShortName">CMP_LN0_INV_STD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_INV_STD[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_NORM">
+      <obj_property name="ElementShortName">CMP_LN0_NORM[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_NORM[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_SCALE">
+      <obj_property name="ElementShortName">CMP_LN0_SCALE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_SCALE[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN0_SHIFT">
+      <obj_property name="ElementShortName">CMP_LN0_SHIFT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN0_SHIFT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_SUM">
+      <obj_property name="ElementShortName">CMP_LN1_SUM[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_SUM[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_SUMSQ">
+      <obj_property name="ElementShortName">CMP_LN1_SUMSQ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_SUMSQ[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_MEAN">
+      <obj_property name="ElementShortName">CMP_LN1_MEAN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_MEAN[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_EYY">
+      <obj_property name="ElementShortName">CMP_LN1_EYY[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_EYY[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_VAR">
+      <obj_property name="ElementShortName">CMP_LN1_VAR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_VAR[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_VAR_EPS">
+      <obj_property name="ElementShortName">CMP_LN1_VAR_EPS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_VAR_EPS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_INV_STD">
+      <obj_property name="ElementShortName">CMP_LN1_INV_STD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_INV_STD[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_NORM">
+      <obj_property name="ElementShortName">CMP_LN1_NORM[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_NORM[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_SCALE">
+      <obj_property name="ElementShortName">CMP_LN1_SCALE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_SCALE[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/CMP_LN1_SHIFT">
+      <obj_property name="ElementShortName">CMP_LN1_SHIFT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CMP_LN1_SHIFT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/transformer_top_tb/HEAD_CTX_W">
+      <obj_property name="ElementShortName">HEAD_CTX_W[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEAD_CTX_W[31:0]</obj_property>
+   </wvobject>
+</wave_config>

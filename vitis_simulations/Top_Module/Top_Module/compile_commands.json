@@ -1,79 +1,66 @@
 [
   {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module",
+    "directory": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module",
     "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls",
-      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-hls-syn-headers-dir=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
       "-fhlstoplevel=transformer_top",
       "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp"
+      "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
     ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/ControlMemInterface/ControlMemInterface.cpp"
+    "file": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
   },
   {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module",
+    "directory": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module",
     "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls",
-      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-hls-syn-headers-dir=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
       "-fhlstoplevel=transformer_top",
       "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+      "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
     ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp"
+    "file": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
   },
   {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module",
+    "directory": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module",
     "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls",
-      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-hls-syn-headers-dir=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
       "-fhlstoplevel=transformer_top",
       "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+      "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
     ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp"
+    "file": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp"
   },
   {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module",
+    "directory": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module",
     "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls",
-      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
+      "-hls-syn-headers-dir=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
       "-fhlstoplevel=transformer_top",
       "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
+      "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/top.cpp"
     ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp"
+    "file": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/top.cpp"
   },
   {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module",
+    "directory": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module",
     "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
-      "-fhls",
-      "-hls-syn-headers-dir=/tools/Xilinx/2025.1/Vitis/common/technology/autopilot",
-      "-fhlstoplevel=transformer_top",
-      "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp"
-    ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/IRQ_Wizard/IRQ_Wizard.cpp"
-  },
-  {
-    "directory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/vitis_simulations/Top_Module/Top_Module",
-    "arguments": [
-      "/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
-      "--gcc-toolchain=/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
+      "/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/vcxx/libexec/clang++",
+      "--gcc-toolchain=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/tps/lnx64/gcc-8.3.0",
       "-fhls-tb",
-      "-hls-sim-headers-dir=/tools/Xilinx/2025.1/Vitis/include",
+      "-hls-sim-headers-dir=/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/include",
       "-c",
-      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp"
+      "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/top_DEBUG_tb.cpp"
     ],
-    "file": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp"
+    "file": "/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM_testing/vitis_simulations/Top_Module/Top_Module/../../../HLS-Verilog/top_DEBUG_tb.cpp"
   }
 ]
