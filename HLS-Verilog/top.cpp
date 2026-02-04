@@ -9,9 +9,31 @@ void transformer_top(
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
 
     // ------------------------------------------------------------
+    // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
+    // ------------------------------------------------------------
+    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
+    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
+    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence
+
+    // ------------------------------------------------------------
+    // AXI4-LITE INTERFACING (PL <-> PS)
+    // ------------------------------------------------------------
+    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interface
+    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
+
+    // ------------------------------------------------------------
+    // INTERUPT INTERFACING (PL → PS)
+    // ------------------------------------------------------------
+    bool        &irq_ps,
+
+
+    /*
+        TEMPORARY INPUT/OUPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
+    */
+
+    // ------------------------------------------------------------
     // Memory Management System (WEIGHT LOADER via DMA)
     // ------------------------------------------------------------
-
     // FSM communication signals
     bool        dma_done,                   // [INPUT]  DMA transfer completed (single-cycle pulse)
     bool        wl_ready,                 // [INPUT]  Weight loader ready for a new request
@@ -30,24 +52,6 @@ void transformer_top(
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
     // ------------------------------------------------------------
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
-    
-    // ------------------------------------------------------------
-    // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
-    // ------------------------------------------------------------
-    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
-    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
-    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
-
-    // ------------------------------------------------------------
-    // AXI4-LITE INTERFACING (PL <-> PS)
-    // ------------------------------------------------------------
-    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
-    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
-
-    // ------------------------------------------------------------
-    // INTERUPT INTERFACING (PL → PS)
-    // ------------------------------------------------------------
-    bool        &irq_ps,
 
     // ------------------------------------------------------------
     // DEBUG OUTPUTS
@@ -105,6 +109,7 @@ void transformer_top(
     static bool     compute_done = false;
     static bool     compute_start = false;
     static uint32_t compute_instruction = 0;
+
     // Debugging mirrors
     dbg_ctrl_mem = ctrl_mem;
     dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);

@@ -99,9 +99,9 @@ reg    ap_ready_int;
 wire   [1:0] trunc_ln605_fu_211_p1;
 reg   [1:0] trunc_ln605_reg_378;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln582_fu_233_p1;
+wire   [63:0] zext_ln549_fu_233_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln583_1_fu_252_p1;
+wire   [63:0] zext_ln550_1_fu_252_p1;
 wire   [15:0] v_fu_272_p3;
 reg   [2:0] i_fu_74;
 wire   [2:0] add_ln605_fu_205_p2;
@@ -116,9 +116,9 @@ reg    in_buf_ce1_local;
 reg    in_buf_ce0_local;
 wire   [2:0] shl_ln607_fu_215_p2;
 wire   [5:0] zext_ln607_fu_221_p1;
-wire   [6:0] zext_ln582_3_cast_fu_225_p3;
-wire   [4:0] zext_ln583_fu_238_p1;
-wire   [6:0] zext_ln583_3_cast_fu_242_p4;
+wire   [6:0] zext_ln549_3_cast_fu_225_p3;
+wire   [4:0] zext_ln550_fu_238_p1;
+wire   [6:0] zext_ln550_3_cast_fu_242_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -423,9 +423,9 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln605_fu_199_p2 = ((ap_sig_allocacmp_i_6 == 3'd4) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln583_1_fu_252_p1;
+assign in_buf_address0 = zext_ln550_1_fu_252_p1;
 
-assign in_buf_address1 = zext_ln582_fu_233_p1;
+assign in_buf_address1 = zext_ln549_fu_233_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
@@ -437,15 +437,15 @@ assign trunc_ln605_fu_211_p1 = ap_sig_allocacmp_i_6[1:0];
 
 assign v_fu_272_p3 = {{in_buf_q0}, {in_buf_q1}};
 
-assign zext_ln582_3_cast_fu_225_p3 = {{1'd1}, {zext_ln607_fu_221_p1}};
+assign zext_ln549_3_cast_fu_225_p3 = {{1'd1}, {zext_ln607_fu_221_p1}};
 
-assign zext_ln582_fu_233_p1 = zext_ln582_3_cast_fu_225_p3;
+assign zext_ln549_fu_233_p1 = zext_ln549_3_cast_fu_225_p3;
 
-assign zext_ln583_1_fu_252_p1 = zext_ln583_3_cast_fu_242_p4;
+assign zext_ln550_1_fu_252_p1 = zext_ln550_3_cast_fu_242_p4;
 
-assign zext_ln583_3_cast_fu_242_p4 = {{{{1'd1}, {zext_ln583_fu_238_p1}}}, {1'd1}};
+assign zext_ln550_3_cast_fu_242_p4 = {{{{1'd1}, {zext_ln550_fu_238_p1}}}, {1'd1}};
 
-assign zext_ln583_fu_238_p1 = trunc_ln605_fu_211_p1;
+assign zext_ln550_fu_238_p1 = trunc_ln605_fu_211_p1;
 
 assign zext_ln607_fu_221_p1 = shl_ln607_fu_215_p2;
 

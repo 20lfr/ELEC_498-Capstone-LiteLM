@@ -327,45 +327,45 @@ static inline DmaFields decode_wl_instruction(uint32_t instr) {
     return f;
 }
 
-static uint32_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) {
+static uint64_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) {
     const DmaFields f = decode_wl_instruction(instr);
     if (f.layer < 0) {
         return 0;
     }
-    const uint32_t layer_u = static_cast<uint32_t>(f.layer);
+    const uint64_t layer_u = static_cast<uint64_t>(f.layer);
     switch (f.sel) {
     case DMASEL_WQ:
         if (f.head < 0) return 0;
-        return ctrl.wq_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.head) * ctrl.wq_head_stride;
+        return ctrl.wq_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wq_head_stride);
     case DMASEL_WK:
         if (f.head < 0) return 0;
-        return ctrl.wk_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.head) * ctrl.wk_head_stride;
+        return ctrl.wk_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wk_head_stride);
     case DMASEL_WV:
         if (f.head < 0) return 0;
-        return ctrl.wv_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.head) * ctrl.wv_head_stride;
+        return ctrl.wv_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wv_head_stride);
     case DMASEL_CTX_K:
         if (f.head < 0) return 0;
-        return ctrl.k_cache_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.head) * ctrl.k_cache_stride;
+        return ctrl.k_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.k_cache_stride);
     case DMASEL_CTX_V:
         if (f.head < 0) return 0;
-        return ctrl.v_cache_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.head) * ctrl.v_cache_stride;
+        return ctrl.v_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.v_cache_stride);
     case DMASEL_WO:
         if (f.tile < 0) return 0;
-        return ctrl.wo_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.tile) * ctrl.wo_tile_stride;
+        return ctrl.wo_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.wo_tile_stride);
     case DMASEL_W1:
         if (f.tile < 0) return 0;
-        return ctrl.w1_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.tile) * ctrl.w1_tile_stride;
+        return ctrl.w1_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w1_tile_stride);
     case DMASEL_W2:
         if (f.tile < 0) return 0;
-        return ctrl.w2_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(f.tile) * ctrl.w2_tile_stride;
+        return ctrl.w2_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
     case DMASEL_CONCAT:
         return 0;
     default:
@@ -373,7 +373,7 @@ static uint32_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) 
     }
 }
 
-static uint32_t compute_wl_address(
+static uint64_t compute_wl_address(
     DmaSel sel,
     int layer,
     int head,
@@ -383,40 +383,40 @@ static uint32_t compute_wl_address(
     if (layer < 0) {
         return 0;
     }
-    const uint32_t layer_u = static_cast<uint32_t>(layer);
+    const uint64_t layer_u = static_cast<uint64_t>(layer);
     switch (sel) {
     case DMASEL_WQ:
         if (head < 0) return 0;
-        return ctrl.wq_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.wq_head_stride;
+        return ctrl.wq_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wq_head_stride);
     case DMASEL_WK:
         if (head < 0) return 0;
-        return ctrl.wk_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.wk_head_stride;
+        return ctrl.wk_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wk_head_stride);
     case DMASEL_WV:
         if (head < 0) return 0;
-        return ctrl.wv_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.wv_head_stride;
+        return ctrl.wv_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wv_head_stride);
     case DMASEL_CTX_K:
         if (head < 0) return 0;
-        return ctrl.k_cache_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.k_cache_stride;
+        return ctrl.k_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.k_cache_stride);
     case DMASEL_CTX_V:
         if (head < 0) return 0;
-        return ctrl.v_cache_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(head) * ctrl.v_cache_stride;
+        return ctrl.v_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.v_cache_stride);
     case DMASEL_WO:
         if (tile < 0) return 0;
-        return ctrl.wo_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(tile) * ctrl.wo_tile_stride;
+        return ctrl.wo_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.wo_tile_stride);
     case DMASEL_W1:
         if (tile < 0) return 0;
-        return ctrl.w1_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(tile) * ctrl.w1_tile_stride;
+        return ctrl.w1_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w1_tile_stride);
     case DMASEL_W2:
         if (tile < 0) return 0;
-        return ctrl.w2_base_addr + layer_u * ctrl.layer_stride +
-               static_cast<uint32_t>(tile) * ctrl.w2_tile_stride;
+        return ctrl.w2_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
     default:
         return 0;
     }
@@ -457,14 +457,14 @@ ControlMemSpace ctrl_mem_init(bool init) {
         ctrl_mem.w1_tile_stride  = 0x00000300;
         ctrl_mem.w2_tile_stride  = 0x00000800;
         // Base addresses - MUST be 64-byte aligned (& 0x3F == 0)
-        ctrl_mem.wq_base_addr = 0x10000000;
-        ctrl_mem.wk_base_addr = 0x20000000;
-        ctrl_mem.wv_base_addr = 0x30000000;
-        ctrl_mem.wo_base_addr = 0x60000000;
-        ctrl_mem.w1_base_addr = 0x70000000;
-        ctrl_mem.w2_base_addr = 0x80000000;
-        ctrl_mem.k_cache_addr = 0x40000000;
-        ctrl_mem.v_cache_addr = 0x50000000;
+        ctrl_mem.wq_base_addr = 0x10000000ull;
+        ctrl_mem.wk_base_addr = 0x20000000ull;
+        ctrl_mem.wv_base_addr = 0x30000000ull;
+        ctrl_mem.wo_base_addr = 0x60000000ull;
+        ctrl_mem.w1_base_addr = 0x70000000ull;
+        ctrl_mem.w2_base_addr = 0x80000000ull;
+        ctrl_mem.k_cache_addr = 0x40000000ull;
+        ctrl_mem.v_cache_addr = 0x50000000ull;
         // Quantization params
         ctrl_mem.logit_scale_qv = 0x00000100;
         ctrl_mem.scale_q        = 0x00000100;
@@ -501,7 +501,7 @@ int main() {
     HeadCtx head_ctx_ref[NUM_HEADS];
     bool dma_done        = false;
     bool wl_dma_request  = false;
-    uint32_t wl_dma_address = 0;
+    uint64_t wl_dma_address = 0;
 
     bool axis_in_valid   = false;
     bool axis_in_last    = false;
@@ -695,7 +695,7 @@ int main() {
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
-    uint32_t irq_enable_reg     = 0;
+    uint32_t irq_mask_reg     = 0;
     uint32_t wq_base_addr   = 0;
     uint32_t wk_base_addr   = 0;
     uint32_t wv_base_addr   = 0;
@@ -709,9 +709,9 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-6s %-10s %-6s %-10s %-6s %-10s %-6s %-6s %-13s | %-10s %-6s %-10s %-10s %-6s | Heads: [idx:phase  C_St C_Dn  CompInstr WL_St DMA   DMADn]\n",
+    std::printf("%-8s %-6s %-6s %-6s %-10s %-6s %-10s %-6s %-10s %-6s %-6s %-13s | %-10s %-6s %-6s %-10s %-10s %-6s | Heads: [idx:phase  C_St C_Dn  CompInstr WL_St DMA   DMADn]\n",
                 "Cycle", "Start", "Reset", "CtrlR", "WlInstr", "DbgSt", "ReqInstr", "C_St", "CompInstr", "C_Rdy", "C_Dn", "DbgState",
-                "MemCtrl", "MemIRQ", "MemMsk", "Status", "ErrCd");
+                "MemCtrl", "MemIRQ", "IRQ_PS", "MemMsk", "Status", "ErrCd");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
@@ -785,7 +785,7 @@ int main() {
         // ========== TEST 3: Address Alignment ==========
         } else if (ctrl_stage == CtrlInitStage::TestAlignment) {
             ctrl_mem = ctrl_mem_init(true);  // Start fresh
-            ctrl_mem.wq_base_addr = 0x10000001;  // Inject error: not 64-byte aligned
+            ctrl_mem.wq_base_addr = 0x10000001ull;  // Inject error: not 64-byte aligned
             std::printf("[TEST 3] Injecting wq_base_addr=0x10000001 (expect ERR_DMA_ALIGNMENT)\n");
             ctrl_stage = CtrlInitStage::TestAlignmentCheck;
             ctrl_gap_cycles = 1;
@@ -883,35 +883,35 @@ int main() {
                 ctrl_data_in  = 0x00000800;
                 break;
             case 13:
-                ctrl_mem.wq_base_addr = 0x10000000;
+                ctrl_mem.wq_base_addr = 0x10000000ull;
                 ctrl_data_in  = 0x10000000;
                 break;
             case 14:
-                ctrl_mem.wk_base_addr = 0x20000000;
+                ctrl_mem.wk_base_addr = 0x20000000ull;
                 ctrl_data_in  = 0x20000000;
                 break;
             case 15:
-                ctrl_mem.wv_base_addr = 0x30000000;
+                ctrl_mem.wv_base_addr = 0x30000000ull;
                 ctrl_data_in  = 0x30000000;
                 break;
             case 16:
-                ctrl_mem.k_cache_addr = 0x40000000;
+                ctrl_mem.k_cache_addr = 0x40000000ull;
                 ctrl_data_in  = 0x40000000;
                 break;
             case 17:
-                ctrl_mem.v_cache_addr = 0x50000000;
+                ctrl_mem.v_cache_addr = 0x50000000ull;
                 ctrl_data_in  = 0x50000000;
                 break;
             case 18:
-                ctrl_mem.wo_base_addr = 0x60000000;
+                ctrl_mem.wo_base_addr = 0x60000000ull;
                 ctrl_data_in  = 0x60000000;
                 break;
             case 19:
-                ctrl_mem.w1_base_addr = 0x70000000;
+                ctrl_mem.w1_base_addr = 0x70000000ull;
                 ctrl_data_in  = 0x70000000;
                 break;
             case 20:
-                ctrl_mem.w2_base_addr = 0x80000000;
+                ctrl_mem.w2_base_addr = 0x80000000ull;
                 ctrl_data_in  = 0x80000000;
                 break;
             case 21:
@@ -1190,6 +1190,12 @@ int main() {
             axis_in_valid,
             axis_in_last,
             axis_in_ready,
+            stream_ready,
+            stream_start,
+            stream_done,
+            ctrl_mem,
+            status_mem,
+            irq_ps,
             dma_done,
             wl_ready,
             wl_instruction,
@@ -1201,17 +1207,11 @@ int main() {
             in_buf,
             out_buf,
             head_ctx_ref,
-            stream_ready,
-            stream_start,
-            stream_done,
-            ctrl_mem,
-            status_mem,
-            irq_ps,
             dbg_state, 
             dbg_ctrl_mem,
             control_reg,
             irq_status_reg,
-            irq_enable_reg,
+            irq_mask_reg,
             wq_base_addr,
             wk_base_addr,
             wv_base_addr,
@@ -1269,7 +1269,7 @@ int main() {
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
         const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d %-6s 0x%08X %-6d 0x%08X %-6s 0x%08X %-6s %-6s %-13s | 0x%08X %-6s 0x%08X %-10s 0x%04X",
+        std::printf("%-8d %-6d %-6d %-6s 0x%08X %-6d 0x%08X %-6s 0x%08X %-6s %-6s %-13s | 0x%08X %-6s %-6s 0x%08X %-10s 0x%04X",
                     cycle,
                     cntrl_start ? 1 : 0,
                     cntrl_reset_n ? 1 : 0,
@@ -1285,6 +1285,7 @@ int main() {
                     // CtrlMemSpace/StatusMemSpace info:
                     dbg_ctrl_mem.control,
                     irq_name(status_mem.irq_status),
+                    dash_or(irq_ps),
                     dbg_ctrl_mem.irq_mask,
                     status_name(status_mem.status),
                     status_mem.error_code);

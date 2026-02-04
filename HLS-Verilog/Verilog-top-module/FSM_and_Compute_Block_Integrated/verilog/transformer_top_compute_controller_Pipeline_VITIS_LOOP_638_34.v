@@ -180,9 +180,9 @@ wire   [3:0] trunc_ln638_fu_363_p1;
 reg   [3:0] trunc_ln638_reg_493;
 wire    ap_block_pp0_stage0_11001;
 reg   [0:0] tmp_reg_497;
-wire   [63:0] zext_ln582_fu_383_p1;
+wire   [63:0] zext_ln549_fu_383_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln583_fu_396_p1;
+wire   [63:0] zext_ln550_fu_396_p1;
 wire   [63:0] zext_ln638_fu_440_p1;
 reg   [4:0] i_fu_106;
 wire   [4:0] add_ln638_fu_357_p2;
@@ -742,9 +742,9 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln638_fu_351_p2 = ((ap_sig_allocacmp_i_5 == 5'd22) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln583_fu_396_p1;
+assign in_buf_address0 = zext_ln550_fu_396_p1;
 
-assign in_buf_address1 = zext_ln582_fu_383_p1;
+assign in_buf_address1 = zext_ln549_fu_383_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
@@ -804,9 +804,9 @@ assign trunc_ln638_fu_363_p1 = ap_sig_allocacmp_i_5[3:0];
 
 assign v_fu_459_p3 = {{in_buf_q0}, {in_buf_q1}};
 
-assign zext_ln582_fu_383_p1 = byte_addr_assign_4_fu_375_p3;
+assign zext_ln549_fu_383_p1 = byte_addr_assign_4_fu_375_p3;
 
-assign zext_ln583_fu_396_p1 = or_ln_fu_388_p3;
+assign zext_ln550_fu_396_p1 = or_ln_fu_388_p3;
 
 assign zext_ln638_fu_440_p1 = tmp_reg_497;
 
