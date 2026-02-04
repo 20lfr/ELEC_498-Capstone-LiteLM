@@ -1,212 +1,224 @@
 #pragma once
-
 #ifndef MMU_HPP
 #define MMU_HPP
 
-#include <cstdint>
-#include <cstring>
+#include "top_params.hpp"
 
+// Data types for buffer layout tracking
+enum class DataType : uint8_t {
+    DTYPE_NONE  = 0,
+    DTYPE_INT4  = 1,
+    DTYPE_INT8  = 2,
+    DTYPE_INT16 = 3,
+    DTYPE_INT32 = 4
+};
 
+// Model dimensions 
 struct ModelDims {
-    uint16_t d_model;        
-    uint16_t d_ffn;          
-    uint16_t d_heads;        
-    uint16_t num_heads;      
-    uint16_t num_layers;     
-    uint16_t context_len;    
-    uint16_t d_tile_wo;      
-    uint16_t d_tile_w1;      
-    uint16_t d_tile_w2;      
-    uint16_t num_wo_tiles;   
-    uint16_t num_w1_tiles;   
-    uint16_t num_w2_tiles;   
-    
-    ModelDims() :
-        d_model(2048), d_ffn(5504), d_heads(64), num_heads(32), num_layers(22),
-        context_len(2048), d_tile_wo(64), d_tile_w1(64), d_tile_w2(172),
-        num_wo_tiles(32), num_w1_tiles(86), num_w2_tiles(32) {}
+    uint16_t d_model     = D_MODEL;
+    uint16_t d_ffn       = D_FFN;
+    uint16_t d_heads     = D_HEADS;
+    uint16_t num_heads   = NUM_HEADS;
+    uint16_t num_layers  = NUM_LAYERS;
+    uint16_t context_len = CONTEXT_LENGTH;
+    uint16_t d_tile_wo   = D_TILE_WO;
+    uint16_t d_tile_w1   = D_TILE_W1;
+    uint16_t d_tile_w2   = D_TILE_W2;
+    uint16_t num_wo_tiles = NUM_WO_TILES;
+    uint16_t num_w1_tiles = NUM_W1_TILES;
+    uint16_t num_w2_tiles = NUM_W2_TILES;
 };
 
-
-enum class ComputeOp : uint8_t {
-    CMP_NONE = 0,
-    CMP_LN0 = 1,           // 0x01
-    CMP_REQUANT1 = 2,      // 0x02
-    CMP_Q = 3,             // 0x03
-    CMP_K = 4,             // 0x04
-    CMP_K_REQUANT = 5,     // 0x05
-    CMP_V = 6,             // 0x06
-    CMP_V_REQUANT = 7,     // 0x07
-    CMP_Q_REQUANT = 8,     // 0x08
-    CMP_ATT_SCORES = 9,    // 0x09
-    CMP_VALUE_SCALE = 10,  // 0x0A
-    CMP_SOFTMAX = 11,      // 0x0B
-    CMP_ATT_VALUE = 12,    // 0x0C
-    CMP_HEAD_REQUANT = 13, // 0x0D
-    CMP_CONCAT = 14,       // 0x0E
-    CMP_OUT_PROJ = 15,     // 0x0F
-    CMP_RESID0 = 16,       // 0x10
-    CMP_REQUANT2 = 17,     // 0x11
-    CMP_FFN_W1 = 18,       // 0x12
-    CMP_FFN_ACT = 19,      // 0x13
-    CMP_FFN_W2 = 20,       // 0x14
-    CMP_REQUANT3 = 21,     // 0x15
-    CMP_RESID1 = 22,       // 0x16
-    CMP_LN1 = 23,          // 0x17
-    CMP_REQUANT4 = 24      // 0x18
+// Buffer field with byte offset and data type
+struct BufferField {
+    uint32_t offset;
+    uint32_t size;
+    DataType dtype;
+    uint16_t num_elements;
+    
+    BufferField() : offset(0), size(0), dtype(DataType::DTYPE_NONE), num_elements(0) {}
+    BufferField(uint32_t off, uint32_t sz, DataType dt, uint16_t n) 
+        : offset(off), size(sz), dtype(dt), num_elements(n) {}
 };
 
-enum class DmaSel : uint8_t {
-    DMASEL_NONE = 0,       // 0x00
-    DMASEL_WQ = 1,         // 0x01
-    DMASEL_WK = 2,         // 0x02
-    DMASEL_K_WRITE = 3,    // 0x03
-    DMASEL_WV = 4,         // 0x04
-    DMASEL_V_WRITE = 5,    // 0x05
-    DMASEL_CTX_K = 6,      // 0x06
-    DMASEL_CTX_V = 7,      // 0x07
-    DMASEL_WO = 8,         // 0x08
-    DMASEL_W1 = 9,         // 0x09
-    DMASEL_W2 = 10,        // 0x0A
-    DMASEL_WLOGIT = 11     // 0x0B
+// Input buffer layout with named fields
+struct InputBufferLayout {
+    BufferField act;
+    BufferField weights;
+    BufferField bias;
+    BufferField scale;
+    BufferField gamma;
+    BufferField eps;
+    BufferField residual;
+    BufferField k_cache;
+    BufferField v_cache;
+    BufferField m_param;
+    BufferField n_param;
+    BufferField z_param;
+    uint32_t total_size;
+    
+    InputBufferLayout() : total_size(0) {}
 };
 
-// FSM Memory Request: <31:24 tile><23:16 head><15:8 layer><7:0 mem_request>
-struct MemoryRequest {
-    uint8_t request;  // DmaSel (7:0)
-    uint8_t layer;    // (15:8)
-    uint8_t head;     // (23:16)
-    uint8_t tile;     // (31:24)
+// Output buffer layout
+struct OutputBufferLayout {
+    BufferField result;
+    DataType out_dtype;
+    uint32_t total_size;
     
-    MemoryRequest() : request(0), layer(0), head(0), tile(0) {}
-    MemoryRequest(uint32_t packed) {
-        request = packed & 0xFF;
-        layer = (packed >> 8) & 0xFF;
-        head = (packed >> 16) & 0xFF;
-        tile = (packed >> 24) & 0xFF;
-    }
-    
-    uint32_t pack() const {
-        return static_cast<uint32_t>(request) |
-               (static_cast<uint32_t>(layer) << 8) |
-               (static_cast<uint32_t>(head) << 16) |
-               (static_cast<uint32_t>(tile) << 24);
-    }
-    
-    DmaSel get_dma_sel() const {
-        return static_cast<DmaSel>(request);
-    }
+    OutputBufferLayout() : out_dtype(DataType::DTYPE_NONE), total_size(0) {}
 };
 
-struct ComputeRequest {
-    uint8_t op;       // ComputeOp (7:0)
-    uint8_t layer;    // (15:8)
-    uint8_t head;     // (23:16)
-    uint8_t tile;     // (31:24)
+// Weight blob layout for DMA payloads
+struct WeightBlobLayout {
+    BufferField weights;
+    BufferField bias;
+    BufferField scale;
+    uint32_t total_size;
     
-    ComputeRequest() : op(0), layer(0), head(0), tile(0) {}
-    ComputeRequest(uint32_t packed) {
-        op = packed & 0xFF;
-        layer = (packed >> 8) & 0xFF;
-        head = (packed >> 16) & 0xFF;
-        tile = (packed >> 24) & 0xFF;
-    }
-    
-    uint32_t pack() const {
-        return static_cast<uint32_t>(op) |
-               (static_cast<uint32_t>(layer) << 8) |
-               (static_cast<uint32_t>(head) << 16) |
-               (static_cast<uint32_t>(tile) << 24);
-    }
-    
-    ComputeOp get_compute_op() const {
-        return static_cast<ComputeOp>(op);
-    }
+    WeightBlobLayout() : total_size(0) {}
 };
 
-struct BufferRegion {
-    uint16_t offset;    // Byte offset in buffer
-    uint16_t size;      // Size in bytes
-    
-    BufferRegion() : offset(0), size(0) {}
-    BufferRegion(uint16_t off, uint16_t sz) : offset(off), size(sz) {}
-};
-
-struct BufferLayout {
-    BufferRegion regions[8];  // Up to 8 regions per buffer
-    uint8_t num_regions;
-    uint16_t total_size;
-    
-    BufferLayout() : num_regions(0), total_size(0) {}
-};
-
-struct WeightBlob {
-    BufferRegion weights;  // W location
-    BufferRegion biases;   // B location
-    BufferRegion scales;   // S location (for FFN)
-    uint16_t total_size;
-    
-    WeightBlob() : total_size(0) {}
-};
-
-
+// KV cache address
 struct KVCacheAddr {
-    uint32_t base_addr;      // Base address in DDR
-    uint16_t token_offset;   // Offset for specific token
-    uint8_t head;            // Head index
-    bool valid;
+    uint32_t base_addr;
+    uint16_t token_offset;
+    uint8_t  head;
+    bool     valid;
     
     KVCacheAddr() : base_addr(0), token_offset(0), head(0), valid(false) {}
 };
 
+// Constants
+constexpr int MMU_MAX_TILES           = 64;
+constexpr int MMU_MAX_HEADS           = 32;
+constexpr int MMU_URAM_BANKS          = 2;
+constexpr uint32_t MMU_BANK_SIZE      = 0x100000;
+constexpr int MMU_DMA_QUEUE_DEPTH     = 16;
+constexpr int MMU_COMPUTE_QUEUE_DEPTH = 16;
 
-struct TileDescriptor {
-    DmaSel addr_sel;
-    int8_t layer;
-    int8_t head;
-    int8_t tile;
-    uint8_t uram_bank;         // 0 or 1 (ping-pong)
-    uint32_t uram_offset;
-    uint16_t size;
-    bool valid;
-    
-    TileDescriptor() :
-        addr_sel(DmaSel::DMASEL_NONE), layer(-1), head(-1), tile(-1),
-        uram_bank(0), uram_offset(0), size(0), valid(false) {}
+// MMU FSM states
+enum class MMUFsmState : uint8_t {
+    IDLE            = 0,
+    DMA_ARBITRATE   = 1,
+    DMA_ISSUE       = 2,
+    DMA_WAIT        = 3,
+    DMA_WRITEBACK   = 4,
+    COMPUTE_ARB     = 5,
+    URAM_TO_INBUF   = 6,
+    OUTBUF_TO_URAM  = 7,
+    TRANSFER_DONE   = 8
 };
 
-constexpr int MMU_MAX_TILES = 64;
-constexpr int MMU_MAX_HEADS = 32;
-constexpr int MMU_URAM_BANKS = 2;
-constexpr uint32_t MMU_BANK_SIZE = 0x10000;  // 64KB
-constexpr int MMU_REQUEST_QUEUE_DEPTH = 16;
-
-struct MMUState {
-
-    TileDescriptor tile_table[MMU_MAX_TILES];
-    uint16_t num_tiles;
-    uint8_t next_bank;  
-    uint32_t bank_offsets[MMU_URAM_BANKS];
+// DMA queue entry
+struct DmaQueueEntry {
+    uint32_t packed_req;
+    bool     valid;
+    bool     is_headed;
     
+    DmaQueueEntry() : packed_req(0), valid(false), is_headed(false) {}
+};
+
+// Compute buffer request type
+enum class ComputeReqType : uint8_t {
+    REQ_NONE  = 0,
+    REQ_READ  = 1,
+    REQ_WRITE = 2
+};
+
+// Compute buffer request
+struct ComputeBufferRequest {
+    ComputeReqType type;
+    uint32_t packed_req;
+    bool     valid;
+    bool     is_headed;
+    uint8_t  head_idx;
+    
+    ComputeBufferRequest() : type(ComputeReqType::REQ_NONE), packed_req(0), 
+                             valid(false), is_headed(false), head_idx(0) {}
+};
+
+// Tile descriptor for URAM cache tracking
+struct TileDescriptor {
+    DmaSel   addr_sel;
+    int8_t   layer;
+    int8_t   head;
+    int8_t   tile;
+    uint8_t  uram_bank;
+    uint32_t uram_offset;
+    uint32_t size;
+    bool     valid;
+    
+    TileDescriptor() : addr_sel(DMASEL_NONE), layer(-1), head(-1), tile(-1),
+                       uram_bank(0), uram_offset(0), size(0), valid(false) {}
+};
+
+// Head arbiter for round-robin arbitration
+struct HeadArbiter {
+    bool     pending[MMU_MAX_HEADS];
+    bool     grant[MMU_MAX_HEADS];
+    uint8_t  current;
+    uint8_t  rr_ptr;
+    bool     busy;
+    
+    HeadArbiter() : current(0), rr_ptr(0), busy(false) {
+        for (int i = 0; i < MMU_MAX_HEADS; ++i) {
+            pending[i] = false;
+            grant[i] = false;
+        }
+    }
+};
+
+// Full MMU context
+struct MMUContext {
+    MMUFsmState fsm_state;
     ModelDims dims;
     
-    uint16_t current_token;
+    // Tile cache
+    TileDescriptor tile_table[MMU_MAX_TILES];
+    uint16_t num_tiles;
+    uint8_t  active_bank;
+    uint32_t bank_offsets[MMU_URAM_BANKS];
     
+    // Request queues
+    DmaQueueEntry dma_queue[MMU_DMA_QUEUE_DEPTH];
+    uint8_t dma_head, dma_tail, dma_count;
+    
+    ComputeBufferRequest compute_queue[MMU_COMPUTE_QUEUE_DEPTH];
+    uint8_t compute_head, compute_tail, compute_count;
+    
+    // Arbitration
+    HeadArbiter arbiter;
+    
+    // Active requests
+    uint32_t active_dma_req;
+    ComputeBufferRequest active_compute_req;
+    bool dma_in_progress;
+    bool transfer_in_progress;
+    
+    // KV cache
     uint32_t k_cache_base;
     uint32_t v_cache_base;
+    uint16_t current_token;
     
+    // Status flags
     bool head_dma_done[MMU_MAX_HEADS];
     bool head_compute_done[MMU_MAX_HEADS];
     bool main_dma_done;
     bool main_compute_done;
     
-    MMUState() :
-        num_tiles(0), next_bank(0), current_token(0),
-        k_cache_base(0), v_cache_base(0),
-        main_dma_done(false), main_compute_done(false) {
-        for (int i = 0; i < MMU_URAM_BANKS; ++i) {
-            bank_offsets[i] = 0;
-        }
+    // Errors
+    bool error_overflow;
+    bool error_invalid;
+    
+    MMUContext() : fsm_state(MMUFsmState::IDLE), num_tiles(0), active_bank(0),
+                   dma_head(0), dma_tail(0), dma_count(0),
+                   compute_head(0), compute_tail(0), compute_count(0),
+                   active_dma_req(0), dma_in_progress(false), transfer_in_progress(false),
+                   k_cache_base(0), v_cache_base(0), current_token(0),
+                   main_dma_done(false), main_compute_done(false),
+                   error_overflow(false), error_invalid(false) {
+        for (int i = 0; i < MMU_URAM_BANKS; ++i) bank_offsets[i] = 0;
         for (int i = 0; i < MMU_MAX_HEADS; ++i) {
             head_dma_done[i] = false;
             head_compute_done[i] = false;
@@ -214,70 +226,102 @@ struct MMUState {
     }
 };
 
-struct MMUAllocation {
-    bool success;
-    uint8_t uram_bank;
-    uint32_t uram_offset;
-    uint16_t size;
-    bool overflow;
-    
-    MMUAllocation() :
-        success(false), uram_bank(0), uram_offset(0), size(0), overflow(false) {}
-};
+// Initialization
+void mmu_init(MMUContext &ctx, const ModelDims &dims);
+void mmu_reset(MMUContext &ctx);
+void mmu_set_kv_cache_bases(MMUContext &ctx, uint32_t k_base, uint32_t v_base);
 
-struct MMULookup {
-    bool found;
-    uint8_t uram_bank;
-    uint32_t uram_offset;
-    uint16_t size;
-    
-    MMULookup() : found(false), uram_bank(0), uram_offset(0), size(0) {}
-};
+// Main FSM (call every cycle)
+void mmu_fsm(
+    MMUContext &ctx,
+    bool dma_ready, bool dma_done,
+    bool &dma_start, uint32_t &dma_addr, uint32_t &dma_len, bool &dma_is_write,
+    uint8_t &uram_bank, uint32_t &uram_offset,
+    bool buffer_ready, bool &buffer_valid, bool &transfer_done
+);
 
-void mmu_init(MMUState &state, const ModelDims &dims);
-void mmu_reset(MMUState &state);
-void mmu_set_kv_cache_bases(MMUState &state, uint32_t k_base, uint32_t v_base);
+// Scheduler interface
+bool mmu_push_dma_request(MMUContext &ctx, uint32_t packed);
+bool mmu_push_dma_request_headed(MMUContext &ctx, uint32_t packed, int head);
 
-MemoryRequest mmu_decode_memory_request(uint32_t packed);
-ComputeRequest mmu_decode_compute_request(uint32_t packed);
+// Compute controller interface
+bool mmu_request_input_buffer(MMUContext &ctx, uint32_t packed_op, int head);
+bool mmu_signal_output_ready(MMUContext &ctx, uint32_t packed_op, int head);
 
-uint16_t mmu_calc_dma_size(DmaSel sel, const ModelDims &dims, int tile);
-uint16_t mmu_calc_input_buffer_size(ComputeOp op, const ModelDims &dims);
-uint16_t mmu_calc_output_buffer_size(ComputeOp op, const ModelDims &dims);
+// Buffer layouts
+InputBufferLayout  mmu_calc_input_layout(ComputeOp op, const ModelDims &dims);
+OutputBufferLayout mmu_calc_output_layout(ComputeOp op, const ModelDims &dims);
+WeightBlobLayout   mmu_calc_weight_blob(DmaSel sel, const ModelDims &dims);
 
-BufferLayout mmu_calc_input_layout(ComputeOp op, const ModelDims &dims);
-BufferLayout mmu_calc_output_layout(ComputeOp op, const ModelDims &dims);
-BufferRegion mmu_get_head_input_slice(ComputeOp op, int head, const ModelDims &dims);
-BufferRegion mmu_get_head_output_slice(ComputeOp op, int head, const ModelDims &dims);
+// KV cache
+KVCacheAddr mmu_calc_kv_write_addr(const MMUContext &ctx, int layer, int head, bool is_v);
+KVCacheAddr mmu_calc_kv_read_addr(const MMUContext &ctx, int layer, int head, bool is_v);
+uint32_t    mmu_calc_kv_cache_size(const ModelDims &dims);
 
-WeightBlob mmu_parse_weight_blob(DmaSel sel, const ModelDims &dims);
+// URAM cache
+bool     mmu_check_cache(const MMUContext &ctx, DmaSel sel, int layer, int head, int tile);
+uint32_t mmu_lookup_uram(const MMUContext &ctx, DmaSel sel, int layer, int head, int tile, uint8_t &bank);
+bool     mmu_allocate_uram(MMUContext &ctx, uint32_t size, uint8_t &bank, uint32_t &offset);
+void     mmu_commit_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int tile,
+                         uint8_t bank, uint32_t offset, uint32_t size);
+void     mmu_invalidate_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int tile);
 
-KVCacheAddr mmu_calc_kv_write_addr(MMUState &state, int layer, int head, bool is_v);
-KVCacheAddr mmu_calc_kv_read_addr(MMUState &state, int layer, int head, bool is_v);
-uint32_t mmu_calc_kv_cache_size(const ModelDims &dims);
+// Arbitration
+void mmu_request_head(MMUContext &ctx, int head);
+void mmu_release_head(MMUContext &ctx, int head);
+void mmu_arbitrate(MMUContext &ctx);
+int  mmu_granted_head(const MMUContext &ctx);
+bool mmu_is_granted(const MMUContext &ctx, int head);
 
-bool mmu_check_cache(const MMUState &state, DmaSel sel, int layer, int head, int tile);
-MMULookup mmu_lookup(const MMUState &state, DmaSel sel, int layer, int head, int tile);
-MMUAllocation mmu_allocate(MMUState &state, DmaSel sel, int layer, int head, int tile);
-void mmu_commit(MMUState &state, DmaSel sel, int layer, int head, int tile,
-                uint8_t bank, uint32_t offset, uint16_t size);
+// Status flags
+void mmu_set_head_dma_done(MMUContext &ctx, int head);
+void mmu_set_head_compute_done(MMUContext &ctx, int head);
+void mmu_set_main_dma_done(MMUContext &ctx);
+void mmu_set_main_compute_done(MMUContext &ctx);
+bool mmu_get_head_dma_done(const MMUContext &ctx, int head);
+bool mmu_get_head_compute_done(const MMUContext &ctx, int head);
+bool mmu_get_main_dma_done(const MMUContext &ctx);
+bool mmu_get_main_compute_done(const MMUContext &ctx);
+void mmu_clear_head_dma_done(MMUContext &ctx, int head);
+void mmu_clear_head_compute_done(MMUContext &ctx, int head);
+void mmu_clear_main_dma_done(MMUContext &ctx);
+void mmu_clear_main_compute_done(MMUContext &ctx);
+void mmu_clear_all_flags(MMUContext &ctx);
 
-void mmu_set_head_dma_done(MMUState &state, int head);
-void mmu_set_head_compute_done(MMUState &state, int head);
-void mmu_set_main_dma_done(MMUState &state);
-void mmu_set_main_compute_done(MMUState &state);
-bool mmu_get_head_dma_done(const MMUState &state, int head);
-bool mmu_get_head_compute_done(const MMUState &state, int head);
-bool mmu_get_main_dma_done(const MMUState &state);
-bool mmu_get_main_compute_done(const MMUState &state);
-void mmu_clear_head_dma_done(MMUState &state, int head);
-void mmu_clear_head_compute_done(MMUState &state, int head);
-void mmu_clear_main_dma_done(MMUState &state);
-void mmu_clear_main_compute_done(MMUState &state);
-
+// Utilities
 bool mmu_is_headed_op(ComputeOp op);
+bool mmu_is_headed_dma(DmaSel sel);
 bool mmu_is_dma_write(DmaSel sel);
-const char* mmu_op_name(ComputeOp op);
-const char* mmu_dma_name(DmaSel sel);
+uint32_t mmu_calc_dma_size(DmaSel sel, const ModelDims &dims, int tile);
+const char* mmu_state_name(MMUFsmState state);
 
-#endif 
+// Request packing helpers
+inline uint32_t mmu_pack_dma(DmaSel sel, int layer, int head, int tile) {
+    return static_cast<uint32_t>(sel) |
+           (static_cast<uint32_t>(layer) << 8) |
+           (static_cast<uint32_t>(head) << 16) |
+           (static_cast<uint32_t>(tile) << 24);
+}
+
+inline uint32_t mmu_pack_compute(ComputeOp op, int layer, int head, int tile) {
+    return static_cast<uint32_t>(op) |
+           (static_cast<uint32_t>(layer) << 8) |
+           (static_cast<uint32_t>(head) << 16) |
+           (static_cast<uint32_t>(tile) << 24);
+}
+
+inline void mmu_unpack_dma(uint32_t packed, DmaSel &sel, int &layer, int &head, int &tile) {
+    sel   = static_cast<DmaSel>(packed & 0xFF);
+    layer = (packed >> 8) & 0xFF;
+    head  = (packed >> 16) & 0xFF;
+    tile  = (packed >> 24) & 0xFF;
+}
+
+inline void mmu_unpack_compute(uint32_t packed, ComputeOp &op, int &layer, int &head, int &tile) {
+    op    = static_cast<ComputeOp>(packed & 0xFF);
+    layer = (packed >> 8) & 0xFF;
+    head  = (packed >> 16) & 0xFF;
+    tile  = (packed >> 24) & 0xFF;
+}
+
+#endif
