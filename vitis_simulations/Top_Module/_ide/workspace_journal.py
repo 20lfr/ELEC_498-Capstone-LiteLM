@@ -70,3 +70,5 @@ comp.run(operation="SYNTHESIS")
 
 vitis.dispose()
 
+comp.run(operation="C_SIMULATION")
+

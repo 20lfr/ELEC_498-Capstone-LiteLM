@@ -1,6 +1,9 @@
 #include "mmu.hpp"
 
-void mmu_init(MMUContext &ctx, const ModelDims &dims) {
+void mmu_init(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    const ModelDims &dims          // [INPUT] model dimensions
+) {
 #pragma HLS INLINE
     ctx.dims = dims;
     ctx.fsm_state = MMUFsmState::IDLE;
@@ -37,7 +40,9 @@ void mmu_init(MMUContext &ctx, const ModelDims &dims) {
     ctx.error_overflow = ctx.error_invalid = false;
 }
 
-void mmu_reset(MMUContext &ctx) {
+void mmu_reset(
+    MMUContext &ctx               // [INOUT] MMU state context
+) {
 #pragma HLS INLINE
     ModelDims dims = ctx.dims;
     uint32_t k = ctx.k_cache_base, v = ctx.v_cache_base;
@@ -46,14 +51,21 @@ void mmu_reset(MMUContext &ctx) {
     ctx.v_cache_base = v;
 }
 
-void mmu_set_kv_cache_bases(MMUContext &ctx, uint32_t k_base, uint32_t v_base) {
+void mmu_set_kv_cache_bases(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t k_base,              // [INPUT] K-cache base address
+    uint32_t v_base               // [INPUT] V-cache base address
+) {
 #pragma HLS INLINE
     ctx.k_cache_base = k_base;
     ctx.v_cache_base = v_base;
 }
 
 // Queue operations
-bool mmu_push_dma_request(MMUContext &ctx, uint32_t packed) {
+bool mmu_push_dma_request(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed               // [INPUT] packed DMA request
+) {
 #pragma HLS INLINE
     if (ctx.dma_count >= MMU_DMA_QUEUE_DEPTH) {
         ctx.error_overflow = true;
@@ -70,7 +82,11 @@ bool mmu_push_dma_request(MMUContext &ctx, uint32_t packed) {
     return true;
 }
 
-bool mmu_push_dma_request_headed(MMUContext &ctx, uint32_t packed, int head) {
+bool mmu_push_dma_request_headed(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed,              // [INPUT] packed DMA request
+    int head                      // [INPUT] head index override
+) {
 #pragma HLS INLINE
     if (ctx.dma_count >= MMU_DMA_QUEUE_DEPTH) {
         ctx.error_overflow = true;
@@ -88,7 +104,10 @@ bool mmu_push_dma_request_headed(MMUContext &ctx, uint32_t packed, int head) {
     return true;
 }
 
-static bool pop_dma(MMUContext &ctx, DmaQueueEntry &e) {
+static bool pop_dma(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    DmaQueueEntry &e              // [OUTPUT] popped DMA queue entry
+) {
 #pragma HLS INLINE
     if (ctx.dma_count == 0) return false;
     e = ctx.dma_queue[ctx.dma_head];
@@ -98,7 +117,11 @@ static bool pop_dma(MMUContext &ctx, DmaQueueEntry &e) {
     return true;
 }
 
-bool mmu_request_input_buffer(MMUContext &ctx, uint32_t packed_op, int head) {
+bool mmu_request_input_buffer(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed_op,           // [INPUT] packed compute request
+    int head                      // [INPUT] head index for headed ops
+) {
 #pragma HLS INLINE
     if (ctx.compute_count >= MMU_COMPUTE_QUEUE_DEPTH) {
         ctx.error_overflow = true;
@@ -117,7 +140,11 @@ bool mmu_request_input_buffer(MMUContext &ctx, uint32_t packed_op, int head) {
     return true;
 }
 
-bool mmu_signal_output_ready(MMUContext &ctx, uint32_t packed_op, int head) {
+bool mmu_signal_output_ready(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t packed_op,           // [INPUT] packed compute request
+    int head                      // [INPUT] head index for headed ops
+) {
 #pragma HLS INLINE
     if (ctx.compute_count >= MMU_COMPUTE_QUEUE_DEPTH) {
         ctx.error_overflow = true;
@@ -136,7 +163,10 @@ bool mmu_signal_output_ready(MMUContext &ctx, uint32_t packed_op, int head) {
     return true;
 }
 
-static bool pop_compute(MMUContext &ctx, ComputeBufferRequest &e) {
+static bool pop_compute(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    ComputeBufferRequest &e       // [OUTPUT] popped compute request
+) {
 #pragma HLS INLINE
     if (ctx.compute_count == 0) return false;
     e = ctx.compute_queue[ctx.compute_head];
@@ -147,12 +177,18 @@ static bool pop_compute(MMUContext &ctx, ComputeBufferRequest &e) {
 }
 
 // Arbitration
-void mmu_request_head(MMUContext &ctx, int head) {
+void mmu_request_head(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index requesting access
+) {
 #pragma HLS INLINE
     if (head >= 0 && head < MMU_MAX_HEADS) ctx.arbiter.pending[head] = true;
 }
 
-void mmu_release_head(MMUContext &ctx, int head) {
+void mmu_release_head(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int head                      // [INPUT] head index releasing access
+) {
 #pragma HLS INLINE
     if (head >= 0 && head < MMU_MAX_HEADS) {
         ctx.arbiter.pending[head] = false;
@@ -161,7 +197,9 @@ void mmu_release_head(MMUContext &ctx, int head) {
     }
 }
 
-void mmu_arbitrate(MMUContext &ctx) {
+void mmu_arbitrate(
+    MMUContext &ctx               // [INOUT] MMU state context
+) {
 #pragma HLS INLINE
     if (ctx.arbiter.busy) return;
     for (int i = 0; i < MMU_MAX_HEADS; ++i) {
@@ -177,18 +215,29 @@ void mmu_arbitrate(MMUContext &ctx) {
     }
 }
 
-int mmu_granted_head(const MMUContext &ctx) {
+int mmu_granted_head(
+    const MMUContext &ctx         // [INPUT] MMU state context
+) {
 #pragma HLS INLINE
     return ctx.arbiter.busy ? ctx.arbiter.current : -1;
 }
 
-bool mmu_is_granted(const MMUContext &ctx, int head) {
+bool mmu_is_granted(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int head                      // [INPUT] head index to test
+) {
 #pragma HLS INLINE
     return (head >= 0 && head < MMU_MAX_HEADS) ? ctx.arbiter.grant[head] : false;
 }
 
 // URAM cache
-bool mmu_check_cache(const MMUContext &ctx, DmaSel sel, int layer, int head, int tile) {
+bool mmu_check_cache(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile                      // [INPUT] tile index
+) {
 #pragma HLS INLINE
     for (int i = 0; i < MMU_MAX_TILES; ++i) {
 #pragma HLS UNROLL factor=8
@@ -199,7 +248,14 @@ bool mmu_check_cache(const MMUContext &ctx, DmaSel sel, int layer, int head, int
     return false;
 }
 
-uint32_t mmu_lookup_uram(const MMUContext &ctx, DmaSel sel, int layer, int head, int tile, uint8_t &bank) {
+uint32_t mmu_lookup_uram(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile,                     // [INPUT] tile index
+    uint8_t &bank                 // [OUTPUT] selected URAM bank
+) {
 #pragma HLS INLINE
     for (int i = 0; i < MMU_MAX_TILES; ++i) {
 #pragma HLS UNROLL factor=8
@@ -213,7 +269,12 @@ uint32_t mmu_lookup_uram(const MMUContext &ctx, DmaSel sel, int layer, int head,
     return 0xFFFFFFFF;
 }
 
-bool mmu_allocate_uram(MMUContext &ctx, uint32_t size, uint8_t &bank, uint32_t &offset) {
+bool mmu_allocate_uram(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    uint32_t size,                // [INPUT] allocation size in bytes
+    uint8_t &bank,                // [OUTPUT] allocated URAM bank
+    uint32_t &offset              // [OUTPUT] allocated URAM offset in bytes
+) {
 #pragma HLS INLINE
     bank = ctx.active_bank;
     offset = ctx.bank_offsets[bank];
@@ -224,8 +285,16 @@ bool mmu_allocate_uram(MMUContext &ctx, uint32_t size, uint8_t &bank, uint32_t &
     return (offset + size <= MMU_BANK_SIZE);
 }
 
-void mmu_commit_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int tile,
-                     uint8_t bank, uint32_t offset, uint32_t size) {
+void mmu_commit_tile(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile,                     // [INPUT] tile index
+    uint8_t bank,                 // [INPUT] URAM bank to commit
+    uint32_t offset,              // [INPUT] URAM offset in bytes
+    uint32_t size                 // [INPUT] tile size in bytes
+) {
 #pragma HLS INLINE
     for (int i = 0; i < MMU_MAX_TILES; ++i) {
 #pragma HLS UNROLL factor=8
@@ -246,7 +315,13 @@ void mmu_commit_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int tile,
     }
 }
 
-void mmu_invalidate_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int tile) {
+void mmu_invalidate_tile(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    DmaSel sel,                   // [INPUT] DMA selector
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    int tile                      // [INPUT] tile index
+) {
 #pragma HLS INLINE
     for (int i = 0; i < MMU_MAX_TILES; ++i) {
 #pragma HLS UNROLL factor=8
@@ -260,7 +335,12 @@ void mmu_invalidate_tile(MMUContext &ctx, DmaSel sel, int layer, int head, int t
 }
 
 // KV cache addressing
-KVCacheAddr mmu_calc_kv_write_addr(const MMUContext &ctx, int layer, int head, bool is_v) {
+KVCacheAddr mmu_calc_kv_write_addr(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    bool is_v                     // [INPUT] true for V-cache, false for K-cache
+) {
 #pragma HLS INLINE
     KVCacheAddr addr;
     uint32_t base = is_v ? ctx.v_cache_base : ctx.k_cache_base;
@@ -277,7 +357,12 @@ KVCacheAddr mmu_calc_kv_write_addr(const MMUContext &ctx, int layer, int head, b
     return addr;
 }
 
-KVCacheAddr mmu_calc_kv_read_addr(const MMUContext &ctx, int layer, int head, bool is_v) {
+KVCacheAddr mmu_calc_kv_read_addr(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int layer,                    // [INPUT] layer index
+    int head,                     // [INPUT] head index
+    bool is_v                     // [INPUT] true for V-cache, false for K-cache
+) {
 #pragma HLS INLINE
     KVCacheAddr addr;
     uint32_t base = is_v ? ctx.v_cache_base : ctx.k_cache_base;
@@ -291,13 +376,19 @@ KVCacheAddr mmu_calc_kv_read_addr(const MMUContext &ctx, int layer, int head, bo
     return addr;
 }
 
-uint32_t mmu_calc_kv_cache_size(const ModelDims &dims) {
+uint32_t mmu_calc_kv_cache_size(
+    const ModelDims &dims         // [INPUT] model dimensions
+) {
 #pragma HLS INLINE
     return (uint32_t)dims.num_layers * dims.num_heads * dims.context_len * dims.d_heads;
 }
 
 // DMA size calculation
-uint32_t mmu_calc_dma_size(DmaSel sel, const ModelDims &dims, int tile) {
+uint32_t mmu_calc_dma_size(
+    DmaSel sel,                   // [INPUT] DMA selector
+    const ModelDims &dims,        // [INPUT] model dimensions
+    int tile                      // [INPUT] tile index
+) {
 #pragma HLS INLINE
     (void)tile;
     switch (sel) {
@@ -319,7 +410,10 @@ uint32_t mmu_calc_dma_size(DmaSel sel, const ModelDims &dims, int tile) {
 }
 
 // Weight blob layout
-WeightBlobLayout mmu_calc_weight_blob(DmaSel sel, const ModelDims &dims) {
+WeightBlobLayout mmu_calc_weight_blob(
+    DmaSel sel,                   // [INPUT] DMA selector (weights type)
+    const ModelDims &dims         // [INPUT] model dimensions
+) {
 #pragma HLS INLINE
     WeightBlobLayout l;
     switch (sel) {
@@ -366,7 +460,10 @@ WeightBlobLayout mmu_calc_weight_blob(DmaSel sel, const ModelDims &dims) {
 }
 
 // Input buffer layout (uses head_buf/compute_buf layouts from top_params.hpp)
-InputBufferLayout mmu_calc_input_layout(ComputeOp op, const ModelDims &dims) {
+InputBufferLayout mmu_calc_input_layout(
+    ComputeOp op,                 // [INPUT] compute operation
+    const ModelDims &dims         // [INPUT] model dimensions
+) {
 #pragma HLS INLINE
     InputBufferLayout l;
     uint32_t off = 0;
@@ -470,7 +567,10 @@ InputBufferLayout mmu_calc_input_layout(ComputeOp op, const ModelDims &dims) {
 }
 
 // Output buffer layout
-OutputBufferLayout mmu_calc_output_layout(ComputeOp op, const ModelDims &dims) {
+OutputBufferLayout mmu_calc_output_layout(
+    ComputeOp op,                 // [INPUT] compute operation
+    const ModelDims &dims         // [INPUT] model dimensions
+) {
 #pragma HLS INLINE
     OutputBufferLayout l;
     switch (op) {
@@ -551,55 +651,87 @@ OutputBufferLayout mmu_calc_output_layout(ComputeOp op, const ModelDims &dims) {
 }
 
 // Status flags
-void mmu_set_head_dma_done(MMUContext &ctx, int h) {
+void mmu_set_head_dma_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int h                         // [INPUT] head index to mark DMA done
+) {
 #pragma HLS INLINE
     if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_dma_done[h] = true;
 }
-void mmu_set_head_compute_done(MMUContext &ctx, int h) {
+void mmu_set_head_compute_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int h                         // [INPUT] head index to mark compute done
+) {
 #pragma HLS INLINE
     if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_compute_done[h] = true;
 }
-void mmu_set_main_dma_done(MMUContext &ctx) {
+void mmu_set_main_dma_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+) {
 #pragma HLS INLINE
     ctx.main_dma_done = true;
 }
-void mmu_set_main_compute_done(MMUContext &ctx) {
+void mmu_set_main_compute_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+) {
 #pragma HLS INLINE
     ctx.main_compute_done = true;
 }
-bool mmu_get_head_dma_done(const MMUContext &ctx, int h) {
+bool mmu_get_head_dma_done(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int h                         // [INPUT] head index to query
+) {
 #pragma HLS INLINE
     return (h >= 0 && h < MMU_MAX_HEADS) ? ctx.head_dma_done[h] : false;
 }
-bool mmu_get_head_compute_done(const MMUContext &ctx, int h) {
+bool mmu_get_head_compute_done(
+    const MMUContext &ctx,        // [INPUT] MMU state context
+    int h                         // [INPUT] head index to query
+) {
 #pragma HLS INLINE
     return (h >= 0 && h < MMU_MAX_HEADS) ? ctx.head_compute_done[h] : false;
 }
-bool mmu_get_main_dma_done(const MMUContext &ctx) {
+bool mmu_get_main_dma_done(
+    const MMUContext &ctx         // [INPUT] MMU state context
+) {
 #pragma HLS INLINE
     return ctx.main_dma_done;
 }
-bool mmu_get_main_compute_done(const MMUContext &ctx) {
+bool mmu_get_main_compute_done(
+    const MMUContext &ctx         // [INPUT] MMU state context
+) {
 #pragma HLS INLINE
     return ctx.main_compute_done;
 }
-void mmu_clear_head_dma_done(MMUContext &ctx, int h) {
+void mmu_clear_head_dma_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int h                         // [INPUT] head index to clear
+) {
 #pragma HLS INLINE
     if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_dma_done[h] = false;
 }
-void mmu_clear_head_compute_done(MMUContext &ctx, int h) {
+void mmu_clear_head_compute_done(
+    MMUContext &ctx,              // [INOUT] MMU state context
+    int h                         // [INPUT] head index to clear
+) {
 #pragma HLS INLINE
     if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_compute_done[h] = false;
 }
-void mmu_clear_main_dma_done(MMUContext &ctx) {
+void mmu_clear_main_dma_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+) {
 #pragma HLS INLINE
     ctx.main_dma_done = false;
 }
-void mmu_clear_main_compute_done(MMUContext &ctx) {
+void mmu_clear_main_compute_done(
+    MMUContext &ctx               // [INOUT] MMU state context
+) {
 #pragma HLS INLINE
     ctx.main_compute_done = false;
 }
-void mmu_clear_all_flags(MMUContext &ctx) {
+void mmu_clear_all_flags(
+    MMUContext &ctx               // [INOUT] MMU state context
+) {
 #pragma HLS INLINE
     ctx.main_dma_done = ctx.main_compute_done = false;
     for (int i = 0; i < MMU_MAX_HEADS; ++i) {
@@ -608,7 +740,9 @@ void mmu_clear_all_flags(MMUContext &ctx) {
 }
 
 // Utilities
-bool mmu_is_headed_op(ComputeOp op) {
+bool mmu_is_headed_op(
+    ComputeOp op                 // [INPUT] compute operation
+) {
 #pragma HLS INLINE
     switch (op) {
         case CMP_Q: case CMP_K: case CMP_V:
@@ -620,7 +754,9 @@ bool mmu_is_headed_op(ComputeOp op) {
     }
 }
 
-bool mmu_is_headed_dma(DmaSel sel) {
+bool mmu_is_headed_dma(
+    DmaSel sel                   // [INPUT] DMA selector
+) {
 #pragma HLS INLINE
     switch (sel) {
         case DMASEL_WQ: case DMASEL_WK: case DMASEL_WV:
@@ -632,12 +768,16 @@ bool mmu_is_headed_dma(DmaSel sel) {
     }
 }
 
-bool mmu_is_dma_write(DmaSel sel) {
+bool mmu_is_dma_write(
+    DmaSel sel                   // [INPUT] DMA selector
+) {
 #pragma HLS INLINE
     return (sel == DMASEL_K_WRITE || sel == DMASEL_V_WRITE);
 }
 
-const char* mmu_state_name(MMUFsmState s) {
+const char* mmu_state_name(
+    MMUFsmState s                // [INPUT] FSM state
+) {
     switch (s) {
         case MMUFsmState::IDLE:          return "IDLE";
         case MMUFsmState::DMA_ARBITRATE: return "DMA_ARB";
@@ -654,11 +794,18 @@ const char* mmu_state_name(MMUFsmState s) {
 
 // Main FSM
 void mmu_fsm(
-    MMUContext &ctx,
-    bool dma_ready, bool dma_done,
-    bool &dma_start, uint32_t &dma_addr, uint32_t &dma_len, bool &dma_is_write,
-    uint8_t &uram_bank, uint32_t &uram_offset,
-    bool buffer_ready, bool &buffer_valid, bool &transfer_done
+    MMUContext &ctx,              // [INOUT] MMU state context
+    bool dma_ready,               // [INPUT] DMA engine ready to accept a request
+    bool dma_done,                // [INPUT] DMA engine completed current transfer
+    bool &dma_start,              // [OUTPUT] pulse to start a DMA transfer
+    uint32_t &dma_addr,           // [OUTPUT] DMA base address
+    uint32_t &dma_len,            // [OUTPUT] DMA transfer length in bytes
+    bool &dma_is_write,           // [OUTPUT] DMA direction (true = write)
+    uint8_t &uram_bank,           // [OUTPUT] selected URAM bank for transfer
+    uint32_t &uram_offset,        // [OUTPUT] selected URAM offset in bytes
+    bool buffer_ready,            // [INPUT] compute buffer ready for transfer
+    bool &buffer_valid,           // [OUTPUT] assert when buffer transfer is valid
+    bool &transfer_done           // [OUTPUT] assert when transfer is complete
 ) {
 #pragma HLS INLINE off
     dma_start = false; dma_addr = 0; dma_len = 0; dma_is_write = false;
