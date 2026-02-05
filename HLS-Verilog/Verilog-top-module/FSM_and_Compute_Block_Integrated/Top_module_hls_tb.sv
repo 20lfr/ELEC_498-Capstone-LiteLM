@@ -68,8 +68,9 @@ module transformer_top_tb;
   localparam logic [31:0] IRQ_ERROR_BIT      = 32'h0000_0002;
   localparam logic [31:0] IRQ_INFER_DONE_BIT = 32'h0000_0004;
   localparam logic [31:0] STATUS_IDLE_BIT    = 32'h0000_0001;
-  localparam logic [31:0] STATUS_ERROR_BIT   = 32'h0000_0002;
   localparam logic [31:0] STATUS_BUSY_BIT    = 32'h0000_0004;
+  localparam logic [31:0] ERR_DMA_ALIGNMENT  = 32'h0000_0010;
+  localparam logic [31:0] ERR_DMA_ZERO_LEN   = 32'h0000_0011;
 
   // AXI-Lite address map (from transformer_top_control_s_axi.v)
   localparam logic [7:0] ADDR_AP_CTRL           = 8'h00;
@@ -158,6 +159,8 @@ module transformer_top_tb;
     logic [31:0] zero_point_v;
   } ControlMemSpace_t;
 
+  
+
   typedef struct packed {
     logic [31:0] status;
     logic [31:0] irq_status;
@@ -227,8 +230,8 @@ module transformer_top_tb;
   logic [0:0] stream_done;
 
   // DUT outputs
-  logic [31:0] dbg_state;
-  logic dbg_state_ap_vld;
+  logic [31:0] STATE;
+  logic STATE_ap_vld;
   logic [0:0] dbg_compute_start;
   logic       dbg_compute_start_ap_vld;
   logic [31:0] dbg_compute_instruction;
@@ -269,6 +272,11 @@ module transformer_top_tb;
   logic        irq_status_reg_ap_vld;
   logic [31:0] irq_mask_reg;
   logic        irq_mask_reg_ap_vld;
+  logic [31:0] irq_clear_reg;
+  logic        irq_clear_reg_ap_vld;
+  logic [31:0] dbg_irq_status_reg;
+  logic [31:0] dbg_irq_mask_reg;
+  logic [31:0] dbg_irq_clear_reg;
   logic [31:0] wq_base_addr;
   logic        wq_base_addr_ap_vld;
   logic [31:0] wk_base_addr;
@@ -296,8 +304,6 @@ module transformer_top_tb;
   logic [0:0] irq_ps;
   logic [0:0]  dbg_done;
   logic        dbg_done_ap_vld;
-  logic [0:0]  dbg_error;
-  logic        dbg_error_ap_vld;
 
   // Testbench state variables
   logic dma_busy;
@@ -324,6 +330,7 @@ module transformer_top_tb;
   logic        ctrl_write_en;
   logic        ctrl_chip_en;
   logic [31:0] ctrl_shadow_control;
+  logic [31:0] dbg_control_register;
   int ctrl_gap_cycles;
   logic assign_base_addresses;
   int base_assign_step;
@@ -341,12 +348,49 @@ module transformer_top_tb;
   int idle_after_done;
   logic axis_last_stretch_active;
   int axis_last_stretch_ctr;
-  logic seen_irq_done;
+  logic irq_seen_done;
+  logic irq_seen_error;
+  logic irq_seen_done_clr;
+  logic irq_seen_error_clr;
   logic irq_pending;
-  logic irq_interupt_flagged;
-  logic [31:0] interupt_data;
+  typedef enum logic [1:0] {
+    IRQ_RD_STATUS = 2'd0,
+    IRQ_RD_STATE  = 2'd1,
+    IRQ_RD_DONE   = 2'd2
+  } irq_read_phase_t;
+  irq_read_phase_t irq_read_phase;
+  // (interrupt latching removed)
   logic [31:0] ctrl_data_out_shadow;
-  logic irq_clear_pending;
+  logic done_clear_pending;
+  logic error_clear_pending;
+  logic [1:0] done_clear_cnt;
+  logic [1:0] error_clear_cnt;
+  logic [31:0] error_code_lat;
+  typedef enum logic [1:0] {
+    ERR_PHASE_READ = 2'd0,
+    ERR_PHASE_RELOAD = 2'd1,
+    ERR_PHASE_CLEAR = 2'd2
+  } err_phase_t;
+  err_phase_t err_phase;
+  logic [4:0] err_reload_step;
+
+  // IRQ/Done/Error control requests
+  logic        irq_req_valid;
+  logic        irq_req_read;
+  logic [7:0]  irq_req_addr;
+  logic        done_req_valid;
+  logic        done_req_write;
+  logic [7:0]  done_req_addr;
+  logic [31:0] done_req_wdata;
+  logic        error_req_valid;
+  logic        error_req_write;
+  logic        error_req_read;
+  logic [7:0]  error_req_addr;
+  logic [31:0] error_req_wdata;
+  wire         irq_req_fire;
+  wire         done_req_fire;
+  wire         error_req_fire;
+
   // AXI-lite master bookkeeping
   typedef enum logic [2:0] {
     AXI_IDLE,
@@ -549,7 +593,6 @@ module transformer_top_tb;
   logic       stream_done_hold;
   logic [2:0] stream_done_ctr;
 
-  logic       irq_inference_done;
   
 
   // Helper to decode DMA select
@@ -701,6 +744,13 @@ module transformer_top_tb;
     ctrl_mem_addr = ADDR_CTRL_MEM_DATA_0 + (word_idx[7:0] << 2);
   endfunction
 
+  wire ctrl_can_issue = (ctrl_gap_cycles == 0) && (axi_state == AXI_IDLE);
+  assign irq_req_fire   = ctrl_can_issue && irq_req_valid;
+  assign done_req_fire  = ctrl_can_issue && !irq_req_valid && done_req_valid;
+  assign error_req_fire = ctrl_can_issue && !irq_req_valid && !done_req_valid && error_req_valid;
+
+  // (error handling removed)
+
   // AXI-Lite master for control/status space
   always_ff @(posedge ap_clk) begin
     if (ap_rst) begin
@@ -786,10 +836,7 @@ module transformer_top_tb;
             axi_read_valid   <= 1'b1;
             case (axi_addr)
               ADDR_STATUS_MEM_DATA_0: status_mem.status      <= s_axi_control_RDATA;
-              ADDR_STATUS_MEM_DATA_1: begin
-                status_mem.irq_status <= s_axi_control_RDATA;
-                interupt_data         <= s_axi_control_RDATA;
-              end
+              ADDR_STATUS_MEM_DATA_1: status_mem.irq_status <= s_axi_control_RDATA;
               ADDR_STATUS_MEM_DATA_2: status_mem.error_code  <= s_axi_control_RDATA;
               ADDR_STATUS_MEM_DATA_3: status_mem.layer_index <= s_axi_control_RDATA;
               default: begin end
@@ -806,12 +853,28 @@ module transformer_top_tb;
     if (ap_rst) begin
       dbg_compute_ready_lat <= 1'b0;
       dbg_compute_done_lat  <= 1'b0;
+      dbg_control_register  <= 32'd0;
+      dbg_irq_status_reg    <= 32'd0;
+      dbg_irq_mask_reg      <= 32'd0;
+      dbg_irq_clear_reg     <= 32'd0;
     end else begin
       if (dbg_compute_ready_ap_vld) begin
         dbg_compute_ready_lat <= dbg_compute_ready;
       end
       if (dbg_compute_done_ap_vld) begin
         dbg_compute_done_lat <= dbg_compute_done;
+      end
+      if (control_reg_ap_vld) begin
+        dbg_control_register <= control_reg;
+      end
+      if (irq_status_reg_ap_vld) begin
+        dbg_irq_status_reg <= irq_status_reg;
+      end
+      if (irq_mask_reg_ap_vld) begin
+        dbg_irq_mask_reg <= irq_mask_reg;
+      end
+      if (irq_clear_reg_ap_vld) begin
+        dbg_irq_clear_reg <= irq_clear_reg;
       end
     end
   end
@@ -1269,23 +1332,6 @@ module transformer_top_tb;
     head_ctx_ref_3_i = t3;
   end
 
-  always_ff @(posedge ap_clk) begin : irq_latch
-    if (ap_rst) begin
-      irq_pending <= 1'b0;
-    end else if (irq_ps) begin
-      irq_pending <= 1'b1;
-    end else if (irq_interupt_flagged) begin
-      irq_pending <= 1'b0;
-    end
-  end
-
-  always_ff @(posedge ap_clk) begin : irq_driver
-    if (irq_interupt_flagged && (interupt_data & IRQ_INFER_DONE_BIT)) begin
-      irq_inference_done <= 1'b1;
-      irq_interupt_flagged <= 1'b0;
-    end
-  end
-
   head_ctx_t head_ctx_ref_0_struct;
   head_ctx_t head_ctx_ref_1_struct;
   head_ctx_t head_ctx_ref_2_struct;
@@ -1444,7 +1490,232 @@ module transformer_top_tb;
 
 
 
-  always_ff @(posedge ap_clk) begin : MAIN_FSM
+  always_ff @(posedge ap_clk) begin : IRQ_TRACKER
+    if (ap_rst) begin
+      irq_pending <= 1'b0;
+      irq_seen_done <= 1'b0;
+      irq_seen_error <= 1'b0;
+      error_code_lat <= 32'd0;
+    end else begin
+      if (irq_seen_done_clr) begin
+        irq_seen_done <= 1'b0;
+      end
+      if (irq_seen_error_clr) begin
+        irq_seen_error <= 1'b0;
+      end
+      if (irq_ps) begin
+        irq_pending <= 1'b1;
+      end
+      if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_1)) begin
+        if (axi_rdata & IRQ_INFER_DONE_BIT) begin
+          irq_seen_done <= 1'b1;
+        end
+        if (axi_rdata & IRQ_ERROR_BIT) begin
+          irq_seen_error <= 1'b1;
+        end
+      end
+      if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_2)) begin
+        error_code_lat <= axi_rdata;
+      end
+      if (!irq_seen_done && !irq_seen_error && (irq_read_phase == IRQ_RD_DONE)) begin
+        irq_pending <= 1'b0;
+      end
+    end
+  end
+
+  always_ff @(posedge ap_clk) begin : IRQ_READER
+    if (ap_rst) begin
+      irq_req_valid <= 1'b0;
+      irq_req_read <= 1'b0;
+      irq_req_addr <= 8'd0;
+      irq_read_phase <= IRQ_RD_STATUS;
+    end else begin
+      irq_req_valid <= 1'b0;
+      irq_req_read <= 1'b0;
+      irq_req_addr <= 8'd0;
+      if (irq_pending && !irq_seen_done && !irq_seen_error) begin
+        case (irq_read_phase)
+          IRQ_RD_STATUS: begin
+            irq_req_valid <= 1'b1;
+            irq_req_read  <= 1'b1;
+            irq_req_addr  <= ADDR_STATUS_MEM_DATA_1; // irq_status
+            if (irq_req_fire) begin
+              irq_read_phase <= IRQ_RD_STATE;
+            end
+          end
+          IRQ_RD_STATE: begin
+            irq_req_valid <= 1'b1;
+            irq_req_read  <= 1'b1;
+            irq_req_addr  <= ADDR_STATUS_MEM_DATA_0; // status
+            if (irq_req_fire) begin
+              irq_read_phase <= IRQ_RD_DONE;
+            end
+          end
+          default: begin
+            // no-op
+          end
+        endcase
+      end else if (!irq_pending) begin
+        irq_read_phase <= IRQ_RD_STATUS;
+      end
+    end
+  end
+
+  always_ff @(posedge ap_clk) begin : HANDLE_IRQ_DONE
+    if (ap_rst) begin
+      done_req_valid <= 1'b0;
+      done_req_write <= 1'b0;
+      done_req_addr <= 8'd0;
+      done_req_wdata <= 32'd0;
+      done_clear_pending <= 1'b0;
+      done_clear_cnt <= 2'd0;
+      irq_seen_done_clr <= 1'b0;
+    end else begin
+      done_req_valid <= 1'b0;
+      done_req_write <= 1'b0;
+      done_req_addr <= 8'd0;
+      done_req_wdata <= 32'd0;
+      irq_seen_done_clr <= 1'b0;
+      if (irq_seen_done) begin
+        if (!(status_mem.status & STATUS_IDLE_BIT)) begin
+          done_req_valid <= 1'b1;
+          done_req_write <= 1'b0;
+          done_req_addr  <= ADDR_STATUS_MEM_DATA_0;
+        end else begin
+          done_req_valid <= 1'b1;
+          done_req_write <= 1'b1;
+          done_req_addr  <= ctrl_mem_addr(CTRL_MEM_WORD_IRQ_CLEAR);
+          done_req_wdata <= 32'h0000_0001;
+          if (done_req_fire) begin
+            if (!done_clear_pending) begin
+              done_clear_pending <= 1'b1;
+              done_clear_cnt <= 2'd2;
+            end
+            if (done_clear_cnt > 0) begin
+              done_clear_cnt <= done_clear_cnt - 1'b1;
+            end
+            if (done_clear_cnt == 1) begin
+              done_clear_pending <= 1'b0;
+              irq_seen_done_clr <= 1'b1;
+            end
+          end
+        end
+      end
+    end
+  end
+
+  always_ff @(posedge ap_clk) begin : HANDLE_ERROR
+    if (ap_rst) begin
+      error_req_valid <= 1'b0;
+      error_req_write <= 1'b0;
+      error_req_read <= 1'b0;
+      error_req_addr <= 8'd0;
+      error_req_wdata <= 32'd0;
+      error_clear_pending <= 1'b0;
+      error_clear_cnt <= 2'd0;
+      err_phase <= ERR_PHASE_READ;
+      err_reload_step <= 5'd0;
+      irq_seen_error_clr <= 1'b0;
+    end else begin
+      error_req_valid <= 1'b0;
+      error_req_write <= 1'b0;
+      error_req_read <= 1'b0;
+      error_req_addr <= 8'd0;
+      error_req_wdata <= 32'd0;
+      irq_seen_error_clr <= 1'b0;
+
+      if (irq_seen_error) begin
+        case (err_phase)
+          ERR_PHASE_READ: begin
+            error_req_valid <= 1'b1;
+            error_req_read  <= 1'b1;
+            error_req_addr  <= ADDR_STATUS_MEM_DATA_2; // error_code
+            if (error_req_fire) begin
+              err_phase <= ERR_PHASE_RELOAD;
+              err_reload_step <= 5'd0;
+            end
+          end
+          ERR_PHASE_RELOAD: begin
+            error_req_valid <= 1'b1;
+            error_req_write <= 1'b1;
+            if (error_code_lat == ERR_DMA_ZERO_LEN) begin
+              case (err_reload_step)
+                5'd0: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_LAYER_LEN); error_req_wdata <= ctrl_mem.dma_layer_len; end
+                5'd1: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_HEAD_LEN);  error_req_wdata <= ctrl_mem.dma_head_len; end
+                5'd2: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_TILE_LEN);  error_req_wdata <= ctrl_mem.dma_tile_len; end
+                5'd3: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_LAYER_STRIDE);  error_req_wdata <= ctrl_mem.layer_stride; end
+                5'd4: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WQ_HEAD_STRIDE); error_req_wdata <= ctrl_mem.wq_head_stride; end
+                5'd5: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WK_HEAD_STRIDE); error_req_wdata <= ctrl_mem.wk_head_stride; end
+                5'd6: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WV_HEAD_STRIDE); error_req_wdata <= ctrl_mem.wv_head_stride; end
+                5'd7: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_K_CACHE_STRIDE); error_req_wdata <= ctrl_mem.k_cache_stride; end
+                5'd8: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_V_CACHE_STRIDE); error_req_wdata <= ctrl_mem.v_cache_stride; end
+                5'd9: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WO_TILE_STRIDE); error_req_wdata <= ctrl_mem.wo_tile_stride; end
+                5'd10: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_W1_TILE_STRIDE); error_req_wdata <= ctrl_mem.w1_tile_stride; end
+                default: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_W2_TILE_STRIDE); error_req_wdata <= ctrl_mem.w2_tile_stride; end
+              endcase
+
+              // Update Counter for RELOAD
+              if (error_req_fire) begin
+                if (err_reload_step >= 5'd10) begin
+                  err_phase <= ERR_PHASE_CLEAR;
+                end else begin
+                  err_reload_step <= err_reload_step + 1'b1;
+                end
+              end
+            end else if (error_code_lat == ERR_DMA_ALIGNMENT) begin
+              case (err_reload_step)
+                5'd0: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WQ_BASE_LO); error_req_wdata <= ctrl_mem.wq_base_addr[31:0]; end
+                5'd1: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WK_BASE_LO); error_req_wdata <= ctrl_mem.wk_base_addr[31:0]; end
+                5'd2: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WV_BASE_LO); error_req_wdata <= ctrl_mem.wv_base_addr[31:0]; end
+                5'd3: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_WO_BASE_LO); error_req_wdata <= ctrl_mem.wo_base_addr[31:0]; end
+                5'd4: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_W1_BASE_LO); error_req_wdata <= ctrl_mem.w1_base_addr[31:0]; end
+                5'd5: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_W2_BASE_LO); error_req_wdata <= ctrl_mem.w2_base_addr[31:0]; end
+                5'd6: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_K_CACHE_LO); error_req_wdata <= ctrl_mem.k_cache_addr[31:0]; end
+                default: begin error_req_addr <= ctrl_mem_addr(CTRL_MEM_WORD_V_CACHE_LO); error_req_wdata <= ctrl_mem.v_cache_addr[31:0]; end
+              endcase
+              
+              // Update Counter for RELOAD
+              if (error_req_fire) begin
+                if (err_reload_step >= 5'd6) begin
+                  err_phase <= ERR_PHASE_CLEAR;
+                end else begin
+                  err_reload_step <= err_reload_step + 1'b1;
+                end
+              end
+            end else begin
+              err_phase <= ERR_PHASE_CLEAR;
+            end
+          end
+          ERR_PHASE_CLEAR: begin
+            error_req_valid <= 1'b1;
+            error_req_write <= 1'b1;
+          error_req_addr  <= ctrl_mem_addr(CTRL_MEM_WORD_IRQ_CLEAR);
+          error_req_wdata <= 32'h0000_0001;
+            if (error_req_fire) begin
+              if (!error_clear_pending) begin
+                error_clear_pending <= 1'b1;
+                error_clear_cnt <= 2'd2;
+              end
+              if (error_clear_cnt > 0) begin
+                error_clear_cnt <= error_clear_cnt - 1'b1;
+              end
+              if (error_clear_cnt == 1) begin
+                error_clear_pending <= 1'b0;
+                irq_seen_error_clr <= 1'b1;
+                err_phase <= ERR_PHASE_READ;
+              end
+            end
+          end
+          default: err_phase <= ERR_PHASE_READ;
+        endcase
+      end else begin
+        err_phase <= ERR_PHASE_READ;
+        err_reload_step <= 5'd0;
+      end
+    end
+  end
+
+  always_ff @(posedge ap_clk) begin : START_FSM
     // Default idle control transaction (none)
     ctrl_addr     <= 8'd0;
     ctrl_data_in  <= 32'd0;
@@ -1452,249 +1723,225 @@ module transformer_top_tb;
     ctrl_write_en <= 1'b0;
     ctrl_chip_en  <= 1'b0;
 
-    if (ctrl_gap_cycles > 0) begin
-        ctrl_gap_cycles <= ctrl_gap_cycles - 1;
-      end else if (axi_state != AXI_IDLE) begin
-        // Wait for AXI-Lite transaction to finish before issuing next
-        ctrl_gap_cycles <= 1;
-      end else begin
-        case (ctrl_stage)
-          CTRL_RESET_MEM: begin
-            ctrl_stage <= CTRL_ASSERT_RESET;
-            ctrl_gap_cycles <= 2;
-          end
-          CTRL_ASSERT_RESET: begin
-            ctrl_mem.control <= 32'd0;
-            ctrl_shadow_control <= 32'd0;
-            ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
-            ctrl_data_in   <= 32'd0;
-            ctrl_write_en  <= 1'b1;
-            ctrl_chip_en   <= 1'b1;
-            ctrl_stage <= CTRL_DEASSERT_RESET;
-            ctrl_gap_cycles <= 3;
-          end
-          CTRL_DEASSERT_RESET: begin
-            ctrl_mem.control <= CTRL_RESETN_BIT;
-            ctrl_shadow_control <= CTRL_RESETN_BIT;
-            ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
-            ctrl_data_in   <= CTRL_RESETN_BIT;
-            ctrl_write_en  <= 1'b1;
-            ctrl_chip_en   <= 1'b1;
-            ctrl_stage <= CTRL_PROGRAM_BASES;
-            ctrl_gap_cycles <= 3;
-          end
-          CTRL_PROGRAM_BASES: begin
-            // Program control-space fields, one write per step
-            ctrl_write_en  <= 1'b1;
-            ctrl_chip_en   <= 1'b1;
-            case (base_assign_step)
-              0: begin
-                ctrl_mem.irq_mask <= (IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_IRQ_MASK);
-                ctrl_data_in <= ctrl_mem.irq_mask;
-              end
-              1: begin
-                ctrl_mem.dma_layer_len <= 32'h0000_0100;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_LAYER_LEN);
-                ctrl_data_in <= ctrl_mem.dma_layer_len;
-              end
-              2: begin
-                ctrl_mem.dma_head_len <= 32'h0000_0100;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_HEAD_LEN);
-                ctrl_data_in <= ctrl_mem.dma_head_len;
-              end
-              3: begin
-                ctrl_mem.dma_tile_len <= 32'h0000_0100;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_TILE_LEN);
-                ctrl_data_in <= ctrl_mem.dma_tile_len;
-              end
-              4: begin
-                ctrl_mem.layer_stride <= 32'h0000_1000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_LAYER_STRIDE);
-                ctrl_data_in <= ctrl_mem.layer_stride;
-              end
-              5: begin
-                ctrl_mem.wq_head_stride <= 32'h0000_0100;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WQ_HEAD_STRIDE);
-                ctrl_data_in <= ctrl_mem.wq_head_stride;
-              end
-              6: begin
-                ctrl_mem.wk_head_stride <= 32'h0000_0100;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WK_HEAD_STRIDE);
-                ctrl_data_in <= ctrl_mem.wk_head_stride;
-              end
-              7: begin
-                ctrl_mem.wv_head_stride <= 32'h0000_0100;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WV_HEAD_STRIDE);
-                ctrl_data_in <= ctrl_mem.wv_head_stride;
-              end
-              8: begin
-                ctrl_mem.k_cache_stride <= 32'h0000_0400;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_K_CACHE_STRIDE);
-                ctrl_data_in <= ctrl_mem.k_cache_stride;
-              end
-              9: begin
-                ctrl_mem.v_cache_stride <= 32'h0000_0400;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_V_CACHE_STRIDE);
-                ctrl_data_in <= ctrl_mem.v_cache_stride;
-              end
-              10: begin
-                ctrl_mem.wo_tile_stride <= 32'h0000_0100;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WO_TILE_STRIDE);
-                ctrl_data_in <= ctrl_mem.wo_tile_stride;
-              end
-              11: begin
-                ctrl_mem.w1_tile_stride <= 32'h0000_0300;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W1_TILE_STRIDE);
-                ctrl_data_in <= ctrl_mem.w1_tile_stride;
-              end
-              12: begin
-                ctrl_mem.w2_tile_stride <= 32'h0000_0800;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W2_TILE_STRIDE);
-                ctrl_data_in <= ctrl_mem.w2_tile_stride;
-              end
-              13: begin
-                ctrl_mem.wq_base_addr <= 64'h0000_0000_1000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WQ_BASE_LO);
-                ctrl_data_in <= ctrl_mem.wq_base_addr[31:0];
-              end
-              14: begin
-                ctrl_mem.wk_base_addr <= 64'h0000_0000_2000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WK_BASE_LO);
-                ctrl_data_in <= ctrl_mem.wk_base_addr[31:0];
-              end
-              15: begin
-                ctrl_mem.wv_base_addr <= 64'h0000_0000_3000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WV_BASE_LO);
-                ctrl_data_in <= ctrl_mem.wv_base_addr[31:0];
-              end
-              16: begin
-                ctrl_mem.k_cache_addr <= 64'h0000_0000_4000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_K_CACHE_LO);
-                ctrl_data_in <= ctrl_mem.k_cache_addr[31:0];
-              end
-              17: begin
-                ctrl_mem.v_cache_addr <= 64'h0000_0000_5000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_V_CACHE_LO);
-                ctrl_data_in <= ctrl_mem.v_cache_addr[31:0];
-              end
-              18: begin
-                ctrl_mem.wo_base_addr <= 64'h0000_0000_6000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WO_BASE_LO);
-                ctrl_data_in <= ctrl_mem.wo_base_addr[31:0];
-              end
-              19: begin
-                ctrl_mem.w1_base_addr <= 64'h0000_0000_7000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W1_BASE_LO);
-                ctrl_data_in <= ctrl_mem.w1_base_addr[31:0];
-              end
-              20: begin
-                ctrl_mem.w2_base_addr <= 64'h0000_0000_8000_0000;
-                ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W2_BASE_LO);
-                ctrl_data_in <= ctrl_mem.w2_base_addr[31:0];
-              end
-              default: begin end
-            endcase
-            if (base_assign_step >= 20) begin
-              assign_base_addresses <= 1'b1;
-              ctrl_stage <= CTRL_ASSERT_AP_START;
-            end else begin
-              base_assign_step <= base_assign_step + 1;
+    if (irq_req_fire) begin
+      ctrl_addr     <= irq_req_addr;
+      ctrl_data_in  <= 32'd0;
+      ctrl_read_en  <= irq_req_read;
+      ctrl_write_en <= 1'b0;
+      ctrl_chip_en  <= 1'b1;
+      ctrl_gap_cycles <= 1;
+    end else if (done_req_fire) begin
+      ctrl_addr     <= done_req_addr;
+      ctrl_data_in  <= done_req_wdata;
+      ctrl_read_en  <= 1'b0;
+      ctrl_write_en <= done_req_write;
+      ctrl_chip_en  <= 1'b1;
+      ctrl_gap_cycles <= 1;
+    end else if (error_req_fire) begin
+      ctrl_addr     <= error_req_addr;
+      ctrl_data_in  <= error_req_wdata;
+      ctrl_read_en  <= error_req_read;
+      ctrl_write_en <= error_req_write;
+      ctrl_chip_en  <= 1'b1;
+      ctrl_gap_cycles <= 1;
+    end else if (ctrl_gap_cycles > 0) begin
+      ctrl_gap_cycles <= ctrl_gap_cycles - 1;
+    end else if (axi_state != AXI_IDLE) begin
+      // Wait for AXI-Lite transaction to finish before issuing next
+      ctrl_gap_cycles <= 1;
+    end else begin
+      case (ctrl_stage)
+        CTRL_RESET_MEM: begin
+          ctrl_stage <= CTRL_ASSERT_RESET;
+          ctrl_gap_cycles <= 2;
+        end
+        CTRL_ASSERT_RESET: begin
+          ctrl_mem.control <= 32'd0;
+          ctrl_shadow_control <= 32'd0;
+          ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
+          ctrl_data_in   <= 32'd0;
+          ctrl_write_en  <= 1'b1;
+          ctrl_chip_en   <= 1'b1;
+          ctrl_stage <= CTRL_DEASSERT_RESET;
+          ctrl_gap_cycles <= 3;
+        end
+        CTRL_DEASSERT_RESET: begin
+          ctrl_mem.control <= CTRL_RESETN_BIT;
+          ctrl_shadow_control <= CTRL_RESETN_BIT;
+          ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
+          ctrl_data_in   <= CTRL_RESETN_BIT;
+          ctrl_write_en  <= 1'b1;
+          ctrl_chip_en   <= 1'b1;
+          ctrl_stage <= CTRL_PROGRAM_BASES;
+          ctrl_gap_cycles <= 3;
+        end
+        CTRL_PROGRAM_BASES: begin
+          // Program control-space fields, one write per step
+          ctrl_write_en  <= 1'b1;
+          ctrl_chip_en   <= 1'b1;
+          case (base_assign_step)
+            0: begin
+              ctrl_mem.dma_layer_len <= 32'h0000_0100;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_LAYER_LEN);
+              ctrl_data_in <= 32'h0000_0100;
             end
-            ctrl_gap_cycles <= 2;
-          end
-          CTRL_ASSERT_AP_START: begin
-            // ap_start + auto_restart
-            ctrl_addr      <= ADDR_AP_CTRL;
-            ctrl_data_in   <= 32'h0000_0081;
-            ctrl_write_en  <= 1'b1;
-            ctrl_chip_en   <= 1'b1;
-            ctrl_stage <= CTRL_ASSERT_START;
-            ctrl_gap_cycles <= 2;
-          end
-          CTRL_ASSERT_START: begin
-            ctrl_mem.control <= (CTRL_RESETN_BIT | CTRL_START_BIT);
-            ctrl_shadow_control <= (CTRL_RESETN_BIT | CTRL_START_BIT);
-            ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
-            ctrl_data_in   <= ctrl_mem.control;
-            ctrl_write_en  <= 1'b1;
-            ctrl_chip_en   <= 1'b1;
-            reset_released <= 1'b1;
-            start_pulsed   <= 1'b1;
-            pending_start_clear <= 1'b1;
-            ctrl_stage <= CTRL_CLEAR_START;
-            ctrl_gap_cycles <= 2;
-          end
-          CTRL_CLEAR_START: begin
-            ctrl_mem.control <= CTRL_RESETN_BIT;
-            ctrl_shadow_control <= CTRL_RESETN_BIT;
-            ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
-            ctrl_data_in   <= ctrl_mem.control;
-            ctrl_write_en  <= 1'b1;
-            ctrl_chip_en   <= 1'b1;
-            pending_start_clear <= 1'b0;
-            ctrl_stage <= CTRL_DONE;
-            ctrl_gap_cycles <= 2;
-          end
-          default: begin
-            if (seen_irq_done) begin
-              if (!irq_clear_pending) begin
-                ctrl_mem.irq_clear <= IRQ_INFER_DONE_BIT;
-                ctrl_addr     <= ctrl_mem_addr(CTRL_MEM_WORD_IRQ_CLEAR);
-                ctrl_data_in  <= ctrl_mem.irq_clear;
-                ctrl_write_en <= 1'b1;
-                ctrl_chip_en  <= 1'b1;
-                irq_clear_pending <= 1'b1;
-                ctrl_gap_cycles <= 1;
-              end else begin
-                ctrl_mem.irq_clear <= 32'd0;
-                ctrl_addr     <= ctrl_mem_addr(CTRL_MEM_WORD_IRQ_CLEAR);
-                ctrl_data_in  <= 32'd0;
-                ctrl_write_en <= 1'b1;
-                ctrl_chip_en  <= 1'b1;
-                irq_clear_pending <= 1'b0;
-                seen_irq_done <= 1'b0;
-                ctrl_gap_cycles <= 1;
-              end
-            end else if (irq_pending) begin
-              ctrl_addr     <= ADDR_STATUS_MEM_DATA_1; // status_mem.irq_status
-              ctrl_read_en  <= 1'b1;
-              ctrl_chip_en  <= 1'b1;
-              ctrl_gap_cycles <= 1;
-              irq_interupt_flagged <= 1'b1;
-            end else begin
-              ctrl_addr     <= ADDR_STATUS_MEM_DATA_0; // status_mem.status
-              ctrl_read_en  <= 1'b1;
-              ctrl_chip_en  <= 1'b1;
-              ctrl_gap_cycles <= 1;
+            1: begin
+              ctrl_mem.dma_head_len <= 32'h0000_0100;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_HEAD_LEN);
+              ctrl_data_in <= 32'h0000_0100;
             end
+            2: begin
+              ctrl_mem.dma_tile_len <= 32'h0000_0100;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_DMA_TILE_LEN);
+              ctrl_data_in <= 32'h0000_0100;
+            end
+            3: begin
+              ctrl_mem.layer_stride <= 32'h0000_1000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_LAYER_STRIDE);
+              ctrl_data_in <= 32'h0000_1000;
+            end
+            4: begin
+              ctrl_mem.wq_head_stride <= 32'h0000_0100;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WQ_HEAD_STRIDE);
+              ctrl_data_in <= 32'h0000_0100;
+            end
+            5: begin
+              ctrl_mem.wk_head_stride <= 32'h0000_0100;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WK_HEAD_STRIDE);
+              ctrl_data_in <= 32'h0000_0100;
+            end
+            6: begin
+              ctrl_mem.wv_head_stride <= 32'h0000_0100;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WV_HEAD_STRIDE);
+              ctrl_data_in <= 32'h0000_0100;
+            end
+            7: begin
+              ctrl_mem.k_cache_stride <= 32'h0000_0400;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_K_CACHE_STRIDE);
+              ctrl_data_in <= 32'h0000_0400;
+            end
+            8: begin
+              ctrl_mem.v_cache_stride <= 32'h0000_0400;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_V_CACHE_STRIDE);
+              ctrl_data_in <= 32'h0000_0400;
+            end
+            9: begin
+              ctrl_mem.wo_tile_stride <= 32'h0000_0100;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WO_TILE_STRIDE);
+              ctrl_data_in <= 32'h0000_0100;
+            end
+            10: begin
+              ctrl_mem.w1_tile_stride <= 32'h0000_0300;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W1_TILE_STRIDE);
+              ctrl_data_in <= 32'h0000_0300;
+            end
+            11: begin
+              ctrl_mem.w2_tile_stride <= 32'h0000_0800;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W2_TILE_STRIDE);
+              ctrl_data_in <= 32'h0000_0800;
+            end
+            12: begin
+              ctrl_mem.wq_base_addr <= 64'h0000_0000_1000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WQ_BASE_LO);
+              ctrl_data_in <= 32'h1000_0000;
+            end
+            13: begin
+              ctrl_mem.wk_base_addr <= 64'h0000_0000_2000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WK_BASE_LO);
+              ctrl_data_in <= 32'h2000_0000;
+            end
+            14: begin
+              ctrl_mem.wv_base_addr <= 64'h0000_0000_3000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WV_BASE_LO);
+              ctrl_data_in <= 32'h3000_0000;
+            end
+            15: begin
+              ctrl_mem.k_cache_addr <= 64'h0000_0000_4000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_K_CACHE_LO);
+              ctrl_data_in <= 32'h4000_0000;
+            end
+            16: begin
+              ctrl_mem.v_cache_addr <= 64'h0000_0000_5000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_V_CACHE_LO);
+              ctrl_data_in <= 32'h5000_0000;
+            end
+            17: begin
+              ctrl_mem.wo_base_addr <= 64'h0000_0000_6000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_WO_BASE_LO);
+              ctrl_data_in <= 32'h6000_0000;
+            end
+            18: begin
+              ctrl_mem.w1_base_addr <= 64'h0000_0000_7000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W1_BASE_LO);
+              ctrl_data_in <= 32'h7000_0000;
+            end
+            19: begin
+              ctrl_mem.w2_base_addr <= 64'h0000_0000_8000_0000;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_W2_BASE_LO);
+              ctrl_data_in <= 32'h8000_0000;
+            end
+            20: begin
+              ctrl_mem.irq_mask <= 32'h0000_0006;
+              ctrl_addr    <= ctrl_mem_addr(CTRL_MEM_WORD_IRQ_MASK);
+              ctrl_data_in <= 32'h0000_0006;
+            end
+            default: begin end
+          endcase
+          if (base_assign_step >= 20) begin
+            assign_base_addresses <= 1'b1;
+            ctrl_stage <= CTRL_ASSERT_AP_START;
+          end else begin
+            base_assign_step <= base_assign_step + 1;
           end
+          ctrl_gap_cycles <= 2;
+        end
+        CTRL_ASSERT_AP_START: begin
+          // ap_start + auto_restart
+          ctrl_addr      <= ADDR_AP_CTRL;
+          ctrl_data_in   <= 32'h0000_0081;
+          ctrl_write_en  <= 1'b1;
+          ctrl_chip_en   <= 1'b1;
+          ctrl_stage <= CTRL_ASSERT_START;
+          ctrl_gap_cycles <= 2;
+        end
+        CTRL_ASSERT_START: begin
+          ctrl_mem.control <= 32'h0000_0003;
+          ctrl_shadow_control <= 32'h0000_0003;
+          ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
+          ctrl_data_in   <= 32'h0000_0003;
+          ctrl_write_en  <= 1'b1;
+          ctrl_chip_en   <= 1'b1;
+          reset_released <= 1'b1;
+          start_pulsed   <= 1'b1;
+          pending_start_clear <= 1'b1;
+          ctrl_stage <= CTRL_CLEAR_START;
+          ctrl_gap_cycles <= 2;
+        end
+        CTRL_CLEAR_START: begin
+          ctrl_mem.control <= 32'h0000_0001;
+          ctrl_shadow_control <= 32'h0000_0001;
+          ctrl_addr      <= ctrl_mem_addr(CTRL_MEM_WORD_CONTROL);
+          ctrl_data_in   <= 32'h0000_0001;
+          ctrl_write_en  <= 1'b1;
+          ctrl_chip_en   <= 1'b1;
+          pending_start_clear <= 1'b0;
+          ctrl_stage <= CTRL_DONE;
+          ctrl_gap_cycles <= 2;
+        end
+        default: begin
+          if (irq_seen_done || irq_seen_error || irq_pending) begin
+            ctrl_gap_cycles <= 1;
+          end else begin
+            ctrl_addr     <= ADDR_STATUS_MEM_DATA_0; // status_mem.status
+            ctrl_read_en  <= 1'b1;
+            ctrl_chip_en  <= 1'b1;
+            ctrl_gap_cycles <= 1;
+          end
+        end
         endcase
       end
   end
 
-  always_ff @(posedge ap_clk) begin : FSM_ENDING_CONDITONS
-    if (irq_inference_done) begin
-        seen_done <= 1'b1;
-        seen_irq_done <= 1'b1;
-      end
-      
-      if (seen_done) begin
-        post_done_cycles <= post_done_cycles + 1;
-        if (post_done_cycles >= 4) begin
-          seen_idle_after <= 1'b1;
-        end
-      end
-
-      // After done, wait for status to report IDLE for 4 cycles
-      if (seen_done) begin
-        if (status_mem.status & STATUS_IDLE_BIT) begin
-          idle_after_done <= idle_after_done + 1;
-        end else begin
-          idle_after_done <= 0;
-        end
-      end
-  end
   // Main stimulus and control
   initial begin : stimulus
     int cycle;
@@ -1702,6 +1949,7 @@ module transformer_top_tb;
     // Initialize
     ap_rst_n = 1'b0;
     ctrl_mem = '0;
+    ctrl_mem.irq_mask = 32'h0000_0006;
     status_mem = '0;
     ctrl_shadow_control = 32'd0;
     ctrl_addr = 8'd0;
@@ -1724,12 +1972,16 @@ module transformer_top_tb;
     seen_idle_after = 1'b0;
     seen_concat = 1'b0;
     idle_after_done = 0;
-    irq_inference_done = 0;
-    seen_irq_done = 1'b0;
+    irq_seen_done = 1'b0;
+    irq_seen_error = 1'b0;
     irq_pending = 1'b0;
-    irq_interupt_flagged = 1'b0;
-    interupt_data = 32'd0;
-    irq_clear_pending = 1'b0;
+    irq_read_phase = IRQ_RD_STATUS;
+    done_clear_pending = 1'b0;
+    error_clear_pending = 1'b0;
+    done_clear_cnt = 2'd0;
+    error_clear_cnt = 2'd0;
+    err_phase = ERR_PHASE_READ;
+    err_reload_step = 5'd0;
 
     // Print header
     $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s %-10s",
@@ -1750,7 +2002,7 @@ module transformer_top_tb;
 
       
       
-      if (wl_start_o && wl_start_o_ap_vld && (dbg_state == 32'd6)) begin
+      if (wl_start_o && wl_start_o_ap_vld && (STATE == 32'd6)) begin
         seen_concat <= 1'b1;
       end
 
@@ -1760,7 +2012,7 @@ module transformer_top_tb;
                (ctrl_shadow_control[1]) ? "1" : "-",
                (ctrl_shadow_control[0]) ? "1" : "-",
                "-" ,
-               state_name(dbg_state),
+               state_name(STATE),
                axis_in_valid ? "1" : "-",
                axis_in_ready ? "1" : "-",
                axis_in_last ? "1" : "-",
@@ -1934,8 +2186,8 @@ module transformer_top_tb;
     .stream_start_ap_vld(stream_start_ap_vld),
     .stream_done(stream_done),
     .irq_ps(irq_ps),
-    .dbg_state(dbg_state),
-    .dbg_state_ap_vld(dbg_state_ap_vld),
+    .STATE(STATE),
+    .STATE_ap_vld(STATE_ap_vld),
     .dbg_ctrl_mem(dbg_ctrl_mem),
     .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
     .control_reg(control_reg),
@@ -1944,6 +2196,8 @@ module transformer_top_tb;
     .irq_status_reg_ap_vld(irq_status_reg_ap_vld),
     .irq_mask_reg(irq_mask_reg),
     .irq_mask_reg_ap_vld(irq_mask_reg_ap_vld),
+    .irq_clear_reg(irq_clear_reg),
+    .irq_clear_reg_ap_vld(irq_clear_reg_ap_vld),
     .wq_base_addr(wq_base_addr),
     .wq_base_addr_ap_vld(wq_base_addr_ap_vld),
     .wk_base_addr(wk_base_addr),
@@ -1998,8 +2252,6 @@ module transformer_top_tb;
     .dbg_ctrl_reset_asserted_ap_vld(dbg_ctrl_reset_asserted_ap_vld),
     .dbg_done(dbg_done),
     .dbg_done_ap_vld(dbg_done_ap_vld),
-    .dbg_error(dbg_error),
-    .dbg_error_ap_vld(dbg_error_ap_vld),
     .s_axi_control_AWVALID(s_axi_control_AWVALID),
     .s_axi_control_AWREADY(s_axi_control_AWREADY),
     .s_axi_control_AWADDR(s_axi_control_AWADDR),

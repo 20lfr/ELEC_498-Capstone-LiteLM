@@ -52,6 +52,7 @@ void transformer_top(
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
     uint32_t &irq_mask_reg,
+    uint32_t &irq_clear_reg,
     uint32_t &wq_base_addr,
     uint32_t &wk_base_addr,
     uint32_t &wv_base_addr,
@@ -81,6 +82,5 @@ void transformer_top(
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
 
-    bool &dbg_done,
-    bool &dbg_error
+    bool &dbg_done
 );
