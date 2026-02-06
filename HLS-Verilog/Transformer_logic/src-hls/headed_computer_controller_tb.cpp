@@ -522,6 +522,7 @@ int main() {
     uint8_t dbg_req_layer = 0;
     uint8_t dbg_req_head = 0;
     uint8_t dbg_req_tile = 0;
+    ComputeHeadCtx compute_ctx{};
 
     const int32_t rq_M = 3;
     const int32_t rq_N = 3;
@@ -724,16 +725,13 @@ int main() {
         const uint8_t op_field_pre = static_cast<uint8_t>(compute_instruction & 0xFFu);
         const ComputeOp op_pre = static_cast<ComputeOp>(op_field_pre);
 
+        compute_ctx.compute_start = compute_start;
+        compute_ctx.compute_instruction = compute_instruction;
+        compute_ctx.mem_transfer_done = mem_transfer_done;
+
         headed_compute_controller(
+            compute_ctx,
             reset,
-            compute_start,
-            compute_instruction,
-            compute_ready,
-            compute_done,
-            mem_transfer_done,
-            mem_read_request,
-            mem_write_request,
-            mem_op,
             in_buf,
             out_buf,
             dbg_state,
@@ -743,6 +741,12 @@ int main() {
             dbg_req_head,
             dbg_req_tile,
             error);
+
+        compute_ready = compute_ctx.compute_ready;
+        compute_done = compute_ctx.compute_done;
+        mem_read_request = compute_ctx.mem_read_request;
+        mem_write_request = compute_ctx.mem_write_request;
+        mem_op = compute_ctx.mem_op;
 
         if (compute_done) {
             print_buffer("out_buf (done)", out_buf, head_buf::OUT_BUF_BYTES);

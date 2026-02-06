@@ -4,7 +4,6 @@
 #include "Head_Helpers/head_helpers.hpp"
 #include "../../top_params.hpp"
 
-constexpr int NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
 
 // ------------------------------------------------------------
 // Scheduler FSM top-level

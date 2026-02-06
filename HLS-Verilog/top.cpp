@@ -110,6 +110,22 @@ void transformer_top(
     static bool     compute_done = false;
     static bool     compute_start = false;
     static uint32_t compute_instruction = 0;
+    static ComputeHeadCtx head_compute_ctx[NUM_HEADS];
+#pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
+    static uint8_t head_in_buf[NUM_HEADS][head_buf::IN_BUF_BYTES];
+    static uint8_t head_out_buf[NUM_HEADS][head_buf::OUT_BUF_BYTES];
+#pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
+#pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
+    static bool head_mem_read_request[NUM_HEADS];
+    static bool head_mem_write_request[NUM_HEADS];
+    static uint32_t head_mem_op[NUM_HEADS];
+    static ComputeState head_dbg_state[NUM_HEADS];
+    static uint32_t head_dbg_req_instruction[NUM_HEADS];
+    static uint8_t head_dbg_req_op[NUM_HEADS];
+    static uint8_t head_dbg_req_layer[NUM_HEADS];
+    static uint8_t head_dbg_req_head[NUM_HEADS];
+    static uint8_t head_dbg_req_tile[NUM_HEADS];
+    static bool head_error[NUM_HEADS];
 
     
     // Clear handshake state on external resetn deassert.
@@ -174,6 +190,33 @@ void transformer_top(
         dbg_mac_complete,
         compute_error               
     );
+
+    for (int h = 0; h < NUM_HEADS; ++h) {
+#pragma HLS UNROLL
+        // TODO: wire real head memory manager. For now, assume head buffers are ready.
+        const bool head_mem_transfer_done = true;
+        head_compute_ctx[h].compute_start = head_ctx_ref[h].compute_start;
+        head_compute_ctx[h].compute_instruction = head_ctx_ref[h].compute_op;
+        head_compute_ctx[h].mem_transfer_done = head_mem_transfer_done;
+        headed_compute_controller(
+            head_compute_ctx[h],
+            (ctrl_mem.control & CTRL_RESETN_BIT) == 0u,
+            head_in_buf[h],
+            head_out_buf[h],
+            head_dbg_state[h],
+            head_dbg_req_instruction[h],
+            head_dbg_req_op[h],
+            head_dbg_req_layer[h],
+            head_dbg_req_head[h],
+            head_dbg_req_tile[h],
+            head_error[h]
+        );
+        head_ctx_ref[h].compute_ready = head_compute_ctx[h].compute_ready;
+        head_ctx_ref[h].compute_done = head_compute_ctx[h].compute_done;
+        head_mem_read_request[h] = head_compute_ctx[h].mem_read_request;
+        head_mem_write_request[h] = head_compute_ctx[h].mem_write_request;
+        head_mem_op[h] = head_compute_ctx[h].mem_op;
+    }
     ctrl_mem_interface.check_errors(ctrl_mem, scheduler_error, compute_error);
     ctrl_mem_interface.check_control(ctrl_mem, done);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);

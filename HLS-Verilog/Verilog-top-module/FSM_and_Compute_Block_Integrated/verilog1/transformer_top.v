@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.278000,HLS_SYN_LAT=17,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=17144,HLS_SYN_LUT=51764,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.278000,HLS_SYN_LAT=17,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=16424,HLS_SYN_LUT=51768,HLS_VERSION=2025_1}" *)
 
 module transformer_top (
         ap_clk,
@@ -70,6 +70,8 @@ module transformer_top (
         irq_status_reg_ap_vld,
         irq_mask_reg,
         irq_mask_reg_ap_vld,
+        irq_clear_reg,
+        irq_clear_reg_ap_vld,
         wq_base_addr,
         wq_base_addr_ap_vld,
         wk_base_addr,
@@ -124,8 +126,6 @@ module transformer_top (
         dbg_ctrl_reset_asserted_ap_vld,
         dbg_done,
         dbg_done_ap_vld,
-        dbg_error,
-        dbg_error_ap_vld,
         s_axi_control_AWVALID,
         s_axi_control_AWREADY,
         s_axi_control_AWADDR,
@@ -220,6 +220,8 @@ output  [31:0] irq_status_reg;
 output   irq_status_reg_ap_vld;
 output  [31:0] irq_mask_reg;
 output   irq_mask_reg_ap_vld;
+output  [31:0] irq_clear_reg;
+output   irq_clear_reg_ap_vld;
 output  [31:0] wq_base_addr;
 output   wq_base_addr_ap_vld;
 output  [31:0] wk_base_addr;
@@ -274,8 +276,6 @@ output  [0:0] dbg_ctrl_reset_asserted;
 output   dbg_ctrl_reset_asserted_ap_vld;
 output  [0:0] dbg_done;
 output   dbg_done_ap_vld;
-output  [0:0] dbg_error;
-output   dbg_error_ap_vld;
 input   s_axi_control_AWVALID;
 output   s_axi_control_AWREADY;
 input  [C_S_AXI_CONTROL_ADDR_WIDTH - 1:0] s_axi_control_AWADDR;
@@ -312,6 +312,7 @@ reg dbg_ctrl_mem_ap_vld;
 reg control_reg_ap_vld;
 reg irq_status_reg_ap_vld;
 reg irq_mask_reg_ap_vld;
+reg irq_clear_reg_ap_vld;
 reg wq_base_addr_ap_vld;
 reg wk_base_addr_ap_vld;
 reg wv_base_addr_ap_vld;
@@ -339,7 +340,6 @@ reg[0:0] dbg_mac_ready;
 reg[0:0] dbg_mac_complete;
 reg dbg_ctrl_reset_asserted_ap_vld;
 reg dbg_done_ap_vld;
-reg dbg_error_ap_vld;
 
  reg    ap_rst_n_inv;
 wire    ap_start;
@@ -351,109 +351,133 @@ reg    ap_ready;
 wire   [1279:0] ctrl_mem;
 wire   [127:0] status_mem;
 reg    status_mem_ap_vld;
-reg   [31:0] last_sched_state;
-reg   [31:0] ctrl_mem_interface_irq_status;
-reg   [31:0] ctrl_mem_interface_status;
-reg   [4:0] ctrl_mem_interface_error_code;
 reg   [0:0] compute_ready;
 reg   [0:0] compute_done;
 reg   [0:0] compute_start;
 reg   [31:0] compute_instruction;
+reg   [31:0] ctrl_mem_interface_status;
+reg   [31:0] ctrl_mem_interface_irq_status;
+reg   [31:0] ctrl_mem_interface_error_code;
 reg   [31:0] ctrl_mem_interface_layer_index;
-reg   [0:0] mem_transfer_done_read_reg_2739;
-reg   [0:0] wl_ready_read_reg_2744;
-reg   [0:0] dma_done_read_reg_2749;
-reg   [1279:0] ctrl_mem_read_reg_2754;
-reg   [0:0] stream_done_read_reg_2759;
-reg   [0:0] stream_ready_read_reg_2764;
-reg   [0:0] axis_in_last_read_reg_2769;
-reg   [0:0] axis_in_valid_read_reg_2774;
-wire   [1:0] trunc_ln21_fu_1792_p1;
-reg   [1:0] trunc_ln21_reg_2779;
-wire   [0:0] trunc_ln21_1_fu_1796_p1;
-reg   [0:0] trunc_ln21_1_reg_2784;
-wire   [1215:0] or_ln120_s_fu_2428_p3;
-reg   [1215:0] or_ln120_s_reg_2807;
-reg   [0:0] compute_ready_load_reg_2812;
+reg   [0:0] mem_transfer_done_read_reg_2796;
+reg   [0:0] wl_ready_read_reg_2801;
+reg   [0:0] dma_done_read_reg_2806;
+reg   [1279:0] ctrl_mem_read_reg_2811;
+reg   [0:0] stream_done_read_reg_2825;
+reg   [0:0] stream_ready_read_reg_2830;
+reg   [0:0] axis_in_last_read_reg_2835;
+reg   [0:0] axis_in_valid_read_reg_2840;
+wire   [31:0] ctrl_mem_control_fu_1764_p1;
+reg   [31:0] ctrl_mem_control_reg_2845;
+wire   [1:0] trunc_ln21_fu_1768_p1;
+reg   [1:0] trunc_ln21_reg_2850;
+wire   [0:0] trunc_ln21_1_fu_1772_p1;
+reg   [0:0] trunc_ln21_1_reg_2855;
+reg   [31:0] ctrl_mem_irq_mask_reg_2860;
+reg   [31:0] ctrl_mem_irq_clear_reg_2865;
+reg   [31:0] ctrl_mem_dma_head_len_reg_2871;
+reg   [31:0] ctrl_mem_dma_tile_len_reg_2876;
+reg   [31:0] ctrl_mem_layer_stride_reg_2881;
+reg   [31:0] ctrl_mem_wq_head_stride_reg_2886;
+reg   [31:0] ctrl_mem_wk_head_stride_reg_2892;
+reg   [31:0] ctrl_mem_wv_head_stride_reg_2898;
+reg   [31:0] ctrl_mem_k_cache_stride_reg_2904;
+reg   [31:0] ctrl_mem_v_cache_stride_reg_2909;
+reg   [31:0] ctrl_mem_wo_tile_stride_reg_2914;
+reg   [31:0] ctrl_mem_w1_tile_stride_reg_2920;
+reg   [31:0] ctrl_mem_w2_tile_stride_reg_2926;
+reg   [5:0] ctrl_mem_wq_base_addr_cast2_reg_2932;
+reg   [5:0] ctrl_mem_wk_base_addr_cast3_reg_2937;
+reg   [5:0] ctrl_mem_wv_base_addr_cast4_reg_2942;
+reg   [5:0] ctrl_mem_wo_base_addr_cast5_reg_2947;
+reg   [5:0] ctrl_mem_w1_base_addr_cast6_reg_2952;
+reg   [5:0] ctrl_mem_w2_base_addr_cast7_reg_2957;
+reg   [5:0] ctrl_mem_k_cache_addr_cast8_reg_2962;
+reg   [5:0] ctrl_mem_v_cache_addr_cast9_reg_2967;
+wire   [0:0] xor_ln116_fu_1968_p2;
+reg   [0:0] xor_ln116_reg_2972;
+wire   [0:0] icmp_ln22_fu_1998_p2;
+reg   [0:0] icmp_ln22_reg_2977;
+reg   [0:0] compute_ready_load_reg_2981;
 wire    ap_CS_fsm_state2;
-reg   [0:0] compute_done_load_reg_2817;
-reg   [0:0] wl_start_read_reg_2822;
-reg   [213:0] head_ctx_ref_0_read_reg_2827;
-reg   [213:0] head_ctx_ref_1_read_reg_2832;
-reg   [213:0] head_ctx_ref_2_read_reg_2837;
-reg   [213:0] head_ctx_ref_3_read_reg_2842;
-reg   [0:0] done_reg_2847;
+reg   [0:0] compute_done_load_reg_2986;
+reg   [0:0] wl_start_read_reg_2991;
+reg   [213:0] head_ctx_ref_0_read_reg_2996;
+reg   [213:0] head_ctx_ref_1_read_reg_3001;
+reg   [213:0] head_ctx_ref_2_read_reg_3006;
+reg   [213:0] head_ctx_ref_3_read_reg_3011;
+reg   [0:0] done_reg_3016;
 wire    ap_CS_fsm_state3;
-reg   [0:0] error_reg_2852;
-reg   [0:0] compute_start_load_reg_2857;
+reg   [0:0] scheduler_error_reg_3021;
+reg   [0:0] compute_start_load_reg_3025;
 wire    ap_CS_fsm_state4;
-reg   [31:0] compute_instruction_load_reg_2862;
-wire    grp_scheduler_hls_fu_1169_ap_start;
-wire    grp_scheduler_hls_fu_1169_ap_done;
-wire    grp_scheduler_hls_fu_1169_ap_idle;
-wire    grp_scheduler_hls_fu_1169_ap_ready;
-wire   [31:0] grp_scheduler_hls_fu_1169_wl_instruction;
-wire    grp_scheduler_hls_fu_1169_wl_instruction_ap_vld;
-wire   [31:0] grp_scheduler_hls_fu_1169_ctrl_mem_interface_status_o;
-wire    grp_scheduler_hls_fu_1169_ctrl_mem_interface_status_o_ap_vld;
-wire   [0:0] grp_scheduler_hls_fu_1169_compute_start_o;
-wire    grp_scheduler_hls_fu_1169_compute_start_o_ap_vld;
-wire   [31:0] grp_scheduler_hls_fu_1169_ctrl_mem_interface_layer_index;
-wire    grp_scheduler_hls_fu_1169_ctrl_mem_interface_layer_index_ap_vld;
-wire   [31:0] grp_scheduler_hls_fu_1169_compute_instruction;
-wire    grp_scheduler_hls_fu_1169_compute_instruction_ap_vld;
-wire   [0:0] grp_scheduler_hls_fu_1169_ap_return_0;
-wire   [0:0] grp_scheduler_hls_fu_1169_ap_return_1;
-wire   [0:0] grp_scheduler_hls_fu_1169_ap_return_2;
-wire   [0:0] grp_scheduler_hls_fu_1169_ap_return_3;
-wire   [0:0] grp_scheduler_hls_fu_1169_ap_return_4;
-wire   [31:0] grp_scheduler_hls_fu_1169_ap_return_5;
-wire   [213:0] grp_scheduler_hls_fu_1169_ap_return_6;
-wire   [213:0] grp_scheduler_hls_fu_1169_ap_return_7;
-wire   [213:0] grp_scheduler_hls_fu_1169_ap_return_8;
-wire   [213:0] grp_scheduler_hls_fu_1169_ap_return_9;
-wire    grp_compute_controller_fu_1302_ap_start;
-wire    grp_compute_controller_fu_1302_ap_done;
-wire    grp_compute_controller_fu_1302_ap_idle;
-wire    grp_compute_controller_fu_1302_ap_ready;
-wire   [0:0] grp_compute_controller_fu_1302_mem_read_request;
-wire    grp_compute_controller_fu_1302_mem_read_request_ap_vld;
-wire   [0:0] grp_compute_controller_fu_1302_mem_write_request;
-wire    grp_compute_controller_fu_1302_mem_write_request_ap_vld;
-wire   [31:0] grp_compute_controller_fu_1302_mem_op;
-wire    grp_compute_controller_fu_1302_mem_op_ap_vld;
-wire   [7:0] grp_compute_controller_fu_1302_in_buf_address0;
-wire    grp_compute_controller_fu_1302_in_buf_ce0;
-wire   [7:0] grp_compute_controller_fu_1302_in_buf_address1;
-wire    grp_compute_controller_fu_1302_in_buf_ce1;
-wire   [5:0] grp_compute_controller_fu_1302_out_buf_address0;
-wire    grp_compute_controller_fu_1302_out_buf_ce0;
-wire    grp_compute_controller_fu_1302_out_buf_we0;
-wire   [7:0] grp_compute_controller_fu_1302_out_buf_d0;
-wire   [5:0] grp_compute_controller_fu_1302_out_buf_address1;
-wire    grp_compute_controller_fu_1302_out_buf_ce1;
-wire    grp_compute_controller_fu_1302_out_buf_we1;
-wire   [7:0] grp_compute_controller_fu_1302_out_buf_d1;
-wire   [0:0] grp_compute_controller_fu_1302_dbg_mac_start;
-wire    grp_compute_controller_fu_1302_dbg_mac_start_ap_vld;
-wire   [0:0] grp_compute_controller_fu_1302_dbg_mac_ready;
-wire    grp_compute_controller_fu_1302_dbg_mac_ready_ap_vld;
-wire   [0:0] grp_compute_controller_fu_1302_dbg_mac_complete;
-wire    grp_compute_controller_fu_1302_dbg_mac_complete_ap_vld;
-wire   [0:0] grp_compute_controller_fu_1302_compute_done;
-wire    grp_compute_controller_fu_1302_compute_done_ap_vld;
-wire   [0:0] grp_compute_controller_fu_1302_compute_ready;
-wire    grp_compute_controller_fu_1302_compute_ready_ap_vld;
-wire   [7:0] grp_compute_controller_fu_1302_ap_return_0;
-wire   [31:0] grp_compute_controller_fu_1302_ap_return_1;
-wire   [7:0] grp_compute_controller_fu_1302_ap_return_2;
-wire   [7:0] grp_compute_controller_fu_1302_ap_return_3;
-wire   [7:0] grp_compute_controller_fu_1302_ap_return_4;
-wire   [7:0] grp_compute_controller_fu_1302_ap_return_5;
-wire   [0:0] grp_compute_controller_fu_1302_ap_return_6;
-reg    grp_scheduler_hls_fu_1169_ap_start_reg;
+reg   [31:0] compute_instruction_load_reg_3030;
+wire    grp_scheduler_hls_fu_1173_ap_start;
+wire    grp_scheduler_hls_fu_1173_ap_done;
+wire    grp_scheduler_hls_fu_1173_ap_idle;
+wire    grp_scheduler_hls_fu_1173_ap_ready;
+wire   [31:0] grp_scheduler_hls_fu_1173_wl_instruction;
+wire    grp_scheduler_hls_fu_1173_wl_instruction_ap_vld;
+wire   [31:0] grp_scheduler_hls_fu_1173_ctrl_mem_interface_status_o;
+wire    grp_scheduler_hls_fu_1173_ctrl_mem_interface_status_o_ap_vld;
+wire   [0:0] grp_scheduler_hls_fu_1173_compute_start_o;
+wire    grp_scheduler_hls_fu_1173_compute_start_o_ap_vld;
+wire   [31:0] grp_scheduler_hls_fu_1173_ctrl_mem_interface_layer_index;
+wire    grp_scheduler_hls_fu_1173_ctrl_mem_interface_layer_index_ap_vld;
+wire   [31:0] grp_scheduler_hls_fu_1173_compute_instruction;
+wire    grp_scheduler_hls_fu_1173_compute_instruction_ap_vld;
+wire   [0:0] grp_scheduler_hls_fu_1173_ap_return_0;
+wire   [0:0] grp_scheduler_hls_fu_1173_ap_return_1;
+wire   [0:0] grp_scheduler_hls_fu_1173_ap_return_2;
+wire   [0:0] grp_scheduler_hls_fu_1173_ap_return_3;
+wire   [0:0] grp_scheduler_hls_fu_1173_ap_return_4;
+wire   [31:0] grp_scheduler_hls_fu_1173_ap_return_5;
+wire   [213:0] grp_scheduler_hls_fu_1173_ap_return_6;
+wire   [213:0] grp_scheduler_hls_fu_1173_ap_return_7;
+wire   [213:0] grp_scheduler_hls_fu_1173_ap_return_8;
+wire   [213:0] grp_scheduler_hls_fu_1173_ap_return_9;
+wire    grp_compute_controller_fu_1306_ap_start;
+wire    grp_compute_controller_fu_1306_ap_done;
+wire    grp_compute_controller_fu_1306_ap_idle;
+wire    grp_compute_controller_fu_1306_ap_ready;
+wire   [0:0] grp_compute_controller_fu_1306_mem_read_request;
+wire    grp_compute_controller_fu_1306_mem_read_request_ap_vld;
+wire   [0:0] grp_compute_controller_fu_1306_mem_write_request;
+wire    grp_compute_controller_fu_1306_mem_write_request_ap_vld;
+wire   [31:0] grp_compute_controller_fu_1306_mem_op;
+wire    grp_compute_controller_fu_1306_mem_op_ap_vld;
+wire   [7:0] grp_compute_controller_fu_1306_in_buf_address0;
+wire    grp_compute_controller_fu_1306_in_buf_ce0;
+wire   [7:0] grp_compute_controller_fu_1306_in_buf_address1;
+wire    grp_compute_controller_fu_1306_in_buf_ce1;
+wire   [5:0] grp_compute_controller_fu_1306_out_buf_address0;
+wire    grp_compute_controller_fu_1306_out_buf_ce0;
+wire    grp_compute_controller_fu_1306_out_buf_we0;
+wire   [7:0] grp_compute_controller_fu_1306_out_buf_d0;
+wire   [5:0] grp_compute_controller_fu_1306_out_buf_address1;
+wire    grp_compute_controller_fu_1306_out_buf_ce1;
+wire    grp_compute_controller_fu_1306_out_buf_we1;
+wire   [7:0] grp_compute_controller_fu_1306_out_buf_d1;
+wire   [0:0] grp_compute_controller_fu_1306_dbg_mac_start;
+wire    grp_compute_controller_fu_1306_dbg_mac_start_ap_vld;
+wire   [0:0] grp_compute_controller_fu_1306_dbg_mac_ready;
+wire    grp_compute_controller_fu_1306_dbg_mac_ready_ap_vld;
+wire   [0:0] grp_compute_controller_fu_1306_dbg_mac_complete;
+wire    grp_compute_controller_fu_1306_dbg_mac_complete_ap_vld;
+wire   [0:0] grp_compute_controller_fu_1306_compute_done;
+wire    grp_compute_controller_fu_1306_compute_done_ap_vld;
+wire   [0:0] grp_compute_controller_fu_1306_compute_ready;
+wire    grp_compute_controller_fu_1306_compute_ready_ap_vld;
+wire   [7:0] grp_compute_controller_fu_1306_ap_return_0;
+wire   [31:0] grp_compute_controller_fu_1306_ap_return_1;
+wire   [7:0] grp_compute_controller_fu_1306_ap_return_2;
+wire   [7:0] grp_compute_controller_fu_1306_ap_return_3;
+wire   [7:0] grp_compute_controller_fu_1306_ap_return_4;
+wire   [7:0] grp_compute_controller_fu_1306_ap_return_5;
+wire   [0:0] grp_compute_controller_fu_1306_ap_return_6;
+reg    grp_scheduler_hls_fu_1173_ap_start_reg;
 reg   [31:0] wl_instruction_reg;
-reg    grp_compute_controller_fu_1302_ap_start_reg;
+reg    grp_compute_controller_fu_1306_ap_start_reg;
 wire    ap_CS_fsm_state5;
 reg   [0:0] mem_read_request_reg;
 reg   [0:0] mem_write_request_reg;
@@ -461,103 +485,88 @@ reg   [31:0] mem_op_reg;
 reg   [0:0] dbg_mac_start_reg;
 reg   [0:0] dbg_mac_ready_reg;
 reg   [0:0] dbg_mac_complete_reg;
-wire   [31:0] or_ln3_fu_2634_p4;
-wire   [31:0] or_ln4_fu_2660_p4;
-wire   [31:0] or_ln_fu_2078_p4;
-wire   [31:0] or_ln1_fu_2212_p4;
-wire   [31:0] or_ln2_fu_2302_p4;
-wire   [31:0] and_ln51_fu_2340_p2;
-reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6;
-reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_7;
-wire   [0:0] error_1_fu_2615_p1;
-wire   [0:0] or_ln106_1_fu_2028_p2;
-wire   [0:0] or_ln20_1_fu_2058_p2;
+wire    ap_CS_fsm_state6;
+wire   [0:0] or_ln22_fu_2103_p2;
+wire   [0:0] irq_error_en_fu_2086_p3;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_status_load;
+wire   [0:0] or_ln34_1_fu_2252_p2;
+wire   [0:0] or_ln33_fu_2225_p2;
+wire   [0:0] or_ln32_fu_2209_p2;
+wire   [0:0] or_ln31_fu_2193_p2;
+wire   [0:0] icmp_ln43_fu_2366_p2;
+wire   [0:0] compute_error_fu_2082_p1;
+wire   [31:0] or_ln_fu_2127_p4;
+wire   [31:0] or_ln2_fu_2276_p4;
+wire   [31:0] or_ln4_fu_2390_p4;
+wire   [31:0] or_ln6_fu_2458_p4;
+wire   [31:0] or_ln8_fu_2532_p4;
+wire   [31:0] or_ln10_fu_2617_p4;
 reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_1;
 reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2;
 reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3;
 reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4;
-wire   [0:0] or_ln27_7_fu_2202_p2;
-wire   [0:0] icmp_ln37_fu_2282_p2;
-wire   [0:0] icmp_ln108_fu_2010_p2;
-reg   [31:0] grp_load_fu_1741_p1;
-reg   [31:0] grp_load_fu_1755_p1;
-wire   [31:0] and_ln_fu_2380_p4;
-reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_status_load_1;
-reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_status_load;
-wire   [0:0] tmp_2_fu_2352_p3;
-reg   [31:0] grp_load_fu_1759_p1;
-wire    ap_CS_fsm_state6;
-wire   [0:0] xor_ln107_fu_2003_p2;
-wire   [31:0] ctrl_mem_wq_head_stride_fu_1849_p3;
-wire   [31:0] ctrl_mem_wk_head_stride_fu_1858_p3;
-wire   [31:0] ctrl_mem_wv_head_stride_fu_1867_p3;
-wire   [31:0] ctrl_mem_wo_tile_stride_fu_1892_p3;
-wire   [31:0] ctrl_mem_w1_tile_stride_fu_1901_p3;
-wire   [31:0] ctrl_mem_w2_tile_stride_fu_1910_p3;
-wire   [0:0] icmp_ln83_fu_2709_p2;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6;
+wire   [0:0] icmp_ln74_fu_2588_p2;
+wire   [31:0] or_ln1_fu_2167_p4;
+wire   [31:0] or_ln3_fu_2316_p4;
+wire   [31:0] or_ln5_fu_2426_p3;
+wire   [31:0] or_ln7_fu_2498_p4;
+wire   [31:0] or_ln9_fu_2572_p4;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_error_code_load_1;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_error_code_load_2;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4;
+reg   [31:0] ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5;
+wire   [0:0] icmp_ln93_fu_2683_p2;
 reg   [0:0] irq_ps_preg;
-wire   [31:0] ctrl_mem_irq_clear_fu_1809_p3;
-wire   [31:0] or_ln106_fu_2016_p2;
-wire   [0:0] icmp_ln106_fu_2022_p2;
-wire   [31:0] ctrl_mem_dma_layer_len_fu_1817_p3;
-wire   [31:0] ctrl_mem_dma_head_len_fu_1825_p3;
-wire   [31:0] ctrl_mem_dma_tile_len_fu_1833_p3;
-wire   [0:0] icmp_ln20_1_fu_2040_p2;
-wire   [0:0] icmp_ln20_2_fu_2046_p2;
-wire   [0:0] or_ln20_fu_2052_p2;
-wire   [0:0] icmp_ln20_fu_2034_p2;
-wire   [29:0] tmp_1_fu_2064_p4;
-wire   [0:0] trunc_ln21_2_fu_2074_p1;
-wire   [31:0] ctrl_mem_layer_stride_fu_1841_p3;
-wire   [31:0] ctrl_mem_k_cache_stride_fu_1876_p3;
-wire   [31:0] ctrl_mem_v_cache_stride_fu_1884_p3;
-wire   [0:0] icmp_ln28_fu_2112_p2;
-wire   [0:0] icmp_ln28_1_fu_2118_p2;
-wire   [0:0] icmp_ln30_1_fu_2148_p2;
-wire   [0:0] icmp_ln30_2_fu_2154_p2;
-wire   [0:0] or_ln27_1_fu_2166_p2;
-wire   [0:0] or_ln27_fu_2160_p2;
-wire   [0:0] icmp_ln29_1_fu_2136_p2;
-wire   [0:0] icmp_ln29_fu_2130_p2;
-wire   [0:0] icmp_ln30_fu_2142_p2;
-wire   [0:0] icmp_ln28_2_fu_2124_p2;
-wire   [0:0] or_ln27_4_fu_2184_p2;
-wire   [0:0] icmp_ln27_fu_2106_p2;
-wire   [0:0] or_ln27_5_fu_2190_p2;
-wire   [0:0] or_ln27_3_fu_2178_p2;
-wire   [0:0] or_ln27_6_fu_2196_p2;
-wire   [0:0] or_ln27_2_fu_2172_p2;
-wire   [29:0] grp_fu_1745_p4;
-wire   [0:0] trunc_ln31_fu_2208_p1;
-wire   [5:0] ctrl_mem_wk_base_addr_cast3_fu_1929_p4;
-wire   [5:0] ctrl_mem_wq_base_addr_cast2_fu_1919_p4;
-wire   [5:0] ctrl_mem_wv_base_addr_cast4_fu_1939_p4;
-wire   [5:0] ctrl_mem_wo_base_addr_cast5_fu_1949_p4;
-wire   [5:0] or_ln37_1_fu_2246_p2;
-wire   [5:0] or_ln37_fu_2240_p2;
-wire   [5:0] ctrl_mem_w1_base_addr_cast6_fu_1959_p4;
-wire   [5:0] ctrl_mem_w2_base_addr_cast7_fu_1969_p4;
-wire   [5:0] ctrl_mem_k_cache_addr_cast8_fu_1979_p4;
-wire   [5:0] ctrl_mem_v_cache_addr_cast9_fu_1989_p4;
-wire   [5:0] or_ln37_4_fu_2264_p2;
-wire   [5:0] or_ln37_3_fu_2258_p2;
-wire   [5:0] or_ln37_5_fu_2270_p2;
-wire   [5:0] or_ln37_2_fu_2252_p2;
-wire   [5:0] or_ln37_6_fu_2276_p2;
-wire   [29:0] tmp_5_fu_2288_p4;
-wire   [0:0] trunc_ln41_fu_2298_p1;
-wire   [31:0] xor_ln51_fu_2330_p2;
-wire   [29:0] tmp_7_fu_2366_p4;
-wire   [0:0] trunc_ln55_fu_2376_p1;
-wire   [735:0] tmp_fu_2414_p4;
-wire   [479:0] trunc_ln120_fu_2424_p1;
-wire   [28:0] tmp_s_fu_2620_p4;
-wire   [1:0] trunc_ln75_fu_2630_p1;
-wire   [0:0] trunc_ln79_fu_2656_p1;
-wire   [1:0] tmp_6_fu_2686_p4;
-wire   [2:0] and_ln1_fu_2695_p3;
-wire   [2:0] trunc_ln83_fu_2682_p1;
-wire   [2:0] and_ln83_fu_2703_p2;
+wire   [31:0] ctrl_mem_dma_layer_len_fu_1792_p3;
+wire   [0:0] icmp_ln22_1_fu_2093_p2;
+wire   [0:0] icmp_ln22_2_fu_2098_p2;
+wire   [29:0] tmp_1_fu_2113_p4;
+wire   [0:0] trunc_ln24_fu_2123_p1;
+wire   [29:0] tmp_3_fu_2153_p4;
+wire   [0:0] trunc_ln26_fu_2163_p1;
+wire   [0:0] icmp_ln31_fu_2183_p2;
+wire   [0:0] icmp_ln32_fu_2188_p2;
+wire   [0:0] icmp_ln32_1_fu_2199_p2;
+wire   [0:0] icmp_ln32_2_fu_2204_p2;
+wire   [0:0] icmp_ln33_fu_2215_p2;
+wire   [0:0] icmp_ln33_1_fu_2220_p2;
+wire   [0:0] icmp_ln34_1_fu_2236_p2;
+wire   [0:0] icmp_ln34_2_fu_2241_p2;
+wire   [0:0] or_ln34_fu_2246_p2;
+wire   [0:0] icmp_ln34_fu_2231_p2;
+wire   [29:0] tmp_5_fu_2262_p4;
+wire   [0:0] trunc_ln36_fu_2272_p1;
+wire   [28:0] tmp_7_fu_2302_p4;
+wire   [1:0] trunc_ln38_fu_2312_p1;
+wire   [5:0] or_ln43_1_fu_2336_p2;
+wire   [5:0] or_ln43_fu_2332_p2;
+wire   [5:0] or_ln43_4_fu_2350_p2;
+wire   [5:0] or_ln43_3_fu_2346_p2;
+wire   [5:0] or_ln43_5_fu_2354_p2;
+wire   [5:0] or_ln43_2_fu_2340_p2;
+wire   [5:0] or_ln43_6_fu_2360_p2;
+wire   [29:0] tmp_9_fu_2376_p4;
+wire   [0:0] trunc_ln48_fu_2386_p1;
+wire   [30:0] tmp_s_fu_2416_p4;
+wire   [29:0] tmp_2_fu_2444_p4;
+wire   [0:0] trunc_ln56_fu_2454_p1;
+wire   [27:0] tmp_4_fu_2484_p4;
+wire   [2:0] trunc_ln58_fu_2494_p1;
+wire   [29:0] tmp_6_fu_2518_p4;
+wire   [0:0] trunc_ln63_fu_2528_p1;
+wire   [26:0] tmp_8_fu_2558_p4;
+wire   [3:0] trunc_ln65_fu_2568_p1;
+wire   [28:0] tmp_10_fu_2603_p4;
+wire   [1:0] trunc_ln77_fu_2613_p1;
+wire   [1:0] tmp_11_fu_2660_p4;
+wire   [2:0] and_ln_fu_2669_p3;
+wire   [2:0] trunc_ln93_fu_2656_p1;
+wire   [2:0] and_ln93_fu_2677_p2;
+wire   [735:0] tmp_fu_2715_p4;
+wire   [479:0] trunc_ln195_fu_2724_p1;
 reg   [5:0] ap_NS_fsm;
 reg    ap_ST_fsm_state1_blk;
 wire    ap_ST_fsm_state2_blk;
@@ -565,121 +574,121 @@ reg    ap_ST_fsm_state3_blk;
 wire    ap_ST_fsm_state4_blk;
 reg    ap_ST_fsm_state5_blk;
 wire    ap_ST_fsm_state6_blk;
+reg    ap_condition_1045;
+reg    ap_condition_1063;
 wire    ap_ce_reg;
 
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 6'd1;
-#0 last_sched_state = 32'd0;
-#0 ctrl_mem_interface_irq_status = 32'd0;
-#0 ctrl_mem_interface_status = 32'd1;
-#0 ctrl_mem_interface_error_code = 5'd0;
 #0 compute_ready = 1'd0;
 #0 compute_done = 1'd0;
 #0 compute_start = 1'd0;
 #0 compute_instruction = 32'd0;
+#0 ctrl_mem_interface_status = 32'd1;
+#0 ctrl_mem_interface_irq_status = 32'd0;
+#0 ctrl_mem_interface_error_code = 32'd0;
 #0 ctrl_mem_interface_layer_index = 32'd0;
-#0 grp_scheduler_hls_fu_1169_ap_start_reg = 1'b0;
-#0 grp_compute_controller_fu_1302_ap_start_reg = 1'b0;
+#0 grp_scheduler_hls_fu_1173_ap_start_reg = 1'b0;
+#0 grp_compute_controller_fu_1306_ap_start_reg = 1'b0;
 #0 irq_ps_preg = 1'd0;
 end
 
-transformer_top_scheduler_hls grp_scheduler_hls_fu_1169(
+transformer_top_scheduler_hls grp_scheduler_hls_fu_1173(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst_n_inv),
-    .ap_start(grp_scheduler_hls_fu_1169_ap_start),
-    .ap_done(grp_scheduler_hls_fu_1169_ap_done),
-    .ap_idle(grp_scheduler_hls_fu_1169_ap_idle),
-    .ap_ready(grp_scheduler_hls_fu_1169_ap_ready),
-    .ctrl_mem_control(trunc_ln21_reg_2779),
-    .axis_in_valid(axis_in_valid_read_reg_2774),
-    .axis_in_last(axis_in_last_read_reg_2769),
-    .dma_done(dma_done_read_reg_2749),
-    .wl_ready(wl_ready_read_reg_2744),
-    .wl_instruction(grp_scheduler_hls_fu_1169_wl_instruction),
-    .wl_instruction_ap_vld(grp_scheduler_hls_fu_1169_wl_instruction_ap_vld),
-    .wl_start_read(wl_start_read_reg_2822),
-    .compute_ready(compute_ready_load_reg_2812),
-    .compute_done(compute_done_load_reg_2817),
-    .p_read1(head_ctx_ref_0_read_reg_2827),
-    .p_read2(head_ctx_ref_1_read_reg_2832),
-    .p_read3(head_ctx_ref_2_read_reg_2837),
-    .p_read4(head_ctx_ref_3_read_reg_2842),
-    .stream_ready(stream_ready_read_reg_2764),
-    .stream_done(stream_done_read_reg_2759),
+    .ap_start(grp_scheduler_hls_fu_1173_ap_start),
+    .ap_done(grp_scheduler_hls_fu_1173_ap_done),
+    .ap_idle(grp_scheduler_hls_fu_1173_ap_idle),
+    .ap_ready(grp_scheduler_hls_fu_1173_ap_ready),
+    .ctrl_mem_control(trunc_ln21_reg_2850),
+    .axis_in_valid(axis_in_valid_read_reg_2840),
+    .axis_in_last(axis_in_last_read_reg_2835),
+    .dma_done(dma_done_read_reg_2806),
+    .wl_ready(wl_ready_read_reg_2801),
+    .wl_instruction(grp_scheduler_hls_fu_1173_wl_instruction),
+    .wl_instruction_ap_vld(grp_scheduler_hls_fu_1173_wl_instruction_ap_vld),
+    .wl_start_read(wl_start_read_reg_2991),
+    .compute_ready(compute_ready_load_reg_2981),
+    .compute_done(compute_done_load_reg_2986),
+    .p_read1(head_ctx_ref_0_read_reg_2996),
+    .p_read2(head_ctx_ref_1_read_reg_3001),
+    .p_read3(head_ctx_ref_2_read_reg_3006),
+    .p_read4(head_ctx_ref_3_read_reg_3011),
+    .stream_ready(stream_ready_read_reg_2830),
+    .stream_done(stream_done_read_reg_2825),
     .ctrl_mem_interface_status_i(ctrl_mem_interface_status),
-    .ctrl_mem_interface_status_o(grp_scheduler_hls_fu_1169_ctrl_mem_interface_status_o),
-    .ctrl_mem_interface_status_o_ap_vld(grp_scheduler_hls_fu_1169_ctrl_mem_interface_status_o_ap_vld),
+    .ctrl_mem_interface_status_o(grp_scheduler_hls_fu_1173_ctrl_mem_interface_status_o),
+    .ctrl_mem_interface_status_o_ap_vld(grp_scheduler_hls_fu_1173_ctrl_mem_interface_status_o_ap_vld),
     .ctrl_mem_interface_irq_status(ctrl_mem_interface_irq_status),
     .ctrl_mem_interface_error_code(ctrl_mem_interface_error_code),
     .compute_start_i(compute_start),
-    .compute_start_o(grp_scheduler_hls_fu_1169_compute_start_o),
-    .compute_start_o_ap_vld(grp_scheduler_hls_fu_1169_compute_start_o_ap_vld),
-    .ctrl_mem_interface_layer_index(grp_scheduler_hls_fu_1169_ctrl_mem_interface_layer_index),
-    .ctrl_mem_interface_layer_index_ap_vld(grp_scheduler_hls_fu_1169_ctrl_mem_interface_layer_index_ap_vld),
-    .compute_instruction(grp_scheduler_hls_fu_1169_compute_instruction),
-    .compute_instruction_ap_vld(grp_scheduler_hls_fu_1169_compute_instruction_ap_vld),
-    .ap_return_0(grp_scheduler_hls_fu_1169_ap_return_0),
-    .ap_return_1(grp_scheduler_hls_fu_1169_ap_return_1),
-    .ap_return_2(grp_scheduler_hls_fu_1169_ap_return_2),
-    .ap_return_3(grp_scheduler_hls_fu_1169_ap_return_3),
-    .ap_return_4(grp_scheduler_hls_fu_1169_ap_return_4),
-    .ap_return_5(grp_scheduler_hls_fu_1169_ap_return_5),
-    .ap_return_6(grp_scheduler_hls_fu_1169_ap_return_6),
-    .ap_return_7(grp_scheduler_hls_fu_1169_ap_return_7),
-    .ap_return_8(grp_scheduler_hls_fu_1169_ap_return_8),
-    .ap_return_9(grp_scheduler_hls_fu_1169_ap_return_9)
+    .compute_start_o(grp_scheduler_hls_fu_1173_compute_start_o),
+    .compute_start_o_ap_vld(grp_scheduler_hls_fu_1173_compute_start_o_ap_vld),
+    .ctrl_mem_interface_layer_index(grp_scheduler_hls_fu_1173_ctrl_mem_interface_layer_index),
+    .ctrl_mem_interface_layer_index_ap_vld(grp_scheduler_hls_fu_1173_ctrl_mem_interface_layer_index_ap_vld),
+    .compute_instruction(grp_scheduler_hls_fu_1173_compute_instruction),
+    .compute_instruction_ap_vld(grp_scheduler_hls_fu_1173_compute_instruction_ap_vld),
+    .ap_return_0(grp_scheduler_hls_fu_1173_ap_return_0),
+    .ap_return_1(grp_scheduler_hls_fu_1173_ap_return_1),
+    .ap_return_2(grp_scheduler_hls_fu_1173_ap_return_2),
+    .ap_return_3(grp_scheduler_hls_fu_1173_ap_return_3),
+    .ap_return_4(grp_scheduler_hls_fu_1173_ap_return_4),
+    .ap_return_5(grp_scheduler_hls_fu_1173_ap_return_5),
+    .ap_return_6(grp_scheduler_hls_fu_1173_ap_return_6),
+    .ap_return_7(grp_scheduler_hls_fu_1173_ap_return_7),
+    .ap_return_8(grp_scheduler_hls_fu_1173_ap_return_8),
+    .ap_return_9(grp_scheduler_hls_fu_1173_ap_return_9)
 );
 
-transformer_top_compute_controller grp_compute_controller_fu_1302(
+transformer_top_compute_controller grp_compute_controller_fu_1306(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst_n_inv),
-    .ap_start(grp_compute_controller_fu_1302_ap_start),
-    .ap_done(grp_compute_controller_fu_1302_ap_done),
-    .ap_idle(grp_compute_controller_fu_1302_ap_idle),
-    .ap_ready(grp_compute_controller_fu_1302_ap_ready),
-    .ctrl_mem_control(trunc_ln21_1_reg_2784),
-    .compute_start(compute_start_load_reg_2857),
-    .compute_instruction(compute_instruction_load_reg_2862),
-    .mem_transfer_done(mem_transfer_done_read_reg_2739),
-    .mem_read_request(grp_compute_controller_fu_1302_mem_read_request),
-    .mem_read_request_ap_vld(grp_compute_controller_fu_1302_mem_read_request_ap_vld),
-    .mem_write_request(grp_compute_controller_fu_1302_mem_write_request),
-    .mem_write_request_ap_vld(grp_compute_controller_fu_1302_mem_write_request_ap_vld),
-    .mem_op(grp_compute_controller_fu_1302_mem_op),
-    .mem_op_ap_vld(grp_compute_controller_fu_1302_mem_op_ap_vld),
-    .in_buf_address0(grp_compute_controller_fu_1302_in_buf_address0),
-    .in_buf_ce0(grp_compute_controller_fu_1302_in_buf_ce0),
+    .ap_start(grp_compute_controller_fu_1306_ap_start),
+    .ap_done(grp_compute_controller_fu_1306_ap_done),
+    .ap_idle(grp_compute_controller_fu_1306_ap_idle),
+    .ap_ready(grp_compute_controller_fu_1306_ap_ready),
+    .ctrl_mem_control(trunc_ln21_1_reg_2855),
+    .compute_start(compute_start_load_reg_3025),
+    .compute_instruction(compute_instruction_load_reg_3030),
+    .mem_transfer_done(mem_transfer_done_read_reg_2796),
+    .mem_read_request(grp_compute_controller_fu_1306_mem_read_request),
+    .mem_read_request_ap_vld(grp_compute_controller_fu_1306_mem_read_request_ap_vld),
+    .mem_write_request(grp_compute_controller_fu_1306_mem_write_request),
+    .mem_write_request_ap_vld(grp_compute_controller_fu_1306_mem_write_request_ap_vld),
+    .mem_op(grp_compute_controller_fu_1306_mem_op),
+    .mem_op_ap_vld(grp_compute_controller_fu_1306_mem_op_ap_vld),
+    .in_buf_address0(grp_compute_controller_fu_1306_in_buf_address0),
+    .in_buf_ce0(grp_compute_controller_fu_1306_in_buf_ce0),
     .in_buf_q0(in_buf_q0),
-    .in_buf_address1(grp_compute_controller_fu_1302_in_buf_address1),
-    .in_buf_ce1(grp_compute_controller_fu_1302_in_buf_ce1),
+    .in_buf_address1(grp_compute_controller_fu_1306_in_buf_address1),
+    .in_buf_ce1(grp_compute_controller_fu_1306_in_buf_ce1),
     .in_buf_q1(in_buf_q1),
-    .out_buf_address0(grp_compute_controller_fu_1302_out_buf_address0),
-    .out_buf_ce0(grp_compute_controller_fu_1302_out_buf_ce0),
-    .out_buf_we0(grp_compute_controller_fu_1302_out_buf_we0),
-    .out_buf_d0(grp_compute_controller_fu_1302_out_buf_d0),
-    .out_buf_address1(grp_compute_controller_fu_1302_out_buf_address1),
-    .out_buf_ce1(grp_compute_controller_fu_1302_out_buf_ce1),
-    .out_buf_we1(grp_compute_controller_fu_1302_out_buf_we1),
-    .out_buf_d1(grp_compute_controller_fu_1302_out_buf_d1),
-    .dbg_mac_start(grp_compute_controller_fu_1302_dbg_mac_start),
-    .dbg_mac_start_ap_vld(grp_compute_controller_fu_1302_dbg_mac_start_ap_vld),
-    .dbg_mac_ready(grp_compute_controller_fu_1302_dbg_mac_ready),
-    .dbg_mac_ready_ap_vld(grp_compute_controller_fu_1302_dbg_mac_ready_ap_vld),
-    .dbg_mac_complete(grp_compute_controller_fu_1302_dbg_mac_complete),
-    .dbg_mac_complete_ap_vld(grp_compute_controller_fu_1302_dbg_mac_complete_ap_vld),
-    .error_read(error_reg_2852),
-    .compute_done(grp_compute_controller_fu_1302_compute_done),
-    .compute_done_ap_vld(grp_compute_controller_fu_1302_compute_done_ap_vld),
-    .compute_ready(grp_compute_controller_fu_1302_compute_ready),
-    .compute_ready_ap_vld(grp_compute_controller_fu_1302_compute_ready_ap_vld),
-    .ap_return_0(grp_compute_controller_fu_1302_ap_return_0),
-    .ap_return_1(grp_compute_controller_fu_1302_ap_return_1),
-    .ap_return_2(grp_compute_controller_fu_1302_ap_return_2),
-    .ap_return_3(grp_compute_controller_fu_1302_ap_return_3),
-    .ap_return_4(grp_compute_controller_fu_1302_ap_return_4),
-    .ap_return_5(grp_compute_controller_fu_1302_ap_return_5),
-    .ap_return_6(grp_compute_controller_fu_1302_ap_return_6)
+    .out_buf_address0(grp_compute_controller_fu_1306_out_buf_address0),
+    .out_buf_ce0(grp_compute_controller_fu_1306_out_buf_ce0),
+    .out_buf_we0(grp_compute_controller_fu_1306_out_buf_we0),
+    .out_buf_d0(grp_compute_controller_fu_1306_out_buf_d0),
+    .out_buf_address1(grp_compute_controller_fu_1306_out_buf_address1),
+    .out_buf_ce1(grp_compute_controller_fu_1306_out_buf_ce1),
+    .out_buf_we1(grp_compute_controller_fu_1306_out_buf_we1),
+    .out_buf_d1(grp_compute_controller_fu_1306_out_buf_d1),
+    .dbg_mac_start(grp_compute_controller_fu_1306_dbg_mac_start),
+    .dbg_mac_start_ap_vld(grp_compute_controller_fu_1306_dbg_mac_start_ap_vld),
+    .dbg_mac_ready(grp_compute_controller_fu_1306_dbg_mac_ready),
+    .dbg_mac_ready_ap_vld(grp_compute_controller_fu_1306_dbg_mac_ready_ap_vld),
+    .dbg_mac_complete(grp_compute_controller_fu_1306_dbg_mac_complete),
+    .dbg_mac_complete_ap_vld(grp_compute_controller_fu_1306_dbg_mac_complete_ap_vld),
+    .compute_done(grp_compute_controller_fu_1306_compute_done),
+    .compute_done_ap_vld(grp_compute_controller_fu_1306_compute_done_ap_vld),
+    .compute_ready(grp_compute_controller_fu_1306_compute_ready),
+    .compute_ready_ap_vld(grp_compute_controller_fu_1306_compute_ready_ap_vld),
+    .ap_return_0(grp_compute_controller_fu_1306_ap_return_0),
+    .ap_return_1(grp_compute_controller_fu_1306_ap_return_1),
+    .ap_return_2(grp_compute_controller_fu_1306_ap_return_2),
+    .ap_return_3(grp_compute_controller_fu_1306_ap_return_3),
+    .ap_return_4(grp_compute_controller_fu_1306_ap_return_4),
+    .ap_return_5(grp_compute_controller_fu_1306_ap_return_5),
+    .ap_return_6(grp_compute_controller_fu_1306_ap_return_6)
 );
 
 transformer_top_control_s_axi #(
@@ -726,24 +735,24 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
-        grp_compute_controller_fu_1302_ap_start_reg <= 1'b0;
+        grp_compute_controller_fu_1306_ap_start_reg <= 1'b0;
     end else begin
         if ((1'b1 == ap_CS_fsm_state4)) begin
-            grp_compute_controller_fu_1302_ap_start_reg <= 1'b1;
-        end else if ((grp_compute_controller_fu_1302_ap_ready == 1'b1)) begin
-            grp_compute_controller_fu_1302_ap_start_reg <= 1'b0;
+            grp_compute_controller_fu_1306_ap_start_reg <= 1'b1;
+        end else if ((grp_compute_controller_fu_1306_ap_ready == 1'b1)) begin
+            grp_compute_controller_fu_1306_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
-        grp_scheduler_hls_fu_1169_ap_start_reg <= 1'b0;
+        grp_scheduler_hls_fu_1173_ap_start_reg <= 1'b0;
     end else begin
         if ((1'b1 == ap_CS_fsm_state2)) begin
-            grp_scheduler_hls_fu_1169_ap_start_reg <= 1'b1;
-        end else if ((grp_scheduler_hls_fu_1169_ap_ready == 1'b1)) begin
-            grp_scheduler_hls_fu_1169_ap_start_reg <= 1'b0;
+            grp_scheduler_hls_fu_1173_ap_start_reg <= 1'b1;
+        end else if ((grp_scheduler_hls_fu_1173_ap_ready == 1'b1)) begin
+            grp_scheduler_hls_fu_1173_ap_start_reg <= 1'b0;
         end
     end
 end
@@ -752,187 +761,210 @@ always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
         irq_ps_preg <= 1'd0;
     end else begin
-        if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-            irq_ps_preg <= icmp_ln83_fu_2709_p2;
+        if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+            irq_ps_preg <= icmp_ln93_fu_2683_p2;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1796_p1 == 1'd0) & (ap_start == 1'b1))) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1772_p1 == 1'd0) & (ap_start == 1'b1))) begin
         compute_done <= 1'd0;
-    end else if (((grp_compute_controller_fu_1302_compute_done_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        compute_done <= grp_compute_controller_fu_1302_compute_done;
+    end else if (((grp_compute_controller_fu_1306_compute_done_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        compute_done <= grp_compute_controller_fu_1306_compute_done;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1796_p1 == 1'd0) & (ap_start == 1'b1))) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1772_p1 == 1'd0) & (ap_start == 1'b1))) begin
         compute_instruction <= 32'd0;
-    end else if (((grp_scheduler_hls_fu_1169_compute_instruction_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        compute_instruction <= grp_scheduler_hls_fu_1169_compute_instruction;
+    end else if (((grp_scheduler_hls_fu_1173_compute_instruction_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+        compute_instruction <= grp_scheduler_hls_fu_1173_compute_instruction;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1796_p1 == 1'd0) & (ap_start == 1'b1))) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1772_p1 == 1'd0) & (ap_start == 1'b1))) begin
         compute_ready <= 1'd1;
-    end else if (((grp_compute_controller_fu_1302_compute_ready_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        compute_ready <= grp_compute_controller_fu_1302_compute_ready;
+    end else if (((grp_compute_controller_fu_1306_compute_ready_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        compute_ready <= grp_compute_controller_fu_1306_compute_ready;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1796_p1 == 1'd0) & (ap_start == 1'b1))) begin
+    if (((1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1772_p1 == 1'd0) & (ap_start == 1'b1))) begin
         compute_start <= 1'd0;
-    end else if (((grp_scheduler_hls_fu_1169_compute_start_o_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        compute_start <= grp_scheduler_hls_fu_1169_compute_start_o;
+    end else if (((grp_scheduler_hls_fu_1173_compute_start_o_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+        compute_start <= grp_scheduler_hls_fu_1173_compute_start_o;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (tmp_2_fu_2352_p3 == 1'd1) & (icmp_ln108_fu_2010_p2 == 1'd0)) | ((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1796_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-                ctrl_mem_interface_error_code[0] <= 1'b0;
-        ctrl_mem_interface_error_code[4] <= 1'b0;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (icmp_ln37_fu_2282_p2 == 1'd0))) begin
-                ctrl_mem_interface_error_code[0] <= 1'b0;
-        ctrl_mem_interface_error_code[4] <= 1'b1;
-    end else if ((((or_ln20_1_fu_2058_p2 == 1'd1) & (or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1)) | ((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (or_ln27_7_fu_2202_p2 == 1'd1)))) begin
-                ctrl_mem_interface_error_code[0] <= 1'b1;
-        ctrl_mem_interface_error_code[4] <= 1'b1;
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        if ((trunc_ln21_1_reg_2855 == 1'd0)) begin
+            ctrl_mem_interface_error_code <= 32'd0;
+        end else if (((compute_error_fu_2082_p1 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ctrl_mem_interface_error_code <= or_ln9_fu_2572_p4;
+        end else if (((scheduler_error_reg_3021 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ctrl_mem_interface_error_code <= or_ln7_fu_2498_p4;
+        end else if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ctrl_mem_interface_error_code <= or_ln5_fu_2426_p3;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ctrl_mem_interface_error_code <= or_ln3_fu_2316_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ctrl_mem_interface_error_code <= or_ln1_fu_2167_p4;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1796_p1 == 1'd0) & (ap_start == 1'b1))) begin
-        ctrl_mem_interface_irq_status <= 32'd0;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (icmp_ln108_fu_2010_p2 == 1'd0))) begin
-        ctrl_mem_interface_irq_status <= and_ln51_fu_2340_p2;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (icmp_ln37_fu_2282_p2 == 1'd0))) begin
-        ctrl_mem_interface_irq_status <= or_ln2_fu_2302_p4;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (or_ln27_7_fu_2202_p2 == 1'd1))) begin
-        ctrl_mem_interface_irq_status <= or_ln1_fu_2212_p4;
-    end else if (((or_ln20_1_fu_2058_p2 == 1'd1) & (or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-        ctrl_mem_interface_irq_status <= or_ln_fu_2078_p4;
-    end else if (((error_1_fu_2615_p1 == 1'd1) & (grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        ctrl_mem_interface_irq_status <= or_ln4_fu_2660_p4;
-    end else if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (done_reg_2847 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
-        ctrl_mem_interface_irq_status <= or_ln3_fu_2634_p4;
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        if ((trunc_ln21_1_reg_2855 == 1'd0)) begin
+            ctrl_mem_interface_irq_status <= 32'd0;
+        end else if (((done_reg_3016 == 1'd1) & (icmp_ln74_fu_2588_p2 == 1'd1))) begin
+            ctrl_mem_interface_irq_status <= or_ln10_fu_2617_p4;
+        end else if ((icmp_ln74_fu_2588_p2 == 1'd0)) begin
+            ctrl_mem_interface_irq_status <= 32'd0;
+        end else if (((compute_error_fu_2082_p1 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ctrl_mem_interface_irq_status <= or_ln8_fu_2532_p4;
+        end else if (((scheduler_error_reg_3021 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ctrl_mem_interface_irq_status <= or_ln6_fu_2458_p4;
+        end else if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ctrl_mem_interface_irq_status <= or_ln4_fu_2390_p4;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ctrl_mem_interface_irq_status <= or_ln2_fu_2276_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ctrl_mem_interface_irq_status <= or_ln_fu_2127_p4;
+        end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln21_1_fu_1796_p1 == 1'd0) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5) & (trunc_ln21_1_reg_2855 == 1'd0))) begin
         ctrl_mem_interface_status <= 32'd1;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (tmp_2_fu_2352_p3 == 1'd1) & (icmp_ln108_fu_2010_p2 == 1'd0))) begin
-        ctrl_mem_interface_status <= and_ln_fu_2380_p4;
-    end else if ((((or_ln20_1_fu_2058_p2 == 1'd1) & (or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1)) | ((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (icmp_ln37_fu_2282_p2 == 1'd0)) | ((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1) & (or_ln27_7_fu_2202_p2 == 1'd1)) | ((error_1_fu_2615_p1 == 1'd1) & (grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    end else if ((((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5) & (compute_error_fu_2082_p1 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5) & (icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5) & (((((or_ln33_fu_2225_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((or_ln34_1_fu_2252_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) | ((or_ln32_fu_2209_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) | ((or_ln31_fu_2193_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)))) | ((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5) & (((icmp_ln22_reg_2977 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((irq_error_en_fu_2086_p3 == 1'd1) & (or_ln22_fu_2103_p2 == 1'd1)))) | ((grp_compute_controller_fu_1306_ap_done == 1'b1) & (scheduler_error_reg_3021 == 1'd1) & (1'b1 == ap_CS_fsm_state5) & (irq_error_en_fu_2086_p3 
+    == 1'd1)))) begin
         ctrl_mem_interface_status <= 32'd2;
-    end else if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (done_reg_2847 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
-        ctrl_mem_interface_status <= 32'd1;
-    end else if (((grp_scheduler_hls_fu_1169_ctrl_mem_interface_status_o_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        ctrl_mem_interface_status <= grp_scheduler_hls_fu_1169_ctrl_mem_interface_status_o;
+    end else if (((grp_scheduler_hls_fu_1173_ctrl_mem_interface_status_o_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+        ctrl_mem_interface_status <= grp_scheduler_hls_fu_1173_ctrl_mem_interface_status_o;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state1)) begin
-        axis_in_last_read_reg_2769 <= axis_in_last;
-        axis_in_valid_read_reg_2774 <= axis_in_valid;
-        ctrl_mem_read_reg_2754 <= ctrl_mem;
-        dma_done_read_reg_2749 <= dma_done;
-        mem_transfer_done_read_reg_2739 <= mem_transfer_done;
-        or_ln120_s_reg_2807 <= or_ln120_s_fu_2428_p3;
-        stream_done_read_reg_2759 <= stream_done;
-        stream_ready_read_reg_2764 <= stream_ready;
-        trunc_ln21_1_reg_2784 <= trunc_ln21_1_fu_1796_p1;
-        trunc_ln21_reg_2779 <= trunc_ln21_fu_1792_p1;
-        wl_ready_read_reg_2744 <= wl_ready;
+        axis_in_last_read_reg_2835 <= axis_in_last;
+        axis_in_valid_read_reg_2840 <= axis_in_valid;
+        ctrl_mem_control_reg_2845 <= ctrl_mem_control_fu_1764_p1;
+        ctrl_mem_dma_head_len_reg_2871 <= {{ctrl_mem[159:128]}};
+        ctrl_mem_dma_tile_len_reg_2876 <= {{ctrl_mem[191:160]}};
+        ctrl_mem_irq_clear_reg_2865 <= {{ctrl_mem[95:64]}};
+        ctrl_mem_irq_mask_reg_2860 <= {{ctrl_mem[63:32]}};
+        ctrl_mem_k_cache_addr_cast8_reg_2962 <= {{ctrl_mem[901:896]}};
+        ctrl_mem_k_cache_stride_reg_2904 <= {{ctrl_mem[351:320]}};
+        ctrl_mem_layer_stride_reg_2881 <= {{ctrl_mem[223:192]}};
+        ctrl_mem_read_reg_2811 <= ctrl_mem;
+        ctrl_mem_v_cache_addr_cast9_reg_2967 <= {{ctrl_mem[965:960]}};
+        ctrl_mem_v_cache_stride_reg_2909 <= {{ctrl_mem[383:352]}};
+        ctrl_mem_w1_base_addr_cast6_reg_2952 <= {{ctrl_mem[773:768]}};
+        ctrl_mem_w1_tile_stride_reg_2920 <= {{ctrl_mem[447:416]}};
+        ctrl_mem_w2_base_addr_cast7_reg_2957 <= {{ctrl_mem[837:832]}};
+        ctrl_mem_w2_tile_stride_reg_2926 <= {{ctrl_mem[479:448]}};
+        ctrl_mem_wk_base_addr_cast3_reg_2937 <= {{ctrl_mem[581:576]}};
+        ctrl_mem_wk_head_stride_reg_2892 <= {{ctrl_mem[287:256]}};
+        ctrl_mem_wo_base_addr_cast5_reg_2947 <= {{ctrl_mem[709:704]}};
+        ctrl_mem_wo_tile_stride_reg_2914 <= {{ctrl_mem[415:384]}};
+        ctrl_mem_wq_base_addr_cast2_reg_2932 <= {{ctrl_mem[517:512]}};
+        ctrl_mem_wq_head_stride_reg_2886 <= {{ctrl_mem[255:224]}};
+        ctrl_mem_wv_base_addr_cast4_reg_2942 <= {{ctrl_mem[645:640]}};
+        ctrl_mem_wv_head_stride_reg_2898 <= {{ctrl_mem[319:288]}};
+        dma_done_read_reg_2806 <= dma_done;
+        icmp_ln22_reg_2977 <= icmp_ln22_fu_1998_p2;
+        mem_transfer_done_read_reg_2796 <= mem_transfer_done;
+        stream_done_read_reg_2825 <= stream_done;
+        stream_ready_read_reg_2830 <= stream_ready;
+        trunc_ln21_1_reg_2855 <= trunc_ln21_1_fu_1772_p1;
+        trunc_ln21_reg_2850 <= trunc_ln21_fu_1768_p1;
+        wl_ready_read_reg_2801 <= wl_ready;
+        xor_ln116_reg_2972 <= xor_ln116_fu_1968_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        compute_done_load_reg_2817 <= compute_done;
-        compute_ready_load_reg_2812 <= compute_ready;
-        head_ctx_ref_0_read_reg_2827 <= head_ctx_ref_0_i;
-        head_ctx_ref_1_read_reg_2832 <= head_ctx_ref_1_i;
-        head_ctx_ref_2_read_reg_2837 <= head_ctx_ref_2_i;
-        head_ctx_ref_3_read_reg_2842 <= head_ctx_ref_3_i;
-        wl_start_read_reg_2822 <= wl_start_i;
+        compute_done_load_reg_2986 <= compute_done;
+        compute_ready_load_reg_2981 <= compute_ready;
+        head_ctx_ref_0_read_reg_2996 <= head_ctx_ref_0_i;
+        head_ctx_ref_1_read_reg_3001 <= head_ctx_ref_1_i;
+        head_ctx_ref_2_read_reg_3006 <= head_ctx_ref_2_i;
+        head_ctx_ref_3_read_reg_3011 <= head_ctx_ref_3_i;
+        wl_start_read_reg_2991 <= wl_start_i;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state4)) begin
-        compute_instruction_load_reg_2862 <= compute_instruction;
-        compute_start_load_reg_2857 <= compute_start;
+        compute_instruction_load_reg_3030 <= compute_instruction;
+        compute_start_load_reg_3025 <= compute_start;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_scheduler_hls_fu_1169_ctrl_mem_interface_layer_index_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        ctrl_mem_interface_layer_index <= grp_scheduler_hls_fu_1169_ctrl_mem_interface_layer_index;
+    if (((grp_scheduler_hls_fu_1173_ctrl_mem_interface_layer_index_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+        ctrl_mem_interface_layer_index <= grp_scheduler_hls_fu_1173_ctrl_mem_interface_layer_index;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_fu_1302_dbg_mac_complete_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        dbg_mac_complete_reg <= grp_compute_controller_fu_1302_dbg_mac_complete;
+    if (((grp_compute_controller_fu_1306_dbg_mac_complete_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        dbg_mac_complete_reg <= grp_compute_controller_fu_1306_dbg_mac_complete;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_fu_1302_dbg_mac_ready_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        dbg_mac_ready_reg <= grp_compute_controller_fu_1302_dbg_mac_ready;
+    if (((grp_compute_controller_fu_1306_dbg_mac_ready_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        dbg_mac_ready_reg <= grp_compute_controller_fu_1306_dbg_mac_ready;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_fu_1302_dbg_mac_start_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        dbg_mac_start_reg <= grp_compute_controller_fu_1302_dbg_mac_start;
+    if (((grp_compute_controller_fu_1306_dbg_mac_start_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        dbg_mac_start_reg <= grp_compute_controller_fu_1306_dbg_mac_start;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state3)) begin
-        done_reg_2847 <= grp_scheduler_hls_fu_1169_ap_return_3;
-        error_reg_2852 <= grp_scheduler_hls_fu_1169_ap_return_4;
+        done_reg_3016 <= grp_scheduler_hls_fu_1173_ap_return_3;
+        scheduler_error_reg_3021 <= grp_scheduler_hls_fu_1173_ap_return_4;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        last_sched_state <= grp_scheduler_hls_fu_1169_ap_return_5;
+    if (((grp_compute_controller_fu_1306_mem_op_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        mem_op_reg <= grp_compute_controller_fu_1306_mem_op;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_fu_1302_mem_op_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        mem_op_reg <= grp_compute_controller_fu_1302_mem_op;
+    if (((grp_compute_controller_fu_1306_mem_read_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        mem_read_request_reg <= grp_compute_controller_fu_1306_mem_read_request;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_fu_1302_mem_read_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        mem_read_request_reg <= grp_compute_controller_fu_1302_mem_read_request;
+    if (((grp_compute_controller_fu_1306_mem_write_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        mem_write_request_reg <= grp_compute_controller_fu_1306_mem_write_request;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_fu_1302_mem_write_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        mem_write_request_reg <= grp_compute_controller_fu_1302_mem_write_request;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((grp_scheduler_hls_fu_1169_wl_instruction_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        wl_instruction_reg <= grp_scheduler_hls_fu_1169_wl_instruction;
+    if (((grp_scheduler_hls_fu_1173_wl_instruction_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+        wl_instruction_reg <= grp_scheduler_hls_fu_1173_wl_instruction;
     end
 end
 
 always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         STATE_ap_vld = 1'b1;
     end else begin
         STATE_ap_vld = 1'b0;
@@ -950,7 +982,7 @@ end
 assign ap_ST_fsm_state2_blk = 1'b0;
 
 always @ (*) begin
-    if ((grp_scheduler_hls_fu_1169_ap_done == 1'b0)) begin
+    if ((grp_scheduler_hls_fu_1173_ap_done == 1'b0)) begin
         ap_ST_fsm_state3_blk = 1'b1;
     end else begin
         ap_ST_fsm_state3_blk = 1'b0;
@@ -960,7 +992,7 @@ end
 assign ap_ST_fsm_state4_blk = 1'b0;
 
 always @ (*) begin
-    if ((grp_compute_controller_fu_1302_ap_done == 1'b0)) begin
+    if ((grp_compute_controller_fu_1306_ap_done == 1'b0)) begin
         ap_ST_fsm_state5_blk = 1'b1;
     end else begin
         ap_ST_fsm_state5_blk = 1'b0;
@@ -994,19 +1026,97 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((or_ln20_1_fu_2058_p2 == 1'd1) & (or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_1 = or_ln_fu_2078_p4;
+    if (((1'b1 == ap_CS_fsm_state5) & (((icmp_ln22_reg_2977 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((irq_error_en_fu_2086_p3 == 1'd1) & (or_ln22_fu_2103_p2 == 1'd1))))) begin
+        ap_sig_allocacmp_ctrl_mem_interface_error_code_load_1 = or_ln1_fu_2167_p4;
+    end else begin
+        ap_sig_allocacmp_ctrl_mem_interface_error_code_load_1 = ctrl_mem_interface_error_code;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_2 = or_ln3_fu_2316_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_2 = or_ln1_fu_2167_p4;
+        end else begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_2 = ctrl_mem_interface_error_code;
+        end
+    end else begin
+        ap_sig_allocacmp_ctrl_mem_interface_error_code_load_2 = ctrl_mem_interface_error_code;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3 = or_ln5_fu_2426_p3;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3 = or_ln3_fu_2316_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3 = or_ln1_fu_2167_p4;
+        end else begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3 = ctrl_mem_interface_error_code;
+        end
+    end else begin
+        ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3 = ctrl_mem_interface_error_code;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if (((scheduler_error_reg_3021 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4 = or_ln7_fu_2498_p4;
+        end else if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4 = or_ln5_fu_2426_p3;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4 = or_ln3_fu_2316_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4 = or_ln1_fu_2167_p4;
+        end else begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4 = ctrl_mem_interface_error_code;
+        end
+    end else begin
+        ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4 = ctrl_mem_interface_error_code;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if ((trunc_ln21_1_reg_2855 == 1'd0)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = 32'd0;
+        end else if (((compute_error_fu_2082_p1 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = or_ln9_fu_2572_p4;
+        end else if (((scheduler_error_reg_3021 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = or_ln7_fu_2498_p4;
+        end else if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = or_ln5_fu_2426_p3;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = or_ln3_fu_2316_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = or_ln1_fu_2167_p4;
+        end else begin
+            ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = ctrl_mem_interface_error_code;
+        end
+    end else begin
+        ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5 = ctrl_mem_interface_error_code;
+    end
+end
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state5) & (((icmp_ln22_reg_2977 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((irq_error_en_fu_2086_p3 == 1'd1) & (or_ln22_fu_2103_p2 == 1'd1))))) begin
+        ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_1 = or_ln_fu_2127_p4;
     end else begin
         ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_1 = ctrl_mem_interface_irq_status;
     end
 end
 
 always @ (*) begin
-    if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((or_ln27_7_fu_2202_p2 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2 = or_ln1_fu_2212_p4;
-        end else if ((or_ln20_1_fu_2058_p2 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2 = or_ln_fu_2078_p4;
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2 = or_ln2_fu_2276_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2 = or_ln_fu_2127_p4;
         end else begin
             ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2 = ctrl_mem_interface_irq_status;
         end
@@ -1016,13 +1126,13 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((icmp_ln37_fu_2282_p2 == 1'd0)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3 = or_ln2_fu_2302_p4;
-        end else if ((or_ln27_7_fu_2202_p2 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3 = or_ln1_fu_2212_p4;
-        end else if ((or_ln20_1_fu_2058_p2 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3 = or_ln_fu_2078_p4;
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3 = or_ln4_fu_2390_p4;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3 = or_ln2_fu_2276_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3 = or_ln_fu_2127_p4;
         end else begin
             ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3 = ctrl_mem_interface_irq_status;
         end
@@ -1032,17 +1142,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((trunc_ln21_1_fu_1796_p1 == 1'd0)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = 32'd0;
-        end else if ((icmp_ln108_fu_2010_p2 == 1'd0)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = and_ln51_fu_2340_p2;
-        end else if ((icmp_ln37_fu_2282_p2 == 1'd0)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = or_ln2_fu_2302_p4;
-        end else if ((or_ln27_7_fu_2202_p2 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = or_ln1_fu_2212_p4;
-        end else if ((or_ln20_1_fu_2058_p2 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = or_ln_fu_2078_p4;
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if (((scheduler_error_reg_3021 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = or_ln6_fu_2458_p4;
+        end else if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = or_ln4_fu_2390_p4;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = or_ln2_fu_2276_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = or_ln_fu_2127_p4;
         end else begin
             ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4 = ctrl_mem_interface_irq_status;
         end
@@ -1052,29 +1160,55 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((done_reg_2847 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
-        ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = or_ln3_fu_2634_p4;
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if (((compute_error_fu_2082_p1 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5 = or_ln8_fu_2532_p4;
+        end else if (((scheduler_error_reg_3021 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5 = or_ln6_fu_2458_p4;
+        end else if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5 = or_ln4_fu_2390_p4;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5 = or_ln2_fu_2276_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5 = or_ln_fu_2127_p4;
+        end else begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5 = ctrl_mem_interface_irq_status;
+        end
+    end else begin
+        ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5 = ctrl_mem_interface_irq_status;
+    end
+end
+
+always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state5)) begin
+        if ((trunc_ln21_1_reg_2855 == 1'd0)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = 32'd0;
+        end else if (((done_reg_3016 == 1'd1) & (icmp_ln74_fu_2588_p2 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = or_ln10_fu_2617_p4;
+        end else if ((icmp_ln74_fu_2588_p2 == 1'd0)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = 32'd0;
+        end else if (((compute_error_fu_2082_p1 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = or_ln8_fu_2532_p4;
+        end else if (((scheduler_error_reg_3021 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = or_ln6_fu_2458_p4;
+        end else if (((icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1))) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = or_ln4_fu_2390_p4;
+        end else if ((1'b1 == ap_condition_1063)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = or_ln2_fu_2276_p4;
+        end else if ((1'b1 == ap_condition_1045)) begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = or_ln_fu_2127_p4;
+        end else begin
+            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = ctrl_mem_interface_irq_status;
+        end
     end else begin
         ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6 = ctrl_mem_interface_irq_status;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state5)) begin
-        if ((error_1_fu_2615_p1 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_7 = or_ln4_fu_2660_p4;
-        end else if ((done_reg_2847 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_7 = or_ln3_fu_2634_p4;
-        end else begin
-            ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_7 = ctrl_mem_interface_irq_status;
-        end
-    end else begin
-        ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_7 = ctrl_mem_interface_irq_status;
-    end
-end
-
-always @ (*) begin
-    if ((((or_ln20_1_fu_2058_p2 == 1'd1) & (or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln37_fu_2282_p2 == 1'd0)) | ((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln27_7_fu_2202_p2 == 1'd1)))) begin
+    if (((1'b1 == ap_CS_fsm_state5) & (trunc_ln21_1_reg_2855 == 1'd0))) begin
+        ap_sig_allocacmp_ctrl_mem_interface_status_load = 32'd1;
+    end else if ((((1'b1 == ap_CS_fsm_state5) & (compute_error_fu_2082_p1 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((1'b1 == ap_CS_fsm_state5) & (icmp_ln43_fu_2366_p2 == 1'd0) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((1'b1 == ap_CS_fsm_state5) & (((((or_ln33_fu_2225_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((or_ln34_1_fu_2252_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) | ((or_ln32_fu_2209_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) | ((or_ln31_fu_2193_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)))) | ((1'b1 == ap_CS_fsm_state5) & (((icmp_ln22_reg_2977 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((irq_error_en_fu_2086_p3 == 1'd1) & (or_ln22_fu_2103_p2 == 1'd1)))) | ((scheduler_error_reg_3021 == 1'd1) & (1'b1 == ap_CS_fsm_state5) & (irq_error_en_fu_2086_p3 == 1'd1)))) begin
         ap_sig_allocacmp_ctrl_mem_interface_status_load = 32'd2;
     end else begin
         ap_sig_allocacmp_ctrl_mem_interface_status_load = ctrl_mem_interface_status;
@@ -1082,21 +1216,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state5)) begin
-        if ((error_1_fu_2615_p1 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_status_load_1 = 32'd2;
-        end else if ((done_reg_2847 == 1'd1)) begin
-            ap_sig_allocacmp_ctrl_mem_interface_status_load_1 = 32'd1;
-        end else begin
-            ap_sig_allocacmp_ctrl_mem_interface_status_load_1 = ctrl_mem_interface_status;
-        end
-    end else begin
-        ap_sig_allocacmp_ctrl_mem_interface_status_load_1 = ctrl_mem_interface_status;
-    end
-end
-
-always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         axis_in_ready_ap_vld = 1'b1;
     end else begin
         axis_in_ready_ap_vld = 1'b0;
@@ -1104,7 +1224,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         control_reg_ap_vld = 1'b1;
     end else begin
         control_reg_ap_vld = 1'b0;
@@ -1144,7 +1264,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_compute_state_ap_vld = 1'b1;
     end else begin
         dbg_compute_state_ap_vld = 1'b0;
@@ -1152,7 +1272,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_ctrl_mem_ap_vld = 1'b1;
     end else begin
         dbg_ctrl_mem_ap_vld = 1'b0;
@@ -1160,7 +1280,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_ctrl_reset_asserted_ap_vld = 1'b1;
     end else begin
         dbg_ctrl_reset_asserted_ap_vld = 1'b0;
@@ -1168,7 +1288,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_done_ap_vld = 1'b1;
     end else begin
         dbg_done_ap_vld = 1'b0;
@@ -1176,39 +1296,31 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        dbg_error_ap_vld = 1'b1;
-    end else begin
-        dbg_error_ap_vld = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((grp_compute_controller_fu_1302_dbg_mac_complete_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        dbg_mac_complete = grp_compute_controller_fu_1302_dbg_mac_complete;
+    if (((grp_compute_controller_fu_1306_dbg_mac_complete_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        dbg_mac_complete = grp_compute_controller_fu_1306_dbg_mac_complete;
     end else begin
         dbg_mac_complete = dbg_mac_complete_reg;
     end
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_dbg_mac_ready_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        dbg_mac_ready = grp_compute_controller_fu_1302_dbg_mac_ready;
+    if (((grp_compute_controller_fu_1306_dbg_mac_ready_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        dbg_mac_ready = grp_compute_controller_fu_1306_dbg_mac_ready;
     end else begin
         dbg_mac_ready = dbg_mac_ready_reg;
     end
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_dbg_mac_start_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        dbg_mac_start = grp_compute_controller_fu_1302_dbg_mac_start;
+    if (((grp_compute_controller_fu_1306_dbg_mac_start_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        dbg_mac_start = grp_compute_controller_fu_1306_dbg_mac_start;
     end else begin
         dbg_mac_start = dbg_mac_start_reg;
     end
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_req_head_ap_vld = 1'b1;
     end else begin
         dbg_req_head_ap_vld = 1'b0;
@@ -1216,7 +1328,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_req_instruction_ap_vld = 1'b1;
     end else begin
         dbg_req_instruction_ap_vld = 1'b0;
@@ -1224,7 +1336,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_req_layer_ap_vld = 1'b1;
     end else begin
         dbg_req_layer_ap_vld = 1'b0;
@@ -1232,7 +1344,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_req_op_ap_vld = 1'b1;
     end else begin
         dbg_req_op_ap_vld = 1'b0;
@@ -1240,7 +1352,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         dbg_req_tile_ap_vld = 1'b1;
     end else begin
         dbg_req_tile_ap_vld = 1'b0;
@@ -1248,37 +1360,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((error_1_fu_2615_p1 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
-        grp_load_fu_1741_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln27_7_fu_2202_p2 == 1'd1))) begin
-        grp_load_fu_1741_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_1;
-    end else begin
-        grp_load_fu_1741_p1 = 'bx;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state5)) begin
-        grp_load_fu_1755_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_7;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln37_fu_2282_p2 == 1'd0))) begin
-        grp_load_fu_1755_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2;
-    end else begin
-        grp_load_fu_1755_p1 = 'bx;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state5)) begin
-        grp_load_fu_1759_p1 = ap_sig_allocacmp_ctrl_mem_interface_status_load_1;
-    end else if (((or_ln106_1_fu_2028_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (tmp_2_fu_2352_p3 == 1'd1) & (icmp_ln108_fu_2010_p2 == 1'd0))) begin
-        grp_load_fu_1759_p1 = ap_sig_allocacmp_ctrl_mem_interface_status_load;
-    end else begin
-        grp_load_fu_1759_p1 = 'bx;
-    end
-end
-
-always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         head_ctx_ref_0_o_ap_vld = 1'b1;
     end else begin
         head_ctx_ref_0_o_ap_vld = 1'b0;
@@ -1286,7 +1368,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         head_ctx_ref_1_o_ap_vld = 1'b1;
     end else begin
         head_ctx_ref_1_o_ap_vld = 1'b0;
@@ -1294,7 +1376,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         head_ctx_ref_2_o_ap_vld = 1'b1;
     end else begin
         head_ctx_ref_2_o_ap_vld = 1'b0;
@@ -1302,7 +1384,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         head_ctx_ref_3_o_ap_vld = 1'b1;
     end else begin
         head_ctx_ref_3_o_ap_vld = 1'b0;
@@ -1310,7 +1392,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        irq_clear_reg_ap_vld = 1'b1;
+    end else begin
+        irq_clear_reg_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         irq_mask_reg_ap_vld = 1'b1;
     end else begin
         irq_mask_reg_ap_vld = 1'b0;
@@ -1318,15 +1408,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        irq_ps = icmp_ln83_fu_2709_p2;
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        irq_ps = icmp_ln93_fu_2683_p2;
     end else begin
         irq_ps = irq_ps_preg;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         irq_status_reg_ap_vld = 1'b1;
     end else begin
         irq_status_reg_ap_vld = 1'b0;
@@ -1334,31 +1424,31 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_mem_op_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        mem_op = grp_compute_controller_fu_1302_mem_op;
+    if (((grp_compute_controller_fu_1306_mem_op_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        mem_op = grp_compute_controller_fu_1306_mem_op;
     end else begin
         mem_op = mem_op_reg;
     end
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_mem_read_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        mem_read_request = grp_compute_controller_fu_1302_mem_read_request;
+    if (((grp_compute_controller_fu_1306_mem_read_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        mem_read_request = grp_compute_controller_fu_1306_mem_read_request;
     end else begin
         mem_read_request = mem_read_request_reg;
     end
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_mem_write_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-        mem_write_request = grp_compute_controller_fu_1302_mem_write_request;
+    if (((grp_compute_controller_fu_1306_mem_write_request_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+        mem_write_request = grp_compute_controller_fu_1306_mem_write_request;
     end else begin
         mem_write_request = mem_write_request_reg;
     end
 end
 
 always @ (*) begin
-    if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         status_mem_ap_vld = 1'b1;
     end else begin
         status_mem_ap_vld = 1'b0;
@@ -1366,7 +1456,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         stream_start_ap_vld = 1'b1;
     end else begin
         stream_start_ap_vld = 1'b0;
@@ -1374,7 +1464,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         w1_base_addr_ap_vld = 1'b1;
     end else begin
         w1_base_addr_ap_vld = 1'b0;
@@ -1382,7 +1472,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         w1_tile_stride_ap_vld = 1'b1;
     end else begin
         w1_tile_stride_ap_vld = 1'b0;
@@ -1390,7 +1480,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         w2_base_addr_ap_vld = 1'b1;
     end else begin
         w2_base_addr_ap_vld = 1'b0;
@@ -1398,7 +1488,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         w2_tile_stride_ap_vld = 1'b1;
     end else begin
         w2_tile_stride_ap_vld = 1'b0;
@@ -1406,7 +1496,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wk_base_addr_ap_vld = 1'b1;
     end else begin
         wk_base_addr_ap_vld = 1'b0;
@@ -1414,7 +1504,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wk_head_stride_ap_vld = 1'b1;
     end else begin
         wk_head_stride_ap_vld = 1'b0;
@@ -1422,15 +1512,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_wl_instruction_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        wl_instruction = grp_scheduler_hls_fu_1169_wl_instruction;
+    if (((grp_scheduler_hls_fu_1173_wl_instruction_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+        wl_instruction = grp_scheduler_hls_fu_1173_wl_instruction;
     end else begin
         wl_instruction = wl_instruction_reg;
     end
 end
 
 always @ (*) begin
-    if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
         wl_start_o_ap_vld = 1'b1;
     end else begin
         wl_start_o_ap_vld = 1'b0;
@@ -1438,7 +1528,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wo_base_addr_ap_vld = 1'b1;
     end else begin
         wo_base_addr_ap_vld = 1'b0;
@@ -1446,7 +1536,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wo_tile_stride_ap_vld = 1'b1;
     end else begin
         wo_tile_stride_ap_vld = 1'b0;
@@ -1454,7 +1544,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wq_base_addr_ap_vld = 1'b1;
     end else begin
         wq_base_addr_ap_vld = 1'b0;
@@ -1462,7 +1552,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wq_head_stride_ap_vld = 1'b1;
     end else begin
         wq_head_stride_ap_vld = 1'b0;
@@ -1470,7 +1560,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wv_base_addr_ap_vld = 1'b1;
     end else begin
         wv_base_addr_ap_vld = 1'b0;
@@ -1478,7 +1568,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+    if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
         wv_head_stride_ap_vld = 1'b1;
     end else begin
         wv_head_stride_ap_vld = 1'b0;
@@ -1498,7 +1588,7 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state3;
         end
         ap_ST_fsm_state3 : begin
-            if (((grp_scheduler_hls_fu_1169_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+            if (((grp_scheduler_hls_fu_1173_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
                 ap_NS_fsm = ap_ST_fsm_state4;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state3;
@@ -1508,7 +1598,7 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state5;
         end
         ap_ST_fsm_state5 : begin
-            if (((grp_compute_controller_fu_1302_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+            if (((grp_compute_controller_fu_1306_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
                 ap_NS_fsm = ap_ST_fsm_state6;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state5;
@@ -1523,15 +1613,11 @@ always @ (*) begin
     endcase
 end
 
-assign STATE = grp_scheduler_hls_fu_1169_ap_return_5;
+assign STATE = grp_scheduler_hls_fu_1173_ap_return_5;
 
-assign and_ln1_fu_2695_p3 = {{tmp_6_fu_2686_p4}, {1'd0}};
+assign and_ln93_fu_2677_p2 = (trunc_ln93_fu_2656_p1 & and_ln_fu_2669_p3);
 
-assign and_ln51_fu_2340_p2 = (xor_ln51_fu_2330_p2 & ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3);
-
-assign and_ln83_fu_2703_p2 = (trunc_ln83_fu_2682_p1 & and_ln1_fu_2695_p3);
-
-assign and_ln_fu_2380_p4 = {{{tmp_7_fu_2366_p4}, {1'd0}}, {trunc_ln55_fu_2376_p1}};
+assign and_ln_fu_2669_p3 = {{tmp_11_fu_2660_p4}, {1'd0}};
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -1546,54 +1632,26 @@ assign ap_CS_fsm_state5 = ap_CS_fsm[32'd4];
 assign ap_CS_fsm_state6 = ap_CS_fsm[32'd5];
 
 always @ (*) begin
+    ap_condition_1045 = (((icmp_ln22_reg_2977 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((irq_error_en_fu_2086_p3 == 1'd1) & (or_ln22_fu_2103_p2 == 1'd1)));
+end
+
+always @ (*) begin
+    ap_condition_1063 = (((((or_ln33_fu_2225_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)) | ((or_ln34_1_fu_2252_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) | ((or_ln32_fu_2209_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1))) | ((or_ln31_fu_2193_p2 == 1'd1) & (irq_error_en_fu_2086_p3 == 1'd1)));
+end
+
+always @ (*) begin
     ap_rst_n_inv = ~ap_rst_n;
 end
 
-assign axis_in_ready = grp_scheduler_hls_fu_1169_ap_return_0;
+assign axis_in_ready = grp_scheduler_hls_fu_1173_ap_return_0;
 
-assign control_reg = ctrl_mem[31:0];
+assign compute_error_fu_2082_p1 = grp_compute_controller_fu_1306_ap_return_6;
 
-assign ctrl_mem_dma_head_len_fu_1825_p3 = {{ctrl_mem[159:128]}};
+assign control_reg = ctrl_mem_control_reg_2845;
 
-assign ctrl_mem_dma_layer_len_fu_1817_p3 = {{ctrl_mem[127:96]}};
+assign ctrl_mem_control_fu_1764_p1 = ctrl_mem[31:0];
 
-assign ctrl_mem_dma_tile_len_fu_1833_p3 = {{ctrl_mem[191:160]}};
-
-assign ctrl_mem_irq_clear_fu_1809_p3 = {{ctrl_mem[95:64]}};
-
-assign ctrl_mem_k_cache_addr_cast8_fu_1979_p4 = {{ctrl_mem[901:896]}};
-
-assign ctrl_mem_k_cache_stride_fu_1876_p3 = {{ctrl_mem[351:320]}};
-
-assign ctrl_mem_layer_stride_fu_1841_p3 = {{ctrl_mem[223:192]}};
-
-assign ctrl_mem_v_cache_addr_cast9_fu_1989_p4 = {{ctrl_mem[965:960]}};
-
-assign ctrl_mem_v_cache_stride_fu_1884_p3 = {{ctrl_mem[383:352]}};
-
-assign ctrl_mem_w1_base_addr_cast6_fu_1959_p4 = {{ctrl_mem[773:768]}};
-
-assign ctrl_mem_w1_tile_stride_fu_1901_p3 = {{ctrl_mem[447:416]}};
-
-assign ctrl_mem_w2_base_addr_cast7_fu_1969_p4 = {{ctrl_mem[837:832]}};
-
-assign ctrl_mem_w2_tile_stride_fu_1910_p3 = {{ctrl_mem[479:448]}};
-
-assign ctrl_mem_wk_base_addr_cast3_fu_1929_p4 = {{ctrl_mem[581:576]}};
-
-assign ctrl_mem_wk_head_stride_fu_1858_p3 = {{ctrl_mem[287:256]}};
-
-assign ctrl_mem_wo_base_addr_cast5_fu_1949_p4 = {{ctrl_mem[709:704]}};
-
-assign ctrl_mem_wo_tile_stride_fu_1892_p3 = {{ctrl_mem[415:384]}};
-
-assign ctrl_mem_wq_base_addr_cast2_fu_1919_p4 = {{ctrl_mem[517:512]}};
-
-assign ctrl_mem_wq_head_stride_fu_1849_p3 = {{ctrl_mem[255:224]}};
-
-assign ctrl_mem_wv_base_addr_cast4_fu_1939_p4 = {{ctrl_mem[645:640]}};
-
-assign ctrl_mem_wv_head_stride_fu_1867_p3 = {{ctrl_mem[319:288]}};
+assign ctrl_mem_dma_layer_len_fu_1792_p3 = {{ctrl_mem[127:96]}};
 
 assign dbg_compute_done = compute_done;
 
@@ -1603,236 +1661,244 @@ assign dbg_compute_ready = compute_ready;
 
 assign dbg_compute_start = compute_start;
 
-assign dbg_compute_state = grp_compute_controller_fu_1302_ap_return_0;
+assign dbg_compute_state = grp_compute_controller_fu_1306_ap_return_0;
 
-assign dbg_ctrl_mem = or_ln120_s_reg_2807;
+assign dbg_ctrl_mem = {{tmp_fu_2715_p4}, {trunc_ln195_fu_2724_p1}};
 
-assign dbg_ctrl_reset_asserted = xor_ln107_fu_2003_p2;
+assign dbg_ctrl_reset_asserted = xor_ln116_reg_2972;
 
-assign dbg_done = done_reg_2847;
+assign dbg_done = done_reg_3016;
 
-assign dbg_error = grp_compute_controller_fu_1302_ap_return_6;
+assign dbg_mac_complete_ap_vld = grp_compute_controller_fu_1306_dbg_mac_complete_ap_vld;
 
-assign dbg_mac_complete_ap_vld = grp_compute_controller_fu_1302_dbg_mac_complete_ap_vld;
+assign dbg_mac_ready_ap_vld = grp_compute_controller_fu_1306_dbg_mac_ready_ap_vld;
 
-assign dbg_mac_ready_ap_vld = grp_compute_controller_fu_1302_dbg_mac_ready_ap_vld;
+assign dbg_mac_start_ap_vld = grp_compute_controller_fu_1306_dbg_mac_start_ap_vld;
 
-assign dbg_mac_start_ap_vld = grp_compute_controller_fu_1302_dbg_mac_start_ap_vld;
+assign dbg_req_head = grp_compute_controller_fu_1306_ap_return_4;
 
-assign dbg_req_head = grp_compute_controller_fu_1302_ap_return_4;
+assign dbg_req_instruction = grp_compute_controller_fu_1306_ap_return_1;
 
-assign dbg_req_instruction = grp_compute_controller_fu_1302_ap_return_1;
+assign dbg_req_layer = grp_compute_controller_fu_1306_ap_return_3;
 
-assign dbg_req_layer = grp_compute_controller_fu_1302_ap_return_3;
+assign dbg_req_op = grp_compute_controller_fu_1306_ap_return_2;
 
-assign dbg_req_op = grp_compute_controller_fu_1302_ap_return_2;
+assign dbg_req_tile = grp_compute_controller_fu_1306_ap_return_5;
 
-assign dbg_req_tile = grp_compute_controller_fu_1302_ap_return_5;
+assign grp_compute_controller_fu_1306_ap_start = grp_compute_controller_fu_1306_ap_start_reg;
 
-assign error_1_fu_2615_p1 = grp_compute_controller_fu_1302_ap_return_6;
+assign grp_scheduler_hls_fu_1173_ap_start = grp_scheduler_hls_fu_1173_ap_start_reg;
 
-assign grp_compute_controller_fu_1302_ap_start = grp_compute_controller_fu_1302_ap_start_reg;
+assign head_ctx_ref_0_o = grp_scheduler_hls_fu_1173_ap_return_6;
 
-assign grp_fu_1745_p4 = {{grp_load_fu_1741_p1[31:2]}};
+assign head_ctx_ref_1_o = grp_scheduler_hls_fu_1173_ap_return_7;
 
-assign grp_scheduler_hls_fu_1169_ap_start = grp_scheduler_hls_fu_1169_ap_start_reg;
+assign head_ctx_ref_2_o = grp_scheduler_hls_fu_1173_ap_return_8;
 
-assign head_ctx_ref_0_o = grp_scheduler_hls_fu_1169_ap_return_6;
+assign head_ctx_ref_3_o = grp_scheduler_hls_fu_1173_ap_return_9;
 
-assign head_ctx_ref_1_o = grp_scheduler_hls_fu_1169_ap_return_7;
+assign icmp_ln22_1_fu_2093_p2 = ((ctrl_mem_dma_head_len_reg_2871 == 32'd0) ? 1'b1 : 1'b0);
 
-assign head_ctx_ref_2_o = grp_scheduler_hls_fu_1169_ap_return_8;
+assign icmp_ln22_2_fu_2098_p2 = ((ctrl_mem_dma_tile_len_reg_2876 == 32'd0) ? 1'b1 : 1'b0);
 
-assign head_ctx_ref_3_o = grp_scheduler_hls_fu_1169_ap_return_9;
+assign icmp_ln22_fu_1998_p2 = ((ctrl_mem_dma_layer_len_fu_1792_p3 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln106_fu_2022_p2 = ((or_ln106_fu_2016_p2 != 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln31_fu_2183_p2 = ((ctrl_mem_layer_stride_reg_2881 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln108_fu_2010_p2 = ((ctrl_mem_irq_clear_fu_1809_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln32_1_fu_2199_p2 = ((ctrl_mem_wk_head_stride_reg_2892 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln20_1_fu_2040_p2 = ((ctrl_mem_dma_head_len_fu_1825_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln32_2_fu_2204_p2 = ((ctrl_mem_wv_head_stride_reg_2898 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln20_2_fu_2046_p2 = ((ctrl_mem_dma_tile_len_fu_1833_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln32_fu_2188_p2 = ((ctrl_mem_wq_head_stride_reg_2886 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln20_fu_2034_p2 = ((ctrl_mem_dma_layer_len_fu_1817_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln33_1_fu_2220_p2 = ((ctrl_mem_v_cache_stride_reg_2909 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln27_fu_2106_p2 = ((ctrl_mem_layer_stride_fu_1841_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln33_fu_2215_p2 = ((ctrl_mem_k_cache_stride_reg_2904 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln28_1_fu_2118_p2 = ((ctrl_mem_wk_head_stride_fu_1858_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln34_1_fu_2236_p2 = ((ctrl_mem_w1_tile_stride_reg_2920 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln28_2_fu_2124_p2 = ((ctrl_mem_wv_head_stride_fu_1867_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln34_2_fu_2241_p2 = ((ctrl_mem_w2_tile_stride_reg_2926 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln28_fu_2112_p2 = ((ctrl_mem_wq_head_stride_fu_1849_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln34_fu_2231_p2 = ((ctrl_mem_wo_tile_stride_reg_2914 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln29_1_fu_2136_p2 = ((ctrl_mem_v_cache_stride_fu_1884_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln43_fu_2366_p2 = ((or_ln43_6_fu_2360_p2 == 6'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln29_fu_2130_p2 = ((ctrl_mem_k_cache_stride_fu_1876_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln74_fu_2588_p2 = ((ctrl_mem_irq_clear_reg_2865 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln30_1_fu_2148_p2 = ((ctrl_mem_w1_tile_stride_fu_1901_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln93_fu_2683_p2 = ((and_ln93_fu_2677_p2 != 3'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln30_2_fu_2154_p2 = ((ctrl_mem_w2_tile_stride_fu_1910_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign in_buf_address0 = grp_compute_controller_fu_1306_in_buf_address0;
 
-assign icmp_ln30_fu_2142_p2 = ((ctrl_mem_wo_tile_stride_fu_1892_p3 == 32'd0) ? 1'b1 : 1'b0);
+assign in_buf_address1 = grp_compute_controller_fu_1306_in_buf_address1;
 
-assign icmp_ln37_fu_2282_p2 = ((or_ln37_6_fu_2276_p2 == 6'd0) ? 1'b1 : 1'b0);
+assign in_buf_ce0 = grp_compute_controller_fu_1306_in_buf_ce0;
 
-assign icmp_ln83_fu_2709_p2 = ((and_ln83_fu_2703_p2 != 3'd0) ? 1'b1 : 1'b0);
+assign in_buf_ce1 = grp_compute_controller_fu_1306_in_buf_ce1;
 
-assign in_buf_address0 = grp_compute_controller_fu_1302_in_buf_address0;
+assign irq_clear_reg = ctrl_mem_irq_clear_reg_2865;
 
-assign in_buf_address1 = grp_compute_controller_fu_1302_in_buf_address1;
+assign irq_error_en_fu_2086_p3 = ctrl_mem_read_reg_2811[32'd33];
 
-assign in_buf_ce0 = grp_compute_controller_fu_1302_in_buf_ce0;
+assign irq_mask_reg = ctrl_mem_irq_mask_reg_2860;
 
-assign in_buf_ce1 = grp_compute_controller_fu_1302_in_buf_ce1;
+assign irq_status_reg = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6;
 
-assign irq_mask_reg = {{ctrl_mem[63:32]}};
+assign mem_op_ap_vld = grp_compute_controller_fu_1306_mem_op_ap_vld;
 
-assign irq_status_reg = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4;
+assign mem_read_request_ap_vld = grp_compute_controller_fu_1306_mem_read_request_ap_vld;
 
-assign mem_op_ap_vld = grp_compute_controller_fu_1302_mem_op_ap_vld;
+assign mem_write_request_ap_vld = grp_compute_controller_fu_1306_mem_write_request_ap_vld;
 
-assign mem_read_request_ap_vld = grp_compute_controller_fu_1302_mem_read_request_ap_vld;
+assign or_ln10_fu_2617_p4 = {{{tmp_10_fu_2603_p4}, {1'd1}}, {trunc_ln77_fu_2613_p1}};
 
-assign mem_write_request_ap_vld = grp_compute_controller_fu_1302_mem_write_request_ap_vld;
+assign or_ln1_fu_2167_p4 = {{{tmp_3_fu_2153_p4}, {1'd1}}, {trunc_ln26_fu_2163_p1}};
 
-assign or_ln106_1_fu_2028_p2 = (xor_ln107_fu_2003_p2 | icmp_ln106_fu_2022_p2);
+assign or_ln22_fu_2103_p2 = (icmp_ln22_2_fu_2098_p2 | icmp_ln22_1_fu_2093_p2);
 
-assign or_ln106_fu_2016_p2 = (last_sched_state | ctrl_mem_irq_clear_fu_1809_p3);
+assign or_ln2_fu_2276_p4 = {{{tmp_5_fu_2262_p4}, {1'd1}}, {trunc_ln36_fu_2272_p1}};
 
-assign or_ln120_s_fu_2428_p3 = {{tmp_fu_2414_p4}, {trunc_ln120_fu_2424_p1}};
+assign or_ln31_fu_2193_p2 = (icmp_ln32_fu_2188_p2 | icmp_ln31_fu_2183_p2);
 
-assign or_ln1_fu_2212_p4 = {{{grp_fu_1745_p4}, {1'd1}}, {trunc_ln31_fu_2208_p1}};
+assign or_ln32_fu_2209_p2 = (icmp_ln32_2_fu_2204_p2 | icmp_ln32_1_fu_2199_p2);
 
-assign or_ln20_1_fu_2058_p2 = (or_ln20_fu_2052_p2 | icmp_ln20_fu_2034_p2);
+assign or_ln33_fu_2225_p2 = (icmp_ln33_fu_2215_p2 | icmp_ln33_1_fu_2220_p2);
 
-assign or_ln20_fu_2052_p2 = (icmp_ln20_2_fu_2046_p2 | icmp_ln20_1_fu_2040_p2);
+assign or_ln34_1_fu_2252_p2 = (or_ln34_fu_2246_p2 | icmp_ln34_fu_2231_p2);
 
-assign or_ln27_1_fu_2166_p2 = (icmp_ln30_2_fu_2154_p2 | icmp_ln30_1_fu_2148_p2);
+assign or_ln34_fu_2246_p2 = (icmp_ln34_2_fu_2241_p2 | icmp_ln34_1_fu_2236_p2);
 
-assign or_ln27_2_fu_2172_p2 = (or_ln27_fu_2160_p2 | or_ln27_1_fu_2166_p2);
+assign or_ln3_fu_2316_p4 = {{{tmp_7_fu_2302_p4}, {1'd1}}, {trunc_ln38_fu_2312_p1}};
 
-assign or_ln27_3_fu_2178_p2 = (icmp_ln29_fu_2130_p2 | icmp_ln29_1_fu_2136_p2);
+assign or_ln43_1_fu_2336_p2 = (ctrl_mem_wv_base_addr_cast4_reg_2942 | ctrl_mem_wo_base_addr_cast5_reg_2947);
 
-assign or_ln27_4_fu_2184_p2 = (icmp_ln30_fu_2142_p2 | icmp_ln28_2_fu_2124_p2);
+assign or_ln43_2_fu_2340_p2 = (or_ln43_fu_2332_p2 | or_ln43_1_fu_2336_p2);
 
-assign or_ln27_5_fu_2190_p2 = (or_ln27_4_fu_2184_p2 | icmp_ln27_fu_2106_p2);
+assign or_ln43_3_fu_2346_p2 = (ctrl_mem_w2_base_addr_cast7_reg_2957 | ctrl_mem_w1_base_addr_cast6_reg_2952);
 
-assign or_ln27_6_fu_2196_p2 = (or_ln27_5_fu_2190_p2 | or_ln27_3_fu_2178_p2);
+assign or_ln43_4_fu_2350_p2 = (ctrl_mem_v_cache_addr_cast9_reg_2967 | ctrl_mem_k_cache_addr_cast8_reg_2962);
 
-assign or_ln27_7_fu_2202_p2 = (or_ln27_6_fu_2196_p2 | or_ln27_2_fu_2172_p2);
+assign or_ln43_5_fu_2354_p2 = (or_ln43_4_fu_2350_p2 | or_ln43_3_fu_2346_p2);
 
-assign or_ln27_fu_2160_p2 = (icmp_ln28_fu_2112_p2 | icmp_ln28_1_fu_2118_p2);
+assign or_ln43_6_fu_2360_p2 = (or_ln43_5_fu_2354_p2 | or_ln43_2_fu_2340_p2);
 
-assign or_ln2_fu_2302_p4 = {{{tmp_5_fu_2288_p4}, {1'd1}}, {trunc_ln41_fu_2298_p1}};
+assign or_ln43_fu_2332_p2 = (ctrl_mem_wq_base_addr_cast2_reg_2932 | ctrl_mem_wk_base_addr_cast3_reg_2937);
 
-assign or_ln37_1_fu_2246_p2 = (ctrl_mem_wv_base_addr_cast4_fu_1939_p4 | ctrl_mem_wo_base_addr_cast5_fu_1949_p4);
+assign or_ln4_fu_2390_p4 = {{{tmp_9_fu_2376_p4}, {1'd1}}, {trunc_ln48_fu_2386_p1}};
 
-assign or_ln37_2_fu_2252_p2 = (or_ln37_fu_2240_p2 | or_ln37_1_fu_2246_p2);
+assign or_ln5_fu_2426_p3 = {{tmp_s_fu_2416_p4}, {1'd1}};
 
-assign or_ln37_3_fu_2258_p2 = (ctrl_mem_w2_base_addr_cast7_fu_1969_p4 | ctrl_mem_w1_base_addr_cast6_fu_1959_p4);
+assign or_ln6_fu_2458_p4 = {{{tmp_2_fu_2444_p4}, {1'd1}}, {trunc_ln56_fu_2454_p1}};
 
-assign or_ln37_4_fu_2264_p2 = (ctrl_mem_v_cache_addr_cast9_fu_1989_p4 | ctrl_mem_k_cache_addr_cast8_fu_1979_p4);
+assign or_ln7_fu_2498_p4 = {{{tmp_4_fu_2484_p4}, {1'd1}}, {trunc_ln58_fu_2494_p1}};
 
-assign or_ln37_5_fu_2270_p2 = (or_ln37_4_fu_2264_p2 | or_ln37_3_fu_2258_p2);
+assign or_ln8_fu_2532_p4 = {{{tmp_6_fu_2518_p4}, {1'd1}}, {trunc_ln63_fu_2528_p1}};
 
-assign or_ln37_6_fu_2276_p2 = (or_ln37_5_fu_2270_p2 | or_ln37_2_fu_2252_p2);
+assign or_ln9_fu_2572_p4 = {{{tmp_8_fu_2558_p4}, {1'd1}}, {trunc_ln65_fu_2568_p1}};
 
-assign or_ln37_fu_2240_p2 = (ctrl_mem_wq_base_addr_cast2_fu_1919_p4 | ctrl_mem_wk_base_addr_cast3_fu_1929_p4);
+assign or_ln_fu_2127_p4 = {{{tmp_1_fu_2113_p4}, {1'd1}}, {trunc_ln24_fu_2123_p1}};
 
-assign or_ln3_fu_2634_p4 = {{{tmp_s_fu_2620_p4}, {1'd1}}, {trunc_ln75_fu_2630_p1}};
+assign out_buf_address0 = grp_compute_controller_fu_1306_out_buf_address0;
 
-assign or_ln4_fu_2660_p4 = {{{grp_fu_1745_p4}, {1'd1}}, {trunc_ln79_fu_2656_p1}};
+assign out_buf_address1 = grp_compute_controller_fu_1306_out_buf_address1;
 
-assign or_ln_fu_2078_p4 = {{{tmp_1_fu_2064_p4}, {1'd1}}, {trunc_ln21_2_fu_2074_p1}};
+assign out_buf_ce0 = grp_compute_controller_fu_1306_out_buf_ce0;
 
-assign out_buf_address0 = grp_compute_controller_fu_1302_out_buf_address0;
+assign out_buf_ce1 = grp_compute_controller_fu_1306_out_buf_ce1;
 
-assign out_buf_address1 = grp_compute_controller_fu_1302_out_buf_address1;
+assign out_buf_d0 = grp_compute_controller_fu_1306_out_buf_d0;
 
-assign out_buf_ce0 = grp_compute_controller_fu_1302_out_buf_ce0;
+assign out_buf_d1 = grp_compute_controller_fu_1306_out_buf_d1;
 
-assign out_buf_ce1 = grp_compute_controller_fu_1302_out_buf_ce1;
+assign out_buf_we0 = grp_compute_controller_fu_1306_out_buf_we0;
 
-assign out_buf_d0 = grp_compute_controller_fu_1302_out_buf_d0;
+assign out_buf_we1 = grp_compute_controller_fu_1306_out_buf_we1;
 
-assign out_buf_d1 = grp_compute_controller_fu_1302_out_buf_d1;
+assign status_mem = {{{{ctrl_mem_interface_layer_index}, {ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5}}, {ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6}}, {ap_sig_allocacmp_ctrl_mem_interface_status_load}};
 
-assign out_buf_we0 = grp_compute_controller_fu_1302_out_buf_we0;
+assign stream_start = grp_scheduler_hls_fu_1173_ap_return_2;
 
-assign out_buf_we1 = grp_compute_controller_fu_1302_out_buf_we1;
+assign tmp_10_fu_2603_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5[31:3]}};
 
-assign status_mem = {{{{{ctrl_mem_interface_layer_index}, {27'd0}}, {ctrl_mem_interface_error_code}}, {grp_load_fu_1755_p1}}, {grp_load_fu_1759_p1}};
+assign tmp_11_fu_2660_p4 = {{ctrl_mem_read_reg_2811[34:33]}};
 
-assign stream_start = grp_scheduler_hls_fu_1169_ap_return_2;
+assign tmp_1_fu_2113_p4 = {{ctrl_mem_interface_irq_status[31:2]}};
 
-assign tmp_1_fu_2064_p4 = {{ctrl_mem_interface_irq_status[31:2]}};
+assign tmp_2_fu_2444_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3[31:2]}};
 
-assign tmp_2_fu_2352_p3 = ctrl_mem[32'd65];
+assign tmp_3_fu_2153_p4 = {{ctrl_mem_interface_error_code[31:2]}};
 
-assign tmp_5_fu_2288_p4 = {{grp_load_fu_1755_p1[31:2]}};
+assign tmp_4_fu_2484_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3[31:4]}};
 
-assign tmp_6_fu_2686_p4 = {{ctrl_mem_read_reg_2754[34:33]}};
+assign tmp_5_fu_2262_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_1[31:2]}};
 
-assign tmp_7_fu_2366_p4 = {{grp_load_fu_1759_p1[31:2]}};
+assign tmp_6_fu_2518_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4[31:2]}};
 
-assign tmp_fu_2414_p4 = {{ctrl_mem[1247:512]}};
+assign tmp_7_fu_2302_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_error_code_load_1[31:3]}};
 
-assign tmp_s_fu_2620_p4 = {{ctrl_mem_interface_irq_status[31:3]}};
+assign tmp_8_fu_2558_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4[31:5]}};
 
-assign trunc_ln120_fu_2424_p1 = ctrl_mem[479:0];
+assign tmp_9_fu_2376_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2[31:2]}};
 
-assign trunc_ln21_1_fu_1796_p1 = ctrl_mem[0:0];
+assign tmp_fu_2715_p4 = {{ctrl_mem_read_reg_2811[1247:512]}};
 
-assign trunc_ln21_2_fu_2074_p1 = ctrl_mem_interface_irq_status[0:0];
+assign tmp_s_fu_2416_p4 = {{ap_sig_allocacmp_ctrl_mem_interface_error_code_load_2[31:1]}};
 
-assign trunc_ln21_fu_1792_p1 = ctrl_mem[1:0];
+assign trunc_ln195_fu_2724_p1 = ctrl_mem_read_reg_2811[479:0];
 
-assign trunc_ln31_fu_2208_p1 = grp_load_fu_1741_p1[0:0];
+assign trunc_ln21_1_fu_1772_p1 = ctrl_mem[0:0];
 
-assign trunc_ln41_fu_2298_p1 = grp_load_fu_1755_p1[0:0];
+assign trunc_ln21_fu_1768_p1 = ctrl_mem[1:0];
 
-assign trunc_ln55_fu_2376_p1 = grp_load_fu_1759_p1[0:0];
+assign trunc_ln24_fu_2123_p1 = ctrl_mem_interface_irq_status[0:0];
 
-assign trunc_ln75_fu_2630_p1 = ctrl_mem_interface_irq_status[1:0];
+assign trunc_ln26_fu_2163_p1 = ctrl_mem_interface_error_code[0:0];
 
-assign trunc_ln79_fu_2656_p1 = grp_load_fu_1741_p1[0:0];
+assign trunc_ln36_fu_2272_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_1[0:0];
 
-assign trunc_ln83_fu_2682_p1 = grp_load_fu_1755_p1[2:0];
+assign trunc_ln38_fu_2312_p1 = ap_sig_allocacmp_ctrl_mem_interface_error_code_load_1[1:0];
 
-assign w1_base_addr = {{ctrl_mem[799:768]}};
+assign trunc_ln48_fu_2386_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_2[0:0];
 
-assign w1_tile_stride = {{ctrl_mem[447:416]}};
+assign trunc_ln56_fu_2454_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_3[0:0];
 
-assign w2_base_addr = {{ctrl_mem[863:832]}};
+assign trunc_ln58_fu_2494_p1 = ap_sig_allocacmp_ctrl_mem_interface_error_code_load_3[2:0];
 
-assign w2_tile_stride = {{ctrl_mem[479:448]}};
+assign trunc_ln63_fu_2528_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_4[0:0];
 
-assign wk_base_addr = {{ctrl_mem[607:576]}};
+assign trunc_ln65_fu_2568_p1 = ap_sig_allocacmp_ctrl_mem_interface_error_code_load_4[3:0];
 
-assign wk_head_stride = {{ctrl_mem[287:256]}};
+assign trunc_ln77_fu_2613_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_5[1:0];
 
-assign wl_instruction_ap_vld = grp_scheduler_hls_fu_1169_wl_instruction_ap_vld;
+assign trunc_ln93_fu_2656_p1 = ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6[2:0];
 
-assign wl_start_o = grp_scheduler_hls_fu_1169_ap_return_1;
+assign w1_base_addr = {{ctrl_mem_read_reg_2811[799:768]}};
 
-assign wo_base_addr = {{ctrl_mem[735:704]}};
+assign w1_tile_stride = ctrl_mem_w1_tile_stride_reg_2920;
 
-assign wo_tile_stride = {{ctrl_mem[415:384]}};
+assign w2_base_addr = {{ctrl_mem_read_reg_2811[863:832]}};
 
-assign wq_base_addr = {{ctrl_mem[543:512]}};
+assign w2_tile_stride = ctrl_mem_w2_tile_stride_reg_2926;
 
-assign wq_head_stride = {{ctrl_mem[255:224]}};
+assign wk_base_addr = {{ctrl_mem_read_reg_2811[607:576]}};
 
-assign wv_base_addr = {{ctrl_mem[671:640]}};
+assign wk_head_stride = ctrl_mem_wk_head_stride_reg_2892;
 
-assign wv_head_stride = {{ctrl_mem[319:288]}};
+assign wl_instruction_ap_vld = grp_scheduler_hls_fu_1173_wl_instruction_ap_vld;
 
-assign xor_ln107_fu_2003_p2 = (trunc_ln21_1_fu_1796_p1 ^ 1'd1);
+assign wl_start_o = grp_scheduler_hls_fu_1173_ap_return_1;
 
-assign xor_ln51_fu_2330_p2 = (ctrl_mem_irq_clear_fu_1809_p3 ^ 32'd4294967295);
+assign wo_base_addr = {{ctrl_mem_read_reg_2811[735:704]}};
 
-always @ (posedge ap_clk) begin
-    ctrl_mem_interface_error_code[3:1] <= 3'b000;
-end
+assign wo_tile_stride = ctrl_mem_wo_tile_stride_reg_2914;
+
+assign wq_base_addr = {{ctrl_mem_read_reg_2811[543:512]}};
+
+assign wq_head_stride = ctrl_mem_wq_head_stride_reg_2886;
+
+assign wv_base_addr = {{ctrl_mem_read_reg_2811[671:640]}};
+
+assign wv_head_stride = ctrl_mem_wv_head_stride_reg_2898;
+
+assign xor_ln116_fu_1968_p2 = (trunc_ln21_1_fu_1772_p1 ^ 1'd1);
 
 endmodule //transformer_top

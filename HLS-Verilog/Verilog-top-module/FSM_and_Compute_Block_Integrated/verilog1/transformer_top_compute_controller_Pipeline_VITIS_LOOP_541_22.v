@@ -73,7 +73,7 @@ wire   [0:0] icmp_ln541_fu_223_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln565_fu_312_p1;
+wire   [63:0] zext_ln570_fu_312_p1;
 reg   [4:0] i_fu_102;
 wire   [4:0] add_ln541_fu_229_p2;
 wire    ap_loop_init;
@@ -312,7 +312,7 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln541_fu_223_p2 = ((ap_sig_allocacmp_i_10 == 5'd16) ? 1'b1 : 1'b0);
 
-assign out_buf_address0 = zext_ln565_fu_312_p1;
+assign out_buf_address0 = zext_ln570_fu_312_p1;
 
 assign out_buf_ce0 = out_buf_ce0_local;
 
@@ -324,6 +324,6 @@ assign trunc_ln541_fu_235_p1 = ap_sig_allocacmp_i_10[3:0];
 
 assign value_assign_1_fu_239_p33 = 'bx;
 
-assign zext_ln565_fu_312_p1 = trunc_ln541_fu_235_p1;
+assign zext_ln570_fu_312_p1 = trunc_ln541_fu_235_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_541_22

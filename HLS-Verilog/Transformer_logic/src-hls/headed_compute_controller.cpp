@@ -299,19 +299,8 @@ void REQUANT_D_HEADS_int32_to_int8(
 
 
 void headed_compute_controller(
+    ComputeHeadCtx &ctx,            // [BOTH] Per-head persistent state
     bool        reset,               // [INPUT] Reset signal
-
-    // FSM communication signals
-    bool        compute_start,       // [INPUT] Start signal for compute
-    uint32_t    compute_instruction,          // [INPUT] Compute operation [7:0]=op [15:8]=layer [23:16]=head [31:24]=tile
-    bool        &compute_ready,      // [OUTPUT] Compute engine ready for new operation
-    bool        &compute_done,       // [OUTPUT] Compute operation finished
-
-    // Memory manager handshake
-    bool        mem_transfer_done,
-    bool        &mem_read_request,        // [OUTPUT] Request memory manager
-    bool        &mem_write_request,        // [OUTPUT] Request memory manager
-    uint32_t     &mem_op,             // [OUTPUT] Full Intruction Identifier for memory manager
 
     // Flat input/output buffers
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
@@ -329,65 +318,55 @@ void headed_compute_controller(
 ) {
 #pragma HLS INLINE off
 
-    static ComputeState state = ComputeState::IDLE;
-#pragma HLS reset variable = state
-    static PendingRequest req;
-
     // Outputs based on current state (before any transition).
-    compute_ready = (state == ComputeState::IDLE);
-    compute_done  = (state == ComputeState::DONE);
-    mem_read_request   = false;
-    mem_write_request  = false;
+    ctx.compute_ready = (ctx.state == ComputeState::IDLE);
+    ctx.compute_done  = (ctx.state == ComputeState::DONE);
+    ctx.mem_read_request   = false;
+    ctx.mem_write_request  = false;
+    ctx.mac_start = false;
 
     static int8_t head_vec[HEAD_VECTOR_MAX];
     static int8_t head_mat[HEAD_MATRIX_MAX];
     static int4_t head_bias[HEAD_ACCUM_MAX];
     static int32_t head_out[HEAD_ACCUM_MAX];
+
+    int32_t head_x32[D_HEADS];
+    int8_t head_y8[D_HEADS];
+
+    int32_t val_in[CONTEXT_LENGTH];
+    int16_t val_scaled[CONTEXT_LENGTH];
+    int16_t soft_in[CONTEXT_LENGTH];
+    int16_t soft_out[CONTEXT_LENGTH];
+
 #pragma HLS ARRAY_PARTITION variable=head_vec cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=head_mat cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=head_bias cyclic factor=HEAD_MAC_OUT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=head_out cyclic factor=HEAD_MAC_OUT_UNROLL dim=1
-    bool mac_start = false;
-    static bool mac_ready = true;
-    static bool mac_complete = false;
-    static bool clear_pending = false;
-    static bool capture_pending = false;
-
-
-
-    // Head requant buffers
-    static int32_t head_x32[D_HEADS];
-    static int8_t head_y8[D_HEADS];
+    //Head requant buffers
 #pragma HLS ARRAY_PARTITION variable=head_x32 cyclic factor=D_HEADS dim=1
 #pragma HLS ARRAY_PARTITION variable=head_y8 cyclic factor=D_HEADS dim=1
 
-    // Value scale / softmax buffers
-    static int32_t val_in[CONTEXT_LENGTH];
-    static int16_t val_scaled[CONTEXT_LENGTH];
-    static int16_t soft_in[CONTEXT_LENGTH];
-    static int16_t soft_out[CONTEXT_LENGTH];
-
     if (reset) {
-        state = ComputeState::IDLE;
+        ctx.state = ComputeState::IDLE;
         error = false;
-        compute_ready = true;
-        compute_done  = false;
-        mem_read_request   = false;
-        mem_write_request = false;
-        mem_op        = 0;
-        req = PendingRequest{};
-        dbg_state = state;
-        dbg_req_instruction = req.instruction;
-        dbg_req_op = static_cast<uint8_t>(req.op);
-        dbg_req_layer = req.layer_idx;
-        dbg_req_head = req.head_idx;
-        dbg_req_tile = req.tile_idx;
+        ctx.compute_ready = true;
+        ctx.compute_done  = false;
+        ctx.mem_read_request   = false;
+        ctx.mem_write_request = false;
+        ctx.mem_op        = 0;
+        ctx.req = PendingRequest{};
+        dbg_state = ctx.state;
+        dbg_req_instruction = ctx.req.instruction;
+        dbg_req_op = static_cast<uint8_t>(ctx.req.op);
+        dbg_req_layer = ctx.req.layer_idx;
+        dbg_req_head = ctx.req.head_idx;
+        dbg_req_tile = ctx.req.tile_idx;
 
-        mac_start = false;
-        mac_ready = true;
-        mac_complete = false;
-        clear_pending = false;
-        capture_pending = false;
+        ctx.mac_start = false;
+        ctx.mac_ready = true;
+        ctx.mac_complete = false;
+        ctx.clear_pending = false;
+        ctx.capture_pending = false;
 
         for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS UNROLL
@@ -417,54 +396,54 @@ void headed_compute_controller(
         return;
     }
 
-    ComputeState next_state = state;
+    ComputeState next_state = ctx.state;
 
-    switch (state) {
+    switch (ctx.state) {
         case ComputeState::IDLE: {
-            if (compute_start) {
-                mac_start = false;
-                mac_complete = false;
-                req.instruction    = compute_instruction;
-                req.op            = static_cast<ComputeOp>(compute_instruction & 0xFFu);
-                req.layer_idx     = (compute_instruction >> 8) & 0xFFu;
-                req.head_idx      = (compute_instruction >> 16) & 0xFFu;
-                req.tile_idx      = (compute_instruction >> 24) & 0xFFu;
+            if (ctx.compute_start) {
+                ctx.mac_start = false;
+                ctx.mac_complete = false;
+                ctx.req.instruction    = ctx.compute_instruction;
+                ctx.req.op            = static_cast<ComputeOp>(ctx.compute_instruction & 0xFFu);
+                ctx.req.layer_idx     = (ctx.compute_instruction >> 8) & 0xFFu;
+                ctx.req.head_idx      = (ctx.compute_instruction >> 16) & 0xFFu;
+                ctx.req.tile_idx      = (ctx.compute_instruction >> 24) & 0xFFu;
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
             }
 
             // look to clear while idling
-            if (clear_pending && !compute_start) {
+            if (ctx.clear_pending && !ctx.compute_start) {
                 for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
 #pragma HLS PIPELINE II=1
                     out_buf[i] = 0;
                 }
-                clear_pending = false;
+                ctx.clear_pending = false;
             }
             break;
         }
         case ComputeState::CAPTURE_INSTRUCTION: {
-            if (!capture_pending && compute_instruction != req.instruction) {
-                capture_pending = true;
-                req.instruction    = compute_instruction;
-                req.op            = static_cast<ComputeOp>(compute_instruction & 0xFFu);
-                req.layer_idx     = (compute_instruction >> 8) & 0xFFu;
-                req.head_idx      = (compute_instruction >> 16) & 0xFFu;
-                req.tile_idx      = (compute_instruction >> 24) & 0xFFu;
+            if (!ctx.capture_pending && ctx.compute_instruction != ctx.req.instruction) {
+                ctx.capture_pending = true;
+                ctx.req.instruction    = ctx.compute_instruction;
+                ctx.req.op            = static_cast<ComputeOp>(ctx.compute_instruction & 0xFFu);
+                ctx.req.layer_idx     = (ctx.compute_instruction >> 8) & 0xFFu;
+                ctx.req.head_idx      = (ctx.compute_instruction >> 16) & 0xFFu;
+                ctx.req.tile_idx      = (ctx.compute_instruction >> 24) & 0xFFu;
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
                 break;
             }
-            capture_pending = false;
-            if (req.op == ComputeOp::CMP_Q ||
-                req.op == ComputeOp::CMP_K ||
-                req.op == ComputeOp::CMP_V ||
-                req.op == ComputeOp::CMP_K_REQUANT ||
-                req.op == ComputeOp::CMP_V_REQUANT ||
-                req.op == ComputeOp::CMP_REQUANT_Q ||
-                req.op == ComputeOp::CMP_ATT_SCORES ||
-                req.op == ComputeOp::CMP_VALUE_SCALE ||
-                req.op == ComputeOp::CMP_SOFTMAX ||
-                req.op == ComputeOp::CMP_ATT_VALUE ||
-                req.op == ComputeOp::CMP_HEAD_REQUANT) {
+            ctx.capture_pending = false;
+            if (ctx.req.op == ComputeOp::CMP_Q ||
+                ctx.req.op == ComputeOp::CMP_K ||
+                ctx.req.op == ComputeOp::CMP_V ||
+                ctx.req.op == ComputeOp::CMP_K_REQUANT ||
+                ctx.req.op == ComputeOp::CMP_V_REQUANT ||
+                ctx.req.op == ComputeOp::CMP_REQUANT_Q ||
+                ctx.req.op == ComputeOp::CMP_ATT_SCORES ||
+                ctx.req.op == ComputeOp::CMP_VALUE_SCALE ||
+                ctx.req.op == ComputeOp::CMP_SOFTMAX ||
+                ctx.req.op == ComputeOp::CMP_ATT_VALUE ||
+                ctx.req.op == ComputeOp::CMP_HEAD_REQUANT) {
                 error = false; // Clear stale errors on a new request.
                 next_state = ComputeState::WAIT_MEM;
             } else {
@@ -474,18 +453,18 @@ void headed_compute_controller(
             break;
         }
         case ComputeState::WAIT_MEM: {
-            mem_read_request = true;
-            mem_op = req.instruction;
-            if (mem_transfer_done) {
-                mem_read_request = false;
-                // mem_op = 0;
+            ctx.mem_read_request = true;
+            ctx.mem_op = ctx.req.instruction;
+            if (ctx.mem_transfer_done) {
+                ctx.mem_read_request = false;
+                // ctx.mem_op = 0;
                 next_state = ComputeState::EXECUTE;
             }
             break;
         }
         case ComputeState::EXECUTE: {
             next_state = ComputeState::MEM_WRITEBACK;
-            switch (req.op) {
+            switch (ctx.req.op) {
                 case ComputeOp::CMP_Q:
                 case ComputeOp::CMP_K:
                 case ComputeOp::CMP_V: {
@@ -523,11 +502,11 @@ void headed_compute_controller(
                         head_bias[h] = int4_t(0);
                     }
                     
-                    if (mac_ready && !mac_start && !mac_complete) {
-                        mac_start = true;
+                    if (ctx.mac_ready && !ctx.mac_start && !ctx.mac_complete) {
+                        ctx.mac_start = true;
                         print_head_buffers("MAC_START QKV", head_vec, head_mat, head_bias);
                     }
-                    if (mac_complete) {
+                    if (ctx.mac_complete) {
                         for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
                             compute_buf::write_i32(out_buf, h * 4, head_out[h]);
@@ -556,7 +535,6 @@ void headed_compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_ATT_SCORES: {
-
                     // INIT the Vector Buffer
                     for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
@@ -588,11 +566,11 @@ void headed_compute_controller(
                         head_bias[h] = int4_t(0);
                     }
                     
-                    if (mac_ready && !mac_start && !mac_complete) {
-                        mac_start = true;
+                    if (ctx.mac_ready && !ctx.mac_start && !ctx.mac_complete) {
+                        ctx.mac_start = true;
                         print_head_buffers("MAC_START ATT_SCORES", head_vec, head_mat, head_bias);
                     }
-                    if (mac_complete) {
+                    if (ctx.mac_complete) {
                         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
                             compute_buf::write_i32(out_buf, t * 4, head_out[t]);
@@ -628,7 +606,6 @@ void headed_compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_ATT_VALUE: {
-
                     // INIT the Vector Buffer
                     for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
@@ -661,11 +638,11 @@ void headed_compute_controller(
                     }
 
 
-                    if (mac_ready && !mac_start && !mac_complete) {
-                        mac_start = true;
+                    if (ctx.mac_ready && !ctx.mac_start && !ctx.mac_complete) {
+                        ctx.mac_start = true;
                         print_head_buffers("MAC_START ATT_VALUE", head_vec, head_mat, head_bias);
                     }
-                    if (mac_complete) {
+                    if (ctx.mac_complete) {
                         for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
                             compute_buf::write_i32(out_buf, h * 4, head_out[h]);
@@ -676,44 +653,45 @@ void headed_compute_controller(
                     }
                     break;
                 }
+                
                 default:
                     error = true;
                     next_state = ComputeState::DONE;
                     break;
             }
-            MAC_HEAD_ARCHITECTURE(mac_start, mac_ready, head_vec, head_mat, head_bias, mac_complete, head_out);
+            MAC_HEAD_ARCHITECTURE(ctx.mac_start, ctx.mac_ready, head_vec, head_mat, head_bias, ctx.mac_complete, head_out);
             break;
         }
         case ComputeState::MEM_WRITEBACK: {
-            mem_write_request = true;
-            mem_op = req.instruction;
-            if (mem_transfer_done) {
-                mem_write_request = false;
-                mem_op = 0;
-                mac_complete = false;
-                clear_pending = true;
+            ctx.mem_write_request = true;
+            ctx.mem_op = ctx.req.instruction;
+            if (ctx.mem_transfer_done) {
+                ctx.mem_write_request = false;
+                ctx.mem_op = 0;
+                ctx.mac_complete = false;
+                ctx.clear_pending = true;
                 next_state = ComputeState::DONE;
             }
             break;
         }
         case ComputeState::DONE: {
             // One-cycle done pulse; fall back to idle.
-            req.instruction     = 0;
-            req.op              = static_cast<ComputeOp>(0);
-            req.layer_idx       = 0;
-            req.head_idx        = 0;
-            req.tile_idx        = 0;
+            ctx.req.instruction     = 0;
+            ctx.req.op              = static_cast<ComputeOp>(0);
+            ctx.req.layer_idx       = 0;
+            ctx.req.head_idx        = 0;
+            ctx.req.tile_idx        = 0;
             next_state = ComputeState::IDLE;
             break;
         }
     }
 
-    state = next_state;
+    ctx.state = next_state;
 
-    dbg_state = state;
-    dbg_req_instruction = req.instruction;
-    dbg_req_op = static_cast<uint8_t>(req.op);
-    dbg_req_layer = req.layer_idx;
-    dbg_req_head = req.head_idx;
-    dbg_req_tile = req.tile_idx;
+    dbg_state = ctx.state;
+    dbg_req_instruction = ctx.req.instruction;
+    dbg_req_op = static_cast<uint8_t>(ctx.req.op);
+    dbg_req_layer = ctx.req.layer_idx;
+    dbg_req_head = ctx.req.head_idx;
+    dbg_req_tile = ctx.req.tile_idx;
 }

@@ -6,6 +6,7 @@
 // IRQ_Wizard functionality now integrated into ControlMemInterface
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
 #include "Transformer_logic/src-hls/compute_controller.hpp"
+#include "Transformer_logic/src-hls/headed_compute_controller.hpp"
 
 
 // Top-level wrapper prototype
