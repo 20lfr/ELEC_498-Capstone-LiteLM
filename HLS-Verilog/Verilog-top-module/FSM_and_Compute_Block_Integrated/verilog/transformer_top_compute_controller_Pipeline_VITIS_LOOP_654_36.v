@@ -180,9 +180,9 @@ wire   [3:0] trunc_ln654_fu_363_p1;
 reg   [3:0] trunc_ln654_reg_493;
 wire    ap_block_pp0_stage0_11001;
 reg   [0:0] tmp_reg_497;
-wire   [63:0] zext_ln582_fu_383_p1;
+wire   [63:0] zext_ln554_fu_383_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln583_fu_396_p1;
+wire   [63:0] zext_ln555_fu_396_p1;
 wire   [63:0] zext_ln654_fu_440_p1;
 reg   [4:0] i_fu_106;
 wire   [4:0] add_ln654_fu_357_p2;
@@ -224,7 +224,7 @@ reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_18_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_18_ce0_local;
 wire   [5:0] byte_addr_assign_5_fu_375_p3;
-wire   [5:0] or_ln583_1_fu_388_p3;
+wire   [5:0] or_ln555_1_fu_388_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -742,15 +742,15 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln654_fu_351_p2 = ((ap_sig_allocacmp_i_3 == 5'd22) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln583_fu_396_p1;
+assign in_buf_address0 = zext_ln555_fu_396_p1;
 
-assign in_buf_address1 = zext_ln582_fu_383_p1;
+assign in_buf_address1 = zext_ln554_fu_383_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
 assign in_buf_ce1 = in_buf_ce1_local;
 
-assign or_ln583_1_fu_388_p3 = {{ap_sig_allocacmp_i_3}, {1'd1}};
+assign or_ln555_1_fu_388_p3 = {{ap_sig_allocacmp_i_3}, {1'd1}};
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_18_address0 = zext_ln654_fu_440_p1;
 
@@ -804,9 +804,9 @@ assign trunc_ln654_fu_363_p1 = ap_sig_allocacmp_i_3[3:0];
 
 assign v_fu_459_p3 = {{in_buf_q0}, {in_buf_q1}};
 
-assign zext_ln582_fu_383_p1 = byte_addr_assign_5_fu_375_p3;
+assign zext_ln554_fu_383_p1 = byte_addr_assign_5_fu_375_p3;
 
-assign zext_ln583_fu_396_p1 = or_ln583_1_fu_388_p3;
+assign zext_ln555_fu_396_p1 = or_ln555_1_fu_388_p3;
 
 assign zext_ln654_fu_440_p1 = tmp_reg_497;
 

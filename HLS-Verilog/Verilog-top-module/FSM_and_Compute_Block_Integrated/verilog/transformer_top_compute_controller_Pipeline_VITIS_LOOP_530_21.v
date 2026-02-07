@@ -211,16 +211,16 @@ reg    ap_ready_int;
 wire   [3:0] trunc_ln530_fu_179_p1;
 reg   [3:0] trunc_ln530_reg_442;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln570_fu_183_p1;
+wire   [63:0] zext_ln542_fu_183_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln570_1_fu_196_p1;
+wire   [63:0] zext_ln542_1_fu_196_p1;
 reg   [4:0] i_2_fu_130;
 wire   [4:0] add_ln530_fu_173_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_i;
 reg    in_buf_ce1_local;
 reg    in_buf_ce0_local;
-wire   [4:0] zext_ln570_2_cast_fu_188_p3;
+wire   [4:0] zext_ln542_2_cast_fu_188_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -695,9 +695,9 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln530_fu_167_p2 = ((ap_sig_allocacmp_i == 5'd16) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln570_1_fu_196_p1;
+assign in_buf_address0 = zext_ln542_1_fu_196_p1;
 
-assign in_buf_address1 = zext_ln570_fu_183_p1;
+assign in_buf_address1 = zext_ln542_fu_183_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
@@ -729,10 +729,10 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign trunc_ln530_fu_179_p1 = ap_sig_allocacmp_i[3:0];
 
-assign zext_ln570_1_fu_196_p1 = zext_ln570_2_cast_fu_188_p3;
+assign zext_ln542_1_fu_196_p1 = zext_ln542_2_cast_fu_188_p3;
 
-assign zext_ln570_2_cast_fu_188_p3 = {{1'd1}, {trunc_ln530_fu_179_p1}};
+assign zext_ln542_2_cast_fu_188_p3 = {{1'd1}, {trunc_ln530_fu_179_p1}};
 
-assign zext_ln570_fu_183_p1 = trunc_ln530_fu_179_p1;
+assign zext_ln542_fu_183_p1 = trunc_ln530_fu_179_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_530_21

@@ -173,7 +173,7 @@ reg    ap_ready_int;
 wire   [3:0] trunc_ln456_fu_259_p1;
 reg   [3:0] trunc_ln456_reg_337;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln570_fu_263_p1;
+wire   [63:0] zext_ln542_fu_263_p1;
 wire    ap_block_pp0_stage0;
 reg   [4:0] i_fu_126;
 wire   [4:0] add_ln456_fu_253_p2;
@@ -719,7 +719,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln456_fu_247_p2 = ((ap_sig_allocacmp_i_12 == 5'd16) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln570_fu_263_p1;
+assign in_buf_address0 = zext_ln542_fu_263_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
@@ -775,6 +775,6 @@ assign sext_ln459_fu_307_p1 = $signed(in_buf_q0);
 
 assign trunc_ln456_fu_259_p1 = ap_sig_allocacmp_i_12[3:0];
 
-assign zext_ln570_fu_263_p1 = trunc_ln456_fu_259_p1;
+assign zext_ln542_fu_263_p1 = trunc_ln456_fu_259_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_456_12
