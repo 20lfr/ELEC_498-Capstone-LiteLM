@@ -47,6 +47,8 @@ void transformer_top(
     uint32_t    &mem_op,             // [OUTPUT] Opcode for memory manager
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
+     const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
@@ -97,6 +99,8 @@ void transformer_top(
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 #pragma HLS INTERFACE ap_none port=irq_ps
+#pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
+#pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
 
     bool done               = false;    // Scheduler done flag
     bool scheduler_error       = false;
@@ -110,26 +114,22 @@ void transformer_top(
     static bool     compute_done = false;
     static bool     compute_start = false;
     static uint32_t compute_instruction = 0;
-    static ComputeHeadCtx head_compute_ctx[NUM_HEADS];
+
+    // Headed compute controller lanes (parallel heads)
+    static ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL];
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
-    static uint8_t head_in_buf[NUM_HEADS][head_buf::IN_BUF_BYTES];
-    static uint8_t head_out_buf[NUM_HEADS][head_buf::OUT_BUF_BYTES];
-#pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
-    static bool head_mem_read_request[NUM_HEADS];
-    static bool head_mem_write_request[NUM_HEADS];
-    static uint32_t head_mem_op[NUM_HEADS];
-    static ComputeState head_dbg_state[NUM_HEADS];
-    static uint32_t head_dbg_req_instruction[NUM_HEADS];
-    static uint8_t head_dbg_req_op[NUM_HEADS];
-    static uint8_t head_dbg_req_layer[NUM_HEADS];
-    static uint8_t head_dbg_req_head[NUM_HEADS];
-    static uint8_t head_dbg_req_tile[NUM_HEADS];
-    static bool head_error[NUM_HEADS];
+    static int8_t  head_dbg_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX];
+    static int32_t head_dbg_out[HEADS_PARALLEL][HEAD_ACCUM_MAX];
+    static int lane_head_idx[HEADS_PARALLEL];
+#pragma HLS ARRAY_PARTITION variable=lane_head_idx complete dim=1
 
     
+    // Active-low reset derived from control register.
+    const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
+    const bool reset = !reset_n;
+
     // Clear handshake state on external resetn deassert.
-    if ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u) {
+    if (reset) {
         done          = false;
         scheduler_error = false;
         compute_error   = false;
@@ -138,6 +138,10 @@ void transformer_top(
         compute_done  = false;
         compute_start = false;
         compute_instruction = 0;
+        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+            lane_head_idx[lane] = -1;
+        }
     }
 
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,31 +195,70 @@ void transformer_top(
         compute_error               
     );
 
+    // Map active heads into HEADS_PARALLEL lanes based on start_head pulses.
+    bool head_taken[NUM_HEADS];
+#pragma HLS ARRAY_PARTITION variable=head_taken complete dim=1
     for (int h = 0; h < NUM_HEADS; ++h) {
 #pragma HLS UNROLL
-        // TODO: wire real head memory manager. For now, assume head buffers are ready.
-        const bool head_mem_transfer_done = true;
-        head_compute_ctx[h].compute_start = head_ctx_ref[h].compute_start;
-        head_compute_ctx[h].compute_instruction = head_ctx_ref[h].compute_op;
-        head_compute_ctx[h].mem_transfer_done = head_mem_transfer_done;
-        headed_compute_controller(
-            head_compute_ctx[h],
-            (ctrl_mem.control & CTRL_RESETN_BIT) == 0u,
-            head_in_buf[h],
-            head_out_buf[h],
-            head_dbg_state[h],
-            head_dbg_req_instruction[h],
-            head_dbg_req_op[h],
-            head_dbg_req_layer[h],
-            head_dbg_req_head[h],
-            head_dbg_req_tile[h],
-            head_error[h]
-        );
-        head_ctx_ref[h].compute_ready = head_compute_ctx[h].compute_ready;
-        head_ctx_ref[h].compute_done = head_compute_ctx[h].compute_done;
-        head_mem_read_request[h] = head_compute_ctx[h].mem_read_request;
-        head_mem_write_request[h] = head_compute_ctx[h].mem_write_request;
-        head_mem_op[h] = head_compute_ctx[h].mem_op;
+        head_taken[h] = false;
+    }
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        const int idx = lane_head_idx[lane];
+        if (idx >= 0) {
+            if (head_ctx_ref[idx].phase == HeadPhase::DONE) {
+                lane_head_idx[lane] = -1;
+            } else {
+                head_taken[idx] = true;
+            }
+        }
+    }
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        if (lane_head_idx[lane] < 0) {
+            bool lane_assigned = false;
+            for (int h = 0; h < NUM_HEADS; ++h) {
+#pragma HLS UNROLL
+                if (!lane_assigned && !head_taken[h] && head_ctx_ref[h].start_head) {
+                    lane_head_idx[lane] = h;
+                    head_taken[h] = true;
+                    lane_assigned = true;
+                }
+            }
+        }
+    }
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        const int idx = lane_head_idx[lane];
+        if (idx >= 0) {
+            head_compute_ctx[lane].compute_start = head_ctx_ref[idx].compute_start;
+            head_compute_ctx[lane].compute_instruction = head_ctx_ref[idx].compute_op;
+            head_compute_ctx[lane].mem_transfer_done = true; // TODO: connect head memory manager
+        } else {
+            head_compute_ctx[lane].compute_start = false;
+            head_compute_ctx[lane].compute_instruction = 0;
+            head_compute_ctx[lane].mem_transfer_done = false;
+        }
+    }
+
+    bool head_error_any = false;
+    drive_headed_compute_controller(
+        head_compute_ctx,
+        reset_n,
+        head_in_buf,
+        head_out_buf,
+        head_dbg_vec,
+        head_dbg_out,
+        head_error_any
+    );
+
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        const int idx = lane_head_idx[lane];
+        if (idx >= 0) {
+            head_ctx_ref[idx].compute_ready = head_compute_ctx[lane].compute_ready;
+            head_ctx_ref[idx].compute_done  = head_compute_ctx[lane].compute_done;
+        }
     }
     ctrl_mem_interface.check_errors(ctrl_mem, scheduler_error, compute_error);
     ctrl_mem_interface.check_control(ctrl_mem, done);
@@ -236,7 +279,7 @@ void transformer_top(
 
     // Debugging mirrors
     dbg_ctrl_mem = ctrl_mem;
-    dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);
+    dbg_ctrl_reset_asserted = reset;
     control_reg   = ctrl_mem.control;
     irq_mask_reg   = ctrl_mem.irq_mask;
     irq_clear_reg  = ctrl_mem.irq_clear;

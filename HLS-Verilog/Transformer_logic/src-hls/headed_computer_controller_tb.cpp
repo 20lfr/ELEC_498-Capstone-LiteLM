@@ -623,7 +623,7 @@ int main() {
                 "State", "ReqInstr", "ReqOp", "ReqL", "ReqH", "ReqT");
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
-        const bool reset = (cycle < 2);
+        const bool reset_n = (cycle >= 2);
 
         mem_transfer_done = false;
         if (mem_done_hold > 0) {
@@ -731,7 +731,7 @@ int main() {
 
         headed_compute_controller(
             compute_ctx,
-            reset,
+            reset_n,
             in_buf,
             out_buf,
             dbg_state,
@@ -760,7 +760,7 @@ int main() {
 
         std::printf("%-6d %-5d %-5d %-5d %-5d %-6d %-6d %-6d %-6d %-10s 0x%08x %-10s %-5d %-5d %-5d %-7d 0x%08x %-8s %-5d %-5d %-5d\n",
                     cycle,
-                    reset ? 1 : 0,
+                    reset_n ? 0 : 1,
                     compute_start ? 1 : 0,
                     compute_ready ? 1 : 0,
                     compute_done ? 1 : 0,
@@ -795,7 +795,7 @@ int main() {
         }
 
         compute_start = false;
-        if (reset) {
+        if (!reset_n) {
             mem_busy = false;
             mem_timer = 0;
             mem_pending = MemPending::NONE;

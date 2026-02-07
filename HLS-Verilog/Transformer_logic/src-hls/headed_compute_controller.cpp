@@ -226,7 +226,7 @@ void REQUANT_D_HEADS_int32_to_int8(
 
 static void headed_compute_controller_lane(
     ComputeHeadCtx &ctx,
-    bool        reset,
+    bool        reset_n,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[head_buf::OUT_BUF_BYTES],
     ComputeState &dbg_state,
@@ -268,7 +268,7 @@ static void headed_compute_controller_lane(
 #pragma HLS ARRAY_PARTITION variable=soft_in cyclic factor=CONTEXT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=soft_out cyclic factor=CONTEXT_UNROLL dim=1
 
-    if (reset) {
+    if (!reset_n) {
         ctx.state = ComputeState::IDLE;
         error = false;
         ctx.error_latched = false;
@@ -634,7 +634,7 @@ static void headed_compute_controller_lane(
 
 void drive_headed_compute_controller(
     ComputeHeadCtx (&ctx)[HEADS_PARALLEL],
-    bool        reset,
+    bool        reset_n,
     const uint8_t in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     int8_t        dbg_head_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX],
@@ -703,7 +703,7 @@ void drive_headed_compute_controller(
 
         headed_compute_controller_lane(
             ctx[lane],
-            reset,
+            reset_n,
             in_buf[lane],
             out_buf[lane],
             dbg_state,
@@ -740,7 +740,7 @@ void drive_headed_compute_controller(
 
 void headed_compute_controller(
     ComputeHeadCtx &ctx,            // [BOTH] Per-head persistent state
-    bool        reset,               // [INPUT] Reset signal
+    bool        reset_n,             // [INPUT] Active-low reset
 
     // Flat input/output buffers
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
@@ -773,7 +773,7 @@ void headed_compute_controller(
 
     headed_compute_controller_lane(
         ctx,
-        reset,
+        reset_n,
         in_buf,
         out_buf,
         dbg_state,

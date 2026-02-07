@@ -45,6 +45,8 @@ void transformer_top(
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
     // ------------------------------------------------------------
+    const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out)
 
     // Debug (scheduler)

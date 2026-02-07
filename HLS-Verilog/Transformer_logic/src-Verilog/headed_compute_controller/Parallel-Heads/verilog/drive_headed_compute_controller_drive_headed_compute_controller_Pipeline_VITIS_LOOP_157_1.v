@@ -74,7 +74,7 @@ reg   [15:0] max_val_1_fu_92;
 wire   [15:0] max_val_2_fu_303_p3;
 wire    ap_loop_init;
 reg   [15:0] ap_sig_allocacmp_max_val_1_load_1;
-reg   [4:0] i_9_fu_96;
+reg   [4:0] i_8_fu_96;
 wire   [4:0] add_ln157_fu_311_p2;
 reg   [4:0] ap_sig_allocacmp_i;
 wire   [15:0] tmp_6_fu_229_p31;
@@ -110,7 +110,7 @@ wire    ap_ce_reg;
 initial begin
 #0 ap_CS_fsm = 1'd1;
 #0 max_val_1_fu_92 = 16'd0;
-#0 i_9_fu_96 = 5'd0;
+#0 i_8_fu_96 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -150,7 +150,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_31_4_16_1_1_U97(
+sparsemux_31_4_16_1_1_U217(
     .din0(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_364),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_365),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_366),
@@ -209,9 +209,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         if ((icmp_ln157_fu_216_p2 == 1'd0)) begin
-            i_9_fu_96 <= add_ln157_fu_311_p2;
+            i_8_fu_96 <= add_ln157_fu_311_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_9_fu_96 <= 5'd1;
+            i_8_fu_96 <= 5'd1;
         end
     end
 end
@@ -270,7 +270,7 @@ always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
         ap_sig_allocacmp_i = 5'd1;
     end else begin
-        ap_sig_allocacmp_i = i_9_fu_96;
+        ap_sig_allocacmp_i = i_8_fu_96;
     end
 end
 

@@ -54,7 +54,7 @@ reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [1:0] trunc_ln308_fu_62_p1;
-reg   [2:0] i_10_fu_38;
+reg   [2:0] i_14_fu_38;
 wire   [2:0] add_ln308_fu_56_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_i;
@@ -71,7 +71,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_10_fu_38 = 3'd0;
+#0 i_14_fu_38 = 3'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -113,9 +113,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         if ((icmp_ln308_fu_50_p2 == 1'd0)) begin
-            i_10_fu_38 <= add_ln308_fu_56_p2;
+            i_14_fu_38 <= add_ln308_fu_56_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_10_fu_38 <= 3'd0;
+            i_14_fu_38 <= 3'd0;
         end
     end
 end
@@ -164,7 +164,7 @@ always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
         ap_sig_allocacmp_i = 3'd0;
     end else begin
-        ap_sig_allocacmp_i = i_10_fu_38;
+        ap_sig_allocacmp_i = i_14_fu_38;
     end
 end
 

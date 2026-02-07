@@ -140,7 +140,7 @@ reg    grp_read_i8_fu_98_ap_start_reg;
 wire    ap_block_pp0_stage0_ignoreCallOp18;
 wire    ap_block_pp0_stage0_ignoreCallOp22;
 wire    ap_block_pp0_stage0;
-reg   [4:0] i_7_fu_94;
+reg   [4:0] i_6_fu_94;
 wire   [4:0] add_ln402_fu_119_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_i;
@@ -161,7 +161,7 @@ initial begin
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
 #0 ap_enable_reg_pp0_iter2 = 1'b0;
 #0 grp_read_i8_fu_98_ap_start_reg = 1'b0;
-#0 i_7_fu_94 = 5'd0;
+#0 i_6_fu_94 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -251,9 +251,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         if (((icmp_ln402_fu_113_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_7_fu_94 <= add_ln402_fu_119_p2;
+            i_6_fu_94 <= add_ln402_fu_119_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_7_fu_94 <= 5'd0;
+            i_6_fu_94 <= 5'd0;
         end
     end
 end
@@ -312,7 +312,7 @@ always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_sig_allocacmp_i = 5'd0;
     end else begin
-        ap_sig_allocacmp_i = i_7_fu_94;
+        ap_sig_allocacmp_i = i_6_fu_94;
     end
 end
 

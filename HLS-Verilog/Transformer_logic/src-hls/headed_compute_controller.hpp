@@ -5,7 +5,7 @@
 
 void headed_compute_controller(
     ComputeHeadCtx &ctx,            // [BOTH] Per-head persistent state
-    bool        reset,               // [INPUT] Reset signal
+    bool        reset_n,             // [INPUT] Active-low reset
 
     // Flat input/output buffers
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
@@ -24,7 +24,7 @@ void headed_compute_controller(
 
 void drive_headed_compute_controller(
     ComputeHeadCtx (&ctx)[HEADS_PARALLEL],
-    bool        reset,
+    bool        reset_n,
     const uint8_t in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     int8_t        dbg_head_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX],

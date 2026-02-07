@@ -1020,14 +1020,14 @@ module parallel_headed_compute_controller_tb;
   integer cycles;
   initial begin
     ap_start = 1'b1;
-    reset = 1'b1;
+    reset = 1'b0;
 
     @(posedge ap_clk);
     for (cycles = 0; cycles < MAX_CYCLES; cycles = cycles + 1) begin
       @(posedge ap_clk);
       if (cycles == RESET_HOLD_CYCLES) begin
         ap_rst <= 1'b0;
-        reset <= 1'b0;
+        reset <= 1'b1;
       end
 
       if (compute_state == DONE) begin
@@ -1061,7 +1061,7 @@ module parallel_headed_compute_controller_tb;
     .ctx_1_i(ctx_i[1]),
     .ctx_1_o(ctx_o[1]),
     .ctx_1_o_ap_vld(ctx_o_ap_vld[1]),
-    .reset(reset),
+    .reset_n(reset),
     .in_buf_address0(in_buf_address0),
     .in_buf_ce0(in_buf_ce0),
     .in_buf_q0(in_buf_q0),

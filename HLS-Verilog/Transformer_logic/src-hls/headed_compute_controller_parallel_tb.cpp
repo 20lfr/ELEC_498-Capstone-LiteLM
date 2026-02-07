@@ -554,7 +554,7 @@ int main() {
 
     std::printf("Cycle-by-cycle trace\n");
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
-        const bool reset = (cycle < 2);
+        const bool reset_n = (cycle >= 2);
 
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
             ctx[lane].mem_transfer_done = false;
@@ -659,7 +659,7 @@ int main() {
             }
         }
 
-        if (reset) {
+        if (!reset_n) {
             for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
                 lane_done[lane] = false;
                 mem_busy[lane] = false;
@@ -667,7 +667,7 @@ int main() {
                 mem_pending[lane] = MemPending::NONE;
             }
             state = TbState::RESET;
-            drive_headed_compute_controller(ctx, true, in_buf, out_buf, dbg_head_vec, dbg_head_out, error);
+            drive_headed_compute_controller(ctx, false, in_buf, out_buf, dbg_head_vec, dbg_head_out, error);
             continue;
         }
 
@@ -712,7 +712,7 @@ int main() {
                 break;
         }
 
-        drive_headed_compute_controller(ctx, false, in_buf, out_buf, dbg_head_vec, dbg_head_out, error);
+        drive_headed_compute_controller(ctx, reset_n, in_buf, out_buf, dbg_head_vec, dbg_head_out, error);
 
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
             if (!mem_busy[lane]) {
