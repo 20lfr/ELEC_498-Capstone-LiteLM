@@ -54,7 +54,6 @@ struct InputBufferLayout {
     BufferField v_cache;
     BufferField m_param;
     BufferField n_param;
-    BufferField z_param;
     uint32_t total_size;
     
     InputBufferLayout() : total_size(0) {}

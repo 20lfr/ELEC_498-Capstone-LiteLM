@@ -347,7 +347,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, 1);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, 0);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT2: {
@@ -356,7 +355,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, 1);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, 0);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT3: {
@@ -365,7 +363,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, 1);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, 0);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT4: {
@@ -374,7 +371,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, 1);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, 0);
                             break;
                         }
                         case ComputeOp::CMP_RESID0: {

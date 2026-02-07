@@ -26,10 +26,6 @@ static void print_head_buffers(
     std::printf("\n");
 }
 
-
-
-
-
 void MAC_HEAD_ARCHITECTURE(
     bool start,
     bool &ready,
@@ -196,7 +192,6 @@ void SOFTMAX(
     }
 }
 
-
 void REQUANT_D_HEADS_int32_to_int8(
     int32_t x32[D_HEADS],   // input vector
     int32_t M,              // integer multiplier               (Provided by PS)
@@ -222,7 +217,6 @@ void REQUANT_D_HEADS_int32_to_int8(
         }
     }   
 }
-
 
 static void headed_compute_controller_lane(
     ComputeHeadCtx &ctx,

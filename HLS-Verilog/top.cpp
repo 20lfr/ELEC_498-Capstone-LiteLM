@@ -53,8 +53,9 @@ void transformer_top(
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
     // ------------------------------------------------------------
-    HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
-    SchedState  &STATE,
+    HeadCtx         (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
+    ComputeHeadCtx  (&head_compute_ctx)[HEADS_PARALLEL],
+    SchedState      &STATE,
     // ------------------------------------------------------------
     // DEBUG OUTPUTS
     // ------------------------------------------------------------
@@ -91,6 +92,7 @@ void transformer_top(
     bool     &dbg_mac_ready,
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
+    int      &dbg_head_group_idx,
 
     bool &dbg_done
 ) {
@@ -101,6 +103,7 @@ void transformer_top(
 #pragma HLS INTERFACE ap_none port=irq_ps
 #pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
+#pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
 
     bool done               = false;    // Scheduler done flag
     bool scheduler_error       = false;
@@ -115,13 +118,10 @@ void transformer_top(
     static bool     compute_start = false;
     static uint32_t compute_instruction = 0;
 
-    // Headed compute controller lanes (parallel heads)
-    static ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL];
-#pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
+    // Headed compute controller lanes (parallel heads) 
+    static int      head_group_idx;
     static int8_t  head_dbg_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX];
     static int32_t head_dbg_out[HEADS_PARALLEL][HEAD_ACCUM_MAX];
-    static int lane_head_idx[HEADS_PARALLEL];
-#pragma HLS ARRAY_PARTITION variable=lane_head_idx complete dim=1
 
     
     // Active-low reset derived from control register.
@@ -138,10 +138,7 @@ void transformer_top(
         compute_done  = false;
         compute_start = false;
         compute_instruction = 0;
-        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
-            lane_head_idx[lane] = -1;
-        }
+        head_group_idx = 0;
     }
 
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
@@ -158,6 +155,7 @@ void transformer_top(
         compute_ready,
         compute_done,
         head_ctx_ref,
+        head_group_idx,
         compute_start,
         compute_instruction,
         stream_ready,
@@ -195,49 +193,15 @@ void transformer_top(
         compute_error               
     );
 
-    // Map active heads into HEADS_PARALLEL lanes based on start_head pulses.
-    bool head_taken[NUM_HEADS];
-#pragma HLS ARRAY_PARTITION variable=head_taken complete dim=1
-    for (int h = 0; h < NUM_HEADS; ++h) {
-#pragma HLS UNROLL
-        head_taken[h] = false;
-    }
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
-        const int idx = lane_head_idx[lane];
-        if (idx >= 0) {
-            if (head_ctx_ref[idx].phase == HeadPhase::DONE) {
-                lane_head_idx[lane] = -1;
-            } else {
-                head_taken[idx] = true;
-            }
-        }
-    }
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
-        if (lane_head_idx[lane] < 0) {
-            bool lane_assigned = false;
-            for (int h = 0; h < NUM_HEADS; ++h) {
-#pragma HLS UNROLL
-                if (!lane_assigned && !head_taken[h] && head_ctx_ref[h].start_head) {
-                    lane_head_idx[lane] = h;
-                    head_taken[h] = true;
-                    lane_assigned = true;
-                }
-            }
-        }
-    }
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
-        const int idx = lane_head_idx[lane];
-        if (idx >= 0) {
+        const int idx = head_group_idx * HEADS_PARALLEL + lane;
+        if (idx >= 0 && idx < NUM_HEADS) {
             head_compute_ctx[lane].compute_start = head_ctx_ref[idx].compute_start;
             head_compute_ctx[lane].compute_instruction = head_ctx_ref[idx].compute_op;
-            head_compute_ctx[lane].mem_transfer_done = true; // TODO: connect head memory manager
         } else {
             head_compute_ctx[lane].compute_start = false;
             head_compute_ctx[lane].compute_instruction = 0;
-            head_compute_ctx[lane].mem_transfer_done = false;
         }
     }
 
@@ -254,12 +218,13 @@ void transformer_top(
 
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
-        const int idx = lane_head_idx[lane];
-        if (idx >= 0) {
+        const int idx = head_group_idx * HEADS_PARALLEL + lane;
+        if (idx >= 0 && idx < NUM_HEADS) {
             head_ctx_ref[idx].compute_ready = head_compute_ctx[lane].compute_ready;
             head_ctx_ref[idx].compute_done  = head_compute_ctx[lane].compute_done;
         }
     }
+    
     ctrl_mem_interface.check_errors(ctrl_mem, scheduler_error, compute_error);
     ctrl_mem_interface.check_control(ctrl_mem, done);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
@@ -280,6 +245,7 @@ void transformer_top(
     // Debugging mirrors
     dbg_ctrl_mem = ctrl_mem;
     dbg_ctrl_reset_asserted = reset;
+    dbg_head_group_idx = head_group_idx;
     control_reg   = ctrl_mem.control;
     irq_mask_reg   = ctrl_mem.irq_mask;
     irq_clear_reg  = ctrl_mem.irq_clear;

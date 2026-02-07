@@ -48,6 +48,7 @@ void transformer_top(
     const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out)
+    ComputeHeadCtx  (&head_compute_ctx)[HEADS_PARALLEL],
 
     // Debug (scheduler)
     SchedState  &dbg_state,
@@ -84,6 +85,7 @@ void transformer_top(
     bool     &dbg_mac_ready,
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
+    int      &dbg_head_group_idx,
 
     bool &dbg_done
 );

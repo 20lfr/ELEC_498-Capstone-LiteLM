@@ -72,6 +72,7 @@ void scheduler_hls(
     bool compute_ready,  // [INPUT]  Compute engine idle / ready for next op
     bool compute_done,   // [INPUT]  Compute operation finished (one-shot)
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]  Per-head context (in/out)
+    int   &head_group_idx,        // [OUTPUT]  Current head group index (0 to NUM_HEADS/HEADS_PARALLEL-1) 
     bool &compute_start, // [OUTPUT] Trigger compute engine
     uint32_t &compute_instruction,     // [OUTPUT] Packed op|layer|head|tile for compute
     // ------------------------------------------------------------
@@ -333,6 +334,7 @@ void scheduler_hls(
   done = 0;
 
   if (reset) {
+    head_group_idx = 0;
     STATE = st;
     return;
   }
@@ -349,6 +351,7 @@ void scheduler_hls(
     done = 0;
     error = true;
     error_latched = true;
+    head_group_idx = group_idx;
     STATE = st;
     return;
   }
@@ -561,6 +564,8 @@ void scheduler_hls(
     if (st == S_FINAL_NORM && final_norm_started) final_norm_compute_done = true;
   }
 
+  int head_group_idx_out = group_idx;
+
   switch (st) {
     case S_IDLE: {
       if (cntrl_start) {
@@ -770,8 +775,8 @@ void scheduler_hls(
       }
 
       // Drive current head group; compute handshake handled externally
-      attn_group_done =
-          drive_group_head_phase(head_group, layer_idx, start_head_group, ctrl_mem, error);
+      head_group_idx_out = group_idx;
+      attn_group_done = drive_group_head_phase(head_group, layer_idx, start_head_group, ctrl_mem, error);
 
       // Copy results back into the full context
       for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
@@ -1045,5 +1050,6 @@ void scheduler_hls(
       break;
     }
   }
+    head_group_idx = head_group_idx_out;
     STATE = st;
 }

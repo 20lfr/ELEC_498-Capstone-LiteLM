@@ -170,8 +170,7 @@ static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         }
         const int32_t M = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::M);
         const int32_t N = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::N);
-        const int32_t Z = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::Z);
-        std::printf("\n  M: %d\n  N: %d\n  Z: %d\n", static_cast<int>(M), static_cast<int>(N), static_cast<int>(Z));
+        std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
     case ComputeOp::CMP_RESID0:
@@ -341,8 +340,7 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         }
         const int32_t M = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::M);
         const int32_t N = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::N);
-        const int32_t Z = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::Z);
-        std::printf("\n  M: %d\n  N: %d\n  Z: %d\n", static_cast<int>(M), static_cast<int>(N), static_cast<int>(Z));
+        std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
     case ComputeOp::CMP_ATT_SCORES: {
@@ -455,16 +453,12 @@ static int32_t g_rq_q_x[HEADS_PARALLEL][D_HEADS] = {};
 static int32_t g_rq_head_x[HEADS_PARALLEL][D_HEADS] = {};
 static int32_t g_rq_k_M[HEADS_PARALLEL] = {};
 static int32_t g_rq_k_N[HEADS_PARALLEL] = {};
-static int32_t g_rq_k_Z[HEADS_PARALLEL] = {};
 static int32_t g_rq_v_M[HEADS_PARALLEL] = {};
 static int32_t g_rq_v_N[HEADS_PARALLEL] = {};
-static int32_t g_rq_v_Z[HEADS_PARALLEL] = {};
 static int32_t g_rq_q_M[HEADS_PARALLEL] = {};
 static int32_t g_rq_q_N[HEADS_PARALLEL] = {};
-static int32_t g_rq_q_Z[HEADS_PARALLEL] = {};
 static int32_t g_rq_head_M[HEADS_PARALLEL] = {};
 static int32_t g_rq_head_N[HEADS_PARALLEL] = {};
-static int32_t g_rq_head_Z[HEADS_PARALLEL] = {};
 
 static int8_t g_att_q[HEADS_PARALLEL][D_HEADS] = {};
 static int8_t g_att_k_cache[HEADS_PARALLEL][CONTEXT_LENGTH * D_HEADS] = {};
@@ -499,16 +493,12 @@ static void init_head_vectors() {
         }
         g_rq_k_M[lane] = 11 + lane;
         g_rq_k_N[lane] = 3 + lane;
-        g_rq_k_Z[lane] = 1 + lane;
         g_rq_v_M[lane] = 12 + lane;
         g_rq_v_N[lane] = 4 + lane;
-        g_rq_v_Z[lane] = 2 + lane;
         g_rq_q_M[lane] = 13 + lane;
         g_rq_q_N[lane] = 5 + lane;
-        g_rq_q_Z[lane] = 3 + lane;
         g_rq_head_M[lane] = 14 + lane;
         g_rq_head_N[lane] = 6 + lane;
-        g_rq_head_Z[lane] = 4 + lane;
 
         for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
             g_att_k_cache[lane][i] = static_cast<int8_t>((i + 1 + lane) % 17);
@@ -567,16 +557,11 @@ static void build_head_in_buf(int lane, ComputeOp op, uint8_t head_in_buf[HEADS_
                         : (op == ComputeOp::CMP_V_REQUANT) ? g_rq_v_N[lane]
                         : (op == ComputeOp::CMP_REQUANT_Q) ? g_rq_q_N[lane]
                         : g_rq_head_N[lane];
-        const int32_t Z = (op == ComputeOp::CMP_K_REQUANT) ? g_rq_k_Z[lane]
-                        : (op == ComputeOp::CMP_V_REQUANT) ? g_rq_v_Z[lane]
-                        : (op == ComputeOp::CMP_REQUANT_Q) ? g_rq_q_Z[lane]
-                        : g_rq_head_Z[lane];
         for (int h = 0; h < D_HEADS; ++h) {
             compute_buf::write_i32(buf, head_buf::HeadRequantLayout::X + (h * 4), x[h]);
         }
         compute_buf::write_i32(buf, head_buf::HeadRequantLayout::M, M);
         compute_buf::write_i32(buf, head_buf::HeadRequantLayout::N, N);
-        compute_buf::write_i32(buf, head_buf::HeadRequantLayout::Z, Z);
         break;
     }
     case ComputeOp::CMP_ATT_SCORES: {
@@ -802,6 +787,7 @@ int main() {
     bool wl_start        = false;
     uint32_t wl_instruction = 0;
     HeadCtx head_ctx_ref[NUM_HEADS];
+    ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL] = {};
     bool dma_done        = false;
     bool wl_dma_request  = false;
     uint64_t wl_dma_address = 0;
@@ -835,10 +821,10 @@ int main() {
     int32_t rq2_x[D_MODEL] = {};
     int32_t rq3_x[D_MODEL] = {};
     int32_t rq4_x[D_MODEL] = {};
-    int32_t rq1_M = 1, rq1_N = 0, rq1_Z = 0;
-    int32_t rq2_M = 2, rq2_N = 1, rq2_Z = 0;
-    int32_t rq3_M = 1, rq3_N = 2, rq3_Z = 0;
-    int32_t rq4_M = 3, rq4_N = 1, rq4_Z = 0;
+    int32_t rq1_M = 1, rq1_N = 0;
+    int32_t rq2_M = 2, rq2_N = 1;
+    int32_t rq3_M = 1, rq3_N = 2;
+    int32_t rq4_M = 3, rq4_N = 1;
 
     int8_t resid0_x[D_MODEL] = {};
     int8_t resid0_r[D_MODEL] = {};
@@ -869,14 +855,11 @@ int main() {
 
     init_head_vectors();
 
-    bool head_lane_busy[HEADS_PARALLEL] = {false};
-    int  head_lane_timer[HEADS_PARALLEL] = {0};
-    int  head_lane_active_idx[HEADS_PARALLEL] = {0};
-    ComputeOp head_lane_op[HEADS_PARALLEL] = {ComputeOp::CMP_NONE};
-    bool head_start_seen[NUM_HEADS] = {false};
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-        head_lane_active_idx[lane] = -1;
-    }
+    bool head_mem_busy[HEADS_PARALLEL] = {false};
+    int  head_mem_timer[HEADS_PARALLEL] = {0};
+    uint32_t head_mem_op_latched[HEADS_PARALLEL] = {0};
+    enum class HeadMemPending { None, Read, Write };
+    HeadMemPending head_mem_pending[HEADS_PARALLEL] = {HeadMemPending::None};
     bool head_dma_busy[HEADS_PARALLEL] = {false};
     int  head_dma_timer[HEADS_PARALLEL] = {0};
     int  head_dma_active_idx[HEADS_PARALLEL] = {0};
@@ -999,6 +982,7 @@ int main() {
     bool dbg_mac_ready = false;
     bool dbg_mac_complete = false;
     bool dbg_ctrl_reset_asserted = false;
+    int dbg_head_group_idx = 0;
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
@@ -1017,9 +1001,8 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-6s %-10s %-6s %-10s %-6s %-10s %-6s %-6s %-13s | %-10s %-6s %-6s %-10s %-10s %-6s | Heads: [idx:phase  C_St C_Dn  CompInstr WL_St DMA   DMADn]\n",
-                "Cycle", "Start", "Reset", "CtrlR", "WlInstr", "DbgSt", "ReqInstr", "C_St", "CompInstr", "C_Rdy", "C_Dn", "DbgState",
-                "MemCtrl", "MemIRQ", "IRQ_PS", "MemMsk", "Status", "ErrCd");
+    std::printf("%-8s %-6s %-6s %-13s | Heads: [idx C_St C_Rdy C_Dn]\n",
+                "Cycle", "Start", "CtrlR", "DbgState");
 
     auto dash_or = [](bool v) { return v ? "1" : "-"; };
 
@@ -1273,31 +1256,9 @@ int main() {
             interupt_data = status_mem.irq_status;
         }
 
-        // Clear per-head compute_done pulse
+        // Clear per-head DMA done pulse
         for (int i = 0; i < NUM_HEADS; ++i) {
-            head_ctx_ref[i].compute_done = false;
             head_ctx_ref[i].dma_done = false;
-        }
-
-        // Complete outstanding per-head compute operations
-        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-            if (head_lane_busy[lane]) {
-                if (head_lane_timer[lane] == 0) {
-                    int idx = head_lane_active_idx[lane];
-                    if (idx >= 0 && idx < NUM_HEADS) {
-                        head_ctx_ref[idx].compute_done = true;
-                        const ComputeOp done_op = head_lane_op[lane];
-                        std::printf("HEAD%d lane %d op %s out_buf\n", idx, lane, op_name(done_op));
-                        print_buffer("head_out_buf (done)", head_out_buf[lane], head_buf::OUT_BUF_BYTES);
-                        print_head_out_buf_decoded(done_op, head_out_buf[lane]);
-                    }
-                    head_lane_busy[lane] = false;
-                    head_lane_active_idx[lane] = -1;
-                    head_lane_op[lane] = ComputeOp::CMP_NONE;
-                } else {
-                    --head_lane_timer[lane];
-                }
-            }
         }
 
         // Complete outstanding per-head DMA operations
@@ -1337,7 +1298,6 @@ int main() {
         // Ready signals depend on busy flags
         for (int i = 0; i < NUM_HEADS; ++i) {
             int lane = i % HEADS_PARALLEL;
-            head_ctx_ref[i].compute_ready = !head_lane_busy[lane];
             head_ctx_ref[i].wl_ready      = !head_dma_busy[lane];
         }
         stream_ready  = !stream_busy;
@@ -1401,16 +1361,11 @@ int main() {
                                          : (op == CMP_REQUANT2) ? rq2_N
                                          : (op == CMP_REQUANT3) ? rq3_N
                                          : rq4_N;
-                        const int32_t Z = (op == CMP_REQUANT1) ? rq1_Z
-                                         : (op == CMP_REQUANT2) ? rq2_Z
-                                         : (op == CMP_REQUANT3) ? rq3_Z
-                                         : rq4_Z;
                         for (int i = 0; i < D_MODEL; ++i) {
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::X + (i * 4), src[i]);
                         }
                         compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, M);
                         compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, N);
-                        compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, Z);
                         break;
                     }
                     case CMP_RESID0:
@@ -1499,6 +1454,49 @@ int main() {
             }
         }
 
+        // Memory manager model for headed compute lanes
+        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+            head_compute_ctx[lane].mem_transfer_done = false;
+        }
+        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+            if (head_mem_busy[lane]) {
+                if (head_mem_timer[lane] == 0) {
+                    head_compute_ctx[lane].mem_transfer_done = true;
+                    head_mem_busy[lane] = false;
+                    const ComputeOp op = decode_op(head_mem_op_latched[lane]);
+                    if (head_mem_pending[lane] == HeadMemPending::Read) {
+                        build_head_in_buf(lane, op, head_in_buf);
+                        if (op == CMP_ATT_SCORES) {
+                            seen_attn = true;
+                        }
+                        std::printf("HEAD lane %d op %s in_buf\n", lane, op_name(op));
+                        print_buffer("head_in_buf (send)", head_in_buf[lane], head_buf::IN_BUF_BYTES);
+                        print_head_in_buf_decoded(op, head_in_buf[lane]);
+                    } else if (head_mem_pending[lane] == HeadMemPending::Write) {
+                        std::printf("HEAD lane %d op %s out_buf\n", lane, op_name(op));
+                        print_buffer("head_out_buf (done)", head_out_buf[lane], head_buf::OUT_BUF_BYTES);
+                        print_head_out_buf_decoded(op, head_out_buf[lane]);
+                    }
+                    head_mem_pending[lane] = HeadMemPending::None;
+                } else {
+                    --head_mem_timer[lane];
+                }
+                continue;
+            }
+
+            if (head_compute_ctx[lane].mem_read_request) {
+                head_mem_busy[lane] = true;
+                head_mem_timer[lane] = MEM_LAT - 1;
+                head_mem_pending[lane] = HeadMemPending::Read;
+                head_mem_op_latched[lane] = head_compute_ctx[lane].mem_op;
+            } else if (head_compute_ctx[lane].mem_write_request) {
+                head_mem_busy[lane] = true;
+                head_mem_timer[lane] = MEM_LAT - 1;
+                head_mem_pending[lane] = HeadMemPending::Write;
+                head_mem_op_latched[lane] = head_compute_ctx[lane].mem_op;
+            }
+        }
+
         transformer_top(
             axis_in_valid,
             axis_in_last,
@@ -1522,6 +1520,7 @@ int main() {
             head_in_buf,
             head_out_buf,
             head_ctx_ref,
+            head_compute_ctx,
             dbg_state, 
             dbg_ctrl_mem,
             control_reg,
@@ -1554,6 +1553,7 @@ int main() {
             dbg_mac_ready,
             dbg_mac_complete,
             dbg_ctrl_reset_asserted,
+            dbg_head_group_idx,
             dbg_done
         );
 
@@ -1583,42 +1583,50 @@ int main() {
         }
 
         const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
-        const bool cntrl_reset_n = ((ctrl_shadow_control & CTRL_RESETN_BIT) != 0);
-        std::printf("%-8d %-6d %-6d %-6s 0x%08X %-6d 0x%08X %-6s 0x%08X %-6s %-6s %-13s | 0x%08X %-6s %-6s 0x%08X %-10s 0x%04X",
+        std::printf("%-8d %-6d %-6s %-13s |",
                     cycle,
                     cntrl_start ? 1 : 0,
-                    cntrl_reset_n ? 1 : 0,
                     dash_or(dbg_ctrl_reset_asserted),
-                    wl_instruction,
-                    static_cast<int>(dbg_compute_state),
-                    dbg_req_instruction,
-                    dash_or(dbg_compute_start),
-                    dbg_compute_instruction,
-                    dash_or(dbg_compute_ready),
-                    dash_or(dbg_compute_done),
-                    state_name(dbg_state),
-                    // CtrlMemSpace/StatusMemSpace info:
-                    dbg_ctrl_mem.control,
-                    irq_name(status_mem.irq_status),
-                    dash_or(irq_ps),
-                    dbg_ctrl_mem.irq_mask,
-                    status_name(status_mem.status),
-                    status_mem.error_code);
+                    state_name(dbg_state));
         for (int i = 0; i < NUM_HEADS; ++i) {
-            char buf[128];
-            const DmaFields head_fields = decode_wl_instruction(head_ctx_ref[i].wl_instruction);
-            std::snprintf(buf, sizeof(buf), "%d:%-6s %-2s %-2s 0x%08X %-2s %-4s %-2s",
-                          i,
-                          phase_name(head_ctx_ref[i].phase),
-                          dash_or(head_ctx_ref[i].compute_start),
-                          dash_or(head_ctx_ref[i].compute_done),
-                          head_ctx_ref[i].compute_op,
-                          dash_or(head_ctx_ref[i].wl_start),
-                          dma_name(head_fields.sel),
-                          dash_or(head_ctx_ref[i].dma_done));
-            std::printf(" %s", buf);
+            std::printf(" %d:%s%s%s",
+                        i,
+                        dash_or(head_ctx_ref[i].compute_start),
+                        dash_or(head_ctx_ref[i].compute_ready),
+                        dash_or(head_ctx_ref[i].compute_done));
         }
         std::printf("\n");
+        if (dbg_state == S_ATTENTION_HEADS) {
+            for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+                const ComputeHeadCtx &ctx = head_compute_ctx[lane];
+                std::printf(
+                    "  Lane %d: state=%d req{instr=0x%08X op=%s layer=%d head=%d tile=%d} "
+                    "mac{busy=%d ready=%d complete=%d start=%d} pend{clr=%d cap=%d} err=%d "
+                    "compute{start=%d instr=0x%08X ready=%d done=%d} mem{rd=%d wr=%d done=%d op=0x%08X}\n",
+                    lane,
+                    static_cast<int>(ctx.state),
+                    ctx.req.instruction,
+                    op_name(ctx.req.op),
+                    ctx.req.layer_idx,
+                    ctx.req.head_idx,
+                    ctx.req.tile_idx,
+                    ctx.mac_busy ? 1 : 0,
+                    ctx.mac_ready ? 1 : 0,
+                    ctx.mac_complete ? 1 : 0,
+                    ctx.mac_start ? 1 : 0,
+                    ctx.clear_pending ? 1 : 0,
+                    ctx.capture_pending ? 1 : 0,
+                    ctx.error_latched ? 1 : 0,
+                    ctx.compute_start ? 1 : 0,
+                    ctx.compute_instruction,
+                    ctx.compute_ready ? 1 : 0,
+                    ctx.compute_done ? 1 : 0,
+                    ctx.mem_read_request ? 1 : 0,
+                    ctx.mem_write_request ? 1 : 0,
+                    ctx.mem_transfer_done ? 1 : 0,
+                    ctx.mem_op);
+            }
+        }
 
         // Track the tail of the sequence: once we hit STREAM_OUT, watch for 4 idle cycles
         if (dbg_state == S_STREAM_OUT) {
@@ -1630,25 +1638,9 @@ int main() {
             idle_after_stream = 0;
         }
 
-        // Launch head compute requests onto their dedicated lanes
+        // Launch head DMA requests onto their dedicated lanes
         for (int i = 0; i < NUM_HEADS; ++i) {
             int lane = i % HEADS_PARALLEL;
-            if (!head_ctx_ref[i].compute_start) {
-                head_start_seen[i] = false;
-            }
-            if (head_ctx_ref[i].compute_start && !head_start_seen[i] && !head_lane_busy[lane]) {
-                head_lane_busy[lane] = true;
-                head_lane_timer[lane] = COMP_LAT - 1;
-                head_lane_active_idx[lane] = i;
-                head_start_seen[i] = true;
-                ComputeOp launched_op = decode_op(head_ctx_ref[i].compute_op);
-                head_lane_op[lane] = launched_op;
-                if (launched_op == CMP_ATT_SCORES) seen_attn = true;
-                build_head_in_buf(lane, launched_op, head_in_buf);
-                std::printf("HEAD%d lane %d op %s in_buf\n", i, lane, op_name(launched_op));
-                print_buffer("head_in_buf (send)", head_in_buf[lane], head_buf::IN_BUF_BYTES);
-                print_head_in_buf_decoded(launched_op, head_in_buf[lane]);
-            }
             if (head_ctx_ref[i].wl_start && !head_dma_busy[lane]) {
                 head_dma_busy[lane] = true;
                 head_dma_timer[lane] = DMA_LAT - 1;

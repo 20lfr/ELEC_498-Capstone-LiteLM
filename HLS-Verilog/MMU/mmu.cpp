@@ -480,7 +480,6 @@ InputBufferLayout mmu_calc_input_layout(
             l.act = BufferField(head_buf::HeadRequantLayout::X, dims.d_heads * 4, DataType::DTYPE_INT32, dims.d_heads);
             l.m_param = BufferField(head_buf::HeadRequantLayout::M, 4, DataType::DTYPE_INT32, 1);
             l.n_param = BufferField(head_buf::HeadRequantLayout::N, 4, DataType::DTYPE_INT32, 1);
-            l.z_param = BufferField(head_buf::HeadRequantLayout::Z, 4, DataType::DTYPE_INT32, 1);
             l.total_size = head_buf::HEAD_REQUANT_IN_BYTES;
             break;
         }
@@ -517,7 +516,6 @@ InputBufferLayout mmu_calc_input_layout(
             l.act = BufferField(compute_buf::RequantLayout::X, dims.d_model * 4, DataType::DTYPE_INT32, dims.d_model);
             l.m_param = BufferField(compute_buf::RequantLayout::M, 4, DataType::DTYPE_INT32, 1);
             l.n_param = BufferField(compute_buf::RequantLayout::N, 4, DataType::DTYPE_INT32, 1);
-            l.z_param = BufferField(compute_buf::RequantLayout::Z, 4, DataType::DTYPE_INT32, 1);
             l.total_size = compute_buf::REQUANT_IN_BYTES;
             break;
         }

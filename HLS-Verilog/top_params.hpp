@@ -445,7 +445,7 @@ constexpr int OUT_PROJ_W_BYTES = div_ceil(OUT_PROJ_W_NIBBLES, 2);
 constexpr int OUT_PROJ_B_BYTES = D_TILE_WO * 4;
 constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
 
-constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
+constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 8;
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
 constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
@@ -506,7 +506,6 @@ struct RequantLayout {
     static constexpr int X = 0;
     static constexpr int M = X + (D_MODEL * 4);
     static constexpr int N = M + 4;
-    static constexpr int Z = N + 4;
 };
 
 struct ResidLayout {
@@ -650,7 +649,7 @@ constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
 constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
 constexpr int QKV_OUT_BYTES = D_HEADS * 4;
 
-constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 8;
 constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
 
 constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
@@ -693,7 +692,6 @@ struct HeadRequantLayout {
     static constexpr int X = 0;
     static constexpr int M = X + (D_HEADS * 4);
     static constexpr int N = M + 4;
-    static constexpr int Z = N + 4;
 };
 
 struct AttScoresLayout {
