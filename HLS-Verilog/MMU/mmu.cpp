@@ -2,13 +2,10 @@
 
 // FSM state
 static MMUFsmState fsm_state;
-#pragma HLS reset variable=fsm_state
 
 // URAM bank allocation tracking
 static uint32_t bank_offsets[MMU_URAM_BANKS];
-#pragma HLS array_partition variable=bank_offsets complete dim=1
 static uint8_t active_bank;
-#pragma HLS reset variable=active_bank
 
 // Tile cache 
 static DmaSel   tt_sel[MMU_MAX_TILES];
@@ -21,29 +18,15 @@ static uint8_t  tt_alloc_num_chunks[MMU_MAX_TILES];
 static uint8_t  tt_alloc_bank[MMU_MAX_TILES][MMU_MAX_CHUNKS];
 static uint32_t tt_alloc_offset[MMU_MAX_TILES][MMU_MAX_CHUNKS];
 static uint32_t tt_alloc_size[MMU_MAX_TILES][MMU_MAX_CHUNKS];
-#pragma HLS array_partition variable=tt_sel complete dim=1
-#pragma HLS array_partition variable=tt_layer complete dim=1
-#pragma HLS array_partition variable=tt_head complete dim=1
-#pragma HLS array_partition variable=tt_tile complete dim=1
-#pragma HLS array_partition variable=tt_total_size complete dim=1
-#pragma HLS array_partition variable=tt_valid complete dim=1
-#pragma HLS array_partition variable=tt_alloc_num_chunks complete dim=1
 static uint16_t num_tiles;
-#pragma HLS reset variable=num_tiles
 
 // DMA queue
 static uint32_t dq_packed[MMU_DMA_QUEUE_DEPTH];
 static bool     dq_is_headed[MMU_DMA_QUEUE_DEPTH];
 static bool     dq_valid[MMU_DMA_QUEUE_DEPTH];
-#pragma HLS array_partition variable=dq_packed complete dim=1
-#pragma HLS array_partition variable=dq_is_headed complete dim=1
-#pragma HLS array_partition variable=dq_valid complete dim=1
 static uint8_t dma_q_head;
-#pragma HLS reset variable=dma_q_head
 static uint8_t dma_q_tail;
-#pragma HLS reset variable=dma_q_tail
 static uint8_t dma_q_count;
-#pragma HLS reset variable=dma_q_count
 
 // Compute queue 
 static ComputeReqType cq_type[MMU_COMPUTE_QUEUE_DEPTH];
@@ -51,77 +34,45 @@ static uint32_t cq_packed[MMU_COMPUTE_QUEUE_DEPTH];
 static bool     cq_is_headed[MMU_COMPUTE_QUEUE_DEPTH];
 static uint8_t  cq_head_idx[MMU_COMPUTE_QUEUE_DEPTH];
 static bool     cq_valid[MMU_COMPUTE_QUEUE_DEPTH];
-#pragma HLS array_partition variable=cq_type complete dim=1
-#pragma HLS array_partition variable=cq_packed complete dim=1
-#pragma HLS array_partition variable=cq_is_headed complete dim=1
-#pragma HLS array_partition variable=cq_head_idx complete dim=1
-#pragma HLS array_partition variable=cq_valid complete dim=1
 static uint8_t comp_q_head;
-#pragma HLS reset variable=comp_q_head
 static uint8_t comp_q_tail;
-#pragma HLS reset variable=comp_q_tail
 static uint8_t comp_q_count;
-#pragma HLS reset variable=comp_q_count
 
 // Head arbiter 
 static bool arb_pending[MMU_MAX_HEADS];
 static bool arb_grant[MMU_MAX_HEADS];
-#pragma HLS array_partition variable=arb_pending complete dim=1
-#pragma HLS array_partition variable=arb_grant complete dim=1
 static uint8_t arb_current;
-#pragma HLS reset variable=arb_current
 static uint8_t arb_rr_ptr;
-#pragma HLS reset variable=arb_rr_ptr
 static bool arb_busy;
-#pragma HLS reset variable=arb_busy
 
 // Active operation state
 static uint32_t active_dma_req;
-#pragma HLS reset variable=active_dma_req
 static bool active_dma_is_headed;
-#pragma HLS reset variable=active_dma_is_headed
 static ComputeReqType active_compute_type;
-#pragma HLS reset variable=active_compute_type
 static uint32_t active_compute_packed;
-#pragma HLS reset variable=active_compute_packed
 static uint8_t active_compute_head;
-#pragma HLS reset variable=active_compute_head
 static bool active_compute_is_headed;
-#pragma HLS reset variable=active_compute_is_headed
 
 // Chunked allocation state
 static uint8_t  alloc_bank[MMU_MAX_CHUNKS];
 static uint32_t alloc_offset[MMU_MAX_CHUNKS];
 static uint32_t alloc_size[MMU_MAX_CHUNKS];
-#pragma HLS array_partition variable=alloc_bank complete dim=1
-#pragma HLS array_partition variable=alloc_offset complete dim=1
-#pragma HLS array_partition variable=alloc_size complete dim=1
 static uint8_t alloc_num_chunks;
-#pragma HLS reset variable=alloc_num_chunks
 static uint8_t current_chunk;
-#pragma HLS reset variable=current_chunk
 
 // Done flags
 static bool head_dma_done_flags[MMU_MAX_HEADS];
 static bool head_compute_done_flags[MMU_MAX_HEADS];
-#pragma HLS array_partition variable=head_dma_done_flags complete dim=1
-#pragma HLS array_partition variable=head_compute_done_flags complete dim=1
 static bool main_dma_done_flag;
-#pragma HLS reset variable=main_dma_done_flag
 static bool main_compute_done_flag;
-#pragma HLS reset variable=main_compute_done_flag
 
 // Error flags
 static bool err_overflow;
-#pragma HLS reset variable=err_overflow
 static bool err_invalid;
-#pragma HLS reset variable=err_invalid
 
 // In-progress flags
 static bool dma_in_progress;
-#pragma HLS reset variable=dma_in_progress
 static bool transfer_in_progress;
-#pragma HLS reset variable=transfer_in_progress
 
 // ============================================================================
 // Helper Functions 
@@ -608,6 +559,57 @@ void mmu_fsm(
     uint16_t    current_token
 ) {
 #pragma HLS INLINE off
+
+    // HLS pragmas for static variables (must be inside function scope)
+#pragma HLS reset variable=fsm_state
+#pragma HLS array_partition variable=bank_offsets complete dim=1
+#pragma HLS reset variable=active_bank
+#pragma HLS array_partition variable=tt_sel complete dim=1
+#pragma HLS array_partition variable=tt_layer complete dim=1
+#pragma HLS array_partition variable=tt_head complete dim=1
+#pragma HLS array_partition variable=tt_tile complete dim=1
+#pragma HLS array_partition variable=tt_total_size complete dim=1
+#pragma HLS array_partition variable=tt_valid complete dim=1
+#pragma HLS array_partition variable=tt_alloc_num_chunks complete dim=1
+#pragma HLS reset variable=num_tiles
+#pragma HLS array_partition variable=dq_packed complete dim=1
+#pragma HLS array_partition variable=dq_is_headed complete dim=1
+#pragma HLS array_partition variable=dq_valid complete dim=1
+#pragma HLS reset variable=dma_q_head
+#pragma HLS reset variable=dma_q_tail
+#pragma HLS reset variable=dma_q_count
+#pragma HLS array_partition variable=cq_type complete dim=1
+#pragma HLS array_partition variable=cq_packed complete dim=1
+#pragma HLS array_partition variable=cq_is_headed complete dim=1
+#pragma HLS array_partition variable=cq_head_idx complete dim=1
+#pragma HLS array_partition variable=cq_valid complete dim=1
+#pragma HLS reset variable=comp_q_head
+#pragma HLS reset variable=comp_q_tail
+#pragma HLS reset variable=comp_q_count
+#pragma HLS array_partition variable=arb_pending complete dim=1
+#pragma HLS array_partition variable=arb_grant complete dim=1
+#pragma HLS reset variable=arb_current
+#pragma HLS reset variable=arb_rr_ptr
+#pragma HLS reset variable=arb_busy
+#pragma HLS reset variable=active_dma_req
+#pragma HLS reset variable=active_dma_is_headed
+#pragma HLS reset variable=active_compute_type
+#pragma HLS reset variable=active_compute_packed
+#pragma HLS reset variable=active_compute_head
+#pragma HLS reset variable=active_compute_is_headed
+#pragma HLS array_partition variable=alloc_bank complete dim=1
+#pragma HLS array_partition variable=alloc_offset complete dim=1
+#pragma HLS array_partition variable=alloc_size complete dim=1
+#pragma HLS reset variable=alloc_num_chunks
+#pragma HLS reset variable=current_chunk
+#pragma HLS array_partition variable=head_dma_done_flags complete dim=1
+#pragma HLS array_partition variable=head_compute_done_flags complete dim=1
+#pragma HLS reset variable=main_dma_done_flag
+#pragma HLS reset variable=main_compute_done_flag
+#pragma HLS reset variable=err_overflow
+#pragma HLS reset variable=err_invalid
+#pragma HLS reset variable=dma_in_progress
+#pragma HLS reset variable=transfer_in_progress
 
     // ========================================================================
     // Reset Logic 
