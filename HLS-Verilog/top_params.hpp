@@ -612,15 +612,18 @@ constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
 
 constexpr int HEAD_MAC_VEC_UNROLL = min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
 constexpr int HEAD_MAC_OUT_UNROLL = min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
+constexpr int CONTEXT_UNROLL = min2_constexpr(CONTEXT_LENGTH, MAX_CYCLIC_SIZE);
 
 struct ComputeHeadCtx {
     ComputeState state = ComputeState::IDLE;
     PendingRequest req{};
+    bool mac_busy = false;
     bool mac_ready = true;
     bool mac_complete = false;
     bool clear_pending = false;
     bool capture_pending = false;
     bool mac_start = false;
+    bool error_latched = false;
 
     // FSM communication signals
     bool compute_start = false;
@@ -633,6 +636,7 @@ struct ComputeHeadCtx {
     bool mem_read_request = false;
     bool mem_write_request = false;
     uint32_t mem_op = 0;
+
 };
 // ------------------------------------------------------------
 // Headed attention buffer layouts

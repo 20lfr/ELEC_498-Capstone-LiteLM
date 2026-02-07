@@ -55,5 +55,6 @@
         "typeinfo": "cpp"
     },
     "C_Cpp.default.compileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Enabled",
+    "cmake.sourceDirectory": "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/software_simulations/ControlMemInterface/ControlMemInterface"
 }
