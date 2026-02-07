@@ -14,32 +14,25 @@ int main() {
     printf("=== AXI Top Testbench ===\n\n");
     printf("D_MODEL = %d\n", D_MODEL);
     
-    // =========================================================================
-    // Setup test data
-    // =========================================================================
     axis_stream_t input_token;
     axis_stream_t output_logit;
 
-    // Prepare input data (simulate PS sending tokens) - 8 bits per transfer
     printf("\n[INIT] Preparing input stream (PS -> PL)...\n");
     for (int i = -8; i < D_MODEL/2; i++) {
         axis_pkt_t pkt;
-        pkt.data = (int8_t)i;  // input: 0, 1, 2, ...
+        pkt.data = (int8_t)i;  // input: -8, -7, -6, ...
         pkt.last = (i == D_MODEL/2 - 1) ? 1 : 0;
         input_token.write(pkt);
         printf("  input_token[%d] = %d%s\n", i, (int)pkt.data, pkt.last ? " (LAST)" : "");
     }
 
-    // ========== CONFIGURE CONTROL REGISTERS ==========
     ControlMemSpace ctrl_mem = {};
     StatusMemSpace status_mem = {};
     bool irq_out = false;
 
-    // Set control: release reset, assert start
     ctrl_mem.control = CTRL_RESETN_BIT | CTRL_START_BIT;
     ctrl_mem.irq_mask = IRQ_INFER_DONE_BIT | IRQ_ERROR_BIT;
     
-    // DMA config (required by ControlMemInterface)
     ctrl_mem.dma_layer_len = 0x100;
     ctrl_mem.dma_head_len = 0x100;
     ctrl_mem.dma_tile_len = 0x100;
@@ -62,7 +55,6 @@ int main() {
     ctrl_mem.k_cache_addr = 0x40000000ull;
     ctrl_mem.v_cache_addr = 0x50000000ull;
 
-    // ========== CALL DUT ==========
     printf("\n[RUN] Calling axi_top...\n");
     
     axi_top(
@@ -75,7 +67,6 @@ int main() {
 
     printf("[RUN] Complete.\n");
 
-    // ========== CHECK RESULTS ==========
     printf("\n[CHECK] Verifying outputs...\n");
 
     // Check output stream - 8-bit per transfer
@@ -99,7 +90,6 @@ int main() {
         }
     }
 
-    // Check IRQ and status
     printf("\n  Control/Status:\n");
     printf("    status_mem.status     = 0x%X\n", status_mem.status);
     printf("    status_mem.irq_status = 0x%X\n", status_mem.irq_status);
@@ -110,7 +100,6 @@ int main() {
         printf("  WARNING: IRQ_INFER_DONE_BIT not set\n");
     }
 
-    // ========== FINAL RESULT ==========
     printf("\n=== TEST %s ===\n", errors == 0 ? "PASSED" : "FAILED");
     printf("Errors: %d\n", errors);
 
