@@ -411,7 +411,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U124(
+sparsemux_33_4_16_1_1_U122(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_q0),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_q0),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_q0),

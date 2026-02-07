@@ -171,7 +171,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 8 ))
-sparsemux_33_4_8_1_1_U282(
+sparsemux_33_4_8_1_1_U280(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_431),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_432),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_433),
@@ -200,7 +200,7 @@ transformer_top_mac_muladd_8s_8s_20s_20_4_1 #(
     .din1_WIDTH( 8 ),
     .din2_WIDTH( 20 ),
     .dout_WIDTH( 20 ))
-mac_muladd_8s_8s_20s_20_4_1_U283(
+mac_muladd_8s_8s_20s_20_4_1_U281(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_333_p0),

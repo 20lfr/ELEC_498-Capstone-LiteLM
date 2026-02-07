@@ -72,12 +72,12 @@ wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire    ap_CS_fsm_state2;
 reg   [2:0] t_1_reg_431;
-reg   [7:0] trunc_ln591_2_reg_440;
-reg   [7:0] trunc_ln592_2_reg_445;
-wire   [63:0] zext_ln589_fu_346_p1;
-wire   [63:0] zext_ln590_fu_370_p1;
-wire   [63:0] zext_ln591_fu_407_p1;
-wire   [63:0] zext_ln592_fu_419_p1;
+reg   [7:0] trunc_ln624_2_reg_440;
+reg   [7:0] trunc_ln625_2_reg_445;
+wire   [63:0] zext_ln622_fu_346_p1;
+wire   [63:0] zext_ln623_fu_370_p1;
+wire   [63:0] zext_ln624_fu_407_p1;
+wire   [63:0] zext_ln625_fu_419_p1;
 reg   [2:0] t_fu_106;
 wire   [2:0] add_ln697_fu_229_p2;
 wire    ap_loop_init;
@@ -100,9 +100,9 @@ wire   [46:0] select_ln699_fu_313_p3;
 wire   [46:0] trunc_ln698_fu_301_p1;
 wire   [46:0] rounded_fu_321_p2;
 wire   [4:0] byte_addr_assign_3_fu_327_p3;
-wire   [4:0] or_ln590_2_fu_362_p3;
-wire   [4:0] or_ln591_2_fu_400_p3;
-wire   [4:0] or_ln592_2_fu_412_p3;
+wire   [4:0] or_ln623_2_fu_362_p3;
+wire   [4:0] or_ln624_2_fu_400_p3;
+wire   [4:0] or_ln625_2_fu_412_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -137,7 +137,7 @@ transformer_top_mul_32s_16s_48_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 48 ))
-mul_32s_16s_48_1_1_U90(
+mul_32s_16s_48_1_1_U88(
     .din0(tmp_46_fu_235_p13),
     .din1(tmp_47_fu_268_p13),
     .dout(prod_fu_211_p2)
@@ -159,7 +159,7 @@ mul_32s_16s_48_1_1_U90(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 32 ))
-sparsemux_11_3_32_1_1_U91(
+sparsemux_11_3_32_1_1_U89(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_129),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_130),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_131),
@@ -186,7 +186,7 @@ sparsemux_11_3_32_1_1_U91(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 16 ))
-sparsemux_11_3_16_1_1_U92(
+sparsemux_11_3_16_1_1_U90(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_271_reload),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_272_reload),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_273_reload),
@@ -245,8 +245,8 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         t_1_reg_431 <= ap_sig_allocacmp_t_1;
-        trunc_ln591_2_reg_440 <= {{rounded_fu_321_p2[38:31]}};
-        trunc_ln592_2_reg_445 <= {{rounded_fu_321_p2[46:39]}};
+        trunc_ln624_2_reg_440 <= {{rounded_fu_321_p2[38:31]}};
+        trunc_ln625_2_reg_445 <= {{rounded_fu_321_p2[46:39]}};
     end
 end
 
@@ -302,9 +302,9 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_address0_local = zext_ln592_fu_419_p1;
+        out_buf_address0_local = zext_ln625_fu_419_p1;
     end else if (((icmp_ln697_fu_223_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        out_buf_address0_local = zext_ln590_fu_370_p1;
+        out_buf_address0_local = zext_ln623_fu_370_p1;
     end else begin
         out_buf_address0_local = 'bx;
     end
@@ -312,9 +312,9 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_address1_local = zext_ln591_fu_407_p1;
+        out_buf_address1_local = zext_ln624_fu_407_p1;
     end else if (((icmp_ln697_fu_223_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        out_buf_address1_local = zext_ln589_fu_346_p1;
+        out_buf_address1_local = zext_ln622_fu_346_p1;
     end else begin
         out_buf_address1_local = 'bx;
     end
@@ -338,7 +338,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_d0_local = trunc_ln592_2_reg_445;
+        out_buf_d0_local = trunc_ln625_2_reg_445;
     end else if (((icmp_ln697_fu_223_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
         out_buf_d0_local = {{rounded_fu_321_p2[30:23]}};
     end else begin
@@ -348,7 +348,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_d1_local = trunc_ln591_2_reg_440;
+        out_buf_d1_local = trunc_ln624_2_reg_440;
     end else if (((icmp_ln697_fu_223_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
         out_buf_d1_local = {{rounded_fu_321_p2[22:15]}};
     end else begin
@@ -412,11 +412,11 @@ assign byte_addr_assign_3_fu_327_p3 = {{ap_sig_allocacmp_t_1}, {2'd0}};
 
 assign icmp_ln697_fu_223_p2 = ((ap_sig_allocacmp_t_1 == 3'd5) ? 1'b1 : 1'b0);
 
-assign or_ln590_2_fu_362_p3 = {{ap_sig_allocacmp_t_1}, {2'd1}};
+assign or_ln623_2_fu_362_p3 = {{ap_sig_allocacmp_t_1}, {2'd1}};
 
-assign or_ln591_2_fu_400_p3 = {{t_1_reg_431}, {2'd2}};
+assign or_ln624_2_fu_400_p3 = {{t_1_reg_431}, {2'd2}};
 
-assign or_ln592_2_fu_412_p3 = {{t_1_reg_431}, {2'd3}};
+assign or_ln625_2_fu_412_p3 = {{t_1_reg_431}, {2'd3}};
 
 assign out_buf_address0 = out_buf_address0_local;
 
@@ -446,12 +446,12 @@ assign tmp_fu_305_p3 = prod_fu_211_p2[32'd47];
 
 assign trunc_ln698_fu_301_p1 = prod_fu_211_p2[46:0];
 
-assign zext_ln589_fu_346_p1 = byte_addr_assign_3_fu_327_p3;
+assign zext_ln622_fu_346_p1 = byte_addr_assign_3_fu_327_p3;
 
-assign zext_ln590_fu_370_p1 = or_ln590_2_fu_362_p3;
+assign zext_ln623_fu_370_p1 = or_ln623_2_fu_362_p3;
 
-assign zext_ln591_fu_407_p1 = or_ln591_2_fu_400_p3;
+assign zext_ln624_fu_407_p1 = or_ln624_2_fu_400_p3;
 
-assign zext_ln592_fu_419_p1 = or_ln592_2_fu_412_p3;
+assign zext_ln625_fu_419_p1 = or_ln625_2_fu_412_p3;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_697_44

@@ -218,16 +218,16 @@ wire   [4:0] add_ln551_fu_197_p2;
 reg   [4:0] add_ln551_reg_509;
 wire   [3:0] trunc_ln551_fu_203_p1;
 reg   [3:0] trunc_ln551_reg_514;
-wire   [6:0] zext_ln556_1_fu_220_p1;
-reg   [6:0] zext_ln556_1_reg_523;
+wire   [6:0] zext_ln556_fu_220_p1;
+reg   [6:0] zext_ln556_reg_523;
 reg   [7:0] in_buf_load_4_reg_534;
 wire    ap_block_pp0_stage1_11001;
-wire   [63:0] zext_ln537_fu_207_p1;
+wire   [63:0] zext_ln570_fu_207_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln556_fu_230_p1;
-wire   [63:0] zext_ln557_fu_274_p1;
+wire   [63:0] zext_ln589_fu_230_p1;
+wire   [63:0] zext_ln590_fu_274_p1;
 wire    ap_block_pp0_stage1;
-wire   [63:0] zext_ln558_fu_284_p1;
+wire   [63:0] zext_ln591_fu_284_p1;
 wire   [18:0] v_fu_393_p4;
 reg   [4:0] i_3_fu_138;
 wire    ap_loop_init;
@@ -238,9 +238,9 @@ reg    in_buf_ce0_local;
 reg   [7:0] in_buf_address0_local;
 wire   [5:0] shl_ln1_fu_212_p3;
 wire   [6:0] byte_addr_fu_224_p2;
-wire   [6:0] add_ln557_fu_269_p2;
-wire   [6:0] add_ln558_fu_279_p2;
-wire   [2:0] trunc_ln559_fu_389_p1;
+wire   [6:0] add_ln590_fu_269_p2;
+wire   [6:0] add_ln591_fu_279_p2;
+wire   [2:0] trunc_ln592_fu_389_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -333,7 +333,7 @@ always @ (posedge ap_clk) begin
         add_ln551_reg_509 <= add_ln551_fu_197_p2;
         icmp_ln551_reg_505 <= icmp_ln551_fu_191_p2;
         trunc_ln551_reg_514 <= trunc_ln551_fu_203_p1;
-        zext_ln556_1_reg_523[5 : 2] <= zext_ln556_1_fu_220_p1[5 : 2];
+        zext_ln556_reg_523[5 : 2] <= zext_ln556_fu_220_p1[5 : 2];
     end
 end
 
@@ -569,9 +569,9 @@ end
 
 always @ (*) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        in_buf_address0_local = zext_ln558_fu_284_p1;
+        in_buf_address0_local = zext_ln591_fu_284_p1;
     end else if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        in_buf_address0_local = zext_ln556_fu_230_p1;
+        in_buf_address0_local = zext_ln589_fu_230_p1;
     end else begin
         in_buf_address0_local = 'bx;
     end
@@ -579,9 +579,9 @@ end
 
 always @ (*) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        in_buf_address1_local = zext_ln557_fu_274_p1;
+        in_buf_address1_local = zext_ln590_fu_274_p1;
     end else if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        in_buf_address1_local = zext_ln537_fu_207_p1;
+        in_buf_address1_local = zext_ln570_fu_207_p1;
     end else begin
         in_buf_address1_local = 'bx;
     end
@@ -725,9 +725,9 @@ end
 
 assign add_ln551_fu_197_p2 = (ap_sig_allocacmp_i + 5'd1);
 
-assign add_ln557_fu_269_p2 = (zext_ln556_1_reg_523 + 7'd17);
+assign add_ln590_fu_269_p2 = (zext_ln556_reg_523 + 7'd17);
 
-assign add_ln558_fu_279_p2 = (zext_ln556_1_reg_523 + 7'd18);
+assign add_ln591_fu_279_p2 = (zext_ln556_reg_523 + 7'd18);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -753,7 +753,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign byte_addr_fu_224_p2 = (zext_ln556_1_fu_220_p1 + 7'd16);
+assign byte_addr_fu_224_p2 = (zext_ln556_fu_220_p1 + 7'd16);
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30 = in_buf_q1;
 
@@ -833,23 +833,23 @@ assign shl_ln1_fu_212_p3 = {{trunc_ln551_fu_203_p1}, {2'd0}};
 
 assign trunc_ln551_fu_203_p1 = ap_sig_allocacmp_i[3:0];
 
-assign trunc_ln559_fu_389_p1 = in_buf_q0[2:0];
+assign trunc_ln592_fu_389_p1 = in_buf_q0[2:0];
 
-assign v_fu_393_p4 = {{{trunc_ln559_fu_389_p1}, {in_buf_q1}}, {in_buf_load_4_reg_534}};
+assign v_fu_393_p4 = {{{trunc_ln592_fu_389_p1}, {in_buf_q1}}, {in_buf_load_4_reg_534}};
 
-assign zext_ln537_fu_207_p1 = trunc_ln551_fu_203_p1;
+assign zext_ln556_fu_220_p1 = shl_ln1_fu_212_p3;
 
-assign zext_ln556_1_fu_220_p1 = shl_ln1_fu_212_p3;
+assign zext_ln570_fu_207_p1 = trunc_ln551_fu_203_p1;
 
-assign zext_ln556_fu_230_p1 = byte_addr_fu_224_p2;
+assign zext_ln589_fu_230_p1 = byte_addr_fu_224_p2;
 
-assign zext_ln557_fu_274_p1 = add_ln557_fu_269_p2;
+assign zext_ln590_fu_274_p1 = add_ln590_fu_269_p2;
 
-assign zext_ln558_fu_284_p1 = add_ln558_fu_279_p2;
+assign zext_ln591_fu_284_p1 = add_ln591_fu_279_p2;
 
 always @ (posedge ap_clk) begin
-    zext_ln556_1_reg_523[1:0] <= 2'b00;
-    zext_ln556_1_reg_523[6] <= 1'b0;
+    zext_ln556_reg_523[1:0] <= 2'b00;
+    zext_ln556_reg_523[6] <= 1'b0;
 end
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_551_23
