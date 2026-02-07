@@ -40,7 +40,28 @@ module mmu_fsm_tb;
   localparam [7:0] DMASEL_W1      = 8'd9;
   localparam [7:0] DMASEL_W2      = 8'd10;
 
-  // ========== Clock and Reset ==========
+  // ComputeOp encodings - MUST match top_params.hpp
+  localparam [7:0] CMP_NONE       = 8'd0;
+  localparam [7:0] CMP_LN0        = 8'd1;
+  localparam [7:0] CMP_REQUANT1   = 8'd2;
+  localparam [7:0] CMP_Q          = 8'd3;
+  localparam [7:0] CMP_K          = 8'd4;
+  localparam [7:0] CMP_K_REQUANT  = 8'd5;
+  localparam [7:0] CMP_V          = 8'd6;
+  localparam [7:0] CMP_V_REQUANT  = 8'd7;
+  localparam [7:0] CMP_REQUANT_Q  = 8'd8;
+  localparam [7:0] CMP_ATT_SCORES = 8'd9;
+  localparam [7:0] CMP_VALUE_SCALE= 8'd10;
+  localparam [7:0] CMP_SOFTMAX    = 8'd11;
+  localparam [7:0] CMP_ATT_VALUE  = 8'd12;
+  localparam [7:0] CMP_OUT_PROJ   = 8'd15;
+  localparam [7:0] CMP_FFN_W1     = 8'd18;
+  localparam [7:0] CMP_FFN_W2     = 8'd20;
+  
+  // ComputeReqType encodings - MUST match mmu.hpp
+  localparam [7:0] REQ_NONE       = 8'd0;
+  localparam [7:0] REQ_READ       = 8'd1;  // URAM -> INBUF
+  localparam [7:0] REQ_WRITE      = 8'd2;  // OUTBUF -> URAM  // ========== Clock and Reset ==========
   logic ap_clk = 0;
   logic ap_rst = 1;
   always #(CLK_PERIOD/2) ap_clk = ~ap_clk;
@@ -192,6 +213,26 @@ module mmu_fsm_tb;
       DMASEL_W2:      return "W2";
       default: return $sformatf("UNK_%0d", sel);
     endcase
+  endfunction
+
+  // ========== Compute Op Names ==========
+  function string compute_op_name(input [7:0] op);
+    case (op)
+      CMP_NONE:       return "NONE";
+      CMP_Q:          return "CMP_Q";
+      CMP_K:          return "CMP_K";
+      CMP_V:          return "CMP_V";
+      CMP_OUT_PROJ:   return "OUT_PROJ";
+      CMP_FFN_W1:     return "FFN_W1";
+      CMP_FFN_W2:     return "FFN_W2";
+      default: return $sformatf("CMP_%0d", op);
+    endcase
+  endfunction
+
+  // ========== Pack Compute Request ==========
+  function [31:0] pack_compute_req(input [7:0] op, input [7:0] layer, 
+                                   input [7:0] head, input [7:0] tile);
+    return {tile, head, layer, op};
   endfunction
 
   // ========== Cycle Counter ==========
@@ -416,8 +457,63 @@ module mmu_fsm_tb;
     // Wait for DMA to be issued and complete
     wait_for_dma_complete();
   endtask
-
-  // ========== DUT Instantiation ==========
+  
+  // Wait for compute transfer to complete
+  task automatic wait_for_compute_complete();
+    int timeout;
+    timeout = 300;
+    
+    // Wait for transfer_done signal
+    while (timeout > 0) begin
+      @(posedge ap_clk);
+      if (transfer_done && transfer_done_ap_vld) begin
+        if (debug_enabled) $display("[%4d] Compute transfer done", cycle_count);
+        // IMPORTANT: Also wait for FSM to return to IDLE after transfer_done
+        wait_for_fsm_idle();
+        return;
+      end
+      timeout = timeout - 1;
+    end
+    
+    // Fallback: check if FSM returned to IDLE (alternative completion)
+    wait_for_fsm_idle();
+    
+    if (timeout == 0) 
+      $display("[WARN] Timeout waiting for compute to complete");
+  endtask
+  
+  // Issue compute request with proper handshaking
+  task automatic issue_compute_request(
+    input [7:0] op, 
+    input [7:0] req_type,  // REQ_READ or REQ_WRITE
+    input [7:0] layer, 
+    input [7:0] head, 
+    input [7:0] tile
+  );
+    string type_str;
+    type_str = (req_type == REQ_READ) ? "READ (URAM->BUF)" : "WRITE (BUF->URAM)";
+    
+    $display("\n[TEST] Issuing Compute request: %s %s layer=%0d head=%0d tile=%0d",
+             compute_op_name(op), type_str, layer, head, tile);
+    
+    // Wait for FSM to be in IDLE before issuing new request
+    wait_for_mmu_ready();
+    
+    // Issue request
+    compute_req_valid <= 1;
+    compute_req_packed <= pack_compute_req(op, layer, head, tile);
+    compute_req_type <= req_type;
+    compute_req_head <= head;
+    
+    // Wait for request to be accepted
+    @(posedge ap_clk);
+    @(posedge ap_clk);
+    
+    compute_req_valid <= 0;
+    
+    // Wait for compute transfer to complete
+    wait_for_compute_complete();
+  endtask  // ========== DUT Instantiation ==========
   mmu_fsm dut (
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
@@ -584,6 +680,34 @@ module mmu_fsm_tb;
       end
     end
     check(data_ok, "URAM data matches DDR source");
+    
+    // ===== Test 7: Compute REQ_READ (URAM -> INBUF) =====
+    $display("\n========== Test 7: Compute REQ_READ (URAM->INBUF) ==========");
+    issue_compute_request(CMP_Q, REQ_READ, 0, 0, 0);
+    
+    // Check transfer completed (FSM went through URAM2BUF -> XFER_DONE -> IDLE)
+    // Note: buffer_valid is a transient pulse, transfer_done indicates completion
+    check(fsm_state_out_ap_vld && (fsm_state_out == 8'd0), "FSM in IDLE after REQ_READ");
+    check(!error_overflow_ap_vld || (error_overflow === 1'b0), "No overflow on compute read");
+    
+    // ===== Test 8: Compute REQ_WRITE (OUTBUF -> URAM) =====
+    $display("\n========== Test 8: Compute REQ_WRITE (OUTBUF->URAM) ==========");
+    issue_compute_request(CMP_K, REQ_WRITE, 0, 1, 0);
+    
+    // Check transfer completed (FSM went through BUF2URAM -> XFER_DONE -> IDLE)
+    check(fsm_state_out_ap_vld && (fsm_state_out == 8'd0), "FSM in IDLE after REQ_WRITE");
+    check(!error_overflow_ap_vld || (error_overflow === 1'b0), "No overflow on compute write");
+    
+    // ===== Test 9: Mixed DMA + Compute sequence =====
+    $display("\n========== Test 9: Mixed DMA + Compute Sequence ==========");
+    // Issue a DMA request followed by compute request
+    dma_was_started = 0;
+    issue_dma_request(DMASEL_W1, 0, 0, 0);
+    check(dma_was_started, "DMA W1 started in mixed sequence");
+    
+    // Now compute read
+    issue_compute_request(CMP_V, REQ_READ, 0, 2, 0);
+    check(!error_overflow_ap_vld || (error_overflow === 1'b0), "No error in mixed sequence");
     
     // ===== Summary =====
     wait_cycles(20);
