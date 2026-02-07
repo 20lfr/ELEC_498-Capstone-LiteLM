@@ -1,26 +1,15 @@
 #!/bin/bash
 
-# ==============================================================================
 # Kria KV260 Overlay Generator & Loader Builder
 # Automated script to generate .dtbo, .bin, shell.json, and a custom load script
-# ==============================================================================
 
-# --- USER CONFIGURATION (EDIT THESE) ---
-# 1. Path to your Xilinx settings (Check your version)
+ROOT_DIR="$(pwd)"
+# USER CONFIGURATION (EDIT THESE)
 XILINX_SETTINGS="/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/settings64.sh"
-
-# 2. Your Input XSA File
-INPUT_XSA="/home/tristan/development/edge_gpt/ELEC_498-Capstone-LiteLM/vivado_simulations/ControlMemInterface/ControlMemInterface/test_design_1_wrapper.xsa"
-
-# 3. Output Directory
-OUTPUT_DIR="./kria_output"
-
-# 4. Your App Name (for folder naming on the board)
-APP_NAME="ControlMemInterface"
-
-# 5. Target Branch for Device Tree (Must match your Vivado version roughly)
+INPUT_XSA="$ROOT_DIR/vivado_simulations/AxiTop/axi_top_bd_01_wrapper.xsa"
+OUTPUT_DIR="$ROOT_DIR/hardware_overlay"
+APP_NAME="axi_top"
 DTG_BRANCH="xlnx_rel_v2025.1"
-# ==============================================================================
 
 set -e # Exit immediately if a command exits with a non-zero status
 

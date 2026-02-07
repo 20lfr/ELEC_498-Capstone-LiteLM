@@ -342,6 +342,7 @@ constexpr uint32_t STATUS_BUSY_BIT      = 1u << 2;
 constexpr uint32_t ERR_NONE             = 0x0;
 constexpr uint32_t ERR_DMA_ALIGNMENT    = 0x10;
 constexpr uint32_t ERR_DMA_ZERO_LEN     = 0x11;
+constexpr uint32_t ERR_INPUT_STREAM     = 0x12;
 
 // Register Addr mapping is auto generated in a HLS project
 // `mask_allowed/hel/impl/ip/drivers/<top_function>/src/x<top_function>_hw.h`
