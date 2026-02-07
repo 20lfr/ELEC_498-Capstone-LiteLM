@@ -337,7 +337,7 @@ reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 wire   [0:0] tmp_fu_562_p3;
 wire   [15:0] v_fu_645_p33;
 wire   [15:0] v_fu_645_p35;
-wire   [0:0] tmp_170_fu_720_p3;
+wire   [0:0] tmp_171_fu_720_p3;
 wire   [14:0] trunc_ln165_fu_716_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -411,7 +411,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U129(
+sparsemux_33_4_16_1_1_U122(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_q0),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_q0),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_q0),
@@ -1169,9 +1169,9 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_65_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_65_we0_local;
 
-assign select_ln166_fu_728_p3 = ((tmp_170_fu_720_p3[0:0] == 1'b1) ? 15'd0 : trunc_ln165_fu_716_p1);
+assign select_ln166_fu_728_p3 = ((tmp_171_fu_720_p3[0:0] == 1'b1) ? 15'd0 : trunc_ln165_fu_716_p1);
 
-assign tmp_170_fu_720_p3 = v_fu_645_p35[32'd15];
+assign tmp_171_fu_720_p3 = v_fu_645_p35[32'd15];
 
 assign tmp_fu_562_p3 = ap_sig_allocacmp_i[32'd4];
 

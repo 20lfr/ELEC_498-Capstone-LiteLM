@@ -9,31 +9,9 @@ void transformer_top(
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
 
     // ------------------------------------------------------------
-    // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
-    // ------------------------------------------------------------
-    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
-    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
-    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence
-
-    // ------------------------------------------------------------
-    // AXI4-LITE INTERFACING (PL <-> PS)
-    // ------------------------------------------------------------
-    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interface
-    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
-
-    // ------------------------------------------------------------
-    // INTERUPT INTERFACING (PL → PS)
-    // ------------------------------------------------------------
-    bool        &irq_ps,
-
-
-    /*
-        TEMPORARY INPUT/OUPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
-    */
-
-    // ------------------------------------------------------------
     // Memory Management System (WEIGHT LOADER via DMA)
     // ------------------------------------------------------------
+
     // FSM communication signals
     bool        dma_done,                   // [INPUT]  DMA transfer completed (single-cycle pulse)
     bool        wl_ready,                 // [INPUT]  Weight loader ready for a new request
@@ -52,15 +30,33 @@ void transformer_top(
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
     // ------------------------------------------------------------
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
-    SchedState  &STATE,
+    
+    // ------------------------------------------------------------
+    // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
+    // ------------------------------------------------------------
+    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
+    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
+    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
+
+    // ------------------------------------------------------------
+    // AXI4-LITE INTERFACING (PL <-> PS)
+    // ------------------------------------------------------------
+    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
+    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
+
+    // ------------------------------------------------------------
+    // INTERUPT INTERFACING (PL → PS)
+    // ------------------------------------------------------------
+    bool        &irq_ps,
+
     // ------------------------------------------------------------
     // DEBUG OUTPUTS
     // ------------------------------------------------------------
+    SchedState  &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
     uint32_t &irq_mask_reg,
-    uint32_t &irq_clear_reg,
     uint32_t &wq_base_addr,
     uint32_t &wk_base_addr,
     uint32_t &wv_base_addr,
@@ -90,7 +86,8 @@ void transformer_top(
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
 
-    bool &dbg_done
+    bool &dbg_done,
+    bool &dbg_error
 ) {
 #pragma HLS INLINE off   
 #pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
@@ -99,24 +96,38 @@ void transformer_top(
 #pragma HLS INTERFACE ap_none port=irq_ps
 
     bool done               = false;    // Scheduler done flag
-    bool scheduler_error       = false;
-    bool compute_error         = false;
-
-
+    bool error              = false;    // Scheduler error flag
     static ControlMemInterface ctrl_mem_interface;
+    ctrl_mem_interface.update_inputs(ctrl_mem);
     StatusMemSpace &active_status_mem = ctrl_mem_interface.get_mutable_status();
 
     static bool     compute_ready = false;
     static bool     compute_done = false;
     static bool     compute_start = false;
     static uint32_t compute_instruction = 0;
+    // Debugging mirrors
+    dbg_ctrl_mem = ctrl_mem;
+    dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);
+    control_reg   = ctrl_mem.control;
+    irq_status_reg   = active_status_mem.irq_status;
+    irq_mask_reg   = ctrl_mem.irq_mask;
+    wq_base_addr   = ctrl_mem.wq_base_addr;
+    wk_base_addr   = ctrl_mem.wk_base_addr;
+    wv_base_addr   = ctrl_mem.wv_base_addr;
+    wo_base_addr   = ctrl_mem.wo_base_addr;
+    w1_base_addr   = ctrl_mem.w1_base_addr;
+    w2_base_addr   = ctrl_mem.w2_base_addr;
+    wq_head_stride   = ctrl_mem.wq_head_stride;
+    wk_head_stride   = ctrl_mem.wk_head_stride;
+    wv_head_stride   = ctrl_mem.wv_head_stride;
+    wo_tile_stride   = ctrl_mem.wo_tile_stride;
+    w1_tile_stride   = ctrl_mem.w1_tile_stride;
+    w2_tile_stride   = ctrl_mem.w2_tile_stride;
 
-    
     // Clear handshake state on external resetn deassert.
     if ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u) {
         done          = false;
-        scheduler_error = false;
-        compute_error   = false;
+        error         = false;
 
         compute_ready = true;
         compute_done  = false;
@@ -144,8 +155,8 @@ void transformer_top(
         stream_start,
         stream_done,
         done,
-        scheduler_error,
-        STATE
+        error,
+        dbg_state
     );
 
     compute_controller(
@@ -172,12 +183,13 @@ void transformer_top(
         dbg_mac_start,
         dbg_mac_ready,
         dbg_mac_complete,
-        compute_error               
+        error               
     );
-    ctrl_mem_interface.check_errors(ctrl_mem, scheduler_error, compute_error);
-    ctrl_mem_interface.check_control(ctrl_mem, done);
-    irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
+
+    // IRQ COMPUTATION (integrated into ControlMemInterface)
+    irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask, done, error);
     dbg_done = done;
+    dbg_error = error;
 
     // Update status memory
     status_mem = active_status_mem;
@@ -188,28 +200,5 @@ void transformer_top(
     dbg_compute_instruction = compute_instruction;
     dbg_compute_ready = compute_ready;
     dbg_compute_done = compute_done;
-
-
-
-    // Debugging mirrors
-    dbg_ctrl_mem = ctrl_mem;
-    dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);
-    control_reg   = ctrl_mem.control;
-    irq_mask_reg   = ctrl_mem.irq_mask;
-    irq_clear_reg  = ctrl_mem.irq_clear;
-    irq_status_reg = active_status_mem.irq_status;
-    wq_base_addr   = ctrl_mem.wq_base_addr;
-    wk_base_addr   = ctrl_mem.wk_base_addr;
-    wv_base_addr   = ctrl_mem.wv_base_addr;
-    wo_base_addr   = ctrl_mem.wo_base_addr;
-    w1_base_addr   = ctrl_mem.w1_base_addr;
-    w2_base_addr   = ctrl_mem.w2_base_addr;
-    wq_head_stride   = ctrl_mem.wq_head_stride;
-    wk_head_stride   = ctrl_mem.wk_head_stride;
-    wv_head_stride   = ctrl_mem.wv_head_stride;
-    wo_tile_stride   = ctrl_mem.wo_tile_stride;
-    w1_tile_stride   = ctrl_mem.w1_tile_stride;
-    w2_tile_stride   = ctrl_mem.w2_tile_stride;
-
 
 }

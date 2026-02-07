@@ -135,8 +135,6 @@ void scheduler_hls(
 #pragma HLS reset variable = requant3_compute_done
   static bool requant4_compute_done;
 #pragma HLS reset variable = requant4_compute_done
-  static bool error_latched;
-#pragma HLS reset variable = error_latched
 
 
 // HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -223,10 +221,6 @@ void scheduler_hls(
   status_mem.status = (status_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
   // Expose a start bit that auto-clears once we leave IDLE
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
-  const bool ctrl_error =
-      ((status_mem.irq_status & IRQ_ERROR_BIT) != 0) ||
-      ((status_mem.status & STATUS_ERROR) != 0) ||
-      (status_mem.error_code != ERR_NONE);
 
   // FSM Reset
   if (reset) {
@@ -314,7 +308,6 @@ void scheduler_hls(
     wl_start = false;
     done = false;
     error = false;
-    error_latched = false;
   }
 
   // Default outputs
@@ -335,182 +328,6 @@ void scheduler_hls(
   if (reset) {
     STATE = st;
     return;
-  }
-
-  // Stall FSM whenever a ControlMemInterface error is latched.
-  if (ctrl_error) {
-    // Cancel all outputs and hold in error state
-    axis_in_ready = 0;
-    wl_start = false;
-    wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
-    compute_start = false;
-    compute_instruction = pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
-    stream_start = 0;
-    done = 0;
-    error = true;
-    error_latched = true;
-    STATE = st;
-    return;
-  }
-
-  // If an error was latched and is now cleared, restart the current phase.
-  if (error_latched) {
-    switch (st) {
-      case S_STREAM_IN: {
-        axis_last_seen = false;
-        break;
-      }
-      case S_LAYER_COUNT: {
-        attn_started = false;
-        attn_compute_done = false;
-        attn_done = false;
-        attn_group_done = false;
-        group_idx = 0;
-        start_head_group = true;
-        requant1_started = false;
-        requant2_started = false;
-        requant3_started = false;
-        requant4_started = false;
-        requant1_compute_done = false;
-        requant2_compute_done = false;
-        requant3_compute_done = false;
-        requant4_compute_done = false;
-        concat_started = false;
-        concat_dma_done = false;
-        outproj_started = false;
-        outproj_compute_done = false;
-        resid0_started = false;
-        resid0_compute_done = false;
-        ln0_started = false;
-        ln0_compute_done = false;
-        ffn_stage = FfnStage::W1;
-        ffn_started = false;
-        ffn_w1_compute_done = false;
-        ffn_act_compute_done = false;
-        ffn_w2_compute_done = false;
-        resid1_started = false;
-        resid1_compute_done = false;
-        ln1_started = false;
-        ln1_compute_done = false;
-        final_norm_started = false;
-        final_norm_compute_done = false;
-        stream_started = false;
-        wo_tile = 0;
-        wo_dma_busy = false;
-        wo_comp_busy = false;
-        w1_tile = 0;
-        w1_dma_busy = false;
-        w1_comp_busy = false;
-        w2_tile = 0;
-        w2_dma_busy = false;
-        w2_comp_busy = false;
-        wl_start = false;
-        wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
-        compute_start = false;
-        compute_instruction = pack_compute_instruction(ComputeOp::CMP_NONE, layer_idx, -1, -1);
-        break;
-      }
-      case S_LAYER_NORM_0: {
-        ln0_started = false;
-        ln0_compute_done = false;
-        break;
-      }
-      case S_REQUANT1: {
-        requant1_started = false;
-        requant1_compute_done = false;
-        break;
-      }
-      case S_ATTENTION_HEADS: {
-        attn_started = false;
-        attn_compute_done = false;
-        attn_done = false;
-        attn_group_done = false;
-        group_idx = 0;
-        start_head_group = true;
-        for (int i = 0; i < NUM_HEADS; ++i) {
-#pragma HLS UNROLL
-          init_head_ctx(head_ctx_ref[i], layer_idx, i);
-        }
-        break;
-      }
-      case S_HEAD_CONCAT: {
-        concat_started = false;
-        concat_dma_done = false;
-        break;
-      }
-      case S_OUT_PROJECTION: {
-        outproj_started = false;
-        outproj_compute_done = false;
-        wo_tile = 0;
-        wo_dma_busy = false;
-        wo_comp_busy = false;
-        wo_dma_done = false;
-        break;
-      }
-      case S_REQUANT2: {
-        requant2_started = false;
-        requant2_compute_done = false;
-        break;
-      }
-      case S_RES_ADD_1: {
-        resid0_started = false;
-        resid0_compute_done = false;
-        break;
-      }
-      case S_LAYER_NORM_1: {
-        ln1_started = false;
-        ln1_compute_done = false;
-        break;
-      }
-      case S_REQUANT3: {
-        requant3_started = false;
-        requant3_compute_done = false;
-        break;
-      }
-      case S_FFN: {
-        ffn_started = false;
-        ffn_stage = FfnStage::W1;
-        ffn_w1_compute_done = false;
-        ffn_act_compute_done = false;
-        ffn_w2_compute_done = false;
-        w1_tile = 0;
-        w2_tile = 0;
-        w1_dma_busy = false;
-        w2_dma_busy = false;
-        w1_comp_busy = false;
-        w2_comp_busy = false;
-        w1_dma_done = false;
-        w2_dma_done = false;
-        break;
-      }
-      case S_REQUANT4: {
-        requant4_started = false;
-        requant4_compute_done = false;
-        break;
-      }
-      case S_RES_ADD_2: {
-        resid1_started = false;
-        resid1_compute_done = false;
-        break;
-      }
-      case S_LOOP_CHECK: {
-        break;
-      }
-      case S_FINAL_NORM: {
-        final_norm_started = false;
-        final_norm_compute_done = false;
-        break;
-      }
-      case S_STREAM_OUT: {
-        stream_started = false;
-        stream_done_seen = false;
-        break;
-      }
-      case S_IDLE:
-      default:
-        break;
-    }
-    error_latched = false;
   }
 
   // Sticky ingress TLAST capture
@@ -542,6 +359,7 @@ void scheduler_hls(
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
     if (st == S_HEAD_CONCAT && concat_started) concat_dma_done = false;
   }
+
   if (compute_done && !compute_start) {
     if (st == S_ATTENTION_HEADS && attn_started)  attn_compute_done = true;
     if (st == S_OUT_PROJECTION && outproj_started) outproj_compute_done = true;
