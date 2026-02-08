@@ -11,8 +11,9 @@
 *.cache/
 *.gen/
 *.xsa
+*.bit
 
-# --- Vitis HLS ---
+# --- Vitis ---
 **/hls/
 **/reports/
 **/_ide/
@@ -34,6 +35,7 @@
 *.hlscompile_summary
 *.hlsrun_csim_summary
 *.hlsrun_impl_summary
+*.hlsrun_package_summary
 compile_commands.json
 
 # --- IDE and Development Slop ---
@@ -42,6 +44,7 @@ compile_commands.json
 .project
 .cproject
 .vscode/
+.rigel_lopper/
 
 # Language Server artifacts (Clangd seen in your logs)
 .cache/clangd/
@@ -51,3 +54,5 @@ compile.log
 
 # Custom outputs
 hardware_overlay/
+interface_ip/
+

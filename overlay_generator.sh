@@ -3,13 +3,19 @@
 # Kria KV260 Overlay Generator & Loader Builder
 # Automated script to generate .dtbo, .bin, shell.json, and a custom load script
 
+# Project & tool paths
 ROOT_DIR="$(pwd)"
-# USER CONFIGURATION (EDIT THESE)
 XILINX_SETTINGS="/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/settings64.sh"
-INPUT_XSA="$ROOT_DIR/vivado_simulations/AxiTop/axi_top_bd_01_wrapper.xsa"
-OUTPUT_DIR="$ROOT_DIR/hardware_overlay"
-APP_NAME="axi_top"
+TARGET_DIR="$ROOT_DIR/hardware_overlay"
 DTG_BRANCH="xlnx_rel_v2025.1"
+VIVADO_DIR="$ROOT_DIR/vivado_simulations/AxiTop"
+HW_WRAPPER="axi_top_bd_01_wrapper"
+
+XSA_FILE="$VIVADO_DIR/$HW_WRAPPER.xsa"
+
+# RTL CONFIGURATION
+APP_NAME="axi_top_0"
+COMPAT_ID="xlnx,axi-top-1.0" # Found in dtsi file
 
 set -e # Exit immediately if a command exits with a non-zero status
 
@@ -21,8 +27,8 @@ else
   exit 1
 fi
 
-mkdir -p "$OUTPUT_DIR"
-cd "$OUTPUT_DIR"
+mkdir -p "$TARGET_DIR"
+cd "$TARGET_DIR"
 
 echo ">>> Step 1: Preparing Device Tree Repository..."
 if [ ! -d "device-tree-xlnx" ]; then
@@ -34,18 +40,15 @@ else
   echo "    Repo already exists, skipping clone."
 fi
 
-echo ">>> Step 2: Extracting Bitstream from XSA..."
-unzip -o -j "$INPUT_XSA" "*.bit" -d .
-BIT_FILE=$(find . -maxdepth 1 -name "*.bit" | head -n 1)
-if [ -z "$BIT_FILE" ]; then
-  echo "ERROR: No .bit file found inside the XSA!"
-  exit 1
-fi
-echo "    Found bitstream: $BIT_FILE"
+echo ">>> Step 2: Generating Device Tree Source (DTSI) via XSCT..."
 
-echo ">>> Step 3: Generating Device Tree Source (DTSI) via XSCT..."
+# Copy XSA locally so HSI extracts artifacts here, not in the original location
+LOCAL_XSA="$TARGET_DIR/$(basename "$XSA_FILE")"
+cp "$XSA_FILE" "$LOCAL_XSA"
+
 cat <<EOT >generate_dts.tcl
-hsi open_hw_design "$INPUT_XSA"
+setws .
+hsi open_hw_design "$LOCAL_XSA"
 hsi set_repo_path ./device-tree-xlnx
 hsi create_sw_design device-tree -os device_tree -proc psu_cortexa53_0
 hsi set_property CONFIG.dt_overlay true [hsi::get_os]
@@ -57,6 +60,11 @@ EOT
 
 xsct generate_dts.tcl
 
+if [ ! -f "$HW_WRAPPER.bit" ]; then
+  echo "ERROR: No .bit file found inside the XSA!"
+  exit 1
+fi
+
 echo ">>> Step 4: Compiling DTBO and Extracting Compatible ID..."
 DTS_FILE="./dts_output/pl.dtsi"
 INCLUDE_PATH="./device-tree-xlnx/include"
@@ -66,17 +74,12 @@ if [ ! -f "$DTS_FILE" ]; then
   exit 1
 fi
 
-# 4a. Extract the 'compatible' string
-# We use 'grep -v' to ignore lines
-COMPAT_ID=$(grep "compatible" "$DTS_FILE" | grep -v "xlnx,fclk" | grep -v "xlnx,afi-fpga" | grep -v "xlnx,zocl" | head -n 1 | cut -d '"' -f 2)
-echo "    Found Hardware ID: $COMPAT_ID"
-
 # 4b. Pre-process and compile
 gcc -E -nostdinc -undef -D__DTS__ -x assembler-with-cpp -I "$INCLUDE_PATH" "$DTS_FILE" -o pl.preprocessed.dtsi
 dtc -@ -O dtb -o pl.dtbo pl.preprocessed.dtsi
 
 echo ">>> Step 5: Converting Bitstream to Bin..."
-echo "all: { [destination_device = pl] $BIT_FILE }" >bitstream.bif
+echo "all: { [destination_device = pl] $HW_WRAPPER.bit }" >bitstream.bif
 bootgen -image bitstream.bif -arch zynqmp -o "$APP_NAME.bit.bin" -w
 
 echo ">>> Step 6: Creating shell.json..."
@@ -90,14 +93,17 @@ cat <<EOT >shell.json
 EOT
 
 echo ">>> Step 7: Packaging Output..."
-# Create the specific output folder structure you requested
-TARGET_DIR="outputs/$APP_NAME"
-mkdir -p "$TARGET_DIR"
 
-mv pl.dtbo "$APP_NAME.bit.bin" shell.json "$TARGET_DIR/"
+# cleanup outputs and specify output dir
+OUTPUT_DIR="$TARGET_DIR/output"
+rm -rf $OUTPUT_DIR
+mkdir $OUTPUT_DIR
+mkdir $OUTPUT_DIR/$APP_NAME
+
+mv pl.dtbo "$APP_NAME.bit.bin" shell.json "$OUTPUT_DIR/$APP_NAME"
 
 echo ">>> Step 8: Generating custom load_hw.sh..."
-LOAD_SCRIPT="outputs/load_hw.sh"
+LOAD_SCRIPT="$OUTPUT_DIR/load_hw.sh"
 
 cat <<EOF >"$LOAD_SCRIPT"
 #!/bin/bash
@@ -105,6 +111,10 @@ cat <<EOF >"$LOAD_SCRIPT"
 
 APP_NAME="$APP_NAME"
 COMPAT_ID="$COMPAT_ID"
+TARGET_DIR=/lib/firmware/xilinx
+
+sudo rm -r /\$TARGET_DIR/\$APP_NAME
+cp -r ./\$APP_NAME /\$TARGET_DIR
 
 # 1. Unload any existing app
 echo ">>> Unloading current firmware..."
@@ -138,10 +148,7 @@ EOF
 
 chmod +x "$LOAD_SCRIPT"
 
-echo "============================================================"
-echo "SUCCESS! Build complete."
-echo "Output located in: $OUTPUT_DIR/outputs/"
-echo "1. Copy to Kria: scp -r $OUTPUT_DIR/outputs/* ubuntu@<kria-ip>:~/"
-echo "2. Move App:     sudo mv ~/$APP_NAME /lib/firmware/xilinx/"
-echo "3. Run Loader:   ./load_hw.sh"
-echo "============================================================"
+echo ">>> Step 9: Deploy to Kria..."
+echo "1. scp -r $OUTPUT_DIR/* ubuntu@<KRIA_IP>:~/"
+echo "2. SSH into Board:  ssh ubuntu@<KRIA_IP>"
+echo "3. Load Hardware:   sudo ./load_hw.sh"
