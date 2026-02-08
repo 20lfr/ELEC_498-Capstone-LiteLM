@@ -9,9 +9,31 @@ void transformer_top(
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
 
     // ------------------------------------------------------------
+    // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
+    // ------------------------------------------------------------
+    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
+    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
+    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence
+
+    // ------------------------------------------------------------
+    // AXI4-LITE INTERFACING (PL <-> PS)
+    // ------------------------------------------------------------
+    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interface
+    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
+
+    // ------------------------------------------------------------
+    // INTERUPT INTERFACING (PL → PS)
+    // ------------------------------------------------------------
+    bool        &irq_ps,
+
+
+    /*
+        TEMPORARY INPUT/OUPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
+    */
+
+    // ------------------------------------------------------------
     // Memory Management System (WEIGHT LOADER via DMA)
     // ------------------------------------------------------------
-
     // FSM communication signals
     bool        dma_done,                   // [INPUT]  DMA transfer completed (single-cycle pulse)
     bool        wl_ready,                 // [INPUT]  Weight loader ready for a new request
@@ -25,38 +47,23 @@ void transformer_top(
     uint32_t    &mem_op,             // [OUTPUT] Opcode for memory manager
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
+     const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
 
     // ------------------------------------------------------------
     // COMPUTE CORE (MAC ARRAY + PIPELINE)
     // ------------------------------------------------------------
-    HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
-    
-    // ------------------------------------------------------------
-    // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
-    // ------------------------------------------------------------
-    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
-    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
-    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
-
-    // ------------------------------------------------------------
-    // AXI4-LITE INTERFACING (PL <-> PS)
-    // ------------------------------------------------------------
-    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
-    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
-
-    // ------------------------------------------------------------
-    // INTERUPT INTERFACING (PL → PS)
-    // ------------------------------------------------------------
-    bool        &irq_ps,
-
+    HeadCtx         (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out) - includes DMA signals, head records and compute signals
+    ComputeHeadCtx  (&head_compute_ctx)[HEADS_PARALLEL],
+    SchedState      &STATE,
     // ------------------------------------------------------------
     // DEBUG OUTPUTS
     // ------------------------------------------------------------
-    SchedState  &dbg_state,
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
     uint32_t &irq_mask_reg,
+    uint32_t &irq_clear_reg,
     uint32_t &wq_base_addr,
     uint32_t &wk_base_addr,
     uint32_t &wv_base_addr,
@@ -85,54 +92,53 @@ void transformer_top(
     bool     &dbg_mac_ready,
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
+    int      &dbg_head_group_idx,
 
-    bool &dbg_done,
-    bool &dbg_error
+    bool &dbg_done
 ) {
 #pragma HLS INLINE off   
 #pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 #pragma HLS INTERFACE ap_none port=irq_ps
+#pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
+#pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
+#pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
 
     bool done               = false;    // Scheduler done flag
-    bool error              = false;    // Scheduler error flag
+    bool scheduler_error       = false;
+    bool compute_error         = false;
+
+
     static ControlMemInterface ctrl_mem_interface;
-    ctrl_mem_interface.update_inputs(ctrl_mem);
     StatusMemSpace &active_status_mem = ctrl_mem_interface.get_mutable_status();
 
     static bool     compute_ready = false;
     static bool     compute_done = false;
     static bool     compute_start = false;
     static uint32_t compute_instruction = 0;
-    // Debugging mirrors
-    dbg_ctrl_mem = ctrl_mem;
-    dbg_ctrl_reset_asserted = ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u);
-    control_reg   = ctrl_mem.control;
-    irq_status_reg   = active_status_mem.irq_status;
-    irq_mask_reg   = ctrl_mem.irq_mask;
-    wq_base_addr   = ctrl_mem.wq_base_addr;
-    wk_base_addr   = ctrl_mem.wk_base_addr;
-    wv_base_addr   = ctrl_mem.wv_base_addr;
-    wo_base_addr   = ctrl_mem.wo_base_addr;
-    w1_base_addr   = ctrl_mem.w1_base_addr;
-    w2_base_addr   = ctrl_mem.w2_base_addr;
-    wq_head_stride   = ctrl_mem.wq_head_stride;
-    wk_head_stride   = ctrl_mem.wk_head_stride;
-    wv_head_stride   = ctrl_mem.wv_head_stride;
-    wo_tile_stride   = ctrl_mem.wo_tile_stride;
-    w1_tile_stride   = ctrl_mem.w1_tile_stride;
-    w2_tile_stride   = ctrl_mem.w2_tile_stride;
+
+    // Headed compute controller lanes (parallel heads) 
+    static int      head_group_idx;
+    static int8_t  head_dbg_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX];
+    static int32_t head_dbg_out[HEADS_PARALLEL][HEAD_ACCUM_MAX];
+
+    
+    // Active-low reset derived from control register.
+    const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
+    const bool reset = !reset_n;
 
     // Clear handshake state on external resetn deassert.
-    if ((ctrl_mem.control & CTRL_RESETN_BIT) == 0u) {
+    if (reset) {
         done          = false;
-        error         = false;
+        scheduler_error = false;
+        compute_error   = false;
 
         compute_ready = true;
         compute_done  = false;
         compute_start = false;
         compute_instruction = 0;
+        head_group_idx = 0;
     }
 
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
@@ -149,14 +155,15 @@ void transformer_top(
         compute_ready,
         compute_done,
         head_ctx_ref,
+        head_group_idx,
         compute_start,
         compute_instruction,
         stream_ready,
         stream_start,
         stream_done,
         done,
-        error,
-        dbg_state
+        scheduler_error,
+        STATE
     );
 
     compute_controller(
@@ -183,13 +190,45 @@ void transformer_top(
         dbg_mac_start,
         dbg_mac_ready,
         dbg_mac_complete,
-        error               
+        compute_error               
     );
 
-    // IRQ COMPUTATION (integrated into ControlMemInterface)
-    irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask, done, error);
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        const int idx = head_group_idx * HEADS_PARALLEL + lane;
+        if (idx >= 0 && idx < NUM_HEADS) {
+            head_compute_ctx[lane].compute_start = head_ctx_ref[idx].compute_start;
+            head_compute_ctx[lane].compute_instruction = head_ctx_ref[idx].compute_op;
+        } else {
+            head_compute_ctx[lane].compute_start = false;
+            head_compute_ctx[lane].compute_instruction = 0;
+        }
+    }
+
+    bool head_error_any = false;
+    drive_headed_compute_controller(
+        head_compute_ctx,
+        reset_n,
+        head_in_buf,
+        head_out_buf,
+        head_dbg_vec,
+        head_dbg_out,
+        head_error_any
+    );
+
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        const int idx = head_group_idx * HEADS_PARALLEL + lane;
+        if (idx >= 0 && idx < NUM_HEADS) {
+            head_ctx_ref[idx].compute_ready = head_compute_ctx[lane].compute_ready;
+            head_ctx_ref[idx].compute_done  = head_compute_ctx[lane].compute_done;
+        }
+    }
+    
+    ctrl_mem_interface.check_errors(ctrl_mem, scheduler_error, compute_error);
+    ctrl_mem_interface.check_control(ctrl_mem, done);
+    irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
     dbg_done = done;
-    dbg_error = error;
 
     // Update status memory
     status_mem = active_status_mem;
@@ -200,5 +239,29 @@ void transformer_top(
     dbg_compute_instruction = compute_instruction;
     dbg_compute_ready = compute_ready;
     dbg_compute_done = compute_done;
+
+
+
+    // Debugging mirrors
+    dbg_ctrl_mem = ctrl_mem;
+    dbg_ctrl_reset_asserted = reset;
+    dbg_head_group_idx = head_group_idx;
+    control_reg   = ctrl_mem.control;
+    irq_mask_reg   = ctrl_mem.irq_mask;
+    irq_clear_reg  = ctrl_mem.irq_clear;
+    irq_status_reg = active_status_mem.irq_status;
+    wq_base_addr   = ctrl_mem.wq_base_addr;
+    wk_base_addr   = ctrl_mem.wk_base_addr;
+    wv_base_addr   = ctrl_mem.wv_base_addr;
+    wo_base_addr   = ctrl_mem.wo_base_addr;
+    w1_base_addr   = ctrl_mem.w1_base_addr;
+    w2_base_addr   = ctrl_mem.w2_base_addr;
+    wq_head_stride   = ctrl_mem.wq_head_stride;
+    wk_head_stride   = ctrl_mem.wk_head_stride;
+    wv_head_stride   = ctrl_mem.wv_head_stride;
+    wo_tile_stride   = ctrl_mem.wo_tile_stride;
+    w1_tile_stride   = ctrl_mem.w1_tile_stride;
+    w2_tile_stride   = ctrl_mem.w2_tile_stride;
+
 
 }

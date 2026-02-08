@@ -6,6 +6,7 @@
 // IRQ_Wizard functionality now integrated into ControlMemInterface
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
 #include "Transformer_logic/src-hls/compute_controller.hpp"
+#include "Transformer_logic/src-hls/headed_compute_controller.hpp"
 
 
 // Top-level wrapper prototype
@@ -13,6 +14,21 @@ void transformer_top(
     bool axis_in_valid,                 // [INPUT]  s_axis_in_tvalid
     bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
+
+    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
+    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
+    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
+    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
+    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
+    bool &irq_ps,                       // [OUTPUT] Interrupt signal
+
+    /*
+        TEMPORARY OUTPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
+    */
+
+    // ------------------------------------------------------------
+    // Memory Management System (WEIGHT LOADER via DMA)
+    // ------------------------------------------------------------
     bool        dma_done,               // [INPUT]  DMA transfer completed (single-cycle pulse)
     bool        wl_ready,               // [INPUT]  Weight loader ready for a new request
     uint32_t    &wl_instruction,        // [OUTPUT] Packed dma op|layer|head|tile
@@ -26,13 +42,13 @@ void transformer_top(
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
 
+    // ------------------------------------------------------------
+    // COMPUTE CORE (MAC ARRAY + PIPELINE)
+    // ------------------------------------------------------------
+    const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out)
-    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
-    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
-    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
-    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
-    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
-    bool &irq_ps,                       // [OUTPUT] Interrupt signal
+    ComputeHeadCtx  (&head_compute_ctx)[HEADS_PARALLEL],
 
     // Debug (scheduler)
     SchedState  &dbg_state,
@@ -40,6 +56,7 @@ void transformer_top(
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
     uint32_t &irq_mask_reg,
+    uint32_t &irq_clear_reg,
     uint32_t &wq_base_addr,
     uint32_t &wk_base_addr,
     uint32_t &wv_base_addr,
@@ -68,7 +85,7 @@ void transformer_top(
     bool     &dbg_mac_ready,
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
+    int      &dbg_head_group_idx,
 
-    bool &dbg_done,
-    bool &dbg_error
+    bool &dbg_done
 );

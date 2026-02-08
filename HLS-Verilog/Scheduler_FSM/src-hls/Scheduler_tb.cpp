@@ -328,6 +328,7 @@ int main() {
             axis_in_last  = false;
         }
 
+        int head_group_idx = 0;
         scheduler_hls(
             ctrl_mem,
             axis_in_valid,
@@ -339,6 +340,7 @@ int main() {
             compute_ready,
             compute_done,
             head_ctx_ref,
+            head_group_idx,
             compute_start,
             compute_op,
             stream_ready,
