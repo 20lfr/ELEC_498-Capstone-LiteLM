@@ -55,5 +55,6 @@ compile.log
 
 # Custom outputs
 hardware_overlay/
-interface_ip/
-
+dependencies/
+package/
+.tar.gz
