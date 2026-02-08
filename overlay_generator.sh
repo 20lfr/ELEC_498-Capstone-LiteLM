@@ -13,9 +13,7 @@ HW_WRAPPER="axi_top_bd_01_wrapper"
 
 XSA_FILE="$VIVADO_DIR/$HW_WRAPPER.xsa"
 
-# USER CONFIGURATION (EDIT THESE)
-KRIA_USER="ubuntu"
-KRIA_IP="10.10.10.1" # <--- CHANGE THIS
+# RTL CONFIGURATION
 APP_NAME="axi_top_0"
 COMPAT_ID="xlnx,axi-top-1.0" # Found in dtsi file
 
@@ -150,9 +148,7 @@ EOF
 
 chmod +x "$LOAD_SCRIPT"
 
-echo ">>> Step 9: Deploying to Kria ($KRIA_IP)..."
-scp -r $OUTPUT_DIR/* $KRIA_USER@$KRIA_IP:~/
-
-echo "SUCCESS! Deployment Complete."
-echo "1. SSH into Board:  ssh $KRIA_USER@$KRIA_IP"
-echo "2. Load Hardware:   sudo ./load_hw.sh"
+echo ">>> Step 9: Deploy to Kria..."
+echo "1. scp -r $OUTPUT_DIR/* ubuntu@<KRIA_IP>:~/"
+echo "2. SSH into Board:  ssh ubuntu@<KRIA_IP>"
+echo "3. Load Hardware:   sudo ./load_hw.sh"
