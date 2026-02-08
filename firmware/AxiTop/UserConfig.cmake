@@ -29,7 +29,8 @@ set(USER_UNDEFINED_SYMBOLS
 
 set(USER_INCLUDE_DIRECTORIES
 "${SYSROOT}/usr/include/aarch64-linux-gnu"
-"../../../vitis_simulations/ControlMemInterface/ControlMemInterface/mask_allowed/hls/impl/ip/drivers/ControlTest_Top_v1_0/src"
+"${SYSROOT}/usr/include/"
+"../../hardware_overlay/drivers/axi_top_v1_0/src"
 )
 
 # -----------------------------------------
@@ -40,9 +41,9 @@ set(USER_INCLUDE_DIRECTORIES
 # Example 3: Adding ${CMAKE_SOURCE_DIR}/data/helloworld.c to add data/helloworld.c from this project.
 
 set(USER_COMPILE_SOURCES
+"../../hardware_overlay/drivers/axi_top_v1_0/src/xaxi_top.c"
+"../../hardware_overlay/drivers/axi_top_v1_0/src/xaxi_top_linux.c"
 "main.cpp"
-"../../../vitis_simulations/ControlMemInterface/ControlMemInterface/mask_allowed/hls/impl/ip/drivers/ControlTest_Top_v1_0/src/xcontroltest_top_linux.c"
-"../../../vitis_simulations/ControlMemInterface/ControlMemInterface/mask_allowed/hls/impl/ip/drivers/ControlTest_Top_v1_0/src/xcontroltest_top.c"
 )
 
 # -----------------------------------------
@@ -136,6 +137,7 @@ set(USER_LINK_LIBRARIES
 # Example 1: Adding /proj/compression/lib will pass -L/proj/compression/lib to the linker.
 # Example 2: Adding ../../common/lib will consider the path as relative to this directory. and will pass the path to -L option.
 set(USER_LINK_DIRECTORIES
+"${SYSROOT}/usr/lib/"
 "${SYSROOT}/usr/lib/aarch64-linux-gnu"
 )
 
