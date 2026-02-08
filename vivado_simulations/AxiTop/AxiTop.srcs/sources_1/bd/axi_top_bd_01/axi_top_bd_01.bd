@@ -2477,22 +2477,22 @@
             "value": "128"
           },
           "PSU__SD0__CLK_100_SDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x3"
           },
           "PSU__SD0__CLK_200_SDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x3"
           },
           "PSU__SD0__CLK_50_DDR_ITAP_DLY": {
-            "value": "0x00"
+            "value": "0x3D"
           },
           "PSU__SD0__CLK_50_DDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x4"
           },
           "PSU__SD0__CLK_50_SDR_ITAP_DLY": {
-            "value": "0x00"
+            "value": "0x15"
           },
           "PSU__SD0__CLK_50_SDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x5"
           },
           "PSU__SD0__PERIPHERAL__ENABLE": {
             "value": "0"
@@ -2501,22 +2501,22 @@
             "value": "0"
           },
           "PSU__SD1__CLK_100_SDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x3"
           },
           "PSU__SD1__CLK_200_SDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x3"
           },
           "PSU__SD1__CLK_50_DDR_ITAP_DLY": {
-            "value": "0x00"
+            "value": "0x3D"
           },
           "PSU__SD1__CLK_50_DDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x4"
           },
           "PSU__SD1__CLK_50_SDR_ITAP_DLY": {
-            "value": "0x00"
+            "value": "0x15"
           },
           "PSU__SD1__CLK_50_SDR_OTAP_DLY": {
-            "value": "0x00"
+            "value": "0x5"
           },
           "PSU__SD1__PERIPHERAL__ENABLE": {
             "value": "0"
@@ -3372,46 +3372,6 @@
                 "address_block": "/axi_top_0/s_axi_control/Reg",
                 "offset": "0x0080010000",
                 "range": "64K",
-                "offset_base_param": "C_S_AXI_CONTROL_BASEADDR",
-                "offset_high_param": "C_S_AXI_CONTROL_HIGHADDR"
-              }
-            }
-          }
-        }
-      },
-      "/axi_dma_0": {
-        "address_spaces": {
-          "Data_MM2S": {
-            "segments": {
-              "SEG_axi_dma_0_Reg": {
-                "address_block": "/axi_dma_0/S_AXI_LITE/Reg",
-                "offset": "0x0000000000000000",
-                "range": "1",
-                "is_excluded": "TRUE"
-              },
-              "SEG_axi_top_0_Reg": {
-                "address_block": "/axi_top_0/s_axi_control/Reg",
-                "offset": "0x0000000000000000",
-                "range": "1",
-                "is_excluded": "TRUE",
-                "offset_base_param": "C_S_AXI_CONTROL_BASEADDR",
-                "offset_high_param": "C_S_AXI_CONTROL_HIGHADDR"
-              }
-            }
-          },
-          "Data_S2MM": {
-            "segments": {
-              "SEG_axi_dma_0_Reg": {
-                "address_block": "/axi_dma_0/S_AXI_LITE/Reg",
-                "offset": "0x0000000000000000",
-                "range": "1",
-                "is_excluded": "TRUE"
-              },
-              "SEG_axi_top_0_Reg": {
-                "address_block": "/axi_top_0/s_axi_control/Reg",
-                "offset": "0x0000000000000000",
-                "range": "1",
-                "is_excluded": "TRUE",
                 "offset_base_param": "C_S_AXI_CONTROL_BASEADDR",
                 "offset_high_param": "C_S_AXI_CONTROL_HIGHADDR"
               }

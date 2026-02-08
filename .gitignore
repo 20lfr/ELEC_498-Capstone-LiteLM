@@ -17,6 +17,7 @@
 **/hls/
 **/reports/
 **/_ide/
+**/build/
 
 # HLS intermediate and database files
 *.adb

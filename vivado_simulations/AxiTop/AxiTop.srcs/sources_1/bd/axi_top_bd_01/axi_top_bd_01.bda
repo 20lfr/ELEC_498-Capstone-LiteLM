@@ -223,82 +223,6 @@
                 "SV": "xilinx.com:hls:axi_top:1.0",
                 "TM": "both",
                 "TU": "register"
-            },
-            "V5": {
-                "VT": "ACE",
-                "BA": "0x0000",
-                "HA": "0x0000",
-                "BP": "C_S_AXI_CONTROL_BASEADDR",
-                "HP": "C_S_AXI_CONTROL_HIGHADDR",
-                "MA": "Data_MM2S",
-                "MX": "/axi_dma_0",
-                "MI": "Data_MM2S",
-                "MS": "SEG_axi_top_0_Reg",
-                "MV": "xilinx.com:ip:axi_dma:7.1",
-                "SX": "/axi_top_0",
-                "SI": "Reg",
-                "MM": "s_axi_control",
-                "SS": "Reg",
-                "SV": "xilinx.com:hls:axi_top:1.0",
-                "TM": "both",
-                "TU": "register"
-            },
-            "V6": {
-                "VT": "ACE",
-                "BA": "0x0000000000000000",
-                "HA": "0x0000000000000000",
-                "BP": "C_BASEADDR",
-                "HP": "C_HIGHADDR",
-                "MA": "Data_MM2S",
-                "MX": "/axi_dma_0",
-                "MI": "M_AXI_MM2S",
-                "MS": "SEG_axi_dma_0_Reg",
-                "MV": "xilinx.com:ip:axi_dma:7.1",
-                "SX": "/axi_dma_0",
-                "SI": "Reg",
-                "MM": "S_AXI_LITE",
-                "SS": "Reg",
-                "SV": "xilinx.com:ip:axi_dma:7.1",
-                "TM": "both",
-                "TU": "register"
-            },
-            "V7": {
-                "VT": "ACE",
-                "BA": "0x0000",
-                "HA": "0x0000",
-                "BP": "C_S_AXI_CONTROL_BASEADDR",
-                "HP": "C_S_AXI_CONTROL_HIGHADDR",
-                "MA": "Data_S2MM",
-                "MX": "/axi_dma_0",
-                "MI": "Data_S2MM",
-                "MS": "SEG_axi_top_0_Reg",
-                "MV": "xilinx.com:ip:axi_dma:7.1",
-                "SX": "/axi_top_0",
-                "SI": "Reg",
-                "MM": "s_axi_control",
-                "SS": "Reg",
-                "SV": "xilinx.com:hls:axi_top:1.0",
-                "TM": "both",
-                "TU": "register"
-            },
-            "V8": {
-                "VT": "ACE",
-                "BA": "0x0000000000000000",
-                "HA": "0x0000000000000000",
-                "BP": "C_BASEADDR",
-                "HP": "C_HIGHADDR",
-                "MA": "Data_S2MM",
-                "MX": "/axi_dma_0",
-                "MI": "M_AXI_S2MM",
-                "MS": "SEG_axi_dma_0_Reg",
-                "MV": "xilinx.com:ip:axi_dma:7.1",
-                "SX": "/axi_dma_0",
-                "SI": "Reg",
-                "MM": "S_AXI_LITE",
-                "SS": "Reg",
-                "SV": "xilinx.com:ip:axi_dma:7.1",
-                "TM": "both",
-                "TU": "register"
             }
         },
         "edges": [
@@ -317,26 +241,6 @@
             },
             {
                 "src": "V4",
-                "trg": "V2",
-                "EH": "2"
-            },
-            {
-                "src": "V5",
-                "trg": "V2",
-                "EH": "2"
-            },
-            {
-                "src": "V6",
-                "trg": "V2",
-                "EH": "2"
-            },
-            {
-                "src": "V7",
-                "trg": "V2",
-                "EH": "2"
-            },
-            {
-                "src": "V8",
                 "trg": "V2",
                 "EH": "2"
             }
