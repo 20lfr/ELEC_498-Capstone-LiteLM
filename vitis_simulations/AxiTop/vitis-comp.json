@@ -1,0 +1,13 @@
+{
+  "name": "AxiTop",
+  "type": "HLS",
+  "configuration": {
+    "componentType": "HLS",
+    "configFiles": [
+      "hls_config.cfg"
+    ],
+    "work_dir": "AxiTop"
+  },
+  "useSysrootToolchain": false,
+  "template": "empty_hls_component"
+}

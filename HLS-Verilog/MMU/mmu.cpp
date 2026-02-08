@@ -1,394 +1,113 @@
 #include "mmu.hpp"
 
-void mmu_init(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    const ModelDims &dims          // [INPUT] model dimensions
-) {
-#pragma HLS INLINE
-    ctx.dims = dims;
-    ctx.fsm_state = MMUFsmState::IDLE;
-    ctx.num_tiles = 0;
-    ctx.active_bank = 0;
-    
-    for (int i = 0; i < MMU_URAM_BANKS; ++i) {
-#pragma HLS UNROLL
-        ctx.bank_offsets[i] = 0;
-    }
-    for (int i = 0; i < MMU_MAX_TILES; ++i) {
-#pragma HLS UNROLL factor=8
-        ctx.tile_table[i].valid = false;
-    }
-    
-    ctx.dma_head = ctx.dma_tail = ctx.dma_count = 0;
-    ctx.compute_head = ctx.compute_tail = ctx.compute_count = 0;
-    
-    for (int i = 0; i < MMU_DMA_QUEUE_DEPTH; ++i) ctx.dma_queue[i].valid = false;
-    for (int i = 0; i < MMU_COMPUTE_QUEUE_DEPTH; ++i) ctx.compute_queue[i].valid = false;
-    
-    ctx.arbiter.current = ctx.arbiter.rr_ptr = 0;
-    ctx.arbiter.busy = false;
-    for (int i = 0; i < MMU_MAX_HEADS; ++i) {
-#pragma HLS UNROLL
-        ctx.arbiter.pending[i] = ctx.arbiter.grant[i] = false;
-        ctx.head_dma_done[i] = ctx.head_compute_done[i] = false;
-    }
-    
-    ctx.dma_in_progress = ctx.transfer_in_progress = false;
-    ctx.k_cache_base = ctx.v_cache_base = 0;
-    ctx.current_token = 0;
-    ctx.main_dma_done = ctx.main_compute_done = false;
-    ctx.error_overflow = ctx.error_invalid = false;
-}
+// FSM state
+static MMUFsmState fsm_state;
 
-void mmu_reset(
-    MMUContext &ctx               // [INOUT] MMU state context
-) {
-#pragma HLS INLINE
-    ModelDims dims = ctx.dims;
-    uint32_t k = ctx.k_cache_base, v = ctx.v_cache_base;
-    mmu_init(ctx, dims);
-    ctx.k_cache_base = k;
-    ctx.v_cache_base = v;
-}
+// URAM bank allocation tracking
+static uint32_t bank_offsets[MMU_URAM_BANKS];
+static uint8_t active_bank;
 
-void mmu_set_kv_cache_bases(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    uint32_t k_base,              // [INPUT] K-cache base address
-    uint32_t v_base               // [INPUT] V-cache base address
-) {
-#pragma HLS INLINE
-    ctx.k_cache_base = k_base;
-    ctx.v_cache_base = v_base;
-}
+// Tile cache 
+static DmaSel   tt_sel[MMU_MAX_TILES];
+static int8_t   tt_layer[MMU_MAX_TILES];
+static int8_t   tt_head[MMU_MAX_TILES];
+static int8_t   tt_tile[MMU_MAX_TILES];
+static uint32_t tt_total_size[MMU_MAX_TILES];
+static bool     tt_valid[MMU_MAX_TILES];
+static uint8_t  tt_alloc_num_chunks[MMU_MAX_TILES];
+static uint8_t  tt_alloc_bank[MMU_MAX_TILES][MMU_MAX_CHUNKS];
+static uint32_t tt_alloc_offset[MMU_MAX_TILES][MMU_MAX_CHUNKS];
+static uint32_t tt_alloc_size[MMU_MAX_TILES][MMU_MAX_CHUNKS];
+static uint16_t num_tiles;
 
-// Queue operations
-bool mmu_push_dma_request(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    uint32_t packed               // [INPUT] packed DMA request
-) {
-#pragma HLS INLINE
-    if (ctx.dma_count >= MMU_DMA_QUEUE_DEPTH) {
-        ctx.error_overflow = true;
-        return false;
-    }
-    DmaSel sel; int layer, head, tile;
-    mmu_unpack_dma(packed, sel, layer, head, tile);
-    
-    ctx.dma_queue[ctx.dma_tail].packed_req = packed;
-    ctx.dma_queue[ctx.dma_tail].valid = true;
-    ctx.dma_queue[ctx.dma_tail].is_headed = mmu_is_headed_dma(sel);
-    ctx.dma_tail = (ctx.dma_tail + 1) % MMU_DMA_QUEUE_DEPTH;
-    ctx.dma_count++;
-    return true;
-}
+// DMA queue
+static uint32_t dq_packed[MMU_DMA_QUEUE_DEPTH];
+static bool     dq_is_headed[MMU_DMA_QUEUE_DEPTH];
+static bool     dq_valid[MMU_DMA_QUEUE_DEPTH];
+static uint8_t dma_q_head;
+static uint8_t dma_q_tail;
+static uint8_t dma_q_count;
 
-bool mmu_push_dma_request_headed(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    uint32_t packed,              // [INPUT] packed DMA request
-    int head                      // [INPUT] head index override
-) {
-#pragma HLS INLINE
-    if (ctx.dma_count >= MMU_DMA_QUEUE_DEPTH) {
-        ctx.error_overflow = true;
-        return false;
-    }
-    DmaSel sel; int layer, h, tile;
-    mmu_unpack_dma(packed, sel, layer, h, tile);
-    uint32_t new_packed = mmu_pack_dma(sel, layer, head, tile);
-    
-    ctx.dma_queue[ctx.dma_tail].packed_req = new_packed;
-    ctx.dma_queue[ctx.dma_tail].valid = true;
-    ctx.dma_queue[ctx.dma_tail].is_headed = true;
-    ctx.dma_tail = (ctx.dma_tail + 1) % MMU_DMA_QUEUE_DEPTH;
-    ctx.dma_count++;
-    return true;
-}
+// Compute queue 
+static ComputeReqType cq_type[MMU_COMPUTE_QUEUE_DEPTH];
+static uint32_t cq_packed[MMU_COMPUTE_QUEUE_DEPTH];
+static bool     cq_is_headed[MMU_COMPUTE_QUEUE_DEPTH];
+static uint8_t  cq_head_idx[MMU_COMPUTE_QUEUE_DEPTH];
+static bool     cq_valid[MMU_COMPUTE_QUEUE_DEPTH];
+static uint8_t comp_q_head;
+static uint8_t comp_q_tail;
+static uint8_t comp_q_count;
 
-static bool pop_dma(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    DmaQueueEntry &e              // [OUTPUT] popped DMA queue entry
-) {
-#pragma HLS INLINE
-    if (ctx.dma_count == 0) return false;
-    e = ctx.dma_queue[ctx.dma_head];
-    ctx.dma_queue[ctx.dma_head].valid = false;
-    ctx.dma_head = (ctx.dma_head + 1) % MMU_DMA_QUEUE_DEPTH;
-    ctx.dma_count--;
-    return true;
-}
+// Head arbiter 
+static bool arb_pending[MMU_MAX_HEADS];
+static bool arb_grant[MMU_MAX_HEADS];
+static uint8_t arb_current;
+static uint8_t arb_rr_ptr;
+static bool arb_busy;
 
-bool mmu_request_input_buffer(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    uint32_t packed_op,           // [INPUT] packed compute request
-    int head                      // [INPUT] head index for headed ops
-) {
-#pragma HLS INLINE
-    if (ctx.compute_count >= MMU_COMPUTE_QUEUE_DEPTH) {
-        ctx.error_overflow = true;
-        return false;
-    }
-    ComputeOp op; int layer, h, tile;
-    mmu_unpack_compute(packed_op, op, layer, h, tile);
-    
-    ctx.compute_queue[ctx.compute_tail].type = ComputeReqType::REQ_READ;
-    ctx.compute_queue[ctx.compute_tail].packed_req = packed_op;
-    ctx.compute_queue[ctx.compute_tail].valid = true;
-    ctx.compute_queue[ctx.compute_tail].is_headed = mmu_is_headed_op(op);
-    ctx.compute_queue[ctx.compute_tail].head_idx = head;
-    ctx.compute_tail = (ctx.compute_tail + 1) % MMU_COMPUTE_QUEUE_DEPTH;
-    ctx.compute_count++;
-    return true;
-}
+// Active operation state
+static uint32_t active_dma_req;
+static bool active_dma_is_headed;
+static ComputeReqType active_compute_type;
+static uint32_t active_compute_packed;
+static uint8_t active_compute_head;
+static bool active_compute_is_headed;
 
-bool mmu_signal_output_ready(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    uint32_t packed_op,           // [INPUT] packed compute request
-    int head                      // [INPUT] head index for headed ops
-) {
-#pragma HLS INLINE
-    if (ctx.compute_count >= MMU_COMPUTE_QUEUE_DEPTH) {
-        ctx.error_overflow = true;
-        return false;
-    }
-    ComputeOp op; int layer, h, tile;
-    mmu_unpack_compute(packed_op, op, layer, h, tile);
-    
-    ctx.compute_queue[ctx.compute_tail].type = ComputeReqType::REQ_WRITE;
-    ctx.compute_queue[ctx.compute_tail].packed_req = packed_op;
-    ctx.compute_queue[ctx.compute_tail].valid = true;
-    ctx.compute_queue[ctx.compute_tail].is_headed = mmu_is_headed_op(op);
-    ctx.compute_queue[ctx.compute_tail].head_idx = head;
-    ctx.compute_tail = (ctx.compute_tail + 1) % MMU_COMPUTE_QUEUE_DEPTH;
-    ctx.compute_count++;
-    return true;
-}
+// Chunked allocation state
+static uint8_t  alloc_bank[MMU_MAX_CHUNKS];
+static uint32_t alloc_offset[MMU_MAX_CHUNKS];
+static uint32_t alloc_size[MMU_MAX_CHUNKS];
+static uint8_t alloc_num_chunks;
+static uint8_t current_chunk;
 
-static bool pop_compute(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    ComputeBufferRequest &e       // [OUTPUT] popped compute request
-) {
-#pragma HLS INLINE
-    if (ctx.compute_count == 0) return false;
-    e = ctx.compute_queue[ctx.compute_head];
-    ctx.compute_queue[ctx.compute_head].valid = false;
-    ctx.compute_head = (ctx.compute_head + 1) % MMU_COMPUTE_QUEUE_DEPTH;
-    ctx.compute_count--;
-    return true;
-}
+// Done flags
+static bool head_dma_done_flags[MMU_MAX_HEADS];
+static bool head_compute_done_flags[MMU_MAX_HEADS];
+static bool main_dma_done_flag;
+static bool main_compute_done_flag;
 
-// Arbitration
-void mmu_request_head(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    int head                      // [INPUT] head index requesting access
-) {
-#pragma HLS INLINE
-    if (head >= 0 && head < MMU_MAX_HEADS) ctx.arbiter.pending[head] = true;
-}
+// Error flags
+static bool err_overflow;
+static bool err_invalid;
 
-void mmu_release_head(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    int head                      // [INPUT] head index releasing access
-) {
-#pragma HLS INLINE
-    if (head >= 0 && head < MMU_MAX_HEADS) {
-        ctx.arbiter.pending[head] = false;
-        ctx.arbiter.grant[head] = false;
-        if (ctx.arbiter.current == head) ctx.arbiter.busy = false;
-    }
-}
+// In-progress flags
+static bool dma_in_progress;
+static bool transfer_in_progress;
 
-void mmu_arbitrate(
-    MMUContext &ctx               // [INOUT] MMU state context
-) {
-#pragma HLS INLINE
-    if (ctx.arbiter.busy) return;
-    for (int i = 0; i < MMU_MAX_HEADS; ++i) {
-#pragma HLS UNROLL factor=4
-        int h = (ctx.arbiter.rr_ptr + i) % MMU_MAX_HEADS;
-        if (ctx.arbiter.pending[h]) {
-            for (int j = 0; j < MMU_MAX_HEADS; ++j) ctx.arbiter.grant[j] = (j == h);
-            ctx.arbiter.current = h;
-            ctx.arbiter.rr_ptr = (h + 1) % MMU_MAX_HEADS;
-            ctx.arbiter.busy = true;
-            return;
-        }
-    }
-}
+// ============================================================================
+// Helper Functions 
+// ============================================================================
 
-int mmu_granted_head(
-    const MMUContext &ctx         // [INPUT] MMU state context
-) {
+bool mmu_is_headed_op(ComputeOp op) {
 #pragma HLS INLINE
-    return ctx.arbiter.busy ? ctx.arbiter.current : -1;
-}
-
-bool mmu_is_granted(
-    const MMUContext &ctx,        // [INPUT] MMU state context
-    int head                      // [INPUT] head index to test
-) {
-#pragma HLS INLINE
-    return (head >= 0 && head < MMU_MAX_HEADS) ? ctx.arbiter.grant[head] : false;
-}
-
-// URAM cache
-bool mmu_check_cache(
-    const MMUContext &ctx,        // [INPUT] MMU state context
-    DmaSel sel,                   // [INPUT] DMA selector
-    int layer,                    // [INPUT] layer index
-    int head,                     // [INPUT] head index
-    int tile                      // [INPUT] tile index
-) {
-#pragma HLS INLINE
-    for (int i = 0; i < MMU_MAX_TILES; ++i) {
-#pragma HLS UNROLL factor=8
-        const TileDescriptor &t = ctx.tile_table[i];
-        if (t.valid && t.addr_sel == sel && t.layer == layer && t.head == head && t.tile == tile)
+    switch (op) {
+        case CMP_Q: case CMP_K: case CMP_V:
+        case CMP_K_REQUANT: case CMP_V_REQUANT: case CMP_REQUANT_Q: case CMP_HEAD_REQUANT:
+        case CMP_ATT_SCORES: case CMP_VALUE_SCALE: case CMP_SOFTMAX: case CMP_ATT_VALUE:
             return true;
-    }
-    return false;
-}
-
-uint32_t mmu_lookup_uram(
-    const MMUContext &ctx,        // [INPUT] MMU state context
-    DmaSel sel,                   // [INPUT] DMA selector
-    int layer,                    // [INPUT] layer index
-    int head,                     // [INPUT] head index
-    int tile,                     // [INPUT] tile index
-    uint8_t &bank                 // [OUTPUT] selected URAM bank
-) {
-#pragma HLS INLINE
-    for (int i = 0; i < MMU_MAX_TILES; ++i) {
-#pragma HLS UNROLL factor=8
-        const TileDescriptor &t = ctx.tile_table[i];
-        if (t.valid && t.addr_sel == sel && t.layer == layer && t.head == head && t.tile == tile) {
-            bank = t.uram_bank;
-            return t.uram_offset;
-        }
-    }
-    bank = 0;
-    return 0xFFFFFFFF;
-}
-
-bool mmu_allocate_uram(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    uint32_t size,                // [INPUT] allocation size in bytes
-    uint8_t &bank,                // [OUTPUT] allocated URAM bank
-    uint32_t &offset              // [OUTPUT] allocated URAM offset in bytes
-) {
-#pragma HLS INLINE
-    bank = ctx.active_bank;
-    offset = ctx.bank_offsets[bank];
-    if (offset + size <= MMU_BANK_SIZE) return true;
-    
-    bank = (ctx.active_bank + 1) % MMU_URAM_BANKS;
-    offset = ctx.bank_offsets[bank];
-    return (offset + size <= MMU_BANK_SIZE);
-}
-
-void mmu_commit_tile(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    DmaSel sel,                   // [INPUT] DMA selector
-    int layer,                    // [INPUT] layer index
-    int head,                     // [INPUT] head index
-    int tile,                     // [INPUT] tile index
-    uint8_t bank,                 // [INPUT] URAM bank to commit
-    uint32_t offset,              // [INPUT] URAM offset in bytes
-    uint32_t size                 // [INPUT] tile size in bytes
-) {
-#pragma HLS INLINE
-    for (int i = 0; i < MMU_MAX_TILES; ++i) {
-#pragma HLS UNROLL factor=8
-        if (!ctx.tile_table[i].valid) {
-            ctx.tile_table[i].addr_sel = sel;
-            ctx.tile_table[i].layer = layer;
-            ctx.tile_table[i].head = head;
-            ctx.tile_table[i].tile = tile;
-            ctx.tile_table[i].uram_bank = bank;
-            ctx.tile_table[i].uram_offset = offset;
-            ctx.tile_table[i].size = size;
-            ctx.tile_table[i].valid = true;
-            ctx.bank_offsets[bank] = offset + size;
-            ctx.active_bank = (bank + 1) % MMU_URAM_BANKS;
-            ctx.num_tiles++;
-            return;
-        }
+        default:
+            return false;
     }
 }
 
-void mmu_invalidate_tile(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    DmaSel sel,                   // [INPUT] DMA selector
-    int layer,                    // [INPUT] layer index
-    int head,                     // [INPUT] head index
-    int tile                      // [INPUT] tile index
-) {
+bool mmu_is_headed_dma(DmaSel sel) {
 #pragma HLS INLINE
-    for (int i = 0; i < MMU_MAX_TILES; ++i) {
-#pragma HLS UNROLL factor=8
-        TileDescriptor &t = ctx.tile_table[i];
-        if (t.valid && t.addr_sel == sel && t.layer == layer && t.head == head && t.tile == tile) {
-            t.valid = false;
-            ctx.num_tiles--;
-            return;
-        }
+    switch (sel) {
+        case DMASEL_WQ: case DMASEL_WK: case DMASEL_WV:
+        case DMASEL_K_WRITE: case DMASEL_V_WRITE:
+        case DMASEL_CTX_K: case DMASEL_CTX_V:
+            return true;
+        default:
+            return false;
     }
 }
 
-// KV cache addressing
-KVCacheAddr mmu_calc_kv_write_addr(
-    const MMUContext &ctx,        // [INPUT] MMU state context
-    int layer,                    // [INPUT] layer index
-    int head,                     // [INPUT] head index
-    bool is_v                     // [INPUT] true for V-cache, false for K-cache
-) {
+bool mmu_is_dma_write(DmaSel sel) {
 #pragma HLS INLINE
-    KVCacheAddr addr;
-    uint32_t base = is_v ? ctx.v_cache_base : ctx.k_cache_base;
-    uint32_t layer_stride = (uint32_t)ctx.dims.num_heads * ctx.dims.context_len * ctx.dims.d_heads;
-    uint32_t head_stride = (uint32_t)ctx.dims.context_len * ctx.dims.d_heads;
-    uint32_t token_stride = ctx.dims.d_heads;
-    
-    addr.base_addr = base + layer * layer_stride + head * head_stride + ctx.current_token * token_stride;
-    addr.token_offset = ctx.current_token;
-    addr.head = head;
-    addr.valid = (layer >= 0 && layer < ctx.dims.num_layers &&
-                  head >= 0 && head < ctx.dims.num_heads &&
-                  ctx.current_token < ctx.dims.context_len);
-    return addr;
+    return (sel == DMASEL_K_WRITE || sel == DMASEL_V_WRITE);
 }
 
-KVCacheAddr mmu_calc_kv_read_addr(
-    const MMUContext &ctx,        // [INPUT] MMU state context
-    int layer,                    // [INPUT] layer index
-    int head,                     // [INPUT] head index
-    bool is_v                     // [INPUT] true for V-cache, false for K-cache
-) {
-#pragma HLS INLINE
-    KVCacheAddr addr;
-    uint32_t base = is_v ? ctx.v_cache_base : ctx.k_cache_base;
-    uint32_t layer_stride = (uint32_t)ctx.dims.num_heads * ctx.dims.context_len * ctx.dims.d_heads;
-    uint32_t head_stride = (uint32_t)ctx.dims.context_len * ctx.dims.d_heads;
-    
-    addr.base_addr = base + layer * layer_stride + head * head_stride;
-    addr.token_offset = 0;
-    addr.head = head;
-    addr.valid = (layer >= 0 && layer < ctx.dims.num_layers && head >= 0 && head < ctx.dims.num_heads);
-    return addr;
-}
-
-uint32_t mmu_calc_kv_cache_size(
-    const ModelDims &dims         // [INPUT] model dimensions
-) {
-#pragma HLS INLINE
-    return (uint32_t)dims.num_layers * dims.num_heads * dims.context_len * dims.d_heads;
-}
-
-// DMA size calculation
-uint32_t mmu_calc_dma_size(
-    DmaSel sel,                   // [INPUT] DMA selector
-    const ModelDims &dims,        // [INPUT] model dimensions
-    int tile                      // [INPUT] tile index
-) {
+uint32_t mmu_calc_dma_size(DmaSel sel, ModelDims dims, int tile) {
 #pragma HLS INLINE
     (void)tile;
     switch (sel) {
@@ -409,11 +128,45 @@ uint32_t mmu_calc_dma_size(
     }
 }
 
-// Weight blob layout
-WeightBlobLayout mmu_calc_weight_blob(
-    DmaSel sel,                   // [INPUT] DMA selector (weights type)
-    const ModelDims &dims         // [INPUT] model dimensions
-) {
+KVCacheAddr mmu_calc_kv_write_addr(uint32_t k_base, uint32_t v_base, uint16_t token,
+                                    ModelDims dims, int layer, int head, bool is_v) {
+#pragma HLS INLINE
+    KVCacheAddr addr;
+    uint32_t base = is_v ? v_base : k_base;
+    uint32_t layer_stride = (uint32_t)dims.num_heads * dims.context_len * dims.d_heads;
+    uint32_t head_stride = (uint32_t)dims.context_len * dims.d_heads;
+    uint32_t token_stride = dims.d_heads;
+    
+    addr.base_addr = base + layer * layer_stride + head * head_stride + token * token_stride;
+    addr.token_offset = token;
+    addr.head = head;
+    addr.valid = (layer >= 0 && layer < dims.num_layers &&
+                  head >= 0 && head < dims.num_heads &&
+                  token < dims.context_len);
+    return addr;
+}
+
+KVCacheAddr mmu_calc_kv_read_addr(uint32_t k_base, uint32_t v_base,
+                                   ModelDims dims, int layer, int head, bool is_v) {
+#pragma HLS INLINE
+    KVCacheAddr addr;
+    uint32_t base = is_v ? v_base : k_base;
+    uint32_t layer_stride = (uint32_t)dims.num_heads * dims.context_len * dims.d_heads;
+    uint32_t head_stride = (uint32_t)dims.context_len * dims.d_heads;
+    
+    addr.base_addr = base + layer * layer_stride + head * head_stride;
+    addr.token_offset = 0;
+    addr.head = head;
+    addr.valid = (layer >= 0 && layer < dims.num_layers && head >= 0 && head < dims.num_heads);
+    return addr;
+}
+
+uint32_t mmu_calc_kv_cache_size(ModelDims dims) {
+#pragma HLS INLINE
+    return (uint32_t)dims.num_layers * dims.num_heads * dims.context_len * dims.d_heads;
+}
+
+WeightBlobLayout mmu_calc_weight_blob(DmaSel sel, ModelDims dims) {
 #pragma HLS INLINE
     WeightBlobLayout l;
     switch (sel) {
@@ -459,326 +212,64 @@ WeightBlobLayout mmu_calc_weight_blob(
     return l;
 }
 
-// Input buffer layout (uses head_buf/compute_buf layouts from top_params.hpp)
-InputBufferLayout mmu_calc_input_layout(
-    ComputeOp op,                 // [INPUT] compute operation
-    const ModelDims &dims         // [INPUT] model dimensions
-) {
+InputBufferLayout mmu_calc_input_layout(ComputeOp op, ModelDims dims) {
 #pragma HLS INLINE
     InputBufferLayout l;
-    uint32_t off = 0;
-    
     switch (op) {
-        case CMP_Q: case CMP_K: case CMP_V: {
-            l.act = BufferField(head_buf::QkvLayout::ACT, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.weights = BufferField(head_buf::QkvLayout::W, head_buf::QKV_W_BYTES, DataType::DTYPE_INT4, dims.d_model * dims.d_heads);
-            l.bias = BufferField(head_buf::QkvLayout::B, head_buf::QKV_B_BYTES, DataType::DTYPE_INT4, dims.d_heads);
-            l.total_size = head_buf::QKV_IN_BYTES;
+        case CMP_Q: case CMP_K: case CMP_V:
+            l.act = BufferField(0, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
+            l.weights = BufferField(dims.d_model, dims.d_model * dims.d_heads / 2, DataType::DTYPE_INT4, dims.d_model * dims.d_heads);
+            l.bias = BufferField(dims.d_model + dims.d_model * dims.d_heads / 2, dims.d_heads / 2, DataType::DTYPE_INT4, dims.d_heads);
+            l.total_size = dims.d_model + dims.d_model * dims.d_heads / 2 + dims.d_heads / 2;
             break;
-        }
-        case CMP_K_REQUANT: case CMP_V_REQUANT: case CMP_REQUANT_Q: case CMP_HEAD_REQUANT: {
-            l.act = BufferField(head_buf::HeadRequantLayout::X, dims.d_heads * 4, DataType::DTYPE_INT32, dims.d_heads);
-            l.m_param = BufferField(head_buf::HeadRequantLayout::M, 4, DataType::DTYPE_INT32, 1);
-            l.n_param = BufferField(head_buf::HeadRequantLayout::N, 4, DataType::DTYPE_INT32, 1);
-            l.total_size = head_buf::HEAD_REQUANT_IN_BYTES;
+        case CMP_ATT_SCORES:
+            l.act = BufferField(0, dims.d_heads, DataType::DTYPE_INT8, dims.d_heads);
+            l.k_cache = BufferField(dims.d_heads, dims.context_len * dims.d_heads, DataType::DTYPE_INT8, dims.context_len * dims.d_heads);
+            l.total_size = dims.d_heads + dims.context_len * dims.d_heads;
             break;
-        }
-        case CMP_ATT_SCORES: {
-            l.act = BufferField(head_buf::AttScoresLayout::Q, dims.d_heads, DataType::DTYPE_INT8, dims.d_heads);
-            l.k_cache = BufferField(head_buf::AttScoresLayout::K_CACHE, dims.context_len * dims.d_heads, DataType::DTYPE_INT8, dims.context_len * dims.d_heads);
-            l.total_size = head_buf::ATT_SCORES_IN_BYTES;
+        case CMP_ATT_VALUE:
+            l.act = BufferField(0, dims.context_len, DataType::DTYPE_INT8, dims.context_len);
+            l.v_cache = BufferField(dims.context_len, dims.context_len * dims.d_heads, DataType::DTYPE_INT8, dims.context_len * dims.d_heads);
+            l.total_size = dims.context_len + dims.context_len * dims.d_heads;
             break;
-        }
-        case CMP_VALUE_SCALE: {
-            l.act = BufferField(head_buf::ValueScaleLayout::X, dims.context_len * 4, DataType::DTYPE_INT32, dims.context_len);
-            l.total_size = head_buf::VALUE_SCALE_IN_BYTES;
-            break;
-        }
-        case CMP_SOFTMAX: {
-            l.act = BufferField(head_buf::SoftmaxLayout::X, dims.context_len * 2, DataType::DTYPE_INT16, dims.context_len);
-            l.total_size = head_buf::SOFTMAX_IN_BYTES;
-            break;
-        }
-        case CMP_ATT_VALUE: {
-            l.act = BufferField(head_buf::AttValueLayout::WEIGHTS, dims.context_len, DataType::DTYPE_INT8, dims.context_len);
-            l.v_cache = BufferField(head_buf::AttValueLayout::V_CACHE, dims.context_len * dims.d_heads, DataType::DTYPE_INT8, dims.context_len * dims.d_heads);
-            l.total_size = head_buf::ATT_VALUE_IN_BYTES;
-            break;
-        }
-        case CMP_LN0: case CMP_LN1: case CMP_FINAL_NORM: {
-            l.act = BufferField(compute_buf::LayerNormLayout::X, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.gamma = BufferField(compute_buf::LayerNormLayout::GAMMA, dims.d_model * 4, DataType::DTYPE_INT32, dims.d_model);
-            l.eps = BufferField(compute_buf::LayerNormLayout::EPS, 4, DataType::DTYPE_INT32, 1);
-            l.total_size = compute_buf::LN_IN_BYTES;
-            break;
-        }
-        case CMP_REQUANT1: case CMP_REQUANT2: case CMP_REQUANT3: case CMP_REQUANT4: {
-            l.act = BufferField(compute_buf::RequantLayout::X, dims.d_model * 4, DataType::DTYPE_INT32, dims.d_model);
-            l.m_param = BufferField(compute_buf::RequantLayout::M, 4, DataType::DTYPE_INT32, 1);
-            l.n_param = BufferField(compute_buf::RequantLayout::N, 4, DataType::DTYPE_INT32, 1);
-            l.total_size = compute_buf::REQUANT_IN_BYTES;
-            break;
-        }
-        case CMP_RESID0: case CMP_RESID1: {
-            l.act = BufferField(compute_buf::ResidLayout::X, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.residual = BufferField(compute_buf::ResidLayout::R, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.total_size = compute_buf::RESID_IN_BYTES;
-            break;
-        }
-        case CMP_OUT_PROJ: {
-            l.act = BufferField(compute_buf::OutProjLayout::ACT, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.weights = BufferField(compute_buf::OutProjLayout::W, compute_buf::OUT_PROJ_W_BYTES, DataType::DTYPE_INT4, dims.d_model * dims.d_tile_wo);
-            l.bias = BufferField(compute_buf::OutProjLayout::B, compute_buf::OUT_PROJ_B_BYTES, DataType::DTYPE_INT32, dims.d_tile_wo);
-            l.total_size = compute_buf::OUT_PROJ_IN_BYTES;
-            break;
-        }
-        case CMP_FFN_W1: {
-            l.act = BufferField(compute_buf::FfnW1Layout::X, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.weights = BufferField(compute_buf::FfnW1Layout::W, compute_buf::FFN_W1_W_BYTES, DataType::DTYPE_INT4, dims.d_model * dims.d_tile_w1);
-            l.bias = BufferField(compute_buf::FfnW1Layout::B, compute_buf::FFN_W1_B_BYTES, DataType::DTYPE_INT32, dims.d_tile_w1);
-            l.scale = BufferField(compute_buf::FfnW1Layout::S, dims.d_tile_w1 * 2, DataType::DTYPE_INT16, dims.d_tile_w1);
-            l.total_size = compute_buf::FFN_W1_IN_BYTES;
-            break;
-        }
-        case CMP_FFN_ACT: {
-            l.act = BufferField(compute_buf::FfnActLayout::X, dims.d_ffn * 2, DataType::DTYPE_INT16, dims.d_ffn);
-            l.total_size = compute_buf::FFN_ACT_IN_BYTES;
-            break;
-        }
-        case CMP_FFN_W2: {
-            l.act = BufferField(compute_buf::FfnW2Layout::X, dims.d_ffn * 2, DataType::DTYPE_INT16, dims.d_ffn);
-            l.weights = BufferField(compute_buf::FfnW2Layout::W, compute_buf::FFN_W2_W_BYTES, DataType::DTYPE_INT4, dims.d_ffn * dims.d_tile_w2);
-            l.bias = BufferField(compute_buf::FfnW2Layout::B, compute_buf::FFN_W2_B_BYTES, DataType::DTYPE_INT32, dims.d_tile_w2);
-            l.scale = BufferField(compute_buf::FfnW2Layout::S, dims.d_tile_w2 * 2, DataType::DTYPE_INT16, dims.d_tile_w2);
-            l.total_size = compute_buf::FFN_W2_IN_BYTES;
-            break;
-        }
-        case CMP_CONCAT: {
-            l.act = BufferField(0, dims.num_heads * dims.d_heads, DataType::DTYPE_INT8, dims.num_heads * dims.d_heads);
-            l.total_size = dims.num_heads * dims.d_heads;
-            break;
-        }
         default:
-            l.total_size = 0;
+            l.total_size = dims.d_model;
     }
     return l;
 }
 
-// Output buffer layout
-OutputBufferLayout mmu_calc_output_layout(
-    ComputeOp op,                 // [INPUT] compute operation
-    const ModelDims &dims         // [INPUT] model dimensions
-) {
+OutputBufferLayout mmu_calc_output_layout(ComputeOp op, ModelDims dims) {
 #pragma HLS INLINE
     OutputBufferLayout l;
     switch (op) {
         case CMP_Q: case CMP_K: case CMP_V:
             l.result = BufferField(0, dims.d_heads * 4, DataType::DTYPE_INT32, dims.d_heads);
             l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = head_buf::QKV_OUT_BYTES;
+            l.total_size = dims.d_heads * 4;
             break;
-        case CMP_K_REQUANT: case CMP_V_REQUANT: case CMP_REQUANT_Q: case CMP_HEAD_REQUANT:
+        case CMP_K_REQUANT: case CMP_V_REQUANT: case CMP_REQUANT_Q:
             l.result = BufferField(0, dims.d_heads, DataType::DTYPE_INT8, dims.d_heads);
             l.out_dtype = DataType::DTYPE_INT8;
-            l.total_size = head_buf::HEAD_REQUANT_OUT_BYTES;
+            l.total_size = dims.d_heads;
             break;
         case CMP_ATT_SCORES:
             l.result = BufferField(0, dims.context_len * 4, DataType::DTYPE_INT32, dims.context_len);
             l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = head_buf::ATT_SCORES_OUT_BYTES;
+            l.total_size = dims.context_len * 4;
             break;
-        case CMP_VALUE_SCALE:
-            l.result = BufferField(0, dims.context_len * 2, DataType::DTYPE_INT16, dims.context_len);
-            l.out_dtype = DataType::DTYPE_INT16;
-            l.total_size = head_buf::VALUE_SCALE_OUT_BYTES;
-            break;
-        case CMP_SOFTMAX:
-            l.result = BufferField(0, dims.context_len * 2, DataType::DTYPE_INT16, dims.context_len);
-            l.out_dtype = DataType::DTYPE_INT16;
-            l.total_size = head_buf::SOFTMAX_OUT_BYTES;
-            break;
-        case CMP_ATT_VALUE:
-            l.result = BufferField(0, dims.d_heads * 4, DataType::DTYPE_INT32, dims.d_heads);
-            l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = head_buf::ATT_VALUE_OUT_BYTES;
-            break;
-        case CMP_LN0: case CMP_LN1: case CMP_FINAL_NORM:
-            l.result = BufferField(0, dims.d_model * 4, DataType::DTYPE_INT32, dims.d_model);
-            l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = compute_buf::LN_OUT_BYTES;
-            break;
-        case CMP_REQUANT1: case CMP_REQUANT2: case CMP_REQUANT3: case CMP_REQUANT4:
-            l.result = BufferField(0, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.out_dtype = DataType::DTYPE_INT8;
-            l.total_size = compute_buf::REQUANT_OUT_BYTES;
-            break;
-        case CMP_RESID0: case CMP_RESID1:
-            l.result = BufferField(0, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
-            l.out_dtype = DataType::DTYPE_INT8;
-            l.total_size = compute_buf::RESID_OUT_BYTES;
-            break;
-        case CMP_OUT_PROJ:
-            l.result = BufferField(0, dims.d_tile_wo * 4, DataType::DTYPE_INT32, dims.d_tile_wo);
-            l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = compute_buf::OUT_PROJ_OUT_BYTES;
-            break;
-        case CMP_FFN_W1:
-            l.result = BufferField(0, dims.d_tile_w1 * 2, DataType::DTYPE_INT16, dims.d_tile_w1);
-            l.out_dtype = DataType::DTYPE_INT16;
-            l.total_size = compute_buf::FFN_W1_OUT_BYTES;
-            break;
-        case CMP_FFN_ACT:
-            l.result = BufferField(0, dims.d_ffn * 2, DataType::DTYPE_INT16, dims.d_ffn);
-            l.out_dtype = DataType::DTYPE_INT16;
-            l.total_size = compute_buf::FFN_ACT_OUT_BYTES;
-            break;
-        case CMP_FFN_W2:
-            l.result = BufferField(0, dims.d_tile_w2 * 4, DataType::DTYPE_INT32, dims.d_tile_w2);
-            l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = compute_buf::FFN_W2_OUT_BYTES;
-            break;
-        case CMP_CONCAT:
+        default:
             l.result = BufferField(0, dims.d_model, DataType::DTYPE_INT8, dims.d_model);
             l.out_dtype = DataType::DTYPE_INT8;
             l.total_size = dims.d_model;
-            break;
-        default:
-            l.total_size = 0;
     }
     return l;
 }
 
-// Status flags
-void mmu_set_head_dma_done(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    int h                         // [INPUT] head index to mark DMA done
-) {
-#pragma HLS INLINE
-    if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_dma_done[h] = true;
-}
-void mmu_set_head_compute_done(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    int h                         // [INPUT] head index to mark compute done
-) {
-#pragma HLS INLINE
-    if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_compute_done[h] = true;
-}
-void mmu_set_main_dma_done(
-    MMUContext &ctx               // [INOUT] MMU state context
-) {
-#pragma HLS INLINE
-    ctx.main_dma_done = true;
-}
-void mmu_set_main_compute_done(
-    MMUContext &ctx               // [INOUT] MMU state context
-) {
-#pragma HLS INLINE
-    ctx.main_compute_done = true;
-}
-bool mmu_get_head_dma_done(
-    const MMUContext &ctx,        // [INPUT] MMU state context
-    int h                         // [INPUT] head index to query
-) {
-#pragma HLS INLINE
-    return (h >= 0 && h < MMU_MAX_HEADS) ? ctx.head_dma_done[h] : false;
-}
-bool mmu_get_head_compute_done(
-    const MMUContext &ctx,        // [INPUT] MMU state context
-    int h                         // [INPUT] head index to query
-) {
-#pragma HLS INLINE
-    return (h >= 0 && h < MMU_MAX_HEADS) ? ctx.head_compute_done[h] : false;
-}
-bool mmu_get_main_dma_done(
-    const MMUContext &ctx         // [INPUT] MMU state context
-) {
-#pragma HLS INLINE
-    return ctx.main_dma_done;
-}
-bool mmu_get_main_compute_done(
-    const MMUContext &ctx         // [INPUT] MMU state context
-) {
-#pragma HLS INLINE
-    return ctx.main_compute_done;
-}
-void mmu_clear_head_dma_done(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    int h                         // [INPUT] head index to clear
-) {
-#pragma HLS INLINE
-    if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_dma_done[h] = false;
-}
-void mmu_clear_head_compute_done(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    int h                         // [INPUT] head index to clear
-) {
-#pragma HLS INLINE
-    if (h >= 0 && h < MMU_MAX_HEADS) ctx.head_compute_done[h] = false;
-}
-void mmu_clear_main_dma_done(
-    MMUContext &ctx               // [INOUT] MMU state context
-) {
-#pragma HLS INLINE
-    ctx.main_dma_done = false;
-}
-void mmu_clear_main_compute_done(
-    MMUContext &ctx               // [INOUT] MMU state context
-) {
-#pragma HLS INLINE
-    ctx.main_compute_done = false;
-}
-void mmu_clear_all_flags(
-    MMUContext &ctx               // [INOUT] MMU state context
-) {
-#pragma HLS INLINE
-    ctx.main_dma_done = ctx.main_compute_done = false;
-    for (int i = 0; i < MMU_MAX_HEADS; ++i) {
-        ctx.head_dma_done[i] = ctx.head_compute_done[i] = false;
-    }
-}
-
-// Utilities
-bool mmu_is_headed_op(
-    ComputeOp op                 // [INPUT] compute operation
-) {
-#pragma HLS INLINE
-    switch (op) {
-        case CMP_Q: case CMP_K: case CMP_V:
-        case CMP_K_REQUANT: case CMP_V_REQUANT: case CMP_REQUANT_Q: case CMP_HEAD_REQUANT:
-        case CMP_ATT_SCORES: case CMP_VALUE_SCALE: case CMP_SOFTMAX: case CMP_ATT_VALUE:
-            return true;
-        default:
-            return false;
-    }
-}
-
-bool mmu_is_headed_dma(
-    DmaSel sel                   // [INPUT] DMA selector
-) {
-#pragma HLS INLINE
-    switch (sel) {
-        case DMASEL_WQ: case DMASEL_WK: case DMASEL_WV:
-        case DMASEL_K_WRITE: case DMASEL_V_WRITE:
-        case DMASEL_CTX_K: case DMASEL_CTX_V:
-            return true;
-        default:
-            return false;
-    }
-}
-
-bool mmu_is_dma_write(
-    DmaSel sel                   // [INPUT] DMA selector
-) {
-#pragma HLS INLINE
-    return (sel == DMASEL_K_WRITE || sel == DMASEL_V_WRITE);
-}
-
-const char* mmu_state_name(
-    MMUFsmState s                // [INPUT] FSM state
-) {
+const char* mmu_state_name(MMUFsmState s) {
     switch (s) {
         case MMUFsmState::IDLE:          return "IDLE";
         case MMUFsmState::DMA_ARBITRATE: return "DMA_ARB";
+        case MMUFsmState::DMA_ALLOC:     return "DMA_ALLOC";
         case MMUFsmState::DMA_ISSUE:     return "DMA_ISSUE";
         case MMUFsmState::DMA_WAIT:      return "DMA_WAIT";
         case MMUFsmState::DMA_WRITEBACK: return "DMA_WB";
@@ -790,171 +281,649 @@ const char* mmu_state_name(
     }
 }
 
-// Main FSM
+// ============================================================================
+// Tile Cache Functions 
+// ============================================================================
+
+bool mmu_check_cache(DmaSel sel, int layer, int head, int tile) {
+#pragma HLS INLINE
+    bool found = false;
+    for (int i = 0; i < MMU_MAX_TILES; ++i) {
+#pragma HLS UNROLL factor=8
+        if (tt_valid[i] && tt_sel[i] == sel && 
+            tt_layer[i] == layer && tt_head[i] == head && tt_tile[i] == tile) {
+            found = true;
+        }
+    }
+    return found;
+}
+
+bool mmu_lookup_tile(DmaSel sel, int layer, int head, int tile,
+                     ChunkedAllocation &alloc_out) {
+#pragma HLS INLINE
+    // Priority encoder pattern - find matching tile (last match wins for synthesis)
+    int found_idx = -1;
+    for (int i = MMU_MAX_TILES - 1; i >= 0; --i) {
+#pragma HLS UNROLL factor=8
+        if (tt_valid[i] && tt_sel[i] == sel && 
+            tt_layer[i] == layer && tt_head[i] == head && tt_tile[i] == tile) {
+            found_idx = i;
+        }
+    }
+    
+    if (found_idx >= 0) {
+        alloc_out.num_chunks = tt_alloc_num_chunks[found_idx];
+        for (int c = 0; c < MMU_MAX_CHUNKS; ++c) {
+#pragma HLS UNROLL
+            alloc_out.bank[c] = tt_alloc_bank[found_idx][c];
+            alloc_out.offset[c] = tt_alloc_offset[found_idx][c];
+            alloc_out.size[c] = tt_alloc_size[found_idx][c];
+        }
+        return true;
+    }
+    return false;
+}
+
+void mmu_invalidate_tile(DmaSel sel, int layer, int head, int tile) {
+#pragma HLS INLINE
+    for (int i = 0; i < MMU_MAX_TILES; ++i) {
+#pragma HLS UNROLL factor=8
+        if (tt_valid[i] && tt_sel[i] == sel && 
+            tt_layer[i] == layer && tt_head[i] == head && tt_tile[i] == tile) {
+            tt_valid[i] = false;
+            num_tiles--;
+        }
+    }
+}
+
+// Internal: commit tile to cache
+static void commit_tile_internal(DmaSel sel, int layer, int head, int tile,
+                                  uint32_t total_size) {
+#pragma HLS INLINE
+    // Priority encoder: find first empty slot
+    int insert_idx = -1;
+    for (int i = MMU_MAX_TILES - 1; i >= 0; --i) {
+#pragma HLS UNROLL factor=8
+        if (!tt_valid[i]) insert_idx = i;
+    }
+    
+    if (insert_idx >= 0) {
+        tt_sel[insert_idx] = sel;
+        tt_layer[insert_idx] = layer;
+        tt_head[insert_idx] = head;
+        tt_tile[insert_idx] = tile;
+        tt_total_size[insert_idx] = total_size;
+        tt_alloc_num_chunks[insert_idx] = alloc_num_chunks;
+        for (int c = 0; c < MMU_MAX_CHUNKS; ++c) {
+#pragma HLS UNROLL
+            tt_alloc_bank[insert_idx][c] = alloc_bank[c];
+            tt_alloc_offset[insert_idx][c] = alloc_offset[c];
+            tt_alloc_size[insert_idx][c] = alloc_size[c];
+        }
+        tt_valid[insert_idx] = true;
+        num_tiles++;
+    }
+}
+
+// ============================================================================
+// Arbitration Functions 
+// ============================================================================
+
+void mmu_request_head(int head) {
+#pragma HLS INLINE
+    if (head >= 0 && head < MMU_MAX_HEADS) arb_pending[head] = true;
+}
+
+void mmu_release_head(int head) {
+#pragma HLS INLINE
+    if (head >= 0 && head < MMU_MAX_HEADS) {
+        arb_pending[head] = false;
+        arb_grant[head] = false;
+        if (arb_current == head) arb_busy = false;
+    }
+}
+
+void mmu_arbitrate() {
+#pragma HLS INLINE
+    if (arb_busy) return;
+    
+    // Round-robin using priority encoder (last match with offset wins)
+    int grant_idx = -1;
+    for (int i = MMU_MAX_HEADS - 1; i >= 0; --i) {
+#pragma HLS UNROLL
+        int h = (arb_rr_ptr + i) % MMU_MAX_HEADS;
+        if (arb_pending[h]) grant_idx = h;
+    }
+    
+    if (grant_idx >= 0) {
+        for (int j = 0; j < MMU_MAX_HEADS; ++j) {
+#pragma HLS UNROLL
+            arb_grant[j] = (j == grant_idx);
+        }
+        arb_current = grant_idx;
+        arb_rr_ptr = (grant_idx + 1) % MMU_MAX_HEADS;
+        arb_busy = true;
+    }
+}
+
+int mmu_granted_head() {
+#pragma HLS INLINE
+    return arb_busy ? (int)arb_current : -1;
+}
+
+bool mmu_is_granted(int head) {
+#pragma HLS INLINE
+    return (head >= 0 && head < MMU_MAX_HEADS) ? arb_grant[head] : false;
+}
+
+// ============================================================================
+// Done Flag Functions 
+// ============================================================================
+
+bool mmu_get_head_dma_done(int h) {
+#pragma HLS INLINE
+    return (h >= 0 && h < MMU_MAX_HEADS) ? head_dma_done_flags[h] : false;
+}
+
+bool mmu_get_head_compute_done(int h) {
+#pragma HLS INLINE
+    return (h >= 0 && h < MMU_MAX_HEADS) ? head_compute_done_flags[h] : false;
+}
+
+void mmu_clear_head_dma_done(int h) {
+#pragma HLS INLINE
+    if (h >= 0 && h < MMU_MAX_HEADS) head_dma_done_flags[h] = false;
+}
+
+void mmu_clear_head_compute_done(int h) {
+#pragma HLS INLINE
+    if (h >= 0 && h < MMU_MAX_HEADS) head_compute_done_flags[h] = false;
+}
+
+void mmu_clear_main_dma_done() {
+#pragma HLS INLINE
+    main_dma_done_flag = false;
+}
+
+void mmu_clear_main_compute_done() {
+#pragma HLS INLINE
+    main_compute_done_flag = false;
+}
+
+void mmu_clear_all_flags() {
+#pragma HLS INLINE
+    main_dma_done_flag = main_compute_done_flag = false;
+    for (int i = 0; i < MMU_MAX_HEADS; ++i) {
+#pragma HLS UNROLL
+        head_dma_done_flags[i] = head_compute_done_flags[i] = false;
+    }
+}
+
+// ============================================================================
+// Chunked Allocation 
+// ============================================================================
+
+static bool allocate_chunked_internal(uint32_t size) {
+#pragma HLS INLINE
+    uint32_t remaining = size;
+    uint8_t bank = active_bank;
+    alloc_num_chunks = 0;
+    
+    // FIXED LOOP BOUND - iterate exactly MMU_MAX_CHUNKS times
+    for (int c = 0; c < MMU_MAX_CHUNKS; ++c) {
+#pragma HLS UNROLL
+        if (remaining > 0) {
+            uint32_t offset = bank_offsets[bank];
+            uint32_t space = MMU_BANK_SIZE - offset;
+            
+            if (space > 0) {
+                uint32_t chunk_size = (remaining < space) ? remaining : space;
+                alloc_bank[alloc_num_chunks] = bank;
+                alloc_offset[alloc_num_chunks] = offset;
+                alloc_size[alloc_num_chunks] = chunk_size;
+                remaining -= chunk_size;
+                alloc_num_chunks++;
+            }
+            bank = (bank + 1) % MMU_URAM_BANKS;
+        }
+    }
+    
+    if (remaining > 0) {
+        alloc_num_chunks = 0;
+        return false;
+    }
+    return true;
+}
+
+static void commit_chunked_internal() {
+#pragma HLS INLINE
+    for (int c = 0; c < MMU_MAX_CHUNKS; ++c) {
+#pragma HLS UNROLL
+        if (c < alloc_num_chunks) {
+            bank_offsets[alloc_bank[c]] = alloc_offset[c] + alloc_size[c];
+        }
+    }
+    if (alloc_num_chunks > 0) {
+        active_bank = (alloc_bank[alloc_num_chunks - 1] + 1) % MMU_URAM_BANKS;
+    }
+}
+
+// ============================================================================
+// Main FSM 
+// ============================================================================
+
 void mmu_fsm(
-    MMUContext &ctx,              // [INOUT] MMU state context
-    bool dma_ready,               // [INPUT] DMA engine ready to accept a request
-    bool dma_done,                // [INPUT] DMA engine completed current transfer
-    bool &dma_start,              // [OUTPUT] pulse to start a DMA transfer
-    uint32_t &dma_addr,           // [OUTPUT] DMA base address
-    uint32_t &dma_len,            // [OUTPUT] DMA transfer length in bytes
-    bool &dma_is_write,           // [OUTPUT] DMA direction (true = write)
-    uint8_t &uram_bank,           // [OUTPUT] selected URAM bank for transfer
-    uint32_t &uram_offset,        // [OUTPUT] selected URAM offset in bytes
-    bool buffer_ready,            // [INPUT] compute buffer ready for transfer
-    bool &buffer_valid,           // [OUTPUT] assert when buffer transfer is valid
-    bool &transfer_done           // [OUTPUT] assert when transfer is complete
+    // Reset
+    bool        reset,
+    
+    // External DMA interface
+    bool        dma_ready,
+    bool        dma_done,
+    bool       &dma_start,
+    uint32_t   &dma_addr,
+    uint32_t   &dma_len,
+    bool       &dma_is_write,
+    uint8_t    &uram_bank,
+    uint32_t   &uram_offset,
+    
+    // Compute buffer interface
+    bool        buffer_ready,
+    bool       &buffer_valid,
+    bool       &transfer_done,
+    
+    // DMA request interface
+    bool        dma_req_valid,
+    uint32_t    dma_req_packed,
+    bool       &dma_req_ready,
+    
+    // Compute request interface
+    bool        compute_req_valid,
+    uint32_t    compute_req_packed,
+    ComputeReqType compute_req_type,
+    uint8_t     compute_req_head,
+    bool       &compute_req_ready,
+    
+    // Done flags output
+    bool       &main_dma_done,
+    bool       &main_compute_done,
+    
+    // Status output
+    MMUFsmState &fsm_state_out,
+    bool       &error_overflow,
+    bool       &error_invalid,
+    
+    // Configuration
+    ModelDims   dims,
+    uint32_t    k_cache_base,
+    uint32_t    v_cache_base,
+    uint16_t    current_token
 ) {
 #pragma HLS INLINE off
-    dma_start = false; dma_addr = 0; dma_len = 0; dma_is_write = false;
-    uram_bank = 0; uram_offset = 0; buffer_valid = false; transfer_done = false;
-    
-    DmaQueueEntry dma_entry;
-    ComputeBufferRequest compute_entry;
-    
-    switch (ctx.fsm_state) {
-        case MMUFsmState::IDLE:
-            if (ctx.dma_count > 0) ctx.fsm_state = MMUFsmState::DMA_ARBITRATE;
-            else if (ctx.compute_count > 0) ctx.fsm_state = MMUFsmState::COMPUTE_ARB;
+
+    // HLS pragmas for static variables (must be inside function scope)
+#pragma HLS reset variable=fsm_state
+#pragma HLS array_partition variable=bank_offsets complete dim=1
+#pragma HLS reset variable=active_bank
+#pragma HLS array_partition variable=tt_sel complete dim=1
+#pragma HLS array_partition variable=tt_layer complete dim=1
+#pragma HLS array_partition variable=tt_head complete dim=1
+#pragma HLS array_partition variable=tt_tile complete dim=1
+#pragma HLS array_partition variable=tt_total_size complete dim=1
+#pragma HLS array_partition variable=tt_valid complete dim=1
+#pragma HLS array_partition variable=tt_alloc_num_chunks complete dim=1
+#pragma HLS reset variable=num_tiles
+#pragma HLS array_partition variable=dq_packed complete dim=1
+#pragma HLS array_partition variable=dq_is_headed complete dim=1
+#pragma HLS array_partition variable=dq_valid complete dim=1
+#pragma HLS reset variable=dma_q_head
+#pragma HLS reset variable=dma_q_tail
+#pragma HLS reset variable=dma_q_count
+#pragma HLS array_partition variable=cq_type complete dim=1
+#pragma HLS array_partition variable=cq_packed complete dim=1
+#pragma HLS array_partition variable=cq_is_headed complete dim=1
+#pragma HLS array_partition variable=cq_head_idx complete dim=1
+#pragma HLS array_partition variable=cq_valid complete dim=1
+#pragma HLS reset variable=comp_q_head
+#pragma HLS reset variable=comp_q_tail
+#pragma HLS reset variable=comp_q_count
+#pragma HLS array_partition variable=arb_pending complete dim=1
+#pragma HLS array_partition variable=arb_grant complete dim=1
+#pragma HLS reset variable=arb_current
+#pragma HLS reset variable=arb_rr_ptr
+#pragma HLS reset variable=arb_busy
+#pragma HLS reset variable=active_dma_req
+#pragma HLS reset variable=active_dma_is_headed
+#pragma HLS reset variable=active_compute_type
+#pragma HLS reset variable=active_compute_packed
+#pragma HLS reset variable=active_compute_head
+#pragma HLS reset variable=active_compute_is_headed
+#pragma HLS array_partition variable=alloc_bank complete dim=1
+#pragma HLS array_partition variable=alloc_offset complete dim=1
+#pragma HLS array_partition variable=alloc_size complete dim=1
+#pragma HLS reset variable=alloc_num_chunks
+#pragma HLS reset variable=current_chunk
+#pragma HLS array_partition variable=head_dma_done_flags complete dim=1
+#pragma HLS array_partition variable=head_compute_done_flags complete dim=1
+#pragma HLS reset variable=main_dma_done_flag
+#pragma HLS reset variable=main_compute_done_flag
+#pragma HLS reset variable=err_overflow
+#pragma HLS reset variable=err_invalid
+#pragma HLS reset variable=dma_in_progress
+#pragma HLS reset variable=transfer_in_progress
+
+    // ========================================================================
+    // Reset Logic 
+    // ========================================================================
+    if (reset) {
+        fsm_state = MMUFsmState::IDLE;
+        active_bank = 0;
+        num_tiles = 0;
+        dma_q_head = dma_q_tail = dma_q_count = 0;
+        comp_q_head = comp_q_tail = comp_q_count = 0;
+        arb_current = arb_rr_ptr = 0;
+        arb_busy = false;
+        alloc_num_chunks = 0;
+        current_chunk = 0;
+        main_dma_done_flag = main_compute_done_flag = false;
+        err_overflow = err_invalid = false;
+        active_dma_req = 0;
+        active_dma_is_headed = false;
+        dma_in_progress = transfer_in_progress = false;
+        active_compute_type = ComputeReqType::REQ_NONE;
+        active_compute_packed = 0;
+        active_compute_head = 0;
+        active_compute_is_headed = false;
+        
+        for (int i = 0; i < MMU_URAM_BANKS; ++i) {
+#pragma HLS UNROLL
+            bank_offsets[i] = 0;
+        }
+        for (int i = 0; i < MMU_DMA_QUEUE_DEPTH; ++i) {
+#pragma HLS UNROLL
+            dq_valid[i] = false;
+        }
+        for (int i = 0; i < MMU_COMPUTE_QUEUE_DEPTH; ++i) {
+#pragma HLS UNROLL
+            cq_valid[i] = false;
+        }
+        for (int i = 0; i < MMU_MAX_HEADS; ++i) {
+#pragma HLS UNROLL
+            arb_pending[i] = arb_grant[i] = false;
+            head_dma_done_flags[i] = head_compute_done_flags[i] = false;
+        }
+        for (int i = 0; i < MMU_MAX_TILES; ++i) {
+#pragma HLS UNROLL factor=8
+            tt_valid[i] = false;
+        }
+        
+        // Set default outputs and return early
+        dma_start = false;
+        dma_addr = 0;
+        dma_len = 0;
+        dma_is_write = false;
+        uram_bank = 0;
+        uram_offset = 0;
+        buffer_valid = false;
+        transfer_done = false;
+        dma_req_ready = true;
+        compute_req_ready = true;
+        main_dma_done = false;
+        main_compute_done = false;
+        fsm_state_out = MMUFsmState::IDLE;
+        error_overflow = false;
+        error_invalid = false;
+        return;
+    }
+
+    // ========================================================================
+    // Default Outputs
+    // ========================================================================
+    dma_start = false;
+    dma_addr = 0;
+    dma_len = 0;
+    dma_is_write = false;
+    uram_bank = 0;
+    uram_offset = 0;
+    buffer_valid = false;
+    transfer_done = false;
+    dma_req_ready = (dma_q_count < MMU_DMA_QUEUE_DEPTH);
+    compute_req_ready = (comp_q_count < MMU_COMPUTE_QUEUE_DEPTH);
+    main_dma_done = main_dma_done_flag;
+    main_compute_done = main_compute_done_flag;
+    fsm_state_out = fsm_state;
+    error_overflow = err_overflow;
+    error_invalid = err_invalid;
+
+    // ========================================================================
+    // Enqueue DMA Request
+    // ========================================================================
+    if (dma_req_valid && dma_req_ready) {
+        DmaSel sel; int layer, head, tile;
+        mmu_unpack_dma(dma_req_packed, sel, layer, head, tile);
+        
+        dq_packed[dma_q_tail] = dma_req_packed;
+        dq_is_headed[dma_q_tail] = mmu_is_headed_dma(sel);
+        dq_valid[dma_q_tail] = true;
+        dma_q_tail = (dma_q_tail + 1) % MMU_DMA_QUEUE_DEPTH;
+        dma_q_count++;
+    }
+
+    // ========================================================================
+    // Enqueue Compute Request
+    // ========================================================================
+    if (compute_req_valid && compute_req_ready) {
+        ComputeOp op; int layer, head, tile;
+        mmu_unpack_compute(compute_req_packed, op, layer, head, tile);
+        
+        cq_type[comp_q_tail] = compute_req_type;
+        cq_packed[comp_q_tail] = compute_req_packed;
+        cq_is_headed[comp_q_tail] = mmu_is_headed_op(op);
+        cq_head_idx[comp_q_tail] = compute_req_head;
+        cq_valid[comp_q_tail] = true;
+        comp_q_tail = (comp_q_tail + 1) % MMU_COMPUTE_QUEUE_DEPTH;
+        comp_q_count++;
+    }
+
+    // ========================================================================
+    // FSM
+    // ========================================================================
+    switch (fsm_state) {
+        
+        case MMUFsmState::IDLE: {
+            current_chunk = 0;
+            alloc_num_chunks = 0;
+            if (dma_q_count > 0) {
+                fsm_state = MMUFsmState::DMA_ARBITRATE;
+            } else if (comp_q_count > 0) {
+                fsm_state = MMUFsmState::COMPUTE_ARB;
+            }
             break;
-            
-        case MMUFsmState::DMA_ARBITRATE:
-            if (pop_dma(ctx, dma_entry)) {
-                ctx.active_dma_req = dma_entry.packed_req;
+        }
+        
+        case MMUFsmState::DMA_ARBITRATE: {
+            if (dma_q_count > 0) {
+                // Pop from DMA queue
+                active_dma_req = dq_packed[dma_q_head];
+                active_dma_is_headed = dq_is_headed[dma_q_head];
+                dq_valid[dma_q_head] = false;
+                dma_q_head = (dma_q_head + 1) % MMU_DMA_QUEUE_DEPTH;
+                dma_q_count--;
+                
                 DmaSel sel; int layer, head, tile;
-                mmu_unpack_dma(dma_entry.packed_req, sel, layer, head, tile);
-                if (dma_entry.is_headed) {
-                    mmu_request_head(ctx, head);
-                    mmu_arbitrate(ctx);
-                    if (mmu_is_granted(ctx, head)) ctx.fsm_state = MMUFsmState::DMA_ISSUE;
+                mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
+                
+                if (active_dma_is_headed) {
+                    mmu_request_head(head);
+                    mmu_arbitrate();
+                    if (mmu_is_granted(head)) {
+                        fsm_state = MMUFsmState::DMA_ALLOC;
+                    }
                 } else {
-                    ctx.fsm_state = MMUFsmState::DMA_ISSUE;
+                    fsm_state = MMUFsmState::DMA_ALLOC;
                 }
             } else {
-                ctx.fsm_state = MMUFsmState::IDLE;
+                fsm_state = MMUFsmState::IDLE;
             }
             break;
+        }
+        
+        case MMUFsmState::DMA_ALLOC: {
+            DmaSel sel; int layer, head, tile;
+            mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
             
-        case MMUFsmState::DMA_ISSUE:
-            if (dma_ready) {
-                DmaSel sel; int layer, head, tile;
-                mmu_unpack_dma(ctx.active_dma_req, sel, layer, head, tile);
-                if (mmu_is_dma_write(sel)) {
-                    ctx.fsm_state = MMUFsmState::DMA_WRITEBACK;
+            if (mmu_is_dma_write(sel)) {
+                fsm_state = MMUFsmState::DMA_WRITEBACK;
+            } else {
+                uint32_t size = mmu_calc_dma_size(sel, dims, tile);
+                bool alloc_ok = allocate_chunked_internal(size);
+                
+                if (alloc_ok && alloc_num_chunks > 0) {
+                    current_chunk = 0;
+                    fsm_state = MMUFsmState::DMA_ISSUE;
                 } else {
-                    uint32_t size = mmu_calc_dma_size(sel, ctx.dims, tile);
-                    uint8_t bank; uint32_t offset;
-                    if (mmu_allocate_uram(ctx, size, bank, offset)) {
-                        dma_start = true;
-                        dma_len = size;
-                        uram_bank = bank;
-                        uram_offset = offset;
-                        ctx.dma_in_progress = true;
-                        ctx.fsm_state = MMUFsmState::DMA_WAIT;
-                    } else {
-                        ctx.error_overflow = true;
-                        ctx.fsm_state = MMUFsmState::IDLE;
-                    }
+                    err_overflow = true;
+                    fsm_state = MMUFsmState::IDLE;
                 }
             }
             break;
-            
-        case MMUFsmState::DMA_WAIT:
+        }
+        
+        case MMUFsmState::DMA_ISSUE: {
+            if (dma_ready && current_chunk < alloc_num_chunks) {
+                dma_start = true;
+                uram_bank = alloc_bank[current_chunk];
+                uram_offset = alloc_offset[current_chunk];
+                dma_len = alloc_size[current_chunk];
+                dma_in_progress = true;
+                fsm_state = MMUFsmState::DMA_WAIT;
+            }
+            break;
+        }
+        
+        case MMUFsmState::DMA_WAIT: {
             if (dma_done) {
-                DmaSel sel; int layer, head, tile;
-                mmu_unpack_dma(ctx.active_dma_req, sel, layer, head, tile);
-                uint32_t size = mmu_calc_dma_size(sel, ctx.dims, tile);
-                mmu_commit_tile(ctx, sel, layer, head, tile, uram_bank, uram_offset, size);
-                if (mmu_is_headed_dma(sel)) {
-                    mmu_set_head_dma_done(ctx, head);
-                    mmu_release_head(ctx, head);
+                current_chunk++;
+                if (current_chunk < alloc_num_chunks) {
+                    fsm_state = MMUFsmState::DMA_ISSUE;
                 } else {
-                    mmu_set_main_dma_done(ctx);
+                    // All chunks done - commit
+                    DmaSel sel; int layer, head, tile;
+                    mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
+                    uint32_t total_size = mmu_calc_dma_size(sel, dims, tile);
+                    
+                    commit_chunked_internal();
+                    commit_tile_internal(sel, layer, head, tile, total_size);
+                    
+                    if (mmu_is_headed_dma(sel)) {
+                        head_dma_done_flags[head] = true;
+                        mmu_release_head(head);
+                    } else {
+                        main_dma_done_flag = true;
+                    }
+                    dma_in_progress = false;
+                    fsm_state = MMUFsmState::IDLE;
                 }
-                ctx.dma_in_progress = false;
-                ctx.fsm_state = MMUFsmState::IDLE;
             }
             break;
-            
-        case MMUFsmState::DMA_WRITEBACK:
+        }
+        
+        case MMUFsmState::DMA_WRITEBACK: {
             if (dma_ready) {
                 DmaSel sel; int layer, head, tile;
-                mmu_unpack_dma(ctx.active_dma_req, sel, layer, head, tile);
+                mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
                 bool is_v = (sel == DMASEL_V_WRITE);
-                KVCacheAddr kv = mmu_calc_kv_write_addr(ctx, layer, head, is_v);
+                KVCacheAddr kv = mmu_calc_kv_write_addr(k_cache_base, v_cache_base, current_token,
+                                                         dims, layer, head, is_v);
                 if (kv.valid) {
                     dma_start = true;
                     dma_addr = kv.base_addr;
-                    dma_len = ctx.dims.d_heads;
+                    dma_len = dims.d_heads;
                     dma_is_write = true;
-                    ctx.dma_in_progress = true;
-                    ctx.fsm_state = MMUFsmState::DMA_WAIT;
+                    dma_in_progress = true;
+                    current_chunk = 0;
+                    alloc_num_chunks = 1;
+                    fsm_state = MMUFsmState::DMA_WAIT;
                 } else {
-                    ctx.error_invalid = true;
-                    ctx.fsm_state = MMUFsmState::IDLE;
+                    err_invalid = true;
+                    fsm_state = MMUFsmState::IDLE;
                 }
             }
             break;
-            
-        case MMUFsmState::COMPUTE_ARB:
-            if (pop_compute(ctx, compute_entry)) {
-                ctx.active_compute_req = compute_entry;
-                if (compute_entry.is_headed) {
-                    mmu_request_head(ctx, compute_entry.head_idx);
-                    mmu_arbitrate(ctx);
-                    if (mmu_is_granted(ctx, compute_entry.head_idx)) {
-                        ctx.fsm_state = (compute_entry.type == ComputeReqType::REQ_READ) 
+        }
+        
+        case MMUFsmState::COMPUTE_ARB: {
+            if (comp_q_count > 0) {
+                // Pop from compute queue
+                active_compute_type = cq_type[comp_q_head];
+                active_compute_packed = cq_packed[comp_q_head];
+                active_compute_is_headed = cq_is_headed[comp_q_head];
+                active_compute_head = cq_head_idx[comp_q_head];
+                cq_valid[comp_q_head] = false;
+                comp_q_head = (comp_q_head + 1) % MMU_COMPUTE_QUEUE_DEPTH;
+                comp_q_count--;
+                
+                if (active_compute_is_headed) {
+                    mmu_request_head(active_compute_head);
+                    mmu_arbitrate();
+                    if (mmu_is_granted(active_compute_head)) {
+                        fsm_state = (active_compute_type == ComputeReqType::REQ_READ) 
                             ? MMUFsmState::URAM_TO_INBUF : MMUFsmState::OUTBUF_TO_URAM;
                     }
                 } else {
-                    ctx.fsm_state = (compute_entry.type == ComputeReqType::REQ_READ)
+                    fsm_state = (active_compute_type == ComputeReqType::REQ_READ)
                         ? MMUFsmState::URAM_TO_INBUF : MMUFsmState::OUTBUF_TO_URAM;
                 }
             } else {
-                ctx.fsm_state = MMUFsmState::IDLE;
+                fsm_state = MMUFsmState::IDLE;
             }
             break;
-            
-        case MMUFsmState::URAM_TO_INBUF:
+        }
+        
+        case MMUFsmState::URAM_TO_INBUF: {
             if (buffer_ready) {
                 buffer_valid = true;
-                ctx.transfer_in_progress = true;
-                ctx.fsm_state = MMUFsmState::TRANSFER_DONE;
+                transfer_in_progress = true;
+                fsm_state = MMUFsmState::TRANSFER_DONE;
             }
             break;
-            
-        case MMUFsmState::OUTBUF_TO_URAM:
+        }
+        
+        case MMUFsmState::OUTBUF_TO_URAM: {
             if (buffer_ready) {
                 ComputeOp op; int layer, head, tile;
-                mmu_unpack_compute(ctx.active_compute_req.packed_req, op, layer, head, tile);
-                OutputBufferLayout out = mmu_calc_output_layout(op, ctx.dims);
-                uint8_t bank; uint32_t offset;
-                if (mmu_allocate_uram(ctx, out.total_size, bank, offset)) {
-                    uram_bank = bank;
-                    uram_offset = offset;
+                mmu_unpack_compute(active_compute_packed, op, layer, head, tile);
+                OutputBufferLayout out = mmu_calc_output_layout(op, dims);
+                
+                bool alloc_ok = allocate_chunked_internal(out.total_size);
+                if (alloc_ok && alloc_num_chunks > 0) {
+                    uram_bank = alloc_bank[0];
+                    uram_offset = alloc_offset[0];
                     buffer_valid = true;
-                    ctx.transfer_in_progress = true;
-                    ctx.fsm_state = MMUFsmState::TRANSFER_DONE;
+                    transfer_in_progress = true;
+                    commit_chunked_internal();
+                    fsm_state = MMUFsmState::TRANSFER_DONE;
                 } else {
-                    ctx.error_overflow = true;
-                    ctx.fsm_state = MMUFsmState::IDLE;
+                    err_overflow = true;
+                    fsm_state = MMUFsmState::IDLE;
                 }
             }
             break;
-            
-        case MMUFsmState::TRANSFER_DONE:
+        }
+        
+        case MMUFsmState::TRANSFER_DONE: {
             transfer_done = true;
-            if (ctx.active_compute_req.is_headed) {
-                mmu_set_head_compute_done(ctx, ctx.active_compute_req.head_idx);
-                mmu_release_head(ctx, ctx.active_compute_req.head_idx);
+            if (active_compute_is_headed) {
+                head_compute_done_flags[active_compute_head] = true;
+                mmu_release_head(active_compute_head);
             } else {
-                mmu_set_main_compute_done(ctx);
+                main_compute_done_flag = true;
             }
-            ctx.transfer_in_progress = false;
-            ctx.fsm_state = MMUFsmState::IDLE;
+            transfer_in_progress = false;
+            fsm_state = MMUFsmState::IDLE;
             break;
-            
+        }
+        
         default:
-            ctx.fsm_state = MMUFsmState::IDLE;
+            fsm_state = MMUFsmState::IDLE;
     }
 }

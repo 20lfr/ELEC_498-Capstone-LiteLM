@@ -1,2 +1,59 @@
-vitis_simulations/
-vivado_simulations/
+# --- Vivado / FPGA General ---
+*.log
+*.jou
+*.str
+*.zip
+.Xil/
+*.ip_user_files/
+*.hw/
+*.sim/
+*.runs/
+*.cache/
+*.gen/
+*.xsa
+*.bit
+
+# --- Vitis ---
+**/hls/
+**/reports/
+**/_ide/
+**/build/
+
+# HLS intermediate and database files
+*.adb
+*.xml
+*.bc
+*.ll
+*.protoinst
+*.DependenceCheck.tcl
+*.tbgen.tcl
+**/.gitignore
+
+# HLS Simulation Artifacts
+*.dat
+*.vcd
+
+*.hlscompile_summary
+*.hlsrun_csim_summary
+*.hlsrun_impl_summary
+*.hlsrun_package_summary
+compile_commands.json
+
+# --- IDE and Development Slop ---
+.cache/
+.settings/
+.project
+.cproject
+.vscode/
+.rigel_lopper/
+
+# Language Server artifacts (Clangd seen in your logs)
+.cache/clangd/
+
+# --- Project Specific Logs ---
+compile.log
+
+# Custom outputs
+hardware_overlay/
+interface_ip/
+

@@ -152,8 +152,8 @@ reg   [4:0] i_4_reg_532;
 wire    ap_block_pp0_stage0_11001;
 wire   [63:0] zext_ln646_fu_381_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln588_fu_493_p1;
-wire   [63:0] zext_ln589_fu_520_p1;
+wire   [63:0] zext_ln616_fu_493_p1;
+wire   [63:0] zext_ln617_fu_520_p1;
 reg   [4:0] i_fu_116;
 wire   [4:0] add_ln646_fu_367_p2;
 wire    ap_loop_init;
@@ -175,10 +175,10 @@ reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_61_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_60_ce0_local;
 reg    out_buf_we1_local;
-wire   [7:0] trunc_ln588_fu_488_p1;
+wire   [7:0] trunc_ln616_fu_488_p1;
 reg    out_buf_ce1_local;
 reg    out_buf_we0_local;
-wire   [7:0] zext_ln589_1_fu_508_p1;
+wire   [7:0] zext_ln617_1_fu_508_p1;
 reg    out_buf_ce0_local;
 wire   [0:0] tmp_fu_373_p3;
 wire   [14:0] v_fu_409_p33;
@@ -186,7 +186,7 @@ wire   [3:0] v_fu_409_p34;
 wire   [14:0] v_fu_409_p35;
 wire   [5:0] byte_addr_assign_s_fu_481_p3;
 wire   [6:0] tmp_s_fu_498_p4;
-wire   [5:0] or_ln_fu_513_p3;
+wire   [5:0] or_ln9_fu_513_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -259,7 +259,7 @@ end
     .def_WIDTH( 15 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 15 ))
-sparsemux_33_4_15_1_1_U163(
+sparsemux_33_4_15_1_1_U156(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_q0),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_q0),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_q0),
@@ -627,19 +627,19 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln646_fu_361_p2 = ((ap_sig_allocacmp_i_4 == 5'd22) ? 1'b1 : 1'b0);
 
-assign or_ln_fu_513_p3 = {{i_4_reg_532}, {1'd1}};
+assign or_ln9_fu_513_p3 = {{i_4_reg_532}, {1'd1}};
 
-assign out_buf_address0 = zext_ln589_fu_520_p1;
+assign out_buf_address0 = zext_ln617_fu_520_p1;
 
-assign out_buf_address1 = zext_ln588_fu_493_p1;
+assign out_buf_address1 = zext_ln616_fu_493_p1;
 
 assign out_buf_ce0 = out_buf_ce0_local;
 
 assign out_buf_ce1 = out_buf_ce1_local;
 
-assign out_buf_d0 = zext_ln589_1_fu_508_p1;
+assign out_buf_d0 = zext_ln617_1_fu_508_p1;
 
-assign out_buf_d1 = trunc_ln588_fu_488_p1;
+assign out_buf_d1 = trunc_ln616_fu_488_p1;
 
 assign out_buf_we0 = out_buf_we0_local;
 
@@ -673,17 +673,17 @@ assign tmp_fu_373_p3 = ap_sig_allocacmp_i_4[32'd4];
 
 assign tmp_s_fu_498_p4 = {{v_fu_409_p35[14:8]}};
 
-assign trunc_ln588_fu_488_p1 = v_fu_409_p35[7:0];
+assign trunc_ln616_fu_488_p1 = v_fu_409_p35[7:0];
 
 assign v_fu_409_p33 = 'bx;
 
 assign v_fu_409_p34 = i_4_reg_532[3:0];
 
-assign zext_ln588_fu_493_p1 = byte_addr_assign_s_fu_481_p3;
+assign zext_ln616_fu_493_p1 = byte_addr_assign_s_fu_481_p3;
 
-assign zext_ln589_1_fu_508_p1 = tmp_s_fu_498_p4;
+assign zext_ln617_1_fu_508_p1 = tmp_s_fu_498_p4;
 
-assign zext_ln589_fu_520_p1 = or_ln_fu_513_p3;
+assign zext_ln617_fu_520_p1 = or_ln9_fu_513_p3;
 
 assign zext_ln646_fu_381_p1 = tmp_fu_373_p3;
 

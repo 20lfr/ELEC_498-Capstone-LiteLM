@@ -103,9 +103,9 @@ wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 reg   [2:0] i_1_reg_381;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln554_fu_239_p1;
+wire   [63:0] zext_ln582_fu_239_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln555_fu_250_p1;
+wire   [63:0] zext_ln583_fu_250_p1;
 wire   [15:0] v_fu_272_p3;
 reg   [2:0] i_fu_76;
 wire   [2:0] add_ln684_fu_207_p2;
@@ -121,9 +121,9 @@ reg    in_buf_ce0_local;
 wire   [3:0] shl_ln5_fu_213_p3;
 wire   [4:0] zext_ln686_1_fu_225_p1;
 wire   [4:0] add_ln686_fu_229_p2;
-wire  signed [6:0] sext_ln554_fu_235_p1;
+wire  signed [6:0] sext_ln582_fu_235_p1;
 wire   [7:0] zext_ln686_fu_221_p1;
-wire   [7:0] add_ln555_fu_244_p2;
+wire   [7:0] add_ln583_fu_244_p2;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -396,7 +396,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln555_fu_244_p2 = (zext_ln686_fu_221_p1 + 8'd120);
+assign add_ln583_fu_244_p2 = (zext_ln686_fu_221_p1 + 8'd120);
 
 assign add_ln684_fu_207_p2 = (ap_sig_allocacmp_i_1 + 3'd1);
 
@@ -442,23 +442,23 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln684_fu_201_p2 = ((ap_sig_allocacmp_i_1 == 3'd5) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln555_fu_250_p1;
+assign in_buf_address0 = zext_ln583_fu_250_p1;
 
-assign in_buf_address1 = zext_ln554_fu_239_p1;
+assign in_buf_address1 = zext_ln582_fu_239_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
 assign in_buf_ce1 = in_buf_ce1_local;
 
-assign sext_ln554_fu_235_p1 = $signed(add_ln686_fu_229_p2);
+assign sext_ln582_fu_235_p1 = $signed(add_ln686_fu_229_p2);
 
 assign shl_ln5_fu_213_p3 = {{ap_sig_allocacmp_i_1}, {1'd0}};
 
 assign v_fu_272_p3 = {{in_buf_q0}, {in_buf_q1}};
 
-assign zext_ln554_fu_239_p1 = $unsigned(sext_ln554_fu_235_p1);
+assign zext_ln582_fu_239_p1 = $unsigned(sext_ln582_fu_235_p1);
 
-assign zext_ln555_fu_250_p1 = add_ln555_fu_244_p2;
+assign zext_ln583_fu_250_p1 = add_ln583_fu_244_p2;
 
 assign zext_ln686_1_fu_225_p1 = shl_ln5_fu_213_p3;
 
