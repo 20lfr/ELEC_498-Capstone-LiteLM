@@ -38,10 +38,10 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [7:0] in_buf_address0;
+output  [6:0] in_buf_address0;
 output   in_buf_ce0;
 input  [7:0] in_buf_q0;
-output  [7:0] in_buf_address1;
+output  [6:0] in_buf_address1;
 output   in_buf_ce1;
 input  [7:0] in_buf_q1;
 output  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134;
@@ -76,17 +76,17 @@ wire    ap_block_pp0_stage0_11001;
 wire   [1:0] trunc_ln570_fu_81_p1;
 reg   [1:0] trunc_ln570_reg_153;
 reg   [1:0] trunc_ln570_reg_153_pp0_iter1_reg;
-wire    grp_read_i32_1_fu_54_ap_start;
-wire    grp_read_i32_1_fu_54_ap_done;
-wire    grp_read_i32_1_fu_54_ap_idle;
-wire    grp_read_i32_1_fu_54_ap_ready;
-wire   [7:0] grp_read_i32_1_fu_54_in_buf_address0;
-wire    grp_read_i32_1_fu_54_in_buf_ce0;
-wire   [7:0] grp_read_i32_1_fu_54_in_buf_address1;
-wire    grp_read_i32_1_fu_54_in_buf_ce1;
-wire   [6:0] grp_read_i32_1_fu_54_byte_addr;
-wire   [31:0] grp_read_i32_1_fu_54_ap_return;
-reg    grp_read_i32_1_fu_54_ap_start_reg;
+wire    grp_read_i32_fu_54_ap_start;
+wire    grp_read_i32_fu_54_ap_done;
+wire    grp_read_i32_fu_54_ap_idle;
+wire    grp_read_i32_fu_54_ap_ready;
+wire   [6:0] grp_read_i32_fu_54_in_buf_address0;
+wire    grp_read_i32_fu_54_in_buf_ce0;
+wire   [6:0] grp_read_i32_fu_54_in_buf_address1;
+wire    grp_read_i32_fu_54_in_buf_ce1;
+wire   [6:0] grp_read_i32_fu_54_byte_addr;
+wire   [31:0] grp_read_i32_fu_54_ap_return;
+reg    grp_read_i32_fu_54_ap_start_reg;
 wire    ap_block_pp0_stage1_ignoreCallOp22;
 wire    ap_block_pp0_stage0_ignoreCallOp23;
 wire    ap_block_pp0_stage1_ignoreCallOp27;
@@ -116,27 +116,27 @@ initial begin
 #0 ap_CS_fsm = 2'd1;
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
 #0 ap_enable_reg_pp0_iter0_reg = 1'b0;
-#0 grp_read_i32_1_fu_54_ap_start_reg = 1'b0;
+#0 grp_read_i32_fu_54_ap_start_reg = 1'b0;
 #0 i_fu_50 = 3'd0;
 #0 ap_done_reg = 1'b0;
 end
 
-transformer_top_read_i32_1 grp_read_i32_1_fu_54(
+transformer_top_read_i32 grp_read_i32_fu_54(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_read_i32_1_fu_54_ap_start),
-    .ap_done(grp_read_i32_1_fu_54_ap_done),
-    .ap_idle(grp_read_i32_1_fu_54_ap_idle),
-    .ap_ready(grp_read_i32_1_fu_54_ap_ready),
+    .ap_start(grp_read_i32_fu_54_ap_start),
+    .ap_done(grp_read_i32_fu_54_ap_done),
+    .ap_idle(grp_read_i32_fu_54_ap_idle),
+    .ap_ready(grp_read_i32_fu_54_ap_ready),
     .ap_ce(1'b1),
-    .in_buf_address0(grp_read_i32_1_fu_54_in_buf_address0),
-    .in_buf_ce0(grp_read_i32_1_fu_54_in_buf_ce0),
+    .in_buf_address0(grp_read_i32_fu_54_in_buf_address0),
+    .in_buf_ce0(grp_read_i32_fu_54_in_buf_ce0),
     .in_buf_q0(in_buf_q0),
-    .in_buf_address1(grp_read_i32_1_fu_54_in_buf_address1),
-    .in_buf_ce1(grp_read_i32_1_fu_54_in_buf_ce1),
+    .in_buf_address1(grp_read_i32_fu_54_in_buf_address1),
+    .in_buf_ce1(grp_read_i32_fu_54_in_buf_ce1),
     .in_buf_q1(in_buf_q1),
-    .byte_addr(grp_read_i32_1_fu_54_byte_addr),
-    .ap_return(grp_read_i32_1_fu_54_ap_return)
+    .byte_addr(grp_read_i32_fu_54_byte_addr),
+    .ap_return(grp_read_i32_fu_54_ap_return)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -198,12 +198,12 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_read_i32_1_fu_54_ap_start_reg <= 1'b0;
+        grp_read_i32_fu_54_ap_start_reg <= 1'b0;
     end else begin
         if (((icmp_ln570_fu_69_p2 == 1'd0) & (1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-            grp_read_i32_1_fu_54_ap_start_reg <= 1'b1;
-        end else if ((grp_read_i32_1_fu_54_ap_ready == 1'b1)) begin
-            grp_read_i32_1_fu_54_ap_start_reg <= 1'b0;
+            grp_read_i32_fu_54_ap_start_reg <= 1'b1;
+        end else if ((grp_read_i32_fu_54_ap_ready == 1'b1)) begin
+            grp_read_i32_fu_54_ap_start_reg <= 1'b0;
         end
     end
 end
@@ -376,27 +376,27 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage1;
 
 assign ap_ready = ap_ready_sig;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134 = grp_read_i32_1_fu_54_ap_return;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134 = grp_read_i32_fu_54_ap_return;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135 = grp_read_i32_1_fu_54_ap_return;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135 = grp_read_i32_fu_54_ap_return;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136 = grp_read_i32_1_fu_54_ap_return;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136 = grp_read_i32_fu_54_ap_return;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137 = grp_read_i32_1_fu_54_ap_return;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137 = grp_read_i32_fu_54_ap_return;
 
-assign grp_read_i32_1_fu_54_ap_start = grp_read_i32_1_fu_54_ap_start_reg;
+assign grp_read_i32_fu_54_ap_start = grp_read_i32_fu_54_ap_start_reg;
 
-assign grp_read_i32_1_fu_54_byte_addr = $unsigned(sext_ln572_fu_109_p1);
+assign grp_read_i32_fu_54_byte_addr = $unsigned(sext_ln572_fu_109_p1);
 
 assign icmp_ln570_fu_69_p2 = ((ap_sig_allocacmp_i_37 == 3'd4) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = grp_read_i32_1_fu_54_in_buf_address0;
+assign in_buf_address0 = grp_read_i32_fu_54_in_buf_address0;
 
-assign in_buf_address1 = grp_read_i32_1_fu_54_in_buf_address1;
+assign in_buf_address1 = grp_read_i32_fu_54_in_buf_address1;
 
-assign in_buf_ce0 = grp_read_i32_1_fu_54_in_buf_ce0;
+assign in_buf_ce0 = grp_read_i32_fu_54_in_buf_ce0;
 
-assign in_buf_ce1 = grp_read_i32_1_fu_54_in_buf_ce1;
+assign in_buf_ce1 = grp_read_i32_fu_54_in_buf_ce1;
 
 assign or_ln_fu_100_p4 = {{{{1'd1}, {trunc_ln570_reg_153}}}, {2'd0}};
 

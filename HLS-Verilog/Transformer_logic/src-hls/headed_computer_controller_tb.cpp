@@ -359,8 +359,28 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         for (int h = 0; h < D_HEADS; ++h) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4))));
         }
-        const int32_t M = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::M);
-        const int32_t N = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::N);
+        int32_t M = 0;
+        int32_t N = 0;
+        switch (op) {
+            case ComputeOp::CMP_K_REQUANT:
+                M = requant_params::REQUANT_K_M;
+                N = requant_params::REQUANT_K_N;
+                break;
+            case ComputeOp::CMP_V_REQUANT:
+                M = requant_params::REQUANT_V_M;
+                N = requant_params::REQUANT_V_N;
+                break;
+            case ComputeOp::CMP_REQUANT_Q:
+                M = requant_params::REQUANT_Q_M;
+                N = requant_params::REQUANT_Q_N;
+                break;
+            case ComputeOp::CMP_HEAD_REQUANT:
+                M = requant_params::REQUANT_HEAD_M;
+                N = requant_params::REQUANT_HEAD_N;
+                break;
+            default:
+                break;
+        }
         std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
@@ -674,8 +694,6 @@ int main() {
                             for (int h = 0; h < D_HEADS; ++h) {
                                 compute_buf::write_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4), src[h]);
                             }
-                            compute_buf::write_i32(in_buf, head_buf::INHeadRequantLayout::M, rq_M);
-                            compute_buf::write_i32(in_buf, head_buf::INHeadRequantLayout::N, rq_N);
                             break;
                         }
                         case ComputeOp::CMP_ATT_SCORES: {

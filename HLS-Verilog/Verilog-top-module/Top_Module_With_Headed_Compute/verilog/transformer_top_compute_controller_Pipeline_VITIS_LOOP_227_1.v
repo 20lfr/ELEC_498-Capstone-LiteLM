@@ -65,6 +65,9 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_227_1 (
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_address0,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_ce0,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_q0,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_address0,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_ce0,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_q0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_address0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_ce0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_q0,
@@ -77,9 +80,6 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_227_1 (
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_address0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_ce0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_q0,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_address0,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_ce0,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_q0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_address0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_ce0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_q0,
@@ -235,6 +235,9 @@ input  [15:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12C
 output  [0:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_address0;
 output   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_ce0;
 input  [15:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_q0;
+output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_address0;
+output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_ce0;
+input  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_q0;
 output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_address0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_ce0;
 input  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_q0;
@@ -247,9 +250,6 @@ input  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_boo
 output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_address0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_ce0;
 input  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_q0;
-output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_address0;
-output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_ce0;
-input  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_q0;
 output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_address0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_ce0;
 input  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_q0;
@@ -601,15 +601,15 @@ reg   [14:0] ap_phi_reg_pp0_iter35_sig_3_reg_831;
 wire    ap_block_pp0_stage0;
 wire   [63:0] zext_ln201_1_fu_1014_p1;
 wire   [63:0] zext_ln201_fu_1035_p1;
-reg   [4:0] i_fu_198;
+reg   [4:0] i_45_fu_198;
 wire   [4:0] add_ln227_fu_854_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_46;
+reg   [4:0] ap_sig_allocacmp_i;
+reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_156_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_157_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_ce0_local;
-reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_152_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_151_ce0_local;
@@ -681,7 +681,7 @@ wire   [8:0] idx_fu_1006_p3;
 wire   [7:0] idx_3_fu_1025_p4;
 wire   [14:0] e_1_fu_1040_p3;
 wire   [15:0] denom_1_fu_1047_p3;
-wire   [13:0] tmp_91_fu_1059_p4;
+wire   [13:0] tmp_99_fu_1059_p4;
 wire   [30:0] grp_fu_1077_p0;
 wire   [15:0] grp_fu_1077_p1;
 wire   [14:0] e_fu_1083_p3;
@@ -691,8 +691,8 @@ wire   [29:0] grp_fu_1122_p0;
 wire   [15:0] grp_fu_1122_p1;
 wire   [14:0] grp_fu_1122_p2;
 wire   [14:0] grp_fu_1077_p2;
-wire   [15:0] tmp_58_fu_1170_p33;
-wire  signed [15:0] tmp_58_fu_1170_p35;
+wire   [15:0] tmp_54_fu_1170_p33;
+wire  signed [15:0] tmp_54_fu_1170_p35;
 wire   [14:0] prod_fu_1249_p1;
 wire   [30:0] prod_fu_1249_p2;
 reg    ap_done_reg;
@@ -758,22 +758,22 @@ wire  signed [3:0] x_q15_assign_fu_897_p25;
 wire  signed [3:0] x_q15_assign_fu_897_p27;
 wire  signed [3:0] x_q15_assign_fu_897_p29;
 wire  signed [3:0] x_q15_assign_fu_897_p31;
-wire   [3:0] tmp_58_fu_1170_p1;
-wire   [3:0] tmp_58_fu_1170_p3;
-wire   [3:0] tmp_58_fu_1170_p5;
-wire   [3:0] tmp_58_fu_1170_p7;
-wire   [3:0] tmp_58_fu_1170_p9;
-wire   [3:0] tmp_58_fu_1170_p11;
-wire   [3:0] tmp_58_fu_1170_p13;
-wire   [3:0] tmp_58_fu_1170_p15;
-wire  signed [3:0] tmp_58_fu_1170_p17;
-wire  signed [3:0] tmp_58_fu_1170_p19;
-wire  signed [3:0] tmp_58_fu_1170_p21;
-wire  signed [3:0] tmp_58_fu_1170_p23;
-wire  signed [3:0] tmp_58_fu_1170_p25;
-wire  signed [3:0] tmp_58_fu_1170_p27;
-wire  signed [3:0] tmp_58_fu_1170_p29;
-wire  signed [3:0] tmp_58_fu_1170_p31;
+wire   [3:0] tmp_54_fu_1170_p1;
+wire   [3:0] tmp_54_fu_1170_p3;
+wire   [3:0] tmp_54_fu_1170_p5;
+wire   [3:0] tmp_54_fu_1170_p7;
+wire   [3:0] tmp_54_fu_1170_p9;
+wire   [3:0] tmp_54_fu_1170_p11;
+wire   [3:0] tmp_54_fu_1170_p13;
+wire   [3:0] tmp_54_fu_1170_p15;
+wire  signed [3:0] tmp_54_fu_1170_p17;
+wire  signed [3:0] tmp_54_fu_1170_p19;
+wire  signed [3:0] tmp_54_fu_1170_p21;
+wire  signed [3:0] tmp_54_fu_1170_p23;
+wire  signed [3:0] tmp_54_fu_1170_p25;
+wire  signed [3:0] tmp_54_fu_1170_p27;
+wire  signed [3:0] tmp_54_fu_1170_p29;
+wire  signed [3:0] tmp_54_fu_1170_p31;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -815,7 +815,7 @@ initial begin
 #0 ap_enable_reg_pp0_iter34 = 1'b0;
 #0 ap_enable_reg_pp0_iter35 = 1'b0;
 #0 ap_enable_reg_pp0_iter36 = 1'b0;
-#0 i_fu_198 = 5'd0;
+#0 i_45_fu_198 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -869,12 +869,12 @@ exp_lut_q15_U(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U146(
-    .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_q0),
-    .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_156_q0),
-    .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_157_q0),
-    .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_q0),
-    .din4(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_q0),
+sparsemux_33_4_16_1_1_U142(
+    .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_154_q0),
+    .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_155_q0),
+    .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_156_q0),
+    .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_157_q0),
+    .din4(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_158_q0),
     .din5(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_153_q0),
     .din6(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_152_q0),
     .din7(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_151_q0),
@@ -897,7 +897,7 @@ transformer_top_udiv_31ns_16ns_15_35_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 15 ))
-udiv_31ns_16ns_15_35_1_U147(
+udiv_31ns_16ns_15_35_1_U143(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_1077_p0),
@@ -912,7 +912,7 @@ transformer_top_udiv_30ns_16ns_15_34_1 #(
     .din0_WIDTH( 30 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 15 ))
-udiv_30ns_16ns_15_34_1_U148(
+udiv_30ns_16ns_15_34_1_U144(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_1122_p0),
@@ -959,7 +959,7 @@ udiv_30ns_16ns_15_34_1_U148(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U149(
+sparsemux_33_4_16_1_1_U145(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_168_q0),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_167_q0),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_166_q0),
@@ -976,9 +976,9 @@ sparsemux_33_4_16_1_1_U149(
     .din13(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_38_q0),
     .din14(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_37_q0),
     .din15(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_q0),
-    .def(tmp_58_fu_1170_p33),
+    .def(tmp_54_fu_1170_p33),
     .sel(trunc_ln227_reg_1292_pp0_iter35_reg),
-    .dout(tmp_58_fu_1170_p35)
+    .dout(tmp_54_fu_1170_p35)
 );
 
 transformer_top_mul_16s_15ns_31_1_1 #(
@@ -987,8 +987,8 @@ transformer_top_mul_16s_15ns_31_1_1 #(
     .din0_WIDTH( 16 ),
     .din1_WIDTH( 15 ),
     .dout_WIDTH( 31 ))
-mul_16s_15ns_31_1_1_U150(
-    .din0(tmp_58_fu_1170_p35),
+mul_16s_15ns_31_1_1_U146(
+    .din0(tmp_54_fu_1170_p35),
     .din1(prod_fu_1249_p1),
     .dout(prod_fu_1249_p2)
 );
@@ -1403,9 +1403,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0_11001))) begin
         if (((ap_enable_reg_pp0_iter0 == 1'b1) & (icmp_ln227_fu_848_p2 == 1'd0))) begin
-            i_fu_198 <= add_ln227_fu_854_p2;
+            i_45_fu_198 <= add_ln227_fu_854_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_198 <= 5'd0;
+            i_45_fu_198 <= 5'd0;
         end
     end
 end
@@ -1876,9 +1876,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_46 = 5'd0;
+        ap_sig_allocacmp_i = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_46 = i_fu_198;
+        ap_sig_allocacmp_i = i_45_fu_198;
     end
 end
 
@@ -2427,7 +2427,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln227_fu_854_p2 = (ap_sig_allocacmp_i_46 + 5'd1);
+assign add_ln227_fu_854_p2 = (ap_sig_allocacmp_i + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -2621,7 +2621,7 @@ assign e_1_fu_1040_p3 = ((tmp_191_reg_1419[0:0] == 1'b1) ? exp_lut_q15_q0 : 15'd
 
 assign e_fu_1083_p3 = ((icmp_ln197_reg_1429[0:0] == 1'b1) ? 15'd12055 : exp_lut_q15_q0);
 
-assign grp_fu_1077_p0 = {{17'd65537}, {tmp_91_fu_1059_p4}};
+assign grp_fu_1077_p0 = {{17'd65537}, {tmp_99_fu_1059_p4}};
 
 assign grp_fu_1077_p1 = grp_fu_1077_p10;
 
@@ -2635,7 +2635,7 @@ assign grp_fu_1122_p10 = denom_fu_1090_p3;
 
 assign icmp_ln197_fu_1019_p2 = ((x_q15_assign_fu_897_p35 == 16'd32768) ? 1'b1 : 1'b0);
 
-assign icmp_ln227_fu_848_p2 = ((ap_sig_allocacmp_i_46 == 5'd22) ? 1'b1 : 1'b0);
+assign icmp_ln227_fu_848_p2 = ((ap_sig_allocacmp_i == 5'd22) ? 1'b1 : 1'b0);
 
 assign idx_3_fu_1025_p4 = {{x_q15_assign_fu_897_p35[14:7]}};
 
@@ -2749,11 +2749,11 @@ assign tmp_190_fu_968_p3 = x_q15_assign_fu_897_p35[32'd15];
 
 assign tmp_191_fu_982_p3 = neg_fu_976_p2[32'd15];
 
-assign tmp_58_fu_1170_p33 = 'bx;
+assign tmp_54_fu_1170_p33 = 'bx;
 
-assign tmp_91_fu_1059_p4 = {{e_1_fu_1040_p3[14:1]}};
+assign tmp_99_fu_1059_p4 = {{e_1_fu_1040_p3[14:1]}};
 
-assign tmp_fu_864_p3 = ap_sig_allocacmp_i_46[32'd4];
+assign tmp_fu_864_p3 = ap_sig_allocacmp_i[32'd4];
 
 assign tmp_s_fu_1098_p4 = {{e_fu_1083_p3[14:1]}};
 
@@ -2761,7 +2761,7 @@ assign trunc_ln211_fu_1165_p1 = grp_fu_1077_p2[14:0];
 
 assign trunc_ln217_fu_1128_p1 = grp_fu_1122_p2[14:0];
 
-assign trunc_ln227_fu_860_p1 = ap_sig_allocacmp_i_46[3:0];
+assign trunc_ln227_fu_860_p1 = ap_sig_allocacmp_i[3:0];
 
 assign x_q15_assign_fu_897_p33 = 'bx;
 

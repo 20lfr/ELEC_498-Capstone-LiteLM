@@ -77,9 +77,9 @@ reg   [15:0] ap_sig_allocacmp_max_val_load_1;
 reg   [4:0] i_fu_96;
 wire   [4:0] add_ln153_fu_311_p2;
 reg   [4:0] ap_sig_allocacmp_i_22;
-wire   [15:0] tmp_53_fu_229_p31;
-wire   [3:0] tmp_53_fu_229_p32;
-wire   [15:0] tmp_53_fu_229_p33;
+wire   [15:0] tmp_49_fu_229_p31;
+wire   [3:0] tmp_49_fu_229_p32;
+wire   [15:0] tmp_49_fu_229_p33;
 wire   [0:0] icmp_ln155_fu_297_p2;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -89,21 +89,21 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [3:0] tmp_53_fu_229_p1;
-wire   [3:0] tmp_53_fu_229_p3;
-wire   [3:0] tmp_53_fu_229_p5;
-wire   [3:0] tmp_53_fu_229_p7;
-wire   [3:0] tmp_53_fu_229_p9;
-wire   [3:0] tmp_53_fu_229_p11;
-wire   [3:0] tmp_53_fu_229_p13;
-wire  signed [3:0] tmp_53_fu_229_p15;
-wire  signed [3:0] tmp_53_fu_229_p17;
-wire  signed [3:0] tmp_53_fu_229_p19;
-wire  signed [3:0] tmp_53_fu_229_p21;
-wire  signed [3:0] tmp_53_fu_229_p23;
-wire  signed [3:0] tmp_53_fu_229_p25;
-wire  signed [3:0] tmp_53_fu_229_p27;
-wire  signed [3:0] tmp_53_fu_229_p29;
+wire   [3:0] tmp_49_fu_229_p1;
+wire   [3:0] tmp_49_fu_229_p3;
+wire   [3:0] tmp_49_fu_229_p5;
+wire   [3:0] tmp_49_fu_229_p7;
+wire   [3:0] tmp_49_fu_229_p9;
+wire   [3:0] tmp_49_fu_229_p11;
+wire   [3:0] tmp_49_fu_229_p13;
+wire  signed [3:0] tmp_49_fu_229_p15;
+wire  signed [3:0] tmp_49_fu_229_p17;
+wire  signed [3:0] tmp_49_fu_229_p19;
+wire  signed [3:0] tmp_49_fu_229_p21;
+wire  signed [3:0] tmp_49_fu_229_p23;
+wire  signed [3:0] tmp_49_fu_229_p25;
+wire  signed [3:0] tmp_49_fu_229_p27;
+wire  signed [3:0] tmp_49_fu_229_p29;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -166,9 +166,9 @@ sparsemux_31_4_16_1_1_U1800(
     .din12(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_547),
     .din13(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_548),
     .din14(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_549),
-    .def(tmp_53_fu_229_p31),
-    .sel(tmp_53_fu_229_p32),
-    .dout(tmp_53_fu_229_p33)
+    .def(tmp_49_fu_229_p31),
+    .sel(tmp_49_fu_229_p32),
+    .dout(tmp_49_fu_229_p33)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -317,14 +317,14 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln153_fu_216_p2 = ((ap_sig_allocacmp_i_22 == 5'd16) ? 1'b1 : 1'b0);
 
-assign icmp_ln155_fu_297_p2 = (($signed(tmp_53_fu_229_p33) > $signed(ap_sig_allocacmp_max_val_load_1)) ? 1'b1 : 1'b0);
+assign icmp_ln155_fu_297_p2 = (($signed(tmp_49_fu_229_p33) > $signed(ap_sig_allocacmp_max_val_load_1)) ? 1'b1 : 1'b0);
 
-assign max_val_1_fu_303_p3 = ((icmp_ln155_fu_297_p2[0:0] == 1'b1) ? tmp_53_fu_229_p33 : ap_sig_allocacmp_max_val_load_1);
+assign max_val_1_fu_303_p3 = ((icmp_ln155_fu_297_p2[0:0] == 1'b1) ? tmp_49_fu_229_p33 : ap_sig_allocacmp_max_val_load_1);
 
 assign max_val_4_out = max_val_fu_92;
 
-assign tmp_53_fu_229_p31 = 'bx;
+assign tmp_49_fu_229_p31 = 'bx;
 
-assign tmp_53_fu_229_p32 = ap_sig_allocacmp_i_22[3:0];
+assign tmp_49_fu_229_p32 = ap_sig_allocacmp_i_22[3:0];
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_153_114

@@ -90,7 +90,7 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [7:0] in_buf_address0;
+output  [6:0] in_buf_address0;
 output   in_buf_ce0;
 input  [7:0] in_buf_q0;
 output  [2:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_address0;
@@ -180,7 +180,7 @@ reg   [3:0] trunc_ln566_reg_705;
 reg   [2:0] lshr_ln8_reg_709;
 wire   [6:0] nibble_idx_fu_507_p2;
 reg   [6:0] nibble_idx_reg_714;
-wire   [63:0] zext_ln553_fu_523_p1;
+wire   [63:0] zext_ln725_fu_523_p1;
 wire    ap_block_pp0_stage0;
 wire   [63:0] zext_ln566_1_fu_603_p1;
 reg   [4:0] i_fu_132;
@@ -194,7 +194,7 @@ wire   [6:0] add_ln557_fu_389_p2;
 reg   [6:0] ap_sig_allocacmp_indvar_flatten_load;
 reg    in_buf_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_we0_local;
-wire   [3:0] storemerge473_fu_647_p3;
+wire   [3:0] storemerge474_fu_647_p3;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_ce0_local;
@@ -235,16 +235,16 @@ wire   [5:0] zext_ln558_fu_455_p1;
 wire   [5:0] empty_fu_449_p2;
 wire   [5:0] add_ln566_fu_459_p2;
 wire   [6:0] zext_ln566_fu_469_p1;
-wire   [6:0] shl_ln7_fu_473_p3;
+wire   [6:0] shl_ln5_fu_473_p3;
 wire   [6:0] add_ln566_1_fu_481_p2;
 wire   [6:0] add_ln562_fu_501_p2;
 wire   [6:0] zext_ln562_fu_497_p1;
-wire   [5:0] trunc_ln552_s_fu_513_p4;
+wire   [5:0] trunc_ln724_s_fu_513_p4;
 wire   [0:0] tmp_fu_583_p3;
 wire   [0:0] tmp_189_fu_590_p3;
-wire   [0:0] trunc_ln551_fu_622_p1;
+wire   [0:0] trunc_ln723_fu_622_p1;
 wire   [3:0] tmp_s_fu_625_p4;
-wire   [3:0] trunc_ln554_fu_635_p1;
+wire   [3:0] trunc_ln726_fu_635_p1;
 wire   [0:0] or_ln560_fu_597_p2;
 wire   [3:0] nibble_fu_639_p3;
 reg    ap_done_reg;
@@ -699,9 +699,9 @@ assign add_ln557_fu_389_p2 = (ap_sig_allocacmp_indvar_flatten_load + 7'd1);
 
 assign add_ln558_fu_562_p2 = (select_ln557_fu_407_p3 + 5'd1);
 
-assign add_ln562_fu_501_p2 = (shl_ln7_fu_473_p3 + 7'd32);
+assign add_ln562_fu_501_p2 = (shl_ln5_fu_473_p3 + 7'd32);
 
-assign add_ln566_1_fu_481_p2 = (zext_ln566_fu_469_p1 + shl_ln7_fu_473_p3);
+assign add_ln566_1_fu_481_p2 = (zext_ln566_fu_469_p1 + shl_ln5_fu_473_p3);
 
 assign add_ln566_fu_459_p2 = (zext_ln558_fu_455_p1 + empty_fu_449_p2);
 
@@ -727,7 +727,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_80_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_80_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_80_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_80_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_80_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_80_we0_local;
 
@@ -735,7 +735,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_81_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_81_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_81_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_81_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_81_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_81_we0_local;
 
@@ -743,7 +743,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_82_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_82_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_82_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_82_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_82_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_82_we0_local;
 
@@ -751,7 +751,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_83_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_83_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_83_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_83_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_83_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_83_we0_local;
 
@@ -759,7 +759,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_84_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_84_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_84_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_84_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_84_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_84_we0_local;
 
@@ -767,7 +767,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_we0_local;
 
@@ -775,7 +775,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_we0_local;
 
@@ -783,7 +783,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_we0_local;
 
@@ -791,7 +791,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_we0_local;
 
@@ -799,7 +799,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_ce0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_d0 = storemerge473_fu_647_p3;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_d0 = storemerge474_fu_647_p3;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89_we0_local;
 
@@ -809,11 +809,11 @@ assign icmp_ln557_fu_383_p2 = ((ap_sig_allocacmp_indvar_flatten_load == 7'd110) 
 
 assign icmp_ln558_fu_401_p2 = ((ap_sig_allocacmp_i_load == 5'd22) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln553_fu_523_p1;
+assign in_buf_address0 = zext_ln725_fu_523_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
-assign nibble_fu_639_p3 = ((trunc_ln551_fu_622_p1[0:0] == 1'b1) ? tmp_s_fu_625_p4 : trunc_ln554_fu_635_p1);
+assign nibble_fu_639_p3 = ((trunc_ln723_fu_622_p1[0:0] == 1'b1) ? tmp_s_fu_625_p4 : trunc_ln726_fu_635_p1);
 
 assign nibble_idx_fu_507_p2 = (add_ln562_fu_501_p2 + zext_ln562_fu_497_p1);
 
@@ -823,7 +823,7 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_ce0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_ce0_local;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_d0 = storemerge473_fu_647_p3;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_d0 = storemerge474_fu_647_p3;
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_we0_local;
 
@@ -831,7 +831,7 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_ce0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_ce0_local;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_d0 = storemerge473_fu_647_p3;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_d0 = storemerge474_fu_647_p3;
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_31_we0_local;
 
@@ -839,7 +839,7 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_ce0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_ce0_local;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_d0 = storemerge473_fu_647_p3;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_d0 = storemerge474_fu_647_p3;
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_32_we0_local;
 
@@ -847,7 +847,7 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33_ce0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33_ce0_local;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33_d0 = storemerge473_fu_647_p3;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33_d0 = storemerge474_fu_647_p3;
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_33_we0_local;
 
@@ -855,7 +855,7 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34_ce0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34_ce0_local;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34_d0 = storemerge473_fu_647_p3;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34_d0 = storemerge474_fu_647_p3;
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_34_we0_local;
 
@@ -863,7 +863,7 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35_ce0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35_ce0_local;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35_d0 = storemerge473_fu_647_p3;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35_d0 = storemerge474_fu_647_p3;
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_35_we0_local;
 
@@ -875,9 +875,9 @@ assign select_ln557_1_fu_421_p3 = ((icmp_ln558_fu_401_p2[0:0] == 1'b1) ? add_ln5
 
 assign select_ln557_fu_407_p3 = ((icmp_ln558_fu_401_p2[0:0] == 1'b1) ? 5'd0 : ap_sig_allocacmp_i_load);
 
-assign shl_ln7_fu_473_p3 = {{select_ln557_1_fu_421_p3}, {4'd0}};
+assign shl_ln5_fu_473_p3 = {{select_ln557_1_fu_421_p3}, {4'd0}};
 
-assign storemerge473_fu_647_p3 = ((or_ln560_fu_597_p2[0:0] == 1'b1) ? 4'd0 : nibble_fu_639_p3);
+assign storemerge474_fu_647_p3 = ((or_ln560_fu_597_p2[0:0] == 1'b1) ? 4'd0 : nibble_fu_639_p3);
 
 assign tmp_188_fu_437_p3 = {{select_ln557_1_fu_421_p3}, {1'd0}};
 
@@ -887,15 +887,13 @@ assign tmp_fu_583_p3 = select_ln557_1_reg_700[32'd2];
 
 assign tmp_s_fu_625_p4 = {{in_buf_q0[7:4]}};
 
-assign trunc_ln551_fu_622_p1 = nibble_idx_reg_714[0:0];
-
-assign trunc_ln552_s_fu_513_p4 = {{nibble_idx_fu_507_p2[6:1]}};
-
-assign trunc_ln554_fu_635_p1 = in_buf_q0[3:0];
-
 assign trunc_ln566_fu_465_p1 = add_ln566_fu_459_p2[3:0];
 
-assign zext_ln553_fu_523_p1 = trunc_ln552_s_fu_513_p4;
+assign trunc_ln723_fu_622_p1 = nibble_idx_reg_714[0:0];
+
+assign trunc_ln724_s_fu_513_p4 = {{nibble_idx_fu_507_p2[6:1]}};
+
+assign trunc_ln726_fu_635_p1 = in_buf_q0[3:0];
 
 assign zext_ln558_fu_455_p1 = select_ln557_fu_407_p3;
 
@@ -904,5 +902,7 @@ assign zext_ln562_fu_497_p1 = select_ln557_fu_407_p3;
 assign zext_ln566_1_fu_603_p1 = lshr_ln8_reg_709;
 
 assign zext_ln566_fu_469_p1 = add_ln566_fu_459_p2;
+
+assign zext_ln725_fu_523_p1 = trunc_ln724_s_fu_513_p4;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_557_14_VITIS_LOOP_558_15

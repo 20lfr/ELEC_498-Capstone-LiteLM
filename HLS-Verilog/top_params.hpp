@@ -424,6 +424,93 @@ enum class BufDType : uint8_t {
     I32,
 };
 
+// ---------------------------------------------------------------------------
+// Requant configuration (compile-time)
+// ---------------------------------------------------------------------------
+namespace requant_scales {
+// Fixed-point scale for Q19.13 outputs (RMSNorm/LN): 2^-13
+constexpr double S_FIXED_Q19_13 = 1.0 / 8192.0;
+
+// Compute-path requants
+constexpr double S_out_ln0 = 1.0;         // int8 scale after RMSNorm0
+constexpr double S_out_ln1 = 1.0;         // int8 scale after RMSNorm1
+
+constexpr double S_act_outproj_in = 1.0;  // activation scale into WO
+constexpr double S_w_wo = 1.0;            // WO weight scale
+constexpr double S_out_outproj = 1.0;     // int8 scale after WO
+
+constexpr double S_act_w2_in = 1.0;       // activation scale into W2
+constexpr double S_w_w2 = 1.0;            // W2 weight scale
+constexpr double S_out_ffn = 1.0;         // int8 scale after FFN W2
+
+// Headed-path requants (Q/K/V)
+constexpr double S_act_q_in = 1.0;
+constexpr double S_w_wq = 1.0;
+constexpr double S_out_q = 1.0;
+
+constexpr double S_act_k_in = 1.0;
+constexpr double S_w_wk = 1.0;
+constexpr double S_out_k = 1.0;
+
+constexpr double S_act_v_in = 1.0;
+constexpr double S_w_wv = 1.0;
+constexpr double S_out_v = 1.0;
+
+// Headed-path requant after attention value MAC
+constexpr double S_att_weights = 1.0;     // softmax output scale
+constexpr double S_v_cache = 1.0;         // V-cache activation scale
+constexpr double S_out_att_value = 1.0;   // int8 scale after ATT_VALUE
+} // namespace requant_scales
+
+namespace requant_params {
+constexpr int32_t round_to_i32(double x) {
+    return (x >= 0.0) ? static_cast<int32_t>(x + 0.5) : static_cast<int32_t>(x - 0.5);
+}
+
+constexpr int32_t calc_m(double real_scale, int32_t n) {
+    return round_to_i32(real_scale * static_cast<double>(1LL << n));
+}
+
+// Default shifts (tune as needed)
+constexpr int32_t REQUANT1_N = 15;
+constexpr int32_t REQUANT2_N = 15;
+constexpr int32_t REQUANT3_N = 15;
+constexpr int32_t REQUANT4_N = 15;
+
+constexpr int32_t REQUANT_Q_N = 15;
+constexpr int32_t REQUANT_K_N = 15;
+constexpr int32_t REQUANT_V_N = 15;
+constexpr int32_t REQUANT_HEAD_N = 15;
+
+// Compute-path M values
+constexpr double REQUANT1_SCALE = requant_scales::S_FIXED_Q19_13 / requant_scales::S_out_ln0;
+constexpr double REQUANT2_SCALE =
+    (requant_scales::S_act_outproj_in * requant_scales::S_w_wo) / requant_scales::S_out_outproj;
+constexpr double REQUANT3_SCALE = requant_scales::S_FIXED_Q19_13 / requant_scales::S_out_ln1;
+constexpr double REQUANT4_SCALE =
+    (requant_scales::S_act_w2_in * requant_scales::S_w_w2) / requant_scales::S_out_ffn;
+
+constexpr int32_t REQUANT1_M = calc_m(REQUANT1_SCALE, REQUANT1_N);
+constexpr int32_t REQUANT2_M = calc_m(REQUANT2_SCALE, REQUANT2_N);
+constexpr int32_t REQUANT3_M = calc_m(REQUANT3_SCALE, REQUANT3_N);
+constexpr int32_t REQUANT4_M = calc_m(REQUANT4_SCALE, REQUANT4_N);
+
+// Headed-path M values
+constexpr double REQUANT_Q_SCALE =
+    (requant_scales::S_act_q_in * requant_scales::S_w_wq) / requant_scales::S_out_q;
+constexpr double REQUANT_K_SCALE =
+    (requant_scales::S_act_k_in * requant_scales::S_w_wk) / requant_scales::S_out_k;
+constexpr double REQUANT_V_SCALE =
+    (requant_scales::S_act_v_in * requant_scales::S_w_wv) / requant_scales::S_out_v;
+constexpr double REQUANT_HEAD_SCALE =
+    (requant_scales::S_att_weights * requant_scales::S_v_cache) / requant_scales::S_out_att_value;
+
+constexpr int32_t REQUANT_Q_M = calc_m(REQUANT_Q_SCALE, REQUANT_Q_N);
+constexpr int32_t REQUANT_K_M = calc_m(REQUANT_K_SCALE, REQUANT_K_N);
+constexpr int32_t REQUANT_V_M = calc_m(REQUANT_V_SCALE, REQUANT_V_N);
+constexpr int32_t REQUANT_HEAD_M = calc_m(REQUANT_HEAD_SCALE, REQUANT_HEAD_N);
+} // namespace requant_params
+
 
 
 constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
@@ -452,7 +539,7 @@ constexpr int OUT_PROJ_W_BYTES = div_ceil(OUT_PROJ_W_NIBBLES, 2);
 constexpr int OUT_PROJ_B_BYTES = D_TILE_WO * 4;
 constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
 
-constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 8;
+constexpr int REQUANT_IN_BYTES = (D_MODEL * 4);
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
 constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
@@ -515,12 +602,8 @@ struct INOutProjLayout {
 
 struct INRequantLayout {
     static constexpr int X_BYTES = D_MODEL * 4;
-    static constexpr int M_BYTES = 4;
-    static constexpr int N_BYTES = 4;
     static constexpr int TOTAL_BYTES = REQUANT_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int M = X + X_BYTES;
-    static constexpr int N = M + M_BYTES;
 };
 
 struct INResidLayout {
@@ -743,7 +826,7 @@ constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
 constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
 constexpr int QKV_OUT_BYTES = D_HEADS * 4;
 
-constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 8;
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4);
 constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
 
 constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
@@ -788,12 +871,8 @@ struct INQkvLayout {
 
 struct INHeadRequantLayout {
     static constexpr int X_BYTES = D_HEADS * 4;
-    static constexpr int M_BYTES = 4;
-    static constexpr int N_BYTES = 4;
     static constexpr int TOTAL_BYTES = HEAD_REQUANT_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int M = X + X_BYTES;
-    static constexpr int N = M + M_BYTES;
 };
 
 struct INAttScoresLayout {

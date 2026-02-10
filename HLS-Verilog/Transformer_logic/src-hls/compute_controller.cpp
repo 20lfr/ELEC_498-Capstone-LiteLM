@@ -599,8 +599,30 @@ void compute_controller(
 #pragma HLS PIPELINE II=1
                         x32[i] = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4));
                     }
-                    const int32_t M = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::M);
-                    const int32_t n = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::N);
+                    int32_t M = 1;
+                    int32_t n = 0;
+
+                    // M and N mux
+                    switch (req.op) {
+                        case ComputeOp::CMP_REQUANT1:
+                            M = requant_params::REQUANT1_M;
+                            n = requant_params::REQUANT1_N;
+                            break;
+                        case ComputeOp::CMP_REQUANT2:
+                            M = requant_params::REQUANT2_M;
+                            n = requant_params::REQUANT2_N;
+                            break;
+                        case ComputeOp::CMP_REQUANT3:
+                            M = requant_params::REQUANT3_M;
+                            n = requant_params::REQUANT3_N;
+                            break;
+                        case ComputeOp::CMP_REQUANT4:
+                            M = requant_params::REQUANT4_M;
+                            n = requant_params::REQUANT4_N;
+                            break;
+                        default:
+                            break;
+                    }
                     REQUANT_D_MODEL_int32_to_int8(
                         x32,
                         M,

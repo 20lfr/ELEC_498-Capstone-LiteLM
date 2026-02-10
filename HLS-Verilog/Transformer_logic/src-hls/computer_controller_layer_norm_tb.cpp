@@ -345,32 +345,24 @@ int main() {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), full_accum[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, 1);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT2: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), ln0_out[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, 1);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT3: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), ffn2_out_full[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, 1);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT4: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), ln1_out[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, 1);
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, 1);
                             break;
                         }
                         case ComputeOp::CMP_RESID0: {

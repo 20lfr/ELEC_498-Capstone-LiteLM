@@ -20,6 +20,10 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_548_12 (
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_ce0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_we0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_d0,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_address0,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_ce0,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_d0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_address0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_ce0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_we0,
@@ -52,10 +56,6 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_548_12 (
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_ce0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_we0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_d0,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_address0,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_ce0,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_d0,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_address0,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_ce0,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0,
@@ -90,13 +90,17 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [7:0] in_buf_address0;
+output  [6:0] in_buf_address0;
 output   in_buf_ce0;
 input  [7:0] in_buf_q0;
 output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_address0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_ce0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_we0;
 output  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_d0;
+output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_address0;
+output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_ce0;
+output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0;
+output  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_d0;
 output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_address0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_ce0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_we0;
@@ -129,10 +133,6 @@ output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_boo
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_ce0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_we0;
 output  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_d0;
-output  [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_address0;
-output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_ce0;
-output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0;
-output  [15:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_d0;
 output  [0:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_address0;
 output   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_ce0;
 output   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0;
@@ -173,7 +173,7 @@ reg    ap_ready_int;
 wire   [3:0] trunc_ln548_fu_259_p1;
 reg   [3:0] trunc_ln548_reg_337;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln548_fu_263_p1;
+wire   [63:0] zext_ln720_fu_263_p1;
 wire    ap_block_pp0_stage0;
 reg   [4:0] i_fu_126;
 wire   [4:0] add_ln548_fu_253_p2;
@@ -191,8 +191,6 @@ reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_28_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_ce0_local;
-reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0_local;
-reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_we0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_58_we0_local;
@@ -209,6 +207,8 @@ reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_54_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_we0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_ce0_local;
+reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0_local;
+reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_we0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_we0_local;
@@ -351,7 +351,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd6))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd7))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_50_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_50_we0_local = 1'b0;
@@ -367,7 +367,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd5))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd6))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_51_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_51_we0_local = 1'b0;
@@ -383,7 +383,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd4))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd5))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_52_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_52_we0_local = 1'b0;
@@ -399,7 +399,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd3))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd4))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_53_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_53_we0_local = 1'b0;
@@ -415,7 +415,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd2))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd3))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_54_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_54_we0_local = 1'b0;
@@ -431,7 +431,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd1))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd2))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_55_we0_local = 1'b0;
@@ -447,7 +447,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd9))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_56_we0_local = 1'b0;
@@ -463,7 +463,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd8))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd9))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_57_we0_local = 1'b0;
@@ -479,7 +479,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd7))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (trunc_ln548_reg_337 == 4'd8))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_58_we0_local = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_58_we0_local = 1'b0;
@@ -719,7 +719,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln548_fu_247_p2 = ((ap_sig_allocacmp_i_39 == 5'd16) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln548_fu_263_p1;
+assign in_buf_address0 = zext_ln720_fu_263_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
@@ -775,6 +775,6 @@ assign sext_ln551_fu_307_p1 = $signed(in_buf_q0);
 
 assign trunc_ln548_fu_259_p1 = ap_sig_allocacmp_i_39[3:0];
 
-assign zext_ln548_fu_263_p1 = trunc_ln548_fu_259_p1;
+assign zext_ln720_fu_263_p1 = trunc_ln548_fu_259_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_548_12

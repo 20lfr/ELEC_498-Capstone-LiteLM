@@ -151,9 +151,9 @@ reg   [4:0] i_fu_156;
 wire   [4:0] add_ln78_fu_270_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_i_1;
-wire   [31:0] tmp_52_fu_280_p33;
-wire   [3:0] tmp_52_fu_280_p34;
-wire   [31:0] tmp_52_fu_280_p35;
+wire   [31:0] tmp_48_fu_280_p33;
+wire   [3:0] tmp_48_fu_280_p34;
+wire   [31:0] tmp_48_fu_280_p35;
 wire   [45:0] prod_fu_352_p3;
 wire   [0:0] tmp_fu_364_p3;
 wire   [46:0] select_ln81_fu_372_p3;
@@ -174,22 +174,22 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [3:0] tmp_52_fu_280_p1;
-wire   [3:0] tmp_52_fu_280_p3;
-wire   [3:0] tmp_52_fu_280_p5;
-wire   [3:0] tmp_52_fu_280_p7;
-wire   [3:0] tmp_52_fu_280_p9;
-wire   [3:0] tmp_52_fu_280_p11;
-wire   [3:0] tmp_52_fu_280_p13;
-wire   [3:0] tmp_52_fu_280_p15;
-wire  signed [3:0] tmp_52_fu_280_p17;
-wire  signed [3:0] tmp_52_fu_280_p19;
-wire  signed [3:0] tmp_52_fu_280_p21;
-wire  signed [3:0] tmp_52_fu_280_p23;
-wire  signed [3:0] tmp_52_fu_280_p25;
-wire  signed [3:0] tmp_52_fu_280_p27;
-wire  signed [3:0] tmp_52_fu_280_p29;
-wire  signed [3:0] tmp_52_fu_280_p31;
+wire   [3:0] tmp_48_fu_280_p1;
+wire   [3:0] tmp_48_fu_280_p3;
+wire   [3:0] tmp_48_fu_280_p5;
+wire   [3:0] tmp_48_fu_280_p7;
+wire   [3:0] tmp_48_fu_280_p9;
+wire   [3:0] tmp_48_fu_280_p11;
+wire   [3:0] tmp_48_fu_280_p13;
+wire   [3:0] tmp_48_fu_280_p15;
+wire  signed [3:0] tmp_48_fu_280_p17;
+wire  signed [3:0] tmp_48_fu_280_p19;
+wire  signed [3:0] tmp_48_fu_280_p21;
+wire  signed [3:0] tmp_48_fu_280_p23;
+wire  signed [3:0] tmp_48_fu_280_p25;
+wire  signed [3:0] tmp_48_fu_280_p27;
+wire  signed [3:0] tmp_48_fu_280_p29;
+wire  signed [3:0] tmp_48_fu_280_p31;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -254,9 +254,9 @@ sparsemux_33_4_32_1_1_U1925(
     .din13(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_579),
     .din14(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_580),
     .din15(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_581),
-    .def(tmp_52_fu_280_p33),
-    .sel(tmp_52_fu_280_p34),
-    .dout(tmp_52_fu_280_p35)
+    .def(tmp_48_fu_280_p33),
+    .sel(tmp_48_fu_280_p34),
+    .dout(tmp_48_fu_280_p35)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -545,7 +545,7 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_270 = select_ln88_1_fu_442_p3;
 
-assign prod_fu_352_p3 = {{tmp_52_fu_280_p35}, {14'd0}};
+assign prod_fu_352_p3 = {{tmp_48_fu_280_p35}, {14'd0}};
 
 assign rounded_fu_380_p2 = ($signed(select_ln81_fu_372_p3) + $signed(sext_ln80_fu_360_p1));
 
@@ -561,11 +561,11 @@ assign sext_ln80_fu_360_p1 = $signed(prod_fu_352_p3);
 
 assign tmp_150_fu_396_p4 = {{rounded_fu_380_p2[46:30]}};
 
-assign tmp_52_fu_280_p33 = 'bx;
+assign tmp_48_fu_280_p33 = 'bx;
 
-assign tmp_52_fu_280_p34 = ap_sig_allocacmp_i_1[3:0];
+assign tmp_48_fu_280_p34 = ap_sig_allocacmp_i_1[3:0];
 
-assign tmp_fu_364_p3 = tmp_52_fu_280_p35[32'd31];
+assign tmp_fu_364_p3 = tmp_48_fu_280_p35[32'd31];
 
 assign trunc_ln78_fu_276_p1 = ap_sig_allocacmp_i_1[3:0];
 

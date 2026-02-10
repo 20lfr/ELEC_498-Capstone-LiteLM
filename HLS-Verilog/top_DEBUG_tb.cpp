@@ -168,8 +168,28 @@ static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         for (int i = 0; i < D_MODEL; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4))));
         }
-        const int32_t M = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::M);
-        const int32_t N = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::N);
+        int32_t M = 0;
+        int32_t N = 0;
+        switch (op) {
+            case ComputeOp::CMP_REQUANT1:
+                M = requant_params::REQUANT1_M;
+                N = requant_params::REQUANT1_N;
+                break;
+            case ComputeOp::CMP_REQUANT2:
+                M = requant_params::REQUANT2_M;
+                N = requant_params::REQUANT2_N;
+                break;
+            case ComputeOp::CMP_REQUANT3:
+                M = requant_params::REQUANT3_M;
+                N = requant_params::REQUANT3_N;
+                break;
+            case ComputeOp::CMP_REQUANT4:
+                M = requant_params::REQUANT4_M;
+                N = requant_params::REQUANT4_N;
+                break;
+            default:
+                break;
+        }
         std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
@@ -342,8 +362,28 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         for (int i = 0; i < D_HEADS; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (i * 4))));
         }
-        const int32_t M = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::M);
-        const int32_t N = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::N);
+        int32_t M = 0;
+        int32_t N = 0;
+        switch (op) {
+            case ComputeOp::CMP_K_REQUANT:
+                M = requant_params::REQUANT_K_M;
+                N = requant_params::REQUANT_K_N;
+                break;
+            case ComputeOp::CMP_V_REQUANT:
+                M = requant_params::REQUANT_V_M;
+                N = requant_params::REQUANT_V_N;
+                break;
+            case ComputeOp::CMP_REQUANT_Q:
+                M = requant_params::REQUANT_Q_M;
+                N = requant_params::REQUANT_Q_N;
+                break;
+            case ComputeOp::CMP_HEAD_REQUANT:
+                M = requant_params::REQUANT_HEAD_M;
+                N = requant_params::REQUANT_HEAD_N;
+                break;
+            default:
+                break;
+        }
         std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
@@ -553,19 +593,9 @@ static void build_head_in_buf(int lane, ComputeOp op, uint8_t head_in_buf[HEADS_
                           : (op == ComputeOp::CMP_V_REQUANT) ? g_rq_v_x[lane]
                           : (op == ComputeOp::CMP_REQUANT_Q) ? g_rq_q_x[lane]
                           : g_rq_head_x[lane];
-        const int32_t M = (op == ComputeOp::CMP_K_REQUANT) ? g_rq_k_M[lane]
-                        : (op == ComputeOp::CMP_V_REQUANT) ? g_rq_v_M[lane]
-                        : (op == ComputeOp::CMP_REQUANT_Q) ? g_rq_q_M[lane]
-                        : g_rq_head_M[lane];
-        const int32_t N = (op == ComputeOp::CMP_K_REQUANT) ? g_rq_k_N[lane]
-                        : (op == ComputeOp::CMP_V_REQUANT) ? g_rq_v_N[lane]
-                        : (op == ComputeOp::CMP_REQUANT_Q) ? g_rq_q_N[lane]
-                        : g_rq_head_N[lane];
         for (int h = 0; h < D_HEADS; ++h) {
             compute_buf::write_i32(buf, head_buf::INHeadRequantLayout::X + (h * 4), x[h]);
         }
-        compute_buf::write_i32(buf, head_buf::INHeadRequantLayout::M, M);
-        compute_buf::write_i32(buf, head_buf::INHeadRequantLayout::N, N);
         break;
     }
     case ComputeOp::CMP_ATT_SCORES: {
@@ -1366,19 +1396,9 @@ int main() {
                                            : (op == CMP_REQUANT2) ? rq2_x
                                            : (op == CMP_REQUANT3) ? rq3_x
                                            : rq4_x;
-                        const int32_t M = (op == CMP_REQUANT1) ? rq1_M
-                                         : (op == CMP_REQUANT2) ? rq2_M
-                                         : (op == CMP_REQUANT3) ? rq3_M
-                                         : rq4_M;
-                        const int32_t N = (op == CMP_REQUANT1) ? rq1_N
-                                         : (op == CMP_REQUANT2) ? rq2_N
-                                         : (op == CMP_REQUANT3) ? rq3_N
-                                         : rq4_N;
                         for (int i = 0; i < D_MODEL; ++i) {
                             compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), src[i]);
                         }
-                        compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, M);
-                        compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, N);
                         break;
                     }
                     case CMP_RESID0:

@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.145375,HLS_SYN_LAT=168,HLS_SYN_TPT=none,HLS_SYN_MEM=2,HLS_SYN_DSP=0,HLS_SYN_FF=36121,HLS_SYN_LUT=84322,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.145375,HLS_SYN_LAT=168,HLS_SYN_TPT=none,HLS_SYN_MEM=2,HLS_SYN_DSP=0,HLS_SYN_FF=34650,HLS_SYN_LUT=79517,HLS_VERSION=2025_1}" *)
 
 module transformer_top (
         ap_clk,
@@ -220,10 +220,10 @@ output  [0:0] mem_write_request;
 output   mem_write_request_ap_vld;
 output  [31:0] mem_op;
 output   mem_op_ap_vld;
-output  [7:0] in_buf_address0;
+output  [6:0] in_buf_address0;
 output   in_buf_ce0;
 input  [7:0] in_buf_q0;
-output  [7:0] in_buf_address1;
+output  [6:0] in_buf_address1;
 output   in_buf_ce1;
 input  [7:0] in_buf_q1;
 output  [5:0] out_buf_address0;
@@ -533,9 +533,9 @@ wire   [0:0] grp_compute_controller_fu_1917_mem_write_request;
 wire    grp_compute_controller_fu_1917_mem_write_request_ap_vld;
 wire   [31:0] grp_compute_controller_fu_1917_mem_op;
 wire    grp_compute_controller_fu_1917_mem_op_ap_vld;
-wire   [7:0] grp_compute_controller_fu_1917_in_buf_address0;
+wire   [6:0] grp_compute_controller_fu_1917_in_buf_address0;
 wire    grp_compute_controller_fu_1917_in_buf_ce0;
-wire   [7:0] grp_compute_controller_fu_1917_in_buf_address1;
+wire   [6:0] grp_compute_controller_fu_1917_in_buf_address1;
 wire    grp_compute_controller_fu_1917_in_buf_ce1;
 wire   [5:0] grp_compute_controller_fu_1917_out_buf_address0;
 wire    grp_compute_controller_fu_1917_out_buf_ce0;
@@ -654,8 +654,8 @@ wire   [148:0] and_ln_fu_3237_p4;
 wire   [31:0] tmp_6_fu_3287_p4;
 wire   [148:0] empty_fu_3279_p3;
 wire   [36:0] tmp_7_fu_3305_p4;
-wire   [31:0] empty_139_fu_3297_p3;
-wire   [79:0] empty_140_fu_3315_p1;
+wire   [31:0] empty_137_fu_3297_p3;
+wire   [79:0] empty_138_fu_3315_p1;
 wire   [68:0] tmp_9_fu_3330_p4;
 wire   [78:0] trunc_ln203_fu_3340_p1;
 wire   [213:0] select_ln200_1_fu_3354_p3;
@@ -665,10 +665,10 @@ wire   [0:0] tmp_4_fu_3368_p3;
 wire   [148:0] or_ln200_1_fu_3376_p4;
 wire   [148:0] and_ln1_fu_3344_p4;
 wire   [31:0] tmp_s_fu_3394_p4;
-wire   [148:0] empty_141_fu_3386_p3;
+wire   [148:0] empty_139_fu_3386_p3;
 wire   [36:0] tmp_5_fu_3412_p4;
-wire   [31:0] empty_142_fu_3404_p3;
-wire   [79:0] empty_143_fu_3422_p1;
+wire   [31:0] empty_140_fu_3404_p3;
+wire   [79:0] empty_141_fu_3422_p1;
 wire   [139:0] tmp_10_fu_3482_p4;
 wire   [1:0] tmp_11_fu_3494_p4;
 wire   [71:0] trunc_ln224_fu_3491_p1;
@@ -1971,15 +1971,15 @@ assign dbg_req_op = grp_compute_controller_fu_1917_ap_return_2;
 
 assign dbg_req_tile = grp_compute_controller_fu_1917_ap_return_5;
 
-assign empty_139_fu_3297_p3 = ((grp_fu_2921_p2[0:0] == 1'b1) ? tmp_6_fu_3287_p4 : 32'd0);
+assign empty_137_fu_3297_p3 = ((grp_fu_2921_p2[0:0] == 1'b1) ? tmp_6_fu_3287_p4 : 32'd0);
 
-assign empty_140_fu_3315_p1 = empty_fu_3279_p3[79:0];
+assign empty_138_fu_3315_p1 = empty_fu_3279_p3[79:0];
 
-assign empty_141_fu_3386_p3 = ((grp_fu_2921_p2[0:0] == 1'b1) ? or_ln200_1_fu_3376_p4 : and_ln1_fu_3344_p4);
+assign empty_139_fu_3386_p3 = ((grp_fu_2921_p2[0:0] == 1'b1) ? or_ln200_1_fu_3376_p4 : and_ln1_fu_3344_p4);
 
-assign empty_142_fu_3404_p3 = ((grp_fu_2921_p2[0:0] == 1'b1) ? tmp_s_fu_3394_p4 : 32'd0);
+assign empty_140_fu_3404_p3 = ((grp_fu_2921_p2[0:0] == 1'b1) ? tmp_s_fu_3394_p4 : 32'd0);
 
-assign empty_143_fu_3422_p1 = empty_141_fu_3386_p3[79:0];
+assign empty_141_fu_3422_p1 = empty_139_fu_3386_p3[79:0];
 
 assign empty_fu_3279_p3 = ((grp_fu_2921_p2[0:0] == 1'b1) ? or_ln_fu_3269_p4 : and_ln_fu_3237_p4);
 
@@ -2197,9 +2197,9 @@ assign select_ln200_fu_3247_p3 = ((grp_fu_2927_p2[0:0] == 1'b1) ? head_ctx_ref_2
 
 assign status_mem = {{{{ctrl_mem_interface_layer_index}, {ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5}}, {ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6}}, {ap_sig_allocacmp_ctrl_mem_interface_status_load}};
 
-assign storemerge255_partset_fu_3426_p4 = {{{tmp_5_fu_3412_p4}, {empty_142_fu_3404_p3}}, {empty_143_fu_3422_p1}};
+assign storemerge255_partset_fu_3426_p4 = {{{tmp_5_fu_3412_p4}, {empty_140_fu_3404_p3}}, {empty_141_fu_3422_p1}};
 
-assign storemerge_partset_fu_3319_p4 = {{{tmp_7_fu_3305_p4}, {empty_139_fu_3297_p3}}, {empty_140_fu_3315_p1}};
+assign storemerge_partset_fu_3319_p4 = {{{tmp_7_fu_3305_p4}, {empty_137_fu_3297_p3}}, {empty_138_fu_3315_p1}};
 
 assign stream_start = grp_scheduler_hls_fu_1782_ap_return_2;
 
@@ -2245,7 +2245,7 @@ assign tmp_3_fu_3261_p3 = zext_ln200_fu_3257_p1[32'd74];
 
 assign tmp_4_fu_3368_p3 = zext_ln200_1_fu_3364_p1[32'd74];
 
-assign tmp_5_fu_3412_p4 = {{empty_141_fu_3386_p3[148:112]}};
+assign tmp_5_fu_3412_p4 = {{empty_139_fu_3386_p3[148:112]}};
 
 assign tmp_6_fu_3287_p4 = {{select_ln200_fu_3247_p3[106:75]}};
 

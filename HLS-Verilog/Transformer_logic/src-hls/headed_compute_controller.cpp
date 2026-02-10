@@ -445,8 +445,30 @@ static void headed_compute_controller_lane(
 #pragma HLS PIPELINE II=1
                         head_x32[h] = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4));
                     }
-                    const int32_t M = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::M);
-                    const int32_t n = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::N);
+                    int32_t M = 1;
+                    int32_t n = 0;
+
+                    // M and N mux
+                    switch (ctx.req.op) {
+                        case ComputeOp::CMP_K_REQUANT:
+                            M = requant_params::REQUANT_K_M;
+                            n = requant_params::REQUANT_K_N;
+                            break;
+                        case ComputeOp::CMP_V_REQUANT:
+                            M = requant_params::REQUANT_V_M;
+                            n = requant_params::REQUANT_V_N;
+                            break;
+                        case ComputeOp::CMP_REQUANT_Q:
+                            M = requant_params::REQUANT_Q_M;
+                            n = requant_params::REQUANT_Q_N;
+                            break;
+                        case ComputeOp::CMP_HEAD_REQUANT:
+                            M = requant_params::REQUANT_HEAD_M;
+                            n = requant_params::REQUANT_HEAD_N;
+                            break;
+                        default:
+                            break;
+                    }
                     REQUANT_D_HEADS_int32_to_int8(head_x32, M, n, head_y8);
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1

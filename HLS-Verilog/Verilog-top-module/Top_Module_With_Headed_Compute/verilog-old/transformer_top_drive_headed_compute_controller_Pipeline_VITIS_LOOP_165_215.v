@@ -64,9 +64,9 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_165_2
         exp_buf_33_out_ap_vld,
         sum_exp_2_out,
         sum_exp_2_out_ap_vld,
-        exp_lut_q15_address0,
-        exp_lut_q15_ce0,
-        exp_lut_q15_q0
+        exp_lut_q15_1_address0,
+        exp_lut_q15_1_ce0,
+        exp_lut_q15_1_q0
 );
 
 parameter    ap_ST_fsm_pp0_stage0 = 1'd1;
@@ -128,9 +128,9 @@ output  [15:0] exp_buf_33_out;
 output   exp_buf_33_out_ap_vld;
 output  [18:0] sum_exp_2_out;
 output   sum_exp_2_out_ap_vld;
-output  [8:0] exp_lut_q15_address0;
-output   exp_lut_q15_ce0;
-input  [14:0] exp_lut_q15_q0;
+output  [8:0] exp_lut_q15_1_address0;
+output   exp_lut_q15_1_ce0;
+input  [14:0] exp_lut_q15_1_q0;
 
 reg ap_idle;
 reg exp_buf_48_out_ap_vld;
@@ -194,7 +194,7 @@ reg   [15:0] exp_buf_13_fu_230;
 reg   [15:0] exp_buf_14_fu_234;
 reg   [15:0] exp_buf_15_fu_238;
 wire    ap_block_pp0_stage0_01001;
-reg    exp_lut_q15_ce0_local;
+reg    exp_lut_q15_1_ce0_local;
 wire   [15:0] tmp_55_fu_505_p33;
 wire   [3:0] tmp_55_fu_505_p34;
 wire   [15:0] tmp_55_fu_505_p35;
@@ -299,7 +299,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U1780(
+sparsemux_33_4_16_1_1_U1818(
     .din0(max_val_3),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_535),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_536),
@@ -333,10 +333,10 @@ sparsemux_33_4_16_1_1_U1780(
     .def_WIDTH( 15 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 15 ))
-sparsemux_7_2_15_1_1_U1781(
+sparsemux_7_2_15_1_1_U1819(
     .din0(15'd32767),
     .din1(15'd12055),
-    .din2(exp_lut_q15_q0),
+    .din2(exp_lut_q15_1_q0),
     .def(e_q15_fu_677_p7),
     .sel(e_q15_fu_677_p8),
     .dout(e_q15_fu_677_p9)
@@ -691,9 +691,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        exp_lut_q15_ce0_local = 1'b1;
+        exp_lut_q15_1_ce0_local = 1'b1;
     end else begin
-        exp_lut_q15_ce0_local = 1'b0;
+        exp_lut_q15_1_ce0_local = 1'b0;
     end
 end
 
@@ -778,9 +778,9 @@ assign exp_buf_47_out = exp_buf_14_fu_234;
 
 assign exp_buf_48_out = exp_buf_15_fu_238;
 
-assign exp_lut_q15_address0 = zext_ln137_fu_621_p1;
+assign exp_lut_q15_1_address0 = zext_ln137_fu_621_p1;
 
-assign exp_lut_q15_ce0 = exp_lut_q15_ce0_local;
+assign exp_lut_q15_1_ce0 = exp_lut_q15_1_ce0_local;
 
 assign icmp_ln133_fu_597_p2 = ((diff_fu_577_p2 == 16'd32768) ? 1'b1 : 1'b0);
 

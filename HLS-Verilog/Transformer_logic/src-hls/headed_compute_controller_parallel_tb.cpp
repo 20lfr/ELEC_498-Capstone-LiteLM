@@ -603,13 +603,11 @@ int main() {
                                                   : (mem_op_code == ComputeOp::CMP_V_REQUANT) ? rq_v_in[lane]
                                                   : (mem_op_code == ComputeOp::CMP_REQUANT_Q) ? rq_q_in[lane]
                                                   : rq_head_in[lane];
-                                for (int h = 0; h < D_HEADS; ++h) {
-                                    compute_buf::write_i32(in_buf[lane], head_buf::INHeadRequantLayout::X + (h * 4), src[h]);
-                                }
-                                compute_buf::write_i32(in_buf[lane], head_buf::INHeadRequantLayout::M, rq_M);
-                                compute_buf::write_i32(in_buf[lane], head_buf::INHeadRequantLayout::N, rq_N);
-                                break;
+                            for (int h = 0; h < D_HEADS; ++h) {
+                                compute_buf::write_i32(in_buf[lane], head_buf::INHeadRequantLayout::X + (h * 4), src[h]);
                             }
+                            break;
+                        }
                             case ComputeOp::CMP_ATT_SCORES: {
                                 for (int h = 0; h < D_HEADS; ++h) {
                                     compute_buf::write_i8(in_buf[lane], head_buf::INAttScoresLayout::Q + h, att_q[lane][h]);
