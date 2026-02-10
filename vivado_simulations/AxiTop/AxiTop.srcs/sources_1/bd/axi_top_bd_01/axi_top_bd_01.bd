@@ -3261,9 +3261,9 @@
       },
       "axi_top_0": {
         "vlnv": "xilinx.com:hls:axi_top:1.0",
-        "ip_revision": "2114471845",
-        "xci_name": "axi_top_bd_01_axi_top_0_0",
-        "xci_path": "ip/axi_top_bd_01_axi_top_0_0/axi_top_bd_01_axi_top_0_0.xci",
+        "ip_revision": "2114474792",
+        "xci_name": "axi_top_bd_01_axi_top_0_1",
+        "xci_path": "ip/axi_top_bd_01_axi_top_0_1/axi_top_bd_01_axi_top_0_1.xci",
         "inst_hier_path": "axi_top_0",
         "has_run_ip_tcl": "true"
       }

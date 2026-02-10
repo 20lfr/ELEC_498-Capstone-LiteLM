@@ -1,19 +1,19 @@
 {
   "schema": "xilinx.com:schema:json_instance:1.0",
   "ip_inst": {
-    "xci_name": "axi_top_bd_01_axi_top_0_0",
+    "xci_name": "axi_top_bd_01_axi_top_0_1",
     "cell_name": "axi_top_0",
     "component_reference": "xilinx.com:hls:axi_top:1.0",
-    "ip_revision": "2114471845",
-    "gen_directory": "../../../../../../AxiTop.gen/sources_1/bd/axi_top_bd_01/ip/axi_top_bd_01_axi_top_0_0",
+    "ip_revision": "2114474792",
+    "gen_directory": "../../../../../../AxiTop.gen/sources_1/bd/axi_top_bd_01/ip/axi_top_bd_01_axi_top_0_1",
     "parameters": {
       "component_parameters": {
-        "Component_Name": [ { "value": "axi_top_bd_01_axi_top_0_0", "resolve_type": "user", "usage": "all" } ],
+        "Component_Name": [ { "value": "axi_top_bd_01_axi_top_0_1", "resolve_type": "user", "usage": "all" } ],
         "clk_period": [ { "value": "10", "enabled": false, "usage": "all" } ],
         "machine": [ { "value": "64", "enabled": false, "usage": "all" } ],
         "combinational": [ { "value": "0", "enabled": false, "usage": "all" } ],
-        "latency": [ { "value": "1", "enabled": false, "usage": "all" } ],
-        "II": [ { "value": "2 ~ 49", "enabled": false, "usage": "all" } ]
+        "latency": [ { "value": "2", "enabled": false, "usage": "all" } ],
+        "II": [ { "value": "3 ~ 49", "enabled": false, "usage": "all" } ]
       },
       "model_parameters": {
         "C_S_AXI_CONTROL_ADDR_WIDTH": [ { "value": "8", "resolve_type": "generated", "format": "long", "usage": "all" } ],
@@ -34,9 +34,9 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
-        "IPREVISION": [ { "value": "2114471845" } ],
+        "IPREVISION": [ { "value": "2114474792" } ],
         "MANAGED": [ { "value": "TRUE" } ],
-        "OUTPUTDIR": [ { "value": "../../../../../../AxiTop.gen/sources_1/bd/axi_top_bd_01/ip/axi_top_bd_01_axi_top_0_0" } ],
+        "OUTPUTDIR": [ { "value": "../../../../../../AxiTop.gen/sources_1/bd/axi_top_bd_01/ip/axi_top_bd_01_axi_top_0_1" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],
         "SHAREDDIR": [ { "value": "../../ipshared" } ],
         "SWVERSION": [ { "value": "2025.1" } ],
@@ -177,18 +177,15 @@
           }
         },
         "irq_ps": {
-          "vlnv": "xilinx.com:signal:data:1.0",
-          "abstraction_type": "xilinx.com:signal:data_rtl:1.0",
+          "vlnv": "xilinx.com:signal:interrupt:1.0",
+          "abstraction_type": "xilinx.com:signal:interrupt_rtl:1.0",
           "mode": "master",
           "parameters": {
-            "LAYERED_METADATA": [ { "value": "undef", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
-            "SENSITIVITY": [ { "value": "", "value_src": "weak", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
-            "PortWidth": [ { "value": "", "value_src": "weak", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
-            "PortType": [ { "value": "", "value_src": "weak", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
-            "PortType.PROP_SRC": [ { "value": "", "value_src": "weak", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ]
+            "SENSITIVITY": [ { "value": "LEVEL_HIGH", "value_src": "constant", "value_permission": "bd_and_user", "usage": "all" } ],
+            "PortWidth": [ { "value": "1", "value_src": "default_prop", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ]
           },
           "port_maps": {
-            "DATA": [ { "physical_name": "irq_ps" } ]
+            "INTERRUPT": [ { "physical_name": "irq_ps" } ]
           }
         },
         "input_token": {

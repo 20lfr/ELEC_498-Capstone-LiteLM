@@ -34,12 +34,10 @@ void axi_top(
     #pragma HLS ARRAY_PARTITION variable=logit_buf cyclic factor=4
     
     // INTERFACE INSTANCES
-    static ControlMemInterface ctrl_intf;
-    static LogitStreamInterface stream_intf;
+    static ControlMemInterface ctrl_mem_interface;
+    static LogitStreamInterface logit_stream_interface;
 
-    // CONTROL INPUT PROCESSING
-    ctrl_intf.update_inputs(ctrl_mem);
-    StatusMemSpace &local_status = ctrl_intf.get_mutable_status();
+    StatusMemSpace &local_status = ctrl_mem_interface.get_mutable_status();
 
     // Scheduler state
     bool done = false;
@@ -62,7 +60,7 @@ void axi_top(
     } else if (start) {
         local_status.status = STATUS_BUSY_BIT;
 
-        bool received_ok = stream_intf.receive_token(input_token, token_buf);
+        bool received_ok = logit_stream_interface.receive_token(input_token, token_buf);
         if (!received_ok) {
             local_status.status = STATUS_ERROR;
             local_status.error_code = ERR_INPUT_STREAM;
@@ -74,11 +72,16 @@ void axi_top(
             #pragma HLS UNROLL factor=4
             logit_buf[i] = token_buf[i] + 1;  // Simple test: increment each value
         }
-    
-        stream_intf.send_logit(output_logit, logit_buf);
-      
+ 
+        logit_stream_interface.send_logit(output_logit, logit_buf);
+ 
         done = true;
     }
-    irq_ps = ctrl_intf.compute_irq(ctrl_mem.irq_mask, done, error);
+
+    // CONTROL INPUT PROCESSING
+    ctrl_mem_interface.check_errors(ctrl_mem, error, error);
+    ctrl_mem_interface.check_control(ctrl_mem, done);
+    irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
+
     status_mem = local_status;
 }

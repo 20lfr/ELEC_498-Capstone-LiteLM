@@ -4,15 +4,14 @@
 class ControlMemInterface {
 private:
     StatusMemSpace local_status{};
-    
+ 
     // Maskable bits for IRQ generation
     static constexpr uint32_t kMaskableBits = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
-    
+
 public:
     ControlMemInterface() = default;
 
     // 1. Process Inputs (PS -> PL)
-    // Call this at the start
     void check_errors(const ControlMemSpace &ctrl_mem, bool scheduler_error, bool compute_error) {
         #pragma HLS INLINE
 
@@ -35,7 +34,7 @@ public:
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
                 local_status.status = STATUS_ERROR;
-                local_status.error_code |= ERR_DMA_ZERO_STRIDE;  // Reuse zero-length error code
+                local_status.error_code |= ERR_DMA_ZERO_STRIDE;
             }
         }
 
@@ -50,7 +49,7 @@ public:
                 local_status.error_code |= ERR_DMA_ALIGNMENT;
             }
         }
-    
+
         if(scheduler_error){
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
@@ -85,16 +84,13 @@ public:
         }
     }
 
-    // 3. Compute IRQ output (replaces irq_wizard)
-    // Call after scheduler sets done/error flags
+    // 3. Compute IRQ output
     // Returns: true if IRQ should be asserted to PS
     inline bool compute_irq(uint32_t irq_mask) {
         #pragma HLS INLINE
         return (local_status.irq_status & (irq_mask & kMaskableBits)) != 0; 
     }
 
-    // 4. Output State (PL -> PS)
-    // call at the end to push data to AXI
     StatusMemSpace& get_mutable_status() {
         #pragma HLS INLINE
         return local_status;
