@@ -4,7 +4,7 @@
     "xci_name": "axi_top_bd_01_axi_top_0_0",
     "cell_name": "axi_top_0",
     "component_reference": "xilinx.com:hls:axi_top:1.0",
-    "ip_revision": "2114470907",
+    "ip_revision": "2114471845",
     "gen_directory": "../../../../../../AxiTop.gen/sources_1/bd/axi_top_bd_01/ip/axi_top_bd_01_axi_top_0_0",
     "parameters": {
       "component_parameters": {
@@ -34,7 +34,7 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
-        "IPREVISION": [ { "value": "2114470907" } ],
+        "IPREVISION": [ { "value": "2114471845" } ],
         "MANAGED": [ { "value": "TRUE" } ],
         "OUTPUTDIR": [ { "value": "../../../../../../AxiTop.gen/sources_1/bd/axi_top_bd_01/ip/axi_top_bd_01_axi_top_0_0" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],

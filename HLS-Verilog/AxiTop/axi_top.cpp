@@ -53,6 +53,12 @@ void axi_top(
         // In reset - do nothing
         local_status.status = STATUS_IDLE;
         irq_ps = false;
+
+        for (int i = 0; i < D_MODEL; i++) {
+            #pragma HLS UNROLL
+            token_buf[i] = 0;
+            logit_buf[i] = 0;
+        }
     } else if (start) {
         local_status.status = STATUS_BUSY_BIT;
 
