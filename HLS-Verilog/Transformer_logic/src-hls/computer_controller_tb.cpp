@@ -187,20 +187,20 @@ void print_buffer(const char *label, const uint8_t *buf, int size) {
 void print_ln_in_buf(const uint8_t *in_buf) {
     std::printf("LN in_buf (decoded):\n  X:");
     for (int i = 0; i < D_MODEL; ++i) {
-        std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::LayerNormLayout::X + i)));
+        std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + i)));
     }
     std::printf("\n  GAMMA:");
     for (int i = 0; i < D_MODEL; ++i) {
-        std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4))));
+        std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4))));
     }
-    const int32_t eps = compute_buf::read_i32(in_buf, compute_buf::LayerNormLayout::EPS);
+    const int32_t eps = compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::EPS);
     std::printf("\n  EPS: %d\n", static_cast<int>(eps));
 }
 
 void print_ln_out_buf(const uint8_t *out_buf) {
     std::printf("LN out_buf (decoded):\n  Y:");
     for (int i = 0; i < D_MODEL; ++i) {
-        std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, compute_buf::LayerNormLayout::X + (i * 4))));
+        std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, compute_buf::INLayerNormLayout::X + (i * 4))));
     }
     std::printf("\n");
 }
@@ -210,15 +210,15 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_OUT_PROJ: {
         std::printf("OUT_PROJ in_buf (decoded):\n  ACT:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::OutProjLayout::ACT + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::INOutProjLayout::ACT + i)));
         }
         std::printf("\n  W:");
         for (int i = 0; i < D_MODEL * D_TILE_WO; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::OutProjLayout::W * 2) + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::INOutProjLayout::W * 2) + i)));
         }
         std::printf("\n  B:");
         for (int i = 0; i < D_TILE_WO; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::OutProjLayout::B + (i * 4))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INOutProjLayout::B + (i * 4))));
         }
         std::printf("\n");
         break;
@@ -229,10 +229,10 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_REQUANT4: {
         std::printf("REQUANT in_buf (decoded):\n  X:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::RequantLayout::X + (i * 4))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4))));
         }
-        const int32_t M = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::M);
-        const int32_t N = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::N);
+        const int32_t M = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::M);
+        const int32_t N = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::N);
         std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
@@ -240,11 +240,11 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_RESID1: {
         std::printf("RESID in_buf (decoded):\n  X:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::X + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i)));
         }
         std::printf("\n  R:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::ResidLayout::R + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::R + i)));
         }
         std::printf("\n");
         break;
@@ -256,27 +256,31 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_FFN_W1: {
         std::printf("FFN_W1 in_buf (decoded):\n  X:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::FfnW1Layout::X + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::INFfnW1Layout::X + i)));
         }
         std::printf("\n  W:");
         for (int i = 0; i < D_MODEL * D_TILE_W1; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::FfnW1Layout::W * 2) + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::INFfnW1Layout::W * 2) + i)));
         }
         std::printf("\n  B:");
         for (int i = 0; i < D_TILE_W1; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::FfnW1Layout::B + (i * 4))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INFfnW1Layout::B + (i * 4))));
         }
         std::printf("\n  S:");
         for (int i = 0; i < D_TILE_W1; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnW1Layout::S + (i * 2))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnW1Layout::S + (i * 2))));
         }
         std::printf("\n");
         break;
     }
     case ComputeOp::CMP_FFN_ACT: {
-        std::printf("FFN_ACT in_buf (decoded):\n  X:");
+        std::printf("FFN_ACT in_buf (decoded):\n  GATE:");
         for (int i = 0; i < D_FFN; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnActLayout::X + (i * 2))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2))));
+        }
+        std::printf("\n  UP:");
+        for (int i = 0; i < D_FFN; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::UP + (i * 2))));
         }
         std::printf("\n");
         break;
@@ -284,19 +288,19 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_FFN_W2: {
         std::printf("FFN_W2 in_buf (decoded):\n  X:");
         for (int i = 0; i < D_FFN; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnW2Layout::X + (i * 2))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnW2Layout::X + (i * 2))));
         }
         std::printf("\n  W:");
         for (int i = 0; i < D_FFN * D_TILE_W2; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::FfnW2Layout::W * 2) + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (compute_buf::INFfnW2Layout::W * 2) + i)));
         }
         std::printf("\n  B:");
         for (int i = 0; i < D_TILE_W2; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::FfnW2Layout::B + (i * 4))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INFfnW2Layout::B + (i * 4))));
         }
         std::printf("\n  S:");
         for (int i = 0; i < D_TILE_W2; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::FfnW2Layout::S + (i * 2))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnW2Layout::S + (i * 2))));
         }
         std::printf("\n");
         break;
@@ -323,7 +327,7 @@ void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     case ComputeOp::CMP_REQUANT4: {
         std::printf("REQUANT out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::RequantLayout::X + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i)));
         }
         std::printf("\n");
         break;
@@ -332,7 +336,7 @@ void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     case ComputeOp::CMP_RESID1: {
         std::printf("RESID out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::ResidLayout::X + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::INResidLayout::X + i)));
         }
         std::printf("\n");
         break;
@@ -352,7 +356,7 @@ void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     case ComputeOp::CMP_FFN_ACT: {
         std::printf("FFN_ACT out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_FFN; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(out_buf, compute_buf::FfnActLayout::X + (i * 2))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(out_buf, compute_buf::INFfnActLayout::OUT + (i * 2))));
         }
         std::printf("\n");
         break;
@@ -425,7 +429,8 @@ int main() {
     int32_t ln0_eps = 0;
     int32_t ln1_eps = 0;
     int8_t ffn1_x[D_MODEL] = {};
-    int16_t ffn_act_in[D_FFN] = {};
+    int16_t ffn_gate_in[D_FFN] = {};
+    int16_t ffn_up_in[D_FFN] = {};
     int16_t ffn2_x[D_FFN] = {};
     int32_t rq1_M = 1;
     int32_t rq1_N = 0;
@@ -491,7 +496,8 @@ int main() {
     ln0_eps = 2;
     ln1_eps = 3;
     for (int i = 0; i < D_FFN; ++i) {
-        ffn_act_in[i] = static_cast<int16_t>((i * 13) - 40);
+        ffn_gate_in[i] = static_cast<int16_t>((i * 13) - 40);
+        ffn_up_in[i] = static_cast<int16_t>((i * 7) - 20);
         ffn2_x[i] = static_cast<int16_t>((i * 9) - 30);
     }
     choose_requant_params(rq1_in, D_MODEL, rq1_M, rq1_N);
@@ -569,7 +575,7 @@ int main() {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i8(
                                     in_buf,
-                                    compute_buf::OutProjLayout::ACT + i,
+                                    compute_buf::INOutProjLayout::ACT + i,
                                     valueA_mem[i]);
                             }
 
@@ -577,7 +583,7 @@ int main() {
                             for (int i = 0; i < D_MODEL * D_TILE_WO; ++i) {
                                 compute_buf::write_i4(
                                     in_buf,
-                                    (compute_buf::OutProjLayout::W * 2) + i,
+                                    (compute_buf::INOutProjLayout::W * 2) + i,
                                     valueB_in[i]);
                             }
 
@@ -585,88 +591,88 @@ int main() {
                             for (int t = 0; t < D_TILE_WO; ++t) {
                                 compute_buf::write_i32(
                                     in_buf,
-                                    compute_buf::OutProjLayout::B + (t * 4),
+                                    compute_buf::INOutProjLayout::B + (t * 4),
                                     full_bias[out_base + t]);
                             }
                             break;
                         }
                         case ComputeOp::CMP_REQUANT1: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i32(in_buf, compute_buf::RequantLayout::X + (i * 4), rq1_in[i]);
+                                compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), rq1_in[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq1_M);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq1_N);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, rq1_M);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, rq1_N);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT2: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i32(in_buf, compute_buf::RequantLayout::X + (i * 4), rq2_in[i]);
+                                compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), rq2_in[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq2_M);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq2_N);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, rq2_M);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, rq2_N);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT3: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i32(in_buf, compute_buf::RequantLayout::X + (i * 4), rq3_in[i]);
+                                compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), rq3_in[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq3_M);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq3_N);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, rq3_M);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, rq3_N);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT4: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i32(in_buf, compute_buf::RequantLayout::X + (i * 4), rq4_in[i]);
+                                compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), rq4_in[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq4_M);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq4_N);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::M, rq4_M);
+                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::N, rq4_N);
                             break;
                         }
                         case ComputeOp::CMP_RESID0: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i8(in_buf, compute_buf::ResidLayout::X + i, resid0_x[i]);
-                                compute_buf::write_i8(in_buf, compute_buf::ResidLayout::R + i, resid0_r[i]);
+                                compute_buf::write_i8(in_buf, compute_buf::INResidLayout::X + i, resid0_x[i]);
+                                compute_buf::write_i8(in_buf, compute_buf::INResidLayout::R + i, resid0_r[i]);
                             }
                             break;
                         }
                         case ComputeOp::CMP_RESID1: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i8(in_buf, compute_buf::ResidLayout::X + i, resid1_x[i]);
-                                compute_buf::write_i8(in_buf, compute_buf::ResidLayout::R + i, resid1_r[i]);
+                                compute_buf::write_i8(in_buf, compute_buf::INResidLayout::X + i, resid1_x[i]);
+                                compute_buf::write_i8(in_buf, compute_buf::INResidLayout::R + i, resid1_r[i]);
                             }
                             break;
                         }
                         case ComputeOp::CMP_LN0: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i8(in_buf, compute_buf::LayerNormLayout::X + i, ln0_x[i]);
-                                compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4), ln0_gamma[i]);
+                                compute_buf::write_i8(in_buf, compute_buf::INLayerNormLayout::X + i, ln0_x[i]);
+                                compute_buf::write_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), ln0_gamma[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::EPS, ln0_eps);
+                            compute_buf::write_i32(in_buf, compute_buf::INLayerNormLayout::EPS, ln0_eps);
                             break;
                         }
                         case ComputeOp::CMP_LN1: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i8(in_buf, compute_buf::LayerNormLayout::X + i, ln1_x[i]);
-                                compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::GAMMA + (i * 4), ln1_gamma[i]);
+                                compute_buf::write_i8(in_buf, compute_buf::INLayerNormLayout::X + i, ln1_x[i]);
+                                compute_buf::write_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), ln1_gamma[i]);
                             }
-                            compute_buf::write_i32(in_buf, compute_buf::LayerNormLayout::EPS, ln1_eps);
+                            compute_buf::write_i32(in_buf, compute_buf::INLayerNormLayout::EPS, ln1_eps);
                             break;
                         }
                         case ComputeOp::CMP_FFN_W1: {
                             const int out_base = mem_tile_idx * D_TILE_W1;
                             load_tile_weights_w1(ffn1_weights, ffn1_weights_full, mem_tile_idx);
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i8(in_buf, compute_buf::FfnW1Layout::X + i, ffn1_x[i]);
+                                compute_buf::write_i8(in_buf, compute_buf::INFfnW1Layout::X + i, ffn1_x[i]);
                             }
                             for (int i = 0; i < D_MODEL * D_TILE_W1; ++i) {
-                                compute_buf::write_i4(in_buf, (compute_buf::FfnW1Layout::W * 2) + i, ffn1_weights[i]);
+                                compute_buf::write_i4(in_buf, (compute_buf::INFfnW1Layout::W * 2) + i, ffn1_weights[i]);
                             }
                             for (int i = 0; i < D_TILE_W1; ++i) {
                                 const int idx = out_base + i;
                                 const int32_t b = (idx < D_MODEL) ? ffn1_bias_full[idx] : 0;
                                 const int16_t s = (idx < D_MODEL) ? ffn1_scale_full[idx] : 0;
-                                compute_buf::write_i32(in_buf, compute_buf::FfnW1Layout::B + (i * 4), b);
-                                compute_buf::write_i16(in_buf, compute_buf::FfnW1Layout::S + (i * 2), s);
+                                compute_buf::write_i32(in_buf, compute_buf::INFfnW1Layout::B + (i * 4), b);
+                                compute_buf::write_i16(in_buf, compute_buf::INFfnW1Layout::S + (i * 2), s);
                             }
                             break;
                         }
@@ -674,8 +680,12 @@ int main() {
                             for (int i = 0; i < D_FFN; ++i) {
                                 compute_buf::write_i16(
                                     in_buf,
-                                    compute_buf::FfnActLayout::X + (i * 2),
-                                    ffn_act_in[i]);
+                                    compute_buf::INFfnActLayout::GATE + (i * 2),
+                                    ffn_gate_in[i]);
+                                compute_buf::write_i16(
+                                    in_buf,
+                                    compute_buf::INFfnActLayout::UP + (i * 2),
+                                    ffn_up_in[i]);
                             }
                             break;
                         }
@@ -683,17 +693,17 @@ int main() {
                             const int out_base = mem_tile_idx * D_TILE_W2;
                             load_tile_weights_w2(ffn2_weights, ffn2_weights_full, mem_tile_idx);
                             for (int i = 0; i < D_FFN; ++i) {
-                                compute_buf::write_i16(in_buf, compute_buf::FfnW2Layout::X + (i * 2), ffn2_x[i]);
+                                compute_buf::write_i16(in_buf, compute_buf::INFfnW2Layout::X + (i * 2), ffn2_x[i]);
                             }
                             for (int i = 0; i < D_FFN * D_TILE_W2; ++i) {
-                                compute_buf::write_i4(in_buf, (compute_buf::FfnW2Layout::W * 2) + i, ffn2_weights[i]);
+                                compute_buf::write_i4(in_buf, (compute_buf::INFfnW2Layout::W * 2) + i, ffn2_weights[i]);
                             }
                             for (int i = 0; i < D_TILE_W2; ++i) {
                                 const int idx = out_base + i;
                                 const int32_t b = (idx < D_FFN) ? ffn2_bias_full[idx] : 0;
                                 const int16_t s = (idx < D_FFN) ? ffn2_scale_full[idx] : 0;
-                                compute_buf::write_i32(in_buf, compute_buf::FfnW2Layout::B + (i * 4), b);
-                                compute_buf::write_i16(in_buf, compute_buf::FfnW2Layout::S + (i * 2), s);
+                                compute_buf::write_i32(in_buf, compute_buf::INFfnW2Layout::B + (i * 4), b);
+                                compute_buf::write_i16(in_buf, compute_buf::INFfnW2Layout::S + (i * 2), s);
                             }
                             break;
                         }
@@ -717,49 +727,49 @@ int main() {
                         }
                         case ComputeOp::CMP_REQUANT1: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                rq1_out[i] = compute_buf::read_i8(out_buf, compute_buf::RequantLayout::X + i);
+                                rq1_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }
                             break;
                         }
                         case ComputeOp::CMP_REQUANT2: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                head_requant_out[i] = compute_buf::read_i8(out_buf, compute_buf::RequantLayout::X + i);
+                                head_requant_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }
                             break;
                         }
                         case ComputeOp::CMP_REQUANT3: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                rq3_out[i] = compute_buf::read_i8(out_buf, compute_buf::RequantLayout::X + i);
+                                rq3_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }
                             break;
                         }
                         case ComputeOp::CMP_REQUANT4: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                rq4_out[i] = compute_buf::read_i8(out_buf, compute_buf::RequantLayout::X + i);
+                                rq4_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }
                             break;
                         }
                         case ComputeOp::CMP_RESID0: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                resid0_out[i] = compute_buf::read_i8(out_buf, compute_buf::ResidLayout::X + i);
+                                resid0_out[i] = compute_buf::read_i8(out_buf, compute_buf::INResidLayout::X + i);
                             }
                             break;
                         }
                         case ComputeOp::CMP_RESID1: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                resid1_out[i] = compute_buf::read_i8(out_buf, compute_buf::ResidLayout::X + i);
+                                resid1_out[i] = compute_buf::read_i8(out_buf, compute_buf::INResidLayout::X + i);
                             }
                             break;
                         }
                         case ComputeOp::CMP_LN0: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                ln0_out[i] = compute_buf::read_i32(out_buf, compute_buf::LayerNormLayout::X + (i * 4));
+                                ln0_out[i] = compute_buf::read_i32(out_buf, compute_buf::INLayerNormLayout::X + (i * 4));
                             }
                             break;
                         }
                         case ComputeOp::CMP_LN1: {
                             for (int i = 0; i < D_MODEL; ++i) {
-                                ln1_out[i] = compute_buf::read_i32(out_buf, compute_buf::LayerNormLayout::X + (i * 4));
+                                ln1_out[i] = compute_buf::read_i32(out_buf, compute_buf::INLayerNormLayout::X + (i * 4));
                             }
                             break;
                         }
@@ -777,7 +787,7 @@ int main() {
                         }
                         case ComputeOp::CMP_FFN_ACT: {
                             for (int i = 0; i < D_FFN; ++i) {
-                                ffn_act_out[i] = compute_buf::read_i16(out_buf, compute_buf::FfnActLayout::X + (i * 2));
+                                ffn_act_out[i] = compute_buf::read_i16(out_buf, compute_buf::INFfnActLayout::OUT + (i * 2));
                             }
                             break;
                         }

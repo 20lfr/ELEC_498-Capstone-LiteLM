@@ -126,7 +126,7 @@ Stored: final_out = [2048] int8
 constexpr int NUM_HEADS       = 4;
 constexpr int NUM_LAYERS      = 2;
 constexpr int NUM_WO_TILES    = 4;
-constexpr int NUM_W1_TILES    = 4;
+constexpr int NUM_W1_TILES    = 8;
 constexpr int NUM_W2_TILES    = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
@@ -134,8 +134,8 @@ constexpr int D_MODEL = 16; // Number of heads processed in parallel
 constexpr int D_FFN   = 22; // Feed-Forward hidden layer size
 constexpr int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
 constexpr int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
-constexpr int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
-constexpr int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
+constexpr int D_TILE_W1  = D_FFN*2 / NUM_W1_TILES; // Tile size for W1
+constexpr int D_TILE_W2  = D_MODEL   / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16; // Context window length
 constexpr int MAX_CYCLIC_SIZE = 16; // << for UNROLL parallelism in MAC units
 constexpr int HEADS_PARALLEL = 2;
@@ -417,6 +417,13 @@ constexpr int min2_constexpr(int a, int b) {
     return (a < b) ? a : b;
 }
 
+enum class BufDType : uint8_t {
+    I4,
+    I8,
+    I16,
+    I32,
+};
+
 
 
 constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
@@ -454,7 +461,7 @@ constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
 constexpr int FFN_W1_B_BYTES = D_TILE_W1 * 4;
 constexpr int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES + (D_TILE_W1 * 2);
 
-constexpr int FFN_ACT_IN_BYTES = D_FFN * 2;
+constexpr int FFN_ACT_IN_BYTES = (D_FFN * 2) * 2;
 
 constexpr int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
 constexpr int FFN_W2_W_BYTES = div_ceil(FFN_W2_W_NIBBLES, 2);
@@ -496,45 +503,130 @@ constexpr int OUT_BUF_BYTES = max2(
 // -------------------------------
 // Per-op layouts (byte offsets)
 // -------------------------------
-struct OutProjLayout {
+struct INOutProjLayout {
+    static constexpr int ACT_BYTES = OUT_PROJ_ACT_BYTES;
+    static constexpr int W_BYTES = OUT_PROJ_W_BYTES;
+    static constexpr int B_BYTES = OUT_PROJ_B_BYTES;
+    static constexpr int TOTAL_BYTES = OUT_PROJ_IN_BYTES;
     static constexpr int ACT = 0;
-    static constexpr int W = ACT + OUT_PROJ_ACT_BYTES;
-    static constexpr int B = W + OUT_PROJ_W_BYTES;
+    static constexpr int W = ACT + ACT_BYTES;
+    static constexpr int B = W + W_BYTES;
 };
 
-struct RequantLayout {
+struct INRequantLayout {
+    static constexpr int X_BYTES = D_MODEL * 4;
+    static constexpr int M_BYTES = 4;
+    static constexpr int N_BYTES = 4;
+    static constexpr int TOTAL_BYTES = REQUANT_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int M = X + (D_MODEL * 4);
-    static constexpr int N = M + 4;
+    static constexpr int M = X + X_BYTES;
+    static constexpr int N = M + M_BYTES;
 };
 
-struct ResidLayout {
+struct INResidLayout {
+    static constexpr int X_BYTES = D_MODEL;
+    static constexpr int R_BYTES = D_MODEL;
+    static constexpr int TOTAL_BYTES = RESID_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int R = X + D_MODEL;
+    static constexpr int R = X + X_BYTES;
 };
 
-struct LayerNormLayout {
+struct INLayerNormLayout {
+    static constexpr int X_BYTES = D_MODEL;
+    static constexpr int GAMMA_BYTES = D_MODEL * 4;
+    static constexpr int EPS_BYTES = 4;
+    static constexpr int TOTAL_BYTES = LN_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int GAMMA = X + D_MODEL;
-    static constexpr int EPS = GAMMA + (D_MODEL * 4);
+    static constexpr int GAMMA = X + X_BYTES;
+    static constexpr int EPS = GAMMA + GAMMA_BYTES;
 };
 
-struct FfnW1Layout {
+struct INFfnW1Layout {
+    static constexpr int X_BYTES = D_MODEL;
+    static constexpr int W_BYTES = FFN_W1_W_BYTES;
+    static constexpr int B_BYTES = FFN_W1_B_BYTES;
+    static constexpr int S_BYTES = D_TILE_W1 * 2;
+    static constexpr int TOTAL_BYTES = FFN_W1_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int W = X + D_MODEL;
-    static constexpr int B = W + FFN_W1_W_BYTES;
-    static constexpr int S = B + FFN_W1_B_BYTES;
+    static constexpr int W = X + X_BYTES;
+    static constexpr int B = W + W_BYTES;
+    static constexpr int S = B + B_BYTES;
 };
 
-struct FfnActLayout {
+struct INFfnActLayout {
+    static constexpr int GATE_BYTES = D_FFN * 2;
+    static constexpr int UP_BYTES = D_FFN * 2;
+    static constexpr int OUT_BYTES = FFN_ACT_OUT_BYTES;
+    static constexpr int TOTAL_BYTES = FFN_ACT_IN_BYTES;
+    static constexpr int GATE = 0;
+    static constexpr int UP = GATE + GATE_BYTES;
+    static constexpr int OUT = 0;
     static constexpr int X = 0;
 };
 
-struct FfnW2Layout {
+struct INFfnW2Layout {
+    static constexpr int X_BYTES = D_FFN * 2;
+    static constexpr int W_BYTES = FFN_W2_W_BYTES;
+    static constexpr int B_BYTES = FFN_W2_B_BYTES;
+    static constexpr int S_BYTES = D_TILE_W2 * 2;
+    static constexpr int TOTAL_BYTES = FFN_W2_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int W = X + (D_FFN * 2);
-    static constexpr int B = W + FFN_W2_W_BYTES;
-    static constexpr int S = B + FFN_W2_B_BYTES;
+    static constexpr int W = X + X_BYTES;
+    static constexpr int B = W + W_BYTES;
+    static constexpr int S = B + B_BYTES;
+};
+
+// -------------------------------
+// Per-op output layouts (byte offsets)
+// -------------------------------
+
+struct OUTOutProjLayout {
+    static constexpr int NUM_ELEMS = D_TILE_WO;
+    static constexpr BufDType TYPE = BufDType::I32;
+    static constexpr int TOTAL_BYTES = OUT_PROJ_OUT_BYTES;
+    static constexpr int Y = 0;
+};
+
+struct OUTRequantLayout {
+    static constexpr int NUM_ELEMS = D_MODEL;
+    static constexpr BufDType TYPE = BufDType::I8;
+    static constexpr int TOTAL_BYTES = REQUANT_OUT_BYTES;
+    static constexpr int X = 0;
+};
+
+struct OUTResidLayout {
+    static constexpr int NUM_ELEMS = D_MODEL;
+    static constexpr BufDType TYPE = BufDType::I8;
+    static constexpr int TOTAL_BYTES = RESID_OUT_BYTES;
+    static constexpr int X = 0;
+};
+
+struct OUTLayerNormLayout {
+    static constexpr int NUM_ELEMS = D_MODEL;
+    static constexpr BufDType TYPE = BufDType::I32;
+    static constexpr int TOTAL_BYTES = LN_OUT_BYTES;
+    static constexpr int X = 0;
+};
+
+struct OUTFfnW1Layout {
+    static constexpr int NUM_ELEMS = D_TILE_W1;
+    static constexpr BufDType TYPE = BufDType::I16;
+    static constexpr int TOTAL_BYTES = FFN_W1_OUT_BYTES;
+    static constexpr int Y = 0;
+};
+
+struct OUTFfnActLayout {
+    static constexpr int NUM_ELEMS = D_FFN;
+    static constexpr BufDType TYPE = BufDType::I16;
+    static constexpr int TOTAL_BYTES = FFN_ACT_OUT_BYTES;
+    static constexpr int Y = 0;
+};
+
+struct OUTFfnW2Layout {
+    static constexpr int NUM_ELEMS = D_TILE_W2;
+    static constexpr BufDType TYPE = BufDType::I32;
+    static constexpr int TOTAL_BYTES = FFN_W2_OUT_BYTES;
+    static constexpr int Y = 0;
 };
 
 
@@ -642,6 +734,8 @@ struct ComputeHeadCtx {
 // ------------------------------------------------------------
 namespace head_buf {
 
+using OutDType = BufDType;
+
 constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
 constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
 constexpr int QKV_B_NIBBLES = D_HEADS;
@@ -682,34 +776,97 @@ constexpr int OUT_BUF_BYTES = compute_buf::max2(
             compute_buf::max2(VALUE_SCALE_OUT_BYTES,
                 compute_buf::max2(SOFTMAX_OUT_BYTES, ATT_VALUE_OUT_BYTES)))));
 
-struct QkvLayout {
+struct INQkvLayout {
+    static constexpr int ACT_BYTES = D_MODEL;
+    static constexpr int W_BYTES = QKV_W_BYTES;
+    static constexpr int B_BYTES = QKV_B_BYTES;
+    static constexpr int TOTAL_BYTES = QKV_IN_BYTES;
     static constexpr int ACT = 0;
-    static constexpr int W = ACT + D_MODEL;
-    static constexpr int B = W + QKV_W_BYTES;
+    static constexpr int W = ACT + ACT_BYTES;
+    static constexpr int B = W + W_BYTES;
 };
 
-struct HeadRequantLayout {
+struct INHeadRequantLayout {
+    static constexpr int X_BYTES = D_HEADS * 4;
+    static constexpr int M_BYTES = 4;
+    static constexpr int N_BYTES = 4;
+    static constexpr int TOTAL_BYTES = HEAD_REQUANT_IN_BYTES;
     static constexpr int X = 0;
-    static constexpr int M = X + (D_HEADS * 4);
-    static constexpr int N = M + 4;
+    static constexpr int M = X + X_BYTES;
+    static constexpr int N = M + M_BYTES;
 };
 
-struct AttScoresLayout {
+struct INAttScoresLayout {
+    static constexpr int Q_BYTES = D_HEADS;
+    static constexpr int K_CACHE_BYTES = CONTEXT_LENGTH * D_HEADS;
+    static constexpr int TOTAL_BYTES = ATT_SCORES_IN_BYTES;
     static constexpr int Q = 0;
-    static constexpr int K_CACHE = Q + D_HEADS;
+    static constexpr int K_CACHE = Q + Q_BYTES;
 };
 
-struct ValueScaleLayout {
+struct INValueScaleLayout {
+    static constexpr int X_BYTES = VALUE_SCALE_IN_BYTES;
+    static constexpr int TOTAL_BYTES = VALUE_SCALE_IN_BYTES;
     static constexpr int X = 0;
 };
 
-struct SoftmaxLayout {
+struct INSoftmaxLayout {
+    static constexpr int X_BYTES = SOFTMAX_IN_BYTES;
+    static constexpr int TOTAL_BYTES = SOFTMAX_IN_BYTES;
     static constexpr int X = 0;
 };
 
-struct AttValueLayout {
+struct INAttValueLayout {
+    static constexpr int WEIGHTS_BYTES = CONTEXT_LENGTH;
+    static constexpr int V_CACHE_BYTES = CONTEXT_LENGTH * D_HEADS;
+    static constexpr int TOTAL_BYTES = ATT_VALUE_IN_BYTES;
     static constexpr int WEIGHTS = 0;
-    static constexpr int V_CACHE = WEIGHTS + CONTEXT_LENGTH;
+    static constexpr int V_CACHE = WEIGHTS + WEIGHTS_BYTES;
+};
+
+// -------------------------------
+// Per-op output layouts (byte offsets)
+// -------------------------------
+struct OUTQkvLayout {
+    static constexpr int NUM_ELEMS = D_HEADS;
+    static constexpr OutDType TYPE = OutDType::I32;
+    static constexpr int TOTAL_BYTES = QKV_OUT_BYTES;
+    static constexpr int Y = 0;
+};
+
+struct OUTHeadRequantLayout {
+    static constexpr int NUM_ELEMS = D_HEADS;
+    static constexpr OutDType TYPE = OutDType::I8;
+    static constexpr int TOTAL_BYTES = HEAD_REQUANT_OUT_BYTES;
+    static constexpr int X = 0;
+};
+
+struct OUTAttScoresLayout {
+    static constexpr int NUM_ELEMS = CONTEXT_LENGTH;
+    static constexpr OutDType TYPE = OutDType::I32;
+    static constexpr int TOTAL_BYTES = ATT_SCORES_OUT_BYTES;
+    static constexpr int X = 0;
+};
+
+struct OUTValueScaleLayout {
+    static constexpr int NUM_ELEMS = CONTEXT_LENGTH;
+    static constexpr OutDType TYPE = OutDType::I16;
+    static constexpr int TOTAL_BYTES = VALUE_SCALE_OUT_BYTES;
+    static constexpr int X = 0;
+};
+
+struct OUTSoftmaxLayout {
+    static constexpr int NUM_ELEMS = CONTEXT_LENGTH;
+    static constexpr OutDType TYPE = OutDType::I16;
+    static constexpr int TOTAL_BYTES = SOFTMAX_OUT_BYTES;
+    static constexpr int X = 0;
+};
+
+struct OUTAttValueLayout {
+    static constexpr int NUM_ELEMS = D_HEADS;
+    static constexpr OutDType TYPE = OutDType::I32;
+    static constexpr int TOTAL_BYTES = ATT_VALUE_OUT_BYTES;
+    static constexpr int Y = 0;
 };
 
 } // namespace head_buf

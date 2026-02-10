@@ -335,14 +335,14 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_Q:
     case ComputeOp::CMP_K:
     case ComputeOp::CMP_V: {
-        const int bias_base = head_buf::QkvLayout::B;
+        const int bias_base = head_buf::INQkvLayout::B;
         std::printf("QKV in_buf (decoded):\n  ACT:");
         for (int i = 0; i < D_MODEL; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::QkvLayout::ACT + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INQkvLayout::ACT + i)));
         }
         std::printf("\n  W:");
         for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (head_buf::QkvLayout::W * 2) + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::W * 2) + i)));
         }
         std::printf("\n  B:");
         for (int h = 0; h < D_HEADS; ++h) {
@@ -357,21 +357,21 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_HEAD_REQUANT: {
         std::printf("HEAD_REQUANT in_buf (decoded):\n  X:");
         for (int h = 0; h < D_HEADS; ++h) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::X + (h * 4))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4))));
         }
-        const int32_t M = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::M);
-        const int32_t N = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::N);
+        const int32_t M = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::M);
+        const int32_t N = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::N);
         std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
     case ComputeOp::CMP_ATT_SCORES: {
         std::printf("ATT_SCORES in_buf (decoded):\n  Q:");
         for (int h = 0; h < D_HEADS; ++h) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::AttScoresLayout::Q + h)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + h)));
         }
         std::printf("\n  K_CACHE:");
         for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::AttScoresLayout::K_CACHE + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::K_CACHE + i)));
         }
         std::printf("\n");
         break;
@@ -379,7 +379,7 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_VALUE_SCALE: {
         std::printf("VALUE_SCALE in_buf (decoded):\n  X:");
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::ValueScaleLayout::X + (t * 4))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4))));
         }
         std::printf("\n");
         break;
@@ -387,7 +387,7 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_SOFTMAX: {
         std::printf("SOFTMAX in_buf (decoded):\n  X:");
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, head_buf::SoftmaxLayout::X + (t * 2))));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (t * 2))));
         }
         std::printf("\n");
         break;
@@ -395,11 +395,11 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_ATT_VALUE: {
         std::printf("ATT_VALUE in_buf (decoded):\n  WEIGHTS:");
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::AttValueLayout::WEIGHTS + t)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::WEIGHTS + t)));
         }
         std::printf("\n  V_CACHE:");
         for (int i = 0; i < D_HEADS * CONTEXT_LENGTH; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::AttValueLayout::V_CACHE + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + i)));
         }
         std::printf("\n");
         break;
@@ -429,7 +429,7 @@ void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     case ComputeOp::CMP_HEAD_REQUANT: {
         std::printf("out_buf (decoded):\n  Y:");
         for (int h = 0; h < D_HEADS; ++h) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, head_buf::HeadRequantLayout::X + h)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, head_buf::INHeadRequantLayout::X + h)));
         }
         std::printf("\n");
         break;
@@ -642,7 +642,7 @@ int main() {
                         case ComputeOp::CMP_Q:
                         case ComputeOp::CMP_K:
                         case ComputeOp::CMP_V: {
-                            const int bias_base = head_buf::QkvLayout::B;
+                            const int bias_base = head_buf::INQkvLayout::B;
                             const int8_t *act = (mem_op_code == ComputeOp::CMP_Q) ? q_act
                                               : (mem_op_code == ComputeOp::CMP_K) ? k_act
                                               : v_act;
@@ -650,13 +650,13 @@ int main() {
                                                 : (mem_op_code == ComputeOp::CMP_K) ? k_bias
                                                 : v_bias;
                             for (int i = 0; i < D_MODEL; ++i) {
-                                compute_buf::write_i8(in_buf, head_buf::QkvLayout::ACT + i, act[i]);
+                                compute_buf::write_i8(in_buf, head_buf::INQkvLayout::ACT + i, act[i]);
                             }
                             const int4_t *src = (mem_op_code == ComputeOp::CMP_Q) ? wq
                                               : (mem_op_code == ComputeOp::CMP_K) ? wk
                                               : wv;
                             for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
-                                compute_buf::write_i4(in_buf, (head_buf::QkvLayout::W * 2) + i, src[i]);
+                                compute_buf::write_i4(in_buf, (head_buf::INQkvLayout::W * 2) + i, src[i]);
                             }
                             for (int h = 0; h < D_HEADS; ++h) {
                                 compute_buf::write_i4(in_buf, (bias_base * 2) + h, bias[h]);
@@ -672,39 +672,39 @@ int main() {
                                               : (mem_op_code == ComputeOp::CMP_REQUANT_Q) ? rq_q_in
                                               : rq_head_in;
                             for (int h = 0; h < D_HEADS; ++h) {
-                                compute_buf::write_i32(in_buf, head_buf::HeadRequantLayout::X + (h * 4), src[h]);
+                                compute_buf::write_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4), src[h]);
                             }
-                            compute_buf::write_i32(in_buf, head_buf::HeadRequantLayout::M, rq_M);
-                            compute_buf::write_i32(in_buf, head_buf::HeadRequantLayout::N, rq_N);
+                            compute_buf::write_i32(in_buf, head_buf::INHeadRequantLayout::M, rq_M);
+                            compute_buf::write_i32(in_buf, head_buf::INHeadRequantLayout::N, rq_N);
                             break;
                         }
                         case ComputeOp::CMP_ATT_SCORES: {
                             for (int h = 0; h < D_HEADS; ++h) {
-                                compute_buf::write_i8(in_buf, head_buf::AttScoresLayout::Q + h, att_q[h]);
+                                compute_buf::write_i8(in_buf, head_buf::INAttScoresLayout::Q + h, att_q[h]);
                             }
                             for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
-                                compute_buf::write_i8(in_buf, head_buf::AttScoresLayout::K_CACHE + i, att_k_cache[i]);
+                                compute_buf::write_i8(in_buf, head_buf::INAttScoresLayout::K_CACHE + i, att_k_cache[i]);
                             }
                             break;
                         }
                         case ComputeOp::CMP_VALUE_SCALE: {
                             for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-                                compute_buf::write_i32(in_buf, head_buf::ValueScaleLayout::X + (t * 4), val_scale_in[t]);
+                                compute_buf::write_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4), val_scale_in[t]);
                             }
                             break;
                         }
                         case ComputeOp::CMP_SOFTMAX: {
                             for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-                                compute_buf::write_i16(in_buf, head_buf::SoftmaxLayout::X + (t * 2), softmax_in[t]);
+                                compute_buf::write_i16(in_buf, head_buf::INSoftmaxLayout::X + (t * 2), softmax_in[t]);
                             }
                             break;
                         }
                         case ComputeOp::CMP_ATT_VALUE: {
                             for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-                                compute_buf::write_i8(in_buf, head_buf::AttValueLayout::WEIGHTS + t, att_weights_in[t]);
+                                compute_buf::write_i8(in_buf, head_buf::INAttValueLayout::WEIGHTS + t, att_weights_in[t]);
                             }
                             for (int i = 0; i < D_HEADS * CONTEXT_LENGTH; ++i) {
-                                compute_buf::write_i8(in_buf, head_buf::AttValueLayout::V_CACHE + i, att_v_cache[i]);
+                                compute_buf::write_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + i, att_v_cache[i]);
                             }
                             break;
                         }
@@ -861,7 +861,7 @@ int main() {
                         }
                         case ComputeOp::CMP_K_REQUANT: {
                             for (int h = 0; h < D_HEADS; ++h) {
-                                k_rq[h] = compute_buf::read_i8(out_buf, head_buf::HeadRequantLayout::X + h);
+                                k_rq[h] = compute_buf::read_i8(out_buf, head_buf::INHeadRequantLayout::X + h);
                                 if (k_rq[h] != exp_k_rq[h]) {
                                     std::fprintf(stderr, "CMP_K_REQUANT failed at head %d: got %d expected %d\n",
                                                  h, static_cast<int>(k_rq[h]), static_cast<int>(exp_k_rq[h]));
@@ -872,7 +872,7 @@ int main() {
                         }
                         case ComputeOp::CMP_V_REQUANT: {
                             for (int h = 0; h < D_HEADS; ++h) {
-                                v_rq[h] = compute_buf::read_i8(out_buf, head_buf::HeadRequantLayout::X + h);
+                                v_rq[h] = compute_buf::read_i8(out_buf, head_buf::INHeadRequantLayout::X + h);
                                 if (v_rq[h] != exp_v_rq[h]) {
                                     std::fprintf(stderr, "CMP_V_REQUANT failed at head %d: got %d expected %d\n",
                                                  h, static_cast<int>(v_rq[h]), static_cast<int>(exp_v_rq[h]));
@@ -883,7 +883,7 @@ int main() {
                         }
                         case ComputeOp::CMP_REQUANT_Q: {
                             for (int h = 0; h < D_HEADS; ++h) {
-                                q_rq[h] = compute_buf::read_i8(out_buf, head_buf::HeadRequantLayout::X + h);
+                                q_rq[h] = compute_buf::read_i8(out_buf, head_buf::INHeadRequantLayout::X + h);
                                 if (q_rq[h] != exp_q_rq[h]) {
                                     std::fprintf(stderr, "CMP_REQUANT_Q failed at head %d: got %d expected %d\n",
                                                  h, static_cast<int>(q_rq[h]), static_cast<int>(exp_q_rq[h]));
@@ -938,7 +938,7 @@ int main() {
                         }
                         case ComputeOp::CMP_HEAD_REQUANT: {
                             for (int h = 0; h < D_HEADS; ++h) {
-                                head_rq[h] = compute_buf::read_i8(out_buf, head_buf::HeadRequantLayout::X + h);
+                                head_rq[h] = compute_buf::read_i8(out_buf, head_buf::INHeadRequantLayout::X + h);
                                 if (head_rq[h] != exp_head_rq[h]) {
                                     std::fprintf(stderr, "CMP_HEAD_REQUANT failed at head %d: got %d expected %d\n",
                                                  h, static_cast<int>(head_rq[h]), static_cast<int>(exp_head_rq[h]));

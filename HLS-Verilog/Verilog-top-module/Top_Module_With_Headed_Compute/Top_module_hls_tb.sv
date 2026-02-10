@@ -22,8 +22,8 @@ module top_module_hls_tb;
   localparam int D_FFN   = 22;
   localparam int D_HEADS = D_MODEL / NUM_HEADS;
   localparam int D_TILE_WO  = D_MODEL / NUM_WO_TILES;
-  localparam int D_TILE_W1  = D_MODEL / NUM_W1_TILES;
-  localparam int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
+  localparam int D_TILE_W1  = D_FFN*2 / NUM_W1_TILES;
+  localparam int D_TILE_W2  = D_MODEL   / NUM_W2_TILES;
   localparam int CONTEXT_LENGTH = 16;
   localparam int HEADS_PARALLEL = 2;
   localparam int NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
@@ -85,6 +85,7 @@ module top_module_hls_tb;
   localparam int LN_X_OFFSET = 0;
   localparam int LN_GAMMA_OFFSET = LN_X_OFFSET + D_MODEL;
   localparam int LN_EPS_OFFSET = LN_GAMMA_OFFSET + (D_MODEL * 4);
+  localparam int W1_OUT_SIZE = NUM_W1_TILES * D_TILE_W1;
   localparam int FFN_W1_X_OFFSET = 0;
   localparam int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
   localparam int FFN_W1_W_BYTES = (FFN_W1_W_NIBBLES + 1) / 2;
@@ -93,7 +94,8 @@ module top_module_hls_tb;
   localparam int FFN_W1_W_OFFSET = FFN_W1_X_OFFSET + D_MODEL;
   localparam int FFN_W1_B_OFFSET = FFN_W1_W_OFFSET + FFN_W1_W_BYTES;
   localparam int FFN_W1_S_OFFSET = FFN_W1_B_OFFSET + FFN_W1_B_BYTES;
-  localparam int FFN_ACT_X_OFFSET = 0;
+  localparam int FFN_ACT_GATE_OFFSET = 0;
+  localparam int FFN_ACT_UP_OFFSET = FFN_ACT_GATE_OFFSET + (D_FFN * 2);
   localparam int FFN_W2_X_OFFSET = 0;
   localparam int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
   localparam int FFN_W2_W_BYTES = (FFN_W2_W_NIBBLES + 1) / 2;
@@ -104,7 +106,7 @@ module top_module_hls_tb;
   localparam int FFN_W2_S_OFFSET = FFN_W2_B_OFFSET + FFN_W2_B_BYTES;
   localparam int MEM_LAT = 8;
   localparam int MEM_DONE_HOLD_CYCLES = 12;
-  localparam int DMA_DONE_HOLD_CYCLES = 20;
+  localparam int DMA_DONE_HOLD_CYCLES = 12;
   localparam int HEAD_DMA_DONE_HOLD_CYCLES = 100;
   localparam int STREAM_DONE_HOLD_CYCLES = 12;
   // Control bits (mirror top_params.hpp)
@@ -705,11 +707,12 @@ module top_module_hls_tb;
   logic [31:0] ln1_eps;
   logic [31:0] final_norm_eps;
   logic [7:0] ffn1_x [0:D_MODEL-1];
-  logic [3:0] ffn1_w [0:(D_MODEL*D_MODEL)-1];
-  logic [31:0] ffn1_b [0:D_MODEL-1];
-  logic [15:0] ffn1_s [0:D_MODEL-1];
-  logic [15:0] ffn1_out [0:D_MODEL-1];
-  logic [15:0] ffn_act_in [0:D_FFN-1];
+  logic [3:0] ffn1_w [0:(D_MODEL*W1_OUT_SIZE)-1];
+  logic [31:0] ffn1_b [0:W1_OUT_SIZE-1];
+  logic [15:0] ffn1_s [0:W1_OUT_SIZE-1];
+  logic [15:0] ffn1_out [0:W1_OUT_SIZE-1];
+  logic [15:0] ffn_act_gate_in [0:D_FFN-1];
+  logic [15:0] ffn_act_up_in [0:D_FFN-1];
   logic [15:0] ffn_act_out [0:D_FFN-1];
   logic [15:0] ffn2_x [0:D_FFN-1];
   logic [3:0] ffn2_w [0:(D_FFN*D_FFN)-1];
@@ -866,6 +869,8 @@ module top_module_hls_tb;
       ln1_out[i] = 32'd0;
       final_norm_out[i] = 32'd0;
       ffn1_x[i] = i + 3;
+    end
+    for (i = 0; i < W1_OUT_SIZE; i = i + 1) begin
       ffn1_b[i] = 32'd7;
       ffn1_s[i] = 16'h4000;
       ffn1_out[i] = 16'd0;
@@ -882,12 +887,17 @@ module top_module_hls_tb;
     for (t = 0; t < D_MODEL; t = t + 1) begin
       for (j = 0; j < D_MODEL; j = j + 1) begin
         full_weights[t * D_MODEL + j] = 4'h7;
+      end
+    end
+    for (t = 0; t < W1_OUT_SIZE; t = t + 1) begin
+      for (j = 0; j < D_MODEL; j = j + 1) begin
         ffn1_w[t * D_MODEL + j] = 4'h1;
       end
     end
 
     for (t = 0; t < D_FFN; t = t + 1) begin
-      ffn_act_in[t] = (t * 3) - 20;
+      ffn_act_gate_in[t] = (t * 3) - 20;
+      ffn_act_up_in[t] = (t * 2) - 10;
       ffn_act_out[t] = 16'd0;
       ffn2_x[t] = (t * 2) + 1;
       ffn2_b[t] = 32'd5;
@@ -1488,43 +1498,51 @@ module top_module_hls_tb;
         $write("\n");
       end
       $display("ffn1_w:");
-      for (i = 0; i < (D_MODEL * D_MODEL); i = i + 16) begin
+      for (i = 0; i < (D_MODEL * W1_OUT_SIZE); i = i + 16) begin
         $write("  %04x:", i);
-        for (j = 0; j < 16 && (i + j) < (D_MODEL * D_MODEL); j = j + 1) begin
+        for (j = 0; j < 16 && (i + j) < (D_MODEL * W1_OUT_SIZE); j = j + 1) begin
           $write(" %x", ffn1_w[i + j]);
         end
         $write("\n");
       end
       $display("ffn1_b:");
-      for (i = 0; i < D_MODEL; i = i + 8) begin
+      for (i = 0; i < W1_OUT_SIZE; i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < D_MODEL; j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < W1_OUT_SIZE; j = j + 1) begin
           $write(" %08x", ffn1_b[i + j]);
         end
         $write("\n");
       end
       $display("ffn1_s:");
-      for (i = 0; i < D_MODEL; i = i + 8) begin
+      for (i = 0; i < W1_OUT_SIZE; i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < D_MODEL; j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < W1_OUT_SIZE; j = j + 1) begin
           $write(" %04x", ffn1_s[i + j]);
         end
         $write("\n");
       end
       $display("ffn1_out:");
-      for (i = 0; i < D_MODEL; i = i + 8) begin
+      for (i = 0; i < W1_OUT_SIZE; i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < D_MODEL; j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < W1_OUT_SIZE; j = j + 1) begin
           $write(" %04x", ffn1_out[i + j]);
         end
         $write("\n");
       end
 
-      $display("ffn_act_in:");
+      $display("ffn_act_gate_in:");
       for (i = 0; i < D_FFN; i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < D_FFN; j = j + 1) begin
-          $write(" %04x", ffn_act_in[i + j]);
+          $write(" %04x", ffn_act_gate_in[i + j]);
+        end
+        $write("\n");
+      end
+      $display("ffn_act_up_in:");
+      for (i = 0; i < D_FFN; i = i + 8) begin
+        $write("  %04x:", i);
+        for (j = 0; j < 8 && (i + j) < D_FFN; j = j + 1) begin
+          $write(" %04x", ffn_act_up_in[i + j]);
         end
         $write("\n");
       end
@@ -2482,7 +2500,8 @@ module top_module_hls_tb;
               end
               CMP_FFN_ACT: begin
                 for (j = 0; j < D_FFN; j = j + 1) begin
-                  write_i16_to_in_buf(FFN_ACT_X_OFFSET + (j * 2), ffn_act_in[j] + layer_off);
+                  write_i16_to_in_buf(FFN_ACT_GATE_OFFSET + (j * 2), ffn_act_gate_in[j] + layer_off);
+                  write_i16_to_in_buf(FFN_ACT_UP_OFFSET + (j * 2), ffn_act_up_in[j] + layer_off);
                 end
               end
               CMP_FFN_W2: begin

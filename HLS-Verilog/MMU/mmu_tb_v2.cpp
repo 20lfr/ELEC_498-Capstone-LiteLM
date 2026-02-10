@@ -166,7 +166,7 @@ int main() {
            qkv_in.weights.offset, qkv_in.weights.size,
            qkv_in.bias.offset, qkv_in.bias.size,
            qkv_in.total_size);
-    check(qkv_in.total_size == head_buf::QKV_IN_BYTES, "qkv_in_size_matches_head_buf");
+    check(qkv_in.total_size == head_buf::INQkvLayout::TOTAL_BYTES, "qkv_in_size_matches_head_buf");
     check(qkv_in.act.size == dims.d_model, "qkv_in_act_size");
     
     InputBufferLayout att_in = mmu_calc_input_layout(CMP_ATT_SCORES, dims);
@@ -174,7 +174,7 @@ int main() {
            att_in.act.offset, att_in.act.size,
            att_in.k_cache.offset, att_in.k_cache.size,
            att_in.total_size);
-    check(att_in.total_size == head_buf::ATT_SCORES_IN_BYTES, "att_scores_in_size_matches");
+    check(att_in.total_size == head_buf::INAttScoresLayout::TOTAL_BYTES, "att_scores_in_size_matches");
     
     InputBufferLayout ffn_in = mmu_calc_input_layout(CMP_FFN_W1, dims);
     printf("  CMP_FFN_W1 input: act@%u(%u), W@%u(%u), B@%u(%u), S@%u(%u), total=%u\n",
@@ -189,7 +189,7 @@ int main() {
     OutputBufferLayout qkv_out = mmu_calc_output_layout(CMP_Q, dims);
     printf("  CMP_Q output: result@%u(%u), total=%u\n",
            qkv_out.result.offset, qkv_out.result.size, qkv_out.total_size);
-    check(qkv_out.total_size == head_buf::QKV_OUT_BYTES, "qkv_out_size_matches_head_buf");
+    check(qkv_out.total_size == head_buf::OUTQkvLayout::TOTAL_BYTES, "qkv_out_size_matches_head_buf");
     check(qkv_out.out_dtype == DataType::DTYPE_INT32, "qkv_out_dtype_int32");
     
     OutputBufferLayout requant_out = mmu_calc_output_layout(CMP_K_REQUANT, dims);

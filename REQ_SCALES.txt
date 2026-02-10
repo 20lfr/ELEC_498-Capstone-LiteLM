@@ -1,0 +1,28 @@
+Condensed requant scale list (symmetric, zero-point = 0)
+
+Compute-path requants
+1) RMSNorm outputs (may be separate):
+   - S_out_ln0
+   - S_out_ln1
+
+2) OutProj requant:
+   - S_act_outproj_in
+   - S_w_wo
+   - S_out_outproj
+
+3) FFN W2 requant:
+   - S_act_w2_in
+   - S_w_w2
+   - S_out_ffn
+
+Headed-path requants
+4) Q/K/V requants (can be shared, confirm with ML):
+   - If shared: S_act_qkv_in, S_w_qkv, S_out_qkv
+   - If separate: S_act_q_in, S_w_wq, S_out_q;
+                  S_act_k_in, S_w_wk, S_out_k;
+                  S_act_v_in, S_w_wv, S_out_v
+
+5) Attention value requant:
+   - S_att_weights   (softmax output scale)
+   - S_v_cache
+   - S_out_att_value
