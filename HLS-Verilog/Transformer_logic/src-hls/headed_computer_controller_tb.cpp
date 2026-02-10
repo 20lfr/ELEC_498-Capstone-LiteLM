@@ -522,6 +522,7 @@ int main() {
     uint8_t dbg_req_layer = 0;
     uint8_t dbg_req_head = 0;
     uint8_t dbg_req_tile = 0;
+    ComputeHeadCtx compute_ctx{};
 
     const int32_t rq_M = 3;
     const int32_t rq_N = 3;
@@ -622,7 +623,7 @@ int main() {
                 "State", "ReqInstr", "ReqOp", "ReqL", "ReqH", "ReqT");
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
-        const bool reset = (cycle < 2);
+        const bool reset_n = (cycle >= 2);
 
         mem_transfer_done = false;
         if (mem_done_hold > 0) {
@@ -724,16 +725,13 @@ int main() {
         const uint8_t op_field_pre = static_cast<uint8_t>(compute_instruction & 0xFFu);
         const ComputeOp op_pre = static_cast<ComputeOp>(op_field_pre);
 
+        compute_ctx.compute_start = compute_start;
+        compute_ctx.compute_instruction = compute_instruction;
+        compute_ctx.mem_transfer_done = mem_transfer_done;
+
         headed_compute_controller(
-            reset,
-            compute_start,
-            compute_instruction,
-            compute_ready,
-            compute_done,
-            mem_transfer_done,
-            mem_read_request,
-            mem_write_request,
-            mem_op,
+            compute_ctx,
+            reset_n,
             in_buf,
             out_buf,
             dbg_state,
@@ -743,6 +741,12 @@ int main() {
             dbg_req_head,
             dbg_req_tile,
             error);
+
+        compute_ready = compute_ctx.compute_ready;
+        compute_done = compute_ctx.compute_done;
+        mem_read_request = compute_ctx.mem_read_request;
+        mem_write_request = compute_ctx.mem_write_request;
+        mem_op = compute_ctx.mem_op;
 
         if (compute_done) {
             print_buffer("out_buf (done)", out_buf, head_buf::OUT_BUF_BYTES);
@@ -756,7 +760,7 @@ int main() {
 
         std::printf("%-6d %-5d %-5d %-5d %-5d %-6d %-6d %-6d %-6d %-10s 0x%08x %-10s %-5d %-5d %-5d %-7d 0x%08x %-8s %-5d %-5d %-5d\n",
                     cycle,
-                    reset ? 1 : 0,
+                    reset_n ? 0 : 1,
                     compute_start ? 1 : 0,
                     compute_ready ? 1 : 0,
                     compute_done ? 1 : 0,
@@ -791,7 +795,7 @@ int main() {
         }
 
         compute_start = false;
-        if (reset) {
+        if (!reset_n) {
             mem_busy = false;
             mem_timer = 0;
             mem_pending = MemPending::NONE;

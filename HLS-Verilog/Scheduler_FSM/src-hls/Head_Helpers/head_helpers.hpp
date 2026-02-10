@@ -5,8 +5,6 @@
 
 
 
-constexpr int HEADS_PARALLEL = 2;
-
 void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx);
 
 // Single-head driver: issues compute_start when ready, advances on compute_done.

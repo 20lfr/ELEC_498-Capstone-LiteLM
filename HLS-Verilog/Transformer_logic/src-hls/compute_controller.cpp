@@ -59,12 +59,10 @@ void MAC_ARCHITECTURE(
 // ---------------------------------------------------------------------------
 // Compute kernels
 // ---------------------------------------------------------------------------
-
 void REQUANT_D_MODEL_int32_to_int8(
     const int32_t x32[D_MODEL],   // input vector
     const int32_t M,              // integer multiplier               (Provided by PS)
     const int32_t n,              // right shift                      (Provided by PS)
-    const int32_t z_out,          // output zero-point (int8 range)   (Provided by PS)
 
     int8_t y8[D_MODEL]      // output vector
 ) {
@@ -91,21 +89,20 @@ void REQUANT_D_MODEL_int32_to_int8(
           n = chosen so M fits int32
 
         Runtime formula:
-          y[t] = saturate_to_int8( (x[t] * M + 2^(n-1)) >> n + z_out )
+          y[t] = saturate_to_int8( (x[t] * M + 2^(n-1)) >> n )
     */
     for (int t = 0; t < D_MODEL; ++t) {
 #pragma HLS UNROLL
         int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
         int64_t rounded = 1LL << (n - 1);
         int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
-        int32_t shifted = scaled + z_out;
 
-        if (shifted > 127) {
+        if (scaled > 127) {
             y8[t] = 127;
-        } else if (shifted < -128) {
+        } else if (scaled < -128) {
             y8[t] = -128;
         } else {
-            y8[t] = static_cast<int8_t>(shifted);
+            y8[t] = static_cast<int8_t>(scaled);
         }
     }   
 }
@@ -509,13 +506,10 @@ void compute_controller(
                     }
                     const int32_t M = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::M);
                     const int32_t n = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::N);
-                    const int32_t z_out = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::Z);
-
                     REQUANT_D_MODEL_int32_to_int8(
                         x32,
                         M,
                         n,
-                        z_out,
                         y8
                     );
                     for (int i = 0; i < D_MODEL; ++i) {

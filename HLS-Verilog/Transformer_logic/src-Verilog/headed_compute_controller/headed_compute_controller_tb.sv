@@ -626,17 +626,17 @@ module headed_compute_controller_tb;
         if (reset_hold_ctr >= (RESET_HOLD_CYCLES - 1)) begin
           ap_rst <= 1'b0;
           ap_start <= 1'b1;
-          reset <= 1'b0;
+          reset <= 1'b1;
           compute_state <= OP_SEND;
         end else begin
           ap_rst <= 1'b1;
           ap_start <= 1'b0;
-          reset <= 1'b1;
+          reset <= 1'b0;
           reset_hold_ctr <= reset_hold_ctr + 1;
         end
       end
       OP_SEND: begin
-        reset <= 0;
+        reset <= 1'b1;
         compute_start <= 1'b0;
         if (compute_ready) begin
           compute_start <= 1'b1;
@@ -725,7 +725,7 @@ module headed_compute_controller_tb;
     .ap_done(ap_done),
     .ap_idle(ap_idle),
     .ap_ready(ap_ready),
-    .reset(reset),
+    .reset_n(reset),
     .compute_start(compute_start),
     .compute_instruction(compute_instruction),
     .compute_ready(compute_ready),

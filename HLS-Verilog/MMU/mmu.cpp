@@ -1,5 +1,10 @@
 #include "mmu.hpp"
 
+
+/*
+    TODO: 
+        1. Put all of these in the mmu_fsm signature or figure out a way to not declare as global variables
+*/
 // FSM state
 static MMUFsmState fsm_state;
 
@@ -560,6 +565,17 @@ void mmu_fsm(
 ) {
 #pragma HLS INLINE off
 
+/*
+    TODO: 
+        1. Added mmu communication of FSM and compute_block signals into the signature of the mmu FSM, and define the global statics here instead of outside the scope of the function
+        2. Put URAM and DMA buffer statics as inputs/outputs of the signature above
+
+        TOP LEVEL: DO NOT USE GLOBAL VARIABLES TO COMMUNICATE BETWEEN BLOCKS
+
+        3. For computed values. Save them until we need to use it. Example, for the Q value, we need to keep it in URAM UNTIL we use it in attention scores (Q*K^T)
+            Same goes for most values. Example again, We compute K and save it, we need to keep it until the FSM asks the MMU to write it back to DDR
+*/
+
     // HLS pragmas for static variables (must be inside function scope)
 #pragma HLS reset variable=fsm_state
 #pragma HLS array_partition variable=bank_offsets complete dim=1
@@ -768,6 +784,11 @@ void mmu_fsm(
         }
         
         case MMUFsmState::DMA_ALLOC: {
+            // TODO: 
+                /* 
+                    2. Seperate K cache request (DMASEL_CTX_K) and V cache (DMASEL_CTX_V)
+                    3. Seperate K writeback and V writeback cases
+                */
             DmaSel sel; int layer, head, tile;
             mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
             
@@ -789,6 +810,10 @@ void mmu_fsm(
         }
         
         case MMUFsmState::DMA_ISSUE: {
+
+            // TODO: 
+            // 1. Need to define/compute dma_address <-- remeber the Weight loader computation
+            // 2. Seperate K cache request (DMASEL_CTX_K) and V cache (DMASEL_CTX_V)
             if (dma_ready && current_chunk < alloc_num_chunks) {
                 dma_start = true;
                 uram_bank = alloc_bank[current_chunk];

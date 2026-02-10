@@ -48,7 +48,7 @@ void expected_out_proj_full(
     }
 }
 
-void choose_requant_params(const int32_t *x, int len, int32_t &M, int32_t &N, int32_t &Z) {
+void choose_requant_params(const int32_t *x, int len, int32_t &M, int32_t &N) {
     int32_t max_abs = 0;
     for (int i = 0; i < len; ++i) {
         const int32_t v = x[i];
@@ -59,7 +59,6 @@ void choose_requant_params(const int32_t *x, int len, int32_t &M, int32_t &N, in
     }
     M = 1;
     N = 0;
-    Z = 0;
     if (max_abs == 0) {
         return;
     }
@@ -234,8 +233,7 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         }
         const int32_t M = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::M);
         const int32_t N = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::N);
-        const int32_t Z = compute_buf::read_i32(in_buf, compute_buf::RequantLayout::Z);
-        std::printf("\n  M: %d\n  N: %d\n  Z: %d\n", static_cast<int>(M), static_cast<int>(N), static_cast<int>(Z));
+        std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
     case ComputeOp::CMP_RESID0:
@@ -431,16 +429,12 @@ int main() {
     int16_t ffn2_x[D_FFN] = {};
     int32_t rq1_M = 1;
     int32_t rq1_N = 0;
-    int32_t rq1_Z = 0;
     int32_t rq2_M = 1;
     int32_t rq2_N = 0;
-    int32_t rq2_Z = 0;
     int32_t rq3_M = 1;
     int32_t rq3_N = 0;
-    int32_t rq3_Z = 0;
     int32_t rq4_M = 1;
     int32_t rq4_N = 0;
-    int32_t rq4_Z = 0;
     uint8_t in_buf[compute_buf::IN_BUF_BYTES] = {};
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
     ComputeState dbg_state = ComputeState::IDLE;
@@ -500,10 +494,10 @@ int main() {
         ffn_act_in[i] = static_cast<int16_t>((i * 13) - 40);
         ffn2_x[i] = static_cast<int16_t>((i * 9) - 30);
     }
-    choose_requant_params(rq1_in, D_MODEL, rq1_M, rq1_N, rq1_Z);
-    choose_requant_params(rq2_in, D_MODEL, rq2_M, rq2_N, rq2_Z);
-    choose_requant_params(rq3_in, D_MODEL, rq3_M, rq3_N, rq3_Z);
-    choose_requant_params(rq4_in, D_MODEL, rq4_M, rq4_N, rq4_Z);
+    choose_requant_params(rq1_in, D_MODEL, rq1_M, rq1_N);
+    choose_requant_params(rq2_in, D_MODEL, rq2_M, rq2_N);
+    choose_requant_params(rq3_in, D_MODEL, rq3_M, rq3_N);
+    choose_requant_params(rq4_in, D_MODEL, rq4_M, rq4_N);
     expected_out_proj_full(valueA_mem, full_weights, full_bias, expected_full);
     std::printf("D_MODEL=%d D_TILE_WO=%d NUM_WO_TILES=%d\n", D_MODEL, D_TILE_WO, NUM_WO_TILES);
     print_valueA(valueA_mem);
@@ -602,7 +596,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq1_M);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq1_N);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, rq1_Z);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT2: {
@@ -611,7 +604,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq2_M);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq2_N);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, rq2_Z);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT3: {
@@ -620,7 +612,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq3_M);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq3_N);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, rq3_Z);
                             break;
                         }
                         case ComputeOp::CMP_REQUANT4: {
@@ -629,7 +620,6 @@ int main() {
                             }
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::M, rq4_M);
                             compute_buf::write_i32(in_buf, compute_buf::RequantLayout::N, rq4_N);
-                            compute_buf::write_i32(in_buf, compute_buf::RequantLayout::Z, rq4_Z);
                             break;
                         }
                         case ComputeOp::CMP_RESID0: {

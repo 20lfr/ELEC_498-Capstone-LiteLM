@@ -408,11 +408,6 @@ bool drive_group_head_phase(
 #pragma HLS UNROLL
         HeadCtx &ctx = head_ctx_ref[lane]; // Current head in this group
 
-        // Re-init when this lane targets a new head or layer
-        // if (ctx.head_idx != lane_head_idx || ctx.layer_stamp != layer_idx) {
-        //     init_head_ctx(ctx, layer_idx, lane_head_idx);
-        // }
-
         // One-cycle start pulse only when idle
         ctx.start_head = start && (ctx.phase == HeadPhase::IDLE);
 

@@ -2,6 +2,8 @@
 #include <cstdint>
 #include <ap_int.h>
 
+using int4_t = ap_int<4>;
+
 
 /*
 README: 
@@ -136,6 +138,9 @@ constexpr int D_TILE_W1  = D_MODEL / NUM_W1_TILES; // Tile size for W1
 constexpr int D_TILE_W2  = D_FFN   / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16; // Context window length
 constexpr int MAX_CYCLIC_SIZE = 16; // << for UNROLL parallelism in MAC units
+constexpr int HEADS_PARALLEL = 2;
+constexpr int NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
+
 
 // Q1.15 scaling factor for attention logits (1/sqrt(D_HEADS) * 2^15).
 // Update if D_HEADS changes.
@@ -297,7 +302,6 @@ struct HeadCtx {
     bool att_value_dma_done  = false;
 };
 
-
 // ------------------------------------------------------------
 // MAC state + helper structs
 // ------------------------------------------------------------
@@ -339,10 +343,14 @@ constexpr uint32_t STATUS_ERROR         = 1u << 1;
 constexpr uint32_t STATUS_BUSY_BIT      = 1u << 2;
 
 // Error Codes
-constexpr uint32_t ERR_NONE             = 0x0;
-constexpr uint32_t ERR_DMA_ALIGNMENT    = 0x10;
-constexpr uint32_t ERR_DMA_ZERO_LEN     = 0x11;
-constexpr uint32_t ERR_INPUT_STREAM     = 0x12;
+constexpr uint32_t ERR_NONE             = 0;
+constexpr uint32_t ERR_DMA_ALIGNMENT    = 1;
+constexpr uint32_t ERR_DMA_ZERO_LEN     = 2;
+constexpr uint32_t ERR_DMA_ZERO_STRIDE  = 4;
+constexpr uint32_t ERR_SCHEDULER_ERROR  = 8;
+constexpr uint32_t ERR_COMPUTE_ERROR    = 16;
+
+
 
 // Register Addr mapping is auto generated in a HLS project
 // `mask_allowed/hel/impl/ip/drivers/<top_function>/src/x<top_function>_hw.h`
@@ -437,7 +445,7 @@ constexpr int OUT_PROJ_W_BYTES = div_ceil(OUT_PROJ_W_NIBBLES, 2);
 constexpr int OUT_PROJ_B_BYTES = D_TILE_WO * 4;
 constexpr int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
 
-constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 12;
+constexpr int REQUANT_IN_BYTES = (D_MODEL * 4) + 8;
 constexpr int RESID_IN_BYTES = D_MODEL * 2;
 constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 
@@ -498,7 +506,6 @@ struct RequantLayout {
     static constexpr int X = 0;
     static constexpr int M = X + (D_MODEL * 4);
     static constexpr int N = M + 4;
-    static constexpr int Z = N + 4;
 };
 
 struct ResidLayout {
@@ -604,6 +611,32 @@ constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
 
 constexpr int HEAD_MAC_VEC_UNROLL = min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
 constexpr int HEAD_MAC_OUT_UNROLL = min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
+constexpr int CONTEXT_UNROLL = min2_constexpr(CONTEXT_LENGTH, MAX_CYCLIC_SIZE);
+
+struct ComputeHeadCtx {
+    ComputeState state = ComputeState::IDLE;
+    PendingRequest req{};
+    bool mac_busy = false;
+    bool mac_ready = true;
+    bool mac_complete = false;
+    bool clear_pending = false;
+    bool capture_pending = false;
+    bool mac_start = false;
+    bool error_latched = false;
+
+    // FSM communication signals
+    bool compute_start = false;
+    uint32_t compute_instruction = 0;
+    bool compute_ready = false;
+    bool compute_done = false;
+
+    // Memory manager handshake
+    bool mem_transfer_done = false;
+    bool mem_read_request = false;
+    bool mem_write_request = false;
+    uint32_t mem_op = 0;
+
+};
 // ------------------------------------------------------------
 // Headed attention buffer layouts
 // ------------------------------------------------------------
@@ -616,7 +649,7 @@ constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
 constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
 constexpr int QKV_OUT_BYTES = D_HEADS * 4;
 
-constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 12;
+constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4) + 8;
 constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
 
 constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
@@ -659,7 +692,6 @@ struct HeadRequantLayout {
     static constexpr int X = 0;
     static constexpr int M = X + (D_HEADS * 4);
     static constexpr int N = M + 4;
-    static constexpr int Z = N + 4;
 };
 
 struct AttScoresLayout {
