@@ -64,9 +64,9 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_165_2
         exp_buf_33_out_ap_vld,
         sum_exp_2_out,
         sum_exp_2_out_ap_vld,
-        exp_lut_q15_address0,
-        exp_lut_q15_ce0,
-        exp_lut_q15_q0
+        exp_lut_q15_1_address0,
+        exp_lut_q15_1_ce0,
+        exp_lut_q15_1_q0
 );
 
 parameter    ap_ST_fsm_pp0_stage0 = 1'd1;
@@ -128,9 +128,9 @@ output  [15:0] exp_buf_33_out;
 output   exp_buf_33_out_ap_vld;
 output  [18:0] sum_exp_2_out;
 output   sum_exp_2_out_ap_vld;
-output  [8:0] exp_lut_q15_address0;
-output   exp_lut_q15_ce0;
-input  [14:0] exp_lut_q15_q0;
+output  [8:0] exp_lut_q15_1_address0;
+output   exp_lut_q15_1_ce0;
+input  [14:0] exp_lut_q15_1_q0;
 
 reg ap_idle;
 reg exp_buf_48_out_ap_vld;
@@ -194,10 +194,10 @@ reg   [15:0] exp_buf_13_fu_230;
 reg   [15:0] exp_buf_14_fu_234;
 reg   [15:0] exp_buf_15_fu_238;
 wire    ap_block_pp0_stage0_01001;
-reg    exp_lut_q15_ce0_local;
-wire   [15:0] tmp_55_fu_505_p33;
-wire   [3:0] tmp_55_fu_505_p34;
-wire   [15:0] tmp_55_fu_505_p35;
+reg    exp_lut_q15_1_ce0_local;
+wire   [15:0] tmp_51_fu_505_p33;
+wire   [3:0] tmp_51_fu_505_p34;
+wire   [15:0] tmp_51_fu_505_p35;
 wire   [15:0] diff_fu_577_p2;
 wire   [0:0] tmp_fu_583_p3;
 wire   [7:0] part_sel1_fu_603_p4;
@@ -215,22 +215,22 @@ wire    ap_enable_pp0;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [3:0] tmp_55_fu_505_p1;
-wire   [3:0] tmp_55_fu_505_p3;
-wire   [3:0] tmp_55_fu_505_p5;
-wire   [3:0] tmp_55_fu_505_p7;
-wire   [3:0] tmp_55_fu_505_p9;
-wire   [3:0] tmp_55_fu_505_p11;
-wire   [3:0] tmp_55_fu_505_p13;
-wire   [3:0] tmp_55_fu_505_p15;
-wire  signed [3:0] tmp_55_fu_505_p17;
-wire  signed [3:0] tmp_55_fu_505_p19;
-wire  signed [3:0] tmp_55_fu_505_p21;
-wire  signed [3:0] tmp_55_fu_505_p23;
-wire  signed [3:0] tmp_55_fu_505_p25;
-wire  signed [3:0] tmp_55_fu_505_p27;
-wire  signed [3:0] tmp_55_fu_505_p29;
-wire  signed [3:0] tmp_55_fu_505_p31;
+wire   [3:0] tmp_51_fu_505_p1;
+wire   [3:0] tmp_51_fu_505_p3;
+wire   [3:0] tmp_51_fu_505_p5;
+wire   [3:0] tmp_51_fu_505_p7;
+wire   [3:0] tmp_51_fu_505_p9;
+wire   [3:0] tmp_51_fu_505_p11;
+wire   [3:0] tmp_51_fu_505_p13;
+wire   [3:0] tmp_51_fu_505_p15;
+wire  signed [3:0] tmp_51_fu_505_p17;
+wire  signed [3:0] tmp_51_fu_505_p19;
+wire  signed [3:0] tmp_51_fu_505_p21;
+wire  signed [3:0] tmp_51_fu_505_p23;
+wire  signed [3:0] tmp_51_fu_505_p25;
+wire  signed [3:0] tmp_51_fu_505_p27;
+wire  signed [3:0] tmp_51_fu_505_p29;
+wire  signed [3:0] tmp_51_fu_505_p31;
 wire  signed [1:0] e_q15_fu_677_p1;
 wire   [1:0] e_q15_fu_677_p3;
 wire   [1:0] e_q15_fu_677_p5;
@@ -299,7 +299,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U1780(
+sparsemux_33_4_16_1_1_U1818(
     .din0(max_val_3),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_535),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_536),
@@ -316,9 +316,9 @@ sparsemux_33_4_16_1_1_U1780(
     .din13(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_547),
     .din14(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_548),
     .din15(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_549),
-    .def(tmp_55_fu_505_p33),
-    .sel(tmp_55_fu_505_p34),
-    .dout(tmp_55_fu_505_p35)
+    .def(tmp_51_fu_505_p33),
+    .sel(tmp_51_fu_505_p34),
+    .dout(tmp_51_fu_505_p35)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_7_2_15_1_1 #(
@@ -333,10 +333,10 @@ sparsemux_33_4_16_1_1_U1780(
     .def_WIDTH( 15 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 15 ))
-sparsemux_7_2_15_1_1_U1781(
+sparsemux_7_2_15_1_1_U1819(
     .din0(15'd32767),
     .din1(15'd12055),
-    .din2(exp_lut_q15_q0),
+    .din2(exp_lut_q15_1_q0),
     .def(e_q15_fu_677_p7),
     .sel(e_q15_fu_677_p8),
     .dout(e_q15_fu_677_p9)
@@ -691,9 +691,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        exp_lut_q15_ce0_local = 1'b1;
+        exp_lut_q15_1_ce0_local = 1'b1;
     end else begin
-        exp_lut_q15_ce0_local = 1'b0;
+        exp_lut_q15_1_ce0_local = 1'b0;
     end
 end
 
@@ -740,7 +740,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign diff_fu_577_p2 = (tmp_55_fu_505_p35 - max_val_4_reload);
+assign diff_fu_577_p2 = (tmp_51_fu_505_p35 - max_val_4_reload);
 
 assign e_q15_fu_677_p7 = 'bx;
 
@@ -778,9 +778,9 @@ assign exp_buf_47_out = exp_buf_14_fu_234;
 
 assign exp_buf_48_out = exp_buf_15_fu_238;
 
-assign exp_lut_q15_address0 = zext_ln137_fu_621_p1;
+assign exp_lut_q15_1_address0 = zext_ln137_fu_621_p1;
 
-assign exp_lut_q15_ce0 = exp_lut_q15_ce0_local;
+assign exp_lut_q15_1_ce0 = exp_lut_q15_1_ce0_local;
 
 assign icmp_ln133_fu_597_p2 = ((diff_fu_577_p2 == 16'd32768) ? 1'b1 : 1'b0);
 
@@ -794,9 +794,9 @@ assign sum_exp_1_fu_788_p2 = (zext_ln172_fu_784_p1 + sum_exp_fu_170);
 
 assign sum_exp_2_out = sum_exp_fu_170;
 
-assign tmp_55_fu_505_p33 = 'bx;
+assign tmp_51_fu_505_p33 = 'bx;
 
-assign tmp_55_fu_505_p34 = ap_sig_allocacmp_i_21[3:0];
+assign tmp_51_fu_505_p34 = ap_sig_allocacmp_i_21[3:0];
 
 assign tmp_fu_583_p3 = diff_fu_577_p2[32'd15];
 

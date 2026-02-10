@@ -14,12 +14,12 @@ module transformer_top_read_i32 (
         ap_idle,
         ap_ready,
         ap_ce,
-        head_in_buf_0_address0,
-        head_in_buf_0_ce0,
-        head_in_buf_0_q0,
-        head_in_buf_0_address1,
-        head_in_buf_0_ce1,
-        head_in_buf_0_q1,
+        in_buf_address0,
+        in_buf_ce0,
+        in_buf_q0,
+        in_buf_address1,
+        in_buf_ce1,
+        in_buf_q1,
         byte_addr,
         ap_return
 );
@@ -34,13 +34,13 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input   ap_ce;
-output  [6:0] head_in_buf_0_address0;
-output   head_in_buf_0_ce0;
-input  [7:0] head_in_buf_0_q0;
-output  [6:0] head_in_buf_0_address1;
-output   head_in_buf_0_ce1;
-input  [7:0] head_in_buf_0_q1;
-input  [5:0] byte_addr;
+output  [6:0] in_buf_address0;
+output   in_buf_ce0;
+input  [7:0] in_buf_q0;
+output  [6:0] in_buf_address1;
+output   in_buf_ce1;
+input  [7:0] in_buf_q1;
+input  [6:0] byte_addr;
 output  [31:0] ap_return;
 
 reg ap_done;
@@ -55,25 +55,25 @@ reg    ap_idle_pp0;
 wire    ap_CS_fsm_pp0_stage1;
 reg    ap_block_pp0_stage1_subdone;
 reg    ap_enable_reg_pp0_iter0_reg;
-reg   [5:0] byte_addr_read_reg_119;
+reg   [6:0] byte_addr_read_reg_119;
 wire    ap_block_pp0_stage0_11001;
-reg   [7:0] head_in_buf_0_load_reg_135;
+reg   [7:0] in_buf_load_reg_135;
 wire    ap_block_pp0_stage1_11001;
-reg   [7:0] head_in_buf_0_load_1_reg_140;
+reg   [7:0] in_buf_load_1_reg_140;
 reg    ap_block_pp0_stage0_subdone;
-wire   [63:0] zext_ln564_fu_73_p1;
+wire   [63:0] zext_ln739_fu_73_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln565_fu_84_p1;
-wire   [63:0] zext_ln566_fu_94_p1;
+wire   [63:0] zext_ln740_fu_84_p1;
+wire   [63:0] zext_ln741_fu_94_p1;
 wire    ap_block_pp0_stage1;
-wire   [63:0] zext_ln567_fu_104_p1;
-reg    head_in_buf_0_ce1_local;
-reg   [6:0] head_in_buf_0_address1_local;
-reg    head_in_buf_0_ce0_local;
-reg   [6:0] head_in_buf_0_address0_local;
-wire   [5:0] add_ln565_fu_78_p2;
-wire   [5:0] add_ln566_fu_89_p2;
-wire   [5:0] add_ln567_fu_99_p2;
+wire   [63:0] zext_ln742_fu_104_p1;
+reg    in_buf_ce1_local;
+reg   [6:0] in_buf_address1_local;
+reg    in_buf_ce0_local;
+reg   [6:0] in_buf_address0_local;
+wire   [6:0] add_ln740_fu_78_p2;
+wire   [6:0] add_ln741_fu_89_p2;
+wire   [6:0] add_ln742_fu_99_p2;
 reg   [1:0] ap_NS_fsm;
 reg    ap_idle_pp0_0to0;
 reg    ap_reset_idle_pp0;
@@ -126,8 +126,8 @@ end
 
 always @ (posedge ap_clk) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_ce) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        head_in_buf_0_load_1_reg_140 <= head_in_buf_0_q0;
-        head_in_buf_0_load_reg_135 <= head_in_buf_0_q1;
+        in_buf_load_1_reg_140 <= in_buf_q0;
+        in_buf_load_reg_135 <= in_buf_q1;
     end
 end
 
@@ -197,37 +197,37 @@ end
 
 always @ (*) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        head_in_buf_0_address0_local = zext_ln567_fu_104_p1;
+        in_buf_address0_local = zext_ln742_fu_104_p1;
     end else if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        head_in_buf_0_address0_local = zext_ln565_fu_84_p1;
+        in_buf_address0_local = zext_ln740_fu_84_p1;
     end else begin
-        head_in_buf_0_address0_local = 'bx;
+        in_buf_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        head_in_buf_0_address1_local = zext_ln566_fu_94_p1;
+        in_buf_address1_local = zext_ln741_fu_94_p1;
     end else if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        head_in_buf_0_address1_local = zext_ln564_fu_73_p1;
+        in_buf_address1_local = zext_ln739_fu_73_p1;
     end else begin
-        head_in_buf_0_address1_local = 'bx;
+        in_buf_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
     if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_ce) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_ce) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
-        head_in_buf_0_ce0_local = 1'b1;
+        in_buf_ce0_local = 1'b1;
     end else begin
-        head_in_buf_0_ce0_local = 1'b0;
+        in_buf_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_ce) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_ce) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
-        head_in_buf_0_ce1_local = 1'b1;
+        in_buf_ce1_local = 1'b1;
     end else begin
-        head_in_buf_0_ce1_local = 1'b0;
+        in_buf_ce1_local = 1'b0;
     end
 end
 
@@ -255,11 +255,11 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln565_fu_78_p2 = (byte_addr + 6'd1);
+assign add_ln740_fu_78_p2 = (byte_addr + 7'd1);
 
-assign add_ln566_fu_89_p2 = (byte_addr_read_reg_119 + 6'd2);
+assign add_ln741_fu_89_p2 = (byte_addr_read_reg_119 + 7'd2);
 
-assign add_ln567_fu_99_p2 = (byte_addr_read_reg_119 + 6'd3);
+assign add_ln742_fu_99_p2 = (byte_addr_read_reg_119 + 7'd3);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -283,22 +283,22 @@ end
 
 assign ap_enable_pp0 = (ap_idle_pp0 ^ 1'b1);
 
-assign ap_return = {{{{head_in_buf_0_q0}, {head_in_buf_0_q1}}, {head_in_buf_0_load_1_reg_140}}, {head_in_buf_0_load_reg_135}};
+assign ap_return = {{{{in_buf_q0}, {in_buf_q1}}, {in_buf_load_1_reg_140}}, {in_buf_load_reg_135}};
 
-assign head_in_buf_0_address0 = head_in_buf_0_address0_local;
+assign in_buf_address0 = in_buf_address0_local;
 
-assign head_in_buf_0_address1 = head_in_buf_0_address1_local;
+assign in_buf_address1 = in_buf_address1_local;
 
-assign head_in_buf_0_ce0 = head_in_buf_0_ce0_local;
+assign in_buf_ce0 = in_buf_ce0_local;
 
-assign head_in_buf_0_ce1 = head_in_buf_0_ce1_local;
+assign in_buf_ce1 = in_buf_ce1_local;
 
-assign zext_ln564_fu_73_p1 = byte_addr;
+assign zext_ln739_fu_73_p1 = byte_addr;
 
-assign zext_ln565_fu_84_p1 = add_ln565_fu_78_p2;
+assign zext_ln740_fu_84_p1 = add_ln740_fu_78_p2;
 
-assign zext_ln566_fu_94_p1 = add_ln566_fu_89_p2;
+assign zext_ln741_fu_94_p1 = add_ln741_fu_89_p2;
 
-assign zext_ln567_fu_104_p1 = add_ln567_fu_99_p2;
+assign zext_ln742_fu_104_p1 = add_ln742_fu_99_p2;
 
 endmodule //transformer_top_read_i32

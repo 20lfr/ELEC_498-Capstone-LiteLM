@@ -45,7 +45,7 @@ reg    ap_enable_reg_pp0_iter1;
 reg    ap_idle_pp0;
 wire    ap_block_pp0_stage0_subdone;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln545_fu_37_p1;
+wire   [63:0] zext_ln720_fu_37_p1;
 wire    ap_block_pp0_stage0;
 reg    head_in_buf_0_ce0_local;
 reg   [0:0] ap_NS_fsm;
@@ -159,10 +159,10 @@ assign ap_enable_reg_pp0_iter0 = ap_start;
 
 assign ap_return = head_in_buf_0_q0;
 
-assign head_in_buf_0_address0 = zext_ln545_fu_37_p1;
+assign head_in_buf_0_address0 = zext_ln720_fu_37_p1;
 
 assign head_in_buf_0_ce0 = head_in_buf_0_ce0_local;
 
-assign zext_ln545_fu_37_p1 = byte_addr;
+assign zext_ln720_fu_37_p1 = byte_addr;
 
 endmodule //transformer_top_read_i8

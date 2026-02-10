@@ -62,7 +62,7 @@ int main() {
            qkv_in.weights.offset, qkv_in.weights.size,
            qkv_in.bias.offset, qkv_in.bias.size,
            qkv_in.total_size);
-    check(qkv_in.total_size == head_buf::QKV_IN_BYTES, "qkv_in_size");
+    check(qkv_in.total_size == head_buf::INQkvLayout::TOTAL_BYTES, "qkv_in_size");
     
     InputBufferLayout ffn_in = mmu_calc_input_layout(CMP_FFN_W1, dims);
     printf("  CMP_FFN_W1: act@%u(%u), W@%u(%u), B@%u(%u), S@%u(%u), total=%u\n",
@@ -71,13 +71,13 @@ int main() {
            ffn_in.bias.offset, ffn_in.bias.size,
            ffn_in.scale.offset, ffn_in.scale.size,
            ffn_in.total_size);
-    check(ffn_in.total_size == compute_buf::FFN_W1_IN_BYTES, "ffn_w1_in_size");
+    check(ffn_in.total_size == compute_buf::INFfnW1Layout::TOTAL_BYTES, "ffn_w1_in_size");
     
     printf("\nOutput buffer layouts:\n");
     OutputBufferLayout qkv_out = mmu_calc_output_layout(CMP_Q, dims);
     printf("  CMP_Q: result@%u(%u), total=%u\n",
            qkv_out.result.offset, qkv_out.result.size, qkv_out.total_size);
-    check(qkv_out.total_size == head_buf::QKV_OUT_BYTES, "qkv_out_size");
+    check(qkv_out.total_size == head_buf::OUTQkvLayout::TOTAL_BYTES, "qkv_out_size");
     
     // Test 7: DMA sizes
     printf("\nDMA sizes:\n");
