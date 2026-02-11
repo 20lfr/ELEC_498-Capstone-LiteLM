@@ -601,24 +601,28 @@ void compute_controller(
                     }
                     int32_t M = 1;
                     int32_t n = 0;
+                    int layer = static_cast<int>(req.layer_idx);
+                    if (layer < 0 || layer >= MODEL_LAYERS) {
+                        layer = 0;
+                    }
 
                     // M and N mux
                     switch (req.op) {
                         case ComputeOp::CMP_REQUANT1:
-                            M = requant_params::REQUANT1_M;
-                            n = requant_params::REQUANT1_N;
+                            M = requant_params::REQUANT1_M_L[layer];
+                            n = requant_params::REQUANT1_N_L[layer];
                             break;
                         case ComputeOp::CMP_REQUANT2:
-                            M = requant_params::REQUANT2_M;
-                            n = requant_params::REQUANT2_N;
+                            M = requant_params::REQUANT2_M_L[layer];
+                            n = requant_params::REQUANT2_N_L[layer];
                             break;
                         case ComputeOp::CMP_REQUANT3:
-                            M = requant_params::REQUANT3_M;
-                            n = requant_params::REQUANT3_N;
+                            M = requant_params::REQUANT3_M_L[layer];
+                            n = requant_params::REQUANT3_N_L[layer];
                             break;
                         case ComputeOp::CMP_REQUANT4:
-                            M = requant_params::REQUANT4_M;
-                            n = requant_params::REQUANT4_N;
+                            M = requant_params::REQUANT4_M_L[layer];
+                            n = requant_params::REQUANT4_N_L[layer];
                             break;
                         default:
                             break;

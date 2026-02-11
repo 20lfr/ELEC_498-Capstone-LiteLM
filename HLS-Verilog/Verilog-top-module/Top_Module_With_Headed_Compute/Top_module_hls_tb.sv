@@ -822,10 +822,10 @@ module top_module_hls_tb;
       full_bias[i] = 32'd7;
       full_accum[i] = 32'd0;
       out_proj_out[i] = 32'd0;
-      rq1_x[i] = (i * 3) - 20;
-      rq2_x[i] = (i * 2) + 5;
-      rq3_x[i] = 100 - (i * 4);
-      rq4_x[i] = (i * 5) - 11;
+      rq1_x[i] = (i * 3000) - 20000;
+      rq2_x[i] = (i * 2000) + 5000;
+      rq3_x[i] = 100000 - (i * 4000);
+      rq4_x[i] = (i * 5000) - 11000;
       rq1_out[i] = 8'd0;
       rq2_out[i] = 8'd0;
       rq3_out[i] = 8'd0;
@@ -846,6 +846,14 @@ module top_module_hls_tb;
       ln1_out[i] = 32'd0;
       final_norm_out[i] = 32'd0;
       ffn1_x[i] = i + 3;
+    end
+    if (D_MODEL > 0) begin
+      rq1_x[0] = 32'sh7fff_ffff;
+      rq3_x[0] = 32'sh7fff_ffff;
+    end
+    if (D_MODEL > 1) begin
+      rq1_x[1] = 32'sh8000_0000;
+      rq3_x[1] = 32'sh8000_0000;
     end
     for (i = 0; i < W1_OUT_SIZE; i = i + 1) begin
       ffn1_b[i] = 32'd7;

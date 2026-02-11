@@ -948,10 +948,10 @@ int main() {
     for (int i = 0; i < D_MODEL; ++i) {
         out_proj_act[i] = static_cast<int8_t>(i + 1);
         out_proj_b[i] = 7;
-        rq1_x[i] = (i * 3) - 20;
-        rq2_x[i] = (i * 2) + 5;
-        rq3_x[i] = 100 - (i * 4);
-        rq4_x[i] = (i * 5) - 11;
+        rq1_x[i] = (i * 3000) - 20000;
+        rq2_x[i] = (i * 2000) + 5000;
+        rq3_x[i] = 100000 - (i * 4000);
+        rq4_x[i] = (i * 5000) - 11000;
         resid0_x[i] = static_cast<int8_t>(i);
         resid0_r[i] = static_cast<int8_t>(i * 2);
         resid1_x[i] = static_cast<int8_t>(-i);
@@ -963,6 +963,15 @@ int main() {
         ln1_gamma[i] = 2;
         final_norm_gamma[i] = 3;
         ffn1_x[i] = static_cast<int8_t>(i + 3);
+    }
+    // Force a couple of extreme values for requant debug visibility.
+    if (D_MODEL > 0) {
+        rq1_x[0] = INT32_MAX;
+        rq3_x[0] = INT32_MAX;
+    }
+    if (D_MODEL > 1) {
+        rq1_x[1] = INT32_MIN;
+        rq3_x[1] = INT32_MIN;
     }
     for (int i = 0; i < W1_OUT_SIZE; ++i) {
         ffn1_b[i] = 7;

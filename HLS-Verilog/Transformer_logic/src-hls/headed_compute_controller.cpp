@@ -447,24 +447,28 @@ static void headed_compute_controller_lane(
                     }
                     int32_t M = 1;
                     int32_t n = 0;
+                    int layer = static_cast<int>(ctx.req.layer_idx);
+                    if (layer < 0 || layer >= MODEL_LAYERS) {
+                        layer = 0;
+                    }
 
                     // M and N mux
                     switch (ctx.req.op) {
                         case ComputeOp::CMP_K_REQUANT:
-                            M = requant_params::REQUANT_K_M;
-                            n = requant_params::REQUANT_K_N;
+                            M = requant_params::REQUANT_K_M_L[layer];
+                            n = requant_params::REQUANT_K_N_L[layer];
                             break;
                         case ComputeOp::CMP_V_REQUANT:
-                            M = requant_params::REQUANT_V_M;
-                            n = requant_params::REQUANT_V_N;
+                            M = requant_params::REQUANT_V_M_L[layer];
+                            n = requant_params::REQUANT_V_N_L[layer];
                             break;
                         case ComputeOp::CMP_REQUANT_Q:
-                            M = requant_params::REQUANT_Q_M;
-                            n = requant_params::REQUANT_Q_N;
+                            M = requant_params::REQUANT_Q_M_L[layer];
+                            n = requant_params::REQUANT_Q_N_L[layer];
                             break;
                         case ComputeOp::CMP_HEAD_REQUANT:
-                            M = requant_params::REQUANT_HEAD_M;
-                            n = requant_params::REQUANT_HEAD_N;
+                            M = requant_params::REQUANT_HEAD_M_L[layer];
+                            n = requant_params::REQUANT_HEAD_N_L[layer];
                             break;
                         default:
                             break;
