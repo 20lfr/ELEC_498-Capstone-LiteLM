@@ -4,9 +4,10 @@
 
 #include "top_params.hpp"
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Data Types
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 enum class DataType : uint8_t {
     DTYPE_NONE  = 0,
     DTYPE_INT4  = 1,
@@ -20,9 +21,10 @@ enum class MemType : uint8_t {
     URAM = 1
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Model Dimensions 
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 struct ModelDims {
     uint16_t d_model     = D_MODEL;
     uint16_t d_ffn       = D_FFN;
@@ -38,9 +40,10 @@ struct ModelDims {
     uint16_t num_w2_tiles = NUM_W2_TILES;
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Buffer Field Descriptor
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 struct BufferField {
     uint32_t offset;
     uint32_t size;
@@ -52,9 +55,10 @@ struct BufferField {
         : offset(off), size(sz), dtype(dt), num_elements(n) {}
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Buffer Layouts
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 struct InputBufferLayout {
     BufferField act;
     BufferField weights;
@@ -67,6 +71,7 @@ struct InputBufferLayout {
     BufferField v_cache;
     BufferField m_param;
     BufferField n_param;
+    BufferField z_param;
     uint32_t total_size;
     
     InputBufferLayout() : total_size(0) {}
@@ -89,9 +94,10 @@ struct WeightBlobLayout {
     WeightBlobLayout() : total_size(0) {}
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // KV Cache Address
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 struct KVCacheAddr {
     uint32_t base_addr;
     uint16_t token_offset;
@@ -101,9 +107,10 @@ struct KVCacheAddr {
     KVCacheAddr() : base_addr(0), token_offset(0), head(0), valid(false) {}
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Configuration Constants
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 constexpr int MMU_MAX_CHUNKS          = 8;
 constexpr int MMU_MAX_TILES           = 64;
 constexpr int MMU_MAX_HEADS           = 32;
@@ -112,9 +119,10 @@ constexpr uint32_t MMU_BANK_SIZE      = 36864;  // 288 Kb per URAM block
 constexpr int MMU_DMA_QUEUE_DEPTH     = 16;
 constexpr int MMU_COMPUTE_QUEUE_DEPTH = 16;
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Chunked Allocation (for multi-bank spanning)
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 struct ChunkedAllocation {
     uint8_t  bank[MMU_MAX_CHUNKS];
     uint32_t offset[MMU_MAX_CHUNKS];
@@ -130,9 +138,10 @@ struct ChunkedAllocation {
     }
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // FSM States
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 enum class MMUFsmState : uint8_t {
     IDLE            = 0,
     DMA_ARBITRATE   = 1,
@@ -146,98 +155,124 @@ enum class MMUFsmState : uint8_t {
     TRANSFER_DONE   = 9
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // Compute Request Types
-// ----------------------------------------------------------------------------
+// ============================================================================
+
 enum class ComputeReqType : uint8_t {
     REQ_NONE  = 0,
     REQ_READ  = 1,
     REQ_WRITE = 2
 };
 
-// ============================================================================
-// Main FSM Function 
-// ============================================================================
+
 void mmu_fsm(
-    // Reset (active high)
-    bool        reset,
+    // ========================================================================
+    // Control
+    // ========================================================================
+    bool                reset,
     
-    // External DMA interface
-    bool        dma_ready,
-    bool        dma_done,
-    bool       &dma_start,
-    uint32_t   &dma_addr,
-    uint32_t   &dma_len,
-    bool       &dma_is_write,
-    uint8_t    &uram_bank,
-    uint32_t   &uram_offset,
+    // ========================================================================
+    // External DMA Interface (to AXI-Full)
+    // ========================================================================
+    bool                dma_ready,          // DMA ready to accept request
+    bool                dma_done,           // DMA transfer complete
+    bool               &dma_start,          // [out] Start DMA transfer
+    uint32_t           &dma_addr,           // [out] DDR address
+    uint32_t           &dma_len,            // [out] Transfer length
+    bool               &dma_is_write,       // [out] Write direction
+    uint8_t            &uram_bank,          // [out] Target URAM bank
+    uint32_t           &uram_offset,        // [out] Offset within bank
     
-    // Compute buffer interface
-    bool        buffer_ready,
-    bool       &buffer_valid,
-    bool       &transfer_done,
+    // ========================================================================
+    // Compute Buffer Interface
+    // ========================================================================
+    bool                buffer_ready,       // Compute buffer ready
+    bool               &buffer_valid,       // [out] Data valid for compute
+    bool               &transfer_done,      // [out] Transfer complete
     
-    // DMA request interface (from scheduler)
-    bool        dma_req_valid,
-    uint32_t    dma_req_packed,
-    bool       &dma_req_ready,
+    // ========================================================================
+    // DMA Request Interface (from Scheduler)
+    // ========================================================================
+    bool                dma_req_valid,      // Request valid
+    uint32_t            dma_req_packed,     // Packed request (sel|layer|head|tile)
+    bool               &dma_req_ready,      // [out] Ready to accept
     
-    // Compute request interface (from compute)
-    bool        compute_req_valid,
-    uint32_t    compute_req_packed,
-    ComputeReqType compute_req_type,
-    uint8_t     compute_req_head,
-    bool       &compute_req_ready,
+    // ========================================================================
+    // Compute Request Interface (from Compute)
+    // ========================================================================
+    bool                compute_req_valid,
+    uint32_t            compute_req_packed,
+    ComputeReqType      compute_req_type,
+    uint8_t             compute_req_head,
+    bool               &compute_req_ready,  // [out] Ready to accept
     
-    // Done flags output
-    bool       &main_dma_done,
-    bool       &main_compute_done,
+    // ========================================================================
+    // Done Flags Output (directly exposed as signals)
+    // ========================================================================
+    bool               &main_dma_done,      // [out] Non-headed DMA complete
+    bool               &main_compute_done,  // [out] Non-headed compute complete
     
-    // Status output
-    MMUFsmState &fsm_state_out,
-    bool       &error_overflow,
-    bool       &error_invalid,
+    // ========================================================================
+    // Per-Head Done Flags (directly exposed as signals)
+    // ========================================================================
+    bool                head_dma_done_out[MMU_MAX_HEADS],     // [out] Per-head DMA done
+    bool                head_compute_done_out[MMU_MAX_HEADS], // [out] Per-head compute done
     
-    // Configuration (passed by value)
-    ModelDims   dims,
-    uint32_t    k_cache_base,
-    uint32_t    v_cache_base,
-    uint16_t    current_token
+    // ========================================================================
+    // Tile Cache Query Interface (signal-based, from Scheduler)
+    // ========================================================================
+    bool                tile_query_valid,   // Query request
+    DmaSel              tile_query_sel,     // What type to look for
+    int                 tile_query_layer,   // Layer to match
+    int                 tile_query_head,    // Head to match
+    int                 tile_query_tile,    // Tile to match
+    bool               &tile_query_hit,     // [out] Found in cache
+    uint8_t            &tile_query_bank,    // [out] Which bank (first chunk)
+    uint32_t           &tile_query_offset,  // [out] Offset (first chunk)
+    
+    // ========================================================================
+    // Head Arbitration Interface (signal-based)
+    // ========================================================================
+    bool                arb_request_valid,  // Request arbitration
+    int                 arb_request_head,   // Which head is requesting
+    bool                arb_release_valid,  // Release grant
+    int                 arb_release_head,   // Which head to release
+    bool               &arb_grant_valid,    // [out] Grant is valid
+    int                &arb_granted_head,   // [out] Which head is granted
+    
+    // ========================================================================
+    // Done Flag Clear Interface (signal-based)
+    // ========================================================================
+    bool                clear_head_dma_done_valid,
+    int                 clear_head_dma_done_idx,
+    bool                clear_head_compute_done_valid,
+    int                 clear_head_compute_done_idx,
+    bool                clear_main_dma_done,
+    bool                clear_main_compute_done,
+    bool                clear_all_flags,
+    
+    // ========================================================================
+    // Status Output
+    // ========================================================================
+    MMUFsmState        &fsm_state_out,      // [out] Current FSM state
+    bool               &error_overflow,     // [out] URAM allocation failed
+    bool               &error_invalid,      // [out] Invalid address
+    
+    // ========================================================================
+    // Configuration
+    // ========================================================================
+    ControlMemSpace     ctrl_mem,           // Base addresses and strides
+    ModelDims           dims,               // Model dimensions
+    uint32_t            k_cache_base,       // K cache base address
+    uint32_t            v_cache_base,       // V cache base address
+    uint16_t            current_token       // Current token position
 );
 
 // ============================================================================
-// Tile Cache Interface 
+// Helper Functions (pure combinational, can be called externally)
 // ============================================================================
-bool mmu_check_cache(DmaSel sel, int layer, int head, int tile);
 
-bool mmu_lookup_tile(DmaSel sel, int layer, int head, int tile,
-                     ChunkedAllocation &alloc_out);
-
-void mmu_invalidate_tile(DmaSel sel, int layer, int head, int tile);
-
-// ============================================================================
-// Head Arbitration Interface 
-// ============================================================================
-void mmu_request_head(int head);
-void mmu_release_head(int head);
-void mmu_arbitrate();
-int  mmu_granted_head();
-bool mmu_is_granted(int head);
-
-// ============================================================================
-// Done Flag Interface 
-// ============================================================================
-bool mmu_get_head_dma_done(int head);
-bool mmu_get_head_compute_done(int head);
-void mmu_clear_head_dma_done(int head);
-void mmu_clear_head_compute_done(int head);
-void mmu_clear_main_dma_done();
-void mmu_clear_main_compute_done();
-void mmu_clear_all_flags();
-
-// ============================================================================
-// Helper Functions 
-// ============================================================================
 bool mmu_is_headed_op(ComputeOp op);
 bool mmu_is_headed_dma(DmaSel sel);
 bool mmu_is_dma_write(DmaSel sel);
@@ -255,6 +290,7 @@ const char* mmu_state_name(MMUFsmState s);
 // ============================================================================
 // Pack/Unpack Utilities
 // ============================================================================
+
 inline uint32_t mmu_pack_dma(DmaSel sel, int layer, int head, int tile) {
 #pragma HLS INLINE
     return static_cast<uint32_t>(sel) |
