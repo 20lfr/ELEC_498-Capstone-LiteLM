@@ -1,18 +1,18 @@
 #include "mmu.hpp"
+#include "Weight_stager.hpp"
 
+// ============================================================================
+// STATIC INTERNAL STATE
+// ============================================================================
 
-/*
-    TODO: 
-        1. Put all of these in the mmu_fsm signature or figure out a way to not declare as global variables
-*/
 // FSM state
 static MMUFsmState fsm_state;
 
-// URAM bank allocation tracking
+// URAM bank allocation tracking (64 banks)
 static uint32_t bank_offsets[MMU_URAM_BANKS];
 static uint8_t active_bank;
 
-// Tile cache 
+// Tile cache (64 entries)
 static DmaSel   tt_sel[MMU_MAX_TILES];
 static int8_t   tt_layer[MMU_MAX_TILES];
 static int8_t   tt_head[MMU_MAX_TILES];
@@ -25,59 +25,62 @@ static uint32_t tt_alloc_offset[MMU_MAX_TILES][MMU_MAX_CHUNKS];
 static uint32_t tt_alloc_size[MMU_MAX_TILES][MMU_MAX_CHUNKS];
 static uint16_t num_tiles;
 
-// DMA queue
+// DMA queue (16 deep)
 static uint32_t dq_packed[MMU_DMA_QUEUE_DEPTH];
 static bool     dq_is_headed[MMU_DMA_QUEUE_DEPTH];
 static bool     dq_valid[MMU_DMA_QUEUE_DEPTH];
-static uint8_t dma_q_head;
-static uint8_t dma_q_tail;
-static uint8_t dma_q_count;
+static uint8_t  dma_q_head;
+static uint8_t  dma_q_tail;
+static uint8_t  dma_q_count;
 
-// Compute queue 
+// Compute queue (16 deep)
 static ComputeReqType cq_type[MMU_COMPUTE_QUEUE_DEPTH];
 static uint32_t cq_packed[MMU_COMPUTE_QUEUE_DEPTH];
 static bool     cq_is_headed[MMU_COMPUTE_QUEUE_DEPTH];
 static uint8_t  cq_head_idx[MMU_COMPUTE_QUEUE_DEPTH];
 static bool     cq_valid[MMU_COMPUTE_QUEUE_DEPTH];
-static uint8_t comp_q_head;
-static uint8_t comp_q_tail;
-static uint8_t comp_q_count;
+static uint8_t  comp_q_head;
+static uint8_t  comp_q_tail;
+static uint8_t  comp_q_count;
 
-// Head arbiter 
-static bool arb_pending[MMU_MAX_HEADS];
-static bool arb_grant[MMU_MAX_HEADS];
-static uint8_t arb_current;
-static uint8_t arb_rr_ptr;
-static bool arb_busy;
+// Head arbiter (32 heads, round-robin)
+static bool     arb_pending[MMU_MAX_HEADS];
+static bool     arb_grant[MMU_MAX_HEADS];
+static uint8_t  arb_current;
+static uint8_t  arb_rr_ptr;
+static bool     arb_busy;
 
 // Active operation state
 static uint32_t active_dma_req;
-static bool active_dma_is_headed;
+static bool     active_dma_is_headed;
 static ComputeReqType active_compute_type;
 static uint32_t active_compute_packed;
-static uint8_t active_compute_head;
-static bool active_compute_is_headed;
+static uint8_t  active_compute_head;
+static bool     active_compute_is_headed;
 
 // Chunked allocation state
 static uint8_t  alloc_bank[MMU_MAX_CHUNKS];
 static uint32_t alloc_offset[MMU_MAX_CHUNKS];
 static uint32_t alloc_size[MMU_MAX_CHUNKS];
-static uint8_t alloc_num_chunks;
-static uint8_t current_chunk;
+static uint8_t  alloc_num_chunks;
+static uint8_t  current_chunk;
 
 // Done flags
-static bool head_dma_done_flags[MMU_MAX_HEADS];
-static bool head_compute_done_flags[MMU_MAX_HEADS];
-static bool main_dma_done_flag;
-static bool main_compute_done_flag;
+static bool     head_dma_done_flags[MMU_MAX_HEADS];
+static bool     head_compute_done_flags[MMU_MAX_HEADS];
+static bool     main_dma_done_flag;
+static bool     main_compute_done_flag;
 
 // Error flags
-static bool err_overflow;
-static bool err_invalid;
+static bool     err_overflow;
+static bool     err_invalid;
 
 // In-progress flags
-static bool dma_in_progress;
-static bool transfer_in_progress;
+static bool     dma_in_progress;
+static bool     transfer_in_progress;
+
+// Latched DMA address (from Weight Stager)
+static uint32_t latched_dma_addr;
 
 // ============================================================================
 // Helper Functions 
@@ -287,10 +290,10 @@ const char* mmu_state_name(MMUFsmState s) {
 }
 
 // ============================================================================
-// Tile Cache Functions 
+// Internal Tile Cache Functions
 // ============================================================================
 
-bool mmu_check_cache(DmaSel sel, int layer, int head, int tile) {
+static bool tile_cache_check(DmaSel sel, int layer, int head, int tile) {
 #pragma HLS INLINE
     bool found = false;
     for (int i = 0; i < MMU_MAX_TILES; ++i) {
@@ -303,10 +306,9 @@ bool mmu_check_cache(DmaSel sel, int layer, int head, int tile) {
     return found;
 }
 
-bool mmu_lookup_tile(DmaSel sel, int layer, int head, int tile,
-                     ChunkedAllocation &alloc_out) {
+static bool tile_cache_lookup(DmaSel sel, int layer, int head, int tile,
+                              uint8_t &out_bank, uint32_t &out_offset) {
 #pragma HLS INLINE
-    // Priority encoder pattern - find matching tile (last match wins for synthesis)
     int found_idx = -1;
     for (int i = MMU_MAX_TILES - 1; i >= 0; --i) {
 #pragma HLS UNROLL factor=8
@@ -317,35 +319,15 @@ bool mmu_lookup_tile(DmaSel sel, int layer, int head, int tile,
     }
     
     if (found_idx >= 0) {
-        alloc_out.num_chunks = tt_alloc_num_chunks[found_idx];
-        for (int c = 0; c < MMU_MAX_CHUNKS; ++c) {
-#pragma HLS UNROLL
-            alloc_out.bank[c] = tt_alloc_bank[found_idx][c];
-            alloc_out.offset[c] = tt_alloc_offset[found_idx][c];
-            alloc_out.size[c] = tt_alloc_size[found_idx][c];
-        }
+        out_bank = tt_alloc_bank[found_idx][0];
+        out_offset = tt_alloc_offset[found_idx][0];
         return true;
     }
     return false;
 }
 
-void mmu_invalidate_tile(DmaSel sel, int layer, int head, int tile) {
+static void tile_cache_commit(DmaSel sel, int layer, int head, int tile, uint32_t total_size) {
 #pragma HLS INLINE
-    for (int i = 0; i < MMU_MAX_TILES; ++i) {
-#pragma HLS UNROLL factor=8
-        if (tt_valid[i] && tt_sel[i] == sel && 
-            tt_layer[i] == layer && tt_head[i] == head && tt_tile[i] == tile) {
-            tt_valid[i] = false;
-            num_tiles--;
-        }
-    }
-}
-
-// Internal: commit tile to cache
-static void commit_tile_internal(DmaSel sel, int layer, int head, int tile,
-                                  uint32_t total_size) {
-#pragma HLS INLINE
-    // Priority encoder: find first empty slot
     int insert_idx = -1;
     for (int i = MMU_MAX_TILES - 1; i >= 0; --i) {
 #pragma HLS UNROLL factor=8
@@ -371,15 +353,15 @@ static void commit_tile_internal(DmaSel sel, int layer, int head, int tile,
 }
 
 // ============================================================================
-// Arbitration Functions 
+// Internal Arbitration Functions
 // ============================================================================
 
-void mmu_request_head(int head) {
+static void arbiter_request(int head) {
 #pragma HLS INLINE
     if (head >= 0 && head < MMU_MAX_HEADS) arb_pending[head] = true;
 }
 
-void mmu_release_head(int head) {
+static void arbiter_release(int head) {
 #pragma HLS INLINE
     if (head >= 0 && head < MMU_MAX_HEADS) {
         arb_pending[head] = false;
@@ -388,11 +370,10 @@ void mmu_release_head(int head) {
     }
 }
 
-void mmu_arbitrate() {
+static void arbiter_arbitrate() {
 #pragma HLS INLINE
     if (arb_busy) return;
     
-    // Round-robin using priority encoder (last match with offset wins)
     int grant_idx = -1;
     for (int i = MMU_MAX_HEADS - 1; i >= 0; --i) {
 #pragma HLS UNROLL
@@ -411,61 +392,13 @@ void mmu_arbitrate() {
     }
 }
 
-int mmu_granted_head() {
-#pragma HLS INLINE
-    return arb_busy ? (int)arb_current : -1;
-}
-
-bool mmu_is_granted(int head) {
+static bool arbiter_is_granted(int head) {
 #pragma HLS INLINE
     return (head >= 0 && head < MMU_MAX_HEADS) ? arb_grant[head] : false;
 }
 
 // ============================================================================
-// Done Flag Functions 
-// ============================================================================
-
-bool mmu_get_head_dma_done(int h) {
-#pragma HLS INLINE
-    return (h >= 0 && h < MMU_MAX_HEADS) ? head_dma_done_flags[h] : false;
-}
-
-bool mmu_get_head_compute_done(int h) {
-#pragma HLS INLINE
-    return (h >= 0 && h < MMU_MAX_HEADS) ? head_compute_done_flags[h] : false;
-}
-
-void mmu_clear_head_dma_done(int h) {
-#pragma HLS INLINE
-    if (h >= 0 && h < MMU_MAX_HEADS) head_dma_done_flags[h] = false;
-}
-
-void mmu_clear_head_compute_done(int h) {
-#pragma HLS INLINE
-    if (h >= 0 && h < MMU_MAX_HEADS) head_compute_done_flags[h] = false;
-}
-
-void mmu_clear_main_dma_done() {
-#pragma HLS INLINE
-    main_dma_done_flag = false;
-}
-
-void mmu_clear_main_compute_done() {
-#pragma HLS INLINE
-    main_compute_done_flag = false;
-}
-
-void mmu_clear_all_flags() {
-#pragma HLS INLINE
-    main_dma_done_flag = main_compute_done_flag = false;
-    for (int i = 0; i < MMU_MAX_HEADS; ++i) {
-#pragma HLS UNROLL
-        head_dma_done_flags[i] = head_compute_done_flags[i] = false;
-    }
-}
-
-// ============================================================================
-// Chunked Allocation 
+// Internal Chunked Allocation
 // ============================================================================
 
 static bool allocate_chunked_internal(uint32_t size) {
@@ -474,7 +407,6 @@ static bool allocate_chunked_internal(uint32_t size) {
     uint8_t bank = active_bank;
     alloc_num_chunks = 0;
     
-    // FIXED LOOP BOUND - iterate exactly MMU_MAX_CHUNKS times
     for (int c = 0; c < MMU_MAX_CHUNKS; ++c) {
 #pragma HLS UNROLL
         if (remaining > 0) {
@@ -505,130 +437,130 @@ static void commit_chunked_internal() {
     for (int c = 0; c < MMU_MAX_CHUNKS; ++c) {
 #pragma HLS UNROLL
         if (c < alloc_num_chunks) {
-            bank_offsets[alloc_bank[c]] = alloc_offset[c] + alloc_size[c];
+            uint8_t b = alloc_bank[c];
+            bank_offsets[b] = alloc_offset[c] + alloc_size[c];
+            if (bank_offsets[b] >= MMU_BANK_SIZE) {
+                active_bank = (b + 1) % MMU_URAM_BANKS;
+            }
         }
-    }
-    if (alloc_num_chunks > 0) {
-        active_bank = (alloc_bank[alloc_num_chunks - 1] + 1) % MMU_URAM_BANKS;
     }
 }
 
 // ============================================================================
-// Main FSM 
+// Main FSM
 // ============================================================================
 
 void mmu_fsm(
-    // Reset
-    bool        reset,
+    // Control
+    bool                reset,
     
-    // External DMA interface
-    bool        dma_ready,
-    bool        dma_done,
-    bool       &dma_start,
-    uint32_t   &dma_addr,
-    uint32_t   &dma_len,
-    bool       &dma_is_write,
-    uint8_t    &uram_bank,
-    uint32_t   &uram_offset,
+    // External DMA Interface
+    bool                dma_ready,
+    bool                dma_done,
+    bool               &dma_start,
+    uint32_t           &dma_addr,
+    uint32_t           &dma_len,
+    bool               &dma_is_write,
+    uint8_t            &uram_bank,
+    uint32_t           &uram_offset,
     
-    // Compute buffer interface
-    bool        buffer_ready,
-    bool       &buffer_valid,
-    bool       &transfer_done,
+    // Compute Buffer Interface
+    bool                buffer_ready,
+    bool               &buffer_valid,
+    bool               &transfer_done,
     
-    // DMA request interface
-    bool        dma_req_valid,
-    uint32_t    dma_req_packed,
-    bool       &dma_req_ready,
+    // DMA Request Interface
+    bool                dma_req_valid,
+    uint32_t            dma_req_packed,
+    bool               &dma_req_ready,
     
-    // Compute request interface
-    bool        compute_req_valid,
-    uint32_t    compute_req_packed,
-    ComputeReqType compute_req_type,
-    uint8_t     compute_req_head,
-    bool       &compute_req_ready,
+    // Compute Request Interface
+    bool                compute_req_valid,
+    uint32_t            compute_req_packed,
+    ComputeReqType      compute_req_type,
+    uint8_t             compute_req_head,
+    bool               &compute_req_ready,
     
-    // Done flags output
-    bool       &main_dma_done,
-    bool       &main_compute_done,
+    // Done Flags Output
+    bool               &main_dma_done,
+    bool               &main_compute_done,
     
-    // Status output
-    MMUFsmState &fsm_state_out,
-    bool       &error_overflow,
-    bool       &error_invalid,
+    // Per-Head Done Flags
+    bool                head_dma_done_out[MMU_MAX_HEADS],
+    bool                head_compute_done_out[MMU_MAX_HEADS],
+    
+    // Tile Cache Query Interface
+    bool                tile_query_valid,
+    DmaSel              tile_query_sel,
+    int                 tile_query_layer,
+    int                 tile_query_head,
+    int                 tile_query_tile,
+    bool               &tile_query_hit,
+    uint8_t            &tile_query_bank,
+    uint32_t           &tile_query_offset,
+    
+    // Head Arbitration Interface
+    bool                arb_request_valid,
+    int                 arb_request_head,
+    bool                arb_release_valid,
+    int                 arb_release_head,
+    bool               &arb_grant_valid,
+    int                &arb_granted_head,
+    
+    // Done Flag Clear Interface
+    bool                clear_head_dma_done_valid,
+    int                 clear_head_dma_done_idx,
+    bool                clear_head_compute_done_valid,
+    int                 clear_head_compute_done_idx,
+    bool                clear_main_dma_done,
+    bool                clear_main_compute_done,
+    bool                clear_all_flags,
+    
+    // Status Output
+    MMUFsmState        &fsm_state_out,
+    bool               &error_overflow,
+    bool               &error_invalid,
     
     // Configuration
-    ModelDims   dims,
-    uint32_t    k_cache_base,
-    uint32_t    v_cache_base,
-    uint16_t    current_token
+    ControlMemSpace     ctrl_mem,
+    ModelDims           dims,
+    uint32_t            k_cache_base,
+    uint32_t            v_cache_base,
+    uint16_t            current_token
 ) {
 #pragma HLS INLINE off
 
-/*
-    TODO: 
-        1. Added mmu communication of FSM and compute_block signals into the signature of the mmu FSM, and define the global statics here instead of outside the scope of the function
-        2. Put URAM and DMA buffer statics as inputs/outputs of the signature above
-
-        TOP LEVEL: DO NOT USE GLOBAL VARIABLES TO COMMUNICATE BETWEEN BLOCKS
-
-        3. For computed values. Save them until we need to use it. Example, for the Q value, we need to keep it in URAM UNTIL we use it in attention scores (Q*K^T)
-            Same goes for most values. Example again, We compute K and save it, we need to keep it until the FSM asks the MMU to write it back to DDR
-*/
-
-    // HLS pragmas for static variables (must be inside function scope)
+    // HLS pragmas for static state
 #pragma HLS reset variable=fsm_state
-#pragma HLS array_partition variable=bank_offsets complete dim=1
+#pragma HLS reset variable=bank_offsets
 #pragma HLS reset variable=active_bank
-#pragma HLS array_partition variable=tt_sel complete dim=1
-#pragma HLS array_partition variable=tt_layer complete dim=1
-#pragma HLS array_partition variable=tt_head complete dim=1
-#pragma HLS array_partition variable=tt_tile complete dim=1
-#pragma HLS array_partition variable=tt_total_size complete dim=1
-#pragma HLS array_partition variable=tt_valid complete dim=1
-#pragma HLS array_partition variable=tt_alloc_num_chunks complete dim=1
+#pragma HLS reset variable=tt_valid
 #pragma HLS reset variable=num_tiles
-#pragma HLS array_partition variable=dq_packed complete dim=1
-#pragma HLS array_partition variable=dq_is_headed complete dim=1
-#pragma HLS array_partition variable=dq_valid complete dim=1
+#pragma HLS reset variable=dq_valid
 #pragma HLS reset variable=dma_q_head
 #pragma HLS reset variable=dma_q_tail
 #pragma HLS reset variable=dma_q_count
-#pragma HLS array_partition variable=cq_type complete dim=1
-#pragma HLS array_partition variable=cq_packed complete dim=1
-#pragma HLS array_partition variable=cq_is_headed complete dim=1
-#pragma HLS array_partition variable=cq_head_idx complete dim=1
-#pragma HLS array_partition variable=cq_valid complete dim=1
+#pragma HLS reset variable=cq_valid
 #pragma HLS reset variable=comp_q_head
 #pragma HLS reset variable=comp_q_tail
 #pragma HLS reset variable=comp_q_count
-#pragma HLS array_partition variable=arb_pending complete dim=1
-#pragma HLS array_partition variable=arb_grant complete dim=1
+#pragma HLS reset variable=arb_pending
+#pragma HLS reset variable=arb_grant
 #pragma HLS reset variable=arb_current
 #pragma HLS reset variable=arb_rr_ptr
 #pragma HLS reset variable=arb_busy
-#pragma HLS reset variable=active_dma_req
-#pragma HLS reset variable=active_dma_is_headed
-#pragma HLS reset variable=active_compute_type
-#pragma HLS reset variable=active_compute_packed
-#pragma HLS reset variable=active_compute_head
-#pragma HLS reset variable=active_compute_is_headed
-#pragma HLS array_partition variable=alloc_bank complete dim=1
-#pragma HLS array_partition variable=alloc_offset complete dim=1
-#pragma HLS array_partition variable=alloc_size complete dim=1
-#pragma HLS reset variable=alloc_num_chunks
-#pragma HLS reset variable=current_chunk
-#pragma HLS array_partition variable=head_dma_done_flags complete dim=1
-#pragma HLS array_partition variable=head_compute_done_flags complete dim=1
+#pragma HLS reset variable=head_dma_done_flags
+#pragma HLS reset variable=head_compute_done_flags
 #pragma HLS reset variable=main_dma_done_flag
 #pragma HLS reset variable=main_compute_done_flag
 #pragma HLS reset variable=err_overflow
 #pragma HLS reset variable=err_invalid
 #pragma HLS reset variable=dma_in_progress
 #pragma HLS reset variable=transfer_in_progress
+#pragma HLS reset variable=latched_dma_addr
 
     // ========================================================================
-    // Reset Logic 
+    // Reset
     // ========================================================================
     if (reset) {
         fsm_state = MMUFsmState::IDLE;
@@ -636,23 +568,23 @@ void mmu_fsm(
         num_tiles = 0;
         dma_q_head = dma_q_tail = dma_q_count = 0;
         comp_q_head = comp_q_tail = comp_q_count = 0;
-        arb_current = arb_rr_ptr = 0;
+        arb_current = 0;
+        arb_rr_ptr = 0;
         arb_busy = false;
-        alloc_num_chunks = 0;
-        current_chunk = 0;
         main_dma_done_flag = main_compute_done_flag = false;
         err_overflow = err_invalid = false;
-        active_dma_req = 0;
-        active_dma_is_headed = false;
         dma_in_progress = transfer_in_progress = false;
-        active_compute_type = ComputeReqType::REQ_NONE;
-        active_compute_packed = 0;
-        active_compute_head = 0;
-        active_compute_is_headed = false;
+        latched_dma_addr = 0;
+        alloc_num_chunks = 0;
+        current_chunk = 0;
         
         for (int i = 0; i < MMU_URAM_BANKS; ++i) {
 #pragma HLS UNROLL
             bank_offsets[i] = 0;
+        }
+        for (int i = 0; i < MMU_MAX_TILES; ++i) {
+#pragma HLS UNROLL factor=8
+            tt_valid[i] = false;
         }
         for (int i = 0; i < MMU_DMA_QUEUE_DEPTH; ++i) {
 #pragma HLS UNROLL
@@ -667,12 +599,8 @@ void mmu_fsm(
             arb_pending[i] = arb_grant[i] = false;
             head_dma_done_flags[i] = head_compute_done_flags[i] = false;
         }
-        for (int i = 0; i < MMU_MAX_TILES; ++i) {
-#pragma HLS UNROLL factor=8
-            tt_valid[i] = false;
-        }
         
-        // Set default outputs and return early
+        // Default outputs
         dma_start = false;
         dma_addr = 0;
         dma_len = 0;
@@ -685,9 +613,20 @@ void mmu_fsm(
         compute_req_ready = true;
         main_dma_done = false;
         main_compute_done = false;
+        tile_query_hit = false;
+        tile_query_bank = 0;
+        tile_query_offset = 0;
+        arb_grant_valid = false;
+        arb_granted_head = -1;
         fsm_state_out = MMUFsmState::IDLE;
         error_overflow = false;
         error_invalid = false;
+        
+        for (int i = 0; i < MMU_MAX_HEADS; ++i) {
+#pragma HLS UNROLL
+            head_dma_done_out[i] = false;
+            head_compute_done_out[i] = false;
+        }
         return;
     }
 
@@ -695,20 +634,69 @@ void mmu_fsm(
     // Default Outputs
     // ========================================================================
     dma_start = false;
-    dma_addr = 0;
-    dma_len = 0;
-    dma_is_write = false;
-    uram_bank = 0;
-    uram_offset = 0;
     buffer_valid = false;
     transfer_done = false;
     dma_req_ready = (dma_q_count < MMU_DMA_QUEUE_DEPTH);
     compute_req_ready = (comp_q_count < MMU_COMPUTE_QUEUE_DEPTH);
-    main_dma_done = main_dma_done_flag;
-    main_compute_done = main_compute_done_flag;
     fsm_state_out = fsm_state;
     error_overflow = err_overflow;
     error_invalid = err_invalid;
+    main_dma_done = main_dma_done_flag;
+    main_compute_done = main_compute_done_flag;
+    
+    // Copy per-head done flags to output
+    for (int i = 0; i < MMU_MAX_HEADS; ++i) {
+#pragma HLS UNROLL
+        head_dma_done_out[i] = head_dma_done_flags[i];
+        head_compute_done_out[i] = head_compute_done_flags[i];
+    }
+
+    // ========================================================================
+    // Tile Cache Query (Combinational - always active)
+    // ========================================================================
+    if (tile_query_valid) {
+        tile_query_hit = tile_cache_lookup(tile_query_sel, tile_query_layer, 
+                                            tile_query_head, tile_query_tile,
+                                            tile_query_bank, tile_query_offset);
+    } else {
+        tile_query_hit = false;
+        tile_query_bank = 0;
+        tile_query_offset = 0;
+    }
+
+    // ========================================================================
+    // External Arbitration Interface (signal-based)
+    // ========================================================================
+    if (arb_request_valid) {
+        arbiter_request(arb_request_head);
+    }
+    if (arb_release_valid) {
+        arbiter_release(arb_release_head);
+    }
+    arb_grant_valid = arb_busy;
+    arb_granted_head = arb_busy ? (int)arb_current : -1;
+
+    // ========================================================================
+    // Done Flag Clear Interface
+    // ========================================================================
+    if (clear_all_flags) {
+        main_dma_done_flag = main_compute_done_flag = false;
+        for (int i = 0; i < MMU_MAX_HEADS; ++i) {
+#pragma HLS UNROLL
+            head_dma_done_flags[i] = head_compute_done_flags[i] = false;
+        }
+    } else {
+        if (clear_main_dma_done) main_dma_done_flag = false;
+        if (clear_main_compute_done) main_compute_done_flag = false;
+        if (clear_head_dma_done_valid && clear_head_dma_done_idx >= 0 && 
+            clear_head_dma_done_idx < MMU_MAX_HEADS) {
+            head_dma_done_flags[clear_head_dma_done_idx] = false;
+        }
+        if (clear_head_compute_done_valid && clear_head_compute_done_idx >= 0 && 
+            clear_head_compute_done_idx < MMU_MAX_HEADS) {
+            head_compute_done_flags[clear_head_compute_done_idx] = false;
+        }
+    }
 
     // ========================================================================
     // Enqueue DMA Request
@@ -769,9 +757,9 @@ void mmu_fsm(
                 mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
                 
                 if (active_dma_is_headed) {
-                    mmu_request_head(head);
-                    mmu_arbitrate();
-                    if (mmu_is_granted(head)) {
+                    arbiter_request(head);
+                    arbiter_arbitrate();
+                    if (arbiter_is_granted(head)) {
                         fsm_state = MMUFsmState::DMA_ALLOC;
                     }
                 } else {
@@ -784,42 +772,75 @@ void mmu_fsm(
         }
         
         case MMUFsmState::DMA_ALLOC: {
-            // TODO: 
-                /* 
-                    2. Seperate K cache request (DMASEL_CTX_K) and V cache (DMASEL_CTX_V)
-                    3. Seperate K writeback and V writeback cases
-                */
             DmaSel sel; int layer, head, tile;
             mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
             
             if (mmu_is_dma_write(sel)) {
-                fsm_state = MMUFsmState::DMA_WRITEBACK;
-            } else {
-                uint32_t size = mmu_calc_dma_size(sel, dims, tile);
-                bool alloc_ok = allocate_chunked_internal(size);
-                
-                if (alloc_ok && alloc_num_chunks > 0) {
-                    current_chunk = 0;
-                    fsm_state = MMUFsmState::DMA_ISSUE;
+                // KV writeback - compute address via KV calc
+                bool is_v = (sel == DMASEL_V_WRITE);
+                KVCacheAddr kv = mmu_calc_kv_write_addr(k_cache_base, v_cache_base, 
+                                                         current_token, dims, layer, head, is_v);
+                if (kv.valid) {
+                    latched_dma_addr = kv.base_addr;
+                    fsm_state = MMUFsmState::DMA_WRITEBACK;
                 } else {
-                    err_overflow = true;
+                    err_invalid = true;
                     fsm_state = MMUFsmState::IDLE;
+                }
+            } else {
+                // DMA read - use Weight Stager for address computation
+                bool wl_ready, wl_memory_request, wl_error;
+                uint32_t wl_addr;
+                
+                weight_stager(
+                    false,              // reset
+                    true,               // wl_start
+                    sel,                // wl_addr_sel
+                    layer,              // wl_layer
+                    head,               // wl_head
+                    tile,               // wl_tile
+                    ctrl_mem,           // ctrl_mem
+                    wl_ready,           // &wl_ready
+                    wl_memory_request,  // &memory_request
+                    wl_error,           // &error
+                    wl_addr             // &addr_latched
+                );
+                
+                if (wl_error) {
+                    err_invalid = true;
+                    fsm_state = MMUFsmState::IDLE;
+                } else if (wl_memory_request) {
+                    latched_dma_addr = wl_addr;
+                    
+                    // Allocate URAM space
+                    uint32_t size = mmu_calc_dma_size(sel, dims, tile);
+                    bool alloc_ok = allocate_chunked_internal(size);
+                    
+                    if (alloc_ok && alloc_num_chunks > 0) {
+                        current_chunk = 0;
+                        fsm_state = MMUFsmState::DMA_ISSUE;
+                    } else {
+                        err_overflow = true;
+                        fsm_state = MMUFsmState::IDLE;
+                    }
                 }
             }
             break;
         }
         
         case MMUFsmState::DMA_ISSUE: {
-
-            // TODO: 
-            // 1. Need to define/compute dma_address <-- remeber the Weight loader computation
-            // 2. Seperate K cache request (DMASEL_CTX_K) and V cache (DMASEL_CTX_V)
             if (dma_ready && current_chunk < alloc_num_chunks) {
                 dma_start = true;
+                dma_addr = latched_dma_addr;
                 uram_bank = alloc_bank[current_chunk];
                 uram_offset = alloc_offset[current_chunk];
                 dma_len = alloc_size[current_chunk];
+                dma_is_write = false;
                 dma_in_progress = true;
+                
+                // Advance address for next chunk
+                latched_dma_addr += alloc_size[current_chunk];
+                
                 fsm_state = MMUFsmState::DMA_WAIT;
             }
             break;
@@ -837,11 +858,11 @@ void mmu_fsm(
                     uint32_t total_size = mmu_calc_dma_size(sel, dims, tile);
                     
                     commit_chunked_internal();
-                    commit_tile_internal(sel, layer, head, tile, total_size);
+                    tile_cache_commit(sel, layer, head, tile, total_size);
                     
                     if (mmu_is_headed_dma(sel)) {
                         head_dma_done_flags[head] = true;
-                        mmu_release_head(head);
+                        arbiter_release(head);
                     } else {
                         main_dma_done_flag = true;
                     }
@@ -856,22 +877,29 @@ void mmu_fsm(
             if (dma_ready) {
                 DmaSel sel; int layer, head, tile;
                 mmu_unpack_dma(active_dma_req, sel, layer, head, tile);
-                bool is_v = (sel == DMASEL_V_WRITE);
-                KVCacheAddr kv = mmu_calc_kv_write_addr(k_cache_base, v_cache_base, current_token,
-                                                         dims, layer, head, is_v);
-                if (kv.valid) {
-                    dma_start = true;
-                    dma_addr = kv.base_addr;
-                    dma_len = dims.d_heads;
-                    dma_is_write = true;
-                    dma_in_progress = true;
-                    current_chunk = 0;
-                    alloc_num_chunks = 1;
-                    fsm_state = MMUFsmState::DMA_WAIT;
+                
+                dma_start = true;
+                dma_addr = latched_dma_addr;
+                dma_len = dims.d_heads;
+                dma_is_write = true;
+                dma_in_progress = true;
+                
+                // For writeback, we read from URAM - lookup where data is
+                uint8_t src_bank;
+                uint32_t src_offset;
+                DmaSel lookup_sel = (sel == DMASEL_K_WRITE) ? DMASEL_WK : DMASEL_WV;
+                if (tile_cache_lookup(lookup_sel, layer, head, tile, src_bank, src_offset)) {
+                    uram_bank = src_bank;
+                    uram_offset = src_offset;
                 } else {
-                    err_invalid = true;
-                    fsm_state = MMUFsmState::IDLE;
+                    // Fallback - use active bank
+                    uram_bank = active_bank;
+                    uram_offset = 0;
                 }
+                
+                current_chunk = 0;
+                alloc_num_chunks = 1;
+                fsm_state = MMUFsmState::DMA_WAIT;
             }
             break;
         }
@@ -888,9 +916,9 @@ void mmu_fsm(
                 comp_q_count--;
                 
                 if (active_compute_is_headed) {
-                    mmu_request_head(active_compute_head);
-                    mmu_arbitrate();
-                    if (mmu_is_granted(active_compute_head)) {
+                    arbiter_request(active_compute_head);
+                    arbiter_arbitrate();
+                    if (arbiter_is_granted(active_compute_head)) {
                         fsm_state = (active_compute_type == ComputeReqType::REQ_READ) 
                             ? MMUFsmState::URAM_TO_INBUF : MMUFsmState::OUTBUF_TO_URAM;
                     }
@@ -905,6 +933,9 @@ void mmu_fsm(
         }
         
         case MMUFsmState::URAM_TO_INBUF: {
+            // Data remains in URAM until explicitly overwritten
+            // Q value retained until attention scores computed
+            // K retained until writeback
             if (buffer_ready) {
                 buffer_valid = true;
                 transfer_in_progress = true;
@@ -914,6 +945,7 @@ void mmu_fsm(
         }
         
         case MMUFsmState::OUTBUF_TO_URAM: {
+            // Data remains in URAM until explicitly overwritten
             if (buffer_ready) {
                 ComputeOp op; int layer, head, tile;
                 mmu_unpack_compute(active_compute_packed, op, layer, head, tile);
@@ -939,7 +971,7 @@ void mmu_fsm(
             transfer_done = true;
             if (active_compute_is_headed) {
                 head_compute_done_flags[active_compute_head] = true;
-                mmu_release_head(active_compute_head);
+                arbiter_release(active_compute_head);
             } else {
                 main_compute_done_flag = true;
             }
