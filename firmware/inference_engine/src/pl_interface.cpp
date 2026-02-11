@@ -1,4 +1,4 @@
-// .pl_interface.cpp - AXI-Lite control + inline DMA stream transport
+// pl_interface.cpp
 #include "pl_interface.hpp"
 #include "logger.hpp"
 #include "error_handler.hpp"
@@ -29,10 +29,9 @@ bool PLInterface::init(const std::string& device_name, bool mock) {
     }
     
     if (!findAndOpenUIO(device_name)) return false;
-    // Assert Start signal (from Vitis HLS UG1399)
-    uint32_t data = readReg(PLReg::AXIL_AP_CTRL) & PLReg::AP_AUTO_RESTART;
-    writeReg(PLReg::AXIL_AP_CTRL, data | PLReg::AP_START);
 
+    // Enable auto_restart so HLS loops; PS controls via ctrl_mem (UG1399)
+    writeReg(PLReg::AXIL_AP_CTRL, PLReg::AP_AUTO_RESTART_BIT | PLReg::AP_START_BIT);
     reset();
     
     _initialized = true;
@@ -314,7 +313,7 @@ void* PLInterface::getDDRPtr(uint64_t offset) {
     return (_mock_mode || !_ddr_base) ? nullptr : (uint8_t*)_ddr_base + offset;
 }
 
-// DMA Register Helpers (inline — operate on dma_regs)
+// DMA Register Helpers
 uint32_t PLInterface::dmaRead(uint32_t offset) const {
     return _dma_regs ? _dma_regs[offset / 4] : 0;
 }
@@ -381,30 +380,41 @@ bool PLInterface::resetDMA() {
     return ok;
 }
 
-bool PLInterface::sendStream(const void* data, size_t size, uint32_t timeout_ms) {
+// Non-blocking DMA API
+bool PLInterface::dmaKickSend(const void* data, size_t size) {
     if (_mock_mode) return true;
     if (!_dma_regs || !_stream_buf.isAllocated()) return false;
 
     memcpy(_stream_buf.virt(), data, size);
-    if (!dmaTransfer(DmaReg::MM2S_CR, DmaReg::MM2S_SR,
-                     DmaReg::MM2S_SA, DmaReg::MM2S_SA_MSB, DmaReg::MM2S_LEN,
-                     _stream_buf.phys(), size)) return false;
-    return dmaWait(DmaReg::MM2S_SR, timeout_ms);
+    return dmaTransfer(DmaReg::MM2S_CR, DmaReg::MM2S_SR,
+                       DmaReg::MM2S_SA, DmaReg::MM2S_SA_MSB, DmaReg::MM2S_LEN,
+                       _stream_buf.phys(), size);
 }
 
-bool PLInterface::recvStream(void* data, size_t size, uint32_t timeout_ms) {
-    if (_mock_mode) { memset(data, 0, size); return true; }
+bool PLInterface::dmaKickRecv(size_t size) {
+    if (_mock_mode) return true;
     if (!_dma_regs || !_stream_buf.isAllocated()) return false;
 
     // Use second half of buffer for receive
+    // TODO: Update size when AXI Full is implemented
     size_t recv_offset = _stream_buf.size() / 2;
     uint64_t dst_phys = _stream_buf.phys() + recv_offset;
+    return dmaTransfer(DmaReg::S2MM_CR, DmaReg::S2MM_SR,
+                       DmaReg::S2MM_DA, DmaReg::S2MM_DA_MSB, DmaReg::S2MM_LEN,
+                       dst_phys, size);
+}
 
-    if (!dmaTransfer(DmaReg::S2MM_CR, DmaReg::S2MM_SR,
-                     DmaReg::S2MM_DA, DmaReg::S2MM_DA_MSB, DmaReg::S2MM_LEN,
-                     dst_phys, size)) return false;
+bool PLInterface::dmaWaitSend(uint32_t timeout_ms) {
+    if (_mock_mode) return true;
+    return dmaWait(DmaReg::MM2S_SR, timeout_ms);
+}
+
+bool PLInterface::dmaWaitRecv(void* data, size_t size, uint32_t timeout_ms) {
+    if (_mock_mode) { memset(data, 0, size); return true; }
     if (!dmaWait(DmaReg::S2MM_SR, timeout_ms)) return false;
 
+    // TODO: Update size when AXI Full is implemented
+    size_t recv_offset = _stream_buf.size() / 2;
     memcpy(data, static_cast<uint8_t*>(_stream_buf.virt()) + recv_offset, size);
     return true;
 }

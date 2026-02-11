@@ -70,7 +70,6 @@ int main(int argc, char* argv[]) {
     pl.writeReg(PLReg::ZERO_POINT_V, static_cast<uint32_t>(cfg.model.zero_point_v));
 
     pl.endConfig();
-    pl.writeReg(PLReg::CONTROL, PLReg::CTRL_RESETN_BIT | PLReg::CTRL_START_BIT);
 
     int8_t send_data[D_MODEL_TEST];
     int8_t recv_data[D_MODEL_TEST];
@@ -79,20 +78,28 @@ int main(int argc, char* argv[]) {
         recv_data[i] = 0;
     }
 
-    if(!pl.sendStream(send_data, D_MODEL_TEST, 1000)) {
-        printf("Send Stream failed: %s\n", g_err->getLastErrorMessage().c_str());
-    }
-    if(!pl.recvStream(recv_data, D_MODEL_TEST, 1000)) {
-        printf("Recv Stream failed: %s\n", g_err->getLastErrorMessage().c_str());
-    }
+    // Arm DMA, then set start — HLS auto_restart picks it up
+    pl.dmaKickRecv(D_MODEL_TEST);
+    pl.dmaKickSend(send_data, D_MODEL_TEST);
+    pl.writeReg(PLReg::CONTROL, PLReg::CTRL_RESETN_BIT | PLReg::CTRL_START_BIT);
 
+    if (!pl.dmaWaitSend(5000))
+        printf("DMA send timeout: %s\n", pl.dmaStatusString().c_str());
+    if (!pl.dmaWaitRecv(recv_data, D_MODEL_TEST, 5000))
+        printf("DMA recv timeout: %s\n", pl.dmaStatusString().c_str());
+
+    // HLS does token_buf[i] + 1
+    printf("\n=== Results ===\n");
     for (int i = 0; i < D_MODEL_TEST; i++) {
-        printf("Recv Data: %d\n", recv_data[i]);
+        printf("  [%2d] sent=%4d  recv=%4d  %s\n",
+               i, send_data[i], recv_data[i],
+               (recv_data[i] == send_data[i] + 1) ? "OK" : "FAIL");
     }
 
-    printf("Status Register: 0x%08X\n", pl.readReg(PLReg::STATUS));
-    printf("Irq status Register: 0x%08X\n", pl.readReg(PLReg::IRQ_STATUS));
-    printf("Error code Register: 0x%08X\n", pl.readReg(PLReg::ERROR_CODE));
+    printf("\nAP_CTRL:    0x%08X\n", pl.readReg(PLReg::AXIL_AP_CTRL));
+    printf("Status:     0x%08X\n", pl.readReg(PLReg::STATUS));
+    printf("IRQ Status: 0x%08X\n", pl.readReg(PLReg::IRQ_STATUS));
+    printf("Error Code: 0x%08X\n", pl.readReg(PLReg::ERROR_CODE));
     printf("DMA STATUS: %s\n", pl.dmaStatusString().c_str());
 
     pl.cleanup();

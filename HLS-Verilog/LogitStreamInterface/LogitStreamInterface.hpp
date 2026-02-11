@@ -7,11 +7,8 @@
 /**
  * LogitStreamInterface - Bidirectional AXI4-Stream for Token/Logit Transfer
  * 
- * Input Stream (PS → PL):  Token embedding data, D_MODEL uint8 values per token
- * Output Stream (PL → PS): Logit data, D_MODEL uint8 values per token
- * 
  * Uses 8-bit TDATA with TLAST for simple byte-by-byte transfers.
- */
+*/
 
 // 8-bit AXI-Stream packet with TLAST only (simple interface)
 typedef hls::axis_data<ap_int<8>, AXIS_ENABLE_LAST> axis_pkt_t;

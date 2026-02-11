@@ -32,11 +32,11 @@ namespace PLReg {
     constexpr uint32_t AXIL_ISR         = XAXI_TOP_CONTROL_ADDR_ISR;
 
     // AXI-Lite Control Register Bits (From Vitis HLS UG1399)
-    constexpr uint32_t AP_START         = (1u << 0);
-    constexpr uint32_t AP_DONE          = (1u << 1);
-    constexpr uint32_t AP_IDLE          = (1u << 2);
-    constexpr uint32_t AP_READY         = (1u << 3);
-    constexpr uint32_t AP_AUTO_RESTART  = (1u << 7);
+    constexpr uint32_t AP_START_BIT         = (1u << 0);
+    constexpr uint32_t AP_DONE_BIT          = (1u << 1);
+    constexpr uint32_t AP_IDLE_BIT          = (1u << 2);
+    constexpr uint32_t AP_READY_BIT         = (1u << 3);
+    constexpr uint32_t AP_AUTO_RESTART_BIT  = (1u << 7);
 
     constexpr uint32_t CTRL_BASE        = XAXI_TOP_CONTROL_ADDR_CTRL_MEM_DATA;
     
@@ -212,9 +212,12 @@ public:
     bool readDDR(uint64_t offset, void* data, size_t size);
     void* getDDRPtr(uint64_t offset);
     
-    // DMA Stream
-    bool sendStream(const void* data, size_t size, uint32_t timeout_ms = 1000);
-    bool recvStream(void* data, size_t size, uint32_t timeout_ms = 1000);
+    // DMA Stream (non-blocking kick/wait)
+    bool dmaKickSend(const void* data, size_t size);
+    bool dmaKickRecv(size_t size);
+    bool dmaWaitSend(uint32_t timeout_ms = 1000);
+    bool dmaWaitRecv(void* data, size_t size, uint32_t timeout_ms = 1000);
+    
     bool resetDMA();
     std::string dmaStatusString() const;
     
