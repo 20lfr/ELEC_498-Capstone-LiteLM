@@ -133,7 +133,7 @@ constexpr int NUM_W2_TILES    = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
 constexpr int D_MODEL = 16; // Number of heads processed in parallel
-constexpr int16_t ATTN_SCALE_Q15 = 16384; // <----- CHANGE IF D_HEADS changes -> Q1.15 scale factor (1/sqrt(D_HEADS) * 2^15)
+constexpr int16_t ATTN_SCALE_Q15 = 3344; // Q1.15: round((1/sqrt(96)) * 2^15) = 3344 (0x0D10)
 constexpr int D_FFN   = 24; // Feed-Forward hidden layer size
 constexpr int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
 constexpr int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
