@@ -60,10 +60,8 @@ module compute_controller_tb;
     localparam int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
     localparam int FFN_W1_W_BYTES = (FFN_W1_W_NIBBLES + 1) / 2;
     localparam int FFN_W1_B_BYTES = D_TILE_W1 * 4;
-    localparam int FFN_W1_S_BYTES = D_TILE_W1 * 2;
     localparam int FFN_W1_W_OFFSET = FFN_W1_X_OFFSET + D_MODEL;
     localparam int FFN_W1_B_OFFSET = FFN_W1_W_OFFSET + FFN_W1_W_BYTES;
-    localparam int FFN_W1_S_OFFSET = FFN_W1_B_OFFSET + FFN_W1_B_BYTES;
 
     localparam int FFN_ACT_GATE_OFFSET = 0;
     localparam int FFN_ACT_UP_OFFSET = FFN_ACT_GATE_OFFSET + (D_FFN * 2);
@@ -72,10 +70,8 @@ module compute_controller_tb;
     localparam int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
     localparam int FFN_W2_W_BYTES = (FFN_W2_W_NIBBLES + 1) / 2;
     localparam int FFN_W2_B_BYTES = D_TILE_W2 * 4;
-    localparam int FFN_W2_S_BYTES = D_TILE_W2 * 2;
     localparam int FFN_W2_W_OFFSET = FFN_W2_X_OFFSET + (D_FFN * 2);
     localparam int FFN_W2_B_OFFSET = FFN_W2_W_OFFSET + FFN_W2_W_BYTES;
-    localparam int FFN_W2_S_OFFSET = FFN_W2_B_OFFSET + FFN_W2_B_BYTES;
 
 
     // localparam logic [7:0] CMP_NONE        = 8'h00;
@@ -313,7 +309,6 @@ module compute_controller_tb;
     logic [7:0] ffn1_x [0:D_MODEL-1];
     logic [3:0] ffn1_w [0:(D_MODEL*W1_OUT_SIZE)-1];
     logic [31:0] ffn1_b [0:W1_OUT_SIZE-1];
-    logic [15:0] ffn1_s [0:W1_OUT_SIZE-1];
     logic [15:0] ffn1_out [0:W1_OUT_SIZE-1];
 
     // FFN activation inputs/outputs.
@@ -325,7 +320,6 @@ module compute_controller_tb;
     logic [15:0] ffn2_x [0:D_FFN-1];
     logic [3:0] ffn2_w [0:(D_FFN*D_FFN)-1];
     logic [31:0] ffn2_b [0:D_FFN-1];
-    logic [15:0] ffn2_s [0:D_FFN-1];
     logic [31:0] ffn2_out [0:(NUM_W2_TILES*D_TILE_W2)-1];
     logic [7:0] in_buf_mem [0:IN_BUF_BYTES-1];
     logic [7:0] out_buf_mem [0:OUT_BUF_BYTES-1];
@@ -387,7 +381,6 @@ module compute_controller_tb;
       end
       for (i = 0; i < W1_OUT_SIZE; i = i + 1) begin
         ffn1_b[i] = 32'd7;
-        ffn1_s[i] = 16'h4000;
         ffn1_out[i] = 16'd0;
       end
 
@@ -415,7 +408,6 @@ module compute_controller_tb;
         ffn_act_out[t] = 16'd0;
         ffn2_x[t] = (t * 2) + 1;
         ffn2_b[t] = 32'd5;
-        ffn2_s[t] = 16'h4000;
       end
       for (t = 0; t < (D_FFN * D_FFN); t = t + 1) begin
         ffn2_w[t] = 4'h1;
@@ -660,9 +652,6 @@ module compute_controller_tb;
                       write_i32_to_in_buf(
                         FFN_W1_B_OFFSET + (t * 4),
                         ffn1_b[out_base + t]);
-                      write_i16_to_in_buf(
-                        FFN_W1_S_OFFSET + (t * 2),
-                        ffn1_s[out_base + t]);
                     end
                   end
                 end
@@ -689,9 +678,6 @@ module compute_controller_tb;
                       write_i32_to_in_buf(
                         FFN_W2_B_OFFSET + (t * 4),
                         ffn2_b[out_base + t]);
-                      write_i16_to_in_buf(
-                        FFN_W2_S_OFFSET + (t * 2),
-                        ffn2_s[out_base + t]);
                     end
                   end
                 end

@@ -13,22 +13,22 @@ module transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_120_1 (
         ap_done,
         ap_idle,
         ap_ready,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_471,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_472,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_473,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_474,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_475,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_476,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_477,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_478,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_479,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_480,
-        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_258,
-        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_259,
-        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_260,
-        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_261,
-        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_262,
-        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_263,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_491,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_492,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_493,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_494,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_495,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_496,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_497,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_498,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_499,
+        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_276,
+        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_277,
+        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_278,
+        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_279,
+        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_280,
+        p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_281,
         square_out,
         square_out_ap_vld
 );
@@ -41,22 +41,22 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_471;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_472;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_473;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_474;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_475;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_476;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_477;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_478;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_479;
-input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_480;
-input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_258;
-input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_259;
-input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_260;
-input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_261;
-input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_262;
-input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_263;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_491;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_492;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_493;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_494;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_495;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_496;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_497;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_498;
+input  [7:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_499;
+input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_276;
+input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_277;
+input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_278;
+input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_279;
+input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_280;
+input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_281;
 output  [18:0] square_out;
 output   square_out_ap_vld;
 
@@ -87,7 +87,7 @@ wire    ap_block_pp0_stage0;
 wire    ap_loop_init;
 reg   [4:0] i_fu_104;
 wire   [4:0] add_ln120_fu_230_p2;
-reg   [4:0] ap_sig_allocacmp_i_46;
+reg   [4:0] ap_sig_allocacmp_i_47;
 reg    ap_loop_exit_ready_pp0_iter1_reg;
 reg    ap_loop_exit_ready_pp0_iter2_reg;
 wire    ap_block_pp0_stage0_01001;
@@ -171,23 +171,23 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 8 ))
-sparsemux_33_4_8_1_1_U327(
-    .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_471),
-    .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_472),
-    .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_473),
-    .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_474),
-    .din4(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_475),
-    .din5(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_476),
-    .din6(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_477),
-    .din7(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_478),
-    .din8(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_479),
-    .din9(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_480),
-    .din10(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_258),
-    .din11(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_259),
-    .din12(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_260),
-    .din13(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_261),
-    .din14(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_262),
-    .din15(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_263),
+sparsemux_33_4_8_1_1_U290(
+    .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490),
+    .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_491),
+    .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_492),
+    .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_493),
+    .din4(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_494),
+    .din5(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_495),
+    .din6(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_496),
+    .din7(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_497),
+    .din8(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_498),
+    .din9(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_499),
+    .din10(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_276),
+    .din11(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_277),
+    .din12(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_278),
+    .din13(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_279),
+    .din14(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_280),
+    .din15(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_281),
     .def(tmp_fu_240_p33),
     .sel(tmp_fu_240_p34),
     .dout(tmp_fu_240_p35)
@@ -200,7 +200,7 @@ transformer_top_mac_muladd_8s_8s_20s_20_4_1 #(
     .din1_WIDTH( 8 ),
     .din2_WIDTH( 20 ),
     .dout_WIDTH( 20 ))
-mac_muladd_8s_8s_20s_20_4_1_U328(
+mac_muladd_8s_8s_20s_20_4_1_U291(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_333_p0),
@@ -356,9 +356,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_46 = 5'd0;
+        ap_sig_allocacmp_i_47 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_46 = i_fu_104;
+        ap_sig_allocacmp_i_47 = i_fu_104;
     end
 end
 
@@ -389,7 +389,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln120_fu_230_p2 = (ap_sig_allocacmp_i_46 + 5'd1);
+assign add_ln120_fu_230_p2 = (ap_sig_allocacmp_i_47 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -415,7 +415,7 @@ assign grp_fu_333_p0 = sext_ln121_fu_312_p1;
 
 assign grp_fu_333_p1 = sext_ln121_fu_312_p1;
 
-assign icmp_ln120_fu_224_p2 = ((ap_sig_allocacmp_i_46 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln120_fu_224_p2 = ((ap_sig_allocacmp_i_47 == 5'd16) ? 1'b1 : 1'b0);
 
 assign sext_ln121_fu_312_p1 = $signed(tmp_fu_240_p35);
 
@@ -423,6 +423,6 @@ assign square_out = ap_sig_allocacmp_square_2[18:0];
 
 assign tmp_fu_240_p33 = 'bx;
 
-assign tmp_fu_240_p34 = ap_sig_allocacmp_i_46[3:0];
+assign tmp_fu_240_p34 = ap_sig_allocacmp_i_47[3:0];
 
 endmodule //transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_120_1

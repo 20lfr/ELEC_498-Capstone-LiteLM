@@ -47,7 +47,7 @@ void transformer_top(
     uint32_t    &mem_op,             // [OUTPUT] Opcode for memory manager
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
-     const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
 
     // ------------------------------------------------------------
@@ -91,6 +91,7 @@ void transformer_top(
     bool     &dbg_mac_start,
     bool     &dbg_mac_ready,
     bool     &dbg_mac_complete,
+    int32_t   dbg_mac_out[ACCUM_MAX],
     bool     &dbg_ctrl_reset_asserted,
     int      &dbg_head_group_idx,
 
@@ -104,6 +105,7 @@ void transformer_top(
 #pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
+#pragma HLS ARRAY_PARTITION variable=dbg_mac_out complete dim=1
 
     bool done               = false;    // Scheduler done flag
     bool scheduler_error       = false;
@@ -190,6 +192,7 @@ void transformer_top(
         dbg_mac_start,
         dbg_mac_ready,
         dbg_mac_complete,
+        dbg_mac_out,
         compute_error               
     );
 

@@ -30,16 +30,16 @@ module transformer_top_RMS_NORM (
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_10,
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9,
@@ -146,16 +146,16 @@ input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12Co
 input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50;
 input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49;
 input  [7:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48;
-input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99;
-input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98;
-input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97;
-input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96;
 input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95;
 input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94;
 input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93;
 input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92;
 input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91;
 input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90;
+input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89;
+input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88;
+input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87;
+input  [18:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86;
 input  [18:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11;
 input  [18:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_10;
 input  [18:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9;
@@ -260,12 +260,12 @@ wire   [0:0] tmp_fu_389_p3;
 wire   [26:0] shl_ln_fu_381_p3;
 wire   [26:0] mean_square_fu_397_p3;
 wire   [31:0] zext_ln124_fu_405_p1;
-wire   [31:0] shl_ln2_fu_409_p3;
+wire   [31:0] shl_ln9_fu_409_p3;
 wire   [22:0] grp_fu_426_p1;
-wire  signed [20:0] shl_ln3_fu_432_p3;
+wire  signed [20:0] shl_ln2_fu_432_p3;
 wire   [44:0] mul_ln132_fu_166_p2;
 wire  signed [31:0] normalized_fu_463_p4;
-wire  signed [31:0] shl_ln4_fu_477_p3;
+wire  signed [31:0] shl_ln3_fu_477_p3;
 wire   [44:0] mul_ln140_fu_230_p2;
 wire  signed [20:0] shl_ln132_1_fu_505_p3;
 wire   [44:0] mul_ln132_1_fu_170_p2;
@@ -403,22 +403,22 @@ transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_120_1 grp_RMS_NORM_Pipeline_VITIS_L
     .ap_done(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_done),
     .ap_idle(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_idle),
     .ap_ready(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_ready),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_471(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_472(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_473(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_474(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_475(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_476(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_477(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_478(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_479(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_480(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_258(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_259(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_260(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_261(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_262(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_263(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_491(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_492(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_493(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_494(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_495(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_496(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_497(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_498(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_499(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_276(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_277(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_278(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_279(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_280(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_281(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48),
     .square_out(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out),
     .square_out_ap_vld(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out_ap_vld)
 );
@@ -436,9 +436,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U349(
+mul_27ns_21s_45_1_1_U312(
     .din0(mul_ln132_fu_166_p0),
-    .din1(shl_ln3_fu_432_p3),
+    .din1(shl_ln2_fu_432_p3),
     .dout(mul_ln132_fu_166_p2)
 );
 
@@ -448,7 +448,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U350(
+mul_27ns_21s_45_1_1_U313(
     .din0(mul_ln132_1_fu_170_p0),
     .din1(shl_ln132_1_fu_505_p3),
     .dout(mul_ln132_1_fu_170_p2)
@@ -460,7 +460,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U351(
+mul_27ns_21s_45_1_1_U314(
     .din0(mul_ln132_2_fu_174_p0),
     .din1(shl_ln132_2_fu_532_p3),
     .dout(mul_ln132_2_fu_174_p2)
@@ -472,7 +472,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U352(
+mul_27ns_21s_45_1_1_U315(
     .din0(mul_ln132_3_fu_178_p0),
     .din1(shl_ln132_3_fu_559_p3),
     .dout(mul_ln132_3_fu_178_p2)
@@ -484,7 +484,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U353(
+mul_27ns_21s_45_1_1_U316(
     .din0(mul_ln132_4_fu_182_p0),
     .din1(shl_ln132_4_fu_586_p3),
     .dout(mul_ln132_4_fu_182_p2)
@@ -496,7 +496,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U354(
+mul_27ns_21s_45_1_1_U317(
     .din0(mul_ln132_5_fu_186_p0),
     .din1(shl_ln132_5_fu_613_p3),
     .dout(mul_ln132_5_fu_186_p2)
@@ -508,7 +508,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U355(
+mul_27ns_21s_45_1_1_U318(
     .din0(mul_ln132_6_fu_190_p0),
     .din1(shl_ln132_6_fu_640_p3),
     .dout(mul_ln132_6_fu_190_p2)
@@ -520,7 +520,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U356(
+mul_27ns_21s_45_1_1_U319(
     .din0(mul_ln132_7_fu_194_p0),
     .din1(shl_ln132_7_fu_667_p3),
     .dout(mul_ln132_7_fu_194_p2)
@@ -532,7 +532,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U357(
+mul_27ns_21s_45_1_1_U320(
     .din0(mul_ln132_8_fu_198_p0),
     .din1(shl_ln132_8_fu_694_p3),
     .dout(mul_ln132_8_fu_198_p2)
@@ -544,7 +544,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U358(
+mul_27ns_21s_45_1_1_U321(
     .din0(mul_ln132_9_fu_202_p0),
     .din1(shl_ln132_9_fu_721_p3),
     .dout(mul_ln132_9_fu_202_p2)
@@ -556,7 +556,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U359(
+mul_27ns_21s_45_1_1_U322(
     .din0(mul_ln132_10_fu_206_p0),
     .din1(shl_ln132_s_fu_748_p3),
     .dout(mul_ln132_10_fu_206_p2)
@@ -568,7 +568,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U360(
+mul_27ns_21s_45_1_1_U323(
     .din0(mul_ln132_11_fu_210_p0),
     .din1(shl_ln132_10_fu_775_p3),
     .dout(mul_ln132_11_fu_210_p2)
@@ -580,7 +580,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U361(
+mul_27ns_21s_45_1_1_U324(
     .din0(mul_ln132_12_fu_214_p0),
     .din1(shl_ln132_11_fu_802_p3),
     .dout(mul_ln132_12_fu_214_p2)
@@ -592,7 +592,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U362(
+mul_27ns_21s_45_1_1_U325(
     .din0(mul_ln132_13_fu_218_p0),
     .din1(shl_ln132_12_fu_829_p3),
     .dout(mul_ln132_13_fu_218_p2)
@@ -604,7 +604,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U363(
+mul_27ns_21s_45_1_1_U326(
     .din0(mul_ln132_14_fu_222_p0),
     .din1(shl_ln132_13_fu_856_p3),
     .dout(mul_ln132_14_fu_222_p2)
@@ -616,7 +616,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
-mul_27ns_21s_45_1_1_U364(
+mul_27ns_21s_45_1_1_U327(
     .din0(mul_ln132_15_fu_226_p0),
     .din1(shl_ln132_14_fu_883_p3),
     .dout(mul_ln132_15_fu_226_p2)
@@ -628,9 +628,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U365(
+mul_32s_32s_45_1_1_U328(
     .din0(normalized_fu_463_p4),
-    .din1(shl_ln4_fu_477_p3),
+    .din1(shl_ln3_fu_477_p3),
     .dout(mul_ln140_fu_230_p2)
 );
 
@@ -640,7 +640,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U366(
+mul_32s_32s_45_1_1_U329(
     .din0(normalized_1_fu_517_p4),
     .din1(shl_ln140_1_fu_909_p3),
     .dout(mul_ln140_1_fu_234_p2)
@@ -652,7 +652,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U367(
+mul_32s_32s_45_1_1_U330(
     .din0(shl_ln140_2_fu_936_p3),
     .din1(normalized_2_fu_544_p4),
     .dout(mul_ln140_2_fu_238_p2)
@@ -664,7 +664,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U368(
+mul_32s_32s_45_1_1_U331(
     .din0(shl_ln140_3_fu_963_p3),
     .din1(normalized_3_fu_571_p4),
     .dout(mul_ln140_3_fu_242_p2)
@@ -676,7 +676,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U369(
+mul_32s_32s_45_1_1_U332(
     .din0(shl_ln140_4_fu_990_p3),
     .din1(normalized_4_fu_598_p4),
     .dout(mul_ln140_4_fu_246_p2)
@@ -688,7 +688,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U370(
+mul_32s_32s_45_1_1_U333(
     .din0(shl_ln140_5_fu_1017_p3),
     .din1(normalized_5_fu_625_p4),
     .dout(mul_ln140_5_fu_250_p2)
@@ -700,7 +700,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U371(
+mul_32s_32s_45_1_1_U334(
     .din0(shl_ln140_6_fu_1044_p3),
     .din1(normalized_6_fu_652_p4),
     .dout(mul_ln140_6_fu_254_p2)
@@ -712,7 +712,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U372(
+mul_32s_32s_45_1_1_U335(
     .din0(shl_ln140_7_fu_1071_p3),
     .din1(normalized_7_fu_679_p4),
     .dout(mul_ln140_7_fu_258_p2)
@@ -724,7 +724,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U373(
+mul_32s_32s_45_1_1_U336(
     .din0(shl_ln140_8_fu_1098_p3),
     .din1(normalized_8_fu_706_p4),
     .dout(mul_ln140_8_fu_262_p2)
@@ -736,7 +736,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U374(
+mul_32s_32s_45_1_1_U337(
     .din0(shl_ln140_9_fu_1125_p3),
     .din1(normalized_9_fu_733_p4),
     .dout(mul_ln140_9_fu_266_p2)
@@ -748,7 +748,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U375(
+mul_32s_32s_45_1_1_U338(
     .din0(shl_ln140_s_fu_1152_p3),
     .din1(normalized_16_fu_760_p4),
     .dout(mul_ln140_10_fu_270_p2)
@@ -760,7 +760,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U376(
+mul_32s_32s_45_1_1_U339(
     .din0(shl_ln140_10_fu_1179_p3),
     .din1(normalized_10_fu_787_p4),
     .dout(mul_ln140_11_fu_274_p2)
@@ -772,7 +772,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U377(
+mul_32s_32s_45_1_1_U340(
     .din0(shl_ln140_11_fu_1206_p3),
     .din1(normalized_11_fu_814_p4),
     .dout(mul_ln140_12_fu_278_p2)
@@ -784,7 +784,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U378(
+mul_32s_32s_45_1_1_U341(
     .din0(shl_ln140_12_fu_1233_p3),
     .din1(normalized_12_fu_841_p4),
     .dout(mul_ln140_13_fu_282_p2)
@@ -796,7 +796,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U379(
+mul_32s_32s_45_1_1_U342(
     .din0(shl_ln140_13_fu_1260_p3),
     .din1(normalized_13_fu_868_p4),
     .dout(mul_ln140_14_fu_286_p2)
@@ -808,7 +808,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
-mul_32s_32s_45_1_1_U380(
+mul_32s_32s_45_1_1_U343(
     .din0(shl_ln140_14_fu_1287_p3),
     .din1(normalized_14_fu_895_p4),
     .dout(mul_ln140_15_fu_290_p2)
@@ -820,7 +820,7 @@ transformer_top_udiv_27s_23ns_27_31_seq_1 #(
     .din0_WIDTH( 27 ),
     .din1_WIDTH( 23 ),
     .dout_WIDTH( 27 ))
-udiv_27s_23ns_27_31_seq_1_U381(
+udiv_27s_23ns_27_31_seq_1_U344(
     .clk(ap_clk),
     .reset(ap_rst),
     .start(grp_fu_426_ap_start),
@@ -1433,31 +1433,31 @@ assign shl_ln140_13_fu_1260_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRb
 
 assign shl_ln140_14_fu_1287_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_6}, {13'd0}};
 
-assign shl_ln140_1_fu_909_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98}, {13'd0}};
+assign shl_ln140_1_fu_909_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94}, {13'd0}};
 
-assign shl_ln140_2_fu_936_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97}, {13'd0}};
+assign shl_ln140_2_fu_936_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93}, {13'd0}};
 
-assign shl_ln140_3_fu_963_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96}, {13'd0}};
+assign shl_ln140_3_fu_963_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92}, {13'd0}};
 
-assign shl_ln140_4_fu_990_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95}, {13'd0}};
+assign shl_ln140_4_fu_990_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91}, {13'd0}};
 
-assign shl_ln140_5_fu_1017_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94}, {13'd0}};
+assign shl_ln140_5_fu_1017_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90}, {13'd0}};
 
-assign shl_ln140_6_fu_1044_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93}, {13'd0}};
+assign shl_ln140_6_fu_1044_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89}, {13'd0}};
 
-assign shl_ln140_7_fu_1071_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92}, {13'd0}};
+assign shl_ln140_7_fu_1071_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88}, {13'd0}};
 
-assign shl_ln140_8_fu_1098_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91}, {13'd0}};
+assign shl_ln140_8_fu_1098_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87}, {13'd0}};
 
-assign shl_ln140_9_fu_1125_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90}, {13'd0}};
+assign shl_ln140_9_fu_1125_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86}, {13'd0}};
 
 assign shl_ln140_s_fu_1152_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11}, {13'd0}};
 
-assign shl_ln2_fu_409_p3 = {{epsilon}, {13'd0}};
+assign shl_ln2_fu_432_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39}, {13'd0}};
 
-assign shl_ln3_fu_432_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39}, {13'd0}};
+assign shl_ln3_fu_477_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95}, {13'd0}};
 
-assign shl_ln4_fu_477_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99}, {13'd0}};
+assign shl_ln9_fu_409_p3 = {{epsilon}, {13'd0}};
 
 assign shl_ln_fu_381_p3 = {{trunc_ln124_fu_377_p1}, {9'd0}};
 
@@ -1465,7 +1465,7 @@ assign tmp_fu_389_p3 = square_loc_fu_130[32'd18];
 
 assign trunc_ln124_fu_377_p1 = square_loc_fu_130[17:0];
 
-assign v_fu_417_p2 = (zext_ln124_fu_405_p1 + shl_ln2_fu_409_p3);
+assign v_fu_417_p2 = (zext_ln124_fu_405_p1 + shl_ln9_fu_409_p3);
 
 assign zext_ln124_fu_405_p1 = mean_square_fu_397_p3;
 

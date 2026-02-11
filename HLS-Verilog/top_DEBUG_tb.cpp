@@ -224,10 +224,6 @@ static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         for (int i = 0; i < D_TILE_W1; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INFfnW1Layout::B + (i * 4))));
         }
-        std::printf("\n  S:");
-        for (int i = 0; i < D_TILE_W1; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnW1Layout::S + (i * 2))));
-        }
         std::printf("\n");
         break;
     }
@@ -255,10 +251,6 @@ static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         std::printf("\n  B:");
         for (int i = 0; i < D_TILE_W2; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INFfnW2Layout::B + (i * 4))));
-        }
-        std::printf("\n  S:");
-        for (int i = 0; i < D_TILE_W2; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnW2Layout::S + (i * 2))));
         }
         std::printf("\n");
         break;
@@ -879,7 +871,6 @@ int main() {
     int8_t ffn1_x[D_MODEL] = {};
     int8_t ffn1_w[D_MODEL * W1_OUT_SIZE] = {};
     int32_t ffn1_b[W1_OUT_SIZE] = {};
-    int16_t ffn1_s[W1_OUT_SIZE] = {};
 
     int16_t ffn_act_gate_in[D_FFN] = {};
     int16_t ffn_act_up_in[D_FFN] = {};
@@ -887,7 +878,6 @@ int main() {
     int16_t ffn2_x[D_FFN] = {};
     int8_t  ffn2_w[D_FFN * D_FFN] = {};
     int32_t ffn2_b[D_FFN] = {};
-    int16_t ffn2_s[D_FFN] = {};
 
     init_head_vectors();
 
@@ -976,7 +966,6 @@ int main() {
     }
     for (int i = 0; i < W1_OUT_SIZE; ++i) {
         ffn1_b[i] = 7;
-        ffn1_s[i] = 0x4000;
     }
     for (int r = 0; r < D_MODEL; ++r) {
         for (int c = 0; c < D_MODEL; ++c) {
@@ -993,7 +982,6 @@ int main() {
         ffn_act_up_in[i] = static_cast<int16_t>((i * 2) - 10);
         ffn2_x[i] = static_cast<int16_t>((i * 2) + 1);
         ffn2_b[i] = 5;
-        ffn2_s[i] = 0x4000;
     }
     for (int r = 0; r < D_FFN; ++r) {
         for (int c = 0; c < D_FFN; ++c) {
@@ -1024,6 +1012,7 @@ int main() {
     bool dbg_mac_start = false;
     bool dbg_mac_ready = false;
     bool dbg_mac_complete = false;
+    int32_t dbg_mac_out[ACCUM_MAX] = {};
     bool dbg_ctrl_reset_asserted = false;
     int dbg_head_group_idx = 0;
 
@@ -1442,7 +1431,6 @@ int main() {
                                              ffn1_w[(out_base + t) * D_MODEL + i]);
                                 }
                                 compute_buf::write_i32(in_buf, compute_buf::INFfnW1Layout::B + (t * 4), ffn1_b[out_base + t]);
-                                compute_buf::write_i16(in_buf, compute_buf::INFfnW1Layout::S + (t * 2), ffn1_s[out_base + t]);
                             }
                         }
                         break;
@@ -1466,7 +1454,6 @@ int main() {
                                              ffn2_w[(out_base + t) * D_FFN + i]);
                                 }
                                 compute_buf::write_i32(in_buf, compute_buf::INFfnW2Layout::B + (t * 4), ffn2_b[out_base + t]);
-                                compute_buf::write_i16(in_buf, compute_buf::INFfnW2Layout::S + (t * 2), ffn2_s[out_base + t]);
                             }
                         }
                         break;
@@ -1586,6 +1573,7 @@ int main() {
             dbg_mac_start,
             dbg_mac_ready,
             dbg_mac_complete,
+            dbg_mac_out,
             dbg_ctrl_reset_asserted,
             dbg_head_group_idx,
             dbg_done

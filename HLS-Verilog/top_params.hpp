@@ -131,10 +131,10 @@ constexpr int NUM_W2_TILES    = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
 constexpr int D_MODEL = 16; // Number of heads processed in parallel
-constexpr int D_FFN   = 22; // Feed-Forward hidden layer size
+constexpr int D_FFN   = 24; // Feed-Forward hidden layer size
 constexpr int D_HEADS = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
 constexpr int D_TILE_WO  = D_MODEL / NUM_WO_TILES; // Tile size for WO
-constexpr int D_TILE_W1  = D_FFN*2 / NUM_W1_TILES; // Tile size for W1
+constexpr int D_TILE_W1  = D_FFN * 2 / NUM_W1_TILES; // Tile size for W1
 constexpr int D_TILE_W2  = D_MODEL   / NUM_W2_TILES;
 constexpr int CONTEXT_LENGTH = 16; // Context window length
 constexpr int MAX_CYCLIC_SIZE = 16; // << for UNROLL parallelism in MAC units
@@ -460,6 +460,10 @@ constexpr double S_out_v = 1.0;
 constexpr double S_att_weights = 1.0;     // softmax output scale
 constexpr double S_v_cache = 1.0;         // V-cache activation scale
 constexpr double S_out_att_value = 1.0;   // int8 scale after ATT_VALUE
+
+// FFN per-stage fixed-point scale (Q1.15)
+constexpr int16_t FFN_W1_SCALE_Q15 = 0x4000; // 0.5
+constexpr int16_t FFN_W2_SCALE_Q15 = 0x4000; // 0.5
 } // namespace requant_scales
 
 namespace requant_params {
@@ -546,14 +550,14 @@ constexpr int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
 constexpr int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
 constexpr int FFN_W1_W_BYTES = div_ceil(FFN_W1_W_NIBBLES, 2);
 constexpr int FFN_W1_B_BYTES = D_TILE_W1 * 4;
-constexpr int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES + (D_TILE_W1 * 2);
+constexpr int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES;
 
 constexpr int FFN_ACT_IN_BYTES = (D_FFN * 2) * 2;
 
 constexpr int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
 constexpr int FFN_W2_W_BYTES = div_ceil(FFN_W2_W_NIBBLES, 2);
 constexpr int FFN_W2_B_BYTES = D_TILE_W2 * 4;
-constexpr int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES + (D_TILE_W2 * 2);
+constexpr int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES;
 
 constexpr int IN_BUF_BYTES = max2(
     OUT_PROJ_IN_BYTES,
@@ -628,12 +632,10 @@ struct INFfnW1Layout {
     static constexpr int X_BYTES = D_MODEL;
     static constexpr int W_BYTES = FFN_W1_W_BYTES;
     static constexpr int B_BYTES = FFN_W1_B_BYTES;
-    static constexpr int S_BYTES = D_TILE_W1 * 2;
     static constexpr int TOTAL_BYTES = FFN_W1_IN_BYTES;
     static constexpr int X = 0;
     static constexpr int W = X + X_BYTES;
     static constexpr int B = W + W_BYTES;
-    static constexpr int S = B + B_BYTES;
 };
 
 struct INFfnActLayout {
@@ -651,12 +653,10 @@ struct INFfnW2Layout {
     static constexpr int X_BYTES = D_FFN * 2;
     static constexpr int W_BYTES = FFN_W2_W_BYTES;
     static constexpr int B_BYTES = FFN_W2_B_BYTES;
-    static constexpr int S_BYTES = D_TILE_W2 * 2;
     static constexpr int TOTAL_BYTES = FFN_W2_IN_BYTES;
     static constexpr int X = 0;
     static constexpr int W = X + X_BYTES;
     static constexpr int B = W + W_BYTES;
-    static constexpr int S = B + B_BYTES;
 };
 
 // -------------------------------

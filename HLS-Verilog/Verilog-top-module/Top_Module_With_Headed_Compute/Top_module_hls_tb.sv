@@ -15,11 +15,11 @@ module top_module_hls_tb;
   localparam int NUM_HEADS       = 4;
   localparam int NUM_LAYERS      = 2;
   localparam int NUM_WO_TILES    = 4;
-  localparam int NUM_W1_TILES    = 4;
+  localparam int NUM_W1_TILES    = 8;
   localparam int NUM_W2_TILES    = 4;
   localparam int NUM_LOGIT_TILES = 2;
   localparam int D_MODEL = 16;
-  localparam int D_FFN   = 22;
+  localparam int D_FFN   = 24;
   localparam int D_HEADS = D_MODEL / NUM_HEADS;
   localparam int D_TILE_WO  = D_MODEL / NUM_WO_TILES;
   localparam int D_TILE_W1  = D_FFN*2 / NUM_W1_TILES;
@@ -87,20 +87,16 @@ module top_module_hls_tb;
   localparam int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
   localparam int FFN_W1_W_BYTES = (FFN_W1_W_NIBBLES + 1) / 2;
   localparam int FFN_W1_B_BYTES = D_TILE_W1 * 4;
-  localparam int FFN_W1_S_BYTES = D_TILE_W1 * 2;
   localparam int FFN_W1_W_OFFSET = FFN_W1_X_OFFSET + D_MODEL;
   localparam int FFN_W1_B_OFFSET = FFN_W1_W_OFFSET + FFN_W1_W_BYTES;
-  localparam int FFN_W1_S_OFFSET = FFN_W1_B_OFFSET + FFN_W1_B_BYTES;
   localparam int FFN_ACT_GATE_OFFSET = 0;
   localparam int FFN_ACT_UP_OFFSET = FFN_ACT_GATE_OFFSET + (D_FFN * 2);
   localparam int FFN_W2_X_OFFSET = 0;
   localparam int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
   localparam int FFN_W2_W_BYTES = (FFN_W2_W_NIBBLES + 1) / 2;
   localparam int FFN_W2_B_BYTES = D_TILE_W2 * 4;
-  localparam int FFN_W2_S_BYTES = D_TILE_W2 * 2;
   localparam int FFN_W2_W_OFFSET = FFN_W2_X_OFFSET + (D_FFN * 2);
   localparam int FFN_W2_B_OFFSET = FFN_W2_W_OFFSET + FFN_W2_W_BYTES;
-  localparam int FFN_W2_S_OFFSET = FFN_W2_B_OFFSET + FFN_W2_B_BYTES;
   localparam int MEM_LAT = 8;
   localparam int MEM_DONE_HOLD_CYCLES = 12;
   localparam int DMA_DONE_HOLD_CYCLES = 12;
@@ -336,6 +332,18 @@ module top_module_hls_tb;
   logic        dbg_mac_ready_ap_vld;
   logic [0:0]  dbg_mac_complete;
   logic        dbg_mac_complete_ap_vld;
+  logic [31:0] dbg_mac_out_0;
+  logic        dbg_mac_out_0_ap_vld;
+  logic [31:0] dbg_mac_out_1;
+  logic        dbg_mac_out_1_ap_vld;
+  logic [31:0] dbg_mac_out_2;
+  logic        dbg_mac_out_2_ap_vld;
+  logic [31:0] dbg_mac_out_3;
+  logic        dbg_mac_out_3_ap_vld;
+  logic [31:0] dbg_mac_out_4;
+  logic        dbg_mac_out_4_ap_vld;
+  logic [31:0] dbg_mac_out_5;
+  logic        dbg_mac_out_5_ap_vld;
   logic [0:0]  dbg_ctrl_reset_asserted;
   logic        dbg_ctrl_reset_asserted_ap_vld;
   logic [0:0] axis_in_ready;
@@ -700,7 +708,6 @@ module top_module_hls_tb;
   logic [7:0] ffn1_x [0:D_MODEL-1];
   logic [3:0] ffn1_w [0:(D_MODEL*W1_OUT_SIZE)-1];
   logic [31:0] ffn1_b [0:W1_OUT_SIZE-1];
-  logic [15:0] ffn1_s [0:W1_OUT_SIZE-1];
   logic [15:0] ffn1_out [0:W1_OUT_SIZE-1];
   logic [15:0] ffn_act_gate_in [0:D_FFN-1];
   logic [15:0] ffn_act_up_in [0:D_FFN-1];
@@ -708,7 +715,6 @@ module top_module_hls_tb;
   logic [15:0] ffn2_x [0:D_FFN-1];
   logic [3:0] ffn2_w [0:(D_FFN*D_FFN)-1];
   logic [31:0] ffn2_b [0:D_FFN-1];
-  logic [15:0] ffn2_s [0:D_FFN-1];
   logic [31:0] ffn2_out [0:(NUM_W2_TILES * D_TILE_W2)-1];
 
 // Per-head input datasets (flattened by layer/head index)
@@ -824,7 +830,7 @@ module top_module_hls_tb;
     int j;
 
     for (i = 0; i < D_MODEL; i = i + 1) begin
-      full_valueA[i] = 8'h7f;
+      full_valueA[i] = i + 1;
       full_bias[i] = 32'd7;
       full_accum[i] = 32'd0;
       out_proj_out[i] = 32'd0;
@@ -855,7 +861,6 @@ module top_module_hls_tb;
     end
     for (i = 0; i < W1_OUT_SIZE; i = i + 1) begin
       ffn1_b[i] = 32'd7;
-      ffn1_s[i] = 16'h4000;
       ffn1_out[i] = 16'd0;
     end
 
@@ -865,7 +870,7 @@ module top_module_hls_tb;
 
     for (t = 0; t < D_MODEL; t = t + 1) begin
       for (j = 0; j < D_MODEL; j = j + 1) begin
-        full_weights[t * D_MODEL + j] = 4'h7;
+        full_weights[t * D_MODEL + j] = (t + j) & 4'h7;
       end
     end
     for (t = 0; t < W1_OUT_SIZE; t = t + 1) begin
@@ -880,7 +885,6 @@ module top_module_hls_tb;
       ffn_act_out[t] = 16'd0;
       ffn2_x[t] = (t * 2) + 1;
       ffn2_b[t] = 32'd5;
-      ffn2_s[t] = 16'h4000;
     end
     for (t = 0; t < (D_FFN * D_FFN); t = t + 1) begin
       ffn2_w[t] = 4'h1;
@@ -906,65 +910,60 @@ module top_module_hls_tb;
     int h;
     int head;
     int layer;
-    int sign;
+    int lane;
     int base;
     int data_idx;
-    int layer_off;
-    int head_off;
+    int idx;
 
     for (layer = 0; layer < NUM_LAYERS; layer = layer + 1) begin
       for (head = 0; head < NUM_HEADS; head = head + 1) begin
         data_idx = head_dataset_index(layer, head);
-        layer_off = layer * 3;
-        head_off = head * 2;
+        lane = head % HEADS_PARALLEL;
 
         for (i = 0; i < D_MODEL; i = i + 1) begin
-          q_act_all[(data_idx * D_MODEL) + i] = (i % 2) ?
-            -$signed(i + 1 + head_off + layer_off) :
-             $signed(i + 1 + head_off + layer_off);
-          k_act_all[(data_idx * D_MODEL) + i] = (i % 2) ?
-             $signed(i + 3 + layer_off) :
-            -$signed(i + 2 + head_off);
-          v_act_all[(data_idx * D_MODEL) + i] = $signed(((i + head_off) % 3) - 4);
+          base = (i * 2) + 1 + lane;
+          q_act_all[(data_idx * D_MODEL) + i] = (i & 1) ? -$signed(base) : $signed(base);
+          k_act_all[(data_idx * D_MODEL) + i] = (i & 1) ? -$signed(base + 1) : $signed(base + 1);
+          v_act_all[(data_idx * D_MODEL) + i] = (i & 1) ? -$signed(base + 2) : $signed(base + 2);
         end
 
         for (h = 0; h < D_HEADS; h = h + 1) begin
           for (i = 0; i < D_MODEL; i = i + 1) begin
+            idx = (h * D_MODEL) + i;
             wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] =
-              (h == 0) ? (4'sd1 + layer[3:0]) : (4'sd3 - head[3:0]);
+              $signed(((idx + lane) % 7) - 3);
             wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] =
-              (h == 0) ? -4'sd2 : (4'sd2 + layer[3:0]);
+              $signed(((idx + lane + 1) % 7) - 3);
             wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] =
-              (i % 2) ? -4'sd3 : 4'sd1;
+              $signed(((idx + lane + 2) % 7) - 3);
           end
-          bq_all[(data_idx * QKV_B_ELEMS) + h] = (h == 0) ? 4'sd3 : -4'sd2;
-          bk_all[(data_idx * QKV_B_ELEMS) + h] = (h == 0) ? -4'sd1 : 4'sd2;
-          bv_all[(data_idx * QKV_B_ELEMS) + h] = (h % 2) ? -4'sd3 : 4'sd4;
+          bq_all[(data_idx * QKV_B_ELEMS) + h] = $signed((h + lane) % 3);
+          bk_all[(data_idx * QKV_B_ELEMS) + h] = $signed(((h + lane + 1) % 3) - 1);
+          bv_all[(data_idx * QKV_B_ELEMS) + h] = $signed(((h + lane + 2) % 3) - 1);
 
-          rq_q_x_all[(data_idx * D_HEADS) + h]    = 40 + (h * 5) + layer_off + head_off;
-          rq_k_x_all[(data_idx * D_HEADS) + h]    = -30 - (h * 7) + layer_off;
-          rq_v_x_all[(data_idx * D_HEADS) + h]    = 15 + (h * 11) + head_off;
-          rq_head_x_all[(data_idx * D_HEADS) + h] = (h % 2) ? (-20 - h - layer_off) : (20 + h + layer_off);
+          rq_q_x_all[(data_idx * D_HEADS) + h]    = 3000 + (lane * 100) + h * 10;
+          rq_k_x_all[(data_idx * D_HEADS) + h]    = 1000 + (lane * 100) + h * 10;
+          rq_v_x_all[(data_idx * D_HEADS) + h]    = 2000 + (lane * 100) + h * 10;
+          rq_head_x_all[(data_idx * D_HEADS) + h] = 4000 + (lane * 100) + h * 10;
 
-          att_q_all[(data_idx * D_HEADS) + h] = (h % 2) ? (-6 - layer) : (5 + head);
+          att_q_all[(data_idx * D_HEADS) + h] = (h + 1) * (lane + 1);
         end
 
         for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
-          sign = (t % 2) ? -1 : 1;
           for (h = 0; h < D_HEADS; h = h + 1) begin
             att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + h] =
-              sign * (t + h + 1 + layer);
+              $signed((t * D_HEADS + h + 1 + lane) % 17);
           end
-          val_scale_in_all[(data_idx * CONTEXT_LENGTH) + t] = (t % 7) * 37 - 90 + (layer * 11);
-          softmax_in_all[(data_idx * CONTEXT_LENGTH) + t] = -1200 + (t * 95) + (layer * 30);
-          att_weights_all[(data_idx * CONTEXT_LENGTH) + t] = ((t % 5) - 2) * 15 + head;
+          val_scale_in_all[(data_idx * CONTEXT_LENGTH) + t] = 500 + (lane * 50) + (t * 7);
+          softmax_in_all[(data_idx * CONTEXT_LENGTH) + t] = -500 + (lane * 10) + (t * 5);
+          att_weights_all[(data_idx * CONTEXT_LENGTH) + t] = $signed((t + lane) % 23);
         end
 
         for (h = 0; h < D_HEADS; h = h + 1) begin
           for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
-            base = (t % 4) - 1;
+            idx = (h * CONTEXT_LENGTH) + t;
             att_v_cache_all[(data_idx * ATT_V_ELEMS) + (h * CONTEXT_LENGTH) + t] =
-              (h + 2 + layer) * base;
+              $signed(((idx + 3 + lane) % 19) - 9);
           end
         end
       end
@@ -1468,14 +1467,6 @@ module top_module_hls_tb;
         end
         $write("\n");
       end
-      $display("ffn1_s:");
-      for (i = 0; i < W1_OUT_SIZE; i = i + 8) begin
-        $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < W1_OUT_SIZE; j = j + 1) begin
-          $write(" %04x", ffn1_s[i + j]);
-        end
-        $write("\n");
-      end
       $display("ffn1_out:");
       for (i = 0; i < W1_OUT_SIZE; i = i + 8) begin
         $write("  %04x:", i);
@@ -1531,14 +1522,6 @@ module top_module_hls_tb;
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < D_FFN; j = j + 1) begin
           $write(" %08x", ffn2_b[i + j]);
-        end
-        $write("\n");
-      end
-      $display("ffn2_s:");
-      for (i = 0; i < D_FFN; i = i + 8) begin
-        $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < D_FFN; j = j + 1) begin
-          $write(" %04x", ffn2_s[i + j]);
         end
         $write("\n");
       end
@@ -2273,8 +2256,6 @@ module top_module_hls_tb;
             int out_base;
             int t;
             int j;
-            int layer_off;
-            layer_off = mem_op[15:8] * 2;
             for (j = 0; j < IN_BUF_BYTES; j = j + 1) begin
               in_buf_mem[j] = 8'd0;
             end
@@ -2282,7 +2263,7 @@ module top_module_hls_tb;
             case (mem_op[7:0])
               CMP_OUT_PROJ: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  in_buf_mem[OUT_PROJ_ACT_OFFSET + j] = full_valueA[j] + layer_off;
+                  in_buf_mem[OUT_PROJ_ACT_OFFSET + j] = full_valueA[j];
                 end
                 if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
                   out_base = pending_tile * D_TILE_WO;
@@ -2290,61 +2271,61 @@ module top_module_hls_tb;
                     for (j = 0; j < D_MODEL; j = j + 1) begin
                       write_i4_to_in_buf(
                         (OUT_PROJ_W_OFFSET * 2) + (t * D_MODEL) + j,
-                        full_weights[(out_base + t) * D_MODEL + j] + layer_off);
+                        full_weights[(out_base + t) * D_MODEL + j]);
                     end
                   end
                   for (t = 0; t < D_TILE_WO; t = t + 1) begin
                     write_i32_to_in_buf(
                       OUT_PROJ_B_OFFSET + (t * 4),
-                      full_bias[out_base + t] + layer_off);
+                      full_bias[out_base + t]);
                   end
                 end
               end
               CMP_REQUANT1: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq1_x[j] + layer_off);
+                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq1_x[j]);
                 end
               end
               CMP_REQUANT2: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq2_x[j] + layer_off);
+                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq2_x[j]);
                 end
               end
               CMP_REQUANT3: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq3_x[j] + layer_off);
+                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq3_x[j]);
                 end
               end
               CMP_REQUANT4: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq4_x[j] + layer_off);
+                  write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq4_x[j]);
                 end
               end
               CMP_RESID0: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  in_buf_mem[RESID_X_OFFSET + j] = resid0_x[j] + layer_off;
-                  in_buf_mem[RESID_R_OFFSET + j] = resid0_r[j] + layer_off;
+                  in_buf_mem[RESID_X_OFFSET + j] = resid0_x[j];
+                  in_buf_mem[RESID_R_OFFSET + j] = resid0_r[j];
                 end
               end
               CMP_RESID1: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  in_buf_mem[RESID_X_OFFSET + j] = resid1_x[j] + layer_off;
-                  in_buf_mem[RESID_R_OFFSET + j] = resid1_r[j] + layer_off;
+                  in_buf_mem[RESID_X_OFFSET + j] = resid1_x[j];
+                  in_buf_mem[RESID_R_OFFSET + j] = resid1_r[j];
                 end
               end
               CMP_LN0: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  in_buf_mem[LN_X_OFFSET + j] = ln0_x[j] + layer_off;
-                  write_i32_to_in_buf(LN_GAMMA_OFFSET + (j * 4), ln0_gamma[j] + layer_off);
+                  in_buf_mem[LN_X_OFFSET + j] = ln0_x[j];
+                  write_i32_to_in_buf(LN_GAMMA_OFFSET + (j * 4), ln0_gamma[j]);
                 end
-                write_i32_to_in_buf(LN_EPS_OFFSET, ln0_eps + layer_off);
+                write_i32_to_in_buf(LN_EPS_OFFSET, ln0_eps);
               end
               CMP_LN1: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  in_buf_mem[LN_X_OFFSET + j] = ln1_x[j] + layer_off;
-                  write_i32_to_in_buf(LN_GAMMA_OFFSET + (j * 4), ln1_gamma[j] + layer_off);
+                  in_buf_mem[LN_X_OFFSET + j] = ln1_x[j];
+                  write_i32_to_in_buf(LN_GAMMA_OFFSET + (j * 4), ln1_gamma[j]);
                 end
-                write_i32_to_in_buf(LN_EPS_OFFSET, ln1_eps + layer_off);
+                write_i32_to_in_buf(LN_EPS_OFFSET, ln1_eps);
               end
               CMP_FINAL_NORM: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
@@ -2355,7 +2336,7 @@ module top_module_hls_tb;
               end
               CMP_FFN_W1: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
-                  in_buf_mem[FFN_W1_X_OFFSET + j] = ffn1_x[j] + layer_off;
+                  in_buf_mem[FFN_W1_X_OFFSET + j] = ffn1_x[j];
                 end
                 if ((pending_tile >= 0) && (pending_tile < NUM_W1_TILES)) begin
                   out_base = pending_tile * D_TILE_W1;
@@ -2363,28 +2344,25 @@ module top_module_hls_tb;
                     for (j = 0; j < D_MODEL; j = j + 1) begin
                       write_i4_to_in_buf(
                         (FFN_W1_W_OFFSET * 2) + (t * D_MODEL) + j,
-                        ffn1_w[(out_base + t) * D_MODEL + j] + layer_off);
+                        ffn1_w[(out_base + t) * D_MODEL + j]);
                     end
                   end
                   for (t = 0; t < D_TILE_W1; t = t + 1) begin
                     write_i32_to_in_buf(
                       FFN_W1_B_OFFSET + (t * 4),
-                      ffn1_b[out_base + t] + layer_off);
-                    write_i16_to_in_buf(
-                      FFN_W1_S_OFFSET + (t * 2),
-                      ffn1_s[out_base + t] + layer_off);
+                      ffn1_b[out_base + t]);
                   end
                 end
               end
               CMP_FFN_ACT: begin
                 for (j = 0; j < D_FFN; j = j + 1) begin
-                  write_i16_to_in_buf(FFN_ACT_GATE_OFFSET + (j * 2), ffn_act_gate_in[j] + layer_off);
-                  write_i16_to_in_buf(FFN_ACT_UP_OFFSET + (j * 2), ffn_act_up_in[j] + layer_off);
+                  write_i16_to_in_buf(FFN_ACT_GATE_OFFSET + (j * 2), ffn_act_gate_in[j]);
+                  write_i16_to_in_buf(FFN_ACT_UP_OFFSET + (j * 2), ffn_act_up_in[j]);
                 end
               end
               CMP_FFN_W2: begin
                 for (j = 0; j < D_FFN; j = j + 1) begin
-                  write_i16_to_in_buf(FFN_W2_X_OFFSET + (j * 2), ffn2_x[j] + layer_off);
+                  write_i16_to_in_buf(FFN_W2_X_OFFSET + (j * 2), ffn2_x[j]);
                 end
                 if ((pending_tile >= 0) && (pending_tile < NUM_W2_TILES)) begin
                   out_base = pending_tile * D_TILE_W2;
@@ -2392,16 +2370,13 @@ module top_module_hls_tb;
                     for (j = 0; j < D_FFN; j = j + 1) begin
                       write_i4_to_in_buf(
                         (FFN_W2_W_OFFSET * 2) + (t * D_FFN) + j,
-                        ffn2_w[(out_base + t) * D_FFN + j] + layer_off);
+                        ffn2_w[(out_base + t) * D_FFN + j]);
                     end
                   end
                   for (t = 0; t < D_TILE_W2; t = t + 1) begin
                     write_i32_to_in_buf(
                       FFN_W2_B_OFFSET + (t * 4),
-                      ffn2_b[out_base + t] + layer_off);
-                    write_i16_to_in_buf(
-                      FFN_W2_S_OFFSET + (t * 2),
-                      ffn2_s[out_base + t] + layer_off);
+                      ffn2_b[out_base + t]);
                   end
                 end
               end
@@ -3583,6 +3558,18 @@ module top_module_hls_tb;
     .dbg_mac_ready_ap_vld(dbg_mac_ready_ap_vld),
     .dbg_mac_complete(dbg_mac_complete),
     .dbg_mac_complete_ap_vld(dbg_mac_complete_ap_vld),
+    .dbg_mac_out_0(dbg_mac_out_0),
+    .dbg_mac_out_0_ap_vld(dbg_mac_out_0_ap_vld),
+    .dbg_mac_out_1(dbg_mac_out_1),
+    .dbg_mac_out_1_ap_vld(dbg_mac_out_1_ap_vld),
+    .dbg_mac_out_2(dbg_mac_out_2),
+    .dbg_mac_out_2_ap_vld(dbg_mac_out_2_ap_vld),
+    .dbg_mac_out_3(dbg_mac_out_3),
+    .dbg_mac_out_3_ap_vld(dbg_mac_out_3_ap_vld),
+    .dbg_mac_out_4(dbg_mac_out_4),
+    .dbg_mac_out_4_ap_vld(dbg_mac_out_4_ap_vld),
+    .dbg_mac_out_5(dbg_mac_out_5),
+    .dbg_mac_out_5_ap_vld(dbg_mac_out_5_ap_vld),
     .dbg_ctrl_reset_asserted(dbg_ctrl_reset_asserted),
     .dbg_ctrl_reset_asserted_ap_vld(dbg_ctrl_reset_asserted_ap_vld),
     .dbg_done(dbg_done),

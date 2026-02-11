@@ -48,19 +48,15 @@ module transformer_top_tb;
   localparam int FFN_W1_W_NIBBLES = D_MODEL * D_TILE_W1;
   localparam int FFN_W1_W_BYTES = (FFN_W1_W_NIBBLES + 1) / 2;
   localparam int FFN_W1_B_BYTES = D_TILE_W1 * 4;
-  localparam int FFN_W1_S_BYTES = D_TILE_W1 * 2;
   localparam int FFN_W1_W_OFFSET = FFN_W1_X_OFFSET + D_MODEL;
   localparam int FFN_W1_B_OFFSET = FFN_W1_W_OFFSET + FFN_W1_W_BYTES;
-  localparam int FFN_W1_S_OFFSET = FFN_W1_B_OFFSET + FFN_W1_B_BYTES;
   localparam int FFN_ACT_X_OFFSET = 0;
   localparam int FFN_W2_X_OFFSET = 0;
   localparam int FFN_W2_W_NIBBLES = D_FFN * D_TILE_W2;
   localparam int FFN_W2_W_BYTES = (FFN_W2_W_NIBBLES + 1) / 2;
   localparam int FFN_W2_B_BYTES = D_TILE_W2 * 4;
-  localparam int FFN_W2_S_BYTES = D_TILE_W2 * 2;
   localparam int FFN_W2_W_OFFSET = FFN_W2_X_OFFSET + (D_FFN * 2);
   localparam int FFN_W2_B_OFFSET = FFN_W2_W_OFFSET + FFN_W2_W_BYTES;
-  localparam int FFN_W2_S_OFFSET = FFN_W2_B_OFFSET + FFN_W2_B_BYTES;
   localparam int MEM_LAT = 8;
 
   // Clock / reset
@@ -394,14 +390,12 @@ module transformer_top_tb;
   logic [7:0] ffn1_x [0:D_MODEL-1];
   logic [3:0] ffn1_w [0:(D_MODEL*D_MODEL)-1];
   logic [31:0] ffn1_b [0:D_MODEL-1];
-  logic [15:0] ffn1_s [0:D_MODEL-1];
   logic [15:0] ffn1_out [0:D_MODEL-1];
   logic [15:0] ffn_act_in [0:D_FFN-1];
   logic [15:0] ffn_act_out [0:D_FFN-1];
   logic [15:0] ffn2_x [0:D_FFN-1];
   logic [3:0] ffn2_w [0:(D_FFN*D_FFN)-1];
   logic [31:0] ffn2_b [0:D_FFN-1];
-  logic [15:0] ffn2_s [0:D_FFN-1];
   logic [31:0] ffn2_out [0:(NUM_W2_TILES * D_TILE_W2)-1];
   // DMA done hold
   logic       dma_done_hold;
@@ -476,7 +470,6 @@ module transformer_top_tb;
       final_norm_out[i] = 32'd0;
       ffn1_x[i] = i + 3;
       ffn1_b[i] = 32'd7;
-      ffn1_s[i] = 16'h4000;
       ffn1_out[i] = 16'd0;
     end
 
@@ -500,7 +493,6 @@ module transformer_top_tb;
       ffn_act_out[t] = 16'd0;
       ffn2_x[t] = (t * 2) + 1;
       ffn2_b[t] = 32'd5;
-      ffn2_s[t] = 16'h4000;
     end
     for (t = 0; t < (D_FFN * D_FFN); t = t + 1) begin
       ffn2_w[t] = 4'h1;
@@ -735,9 +727,6 @@ module transformer_top_tb;
                     write_i32_to_in_buf(
                       FFN_W1_B_OFFSET + (t * 4),
                       ffn1_b[out_base + t] + layer_off);
-                    write_i16_to_in_buf(
-                      FFN_W1_S_OFFSET + (t * 2),
-                      ffn1_s[out_base + t] + layer_off);
                   end
                 end
               end
@@ -763,9 +752,6 @@ module transformer_top_tb;
                     write_i32_to_in_buf(
                       FFN_W2_B_OFFSET + (t * 4),
                       ffn2_b[out_base + t] + layer_off);
-                    write_i16_to_in_buf(
-                      FFN_W2_S_OFFSET + (t * 2),
-                      ffn2_s[out_base + t] + layer_off);
                   end
                 end
               end

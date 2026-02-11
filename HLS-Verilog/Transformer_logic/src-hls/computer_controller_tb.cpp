@@ -286,10 +286,6 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         for (int i = 0; i < D_TILE_W1; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INFfnW1Layout::B + (i * 4))));
         }
-        std::printf("\n  S:");
-        for (int i = 0; i < D_TILE_W1; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnW1Layout::S + (i * 2))));
-        }
         std::printf("\n");
         break;
     }
@@ -317,10 +313,6 @@ void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         std::printf("\n  B:");
         for (int i = 0; i < D_TILE_W2; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INFfnW2Layout::B + (i * 4))));
-        }
-        std::printf("\n  S:");
-        for (int i = 0; i < D_TILE_W2; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, compute_buf::INFfnW2Layout::S + (i * 2))));
         }
         std::printf("\n");
         break;
@@ -417,13 +409,11 @@ int main() {
     int16_t ffn1_out_full[D_MODEL] = {};
     int4_t ffn1_weights_full[D_MODEL * D_MODEL] = {};
     int32_t ffn1_bias_full[D_MODEL] = {};
-    int16_t ffn1_scale_full[D_MODEL] = {};
     int16_t ffn_act_out[D_FFN] = {};
     int4_t ffn2_weights[D_FFN * D_TILE_W2] = {};
     int32_t ffn2_out[D_TILE_W2] = {};
     int4_t ffn2_weights_full[D_FFN * D_FFN] = {};
     int32_t ffn2_bias_full[D_FFN] = {};
-    int16_t ffn2_scale_full[D_FFN] = {};
     int32_t ffn2_out_full[D_MODEL] = {};
     int8_t rq1_out[D_MODEL] = {};
     int8_t head_requant_out[D_MODEL] = {};
@@ -471,6 +461,7 @@ int main() {
     bool dbg_mac_start = false;
     bool dbg_mac_ready = false;
     bool dbg_mac_complete = false;
+    int32_t dbg_mac_out[ACCUM_MAX] = {};
     int32_t expected_full[D_MODEL] = {};
     int32_t full_accum[D_MODEL] = {};
 
@@ -489,14 +480,12 @@ int main() {
     }
     for (int i = 0; i < D_MODEL; ++i) {
         ffn1_bias_full[i] = 5;
-        ffn1_scale_full[i] = 16384; // 0.5 in Q1.15
     }
     for (int i = 0; i < D_FFN * D_FFN; ++i) {
         ffn2_weights_full[i] = int4_t(2);
     }
     for (int i = 0; i < D_FFN; ++i) {
         ffn2_bias_full[i] = 4;
-        ffn2_scale_full[i] = 16384; // 0.5 in Q1.15
     }
     for (int i = 0; i < D_MODEL; ++i) {
         rq1_in[i] = (i * 7) - 15;
@@ -682,9 +671,7 @@ int main() {
                             for (int i = 0; i < D_TILE_W1; ++i) {
                                 const int idx = out_base + i;
                                 const int32_t b = (idx < D_MODEL) ? ffn1_bias_full[idx] : 0;
-                                const int16_t s = (idx < D_MODEL) ? ffn1_scale_full[idx] : 0;
                                 compute_buf::write_i32(in_buf, compute_buf::INFfnW1Layout::B + (i * 4), b);
-                                compute_buf::write_i16(in_buf, compute_buf::INFfnW1Layout::S + (i * 2), s);
                             }
                             break;
                         }
@@ -713,9 +700,7 @@ int main() {
                             for (int i = 0; i < D_TILE_W2; ++i) {
                                 const int idx = out_base + i;
                                 const int32_t b = (idx < D_FFN) ? ffn2_bias_full[idx] : 0;
-                                const int16_t s = (idx < D_FFN) ? ffn2_scale_full[idx] : 0;
                                 compute_buf::write_i32(in_buf, compute_buf::INFfnW2Layout::B + (i * 4), b);
-                                compute_buf::write_i16(in_buf, compute_buf::INFfnW2Layout::S + (i * 2), s);
                             }
                             break;
                         }
@@ -857,6 +842,7 @@ int main() {
             dbg_mac_start,
             dbg_mac_ready,
             dbg_mac_complete,
+            dbg_mac_out,
             error);
 
         if (compute_done) {
