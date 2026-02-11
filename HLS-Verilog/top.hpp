@@ -84,7 +84,6 @@ void transformer_top(
     bool     &dbg_mac_start,
     bool     &dbg_mac_ready,
     bool     &dbg_mac_complete,
-    int32_t   dbg_mac_out[ACCUM_MAX],
     bool     &dbg_ctrl_reset_asserted,
     int      &dbg_head_group_idx,
 

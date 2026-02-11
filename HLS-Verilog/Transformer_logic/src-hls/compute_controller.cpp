@@ -310,7 +310,6 @@ void compute_controller(
     bool        &dbg_mac_start,
     bool        &dbg_mac_ready,
     bool        &dbg_mac_complete,
-    int32_t      dbg_mac_out[ACCUM_MAX],
 
     bool        &error               // [OUTPUT] Error flag on invalid request
 ) {
@@ -722,18 +721,17 @@ void compute_controller(
 
                         // Do Scaling before Activation 
                         for (int t = 0; t < D_TILE_W1; ++t) {
-                            // const int64_t prod =
-                            //     static_cast<int64_t>(out[t]) *
-                            //     static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
-                            // const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
-                            // int32_t scaled = static_cast<int32_t>(rounded >> 15);
-                            // if (scaled > 32767) {
-                            //     scaled = 32767;
-                            // } else if (scaled < -32768) {
-                            //     scaled = -32768;
-                            // }
-                            compute_buf::write_i16(out_buf, t * 2, static_cast<int16_t>(out[t]));
-                            // compute_buf::write_i16(out_buf, t * 2 + 1, static_cast<int16_t>(vectorA[t]));
+                            const int64_t prod =
+                                static_cast<int64_t>(out[t]) *
+                                static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
+                            const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
+                            int32_t scaled = static_cast<int32_t>(rounded >> 15);
+                            if (scaled > 32767) {
+                                scaled = 32767;
+                            } else if (scaled < -32768) {
+                                scaled = -32768;
+                            }
+                            compute_buf::write_i16(out_buf, t * 2, static_cast<int16_t>(scaled));
                         }
                         next_state = ComputeState::MEM_WRITEBACK;
                     } else {
@@ -854,8 +852,4 @@ void compute_controller(
     dbg_mac_start = mac_start;
     dbg_mac_ready = mac_ready;
     dbg_mac_complete = mac_complete;
-    for (int i = 0; i < ACCUM_MAX; ++i) {
-#pragma HLS UNROLL
-        dbg_mac_out[i] = out[i];
-    }
 }

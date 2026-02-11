@@ -34,7 +34,6 @@ void compute_controller(
     bool        &dbg_mac_start,
     bool        &dbg_mac_ready,
     bool        &dbg_mac_complete,
-    int32_t      dbg_mac_out[ACCUM_MAX],
 
     bool        &error               // [OUTPUT] Error flag on invalid_request
 );

@@ -461,7 +461,6 @@ int main() {
     bool dbg_mac_start = false;
     bool dbg_mac_ready = false;
     bool dbg_mac_complete = false;
-    int32_t dbg_mac_out[ACCUM_MAX] = {};
     int32_t expected_full[D_MODEL] = {};
     int32_t full_accum[D_MODEL] = {};
 
@@ -842,7 +841,6 @@ int main() {
             dbg_mac_start,
             dbg_mac_ready,
             dbg_mac_complete,
-            dbg_mac_out,
             error);
 
         if (compute_done) {

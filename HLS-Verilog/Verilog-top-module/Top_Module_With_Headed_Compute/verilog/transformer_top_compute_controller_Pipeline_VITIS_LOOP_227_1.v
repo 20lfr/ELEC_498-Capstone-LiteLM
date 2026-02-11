@@ -502,57 +502,57 @@ reg   [63:0] zext_ln227_reg_1299_pp0_iter31_reg;
 reg   [63:0] zext_ln227_reg_1299_pp0_iter32_reg;
 reg   [63:0] zext_ln227_reg_1299_pp0_iter33_reg;
 reg   [63:0] zext_ln227_reg_1299_pp0_iter34_reg;
-wire   [0:0] tmp_193_fu_968_p3;
-reg   [0:0] tmp_193_reg_1415;
-reg   [0:0] tmp_193_reg_1415_pp0_iter2_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter3_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter4_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter5_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter6_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter7_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter8_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter9_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter10_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter11_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter12_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter13_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter14_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter15_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter16_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter17_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter18_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter19_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter20_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter21_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter22_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter23_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter24_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter25_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter26_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter27_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter28_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter29_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter30_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter31_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter32_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter33_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter34_reg;
-reg   [0:0] tmp_193_reg_1415_pp0_iter35_reg;
-wire   [0:0] tmp_194_fu_982_p3;
-reg   [0:0] tmp_194_reg_1419;
+wire   [0:0] tmp_189_fu_968_p3;
+reg   [0:0] tmp_189_reg_1415;
+reg   [0:0] tmp_189_reg_1415_pp0_iter2_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter3_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter4_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter5_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter6_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter7_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter8_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter9_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter10_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter11_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter12_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter13_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter14_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter15_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter16_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter17_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter18_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter19_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter20_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter21_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter22_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter23_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter24_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter25_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter26_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter27_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter28_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter29_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter30_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter31_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter32_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter33_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter34_reg;
+reg   [0:0] tmp_189_reg_1415_pp0_iter35_reg;
+wire   [0:0] tmp_190_fu_982_p3;
+reg   [0:0] tmp_190_reg_1419;
 wire   [0:0] icmp_ln197_fu_1019_p2;
 reg   [0:0] icmp_ln197_reg_1429;
 wire   [14:0] trunc_ln217_fu_1128_p1;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_481_reg_1544;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_482_reg_1549;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_483_reg_1554;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_484_reg_1559;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_485_reg_1564;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_486_reg_1569;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_487_reg_1574;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_488_reg_1579;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_489_reg_1584;
-reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490_reg_1589;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_487_reg_1544;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_488_reg_1549;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_489_reg_1554;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490_reg_1559;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_491_reg_1564;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_492_reg_1569;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_493_reg_1574;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_494_reg_1579;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_495_reg_1584;
+reg   [0:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_496_reg_1589;
 reg   [0:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_258_reg_1594;
 reg   [0:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_259_reg_1599;
 reg   [0:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_260_reg_1604;
@@ -1392,7 +1392,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter35 == 1'b1))) begin
-        if (((tmp_193_reg_1415_pp0_iter34_reg == 1'd1) & (icmp_ln227_reg_1288_pp0_iter34_reg == 1'd0))) begin
+        if (((tmp_189_reg_1415_pp0_iter34_reg == 1'd1) & (icmp_ln227_reg_1288_pp0_iter34_reg == 1'd0))) begin
             ap_phi_reg_pp0_iter36_sig_3_reg_831 <= trunc_ln217_fu_1128_p1;
         end else if ((1'b1 == 1'b1)) begin
             ap_phi_reg_pp0_iter36_sig_3_reg_831 <= ap_phi_reg_pp0_iter35_sig_3_reg_831;
@@ -1445,16 +1445,16 @@ always @ (posedge ap_clk) begin
         ap_loop_exit_ready_pp0_iter7_reg <= ap_loop_exit_ready_pp0_iter6_reg;
         ap_loop_exit_ready_pp0_iter8_reg <= ap_loop_exit_ready_pp0_iter7_reg;
         ap_loop_exit_ready_pp0_iter9_reg <= ap_loop_exit_ready_pp0_iter8_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_481_reg_1544 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_482_reg_1549 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_483_reg_1554 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_484_reg_1559 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_485_reg_1564 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_486_reg_1569 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_487_reg_1574 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_488_reg_1579 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_489_reg_1584 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490_reg_1589 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_487_reg_1544 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_488_reg_1549 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_489_reg_1554 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490_reg_1559 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_491_reg_1564 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_492_reg_1569 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_493_reg_1574 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_494_reg_1579 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_495_reg_1584 <= zext_ln227_reg_1299_pp0_iter34_reg;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_496_reg_1589 <= zext_ln227_reg_1299_pp0_iter34_reg;
         icmp_ln227_reg_1288_pp0_iter10_reg <= icmp_ln227_reg_1288_pp0_iter9_reg;
         icmp_ln227_reg_1288_pp0_iter11_reg <= icmp_ln227_reg_1288_pp0_iter10_reg;
         icmp_ln227_reg_1288_pp0_iter12_reg <= icmp_ln227_reg_1288_pp0_iter11_reg;
@@ -1495,40 +1495,40 @@ always @ (posedge ap_clk) begin
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_261_reg_1609 <= zext_ln227_reg_1299_pp0_iter34_reg;
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_262_reg_1614 <= zext_ln227_reg_1299_pp0_iter34_reg;
         p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_263_reg_1619 <= zext_ln227_reg_1299_pp0_iter34_reg;
-        tmp_193_reg_1415_pp0_iter10_reg <= tmp_193_reg_1415_pp0_iter9_reg;
-        tmp_193_reg_1415_pp0_iter11_reg <= tmp_193_reg_1415_pp0_iter10_reg;
-        tmp_193_reg_1415_pp0_iter12_reg <= tmp_193_reg_1415_pp0_iter11_reg;
-        tmp_193_reg_1415_pp0_iter13_reg <= tmp_193_reg_1415_pp0_iter12_reg;
-        tmp_193_reg_1415_pp0_iter14_reg <= tmp_193_reg_1415_pp0_iter13_reg;
-        tmp_193_reg_1415_pp0_iter15_reg <= tmp_193_reg_1415_pp0_iter14_reg;
-        tmp_193_reg_1415_pp0_iter16_reg <= tmp_193_reg_1415_pp0_iter15_reg;
-        tmp_193_reg_1415_pp0_iter17_reg <= tmp_193_reg_1415_pp0_iter16_reg;
-        tmp_193_reg_1415_pp0_iter18_reg <= tmp_193_reg_1415_pp0_iter17_reg;
-        tmp_193_reg_1415_pp0_iter19_reg <= tmp_193_reg_1415_pp0_iter18_reg;
-        tmp_193_reg_1415_pp0_iter20_reg <= tmp_193_reg_1415_pp0_iter19_reg;
-        tmp_193_reg_1415_pp0_iter21_reg <= tmp_193_reg_1415_pp0_iter20_reg;
-        tmp_193_reg_1415_pp0_iter22_reg <= tmp_193_reg_1415_pp0_iter21_reg;
-        tmp_193_reg_1415_pp0_iter23_reg <= tmp_193_reg_1415_pp0_iter22_reg;
-        tmp_193_reg_1415_pp0_iter24_reg <= tmp_193_reg_1415_pp0_iter23_reg;
-        tmp_193_reg_1415_pp0_iter25_reg <= tmp_193_reg_1415_pp0_iter24_reg;
-        tmp_193_reg_1415_pp0_iter26_reg <= tmp_193_reg_1415_pp0_iter25_reg;
-        tmp_193_reg_1415_pp0_iter27_reg <= tmp_193_reg_1415_pp0_iter26_reg;
-        tmp_193_reg_1415_pp0_iter28_reg <= tmp_193_reg_1415_pp0_iter27_reg;
-        tmp_193_reg_1415_pp0_iter29_reg <= tmp_193_reg_1415_pp0_iter28_reg;
-        tmp_193_reg_1415_pp0_iter2_reg <= tmp_193_reg_1415;
-        tmp_193_reg_1415_pp0_iter30_reg <= tmp_193_reg_1415_pp0_iter29_reg;
-        tmp_193_reg_1415_pp0_iter31_reg <= tmp_193_reg_1415_pp0_iter30_reg;
-        tmp_193_reg_1415_pp0_iter32_reg <= tmp_193_reg_1415_pp0_iter31_reg;
-        tmp_193_reg_1415_pp0_iter33_reg <= tmp_193_reg_1415_pp0_iter32_reg;
-        tmp_193_reg_1415_pp0_iter34_reg <= tmp_193_reg_1415_pp0_iter33_reg;
-        tmp_193_reg_1415_pp0_iter35_reg <= tmp_193_reg_1415_pp0_iter34_reg;
-        tmp_193_reg_1415_pp0_iter3_reg <= tmp_193_reg_1415_pp0_iter2_reg;
-        tmp_193_reg_1415_pp0_iter4_reg <= tmp_193_reg_1415_pp0_iter3_reg;
-        tmp_193_reg_1415_pp0_iter5_reg <= tmp_193_reg_1415_pp0_iter4_reg;
-        tmp_193_reg_1415_pp0_iter6_reg <= tmp_193_reg_1415_pp0_iter5_reg;
-        tmp_193_reg_1415_pp0_iter7_reg <= tmp_193_reg_1415_pp0_iter6_reg;
-        tmp_193_reg_1415_pp0_iter8_reg <= tmp_193_reg_1415_pp0_iter7_reg;
-        tmp_193_reg_1415_pp0_iter9_reg <= tmp_193_reg_1415_pp0_iter8_reg;
+        tmp_189_reg_1415_pp0_iter10_reg <= tmp_189_reg_1415_pp0_iter9_reg;
+        tmp_189_reg_1415_pp0_iter11_reg <= tmp_189_reg_1415_pp0_iter10_reg;
+        tmp_189_reg_1415_pp0_iter12_reg <= tmp_189_reg_1415_pp0_iter11_reg;
+        tmp_189_reg_1415_pp0_iter13_reg <= tmp_189_reg_1415_pp0_iter12_reg;
+        tmp_189_reg_1415_pp0_iter14_reg <= tmp_189_reg_1415_pp0_iter13_reg;
+        tmp_189_reg_1415_pp0_iter15_reg <= tmp_189_reg_1415_pp0_iter14_reg;
+        tmp_189_reg_1415_pp0_iter16_reg <= tmp_189_reg_1415_pp0_iter15_reg;
+        tmp_189_reg_1415_pp0_iter17_reg <= tmp_189_reg_1415_pp0_iter16_reg;
+        tmp_189_reg_1415_pp0_iter18_reg <= tmp_189_reg_1415_pp0_iter17_reg;
+        tmp_189_reg_1415_pp0_iter19_reg <= tmp_189_reg_1415_pp0_iter18_reg;
+        tmp_189_reg_1415_pp0_iter20_reg <= tmp_189_reg_1415_pp0_iter19_reg;
+        tmp_189_reg_1415_pp0_iter21_reg <= tmp_189_reg_1415_pp0_iter20_reg;
+        tmp_189_reg_1415_pp0_iter22_reg <= tmp_189_reg_1415_pp0_iter21_reg;
+        tmp_189_reg_1415_pp0_iter23_reg <= tmp_189_reg_1415_pp0_iter22_reg;
+        tmp_189_reg_1415_pp0_iter24_reg <= tmp_189_reg_1415_pp0_iter23_reg;
+        tmp_189_reg_1415_pp0_iter25_reg <= tmp_189_reg_1415_pp0_iter24_reg;
+        tmp_189_reg_1415_pp0_iter26_reg <= tmp_189_reg_1415_pp0_iter25_reg;
+        tmp_189_reg_1415_pp0_iter27_reg <= tmp_189_reg_1415_pp0_iter26_reg;
+        tmp_189_reg_1415_pp0_iter28_reg <= tmp_189_reg_1415_pp0_iter27_reg;
+        tmp_189_reg_1415_pp0_iter29_reg <= tmp_189_reg_1415_pp0_iter28_reg;
+        tmp_189_reg_1415_pp0_iter2_reg <= tmp_189_reg_1415;
+        tmp_189_reg_1415_pp0_iter30_reg <= tmp_189_reg_1415_pp0_iter29_reg;
+        tmp_189_reg_1415_pp0_iter31_reg <= tmp_189_reg_1415_pp0_iter30_reg;
+        tmp_189_reg_1415_pp0_iter32_reg <= tmp_189_reg_1415_pp0_iter31_reg;
+        tmp_189_reg_1415_pp0_iter33_reg <= tmp_189_reg_1415_pp0_iter32_reg;
+        tmp_189_reg_1415_pp0_iter34_reg <= tmp_189_reg_1415_pp0_iter33_reg;
+        tmp_189_reg_1415_pp0_iter35_reg <= tmp_189_reg_1415_pp0_iter34_reg;
+        tmp_189_reg_1415_pp0_iter3_reg <= tmp_189_reg_1415_pp0_iter2_reg;
+        tmp_189_reg_1415_pp0_iter4_reg <= tmp_189_reg_1415_pp0_iter3_reg;
+        tmp_189_reg_1415_pp0_iter5_reg <= tmp_189_reg_1415_pp0_iter4_reg;
+        tmp_189_reg_1415_pp0_iter6_reg <= tmp_189_reg_1415_pp0_iter5_reg;
+        tmp_189_reg_1415_pp0_iter7_reg <= tmp_189_reg_1415_pp0_iter6_reg;
+        tmp_189_reg_1415_pp0_iter8_reg <= tmp_189_reg_1415_pp0_iter7_reg;
+        tmp_189_reg_1415_pp0_iter9_reg <= tmp_189_reg_1415_pp0_iter8_reg;
         trunc_ln227_reg_1292_pp0_iter10_reg <= trunc_ln227_reg_1292_pp0_iter9_reg;
         trunc_ln227_reg_1292_pp0_iter11_reg <= trunc_ln227_reg_1292_pp0_iter10_reg;
         trunc_ln227_reg_1292_pp0_iter12_reg <= trunc_ln227_reg_1292_pp0_iter11_reg;
@@ -1606,8 +1606,8 @@ always @ (posedge ap_clk) begin
         icmp_ln197_reg_1429 <= icmp_ln197_fu_1019_p2;
         icmp_ln227_reg_1288 <= icmp_ln227_fu_848_p2;
         icmp_ln227_reg_1288_pp0_iter1_reg <= icmp_ln227_reg_1288;
-        tmp_193_reg_1415 <= x_q15_assign_fu_897_p35[32'd15];
-        tmp_194_reg_1419 <= neg_fu_976_p2[32'd15];
+        tmp_189_reg_1415 <= x_q15_assign_fu_897_p35[32'd15];
+        tmp_190_reg_1419 <= neg_fu_976_p2[32'd15];
         trunc_ln227_reg_1292 <= trunc_ln227_fu_860_p1;
         trunc_ln227_reg_1292_pp0_iter1_reg <= trunc_ln227_reg_1292;
         zext_ln227_reg_1299[0] <= zext_ln227_fu_872_p1[0];
@@ -1859,7 +1859,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((tmp_193_reg_1415_pp0_iter35_reg == 1'd0) & (icmp_ln227_reg_1288_pp0_iter35_reg == 1'd0))) begin
+    if (((tmp_189_reg_1415_pp0_iter35_reg == 1'd0) & (icmp_ln227_reg_1288_pp0_iter35_reg == 1'd0))) begin
         ap_phi_mux_sig_3_phi_fu_834_p4 = trunc_ln211_fu_1165_p1;
     end else begin
         ap_phi_mux_sig_3_phi_fu_834_p4 = ap_phi_reg_pp0_iter36_sig_3_reg_831;
@@ -2204,9 +2204,9 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_condition_1749)) begin
-        if ((tmp_193_fu_968_p3 == 1'd1)) begin
+        if ((tmp_189_fu_968_p3 == 1'd1)) begin
             exp_lut_q15_address0_local = zext_ln201_fu_1035_p1;
-        end else if ((tmp_193_fu_968_p3 == 1'd0)) begin
+        end else if ((tmp_189_fu_968_p3 == 1'd0)) begin
             exp_lut_q15_address0_local = zext_ln201_1_fu_1014_p1;
         end else begin
             exp_lut_q15_address0_local = 'bx;
@@ -2217,7 +2217,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((tmp_193_fu_968_p3 == 1'd0) & (icmp_ln227_reg_1288 == 1'd0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0_11001)) | ((tmp_193_fu_968_p3 == 1'd1) & (icmp_ln227_reg_1288 == 1'd0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0_11001)))) begin
+    if ((((tmp_189_fu_968_p3 == 1'd0) & (icmp_ln227_reg_1288 == 1'd0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0_11001)) | ((tmp_189_fu_968_p3 == 1'd1) & (icmp_ln227_reg_1288 == 1'd0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0_11001)))) begin
         exp_lut_q15_ce0_local = 1'b1;
     end else begin
         exp_lut_q15_ce0_local = 1'b0;
@@ -2453,7 +2453,7 @@ assign ap_phi_reg_pp0_iter0_sig_3_reg_831 = 'bx;
 
 assign ap_ready = ap_ready_sig;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490_reg_1589;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_496_reg_1589;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_ce0_local;
 
@@ -2461,7 +2461,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_137_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_489_reg_1584;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_495_reg_1584;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_ce0_local;
 
@@ -2469,7 +2469,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_138_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_488_reg_1579;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_494_reg_1579;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_ce0_local;
 
@@ -2477,7 +2477,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_139_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_487_reg_1574;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_493_reg_1574;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_ce0_local;
 
@@ -2485,7 +2485,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_140_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_486_reg_1569;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_492_reg_1569;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_ce0_local;
 
@@ -2493,7 +2493,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_141_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_485_reg_1564;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_491_reg_1564;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_ce0_local;
 
@@ -2501,7 +2501,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_142_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_484_reg_1559;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_490_reg_1559;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_ce0_local;
 
@@ -2509,7 +2509,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_143_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_483_reg_1554;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_489_reg_1554;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_ce0_local;
 
@@ -2517,7 +2517,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_144_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_482_reg_1549;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_488_reg_1549;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_ce0_local;
 
@@ -2525,7 +2525,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_145_we0_local;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_481_reg_1544;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_address0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_487_reg_1544;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_ce0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146_ce0_local;
 
@@ -2617,7 +2617,7 @@ assign denom_1_fu_1047_p3 = {{1'd1}, {e_1_fu_1040_p3}};
 
 assign denom_fu_1090_p3 = {{1'd1}, {e_fu_1083_p3}};
 
-assign e_1_fu_1040_p3 = ((tmp_194_reg_1419[0:0] == 1'b1) ? exp_lut_q15_q0 : 15'd32767);
+assign e_1_fu_1040_p3 = ((tmp_190_reg_1419[0:0] == 1'b1) ? exp_lut_q15_q0 : 15'd32767);
 
 assign e_fu_1083_p3 = ((icmp_ln197_reg_1429[0:0] == 1'b1) ? 15'd12055 : exp_lut_q15_q0);
 
@@ -2747,9 +2747,9 @@ assign prod_fu_1249_p10 = ap_phi_mux_sig_3_phi_fu_834_p4;
 
 assign tmp_102_fu_1059_p4 = {{e_1_fu_1040_p3[14:1]}};
 
-assign tmp_193_fu_968_p3 = x_q15_assign_fu_897_p35[32'd15];
+assign tmp_189_fu_968_p3 = x_q15_assign_fu_897_p35[32'd15];
 
-assign tmp_194_fu_982_p3 = neg_fu_976_p2[32'd15];
+assign tmp_190_fu_982_p3 = neg_fu_976_p2[32'd15];
 
 assign tmp_54_fu_1170_p33 = 'bx;
 
@@ -2765,7 +2765,7 @@ assign trunc_ln227_fu_860_p1 = ap_sig_allocacmp_i[3:0];
 
 assign x_q15_assign_fu_897_p33 = 'bx;
 
-assign xor_ln200_fu_990_p2 = (tmp_194_fu_982_p3 ^ 1'd1);
+assign xor_ln200_fu_990_p2 = (tmp_190_fu_982_p3 ^ 1'd1);
 
 assign zext_ln201_1_fu_1014_p1 = idx_fu_1006_p3;
 

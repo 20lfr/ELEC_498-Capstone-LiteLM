@@ -332,18 +332,6 @@ module top_module_hls_tb;
   logic        dbg_mac_ready_ap_vld;
   logic [0:0]  dbg_mac_complete;
   logic        dbg_mac_complete_ap_vld;
-  logic [31:0] dbg_mac_out_0;
-  logic        dbg_mac_out_0_ap_vld;
-  logic [31:0] dbg_mac_out_1;
-  logic        dbg_mac_out_1_ap_vld;
-  logic [31:0] dbg_mac_out_2;
-  logic        dbg_mac_out_2_ap_vld;
-  logic [31:0] dbg_mac_out_3;
-  logic        dbg_mac_out_3_ap_vld;
-  logic [31:0] dbg_mac_out_4;
-  logic        dbg_mac_out_4_ap_vld;
-  logic [31:0] dbg_mac_out_5;
-  logic        dbg_mac_out_5_ap_vld;
   logic [0:0]  dbg_ctrl_reset_asserted;
   logic        dbg_ctrl_reset_asserted_ap_vld;
   logic [0:0] axis_in_ready;
@@ -3558,18 +3546,6 @@ module top_module_hls_tb;
     .dbg_mac_ready_ap_vld(dbg_mac_ready_ap_vld),
     .dbg_mac_complete(dbg_mac_complete),
     .dbg_mac_complete_ap_vld(dbg_mac_complete_ap_vld),
-    .dbg_mac_out_0(dbg_mac_out_0),
-    .dbg_mac_out_0_ap_vld(dbg_mac_out_0_ap_vld),
-    .dbg_mac_out_1(dbg_mac_out_1),
-    .dbg_mac_out_1_ap_vld(dbg_mac_out_1_ap_vld),
-    .dbg_mac_out_2(dbg_mac_out_2),
-    .dbg_mac_out_2_ap_vld(dbg_mac_out_2_ap_vld),
-    .dbg_mac_out_3(dbg_mac_out_3),
-    .dbg_mac_out_3_ap_vld(dbg_mac_out_3_ap_vld),
-    .dbg_mac_out_4(dbg_mac_out_4),
-    .dbg_mac_out_4_ap_vld(dbg_mac_out_4_ap_vld),
-    .dbg_mac_out_5(dbg_mac_out_5),
-    .dbg_mac_out_5_ap_vld(dbg_mac_out_5_ap_vld),
     .dbg_ctrl_reset_asserted(dbg_ctrl_reset_asserted),
     .dbg_ctrl_reset_asserted_ap_vld(dbg_ctrl_reset_asserted_ap_vld),
     .dbg_done(dbg_done),

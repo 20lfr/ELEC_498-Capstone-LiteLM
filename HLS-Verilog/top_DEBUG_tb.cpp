@@ -1012,7 +1012,6 @@ int main() {
     bool dbg_mac_start = false;
     bool dbg_mac_ready = false;
     bool dbg_mac_complete = false;
-    int32_t dbg_mac_out[ACCUM_MAX] = {};
     bool dbg_ctrl_reset_asserted = false;
     int dbg_head_group_idx = 0;
 
@@ -1573,7 +1572,6 @@ int main() {
             dbg_mac_start,
             dbg_mac_ready,
             dbg_mac_complete,
-            dbg_mac_out,
             dbg_ctrl_reset_asserted,
             dbg_head_group_idx,
             dbg_done

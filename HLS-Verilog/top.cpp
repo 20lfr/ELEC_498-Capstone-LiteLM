@@ -91,7 +91,6 @@ void transformer_top(
     bool     &dbg_mac_start,
     bool     &dbg_mac_ready,
     bool     &dbg_mac_complete,
-    int32_t   dbg_mac_out[ACCUM_MAX],
     bool     &dbg_ctrl_reset_asserted,
     int      &dbg_head_group_idx,
 
@@ -105,7 +104,6 @@ void transformer_top(
 #pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
-#pragma HLS ARRAY_PARTITION variable=dbg_mac_out complete dim=1
 
     bool done               = false;    // Scheduler done flag
     bool scheduler_error       = false;
@@ -192,7 +190,6 @@ void transformer_top(
         dbg_mac_start,
         dbg_mac_ready,
         dbg_mac_complete,
-        dbg_mac_out,
         compute_error               
     );
 
