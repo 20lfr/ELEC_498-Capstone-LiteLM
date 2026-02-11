@@ -6,11 +6,12 @@
 #include <cstdint>
 
 struct HardwareConfig {
-    uint64_t base_address = 0xA0000000UL;
-    std::string uio_device = "/dev/uio0";
+    uint64_t dma_reg_base_addr = 0x80000000;
+    std::string dmabuf_device = "udmabuf0";
+    size_t dma_buffer_size = 0x100000; // 1MB
     uint32_t timeout_ms = 30000;
     bool mock_mode = false;
-    uint64_t ddr_base_address = 0x40000000UL;
+    uint64_t ddr_reg_base_addr = 0x40000000;
     size_t ddr_size = 0x80000000;  // 2GB for Phi-3
 };
 

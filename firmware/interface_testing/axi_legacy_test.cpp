@@ -29,8 +29,8 @@ int main() {
 
     // Prepare control data (maps to ControlMemSpace struct)
     XAxi_top_Ctrl_mem ctrl = {0};
-    ctrl.word_0 = CTRL_RESETN_BIT;  // control register
-//    ctrl.word_0 = CTRL_RESETN_BIT | CTRL_START_BIT;  // control register will cause timeout
+//    ctrl.word_0 = CTRL_RESETN_BIT;  // control register
+    ctrl.word_0 = CTRL_RESETN_BIT | CTRL_START_BIT;  // control register will cause timeout
     ctrl.word_1 = IRQ_INFER_DONE_BIT | IRQ_ERROR_BIT; // irq_mask
     ctrl.word_2 = 0x100;   // dma_layer_len
     ctrl.word_3 = 0x100;   // dma_head_len

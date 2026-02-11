@@ -1,0 +1,104 @@
+/**
+ * @file dma_buffer.hpp
+ * @brief Contiguous DMA buffer allocation using u-dma-buf kernel module
+ * 
+ * Requires: u-dma-buf kernel module loaded (insmod u-dma-buf.ko udmabuf0=SIZE)
+ */
+
+#ifndef DMA_BUFFER_HPP
+#define DMA_BUFFER_HPP
+
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+class DmaBuffer {
+private:
+    size_t _size;
+    int _fd;
+    bool _mock;
+    std::string _device_name;
+    void* _virt;
+    uint64_t _phys;
+
+public:
+    DmaBuffer(const std::string& device_name = "udmabuf0")
+        : _device_name(device_name), _size(0), _fd(-1), _mock(false),
+          _virt(nullptr), _phys(0) {}
+
+    bool allocate(size_t size, bool mock = false) {
+        _mock = mock;
+        _size = size;
+
+        if (mock) {
+            _virt = malloc(size);
+            _phys = 0x10000000;  // Fake physical address for mock
+            return _virt != nullptr;
+        }
+
+        // 1. Read physical address from sysfs
+        std::string sysfs_path = "/sys/class/u-dma-buf/" + _device_name + "/phys_addr";
+        FILE* fp = fopen(sysfs_path.c_str(), "r");
+        if (!fp) {
+            perror(("DmaBuffer: cannot open " + sysfs_path + " (is module loaded?)").c_str());
+            return false;
+        }
+        char hex_str[32];
+        if (fgets(hex_str, sizeof(hex_str), fp)) {
+            _phys = strtoull(hex_str, nullptr, 16);
+        }
+        fclose(fp);
+
+        // 2. Open device file
+        std::string dev_path = "/dev/" + _device_name;
+        _fd = open(dev_path.c_str(), O_RDWR | O_SYNC);  // O_SYNC = uncached
+        if (_fd < 0) {
+            perror(("DmaBuffer: cannot open " + dev_path).c_str());
+            return false;
+        }
+
+        // 3. mmap to userspace
+        _virt = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, _fd, 0);
+        if (_virt == MAP_FAILED) {
+            perror("DmaBuffer: mmap failed");
+            _virt = nullptr;
+            close(_fd);
+            _fd = -1;
+            return false;
+        }
+
+        return true;
+    }
+
+    void release() {
+        if (_virt) {
+            if (_mock) {
+                free(_virt);
+            } else {
+                munmap(_virt, _size);
+                if (_fd >= 0) {
+                    close(_fd);
+                    _fd = -1;
+                }
+            }
+            _virt = nullptr;
+        }
+    }
+
+    size_t size() const { return _size; }
+    bool isAllocated() const { return _virt != nullptr; }
+    void* virt() const { return _virt; }
+    uint64_t phys() const { return _phys; }
+
+    ~DmaBuffer() { release(); }
+
+    DmaBuffer(const DmaBuffer&) = delete;
+    DmaBuffer& operator=(const DmaBuffer&) = delete;
+};
+
+#endif // DMA_BUFFER_HPP
