@@ -144,6 +144,13 @@ static inline int8_t stim_i8(int layer, int idx, int salt) {
     return static_cast<int8_t>(((idx * 13 + salt * 7 + layer * 5) % 95) - 47);
 }
 
+static inline int8_t stim_i8_mid(int layer, int idx, int salt) {
+    // Mid-range signed values for attention-score inputs (avoid rail-only patterns).
+    int v = ((idx * 17 + salt * 9 + layer * 5) % 97) - 48; // [-48, 48]
+    if (((idx + salt + layer) & 7) == 0) v = 0;
+    return static_cast<int8_t>(v);
+}
+
 static inline int16_t stim_i16(int layer, int idx, int salt) {
     const LayerInputProfile p = layer_profile(layer);
     if (p == LayerInputProfile::MIN_ONLY) return std::numeric_limits<int16_t>::min();
@@ -650,7 +657,14 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
 
 static void print_head_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     switch (op) {
-    case ComputeOp::CMP_Q:
+    case ComputeOp::CMP_Q: {
+        std::printf("HEAD_Q out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_HEADS; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, i)));
+        }
+        std::printf("\n");
+        break;
+    }
     case ComputeOp::CMP_K:
     case ComputeOp::CMP_V:
     case ComputeOp::CMP_ATT_VALUE: {
@@ -743,7 +757,7 @@ static void fill_head_lane_inputs(int lane, int layer) {
         g_bq[lane][h] = stim_i4(layer, h, 71 + lane);
         g_bk[lane][h] = stim_i4(layer, h, 81 + lane);
         g_bv[lane][h] = stim_i4(layer, h, 91 + lane);
-        g_att_q[lane][h] = stim_i8(layer, h, 101 + lane);
+        g_att_q[lane][h] = stim_i8_mid(layer, h, 101 + lane);
         g_rq_k_x[lane][h] = stim_i32(layer, h, 111 + lane);
         g_rq_v_x[lane][h] = stim_i32(layer, h, 121 + lane);
         g_rq_q_x[lane][h] = stim_i32(layer, h, 131 + lane);
@@ -759,7 +773,7 @@ static void fill_head_lane_inputs(int lane, int layer) {
     g_rq_head_N[lane] = 6 + lane;
 
     for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
-        g_att_k_cache[lane][i] = stim_i8(layer, i, 151 + lane);
+        g_att_k_cache[lane][i] = stim_i8_mid(layer, i, 151 + lane);
         g_att_v_cache[lane][i] = stim_i8(layer, i, 161 + lane);
     }
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
@@ -773,7 +787,6 @@ static void fill_head_lane_inputs(int lane, int layer) {
     force_i8_i4_mm_corners(g_q_act[lane], D_MODEL, g_wq[lane], D_HEADS, D_MODEL);
     force_i8_i4_mm_corners(g_k_act[lane], D_MODEL, g_wk[lane], D_HEADS, D_MODEL);
     force_i8_i4_mm_corners(g_v_act[lane], D_MODEL, g_wv[lane], D_HEADS, D_MODEL);
-    force_i8_i8_mm_corners(g_att_q[lane], D_HEADS, g_att_k_cache[lane], CONTEXT_LENGTH, D_HEADS);
     force_i16_i8_mm_corners(g_att_weights[lane], CONTEXT_LENGTH, g_att_v_cache[lane], D_HEADS, CONTEXT_LENGTH);
 
     // Layer 0 Q path: force max-positive output (Q = x*W + b).

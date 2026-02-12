@@ -28,7 +28,7 @@ input clk;
 (* ram_style = "auto"  *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/Top_Module_With_Headed_Compute/verilog/transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_jbC.dat", ram);
+    $readmemh("./transformer_top_compute_controller_compute_controller_ControlMemSpace_bool_unsigned_int_bool_jbC.dat", ram);
 end 
 
  

@@ -860,6 +860,15 @@ module top_module_hls_tb;
     end
   endfunction
 
+  function automatic logic signed [7:0] stim_i8_mid(input int layer, input int idx, input int salt);
+    int v;
+    begin
+      v = ((idx * 17 + salt * 9 + layer * 5) % 97) - 48; // [-48, 48]
+      if (((idx + salt + layer) & 7) == 0) v = 0;
+      stim_i8_mid = $signed(v);
+    end
+  endfunction
+
   function automatic logic signed [15:0] stim_i16(input int layer, input int idx, input int salt);
     int p;
     int v;
@@ -1118,12 +1127,12 @@ module top_module_hls_tb;
           rq_v_x_all[(data_idx * D_HEADS) + h]    = stim_i32(layer, h, 121 + lane + head);
           rq_head_x_all[(data_idx * D_HEADS) + h] = stim_i32(layer, h, 131 + lane + head);
 
-          att_q_all[(data_idx * D_HEADS) + h] = stim_i8(layer, h, 141 + lane + head);
+          att_q_all[(data_idx * D_HEADS) + h] = stim_i8_mid(layer, h, 141 + lane + head);
         end
 
         for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
           for (h = 0; h < D_HEADS; h = h + 1) begin
-            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + h] = stim_i8(layer, (t * D_HEADS) + h, 151 + lane + head);
+            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + h] = stim_i8_mid(layer, (t * D_HEADS) + h, 151 + lane + head);
           end
           val_scale_in_all[(data_idx * CONTEXT_LENGTH) + t] = stim_i32(layer, t, 161 + lane + head);
           softmax_in_all[(data_idx * CONTEXT_LENGTH) + t] = stim_i16(layer, t, 171 + lane + head);
@@ -1167,18 +1176,6 @@ module top_module_hls_tb;
             wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 1] = 4'sh8;
             wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 2] = 4'sd7;
             wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 3] = 4'sh8;
-          end
-        end
-        if (D_HEADS >= 4) begin
-          att_q_all[(data_idx * D_HEADS) + 0] = 8'sd127;
-          att_q_all[(data_idx * D_HEADS) + 1] = 8'sd127;
-          att_q_all[(data_idx * D_HEADS) + 2] = 8'sh80;
-          att_q_all[(data_idx * D_HEADS) + 3] = 8'sh80;
-          for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
-            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 0] = 8'sd127;
-            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 1] = 8'sh80;
-            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 2] = 8'sd127;
-            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 3] = 8'sh80;
           end
         end
         if (CONTEXT_LENGTH >= 4) begin
@@ -2376,7 +2373,8 @@ module top_module_hls_tb;
             case (head_mem_op_latched[lane][7:0])
               HEAD_CMP_Q: begin
                 for (h = 0; h < D_HEADS; h = h + 1) begin
-                  q_out_all[(data_idx * D_HEADS) + h] <= head_read_i32_from_out_buf(lane, h * 4);
+                  q_out_all[(data_idx * D_HEADS) + h] <= $signed(head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h]);
+                  q_rq_out_all[(data_idx * D_HEADS) + h] <= head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h];
                 end
               end
               HEAD_CMP_K: begin

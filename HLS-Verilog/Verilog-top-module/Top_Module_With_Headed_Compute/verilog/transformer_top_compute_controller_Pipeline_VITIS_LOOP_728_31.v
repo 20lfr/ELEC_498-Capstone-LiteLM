@@ -79,7 +79,7 @@ wire   [0:0] tmp_fu_229_p3;
 wire   [46:0] select_ln732_fu_237_p3;
 wire  signed [46:0] sext_ln729_fu_225_p1;
 wire   [46:0] rounded_fu_245_p2;
-wire   [16:0] tmp_191_fu_261_p4;
+wire   [16:0] tmp_201_fu_261_p4;
 wire   [31:0] scaled_fu_251_p4;
 wire   [0:0] icmp_ln734_fu_271_p2;
 wire   [0:0] icmp_ln736_fu_277_p2;
@@ -296,7 +296,7 @@ assign byte_addr_assign_s_fu_315_p3 = {{ap_sig_allocacmp_t_12}, {1'd0}};
 
 assign icmp_ln728_fu_173_p2 = ((ap_sig_allocacmp_t_12 == 3'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln734_fu_271_p2 = (($signed(tmp_191_fu_261_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln734_fu_271_p2 = (($signed(tmp_201_fu_261_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln736_fu_277_p2 = (($signed(scaled_fu_251_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
@@ -332,7 +332,7 @@ assign select_ln739_fu_293_p3 = ((icmp_ln734_fu_271_p2[0:0] == 1'b1) ? 16'd32767
 
 assign sext_ln729_fu_225_p1 = $signed(prod_fu_217_p3);
 
-assign tmp_191_fu_261_p4 = {{rounded_fu_245_p2[46:30]}};
+assign tmp_201_fu_261_p4 = {{rounded_fu_245_p2[46:30]}};
 
 assign tmp_56_fu_185_p13 = 'bx;
 

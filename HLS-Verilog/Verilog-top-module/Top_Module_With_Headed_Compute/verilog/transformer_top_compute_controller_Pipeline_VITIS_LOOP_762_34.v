@@ -224,7 +224,7 @@ reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_ce0_local;
 wire   [5:0] byte_addr_assign_s_fu_375_p3;
-wire   [5:0] or_ln658_4_fu_388_p3;
+wire   [5:0] or_ln658_6_fu_388_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -750,7 +750,7 @@ assign in_buf_ce0 = in_buf_ce0_local;
 
 assign in_buf_ce1 = in_buf_ce1_local;
 
-assign or_ln658_4_fu_388_p3 = {{ap_sig_allocacmp_i_27}, {1'd1}};
+assign or_ln658_6_fu_388_p3 = {{ap_sig_allocacmp_i_27}, {1'd1}};
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_address0 = zext_ln762_fu_440_p1;
 
@@ -806,7 +806,7 @@ assign v_fu_459_p3 = {{in_buf_q0}, {in_buf_q1}};
 
 assign zext_ln657_fu_383_p1 = byte_addr_assign_s_fu_375_p3;
 
-assign zext_ln658_fu_396_p1 = or_ln658_4_fu_388_p3;
+assign zext_ln658_fu_396_p1 = or_ln658_6_fu_388_p3;
 
 assign zext_ln762_fu_440_p1 = tmp_reg_497;
 

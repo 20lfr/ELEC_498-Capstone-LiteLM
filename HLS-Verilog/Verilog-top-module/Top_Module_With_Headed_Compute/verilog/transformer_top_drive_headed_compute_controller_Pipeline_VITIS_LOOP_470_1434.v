@@ -73,7 +73,7 @@ wire   [3:0] nibble_fu_161_p3;
 reg   [2:0] h_fu_58;
 wire   [2:0] add_ln470_fu_89_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_h_13;
+reg   [2:0] ap_sig_allocacmp_h_14;
 reg    head_in_buf_1_ce0_local;
 wire   [0:0] tmp_fu_103_p3;
 wire   [3:0] zext_ln649_fu_111_p1;
@@ -205,9 +205,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_h_13 = 3'd0;
+        ap_sig_allocacmp_h_14 = 3'd0;
     end else begin
-        ap_sig_allocacmp_h_13 = h_fu_58;
+        ap_sig_allocacmp_h_14 = h_fu_58;
     end
 end
 
@@ -262,7 +262,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln470_fu_89_p2 = (ap_sig_allocacmp_h_13 + 3'd1);
+assign add_ln470_fu_89_p2 = (ap_sig_allocacmp_h_14 + 3'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -286,7 +286,7 @@ assign head_in_buf_1_address0 = zext_ln650_fu_127_p1;
 
 assign head_in_buf_1_ce0 = head_in_buf_1_ce0_local;
 
-assign icmp_ln470_fu_83_p2 = ((ap_sig_allocacmp_h_13 == 3'd4) ? 1'b1 : 1'b0);
+assign icmp_ln470_fu_83_p2 = ((ap_sig_allocacmp_h_14 == 3'd4) ? 1'b1 : 1'b0);
 
 assign nibble_fu_161_p3 = ((trunc_ln648_reg_206[0:0] == 1'b1) ? tmp_s_fu_147_p4 : trunc_ln651_fu_157_p1);
 
@@ -302,13 +302,13 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA
 
 assign sext_ln650_fu_123_p1 = $signed(or_ln649_1_fu_115_p3);
 
-assign tmp_fu_103_p3 = ap_sig_allocacmp_h_13[32'd1];
+assign tmp_fu_103_p3 = ap_sig_allocacmp_h_14[32'd1];
 
 assign tmp_s_fu_147_p4 = {{head_in_buf_1_q0[7:4]}};
 
-assign trunc_ln470_fu_95_p1 = ap_sig_allocacmp_h_13[1:0];
+assign trunc_ln470_fu_95_p1 = ap_sig_allocacmp_h_14[1:0];
 
-assign trunc_ln648_fu_99_p1 = ap_sig_allocacmp_h_13[0:0];
+assign trunc_ln648_fu_99_p1 = ap_sig_allocacmp_h_14[0:0];
 
 assign trunc_ln651_fu_157_p1 = head_in_buf_1_q0[3:0];
 

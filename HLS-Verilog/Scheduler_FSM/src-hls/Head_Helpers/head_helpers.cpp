@@ -135,7 +135,6 @@ bool run_single_head(
         if (ctx.k_requant_started && last_op == ComputeOp::CMP_K_REQUANT)       ctx.k_requant_compute_done  = true;
         if (ctx.v_started && last_op == ComputeOp::CMP_V)                       ctx.v_compute_done = true;
         if (ctx.v_requant_started && last_op == ComputeOp::CMP_V_REQUANT)       ctx.v_requant_compute_done  = true;
-        if (ctx.requant_q_started && last_op == ComputeOp::CMP_REQUANT_Q)       ctx.requant_q_compute_done  = true;
         if (ctx.att_scores_started && last_op == ComputeOp::CMP_ATT_SCORES)     ctx.att_scores_compute_done = true;
         if (ctx.val_scale_started && last_op == ComputeOp::CMP_VALUE_SCALE)     ctx.val_scale_compute_done  = true;
         if (ctx.softmax_started && last_op == ComputeOp::CMP_SOFTMAX)           ctx.softmax_compute_done    = true;
@@ -292,20 +291,9 @@ bool run_single_head(
                 ctx.last_wl_addr = DmaSel::DMASEL_V_WRITE;
                 ctx.v_writeback_started = true;
             } else if (ctx.v_writeback_dma_done && ctx.v_writeback_started) {
-                ctx.phase = HeadPhase::REQUANT_Q;
-                ctx.v_writeback_started = false;
-            }
-            break;
-        }
-        case HeadPhase::REQUANT_Q: {
-            if (ctx.compute_ready && !ctx.requant_q_started) {
-                ctx.compute_start   = true;
-                ctx.compute_op      = pack_compute_op(ComputeOp::CMP_REQUANT_Q, layer_idx, ctx.head_idx, -1);
-                ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_REQUANT_Q, layer_idx, ctx.head_idx, -1);
-                ctx.requant_q_started = true;
-            } else if (ctx.requant_q_compute_done && ctx.requant_q_started) {
+                // Q is now requanted inside CMP_Q, so no standalone REQUANT_Q phase.
                 ctx.phase = HeadPhase::ATT_SCORES;
-                ctx.requant_q_started = false;
+                ctx.v_writeback_started = false;
             }
             break;
         }
