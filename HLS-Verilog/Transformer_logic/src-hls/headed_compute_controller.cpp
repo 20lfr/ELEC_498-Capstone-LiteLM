@@ -440,8 +440,8 @@ static void headed_compute_controller_lane(
             next_state = ComputeState::MEM_WRITEBACK;
             switch (ctx.req.op) {
                 case ComputeOp::CMP_Q:              // Q0.7   -> Q0.7 (requant in-op)
-                case ComputeOp::CMP_K:              // Q0.7   -> Qacc
-                case ComputeOp::CMP_V: {            // Q0.7   -> Qacc  
+                case ComputeOp::CMP_K:              // Q0.7   -> Q0.7 (requant in-op)
+                case ComputeOp::CMP_V: {            // Q0.7   -> Q0.7 (requant in-op)
                     // INIT the Vector Buffer
                     for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
@@ -481,23 +481,32 @@ static void headed_compute_controller_lane(
                         print_head_buffers("MAC_START QKV", head_vec, head_mat, head_bias);
                     }
                     if (ctx.mac_complete) {
-                        if (ctx.req.op == ComputeOp::CMP_Q) {
-                            int layer = static_cast<int>(ctx.req.layer_idx);
-                            if (layer < 0 || layer >= MODEL_LAYERS) {
-                                layer = 0;
-                            }
-                            const int32_t M = requant_params::REQUANT_Q_M_L[layer];
-                            const int32_t n = requant_params::REQUANT_Q_N_L[layer];
-                            REQUANT_D_HEADS_int32_to_int8(head_out, M, n, head_y8);
-                            for (int h = 0; h < D_HEADS; ++h) {
+                        int layer = static_cast<int>(ctx.req.layer_idx);
+                        if (layer < 0 || layer >= MODEL_LAYERS) {
+                            layer = 0;
+                        }
+                        int32_t M = 0;
+                        int32_t n = 0;
+                        switch (ctx.req.op) {
+                            case ComputeOp::CMP_Q:
+                                M = requant_params::REQUANT_Q_M_L[layer];
+                                n = requant_params::REQUANT_Q_N_L[layer];
+                                break;
+                            case ComputeOp::CMP_K:
+                                M = requant_params::REQUANT_K_M_L[layer];
+                                n = requant_params::REQUANT_K_N_L[layer];
+                                break;
+                            case ComputeOp::CMP_V:
+                                M = requant_params::REQUANT_V_M_L[layer];
+                                n = requant_params::REQUANT_V_N_L[layer];
+                                break;
+                            default:
+                                break;  
+                        }
+                        REQUANT_D_HEADS_int32_to_int8(head_out, M, n, head_y8);
+                        for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                                compute_buf::write_i8(out_buf, h, head_y8[h]);
-                            }
-                        } else {
-                            for (int h = 0; h < D_HEADS; ++h) {
-#pragma HLS PIPELINE II=1
-                                compute_buf::write_i32(out_buf, h * 4, head_out[h]);
-                            }
+                            compute_buf::write_i8(out_buf, h, head_y8[h]);
                         }
                         next_state = ComputeState::MEM_WRITEBACK;
                     } else {

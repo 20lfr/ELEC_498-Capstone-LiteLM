@@ -250,15 +250,10 @@ OutputBufferLayout mmu_calc_output_layout(ComputeOp op, ModelDims dims) {
 #pragma HLS INLINE
     OutputBufferLayout l;
     switch (op) {
-        case CMP_Q:
+        case CMP_Q: case CMP_K: case CMP_V:
             l.result = BufferField(0, dims.d_heads, DataType::DTYPE_INT8, dims.d_heads);
             l.out_dtype = DataType::DTYPE_INT8;
             l.total_size = dims.d_heads;
-            break;
-        case CMP_K: case CMP_V:
-            l.result = BufferField(0, dims.d_heads * 4, DataType::DTYPE_INT32, dims.d_heads);
-            l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = dims.d_heads * 4;
             break;
         case CMP_K_REQUANT: case CMP_V_REQUANT: case CMP_REQUANT_Q:
             l.result = BufferField(0, dims.d_heads, DataType::DTYPE_INT8, dims.d_heads);

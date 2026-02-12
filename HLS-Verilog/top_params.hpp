@@ -749,7 +749,7 @@ constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
 constexpr int QKV_B_NIBBLES = D_HEADS;
 constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
 constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
-constexpr int QKV_OUT_BYTES = D_HEADS * 4;
+constexpr int QKV_OUT_BYTES = D_HEADS;
 
 constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4);
 constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
@@ -833,7 +833,7 @@ struct INAttValueLayout {
 // -------------------------------
 struct OUTQkvLayout {
     static constexpr int NUM_ELEMS = D_HEADS;
-    static constexpr OutDType TYPE = OutDType::I32;
+    static constexpr OutDType TYPE = OutDType::I8;
     static constexpr int TOTAL_BYTES = QKV_OUT_BYTES;
     static constexpr int Y = 0;
 };

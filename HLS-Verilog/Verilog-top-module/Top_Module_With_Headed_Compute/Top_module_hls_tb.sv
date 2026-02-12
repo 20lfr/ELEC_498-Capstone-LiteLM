@@ -42,7 +42,7 @@ module top_module_hls_tb;
   localparam int ATT_K_ELEMS = CONTEXT_LENGTH * D_HEADS;
   localparam int ATT_V_ELEMS = CONTEXT_LENGTH * D_HEADS;
   localparam int QKV_IN_BYTES  = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
-  localparam int QKV_OUT_BYTES = D_HEADS * 4;
+  localparam int QKV_OUT_BYTES = D_HEADS;
   localparam int HEAD_REQUANT_IN_BYTES  = (D_HEADS * 4);
   localparam int HEAD_REQUANT_OUT_BYTES = D_HEADS;
   localparam int ATT_SCORES_IN_BYTES  = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
@@ -768,9 +768,9 @@ module top_module_hls_tb;
   logic signed [7:0] att_v_cache_all [0:(HEAD_DATASETS*ATT_V_ELEMS)-1];
 
   // Output capture per operation (single-layer only; indexed by head)
-  logic signed [31:0] q_out_all [0:(NUM_HEADS*D_HEADS)-1];
-  logic signed [31:0] k_out_all [0:(NUM_HEADS*D_HEADS)-1];
-  logic signed [31:0] v_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [7:0] q_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [7:0] k_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [7:0] v_out_all [0:(NUM_HEADS*D_HEADS)-1];
 
   logic signed [7:0] k_rq_out_all [0:(NUM_HEADS*D_HEADS)-1];
   logic signed [7:0] v_rq_out_all [0:(NUM_HEADS*D_HEADS)-1];
@@ -1938,7 +1938,7 @@ module top_module_hls_tb;
       for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
-          $write(" %08x", q_out_all[i + j]);
+          $write(" %02x", q_out_all[i + j]);
         end
         $write("\n");
       end
@@ -1946,7 +1946,7 @@ module top_module_hls_tb;
       for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
-          $write(" %08x", k_out_all[i + j]);
+          $write(" %02x", k_out_all[i + j]);
         end
         $write("\n");
       end
@@ -1954,7 +1954,7 @@ module top_module_hls_tb;
       for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
-          $write(" %08x", v_out_all[i + j]);
+          $write(" %02x", v_out_all[i + j]);
         end
         $write("\n");
       end
@@ -2374,33 +2374,26 @@ module top_module_hls_tb;
               HEAD_CMP_Q: begin
                 for (h = 0; h < D_HEADS; h = h + 1) begin
                   q_out_all[(data_idx * D_HEADS) + h] <= $signed(head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h]);
-                  q_rq_out_all[(data_idx * D_HEADS) + h] <= head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h];
                 end
               end
               HEAD_CMP_K: begin
                 for (h = 0; h < D_HEADS; h = h + 1) begin
-                  k_out_all[(data_idx * D_HEADS) + h] <= head_read_i32_from_out_buf(lane, h * 4);
+                  k_out_all[(data_idx * D_HEADS) + h] <= $signed(head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h]);
                 end
               end
               HEAD_CMP_V: begin
                 for (h = 0; h < D_HEADS; h = h + 1) begin
-                  v_out_all[(data_idx * D_HEADS) + h] <= head_read_i32_from_out_buf(lane, h * 4);
+                  v_out_all[(data_idx * D_HEADS) + h] <= $signed(head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h]);
                 end
               end
               HEAD_CMP_K_REQUANT: begin
-                for (h = 0; h < D_HEADS; h = h + 1) begin
-                  k_rq_out_all[(data_idx * D_HEADS) + h] <= head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h];
-                end
+                // Requant is integrated into HEAD_CMP_K.
               end
               HEAD_CMP_V_REQUANT: begin
-                for (h = 0; h < D_HEADS; h = h + 1) begin
-                  v_rq_out_all[(data_idx * D_HEADS) + h] <= head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h];
-                end
+                // Requant is integrated into HEAD_CMP_V.
               end
               HEAD_CMP_REQUANT_Q: begin
-                for (h = 0; h < D_HEADS; h = h + 1) begin
-                  q_rq_out_all[(data_idx * D_HEADS) + h] <= head_out_buf_mem[lane][HEAD_RQ_X_OFFSET + h];
-                end
+                // Requant is integrated into HEAD_CMP_Q.
               end
               HEAD_CMP_ATT_SCORES: begin
                 for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin

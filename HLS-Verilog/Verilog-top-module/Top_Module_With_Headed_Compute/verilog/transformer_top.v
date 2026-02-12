@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.145375,HLS_SYN_LAT=172,HLS_SYN_TPT=none,HLS_SYN_MEM=2,HLS_SYN_DSP=0,HLS_SYN_FF=38142,HLS_SYN_LUT=88739,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.145375,HLS_SYN_LAT=172,HLS_SYN_TPT=none,HLS_SYN_MEM=2,HLS_SYN_DSP=0,HLS_SYN_FF=38340,HLS_SYN_LUT=91124,HLS_VERSION=2025_1}" *)
 
 module transformer_top (
         ap_clk,
@@ -654,8 +654,8 @@ wire   [148:0] and_ln_fu_3529_p4;
 wire   [31:0] tmp_6_fu_3579_p4;
 wire   [148:0] empty_fu_3571_p3;
 wire   [36:0] tmp_7_fu_3597_p4;
-wire   [31:0] empty_146_fu_3589_p3;
-wire   [79:0] empty_147_fu_3607_p1;
+wire   [31:0] empty_143_fu_3589_p3;
+wire   [79:0] empty_144_fu_3607_p1;
 wire   [68:0] tmp_9_fu_3622_p4;
 wire   [78:0] trunc_ln203_fu_3632_p1;
 wire   [213:0] select_ln200_1_fu_3646_p3;
@@ -665,10 +665,10 @@ wire   [0:0] tmp_4_fu_3660_p3;
 wire   [148:0] or_ln200_1_fu_3668_p4;
 wire   [148:0] and_ln1_fu_3636_p4;
 wire   [31:0] tmp_s_fu_3686_p4;
-wire   [148:0] empty_148_fu_3678_p3;
+wire   [148:0] empty_145_fu_3678_p3;
 wire   [36:0] tmp_5_fu_3704_p4;
-wire   [31:0] empty_149_fu_3696_p3;
-wire   [79:0] empty_150_fu_3714_p1;
+wire   [31:0] empty_146_fu_3696_p3;
+wire   [79:0] empty_147_fu_3714_p1;
 wire   [139:0] tmp_10_fu_3774_p4;
 wire   [1:0] tmp_11_fu_3786_p4;
 wire   [71:0] trunc_ln224_fu_3783_p1;
@@ -1971,15 +1971,15 @@ assign dbg_req_op = grp_compute_controller_fu_2063_ap_return_2;
 
 assign dbg_req_tile = grp_compute_controller_fu_2063_ap_return_5;
 
-assign empty_146_fu_3589_p3 = ((grp_fu_3213_p2[0:0] == 1'b1) ? tmp_6_fu_3579_p4 : 32'd0);
+assign empty_143_fu_3589_p3 = ((grp_fu_3213_p2[0:0] == 1'b1) ? tmp_6_fu_3579_p4 : 32'd0);
 
-assign empty_147_fu_3607_p1 = empty_fu_3571_p3[79:0];
+assign empty_144_fu_3607_p1 = empty_fu_3571_p3[79:0];
 
-assign empty_148_fu_3678_p3 = ((grp_fu_3213_p2[0:0] == 1'b1) ? or_ln200_1_fu_3668_p4 : and_ln1_fu_3636_p4);
+assign empty_145_fu_3678_p3 = ((grp_fu_3213_p2[0:0] == 1'b1) ? or_ln200_1_fu_3668_p4 : and_ln1_fu_3636_p4);
 
-assign empty_149_fu_3696_p3 = ((grp_fu_3213_p2[0:0] == 1'b1) ? tmp_s_fu_3686_p4 : 32'd0);
+assign empty_146_fu_3696_p3 = ((grp_fu_3213_p2[0:0] == 1'b1) ? tmp_s_fu_3686_p4 : 32'd0);
 
-assign empty_150_fu_3714_p1 = empty_148_fu_3678_p3[79:0];
+assign empty_147_fu_3714_p1 = empty_145_fu_3678_p3[79:0];
 
 assign empty_fu_3571_p3 = ((grp_fu_3213_p2[0:0] == 1'b1) ? or_ln_fu_3561_p4 : and_ln_fu_3529_p4);
 
@@ -2197,9 +2197,9 @@ assign select_ln200_fu_3539_p3 = ((grp_fu_3219_p2[0:0] == 1'b1) ? head_ctx_ref_2
 
 assign status_mem = {{{{ctrl_mem_interface_layer_index}, {ap_sig_allocacmp_ctrl_mem_interface_error_code_load_5}}, {ap_sig_allocacmp_ctrl_mem_interface_irq_status_load_6}}, {ap_sig_allocacmp_ctrl_mem_interface_status_load}};
 
-assign storemerge255_partset_fu_3718_p4 = {{{tmp_5_fu_3704_p4}, {empty_149_fu_3696_p3}}, {empty_150_fu_3714_p1}};
+assign storemerge255_partset_fu_3718_p4 = {{{tmp_5_fu_3704_p4}, {empty_146_fu_3696_p3}}, {empty_147_fu_3714_p1}};
 
-assign storemerge_partset_fu_3611_p4 = {{{tmp_7_fu_3597_p4}, {empty_146_fu_3589_p3}}, {empty_147_fu_3607_p1}};
+assign storemerge_partset_fu_3611_p4 = {{{tmp_7_fu_3597_p4}, {empty_143_fu_3589_p3}}, {empty_144_fu_3607_p1}};
 
 assign stream_start = grp_scheduler_hls_fu_1928_ap_return_2;
 
@@ -2245,7 +2245,7 @@ assign tmp_3_fu_3553_p3 = zext_ln200_fu_3549_p1[32'd74];
 
 assign tmp_4_fu_3660_p3 = zext_ln200_1_fu_3656_p1[32'd74];
 
-assign tmp_5_fu_3704_p4 = {{empty_148_fu_3678_p3[148:112]}};
+assign tmp_5_fu_3704_p4 = {{empty_145_fu_3678_p3[148:112]}};
 
 assign tmp_6_fu_3579_p4 = {{select_ln200_fu_3539_p3[106:75]}};
 

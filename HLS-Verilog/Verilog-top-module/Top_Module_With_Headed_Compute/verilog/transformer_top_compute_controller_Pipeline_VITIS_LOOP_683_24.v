@@ -85,8 +85,8 @@ reg    ap_ready_int;
 wire    ap_CS_fsm_state2;
 wire   [3:0] trunc_ln683_fu_287_p1;
 reg   [3:0] trunc_ln683_reg_464;
-reg   [7:0] trunc_ln13_reg_470;
-reg   [7:0] trunc_ln14_reg_475;
+reg   [7:0] trunc_ln12_reg_470;
+reg   [7:0] trunc_ln13_reg_475;
 wire   [63:0] zext_ln697_fu_376_p1;
 wire   [63:0] zext_ln698_fu_400_p1;
 wire   [63:0] zext_ln699_fu_437_p1;
@@ -251,8 +251,8 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        trunc_ln13_reg_470 <= {{v_fu_291_p35[23:16]}};
-        trunc_ln14_reg_475 <= {{v_fu_291_p35[31:24]}};
+        trunc_ln12_reg_470 <= {{v_fu_291_p35[23:16]}};
+        trunc_ln13_reg_475 <= {{v_fu_291_p35[31:24]}};
         trunc_ln683_reg_464 <= trunc_ln683_fu_287_p1;
     end
 end
@@ -345,7 +345,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_d0_local = trunc_ln14_reg_475;
+        out_buf_d0_local = trunc_ln13_reg_475;
     end else if (((icmp_ln683_fu_275_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
         out_buf_d0_local = {{v_fu_291_p35[15:8]}};
     end else begin
@@ -355,7 +355,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_d1_local = trunc_ln13_reg_470;
+        out_buf_d1_local = trunc_ln12_reg_470;
     end else if (((icmp_ln683_fu_275_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
         out_buf_d1_local = trunc_ln697_fu_371_p1;
     end else begin

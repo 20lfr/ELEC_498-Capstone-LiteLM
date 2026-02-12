@@ -657,7 +657,9 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
 
 static void print_head_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     switch (op) {
-    case ComputeOp::CMP_Q: {
+    case ComputeOp::CMP_Q:
+    case ComputeOp::CMP_K:
+    case ComputeOp::CMP_V: {
         std::printf("HEAD_Q out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_HEADS; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, i)));
@@ -665,8 +667,6 @@ static void print_head_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
         std::printf("\n");
         break;
     }
-    case ComputeOp::CMP_K:
-    case ComputeOp::CMP_V:
     case ComputeOp::CMP_ATT_VALUE: {
         std::printf("HEAD out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_HEADS; ++i) {
