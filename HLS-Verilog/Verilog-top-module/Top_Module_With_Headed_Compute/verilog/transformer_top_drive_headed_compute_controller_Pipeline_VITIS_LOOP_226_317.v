@@ -200,7 +200,7 @@ transformer_top_mul_31s_16ns_31_1_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 31 ))
-mul_31s_16ns_31_1_1_U2051(
+mul_31s_16ns_31_1_1_U2111(
     .din0(inv_sum_q15_3),
     .din1(mul_ln228_fu_246_p1),
     .dout(mul_ln228_fu_246_p2)
@@ -244,7 +244,7 @@ mul_31s_16ns_31_1_1_U2051(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U2052(
+sparsemux_33_4_16_1_1_U2112(
     .din0(exp_buf_33_reload),
     .din1(exp_buf_34_reload),
     .din2(exp_buf_35_reload),

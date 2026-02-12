@@ -85,8 +85,8 @@ wire   [27:0] v_fu_165_p9;
 wire   [27:0] v_fu_165_p11;
 wire   [3:0] byte_addr_assign_5_fu_189_p3;
 wire   [3:0] or_ln_fu_218_p3;
-wire   [3:0] or_ln14_fu_256_p3;
-wire   [3:0] or_ln15_fu_272_p3;
+wire   [3:0] or_ln15_fu_256_p3;
+wire   [3:0] or_ln16_fu_272_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -123,7 +123,7 @@ end
     .def_WIDTH( 28 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 28 ))
-sparsemux_9_2_28_1_1_U1262(
+sparsemux_9_2_28_1_1_U1323(
     .din0(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_562),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_563),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_564),
@@ -364,9 +364,9 @@ assign head_out_buf_0_we1 = head_out_buf_0_we1_local;
 
 assign icmp_ln659_fu_149_p2 = ((ap_sig_allocacmp_h_3 == 3'd4) ? 1'b1 : 1'b0);
 
-assign or_ln14_fu_256_p3 = {{trunc_ln659_reg_294}, {2'd2}};
+assign or_ln15_fu_256_p3 = {{trunc_ln659_reg_294}, {2'd2}};
 
-assign or_ln15_fu_272_p3 = {{trunc_ln659_reg_294}, {2'd3}};
+assign or_ln16_fu_272_p3 = {{trunc_ln659_reg_294}, {2'd3}};
 
 assign or_ln_fu_218_p3 = {{trunc_ln659_fu_161_p1}, {2'd1}};
 
@@ -382,8 +382,8 @@ assign zext_ln697_fu_202_p1 = byte_addr_assign_5_fu_189_p3;
 
 assign zext_ln698_fu_226_p1 = or_ln_fu_218_p3;
 
-assign zext_ln699_fu_263_p1 = or_ln14_fu_256_p3;
+assign zext_ln699_fu_263_p1 = or_ln15_fu_256_p3;
 
-assign zext_ln700_fu_279_p1 = or_ln15_fu_272_p3;
+assign zext_ln700_fu_279_p1 = or_ln16_fu_272_p3;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_659_35

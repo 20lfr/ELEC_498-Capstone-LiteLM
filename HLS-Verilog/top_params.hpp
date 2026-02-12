@@ -498,13 +498,13 @@ constexpr int IN_BUF_BYTES = max2(
 // -------------------------------
 // Output buffer size calculations
 // -------------------------------
-constexpr int OUT_PROJ_OUT_BYTES = D_TILE_WO * 4;
+constexpr int OUT_PROJ_OUT_BYTES = D_TILE_WO;
 constexpr int REQUANT_OUT_BYTES = D_MODEL;
 constexpr int RESID_OUT_BYTES = D_MODEL;
 constexpr int LN_OUT_BYTES = D_MODEL * 4;
 constexpr int FFN_W1_OUT_BYTES = D_TILE_W1 * 2;
 constexpr int FFN_ACT_OUT_BYTES = D_FFN * 2;
-constexpr int FFN_W2_OUT_BYTES = D_TILE_W2 * 4;
+constexpr int FFN_W2_OUT_BYTES = D_TILE_W2;
 
 constexpr int OUT_BUF_BYTES = max2(
     OUT_PROJ_OUT_BYTES,
@@ -590,7 +590,7 @@ struct INFfnW2Layout {
 
 struct OUTOutProjLayout {
     static constexpr int NUM_ELEMS = D_TILE_WO;
-    static constexpr BufDType TYPE = BufDType::I32;
+    static constexpr BufDType TYPE = BufDType::I8;
     static constexpr int TOTAL_BYTES = OUT_PROJ_OUT_BYTES;
     static constexpr int Y = 0;
 };
@@ -632,7 +632,7 @@ struct OUTFfnActLayout {
 
 struct OUTFfnW2Layout {
     static constexpr int NUM_ELEMS = D_TILE_W2;
-    static constexpr BufDType TYPE = BufDType::I32;
+    static constexpr BufDType TYPE = BufDType::I8;
     static constexpr int TOTAL_BYTES = FFN_W2_OUT_BYTES;
     static constexpr int Y = 0;
 };

@@ -94,7 +94,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U1538(
+sparsemux_9_2_8_1_1_U1599(
     .din0(select_ln252),
     .din1(select_ln252_1),
     .din2(select_ln252_2),

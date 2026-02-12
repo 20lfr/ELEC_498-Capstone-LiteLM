@@ -95,7 +95,7 @@ reg    head_in_buf_0_ce0_local;
 reg   [6:0] head_in_buf_0_address0_local;
 wire   [3:0] byte_addr_assign_fu_121_p3;
 wire   [3:0] or_ln_fu_134_p3;
-wire   [3:0] or_ln16_fu_162_p3;
+wire   [3:0] or_ln17_fu_162_p3;
 wire   [3:0] or_ln667_1_fu_174_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -393,7 +393,7 @@ assign head_in_buf_0_ce1 = head_in_buf_0_ce1_local;
 
 assign icmp_ln521_fu_105_p2 = ((ap_sig_allocacmp_h_11 == 3'd4) ? 1'b1 : 1'b0);
 
-assign or_ln16_fu_162_p3 = {{trunc_ln521_reg_231}, {2'd2}};
+assign or_ln17_fu_162_p3 = {{trunc_ln521_reg_231}, {2'd2}};
 
 assign or_ln667_1_fu_174_p3 = {{trunc_ln521_reg_231}, {2'd3}};
 
@@ -415,7 +415,7 @@ assign zext_ln664_fu_129_p1 = byte_addr_assign_fu_121_p3;
 
 assign zext_ln665_fu_142_p1 = or_ln_fu_134_p3;
 
-assign zext_ln666_fu_169_p1 = or_ln16_fu_162_p3;
+assign zext_ln666_fu_169_p1 = or_ln17_fu_162_p3;
 
 assign zext_ln667_fu_181_p1 = or_ln667_1_fu_174_p3;
 

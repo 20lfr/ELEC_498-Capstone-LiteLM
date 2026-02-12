@@ -497,7 +497,7 @@ static void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     case ComputeOp::CMP_OUT_PROJ: {
         std::printf("OUT_PROJ out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_TILE_WO; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, i)));
         }
         std::printf("\n");
         break;
@@ -523,7 +523,14 @@ static void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
         break;
     }
     case ComputeOp::CMP_LN0:
-    case ComputeOp::CMP_LN1:
+    case ComputeOp::CMP_LN1: {
+        std::printf("LN out_buf (decoded):\n  Y:");
+        for (int i = 0; i < D_MODEL; ++i) {
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, i)));
+        }
+        std::printf("\n");
+        break;
+    }
     case ComputeOp::CMP_FINAL_NORM:
         print_ln_out_buf(out_buf);
         break;
@@ -546,7 +553,7 @@ static void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     case ComputeOp::CMP_FFN_W2: {
         std::printf("FFN_W2 out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_TILE_W2; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, i)));
         }
         std::printf("\n");
         break;

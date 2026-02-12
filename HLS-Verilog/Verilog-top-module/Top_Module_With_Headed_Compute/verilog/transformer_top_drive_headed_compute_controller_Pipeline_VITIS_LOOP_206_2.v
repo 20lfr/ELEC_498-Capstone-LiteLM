@@ -299,7 +299,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U1305(
+sparsemux_33_4_16_1_1_U1366(
     .din0(max_val),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_452),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_453),
@@ -333,7 +333,7 @@ sparsemux_33_4_16_1_1_U1305(
     .def_WIDTH( 15 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 15 ))
-sparsemux_7_2_15_1_1_U1306(
+sparsemux_7_2_15_1_1_U1367(
     .din0(15'd32767),
     .din1(15'd12055),
     .din2(exp_lut_q15_1_q0),

@@ -155,21 +155,21 @@ wire   [31:0] tmp_41_fu_290_p33;
 wire   [3:0] tmp_41_fu_290_p34;
 wire   [31:0] tmp_41_fu_290_p35;
 wire   [43:0] tmp_fu_362_p3;
-wire   [41:0] tmp_155_fu_374_p3;
+wire   [41:0] tmp_207_fu_374_p3;
 wire  signed [44:0] sext_ln121_fu_370_p1;
 wire  signed [44:0] sext_ln121_4_fu_382_p1;
-wire   [39:0] tmp_156_fu_392_p3;
+wire   [39:0] tmp_208_fu_392_p3;
 wire   [44:0] sub_ln121_fu_386_p2;
 wire  signed [44:0] sext_ln121_5_fu_400_p1;
-wire   [35:0] tmp_157_fu_410_p3;
+wire   [35:0] tmp_209_fu_410_p3;
 wire   [44:0] add_ln121_fu_404_p2;
 wire  signed [44:0] sext_ln121_6_fu_418_p1;
 wire   [44:0] prod_fu_422_p2;
-wire   [0:0] tmp_158_fu_432_p3;
+wire   [0:0] tmp_210_fu_432_p3;
 wire   [43:0] select_ln122_fu_440_p3;
 wire   [43:0] trunc_ln121_fu_428_p1;
 wire   [43:0] rounded_fu_448_p2;
-wire   [13:0] tmp_159_fu_464_p4;
+wire   [13:0] tmp_211_fu_464_p4;
 wire   [28:0] trunc_ln_fu_454_p4;
 wire   [0:0] icmp_ln124_fu_474_p2;
 wire   [0:0] icmp_ln126_fu_480_p2;
@@ -247,7 +247,7 @@ end
     .def_WIDTH( 32 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 32 ))
-sparsemux_33_4_32_1_1_U1415(
+sparsemux_33_4_32_1_1_U1476(
     .din0(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_420),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_421),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_422),
@@ -519,7 +519,7 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln119_fu_274_p2 = ((ap_sig_allocacmp_i == 5'd16) ? 1'b1 : 1'b0);
 
-assign icmp_ln124_fu_474_p2 = (($signed(tmp_159_fu_464_p4) > $signed(14'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln124_fu_474_p2 = (($signed(tmp_211_fu_464_p4) > $signed(14'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln126_fu_480_p2 = (($signed(trunc_ln_fu_454_p4) < $signed(29'd536838144)) ? 1'b1 : 1'b0);
 
@@ -561,31 +561,31 @@ assign prod_fu_422_p2 = ($signed(add_ln121_fu_404_p2) + $signed(sext_ln121_6_fu_
 
 assign rounded_fu_448_p2 = (select_ln122_fu_440_p3 + trunc_ln121_fu_428_p1);
 
-assign select_ln122_fu_440_p3 = ((tmp_158_fu_432_p3[0:0] == 1'b1) ? 44'd17592186028032 : 44'd16384);
+assign select_ln122_fu_440_p3 = ((tmp_210_fu_432_p3[0:0] == 1'b1) ? 44'd17592186028032 : 44'd16384);
 
 assign select_ln129_1_fu_510_p3 = ((or_ln129_fu_504_p2[0:0] == 1'b1) ? select_ln129_fu_496_p3 : trunc_ln8_fu_486_p4);
 
 assign select_ln129_fu_496_p3 = ((icmp_ln124_fu_474_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
 
-assign sext_ln121_4_fu_382_p1 = $signed(tmp_155_fu_374_p3);
+assign sext_ln121_4_fu_382_p1 = $signed(tmp_207_fu_374_p3);
 
-assign sext_ln121_5_fu_400_p1 = $signed(tmp_156_fu_392_p3);
+assign sext_ln121_5_fu_400_p1 = $signed(tmp_208_fu_392_p3);
 
-assign sext_ln121_6_fu_418_p1 = $signed(tmp_157_fu_410_p3);
+assign sext_ln121_6_fu_418_p1 = $signed(tmp_209_fu_410_p3);
 
 assign sext_ln121_fu_370_p1 = $signed(tmp_fu_362_p3);
 
 assign sub_ln121_fu_386_p2 = ($signed(sext_ln121_fu_370_p1) - $signed(sext_ln121_4_fu_382_p1));
 
-assign tmp_155_fu_374_p3 = {{tmp_41_fu_290_p35}, {10'd0}};
+assign tmp_207_fu_374_p3 = {{tmp_41_fu_290_p35}, {10'd0}};
 
-assign tmp_156_fu_392_p3 = {{tmp_41_fu_290_p35}, {8'd0}};
+assign tmp_208_fu_392_p3 = {{tmp_41_fu_290_p35}, {8'd0}};
 
-assign tmp_157_fu_410_p3 = {{tmp_41_fu_290_p35}, {4'd0}};
+assign tmp_209_fu_410_p3 = {{tmp_41_fu_290_p35}, {4'd0}};
 
-assign tmp_158_fu_432_p3 = prod_fu_422_p2[32'd44];
+assign tmp_210_fu_432_p3 = prod_fu_422_p2[32'd44];
 
-assign tmp_159_fu_464_p4 = {{rounded_fu_448_p2[43:30]}};
+assign tmp_211_fu_464_p4 = {{rounded_fu_448_p2[43:30]}};
 
 assign tmp_41_fu_290_p33 = 'bx;
 

@@ -111,13 +111,13 @@ module top_module_hls_tb;
           LN_IN_BYTES,
           max2(FFN_W1_IN_BYTES, max2(FFN_ACT_IN_BYTES, FFN_W2_IN_BYTES))))));
 
-  localparam int OUT_PROJ_OUT_BYTES = D_TILE_WO * 4;
+  localparam int OUT_PROJ_OUT_BYTES = D_TILE_WO;
   localparam int REQUANT_OUT_BYTES = D_MODEL;
   localparam int RESID_OUT_BYTES = D_MODEL;
   localparam int LN_OUT_BYTES = D_MODEL * 4;
   localparam int FFN_W1_OUT_BYTES = D_TILE_W1 * 2;
   localparam int FFN_ACT_OUT_BYTES = D_FFN * 2;
-  localparam int FFN_W2_OUT_BYTES = D_TILE_W2 * 4;
+  localparam int FFN_W2_OUT_BYTES = D_TILE_W2;
   localparam int OUT_BUF_BYTES = max2(
     OUT_PROJ_OUT_BYTES,
     max2(
@@ -2735,8 +2735,8 @@ module top_module_hls_tb;
                 if ((pending_tile >= 0) && (pending_tile < NUM_WO_TILES)) begin
                   out_base = pending_tile * D_TILE_WO;
                   for (t = 0; t < D_TILE_WO; t = t + 1) begin
-                    full_accum[out_base + t] <= read_i32_from_out_buf(t * 4);
-                    out_proj_out[out_base + t] <= read_i32_from_out_buf(t * 4);
+                    full_accum[out_base + t] <= out_buf_mem[t];
+                    out_proj_out[out_base + t] <= out_buf_mem[t];
                   end
                 end
               end
@@ -2772,12 +2772,12 @@ module top_module_hls_tb;
               end
               CMP_LN0: begin
                 for (t = 0; t < D_MODEL; t = t + 1) begin
-                  ln0_out[t] <= read_i32_from_out_buf(t * 4);
+                  ln0_out[t] <= out_buf_mem[t];
                 end
               end
               CMP_LN1: begin
                 for (t = 0; t < D_MODEL; t = t + 1) begin
-                  ln1_out[t] <= read_i32_from_out_buf(t * 4);
+                  ln1_out[t] <= out_buf_mem[t];
                 end
               end
               CMP_FINAL_NORM: begin
@@ -2802,7 +2802,7 @@ module top_module_hls_tb;
                 if ((pending_tile >= 0) && (pending_tile < NUM_W2_TILES)) begin
                   out_base = pending_tile * D_TILE_W2;
                   for (t = 0; t < D_TILE_W2; t = t + 1) begin
-                    ffn2_out[out_base + t] <= read_i32_from_out_buf(t * 4);
+                    ffn2_out[out_base + t] <= out_buf_mem[t];
                   end
                 end
               end
