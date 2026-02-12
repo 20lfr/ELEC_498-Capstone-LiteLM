@@ -262,10 +262,10 @@ wire   [26:0] mean_square_fu_397_p3;
 wire   [31:0] zext_ln124_fu_405_p1;
 wire   [31:0] shl_ln9_fu_409_p3;
 wire   [22:0] grp_fu_426_p1;
-wire  signed [20:0] shl_ln2_fu_432_p3;
+wire  signed [20:0] shl_ln1_fu_432_p3;
 wire   [44:0] mul_ln132_fu_166_p2;
 wire  signed [31:0] normalized_fu_463_p4;
-wire  signed [31:0] shl_ln3_fu_477_p3;
+wire  signed [31:0] shl_ln2_fu_477_p3;
 wire   [44:0] mul_ln140_fu_230_p2;
 wire  signed [20:0] shl_ln132_1_fu_505_p3;
 wire   [44:0] mul_ln132_1_fu_170_p2;
@@ -438,7 +438,7 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U312(
     .din0(mul_ln132_fu_166_p0),
-    .din1(shl_ln2_fu_432_p3),
+    .din1(shl_ln1_fu_432_p3),
     .dout(mul_ln132_fu_166_p2)
 );
 
@@ -630,7 +630,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U328(
     .din0(normalized_fu_463_p4),
-    .din1(shl_ln3_fu_477_p3),
+    .din1(shl_ln2_fu_477_p3),
     .dout(mul_ln140_fu_230_p2)
 );
 
@@ -1453,9 +1453,9 @@ assign shl_ln140_9_fu_1125_p3 = {{compute_controller_ControlMemSpace_bool_unsign
 
 assign shl_ln140_s_fu_1152_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11}, {13'd0}};
 
-assign shl_ln2_fu_432_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39}, {13'd0}};
+assign shl_ln1_fu_432_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39}, {13'd0}};
 
-assign shl_ln3_fu_477_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95}, {13'd0}};
+assign shl_ln2_fu_477_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95}, {13'd0}};
 
 assign shl_ln9_fu_409_p3 = {{epsilon}, {13'd0}};
 

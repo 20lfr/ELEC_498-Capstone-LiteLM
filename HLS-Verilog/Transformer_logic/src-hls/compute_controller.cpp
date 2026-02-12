@@ -636,6 +636,7 @@ void compute_controller(
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
                         compute_buf::write_i8(out_buf, compute_buf::INRequantLayout::X + i, y8[i]);
+                        // compute_buf::write_i32(out_buf, compute_buf::INRequantLayout::X + i, x32[i]);
                     }
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;

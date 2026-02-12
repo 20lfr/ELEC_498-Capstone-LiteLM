@@ -141,31 +141,41 @@ reg p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg    ap_block_state1_pp0_stage0_iter0;
-wire   [0:0] icmp_ln78_fu_264_p2;
+wire   [0:0] icmp_ln78_fu_274_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [15:0] select_ln88_1_fu_442_p3;
-wire   [3:0] trunc_ln78_fu_276_p1;
-reg   [4:0] i_fu_156;
-wire   [4:0] add_ln78_fu_270_p2;
+wire   [15:0] select_ln88_1_fu_510_p3;
+wire   [3:0] trunc_ln78_fu_286_p1;
+reg   [4:0] i_fu_166;
+wire   [4:0] add_ln78_fu_280_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_i_2;
-wire   [31:0] tmp_41_fu_280_p33;
-wire   [3:0] tmp_41_fu_280_p34;
-wire   [31:0] tmp_41_fu_280_p35;
-wire   [45:0] prod_fu_352_p3;
-wire   [0:0] tmp_fu_364_p3;
-wire   [46:0] select_ln81_fu_372_p3;
-wire  signed [46:0] sext_ln80_fu_360_p1;
-wire   [46:0] rounded_fu_380_p2;
-wire   [16:0] tmp_151_fu_396_p4;
-wire   [31:0] scaled_fu_386_p4;
-wire   [0:0] icmp_ln83_fu_406_p2;
-wire   [0:0] icmp_ln85_fu_412_p2;
-wire   [0:0] or_ln88_fu_436_p2;
-wire   [15:0] select_ln88_fu_428_p3;
-wire   [15:0] trunc_ln_fu_418_p4;
+wire   [31:0] tmp_41_fu_290_p33;
+wire   [3:0] tmp_41_fu_290_p34;
+wire   [31:0] tmp_41_fu_290_p35;
+wire   [43:0] tmp_fu_362_p3;
+wire   [41:0] tmp_155_fu_374_p3;
+wire  signed [44:0] sext_ln80_fu_370_p1;
+wire  signed [44:0] sext_ln80_4_fu_382_p1;
+wire   [39:0] tmp_156_fu_392_p3;
+wire   [44:0] sub_ln80_fu_386_p2;
+wire  signed [44:0] sext_ln80_5_fu_400_p1;
+wire   [35:0] tmp_157_fu_410_p3;
+wire   [44:0] add_ln80_fu_404_p2;
+wire  signed [44:0] sext_ln80_6_fu_418_p1;
+wire   [44:0] prod_fu_422_p2;
+wire   [0:0] tmp_158_fu_432_p3;
+wire   [43:0] select_ln81_fu_440_p3;
+wire   [43:0] trunc_ln80_fu_428_p1;
+wire   [43:0] rounded_fu_448_p2;
+wire   [13:0] tmp_159_fu_464_p4;
+wire   [28:0] trunc_ln_fu_454_p4;
+wire   [0:0] icmp_ln83_fu_474_p2;
+wire   [0:0] icmp_ln85_fu_480_p2;
+wire   [0:0] or_ln88_fu_504_p2;
+wire   [15:0] select_ln88_fu_496_p3;
+wire   [15:0] trunc_ln6_fu_486_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -174,28 +184,28 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [3:0] tmp_41_fu_280_p1;
-wire   [3:0] tmp_41_fu_280_p3;
-wire   [3:0] tmp_41_fu_280_p5;
-wire   [3:0] tmp_41_fu_280_p7;
-wire   [3:0] tmp_41_fu_280_p9;
-wire   [3:0] tmp_41_fu_280_p11;
-wire   [3:0] tmp_41_fu_280_p13;
-wire   [3:0] tmp_41_fu_280_p15;
-wire  signed [3:0] tmp_41_fu_280_p17;
-wire  signed [3:0] tmp_41_fu_280_p19;
-wire  signed [3:0] tmp_41_fu_280_p21;
-wire  signed [3:0] tmp_41_fu_280_p23;
-wire  signed [3:0] tmp_41_fu_280_p25;
-wire  signed [3:0] tmp_41_fu_280_p27;
-wire  signed [3:0] tmp_41_fu_280_p29;
-wire  signed [3:0] tmp_41_fu_280_p31;
+wire   [3:0] tmp_41_fu_290_p1;
+wire   [3:0] tmp_41_fu_290_p3;
+wire   [3:0] tmp_41_fu_290_p5;
+wire   [3:0] tmp_41_fu_290_p7;
+wire   [3:0] tmp_41_fu_290_p9;
+wire   [3:0] tmp_41_fu_290_p11;
+wire   [3:0] tmp_41_fu_290_p13;
+wire   [3:0] tmp_41_fu_290_p15;
+wire  signed [3:0] tmp_41_fu_290_p17;
+wire  signed [3:0] tmp_41_fu_290_p19;
+wire  signed [3:0] tmp_41_fu_290_p21;
+wire  signed [3:0] tmp_41_fu_290_p23;
+wire  signed [3:0] tmp_41_fu_290_p25;
+wire  signed [3:0] tmp_41_fu_290_p27;
+wire  signed [3:0] tmp_41_fu_290_p29;
+wire  signed [3:0] tmp_41_fu_290_p31;
 wire    ap_ce_reg;
 
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_fu_156 = 5'd0;
+#0 i_fu_166 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -237,7 +247,7 @@ end
     .def_WIDTH( 32 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 32 ))
-sparsemux_33_4_32_1_1_U1325(
+sparsemux_33_4_32_1_1_U1335(
     .din0(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_332),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_333),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_334),
@@ -254,9 +264,9 @@ sparsemux_33_4_32_1_1_U1325(
     .din13(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_345),
     .din14(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_346),
     .din15(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_347),
-    .def(tmp_41_fu_280_p33),
-    .sel(tmp_41_fu_280_p34),
-    .dout(tmp_41_fu_280_p35)
+    .def(tmp_41_fu_290_p33),
+    .sel(tmp_41_fu_290_p34),
+    .dout(tmp_41_fu_290_p35)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -296,10 +306,10 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((icmp_ln78_fu_264_p2 == 1'd0)) begin
-            i_fu_156 <= add_ln78_fu_270_p2;
+        if ((icmp_ln78_fu_274_p2 == 1'd0)) begin
+            i_fu_166 <= add_ln78_fu_280_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_156 <= 5'd0;
+            i_fu_166 <= 5'd0;
         end
     end
 end
@@ -313,7 +323,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln78_fu_264_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((icmp_ln78_fu_274_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -348,12 +358,12 @@ always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
         ap_sig_allocacmp_i_2 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_2 = i_fu_156;
+        ap_sig_allocacmp_i_2 = i_fu_166;
     end
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd0) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd0) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_239_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_239_ap_vld = 1'b0;
@@ -361,7 +371,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd1) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd1) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_240_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_240_ap_vld = 1'b0;
@@ -369,7 +379,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd10) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd10) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_241_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_241_ap_vld = 1'b0;
@@ -377,7 +387,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd11) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd11) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_242_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_242_ap_vld = 1'b0;
@@ -385,7 +395,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd12) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd12) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_243_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_243_ap_vld = 1'b0;
@@ -393,7 +403,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd13) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd13) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_244_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_244_ap_vld = 1'b0;
@@ -401,7 +411,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd14) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd14) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_245_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_245_ap_vld = 1'b0;
@@ -409,7 +419,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd15) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd15) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_246_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_246_ap_vld = 1'b0;
@@ -417,7 +427,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd2) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd2) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_247_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_247_ap_vld = 1'b0;
@@ -425,7 +435,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd3) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd3) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_248_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_248_ap_vld = 1'b0;
@@ -433,7 +443,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd4) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd4) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_249_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_249_ap_vld = 1'b0;
@@ -441,7 +451,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd5) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd5) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_250_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_250_ap_vld = 1'b0;
@@ -449,7 +459,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd6) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd6) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_251_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_251_ap_vld = 1'b0;
@@ -457,7 +467,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd7) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd7) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_252_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_252_ap_vld = 1'b0;
@@ -465,7 +475,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd8) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd8) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_253_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_253_ap_vld = 1'b0;
@@ -473,7 +483,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln78_fu_276_p1 == 4'd9) & (icmp_ln78_fu_264_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln78_fu_286_p1 == 4'd9) & (icmp_ln78_fu_274_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_254_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_254_ap_vld = 1'b0;
@@ -491,7 +501,9 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln78_fu_270_p2 = (ap_sig_allocacmp_i_2 + 5'd1);
+assign add_ln78_fu_280_p2 = (ap_sig_allocacmp_i_2 + 5'd1);
+
+assign add_ln80_fu_404_p2 = ($signed(sub_ln80_fu_386_p2) + $signed(sext_ln80_5_fu_400_p1));
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -505,70 +517,88 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln78_fu_264_p2 = ((ap_sig_allocacmp_i_2 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln78_fu_274_p2 = ((ap_sig_allocacmp_i_2 == 5'd16) ? 1'b1 : 1'b0);
 
-assign icmp_ln83_fu_406_p2 = (($signed(tmp_151_fu_396_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln83_fu_474_p2 = (($signed(tmp_159_fu_464_p4) > $signed(14'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln85_fu_412_p2 = (($signed(scaled_fu_386_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln85_fu_480_p2 = (($signed(trunc_ln_fu_454_p4) < $signed(29'd536838144)) ? 1'b1 : 1'b0);
 
-assign or_ln88_fu_436_p2 = (icmp_ln85_fu_412_p2 | icmp_ln83_fu_406_p2);
+assign or_ln88_fu_504_p2 = (icmp_ln85_fu_480_p2 | icmp_ln83_fu_474_p2);
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_239 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_239 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_240 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_240 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_241 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_241 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_242 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_242 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_243 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_243 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_244 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_244 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_245 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_245 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_246 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_246 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_247 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_247 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_248 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_248 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_249 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_249 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_250 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_250 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_251 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_251 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_252 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_252 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_253 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_253 = select_ln88_1_fu_510_p3;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_254 = select_ln88_1_fu_442_p3;
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA80_KhPA64_hPA16_aPA16_254 = select_ln88_1_fu_510_p3;
 
-assign prod_fu_352_p3 = {{tmp_41_fu_280_p35}, {14'd0}};
+assign prod_fu_422_p2 = ($signed(add_ln80_fu_404_p2) + $signed(sext_ln80_6_fu_418_p1));
 
-assign rounded_fu_380_p2 = ($signed(select_ln81_fu_372_p3) + $signed(sext_ln80_fu_360_p1));
+assign rounded_fu_448_p2 = (select_ln81_fu_440_p3 + trunc_ln80_fu_428_p1);
 
-assign scaled_fu_386_p4 = {{rounded_fu_380_p2[46:15]}};
+assign select_ln81_fu_440_p3 = ((tmp_158_fu_432_p3[0:0] == 1'b1) ? 44'd17592186028032 : 44'd16384);
 
-assign select_ln81_fu_372_p3 = ((tmp_fu_364_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln88_1_fu_510_p3 = ((or_ln88_fu_504_p2[0:0] == 1'b1) ? select_ln88_fu_496_p3 : trunc_ln6_fu_486_p4);
 
-assign select_ln88_1_fu_442_p3 = ((or_ln88_fu_436_p2[0:0] == 1'b1) ? select_ln88_fu_428_p3 : trunc_ln_fu_418_p4);
+assign select_ln88_fu_496_p3 = ((icmp_ln83_fu_474_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
 
-assign select_ln88_fu_428_p3 = ((icmp_ln83_fu_406_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
+assign sext_ln80_4_fu_382_p1 = $signed(tmp_155_fu_374_p3);
 
-assign sext_ln80_fu_360_p1 = $signed(prod_fu_352_p3);
+assign sext_ln80_5_fu_400_p1 = $signed(tmp_156_fu_392_p3);
 
-assign tmp_151_fu_396_p4 = {{rounded_fu_380_p2[46:30]}};
+assign sext_ln80_6_fu_418_p1 = $signed(tmp_157_fu_410_p3);
 
-assign tmp_41_fu_280_p33 = 'bx;
+assign sext_ln80_fu_370_p1 = $signed(tmp_fu_362_p3);
 
-assign tmp_41_fu_280_p34 = ap_sig_allocacmp_i_2[3:0];
+assign sub_ln80_fu_386_p2 = ($signed(sext_ln80_fu_370_p1) - $signed(sext_ln80_4_fu_382_p1));
 
-assign tmp_fu_364_p3 = tmp_41_fu_280_p35[32'd31];
+assign tmp_155_fu_374_p3 = {{tmp_41_fu_290_p35}, {10'd0}};
 
-assign trunc_ln78_fu_276_p1 = ap_sig_allocacmp_i_2[3:0];
+assign tmp_156_fu_392_p3 = {{tmp_41_fu_290_p35}, {8'd0}};
 
-assign trunc_ln_fu_418_p4 = {{rounded_fu_380_p2[30:15]}};
+assign tmp_157_fu_410_p3 = {{tmp_41_fu_290_p35}, {4'd0}};
+
+assign tmp_158_fu_432_p3 = prod_fu_422_p2[32'd44];
+
+assign tmp_159_fu_464_p4 = {{rounded_fu_448_p2[43:30]}};
+
+assign tmp_41_fu_290_p33 = 'bx;
+
+assign tmp_41_fu_290_p34 = ap_sig_allocacmp_i_2[3:0];
+
+assign tmp_fu_362_p3 = {{tmp_41_fu_290_p35}, {12'd0}};
+
+assign trunc_ln6_fu_486_p4 = {{rounded_fu_448_p2[30:15]}};
+
+assign trunc_ln78_fu_286_p1 = ap_sig_allocacmp_i_2[3:0];
+
+assign trunc_ln80_fu_428_p1 = prod_fu_422_p2[43:0];
+
+assign trunc_ln_fu_454_p4 = {{rounded_fu_448_p2[43:15]}};
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_78_1

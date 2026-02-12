@@ -31,10 +31,6 @@ module top_module_hls_tb;
   function automatic int max2(input int a, input int b);
     max2 = (a > b) ? a : b;
   endfunction
-  localparam int IN_BUF_BYTES = 129;
-  localparam int OUT_BUF_BYTES = 64;
-  localparam int IN_BUF_ADDR_W = 8;
-  localparam int OUT_BUF_ADDR_W = 6;
   localparam int HEAD_VECTOR_MAX = max2(D_MODEL, max2(D_HEADS, CONTEXT_LENGTH));
   localparam int HEAD_ACCUM_MAX  = max2(D_HEADS, CONTEXT_LENGTH);
   localparam int QKV_W_NIBBLES = D_MODEL * D_HEADS;
@@ -97,6 +93,43 @@ module top_module_hls_tb;
   localparam int FFN_W2_B_BYTES = D_TILE_W2 * 4;
   localparam int FFN_W2_W_OFFSET = FFN_W2_X_OFFSET + (D_FFN * 2);
   localparam int FFN_W2_B_OFFSET = FFN_W2_W_OFFSET + FFN_W2_W_BYTES;
+  // Compute buffer sizing (mirror top_params.hpp)
+  localparam int OUT_PROJ_IN_BYTES = OUT_PROJ_ACT_BYTES + OUT_PROJ_W_BYTES + OUT_PROJ_B_BYTES;
+  localparam int REQUANT_IN_BYTES = D_MODEL * 4;
+  localparam int RESID_IN_BYTES = D_MODEL * 2;
+  localparam int LN_IN_BYTES = D_MODEL + (D_MODEL * 4) + 4;
+  localparam int FFN_W1_IN_BYTES = D_MODEL + FFN_W1_W_BYTES + FFN_W1_B_BYTES;
+  localparam int FFN_ACT_IN_BYTES = (D_FFN * 2) * 2;
+  localparam int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES;
+  localparam int IN_BUF_BYTES = max2(
+    OUT_PROJ_IN_BYTES,
+    max2(
+      REQUANT_IN_BYTES,
+      max2(
+        RESID_IN_BYTES,
+        max2(
+          LN_IN_BYTES,
+          max2(FFN_W1_IN_BYTES, max2(FFN_ACT_IN_BYTES, FFN_W2_IN_BYTES))))));
+
+  localparam int OUT_PROJ_OUT_BYTES = D_TILE_WO * 4;
+  localparam int REQUANT_OUT_BYTES = D_MODEL;
+  localparam int RESID_OUT_BYTES = D_MODEL;
+  localparam int LN_OUT_BYTES = D_MODEL * 4;
+  localparam int FFN_W1_OUT_BYTES = D_TILE_W1 * 2;
+  localparam int FFN_ACT_OUT_BYTES = D_FFN * 2;
+  localparam int FFN_W2_OUT_BYTES = D_TILE_W2 * 4;
+  localparam int OUT_BUF_BYTES = max2(
+    OUT_PROJ_OUT_BYTES,
+    max2(
+      REQUANT_OUT_BYTES,
+      max2(
+        RESID_OUT_BYTES,
+        max2(
+          LN_OUT_BYTES,
+          max2(FFN_W1_OUT_BYTES, max2(FFN_ACT_OUT_BYTES, FFN_W2_OUT_BYTES))))));
+
+  localparam int IN_BUF_ADDR_W = (IN_BUF_BYTES > 1) ? $clog2(IN_BUF_BYTES) : 1;
+  localparam int OUT_BUF_ADDR_W = (OUT_BUF_BYTES > 1) ? $clog2(OUT_BUF_BYTES) : 1;
   localparam int MEM_LAT = 8;
   localparam int MEM_DONE_HOLD_CYCLES = 12;
   localparam int DMA_DONE_HOLD_CYCLES = 12;
