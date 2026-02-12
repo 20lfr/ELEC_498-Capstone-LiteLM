@@ -45,7 +45,7 @@ module parallel_headed_compute_controller_tb;
   localparam int SOFTMAX_IN_BYTES  = CONTEXT_LENGTH * 2;
   localparam int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
 
-  localparam int ATT_VALUE_IN_BYTES  = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+  localparam int ATT_VALUE_IN_BYTES  = (CONTEXT_LENGTH * 2) + (CONTEXT_LENGTH * D_HEADS);
   localparam int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
 
   localparam int IN_BUF_BYTES = max2(QKV_IN_BYTES,
@@ -87,7 +87,7 @@ module parallel_headed_compute_controller_tb;
   localparam int SOFTMAX_X_OFFSET     = 0;
 
   localparam int ATT_VALUE_W_OFFSET   = 0;
-  localparam int ATT_VALUE_V_OFFSET   = ATT_VALUE_W_OFFSET + CONTEXT_LENGTH;
+  localparam int ATT_VALUE_V_OFFSET   = ATT_VALUE_W_OFFSET + (CONTEXT_LENGTH * 2);
 
   // Align opcodes with top_params.hpp ComputeOp enum.
   localparam logic [7:0] CMP_Q            = 8'h03;
@@ -310,7 +310,7 @@ module parallel_headed_compute_controller_tb;
   logic signed [31:0] val_scale_in_all [0:(HEADS_PARALLEL*CONTEXT_LENGTH)-1];
   logic signed [15:0] softmax_in_all [0:(HEADS_PARALLEL*CONTEXT_LENGTH)-1];
 
-  logic signed [7:0] att_weights_all [0:(HEADS_PARALLEL*CONTEXT_LENGTH)-1];
+  logic signed [15:0] att_weights_all [0:(HEADS_PARALLEL*CONTEXT_LENGTH)-1];
   logic signed [7:0] att_v_cache_all [0:(HEADS_PARALLEL*ATT_V_ELEMS)-1];
 
   // Output capture per operation (per head lane)
@@ -520,8 +520,8 @@ module parallel_headed_compute_controller_tb;
         end
         CMP_ATT_VALUE: begin
           for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
-            in_buf_stage[lane][ATT_VALUE_W_OFFSET + t] =
-              att_weights_all[lane * CONTEXT_LENGTH + t];
+            write_i16_to_in_buf(lane, ATT_VALUE_W_OFFSET + (t * 2),
+              att_weights_all[lane * CONTEXT_LENGTH + t]);
           end
           for (h = 0; h < D_HEADS; h = h + 1) begin
             for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
@@ -657,7 +657,7 @@ module parallel_headed_compute_controller_tb;
         end
         val_scale_in_all[head * CONTEXT_LENGTH + t] = (t % 7) * 37 - 90;
         softmax_in_all[head * CONTEXT_LENGTH + t] = -1200 + (t * 95);
-        att_weights_all[head * CONTEXT_LENGTH + t] = ((t % 5) - 2) * 15;
+        att_weights_all[head * CONTEXT_LENGTH + t] = ((t % 5) - 2) * 137;
       end
 
       for (h = 0; h < D_HEADS; h = h + 1) begin

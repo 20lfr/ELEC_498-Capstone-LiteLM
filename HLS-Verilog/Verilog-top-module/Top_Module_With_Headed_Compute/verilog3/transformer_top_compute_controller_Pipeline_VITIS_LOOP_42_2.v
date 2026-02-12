@@ -14,8 +14,8 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_42_2 (
         ap_idle,
         ap_ready,
         acc,
-        acc_6_out,
-        acc_6_out_ap_vld,
+        acc_8_out,
+        acc_8_out_ap_vld,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_address0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_ce0,
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_q0,
@@ -123,8 +123,8 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [31:0] acc;
-output  [31:0] acc_6_out;
-output   acc_6_out_ap_vld;
+output  [31:0] acc_8_out;
+output   acc_8_out_ap_vld;
 output  [3:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_address0;
 output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_ce0;
 input  [3:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_85_q0;
@@ -223,7 +223,7 @@ output   p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12Comput
 input  [15:0] p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_q0;
 
 reg ap_idle;
-reg acc_6_out_ap_vld;
+reg acc_8_out_ap_vld;
 
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_pp0_stage0;
@@ -255,12 +255,12 @@ reg   [0:0] icmp_ln42_reg_1028_pp0_iter5_reg;
 wire  signed [20:0] grp_fu_882_p3;
 wire  signed [20:0] grp_fu_899_p3;
 wire    ap_block_pp0_stage0;
-reg   [31:0] acc_4_fu_110;
+reg   [31:0] acc_6_fu_110;
 wire   [31:0] acc_19_fu_871_p2;
 wire    ap_loop_init;
 reg   [4:0] i_fu_114;
 wire   [4:0] xor_ln_fu_612_p3;
-reg   [4:0] ap_sig_allocacmp_i_46;
+reg   [4:0] ap_sig_allocacmp_i_49;
 wire   [31:0] acc_18_fu_843_p2;
 reg    ap_loop_exit_ready_pp0_iter1_reg;
 reg    ap_loop_exit_ready_pp0_iter2_reg;
@@ -350,7 +350,7 @@ initial begin
 #0 ap_enable_reg_pp0_iter4 = 1'b0;
 #0 ap_enable_reg_pp0_iter5 = 1'b0;
 #0 ap_enable_reg_pp0_iter6 = 1'b0;
-#0 acc_4_fu_110 = 32'd0;
+#0 acc_6_fu_110 = 32'd0;
 #0 i_fu_114 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
@@ -695,9 +695,9 @@ end
 always @ (posedge ap_clk) begin
     if ((1'b0 == ap_block_pp0_stage0_11001)) begin
         if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-            acc_4_fu_110 <= acc;
+            acc_6_fu_110 <= acc;
         end else if (((ap_enable_reg_pp0_iter6 == 1'b1) & (icmp_ln42_reg_1028_pp0_iter5_reg == 1'd0))) begin
-            acc_4_fu_110 <= acc_19_fu_871_p2;
+            acc_6_fu_110 <= acc_19_fu_871_p2;
         end
     end
 end
@@ -747,9 +747,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_loop_exit_ready_pp0_iter6_reg == 1'b1) & (icmp_ln42_reg_1028_pp0_iter5_reg == 1'd1))) begin
-        acc_6_out_ap_vld = 1'b1;
+        acc_8_out_ap_vld = 1'b1;
     end else begin
-        acc_6_out_ap_vld = 1'b0;
+        acc_8_out_ap_vld = 1'b0;
     end
 end
 
@@ -795,9 +795,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_46 = 5'd0;
+        ap_sig_allocacmp_i_49 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_46 = i_fu_114;
+        ap_sig_allocacmp_i_49 = i_fu_114;
     end
 end
 
@@ -1068,11 +1068,11 @@ always @ (*) begin
     endcase
 end
 
-assign acc_18_fu_843_p2 = (add_ln45_6_fu_838_p2 + acc_4_fu_110);
+assign acc_18_fu_843_p2 = (add_ln45_6_fu_838_p2 + acc_6_fu_110);
 
 assign acc_19_fu_871_p2 = (add_ln45_10_fu_866_p2 + acc_18_fu_843_p2);
 
-assign acc_6_out = acc_18_fu_843_p2;
+assign acc_8_out = acc_18_fu_843_p2;
 
 assign add_ln45_10_fu_866_p2 = ($signed(sext_ln45_41_fu_862_p1) + $signed(grp_fu_943_p3));
 
@@ -1102,7 +1102,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign bit_sel2_fu_594_p3 = ap_sig_allocacmp_i_46[5'd4];
+assign bit_sel2_fu_594_p3 = ap_sig_allocacmp_i_49[5'd4];
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_50_address0 = zext_ln41_fu_568_p1;
 
@@ -1248,11 +1248,11 @@ assign sext_ln45_40_fu_853_p1 = grp_fu_952_p3;
 
 assign sext_ln45_41_fu_862_p1 = $signed(add_ln45_14_fu_856_p2);
 
-assign tmp_fu_560_p3 = ap_sig_allocacmp_i_46[32'd4];
+assign tmp_fu_560_p3 = ap_sig_allocacmp_i_49[32'd4];
 
-assign trunc_ln42_9_fu_608_p1 = ap_sig_allocacmp_i_46[3:0];
+assign trunc_ln42_9_fu_608_p1 = ap_sig_allocacmp_i_49[3:0];
 
-assign trunc_ln42_fu_574_p1 = ap_sig_allocacmp_i_46[2:0];
+assign trunc_ln42_fu_574_p1 = ap_sig_allocacmp_i_49[2:0];
 
 assign xor_ln42_fu_602_p2 = (bit_sel2_fu_594_p3 ^ 1'd1);
 

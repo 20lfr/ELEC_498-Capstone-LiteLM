@@ -42,7 +42,7 @@ module headed_compute_controller_tb;
   localparam int SOFTMAX_IN_BYTES  = CONTEXT_LENGTH * 2;
   localparam int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
 
-  localparam int ATT_VALUE_IN_BYTES  = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+  localparam int ATT_VALUE_IN_BYTES  = (CONTEXT_LENGTH * 2) + (CONTEXT_LENGTH * D_HEADS);
   localparam int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
 
   localparam int IN_BUF_BYTES = max2(QKV_IN_BYTES,
@@ -77,7 +77,7 @@ module headed_compute_controller_tb;
   localparam int SOFTMAX_X_OFFSET     = 0;
 
   localparam int ATT_VALUE_W_OFFSET   = 0;
-  localparam int ATT_VALUE_V_OFFSET   = ATT_VALUE_W_OFFSET + CONTEXT_LENGTH;
+  localparam int ATT_VALUE_V_OFFSET   = ATT_VALUE_W_OFFSET + (CONTEXT_LENGTH * 2);
 
   // Align opcodes with top_params.hpp ComputeOp enum.
   localparam logic [7:0] CMP_Q           = 8'h03;
@@ -224,7 +224,7 @@ module headed_compute_controller_tb;
   logic signed [31:0] val_scale_in [0:CONTEXT_LENGTH-1];
   logic signed [15:0] softmax_in [0:CONTEXT_LENGTH-1];
 
-  logic signed [7:0] att_weights [0:CONTEXT_LENGTH-1];
+  logic signed [15:0] att_weights [0:CONTEXT_LENGTH-1];
   logic signed [7:0] att_v_cache [0:(D_HEADS*CONTEXT_LENGTH)-1];
 
   // Output capture per operation
@@ -289,7 +289,7 @@ module headed_compute_controller_tb;
       end
       val_scale_in[t] = (t % 7) * 37 - 90;
       softmax_in[t] = -1200 + (t * 95);
-      att_weights[t] = ((t % 5) - 2) * 15;
+      att_weights[t] = ((t % 5) - 2) * 137;
     end
 
     for (h = 0; h < D_HEADS; h = h + 1) begin
@@ -506,7 +506,7 @@ module headed_compute_controller_tb;
               end
               CMP_ATT_VALUE: begin
                 for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
-                  in_buf_mem[ATT_VALUE_W_OFFSET + t] = att_weights[t];
+                  write_i16_to_in_buf(ATT_VALUE_W_OFFSET + (t * 2), att_weights[t]);
                 end
                 for (h = 0; h < D_HEADS; h = h + 1) begin
                   for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin

@@ -738,21 +738,12 @@ void scheduler_hls(
       } else if (ln0_started && ln0_compute_done) {
         ln0_started = false;
         ln0_compute_done = false;
-        st = S_REQUANT1;
+        st = S_ATTENTION_HEADS;
       }
       break;
     }
     case S_REQUANT1: {
-      if (!requant1_started && compute_ready) {
-        requant1_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT1, layer_idx, -1, -1);
-        requant1_started = true;
-      } else if (requant1_started && requant1_compute_done) {
-        requant1_started = false;
-        requant1_compute_done = false;
-        st = S_ATTENTION_HEADS;
-      }
+      st = S_ATTENTION_HEADS;
       break;
     }
     case S_ATTENTION_HEADS: {
@@ -828,7 +819,7 @@ void scheduler_hls(
     case S_OUT_PROJECTION: {
       if (wo_tile >= NUM_WO_TILES) {
         resid0_started = false;
-        st = S_REQUANT2;
+        st = S_RES_ADD_1;
         break;
       }
 
@@ -856,16 +847,7 @@ void scheduler_hls(
       break;
     }
     case S_REQUANT2: {
-      if (!requant2_started && compute_ready) {
-        requant2_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT2, layer_idx, -1, -1);
-        requant2_started = true;
-      } else if (requant2_started && requant2_compute_done) {
-        requant2_started = false;
-        requant2_compute_done = false;
-        st = S_RES_ADD_1;
-      }
+      st = S_RES_ADD_1;
       break;
     }
     case S_RES_ADD_1: {
@@ -890,21 +872,12 @@ void scheduler_hls(
       } else if (ln1_started && ln1_compute_done) {
         ln1_started = false;
         ln1_compute_done = false;
-        st = S_REQUANT3;
+        st = S_FFN;
       }
       break;
     }
     case S_REQUANT3: {
-      if (!requant3_started && compute_ready) {
-        requant3_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT3, layer_idx, -1, -1);
-        requant3_started = true;
-      } else if (requant3_started && requant3_compute_done) {
-        requant3_started = false;
-        requant3_compute_done = false;
-        st = S_FFN;
-      }
+      st = S_FFN;
       break;
     }
     case S_FFN: {
@@ -956,7 +929,7 @@ void scheduler_hls(
           if (w2_tile >= NUM_W2_TILES) {
             ffn_started = false;
             ffn_stage = FfnStage::W1;
-            st = S_REQUANT4;
+            st = S_RES_ADD_2;
             break;
           }
 
@@ -986,16 +959,7 @@ void scheduler_hls(
         break;
     }
     case S_REQUANT4: {
-      if (!requant4_started && compute_ready) {
-        requant4_compute_done = false;
-        compute_start = 1;
-        compute_instruction= pack_compute_instruction(CMP_REQUANT4, layer_idx, -1, -1);
-        requant4_started = true;
-      } else if (requant4_started && requant4_compute_done) {
-        requant4_started = false;
-        requant4_compute_done = false;
-        st = S_RES_ADD_2;
-      }
+      st = S_RES_ADD_2;
       break;
     }
     case S_RES_ADD_2: {

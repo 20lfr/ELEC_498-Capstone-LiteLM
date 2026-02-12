@@ -107,6 +107,31 @@ void REQUANT_D_MODEL_int32_to_int8(
     }   
 }
 
+void REQUANT_D_TILE_int32_to_int8(
+    const int32_t x32[ACCUM_MAX],
+    const int count,
+    const int32_t M,
+    const int32_t n,
+    int8_t y8[ACCUM_MAX]
+) {
+    for (int t = 0; t < ACCUM_MAX; ++t) {
+#pragma HLS PIPELINE II=1
+        if (t >= count) {
+            continue;
+        }
+        const int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
+        const int64_t rounded = 1LL << (n - 1);
+        const int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+        if (scaled > 127) {
+            y8[t] = 127;
+        } else if (scaled < -128) {
+            y8[t] = -128;
+        } else {
+            y8[t] = static_cast<int8_t>(scaled);
+        }
+    }
+}
+
 void RMS_NORM(
     const int8_t x[D_MODEL],        // input vector
     const int32_t gamma[D_MODEL],   // scale parameter
@@ -543,7 +568,7 @@ void compute_controller(
         }
         case ComputeState::EXECUTE: {
             switch (req.op) {
-                case ComputeOp::CMP_OUT_PROJ:       // Q0.7   -> Qacc   [After Headed Attention]
+                case ComputeOp::CMP_OUT_PROJ:       // Q0.7   -> Q0.7   [After Headed Attention, requant in-op]
                 {
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
@@ -582,8 +607,15 @@ void compute_controller(
                         mac_start = true;
                     }
                     if (mac_complete) {
+                        int layer = static_cast<int>(req.layer_idx);
+                        if (layer < 0 || layer >= MODEL_LAYERS) {
+                            layer = 0;
+                        }
+                        const int32_t M = requant_params::REQUANT2_M_L[layer];
+                        const int32_t n = requant_params::REQUANT2_N_L[layer];
+                        REQUANT_D_TILE_int32_to_int8(out, D_TILE_WO, M, n, y8);
                         for (int t = 0; t < D_TILE_WO; ++t) {
-                            compute_buf::write_i32(out_buf, t * 4, out[t]);
+                            compute_buf::write_i8(out_buf, t, y8[t]);
                         }
                         next_state = ComputeState::MEM_WRITEBACK;
                     } else {
@@ -636,6 +668,7 @@ void compute_controller(
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
                         compute_buf::write_i8(out_buf, compute_buf::INRequantLayout::X + i, y8[i]);
+                        // compute_buf::write_i32(out_buf, compute_buf::INRequantLayout::X + i, x32[i]);
                     }
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
@@ -660,9 +693,8 @@ void compute_controller(
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
-                case ComputeOp::CMP_LN0:            // Q0.7    -> Q19.13
-                case ComputeOp::CMP_LN1:            // Q0.7    -> Q19.13
-                case ComputeOp::CMP_FINAL_NORM: {   // Q0.7    -> Q19.13
+                case ComputeOp::CMP_LN0:            // Q0.7    -> Q0.7    [requant in-op]
+                case ComputeOp::CMP_LN1: {          // Q0.7    -> Q0.7    [requant in-op]
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
                         // Setup X
@@ -679,6 +711,42 @@ void compute_controller(
                         ln_epsilon,
                         y_act
                     );
+                    int layer = static_cast<int>(req.layer_idx);
+                    if (layer < 0 || layer >= MODEL_LAYERS) {
+                        layer = 0;
+                    }
+                    int32_t M = 0;
+                    int32_t n = 0;
+                    switch (req.op) {
+                        case ComputeOp::CMP_LN0:
+                            M = requant_params::REQUANT1_M_L[layer];
+                            n = requant_params::REQUANT1_N_L[layer];
+                            break;
+                        case ComputeOp::CMP_LN1:
+                            M = requant_params::REQUANT3_M_L[layer];
+                            n = requant_params::REQUANT3_N_L[layer];
+                            break;
+                        default:
+                            M = 0;
+                            n = 0;
+                            break;
+                    }
+                    REQUANT_D_MODEL_int32_to_int8(y_act, M, n, y8);
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        compute_buf::write_i8(out_buf, i, y8[i]);
+                    }
+                    next_state = ComputeState::MEM_WRITEBACK;
+                    break;
+                }
+                case ComputeOp::CMP_FINAL_NORM: {   // Q0.7    -> Q19.13
+                    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                        x_act[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + i));
+                        ln_gamma[i] = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4)));
+                    }
+                    ln_epsilon = static_cast<int32_t>(compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::EPS));
+                    RMS_NORM(x_act, ln_gamma, ln_epsilon, y_act);
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
                         compute_buf::write_i32(out_buf, compute_buf::INLayerNormLayout::X + (i * 4), y_act[i]);
@@ -757,7 +825,7 @@ void compute_controller(
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
-                case ComputeOp::CMP_FFN_W2:{        // Q1.15   -> Qacc      [Second FFN stage]
+                case ComputeOp::CMP_FFN_W2:{        // Q1.15   -> Q0.7      [Second FFN stage, requant in-op]
                     for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS PIPELINE II=1
                         vectorA[i] = compute_buf::read_i16(
@@ -793,13 +861,15 @@ void compute_controller(
                         mac_start = true;
                     }
                     if (mac_complete) {
+                        int layer = static_cast<int>(req.layer_idx);
+                        if (layer < 0 || layer >= MODEL_LAYERS) {
+                            layer = 0;
+                        }
+                        const int32_t M = requant_params::REQUANT4_M_L[layer];
+                        const int32_t n = requant_params::REQUANT4_N_L[layer];
+                        REQUANT_D_TILE_int32_to_int8(out, D_TILE_W2, M, n, y8);
                         for (int t = 0; t < D_TILE_W2; ++t) {
-                            const int64_t prod =
-                                static_cast<int64_t>(out[t]) *
-                                static_cast<int64_t>(requant_scales::FFN_W2_SCALE_Q15);
-                            const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
-                            int32_t scaled = static_cast<int32_t>(rounded >> 15);
-                            compute_buf::write_i32(out_buf, t * 4, scaled);
+                            compute_buf::write_i8(out_buf, t, y8[t]);
                         }
                         next_state = ComputeState::MEM_WRITEBACK;
                     } else {
