@@ -3,7 +3,7 @@
 vitis-run --mode hls --csim --config /home/luka/Scripting/vitis_simulations/Top_module/hls_config.cfg --work_dir transformer_top
 
   **** SW Build 6137779 on 2025-05-21-18:10:03
-  **** Start of session at: Tue Feb 10 18:27:48 2026
+  **** Start of session at: Wed Feb 11 21:46:42 2026
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
     ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 
@@ -49,14 +49,8 @@ INFO: [HLS 200-2176] Writing Vitis IDE component file /home/luka/Scripting/vitis
 INFO: [SIM 211-2] *************** CSIM start ***************
 INFO: [SIM 211-4] CSIM will launch CLANG as the compiler.
 INFO: [HLS 200-2036] Building debug C Simulation binaries
-   Compiling ../../../../../../ELEC_498-Capstone-LiteLM/HLS-Verilog/top_DEBUG_tb.cpp in debug mode
-   Compiling ../../../../../../ELEC_498-Capstone-LiteLM/HLS-Verilog/Transformer_logic/src-hls/compute_controller.cpp in debug mode
-   Compiling ../../../../../../ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Head_Helpers/head_helpers.cpp in debug mode
-   Compiling ../../../../../../ELEC_498-Capstone-LiteLM/HLS-Verilog/Scheduler_FSM/src-hls/Scheduler_FSM.cpp in debug mode
-   Compiling ../../../../../../ELEC_498-Capstone-LiteLM/HLS-Verilog/top.cpp in debug mode
-   Generating csim.exe
+make: 'csim.exe' is up to date.
 Cycle    Start  CtrlR  DbgState      | Heads: [idx C_St C_Rdy C_Dn]
-0        0      1      S_IDLE        | 0:-1- 1:-1- 2:--- 3:---
 1        0      1      S_IDLE        | 0:-1- 1:-1- 2:--- 3:---
 2        0      -      S_IDLE        | 0:-1- 1:-1- 2:--- 3:---
 3        0      -      S_IDLE        | 0:-1- 1:-1- 2:--- 3:---
@@ -156,17 +150,17 @@ LN out_buf (decoded):
 78       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 79       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 in_buf (send)[112]:
-  0000: ec ff ff ff ef ff ff ff f2 ff ff ff f5 ff ff ff
-  0010: f8 ff ff ff fb ff ff ff fe ff ff ff 01 00 00 00
-  0020: 04 00 00 00 07 00 00 00 0a 00 00 00 0d 00 00 00
-  0030: 10 00 00 00 13 00 00 00 16 00 00 00 19 00 00 00
+  0000: ff ff ff 7f 00 00 00 80 50 c9 ff ff 08 d5 ff ff
+  0010: c0 e0 ff ff 78 ec ff ff 30 f8 ff ff e8 03 00 00
+  0020: a0 0f 00 00 58 1b 00 00 10 27 00 00 c8 32 00 00
+  0030: 80 3e 00 00 38 4a 00 00 f0 55 00 00 a8 61 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25
-  M: 4
-  N: 15
+  X: 2147483647 -2147483648 -14000 -11000 -8000 -5000 -2000 1000 4000 7000 10000 13000 16000 19000 22000 25000
+  M: 1327155345
+  N: 38
 80       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 81       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 82       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
@@ -175,12 +169,12 @@ REQUANT in_buf (decoded):
 85       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 86       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 out_buf (done)[64]:
-  0000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 7f 80 bc cb d9 e8 f6 05 13 22 30 3f 4d 5c 6a 79
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Y: 127 -128 -68 -53 -39 -24 -10 5 19 34 48 63 77 92 106 121
 87       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 88       0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 89       0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
@@ -515,8 +509,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1000 1010 1020 1030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op K_RQ in_buf
 head_in_buf (send)[80]:
   0000: 4c 04 00 00 56 04 00 00 60 04 00 00 6a 04 00 00
@@ -526,8 +520,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1100 1110 1120 1130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 146      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF000005 op=K_RQ layer=0 head=0 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF000005}
   Lane 1: state=3 req{instr=0xFF010005 op=K_RQ layer=0 head=1 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF010005}
@@ -554,20 +548,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF010005 op=K_RQ layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF010005}
 HEAD lane 0 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 HEAD lane 1 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 154      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF000005 op=K_RQ layer=0 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF010005 op=K_RQ layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -767,8 +761,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2000 2010 2020 2030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op V_RQ in_buf
 head_in_buf (send)[80]:
   0000: 34 08 00 00 3e 08 00 00 48 08 00 00 52 08 00 00
@@ -778,8 +772,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2100 2110 2120 2130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 192      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF000007 op=V_RQ layer=0 head=0 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF000007}
   Lane 1: state=3 req{instr=0xFF010007 op=V_RQ layer=0 head=1 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF010007}
@@ -806,20 +800,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF010007 op=V_RQ layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF010007}
 HEAD lane 0 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 HEAD lane 1 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 200      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF000007 op=V_RQ layer=0 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF010007 op=V_RQ layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -874,8 +868,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3000 3010 3020 3030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op RQ_Q in_buf
 head_in_buf (send)[80]:
   0000: 1c 0c 00 00 26 0c 00 00 30 0c 00 00 3a 0c 00 00
@@ -885,8 +879,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3100 3110 3120 3130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 215      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF000008 op=RQ_Q layer=0 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF000008}
   Lane 1: state=3 req{instr=0xFF010008 op=RQ_Q layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF010008}
@@ -913,20 +907,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF010008 op=RQ_Q layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF010008}
 HEAD lane 0 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 HEAD lane 1 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 223      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF000008 op=RQ_Q layer=0 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF010008 op=RQ_Q layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -1147,20 +1141,20 @@ VALUE_SCALE in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF01000A op=VALUE_SCALE layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF01000A}
 HEAD lane 0 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: fa 00 fe 00 01 01 05 01 08 01 0c 01 0f 01 13 01
-  0010: 16 01 1a 01 1d 01 21 01 24 01 28 01 2b 01 2f 01
+  0000: 33 00 34 00 34 00 35 00 36 00 37 00 37 00 38 00
+  0010: 39 00 39 00 3a 00 3b 00 3c 00 3c 00 3d 00 3e 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 250 254 257 261 264 268 271 275 278 282 285 289 292 296 299 303
+  Y: 51 52 52 53 54 55 55 56 57 57 58 59 60 60 61 62
 HEAD lane 1 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: 13 01 17 01 1a 01 1e 01 21 01 25 01 28 01 2c 01
-  0010: 2f 01 33 01 36 01 3a 01 3d 01 41 01 44 01 48 01
+  0000: 38 00 39 00 3a 00 3a 00 3b 00 3c 00 3c 00 3d 00
+  0010: 3e 00 3f 00 3f 00 40 00 41 00 41 00 42 00 43 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 275 279 282 286 289 293 296 300 303 307 310 314 317 321 324 328
+  Y: 56 57 58 58 59 60 60 61 62 63 63 64 65 65 66 67
 265      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF00000A op=VALUE_SCALE layer=0 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF01000A op=VALUE_SCALE layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -1469,8 +1463,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4000 4010 4020 4030
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 HEAD lane 1 op HEAD_RQ in_buf
 head_in_buf (send)[80]:
   0000: 04 10 00 00 0e 10 00 00 18 10 00 00 22 10 00 00
@@ -1480,8 +1474,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4100 4110 4120 4130
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 318      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF00000D op=HEAD_RQ layer=0 head=0 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF00000D}
   Lane 1: state=3 req{instr=0xFF01000D op=HEAD_RQ layer=0 head=1 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF01000D}
@@ -1508,20 +1502,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF01000D op=HEAD_RQ layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF01000D}
 HEAD lane 0 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2a 2a 2a 2a 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 42 42 42 42
 HEAD lane 1 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2b 2b 2b 2b 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 43 43 43 43
 326      0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF00000D op=HEAD_RQ layer=0 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF01000D op=HEAD_RQ layer=0 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -1860,8 +1854,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1000 1010 1020 1030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op K_RQ in_buf
 head_in_buf (send)[80]:
   0000: 4c 04 00 00 56 04 00 00 60 04 00 00 6a 04 00 00
@@ -1871,8 +1865,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1100 1110 1120 1130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 385      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF020005 op=K_RQ layer=0 head=2 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF020005}
   Lane 1: state=3 req{instr=0xFF030005 op=K_RQ layer=0 head=3 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF030005}
@@ -1899,20 +1893,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF030005 op=K_RQ layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF030005}
 HEAD lane 0 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 HEAD lane 1 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 393      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF020005 op=K_RQ layer=0 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF030005 op=K_RQ layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -2112,8 +2106,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2000 2010 2020 2030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op V_RQ in_buf
 head_in_buf (send)[80]:
   0000: 34 08 00 00 3e 08 00 00 48 08 00 00 52 08 00 00
@@ -2123,8 +2117,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2100 2110 2120 2130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 431      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF020007 op=V_RQ layer=0 head=2 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF020007}
   Lane 1: state=3 req{instr=0xFF030007 op=V_RQ layer=0 head=3 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF030007}
@@ -2151,20 +2145,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF030007 op=V_RQ layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF030007}
 HEAD lane 0 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 HEAD lane 1 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 439      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF020007 op=V_RQ layer=0 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF030007 op=V_RQ layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -2219,8 +2213,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3000 3010 3020 3030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op RQ_Q in_buf
 head_in_buf (send)[80]:
   0000: 1c 0c 00 00 26 0c 00 00 30 0c 00 00 3a 0c 00 00
@@ -2230,8 +2224,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3100 3110 3120 3130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 454      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF020008 op=RQ_Q layer=0 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF020008}
   Lane 1: state=3 req{instr=0xFF030008 op=RQ_Q layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF030008}
@@ -2258,20 +2252,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF030008 op=RQ_Q layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF030008}
 HEAD lane 0 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 HEAD lane 1 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 462      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF020008 op=RQ_Q layer=0 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF030008 op=RQ_Q layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -2492,20 +2486,20 @@ VALUE_SCALE in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF03000A op=VALUE_SCALE layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF03000A}
 HEAD lane 0 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: fa 00 fe 00 01 01 05 01 08 01 0c 01 0f 01 13 01
-  0010: 16 01 1a 01 1d 01 21 01 24 01 28 01 2b 01 2f 01
+  0000: 33 00 34 00 34 00 35 00 36 00 37 00 37 00 38 00
+  0010: 39 00 39 00 3a 00 3b 00 3c 00 3c 00 3d 00 3e 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 250 254 257 261 264 268 271 275 278 282 285 289 292 296 299 303
+  Y: 51 52 52 53 54 55 55 56 57 57 58 59 60 60 61 62
 HEAD lane 1 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: 13 01 17 01 1a 01 1e 01 21 01 25 01 28 01 2c 01
-  0010: 2f 01 33 01 36 01 3a 01 3d 01 41 01 44 01 48 01
+  0000: 38 00 39 00 3a 00 3a 00 3b 00 3c 00 3c 00 3d 00
+  0010: 3e 00 3f 00 3f 00 40 00 41 00 41 00 42 00 43 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 275 279 282 286 289 293 296 300 303 307 310 314 317 321 324 328
+  Y: 56 57 58 58 59 60 60 61 62 63 63 64 65 65 66 67
 504      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF02000A op=VALUE_SCALE layer=0 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF03000A op=VALUE_SCALE layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -2814,8 +2808,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4000 4010 4020 4030
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 HEAD lane 1 op HEAD_RQ in_buf
 head_in_buf (send)[80]:
   0000: 04 10 00 00 0e 10 00 00 18 10 00 00 22 10 00 00
@@ -2825,8 +2819,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4100 4110 4120 4130
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 557      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF02000D op=HEAD_RQ layer=0 head=2 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF02000D}
   Lane 1: state=3 req{instr=0xFF03000D op=HEAD_RQ layer=0 head=3 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF03000D}
@@ -2853,20 +2847,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF03000D op=HEAD_RQ layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF03000D}
 HEAD lane 0 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2a 2a 2a 2a 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 42 42 42 42
 HEAD lane 1 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2b 2b 2b 2b 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 43 43 43 43
 565      0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF02000D op=HEAD_RQ layer=0 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF03000D op=HEAD_RQ layer=0 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030000 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -3055,17 +3049,17 @@ OUT_PROJ out_buf (decoded):
 670      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 671      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 in_buf (send)[112]:
-  0000: 05 00 00 00 07 00 00 00 09 00 00 00 0b 00 00 00
-  0010: 0d 00 00 00 0f 00 00 00 11 00 00 00 13 00 00 00
-  0020: 15 00 00 00 17 00 00 00 19 00 00 00 1b 00 00 00
-  0030: 1d 00 00 00 1f 00 00 00 21 00 00 00 23 00 00 00
+  0000: 88 13 00 00 58 1b 00 00 28 23 00 00 f8 2a 00 00
+  0010: c8 32 00 00 98 3a 00 00 68 42 00 00 38 4a 00 00
+  0020: 08 52 00 00 d8 59 00 00 a8 61 00 00 78 69 00 00
+  0030: 48 71 00 00 18 79 00 00 e8 80 00 00 b8 88 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35
-  M: 32768
-  N: 15
+  X: 5000 7000 9000 11000 13000 15000 17000 19000 21000 23000 25000 27000 29000 31000 33000 35000
+  M: 1375700707
+  N: 39
 672      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 673      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 674      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3074,12 +3068,12 @@ REQUANT in_buf (decoded):
 677      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 678      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 05 07 09 0b 0d 0f 11 13 15 17 19 1b 1d 1f 21 23
+  0000: 0d 12 17 1c 21 26 2b 30 35 3a 3f 44 49 4e 53 58
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35
+  Y: 13 18 23 28 33 38 43 48 53 58 63 68 73 78 83 88
 679      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 680      0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 681      0      -      S_RES_ADD_1   | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3162,17 +3156,17 @@ LN out_buf (decoded):
 721      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 722      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 in_buf (send)[112]:
-  0000: 64 00 00 00 60 00 00 00 5c 00 00 00 58 00 00 00
-  0010: 54 00 00 00 50 00 00 00 4c 00 00 00 48 00 00 00
-  0020: 44 00 00 00 40 00 00 00 3c 00 00 00 38 00 00 00
-  0030: 34 00 00 00 30 00 00 00 2c 00 00 00 28 00 00 00
+  0000: ff ff ff 7f 00 00 00 80 60 67 01 00 c0 57 01 00
+  0010: 20 48 01 00 80 38 01 00 e0 28 01 00 40 19 01 00
+  0020: a0 09 01 00 00 fa 00 00 60 ea 00 00 c0 da 00 00
+  0030: 20 cb 00 00 80 bb 00 00 e0 ab 00 00 40 9c 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: 100 96 92 88 84 80 76 72 68 64 60 56 52 48 44 40
-  M: 4
-  N: 15
+  X: 2147483647 -2147483648 92000 88000 84000 80000 76000 72000 68000 64000 60000 56000 52000 48000 44000 40000
+  M: 1204963673
+  N: 36
 723      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 724      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 725      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3181,12 +3175,12 @@ REQUANT in_buf (decoded):
 728      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 729      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 7f 80 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Y: 127 -128 127 127 127 127 127 127 127 127 127 127 127 127 127 127
 730      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 731      0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 732      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3205,15 +3199,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 744      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 745      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 746      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3224,12 +3217,12 @@ FFN_W1 in_buf (decoded):
 751      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 752      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 753      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 754      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 755      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3248,15 +3241,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 767      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 768      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 769      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3267,12 +3259,12 @@ FFN_W1 in_buf (decoded):
 774      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 775      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 776      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 777      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 778      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3291,15 +3283,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 790      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 791      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 792      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3310,12 +3301,12 @@ FFN_W1 in_buf (decoded):
 797      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 798      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 799      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 800      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 801      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3334,15 +3325,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 813      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 814      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 815      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3353,12 +3343,12 @@ FFN_W1 in_buf (decoded):
 820      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 821      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 822      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 823      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 824      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3377,15 +3367,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 836      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 837      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 838      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3396,12 +3385,12 @@ FFN_W1 in_buf (decoded):
 843      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 844      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 845      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 846      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 847      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3420,15 +3409,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 859      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 860      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 861      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3439,12 +3427,12 @@ FFN_W1 in_buf (decoded):
 866      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 867      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 868      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 869      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 870      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3463,15 +3451,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 882      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 883      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 884      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3482,12 +3469,12 @@ FFN_W1 in_buf (decoded):
 889      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 890      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 891      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 892      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 893      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3506,15 +3493,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 905      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 906      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 907      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3525,12 +3511,12 @@ FFN_W1 in_buf (decoded):
 912      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 913      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 914      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 915      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 916      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3545,19 +3531,19 @@ FFN_W1 out_buf (decoded):
 in_buf (send)[112]:
   0000: ec ff ef ff f2 ff f5 ff f8 ff fb ff fe ff 01 00
   0010: 04 00 07 00 0a 00 0d 00 10 00 13 00 16 00 19 00
-  0020: 1c 00 1f 00 22 00 25 00 28 00 2b 00 f6 ff f8 ff
-  0030: fa ff fc ff fe ff 00 00 02 00 04 00 06 00 08 00
-  0040: 0a 00 0c 00 0e 00 10 00 12 00 14 00 16 00 18 00
-  0050: 1a 00 1c 00 1e 00 20 00 00 00 00 00 00 00 00 00
+  0020: 1c 00 1f 00 22 00 25 00 28 00 2b 00 2e 00 31 00
+  0030: f6 ff f8 ff fa ff fc ff fe ff 00 00 02 00 04 00
+  0040: 06 00 08 00 0a 00 0c 00 0e 00 10 00 12 00 14 00
+  0050: 16 00 18 00 1a 00 1c 00 1e 00 20 00 22 00 24 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_ACT in_buf (decoded):
-  GATE: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43
-  UP: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32
+  GATE: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49
+  UP: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36
 925      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
-FFN_ACT gate: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43
-FFN_ACT sigmoid: 16352 16352 16352 16352 16352 16352 16352 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416
-FFN_ACT up: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32
-FFN_ACT out: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+FFN_ACT gate: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49
+FFN_ACT sigmoid: 16352 16352 16352 16352 16352 16352 16352 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416
+FFN_ACT up: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36
+FFN_ACT out: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 926      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 927      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 928      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3567,10 +3553,10 @@ FFN_ACT out: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
 out_buf (done)[64]:
   0000: fb ff fc ff fd ff fe ff ff ff 00 00 00 00 02 00
   0010: 03 00 04 00 05 00 06 00 07 00 08 00 09 00 0a 00
-  0020: 0b 00 0c 00 0d 00 0e 00 0f 00 10 00 00 00 00 00
+  0020: 0b 00 0c 00 0d 00 0e 00 0f 00 10 00 11 00 12 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_ACT out_buf (decoded):
-  Y: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+  Y: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 932      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 933      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 934      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3588,16 +3574,15 @@ FFN_ACT out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 946      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 947      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 948      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3608,12 +3593,12 @@ FFN_W2 in_buf (decoded):
 953      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 954      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 955      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 956      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 957      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3631,16 +3616,15 @@ FFN_W2 out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 969      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 970      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 971      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3651,12 +3635,12 @@ FFN_W2 in_buf (decoded):
 976      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 977      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 978      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 979      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 980      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3674,16 +3658,15 @@ FFN_W2 out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 992      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 993      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 994      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3694,12 +3677,12 @@ FFN_W2 in_buf (decoded):
 999      0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1000     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 1001     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1002     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1003     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3717,16 +3700,15 @@ FFN_W2 out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 1015     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1016     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1017     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3737,12 +3719,12 @@ FFN_W2 in_buf (decoded):
 1022     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1023     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 1024     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1025     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1026     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3755,17 +3737,17 @@ FFN_W2 out_buf (decoded):
 1033     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 1034     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 in_buf (send)[112]:
-  0000: f5 ff ff ff fa ff ff ff ff ff ff ff 04 00 00 00
-  0010: 09 00 00 00 0e 00 00 00 13 00 00 00 18 00 00 00
-  0020: 1d 00 00 00 22 00 00 00 27 00 00 00 2c 00 00 00
-  0030: 31 00 00 00 36 00 00 00 3b 00 00 00 40 00 00 00
+  0000: 08 d5 ff ff 90 e8 ff ff 18 fc ff ff a0 0f 00 00
+  0010: 28 23 00 00 b0 36 00 00 38 4a 00 00 c0 5d 00 00
+  0020: 48 71 00 00 d0 84 00 00 58 98 00 00 e0 ab 00 00
+  0030: 68 bf 00 00 f0 d2 00 00 78 e6 00 00 00 fa 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: -11 -6 -1 4 9 14 19 24 29 34 39 44 49 54 59 64
-  M: 32768
-  N: 15
+  X: -11000 -6000 -1000 4000 9000 14000 19000 24000 29000 34000 39000 44000 49000 54000 59000 64000
+  M: 1684882386
+  N: 40
 1035     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 1036     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 1037     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3774,12 +3756,12 @@ REQUANT in_buf (decoded):
 1040     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 1041     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 fa ff 04 09 0e 13 18 1d 22 27 2c 31 36 3b 40
+  0000: ef f7 fe 06 0e 15 1d 25 2c 34 3c 43 4b 53 5a 62
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: -11 -6 -1 4 9 14 19 24 29 34 39 44 49 54 59 64
+  Y: -17 -9 -2 6 14 21 29 37 44 52 60 67 75 83 90 98
 1042     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 1043     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 1044     0      -      S_RES_ADD_2   | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -3864,17 +3846,17 @@ LN out_buf (decoded):
 1086     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 1087     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 in_buf (send)[112]:
-  0000: ec ff ff ff ef ff ff ff f2 ff ff ff f5 ff ff ff
-  0010: f8 ff ff ff fb ff ff ff fe ff ff ff 01 00 00 00
-  0020: 04 00 00 00 07 00 00 00 0a 00 00 00 0d 00 00 00
-  0030: 10 00 00 00 13 00 00 00 16 00 00 00 19 00 00 00
+  0000: ff ff ff 7f 00 00 00 80 50 c9 ff ff 08 d5 ff ff
+  0010: c0 e0 ff ff 78 ec ff ff 30 f8 ff ff e8 03 00 00
+  0020: a0 0f 00 00 58 1b 00 00 10 27 00 00 c8 32 00 00
+  0030: 80 3e 00 00 38 4a 00 00 f0 55 00 00 a8 61 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25
-  M: 4
-  N: 15
+  X: 2147483647 -2147483648 -14000 -11000 -8000 -5000 -2000 1000 4000 7000 10000 13000 16000 19000 22000 25000
+  M: 1327155345
+  N: 38
 1088     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 1089     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 1090     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
@@ -3883,12 +3865,12 @@ REQUANT in_buf (decoded):
 1093     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 1094     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 out_buf (done)[64]:
-  0000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 7f 80 d0 da e5 ef f9 03 0e 18 22 2c 37 41 4b 55
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Y: 127 -128 -48 -38 -27 -17 -7 3 14 24 34 44 55 65 75 85
 1095     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 1096     0      -      S_RQ1         | 0:-1- 1:-1- 2:--- 3:---
 1097     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
@@ -4223,8 +4205,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1000 1010 1020 1030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op K_RQ in_buf
 head_in_buf (send)[80]:
   0000: 4c 04 00 00 56 04 00 00 60 04 00 00 6a 04 00 00
@@ -4234,8 +4216,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1100 1110 1120 1130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 1154     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF000105 op=K_RQ layer=1 head=0 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF000105}
   Lane 1: state=3 req{instr=0xFF010105 op=K_RQ layer=1 head=1 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF010105}
@@ -4262,20 +4244,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF010105 op=K_RQ layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF010105}
 HEAD lane 0 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 HEAD lane 1 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 1162     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF000105 op=K_RQ layer=1 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF010105 op=K_RQ layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -4475,8 +4457,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2000 2010 2020 2030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op V_RQ in_buf
 head_in_buf (send)[80]:
   0000: 34 08 00 00 3e 08 00 00 48 08 00 00 52 08 00 00
@@ -4486,8 +4468,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2100 2110 2120 2130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 1200     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF000107 op=V_RQ layer=1 head=0 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF000107}
   Lane 1: state=3 req{instr=0xFF010107 op=V_RQ layer=1 head=1 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF010107}
@@ -4514,20 +4496,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF010107 op=V_RQ layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF010107}
 HEAD lane 0 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 HEAD lane 1 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 1208     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF000107 op=V_RQ layer=1 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF010107 op=V_RQ layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -4582,8 +4564,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3000 3010 3020 3030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op RQ_Q in_buf
 head_in_buf (send)[80]:
   0000: 1c 0c 00 00 26 0c 00 00 30 0c 00 00 3a 0c 00 00
@@ -4593,8 +4575,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3100 3110 3120 3130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 1223     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF000108 op=RQ_Q layer=1 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF000108}
   Lane 1: state=3 req{instr=0xFF010108 op=RQ_Q layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF010108}
@@ -4621,20 +4603,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF010108 op=RQ_Q layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF010108}
 HEAD lane 0 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 HEAD lane 1 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 1231     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF000108 op=RQ_Q layer=1 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF010108 op=RQ_Q layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -4855,20 +4837,20 @@ VALUE_SCALE in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF01010A op=VALUE_SCALE layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF01010A}
 HEAD lane 0 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: fa 00 fe 00 01 01 05 01 08 01 0c 01 0f 01 13 01
-  0010: 16 01 1a 01 1d 01 21 01 24 01 28 01 2b 01 2f 01
+  0000: 33 00 34 00 34 00 35 00 36 00 37 00 37 00 38 00
+  0010: 39 00 39 00 3a 00 3b 00 3c 00 3c 00 3d 00 3e 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 250 254 257 261 264 268 271 275 278 282 285 289 292 296 299 303
+  Y: 51 52 52 53 54 55 55 56 57 57 58 59 60 60 61 62
 HEAD lane 1 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: 13 01 17 01 1a 01 1e 01 21 01 25 01 28 01 2c 01
-  0010: 2f 01 33 01 36 01 3a 01 3d 01 41 01 44 01 48 01
+  0000: 38 00 39 00 3a 00 3a 00 3b 00 3c 00 3c 00 3d 00
+  0010: 3e 00 3f 00 3f 00 40 00 41 00 41 00 42 00 43 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 275 279 282 286 289 293 296 300 303 307 310 314 317 321 324 328
+  Y: 56 57 58 58 59 60 60 61 62 63 63 64 65 65 66 67
 1273     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF00010A op=VALUE_SCALE layer=1 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF01010A op=VALUE_SCALE layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -5177,8 +5159,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4000 4010 4020 4030
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 HEAD lane 1 op HEAD_RQ in_buf
 head_in_buf (send)[80]:
   0000: 04 10 00 00 0e 10 00 00 18 10 00 00 22 10 00 00
@@ -5188,8 +5170,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4100 4110 4120 4130
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 1326     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF00010D op=HEAD_RQ layer=1 head=0 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF00010D}
   Lane 1: state=3 req{instr=0xFF01010D op=HEAD_RQ layer=1 head=1 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF01010D}
@@ -5216,20 +5198,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF01010D op=HEAD_RQ layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF01010D}
 HEAD lane 0 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2a 2a 2a 2a 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 42 42 42 42
 HEAD lane 1 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2b 2b 2b 2b 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 43 43 43 43
 1334     0      -      S_ATT_HEADS   | 0:--- 1:--- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF00010D op=HEAD_RQ layer=1 head=0 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF000100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF01010D op=HEAD_RQ layer=1 head=1 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF010100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -5568,8 +5550,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1000 1010 1020 1030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op K_RQ in_buf
 head_in_buf (send)[80]:
   0000: 4c 04 00 00 56 04 00 00 60 04 00 00 6a 04 00 00
@@ -5579,8 +5561,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 1100 1110 1120 1130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 1393     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF020105 op=K_RQ layer=1 head=2 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF020105}
   Lane 1: state=3 req{instr=0xFF030105 op=K_RQ layer=1 head=3 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF030105}
@@ -5607,20 +5589,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF030105 op=K_RQ layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF030105}
 HEAD lane 0 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 HEAD lane 1 op K_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 03 03 03 03 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 3 3 3 3
 1401     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF020105 op=K_RQ layer=1 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF030105 op=K_RQ layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -5820,8 +5802,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2000 2010 2020 2030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op V_RQ in_buf
 head_in_buf (send)[80]:
   0000: 34 08 00 00 3e 08 00 00 48 08 00 00 52 08 00 00
@@ -5831,8 +5813,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 2100 2110 2120 2130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 1439     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF020107 op=V_RQ layer=1 head=2 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF020107}
   Lane 1: state=3 req{instr=0xFF030107 op=V_RQ layer=1 head=3 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF030107}
@@ -5859,20 +5841,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF030107 op=V_RQ layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF030107}
 HEAD lane 0 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 HEAD lane 1 op V_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 05 05 05 05 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 5 5 5 5
 1447     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF020107 op=V_RQ layer=1 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF030107 op=V_RQ layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -5927,8 +5909,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3000 3010 3020 3030
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 HEAD lane 1 op RQ_Q in_buf
 head_in_buf (send)[80]:
   0000: 1c 0c 00 00 26 0c 00 00 30 0c 00 00 3a 0c 00 00
@@ -5938,8 +5920,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 3100 3110 3120 3130
-  M: 32768
-  N: 15
+  M: 1375700707
+  N: 39
 1462     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF020108 op=RQ_Q layer=1 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF020108}
   Lane 1: state=3 req{instr=0xFF030108 op=RQ_Q layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF030108}
@@ -5966,20 +5948,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF030108 op=RQ_Q layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF030108}
 HEAD lane 0 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 HEAD lane 1 op RQ_Q out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 08 08 08 08 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 8 8 8 8
 1470     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF020108 op=RQ_Q layer=1 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF030108 op=RQ_Q layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -6200,20 +6182,20 @@ VALUE_SCALE in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF03010A op=VALUE_SCALE layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF03010A}
 HEAD lane 0 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: fa 00 fe 00 01 01 05 01 08 01 0c 01 0f 01 13 01
-  0010: 16 01 1a 01 1d 01 21 01 24 01 28 01 2b 01 2f 01
+  0000: 33 00 34 00 34 00 35 00 36 00 37 00 37 00 38 00
+  0010: 39 00 39 00 3a 00 3b 00 3c 00 3c 00 3d 00 3e 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 250 254 257 261 264 268 271 275 278 282 285 289 292 296 299 303
+  Y: 51 52 52 53 54 55 55 56 57 57 58 59 60 60 61 62
 HEAD lane 1 op VALUE_SCALE out_buf
 head_out_buf (done)[64]:
-  0000: 13 01 17 01 1a 01 1e 01 21 01 25 01 28 01 2c 01
-  0010: 2f 01 33 01 36 01 3a 01 3d 01 41 01 44 01 48 01
+  0000: 38 00 39 00 3a 00 3a 00 3b 00 3c 00 3c 00 3d 00
+  0010: 3e 00 3f 00 3f 00 40 00 41 00 41 00 42 00 43 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD out_buf (decoded):
-  Y: 275 279 282 286 289 293 296 300 303 307 310 314 317 321 324 328
+  Y: 56 57 58 58 59 60 60 61 62 63 63 64 65 65 66 67
 1512     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF02010A op=VALUE_SCALE layer=1 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF03010A op=VALUE_SCALE layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -6522,8 +6504,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4000 4010 4020 4030
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 HEAD lane 1 op HEAD_RQ in_buf
 head_in_buf (send)[80]:
   0000: 04 10 00 00 0e 10 00 00 18 10 00 00 22 10 00 00
@@ -6533,8 +6515,8 @@ head_in_buf (send)[80]:
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT in_buf (decoded):
   X: 4100 4110 4120 4130
-  M: 32768
-  N: 15
+  M: 1431655765
+  N: 37
 1565     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=3 req{instr=0xFF02010D op=HEAD_RQ layer=1 head=2 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF02010D}
   Lane 1: state=3 req{instr=0xFF03010D op=HEAD_RQ layer=1 head=3 tile=255} mac{busy=0 ready=0 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0xFF03010D}
@@ -6561,20 +6543,20 @@ HEAD_REQUANT in_buf (decoded):
   Lane 1: state=4 req{instr=0xFF03010D op=HEAD_RQ layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=0 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=1 done=0 op=0xFF03010D}
 HEAD lane 0 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2a 2a 2a 2a 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 42 42 42 42
 HEAD lane 1 op HEAD_RQ out_buf
 head_out_buf (done)[64]:
-  0000: 7f 7f 7f 7f 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 2b 2b 2b 2b 00 00 00 00 00 00 00 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 HEAD_REQUANT out_buf (decoded):
-  Y: 127 127 127 127
+  Y: 43 43 43 43
 1573     0      -      S_ATT_HEADS   | 0:-1- 1:-1- 2:--- 3:---
   Lane 0: state=5 req{instr=0xFF02010D op=HEAD_RQ layer=1 head=2 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF020100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
   Lane 1: state=5 req{instr=0xFF03010D op=HEAD_RQ layer=1 head=3 tile=255} mac{busy=0 ready=1 complete=0 start=0} pend{clr=1 cap=0} err=0 compute{start=0 instr=0xFF030100 ready=0 done=0} mem{rd=0 wr=0 done=1 op=0x00000000}
@@ -6763,17 +6745,17 @@ OUT_PROJ out_buf (decoded):
 1678     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 1679     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 in_buf (send)[112]:
-  0000: 05 00 00 00 07 00 00 00 09 00 00 00 0b 00 00 00
-  0010: 0d 00 00 00 0f 00 00 00 11 00 00 00 13 00 00 00
-  0020: 15 00 00 00 17 00 00 00 19 00 00 00 1b 00 00 00
-  0030: 1d 00 00 00 1f 00 00 00 21 00 00 00 23 00 00 00
+  0000: 88 13 00 00 58 1b 00 00 28 23 00 00 f8 2a 00 00
+  0010: c8 32 00 00 98 3a 00 00 68 42 00 00 38 4a 00 00
+  0020: 08 52 00 00 d8 59 00 00 a8 61 00 00 78 69 00 00
+  0030: 48 71 00 00 18 79 00 00 e8 80 00 00 b8 88 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35
-  M: 32768
-  N: 15
+  X: 5000 7000 9000 11000 13000 15000 17000 19000 21000 23000 25000 27000 29000 31000 33000 35000
+  M: 1375700707
+  N: 39
 1680     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 1681     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 1682     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6782,12 +6764,12 @@ REQUANT in_buf (decoded):
 1685     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 1686     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 05 07 09 0b 0d 0f 11 13 15 17 19 1b 1d 1f 21 23
+  0000: 0d 12 17 1c 21 26 2b 30 35 3a 3f 44 49 4e 53 58
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35
+  Y: 13 18 23 28 33 38 43 48 53 58 63 68 73 78 83 88
 1687     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 1688     0      -      S_RQ2         | 0:-1- 1:-1- 2:-1- 3:-1-
 1689     0      -      S_RES_ADD_1   | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6870,17 +6852,17 @@ LN out_buf (decoded):
 1729     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 1730     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 in_buf (send)[112]:
-  0000: 64 00 00 00 60 00 00 00 5c 00 00 00 58 00 00 00
-  0010: 54 00 00 00 50 00 00 00 4c 00 00 00 48 00 00 00
-  0020: 44 00 00 00 40 00 00 00 3c 00 00 00 38 00 00 00
-  0030: 34 00 00 00 30 00 00 00 2c 00 00 00 28 00 00 00
+  0000: ff ff ff 7f 00 00 00 80 60 67 01 00 c0 57 01 00
+  0010: 20 48 01 00 80 38 01 00 e0 28 01 00 40 19 01 00
+  0020: a0 09 01 00 00 fa 00 00 60 ea 00 00 c0 da 00 00
+  0030: 20 cb 00 00 80 bb 00 00 e0 ab 00 00 40 9c 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: 100 96 92 88 84 80 76 72 68 64 60 56 52 48 44 40
-  M: 4
-  N: 15
+  X: 2147483647 -2147483648 92000 88000 84000 80000 76000 72000 68000 64000 60000 56000 52000 48000 44000 40000
+  M: 1204963673
+  N: 36
 1731     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 1732     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 1733     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6889,12 +6871,12 @@ REQUANT in_buf (decoded):
 1736     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 1737     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0000: 7f 80 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f 7f
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Y: 127 -128 127 127 127 127 127 127 127 127 127 127 127 127 127 127
 1738     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 1739     0      -      S_RQ3         | 0:-1- 1:-1- 2:-1- 3:-1-
 1740     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6913,15 +6895,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1752     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1753     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1754     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6932,12 +6913,12 @@ FFN_W1 in_buf (decoded):
 1759     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1760     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1761     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1762     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1763     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6956,15 +6937,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1775     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1776     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1777     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6975,12 +6955,12 @@ FFN_W1 in_buf (decoded):
 1782     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1783     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1784     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1785     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1786     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -6999,15 +6979,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1798     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1799     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1800     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7018,12 +6997,12 @@ FFN_W1 in_buf (decoded):
 1805     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1806     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1807     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1808     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1809     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7042,15 +7021,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1821     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1822     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1823     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7061,12 +7039,12 @@ FFN_W1 in_buf (decoded):
 1828     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1829     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1830     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1831     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1832     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7085,15 +7063,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1844     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1845     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1846     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7104,12 +7081,12 @@ FFN_W1 in_buf (decoded):
 1851     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1852     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1853     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1854     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1855     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7128,15 +7105,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1867     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1868     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1869     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7147,12 +7123,12 @@ FFN_W1 in_buf (decoded):
 1874     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1875     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1876     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1877     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1878     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7171,15 +7147,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1890     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1891     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1892     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7190,12 +7165,12 @@ FFN_W1 in_buf (decoded):
 1897     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1898     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1899     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1900     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1901     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7214,15 +7189,14 @@ in_buf (send)[112]:
   0000: 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12
   0010: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0020: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0030: 11 11 11 11 11 11 11 11 07 00 00 00 07 00 00 00
-  0040: 07 00 00 00 07 00 00 00 07 00 00 00 00 40 00 40
-  0050: 00 40 00 40 00 40 00 00 00 00 00 00 00 00 00 00
+  0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0040: 07 00 00 00 07 00 00 00 07 00 00 00 07 00 00 00
+  0050: 07 00 00 00 07 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 in_buf (decoded):
   X: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  B: 7 7 7 7 7
-  S: 16384 16384 16384 16384 16384
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  B: 7 7 7 7 7 7
 1913     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1914     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1915     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7233,12 +7207,12 @@ FFN_W1 in_buf (decoded):
 1920     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1921     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: 58 00 58 00 58 00 58 00 58 00 00 00 00 00 00 00
+  0000: 58 00 58 00 58 00 58 00 58 00 58 00 00 00 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W1 out_buf (decoded):
-  Y: 88 88 88 88 88
+  Y: 88 88 88 88 88 88
 1922     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1923     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1924     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7253,19 +7227,19 @@ FFN_W1 out_buf (decoded):
 in_buf (send)[112]:
   0000: ec ff ef ff f2 ff f5 ff f8 ff fb ff fe ff 01 00
   0010: 04 00 07 00 0a 00 0d 00 10 00 13 00 16 00 19 00
-  0020: 1c 00 1f 00 22 00 25 00 28 00 2b 00 f6 ff f8 ff
-  0030: fa ff fc ff fe ff 00 00 02 00 04 00 06 00 08 00
-  0040: 0a 00 0c 00 0e 00 10 00 12 00 14 00 16 00 18 00
-  0050: 1a 00 1c 00 1e 00 20 00 00 00 00 00 00 00 00 00
+  0020: 1c 00 1f 00 22 00 25 00 28 00 2b 00 2e 00 31 00
+  0030: f6 ff f8 ff fa ff fc ff fe ff 00 00 02 00 04 00
+  0040: 06 00 08 00 0a 00 0c 00 0e 00 10 00 12 00 14 00
+  0050: 16 00 18 00 1a 00 1c 00 1e 00 20 00 22 00 24 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_ACT in_buf (decoded):
-  GATE: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43
-  UP: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32
+  GATE: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49
+  UP: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36
 1933     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
-FFN_ACT gate: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43
-FFN_ACT sigmoid: 16352 16352 16352 16352 16352 16352 16352 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416
-FFN_ACT up: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32
-FFN_ACT out: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+FFN_ACT gate: -20 -17 -14 -11 -8 -5 -2 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49
+FFN_ACT sigmoid: 16352 16352 16352 16352 16352 16352 16352 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416 16416
+FFN_ACT up: -10 -8 -6 -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36
+FFN_ACT out: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 1934     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1935     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1936     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7275,10 +7249,10 @@ FFN_ACT out: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
 out_buf (done)[64]:
   0000: fb ff fc ff fd ff fe ff ff ff 00 00 00 00 02 00
   0010: 03 00 04 00 05 00 06 00 07 00 08 00 09 00 0a 00
-  0020: 0b 00 0c 00 0d 00 0e 00 0f 00 10 00 00 00 00 00
+  0020: 0b 00 0c 00 0d 00 0e 00 0f 00 10 00 11 00 12 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_ACT out_buf (decoded):
-  Y: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+  Y: -5 -4 -3 -2 -1 0 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 1940     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1941     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1942     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7296,16 +7270,15 @@ FFN_ACT out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 1954     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1955     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1956     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7316,12 +7289,12 @@ FFN_W2 in_buf (decoded):
 1961     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1962     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 1963     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1964     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1965     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7339,16 +7312,15 @@ FFN_W2 out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 1977     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1978     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1979     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7359,12 +7331,12 @@ FFN_W2 in_buf (decoded):
 1984     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1985     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 1986     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1987     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 1988     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7382,16 +7354,15 @@ FFN_W2 out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 2000     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2001     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2002     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7402,12 +7373,12 @@ FFN_W2 in_buf (decoded):
 2007     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2008     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 2009     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2010     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2011     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7425,16 +7396,15 @@ FFN_W2 out_buf (decoded):
 in_buf (send)[112]:
   0000: 01 00 03 00 05 00 07 00 09 00 0b 00 0d 00 0f 00
   0010: 11 00 13 00 15 00 17 00 19 00 1b 00 1d 00 1f 00
-  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 11 11 11 11
+  0020: 21 00 23 00 25 00 27 00 29 00 2b 00 2d 00 2f 00
   0030: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
   0040: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
-  0050: 11 11 11 11 11 11 11 11 05 00 00 00 05 00 00 00
-  0060: 05 00 00 00 05 00 00 00 00 40 00 40 00 40 00 40
+  0050: 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11
+  0060: 05 00 00 00 05 00 00 00 05 00 00 00 05 00 00 00
 FFN_W2 in_buf (decoded):
-  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  X: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47
+  W: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
   B: 5 5 5 5
-  S: 16384 16384 16384 16384
 2023     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2024     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2025     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7445,12 +7415,12 @@ FFN_W2 in_buf (decoded):
 2030     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2031     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 00 00 00 f5 00 00 00 f5 00 00 00 f5 00 00 00
+  0000: 23 01 00 00 23 01 00 00 23 01 00 00 23 01 00 00
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 FFN_W2 out_buf (decoded):
-  Y: 245 245 245 245
+  Y: 291 291 291 291
 2032     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2033     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
 2034     0      -      S_FFN         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7463,17 +7433,17 @@ FFN_W2 out_buf (decoded):
 2041     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 2042     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 in_buf (send)[112]:
-  0000: f5 ff ff ff fa ff ff ff ff ff ff ff 04 00 00 00
-  0010: 09 00 00 00 0e 00 00 00 13 00 00 00 18 00 00 00
-  0020: 1d 00 00 00 22 00 00 00 27 00 00 00 2c 00 00 00
-  0030: 31 00 00 00 36 00 00 00 3b 00 00 00 40 00 00 00
+  0000: 08 d5 ff ff 90 e8 ff ff 18 fc ff ff a0 0f 00 00
+  0010: 28 23 00 00 b0 36 00 00 38 4a 00 00 c0 5d 00 00
+  0020: 48 71 00 00 d0 84 00 00 58 98 00 00 e0 ab 00 00
+  0030: 68 bf 00 00 f0 d2 00 00 78 e6 00 00 00 fa 00 00
   0040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT in_buf (decoded):
-  X: -11 -6 -1 4 9 14 19 24 29 34 39 44 49 54 59 64
-  M: 32768
-  N: 15
+  X: -11000 -6000 -1000 4000 9000 14000 19000 24000 29000 34000 39000 44000 49000 54000 59000 64000
+  M: 1684882386
+  N: 40
 2043     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 2044     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 2045     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7482,12 +7452,12 @@ REQUANT in_buf (decoded):
 2048     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 2049     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 out_buf (done)[64]:
-  0000: f5 fa ff 04 09 0e 13 18 1d 22 27 2c 31 36 3b 40
+  0000: ef f7 fe 06 0e 15 1d 25 2c 34 3c 43 4b 53 5a 62
   0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   0030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 REQUANT out_buf (decoded):
-  Y: -11 -6 -1 4 9 14 19 24 29 34 39 44 49 54 59 64
+  Y: -17 -9 -2 6 14 21 29 37 44 52 60 67 75 83 90 98
 2050     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 2051     0      -      S_RQ4         | 0:-1- 1:-1- 2:-1- 3:-1-
 2052     0      -      S_RES_ADD_2   | 0:-1- 1:-1- 2:-1- 3:-1-
@@ -7571,6 +7541,6 @@ LN out_buf (decoded):
 PASS: STREAM_OUT reached and FSM stayed IDLE for 4 cycles after.
 INFO: [SIM 211-1] CSim done with 0 errors.
 INFO: [SIM 211-3] *************** CSIM finish ***************
-INFO: [HLS 200-112] Total CPU user time: 16.66 seconds. Total CPU system time: 1.55 seconds. Total elapsed time: 18.22 seconds; peak allocated memory: 445.102 MB.
-INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 22s
+INFO: [HLS 200-112] Total CPU user time: 2.26 seconds. Total CPU system time: 0.71 seconds. Total elapsed time: 3 seconds; peak allocated memory: 445.102 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 6s
 C-simulation finished successfully
