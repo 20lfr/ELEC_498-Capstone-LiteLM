@@ -385,9 +385,9 @@ static void headed_compute_controller_lane(
         case ComputeState::EXECUTE: {
             next_state = ComputeState::MEM_WRITEBACK;
             switch (ctx.req.op) {
-                case ComputeOp::CMP_Q:
-                case ComputeOp::CMP_K:
-                case ComputeOp::CMP_V: {
+                case ComputeOp::CMP_Q:              // Q0.7   -> Qacc
+                case ComputeOp::CMP_K:              // Q0.7   -> Qacc
+                case ComputeOp::CMP_V: {            // Q0.7   -> Qacc  
                     // INIT the Vector Buffer
                     for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
@@ -395,7 +395,7 @@ static void headed_compute_controller_lane(
                     }
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
-                        head_vec[i] = compute_buf::read_i8(in_buf, head_buf::QkvLayout::ACT + i);
+                        head_vec[i] = compute_buf::read_i8(in_buf, head_buf::INQkvLayout::ACT + i);
                     }
                     
                     // INIT the Matrix Buffer
@@ -408,14 +408,14 @@ static void headed_compute_controller_lane(
                         for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL
                             const int w_idx = (h * D_MODEL) + i;
-                            head_mat[h * HEAD_VECTOR_MAX + i] = static_cast<int8_t>(compute_buf::read_i4(in_buf, (head_buf::QkvLayout::W * 2) + w_idx));
+                            head_mat[h * HEAD_VECTOR_MAX + i] = static_cast<int8_t>(compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::W * 2) + w_idx));
                         }
                     }
                     
                     // INIT the Bias Buffer
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                        head_bias[h] = compute_buf::read_i4(in_buf, (head_buf::QkvLayout::B * 2) + h);
+                        head_bias[h] = compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::B * 2) + h);
                     }
                     for (int h = D_HEADS; h < HEAD_ACCUM_MAX; ++h) {
 #pragma HLS PIPELINE II=1
@@ -437,24 +437,50 @@ static void headed_compute_controller_lane(
                     }
                     break;
                 }
-                case ComputeOp::CMP_K_REQUANT:
-                case ComputeOp::CMP_V_REQUANT:
-                case ComputeOp::CMP_REQUANT_Q:
-                case ComputeOp::CMP_HEAD_REQUANT: {
+                case ComputeOp::CMP_K_REQUANT:      // Qacc   -> Q0.7    [After K]
+                case ComputeOp::CMP_V_REQUANT:      // Qacc   -> Q0.7    [After V]
+                case ComputeOp::CMP_REQUANT_Q:      // Qacc   -> Q0.7    [After Q]
+                case ComputeOp::CMP_HEAD_REQUANT:{  // Qacc   -> Q0.7    [After Attention Values]
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                        head_x32[h] = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::X + (h * 4));
+                        head_x32[h] = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4));
                     }
-                    const int32_t M = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::M);
-                    const int32_t n = compute_buf::read_i32(in_buf, head_buf::HeadRequantLayout::N);
+                    int32_t M = 1;
+                    int32_t n = 0;
+                    int layer = static_cast<int>(ctx.req.layer_idx);
+                    if (layer < 0 || layer >= MODEL_LAYERS) {
+                        layer = 0;
+                    }
+
+                    // M and N mux
+                    switch (ctx.req.op) {
+                        case ComputeOp::CMP_K_REQUANT:
+                            M = requant_params::REQUANT_K_M_L[layer];
+                            n = requant_params::REQUANT_K_N_L[layer];
+                            break;
+                        case ComputeOp::CMP_V_REQUANT:
+                            M = requant_params::REQUANT_V_M_L[layer];
+                            n = requant_params::REQUANT_V_N_L[layer];
+                            break;
+                        case ComputeOp::CMP_REQUANT_Q:
+                            M = requant_params::REQUANT_Q_M_L[layer];
+                            n = requant_params::REQUANT_Q_N_L[layer];
+                            break;
+                        case ComputeOp::CMP_HEAD_REQUANT:
+                            M = requant_params::REQUANT_HEAD_M_L[layer];
+                            n = requant_params::REQUANT_HEAD_N_L[layer];
+                            break;
+                        default:
+                            break;
+                    }
                     REQUANT_D_HEADS_int32_to_int8(head_x32, M, n, head_y8);
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                        compute_buf::write_i8(out_buf, head_buf::HeadRequantLayout::X + h, head_y8[h]);
+                        compute_buf::write_i8(out_buf, head_buf::INHeadRequantLayout::X + h, head_y8[h]);
                     }
                     break;
                 }
-                case ComputeOp::CMP_ATT_SCORES: {
+                case ComputeOp::CMP_ATT_SCORES: {   // Q0.7   -> Qacc
                     // INIT the Vector Buffer
                     for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
@@ -462,7 +488,7 @@ static void headed_compute_controller_lane(
                     }
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                        head_vec[h] = compute_buf::read_i8(in_buf, head_buf::AttScoresLayout::Q + h);
+                        head_vec[h] = compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + h);
                     }
 
                     // INIT K cache matrix buffer
@@ -476,7 +502,7 @@ static void headed_compute_controller_lane(
 #pragma HLS UNROLL
                             const int k_idx = (t * D_HEADS) + h;
                             head_mat[t * HEAD_VECTOR_MAX + h] =
-                                compute_buf::read_i8(in_buf, head_buf::AttScoresLayout::K_CACHE + k_idx);
+                                compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::K_CACHE + k_idx);
                         }
                     }
                     
@@ -501,10 +527,10 @@ static void headed_compute_controller_lane(
                     }
                     break;
                 }
-                case ComputeOp::CMP_VALUE_SCALE: {
+                case ComputeOp::CMP_VALUE_SCALE: {  // Qacc   -> Q1.15
                     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
-                        val_in[t] = compute_buf::read_i32(in_buf, head_buf::ValueScaleLayout::X + (t * 4));
+                        val_in[t] = compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4));
                     }
                     VALUE_SCALE_CLAMP(val_in, val_scaled);
                     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
@@ -513,10 +539,10 @@ static void headed_compute_controller_lane(
                     }
                     break;
                 }
-                case ComputeOp::CMP_SOFTMAX: {
+                case ComputeOp::CMP_SOFTMAX: {      // Q1.15  -> Q1.15
                     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
-                        soft_in[t] = compute_buf::read_i16(in_buf, head_buf::SoftmaxLayout::X + (t * 2));
+                        soft_in[t] = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (t * 2));
                     }
                     SOFTMAX(soft_in, soft_out);
                     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
@@ -525,7 +551,7 @@ static void headed_compute_controller_lane(
                     }
                     break;
                 }
-                case ComputeOp::CMP_ATT_VALUE: {
+                case ComputeOp::CMP_ATT_VALUE: {    // Q0.7   -> Qacc
                     // INIT the Vector Buffer
                     for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS PIPELINE II=1
@@ -533,7 +559,7 @@ static void headed_compute_controller_lane(
                     }
                     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
-                        head_vec[t] = compute_buf::read_i8(in_buf, head_buf::AttValueLayout::WEIGHTS + t);
+                        head_vec[t] = compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::WEIGHTS + t);
                     }
 
                     // INIT V cache matrix buffer
@@ -547,7 +573,7 @@ static void headed_compute_controller_lane(
 #pragma HLS UNROLL
                             const int v_idx = (h * CONTEXT_LENGTH) + t;
                             head_mat[h * HEAD_VECTOR_MAX + t] =
-                                compute_buf::read_i8(in_buf, head_buf::AttValueLayout::V_CACHE + v_idx);
+                                compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + v_idx);
                         }
                     }
                     

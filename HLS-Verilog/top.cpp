@@ -47,7 +47,7 @@ void transformer_top(
     uint32_t    &mem_op,             // [OUTPUT] Opcode for memory manager
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
-     const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
 
     // ------------------------------------------------------------

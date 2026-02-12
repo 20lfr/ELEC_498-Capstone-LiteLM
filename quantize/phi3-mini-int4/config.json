@@ -34,3 +34,11 @@
   "use_cache": true,
   "vocab_size": 32064
 }
+
+// C = x  * W_combined [12288]
+// C = [w_gate | w_up]
+
+
+
+// D = C_up * SiLu(C_gate)
+// G = D * W_down

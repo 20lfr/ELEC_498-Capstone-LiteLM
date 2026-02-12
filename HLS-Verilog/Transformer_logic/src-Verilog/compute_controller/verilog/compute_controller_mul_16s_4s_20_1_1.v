@@ -2,7 +2,7 @@
 
 `timescale 1 ns / 1 ps
 
-module transformer_top_mul_32s_32s_45_1_1(din0, din1, dout);
+ module compute_controller_mul_16s_4s_20_1_1(din0, din1, dout);
 parameter ID = 1;
 parameter NUM_STAGE = 0;
 parameter din0_WIDTH = 14;
