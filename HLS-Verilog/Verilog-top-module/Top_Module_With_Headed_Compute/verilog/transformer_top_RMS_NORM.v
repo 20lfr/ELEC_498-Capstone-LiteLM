@@ -225,123 +225,123 @@ reg   [22:0] sext_ln_reg_1470;
 wire    ap_CS_fsm_state10;
 wire    ap_CS_fsm_state11;
 wire   [26:0] grp_fu_426_p2;
-reg   [26:0] udiv_ln129_reg_1480;
+reg   [26:0] udiv_ln154_reg_1480;
 wire    ap_CS_fsm_state41;
-wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start;
-wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_done;
-wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_idle;
-wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_ready;
-wire   [18:0] grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out;
-wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out_ap_vld;
-reg    grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start_reg;
+wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start;
+wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_done;
+wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_idle;
+wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_ready;
+wire   [18:0] grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_square_out;
+wire    grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_square_out_ap_vld;
+reg    grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start_reg;
 wire    ap_CS_fsm_state2;
 reg   [18:0] square_loc_fu_130;
 wire    ap_CS_fsm_state4;
 wire    ap_CS_fsm_state42;
-wire   [26:0] mul_ln132_fu_166_p0;
-wire   [44:0] zext_ln132_fu_439_p1;
-wire   [26:0] mul_ln132_1_fu_170_p0;
-wire   [26:0] mul_ln132_2_fu_174_p0;
-wire   [26:0] mul_ln132_3_fu_178_p0;
-wire   [26:0] mul_ln132_4_fu_182_p0;
-wire   [26:0] mul_ln132_5_fu_186_p0;
-wire   [26:0] mul_ln132_6_fu_190_p0;
-wire   [26:0] mul_ln132_7_fu_194_p0;
-wire   [26:0] mul_ln132_8_fu_198_p0;
-wire   [26:0] mul_ln132_9_fu_202_p0;
-wire   [26:0] mul_ln132_10_fu_206_p0;
-wire   [26:0] mul_ln132_11_fu_210_p0;
-wire   [26:0] mul_ln132_12_fu_214_p0;
-wire   [26:0] mul_ln132_13_fu_218_p0;
-wire   [26:0] mul_ln132_14_fu_222_p0;
-wire   [26:0] mul_ln132_15_fu_226_p0;
-wire   [17:0] trunc_ln124_fu_377_p1;
+wire   [26:0] mul_ln157_fu_166_p0;
+wire   [44:0] zext_ln157_fu_439_p1;
+wire   [26:0] mul_ln157_1_fu_170_p0;
+wire   [26:0] mul_ln157_2_fu_174_p0;
+wire   [26:0] mul_ln157_3_fu_178_p0;
+wire   [26:0] mul_ln157_4_fu_182_p0;
+wire   [26:0] mul_ln157_5_fu_186_p0;
+wire   [26:0] mul_ln157_6_fu_190_p0;
+wire   [26:0] mul_ln157_7_fu_194_p0;
+wire   [26:0] mul_ln157_8_fu_198_p0;
+wire   [26:0] mul_ln157_9_fu_202_p0;
+wire   [26:0] mul_ln157_10_fu_206_p0;
+wire   [26:0] mul_ln157_11_fu_210_p0;
+wire   [26:0] mul_ln157_12_fu_214_p0;
+wire   [26:0] mul_ln157_13_fu_218_p0;
+wire   [26:0] mul_ln157_14_fu_222_p0;
+wire   [26:0] mul_ln157_15_fu_226_p0;
+wire   [17:0] trunc_ln149_fu_377_p1;
 wire   [0:0] tmp_fu_389_p3;
 wire   [26:0] shl_ln_fu_381_p3;
 wire   [26:0] mean_square_fu_397_p3;
-wire   [31:0] zext_ln124_fu_405_p1;
-wire   [31:0] shl_ln9_fu_409_p3;
+wire   [31:0] zext_ln149_fu_405_p1;
+wire   [31:0] shl_ln1_fu_409_p3;
 wire   [22:0] grp_fu_426_p1;
 wire  signed [20:0] shl_ln2_fu_432_p3;
-wire   [44:0] mul_ln132_fu_166_p2;
+wire   [44:0] mul_ln157_fu_166_p2;
 wire  signed [31:0] normalized_fu_463_p4;
 wire  signed [31:0] shl_ln3_fu_477_p3;
-wire   [44:0] mul_ln140_fu_230_p2;
-wire  signed [20:0] shl_ln132_1_fu_505_p3;
-wire   [44:0] mul_ln132_1_fu_170_p2;
+wire   [44:0] mul_ln165_fu_230_p2;
+wire  signed [20:0] shl_ln157_1_fu_505_p3;
+wire   [44:0] mul_ln157_1_fu_170_p2;
 wire  signed [31:0] normalized_1_fu_517_p4;
-wire  signed [20:0] shl_ln132_2_fu_532_p3;
-wire   [44:0] mul_ln132_2_fu_174_p2;
+wire  signed [20:0] shl_ln157_2_fu_532_p3;
+wire   [44:0] mul_ln157_2_fu_174_p2;
 wire  signed [31:0] normalized_2_fu_544_p4;
-wire  signed [20:0] shl_ln132_3_fu_559_p3;
-wire   [44:0] mul_ln132_3_fu_178_p2;
+wire  signed [20:0] shl_ln157_3_fu_559_p3;
+wire   [44:0] mul_ln157_3_fu_178_p2;
 wire  signed [31:0] normalized_3_fu_571_p4;
-wire  signed [20:0] shl_ln132_4_fu_586_p3;
-wire   [44:0] mul_ln132_4_fu_182_p2;
+wire  signed [20:0] shl_ln157_4_fu_586_p3;
+wire   [44:0] mul_ln157_4_fu_182_p2;
 wire  signed [31:0] normalized_4_fu_598_p4;
-wire  signed [20:0] shl_ln132_5_fu_613_p3;
-wire   [44:0] mul_ln132_5_fu_186_p2;
+wire  signed [20:0] shl_ln157_5_fu_613_p3;
+wire   [44:0] mul_ln157_5_fu_186_p2;
 wire  signed [31:0] normalized_5_fu_625_p4;
-wire  signed [20:0] shl_ln132_6_fu_640_p3;
-wire   [44:0] mul_ln132_6_fu_190_p2;
+wire  signed [20:0] shl_ln157_6_fu_640_p3;
+wire   [44:0] mul_ln157_6_fu_190_p2;
 wire  signed [31:0] normalized_6_fu_652_p4;
-wire  signed [20:0] shl_ln132_7_fu_667_p3;
-wire   [44:0] mul_ln132_7_fu_194_p2;
+wire  signed [20:0] shl_ln157_7_fu_667_p3;
+wire   [44:0] mul_ln157_7_fu_194_p2;
 wire  signed [31:0] normalized_7_fu_679_p4;
-wire  signed [20:0] shl_ln132_8_fu_694_p3;
-wire   [44:0] mul_ln132_8_fu_198_p2;
+wire  signed [20:0] shl_ln157_8_fu_694_p3;
+wire   [44:0] mul_ln157_8_fu_198_p2;
 wire  signed [31:0] normalized_8_fu_706_p4;
-wire  signed [20:0] shl_ln132_9_fu_721_p3;
-wire   [44:0] mul_ln132_9_fu_202_p2;
+wire  signed [20:0] shl_ln157_9_fu_721_p3;
+wire   [44:0] mul_ln157_9_fu_202_p2;
 wire  signed [31:0] normalized_9_fu_733_p4;
-wire  signed [20:0] shl_ln132_s_fu_748_p3;
-wire   [44:0] mul_ln132_10_fu_206_p2;
+wire  signed [20:0] shl_ln157_s_fu_748_p3;
+wire   [44:0] mul_ln157_10_fu_206_p2;
 wire  signed [31:0] normalized_16_fu_760_p4;
-wire  signed [20:0] shl_ln132_10_fu_775_p3;
-wire   [44:0] mul_ln132_11_fu_210_p2;
+wire  signed [20:0] shl_ln157_10_fu_775_p3;
+wire   [44:0] mul_ln157_11_fu_210_p2;
 wire  signed [31:0] normalized_10_fu_787_p4;
-wire  signed [20:0] shl_ln132_11_fu_802_p3;
-wire   [44:0] mul_ln132_12_fu_214_p2;
+wire  signed [20:0] shl_ln157_11_fu_802_p3;
+wire   [44:0] mul_ln157_12_fu_214_p2;
 wire  signed [31:0] normalized_11_fu_814_p4;
-wire  signed [20:0] shl_ln132_12_fu_829_p3;
-wire   [44:0] mul_ln132_13_fu_218_p2;
+wire  signed [20:0] shl_ln157_12_fu_829_p3;
+wire   [44:0] mul_ln157_13_fu_218_p2;
 wire  signed [31:0] normalized_12_fu_841_p4;
-wire  signed [20:0] shl_ln132_13_fu_856_p3;
-wire   [44:0] mul_ln132_14_fu_222_p2;
+wire  signed [20:0] shl_ln157_13_fu_856_p3;
+wire   [44:0] mul_ln157_14_fu_222_p2;
 wire  signed [31:0] normalized_13_fu_868_p4;
-wire  signed [20:0] shl_ln132_14_fu_883_p3;
-wire   [44:0] mul_ln132_15_fu_226_p2;
-wire  signed [31:0] shl_ln140_1_fu_909_p3;
-wire   [44:0] mul_ln140_1_fu_234_p2;
-wire  signed [31:0] shl_ln140_2_fu_936_p3;
-wire   [44:0] mul_ln140_2_fu_238_p2;
-wire  signed [31:0] shl_ln140_3_fu_963_p3;
-wire   [44:0] mul_ln140_3_fu_242_p2;
-wire  signed [31:0] shl_ln140_4_fu_990_p3;
-wire   [44:0] mul_ln140_4_fu_246_p2;
-wire  signed [31:0] shl_ln140_5_fu_1017_p3;
-wire   [44:0] mul_ln140_5_fu_250_p2;
-wire  signed [31:0] shl_ln140_6_fu_1044_p3;
-wire   [44:0] mul_ln140_6_fu_254_p2;
-wire  signed [31:0] shl_ln140_7_fu_1071_p3;
-wire   [44:0] mul_ln140_7_fu_258_p2;
-wire  signed [31:0] shl_ln140_8_fu_1098_p3;
-wire   [44:0] mul_ln140_8_fu_262_p2;
-wire  signed [31:0] shl_ln140_9_fu_1125_p3;
-wire   [44:0] mul_ln140_9_fu_266_p2;
-wire  signed [31:0] shl_ln140_s_fu_1152_p3;
-wire   [44:0] mul_ln140_10_fu_270_p2;
-wire  signed [31:0] shl_ln140_10_fu_1179_p3;
-wire   [44:0] mul_ln140_11_fu_274_p2;
-wire  signed [31:0] shl_ln140_11_fu_1206_p3;
-wire   [44:0] mul_ln140_12_fu_278_p2;
-wire  signed [31:0] shl_ln140_12_fu_1233_p3;
-wire   [44:0] mul_ln140_13_fu_282_p2;
-wire  signed [31:0] shl_ln140_13_fu_1260_p3;
-wire   [44:0] mul_ln140_14_fu_286_p2;
+wire  signed [20:0] shl_ln157_14_fu_883_p3;
+wire   [44:0] mul_ln157_15_fu_226_p2;
+wire  signed [31:0] shl_ln165_1_fu_909_p3;
+wire   [44:0] mul_ln165_1_fu_234_p2;
+wire  signed [31:0] shl_ln165_2_fu_936_p3;
+wire   [44:0] mul_ln165_2_fu_238_p2;
+wire  signed [31:0] shl_ln165_3_fu_963_p3;
+wire   [44:0] mul_ln165_3_fu_242_p2;
+wire  signed [31:0] shl_ln165_4_fu_990_p3;
+wire   [44:0] mul_ln165_4_fu_246_p2;
+wire  signed [31:0] shl_ln165_5_fu_1017_p3;
+wire   [44:0] mul_ln165_5_fu_250_p2;
+wire  signed [31:0] shl_ln165_6_fu_1044_p3;
+wire   [44:0] mul_ln165_6_fu_254_p2;
+wire  signed [31:0] shl_ln165_7_fu_1071_p3;
+wire   [44:0] mul_ln165_7_fu_258_p2;
+wire  signed [31:0] shl_ln165_8_fu_1098_p3;
+wire   [44:0] mul_ln165_8_fu_262_p2;
+wire  signed [31:0] shl_ln165_9_fu_1125_p3;
+wire   [44:0] mul_ln165_9_fu_266_p2;
+wire  signed [31:0] shl_ln165_s_fu_1152_p3;
+wire   [44:0] mul_ln165_10_fu_270_p2;
+wire  signed [31:0] shl_ln165_10_fu_1179_p3;
+wire   [44:0] mul_ln165_11_fu_274_p2;
+wire  signed [31:0] shl_ln165_11_fu_1206_p3;
+wire   [44:0] mul_ln165_12_fu_278_p2;
+wire  signed [31:0] shl_ln165_12_fu_1233_p3;
+wire   [44:0] mul_ln165_13_fu_282_p2;
+wire  signed [31:0] shl_ln165_13_fu_1260_p3;
+wire   [44:0] mul_ln165_14_fu_286_p2;
 wire  signed [31:0] normalized_14_fu_895_p4;
-wire  signed [31:0] shl_ln140_14_fu_1287_p3;
-wire   [44:0] mul_ln140_15_fu_290_p2;
+wire  signed [31:0] shl_ln165_14_fu_1287_p3;
+wire   [44:0] mul_ln165_15_fu_290_p2;
 reg    grp_fu_426_ap_start;
 wire    grp_fu_426_ap_done;
 reg   [41:0] ap_NS_fsm;
@@ -393,34 +393,34 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 42'd1;
-#0 grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start_reg = 1'b0;
+#0 grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start_reg = 1'b0;
 end
 
-transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_120_1 grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140(
+transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_145_1 grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start),
-    .ap_done(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_done),
-    .ap_idle(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_idle),
-    .ap_ready(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_ready),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_478(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_479(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_480(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_481(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_482(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_483(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_484(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_485(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_486(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31),
-    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_487(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_276(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_277(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_278(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_279(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_280(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49),
-    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_281(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48),
-    .square_out(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out),
-    .square_out_ap_vld(grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out_ap_vld)
+    .ap_start(grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start),
+    .ap_done(grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_done),
+    .ap_idle(grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_idle),
+    .ap_ready(grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_ready),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_516(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_517(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_518(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_519(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_520(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_521(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_522(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_523(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_524(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31),
+    .compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_525(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_294(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_295(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_296(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_297(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_298(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49),
+    .p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_299(p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48),
+    .square_out(grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_square_out),
+    .square_out_ap_vld(grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_square_out_ap_vld)
 );
 
 transformer_top_sqrt_fixed_32_19_s grp_sqrt_fixed_32_19_s_fu_161(
@@ -437,9 +437,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U312(
-    .din0(mul_ln132_fu_166_p0),
+    .din0(mul_ln157_fu_166_p0),
     .din1(shl_ln2_fu_432_p3),
-    .dout(mul_ln132_fu_166_p2)
+    .dout(mul_ln157_fu_166_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -449,9 +449,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U313(
-    .din0(mul_ln132_1_fu_170_p0),
-    .din1(shl_ln132_1_fu_505_p3),
-    .dout(mul_ln132_1_fu_170_p2)
+    .din0(mul_ln157_1_fu_170_p0),
+    .din1(shl_ln157_1_fu_505_p3),
+    .dout(mul_ln157_1_fu_170_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -461,9 +461,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U314(
-    .din0(mul_ln132_2_fu_174_p0),
-    .din1(shl_ln132_2_fu_532_p3),
-    .dout(mul_ln132_2_fu_174_p2)
+    .din0(mul_ln157_2_fu_174_p0),
+    .din1(shl_ln157_2_fu_532_p3),
+    .dout(mul_ln157_2_fu_174_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -473,9 +473,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U315(
-    .din0(mul_ln132_3_fu_178_p0),
-    .din1(shl_ln132_3_fu_559_p3),
-    .dout(mul_ln132_3_fu_178_p2)
+    .din0(mul_ln157_3_fu_178_p0),
+    .din1(shl_ln157_3_fu_559_p3),
+    .dout(mul_ln157_3_fu_178_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -485,9 +485,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U316(
-    .din0(mul_ln132_4_fu_182_p0),
-    .din1(shl_ln132_4_fu_586_p3),
-    .dout(mul_ln132_4_fu_182_p2)
+    .din0(mul_ln157_4_fu_182_p0),
+    .din1(shl_ln157_4_fu_586_p3),
+    .dout(mul_ln157_4_fu_182_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -497,9 +497,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U317(
-    .din0(mul_ln132_5_fu_186_p0),
-    .din1(shl_ln132_5_fu_613_p3),
-    .dout(mul_ln132_5_fu_186_p2)
+    .din0(mul_ln157_5_fu_186_p0),
+    .din1(shl_ln157_5_fu_613_p3),
+    .dout(mul_ln157_5_fu_186_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -509,9 +509,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U318(
-    .din0(mul_ln132_6_fu_190_p0),
-    .din1(shl_ln132_6_fu_640_p3),
-    .dout(mul_ln132_6_fu_190_p2)
+    .din0(mul_ln157_6_fu_190_p0),
+    .din1(shl_ln157_6_fu_640_p3),
+    .dout(mul_ln157_6_fu_190_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -521,9 +521,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U319(
-    .din0(mul_ln132_7_fu_194_p0),
-    .din1(shl_ln132_7_fu_667_p3),
-    .dout(mul_ln132_7_fu_194_p2)
+    .din0(mul_ln157_7_fu_194_p0),
+    .din1(shl_ln157_7_fu_667_p3),
+    .dout(mul_ln157_7_fu_194_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -533,9 +533,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U320(
-    .din0(mul_ln132_8_fu_198_p0),
-    .din1(shl_ln132_8_fu_694_p3),
-    .dout(mul_ln132_8_fu_198_p2)
+    .din0(mul_ln157_8_fu_198_p0),
+    .din1(shl_ln157_8_fu_694_p3),
+    .dout(mul_ln157_8_fu_198_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -545,9 +545,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U321(
-    .din0(mul_ln132_9_fu_202_p0),
-    .din1(shl_ln132_9_fu_721_p3),
-    .dout(mul_ln132_9_fu_202_p2)
+    .din0(mul_ln157_9_fu_202_p0),
+    .din1(shl_ln157_9_fu_721_p3),
+    .dout(mul_ln157_9_fu_202_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -557,9 +557,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U322(
-    .din0(mul_ln132_10_fu_206_p0),
-    .din1(shl_ln132_s_fu_748_p3),
-    .dout(mul_ln132_10_fu_206_p2)
+    .din0(mul_ln157_10_fu_206_p0),
+    .din1(shl_ln157_s_fu_748_p3),
+    .dout(mul_ln157_10_fu_206_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -569,9 +569,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U323(
-    .din0(mul_ln132_11_fu_210_p0),
-    .din1(shl_ln132_10_fu_775_p3),
-    .dout(mul_ln132_11_fu_210_p2)
+    .din0(mul_ln157_11_fu_210_p0),
+    .din1(shl_ln157_10_fu_775_p3),
+    .dout(mul_ln157_11_fu_210_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -581,9 +581,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U324(
-    .din0(mul_ln132_12_fu_214_p0),
-    .din1(shl_ln132_11_fu_802_p3),
-    .dout(mul_ln132_12_fu_214_p2)
+    .din0(mul_ln157_12_fu_214_p0),
+    .din1(shl_ln157_11_fu_802_p3),
+    .dout(mul_ln157_12_fu_214_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -593,9 +593,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U325(
-    .din0(mul_ln132_13_fu_218_p0),
-    .din1(shl_ln132_12_fu_829_p3),
-    .dout(mul_ln132_13_fu_218_p2)
+    .din0(mul_ln157_13_fu_218_p0),
+    .din1(shl_ln157_12_fu_829_p3),
+    .dout(mul_ln157_13_fu_218_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -605,9 +605,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U326(
-    .din0(mul_ln132_14_fu_222_p0),
-    .din1(shl_ln132_13_fu_856_p3),
-    .dout(mul_ln132_14_fu_222_p2)
+    .din0(mul_ln157_14_fu_222_p0),
+    .din1(shl_ln157_13_fu_856_p3),
+    .dout(mul_ln157_14_fu_222_p2)
 );
 
 transformer_top_mul_27ns_21s_45_1_1 #(
@@ -617,9 +617,9 @@ transformer_top_mul_27ns_21s_45_1_1 #(
     .din1_WIDTH( 21 ),
     .dout_WIDTH( 45 ))
 mul_27ns_21s_45_1_1_U327(
-    .din0(mul_ln132_15_fu_226_p0),
-    .din1(shl_ln132_14_fu_883_p3),
-    .dout(mul_ln132_15_fu_226_p2)
+    .din0(mul_ln157_15_fu_226_p0),
+    .din1(shl_ln157_14_fu_883_p3),
+    .dout(mul_ln157_15_fu_226_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -631,7 +631,7 @@ transformer_top_mul_32s_32s_45_1_1 #(
 mul_32s_32s_45_1_1_U328(
     .din0(normalized_fu_463_p4),
     .din1(shl_ln3_fu_477_p3),
-    .dout(mul_ln140_fu_230_p2)
+    .dout(mul_ln165_fu_230_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -642,8 +642,8 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U329(
     .din0(normalized_1_fu_517_p4),
-    .din1(shl_ln140_1_fu_909_p3),
-    .dout(mul_ln140_1_fu_234_p2)
+    .din1(shl_ln165_1_fu_909_p3),
+    .dout(mul_ln165_1_fu_234_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -653,9 +653,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U330(
-    .din0(shl_ln140_2_fu_936_p3),
+    .din0(shl_ln165_2_fu_936_p3),
     .din1(normalized_2_fu_544_p4),
-    .dout(mul_ln140_2_fu_238_p2)
+    .dout(mul_ln165_2_fu_238_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -665,9 +665,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U331(
-    .din0(shl_ln140_3_fu_963_p3),
+    .din0(shl_ln165_3_fu_963_p3),
     .din1(normalized_3_fu_571_p4),
-    .dout(mul_ln140_3_fu_242_p2)
+    .dout(mul_ln165_3_fu_242_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -677,9 +677,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U332(
-    .din0(shl_ln140_4_fu_990_p3),
+    .din0(shl_ln165_4_fu_990_p3),
     .din1(normalized_4_fu_598_p4),
-    .dout(mul_ln140_4_fu_246_p2)
+    .dout(mul_ln165_4_fu_246_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -689,9 +689,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U333(
-    .din0(shl_ln140_5_fu_1017_p3),
+    .din0(shl_ln165_5_fu_1017_p3),
     .din1(normalized_5_fu_625_p4),
-    .dout(mul_ln140_5_fu_250_p2)
+    .dout(mul_ln165_5_fu_250_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -701,9 +701,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U334(
-    .din0(shl_ln140_6_fu_1044_p3),
+    .din0(shl_ln165_6_fu_1044_p3),
     .din1(normalized_6_fu_652_p4),
-    .dout(mul_ln140_6_fu_254_p2)
+    .dout(mul_ln165_6_fu_254_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -713,9 +713,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U335(
-    .din0(shl_ln140_7_fu_1071_p3),
+    .din0(shl_ln165_7_fu_1071_p3),
     .din1(normalized_7_fu_679_p4),
-    .dout(mul_ln140_7_fu_258_p2)
+    .dout(mul_ln165_7_fu_258_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -725,9 +725,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U336(
-    .din0(shl_ln140_8_fu_1098_p3),
+    .din0(shl_ln165_8_fu_1098_p3),
     .din1(normalized_8_fu_706_p4),
-    .dout(mul_ln140_8_fu_262_p2)
+    .dout(mul_ln165_8_fu_262_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -737,9 +737,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U337(
-    .din0(shl_ln140_9_fu_1125_p3),
+    .din0(shl_ln165_9_fu_1125_p3),
     .din1(normalized_9_fu_733_p4),
-    .dout(mul_ln140_9_fu_266_p2)
+    .dout(mul_ln165_9_fu_266_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -749,9 +749,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U338(
-    .din0(shl_ln140_s_fu_1152_p3),
+    .din0(shl_ln165_s_fu_1152_p3),
     .din1(normalized_16_fu_760_p4),
-    .dout(mul_ln140_10_fu_270_p2)
+    .dout(mul_ln165_10_fu_270_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -761,9 +761,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U339(
-    .din0(shl_ln140_10_fu_1179_p3),
+    .din0(shl_ln165_10_fu_1179_p3),
     .din1(normalized_10_fu_787_p4),
-    .dout(mul_ln140_11_fu_274_p2)
+    .dout(mul_ln165_11_fu_274_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -773,9 +773,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U340(
-    .din0(shl_ln140_11_fu_1206_p3),
+    .din0(shl_ln165_11_fu_1206_p3),
     .din1(normalized_11_fu_814_p4),
-    .dout(mul_ln140_12_fu_278_p2)
+    .dout(mul_ln165_12_fu_278_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -785,9 +785,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U341(
-    .din0(shl_ln140_12_fu_1233_p3),
+    .din0(shl_ln165_12_fu_1233_p3),
     .din1(normalized_12_fu_841_p4),
-    .dout(mul_ln140_13_fu_282_p2)
+    .dout(mul_ln165_13_fu_282_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -797,9 +797,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U342(
-    .din0(shl_ln140_13_fu_1260_p3),
+    .din0(shl_ln165_13_fu_1260_p3),
     .din1(normalized_13_fu_868_p4),
-    .dout(mul_ln140_14_fu_286_p2)
+    .dout(mul_ln165_14_fu_286_p2)
 );
 
 transformer_top_mul_32s_32s_45_1_1 #(
@@ -809,9 +809,9 @@ transformer_top_mul_32s_32s_45_1_1 #(
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 45 ))
 mul_32s_32s_45_1_1_U343(
-    .din0(shl_ln140_14_fu_1287_p3),
+    .din0(shl_ln165_14_fu_1287_p3),
     .din1(normalized_14_fu_895_p4),
-    .dout(mul_ln140_15_fu_290_p2)
+    .dout(mul_ln165_15_fu_290_p2)
 );
 
 transformer_top_udiv_27s_23ns_27_31_seq_1 #(
@@ -841,12 +841,12 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start_reg <= 1'b0;
+        grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start_reg <= 1'b0;
     end else begin
         if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-            grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start_reg <= 1'b1;
-        end else if ((grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_ready == 1'b1)) begin
-            grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start_reg <= 1'b0;
+            grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start_reg <= 1'b1;
+        end else if ((grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_ready == 1'b1)) begin
+            grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start_reg <= 1'b0;
         end
     end
 end
@@ -858,14 +858,14 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state2) & (grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out_ap_vld == 1'b1))) begin
-        square_loc_fu_130 <= grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_square_out;
+    if (((1'b1 == ap_CS_fsm_state2) & (grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_square_out_ap_vld == 1'b1))) begin
+        square_loc_fu_130 <= grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_square_out;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state41)) begin
-        udiv_ln129_reg_1480 <= grp_fu_426_p2;
+        udiv_ln154_reg_1480 <= grp_fu_426_p2;
     end
 end
 
@@ -924,7 +924,7 @@ assign ap_ST_fsm_state28_blk = 1'b0;
 assign ap_ST_fsm_state29_blk = 1'b0;
 
 always @ (*) begin
-    if ((grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_done == 1'b0)) begin
+    if ((grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_done == 1'b0)) begin
         ap_ST_fsm_state2_blk = 1'b1;
     end else begin
         ap_ST_fsm_state2_blk = 1'b0;
@@ -1141,7 +1141,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((1'b1 == ap_CS_fsm_state2) & (grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_done == 1'b1))) begin
+            if (((1'b1 == ap_CS_fsm_state2) & (grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_done == 1'b1))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state2;
@@ -1289,27 +1289,27 @@ assign ap_CS_fsm_state41 = ap_CS_fsm[32'd40];
 
 assign ap_CS_fsm_state42 = ap_CS_fsm[32'd41];
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_10 = {{mul_ln140_9_fu_266_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_10 = {{mul_ln165_9_fu_266_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_11 = {{mul_ln140_8_fu_262_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_11 = {{mul_ln165_8_fu_262_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_12 = {{mul_ln140_7_fu_258_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_12 = {{mul_ln165_7_fu_258_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_13 = {{mul_ln140_6_fu_254_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_13 = {{mul_ln165_6_fu_254_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_14 = {{mul_ln140_5_fu_250_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_14 = {{mul_ln165_5_fu_250_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_15 = {{mul_ln140_4_fu_246_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_15 = {{mul_ln165_4_fu_246_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_16 = {{mul_ln140_3_fu_242_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_16 = {{mul_ln165_3_fu_242_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_17 = {{mul_ln140_2_fu_238_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_17 = {{mul_ln165_2_fu_238_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_18 = {{mul_ln140_1_fu_234_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_18 = {{mul_ln165_1_fu_234_p2[44:13]}};
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_19 = {{mul_ln140_fu_230_p2[44:13]}};
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_19 = {{mul_ln165_fu_230_p2[44:13]}};
 
-assign grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start = grp_RMS_NORM_Pipeline_VITIS_LOOP_120_1_fu_140_ap_start_reg;
+assign grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start = grp_RMS_NORM_Pipeline_VITIS_LOOP_145_1_fu_140_ap_start_reg;
 
 assign grp_fu_426_p1 = grp_fu_426_p10;
 
@@ -1317,159 +1317,159 @@ assign grp_fu_426_p10 = sext_ln_reg_1470;
 
 assign mean_square_fu_397_p3 = ((tmp_fu_389_p3[0:0] == 1'b1) ? 27'd0 : shl_ln_fu_381_p3);
 
-assign mul_ln132_10_fu_206_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_10_fu_206_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_11_fu_210_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_11_fu_210_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_12_fu_214_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_12_fu_214_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_13_fu_218_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_13_fu_218_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_14_fu_222_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_14_fu_222_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_15_fu_226_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_15_fu_226_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_1_fu_170_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_1_fu_170_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_2_fu_174_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_2_fu_174_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_3_fu_178_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_3_fu_178_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_4_fu_182_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_4_fu_182_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_5_fu_186_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_5_fu_186_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_6_fu_190_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_6_fu_190_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_7_fu_194_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_7_fu_194_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_8_fu_198_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_8_fu_198_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_9_fu_202_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_9_fu_202_p0 = zext_ln157_fu_439_p1;
 
-assign mul_ln132_fu_166_p0 = zext_ln132_fu_439_p1;
+assign mul_ln157_fu_166_p0 = zext_ln157_fu_439_p1;
 
-assign normalized_10_fu_787_p4 = {{mul_ln132_11_fu_210_p2[44:13]}};
+assign normalized_10_fu_787_p4 = {{mul_ln157_11_fu_210_p2[44:13]}};
 
-assign normalized_11_fu_814_p4 = {{mul_ln132_12_fu_214_p2[44:13]}};
+assign normalized_11_fu_814_p4 = {{mul_ln157_12_fu_214_p2[44:13]}};
 
-assign normalized_12_fu_841_p4 = {{mul_ln132_13_fu_218_p2[44:13]}};
+assign normalized_12_fu_841_p4 = {{mul_ln157_13_fu_218_p2[44:13]}};
 
-assign normalized_13_fu_868_p4 = {{mul_ln132_14_fu_222_p2[44:13]}};
+assign normalized_13_fu_868_p4 = {{mul_ln157_14_fu_222_p2[44:13]}};
 
-assign normalized_14_fu_895_p4 = {{mul_ln132_15_fu_226_p2[44:13]}};
+assign normalized_14_fu_895_p4 = {{mul_ln157_15_fu_226_p2[44:13]}};
 
-assign normalized_16_fu_760_p4 = {{mul_ln132_10_fu_206_p2[44:13]}};
+assign normalized_16_fu_760_p4 = {{mul_ln157_10_fu_206_p2[44:13]}};
 
-assign normalized_1_fu_517_p4 = {{mul_ln132_1_fu_170_p2[44:13]}};
+assign normalized_1_fu_517_p4 = {{mul_ln157_1_fu_170_p2[44:13]}};
 
-assign normalized_2_fu_544_p4 = {{mul_ln132_2_fu_174_p2[44:13]}};
+assign normalized_2_fu_544_p4 = {{mul_ln157_2_fu_174_p2[44:13]}};
 
-assign normalized_3_fu_571_p4 = {{mul_ln132_3_fu_178_p2[44:13]}};
+assign normalized_3_fu_571_p4 = {{mul_ln157_3_fu_178_p2[44:13]}};
 
-assign normalized_4_fu_598_p4 = {{mul_ln132_4_fu_182_p2[44:13]}};
+assign normalized_4_fu_598_p4 = {{mul_ln157_4_fu_182_p2[44:13]}};
 
-assign normalized_5_fu_625_p4 = {{mul_ln132_5_fu_186_p2[44:13]}};
+assign normalized_5_fu_625_p4 = {{mul_ln157_5_fu_186_p2[44:13]}};
 
-assign normalized_6_fu_652_p4 = {{mul_ln132_6_fu_190_p2[44:13]}};
+assign normalized_6_fu_652_p4 = {{mul_ln157_6_fu_190_p2[44:13]}};
 
-assign normalized_7_fu_679_p4 = {{mul_ln132_7_fu_194_p2[44:13]}};
+assign normalized_7_fu_679_p4 = {{mul_ln157_7_fu_194_p2[44:13]}};
 
-assign normalized_8_fu_706_p4 = {{mul_ln132_8_fu_198_p2[44:13]}};
+assign normalized_8_fu_706_p4 = {{mul_ln157_8_fu_198_p2[44:13]}};
 
-assign normalized_9_fu_733_p4 = {{mul_ln132_9_fu_202_p2[44:13]}};
+assign normalized_9_fu_733_p4 = {{mul_ln157_9_fu_202_p2[44:13]}};
 
-assign normalized_fu_463_p4 = {{mul_ln132_fu_166_p2[44:13]}};
+assign normalized_fu_463_p4 = {{mul_ln157_fu_166_p2[44:13]}};
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_42 = {{mul_ln140_15_fu_290_p2[44:13]}};
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_42 = {{mul_ln165_15_fu_290_p2[44:13]}};
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_43 = {{mul_ln140_14_fu_286_p2[44:13]}};
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_43 = {{mul_ln165_14_fu_286_p2[44:13]}};
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_44 = {{mul_ln140_13_fu_282_p2[44:13]}};
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_44 = {{mul_ln165_13_fu_282_p2[44:13]}};
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_45 = {{mul_ln140_12_fu_278_p2[44:13]}};
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_45 = {{mul_ln165_12_fu_278_p2[44:13]}};
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_46 = {{mul_ln140_11_fu_274_p2[44:13]}};
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_46 = {{mul_ln165_11_fu_274_p2[44:13]}};
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_47 = {{mul_ln140_10_fu_270_p2[44:13]}};
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_47 = {{mul_ln165_10_fu_270_p2[44:13]}};
 
-assign shl_ln132_10_fu_775_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52}, {13'd0}};
+assign shl_ln157_10_fu_775_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52}, {13'd0}};
 
-assign shl_ln132_11_fu_802_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51}, {13'd0}};
+assign shl_ln157_11_fu_802_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51}, {13'd0}};
 
-assign shl_ln132_12_fu_829_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50}, {13'd0}};
+assign shl_ln157_12_fu_829_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50}, {13'd0}};
 
-assign shl_ln132_13_fu_856_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49}, {13'd0}};
+assign shl_ln157_13_fu_856_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49}, {13'd0}};
 
-assign shl_ln132_14_fu_883_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48}, {13'd0}};
+assign shl_ln157_14_fu_883_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48}, {13'd0}};
 
-assign shl_ln132_1_fu_505_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38}, {13'd0}};
+assign shl_ln157_1_fu_505_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38}, {13'd0}};
 
-assign shl_ln132_2_fu_532_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37}, {13'd0}};
+assign shl_ln157_2_fu_532_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37}, {13'd0}};
 
-assign shl_ln132_3_fu_559_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36}, {13'd0}};
+assign shl_ln157_3_fu_559_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36}, {13'd0}};
 
-assign shl_ln132_4_fu_586_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35}, {13'd0}};
+assign shl_ln157_4_fu_586_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35}, {13'd0}};
 
-assign shl_ln132_5_fu_613_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34}, {13'd0}};
+assign shl_ln157_5_fu_613_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34}, {13'd0}};
 
-assign shl_ln132_6_fu_640_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33}, {13'd0}};
+assign shl_ln157_6_fu_640_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33}, {13'd0}};
 
-assign shl_ln132_7_fu_667_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32}, {13'd0}};
+assign shl_ln157_7_fu_667_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32}, {13'd0}};
 
-assign shl_ln132_8_fu_694_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31}, {13'd0}};
+assign shl_ln157_8_fu_694_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31}, {13'd0}};
 
-assign shl_ln132_9_fu_721_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30}, {13'd0}};
+assign shl_ln157_9_fu_721_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30}, {13'd0}};
 
-assign shl_ln132_s_fu_748_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53}, {13'd0}};
+assign shl_ln157_s_fu_748_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53}, {13'd0}};
 
-assign shl_ln140_10_fu_1179_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_10}, {13'd0}};
+assign shl_ln165_10_fu_1179_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_10}, {13'd0}};
 
-assign shl_ln140_11_fu_1206_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9}, {13'd0}};
+assign shl_ln165_11_fu_1206_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9}, {13'd0}};
 
-assign shl_ln140_12_fu_1233_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_8}, {13'd0}};
+assign shl_ln165_12_fu_1233_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_8}, {13'd0}};
 
-assign shl_ln140_13_fu_1260_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_7}, {13'd0}};
+assign shl_ln165_13_fu_1260_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_7}, {13'd0}};
 
-assign shl_ln140_14_fu_1287_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_6}, {13'd0}};
+assign shl_ln165_14_fu_1287_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_6}, {13'd0}};
 
-assign shl_ln140_1_fu_909_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94}, {13'd0}};
+assign shl_ln165_1_fu_909_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_94}, {13'd0}};
 
-assign shl_ln140_2_fu_936_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93}, {13'd0}};
+assign shl_ln165_2_fu_936_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_93}, {13'd0}};
 
-assign shl_ln140_3_fu_963_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92}, {13'd0}};
+assign shl_ln165_3_fu_963_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_92}, {13'd0}};
 
-assign shl_ln140_4_fu_990_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91}, {13'd0}};
+assign shl_ln165_4_fu_990_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_91}, {13'd0}};
 
-assign shl_ln140_5_fu_1017_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90}, {13'd0}};
+assign shl_ln165_5_fu_1017_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_90}, {13'd0}};
 
-assign shl_ln140_6_fu_1044_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89}, {13'd0}};
+assign shl_ln165_6_fu_1044_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_89}, {13'd0}};
 
-assign shl_ln140_7_fu_1071_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88}, {13'd0}};
+assign shl_ln165_7_fu_1071_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88}, {13'd0}};
 
-assign shl_ln140_8_fu_1098_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87}, {13'd0}};
+assign shl_ln165_8_fu_1098_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87}, {13'd0}};
 
-assign shl_ln140_9_fu_1125_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86}, {13'd0}};
+assign shl_ln165_9_fu_1125_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86}, {13'd0}};
 
-assign shl_ln140_s_fu_1152_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11}, {13'd0}};
+assign shl_ln165_s_fu_1152_p3 = {{p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11}, {13'd0}};
+
+assign shl_ln1_fu_409_p3 = {{epsilon}, {13'd0}};
 
 assign shl_ln2_fu_432_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39}, {13'd0}};
 
 assign shl_ln3_fu_477_p3 = {{compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_95}, {13'd0}};
 
-assign shl_ln9_fu_409_p3 = {{epsilon}, {13'd0}};
-
-assign shl_ln_fu_381_p3 = {{trunc_ln124_fu_377_p1}, {9'd0}};
+assign shl_ln_fu_381_p3 = {{trunc_ln149_fu_377_p1}, {9'd0}};
 
 assign tmp_fu_389_p3 = square_loc_fu_130[32'd18];
 
-assign trunc_ln124_fu_377_p1 = square_loc_fu_130[17:0];
+assign trunc_ln149_fu_377_p1 = square_loc_fu_130[17:0];
 
-assign v_fu_417_p2 = (zext_ln124_fu_405_p1 + shl_ln9_fu_409_p3);
+assign v_fu_417_p2 = (zext_ln149_fu_405_p1 + shl_ln1_fu_409_p3);
 
-assign zext_ln124_fu_405_p1 = mean_square_fu_397_p3;
+assign zext_ln149_fu_405_p1 = mean_square_fu_397_p3;
 
-assign zext_ln132_fu_439_p1 = udiv_ln129_reg_1480;
+assign zext_ln157_fu_439_p1 = udiv_ln154_reg_1480;
 
 always @ (posedge ap_clk) begin
     v_reg_1465[8:0] <= 9'b000000000;

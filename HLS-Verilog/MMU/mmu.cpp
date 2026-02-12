@@ -236,9 +236,9 @@ InputBufferLayout mmu_calc_input_layout(ComputeOp op, ModelDims dims) {
             l.total_size = dims.d_heads + dims.context_len * dims.d_heads;
             break;
         case CMP_ATT_VALUE:
-            l.act = BufferField(0, dims.context_len, DataType::DTYPE_INT8, dims.context_len);
-            l.v_cache = BufferField(dims.context_len, dims.context_len * dims.d_heads, DataType::DTYPE_INT8, dims.context_len * dims.d_heads);
-            l.total_size = dims.context_len + dims.context_len * dims.d_heads;
+            l.act = BufferField(0, dims.context_len * 2, DataType::DTYPE_INT16, dims.context_len);
+            l.v_cache = BufferField(dims.context_len * 2, dims.context_len * dims.d_heads, DataType::DTYPE_INT8, dims.context_len * dims.d_heads);
+            l.total_size = (dims.context_len * 2) + dims.context_len * dims.d_heads;
             break;
         default:
             l.total_size = dims.d_model;
@@ -251,9 +251,9 @@ OutputBufferLayout mmu_calc_output_layout(ComputeOp op, ModelDims dims) {
     OutputBufferLayout l;
     switch (op) {
         case CMP_Q: case CMP_K: case CMP_V:
-            l.result = BufferField(0, dims.d_heads * 4, DataType::DTYPE_INT32, dims.d_heads);
-            l.out_dtype = DataType::DTYPE_INT32;
-            l.total_size = dims.d_heads * 4;
+            l.result = BufferField(0, dims.d_heads, DataType::DTYPE_INT8, dims.d_heads);
+            l.out_dtype = DataType::DTYPE_INT8;
+            l.total_size = dims.d_heads;
             break;
         case CMP_K_REQUANT: case CMP_V_REQUANT: case CMP_REQUANT_Q:
             l.result = BufferField(0, dims.d_heads, DataType::DTYPE_INT8, dims.d_heads);
