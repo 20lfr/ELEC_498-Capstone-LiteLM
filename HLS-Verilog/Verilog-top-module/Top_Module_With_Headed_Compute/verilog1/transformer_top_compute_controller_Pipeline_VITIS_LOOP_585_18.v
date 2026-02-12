@@ -13,10 +13,10 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_585_18 (
         ap_done,
         ap_idle,
         ap_ready,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_122,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_132,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_133,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135,
         out_buf_address0,
         out_buf_ce0,
         out_buf_we0,
@@ -36,10 +36,10 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_122;
-input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123;
-input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124;
-input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125;
+input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_132;
+input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_133;
+input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134;
+input  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135;
 output  [5:0] out_buf_address0;
 output   out_buf_ce0;
 output   out_buf_we0;
@@ -61,19 +61,19 @@ reg    ap_ready_int;
 wire    ap_CS_fsm_state2;
 wire   [1:0] trunc_ln585_fu_159_p1;
 reg   [1:0] trunc_ln585_reg_288;
-reg   [7:0] trunc_ln1060_8_reg_294;
-reg   [7:0] trunc_ln1061_8_reg_299;
-wire   [63:0] zext_ln1058_fu_200_p1;
-wire   [63:0] zext_ln1059_fu_224_p1;
-wire   [63:0] zext_ln1060_fu_261_p1;
-wire   [63:0] zext_ln1061_fu_273_p1;
+reg   [7:0] trunc_ln699_7_reg_294;
+reg   [7:0] trunc_ln700_7_reg_299;
+wire   [63:0] zext_ln697_fu_200_p1;
+wire   [63:0] zext_ln698_fu_224_p1;
+wire   [63:0] zext_ln699_fu_261_p1;
+wire   [63:0] zext_ln700_fu_273_p1;
 reg   [2:0] t_fu_70;
 wire   [2:0] add_ln585_fu_153_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_t_13;
 reg    out_buf_we1_local;
 reg   [7:0] out_buf_d1_local;
-wire   [7:0] trunc_ln1058_fu_195_p1;
+wire   [7:0] trunc_ln697_fu_195_p1;
 reg    out_buf_ce1_local;
 reg   [5:0] out_buf_address1_local;
 reg    out_buf_we0_local;
@@ -83,9 +83,9 @@ reg   [5:0] out_buf_address0_local;
 wire   [31:0] v_fu_163_p9;
 wire   [31:0] v_fu_163_p11;
 wire   [3:0] byte_addr_assign_s_fu_187_p3;
-wire   [3:0] or_ln1059_7_fu_216_p3;
-wire   [3:0] or_ln1060_7_fu_254_p3;
-wire   [3:0] or_ln1061_7_fu_266_p3;
+wire   [3:0] or_ln698_7_fu_216_p3;
+wire   [3:0] or_ln699_7_fu_254_p3;
+wire   [3:0] or_ln700_7_fu_266_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -122,11 +122,11 @@ end
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U599(
-    .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_122),
-    .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123),
-    .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124),
-    .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125),
+sparsemux_9_2_32_1_1_U650(
+    .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_132),
+    .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_133),
+    .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134),
+    .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135),
     .def(v_fu_163_p9),
     .sel(trunc_ln585_fu_159_p1),
     .dout(v_fu_163_p11)
@@ -179,9 +179,9 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        trunc_ln1060_8_reg_294 <= {{v_fu_163_p11[23:16]}};
-        trunc_ln1061_8_reg_299 <= {{v_fu_163_p11[31:24]}};
         trunc_ln585_reg_288 <= trunc_ln585_fu_159_p1;
+        trunc_ln699_7_reg_294 <= {{v_fu_163_p11[23:16]}};
+        trunc_ln700_7_reg_299 <= {{v_fu_163_p11[31:24]}};
     end
 end
 
@@ -237,9 +237,9 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_address0_local = zext_ln1061_fu_273_p1;
+        out_buf_address0_local = zext_ln700_fu_273_p1;
     end else if (((icmp_ln585_fu_147_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        out_buf_address0_local = zext_ln1059_fu_224_p1;
+        out_buf_address0_local = zext_ln698_fu_224_p1;
     end else begin
         out_buf_address0_local = 'bx;
     end
@@ -247,9 +247,9 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_address1_local = zext_ln1060_fu_261_p1;
+        out_buf_address1_local = zext_ln699_fu_261_p1;
     end else if (((icmp_ln585_fu_147_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        out_buf_address1_local = zext_ln1058_fu_200_p1;
+        out_buf_address1_local = zext_ln697_fu_200_p1;
     end else begin
         out_buf_address1_local = 'bx;
     end
@@ -273,7 +273,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_d0_local = trunc_ln1061_8_reg_299;
+        out_buf_d0_local = trunc_ln700_7_reg_299;
     end else if (((icmp_ln585_fu_147_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
         out_buf_d0_local = {{v_fu_163_p11[15:8]}};
     end else begin
@@ -283,9 +283,9 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        out_buf_d1_local = trunc_ln1060_8_reg_294;
+        out_buf_d1_local = trunc_ln699_7_reg_294;
     end else if (((icmp_ln585_fu_147_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        out_buf_d1_local = trunc_ln1058_fu_195_p1;
+        out_buf_d1_local = trunc_ln697_fu_195_p1;
     end else begin
         out_buf_d1_local = 'bx;
     end
@@ -347,11 +347,11 @@ assign byte_addr_assign_s_fu_187_p3 = {{trunc_ln585_fu_159_p1}, {2'd0}};
 
 assign icmp_ln585_fu_147_p2 = ((ap_sig_allocacmp_t_13 == 3'd4) ? 1'b1 : 1'b0);
 
-assign or_ln1059_7_fu_216_p3 = {{trunc_ln585_fu_159_p1}, {2'd1}};
+assign or_ln698_7_fu_216_p3 = {{trunc_ln585_fu_159_p1}, {2'd1}};
 
-assign or_ln1060_7_fu_254_p3 = {{trunc_ln585_reg_288}, {2'd2}};
+assign or_ln699_7_fu_254_p3 = {{trunc_ln585_reg_288}, {2'd2}};
 
-assign or_ln1061_7_fu_266_p3 = {{trunc_ln585_reg_288}, {2'd3}};
+assign or_ln700_7_fu_266_p3 = {{trunc_ln585_reg_288}, {2'd3}};
 
 assign out_buf_address0 = out_buf_address0_local;
 
@@ -369,18 +369,18 @@ assign out_buf_we0 = out_buf_we0_local;
 
 assign out_buf_we1 = out_buf_we1_local;
 
-assign trunc_ln1058_fu_195_p1 = v_fu_163_p11[7:0];
-
 assign trunc_ln585_fu_159_p1 = ap_sig_allocacmp_t_13[1:0];
+
+assign trunc_ln697_fu_195_p1 = v_fu_163_p11[7:0];
 
 assign v_fu_163_p9 = 'bx;
 
-assign zext_ln1058_fu_200_p1 = byte_addr_assign_s_fu_187_p3;
+assign zext_ln697_fu_200_p1 = byte_addr_assign_s_fu_187_p3;
 
-assign zext_ln1059_fu_224_p1 = or_ln1059_7_fu_216_p3;
+assign zext_ln698_fu_224_p1 = or_ln698_7_fu_216_p3;
 
-assign zext_ln1060_fu_261_p1 = or_ln1060_7_fu_254_p3;
+assign zext_ln699_fu_261_p1 = or_ln699_7_fu_254_p3;
 
-assign zext_ln1061_fu_273_p1 = or_ln1061_7_fu_266_p3;
+assign zext_ln700_fu_273_p1 = or_ln700_7_fu_266_p3;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_585_18

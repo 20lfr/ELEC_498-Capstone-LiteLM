@@ -13,10 +13,10 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_574_17 (
         ap_done,
         ap_idle,
         ap_ready,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125_ap_vld,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126,
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126_ap_vld
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_ap_vld,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136,
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_ap_vld
 );
 
 parameter    ap_ST_fsm_state1 = 1'd1;
@@ -27,14 +27,14 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125;
-output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125_ap_vld;
-output  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126;
-output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126_ap_vld;
+output  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135;
+output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_ap_vld;
+output  [31:0] compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136;
+output   compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_ap_vld;
 
 reg ap_idle;
-reg compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125_ap_vld;
-reg compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126_ap_vld;
+reg compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_ap_vld;
+reg compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_ap_vld;
 
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
@@ -47,7 +47,7 @@ wire   [0:0] icmp_ln576_fu_44_p2;
 reg   [2:0] i_fu_26;
 wire   [2:0] add_ln574_fu_62_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_i_36;
+reg   [2:0] ap_sig_allocacmp_i_39;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -152,25 +152,25 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_36 = 3'd4;
+        ap_sig_allocacmp_i_39 = 3'd4;
     end else begin
-        ap_sig_allocacmp_i_36 = i_fu_26;
+        ap_sig_allocacmp_i_39 = i_fu_26;
     end
 end
 
 always @ (*) begin
     if (((icmp_ln576_fu_44_p2 == 1'd1) & (icmp_ln574_fu_38_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125_ap_vld = 1'b1;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_ap_vld = 1'b1;
     end else begin
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125_ap_vld = 1'b0;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_ap_vld = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((icmp_ln576_fu_44_p2 == 1'd0) & (icmp_ln574_fu_38_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126_ap_vld = 1'b1;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_ap_vld = 1'b1;
     end else begin
-        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126_ap_vld = 1'b0;
+        compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_ap_vld = 1'b0;
     end
 end
 
@@ -185,7 +185,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln574_fu_62_p2 = (ap_sig_allocacmp_i_36 + 3'd1);
+assign add_ln574_fu_62_p2 = (ap_sig_allocacmp_i_39 + 3'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -199,12 +199,12 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125 = 32'd0;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135 = 32'd0;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126 = 32'd0;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136 = 32'd0;
 
-assign icmp_ln574_fu_38_p2 = ((ap_sig_allocacmp_i_36 == 3'd6) ? 1'b1 : 1'b0);
+assign icmp_ln574_fu_38_p2 = ((ap_sig_allocacmp_i_39 == 3'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln576_fu_44_p2 = ((ap_sig_allocacmp_i_36 == 3'd4) ? 1'b1 : 1'b0);
+assign icmp_ln576_fu_44_p2 = ((ap_sig_allocacmp_i_39 == 3'd4) ? 1'b1 : 1'b0);
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_574_17

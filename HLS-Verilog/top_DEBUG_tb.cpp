@@ -2,6 +2,7 @@
 // Mirrors the style of Scheduler_tb_minimal.cpp but against the simplified scheduler interface.
 #include <cstdio>
 #include <cstdint>
+#include <limits>
 #include <string>
 
 #include "top.hpp"
@@ -105,6 +106,229 @@ static const char *phase_name(HeadPhase ph) {
     case HeadPhase::HEAD_REQUANT:     return "HEAD_RQ";
     case HeadPhase::DONE:              return "DONE";
     default:                           return "UNK";
+    }
+}
+
+enum class LayerInputProfile : int {
+    NORMAL = 0,
+    MIN_ONLY = 1,
+    MAX_ONLY = 2,
+    MIXED = 3
+};
+
+static inline LayerInputProfile layer_profile(int layer) {
+    if (layer <= 0) return LayerInputProfile::NORMAL;
+    if (layer == 1) return LayerInputProfile::MIN_ONLY;
+    if (layer == 2) return LayerInputProfile::MAX_ONLY;
+    return LayerInputProfile::MIXED;
+}
+
+static inline int clamp_layer(int layer) {
+    if (layer < 0) return 0;
+    if (layer >= NUM_LAYERS) return NUM_LAYERS - 1;
+    return layer;
+}
+
+static inline int8_t stim_i8(int layer, int idx, int salt) {
+    const LayerInputProfile p = layer_profile(layer);
+    if (p == LayerInputProfile::MIN_ONLY) return std::numeric_limits<int8_t>::min();
+    if (p == LayerInputProfile::MAX_ONLY) return std::numeric_limits<int8_t>::max();
+    if (p == LayerInputProfile::MIXED) {
+        switch ((idx + salt) & 3) {
+            case 0: return std::numeric_limits<int8_t>::min();
+            case 1: return std::numeric_limits<int8_t>::max();
+            case 2: return static_cast<int8_t>(((idx * 11 + salt * 3 + layer) % 63) - 31);
+            default:return static_cast<int8_t>(-(((idx * 7 + salt * 5 + layer) % 63) - 31));
+        }
+    }
+    return static_cast<int8_t>(((idx * 13 + salt * 7 + layer * 5) % 95) - 47);
+}
+
+static inline int16_t stim_i16(int layer, int idx, int salt) {
+    const LayerInputProfile p = layer_profile(layer);
+    if (p == LayerInputProfile::MIN_ONLY) return std::numeric_limits<int16_t>::min();
+    if (p == LayerInputProfile::MAX_ONLY) return std::numeric_limits<int16_t>::max();
+    if (p == LayerInputProfile::MIXED) {
+        switch ((idx + salt) & 3) {
+            case 0: return std::numeric_limits<int16_t>::min();
+            case 1: return std::numeric_limits<int16_t>::max();
+            case 2: return static_cast<int16_t>(((idx * 173 + salt * 19 + layer * 11) % 8191) - 4095);
+            default:return static_cast<int16_t>(-(((idx * 131 + salt * 23 + layer * 7) % 8191) - 4095));
+        }
+    }
+    return static_cast<int16_t>(((idx * 139 + salt * 17 + layer * 29) % 4095) - 2047);
+}
+
+static inline int32_t stim_i32(int layer, int idx, int salt) {
+    const LayerInputProfile p = layer_profile(layer);
+    if (p == LayerInputProfile::MIN_ONLY) return std::numeric_limits<int32_t>::min();
+    if (p == LayerInputProfile::MAX_ONLY) return std::numeric_limits<int32_t>::max();
+    if (p == LayerInputProfile::MIXED) {
+        switch ((idx + salt) % 6) {
+            case 0: return std::numeric_limits<int32_t>::max();
+            case 1: return std::numeric_limits<int32_t>::min();
+            case 2: return 2000000000;
+            case 3: return -2000000000;
+            case 4: return ((idx * 7919 + salt * 313 + layer * 97) % 500000) - 250000;
+            default:return -(((idx * 6151 + salt * 271 + layer * 89) % 500000) - 250000);
+        }
+    }
+    return ((idx * 3571 + salt * 173 + layer * 97) % 200000) - 100000;
+}
+
+static inline int4_t stim_i4(int layer, int idx, int salt) {
+    const LayerInputProfile p = layer_profile(layer);
+    int v = 0;
+    if (p == LayerInputProfile::MIN_ONLY) {
+        v = (((idx + salt) % 5) == 0) ? -7 : -8;
+    } else if (p == LayerInputProfile::MAX_ONLY) {
+        v = (((idx + salt) % 5) == 0) ? 6 : 7;
+    } else if (p == LayerInputProfile::MIXED) {
+        switch ((idx + salt) & 3) {
+            case 0: v = -8; break;
+            case 1: v = 7; break;
+            case 2: v = ((idx + salt + layer) % 15) - 7; break;
+            default:v = -(((idx * 3 + salt + layer) % 15) - 7); break;
+        }
+    } else {
+        v = ((idx * 3 + salt + layer * 2) % 15) - 7;
+    }
+    if (v > 7) v = 7;
+    if (v < -8) v = -8;
+    return static_cast<int4_t>(v);
+}
+
+static inline int32_t stim_eps(int layer, int salt) {
+    const LayerInputProfile p = layer_profile(layer);
+    if (p == LayerInputProfile::MIN_ONLY) return 1;
+    if (p == LayerInputProfile::MAX_ONLY) return 1024;
+    if (p == LayerInputProfile::MIXED) return 7 + ((salt + layer) % 13);
+    return 3 + ((salt + layer) % 5);
+}
+
+static inline void force_i8_i4_mm_corners(
+    int8_t *act,
+    int act_len,
+    int4_t *weights,
+    int rows,
+    int cols
+) {
+    if (act_len < 4 || cols < 4 || rows <= 0) return;
+    act[0] = std::numeric_limits<int8_t>::max();
+    act[1] = std::numeric_limits<int8_t>::max();
+    act[2] = std::numeric_limits<int8_t>::min();
+    act[3] = std::numeric_limits<int8_t>::min();
+    for (int r = 0; r < rows; ++r) {
+        const int base = r * cols;
+        weights[base + 0] = static_cast<int4_t>(7);   // max weight
+        weights[base + 1] = static_cast<int4_t>(-8);  // min weight
+        weights[base + 2] = static_cast<int4_t>(7);   // max weight
+        weights[base + 3] = static_cast<int4_t>(-8);  // min weight
+    }
+}
+
+static inline void force_i16_i4_mm_corners(
+    int16_t *act,
+    int act_len,
+    int4_t *weights,
+    int rows,
+    int cols
+) {
+    if (act_len < 4 || cols < 4 || rows <= 0) return;
+    act[0] = std::numeric_limits<int16_t>::max();
+    act[1] = std::numeric_limits<int16_t>::max();
+    act[2] = std::numeric_limits<int16_t>::min();
+    act[3] = std::numeric_limits<int16_t>::min();
+    for (int r = 0; r < rows; ++r) {
+        const int base = r * cols;
+        weights[base + 0] = static_cast<int4_t>(7);
+        weights[base + 1] = static_cast<int4_t>(-8);
+        weights[base + 2] = static_cast<int4_t>(7);
+        weights[base + 3] = static_cast<int4_t>(-8);
+    }
+}
+
+static inline void force_i8_i8_mm_corners(
+    int8_t *act,
+    int act_len,
+    int8_t *weights,
+    int rows,
+    int cols
+) {
+    if (act_len < 4 || cols < 4 || rows <= 0) return;
+    act[0] = std::numeric_limits<int8_t>::max();
+    act[1] = std::numeric_limits<int8_t>::max();
+    act[2] = std::numeric_limits<int8_t>::min();
+    act[3] = std::numeric_limits<int8_t>::min();
+    for (int r = 0; r < rows; ++r) {
+        const int base = r * cols;
+        weights[base + 0] = std::numeric_limits<int8_t>::max();
+        weights[base + 1] = std::numeric_limits<int8_t>::min();
+        weights[base + 2] = std::numeric_limits<int8_t>::max();
+        weights[base + 3] = std::numeric_limits<int8_t>::min();
+    }
+}
+
+static inline void force_i16_i8_mm_corners(
+    int16_t *act,
+    int act_len,
+    int8_t *weights,
+    int rows,
+    int cols
+) {
+    if (act_len < 4 || cols < 4 || rows <= 0) return;
+    act[0] = std::numeric_limits<int16_t>::max();
+    act[1] = std::numeric_limits<int16_t>::max();
+    act[2] = std::numeric_limits<int16_t>::min();
+    act[3] = std::numeric_limits<int16_t>::min();
+    for (int r = 0; r < rows; ++r) {
+        const int base = r * cols;
+        weights[base + 0] = std::numeric_limits<int8_t>::max();
+        weights[base + 1] = std::numeric_limits<int8_t>::min();
+        weights[base + 2] = std::numeric_limits<int8_t>::max();
+        weights[base + 3] = std::numeric_limits<int8_t>::min();
+    }
+}
+
+static inline void force_i8_i4stored_i8_mm_corners(
+    int8_t *act,
+    int act_len,
+    int8_t *weights,
+    int rows,
+    int cols
+) {
+    if (act_len < 4 || cols < 4 || rows <= 0) return;
+    act[0] = std::numeric_limits<int8_t>::max();
+    act[1] = std::numeric_limits<int8_t>::max();
+    act[2] = std::numeric_limits<int8_t>::min();
+    act[3] = std::numeric_limits<int8_t>::min();
+    for (int r = 0; r < rows; ++r) {
+        const int base = r * cols;
+        weights[base + 0] = 7;
+        weights[base + 1] = -8;
+        weights[base + 2] = 7;
+        weights[base + 3] = -8;
+    }
+}
+
+static inline void force_i16_i4stored_i8_mm_corners(
+    int16_t *act,
+    int act_len,
+    int8_t *weights,
+    int rows,
+    int cols
+) {
+    if (act_len < 4 || cols < 4 || rows <= 0) return;
+    act[0] = std::numeric_limits<int16_t>::max();
+    act[1] = std::numeric_limits<int16_t>::max();
+    act[2] = std::numeric_limits<int16_t>::min();
+    act[3] = std::numeric_limits<int16_t>::min();
+    for (int r = 0; r < rows; ++r) {
+        const int base = r * cols;
+        weights[base + 0] = 7;
+        weights[base + 1] = -8;
+        weights[base + 2] = 7;
+        weights[base + 3] = -8;
     }
 }
 
@@ -503,52 +727,71 @@ static int16_t g_softmax_in[HEADS_PARALLEL][CONTEXT_LENGTH] = {};
 static int16_t g_att_weights[HEADS_PARALLEL][CONTEXT_LENGTH] = {};
 static int8_t g_att_v_cache[HEADS_PARALLEL][CONTEXT_LENGTH * D_HEADS] = {};
 
-static void init_head_vectors() {
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+static void fill_head_lane_inputs(int lane, int layer) {
+    layer = clamp_layer(layer);
+    for (int i = 0; i < D_MODEL; ++i) {
+        g_q_act[lane][i] = stim_i8(layer, i, 11 + lane);
+        g_k_act[lane][i] = stim_i8(layer, i, 21 + lane);
+        g_v_act[lane][i] = stim_i8(layer, i, 31 + lane);
+    }
+    for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
+        g_wq[lane][i] = stim_i4(layer, i, 41 + lane);
+        g_wk[lane][i] = stim_i4(layer, i, 51 + lane);
+        g_wv[lane][i] = stim_i4(layer, i, 61 + lane);
+    }
+    for (int h = 0; h < D_HEADS; ++h) {
+        g_bq[lane][h] = stim_i4(layer, h, 71 + lane);
+        g_bk[lane][h] = stim_i4(layer, h, 81 + lane);
+        g_bv[lane][h] = stim_i4(layer, h, 91 + lane);
+        g_att_q[lane][h] = stim_i8(layer, h, 101 + lane);
+        g_rq_k_x[lane][h] = stim_i32(layer, h, 111 + lane);
+        g_rq_v_x[lane][h] = stim_i32(layer, h, 121 + lane);
+        g_rq_q_x[lane][h] = stim_i32(layer, h, 131 + lane);
+        g_rq_head_x[lane][h] = stim_i32(layer, h, 141 + lane);
+    }
+    g_rq_k_M[lane] = 11 + lane;
+    g_rq_k_N[lane] = 3 + lane;
+    g_rq_v_M[lane] = 12 + lane;
+    g_rq_v_N[lane] = 4 + lane;
+    g_rq_q_M[lane] = 13 + lane;
+    g_rq_q_N[lane] = 5 + lane;
+    g_rq_head_M[lane] = 14 + lane;
+    g_rq_head_N[lane] = 6 + lane;
+
+    for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
+        g_att_k_cache[lane][i] = stim_i8(layer, i, 151 + lane);
+        g_att_v_cache[lane][i] = stim_i8(layer, i, 161 + lane);
+    }
+    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
+        g_val_scale_in[lane][i] = stim_i32(layer, i, 171 + lane);
+        g_softmax_in[lane][i] = stim_i16(layer, i, 181 + lane);
+        g_att_weights[lane][i] = stim_i16(layer, i, 191 + lane);
+    }
+
+    // Force first MM lanes into explicit overflow corner cases:
+    // +A*+W, +A*-W, -A*+W, -A*-W.
+    force_i8_i4_mm_corners(g_q_act[lane], D_MODEL, g_wq[lane], D_HEADS, D_MODEL);
+    force_i8_i4_mm_corners(g_k_act[lane], D_MODEL, g_wk[lane], D_HEADS, D_MODEL);
+    force_i8_i4_mm_corners(g_v_act[lane], D_MODEL, g_wv[lane], D_HEADS, D_MODEL);
+    force_i8_i8_mm_corners(g_att_q[lane], D_HEADS, g_att_k_cache[lane], CONTEXT_LENGTH, D_HEADS);
+    force_i16_i8_mm_corners(g_att_weights[lane], CONTEXT_LENGTH, g_att_v_cache[lane], D_HEADS, CONTEXT_LENGTH);
+
+    // Layer 0 Q path: force max-positive output (Q = x*W + b).
+    if (layer == 0) {
         for (int i = 0; i < D_MODEL; ++i) {
-            const int8_t base = static_cast<int8_t>(i * 2 + 1 + lane);
-            g_q_act[lane][i] = (i & 1) ? static_cast<int8_t>(-base) : base;
-            g_k_act[lane][i] = (i & 1) ? static_cast<int8_t>(-(base + 1)) : static_cast<int8_t>(base + 1);
-            g_v_act[lane][i] = (i & 1) ? static_cast<int8_t>(-(base + 2)) : static_cast<int8_t>(base + 2);
+            g_q_act[lane][i] = std::numeric_limits<int8_t>::max();
         }
         for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
-            const int4_t v = static_cast<int4_t>(((i + lane) % 7) - 3);
-            g_wq[lane][i] = v;
-            g_wk[lane][i] = static_cast<int4_t>(((i + lane + 1) % 7) - 3);
-            g_wv[lane][i] = static_cast<int4_t>(((i + lane + 2) % 7) - 3);
+            g_wq[lane][i] = static_cast<int4_t>(7);
         }
         for (int h = 0; h < D_HEADS; ++h) {
-            g_bq[lane][h] = static_cast<int4_t>((h + lane) % 3);
-            g_bk[lane][h] = static_cast<int4_t>(((h + lane + 1) % 3) - 1);
-            g_bv[lane][h] = static_cast<int4_t>(((h + lane + 2) % 3) - 1);
-            g_att_q[lane][h] = static_cast<int8_t>((h + 1) * (lane + 1));
-            g_rq_k_x[lane][h] = 1000 + (lane * 100) + h * 10;
-            g_rq_v_x[lane][h] = 2000 + (lane * 100) + h * 10;
-            g_rq_q_x[lane][h] = 3000 + (lane * 100) + h * 10;
-            g_rq_head_x[lane][h] = 4000 + (lane * 100) + h * 10;
-        }
-        g_rq_k_M[lane] = 11 + lane;
-        g_rq_k_N[lane] = 3 + lane;
-        g_rq_v_M[lane] = 12 + lane;
-        g_rq_v_N[lane] = 4 + lane;
-        g_rq_q_M[lane] = 13 + lane;
-        g_rq_q_N[lane] = 5 + lane;
-        g_rq_head_M[lane] = 14 + lane;
-        g_rq_head_N[lane] = 6 + lane;
-
-        for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
-            g_att_k_cache[lane][i] = static_cast<int8_t>((i + 1 + lane) % 17);
-            g_att_v_cache[lane][i] = static_cast<int8_t>(((i + 3 + lane) % 19) - 9);
-        }
-        for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-            g_val_scale_in[lane][i] = 500 + lane * 50 + i * 7;
-            g_softmax_in[lane][i] = static_cast<int16_t>(-500 + lane * 10 + i * 5);
-            g_att_weights[lane][i] = static_cast<int16_t>((i + lane) * 137);
+            g_bq[lane][h] = static_cast<int4_t>(7);
         }
     }
 }
 
-static void build_head_in_buf(int lane, ComputeOp op, uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES]) {
+static void build_head_in_buf(int lane, int layer, ComputeOp op, uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES]) {
+    fill_head_lane_inputs(lane, layer);
     uint8_t *buf = head_in_buf[lane];
     for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
         buf[i] = 0;
@@ -802,7 +1045,7 @@ static inline void write_i4(uint8_t *buf, int nibble_idx, int8_t value) {
 }
 
 int main() {
-    const int MAX_CYCLES = 4000;
+    const int MAX_CYCLES = 8000;
     const int COMP_LAT   = 3;
     const int DMA_LAT    = 3;
     const int AXIS_BEATS = 3;
@@ -836,6 +1079,7 @@ int main() {
     uint8_t head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES] = {};
     bool mem_busy = false;
     int  mem_timer = 0;
+    int  active_main_layer = -1;
     enum class MemPending { None, Read, Write };
     MemPending mem_pending = MemPending::None;
 
@@ -879,10 +1123,9 @@ int main() {
     int8_t  ffn2_w[D_FFN * D_FFN] = {};
     int32_t ffn2_b[D_FFN] = {};
 
-    init_head_vectors();
-
     bool head_mem_busy[HEADS_PARALLEL] = {false};
     int  head_mem_timer[HEADS_PARALLEL] = {0};
+    int  active_head_layer[HEADS_PARALLEL];
     uint32_t head_mem_op_latched[HEADS_PARALLEL] = {0};
     enum class HeadMemPending { None, Read, Write };
     HeadMemPending head_mem_pending[HEADS_PARALLEL] = {HeadMemPending::None};
@@ -891,6 +1134,7 @@ int main() {
     int  head_dma_active_idx[HEADS_PARALLEL] = {0};
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
         head_dma_active_idx[lane] = -1;
+        active_head_layer[lane] = -1;
     }
 
     bool stream_ready    = true;
@@ -1365,9 +1609,59 @@ int main() {
                 if (mem_pending == MemPending::Read) {
                     const ComputeOp op = decode_op(mem_op_latched);
                     const int tile = static_cast<int>(static_cast<int8_t>((mem_op_latched >> 24) & 0xFFu));
+                    const int req_layer = clamp_layer(static_cast<int>((mem_op_latched >> 8) & 0xFFu));
                     for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
                         in_buf[i] = 0;
                     }
+                    if (active_main_layer != req_layer) {
+                        for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
+                            out_buf[i] = 0;
+                        }
+                        active_main_layer = req_layer;
+                    }
+                    for (int i = 0; i < D_MODEL; ++i) {
+                        out_proj_act[i] = stim_i8(req_layer, i, 11);
+                        out_proj_b[i] = stim_i32(req_layer, i, 13);
+                        rq1_x[i] = stim_i32(req_layer, i, 21);
+                        rq2_x[i] = stim_i32(req_layer, i, 31);
+                        rq3_x[i] = stim_i32(req_layer, i, 41);
+                        rq4_x[i] = stim_i32(req_layer, i, 51);
+                        resid0_x[i] = stim_i8(req_layer, i, 61);
+                        resid0_r[i] = stim_i8(req_layer, i, 71);
+                        resid1_x[i] = stim_i8(req_layer, i, 81);
+                        resid1_r[i] = stim_i8(req_layer, i, 91);
+                        ln0_x[i] = stim_i8(req_layer, i, 101);
+                        ln1_x[i] = stim_i8(req_layer, i, 111);
+                        final_norm_x[i] = stim_i8(req_layer, i, 121);
+                        ln0_gamma[i] = stim_i32(req_layer, i, 131);
+                        ln1_gamma[i] = stim_i32(req_layer, i, 141);
+                        final_norm_gamma[i] = stim_i32(req_layer, i, 151);
+                        ffn1_x[i] = stim_i8(req_layer, i, 161);
+                    }
+                    ln0_eps = stim_eps(req_layer, 171);
+                    ln1_eps = stim_eps(req_layer, 181);
+                    final_norm_eps = stim_eps(req_layer, 191);
+                    for (int i = 0; i < D_MODEL * D_MODEL; ++i) {
+                        out_proj_w[i] = stim_i4(req_layer, i, 201);
+                    }
+                    for (int i = 0; i < W1_OUT_SIZE; ++i) {
+                        ffn1_b[i] = stim_i32(req_layer, i, 211);
+                    }
+                    for (int i = 0; i < D_MODEL * W1_OUT_SIZE; ++i) {
+                        ffn1_w[i] = stim_i4(req_layer, i, 221);
+                    }
+                    for (int i = 0; i < D_FFN; ++i) {
+                        ffn_act_gate_in[i] = stim_i16(req_layer, i, 231);
+                        ffn_act_up_in[i] = stim_i16(req_layer, i, 241);
+                        ffn2_x[i] = stim_i16(req_layer, i, 251);
+                        ffn2_b[i] = stim_i32(req_layer, i, 261);
+                    }
+                    for (int i = 0; i < D_FFN * D_FFN; ++i) {
+                        ffn2_w[i] = stim_i4(req_layer, i, 271);
+                    }
+                    force_i8_i4stored_i8_mm_corners(out_proj_act, D_MODEL, out_proj_w, D_MODEL, D_MODEL);
+                    force_i8_i4stored_i8_mm_corners(ffn1_x, D_MODEL, ffn1_w, W1_OUT_SIZE, D_MODEL);
+                    force_i16_i4stored_i8_mm_corners(ffn2_x, D_FFN, ffn2_w, D_FFN, D_FFN);
                     switch (op) {
                     case CMP_OUT_PROJ: {
                         for (int i = 0; i < D_MODEL; ++i) {
@@ -1493,8 +1787,15 @@ int main() {
                     head_compute_ctx[lane].mem_transfer_done = true;
                     head_mem_busy[lane] = false;
                     const ComputeOp op = decode_op(head_mem_op_latched[lane]);
+                    const int req_layer = clamp_layer(static_cast<int>((head_mem_op_latched[lane] >> 8) & 0xFFu));
                     if (head_mem_pending[lane] == HeadMemPending::Read) {
-                        build_head_in_buf(lane, op, head_in_buf);
+                        if (active_head_layer[lane] != req_layer) {
+                            for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
+                                head_out_buf[lane][i] = 0;
+                            }
+                            active_head_layer[lane] = req_layer;
+                        }
+                        build_head_in_buf(lane, req_layer, op, head_in_buf);
                         if (op == CMP_ATT_SCORES) {
                             seen_attn = true;
                         }

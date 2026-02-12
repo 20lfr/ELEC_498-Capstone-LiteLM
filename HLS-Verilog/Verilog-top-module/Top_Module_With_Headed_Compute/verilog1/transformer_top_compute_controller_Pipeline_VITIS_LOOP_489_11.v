@@ -45,7 +45,7 @@ wire   [63:0] zext_ln489_fu_72_p1;
 reg   [6:0] i_fu_34;
 wire   [6:0] add_ln489_fu_66_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i_40;
+reg   [6:0] ap_sig_allocacmp_i_43;
 reg    out_buf_we0_local;
 reg    out_buf_ce0_local;
 reg    ap_done_reg;
@@ -152,9 +152,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_40 = 7'd0;
+        ap_sig_allocacmp_i_43 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_40 = i_fu_34;
+        ap_sig_allocacmp_i_43 = i_fu_34;
     end
 end
 
@@ -185,7 +185,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln489_fu_66_p2 = (ap_sig_allocacmp_i_40 + 7'd1);
+assign add_ln489_fu_66_p2 = (ap_sig_allocacmp_i_43 + 7'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -199,7 +199,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln489_fu_60_p2 = ((ap_sig_allocacmp_i_40 == 7'd64) ? 1'b1 : 1'b0);
+assign icmp_ln489_fu_60_p2 = ((ap_sig_allocacmp_i_43 == 7'd64) ? 1'b1 : 1'b0);
 
 assign out_buf_address0 = zext_ln489_fu_72_p1;
 
@@ -209,6 +209,6 @@ assign out_buf_d0 = 8'd0;
 
 assign out_buf_we0 = out_buf_we0_local;
 
-assign zext_ln489_fu_72_p1 = ap_sig_allocacmp_i_40;
+assign zext_ln489_fu_72_p1 = ap_sig_allocacmp_i_43;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_489_11

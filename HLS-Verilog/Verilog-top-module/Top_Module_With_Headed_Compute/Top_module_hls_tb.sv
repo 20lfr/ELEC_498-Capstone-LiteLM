@@ -3,7 +3,7 @@
 // Enhanced testbench for transformer_top RTL matching C++ testbench functionality
 module top_module_hls_tb;
   localparam int CLK_PERIOD = 10;
-  localparam int MAX_CYCLES = 90000;
+  localparam int MAX_CYCLES = 200000;
   localparam int COMP_LAT = 3;
   localparam int COMP_LAT_MIN = 1;
   localparam int COMP_LAT_MAX = 4;
@@ -13,7 +13,7 @@ module top_module_hls_tb;
   localparam int AXIS_BEATS = 3;
   localparam int AXIS_LAST_HOLD_CYCLES = 6;
   localparam int NUM_HEADS       = 4;
-  localparam int NUM_LAYERS      = 2;
+  localparam int NUM_LAYERS      = 4;
   localparam int NUM_WO_TILES    = 4;
   localparam int NUM_W1_TILES    = 8;
   localparam int NUM_W2_TILES    = 4;
@@ -693,6 +693,10 @@ module top_module_hls_tb;
   int mem_timer;
   int mem_done_hold;
   int pending_tile;
+  int pending_layer;
+  int active_main_layer;
+  int active_head_layer [0:HEADS_PARALLEL-1];
+  int active_head_capture_layer;
 
   // Input data sets (mirrors compute_controller_tb.sv)
   logic [7:0]  full_valueA [0:D_MODEL-1];
@@ -763,20 +767,20 @@ module top_module_hls_tb;
   logic signed [15:0] att_weights_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
   logic signed [7:0] att_v_cache_all [0:(HEAD_DATASETS*ATT_V_ELEMS)-1];
 
-  // Output capture per operation (flattened by layer/head index)
-  logic signed [31:0] q_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
-  logic signed [31:0] k_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
-  logic signed [31:0] v_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
+  // Output capture per operation (single-layer only; indexed by head)
+  logic signed [31:0] q_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [31:0] k_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [31:0] v_out_all [0:(NUM_HEADS*D_HEADS)-1];
 
-  logic signed [7:0] k_rq_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
-  logic signed [7:0] v_rq_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
-  logic signed [7:0] q_rq_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
-  logic signed [7:0] head_rq_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
+  logic signed [7:0] k_rq_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [7:0] v_rq_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [7:0] q_rq_out_all [0:(NUM_HEADS*D_HEADS)-1];
+  logic signed [7:0] head_rq_out_all [0:(NUM_HEADS*D_HEADS)-1];
 
-  logic signed [31:0] att_scores_out_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
-  logic signed [15:0] val_scale_out_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
-  logic signed [15:0] softmax_out_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
-  logic signed [31:0] att_value_out_all [0:(HEAD_DATASETS*D_HEADS)-1];
+  logic signed [31:0] att_scores_out_all [0:(NUM_HEADS*CONTEXT_LENGTH)-1];
+  logic signed [15:0] val_scale_out_all [0:(NUM_HEADS*CONTEXT_LENGTH)-1];
+  logic signed [15:0] softmax_out_all [0:(NUM_HEADS*CONTEXT_LENGTH)-1];
+  logic signed [31:0] att_value_out_all [0:(NUM_HEADS*D_HEADS)-1];
   // headedness outputs
 
   logic [7:0] head_in_buf_mem [0:HEADS_PARALLEL-1][0:HEAD_IN_BUF_BYTES-1];
@@ -805,6 +809,144 @@ module top_module_hls_tb;
 
   function automatic int head_data_base(input int layer, input int head, input int stride);
     head_data_base = head_dataset_index(layer, head) * stride;
+  endfunction
+
+  function automatic int clamp_layer(input int layer);
+    if (layer < 0) begin
+      clamp_layer = 0;
+    end else if (layer >= NUM_LAYERS) begin
+      clamp_layer = NUM_LAYERS - 1;
+    end else begin
+      clamp_layer = layer;
+    end
+  endfunction
+
+  function automatic int layer_profile(input int layer);
+    int l;
+    begin
+      l = clamp_layer(layer);
+      if (l == 0) begin
+        layer_profile = 0; // normal
+      end else if (l == 1) begin
+        layer_profile = 1; // min
+      end else if (l == 2) begin
+        layer_profile = 2; // max
+      end else begin
+        layer_profile = 3; // mixed
+      end
+    end
+  endfunction
+
+  function automatic logic signed [7:0] stim_i8(input int layer, input int idx, input int salt);
+    int p;
+    int v;
+    begin
+      p = layer_profile(layer);
+      if (p == 1) begin
+        v = -128;
+      end else if (p == 2) begin
+        v = 127;
+      end else if (p == 3) begin
+        case ((idx + salt) & 3)
+          0: v = -128;
+          1: v = 127;
+          2: v = ((idx * 11 + salt * 3 + layer) % 63) - 31;
+          default: v = -(((idx * 7 + salt * 5 + layer) % 63) - 31);
+        endcase
+      end else begin
+        v = ((idx * 13 + salt * 7 + layer * 5) % 95) - 47;
+      end
+      stim_i8 = $signed(v);
+    end
+  endfunction
+
+  function automatic logic signed [15:0] stim_i16(input int layer, input int idx, input int salt);
+    int p;
+    int v;
+    begin
+      p = layer_profile(layer);
+      if (p == 1) begin
+        v = -32768;
+      end else if (p == 2) begin
+        v = 32767;
+      end else if (p == 3) begin
+        case ((idx + salt) & 3)
+          0: v = -32768;
+          1: v = 32767;
+          2: v = ((idx * 173 + salt * 19 + layer * 11) % 8191) - 4095;
+          default: v = -(((idx * 131 + salt * 23 + layer * 7) % 8191) - 4095);
+        endcase
+      end else begin
+        v = ((idx * 139 + salt * 17 + layer * 29) % 4095) - 2047;
+      end
+      stim_i16 = $signed(v);
+    end
+  endfunction
+
+  function automatic logic signed [31:0] stim_i32(input int layer, input int idx, input int salt);
+    int p;
+    integer v;
+    begin
+      p = layer_profile(layer);
+      if (p == 1) begin
+        v = -2147483648;
+      end else if (p == 2) begin
+        v = 2147483647;
+      end else if (p == 3) begin
+        case ((idx + salt) % 6)
+          0: v = 2147483647;
+          1: v = -2147483648;
+          2: v = 2000000000;
+          3: v = -2000000000;
+          4: v = ((idx * 7919 + salt * 313 + layer * 97) % 500000) - 250000;
+          default: v = -(((idx * 6151 + salt * 271 + layer * 89) % 500000) - 250000);
+        endcase
+      end else begin
+        v = ((idx * 3571 + salt * 173 + layer * 97) % 200000) - 100000;
+      end
+      stim_i32 = $signed(v);
+    end
+  endfunction
+
+  function automatic logic signed [3:0] stim_i4(input int layer, input int idx, input int salt);
+    int p;
+    int v;
+    begin
+      p = layer_profile(layer);
+      if (p == 1) begin
+        v = (((idx + salt) % 5) == 0) ? -7 : -8;
+      end else if (p == 2) begin
+        v = (((idx + salt) % 5) == 0) ? 6 : 7;
+      end else if (p == 3) begin
+        case ((idx + salt) & 3)
+          0: v = -8;
+          1: v = 7;
+          2: v = ((idx + salt + layer) % 15) - 7;
+          default: v = -(((idx * 3 + salt + layer) % 15) - 7);
+        endcase
+      end else begin
+        v = ((idx * 3 + salt + layer * 2) % 15) - 7;
+      end
+      if (v > 7) v = 7;
+      if (v < -8) v = -8;
+      stim_i4 = $signed(v[3:0]);
+    end
+  endfunction
+
+  function automatic logic [31:0] stim_eps(input int layer, input int salt);
+    int p;
+    begin
+      p = layer_profile(layer);
+      if (p == 1) begin
+        stim_eps = 32'd1;
+      end else if (p == 2) begin
+        stim_eps = 32'd1024;
+      end else if (p == 3) begin
+        stim_eps = 7 + ((salt + layer) % 13);
+      end else begin
+        stim_eps = 3 + ((salt + layer) % 5);
+      end
+    end
   endfunction
 
   // DMA done hold
@@ -929,6 +1071,11 @@ module top_module_hls_tb;
     for (i = 0; i < OUT_BUF_BYTES; i = i + 1) begin
       out_buf_mem[i] = 8'd0;
     end
+    active_main_layer = -1;
+    active_head_capture_layer = -1;
+    for (i = 0; i < HEADS_PARALLEL; i = i + 1) begin
+      active_head_layer[i] = -1;
+    end
   end
 
 
@@ -950,49 +1097,113 @@ module top_module_hls_tb;
         lane = head % HEADS_PARALLEL;
 
         for (i = 0; i < D_MODEL; i = i + 1) begin
-          base = (i * 2) + 1 + lane;
-          q_act_all[(data_idx * D_MODEL) + i] = (i & 1) ? -$signed(base) : $signed(base);
-          k_act_all[(data_idx * D_MODEL) + i] = (i & 1) ? -$signed(base + 1) : $signed(base + 1);
-          v_act_all[(data_idx * D_MODEL) + i] = (i & 1) ? -$signed(base + 2) : $signed(base + 2);
+          q_act_all[(data_idx * D_MODEL) + i] = stim_i8(layer, i, 11 + lane + (head * 3));
+          k_act_all[(data_idx * D_MODEL) + i] = stim_i8(layer, i, 21 + lane + (head * 3));
+          v_act_all[(data_idx * D_MODEL) + i] = stim_i8(layer, i, 31 + lane + (head * 3));
         end
 
         for (h = 0; h < D_HEADS; h = h + 1) begin
           for (i = 0; i < D_MODEL; i = i + 1) begin
             idx = (h * D_MODEL) + i;
-            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] =
-              $signed(((idx + lane) % 7) - 3);
-            wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] =
-              $signed(((idx + lane + 1) % 7) - 3);
-            wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] =
-              $signed(((idx + lane + 2) % 7) - 3);
+            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = stim_i4(layer, idx, 41 + lane + head);
+            wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = stim_i4(layer, idx, 51 + lane + head);
+            wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = stim_i4(layer, idx, 61 + lane + head);
           end
-          bq_all[(data_idx * QKV_B_ELEMS) + h] = $signed((h + lane) % 3);
-          bk_all[(data_idx * QKV_B_ELEMS) + h] = $signed(((h + lane + 1) % 3) - 1);
-          bv_all[(data_idx * QKV_B_ELEMS) + h] = $signed(((h + lane + 2) % 3) - 1);
+          bq_all[(data_idx * QKV_B_ELEMS) + h] = stim_i4(layer, h, 71 + lane + head);
+          bk_all[(data_idx * QKV_B_ELEMS) + h] = stim_i4(layer, h, 81 + lane + head);
+          bv_all[(data_idx * QKV_B_ELEMS) + h] = stim_i4(layer, h, 91 + lane + head);
 
-          rq_q_x_all[(data_idx * D_HEADS) + h]    = 3000 + (lane * 100) + h * 10;
-          rq_k_x_all[(data_idx * D_HEADS) + h]    = 1000 + (lane * 100) + h * 10;
-          rq_v_x_all[(data_idx * D_HEADS) + h]    = 2000 + (lane * 100) + h * 10;
-          rq_head_x_all[(data_idx * D_HEADS) + h] = 4000 + (lane * 100) + h * 10;
+          rq_q_x_all[(data_idx * D_HEADS) + h]    = stim_i32(layer, h, 101 + lane + head);
+          rq_k_x_all[(data_idx * D_HEADS) + h]    = stim_i32(layer, h, 111 + lane + head);
+          rq_v_x_all[(data_idx * D_HEADS) + h]    = stim_i32(layer, h, 121 + lane + head);
+          rq_head_x_all[(data_idx * D_HEADS) + h] = stim_i32(layer, h, 131 + lane + head);
 
-          att_q_all[(data_idx * D_HEADS) + h] = (h + 1) * (lane + 1);
+          att_q_all[(data_idx * D_HEADS) + h] = stim_i8(layer, h, 141 + lane + head);
         end
 
         for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
           for (h = 0; h < D_HEADS; h = h + 1) begin
-            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + h] =
-              $signed((t * D_HEADS + h + 1 + lane) % 17);
+            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + h] = stim_i8(layer, (t * D_HEADS) + h, 151 + lane + head);
           end
-          val_scale_in_all[(data_idx * CONTEXT_LENGTH) + t] = 500 + (lane * 50) + (t * 7);
-          softmax_in_all[(data_idx * CONTEXT_LENGTH) + t] = -500 + (lane * 10) + (t * 5);
-          att_weights_all[(data_idx * CONTEXT_LENGTH) + t] = $signed((t + lane) * 137);
+          val_scale_in_all[(data_idx * CONTEXT_LENGTH) + t] = stim_i32(layer, t, 161 + lane + head);
+          softmax_in_all[(data_idx * CONTEXT_LENGTH) + t] = stim_i16(layer, t, 171 + lane + head);
+          att_weights_all[(data_idx * CONTEXT_LENGTH) + t] = stim_i16(layer, t, 181 + lane + head);
         end
 
         for (h = 0; h < D_HEADS; h = h + 1) begin
           for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
             idx = (h * CONTEXT_LENGTH) + t;
-            att_v_cache_all[(data_idx * ATT_V_ELEMS) + (h * CONTEXT_LENGTH) + t] =
-              $signed(((idx + 3 + lane) % 19) - 9);
+            att_v_cache_all[(data_idx * ATT_V_ELEMS) + (h * CONTEXT_LENGTH) + t] = stim_i8(layer, idx, 191 + lane + head);
+          end
+        end
+
+        // Matrix-multiply corner vectors for overflow coverage:
+        // +A*+W, +A*-W, -A*+W, -A*-W.
+        if (D_MODEL >= 4) begin
+          q_act_all[(data_idx * D_MODEL) + 0] = 8'sd127;
+          q_act_all[(data_idx * D_MODEL) + 1] = 8'sd127;
+          q_act_all[(data_idx * D_MODEL) + 2] = 8'sh80;
+          q_act_all[(data_idx * D_MODEL) + 3] = 8'sh80;
+          k_act_all[(data_idx * D_MODEL) + 0] = 8'sd127;
+          k_act_all[(data_idx * D_MODEL) + 1] = 8'sd127;
+          k_act_all[(data_idx * D_MODEL) + 2] = 8'sh80;
+          k_act_all[(data_idx * D_MODEL) + 3] = 8'sh80;
+          v_act_all[(data_idx * D_MODEL) + 0] = 8'sd127;
+          v_act_all[(data_idx * D_MODEL) + 1] = 8'sd127;
+          v_act_all[(data_idx * D_MODEL) + 2] = 8'sh80;
+          v_act_all[(data_idx * D_MODEL) + 3] = 8'sh80;
+        end
+        if ((D_MODEL >= 4) && (D_HEADS > 0)) begin
+          for (h = 0; h < D_HEADS; h = h + 1) begin
+            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 0] = 4'sd7;
+            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 1] = 4'sh8;
+            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 2] = 4'sd7;
+            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 3] = 4'sh8;
+            wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 0] = 4'sd7;
+            wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 1] = 4'sh8;
+            wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 2] = 4'sd7;
+            wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 3] = 4'sh8;
+            wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 0] = 4'sd7;
+            wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 1] = 4'sh8;
+            wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 2] = 4'sd7;
+            wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 3] = 4'sh8;
+          end
+        end
+        if (D_HEADS >= 4) begin
+          att_q_all[(data_idx * D_HEADS) + 0] = 8'sd127;
+          att_q_all[(data_idx * D_HEADS) + 1] = 8'sd127;
+          att_q_all[(data_idx * D_HEADS) + 2] = 8'sh80;
+          att_q_all[(data_idx * D_HEADS) + 3] = 8'sh80;
+          for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
+            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 0] = 8'sd127;
+            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 1] = 8'sh80;
+            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 2] = 8'sd127;
+            att_k_cache_all[(data_idx * ATT_K_ELEMS) + (t * D_HEADS) + 3] = 8'sh80;
+          end
+        end
+        if (CONTEXT_LENGTH >= 4) begin
+          att_weights_all[(data_idx * CONTEXT_LENGTH) + 0] = 16'sd32767;
+          att_weights_all[(data_idx * CONTEXT_LENGTH) + 1] = 16'sd32767;
+          att_weights_all[(data_idx * CONTEXT_LENGTH) + 2] = 16'sh8000;
+          att_weights_all[(data_idx * CONTEXT_LENGTH) + 3] = 16'sh8000;
+          for (h = 0; h < D_HEADS; h = h + 1) begin
+            att_v_cache_all[(data_idx * ATT_V_ELEMS) + (h * CONTEXT_LENGTH) + 0] = 8'sd127;
+            att_v_cache_all[(data_idx * ATT_V_ELEMS) + (h * CONTEXT_LENGTH) + 1] = 8'sh80;
+            att_v_cache_all[(data_idx * ATT_V_ELEMS) + (h * CONTEXT_LENGTH) + 2] = 8'sd127;
+            att_v_cache_all[(data_idx * ATT_V_ELEMS) + (h * CONTEXT_LENGTH) + 3] = 8'sh80;
+          end
+        end
+
+        // Layer 0 Q path: force max-positive output (Q = x*W + b).
+        if (layer == 0) begin
+          for (i = 0; i < D_MODEL; i = i + 1) begin
+            q_act_all[(data_idx * D_MODEL) + i] = 8'sd127;
+          end
+          for (h = 0; h < D_HEADS; h = h + 1) begin
+            for (i = 0; i < D_MODEL; i = i + 1) begin
+              wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = 4'sd7;
+            end
+            bq_all[(data_idx * QKV_B_ELEMS) + h] = 4'sd7;
           end
         end
       end
@@ -1727,91 +1938,91 @@ module top_module_hls_tb;
       end
 
       $display("q_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 8) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %08x", q_out_all[i + j]);
         end
         $write("\n");
       end
       $display("k_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 8) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %08x", k_out_all[i + j]);
         end
         $write("\n");
       end
       $display("v_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 8) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %08x", v_out_all[i + j]);
         end
         $write("\n");
       end
 
       $display("k_rq_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 16) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 16) begin
         $write("  %04x:", i);
-        for (j = 0; j < 16 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 16 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %02x", k_rq_out_all[i + j]);
         end
         $write("\n");
       end
       $display("v_rq_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 16) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 16) begin
         $write("  %04x:", i);
-        for (j = 0; j < 16 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 16 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %02x", v_rq_out_all[i + j]);
         end
         $write("\n");
       end
       $display("q_rq_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 16) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 16) begin
         $write("  %04x:", i);
-        for (j = 0; j < 16 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 16 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %02x", q_rq_out_all[i + j]);
         end
         $write("\n");
       end
       $display("head_rq_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 16) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 16) begin
         $write("  %04x:", i);
-        for (j = 0; j < 16 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 16 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %02x", head_rq_out_all[i + j]);
         end
         $write("\n");
       end
 
       $display("att_scores_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * CONTEXT_LENGTH); i = i + 8) begin
+      for (i = 0; i < (NUM_HEADS * CONTEXT_LENGTH); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * CONTEXT_LENGTH); j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < (NUM_HEADS * CONTEXT_LENGTH); j = j + 1) begin
           $write(" %08x", att_scores_out_all[i + j]);
         end
         $write("\n");
       end
       $display("val_scale_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * CONTEXT_LENGTH); i = i + 8) begin
+      for (i = 0; i < (NUM_HEADS * CONTEXT_LENGTH); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * CONTEXT_LENGTH); j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < (NUM_HEADS * CONTEXT_LENGTH); j = j + 1) begin
           $write(" %04x", val_scale_out_all[i + j]);
         end
         $write("\n");
       end
       $display("softmax_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * CONTEXT_LENGTH); i = i + 8) begin
+      for (i = 0; i < (NUM_HEADS * CONTEXT_LENGTH); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * CONTEXT_LENGTH); j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < (NUM_HEADS * CONTEXT_LENGTH); j = j + 1) begin
           $write(" %04x", softmax_out_all[i + j]);
         end
         $write("\n");
       end
       $display("att_value_out_all:");
-      for (i = 0; i < (HEAD_DATASETS * D_HEADS); i = i + 8) begin
+      for (i = 0; i < (NUM_HEADS * D_HEADS); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * D_HEADS); j = j + 1) begin
+        for (j = 0; j < 8 && (i + j) < (NUM_HEADS * D_HEADS); j = j + 1) begin
           $write(" %08x", att_value_out_all[i + j]);
         end
         $write("\n");
@@ -2104,6 +2315,7 @@ module top_module_hls_tb;
     int req_layer;
     int req_head;
     if (ap_rst) begin
+      active_head_capture_layer <= -1;
       for (lane = 0; lane < HEADS_PARALLEL; lane = lane + 1) begin
         head_mem_pending[lane] <= HEAD_MEM_NONE;
         head_mem_busy[lane] <= 1'b0;
@@ -2129,17 +2341,37 @@ module top_module_hls_tb;
           head_mem_pending[lane] <= HEAD_MEM_NONE;
         end else if (head_mem_busy[lane] && (head_mem_pending[lane] == HEAD_MEM_WRITE)) begin
           if (head_mem_timer[lane] == 0) begin
+            int clear_idx;
             head_mem_transfer_done[lane] <= 1'b1;
             head_mem_done_hold[lane] <= HEAD_MEM_DONE_HOLD_CYCLES;
             head_mem_busy[lane] <= 1'b0;
             head_mem_pending[lane] <= HEAD_MEM_NONE;
             req_layer = head_mem_op_latched[lane][15:8];
             req_head  = head_mem_op_latched[lane][23:16];
+            req_layer = clamp_layer(req_layer);
             if ((req_layer >= 0) && (req_layer < NUM_LAYERS) &&
                 (req_head  >= 0) && (req_head  < NUM_HEADS)) begin
-              data_idx = head_dataset_index(req_layer, req_head);
+              data_idx = req_head;
             end else begin
               data_idx = 0;
+            end
+            if (active_head_capture_layer != req_layer) begin
+              for (clear_idx = 0; clear_idx < (NUM_HEADS * D_HEADS); clear_idx = clear_idx + 1) begin
+                q_out_all[clear_idx] <= '0;
+                k_out_all[clear_idx] <= '0;
+                v_out_all[clear_idx] <= '0;
+                k_rq_out_all[clear_idx] <= '0;
+                v_rq_out_all[clear_idx] <= '0;
+                q_rq_out_all[clear_idx] <= '0;
+                head_rq_out_all[clear_idx] <= '0;
+                att_value_out_all[clear_idx] <= '0;
+              end
+              for (clear_idx = 0; clear_idx < (NUM_HEADS * CONTEXT_LENGTH); clear_idx = clear_idx + 1) begin
+                att_scores_out_all[clear_idx] <= '0;
+                val_scale_out_all[clear_idx] <= '0;
+                softmax_out_all[clear_idx] <= '0;
+              end
+              active_head_capture_layer <= req_layer;
             end
             case (head_mem_op_latched[lane][7:0])
               HEAD_CMP_Q: begin
@@ -2235,6 +2467,7 @@ module top_module_hls_tb;
         head_mem_read_active[lane] <= 1'b0;
         head_mem_read_idx[lane] <= 0;
         head_mem_read_done_pulse[lane] <= 1'b0;
+        active_head_layer[lane] <= -1;
       end
     end else begin
       for (lane = 0; lane < HEADS_PARALLEL; lane = lane + 1) begin
@@ -2242,6 +2475,13 @@ module top_module_hls_tb;
         if (head_mem_read_start[lane] && !head_mem_read_active[lane]) begin
           req_layer = head_mem_op_latched[lane][15:8];
           req_head  = head_mem_op_latched[lane][23:16];
+          req_layer = clamp_layer(req_layer);
+          if (active_head_layer[lane] != req_layer) begin
+            for (int z = 0; z < HEAD_OUT_BUF_BYTES; z = z + 1) begin
+              head_out_buf_mem[lane][z] = 8'd0;
+            end
+            active_head_layer[lane] <= req_layer;
+          end
           head_build_in_buf_image(lane, head_mem_op_latched[lane][7:0], req_layer, req_head);
           head_mem_read_active[lane] <= 1'b1;
           head_mem_read_idx[lane] <= 0;
@@ -2269,7 +2509,9 @@ module top_module_hls_tb;
       mem_timer <= 0;
       mem_pending <= MEM_NONE;
       pending_tile <= 0;
+      pending_layer <= 0;
       mem_done_hold <= 0;
+      active_main_layer <= -1;
     end else begin
       mem_transfer_done <= (mem_done_hold != 0);
       if (mem_done_hold != 0) begin
@@ -2285,8 +2527,90 @@ module top_module_hls_tb;
             int out_base;
             int t;
             int j;
+            int req_layer;
             for (j = 0; j < IN_BUF_BYTES; j = j + 1) begin
               in_buf_mem[j] = 8'd0;
+            end
+            req_layer = clamp_layer(pending_layer);
+            if (active_main_layer != req_layer) begin
+              for (j = 0; j < OUT_BUF_BYTES; j = j + 1) begin
+                out_buf_mem[j] = 8'd0;
+              end
+              active_main_layer <= req_layer;
+            end
+            for (j = 0; j < D_MODEL; j = j + 1) begin
+              full_valueA[j] = stim_i8(req_layer, j, 11);
+              full_bias[j] = stim_i32(req_layer, j, 13);
+              rq1_x[j] = stim_i32(req_layer, j, 21);
+              rq2_x[j] = stim_i32(req_layer, j, 31);
+              rq3_x[j] = stim_i32(req_layer, j, 41);
+              rq4_x[j] = stim_i32(req_layer, j, 51);
+              resid0_x[j] = stim_i8(req_layer, j, 61);
+              resid0_r[j] = stim_i8(req_layer, j, 71);
+              resid1_x[j] = stim_i8(req_layer, j, 81);
+              resid1_r[j] = stim_i8(req_layer, j, 91);
+              ln0_x[j] = stim_i8(req_layer, j, 101);
+              ln1_x[j] = stim_i8(req_layer, j, 111);
+              final_norm_x[j] = stim_i8(req_layer, j, 121);
+              ln0_gamma[j] = stim_i32(req_layer, j, 131);
+              ln1_gamma[j] = stim_i32(req_layer, j, 141);
+              final_norm_gamma[j] = stim_i32(req_layer, j, 151);
+              ffn1_x[j] = stim_i8(req_layer, j, 161);
+            end
+            ln0_eps = stim_eps(req_layer, 171);
+            ln1_eps = stim_eps(req_layer, 181);
+            final_norm_eps = stim_eps(req_layer, 191);
+            for (j = 0; j < (D_MODEL * D_MODEL); j = j + 1) begin
+              full_weights[j] = stim_i4(req_layer, j, 201);
+            end
+            for (j = 0; j < W1_OUT_SIZE; j = j + 1) begin
+              ffn1_b[j] = stim_i32(req_layer, j, 211);
+            end
+            for (j = 0; j < (D_MODEL * W1_OUT_SIZE); j = j + 1) begin
+              ffn1_w[j] = stim_i4(req_layer, j, 221);
+            end
+            for (j = 0; j < D_FFN; j = j + 1) begin
+              ffn_act_gate_in[j] = stim_i16(req_layer, j, 231);
+              ffn_act_up_in[j] = stim_i16(req_layer, j, 241);
+              ffn2_x[j] = stim_i16(req_layer, j, 251);
+              ffn2_b[j] = stim_i32(req_layer, j, 261);
+            end
+            for (j = 0; j < (D_FFN * D_FFN); j = j + 1) begin
+              ffn2_w[j] = stim_i4(req_layer, j, 271);
+            end
+            if (D_MODEL >= 4) begin
+              full_valueA[0] = 8'sd127;
+              full_valueA[1] = 8'sd127;
+              full_valueA[2] = 8'sh80;
+              full_valueA[3] = 8'sh80;
+              ffn1_x[0] = 8'sd127;
+              ffn1_x[1] = 8'sd127;
+              ffn1_x[2] = 8'sh80;
+              ffn1_x[3] = 8'sh80;
+              for (t = 0; t < D_MODEL; t = t + 1) begin
+                full_weights[(t * D_MODEL) + 0] = 4'sd7;
+                full_weights[(t * D_MODEL) + 1] = 4'sh8;
+                full_weights[(t * D_MODEL) + 2] = 4'sd7;
+                full_weights[(t * D_MODEL) + 3] = 4'sh8;
+              end
+              for (t = 0; t < W1_OUT_SIZE; t = t + 1) begin
+                ffn1_w[(t * D_MODEL) + 0] = 4'sd7;
+                ffn1_w[(t * D_MODEL) + 1] = 4'sh8;
+                ffn1_w[(t * D_MODEL) + 2] = 4'sd7;
+                ffn1_w[(t * D_MODEL) + 3] = 4'sh8;
+              end
+            end
+            if (D_FFN >= 4) begin
+              ffn2_x[0] = 16'sd32767;
+              ffn2_x[1] = 16'sd32767;
+              ffn2_x[2] = 16'sh8000;
+              ffn2_x[3] = 16'sh8000;
+              for (t = 0; t < D_FFN; t = t + 1) begin
+                ffn2_w[(t * D_FFN) + 0] = 4'sd7;
+                ffn2_w[(t * D_FFN) + 1] = 4'sh8;
+                ffn2_w[(t * D_FFN) + 2] = 4'sd7;
+                ffn2_w[(t * D_FFN) + 3] = 4'sh8;
+              end
             end
 
             case (mem_op[7:0])
@@ -2505,11 +2829,13 @@ module top_module_hls_tb;
           mem_timer <= MEM_LAT - 1;
           mem_pending <= MEM_READ;
           pending_tile <= mem_op[31:24];
+          pending_layer <= mem_op[15:8];
         end else if (mem_write_request && mem_write_request_ap_vld) begin
           mem_busy <= 1'b1;
           mem_timer <= MEM_LAT - 1;
           mem_pending <= MEM_WRITE;
           pending_tile <= mem_op[31:24];
+          pending_layer <= mem_op[15:8];
         end
       end
     end

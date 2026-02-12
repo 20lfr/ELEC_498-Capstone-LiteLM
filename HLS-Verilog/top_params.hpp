@@ -139,7 +139,7 @@ constexpr int NUM_LOGIT_TILES           = 2;
 
 // Params used in architecture
 constexpr int       NUM_HEADS       = 4;
-constexpr int       NUM_LAYERS      = 2;
+constexpr int       NUM_LAYERS      = 4;
 constexpr int       D_MODEL         = 16;                           // Number of heads processed in parallel
 constexpr int       D_FFN           = 24;                           // Feed-Forward hidden layer size
 constexpr int       D_HEADS         = D_MODEL / NUM_HEADS;          // Number of heads processed in parallel
