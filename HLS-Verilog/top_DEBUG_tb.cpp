@@ -410,7 +410,7 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_ATT_VALUE: {
         std::printf("ATT_VALUE in_buf (decoded):\n  W:");
         for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::WEIGHTS + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (i * 2))));
         }
         std::printf("\n  V_CACHE:");
         for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
@@ -500,7 +500,7 @@ static int8_t g_att_q[HEADS_PARALLEL][D_HEADS] = {};
 static int8_t g_att_k_cache[HEADS_PARALLEL][CONTEXT_LENGTH * D_HEADS] = {};
 static int32_t g_val_scale_in[HEADS_PARALLEL][CONTEXT_LENGTH] = {};
 static int16_t g_softmax_in[HEADS_PARALLEL][CONTEXT_LENGTH] = {};
-static int8_t g_att_weights[HEADS_PARALLEL][CONTEXT_LENGTH] = {};
+static int16_t g_att_weights[HEADS_PARALLEL][CONTEXT_LENGTH] = {};
 static int8_t g_att_v_cache[HEADS_PARALLEL][CONTEXT_LENGTH * D_HEADS] = {};
 
 static void init_head_vectors() {
@@ -543,7 +543,7 @@ static void init_head_vectors() {
         for (int i = 0; i < CONTEXT_LENGTH; ++i) {
             g_val_scale_in[lane][i] = 500 + lane * 50 + i * 7;
             g_softmax_in[lane][i] = static_cast<int16_t>(-500 + lane * 10 + i * 5);
-            g_att_weights[lane][i] = static_cast<int8_t>((i + lane) % 23);
+            g_att_weights[lane][i] = static_cast<int16_t>((i + lane) * 137);
         }
     }
 }
@@ -613,7 +613,7 @@ static void build_head_in_buf(int lane, ComputeOp op, uint8_t head_in_buf[HEADS_
     }
     case ComputeOp::CMP_ATT_VALUE: {
         for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-            compute_buf::write_i8(buf, head_buf::INAttValueLayout::WEIGHTS + i, g_att_weights[lane][i]);
+            compute_buf::write_i16(buf, head_buf::INAttValueLayout::WEIGHTS + (i * 2), g_att_weights[lane][i]);
         }
         for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
             compute_buf::write_i8(buf, head_buf::INAttValueLayout::V_CACHE + i, g_att_v_cache[lane][i]);

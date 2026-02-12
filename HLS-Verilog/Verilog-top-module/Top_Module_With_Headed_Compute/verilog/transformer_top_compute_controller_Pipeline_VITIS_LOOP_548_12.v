@@ -173,12 +173,12 @@ reg    ap_ready_int;
 wire   [3:0] trunc_ln548_fu_259_p1;
 reg   [3:0] trunc_ln548_reg_337;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln1006_fu_263_p1;
+wire   [63:0] zext_ln645_fu_263_p1;
 wire    ap_block_pp0_stage0;
 reg   [4:0] i_fu_126;
 wire   [4:0] add_ln548_fu_253_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_39;
+reg   [4:0] ap_sig_allocacmp_i_42;
 reg    in_buf_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_25_we0_local;
 wire  signed [15:0] sext_ln551_fu_307_p1;
@@ -336,9 +336,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_39 = 5'd0;
+        ap_sig_allocacmp_i_42 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_39 = i_fu_126;
+        ap_sig_allocacmp_i_42 = i_fu_126;
     end
 end
 
@@ -617,7 +617,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln548_fu_253_p2 = (ap_sig_allocacmp_i_39 + 5'd1);
+assign add_ln548_fu_253_p2 = (ap_sig_allocacmp_i_42 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -717,9 +717,9 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_we0_local;
 
-assign icmp_ln548_fu_247_p2 = ((ap_sig_allocacmp_i_39 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln548_fu_247_p2 = ((ap_sig_allocacmp_i_42 == 5'd16) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln1006_fu_263_p1;
+assign in_buf_address0 = zext_ln645_fu_263_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
@@ -773,8 +773,8 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign sext_ln551_fu_307_p1 = $signed(in_buf_q0);
 
-assign trunc_ln548_fu_259_p1 = ap_sig_allocacmp_i_39[3:0];
+assign trunc_ln548_fu_259_p1 = ap_sig_allocacmp_i_42[3:0];
 
-assign zext_ln1006_fu_263_p1 = trunc_ln548_fu_259_p1;
+assign zext_ln645_fu_263_p1 = trunc_ln548_fu_259_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_548_12

@@ -175,10 +175,10 @@ reg   [2:0] select_ln771_1_reg_648;
 wire    ap_block_pp0_stage0_11001;
 wire   [3:0] trunc_ln780_fu_437_p1;
 reg   [3:0] trunc_ln780_reg_653;
-reg   [3:0] lshr_ln7_reg_657;
+reg   [3:0] lshr_ln8_reg_657;
 wire   [7:0] nibble_idx_fu_473_p2;
 reg   [7:0] nibble_idx_reg_662;
-wire   [63:0] zext_ln1011_fu_489_p1;
+wire   [63:0] zext_ln650_fu_489_p1;
 wire    ap_block_pp0_stage0;
 wire   [63:0] zext_ln780_2_fu_556_p1;
 reg   [4:0] i_fu_122;
@@ -235,9 +235,9 @@ wire   [7:0] zext_ln780_fu_441_p1;
 wire   [7:0] zext_ln780_1_fu_453_p1;
 wire   [7:0] add_ln780_1_fu_457_p2;
 wire   [6:0] trunc_ln_fu_479_p4;
-wire   [0:0] trunc_ln1009_fu_575_p1;
+wire   [0:0] trunc_ln648_fu_575_p1;
 wire   [3:0] tmp_91_fu_578_p4;
-wire   [3:0] trunc_ln1012_fu_588_p1;
+wire   [3:0] trunc_ln651_fu_588_p1;
 wire   [0:0] tmp_fu_549_p3;
 wire   [3:0] nibble_fu_592_p3;
 reg    ap_done_reg;
@@ -339,7 +339,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        lshr_ln7_reg_657 <= {{add_ln780_1_fu_457_p2[7:4]}};
+        lshr_ln8_reg_657 <= {{add_ln780_1_fu_457_p2[7:4]}};
         nibble_idx_reg_662 <= nibble_idx_fu_473_p2;
         select_ln771_1_reg_648 <= select_ln771_1_fu_411_p3;
         trunc_ln780_reg_653 <= trunc_ln780_fu_437_p1;
@@ -797,11 +797,11 @@ assign icmp_ln771_fu_373_p2 = ((ap_sig_allocacmp_indvar_flatten13_load == 8'd144
 
 assign icmp_ln772_fu_391_p2 = ((ap_sig_allocacmp_i_load == 5'd24) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln1011_fu_489_p1;
+assign in_buf_address0 = zext_ln650_fu_489_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
-assign nibble_fu_592_p3 = ((trunc_ln1009_fu_575_p1[0:0] == 1'b1) ? tmp_91_fu_578_p4 : trunc_ln1012_fu_588_p1);
+assign nibble_fu_592_p3 = ((trunc_ln648_fu_575_p1[0:0] == 1'b1) ? tmp_91_fu_578_p4 : trunc_ln651_fu_588_p1);
 
 assign nibble_idx_fu_473_p2 = (add_ln780_1_fu_457_p2 + 8'd96);
 
@@ -867,21 +867,21 @@ assign tmp_fu_549_p3 = select_ln771_1_reg_648[32'd2];
 
 assign tmp_s_fu_419_p3 = {{select_ln771_1_fu_411_p3}, {3'd0}};
 
-assign trunc_ln1009_fu_575_p1 = nibble_idx_reg_662[0:0];
+assign trunc_ln648_fu_575_p1 = nibble_idx_reg_662[0:0];
 
-assign trunc_ln1012_fu_588_p1 = in_buf_q0[3:0];
+assign trunc_ln651_fu_588_p1 = in_buf_q0[3:0];
 
 assign trunc_ln780_fu_437_p1 = add_ln780_fu_431_p2[3:0];
 
 assign trunc_ln_fu_479_p4 = {{nibble_idx_fu_473_p2[7:1]}};
 
-assign zext_ln1011_fu_489_p1 = trunc_ln_fu_479_p4;
+assign zext_ln650_fu_489_p1 = trunc_ln_fu_479_p4;
 
 assign zext_ln772_fu_427_p1 = select_ln771_fu_397_p3;
 
 assign zext_ln780_1_fu_453_p1 = shl_ln4_fu_445_p3;
 
-assign zext_ln780_2_fu_556_p1 = lshr_ln7_reg_657;
+assign zext_ln780_2_fu_556_p1 = lshr_ln8_reg_657;
 
 assign zext_ln780_fu_441_p1 = add_ln780_fu_431_p2;
 

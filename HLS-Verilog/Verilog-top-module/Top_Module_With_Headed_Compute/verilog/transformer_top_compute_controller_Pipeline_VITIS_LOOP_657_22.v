@@ -73,11 +73,11 @@ wire   [0:0] icmp_ln657_fu_223_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln1034_fu_312_p1;
+wire   [63:0] zext_ln673_fu_312_p1;
 reg   [4:0] i_fu_102;
 wire   [4:0] add_ln657_fu_229_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_33;
+reg   [4:0] ap_sig_allocacmp_i_35;
 reg    out_buf_we0_local;
 wire   [7:0] value_assign_fu_239_p35;
 reg    out_buf_ce0_local;
@@ -263,9 +263,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_33 = 5'd0;
+        ap_sig_allocacmp_i_35 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_33 = i_fu_102;
+        ap_sig_allocacmp_i_35 = i_fu_102;
     end
 end
 
@@ -296,7 +296,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln657_fu_229_p2 = (ap_sig_allocacmp_i_33 + 5'd1);
+assign add_ln657_fu_229_p2 = (ap_sig_allocacmp_i_35 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -310,9 +310,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln657_fu_223_p2 = ((ap_sig_allocacmp_i_33 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln657_fu_223_p2 = ((ap_sig_allocacmp_i_35 == 5'd16) ? 1'b1 : 1'b0);
 
-assign out_buf_address0 = zext_ln1034_fu_312_p1;
+assign out_buf_address0 = zext_ln673_fu_312_p1;
 
 assign out_buf_ce0 = out_buf_ce0_local;
 
@@ -320,10 +320,10 @@ assign out_buf_d0 = value_assign_fu_239_p35;
 
 assign out_buf_we0 = out_buf_we0_local;
 
-assign trunc_ln657_fu_235_p1 = ap_sig_allocacmp_i_33[3:0];
+assign trunc_ln657_fu_235_p1 = ap_sig_allocacmp_i_35[3:0];
 
 assign value_assign_fu_239_p33 = 'bx;
 
-assign zext_ln1034_fu_312_p1 = trunc_ln657_fu_235_p1;
+assign zext_ln673_fu_312_p1 = trunc_ln657_fu_235_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_657_22

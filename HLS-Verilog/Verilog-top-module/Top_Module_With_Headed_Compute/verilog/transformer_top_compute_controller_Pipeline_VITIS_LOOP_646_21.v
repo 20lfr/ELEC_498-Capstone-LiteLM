@@ -211,16 +211,16 @@ reg    ap_ready_int;
 wire   [3:0] trunc_ln646_fu_179_p1;
 reg   [3:0] trunc_ln646_reg_442;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln1006_fu_183_p1;
+wire   [63:0] zext_ln645_fu_183_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln1006_22_fu_196_p1;
+wire   [63:0] zext_ln645_22_fu_196_p1;
 reg   [4:0] i_fu_130;
 wire   [4:0] add_ln646_fu_173_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_34;
+reg   [4:0] ap_sig_allocacmp_i_36;
 reg    in_buf_ce1_local;
 reg    in_buf_ce0_local;
-wire   [4:0] zext_ln1006_41_cast_fu_188_p3;
+wire   [4:0] zext_ln645_41_cast_fu_188_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -344,9 +344,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_34 = 5'd0;
+        ap_sig_allocacmp_i_36 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_34 = i_fu_130;
+        ap_sig_allocacmp_i_36 = i_fu_130;
     end
 end
 
@@ -633,7 +633,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln646_fu_173_p2 = (ap_sig_allocacmp_i_34 + 5'd1);
+assign add_ln646_fu_173_p2 = (ap_sig_allocacmp_i_36 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -693,11 +693,11 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_69 = in_buf_q0;
 
-assign icmp_ln646_fu_167_p2 = ((ap_sig_allocacmp_i_34 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln646_fu_167_p2 = ((ap_sig_allocacmp_i_36 == 5'd16) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln1006_22_fu_196_p1;
+assign in_buf_address0 = zext_ln645_22_fu_196_p1;
 
-assign in_buf_address1 = zext_ln1006_fu_183_p1;
+assign in_buf_address1 = zext_ln645_fu_183_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
@@ -727,12 +727,12 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53 = in_buf_q1;
 
-assign trunc_ln646_fu_179_p1 = ap_sig_allocacmp_i_34[3:0];
+assign trunc_ln646_fu_179_p1 = ap_sig_allocacmp_i_36[3:0];
 
-assign zext_ln1006_22_fu_196_p1 = zext_ln1006_41_cast_fu_188_p3;
+assign zext_ln645_22_fu_196_p1 = zext_ln645_41_cast_fu_188_p3;
 
-assign zext_ln1006_41_cast_fu_188_p3 = {{1'd1}, {trunc_ln646_fu_179_p1}};
+assign zext_ln645_41_cast_fu_188_p3 = {{1'd1}, {trunc_ln646_fu_179_p1}};
 
-assign zext_ln1006_fu_183_p1 = trunc_ln646_fu_179_p1;
+assign zext_ln645_fu_183_p1 = trunc_ln646_fu_179_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_646_21

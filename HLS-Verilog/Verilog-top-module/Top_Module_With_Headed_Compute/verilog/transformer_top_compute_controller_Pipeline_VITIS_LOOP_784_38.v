@@ -95,7 +95,7 @@ wire    ap_block_pp0_stage1_11001;
 reg   [2:0] i_fu_52;
 wire   [2:0] add_ln784_fu_77_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_i_24;
+reg   [2:0] ap_sig_allocacmp_i_26;
 wire    ap_block_pp0_stage0;
 wire   [3:0] shl_ln7_fu_102_p3;
 wire   [4:0] zext_ln786_fu_109_p1;
@@ -285,9 +285,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_24 = 3'd0;
+        ap_sig_allocacmp_i_26 = 3'd0;
     end else begin
-        ap_sig_allocacmp_i_24 = i_fu_52;
+        ap_sig_allocacmp_i_26 = i_fu_52;
     end
 end
 
@@ -345,7 +345,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln784_fu_77_p2 = (ap_sig_allocacmp_i_24 + 3'd1);
+assign add_ln784_fu_77_p2 = (ap_sig_allocacmp_i_26 + 3'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -389,7 +389,7 @@ assign grp_read_i32_fu_56_ap_start = grp_read_i32_fu_56_ap_start_reg;
 
 assign grp_read_i32_fu_56_byte_addr = $signed(or_ln_fu_113_p3);
 
-assign icmp_ln784_fu_71_p2 = ((ap_sig_allocacmp_i_24 == 3'd4) ? 1'b1 : 1'b0);
+assign icmp_ln784_fu_71_p2 = ((ap_sig_allocacmp_i_26 == 3'd4) ? 1'b1 : 1'b0);
 
 assign in_buf_address0 = grp_read_i32_fu_56_in_buf_address0;
 
@@ -403,7 +403,7 @@ assign or_ln_fu_113_p3 = {{1'd1}, {zext_ln786_fu_109_p1}};
 
 assign shl_ln7_fu_102_p3 = {{trunc_ln784_reg_161}, {2'd0}};
 
-assign trunc_ln784_fu_83_p1 = ap_sig_allocacmp_i_24[1:0];
+assign trunc_ln784_fu_83_p1 = ap_sig_allocacmp_i_26[1:0];
 
 assign zext_ln786_fu_109_p1 = shl_ln7_fu_102_p3;
 

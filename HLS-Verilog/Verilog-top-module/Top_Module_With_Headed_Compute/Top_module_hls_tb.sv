@@ -51,7 +51,7 @@ module top_module_hls_tb;
   localparam int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
   localparam int SOFTMAX_IN_BYTES  = CONTEXT_LENGTH * 2;
   localparam int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
-  localparam int ATT_VALUE_IN_BYTES  = CONTEXT_LENGTH + (CONTEXT_LENGTH * D_HEADS);
+  localparam int ATT_VALUE_IN_BYTES  = (CONTEXT_LENGTH * 2) + (CONTEXT_LENGTH * D_HEADS);
   localparam int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
   localparam int HEAD_IN_BUF_BYTES = max2(QKV_IN_BYTES,
                                   max2(HEAD_REQUANT_IN_BYTES,
@@ -545,7 +545,7 @@ module top_module_hls_tb;
   localparam int HEAD_VALUE_SCALE_X_OFFSET = 0;
   localparam int HEAD_SOFTMAX_X_OFFSET     = 0;
   localparam int HEAD_ATT_VALUE_W_OFFSET = 0;
-  localparam int HEAD_ATT_VALUE_V_OFFSET = HEAD_ATT_VALUE_W_OFFSET + CONTEXT_LENGTH;
+  localparam int HEAD_ATT_VALUE_V_OFFSET = HEAD_ATT_VALUE_W_OFFSET + (CONTEXT_LENGTH * 2);
   // Compute controller ops (match compute_controller_tb.sv)
   localparam int CMP_LN0        = 8'h01;
   localparam int CMP_REQUANT1   = 8'h02;
@@ -760,7 +760,7 @@ module top_module_hls_tb;
   logic signed [31:0] val_scale_in_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
   logic signed [15:0] softmax_in_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
 
-  logic signed [7:0] att_weights_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
+  logic signed [15:0] att_weights_all [0:(HEAD_DATASETS*CONTEXT_LENGTH)-1];
   logic signed [7:0] att_v_cache_all [0:(HEAD_DATASETS*ATT_V_ELEMS)-1];
 
   // Output capture per operation (flattened by layer/head index)
@@ -985,7 +985,7 @@ module top_module_hls_tb;
           end
           val_scale_in_all[(data_idx * CONTEXT_LENGTH) + t] = 500 + (lane * 50) + (t * 7);
           softmax_in_all[(data_idx * CONTEXT_LENGTH) + t] = -500 + (lane * 10) + (t * 5);
-          att_weights_all[(data_idx * CONTEXT_LENGTH) + t] = $signed((t + lane) % 23);
+          att_weights_all[(data_idx * CONTEXT_LENGTH) + t] = $signed((t + lane) * 137);
         end
 
         for (h = 0; h < D_HEADS; h = h + 1) begin
@@ -1142,8 +1142,8 @@ module top_module_hls_tb;
         end
         HEAD_CMP_ATT_VALUE: begin
           for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
-            head_in_buf_stage[lane][HEAD_ATT_VALUE_W_OFFSET + t] =
-              att_weights_all[(data_idx * CONTEXT_LENGTH) + t];
+            head_write_i16_to_stage(lane, HEAD_ATT_VALUE_W_OFFSET + (t * 2),
+              att_weights_all[(data_idx * CONTEXT_LENGTH) + t]);
           end
           for (h = 0; h < D_HEADS; h = h + 1) begin
             for (t = 0; t < CONTEXT_LENGTH; t = t + 1) begin
@@ -1710,10 +1710,10 @@ module top_module_hls_tb;
         $write("\n");
       end
       $display("att_weights_all:");
-      for (i = 0; i < (HEAD_DATASETS * CONTEXT_LENGTH); i = i + 16) begin
+      for (i = 0; i < (HEAD_DATASETS * CONTEXT_LENGTH); i = i + 8) begin
         $write("  %04x:", i);
-        for (j = 0; j < 16 && (i + j) < (HEAD_DATASETS * CONTEXT_LENGTH); j = j + 1) begin
-          $write(" %02x", att_weights_all[i + j]);
+        for (j = 0; j < 8 && (i + j) < (HEAD_DATASETS * CONTEXT_LENGTH); j = j + 1) begin
+          $write(" %04x", att_weights_all[i + j]);
         end
         $write("\n");
       end

@@ -87,7 +87,7 @@ wire    ap_block_pp0_stage0;
 wire    ap_loop_init;
 reg   [4:0] i_fu_104;
 wire   [4:0] add_ln120_fu_230_p2;
-reg   [4:0] ap_sig_allocacmp_i_47;
+reg   [4:0] ap_sig_allocacmp_i_50;
 reg    ap_loop_exit_ready_pp0_iter1_reg;
 reg    ap_loop_exit_ready_pp0_iter2_reg;
 wire    ap_block_pp0_stage0_01001;
@@ -356,9 +356,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_47 = 5'd0;
+        ap_sig_allocacmp_i_50 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_47 = i_fu_104;
+        ap_sig_allocacmp_i_50 = i_fu_104;
     end
 end
 
@@ -389,7 +389,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln120_fu_230_p2 = (ap_sig_allocacmp_i_47 + 5'd1);
+assign add_ln120_fu_230_p2 = (ap_sig_allocacmp_i_50 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -415,7 +415,7 @@ assign grp_fu_333_p0 = sext_ln121_fu_312_p1;
 
 assign grp_fu_333_p1 = sext_ln121_fu_312_p1;
 
-assign icmp_ln120_fu_224_p2 = ((ap_sig_allocacmp_i_47 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln120_fu_224_p2 = ((ap_sig_allocacmp_i_50 == 5'd16) ? 1'b1 : 1'b0);
 
 assign sext_ln121_fu_312_p1 = $signed(tmp_fu_240_p35);
 
@@ -423,6 +423,6 @@ assign square_out = ap_sig_allocacmp_square_2[18:0];
 
 assign tmp_fu_240_p33 = 'bx;
 
-assign tmp_fu_240_p34 = ap_sig_allocacmp_i_47[3:0];
+assign tmp_fu_240_p34 = ap_sig_allocacmp_i_50[3:0];
 
 endmodule //transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_120_1

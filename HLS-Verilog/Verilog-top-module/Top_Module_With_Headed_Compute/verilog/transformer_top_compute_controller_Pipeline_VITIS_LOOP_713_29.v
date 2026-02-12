@@ -81,9 +81,9 @@ reg   [0:0] icmp_ln713_reg_176;
 reg    ap_condition_exit_pp0_iter0_stage1;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-reg   [2:0] i_28_reg_170;
+reg   [2:0] i_30_reg_170;
 wire    ap_block_pp0_stage0_11001;
-reg   [2:0] i_28_reg_170_pp0_iter1_reg;
+reg   [2:0] i_30_reg_170_pp0_iter1_reg;
 wire   [0:0] icmp_ln713_fu_77_p2;
 wire    grp_read_i32_fu_62_ap_start;
 wire    grp_read_i32_fu_62_ap_done;
@@ -104,7 +104,7 @@ wire    ap_block_pp0_stage1_11001;
 reg   [2:0] i_fu_58;
 wire   [2:0] add_ln713_fu_83_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_i_28;
+reg   [2:0] ap_sig_allocacmp_i_30;
 wire    ap_block_pp0_stage0;
 wire   [4:0] shl_ln8_fu_94_p3;
 wire   [5:0] zext_ln715_fu_101_p1;
@@ -229,8 +229,8 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        i_28_reg_170 <= ap_sig_allocacmp_i_28;
-        i_28_reg_170_pp0_iter1_reg <= i_28_reg_170;
+        i_30_reg_170 <= ap_sig_allocacmp_i_30;
+        i_30_reg_170_pp0_iter1_reg <= i_30_reg_170;
         icmp_ln713_reg_176 <= icmp_ln713_fu_77_p2;
     end
 end
@@ -293,14 +293,14 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_28 = 3'd0;
+        ap_sig_allocacmp_i_30 = 3'd0;
     end else begin
-        ap_sig_allocacmp_i_28 = i_fu_58;
+        ap_sig_allocacmp_i_30 = i_fu_58;
     end
 end
 
 always @ (*) begin
-    if (((i_28_reg_170_pp0_iter1_reg == 3'd0) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+    if (((i_30_reg_170_pp0_iter1_reg == 3'd0) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_131_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_131_ap_vld = 1'b0;
@@ -308,7 +308,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((i_28_reg_170_pp0_iter1_reg == 3'd1) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+    if (((i_30_reg_170_pp0_iter1_reg == 3'd1) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_132_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_132_ap_vld = 1'b0;
@@ -316,7 +316,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((i_28_reg_170_pp0_iter1_reg == 3'd2) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+    if (((i_30_reg_170_pp0_iter1_reg == 3'd2) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_133_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_133_ap_vld = 1'b0;
@@ -324,7 +324,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((i_28_reg_170_pp0_iter1_reg == 3'd3) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+    if (((i_30_reg_170_pp0_iter1_reg == 3'd3) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_134_ap_vld = 1'b0;
@@ -332,7 +332,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((i_28_reg_170_pp0_iter1_reg == 3'd4) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+    if (((i_30_reg_170_pp0_iter1_reg == 3'd4) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_135_ap_vld = 1'b0;
@@ -340,7 +340,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~(i_28_reg_170_pp0_iter1_reg == 3'd4) & ~(i_28_reg_170_pp0_iter1_reg == 3'd3) & ~(i_28_reg_170_pp0_iter1_reg == 3'd2) & ~(i_28_reg_170_pp0_iter1_reg == 3'd1) & ~(i_28_reg_170_pp0_iter1_reg == 3'd0) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+    if ((~(i_30_reg_170_pp0_iter1_reg == 3'd4) & ~(i_30_reg_170_pp0_iter1_reg == 3'd3) & ~(i_30_reg_170_pp0_iter1_reg == 3'd2) & ~(i_30_reg_170_pp0_iter1_reg == 3'd1) & ~(i_30_reg_170_pp0_iter1_reg == 3'd0) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_136_ap_vld = 1'b0;
@@ -369,7 +369,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln713_fu_83_p2 = (ap_sig_allocacmp_i_28 + 3'd1);
+assign add_ln713_fu_83_p2 = (ap_sig_allocacmp_i_30 + 3'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -417,7 +417,7 @@ assign grp_read_i32_fu_62_ap_start = grp_read_i32_fu_62_ap_start_reg;
 
 assign grp_read_i32_fu_62_byte_addr = {{1'd1}, {zext_ln715_fu_101_p1}};
 
-assign icmp_ln713_fu_77_p2 = ((ap_sig_allocacmp_i_28 == 3'd6) ? 1'b1 : 1'b0);
+assign icmp_ln713_fu_77_p2 = ((ap_sig_allocacmp_i_30 == 3'd6) ? 1'b1 : 1'b0);
 
 assign in_buf_address0 = grp_read_i32_fu_62_in_buf_address0;
 
@@ -427,7 +427,7 @@ assign in_buf_ce0 = grp_read_i32_fu_62_in_buf_ce0;
 
 assign in_buf_ce1 = grp_read_i32_fu_62_in_buf_ce1;
 
-assign shl_ln8_fu_94_p3 = {{i_28_reg_170}, {2'd0}};
+assign shl_ln8_fu_94_p3 = {{i_30_reg_170}, {2'd0}};
 
 assign zext_ln715_fu_101_p1 = shl_ln8_fu_94_p3;
 

@@ -180,14 +180,14 @@ wire   [3:0] trunc_ln762_fu_363_p1;
 reg   [3:0] trunc_ln762_reg_493;
 wire    ap_block_pp0_stage0_11001;
 reg   [0:0] tmp_reg_497;
-wire   [63:0] zext_ln1018_fu_383_p1;
+wire   [63:0] zext_ln657_fu_383_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln1019_fu_396_p1;
+wire   [63:0] zext_ln658_fu_396_p1;
 wire   [63:0] zext_ln762_fu_440_p1;
 reg   [4:0] i_fu_106;
 wire   [4:0] add_ln762_fu_357_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_25;
+reg   [4:0] ap_sig_allocacmp_i_27;
 reg    in_buf_ce1_local;
 reg    in_buf_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_25_we0_local;
@@ -224,7 +224,7 @@ reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_ce0_local;
 wire   [5:0] byte_addr_assign_s_fu_375_p3;
-wire   [5:0] or_ln1019_2_fu_388_p3;
+wire   [5:0] or_ln658_4_fu_388_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -302,7 +302,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        tmp_reg_497 <= ap_sig_allocacmp_i_25[32'd4];
+        tmp_reg_497 <= ap_sig_allocacmp_i_27[32'd4];
         trunc_ln762_reg_493 <= trunc_ln762_fu_363_p1;
     end
 end
@@ -349,9 +349,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_25 = 5'd0;
+        ap_sig_allocacmp_i_27 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_25 = i_fu_106;
+        ap_sig_allocacmp_i_27 = i_fu_106;
     end
 end
 
@@ -638,7 +638,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln762_fu_357_p2 = (ap_sig_allocacmp_i_25 + 5'd1);
+assign add_ln762_fu_357_p2 = (ap_sig_allocacmp_i_27 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -658,7 +658,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign byte_addr_assign_s_fu_375_p3 = {{ap_sig_allocacmp_i_25}, {1'd0}};
+assign byte_addr_assign_s_fu_375_p3 = {{ap_sig_allocacmp_i_27}, {1'd0}};
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_50_address0 = zext_ln762_fu_440_p1;
 
@@ -740,17 +740,17 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_59_we0_local;
 
-assign icmp_ln762_fu_351_p2 = ((ap_sig_allocacmp_i_25 == 5'd24) ? 1'b1 : 1'b0);
+assign icmp_ln762_fu_351_p2 = ((ap_sig_allocacmp_i_27 == 5'd24) ? 1'b1 : 1'b0);
 
-assign in_buf_address0 = zext_ln1019_fu_396_p1;
+assign in_buf_address0 = zext_ln658_fu_396_p1;
 
-assign in_buf_address1 = zext_ln1018_fu_383_p1;
+assign in_buf_address1 = zext_ln657_fu_383_p1;
 
 assign in_buf_ce0 = in_buf_ce0_local;
 
 assign in_buf_ce1 = in_buf_ce1_local;
 
-assign or_ln1019_2_fu_388_p3 = {{ap_sig_allocacmp_i_25}, {1'd1}};
+assign or_ln658_4_fu_388_p3 = {{ap_sig_allocacmp_i_27}, {1'd1}};
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_address0 = zext_ln762_fu_440_p1;
 
@@ -800,13 +800,13 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0_local;
 
-assign trunc_ln762_fu_363_p1 = ap_sig_allocacmp_i_25[3:0];
+assign trunc_ln762_fu_363_p1 = ap_sig_allocacmp_i_27[3:0];
 
 assign v_fu_459_p3 = {{in_buf_q0}, {in_buf_q1}};
 
-assign zext_ln1018_fu_383_p1 = byte_addr_assign_s_fu_375_p3;
+assign zext_ln657_fu_383_p1 = byte_addr_assign_s_fu_375_p3;
 
-assign zext_ln1019_fu_396_p1 = or_ln1019_2_fu_388_p3;
+assign zext_ln658_fu_396_p1 = or_ln658_4_fu_388_p3;
 
 assign zext_ln762_fu_440_p1 = tmp_reg_497;
 
