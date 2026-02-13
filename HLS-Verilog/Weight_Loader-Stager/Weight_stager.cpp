@@ -17,6 +17,7 @@ void weight_stager(
 #pragma HLS INLINE
     wl_ready = true;
     memory_request = false;
+    error = false;
 
     if (reset) {
         addr_latched = 0;
@@ -58,35 +59,35 @@ void weight_stager(
         wl_ready = false;
         switch (wl_addr_sel) {
             case DmaSel::DMASEL_WQ:
-                addr_latched = ctrl_mem.wq_base_addr + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.wq_head_stride;
+                addr_latched = ctrl_mem.wq_offset + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.wq_head_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_WK:
-                addr_latched = ctrl_mem.wk_base_addr + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.wk_head_stride;
+                addr_latched = ctrl_mem.wk_offset + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.wk_head_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_WV:
-                addr_latched = ctrl_mem.wv_base_addr + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.wv_head_stride;
+                addr_latched = ctrl_mem.wv_offset + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.wv_head_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_CTX_K:
-                addr_latched = ctrl_mem.k_cache_addr + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.k_cache_stride;
+                addr_latched = ctrl_mem.k_cache_offset + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.k_cache_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_CTX_V:
-                addr_latched = ctrl_mem.v_cache_addr + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.v_cache_stride;
+                addr_latched = ctrl_mem.v_cache_offset + wl_layer * ctrl_mem.layer_stride + wl_head * ctrl_mem.v_cache_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_WO:
-                addr_latched = ctrl_mem.wo_base_addr + wl_layer * ctrl_mem.layer_stride + wl_tile * ctrl_mem.wo_tile_stride;
+                addr_latched = ctrl_mem.wo_offset + wl_layer * ctrl_mem.layer_stride + wl_tile * ctrl_mem.wo_tile_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_W1:
-                addr_latched = ctrl_mem.w1_base_addr + wl_layer * ctrl_mem.layer_stride + wl_tile * ctrl_mem.w1_tile_stride;
+                addr_latched = ctrl_mem.w1_offset + wl_layer * ctrl_mem.layer_stride + wl_tile * ctrl_mem.w1_tile_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_W2:
-                addr_latched = ctrl_mem.w2_base_addr + wl_layer * ctrl_mem.layer_stride + wl_tile * ctrl_mem.w2_tile_stride;
+                addr_latched = ctrl_mem.w2_offset + wl_layer * ctrl_mem.layer_stride + wl_tile * ctrl_mem.w2_tile_stride;
                 memory_request = true;
                 break;
             case DmaSel::DMASEL_CONCAT:

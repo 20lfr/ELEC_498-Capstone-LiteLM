@@ -372,9 +372,7 @@ struct ControlMemSpace {
     uint32_t irq_mask       = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear      = 0;
 
-    uint32_t dma_layer_len  = 0;
-    uint32_t dma_head_len   = 0;
-    uint32_t dma_tile_len   = 0;
+    // DMA lengths set by MMU
 
     uint32_t layer_stride   = 0;
     uint32_t wq_head_stride = 0;
@@ -388,16 +386,16 @@ struct ControlMemSpace {
     uint32_t w1_tile_stride = 0;
     uint32_t w2_tile_stride = 0;
 
-    // address size match ARM64 address space
-    uint64_t wq_base_addr   = 0;
-    uint64_t wk_base_addr   = 0;
-    uint64_t wv_base_addr   = 0;
-    uint64_t wo_base_addr   = 0;
-    uint64_t w1_base_addr   = 0;
-    uint64_t w2_base_addr   = 0;
-
-    uint64_t k_cache_addr   = 0;
-    uint64_t v_cache_addr   = 0;
+    // Word offsets relative to m_axi base (set by PS)
+    // wq=0, wk=size(wq), wv=size(wq)+size(wk), ...
+    uint32_t wq_offset      = 0;
+    uint32_t wk_offset      = 0;
+    uint32_t wv_offset      = 0;
+    uint32_t wo_offset      = 0;
+    uint32_t w1_offset      = 0;
+    uint32_t w2_offset      = 0;
+    uint32_t k_cache_offset = 0;
+    uint32_t v_cache_offset = 0;
 
     uint32_t logit_scale_qv = 0;
     uint32_t scale_q        = 0;

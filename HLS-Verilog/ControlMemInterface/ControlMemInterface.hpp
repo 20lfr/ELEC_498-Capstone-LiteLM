@@ -17,15 +17,6 @@ public:
 
         const bool irq_error_en = (((ctrl_mem.irq_mask & 2u) >> 1) & 0x1u) != 0;
 
-        // Check DMA Length (all must be non-zero)
-        if (ctrl_mem.dma_layer_len == 0 || ctrl_mem.dma_head_len == 0 || ctrl_mem.dma_tile_len == 0) {
-            if (irq_error_en) {
-                local_status.irq_status |= IRQ_ERROR_BIT;
-                local_status.status = STATUS_ERROR;
-                local_status.error_code |= ERR_DMA_ZERO_LEN;
-            }
-        }
-
         // Check strides are non-zero (zero stride causes DMA issues)
         if (ctrl_mem.layer_stride == 0 || 
             ctrl_mem.wq_head_stride == 0 || ctrl_mem.wk_head_stride == 0 || ctrl_mem.wv_head_stride == 0 ||
@@ -39,10 +30,10 @@ public:
         }
 
         // Base address alignment (check 64-byte alignment for all DMA addresses)
-        if ((ctrl_mem.wq_base_addr & 0x3F) != 0 || (ctrl_mem.wk_base_addr & 0x3F) != 0 || 
-            (ctrl_mem.wv_base_addr & 0x3F) != 0 || (ctrl_mem.wo_base_addr & 0x3F) != 0 ||
-            (ctrl_mem.w1_base_addr & 0x3F) != 0 || (ctrl_mem.w2_base_addr & 0x3F) != 0 ||
-            (ctrl_mem.k_cache_addr & 0x3F) != 0 || (ctrl_mem.v_cache_addr & 0x3F) != 0) {
+        if ((ctrl_mem.wq_offset & 0x3F) != 0 || (ctrl_mem.wk_offset & 0x3F) != 0 || 
+            (ctrl_mem.wv_offset & 0x3F) != 0 || (ctrl_mem.wo_offset & 0x3F) != 0 ||
+            (ctrl_mem.w1_offset & 0x3F) != 0 || (ctrl_mem.w2_offset & 0x3F) != 0 ||
+            (ctrl_mem.k_cache_offset & 0x3F) != 0 || (ctrl_mem.v_cache_offset & 0x3F) != 0) {
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
                 local_status.status = STATUS_ERROR;
