@@ -2524,6 +2524,14 @@ module top_module_hls_tb;
             end
             req_layer = clamp_layer(pending_layer);
             if (active_main_layer != req_layer) begin
+              if (active_main_layer >= 0) begin
+                $display("=== End of Layer %0d (switching to layer %0d) ===",
+                         active_main_layer, req_layer);
+                dump_main_buffers();
+                dump_head_buffers_all();
+                dump_main_datasets();
+                dump_head_datasets();
+              end
               for (j = 0; j < OUT_BUF_BYTES; j = j + 1) begin
                 out_buf_mem[j] = 8'd0;
               end
@@ -3213,6 +3221,7 @@ module top_module_hls_tb;
             if (done_clear_cnt == 1) begin
               done_clear_pending <= 1'b0;
               irq_seen_done_clr <= 1'b1;
+              seen_done <= 1;
             end
           end
         end
@@ -3600,11 +3609,11 @@ module top_module_hls_tb;
     err_reload_step = 5'd0;
 
     // Print header
-    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s %-10s",
-             "Cycle", "Start", "Reset", "Busy", "State",
-             "AXIS_v", "AXIS_r", "AXIS_last",
-             "WLStart", "DMA_Done",
-             "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
+    // $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s %-10s",
+    //          "Cycle", "Start", "Reset", "Busy", "State",
+    //          "AXIS_v", "AXIS_r", "AXIS_last",
+    //          "WLStart", "DMA_Done",
+    //          "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
 
     // Release reset at cycle 2
     repeat(2) @(posedge ap_clk);
@@ -3623,21 +3632,21 @@ module top_module_hls_tb;
       end
 
       // Print state
-      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s 0x%08h",
-               cycle,
-               (ctrl_shadow_control[1]) ? "1" : "-",
-               (ctrl_shadow_control[0]) ? "1" : "-",
-               "-" ,
-               state_name(STATE),
-               axis_in_valid ? "1" : "-",
-               axis_in_ready ? "1" : "-",
-               axis_in_last ? "1" : "-",
-               wl_start_o ? "1" : "-",
-               dma_done ? "1" : "-",
-               dbg_compute_start ? "1" : "-",
-               dbg_compute_ready_lat ? "1" : "-",
-               dbg_compute_done_lat ? "1" : "-",
-               dbg_compute_instruction);
+      // $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s 0x%08h",
+      //          cycle,
+      //          (ctrl_shadow_control[1]) ? "1" : "-",
+      //          (ctrl_shadow_control[0]) ? "1" : "-",
+      //          "-" ,
+      //          state_name(STATE),
+      //          axis_in_valid ? "1" : "-",
+      //          axis_in_ready ? "1" : "-",
+      //          axis_in_last ? "1" : "-",
+      //          wl_start_o ? "1" : "-",
+      //          dma_done ? "1" : "-",
+      //          dbg_compute_start ? "1" : "-",
+      //          dbg_compute_ready_lat ? "1" : "-",
+      //          dbg_compute_done_lat ? "1" : "-",
+      //          dbg_compute_instruction);
       
       // Track done signal
       // if (ap_done) begin
@@ -3646,7 +3655,7 @@ module top_module_hls_tb;
       
       
       // Exit once we've seen done and IDLE held for 4 cycles
-      if (seen_done && seen_idle_after) begin
+      if (seen_done) begin
         break;
       end
     end
