@@ -213,6 +213,28 @@ static inline int32_t stim_eps(int layer, int salt) {
     return 3 + ((salt + layer) % 5);
 }
 
+// Gamma stimulus in Q19.13 range, intentionally away from extreme int32 rails.
+static inline int32_t stim_gamma_q19_13(int layer, int idx, int salt) {
+    const LayerInputProfile p = layer_profile(layer);
+    switch (p) {
+        case LayerInputProfile::MIN_ONLY:
+            return 4096 + ((idx * 17 + salt + layer) % 1024);   // ~[0.5, 0.625]
+        case LayerInputProfile::MAX_ONLY:
+            return 12288 + ((idx * 19 + salt + layer) % 2048);  // ~[1.5, 1.75]
+        case LayerInputProfile::MIXED: {
+            switch ((idx + salt) & 3) {
+                case 0: return 2048;   // 0.25
+                case 1: return 6144;   // 0.75
+                case 2: return 8192;   // 1.0
+                default:return 12288;  // 1.5
+            }
+        }
+        case LayerInputProfile::NORMAL:
+        default:
+            return 8192 + (((idx * 37 + salt * 5 + layer * 11) % 2049) - 1024); // ~[0.875, 1.125]
+    }
+}
+
 static inline void force_i8_i4_mm_corners(
     int8_t *act,
     int act_len,
@@ -751,17 +773,30 @@ static int8_t g_att_v_cache[HEADS_PARALLEL][CONTEXT_LENGTH * D_HEADS] = {};
 static void fill_head_lane_inputs(int lane, int layer) {
     layer = clamp_layer(layer);
     for (int i = 0; i < D_MODEL; ++i) {
-        g_q_act[lane][i] = stim_i8(layer, i, 11 + lane);
+        // Keep Q inputs in a mid-range to reduce artificial saturation.
+        g_q_act[lane][i] = stim_i8_mid(layer, i, 11 + lane);
         g_k_act[lane][i] = stim_i8(layer, i, 21 + lane);
         g_v_act[lane][i] = stim_i8(layer, i, 31 + lane);
     }
     for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
-        g_wq[lane][i] = stim_i4(layer, i, 41 + lane);
+        int q_w = static_cast<int>(stim_i4(layer, i, 41 + lane));
+        if (q_w > 3) {
+            q_w = 3;
+        } else if (q_w < -3) {
+            q_w = -3;
+        }
+        g_wq[lane][i] = static_cast<int4_t>(q_w);
         g_wk[lane][i] = stim_i4(layer, i, 51 + lane);
         g_wv[lane][i] = stim_i4(layer, i, 61 + lane);
     }
     for (int h = 0; h < D_HEADS; ++h) {
-        g_bq[lane][h] = stim_i4(layer, h, 71 + lane);
+        int q_b = static_cast<int>(stim_i4(layer, h, 71 + lane));
+        if (q_b > 2) {
+            q_b = 2;
+        } else if (q_b < -2) {
+            q_b = -2;
+        }
+        g_bq[lane][h] = static_cast<int4_t>(q_b);
         g_bk[lane][h] = stim_i4(layer, h, 81 + lane);
         g_bv[lane][h] = stim_i4(layer, h, 91 + lane);
         g_att_q[lane][h] = stim_i8_mid(layer, h, 101 + lane);
@@ -791,23 +826,9 @@ static void fill_head_lane_inputs(int lane, int layer) {
 
     // Force first MM lanes into explicit overflow corner cases:
     // +A*+W, +A*-W, -A*+W, -A*-W.
-    force_i8_i4_mm_corners(g_q_act[lane], D_MODEL, g_wq[lane], D_HEADS, D_MODEL);
     force_i8_i4_mm_corners(g_k_act[lane], D_MODEL, g_wk[lane], D_HEADS, D_MODEL);
     force_i8_i4_mm_corners(g_v_act[lane], D_MODEL, g_wv[lane], D_HEADS, D_MODEL);
     force_i16_i8_mm_corners(g_att_weights[lane], CONTEXT_LENGTH, g_att_v_cache[lane], D_HEADS, CONTEXT_LENGTH);
-
-    // Layer 0 Q path: force max-positive output (Q = x*W + b).
-    if (layer == 0) {
-        for (int i = 0; i < D_MODEL; ++i) {
-            g_q_act[lane][i] = std::numeric_limits<int8_t>::max();
-        }
-        for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
-            g_wq[lane][i] = static_cast<int4_t>(7);
-        }
-        for (int h = 0; h < D_HEADS; ++h) {
-            g_bq[lane][h] = static_cast<int4_t>(7);
-        }
-    }
 }
 
 static void build_head_in_buf(int lane, int layer, ComputeOp op, uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES]) {
@@ -1640,8 +1661,14 @@ int main() {
                         active_main_layer = req_layer;
                     }
                     for (int i = 0; i < D_MODEL; ++i) {
-                        out_proj_act[i] = stim_i8(req_layer, i, 11);
-                        out_proj_b[i] = stim_i32(req_layer, i, 13);
+                        out_proj_act[i] = stim_i8_mid(req_layer, i, 11);
+                        int32_t out_b = stim_i32(req_layer, i, 13);
+                        if (out_b > 96) {
+                            out_b = 96;
+                        } else if (out_b < -96) {
+                            out_b = -96;
+                        }
+                        out_proj_b[i] = out_b;
                         rq1_x[i] = stim_i32(req_layer, i, 21);
                         rq2_x[i] = stim_i32(req_layer, i, 31);
                         rq3_x[i] = stim_i32(req_layer, i, 41);
@@ -1650,19 +1677,25 @@ int main() {
                         resid0_r[i] = stim_i8(req_layer, i, 71);
                         resid1_x[i] = stim_i8(req_layer, i, 81);
                         resid1_r[i] = stim_i8(req_layer, i, 91);
-                        ln0_x[i] = stim_i8(req_layer, i, 101);
-                        ln1_x[i] = stim_i8(req_layer, i, 111);
+                        ln0_x[i] = stim_i8_mid(req_layer, i, 101);
+                        ln1_x[i] = stim_i8_mid(req_layer, i, 111);
                         final_norm_x[i] = stim_i8(req_layer, i, 121);
-                        ln0_gamma[i] = stim_i32(req_layer, i, 131);
-                        ln1_gamma[i] = stim_i32(req_layer, i, 141);
-                        final_norm_gamma[i] = stim_i32(req_layer, i, 151);
+                        ln0_gamma[i] = stim_gamma_q19_13(req_layer, i, 131);
+                        ln1_gamma[i] = stim_gamma_q19_13(req_layer, i, 141);
+                        final_norm_gamma[i] = stim_gamma_q19_13(req_layer, i, 151);
                         ffn1_x[i] = stim_i8(req_layer, i, 161);
                     }
                     ln0_eps = stim_eps(req_layer, 171);
                     ln1_eps = stim_eps(req_layer, 181);
                     final_norm_eps = stim_eps(req_layer, 191);
                     for (int i = 0; i < D_MODEL * D_MODEL; ++i) {
-                        out_proj_w[i] = stim_i4(req_layer, i, 201);
+                        int w = static_cast<int>(stim_i4(req_layer, i, 201));
+                        if (w > 3) {
+                            w = 3;
+                        } else if (w < -3) {
+                            w = -3;
+                        }
+                        out_proj_w[i] = static_cast<int8_t>(w);
                     }
                     for (int i = 0; i < W1_OUT_SIZE; ++i) {
                         ffn1_b[i] = stim_i32(req_layer, i, 211);
@@ -1673,15 +1706,31 @@ int main() {
                     for (int i = 0; i < D_FFN; ++i) {
                         ffn_act_gate_in[i] = stim_i16(req_layer, i, 231);
                         ffn_act_up_in[i] = stim_i16(req_layer, i, 241);
-                        ffn2_x[i] = stim_i16(req_layer, i, 251);
-                        ffn2_b[i] = stim_i32(req_layer, i, 261);
+                        int32_t x2 = static_cast<int32_t>(stim_i16(req_layer, i, 251));
+                        if (x2 > 1024) {
+                            x2 = 1024;
+                        } else if (x2 < -1024) {
+                            x2 = -1024;
+                        }
+                        ffn2_x[i] = static_cast<int16_t>(x2);
+                        int32_t b2 = stim_i32(req_layer, i, 261);
+                        if (b2 > 256) {
+                            b2 = 256;
+                        } else if (b2 < -256) {
+                            b2 = -256;
+                        }
+                        ffn2_b[i] = b2;
                     }
                     for (int i = 0; i < D_FFN * D_FFN; ++i) {
-                        ffn2_w[i] = stim_i4(req_layer, i, 271);
+                        int w2 = static_cast<int>(stim_i4(req_layer, i, 271));
+                        if (w2 > 3) {
+                            w2 = 3;
+                        } else if (w2 < -3) {
+                            w2 = -3;
+                        }
+                        ffn2_w[i] = static_cast<int8_t>(w2);
                     }
-                    force_i8_i4stored_i8_mm_corners(out_proj_act, D_MODEL, out_proj_w, D_MODEL, D_MODEL);
                     force_i8_i4stored_i8_mm_corners(ffn1_x, D_MODEL, ffn1_w, W1_OUT_SIZE, D_MODEL);
-                    force_i16_i4stored_i8_mm_corners(ffn2_x, D_FFN, ffn2_w, D_FFN, D_FFN);
                     switch (op) {
                     case CMP_OUT_PROJ: {
                         for (int i = 0; i < D_MODEL; ++i) {

@@ -92,12 +92,12 @@ reg   [6:0] zext_ln582_reg_257;
 wire   [63:0] zext_ln576_fu_216_p1;
 reg   [63:0] zext_ln576_reg_273;
 wire    ap_block_pp0_stage1_11001;
-wire   [63:0] zext_ln645_fu_195_p1;
+wire   [63:0] zext_ln656_fu_195_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln645_19_fu_206_p1;
+wire   [63:0] zext_ln656_19_fu_206_p1;
 wire    ap_block_pp0_stage1;
-wire   [63:0] zext_ln645_20_fu_226_p1;
-wire   [63:0] zext_ln645_21_fu_236_p1;
+wire   [63:0] zext_ln656_20_fu_226_p1;
+wire   [63:0] zext_ln656_21_fu_236_p1;
 reg   [4:0] t_fu_52;
 wire   [4:0] add_ln576_fu_167_p2;
 wire    ap_loop_init;
@@ -289,9 +289,9 @@ end
 
 always @ (*) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        head_in_buf_1_address0_local = zext_ln645_21_fu_236_p1;
+        head_in_buf_1_address0_local = zext_ln656_21_fu_236_p1;
     end else if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        head_in_buf_1_address0_local = zext_ln645_19_fu_206_p1;
+        head_in_buf_1_address0_local = zext_ln656_19_fu_206_p1;
     end else begin
         head_in_buf_1_address0_local = 'bx;
     end
@@ -299,9 +299,9 @@ end
 
 always @ (*) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        head_in_buf_1_address1_local = zext_ln645_20_fu_226_p1;
+        head_in_buf_1_address1_local = zext_ln656_20_fu_226_p1;
     end else if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        head_in_buf_1_address1_local = zext_ln645_fu_195_p1;
+        head_in_buf_1_address1_local = zext_ln656_fu_195_p1;
     end else begin
         head_in_buf_1_address1_local = 'bx;
     end
@@ -495,13 +495,13 @@ assign zext_ln576_fu_216_p1 = t_10_reg_248;
 
 assign zext_ln582_fu_185_p1 = shl_ln582_1_fu_177_p3;
 
-assign zext_ln645_19_fu_206_p1 = byte_addr_35_fu_200_p2;
+assign zext_ln656_19_fu_206_p1 = byte_addr_35_fu_200_p2;
 
-assign zext_ln645_20_fu_226_p1 = byte_addr_36_fu_221_p2;
+assign zext_ln656_20_fu_226_p1 = byte_addr_36_fu_221_p2;
 
-assign zext_ln645_21_fu_236_p1 = byte_addr_37_fu_231_p2;
+assign zext_ln656_21_fu_236_p1 = byte_addr_37_fu_231_p2;
 
-assign zext_ln645_fu_195_p1 = byte_addr_fu_189_p2;
+assign zext_ln656_fu_195_p1 = byte_addr_fu_189_p2;
 
 always @ (posedge ap_clk) begin
     zext_ln582_reg_257[1:0] <= 2'b00;

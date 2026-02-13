@@ -49,7 +49,7 @@ wire   [0:0] icmp_ln617_fu_103_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln673_fu_144_p1;
+wire   [63:0] zext_ln684_fu_144_p1;
 reg   [2:0] t_fu_54;
 wire   [2:0] add_ln617_fu_109_p2;
 wire    ap_loop_init;
@@ -94,7 +94,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U711(
+sparsemux_9_2_8_1_1_U717(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_146),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_147),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_148),
@@ -240,7 +240,7 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln617_fu_103_p2 = ((ap_sig_allocacmp_t_13 == 3'd4) ? 1'b1 : 1'b0);
 
-assign out_buf_address0 = zext_ln673_fu_144_p1;
+assign out_buf_address0 = zext_ln684_fu_144_p1;
 
 assign out_buf_ce0 = out_buf_ce0_local;
 
@@ -252,6 +252,6 @@ assign trunc_ln617_fu_115_p1 = ap_sig_allocacmp_t_13[1:0];
 
 assign value_assign_6_fu_119_p9 = 'bx;
 
-assign zext_ln673_fu_144_p1 = trunc_ln617_fu_115_p1;
+assign zext_ln684_fu_144_p1 = trunc_ln617_fu_115_p1;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_617_18

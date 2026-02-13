@@ -154,11 +154,22 @@ constexpr int       NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_P
 // ---------------------------------------------------------------------------
 // Requant configuration (compile-time)
 // ---------------------------------------------------------------------------
-// #define USE_REQUANT_SCALES1 1+
-#if defined(USE_REQUANT_SCALES1)
-#include "fpga_requant_scales1_sample.hpp"
+// Select one:
+//   -DREQUANT_SCALES_VER=0  -> requant_scales_v0.hpp
+//   -DREQUANT_SCALES_VER=1  -> requant_scales_v1.hpp
+//   -DREQUANT_SCALES_VER=2  -> requant_scales_v2.hpp
+#ifndef REQUANT_SCALES_VER
+#define REQUANT_SCALES_VER 2
+#endif
+
+#if (REQUANT_SCALES_VER == 0)
+#include "requant_scales_v0.hpp"
+#elif (REQUANT_SCALES_VER == 1)
+#include "requant_scales_v1.hpp"
+#elif (REQUANT_SCALES_VER == 2)
+#include "requant_scales_v2.hpp"
 #else
-#include "requant_scales_fixed.hpp"
+#error "Invalid REQUANT_SCALES_VER. Use 0, 1, or 2."
 #endif
 // ------------------------------------------------------------
 // Scheduler state + helper enums

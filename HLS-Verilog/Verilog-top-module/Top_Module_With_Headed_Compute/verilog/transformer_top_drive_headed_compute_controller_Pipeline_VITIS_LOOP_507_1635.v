@@ -49,7 +49,7 @@ wire   [0:0] icmp_ln507_fu_103_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln673_fu_144_p1;
+wire   [63:0] zext_ln684_fu_144_p1;
 reg   [2:0] h_fu_54;
 wire   [2:0] add_ln507_fu_109_p2;
 wire    ap_loop_init;
@@ -94,7 +94,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U2378(
+sparsemux_9_2_8_1_1_U2392(
     .din0(select_ln252_12),
     .din1(select_ln252_13),
     .din2(select_ln252_14),
@@ -238,7 +238,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign head_out_buf_1_address0 = zext_ln673_fu_144_p1;
+assign head_out_buf_1_address0 = zext_ln684_fu_144_p1;
 
 assign head_out_buf_1_ce0 = head_out_buf_1_ce0_local;
 
@@ -252,6 +252,6 @@ assign trunc_ln507_fu_115_p1 = ap_sig_allocacmp_h_12[1:0];
 
 assign value_assign_s_fu_119_p9 = 'bx;
 
-assign zext_ln673_fu_144_p1 = trunc_ln507_fu_115_p1;
+assign zext_ln684_fu_144_p1 = trunc_ln507_fu_115_p1;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_507_1635
