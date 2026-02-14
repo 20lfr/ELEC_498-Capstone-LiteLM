@@ -402,6 +402,22 @@ struct ControlMemSpace {
     uint32_t w1_tile_stride = 0;
     uint32_t w2_tile_stride = 0;
 
+    // Optional dedicated bias strides (if biases are not packed right after weights)
+    uint32_t wq_bias_head_stride = 0;
+    uint32_t wk_bias_head_stride = 0;
+    uint32_t wv_bias_head_stride = 0;
+    uint32_t wo_bias_tile_stride = 0;
+    uint32_t w1_bias_tile_stride = 0;
+    uint32_t w2_bias_tile_stride = 0;
+
+    // Optional LN/RMS parameter strides (per-layer tables)
+    uint32_t ln0_gamma_stride = 0;
+    uint32_t ln1_gamma_stride = 0;
+    uint32_t final_norm_gamma_stride = 0;
+    uint32_t ln0_eps_stride = 0;
+    uint32_t ln1_eps_stride = 0;
+    uint32_t final_norm_eps_stride = 0;
+
     // address size match ARM64 address space
     uint64_t wq_base_addr   = 0;
     uint64_t wk_base_addr   = 0;
@@ -412,6 +428,22 @@ struct ControlMemSpace {
 
     uint64_t k_cache_addr   = 0;
     uint64_t v_cache_addr   = 0;
+
+    // Optional dedicated bias base addresses (if not packed with weights)
+    uint64_t wq_bias_base_addr = 0;
+    uint64_t wk_bias_base_addr = 0;
+    uint64_t wv_bias_base_addr = 0;
+    uint64_t wo_bias_base_addr = 0;
+    uint64_t w1_bias_base_addr = 0;
+    uint64_t w2_bias_base_addr = 0;
+
+    // LayerNorm / RMSNorm parameter tables
+    uint64_t ln0_gamma_base_addr = 0;
+    uint64_t ln1_gamma_base_addr = 0;
+    uint64_t final_norm_gamma_base_addr = 0;
+    uint64_t ln0_eps_base_addr = 0;
+    uint64_t ln1_eps_base_addr = 0;
+    uint64_t final_norm_eps_base_addr = 0;
 
     uint32_t logit_scale_qv = 0;
     uint32_t scale_q        = 0;

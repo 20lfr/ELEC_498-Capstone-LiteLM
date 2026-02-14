@@ -1,0 +1,179 @@
+MMU Luka Design Report
+======================
+
+Scope
+-----
+This report explains why `mmu_luka` works, and how it implements the tasks you defined.
+Files covered:
+- `HLS-Verilog/MMU/mmu_luka.hpp`
+- `HLS-Verilog/MMU/mmu_luka.cpp`
+- `HLS-Verilog/MMU/mmu_luka_tb.cpp`
+
+Validation status
+-----------------
+- Host compile check passed:
+  - `g++ -std=c++17 -Wall -Wextra -I HLS-Verilog -I /tools/Xilinx/2025.1/Vitis/include HLS-Verilog/MMU/mmu_luka.cpp HLS-Verilog/MMU/mmu_luka_tb.cpp HLS-Verilog/Weight_Loader-Stager/Weight_stager.cpp -o /tmp/mmu_luka_tb`
+- Testbench run passed:
+  - `/tmp/mmu_luka_tb` returned `0`
+  - `status.overflow=0`, `status.invalid=0`
+
+Task-to-Implementation Mapping
+------------------------------
+1) Keep per-state FSM style + helper functions
+- Implemented.
+- FSM states are explicit in `mmu_luka.hpp:22` and switched in `mmu_luka.cpp:1200+`.
+- Helpers are decomposed by function (queue, arbitration, region mgmt, DMA planning, compute in-buffer build).
+
+2) Keep headed arbitration + request popping
+- Implemented.
+- Round-robin headed arbitration: `arb_request/arb_release/arb_step/arb_is_granted` in `mmu_luka.cpp:245-290`.
+- DMA and compute queues with pop/push:
+  - `dma_q_push/dma_q_pop` in `mmu_luka.cpp:293-312`
+  - `compute_q_push/compute_q_pop` in `mmu_luka.cpp:314-333`
+
+3) Add MMU-owned compute buffers at interface (BRAM-facing buffers)
+- Implemented in MMU IO contract (no top wiring yet, as requested earlier).
+- Interface includes:
+  - `in_buf`, `out_buf`
+  - `head_in_buf[HEADS_PARALLEL]`, `head_out_buf[HEADS_PARALLEL]`
+- See `mmu_luka.hpp:150-155` and `mmu_luka.cpp:1104-1107`.
+
+4) Use 64 URAM blocks internally and manage placement
+- Implemented.
+- Internal store: `uram_banks[64][URAM_BANK_BYTES]` in `mmu_luka.cpp:27`.
+- URAM pragma: `#pragma HLS BIND_STORAGE ... impl=uram` at `mmu_luka.cpp:28`.
+- Placement/chunking:
+  - `allocate_chunks`, `commit_chunks` (`mmu_luka.cpp:340-377`)
+  - multi-chunk Region descriptor (`mmu_luka.hpp:75-99`)
+
+5) Compute READ requests fill input buffers from stored artifacts
+- Implemented.
+- Headed path builder: `build_head_in_buf` (`mmu_luka.cpp:896-974`)
+- Main path builder: `build_main_in_buf` (`mmu_luka.cpp:976-1048`)
+- READ flow in FSM: `COMPUTE_READ_PREP` (`mmu_luka.cpp:1472-1489`)
+
+6) Compute WRITE requests parse out buffers and store by op/layer/head/tile
+- Implemented.
+- Mapping policy by op: `build_write_spec` (`mmu_luka.cpp:669-751`)
+- WRITE flow in FSM: `COMPUTE_WRITE_PREP` (`mmu_luka.cpp:1505-1534`)
+- Uses region key `(tag, layer, head, tile)` plus part tracking.
+
+7) DMA fetch path (weight stager address + piecewise fetch/store)
+- Implemented.
+- DMA request decode + queue + pop: `DMA_POP` path (`mmu_luka.cpp:1217-1244`)
+- Piece plan by DMASEL (W/B splitting for WQ/WK/WV/WO/W1/W2):
+  - `build_dma_piece_plan` (`mmu_luka.cpp:753-847`)
+- Base address from weight stager:
+  - `calc_dma_base_addr` (`mmu_luka.cpp:849-871`)
+- DMA issue/wait/store states:
+  - `DMA_ISSUE`, `DMA_WAIT`, `DMA_STORE` (`mmu_luka.cpp:1318-1383`)
+
+8) KV writeback special case (reverse direction)
+- Implemented.
+- Special branch in `DMA_POP` for `DMASEL_K_WRITE`/`DMASEL_V_WRITE` (`mmu_luka.cpp:1237-1239`).
+- Writeback prep/issue/wait:
+  - `DMA_WRITEBACK_PREP/ISSUE/WAIT` (`mmu_luka.cpp:1385-1432`)
+- Source region is `K_OUT` or `V_OUT`; address uses token-aware function `calc_kv_write_addr` (`mmu_luka.cpp:873-894`).
+
+9) Contiguous handoff packing for tiled/head-parallel stages
+- Implemented.
+- Headed: `CMP_HEAD_REQUANT` is packed contiguously across all heads into `HEAD_REQUANT_PACKED`.
+  - `build_write_spec` (`mmu_luka.cpp:686-699`)
+- Main tiled ops packed contiguously:
+  - `CMP_OUT_PROJ` -> `OUT_PROJ_PACKED` across `NUM_WO_TILES`
+  - `CMP_FFN_W1` -> `FFN_W1_PACKED` across `NUM_W1_TILES`
+  - `CMP_FFN_W2` -> `FFN_W2_PACKED` across `NUM_W2_TILES`
+  - `build_write_spec` (`mmu_luka.cpp:707-739`)
+- Internal concat DMA op:
+  - `DMA_INTERNAL_CONCAT` builds `CONCAT_OUT` from `HEAD_REQUANT_PACKED` (`mmu_luka.cpp:1247-1291`).
+
+10) Save/evict mechanism (used/unused semantics)
+- Implemented.
+- Region fields: `used`, `retain_count`, part-complete tracking (`mmu_luka.hpp:84-98`).
+- Consumption and lifetime:
+  - `should_consume` (`mmu_luka.cpp:226-241`)
+  - `maybe_consume` decrements retain/marks unused (`mmu_luka.cpp:401-411`)
+- Garbage collection:
+  - `gc_scan` drops unused entries and resets banks when no live regions (`mmu_luka.cpp:413-447`).
+
+How the FSM Executes (Operational Sequence)
+--------------------------------------------
+A) On each cycle, MMU can accept new scheduler DMA request and compute request if queues are not full.
+- enqueue points: `mmu_luka.cpp:1173-1194`
+
+B) IDLE priority:
+- If DMA queue has work: process DMA first.
+- Else if compute queue has work: process compute.
+- Else run GC scan.
+- `mmu_luka.cpp:1200-1214`
+
+C) DMA flow:
+1. Pop request (`DMA_POP`)
+2. If headed, wait for arb grant
+3. Route to:
+   - `DMA_WRITEBACK_PREP` for K/V writeback
+   - `DMA_INTERNAL_CONCAT` for concat op
+   - `DMA_PREP` for normal fetch
+4. For normal fetch:
+   - build piece plan + base address
+   - issue DMA read(s)
+   - on `dma_done`, store into tagged region
+
+D) Compute flow:
+1. Pop request (`COMPUTE_POP`)
+2. If headed, wait for arb grant
+3. Branch by type:
+   - READ: build/fill `in_buf` or `head_in_buf[lane]`
+   - WRITE: commit `out_buf` or `head_out_buf[lane]` into URAM regions
+4. Emit done pulse for main or specific head.
+
+Evidence From Testbench Run
+---------------------------
+`mmu_luka_tb` drives a cycle-by-cycle sequence with one request per phase:
+1. DMA load WQ
+2. Main compute WRITE `CMP_REQUANT1`
+3. Headed compute READ `CMP_Q`
+4. Headed compute WRITE `CMP_K`
+5. DMA writeback `DMASEL_K_WRITE`
+
+Observed behavior (from `/tmp/mmu_luka_tb.log`):
+- WQ DMA read occurs in 2 pieces (W then B):
+  - first `dlen=32` then `dlen=2`
+- Region count grows as artifacts are committed:
+  - ends at 4
+- No error flags:
+  - `ov=0`, `inv=0` throughout
+- Headed input buffer was populated from stored artifacts:
+  - `head_in_buf[0]` shows non-zero synthesized data
+- K writeback payload was produced:
+  - `dma_tx_buf first bytes: 40 41 42 43 ...`
+
+Why This Is Correct For Your Requested Behavior
+-----------------------------------------------
+- Storage correctness:
+  - Every artifact is keyed by semantic identity `(tag, layer, head, tile)` and can spill across banks.
+- Handoff correctness:
+  - Tiled/headed outputs that must be contiguous are explicitly packed and tracked by `expected_parts/written_parts`.
+- Scheduling correctness:
+  - Headed arbitration ensures one head consumes shared MMU resources at a time.
+- Lifetime correctness:
+  - `retain_count + used + consume + gc_scan` enforces “keep if needed, emit if unused”.
+- Interface correctness:
+  - MMU owns movement between external DMA, URAM regions, and compute BRAM buffers through explicit READ/WRITE requests.
+
+Known Boundaries (Current Scope)
+--------------------------------
+- This report covers `mmu_luka` standalone behavior and its dedicated TB.
+- Full top-level integration (`top.cpp` wiring and replacing legacy MMU path) is intentionally not done yet.
+- `ComputeHeadCtx` direct-struct coupling is not used in this standalone module; this design uses packed compute requests + headed arbitration metadata.
+
+Conclusion
+----------
+The current `mmu_luka` design matches the requested architecture:
+- explicit readable FSM,
+- queue + arbitration control,
+- URAM-backed region manager with packing and lifecycle,
+- DMA fetch/writeback handling,
+- compute buffer fill/commit for both main and headed paths.
+
+The standalone compile/run evidence shows the implemented data movement and control sequencing are functioning without overflow/invalid faults for the exercised flow.

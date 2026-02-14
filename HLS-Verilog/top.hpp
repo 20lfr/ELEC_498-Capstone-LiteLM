@@ -8,6 +8,7 @@
 #include "Transformer_logic/src-hls/compute_controller.hpp"
 #include "Transformer_logic/src-hls/headed_compute_controller.hpp"
 
+constexpr int TOP_DMA_BUF_BYTES = 65536;
 
 // Top-level wrapper prototype
 void transformer_top(
@@ -21,37 +22,23 @@ void transformer_top(
     ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
     StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
     bool &irq_ps,                       // [OUTPUT] Interrupt signal
+    bool dma_ready,                     // [INPUT] DMA command interface ready
+    bool dma_done,                      // [INPUT] DMA completion pulse
+    const uint8_t dma_rx_buf[TOP_DMA_BUF_BYTES], // [INPUT] DMA read payload into MMU
+    uint8_t dma_tx_buf[TOP_DMA_BUF_BYTES],       // [OUTPUT] DMA write payload from MMU
+    bool &dma_start,                    // [OUTPUT] Start DMA transfer
+    uint32_t &dma_addr,                 // [OUTPUT] DMA address
+    uint32_t &dma_len,                  // [OUTPUT] DMA transfer length
+    bool &dma_is_write,                 // [OUTPUT] DMA direction (1=MMU->DDR)
 
     /*
         TEMPORARY OUTPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
     */
 
-    // ------------------------------------------------------------
-    // Memory Management System (WEIGHT LOADER via DMA)
-    // ------------------------------------------------------------
-    bool        dma_done,               // [INPUT]  DMA transfer completed (single-cycle pulse)
-    bool        wl_ready,               // [INPUT]  Weight loader ready for a new request
-    uint32_t    &wl_instruction,        // [OUTPUT] Packed dma op|layer|head|tile
-    bool        &wl_start,              // [OUTPUT] Start weight load request
-
-    // Compute Controller communication signals
-    bool        mem_transfer_done,      // [INPUT] Memory manager transfer complete
-    bool        &mem_read_request,      // [OUTPUT] Request memory manager read
-    bool        &mem_write_request,     // [OUTPUT] Request memory manager write
-    uint32_t    &mem_op,                // [OUTPUT] Opcode for memory manager
-    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
-
-    // ------------------------------------------------------------
-    // COMPUTE CORE (MAC ARRAY + PIPELINE)
-    // ------------------------------------------------------------
-    const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
-    uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
-    HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out)
-    ComputeHeadCtx  (&head_compute_ctx)[HEADS_PARALLEL],
-
     // Debug (scheduler)
     SchedState  &dbg_state,
+    HeadCtx (&dbg_head_ctx_ref)[NUM_HEADS],              // [OUTPUT] Debug mirror: per-head scheduler context
+    ComputeHeadCtx  (&dbg_head_compute_ctx)[HEADS_PARALLEL], // [OUTPUT] Debug mirror: per-lane headed compute context
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
@@ -86,6 +73,17 @@ void transformer_top(
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
     int      &dbg_head_group_idx,
+    bool     &dbg_wl_ready,
+    uint32_t &dbg_wl_instruction,
+    bool     &dbg_wl_start,
+    bool     &dbg_mem_transfer_done,
+    bool     &dbg_mem_read_request,
+    bool     &dbg_mem_write_request,
+    uint32_t &dbg_mem_op,
+    uint8_t  dbg_in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t  dbg_out_buf[compute_buf::OUT_BUF_BYTES],
+    uint8_t  dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    uint8_t  dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
 
     bool &dbg_done
 );

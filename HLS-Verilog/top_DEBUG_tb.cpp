@@ -1098,7 +1098,14 @@ int main() {
     uint32_t wl_instruction = 0;
     HeadCtx head_ctx_ref[NUM_HEADS];
     ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL] = {};
+    bool dma_ready       = false;
     bool dma_done        = false;
+    bool dma_start       = false;
+    uint32_t dma_addr    = 0;
+    uint32_t dma_len     = 0;
+    bool dma_is_write    = false;
+    uint8_t dma_rx_buf[TOP_DMA_BUF_BYTES] = {};
+    uint8_t dma_tx_buf[TOP_DMA_BUF_BYTES] = {};
     bool wl_dma_request  = false;
     uint64_t wl_dma_address = 0;
 
@@ -1626,6 +1633,7 @@ int main() {
             head_ctx_ref[i].wl_ready      = !head_dma_busy[lane];
         }
         stream_ready  = !stream_busy;
+        dma_ready = !dma_busy;
         wl_ready = !dma_busy;
         wl_dma_request = false;
 
@@ -1906,21 +1914,17 @@ int main() {
             ctrl_mem,
             status_mem,
             irq_ps,
+            dma_ready,
             dma_done,
-            wl_ready,
-            wl_instruction,
-            wl_start,
-            mem_transfer_done,
-            mem_read_request,
-            mem_write_request,
-            mem_op,
-            in_buf,
-            out_buf,
-            head_in_buf,
-            head_out_buf,
+            dma_rx_buf,
+            dma_tx_buf,
+            dma_start,
+            dma_addr,
+            dma_len,
+            dma_is_write,
+            dbg_state, 
             head_ctx_ref,
             head_compute_ctx,
-            dbg_state, 
             dbg_ctrl_mem,
             control_reg,
             irq_status_reg,
@@ -1953,6 +1957,17 @@ int main() {
             dbg_mac_complete,
             dbg_ctrl_reset_asserted,
             dbg_head_group_idx,
+            wl_ready,
+            wl_instruction,
+            wl_start,
+            mem_transfer_done,
+            mem_read_request,
+            mem_write_request,
+            mem_op,
+            in_buf,
+            out_buf,
+            head_in_buf,
+            head_out_buf,
             dbg_done
         );
 
@@ -1974,9 +1989,9 @@ int main() {
             }
         }
 
-        if (wl_start && !dma_busy) {
+        if (dma_start && !dma_busy) {
             wl_dma_request = true;
-            wl_dma_address = compute_wl_address(wl_instruction, dbg_ctrl_mem);
+            wl_dma_address = static_cast<uint64_t>(dma_addr);
             dma_busy  = true;
             dma_timer = DMA_LAT - 1;
         }
