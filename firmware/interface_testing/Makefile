@@ -15,7 +15,7 @@ SYSROOT        ?= $(FIRMWARE_DIR)/dependencies/iot-limerick-kria-classic-desktop
 UDMABUF_DIR    ?= $(FIRMWARE_DIR)/udmabuf
 
 # Base addresses (From Vivado Address Editor)
-DMA_REG_BASE_ADDR  ?= 80000000
+DMA_REG_BASE_ADDR  ?= A0000000
 
 # Flags
 CXXFLAGS = -std=c++11 -Wall -O2 -g
@@ -64,41 +64,54 @@ $(BUILD_DIR)/axi_legacy_test: $(AXI_LEGACY_TEST_SRCS) $(DRIVER_LEGACY_SRC)
 
 PACKAGE_NAME = interface_testing
 
-define INSTALL_SCRIPT
+define INSTALL_KMODULE
 #!/bin/bash
 set -e
 
-DMA_ADDR="$(DMA_REG_BASE_ADDR)"
+echo "=== Setting up DMA Buffer (u-dma-buf) ==="
 
-setup() {
-    echo "=== Setting up DMA testing environment ==="
-    
-    # Build and load udmabuf
-    echo "[1/2] Building udmabuf kernel module..."
-    cd udmabuf && make -s clean all && cd ..
-    
-    echo "[2/2] Loading udmabuf (1MB buffer)..."
-    sudo rmmod u-dma-buf 2>/dev/null || true
-    sudo insmod udmabuf/u-dma-buf.ko udmabuf0=1048576
-    
-    # Unbind DMA from kernel driver if bound
-    if [ -e "/sys/bus/platform/drivers/xilinx-vdma/$${DMA_ADDR}.dma" ]; then
-        echo "       Unbinding DMA from xilinx-vdma driver..."
-        echo "$${DMA_ADDR}.dma" | sudo tee /sys/bus/platform/drivers/xilinx-vdma/unbind >/dev/null
-    fi
-    
-    echo ""
-    echo "=== Setup complete! ==="
-    echo "Run: ./run.sh test		- AXI test"
-}
+echo "[1/3] Building udmabuf kernel module..."
+cd udmabuf && make -s clean all && cd ..
 
-case "$${1:-setup}" in
-    setup) setup ;;
-    test)  sudo ./bin/axi_test ;;
-    *)     echo "Usage: ./run.sh [setup|test]" ;;
-esac
+echo "[2/3] Installing kernel module..."
+# Using cp instead of mv so you keep a local copy if needed
+sudo cp udmabuf/u-dma-buf.ko /lib/modules/$$(uname -r)/kernel/drivers/
+
+echo "[3/3] Configuring safe auto-load on boot..."
+# Safely create a dedicated config file instead of modifying /etc/modules
+echo "u-dma-buf" | sudo tee /etc/modules-load.d/u-dma-buf.conf > /dev/null
+
+echo "Updating module dependencies (Please wait, this might take a minute)..."
+sudo depmod -a
+
+echo ""
+echo "=== Buffer Setup Complete! ==="
+echo "Please REBOOT your board now to finalize the memory configuration."
 endef
-export INSTALL_SCRIPT
+export INSTALL_KMODULE
+
+define UNBIND_DMAREGS
+#!/bin/bash
+set -e
+
+# Replace this with your actual DMA register base address if it's not exported in your environment
+DMA_ADDR="${DMA_REG_BASE_ADDR:-a0000000}"
+
+echo "=== Setting up DMA IP Registers ==="
+
+# Unbind DMA from kernel driver if bound
+if [ -e "/sys/bus/platform/drivers/xilinx-vdma/${DMA_ADDR}.dma" ]; then
+    echo "Unbinding DMA from xilinx-vdma driver..."
+    echo "${DMA_ADDR}.dma" | sudo tee /sys/bus/platform/drivers/xilinx-vdma/unbind >/dev/null
+    echo "Unbind successful."
+else
+    echo "DMA driver is already unbound or not attached to xilinx-vdma."
+fi
+
+echo ""
+echo "=== IP Setup Complete! ==="
+endef
+export UNBIND_DMAREGS
 
 package: all
 	@echo "Creating deployment package..."
@@ -114,8 +127,10 @@ package: all
 	@cp -r ${UDMABUF_DIR}/* $(PACKAGE_DIR)/$(PACKAGE_NAME)/udmabuf/
 	
 	@# Create run script
-	@echo "$$INSTALL_SCRIPT" > $(PACKAGE_DIR)/$(PACKAGE_NAME)/run.sh
-	@chmod +x $(PACKAGE_DIR)/$(PACKAGE_NAME)/run.sh
+	@echo "$$INSTALL_KMODULE" > $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_buffer.sh
+	@chmod +x $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_buffer.sh
+	@echo "$$UNBIND_DMAREGS" > $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_dmaregs.sh
+	@chmod +x $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_dmaregs.sh
 	
 	@tar -czvf $(PACKAGE_DIR)/$(PACKAGE_NAME).tar.gz -C $(PACKAGE_DIR) $(PACKAGE_NAME)
 	@rm -rf $(PACKAGE_DIR)/$(PACKAGE_NAME)

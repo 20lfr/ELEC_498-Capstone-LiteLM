@@ -131,3 +131,25 @@
 #define XAXI_TOP_CONTROL_BITS_STATUS_MEM_DATA 128
 #define XAXI_TOP_CONTROL_ADDR_STATUS_MEM_CTRL 0xc4
 
+// control_r
+// 0x00 : reserved
+// 0x04 : reserved
+// 0x08 : reserved
+// 0x0c : reserved
+// 0x10 : Data signal of ddr_weights
+//        bit 31~0 - ddr_weights[31:0] (Read/Write)
+// 0x14 : Data signal of ddr_weights
+//        bit 31~0 - ddr_weights[63:32] (Read/Write)
+// 0x18 : reserved
+// 0x1c : Data signal of ddr_kvcache
+//        bit 31~0 - ddr_kvcache[31:0] (Read/Write)
+// 0x20 : Data signal of ddr_kvcache
+//        bit 31~0 - ddr_kvcache[63:32] (Read/Write)
+// 0x24 : reserved
+// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
+
+#define XAXI_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA 0x10
+#define XAXI_TOP_CONTROL_R_BITS_DDR_WEIGHTS_DATA 64
+#define XAXI_TOP_CONTROL_R_ADDR_DDR_KVCACHE_DATA 0x1c
+#define XAXI_TOP_CONTROL_R_BITS_DDR_KVCACHE_DATA 64
+

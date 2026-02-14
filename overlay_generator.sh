@@ -21,10 +21,10 @@ set -e # Exit immediately if a command exits with a non-zero status
 
 echo ">>> Sourcing Xilinx Environment..."
 if [ -f "$XILINX_SETTINGS" ]; then
-  source "$XILINX_SETTINGS"
+    source "$XILINX_SETTINGS"
 else
-  echo "ERROR: Xilinx settings not found at $XILINX_SETTINGS"
-  exit 1
+    echo "ERROR: Xilinx settings not found at $XILINX_SETTINGS"
+    exit 1
 fi
 
 mkdir -p "$TARGET_DIR"
@@ -32,12 +32,12 @@ cd "$TARGET_DIR"
 
 echo ">>> Step 1: Preparing Device Tree Repository..."
 if [ ! -d "device-tree-xlnx" ]; then
-  git clone https://github.com/Xilinx/device-tree-xlnx.git
-  cd device-tree-xlnx
-  git checkout $DTG_BRANCH
-  cd ..
+    git clone https://github.com/Xilinx/device-tree-xlnx.git
+    cd device-tree-xlnx
+    git checkout $DTG_BRANCH
+    cd ..
 else
-  echo "    Repo already exists, skipping clone."
+    echo "    Repo already exists, skipping clone."
 fi
 
 echo ">>> Step 2: Generating Device Tree Source (DTSI) via XSCT..."
@@ -61,8 +61,8 @@ EOT
 xsct generate_dts.tcl
 
 if [ ! -f "$HW_WRAPPER.bit" ]; then
-  echo "ERROR: No .bit file found inside the XSA!"
-  exit 1
+    echo "ERROR: No .bit file found inside the XSA!"
+    exit 1
 fi
 
 echo ">>> Step 4: Compiling DTBO and Extracting Compatible ID..."
@@ -70,11 +70,13 @@ DTS_FILE="./dts_output/pl.dtsi"
 INCLUDE_PATH="./device-tree-xlnx/include"
 
 if [ ! -f "$DTS_FILE" ]; then
-  echo "ERROR: XSCT failed to generate pl.dtsi"
-  exit 1
+    echo "ERROR: XSCT failed to generate pl.dtsi"
+    exit 1
 fi
 
 # 4b. Pre-process and compile
+#
+
 gcc -E -nostdinc -undef -D__DTS__ -x assembler-with-cpp -I "$INCLUDE_PATH" "$DTS_FILE" -o pl.preprocessed.dtsi
 dtc -@ -O dtb -o pl.dtbo pl.preprocessed.dtsi
 
@@ -114,7 +116,7 @@ COMPAT_ID="$COMPAT_ID"
 TARGET_DIR=/lib/firmware/xilinx
 
 sudo rm -r /\$TARGET_DIR/\$APP_NAME
-cp -r ./\$APP_NAME /\$TARGET_DIR
+sudo cp -r ./\$APP_NAME /\$TARGET_DIR
 
 # 1. Unload any existing app
 echo ">>> Unloading current firmware..."
@@ -136,7 +138,7 @@ sudo modprobe uio_pdrv_genirq of_id="\$COMPAT_ID"
 # 4. Find and print the UIO Instance Name
 echo ">>> checking /sys/class/uio for device name..."
 # We sleep briefly to let the kernel settle
-sleep 1
+sleep 2
 # Find the UIO device that matches the compatible name (often partially matched in name file)
 # OR simply list all to help the user.
 echo "--------------------------------------------------"

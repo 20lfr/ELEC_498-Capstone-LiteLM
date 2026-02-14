@@ -22,16 +22,15 @@ private:
     size_t _size;
     int _fd;
     bool _mock;
-    std::string _device_name;
     void* _virt;
     uint64_t _phys;
 
 public:
-    DmaBuffer(const std::string& device_name = "udmabuf0")
-        : _device_name(device_name), _size(0), _fd(-1), _mock(false),
+    DmaBuffer()
+        : _size(0), _fd(-1), _mock(false),
           _virt(nullptr), _phys(0) {}
 
-    bool allocate(size_t size, bool mock = false) {
+    bool allocate(const std::string& device_name, size_t size, bool mock = false) {
         _mock = mock;
         _size = size;
 
@@ -40,9 +39,13 @@ public:
             _phys = 0x10000000;  // Fake physical address for mock
             return _virt != nullptr;
         }
+        if (device_name.empty()) {
+            perror("DmaBuffer: device_name is empty");
+            return false;
+        }
 
         // 1. Read physical address from sysfs
-        std::string sysfs_path = "/sys/class/u-dma-buf/" + _device_name + "/phys_addr";
+        std::string sysfs_path = "/sys/class/u-dma-buf/" + device_name + "/phys_addr";
         FILE* fp = fopen(sysfs_path.c_str(), "r");
         if (!fp) {
             perror(("DmaBuffer: cannot open " + sysfs_path + " (is module loaded?)").c_str());
@@ -55,7 +58,7 @@ public:
         fclose(fp);
 
         // 2. Open device file
-        std::string dev_path = "/dev/" + _device_name;
+        std::string dev_path = "/dev/" + device_name;
         _fd = open(dev_path.c_str(), O_RDWR | O_SYNC);  // O_SYNC = uncached
         if (_fd < 0) {
             perror(("DmaBuffer: cannot open " + dev_path).c_str());
