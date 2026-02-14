@@ -15,7 +15,7 @@ SYSROOT        ?= $(FIRMWARE_DIR)/dependencies/iot-limerick-kria-classic-desktop
 UDMABUF_DIR    ?= $(FIRMWARE_DIR)/udmabuf
 
 # Base addresses (From Vivado Address Editor)
-DMA_REG_BASE_ADDR  ?= A0000000
+DMA_REG_BASE_ADDR  ?= a0000000
 
 # Flags
 CXXFLAGS = -std=c++11 -Wall -O2 -g
@@ -95,14 +95,14 @@ define UNBIND_DMAREGS
 set -e
 
 # Replace this with your actual DMA register base address if it's not exported in your environment
-DMA_ADDR="${DMA_REG_BASE_ADDR:-a0000000}"
+DMA_ADDR="${DMA_REG_BASE_ADDR}"
 
 echo "=== Setting up DMA IP Registers ==="
 
 # Unbind DMA from kernel driver if bound
-if [ -e "/sys/bus/platform/drivers/xilinx-vdma/${DMA_ADDR}.dma" ]; then
+if [ -e "/sys/bus/platform/drivers/xilinx-vdma/$${DMA_ADDR}.dma" ]; then
     echo "Unbinding DMA from xilinx-vdma driver..."
-    echo "${DMA_ADDR}.dma" | sudo tee /sys/bus/platform/drivers/xilinx-vdma/unbind >/dev/null
+    echo "$${DMA_ADDR}.dma" | sudo tee /sys/bus/platform/drivers/xilinx-vdma/unbind >/dev/null
     echo "Unbind successful."
 else
     echo "DMA driver is already unbound or not attached to xilinx-vdma."
