@@ -65,9 +65,9 @@ reg    ap_ready_int;
 wire   [1:0] trunc_ln470_fu_95_p1;
 reg   [1:0] trunc_ln470_reg_202;
 wire    ap_block_pp0_stage0_11001;
-wire   [0:0] trunc_ln648_fu_99_p1;
-reg   [0:0] trunc_ln648_reg_206;
-wire   [63:0] zext_ln650_fu_127_p1;
+wire   [0:0] trunc_ln659_fu_99_p1;
+reg   [0:0] trunc_ln659_reg_206;
+wire   [63:0] zext_ln661_fu_127_p1;
 wire    ap_block_pp0_stage0;
 wire   [3:0] nibble_fu_161_p3;
 reg   [2:0] h_6_fu_58;
@@ -76,11 +76,11 @@ wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_h;
 reg    head_in_buf_0_ce0_local;
 wire   [0:0] tmp_fu_103_p3;
-wire   [3:0] zext_ln649_fu_111_p1;
+wire   [3:0] zext_ln660_fu_111_p1;
 wire   [4:0] or_ln_fu_115_p3;
-wire  signed [5:0] sext_ln650_fu_123_p1;
+wire  signed [5:0] sext_ln661_fu_123_p1;
 wire   [3:0] tmp_s_fu_147_p4;
-wire   [3:0] trunc_ln651_fu_157_p1;
+wire   [3:0] trunc_ln662_fu_157_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -159,7 +159,7 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         trunc_ln470_reg_202 <= trunc_ln470_fu_95_p1;
-        trunc_ln648_reg_206 <= trunc_ln648_fu_99_p1;
+        trunc_ln659_reg_206 <= trunc_ln659_fu_99_p1;
     end
 end
 
@@ -282,15 +282,15 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign head_in_buf_0_address0 = zext_ln650_fu_127_p1;
+assign head_in_buf_0_address0 = zext_ln661_fu_127_p1;
 
 assign head_in_buf_0_ce0 = head_in_buf_0_ce0_local;
 
 assign icmp_ln470_fu_83_p2 = ((ap_sig_allocacmp_h == 3'd4) ? 1'b1 : 1'b0);
 
-assign nibble_fu_161_p3 = ((trunc_ln648_reg_206[0:0] == 1'b1) ? tmp_s_fu_147_p4 : trunc_ln651_fu_157_p1);
+assign nibble_fu_161_p3 = ((trunc_ln659_reg_206[0:0] == 1'b1) ? tmp_s_fu_147_p4 : trunc_ln662_fu_157_p1);
 
-assign or_ln_fu_115_p3 = {{1'd1}, {zext_ln649_fu_111_p1}};
+assign or_ln_fu_115_p3 = {{1'd1}, {zext_ln660_fu_111_p1}};
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_4 = nibble_fu_161_p3;
 
@@ -300,7 +300,7 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_7 = nibble_fu_161_p3;
 
-assign sext_ln650_fu_123_p1 = $signed(or_ln_fu_115_p3);
+assign sext_ln661_fu_123_p1 = $signed(or_ln_fu_115_p3);
 
 assign tmp_fu_103_p3 = ap_sig_allocacmp_h[32'd1];
 
@@ -308,12 +308,12 @@ assign tmp_s_fu_147_p4 = {{head_in_buf_0_q0[7:4]}};
 
 assign trunc_ln470_fu_95_p1 = ap_sig_allocacmp_h[1:0];
 
-assign trunc_ln648_fu_99_p1 = ap_sig_allocacmp_h[0:0];
+assign trunc_ln659_fu_99_p1 = ap_sig_allocacmp_h[0:0];
 
-assign trunc_ln651_fu_157_p1 = head_in_buf_0_q0[3:0];
+assign trunc_ln662_fu_157_p1 = head_in_buf_0_q0[3:0];
 
-assign zext_ln649_fu_111_p1 = tmp_fu_103_p3;
+assign zext_ln660_fu_111_p1 = tmp_fu_103_p3;
 
-assign zext_ln650_fu_127_p1 = $unsigned(sext_ln650_fu_123_p1);
+assign zext_ln661_fu_127_p1 = $unsigned(sext_ln661_fu_123_p1);
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_470_14

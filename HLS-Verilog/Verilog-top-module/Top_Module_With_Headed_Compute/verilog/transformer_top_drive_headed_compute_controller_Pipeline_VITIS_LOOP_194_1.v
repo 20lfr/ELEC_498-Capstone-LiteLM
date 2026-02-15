@@ -150,7 +150,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_31_4_16_1_1_U1347(
+sparsemux_31_4_16_1_1_U1361(
     .din0(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_452),
     .din1(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_453),
     .din2(p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbPA96_KhPA64_hPA16_aPA16_454),

@@ -131,9 +131,9 @@ reg    ap_ready_int;
 wire   [3:0] trunc_ln620_fu_149_p1;
 reg   [3:0] trunc_ln620_reg_330;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln657_fu_159_p1;
+wire   [63:0] zext_ln668_fu_159_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln658_fu_172_p1;
+wire   [63:0] zext_ln669_fu_172_p1;
 wire   [15:0] v_fu_216_p3;
 reg   [4:0] t_1_fu_100;
 wire   [4:0] add_ln620_fu_143_p2;
@@ -447,9 +447,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign head_in_buf_0_address0 = zext_ln658_fu_172_p1;
+assign head_in_buf_0_address0 = zext_ln669_fu_172_p1;
 
-assign head_in_buf_0_address1 = zext_ln657_fu_159_p1;
+assign head_in_buf_0_address1 = zext_ln668_fu_159_p1;
 
 assign head_in_buf_0_ce0 = head_in_buf_0_ce0_local;
 
@@ -497,8 +497,8 @@ assign trunc_ln620_fu_149_p1 = ap_sig_allocacmp_t[3:0];
 
 assign v_fu_216_p3 = {{head_in_buf_0_q0}, {head_in_buf_0_q1}};
 
-assign zext_ln657_fu_159_p1 = shl_ln622_fu_153_p2;
+assign zext_ln668_fu_159_p1 = shl_ln622_fu_153_p2;
 
-assign zext_ln658_fu_172_p1 = or_ln_fu_164_p3;
+assign zext_ln669_fu_172_p1 = or_ln_fu_164_p3;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_620_28

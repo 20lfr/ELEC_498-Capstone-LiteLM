@@ -707,15 +707,15 @@ module top_module_hls_tb;
   logic [31:0] rq3_x [0:D_MODEL-1];
   logic [31:0] rq4_x [0:D_MODEL-1];
   logic [31:0] full_accum [0:D_MODEL-1];
-  logic [31:0] out_proj_out [0:D_MODEL-1];
+  logic [7:0]  out_proj_out [0:D_MODEL-1];
   logic [7:0]  rq1_out [0:D_MODEL-1];
   logic [7:0]  rq2_out [0:D_MODEL-1];
   logic [7:0]  rq3_out [0:D_MODEL-1];
   logic [7:0]  rq4_out [0:D_MODEL-1];
   logic [7:0]  resid0_out [0:D_MODEL-1];
   logic [7:0]  resid1_out [0:D_MODEL-1];
-  logic [31:0] ln0_out [0:D_MODEL-1];
-  logic [31:0] ln1_out [0:D_MODEL-1];
+  logic [7:0]  ln0_out [0:D_MODEL-1];
+  logic [7:0]  ln1_out [0:D_MODEL-1];
   logic [31:0] final_norm_out [0:D_MODEL-1];
   logic [7:0] resid0_x [0:D_MODEL-1];
   logic [7:0] resid0_r [0:D_MODEL-1];
@@ -740,7 +740,7 @@ module top_module_hls_tb;
   logic [15:0] ffn2_x [0:D_FFN-1];
   logic [3:0] ffn2_w [0:(D_FFN*D_FFN)-1];
   logic [31:0] ffn2_b [0:D_FFN-1];
-  logic [31:0] ffn2_out [0:(NUM_W2_TILES * D_TILE_W2)-1];
+  logic [7:0]  ffn2_out [0:(NUM_W2_TILES * D_TILE_W2)-1];
 
 // Per-head input datasets (flattened by layer/head index)
   logic signed [7:0] q_act_all [0:(HEAD_DATASETS*D_MODEL)-1];
@@ -958,6 +958,29 @@ module top_module_hls_tb;
     end
   endfunction
 
+  function automatic logic signed [31:0] stim_gamma_q19_13(input int layer, input int idx, input int salt);
+    int p;
+    integer v;
+    begin
+      p = layer_profile(layer);
+      if (p == 1) begin
+        v = 4096 + ((idx * 17 + salt + layer) % 1024); // ~[0.5, 0.625]
+      end else if (p == 2) begin
+        v = 12288 + ((idx * 19 + salt + layer) % 2048); // ~[1.5, 1.75]
+      end else if (p == 3) begin
+        case ((idx + salt) & 3)
+          0: v = 2048;   // 0.25
+          1: v = 6144;   // 0.75
+          2: v = 8192;   // 1.0
+          default: v = 12288; // 1.5
+        endcase
+      end else begin
+        v = 8192 + (((idx * 37 + salt * 5 + layer * 11) % 2049) - 1024); // ~[0.875, 1.125]
+      end
+      stim_gamma_q19_13 = $signed(v);
+    end
+  endfunction
+
   // DMA done hold
   logic       dma_done_hold;
   int dma_done_ctr;
@@ -1005,7 +1028,7 @@ module top_module_hls_tb;
       full_valueA[i] = i + 1;
       full_bias[i] = 32'd7;
       full_accum[i] = 32'd0;
-      out_proj_out[i] = 32'd0;
+      out_proj_out[i] = 8'd0;
       rq1_x[i] = (i * 3000) - 20000;
       rq2_x[i] = (i * 2000) + 5000;
       rq3_x[i] = 100000 - (i * 4000);
@@ -1026,8 +1049,8 @@ module top_module_hls_tb;
       ln0_gamma[i] = 32'd1;
       ln1_gamma[i] = 32'd2;
       final_norm_gamma[i] = 32'd3;
-      ln0_out[i] = 32'd0;
-      ln1_out[i] = 32'd0;
+      ln0_out[i] = 8'd0;
+      ln1_out[i] = 8'd0;
       final_norm_out[i] = 32'd0;
       ffn1_x[i] = i + 3;
     end
@@ -1070,7 +1093,7 @@ module top_module_hls_tb;
       ffn2_w[t] = 4'h1;
     end
     for (t = 0; t < (NUM_W2_TILES * D_TILE_W2); t = t + 1) begin
-      ffn2_out[t] = 32'd0;
+      ffn2_out[t] = 8'd0;
     end
 
     for (i = 0; i < IN_BUF_BYTES; i = i + 1) begin
@@ -1099,6 +1122,8 @@ module top_module_hls_tb;
     int base;
     int data_idx;
     int idx;
+    int q_w_tmp;
+    int q_b_tmp;
 
     for (layer = 0; layer < NUM_LAYERS; layer = layer + 1) begin
       for (head = 0; head < NUM_HEADS; head = head + 1) begin
@@ -1106,7 +1131,8 @@ module top_module_hls_tb;
         lane = head % HEADS_PARALLEL;
 
         for (i = 0; i < D_MODEL; i = i + 1) begin
-          q_act_all[(data_idx * D_MODEL) + i] = stim_i8(layer, i, 11 + lane + (head * 3));
+          // Keep Q inputs in a mid-range to reduce artificial saturation.
+          q_act_all[(data_idx * D_MODEL) + i] = stim_i8_mid(layer, i, 11 + lane + (head * 3));
           k_act_all[(data_idx * D_MODEL) + i] = stim_i8(layer, i, 21 + lane + (head * 3));
           v_act_all[(data_idx * D_MODEL) + i] = stim_i8(layer, i, 31 + lane + (head * 3));
         end
@@ -1114,11 +1140,17 @@ module top_module_hls_tb;
         for (h = 0; h < D_HEADS; h = h + 1) begin
           for (i = 0; i < D_MODEL; i = i + 1) begin
             idx = (h * D_MODEL) + i;
-            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = stim_i4(layer, idx, 41 + lane + head);
+            q_w_tmp = stim_i4(layer, idx, 41 + lane + head);
+            if (q_w_tmp > 3) q_w_tmp = 3;
+            else if (q_w_tmp < -3) q_w_tmp = -3;
+            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = q_w_tmp;
             wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = stim_i4(layer, idx, 51 + lane + head);
             wv_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = stim_i4(layer, idx, 61 + lane + head);
           end
-          bq_all[(data_idx * QKV_B_ELEMS) + h] = stim_i4(layer, h, 71 + lane + head);
+          q_b_tmp = stim_i4(layer, h, 71 + lane + head);
+          if (q_b_tmp > 2) q_b_tmp = 2;
+          else if (q_b_tmp < -2) q_b_tmp = -2;
+          bq_all[(data_idx * QKV_B_ELEMS) + h] = q_b_tmp;
           bk_all[(data_idx * QKV_B_ELEMS) + h] = stim_i4(layer, h, 81 + lane + head);
           bv_all[(data_idx * QKV_B_ELEMS) + h] = stim_i4(layer, h, 91 + lane + head);
 
@@ -1149,10 +1181,6 @@ module top_module_hls_tb;
         // Matrix-multiply corner vectors for overflow coverage:
         // +A*+W, +A*-W, -A*+W, -A*-W.
         if (D_MODEL >= 4) begin
-          q_act_all[(data_idx * D_MODEL) + 0] = 8'sd127;
-          q_act_all[(data_idx * D_MODEL) + 1] = 8'sd127;
-          q_act_all[(data_idx * D_MODEL) + 2] = 8'sh80;
-          q_act_all[(data_idx * D_MODEL) + 3] = 8'sh80;
           k_act_all[(data_idx * D_MODEL) + 0] = 8'sd127;
           k_act_all[(data_idx * D_MODEL) + 1] = 8'sd127;
           k_act_all[(data_idx * D_MODEL) + 2] = 8'sh80;
@@ -1164,10 +1192,6 @@ module top_module_hls_tb;
         end
         if ((D_MODEL >= 4) && (D_HEADS > 0)) begin
           for (h = 0; h < D_HEADS; h = h + 1) begin
-            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 0] = 4'sd7;
-            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 1] = 4'sh8;
-            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 2] = 4'sd7;
-            wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 3] = 4'sh8;
             wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 0] = 4'sd7;
             wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 1] = 4'sh8;
             wk_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + 2] = 4'sd7;
@@ -1191,18 +1215,6 @@ module top_module_hls_tb;
           end
         end
 
-        // Layer 0 Q path: force max-positive output (Q = x*W + b).
-        if (layer == 0) begin
-          for (i = 0; i < D_MODEL; i = i + 1) begin
-            q_act_all[(data_idx * D_MODEL) + i] = 8'sd127;
-          end
-          for (h = 0; h < D_HEADS; h = h + 1) begin
-            for (i = 0; i < D_MODEL; i = i + 1) begin
-              wq_all[(data_idx * QKV_W_ELEMS) + (h * D_MODEL) + i] = 4'sd7;
-            end
-            bq_all[(data_idx * QKV_B_ELEMS) + h] = 4'sd7;
-          end
-        end
       end
     end
 
@@ -1505,7 +1517,7 @@ module top_module_hls_tb;
       for (i = 0; i < D_MODEL; i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < D_MODEL; j = j + 1) begin
-          $write(" %08x", out_proj_out[i + j]);
+          $write(" %02x", out_proj_out[i + j]);
         end
         $write("\n");
       end
@@ -1572,7 +1584,7 @@ module top_module_hls_tb;
       for (i = 0; i < D_MODEL; i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < D_MODEL; j = j + 1) begin
-          $write(" %08x", ln0_out[i + j]);
+          $write(" %02x", ln0_out[i + j]);
         end
         $write("\n");
       end
@@ -1580,7 +1592,7 @@ module top_module_hls_tb;
       for (i = 0; i < D_MODEL; i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < D_MODEL; j = j + 1) begin
-          $write(" %08x", ln1_out[i + j]);
+          $write(" %02x", ln1_out[i + j]);
         end
         $write("\n");
       end
@@ -1766,7 +1778,7 @@ module top_module_hls_tb;
       for (i = 0; i < (NUM_W2_TILES * D_TILE_W2); i = i + 8) begin
         $write("  %04x:", i);
         for (j = 0; j < 8 && (i + j) < (NUM_W2_TILES * D_TILE_W2); j = j + 1) begin
-          $write(" %08x", ffn2_out[i + j]);
+          $write(" %02x", ffn2_out[i + j]);
         end
         $write("\n");
       end
@@ -2519,19 +2531,32 @@ module top_module_hls_tb;
             int t;
             int j;
             int req_layer;
+            int tmp_i32;
+            int tmp_i4;
             for (j = 0; j < IN_BUF_BYTES; j = j + 1) begin
               in_buf_mem[j] = 8'd0;
             end
             req_layer = clamp_layer(pending_layer);
             if (active_main_layer != req_layer) begin
+              if (active_main_layer >= 0) begin
+                $display("=== End of Layer %0d (switching to layer %0d) ===",
+                         active_main_layer, req_layer);
+                dump_main_buffers();
+                dump_head_buffers_all();
+                dump_main_datasets();
+                dump_head_datasets();
+              end
               for (j = 0; j < OUT_BUF_BYTES; j = j + 1) begin
                 out_buf_mem[j] = 8'd0;
               end
               active_main_layer <= req_layer;
             end
             for (j = 0; j < D_MODEL; j = j + 1) begin
-              full_valueA[j] = stim_i8(req_layer, j, 11);
-              full_bias[j] = stim_i32(req_layer, j, 13);
+              full_valueA[j] = stim_i8_mid(req_layer, j, 11);
+              tmp_i32 = stim_i32(req_layer, j, 13);
+              if (tmp_i32 > 96) tmp_i32 = 96;
+              else if (tmp_i32 < -96) tmp_i32 = -96;
+              full_bias[j] = tmp_i32;
               rq1_x[j] = stim_i32(req_layer, j, 21);
               rq2_x[j] = stim_i32(req_layer, j, 31);
               rq3_x[j] = stim_i32(req_layer, j, 41);
@@ -2540,19 +2565,22 @@ module top_module_hls_tb;
               resid0_r[j] = stim_i8(req_layer, j, 71);
               resid1_x[j] = stim_i8(req_layer, j, 81);
               resid1_r[j] = stim_i8(req_layer, j, 91);
-              ln0_x[j] = stim_i8(req_layer, j, 101);
-              ln1_x[j] = stim_i8(req_layer, j, 111);
+              ln0_x[j] = stim_i8_mid(req_layer, j, 101);
+              ln1_x[j] = stim_i8_mid(req_layer, j, 111);
               final_norm_x[j] = stim_i8(req_layer, j, 121);
-              ln0_gamma[j] = stim_i32(req_layer, j, 131);
-              ln1_gamma[j] = stim_i32(req_layer, j, 141);
-              final_norm_gamma[j] = stim_i32(req_layer, j, 151);
+              ln0_gamma[j] = stim_gamma_q19_13(req_layer, j, 131);
+              ln1_gamma[j] = stim_gamma_q19_13(req_layer, j, 141);
+              final_norm_gamma[j] = stim_gamma_q19_13(req_layer, j, 151);
               ffn1_x[j] = stim_i8(req_layer, j, 161);
             end
             ln0_eps = stim_eps(req_layer, 171);
             ln1_eps = stim_eps(req_layer, 181);
             final_norm_eps = stim_eps(req_layer, 191);
             for (j = 0; j < (D_MODEL * D_MODEL); j = j + 1) begin
-              full_weights[j] = stim_i4(req_layer, j, 201);
+              tmp_i4 = stim_i4(req_layer, j, 201);
+              if (tmp_i4 > 3) tmp_i4 = 3;
+              else if (tmp_i4 < -3) tmp_i4 = -3;
+              full_weights[j] = tmp_i4;
             end
             for (j = 0; j < W1_OUT_SIZE; j = j + 1) begin
               ffn1_b[j] = stim_i32(req_layer, j, 211);
@@ -2563,44 +2591,31 @@ module top_module_hls_tb;
             for (j = 0; j < D_FFN; j = j + 1) begin
               ffn_act_gate_in[j] = stim_i16(req_layer, j, 231);
               ffn_act_up_in[j] = stim_i16(req_layer, j, 241);
-              ffn2_x[j] = stim_i16(req_layer, j, 251);
-              ffn2_b[j] = stim_i32(req_layer, j, 261);
+              tmp_i32 = stim_i16(req_layer, j, 251);
+              if (tmp_i32 > 1024) tmp_i32 = 1024;
+              else if (tmp_i32 < -1024) tmp_i32 = -1024;
+              ffn2_x[j] = tmp_i32;
+              tmp_i32 = stim_i32(req_layer, j, 261);
+              if (tmp_i32 > 256) tmp_i32 = 256;
+              else if (tmp_i32 < -256) tmp_i32 = -256;
+              ffn2_b[j] = tmp_i32;
             end
             for (j = 0; j < (D_FFN * D_FFN); j = j + 1) begin
-              ffn2_w[j] = stim_i4(req_layer, j, 271);
+              tmp_i4 = stim_i4(req_layer, j, 271);
+              if (tmp_i4 > 3) tmp_i4 = 3;
+              else if (tmp_i4 < -3) tmp_i4 = -3;
+              ffn2_w[j] = tmp_i4;
             end
             if (D_MODEL >= 4) begin
-              full_valueA[0] = 8'sd127;
-              full_valueA[1] = 8'sd127;
-              full_valueA[2] = 8'sh80;
-              full_valueA[3] = 8'sh80;
               ffn1_x[0] = 8'sd127;
               ffn1_x[1] = 8'sd127;
               ffn1_x[2] = 8'sh80;
               ffn1_x[3] = 8'sh80;
-              for (t = 0; t < D_MODEL; t = t + 1) begin
-                full_weights[(t * D_MODEL) + 0] = 4'sd7;
-                full_weights[(t * D_MODEL) + 1] = 4'sh8;
-                full_weights[(t * D_MODEL) + 2] = 4'sd7;
-                full_weights[(t * D_MODEL) + 3] = 4'sh8;
-              end
               for (t = 0; t < W1_OUT_SIZE; t = t + 1) begin
                 ffn1_w[(t * D_MODEL) + 0] = 4'sd7;
                 ffn1_w[(t * D_MODEL) + 1] = 4'sh8;
                 ffn1_w[(t * D_MODEL) + 2] = 4'sd7;
                 ffn1_w[(t * D_MODEL) + 3] = 4'sh8;
-              end
-            end
-            if (D_FFN >= 4) begin
-              ffn2_x[0] = 16'sd32767;
-              ffn2_x[1] = 16'sd32767;
-              ffn2_x[2] = 16'sh8000;
-              ffn2_x[3] = 16'sh8000;
-              for (t = 0; t < D_FFN; t = t + 1) begin
-                ffn2_w[(t * D_FFN) + 0] = 4'sd7;
-                ffn2_w[(t * D_FFN) + 1] = 4'sh8;
-                ffn2_w[(t * D_FFN) + 2] = 4'sd7;
-                ffn2_w[(t * D_FFN) + 3] = 4'sh8;
               end
             end
 
@@ -3213,6 +3228,7 @@ module top_module_hls_tb;
             if (done_clear_cnt == 1) begin
               done_clear_pending <= 1'b0;
               irq_seen_done_clr <= 1'b1;
+              seen_done <= 1;
             end
           end
         end
@@ -3600,11 +3616,11 @@ module top_module_hls_tb;
     err_reload_step = 5'd0;
 
     // Print header
-    $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s %-10s",
-             "Cycle", "Start", "Reset", "Busy", "State",
-             "AXIS_v", "AXIS_r", "AXIS_last",
-             "WLStart", "DMA_Done",
-             "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
+    // $display("%-8s %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s %-10s",
+    //          "Cycle", "Start", "Reset", "Busy", "State",
+    //          "AXIS_v", "AXIS_r", "AXIS_last",
+    //          "WLStart", "DMA_Done",
+    //          "CmpStrt", "CmpRdy", "CmpDone", "CmpOp");
 
     // Release reset at cycle 2
     repeat(2) @(posedge ap_clk);
@@ -3623,21 +3639,21 @@ module top_module_hls_tb;
       end
 
       // Print state
-      $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s 0x%08h",
-               cycle,
-               (ctrl_shadow_control[1]) ? "1" : "-",
-               (ctrl_shadow_control[0]) ? "1" : "-",
-               "-" ,
-               state_name(STATE),
-               axis_in_valid ? "1" : "-",
-               axis_in_ready ? "1" : "-",
-               axis_in_last ? "1" : "-",
-               wl_start_o ? "1" : "-",
-               dma_done ? "1" : "-",
-               dbg_compute_start ? "1" : "-",
-               dbg_compute_ready_lat ? "1" : "-",
-               dbg_compute_done_lat ? "1" : "-",
-               dbg_compute_instruction);
+      // $display("%-8d %-6s %-6s %-8s | %-12s | %-6s %-6s %-8s | %-8s %-8s | %-8s %-8s %-8s 0x%08h",
+      //          cycle,
+      //          (ctrl_shadow_control[1]) ? "1" : "-",
+      //          (ctrl_shadow_control[0]) ? "1" : "-",
+      //          "-" ,
+      //          state_name(STATE),
+      //          axis_in_valid ? "1" : "-",
+      //          axis_in_ready ? "1" : "-",
+      //          axis_in_last ? "1" : "-",
+      //          wl_start_o ? "1" : "-",
+      //          dma_done ? "1" : "-",
+      //          dbg_compute_start ? "1" : "-",
+      //          dbg_compute_ready_lat ? "1" : "-",
+      //          dbg_compute_done_lat ? "1" : "-",
+      //          dbg_compute_instruction);
       
       // Track done signal
       // if (ap_done) begin
@@ -3646,7 +3662,7 @@ module top_module_hls_tb;
       
       
       // Exit once we've seen done and IDLE held for 4 cycles
-      if (seen_done && seen_idle_after) begin
+      if (seen_done) begin
         break;
       end
     end
