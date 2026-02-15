@@ -5,21 +5,21 @@
 #include <cstdio>
 #include <cstdlib>
 
-PLInterface::PLInterface(Logger* log, ErrorHandler* error)
+PLInterface::PLInterface(Logger* log, ErrorHandler* error, bool mock)
     : _ctrl_fd(-1), _ctrl_regs(nullptr), _ctrl_size(0),
-      _ddr_base(nullptr), _ddr_phys(0), _ddr_size(0),
-      _dma_regs(nullptr), _initialized(false), 
-      _mock_mode(false), _logger(log), _err(error) {
-
-    memset(_mock_regs, 0, sizeof(_mock_regs));
+      _addr_regs(nullptr), _addr_size(0),
+      _stream_regs(nullptr),
+      _initialized(false), _mock_mode(mock), _logger(log), _err(error) {
+    if (_mock_mode) {
+        memset(_mock_regs, 0, sizeof(_mock_regs));
+    }
 }
 
 PLInterface::~PLInterface() { cleanup(); }
 
 // Init / Cleanup
-bool PLInterface::init(const std::string& device_name, bool mock) {
-    _mock_mode = mock;
-    
+bool PLInterface::init(const std::string& device_name, uint64_t stream_reg_base_addr) {
+
     if (_mock_mode) {
         LOG_INFO("PLInterface: Mock mode");
         _mock_regs[PLReg::CONTROL / 4] = PLReg::CTRL_RESETN_BIT;
@@ -29,9 +29,11 @@ bool PLInterface::init(const std::string& device_name, bool mock) {
     }
     
     if (!findAndOpenUIO(device_name)) return false;
+    if (!mapStreamRegs(stream_reg_base_addr)) return false;
 
     // Enable auto_restart so HLS loops; PS controls via ctrl_mem (UG1399)
     writeReg(PLReg::AXIL_AP_CTRL, PLReg::AP_AUTO_RESTART_BIT | PLReg::AP_START_BIT);
+    // Reset (Ctrl and Stream)
     reset();
     
     _initialized = true;
@@ -39,41 +41,48 @@ bool PLInterface::init(const std::string& device_name, bool mock) {
     return true;
 }
 
-bool PLInterface::initDDR(uint64_t addr, size_t size) {
-    if (_mock_mode) return true;
-    _ddr_phys = addr;
-    _ddr_size = size;
-    return mapDDR();
-}
+// Unified DMA init
+bool PLInterface::initDMA(const std::string& dmabuf0_name, size_t dmabuf0_size, const std::string& dmabuf1_name, size_t dmabuf1_size) {
+    if (_mock_mode) {
+        if (!_dma_buf0.allocate(dmabuf0_name, dmabuf0_size, true)) return false;
+        if (!_dma_buf1.allocate(dmabuf1_name, dmabuf1_size, true)) return false;
+        // Mock registers for DMA
+        _stream_regs = _mock_regs + (0x1000 / 4); // Just an offset in mock array
+        return true;
+    }
 
-bool PLInterface::initDMA(uint64_t dma_base_addr, size_t buf_size) {
-    if (_mock_mode) return true;
 
-    if (!mapDmaRegs(dma_base_addr)) return false;
-
-    if (!_stream_buf.allocate(buf_size)) {
+    if (!_dma_buf0.allocate(dmabuf0_name, dmabuf0_size)) {
         _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
         return false;
     }
-
-    // Reset both channels
-    if (!resetDMA()) {
-        LOG_ERROR("PLInterface: DMA reset failed during init");
+    if (!_dma_buf1.allocate(dmabuf1_name, dmabuf1_size)) {
+        _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
         return false;
     }
-
-    LOG_INFO("PLInterface: DMA initialized");
+    
+    // Clear buffer
+    memset(_dma_buf0.virt(), 0, dmabuf0_size);
+    memset(_dma_buf1.virt(), 0, dmabuf1_size);
+    
+    std::string phys0_str = std::to_string(_dma_buf0.phys());
+    std::string phys1_str = std::to_string(_dma_buf1.phys());
+    std::string size0_str = std::to_string(dmabuf0_size/1024/1024);
+    std::string size1_str = std::to_string(dmabuf1_size/1024/1024);
+    _logger->info("DMA initialized: buf=0x" + phys0_str + " (" + size0_str + " MB)");
+    _logger->info("DMA initialized: buf=0x" + phys1_str + " (" + size1_str + " MB)");
     return true;
 }
 
 void PLInterface::cleanup() {
     if (_ctrl_fd >= 0) { close(_ctrl_fd); _ctrl_fd = -1; }
-    _stream_buf.release();
+    _dma_buf0.release();
+    _dma_buf1.release();
     unmapAll();
     _initialized = false;
 }
 
-// UIO Device Discovery
+// UIO Device Discovery — maps both map0 (control) and map1 (control_r)
 bool PLInterface::findAndOpenUIO(const std::string& device_name) {
     struct dirent** namelist;
     int n = scandir("/sys/class/uio", &namelist, nullptr, alphasort);
@@ -110,18 +119,28 @@ bool PLInterface::findAndOpenUIO(const std::string& device_name) {
         return false;
     }
 
-    // Read map0 size from sysfs
-    char path[256];
-    snprintf(path, sizeof(path), "/sys/class/uio/uio%d/maps/map0/size", uio_num);
-    FILE* fp = fopen(path, "r");
-    if (!fp) {
-        _err->setError(ErrorCode::DEVICE_NOT_FOUND, "Cannot read UIO map0 size");
-        return false;
+    // Read map0 size (control) and map1 size (control_r) from sysfs
+    size_t map_sizes[2] = {0, 0};
+    for (int i = 0; i < 2; i++) {
+        char path[256];
+        snprintf(path, sizeof(path), "/sys/class/uio/uio%d/maps/map%d/size", uio_num, i);
+        FILE* fp = fopen(path, "r");
+        if (!fp) {
+            if (i == 0) {
+                _err->setError(ErrorCode::DEVICE_NOT_FOUND, "Cannot read UIO map0 size");
+                return false;
+            }
+            // map1 may not exist if control_r is a separate UIO device
+            LOG_INFO("PLInterface: map1 not found, control_r may be separate");
+            break;
+        }
+        unsigned long sz = 0;
+        fscanf(fp, "0x%lx", &sz);
+        fclose(fp);
+        map_sizes[i] = sz;
     }
-    unsigned long map_size = 0;
-    fscanf(fp, "0x%lx", &map_size);
-    fclose(fp);
-    _ctrl_size = map_size;
+    _ctrl_size = map_sizes[0];
+    _addr_size = map_sizes[1];
 
     // Open /dev/uioN
     char dev_path[64];
@@ -133,91 +152,89 @@ bool PLInterface::findAndOpenUIO(const std::string& device_name) {
         return false;
     }
 
-    // mmap map0 (the 'Control' slave interface)
-    void* m = mmap(nullptr, _ctrl_size, PROT_READ | PROT_WRITE,
-                   MAP_SHARED, _ctrl_fd, 0);
-    if (m == MAP_FAILED) {
+    // mmap map0 — the 'control' slave interface
+    void* m0 = mmap(nullptr, _ctrl_size, PROT_READ | PROT_WRITE,
+                    MAP_SHARED, _ctrl_fd, 0);
+    if (m0 == MAP_FAILED) {
         _err->setError(ErrorCode::MMAP_FAILED,
-                       "UIO mmap: " + std::string(strerror(errno)));
+                       "UIO mmap map0: " + std::string(strerror(errno)));
         close(_ctrl_fd);
         _ctrl_fd = -1;
         return false;
     }
-    _ctrl_regs = static_cast<volatile uint32_t*>(m);
+    _ctrl_regs = static_cast<volatile uint32_t*>(m0);
+
+    // mmap map1 — the 'control_r' slave interface (m_axi base addresses)
+    if (_addr_size > 0) {
+        void* m1 = mmap(nullptr, _addr_size, PROT_READ | PROT_WRITE,
+                        MAP_SHARED, _ctrl_fd, getpagesize());
+        if (m1 == MAP_FAILED) {
+            _err->setError(ErrorCode::MMAP_FAILED,
+                       "UIO mmap map1: " + std::string(strerror(errno)));
+            _addr_regs = nullptr;
+        } else {
+            _addr_regs = static_cast<volatile uint32_t*>(m1);
+        }
+    }
 
     LOG_INFO("PLInterface: Found " + device_name + " at " + std::string(dev_path) +
-             " (map0 size=0x" + std::to_string(_ctrl_size) + ")");
+             " (map0=0x" + std::to_string(_ctrl_size) + 
+             ", map1=0x" + std::to_string(_addr_size) + ")");
     return true;
 }
 
-bool PLInterface::mapDDR() {
+bool PLInterface::mapStreamRegs(uint64_t phys_addr) {
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) {
         _err->setError(ErrorCode::DEVICE_NOT_FOUND, "/dev/mem: " + std::string(strerror(errno)));
         return false;
     }
-    _ddr_base = mmap(nullptr, _ddr_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, _ddr_phys);
-    close(fd);
-    if (_ddr_base == MAP_FAILED) {
-        _err->setError(ErrorCode::MMAP_FAILED, "DDR: " + std::string(strerror(errno)));
-        return false;
-    }
-    return true;
-}
-
-
-bool PLInterface::mapDmaRegs(uint64_t phys_addr) {
-    int fd = open("/dev/mem", O_RDWR | O_SYNC);
-    if (fd < 0) {
-        _err->setError(ErrorCode::DEVICE_NOT_FOUND, "/dev/mem: " + std::string(strerror(errno)));
-        return false;
-    }
-    void* m = mmap(nullptr, DmaReg::DMA_REGS_PAGE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, phys_addr);
+    void* m = mmap(nullptr, StreamReg::STREAM_REGS_PAGE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, phys_addr);
     close(fd);
     if (m == MAP_FAILED) {
         _err->setError(ErrorCode::MMAP_FAILED, "DMA regs: " + std::string(strerror(errno)));
         return false;
     }
-    _dma_regs = static_cast<volatile uint32_t*>(m);
+    _stream_regs = static_cast<volatile uint32_t*>(m);
     return true;
 }
 
 void PLInterface::unmapAll() {
-    if (_ctrl_regs) { munmap((void*)_ctrl_regs, _ctrl_size); _ctrl_regs = nullptr; }
-    if (_ddr_base)  { munmap(_ddr_base, _ddr_size); _ddr_base = nullptr; }
-    if (_dma_regs)  { munmap((void*)_dma_regs, DmaReg::DMA_REGS_PAGE); _dma_regs = nullptr; }
+    if (_ctrl_regs)  { munmap((void*)_ctrl_regs, _ctrl_size); _ctrl_regs = nullptr; }
+    if (_addr_regs)  { munmap((void*)_addr_regs, _addr_size); _addr_regs = nullptr; }
+    if (_stream_regs)   { munmap((void*)_stream_regs, StreamReg::STREAM_REGS_PAGE); _stream_regs = nullptr; }
 }
 
-// Register access
-uint32_t PLInterface::readReg(uint32_t offset) {
+// Bus pointer dispatch
+volatile uint32_t* PLInterface::busPtr(RegBus bus) const {
+    switch (bus) {
+        case RegBus::CTRL:   return _ctrl_regs;
+        case RegBus::ADDR:   return _addr_regs;
+        case RegBus::STREAM: return _stream_regs;
+    }
+    return nullptr;
+}
+
+// Register access — bus-explicit
+uint32_t PLInterface::readReg(RegBus bus, uint32_t offset) const {
     if (_mock_mode) return _mock_regs[offset / 4];
-    return _ctrl_regs ? _ctrl_regs[offset / 4] : 0;
+    volatile uint32_t* regs = busPtr(bus);
+    return regs ? regs[offset / 4] : 0;
 }
 
-void PLInterface::writeReg(uint32_t offset, uint32_t value) {
+void PLInterface::writeReg(RegBus bus, uint32_t offset, uint32_t value) {
     if (_mock_mode) { _mock_regs[offset / 4] = value; return; }
-    if (_ctrl_regs) _ctrl_regs[offset / 4] = value;
+    volatile uint32_t* regs = busPtr(bus);
+    if (regs) regs[offset / 4] = value;
 }
 
-void PLInterface::writeReg64(uint32_t offset_lo, uint64_t value) {
-    writeReg(offset_lo, static_cast<uint32_t>(value & 0xFFFFFFFFu));
-    writeReg(offset_lo + 4, static_cast<uint32_t>(value >> 32));
+uint64_t PLInterface::readReg64(RegBus bus, uint32_t offset_lo) const {
+    return (static_cast<uint64_t>(readReg(bus, offset_lo + 4)) << 32) | readReg(bus, offset_lo);
 }
 
-uint64_t PLInterface::readReg64(uint32_t offset_lo) {
-    return (static_cast<uint64_t>(readReg(offset_lo + 4)) << 32) | readReg(offset_lo);
-}
-
-void PLInterface::setRegBits(uint32_t offset, uint32_t mask) {
-    writeReg(offset, readReg(offset) | mask);
-}
-
-void PLInterface::clearRegBits(uint32_t offset, uint32_t mask) {
-    writeReg(offset, readReg(offset) & ~mask);
-}
-
-bool PLInterface::testRegBits(uint32_t offset, uint32_t mask) {
-    return (readReg(offset) & mask) != 0;
+void PLInterface::writeReg64(RegBus bus, uint32_t offset_lo, uint64_t value) {
+    writeReg(bus, offset_lo, static_cast<uint32_t>(value & 0xFFFFFFFFu));
+    writeReg(bus, offset_lo + 4, static_cast<uint32_t>(value >> 32));
 }
 
 // Control operations
@@ -230,6 +247,9 @@ bool PLInterface::reset() {
     writeReg(PLReg::IRQ_ENABLE_MASK, 0);
     writeReg(PLReg::IRQ_CLEAR, PLReg::IRQ_ERROR_BIT | PLReg::IRQ_INFER_DONE_BIT);
     usleep(1000);
+
+    // Reset (Stream DMA IP)
+    resetStream();
     return true;
 }
 
@@ -251,7 +271,7 @@ void PLInterface::endConfig() {
     if (testRegBits(PLReg::IRQ_STATUS, PLReg::IRQ_ERROR_BIT)) {
         uint32_t code = getErrorCode();
         std::string msg = (code == PLReg::ERR_DMA_ALIGNMENT) ? "DMA alignment" :
-                          (code == PLReg::ERR_DMA_ZERO_LEN) ? "DMA/stride zero" : "unknown";
+                          (code == PLReg::ERR_DMA_ZERO_STRIDE) ? "DMA/stride zero" : "unknown";
         LOG_ERROR("Config error: " + msg);
         _err->setError(ErrorCode::CONFIG_ERROR, msg);
     }
@@ -282,10 +302,6 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
     return false;
 }
 
-bool PLInterface::isBusy() { return testRegBits(PLReg::STATUS, PLReg::STATUS_BUSY_BIT); }
-bool PLInterface::isError() { return testRegBits(PLReg::STATUS, PLReg::STATUS_ERROR_BIT); }
-uint32_t PLInterface::getErrorCode() { return readReg(PLReg::ERROR_CODE); }
-uint32_t PLInterface::getIRQStatus() { return readReg(PLReg::IRQ_STATUS); }
 
 bool PLInterface::clearIRQ() {
     writeReg(PLReg::IRQ_CLEAR, PLReg::IRQ_ERROR_BIT | PLReg::IRQ_INFER_DONE_BIT);
@@ -295,147 +311,123 @@ bool PLInterface::clearIRQ() {
 }
 
 // DDR access
-bool PLInterface::writeDDR(uint64_t offset, const void* data, size_t size) {
-    if (_mock_mode) return true;
-    if (!_ddr_base || offset + size > _ddr_size) return false;
-    memcpy((uint8_t*)_ddr_base + offset, data, size);
+bool PLInterface::writeDDR(DmaBufferType type, uint32_t offset, const void* data, size_t size) {
+    DmaBuffer* buf = (type == DmaBufferType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    if (!buf->isAllocated() || offset + size > buf->size()) return false;
+    memcpy((uint8_t*)buf->virt() + offset, data, size);
+    buf->sync_pl();
     return true;
 }
 
-bool PLInterface::readDDR(uint64_t offset, void* data, size_t size) {
-    if (_mock_mode) { memset(data, 0, size); return true; }
-    if (!_ddr_base || offset + size > _ddr_size) return false;
-    memcpy(data, (uint8_t*)_ddr_base + offset, size);
+bool PLInterface::readDDR(DmaBufferType type, uint32_t offset, void* data, size_t size) {
+    DmaBuffer* buf = (type == DmaBufferType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    if (!buf->isAllocated() || offset + size > buf->size()) return false;
+    buf->sync_cpu();
+    memcpy(data, (uint8_t*)buf->virt() + offset, size);
     return true;
 }
 
-void* PLInterface::getDDRPtr(uint64_t offset) {
-    return (_mock_mode || !_ddr_base) ? nullptr : (uint8_t*)_ddr_base + offset;
-}
-
-// DMA Register Helpers
-uint32_t PLInterface::dmaRead(uint32_t offset) const {
-    return _dma_regs ? _dma_regs[offset / 4] : 0;
-}
-
-void PLInterface::dmaWrite(uint32_t offset, uint32_t val) {
-    if (_dma_regs) _dma_regs[offset / 4] = val;
-}
-
-bool PLInterface::dmaResetChannel(uint32_t cr_off, uint32_t sr_off, uint32_t timeout_us) {
-    dmaWrite(cr_off, DmaReg::CR_RESET);
-    for (uint32_t t = 0; t < timeout_us; t += 100) {
-        usleep(100);
-        if ((dmaRead(cr_off) & DmaReg::CR_RESET) == 0) return true;
-    }
-    return false;
-}
-
-bool PLInterface::dmaTransfer(uint32_t cr_off, uint32_t sr_off,
+// Stream API
+bool PLInterface::streamTransfer(uint32_t cr_off, uint32_t sr_off,
                                uint32_t addr_off, uint32_t addr_msb_off,
                                uint32_t len_off,
                                uint64_t phys_addr, uint32_t length) {
     // PG021 programming sequence:
     // 1. Clear & enable interrupts
-    dmaWrite(sr_off, DmaReg::SR_ALL_IRQ);
-    uint32_t cr = dmaRead(cr_off);
-    dmaWrite(cr_off, cr | DmaReg::CR_IOC_EN | DmaReg::CR_ERR_EN);
+    writeReg(RegBus::STREAM, sr_off, StreamReg::SR_ALL_IRQ);
+    uint32_t cr = readReg(RegBus::STREAM, cr_off);
+    writeReg(RegBus::STREAM, cr_off, cr | StreamReg::CR_IOC_EN | StreamReg::CR_ERR_EN);
 
     // 2. Set address
-    dmaWrite(addr_off,     static_cast<uint32_t>(phys_addr & 0xFFFFFFFF));
-    dmaWrite(addr_msb_off, static_cast<uint32_t>(phys_addr >> 32));
+    writeReg(RegBus::STREAM, addr_off,     static_cast<uint32_t>(phys_addr & 0xFFFFFFFF));
+    writeReg(RegBus::STREAM, addr_msb_off, static_cast<uint32_t>(phys_addr >> 32));
 
     // 3. Start channel (RS=1)
-    cr = dmaRead(cr_off);
-    dmaWrite(cr_off, cr | DmaReg::CR_RS);
+    cr = readReg(RegBus::STREAM, cr_off);
+    writeReg(RegBus::STREAM, cr_off, cr | StreamReg::CR_RS);
 
     // 4. Set length — triggers transfer
-    dmaWrite(len_off, length);
+    writeReg(RegBus::STREAM, len_off, length);
     return true;
 }
 
-bool PLInterface::dmaWait(uint32_t sr_off, uint32_t timeout_ms) {
+bool PLInterface::streamWait(uint32_t sr_off, uint32_t timeout_ms) {
     for (uint32_t t = 0; t < timeout_ms; t++) {
-        uint32_t sr = dmaRead(sr_off);
-        if (sr & DmaReg::SR_IOC_IRQ) {
-            dmaWrite(sr_off, DmaReg::SR_ALL_IRQ);  // clear
+        uint32_t sr = readReg(RegBus::STREAM, sr_off);
+        if (sr & StreamReg::SR_IOC_IRQ) {
+            writeReg(RegBus::STREAM, sr_off, StreamReg::SR_ALL_IRQ);  // clear
             return true;
         }
-        if (sr & DmaReg::SR_ALL_ERR) {
-            LOG_ERROR("DMA error: " + dmaStatusString());
-            dmaWrite(sr_off, DmaReg::SR_ALL_IRQ);
+        if (sr & StreamReg::SR_ALL_ERR) {
+            LOG_ERROR("DMA error: " + streamStatusString());
+            writeReg(RegBus::STREAM, sr_off, StreamReg::SR_ALL_IRQ);
             return false;
         }
         usleep(1000);
     }
-    LOG_ERROR("DMA timeout: " + dmaStatusString());
+    LOG_ERROR("DMA timeout: " + streamStatusString());
     return false;
 }
 
-// DMA Stream API
-bool PLInterface::resetDMA() {
-    if (!_dma_regs) return false;
-    bool ok = dmaResetChannel(DmaReg::MM2S_CR, DmaReg::MM2S_SR);
-    ok &= dmaResetChannel(DmaReg::S2MM_CR, DmaReg::S2MM_SR);
+bool PLInterface::resetStream() {
+    bool ok = true;
+    writeReg(RegBus::STREAM, StreamReg::MM2S_CR, StreamReg::CR_RESET);
+    for (uint32_t t = 0; t < 10; t++) {
+        usleep(100);
+        ok &= (readReg(RegBus::STREAM, StreamReg::MM2S_CR) & StreamReg::CR_RESET) == 0;
+    }
+    writeReg(RegBus::STREAM, StreamReg::S2MM_CR, StreamReg::CR_RESET);
+    for (uint32_t t = 0; t < 10; t++) {
+        usleep(100);
+        ok &= (readReg(RegBus::STREAM, StreamReg::S2MM_CR) & StreamReg::CR_RESET) == 0;
+    }
     return ok;
 }
 
-// Non-blocking DMA API
-bool PLInterface::dmaKickSend(const void* data, size_t size) {
-    if (_mock_mode) return true;
-    if (!_dma_regs || !_stream_buf.isAllocated()) return false;
-
-    memcpy(_stream_buf.virt(), data, size);
-    return dmaTransfer(DmaReg::MM2S_CR, DmaReg::MM2S_SR,
-                       DmaReg::MM2S_SA, DmaReg::MM2S_SA_MSB, DmaReg::MM2S_LEN,
-                       _stream_buf.phys(), size);
+bool PLInterface::streamInitSend(uint32_t dma_offset, const void* data, size_t size) {
+    if (!_stream_regs || !_dma_buf1.isAllocated()) return false;
+    writeDDR(DmaBufferType::IO_STREAM, dma_offset, data, size);
+    return streamTransfer(StreamReg::MM2S_CR, StreamReg::MM2S_SR,
+                       StreamReg::MM2S_SA, StreamReg::MM2S_SA_MSB, StreamReg::MM2S_LEN,
+                       _dma_buf1.phys() + dma_offset, size);
 }
 
-bool PLInterface::dmaKickRecv(size_t size) {
-    if (_mock_mode) return true;
-    if (!_dma_regs || !_stream_buf.isAllocated()) return false;
+bool PLInterface::streamInitRecv(uint32_t dma_offset, size_t size) {
+    if (!_stream_regs || !_dma_buf1.isAllocated()) return false;
+    if (dma_offset + size > _dma_buf1.size()) return false; // Bounds check
 
-    // Use second half of buffer for receive
-    // TODO: Update size when AXI Full is implemented
-    size_t recv_offset = _stream_buf.size() / 2;
-    uint64_t dst_phys = _stream_buf.phys() + recv_offset;
-    return dmaTransfer(DmaReg::S2MM_CR, DmaReg::S2MM_SR,
-                       DmaReg::S2MM_DA, DmaReg::S2MM_DA_MSB, DmaReg::S2MM_LEN,
-                       dst_phys, size);
+    return streamTransfer(StreamReg::S2MM_CR, StreamReg::S2MM_SR,
+                       StreamReg::S2MM_DA, StreamReg::S2MM_DA_MSB, StreamReg::S2MM_LEN,
+                       _dma_buf1.phys() + dma_offset, size);
 }
 
-bool PLInterface::dmaWaitSend(uint32_t timeout_ms) {
-    if (_mock_mode) return true;
-    return dmaWait(DmaReg::MM2S_SR, timeout_ms);
+bool PLInterface::streamWaitSend(uint32_t timeout_ms) {
+    return streamWait(StreamReg::MM2S_SR, timeout_ms);
 }
 
-bool PLInterface::dmaWaitRecv(void* data, size_t size, uint32_t timeout_ms) {
-    if (_mock_mode) { memset(data, 0, size); return true; }
-    if (!dmaWait(DmaReg::S2MM_SR, timeout_ms)) return false;
-
-    // TODO: Update size when AXI Full is implemented
-    size_t recv_offset = _stream_buf.size() / 2;
-    memcpy(data, static_cast<uint8_t*>(_stream_buf.virt()) + recv_offset, size);
+bool PLInterface::streamWaitRecv(uint32_t dma_offset, void* data, size_t size, uint32_t timeout_ms) {
+    if (!streamWait(StreamReg::S2MM_SR, timeout_ms)) return false;
+    readDDR(DmaBufferType::IO_STREAM, dma_offset, data, size);
     return true;
 }
 
-std::string PLInterface::dmaStatusString() const {
-    if (!_dma_regs) return "DMA not initialized";
+std::string PLInterface::streamStatusString() const {
+    if (!_stream_regs) return "Stream not initialized";
 
-    uint32_t mm2s_sr = dmaRead(DmaReg::MM2S_SR);
-    uint32_t s2mm_sr = dmaRead(DmaReg::S2MM_SR);
+    uint32_t mm2s_sr = readReg(RegBus::STREAM, StreamReg::MM2S_SR);
+    uint32_t s2mm_sr = readReg(RegBus::STREAM, StreamReg::S2MM_SR);
     char buf[256];
     snprintf(buf, sizeof(buf),
         "MM2S[SR=0x%08X halt=%d idle=%d err=%d] "
         "S2MM[SR=0x%08X halt=%d idle=%d err=%d]",
         mm2s_sr,
-        (mm2s_sr & DmaReg::SR_HALTED) ? 1 : 0,
-        (mm2s_sr & DmaReg::SR_IDLE)   ? 1 : 0,
-        (mm2s_sr & DmaReg::SR_ALL_ERR) ? 1 : 0,
+        (mm2s_sr & StreamReg::SR_HALTED) ? 1 : 0,
+        (mm2s_sr & StreamReg::SR_IDLE)   ? 1 : 0,
+        (mm2s_sr & StreamReg::SR_ALL_ERR) ? 1 : 0,
         s2mm_sr,
-        (s2mm_sr & DmaReg::SR_HALTED) ? 1 : 0,
-        (s2mm_sr & DmaReg::SR_IDLE)   ? 1 : 0,
-        (s2mm_sr & DmaReg::SR_ALL_ERR) ? 1 : 0);
+        (s2mm_sr & StreamReg::SR_HALTED) ? 1 : 0,
+        (s2mm_sr & StreamReg::SR_IDLE)   ? 1 : 0,
+        (s2mm_sr & StreamReg::SR_ALL_ERR) ? 1 : 0);
     return std::string(buf);
 }
 

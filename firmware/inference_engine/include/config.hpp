@@ -6,32 +6,13 @@
 #include <cstdint>
 
 struct HardwareConfig {
-    uint64_t dma_reg_base_addr = 0x80000000;
-    std::string dmabuf_device = "udmabuf0";
-    size_t dma_buffer_size = 0x100000; // 1MB
+    uint64_t stream_reg_base_addr = 0xa0000000;
+    std::string dmabuf0_name = "udmabuf0";
+    size_t dmabuf0_max_size = 0x7a000000; // 2GB
+    std::string dmabuf1_name = "udmabuf1";
+    size_t dmabuf1_max_size = 0x20000000; // 512MB
     uint32_t timeout_ms = 30000;
     bool mock_mode = false;
-    uint64_t ddr_reg_base_addr = 0x40000000;
-    size_t ddr_size = 0x80000000;  // 2GB for Phi-3
-};
-
-struct MemoryLayout {
-    uint64_t wq_offset       = 0x00000000;
-    uint64_t wk_offset       = 0x10000000;
-    uint64_t wv_offset       = 0x20000000;
-    uint64_t wo_offset       = 0x30000000;
-    uint64_t w1_offset       = 0x40000000;
-    uint64_t w2_offset       = 0x50000000;
-    uint64_t k_cache_offset  = 0x60000000;
-    uint64_t v_cache_offset  = 0x68000000;
-    uint64_t input_offset    = 0x70000000;
-    uint64_t output_offset   = 0x70100000;
-    uint64_t quant_params    = 0x70200000;
-    
-    bool isAligned() const {
-        return !((wq_offset | wk_offset | wv_offset | wo_offset |
-                  w1_offset | w2_offset | k_cache_offset | v_cache_offset) & 0x3F);
-    }
 };
 
 struct ModelConfig {
@@ -40,23 +21,20 @@ struct ModelConfig {
     std::string tokenizer_vocab = "tokenizer.model";
     
     // Phi-3-mini-4k-instruct architecture
-    uint32_t d_model = 3072;
-    uint32_t d_ffn = 12288;
-    uint32_t num_layers = 32;
-    uint32_t num_heads = 32;
-    uint32_t head_dim = 96;
-    uint32_t context_len = 4096;
+    static constexpr uint32_t d_model = 3072;
+    // saw 12288 before is that old??
+    static constexpr uint32_t d_ffn = 8192;
+    static constexpr uint32_t num_layers = 32;
+    static constexpr uint32_t num_heads = 32;
+    static constexpr uint32_t head_dim = 96;
+    // skrinked from 4096
+    static constexpr uint32_t context_len = 2048;
     uint32_t vocab_size = 32064;
     
     // Tiling
     uint32_t num_wo_tiles = 32;
     uint32_t num_w1_tiles = 128;
     uint32_t num_w2_tiles = 32;
-    
-    // DMA lengths
-    uint32_t dma_layer_len = 0x380000;
-    uint32_t dma_head_len = 0x12000;
-    uint32_t dma_tile_len = 0x6000;
     
     // Strides
     uint32_t layer_stride = 0x380000;
@@ -81,10 +59,40 @@ struct ModelConfig {
     int32_t zero_point_v = 0;
     
     bool validate() const {
-        return dma_layer_len && dma_head_len && dma_tile_len &&
-               layer_stride && wq_head_stride && wk_head_stride && wv_head_stride &&
+        return layer_stride && wq_head_stride && wk_head_stride && wv_head_stride &&
                k_cache_stride && v_cache_stride &&
                wo_tile_stride && w1_tile_stride && w2_tile_stride;
+    }
+};
+
+struct MemoryLayout {
+    constexpr uint32_t align64(uint32_t val) {
+        return (val + 63) & ~63;
+    }
+    // relative to dmabuf0
+    const uint32_t wq_offset       = 0x0;
+    const uint32_t wk_offset       = align64(wq_offset + 0.5*ModelConfig::num_layers * ModelConfig::d_model * ModelConfig::d_model);
+    const uint32_t wv_offset       = align64(wk_offset + 0.5*ModelConfig::num_layers * ModelConfig::d_model * ModelConfig::d_model);
+    const uint32_t wo_offset       = align64(wv_offset + 0.5*ModelConfig::num_layers * ModelConfig::d_model * ModelConfig::d_model);
+    const uint32_t w1_offset       = align64(wo_offset + 0.5*ModelConfig::num_layers * ModelConfig::d_model * ModelConfig::d_model);
+    const uint32_t w2_offset       = align64(w1_offset + ModelConfig::num_layers * ModelConfig::d_ffn * ModelConfig::d_model);
+
+    const uint64_t dmabuf0_real_size = align64(w2_offset + 0.5*ModelConfig::num_layers * ModelConfig::d_ffn * ModelConfig::d_model + 1024);
+
+    // relative to dmabuf1
+    const uint32_t k_cache_offset  = 0x0;
+    const uint32_t v_cache_offset  = align64(k_cache_offset + ModelConfig::context_len * ModelConfig::num_layers
+                                                            * ModelConfig::num_heads * ModelConfig::head_dim);
+    const uint32_t input_offset    = align64(v_cache_offset + ModelConfig::context_len * ModelConfig::num_layers 
+                                                            * ModelConfig::num_heads * ModelConfig::head_dim);
+    const uint32_t output_offset   = align64(input_offset + ModelConfig::d_model);
+
+    const uint64_t dmabuf1_real_size = align64(output_offset + ModelConfig::d_model + 1024);
+    
+    bool isAligned() const {
+        return !((wq_offset | wk_offset | wv_offset | wo_offset |
+                  w1_offset | w2_offset | k_cache_offset |
+                  v_cache_offset | input_offset | output_offset) & 0x3F);
     }
 };
 

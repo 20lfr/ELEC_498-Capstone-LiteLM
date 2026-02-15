@@ -16,15 +16,33 @@ int main(int argc, char* argv[]) {
     g_logger = new Logger(lvl, "axi_test.log");
     g_err = new ErrorHandler();
 
-    PLInterface pl(g_logger, g_err);
-    if(!pl.init("axi_top", mock)) {
+    PLInterface pl(g_logger, g_err, false);
+    if(!pl.init("axi_top", cfg.hardware.stream_reg_base_addr)) {
         printf("Init failed: %s\n", g_err->getLastErrorMessage().c_str());
         pl.cleanup();
         delete g_logger;
         delete g_err;
         return 1;
     }
-    if(!pl.initDMA(cfg.hardware.dma_reg_base_addr, cfg.hardware.dma_buffer_size)) {
+    if(cfg.hardware.dmabuf0_max_size < cfg.memory.dmabuf0_real_size) {
+        printf("Error: dmabuf0_max_size is smaller than dmabuf0_real_size\n");
+        printf("dmabuf0_max_size: %zu\n", cfg.hardware.dmabuf0_max_size);
+        printf("dmabuf0_real_size: %zu\n", cfg.memory.dmabuf0_real_size);
+        pl.cleanup();
+        delete g_logger;
+        delete g_err;
+        return 1;
+    }
+    if(cfg.hardware.dmabuf1_max_size < cfg.memory.dmabuf1_real_size) {
+        printf("Error: dmabuf1_max_size is smaller than dmabuf1_real_size\n");
+        printf("dmabuf1_max_size: %zu\n", cfg.hardware.dmabuf1_max_size);
+        printf("dmabuf1_real_size: %zu\n", cfg.memory.dmabuf1_real_size);
+        pl.cleanup();
+        delete g_logger;
+        delete g_err;
+        return 1;
+    }
+    if(!pl.initDMA(cfg.hardware.dmabuf0_name, cfg.hardware.dmabuf0_max_size, cfg.hardware.dmabuf1_name, cfg.hardware.dmabuf1_max_size)) {
         printf("DMA init failed: %s\n", g_err->getLastErrorMessage().c_str());
         pl.cleanup();
         delete g_logger;
@@ -33,11 +51,6 @@ int main(int argc, char* argv[]) {
     }
     pl.beginConfig();
     pl.writeReg(PLReg::CONTROL, PLReg::CTRL_RESETN_BIT);
-
-    // DMA lengths (required non-zero)
-    pl.writeReg(PLReg::DMA_LAYER_LEN, cfg.model.dma_layer_len);
-    pl.writeReg(PLReg::DMA_HEAD_LEN, cfg.model.dma_head_len);
-    pl.writeReg(PLReg::DMA_TILE_LEN, cfg.model.dma_tile_len);
 
     // Strides (required non-zero)
     pl.writeReg(PLReg::LAYER_STRIDE, cfg.model.layer_stride);
@@ -50,15 +63,19 @@ int main(int argc, char* argv[]) {
     pl.writeReg(PLReg::W1_TILE_STRIDE, cfg.model.w1_tile_stride);
     pl.writeReg(PLReg::W2_TILE_STRIDE, cfg.model.w2_tile_stride);
 
-    // 64-bit base addresses
-    pl.writeReg64(PLReg::WQ_BASE_LO, cfg.memory.wq_offset);
-    pl.writeReg64(PLReg::WK_BASE_LO, cfg.memory.wk_offset);
-    pl.writeReg64(PLReg::WV_BASE_LO, cfg.memory.wv_offset);
-    pl.writeReg64(PLReg::WO_BASE_LO, cfg.memory.wo_offset);
-    pl.writeReg64(PLReg::W1_BASE_LO, cfg.memory.w1_offset);
-    pl.writeReg64(PLReg::W2_BASE_LO, cfg.memory.w2_offset);
-    pl.writeReg64(PLReg::K_CACHE_LO, cfg.memory.k_cache_offset);
-    pl.writeReg64(PLReg::V_CACHE_LO, cfg.memory.v_cache_offset);
+    // DDR base addressesd
+    pl.writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO, pl.getDDRBaseAddr(DmaBufferType::WEIGHTS));
+    pl.writeReg64(RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO, pl.getDDRBaseAddr(DmaBufferType::KV_CACHE));
+
+    // 32-bit word offsets (within ctrl_mem struct)
+    pl.writeReg(PLReg::WQ_OFFSET, cfg.memory.wq_offset);
+    pl.writeReg(PLReg::WK_OFFSET, cfg.memory.wk_offset);
+    pl.writeReg(PLReg::WV_OFFSET, cfg.memory.wv_offset);
+    pl.writeReg(PLReg::WO_OFFSET, cfg.memory.wo_offset);
+    pl.writeReg(PLReg::W1_OFFSET, cfg.memory.w1_offset);
+    pl.writeReg(PLReg::W2_OFFSET, cfg.memory.w2_offset);
+    pl.writeReg(PLReg::K_CACHE_OFFSET, cfg.memory.k_cache_offset);
+    pl.writeReg(PLReg::V_CACHE_OFFSET, cfg.memory.v_cache_offset);
 
     // Quantization
     pl.writeReg(PLReg::LOGIT_SCALE_QV, cfg.model.logit_scale_qv);
@@ -78,15 +95,15 @@ int main(int argc, char* argv[]) {
         recv_data[i] = 0;
     }
 
-    // Arm DMA, then set start — HLS auto_restart picks it up
-    pl.dmaKickRecv(D_MODEL_TEST);
-    pl.dmaKickSend(send_data, D_MODEL_TEST);
+    // Arm stream, then set start — HLS auto_restart picks it up
+    pl.streamInitRecv(cfg.memory.output_offset, D_MODEL_TEST);
+    pl.streamInitSend(cfg.memory.input_offset, send_data, D_MODEL_TEST);
     pl.writeReg(PLReg::CONTROL, PLReg::CTRL_RESETN_BIT | PLReg::CTRL_START_BIT);
 
-    if (!pl.dmaWaitSend(5000))
-        printf("DMA send timeout: %s\n", pl.dmaStatusString().c_str());
-    if (!pl.dmaWaitRecv(recv_data, D_MODEL_TEST, 5000))
-        printf("DMA recv timeout: %s\n", pl.dmaStatusString().c_str());
+    if (!pl.streamWaitSend(5000))
+        printf("Stream send timeout: %s\n", pl.streamStatusString().c_str());
+    if (!pl.streamWaitRecv(cfg.memory.output_offset, recv_data, D_MODEL_TEST, 5000))
+        printf("Stream recv timeout: %s\n", pl.streamStatusString().c_str());
 
     // HLS does token_buf[i] + 1
     printf("\n=== Results ===\n");
@@ -100,7 +117,7 @@ int main(int argc, char* argv[]) {
     printf("Status:     0x%08X\n", pl.readReg(PLReg::STATUS));
     printf("IRQ Status: 0x%08X\n", pl.readReg(PLReg::IRQ_STATUS));
     printf("Error Code: 0x%08X\n", pl.readReg(PLReg::ERROR_CODE));
-    printf("DMA STATUS: %s\n", pl.dmaStatusString().c_str());
+    printf("Stream:     %s\n", pl.streamStatusString().c_str());
 
     pl.cleanup();
     delete g_logger;
