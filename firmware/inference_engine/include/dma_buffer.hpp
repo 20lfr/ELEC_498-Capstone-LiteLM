@@ -8,14 +8,12 @@
 #ifndef DMA_BUFFER_HPP
 #define DMA_BUFFER_HPP
 
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <string>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <sys/ioctl.h>
+#include <linux/dma-buf.h>
 
 class DmaBuffer {
 private:
@@ -59,7 +57,7 @@ public:
 
         // 2. Open device file
         std::string dev_path = "/dev/" + device_name;
-        _fd = open(dev_path.c_str(), O_RDWR | O_SYNC);  // O_SYNC = uncached
+        _fd = open(dev_path.c_str(), O_RDWR);
         if (_fd < 0) {
             perror(("DmaBuffer: cannot open " + dev_path).c_str());
             return false;
@@ -97,6 +95,24 @@ public:
     bool isAllocated() const { return _virt != nullptr; }
     void* virt() const { return _virt; }
     uint64_t phys() const { return _phys; }
+    void sync_pl() {
+        if (_mock || _fd < 0) return;
+        struct dma_buf_sync sync_args;
+        sync_args.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_START;
+        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args);
+        
+        sync_args.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_END;
+        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args); 
+    }
+    void sync_cpu() {
+        if (_mock || _fd < 0) return;
+        struct dma_buf_sync sync_args;
+        sync_args.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
+        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args);
+        
+        sync_args.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
+        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args); 
+    }
 
     ~DmaBuffer() { release(); }
 
