@@ -12,6 +12,7 @@
 *.gen/
 *.xsa
 *.bit
+*.dcp
 
 # --- Vitis ---
 **/hls/
