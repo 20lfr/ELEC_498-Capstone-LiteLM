@@ -14,9 +14,6 @@ CC             = $(CROSS_COMPILE)gcc
 SYSROOT        ?= $(FIRMWARE_DIR)/dependencies/iot-limerick-kria-classic-desktop-2204-classic-22.04-kr10-20240304-165-sysroot/sysroots/aarch64-xilinx-linux
 UDMABUF_DIR    ?= $(FIRMWARE_DIR)/udmabuf
 
-# Base addresses (From Vivado Address Editor)
-DMA_REG_BASE_ADDR  ?= a0000000
-
 # Flags
 CXXFLAGS = -std=c++11 -Wall -O2 -g
 LDFLAGS  = -lpthread -lrt
@@ -90,29 +87,6 @@ echo "Please REBOOT your board now to finalize the memory configuration."
 endef
 export INSTALL_KMODULE
 
-define UNBIND_DMAREGS
-#!/bin/bash
-set -e
-
-# Replace this with your actual DMA register base address if it's not exported in your environment
-DMA_ADDR="${DMA_REG_BASE_ADDR}"
-
-echo "=== Setting up DMA IP Registers ==="
-
-# Unbind DMA from kernel driver if bound
-if [ -e "/sys/bus/platform/drivers/xilinx-vdma/$${DMA_ADDR}.dma" ]; then
-    echo "Unbinding DMA from xilinx-vdma driver..."
-    echo "$${DMA_ADDR}.dma" | sudo tee /sys/bus/platform/drivers/xilinx-vdma/unbind >/dev/null
-    echo "Unbind successful."
-else
-    echo "DMA driver is already unbound or not attached to xilinx-vdma."
-fi
-
-echo ""
-echo "=== IP Setup Complete! ==="
-endef
-export UNBIND_DMAREGS
-
 package: all
 	@echo "Creating deployment package..."
 	@mkdir -p $(PACKAGE_DIR)
@@ -129,8 +103,6 @@ package: all
 	@# Create run script
 	@echo "$$INSTALL_KMODULE" > $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_buffer.sh
 	@chmod +x $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_buffer.sh
-	@echo "$$UNBIND_DMAREGS" > $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_dmaregs.sh
-	@chmod +x $(PACKAGE_DIR)/$(PACKAGE_NAME)/setup_dmaregs.sh
 	
 	@tar -czvf $(PACKAGE_DIR)/$(PACKAGE_NAME).tar.gz -C $(PACKAGE_DIR) $(PACKAGE_NAME)
 	@rm -rf $(PACKAGE_DIR)/$(PACKAGE_NAME)
