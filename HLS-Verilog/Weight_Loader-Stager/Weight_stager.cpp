@@ -92,6 +92,7 @@ void weight_stager(
                 break;
             case DmaSel::DMASEL_CONCAT:
                 addr_latched = 0;
+                // still a memory request????
                 memory_request = true;
                 break;
             default:
