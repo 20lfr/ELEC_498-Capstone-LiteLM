@@ -117,6 +117,8 @@ Stored: final_out = [2048] int8
 
 */
 
+// File used by PS & PL
+#include "shared_params.hpp"
 
 // REAL Full model layer count from fpga_requant_scales.json
 constexpr int MODEL_LAYERS              = 32;
@@ -126,7 +128,6 @@ constexpr int MODEL_HEAD_DIMENSTION     = 96;
 constexpr int MODEL_INTERMEDIATE_SIZE   = 8192;
 constexpr int MODEL_CONTEXT_LENGTH      = 2048;
 constexpr int16_t   ATTN_SCALE_Q15      = 3344;         // Q1.15: round((1/sqrt(96)) * 2^15) = 3344 (0x0D10)
-
 
 
 // ------------------------------------------------------------
@@ -349,41 +350,12 @@ struct PendingRequest {
     uint8_t tile_idx        = 0;
 };
 
-
-// ------------------------------------------------------------
-// Control + IRQ bitfields
-// ------------------------------------------------------------
-// Bit positions: bit0 = reset_n, bit1 = start
-constexpr uint32_t CTRL_RESETN_BIT      = 1u << 0;
-constexpr uint32_t CTRL_START_BIT       = 1u << 1;
-
-// IRQ Bits
-constexpr uint32_t IRQ_ERROR_BIT        = 1u << 1;
-constexpr uint32_t IRQ_INFER_DONE_BIT   = 1u << 2;
-
-// Status bits
-constexpr uint32_t STATUS_IDLE          = 1u << 0;
-constexpr uint32_t STATUS_ERROR         = 1u << 1;
-constexpr uint32_t STATUS_BUSY_BIT      = 1u << 2;
-
-// Error Codes
-constexpr uint32_t ERR_NONE             = 0;
-constexpr uint32_t ERR_DMA_ALIGNMENT    = 1;
-constexpr uint32_t ERR_DMA_ZERO_LEN     = 2;
-constexpr uint32_t ERR_DMA_ZERO_STRIDE  = 4;
-constexpr uint32_t ERR_SCHEDULER_ERROR  = 8;
-constexpr uint32_t ERR_COMPUTE_ERROR    = 16;
-constexpr uint32_t ERR_INPUT_STREAM     = 32;
-
-
 // Config (PS Writes -> PL Reads)
 // Passed by value
 struct ControlMemSpace {
-    uint32_t control        = CTRL_RESETN_BIT;  // cntrl_reset | cntrl_start
+    uint32_t control        = PLRegBits::CTRL_RESETN_BIT;  // cntrl_reset | cntrl_start
     uint32_t irq_mask       = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear      = 0;
-
-    // DMA lengths set by MMU
 
     uint32_t layer_stride   = 0;
     uint32_t wq_head_stride = 0;
@@ -397,7 +369,7 @@ struct ControlMemSpace {
     uint32_t w1_tile_stride = 0;
     uint32_t w2_tile_stride = 0;
 
-    // Word offsets relative to m_axi base (set by PS)
+    // Word offsets relative to AXI Full base (set by PS)
     // wq=0, wk=size(wq), wv=size(wq)+size(wk), ...
     uint32_t wq_offset      = 0;
     uint32_t wk_offset      = 0;
@@ -420,10 +392,13 @@ struct ControlMemSpace {
 // Status (PS Reads <- PL Writes)
 // Passed by reference
 struct StatusMemSpace {
-    uint32_t status = STATUS_IDLE;
+    uint32_t status = PLRegBits::STAT_IDLE_BIT;
     uint32_t irq_status     = 0;
-    uint32_t error_code     = ERR_NONE;
+    uint32_t error_code     = PLRegBits::ERR_NONE_BIT;
     uint32_t layer_index    = 0;
+    // Testing registers
+    uint32_t head_index     = 0;
+    uint32_t token_index    = 0;
 };
 
 // ---------------------------------------------------------------------------
@@ -437,15 +412,12 @@ constexpr int min2_constexpr(int a, int b) {
 }
 
 enum class BufDType : uint8_t {
+    NONE,
     I4,
     I8,
     I16,
     I32,
 };
-
-
-
-
 
 // For MAIN MAC unit input and output buffer sizing
 constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
