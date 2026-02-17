@@ -31,31 +31,29 @@ endif
 
 # Sources & Includes
 DRIVER_DIR     = $(FIRMWARE_DIR)/../hardware_overlay/drivers/axi_top_v1_0/src
+HLS_DIR        = $(FIRMWARE_DIR)/../HLS-Verilog
 INFERENCE_DIR  = $(FIRMWARE_DIR)/inference_engine
 
 INCLUDES = -I$(DRIVER_DIR) \
+           -I$(HLS_DIR) \
            -I$(INFERENCE_DIR)/include \
            -I$(SYSROOT)/usr/include \
            -I$(SYSROOT)/usr/include/aarch64-linux-gnu
 
 # Sources
 INFERENCE_SRCS = $(INFERENCE_DIR)/src/pl_interface.cpp
-AXI_TEST_SRCS = axi_test.cpp
+PL_CLI_SRCS = pl_cli.cpp
 DRIVER_LEGACY_SRC = $(DRIVER_DIR)/xaxi_top.c $(DRIVER_DIR)/xaxi_top_linux.c
 AXI_LEGACY_TEST_SRCS = axi_legacy_test.cpp
 
 # Targets
-TARGETS = $(BUILD_DIR)/axi_test $(BUILD_DIR)/axi_legacy_test
+TARGETS = $(BUILD_DIR)/pl_cli
 
 .PHONY: all clean package help
 
 all: $(TARGETS)
 
-$(BUILD_DIR)/axi_test: $(AXI_TEST_SRCS) $(INFERENCE_SRCS)
-	@mkdir -p $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^ $(LDFLAGS)
-
-$(BUILD_DIR)/axi_legacy_test: $(AXI_LEGACY_TEST_SRCS) $(DRIVER_LEGACY_SRC)
+$(BUILD_DIR)/pl_cli: $(PL_CLI_SRCS) $(INFERENCE_SRCS)
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^ $(LDFLAGS)
 
