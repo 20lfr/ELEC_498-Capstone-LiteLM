@@ -1295,7 +1295,7 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>TDATA_NUM_BYTES</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.INPUT_TOKEN.TDATA_NUM_BYTES">128</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.INPUT_TOKEN.TDATA_NUM_BYTES">64</spirit:value>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -1345,7 +1345,7 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>TDATA_NUM_BYTES</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.OUTPUT_LOGIT.TDATA_NUM_BYTES">128</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.OUTPUT_LOGIT.TDATA_NUM_BYTES">64</spirit:value>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -2601,7 +2601,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>c6ef4605</spirit:value>
+            <spirit:value>35222ee3</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2617,7 +2617,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>75745615</spirit:value>
+            <spirit:value>80a70341</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2633,7 +2633,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>71a5d53a</spirit:value>
+            <spirit:value>76fae803</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2649,7 +2649,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>c16c8d84</spirit:value>
+            <spirit:value>2f97049f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4860,7 +4860,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">1023</spirit:left>
+            <spirit:left spirit:format="long">511</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -4923,7 +4923,7 @@
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">1023</spirit:left>
+            <spirit:left spirit:format="long">511</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -5204,27 +5204,11 @@
         <spirit:userFileType>USED_IN_out_of_context</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_kc_9_ePU.dat</spirit:name>
-        <spirit:userFileType>mif</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_kc_9_ePU.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_to_9_bkb.dat</spirit:name>
         <spirit:userFileType>mif</spirit:userFileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_to_9_bkb.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_we_9_ejP.dat</spirit:name>
-        <spirit:userFileType>mif</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_we_9_ejP.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -5248,27 +5232,15 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_160_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_285_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_165_2.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_311_2.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_169_3.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_323_4.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_349_5.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_374_6.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_339_4.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -5316,27 +5288,19 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_7_2_32_1_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_scratch_buf_RAM_2P_URAM_1R1W.dat</spirit:name>
+        <spirit:userFileType>mif</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/axi_top_scratch_buf_RAM_2P_URAM_1R1W.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_17_5_8_1_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_sparsemux_33_4_8_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_33_5_8_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_49_7_8_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_65_5_32_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_65_7_8_1_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_sparsemux_33_6_8_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -5347,29 +5311,11 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_kc_9_ePU.dat</spirit:name>
-        <spirit:userFileType>mif</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_kc_9_ePU.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_to_9_bkb.dat</spirit:name>
         <spirit:userFileType>mif</spirit:userFileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_to_9_bkb.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_we_9_ejP.dat</spirit:name>
-        <spirit:userFileType>mif</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_we_9_ejP.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -5399,32 +5345,17 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_160_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_285_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_165_2.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_311_2.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_169_3.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_323_4.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_349_5.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_374_6.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_axi_top_Pipeline_VITIS_LOOP_339_4.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -5484,32 +5415,21 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_7_2_32_1_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_scratch_buf_RAM_2P_URAM_1R1W.dat</spirit:name>
+        <spirit:userFileType>mif</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/axi_top_scratch_buf_RAM_2P_URAM_1R1W.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_17_5_8_1_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_sparsemux_33_4_8_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_33_5_8_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_49_7_8_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_65_5_32_1_1.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/verilog/axi_top_sparsemux_65_7_8_1_1.v</spirit:name>
+        <spirit:name>hdl/verilog/axi_top_sparsemux_33_6_8_1_1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -5527,15 +5447,7 @@
         <spirit:userFileType>USED_IN_out_of_context</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_kc_9_ePU.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/vhdl/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_to_9_bkb.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_we_9_ejP.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -5559,27 +5471,15 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_160_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_285_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_165_2.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_311_2.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_169_3.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_323_4.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_349_5.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_374_6.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_339_4.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -5619,49 +5519,27 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_7_2_32_1_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_scratch_buf_RAM_2P_URAM_1R1W.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_17_5_8_1_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_sparsemux_33_4_8_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_33_5_8_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_49_7_8_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_65_5_32_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_65_7_8_1_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_sparsemux_33_6_8_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/vhdl/axi_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_6430ae3b</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_24b8da1f</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_kc_9_ePU.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>hdl/vhdl/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_to_9_bkb.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_ControlMemSpace_StatusMemSpace_bool_stream_stream_int_const_int_we_9_ejP.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -5691,32 +5569,17 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_160_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_285_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_165_2.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_311_2.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_169_3.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_323_4.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_349_5.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_374_6.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_axi_top_Pipeline_VITIS_LOOP_339_4.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -5766,32 +5629,17 @@
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_7_2_32_1_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_scratch_buf_RAM_2P_URAM_1R1W.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_17_5_8_1_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_sparsemux_33_4_8_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_33_5_8_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_49_7_8_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_65_5_32_1_1.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hdl/vhdl/axi_top_sparsemux_65_7_8_1_1.vhd</spirit:name>
+        <spirit:name>hdl/vhdl/axi_top_sparsemux_33_6_8_1_1.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -6114,11 +5962,11 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>latency</spirit:name>
-      <spirit:value spirit:id="PARAM_VALUE.latency" spirit:order="28">3</spirit:value>
+      <spirit:value spirit:id="PARAM_VALUE.latency" spirit:order="28">2</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>II</spirit:name>
-      <spirit:value spirit:id="PARAM_VALUE.II" spirit:order="29">4 ~ 6507463</spirit:value>
+      <spirit:value spirit:id="PARAM_VALUE.II" spirit:order="29">3 ~ 216004</spirit:value>
     </spirit:parameter>
   </spirit:parameters>
   <spirit:vendorExtensions>
@@ -6131,8 +5979,8 @@
       </xilinx:taxonomies>
       <xilinx:displayName>Axi_top</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2114482159</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2026-02-16T00:19:24Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2114483642</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2026-02-17T01:02:15Z</xilinx:coreCreationDateTime>
       <xilinx:sdxKernelAttributes>
         <xilinx:sdx_kernel>true</xilinx:sdx_kernel>
         <xilinx:sdx_kernel_type>hls</xilinx:sdx_kernel_type>
@@ -6140,13 +5988,13 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2025.1</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="3d2257dc"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="fcf8692c"/>
       <xilinx:checksum xilinx:scope="addressSpaces" xilinx:value="84673009"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="6e566718"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="841d7567"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="ea02136c"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="4e8b281c"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="61ddf1ec"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="ea08e33c"/>
-      <xilinx:checksum xilinx:scope="parameters" xilinx:value="bfadd2e5"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="8b86c5a2"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
 </spirit:component>
