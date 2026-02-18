@@ -37,6 +37,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
     ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_NONE, layer_idx, head_idx, -1);
     ctx.last_wl_addr  = DmaSel::DMASEL_NONE;
     ctx.wl_ready      = false;
+    ctx.wl_accept     = false;
     ctx.wl_start      = false;
     ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, head_idx, -1);
     ctx.dma_done      = false;
@@ -81,9 +82,7 @@ void init_head_ctx(HeadCtx &ctx, int layer_idx, int head_idx) {
 bool run_single_head(
     HeadCtx &ctx,           // [BOTH]   Persistent head state (phase, flags, last layer stamp, compute handshake bits).
     int      layer_idx,     // [INPUT]: Current layer stamp; if changed, ctx re-initializes to IDLE.
-    bool     start,          // [INPUT]: Kick from IDLE into Q (independent of compute_ready).
-    ControlMemSpace ctrl_mem,  // [BOTH]: Control memory space for WL
-    bool     &error         // [OUTPUT]: Error flag from weight_stager
+    bool     start          // [INPUT]: Kick from IDLE into Q (independent of compute_ready).
 )
 {
 #pragma HLS INLINE
@@ -91,7 +90,7 @@ bool run_single_head(
     if (ctx.layer_stamp != layer_idx) {
         init_head_ctx(ctx, layer_idx, ctx.head_idx);
     }
-    if (!ctx.wl_ready && ctx.wl_start){
+    if (ctx.wl_accept && ctx.wl_start){
         ctx.wl_start      = false;
         ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, ctx.head_idx, -1);
     }
@@ -102,7 +101,7 @@ bool run_single_head(
     }
 
     // Sticky capture of compute_done per phase so single-cycle pulses are retained temporarily
-    if (ctx.dma_done && !ctx.wl_start) {
+    if (ctx.dma_done) {
         if (ctx.q_started          && ctx.last_wl_addr == DmaSel::DMASEL_WQ)    ctx.q_dma_done = true; // ctx.dma_done && ctx.q_started
         if (ctx.k_started          && ctx.last_wl_addr == DmaSel::DMASEL_WK)    ctx.k_dma_done = true;
         if (ctx.k_writeback_started && ctx.last_wl_addr == DmaSel::DMASEL_K_WRITE) ctx.k_writeback_dma_done = true;
@@ -342,20 +341,22 @@ bool run_single_head(
 
 
 bool drive_group_head_phase(
-    HeadCtx     (&head_ctx_ref)[HEADS_PARALLEL], // [BOTH]:  Tracks current group only
+    HeadCtx     (&head_ctx_ref)[NUM_HEADS],      // [BOTH]: Full head context array
+    int         group_base,                      // [INPUT]: Base head index of active group
     int         layer_idx,                      // [INPUT]: Current Layer ID
-    bool        start,                          // [INPUT]: Start the driving phase
-    ControlMemSpace ctrl_mem,                   // [INPUT]: Control memory space for WL
-    bool     &error                             // [OUTPUT]: Error flag from weight_stager
+    bool        start                           // [INPUT]: Start the driving phase
 ){
 #pragma HLS INLINE
-#pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
 
     bool group_finished = true; // assume finished unless any head is still active
 
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
-        HeadCtx &ctx = head_ctx_ref[lane]; // Current head in this group
+        const int h = group_base + lane;
+        if (h >= NUM_HEADS) {
+            continue;
+        }
+        HeadCtx &ctx = head_ctx_ref[h]; // Current head in this group
 
         // One-cycle start pulse only when idle
         ctx.start_head = start && (ctx.phase == HeadPhase::IDLE);
@@ -364,9 +365,7 @@ bool drive_group_head_phase(
             const bool head_done = run_single_head(
                 ctx,
                 layer_idx,
-                ctx.start_head,
-                ctrl_mem,
-                error);
+                ctx.start_head);
             if (!head_done) group_finished = false;
         }
 

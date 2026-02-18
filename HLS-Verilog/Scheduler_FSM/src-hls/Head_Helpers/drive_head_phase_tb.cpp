@@ -75,7 +75,6 @@ int main() {
 
     HeadCtx head_ctx[HEADS_TOTAL];
     for (int h = 0; h < HEADS_TOTAL; ++h) init_head_ctx(head_ctx[h], 0, h);
-    HeadCtx group_ctx[PAR];
 
     // Per-head compute models (use arrays to avoid vector<bool> proxy references)
     std::array<int, HEADS_TOTAL> busy_ctr{};
@@ -115,20 +114,16 @@ int main() {
             head_ctx[h].dma_done      = false;
         }
 
-        // Prepare active group slice and drive compute_ready/done for it only
+        // Drive compute_ready/done for active group only
         for (int lane = 0; lane < PAR; ++lane) {
             const int h = group_base + lane;
-            if (h >= HEADS_TOTAL) {
-                init_head_ctx(group_ctx[lane], 0, h);
-                continue;
-            }
-            group_ctx[lane] = head_ctx[h];
-            group_ctx[lane].compute_ready = (busy_ctr[h] == 0);
-            group_ctx[lane].compute_done  = (busy_ctr[h] == 1);
-            group_ctx[lane].wl_ready      = (dma_ctr[h] == 0);
-            group_ctx[lane].dma_done      = (dma_ctr[h] == 1);
-            group_ctx[lane].wl_start      = false; // clear outputs before evaluation
-            group_ctx[lane].wl_instruction = 0;
+            if (h >= HEADS_TOTAL) break;
+            head_ctx[h].compute_ready = (busy_ctr[h] == 0);
+            head_ctx[h].compute_done  = (busy_ctr[h] == 1);
+            head_ctx[h].wl_ready      = (dma_ctr[h] == 0);
+            head_ctx[h].dma_done      = (dma_ctr[h] == 1);
+            head_ctx[h].wl_start      = false; // clear outputs before evaluation
+            head_ctx[h].wl_instruction = 0;
         }
         for (int lane = 0; lane < PAR; ++lane) {
             const int h = group_base + lane;
@@ -150,17 +145,10 @@ int main() {
 
         // Call the grouped driver for the active group
         bool group_finished = drive_group_head_phase(
-            group_ctx,
+            head_ctx,
             group_base,
             layer_idx,
             start_pulse);
-
-        // Copy updated group state back into full array
-        for (int lane = 0; lane < PAR; ++lane) {
-            const int h = group_base + lane;
-            if (h >= HEADS_TOTAL) break;
-            head_ctx[h] = group_ctx[lane];
-        }
 
         // Log activity for this cycle (columns per head)
         std::cout << std::left << std::setw(6) << cycle;
@@ -184,10 +172,10 @@ int main() {
         for (int lane = 0; lane < PAR; ++lane) {
             const int h = group_base + lane;
             if (h >= HEADS_TOTAL) break;
-            if (group_ctx[lane].compute_start) {
+            if (head_ctx[h].compute_start) {
                 busy_ctr[h] = COMPUTE_LATENCY;
             }
-            if (group_ctx[lane].wl_start && dma_ctr[h] == 0) {
+            if (head_ctx[h].wl_start && dma_ctr[h] == 0) {
                 dma_ctr[h] = DMA_LATENCY;
             }
         }

@@ -94,13 +94,13 @@ module compute_controller_tb;
     localparam logic [7:0] CMP_LN0       = 8'h01;
     localparam logic [7:0] CMP_REQUANT1  = 8'h02;
     localparam logic [7:0] CMP_OUT_PROJ  = 8'h0F;
-    localparam logic [7:0] CMP_RESID0    = 8'h10;
+    localparam logic [7:0] CMP_RESID1    = 8'h10;
     localparam logic [7:0] CMP_REQUANT2  = 8'h11;
     localparam logic [7:0] CMP_FFN_W1    = 8'h12;
     localparam logic [7:0] CMP_FFN_ACT   = 8'h13;
     localparam logic [7:0] CMP_FFN_W2    = 8'h14;
     localparam logic [7:0] CMP_REQUANT3  = 8'h15;
-    localparam logic [7:0] CMP_RESID1    = 8'h16;
+    localparam logic [7:0] CMP_RESID2    = 8'h16;
     localparam logic [7:0] CMP_LN1       = 8'h17;
     localparam logic [7:0] CMP_REQUANT4  = 8'h18;
     localparam logic [7:0] CMP_DEQUANT   = 8'h19;
@@ -149,8 +149,8 @@ module compute_controller_tb;
         2: op_for_index = CMP_REQUANT2;
         3: op_for_index = CMP_REQUANT3;
         4: op_for_index = CMP_REQUANT4;
-        5: op_for_index = CMP_RESID0;
-        6: op_for_index = CMP_RESID1;
+        5: op_for_index = CMP_RESID1;
+        6: op_for_index = CMP_RESID2;
         7: op_for_index = CMP_LN0;
         8: op_for_index = CMP_LN1;
         9: op_for_index = CMP_FFN_W1;
@@ -609,13 +609,13 @@ module compute_controller_tb;
                   write_i32_to_in_buf(REQUANT_N_OFFSET, rq4_N);
                   write_i32_to_in_buf(REQUANT_Z_OFFSET, rq4_Z);
                 end
-                CMP_RESID0: begin
+                CMP_RESID1: begin
                   for (j = 0; j < D_MODEL; j = j + 1) begin
                     in_buf_mem[RESID_X_OFFSET + j] = resid0_x[j];
                     in_buf_mem[RESID_R_OFFSET + j] = resid0_r[j];
                   end
                 end
-                CMP_RESID1: begin
+                CMP_RESID2: begin
                   for (j = 0; j < D_MODEL; j = j + 1) begin
                     in_buf_mem[RESID_X_OFFSET + j] = resid1_x[j];
                     in_buf_mem[RESID_R_OFFSET + j] = resid1_r[j];
@@ -716,12 +716,12 @@ module compute_controller_tb;
                     rq4_out[t] <= out_buf_mem[t];
                   end
                 end
-                CMP_RESID0: begin
+                CMP_RESID1: begin
                   for (t = 0; t < D_MODEL; t = t + 1) begin
                     resid0_out[t] <= out_buf_mem[t];
                   end
                 end
-                CMP_RESID1: begin
+                CMP_RESID2: begin
                   for (t = 0; t < D_MODEL; t = t + 1) begin
                     resid1_out[t] <= out_buf_mem[t];
                   end

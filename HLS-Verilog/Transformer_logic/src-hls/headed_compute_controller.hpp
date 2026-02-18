@@ -27,7 +27,5 @@ void drive_headed_compute_controller(
     bool        reset_n,
     const uint8_t in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
-    int8_t        dbg_head_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX],
-    int32_t       dbg_head_out[HEADS_PARALLEL][HEAD_ACCUM_MAX],
     bool        &error
 );

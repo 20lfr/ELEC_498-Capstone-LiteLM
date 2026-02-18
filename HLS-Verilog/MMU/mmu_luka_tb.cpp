@@ -101,14 +101,14 @@ static const char *op_name(ComputeOp op) {
         case CMP_CONCAT: return "CMP_CONCAT";
         case CMP_OUT_PROJ: return "CMP_OUT_PROJ";
         case CMP_REQUANT2: return "CMP_REQUANT2";
-        case CMP_RESID0: return "CMP_RESID0";
+        case CMP_RESID1: return "CMP_RESID1";
         case CMP_LN1: return "CMP_LN1";
         case CMP_REQUANT3: return "CMP_REQUANT3";
         case CMP_FFN_W1: return "CMP_FFN_W1";
         case CMP_FFN_ACT: return "CMP_FFN_ACT";
         case CMP_FFN_W2: return "CMP_FFN_W2";
         case CMP_REQUANT4: return "CMP_REQUANT4";
-        case CMP_RESID1: return "CMP_RESID1";
+        case CMP_RESID2: return "CMP_RESID2";
         case CMP_FINAL_NORM: return "CMP_FINAL_NORM";
         case CMP_REQUANT1: return "CMP_REQUANT1";
         case CMP_REQUANT_Q: return "CMP_REQUANT_Q";
@@ -242,6 +242,8 @@ int main() {
     static uint8_t out_buf[compute_buf::OUT_BUF_BYTES];
     static uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES];
     static uint8_t head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES];
+    static uint8_t stream_in_buf[STREAM_IN_BUF_BYTES];
+    static uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES];
 
     std::memset(dma_rx_buf, 0, sizeof(dma_rx_buf));
     std::memset(dma_tx_buf, 0, sizeof(dma_tx_buf));
@@ -249,6 +251,11 @@ int main() {
     std::memset(out_buf, 0, sizeof(out_buf));
     std::memset(head_in_buf, 0, sizeof(head_in_buf));
     std::memset(head_out_buf, 0, sizeof(head_out_buf));
+    std::memset(stream_in_buf, 0, sizeof(stream_in_buf));
+    std::memset(stream_out_buf, 0, sizeof(stream_out_buf));
+    for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+        stream_in_buf[i] = static_cast<uint8_t>((i * 5 + 1) & 0x7F);
+    }
 
     bool dma_ready = true;
     bool dma_done = false;
@@ -260,11 +267,15 @@ int main() {
     bool mmu_dma_req_start = false;
     uint32_t mmu_dma_instruction = 0;
     bool mmu_req_ready = false;
+    bool main_wl_accept = false;
     bool main_dma_done = false;
     bool mem_read_request = false;
     bool mem_write_request = false;
     uint32_t mem_op = 0;
     bool mem_transfer_done = false;
+    bool axis_in_ready = false;
+    bool axis_in_start = false;
+    bool stream_start = false;
 
     HeadCtx head_ctx[NUM_HEADS];
     ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL];
@@ -343,7 +354,7 @@ int main() {
     for (int t = 0; t < NUM_WO_TILES; ++t) {
         add_cmp(CMP_OUT_PROJ, ComputeReqType::WRITE, 0, -1, t, "Single: write OUT_PROJ tile");
     }
-    add_cmp(CMP_RESID0, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID0_OUT");
+    add_cmp(CMP_RESID1, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID0_OUT");
     add_cmp(CMP_LN1, ComputeReqType::WRITE, 0, -1, -1, "Single: write LN1_OUT");
 
     for (int t = 0; t < NUM_W1_TILES; ++t) {
@@ -356,7 +367,7 @@ int main() {
     for (int t = 0; t < NUM_W2_TILES; ++t) {
         add_cmp(CMP_FFN_W2, ComputeReqType::WRITE, 0, -1, t, "Single: write FFN_W2 tile");
     }
-    add_cmp(CMP_RESID1, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID1_OUT");
+    add_cmp(CMP_RESID2, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID1_OUT");
     add_cmp(CMP_FINAL_NORM, ComputeReqType::WRITE, 0, -1, -1, "Single: write FINAL_NORM_OUT");
 
     // 3) Headed DMA preloads.
@@ -530,9 +541,15 @@ int main() {
             dma_addr,
             dma_len,
             dma_is_write,
+            axis_in_ready,
+            axis_in_start,
+            stream_start,
+            stream_in_buf,
+            stream_out_buf,
             mmu_dma_req_start,
             mmu_dma_instruction,
             mmu_req_ready,
+            main_wl_accept,
             main_dma_done,
             mem_read_request,
             mem_write_request,

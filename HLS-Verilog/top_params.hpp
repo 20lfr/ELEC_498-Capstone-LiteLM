@@ -146,10 +146,17 @@ constexpr int       D_HEADS         = D_MODEL / NUM_HEADS;          // Number of
 constexpr int       D_TILE_WO       = D_MODEL / NUM_WO_TILES;       // Tile size for WO
 constexpr int       D_TILE_W1       = D_FFN * 2 / NUM_W1_TILES;     // Tile size for W1
 constexpr int       D_TILE_W2       = D_MODEL   / NUM_W2_TILES;
+constexpr int       STREAM_IN_BUF_BYTES  = D_MODEL;                 // Token ingress payload (int8 activations)
+constexpr int       STREAM_OUT_BUF_BYTES = D_MODEL * 4;             // Streamed egress payload (e.g. final norm int32)
 constexpr int       CONTEXT_LENGTH  = 16;                           // Context window length
 constexpr int       MAX_CYCLIC_SIZE = 16;                           // << for UNROLL parallelism in MAC units
 constexpr int       HEADS_PARALLEL  = 2;
 constexpr int       NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
+
+// MMU LN parameter source selection:
+//   true  -> MMU hardcodes LN0 gamma/eps for bring-up
+//   false -> MMU requires LN0 gamma/eps to exist in URAM regions
+constexpr bool MMU_USE_HARDCODED_LN_PARAMS = false;
 
 // ---------------------------------------------------------------------------
 // Requant configuration (compile-time)
@@ -237,13 +244,13 @@ enum ComputeOp : uint8_t {
     CMP_HEAD_REQUANT = 13, 
     CMP_CONCAT       = 14, // 13
     CMP_OUT_PROJ     = 15, // 14
-    CMP_RESID0       = 16, // 16
+    CMP_RESID1       = 16, // 16
     CMP_REQUANT2     = 17, // 18
     CMP_FFN_W1       = 18, // 19
     CMP_FFN_ACT      = 19, // 20
     CMP_FFN_W2       = 20, // 21
     CMP_REQUANT3     = 21, // 22
-    CMP_RESID1       = 22, // 23
+    CMP_RESID2       = 22, // 23
     CMP_LN1          = 23, // 24
     CMP_REQUANT4     = 24, // 25
     CMP_FINAL_NORM   = 25, // 26
@@ -264,7 +271,9 @@ enum DmaSel : uint8_t {
     DMASEL_W1,          // 9
     DMASEL_W2,          // 10
     DMASEL_WLOGIT,      // 11
-    DMASEL_CONCAT       // 12
+    DMASEL_CONCAT,      // 12
+    DMASEL_LN0,         // 13
+    DMASEL_LN1          // 14
 };
 
 enum class ComputeErrorCodes {
@@ -283,10 +292,11 @@ struct HeadCtx {
     uint32_t   last_compute_op = 0; // Packed compute op for done gating
     DmaSel     last_wl_addr  = DmaSel::DMASEL_NONE;   // Tracks last issued WL request for dma_done attribution
 
-    bool    wl_ready    = false;                  // INPUT FROM WL 
+    bool    wl_ready    = false;                  // INPUT FROM WL/MMU
+    bool    wl_accept   = false;                  // INPUT FROM MMU: request captured
     bool    wl_start    = false;                  // OUTPUT signal for head
     uint32_t wl_instruction = 0;                  // OUTPUT packed DMA op|layer|head|tile
-    bool    dma_done    = false;                  // INPUT FROM AXI-FULL 
+    bool    dma_done    = false;                  // INPUT FROM AXI-FULL/MMU
 
     bool start_head = false;
 
@@ -373,6 +383,28 @@ constexpr uint32_t ERR_DMA_ZERO_LEN     = 2;
 constexpr uint32_t ERR_DMA_ZERO_STRIDE  = 4;
 constexpr uint32_t ERR_SCHEDULER_ERROR  = 8;
 constexpr uint32_t ERR_COMPUTE_ERROR    = 16;
+constexpr uint32_t ERR_MMU_INVALID      = 32;
+constexpr uint32_t ERR_MMU_OVERFLOW     = 64;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_DMA                = 128;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED  = 256;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED = 512;
+constexpr uint32_t ERR_MMU_BAD_DMA_PLAN    = 2048;
+constexpr uint32_t ERR_MMU_BAD_DMA_ADDR    = 4096;
+constexpr uint32_t ERR_MMU_REGION_ACCESS   = 8192;
+constexpr uint32_t ERR_MMU_CONCAT_SOURCE   = 16384;
+constexpr uint32_t ERR_MMU_WRITEBACK_SRC   = 32768;
+constexpr uint32_t ERR_MMU_QUEUE_OVERFLOW  = 65536;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW = 131072; // legacy/general
+constexpr uint32_t ERR_MMU_STREAM_OUTPUT_MISSING = 262144;
+constexpr uint32_t ERR_MMU_MISSING_REGION_FULL_READ         = 524288;
+constexpr uint32_t ERR_MMU_MISSING_REGION_PARTIAL_READ      = 1048576;
+constexpr uint32_t ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP = 2097152;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_STREAM_IN         = 4194304;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_CONCAT        = 8388608;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_STORE         = 16777216;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE     = 33554432;
+constexpr uint32_t ERR_MMU_REGION_TABLE_FULL                 = 67108864;
+constexpr uint32_t ERR_MMU_URAM_CHUNK_ALLOC_FAIL             = 134217728;
 
 
 

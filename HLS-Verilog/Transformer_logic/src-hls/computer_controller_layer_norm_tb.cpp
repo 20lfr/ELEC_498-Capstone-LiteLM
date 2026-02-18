@@ -64,14 +64,14 @@ static const char *op_name(ComputeOp op) {
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
     case CMP_REQUANT1:     return "RQ1";
-    case CMP_RESID0:       return "RESID0";
+    case CMP_RESID1:       return "RESID1";
     case CMP_LN0:          return "LN0";
     case CMP_REQUANT3:     return "RQ3";
     case CMP_FFN_W1:       return "FFN_W1";
     case CMP_FFN_ACT:      return "FFN_ACT";
     case CMP_FFN_W2:       return "FFN_W2";
     case CMP_REQUANT4:     return "RQ4";
-    case CMP_RESID1:       return "RESID1";
+    case CMP_RESID2:       return "RESID2";
     case CMP_LN1:          return "LN1";
     case CMP_DEQUANT:      return "DEQUANT";
     case CMP_LOGITS:       return "LOGITS";
@@ -361,14 +361,14 @@ int main() {
                             }
                             break;
                         }
-                        case ComputeOp::CMP_RESID0: {
+                        case ComputeOp::CMP_RESID1: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i8(in_buf, compute_buf::INResidLayout::X + i, rq1_out[i]);
                                 compute_buf::write_i8(in_buf, compute_buf::INResidLayout::R + i, valueA_mem[i]);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_RESID1: {
+                        case ComputeOp::CMP_RESID2: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i8(in_buf, compute_buf::INResidLayout::X + i, rq3_out[i]);
                                 compute_buf::write_i8(in_buf, compute_buf::INResidLayout::R + i, valueA_mem[i]);
@@ -478,13 +478,13 @@ int main() {
                             }
                             break;
                         }
-                        case ComputeOp::CMP_RESID0: {
+                        case ComputeOp::CMP_RESID1: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 resid0_out[i] = compute_buf::read_i8(out_buf, compute_buf::INResidLayout::X + i);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_RESID1: {
+                        case ComputeOp::CMP_RESID2: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 resid1_out[i] = compute_buf::read_i8(out_buf, compute_buf::INResidLayout::X + i);
                             }

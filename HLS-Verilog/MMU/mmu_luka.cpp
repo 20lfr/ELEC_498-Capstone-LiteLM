@@ -22,25 +22,20 @@ struct ComputeQueueEntry {
 // Static memory resources
 // ---------------------------------------------------------------------------
 static uint8_t uram_banks[URAM_BANKS][URAM_BANK_BYTES];
-#pragma HLS BIND_STORAGE variable=uram_banks type=ram_t2p impl=uram
 
 static uint32_t bank_offsets[URAM_BANKS];
-#pragma HLS BIND_STORAGE variable=bank_offsets type=ram_1p impl=bram
 
 static DmaQueueEntry dma_q[DMA_QUEUE_DEPTH];
-#pragma HLS BIND_STORAGE variable=dma_q type=ram_1p impl=bram
 static uint8_t dma_q_head = 0;
 static uint8_t dma_q_tail = 0;
 static uint8_t dma_q_count = 0;
 
 static ComputeQueueEntry compute_q[COMPUTE_QUEUE_DEPTH];
-#pragma HLS BIND_STORAGE variable=compute_q type=ram_1p impl=bram
 static uint8_t compute_q_head = 0;
 static uint8_t compute_q_tail = 0;
 static uint8_t compute_q_count = 0;
 
 static Region regions[MAX_REGIONS];
-#pragma HLS BIND_STORAGE variable=regions type=ram_1p impl=bram
 static uint16_t region_count = 0;
 
 static bool arb_pending[NUM_HEADS];
@@ -52,6 +47,7 @@ static bool arb_busy = false;
 static State g_state = State::IDLE;
 static bool g_overflow = false;
 static bool g_invalid = false;
+static uint32_t g_error_code = ERR_NONE;
 static uint8_t g_active_bank = 0;
 
 // Active DMA request context
@@ -77,15 +73,37 @@ static int active_compute_layer = 0;
 static int active_compute_head = -1;
 static int active_compute_tile = -1;
 
+// Edge-detect latches so level-style requests do not enqueue repeatedly.
+static bool main_wl_accepted = false;
+static bool head_wl_accepted[NUM_HEADS];
+static bool prev_main_mem_req = false;
+static uint32_t prev_main_mem_op = 0;
+static bool prev_head_mem_req[HEADS_PARALLEL];
+static uint32_t prev_head_mem_op[HEADS_PARALLEL];
+static bool prev_axis_in_start = false;
+static bool prev_stream_start = false;
+static int g_current_layer = -1;
+
 // Scratch buffer for region copy/construction
 static uint8_t scratch[DMA_BUF_BYTES];
-#pragma HLS BIND_STORAGE variable=scratch type=ram_1p impl=bram
 
 // ---------------------------------------------------------------------------
 // Utility
 // ---------------------------------------------------------------------------
 static inline int decode_s8(uint32_t v) {
     return static_cast<int>(static_cast<int8_t>(v & 0xFFu));
+}
+
+static inline void mmu_set_invalid(uint32_t err_bit) {
+#pragma HLS INLINE
+    g_invalid = true;
+    g_error_code |= err_bit;
+}
+
+static inline void mmu_set_overflow(uint32_t err_bit) {
+#pragma HLS INLINE
+    g_overflow = true;
+    g_error_code |= err_bit;
 }
 
 static inline void unpack_dma(uint32_t packed, DmaSel &sel, int &layer, int &head, int &tile) {
@@ -128,9 +146,6 @@ static inline bool is_headed_compute(ComputeOp op) {
         case CMP_Q:
         case CMP_K:
         case CMP_V:
-        case CMP_K_REQUANT:
-        case CMP_V_REQUANT:
-        case CMP_REQUANT_Q:
         case CMP_ATT_SCORES:
         case CMP_VALUE_SCALE:
         case CMP_SOFTMAX:
@@ -147,13 +162,6 @@ static inline bool is_headed_compute(ComputeOp op) {
 static inline bool is_disabled_compute_op(ComputeOp op) {
 #pragma HLS INLINE
     switch (op) {
-        case CMP_REQUANT1:
-        case CMP_REQUANT2:
-        case CMP_REQUANT3:
-        case CMP_REQUANT4:
-        case CMP_REQUANT_Q:
-        case CMP_K_REQUANT:
-        case CMP_V_REQUANT:
         case CMP_CONCAT: {
             return true;
         }
@@ -169,20 +177,33 @@ static inline int head_to_lane(int head) {
     return head % HEADS_PARALLEL;
 }
 
+static inline void signal_head_compute_done(
+    ComputeHeadCtx (&head_compute_ctx)[HEADS_PARALLEL],
+    int done_head
+) {
+#pragma HLS INLINE
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        ComputeOp op = ComputeOp::CMP_NONE;
+        int layer = 0, head = -1, tile = -1;
+        unpack_compute(head_compute_ctx[lane].mem_op, op, layer, head, tile);
+        if (head < 0 || head >= NUM_HEADS) {
+            unpack_compute(head_compute_ctx[lane].compute_instruction, op, layer, head, tile);
+        }
+        if (head == done_head) {
+            head_compute_ctx[lane].mem_transfer_done = true;
+        }
+    }
+}
+
 static inline uint32_t main_op_out_bytes(ComputeOp op) {
 #pragma HLS INLINE
     switch (op) {
         case CMP_OUT_PROJ: {
             return compute_buf::OUTOutProjLayout::TOTAL_BYTES;
         }
-        case CMP_REQUANT1:
-        case CMP_REQUANT2:
-        case CMP_REQUANT3:
-        case CMP_REQUANT4: {
-            return compute_buf::OUTRequantLayout::TOTAL_BYTES;
-        }
-        case CMP_RESID0:
-        case CMP_RESID1: {
+        case CMP_RESID1:
+        case CMP_RESID2: {
             return compute_buf::OUTResidLayout::TOTAL_BYTES;
         }
         case CMP_LN0:
@@ -216,9 +237,6 @@ static inline uint32_t head_op_out_bytes(ComputeOp op) {
         case CMP_V: {
             return head_buf::OUTQkvLayout::TOTAL_BYTES;
         }
-        case CMP_K_REQUANT:
-        case CMP_V_REQUANT:
-        case CMP_REQUANT_Q:
         case CMP_HEAD_REQUANT: {
             return head_buf::OUTHeadRequantLayout::TOTAL_BYTES;
         }
@@ -256,7 +274,12 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::W2_W:
         case Tag::W2_B:
         case Tag::CTX_K:
-        case Tag::CTX_V: {
+        case Tag::CTX_V:
+        case Tag::LN0_GAMMA:
+        case Tag::LN0_EPS:
+        case Tag::LN1_GAMMA:
+        case Tag::LN1_EPS:
+        case Tag::STREAM_IN_TOKEN: {
             return 0xFF; // keep indefinitely unless explicitly reset
         }
         case Tag::HEAD_REQUANT_PACKED:
@@ -264,7 +287,14 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::OUT_PROJ_PACKED:
         case Tag::FFN_W1_PACKED:
         case Tag::FFN_ACT_OUT:
-        case Tag::FFN_W2_PACKED: {
+        case Tag::FFN_W2_PACKED:
+        case Tag::Q_OUT:
+        case Tag::K_OUT:
+        case Tag::V_OUT:
+        case Tag::ATT_SCORES_OUT:
+        case Tag::VALUE_SCALE_OUT:
+        case Tag::SOFTMAX_OUT:
+        case Tag::ATT_VALUE_OUT: {
             return 1;
         }
         default: {
@@ -281,13 +311,43 @@ static inline bool should_consume(Tag tag) {
         case Tag::OUT_PROJ_PACKED:
         case Tag::FFN_W1_PACKED:
         case Tag::FFN_ACT_OUT:
-        case Tag::FFN_W2_PACKED: {
+        case Tag::FFN_W2_PACKED:
+        case Tag::Q_OUT:
+        case Tag::K_OUT:
+        case Tag::V_OUT:
+        case Tag::ATT_SCORES_OUT:
+        case Tag::VALUE_SCALE_OUT:
+        case Tag::SOFTMAX_OUT:
+        case Tag::ATT_VALUE_OUT: {
             return true;
         }
         default: {
             return false;
         }
     }
+}
+
+static inline bool is_cross_layer_carry_tag(Tag tag) {
+#pragma HLS INLINE
+    switch (tag) {
+        case Tag::RESID1_OUT: {
+            return true;
+        }
+        default: {
+            return false;
+        }
+    }
+}
+
+static inline bool keep_region_on_layer_purge(const Region &r, int new_layer) {
+#pragma HLS INLINE
+    if (!r.valid || !r.used) return false;
+    if (r.layer < 0) return true;
+    if (r.layer >= new_layer) return true;
+    if (is_cross_layer_carry_tag(r.tag) && r.layer == (new_layer - 1)) {
+        return true;
+    }
+    return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -397,7 +457,8 @@ static bool allocate_chunks(uint32_t total_bytes, Chunk chunks[MAX_CHUNKS], uint
     while (remaining > 0) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=8
         if (num_chunks >= MAX_CHUNKS) return false;
-        const uint32_t off = bank_offsets[bank];
+        const int bank_i = static_cast<int>(bank);
+        const uint32_t off = bank_offsets[bank_i];
         if (off >= URAM_BANK_BYTES) {
             bank = static_cast<uint8_t>((bank + 1) % URAM_BANKS);
             continue;
@@ -420,8 +481,9 @@ static void commit_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks) {
 #pragma HLS UNROLL
         if (c < num_chunks) {
             const uint8_t b = chunks[c].bank;
-            bank_offsets[b] = chunks[c].offset + chunks[c].size;
-            if (bank_offsets[b] >= URAM_BANK_BYTES) {
+            const int bank_i = static_cast<int>(b);
+            bank_offsets[bank_i] = chunks[c].offset + chunks[c].size;
+            if (bank_offsets[bank_i] >= URAM_BANK_BYTES) {
                 g_active_bank = static_cast<uint8_t>((b + 1) % URAM_BANKS);
             }
         }
@@ -429,9 +491,8 @@ static void commit_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks) {
 }
 
 static int find_region(Tag tag, int layer, int head, int tile) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
         if (regions[i].valid &&
             regions[i].tag == tag &&
             regions[i].layer == layer &&
@@ -463,10 +524,9 @@ static void maybe_consume(int idx) {
 }
 
 static void gc_scan() {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     bool any_live = false;
     for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
         if (regions[i].valid && regions[i].used) {
             any_live = true;
         }
@@ -476,11 +536,9 @@ static void gc_scan() {
         region_count = 0;
         g_active_bank = 0;
         for (int b = 0; b < URAM_BANKS; ++b) {
-#pragma HLS UNROLL factor=8
             bank_offsets[b] = 0;
         }
         for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
             regions[i].valid = false;
             regions[i].used = false;
         }
@@ -488,11 +546,39 @@ static void gc_scan() {
     }
 
     for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
         if (regions[i].valid && !regions[i].used) {
             regions[i].valid = false;
             if (region_count > 0) region_count--;
         }
+    }
+}
+
+static void purge_layers_before(int new_layer) {
+#pragma HLS INLINE
+    if (new_layer <= 0) return;
+
+    for (int i = 0; i < MAX_REGIONS; ++i) {
+#pragma HLS UNROLL factor=8
+        if (!regions[i].valid || !regions[i].used) {
+            continue;
+        }
+        if (!keep_region_on_layer_purge(regions[i], new_layer)) {
+            regions[i].used = false;
+        }
+    }
+    gc_scan();
+}
+
+static void on_layer_transition(int req_layer) {
+#pragma HLS INLINE
+    if (req_layer < 0) return;
+    if (g_current_layer < 0) {
+        g_current_layer = req_layer;
+        return;
+    }
+    if (req_layer > g_current_layer) {
+        purge_layers_before(req_layer);
+        g_current_layer = req_layer;
     }
 }
 
@@ -520,6 +606,7 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
     }
     if (free_idx < 0) {
         overflow_flag = true;
+        mmu_set_overflow(ERR_MMU_REGION_TABLE_FULL);
         return -1;
     }
 
@@ -529,6 +616,7 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
         gc_scan();
         if (!allocate_chunks(total_bytes, chunks, num_chunks)) {
             overflow_flag = true;
+            mmu_set_overflow(ERR_MMU_URAM_CHUNK_ALLOC_FAIL);
             return -1;
         }
     }
@@ -572,14 +660,14 @@ static int get_or_create_region(Tag tag, int layer, int head, int tile, uint32_t
 }
 
 static bool region_write_bytes(const Region &r, uint32_t dst_offset, const uint8_t *src, uint32_t bytes) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     if (dst_offset + bytes > r.total_bytes) return false;
     uint32_t remaining = bytes;
     uint32_t written = 0;
     uint32_t logical = dst_offset;
 
     for (int c = 0; c < MAX_CHUNKS && remaining > 0; ++c) {
-#pragma HLS UNROLL
+#pragma HLS LOOP_FLATTEN off
         if (c >= r.num_chunks) break;
         const Chunk &ck = r.chunks[c];
         if (logical >= ck.size) {
@@ -600,14 +688,14 @@ static bool region_write_bytes(const Region &r, uint32_t dst_offset, const uint8
 }
 
 static bool region_read_bytes(const Region &r, uint32_t src_offset, uint8_t *dst, uint32_t bytes) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     if (src_offset + bytes > r.total_bytes) return false;
     uint32_t remaining = bytes;
     uint32_t copied = 0;
     uint32_t logical = src_offset;
 
     for (int c = 0; c < MAX_CHUNKS && remaining > 0; ++c) {
-#pragma HLS UNROLL
+#pragma HLS LOOP_FLATTEN off
         if (c >= r.num_chunks) break;
         const Chunk &ck = r.chunks[c];
         if (logical >= ck.size) {
@@ -653,10 +741,12 @@ static bool load_region_to_buf(Tag tag, int layer, int head, int tile,
 #pragma HLS INLINE
     const int idx = find_region(tag, layer, head, tile);
     if (idx < 0 || !region_ready(regions[idx])) {
+        mmu_set_invalid(ERR_MMU_MISSING_REGION_FULL_READ);
         invalid_flag = true;
         return false;
     }
     if (!region_read_bytes(regions[idx], 0, &dst[dst_off], bytes)) {
+        mmu_set_invalid(ERR_MMU_REGION_ACCESS);
         invalid_flag = true;
         return false;
     }
@@ -672,11 +762,13 @@ static bool load_region_partial_to_buf(Tag tag, int layer, int head, int tile,
 #pragma HLS INLINE
     const int idx = find_region(tag, layer, head, tile);
     if (idx < 0 || !region_ready(regions[idx])) {
+        mmu_set_invalid(ERR_MMU_MISSING_REGION_PARTIAL_READ);
         invalid_flag = true;
         return false;
     }
     const uint32_t copy_bytes = (regions[idx].total_bytes < bytes) ? regions[idx].total_bytes : bytes;
     if (!region_read_bytes(regions[idx], 0, &dst[dst_off], copy_bytes)) {
+        mmu_set_invalid(ERR_MMU_REGION_ACCESS);
         invalid_flag = true;
         return false;
     }
@@ -769,23 +861,13 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
             s.total_bytes = static_cast<uint32_t>(NUM_WO_TILES) * s.part_bytes;
             break;
         }
-        case CMP_REQUANT2: {
-            s.tag = Tag::REQUANT2_OUT;
-            s.key_tile = -1;
-            break;
-        }
-        case CMP_RESID0: {
+        case CMP_RESID1: {
             s.tag = Tag::RESID0_OUT;
             s.key_tile = -1;
             break;
         }
         case CMP_LN1: {
             s.tag = Tag::LN1_OUT;
-            s.key_tile = -1;
-            break;
-        }
-        case CMP_REQUANT3: {
-            s.tag = Tag::REQUANT3_OUT;
             s.key_tile = -1;
             break;
         }
@@ -812,12 +894,7 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
             s.total_bytes = static_cast<uint32_t>(NUM_W2_TILES) * s.part_bytes;
             break;
         }
-        case CMP_REQUANT4: {
-            s.tag = Tag::REQUANT4_OUT;
-            s.key_tile = -1;
-            break;
-        }
-        case CMP_RESID1: {
+        case CMP_RESID2: {
             s.tag = Tag::RESID1_OUT;
             s.key_tile = -1;
             break;
@@ -829,11 +906,6 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
         }
         case CMP_LN0: {
             s.tag = Tag::LN0_OUT;
-            s.key_tile = -1;
-            break;
-        }
-        case CMP_REQUANT1: {
-            s.tag = Tag::REQUANT1_OUT;
             s.key_tile = -1;
             break;
         }
@@ -934,6 +1006,26 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_tag[0] = Tag::CTX_V;
             return true;
         }
+        case DMASEL_LN0: {
+            piece_count = 2;
+            piece_bytes[0] = compute_buf::INLayerNormLayout::GAMMA_BYTES;
+            piece_bytes[1] = compute_buf::INLayerNormLayout::EPS_BYTES;
+            piece_addr_off[0] = 0;
+            piece_addr_off[1] = 0;
+            piece_tag[0] = Tag::LN0_GAMMA;
+            piece_tag[1] = Tag::LN0_EPS;
+            return true;
+        }
+        case DMASEL_LN1: {
+            piece_count = 2;
+            piece_bytes[0] = compute_buf::INLayerNormLayout::GAMMA_BYTES;
+            piece_bytes[1] = compute_buf::INLayerNormLayout::EPS_BYTES;
+            piece_addr_off[0] = 0;
+            piece_addr_off[1] = 0;
+            piece_tag[0] = Tag::LN1_GAMMA;
+            piece_tag[1] = Tag::LN1_EPS;
+            return true;
+        }
         case DMASEL_WLOGIT:
         case DMASEL_NONE: {
             piece_count = 0;
@@ -1011,6 +1103,16 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
                      + static_cast<uint32_t>(tile) * ctrl_mem.w2_tile_stride;
             return true;
         }
+        case DmaSel::DMASEL_LN0: {
+            addr_out = ctrl_mem.ln0_gamma_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.ln0_gamma_stride;
+            return true;
+        }
+        case DmaSel::DMASEL_LN1: {
+            addr_out = ctrl_mem.ln1_gamma_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.ln1_gamma_stride;
+            return true;
+        }
         case DmaSel::DMASEL_CONCAT:
         case DmaSel::DMASEL_WLOGIT:
         case DmaSel::DMASEL_NONE:
@@ -1058,7 +1160,7 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
     zero_buf(lane_buf, head_buf::IN_BUF_BYTES);
     switch (op) {
         case CMP_Q: {
-            bool ok = load_region_to_buf(Tag::REQUANT1_OUT, layer, -1, -1,
+            bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
@@ -1071,7 +1173,7 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
                                       false, invalid_flag);
         }
         case CMP_K: {
-            bool ok = load_region_to_buf(Tag::REQUANT1_OUT, layer, -1, -1,
+            bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
@@ -1084,7 +1186,7 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
                                       false, invalid_flag);
         }
         case CMP_V: {
-            bool ok = load_region_to_buf(Tag::REQUANT1_OUT, layer, -1, -1,
+            bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
@@ -1099,7 +1201,7 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
         case CMP_ATT_SCORES: {
             bool ok = load_region_to_buf(Tag::Q_OUT, layer, head, -1,
                                          lane_buf, head_buf::INAttScoresLayout::Q, head_buf::INAttScoresLayout::Q_BYTES,
-                                         false, invalid_flag);
+                                         true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::CTX_K, layer, head, -1,
                                       lane_buf, head_buf::INAttScoresLayout::K_CACHE, head_buf::INAttScoresLayout::K_CACHE_BYTES,
@@ -1108,17 +1210,17 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
         case CMP_VALUE_SCALE: {
             return load_region_to_buf(Tag::ATT_SCORES_OUT, layer, head, -1,
                                       lane_buf, head_buf::INValueScaleLayout::X, head_buf::INValueScaleLayout::X_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         case CMP_SOFTMAX: {
             return load_region_to_buf(Tag::VALUE_SCALE_OUT, layer, head, -1,
                                       lane_buf, head_buf::INSoftmaxLayout::X, head_buf::INSoftmaxLayout::X_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         case CMP_ATT_VALUE: {
             bool ok = load_region_to_buf(Tag::SOFTMAX_OUT, layer, head, -1,
                                          lane_buf, head_buf::INAttValueLayout::WEIGHTS, head_buf::INAttValueLayout::WEIGHTS_BYTES,
-                                         false, invalid_flag);
+                                         true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::CTX_V, layer, head, -1,
                                       lane_buf, head_buf::INAttValueLayout::V_CACHE, head_buf::INAttValueLayout::V_CACHE_BYTES,
@@ -1127,9 +1229,10 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
         case CMP_HEAD_REQUANT: {
             return load_region_to_buf(Tag::ATT_VALUE_OUT, layer, head, -1,
                                       lane_buf, head_buf::INHeadRequantLayout::X, head_buf::INHeadRequantLayout::X_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         default: {
+            mmu_set_invalid(ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED);
             invalid_flag = true;
             return false;
         }
@@ -1141,14 +1244,49 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
 #pragma HLS INLINE
     zero_buf(buf, compute_buf::IN_BUF_BYTES);
     switch (op) {
+        case CMP_LN0: {
+            // Layer input:
+            //  - layer 0: original streamed token
+            //  - layer n>0: previous layer residual output
+            Tag x_tag = Tag::STREAM_IN_TOKEN;
+            int x_layer = 0;
+            if (layer > 0) {
+                x_tag = Tag::RESID1_OUT;
+                x_layer = layer - 1;
+            }
+
+            bool ok = load_region_to_buf(x_tag, x_layer, -1, -1,
+                                         buf, compute_buf::INLayerNormLayout::X,
+                                         compute_buf::INLayerNormLayout::X_BYTES, false, invalid_flag);
+            if (!ok) return false;
+            if (MMU_USE_HARDCODED_LN_PARAMS) {
+                // Default gamma=1.0 (Q19.13) and epsilon=1 for bring-up.
+                for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
+                }
+                compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
+                return true;
+            } else {
+                ok = load_region_to_buf(Tag::LN0_GAMMA, layer, -1, -1,
+                                        buf, compute_buf::INLayerNormLayout::GAMMA,
+                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, false, invalid_flag);
+                if (!ok) return false;
+                return load_region_to_buf(Tag::LN0_EPS, layer, -1, -1,
+                                          buf, compute_buf::INLayerNormLayout::EPS,
+                                          compute_buf::INLayerNormLayout::EPS_BYTES, false, invalid_flag);
+            }
+        }
         case CMP_CONCAT: {
             return load_region_to_buf(Tag::HEAD_REQUANT_PACKED, layer, -1, -1,
                                       buf, 0, D_MODEL, true, invalid_flag);
         }
         case CMP_OUT_PROJ: {
+            const bool consume_concat_out =
+                (tile >= 0) && (tile >= (NUM_WO_TILES - 1));
             bool ok = load_region_to_buf(Tag::CONCAT_OUT, layer, -1, -1,
                                          buf, compute_buf::INOutProjLayout::ACT,
-                                         compute_buf::INOutProjLayout::ACT_BYTES, true, invalid_flag);
+                                         compute_buf::INOutProjLayout::ACT_BYTES, consume_concat_out, invalid_flag);
             if (!ok) return false;
             ok = load_region_to_buf(Tag::WO_W, layer, -1, tile,
                                     buf, compute_buf::INOutProjLayout::W,
@@ -1158,13 +1296,46 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                                       buf, compute_buf::INOutProjLayout::B,
                                       compute_buf::INOutProjLayout::B_BYTES, false, invalid_flag);
         }
-        case CMP_REQUANT2: {
-            return load_region_partial_to_buf(Tag::OUT_PROJ_PACKED, layer, -1, -1,
-                                              buf, compute_buf::INRequantLayout::X,
-                                              compute_buf::INRequantLayout::X_BYTES, true, invalid_flag);
+        case CMP_RESID1: {
+            Tag x_tag = Tag::STREAM_IN_TOKEN;
+            int x_layer = 0;
+            if (layer > 0) {
+                x_tag = Tag::RESID1_OUT;
+                x_layer = layer - 1;
+            }
+
+            bool ok = load_region_to_buf(x_tag, x_layer, -1, -1,
+                                         buf, compute_buf::INResidLayout::X,
+                                         compute_buf::INResidLayout::X_BYTES, false, invalid_flag);
+            if (!ok) return false;
+            return load_region_to_buf(Tag::OUT_PROJ_PACKED, layer, -1, -1,
+                                      buf, compute_buf::INResidLayout::R,
+                                      compute_buf::INResidLayout::R_BYTES, true, invalid_flag);
+        }
+        case CMP_LN1: {
+            bool ok = load_region_to_buf(Tag::RESID0_OUT, layer, -1, -1,
+                                         buf, compute_buf::INLayerNormLayout::X,
+                                         compute_buf::INLayerNormLayout::X_BYTES, false, invalid_flag);
+            if (!ok) return false;
+            if (MMU_USE_HARDCODED_LN_PARAMS) {
+                for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
+                }
+                compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
+                return true;
+            } else {
+                ok = load_region_to_buf(Tag::LN1_GAMMA, layer, -1, -1,
+                                        buf, compute_buf::INLayerNormLayout::GAMMA,
+                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, false, invalid_flag);
+                if (!ok) return false;
+                return load_region_to_buf(Tag::LN1_EPS, layer, -1, -1,
+                                          buf, compute_buf::INLayerNormLayout::EPS,
+                                          compute_buf::INLayerNormLayout::EPS_BYTES, false, invalid_flag);
+            }
         }
         case CMP_FFN_W1: {
-            bool ok = load_region_to_buf(Tag::REQUANT3_OUT, layer, -1, -1,
+            bool ok = load_region_to_buf(Tag::LN1_OUT, layer, -1, -1,
                                          buf, compute_buf::INFfnW1Layout::X,
                                          compute_buf::INFfnW1Layout::X_BYTES, false, invalid_flag);
             if (!ok) return false;
@@ -1182,9 +1353,11 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                                       compute_buf::INFfnActLayout::TOTAL_BYTES, true, invalid_flag);
         }
         case CMP_FFN_W2: {
+            const bool consume_ffn_act_out =
+                (tile >= 0) && (tile >= (NUM_W2_TILES - 1));
             bool ok = load_region_to_buf(Tag::FFN_ACT_OUT, layer, -1, -1,
                                          buf, compute_buf::INFfnW2Layout::X,
-                                         compute_buf::INFfnW2Layout::X_BYTES, true, invalid_flag);
+                                         compute_buf::INFfnW2Layout::X_BYTES, consume_ffn_act_out, invalid_flag);
             if (!ok) return false;
             ok = load_region_to_buf(Tag::W2_W, layer, -1, tile,
                                     buf, compute_buf::INFfnW2Layout::W,
@@ -1194,12 +1367,39 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                                       buf, compute_buf::INFfnW2Layout::B,
                                       compute_buf::INFfnW2Layout::B_BYTES, false, invalid_flag);
         }
-        case CMP_REQUANT4: {
-            return load_region_partial_to_buf(Tag::FFN_W2_PACKED, layer, -1, -1,
-                                              buf, compute_buf::INRequantLayout::X,
-                                              compute_buf::INRequantLayout::X_BYTES, true, invalid_flag);
+        case CMP_RESID2: {
+            bool ok = load_region_to_buf(Tag::RESID0_OUT, layer, -1, -1,
+                                         buf, compute_buf::INResidLayout::X,
+                                         compute_buf::INResidLayout::X_BYTES, true, invalid_flag);
+            if (!ok) return false;
+            return load_region_to_buf(Tag::FFN_W2_PACKED, layer, -1, -1,
+                                      buf, compute_buf::INResidLayout::R,
+                                      compute_buf::INResidLayout::R_BYTES, true, invalid_flag);
+        }
+        case CMP_FINAL_NORM: {
+            bool ok = load_region_to_buf(Tag::RESID1_OUT, layer, -1, -1,
+                                         buf, compute_buf::INLayerNormLayout::X,
+                                         compute_buf::INLayerNormLayout::X_BYTES, false, invalid_flag);
+            if (!ok) return false;
+            if (MMU_USE_HARDCODED_LN_PARAMS) {
+                for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS PIPELINE II=1
+                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
+                }
+                compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
+                return true;
+            } else {
+                ok = load_region_to_buf(Tag::LN0_GAMMA, layer, -1, -1,
+                                        buf, compute_buf::INLayerNormLayout::GAMMA,
+                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, false, invalid_flag);
+                if (!ok) return false;
+                return load_region_to_buf(Tag::LN0_EPS, layer, -1, -1,
+                                          buf, compute_buf::INLayerNormLayout::EPS,
+                                          compute_buf::INLayerNormLayout::EPS_BYTES, false, invalid_flag);
+            }
         }
         default: {
+            mmu_set_invalid(ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED);
             invalid_flag = true;
             return false;
         }
@@ -1289,10 +1489,18 @@ void mmu_fsm(
     uint32_t        &dma_len,                       // [OUTPUT] DMA transfer length
     bool            &dma_is_write,                  // [OUTPUT] DMA direction (1=MMU->DDR)
 
+    // Stream ingress/egress buffers controlled by scheduler pulses
+    bool            axis_in_ready,                  // [INPUT] Scheduler AXIS ingress ready flag
+    bool            axis_in_start,                  // [INPUT] Scheduler pulse: stream-in payload complete
+    bool            stream_start,                   // [INPUT] Scheduler pulse: begin stream-out payload
+    const uint8_t   stream_in_buf[STREAM_IN_BUF_BYTES], // [INPUT] Constructed stream-in payload
+    uint8_t         stream_out_buf[STREAM_OUT_BUF_BYTES], // [OUTPUT] Stream-out payload produced by MMU
+
     // Main scheduler DMA request (non-headed path)
     bool            mmu_dma_req_start,              // [INPUT] Main scheduler DMA request valid
     uint32_t        mmu_dma_instruction,            // [INPUT] Packed request [sel|layer|head|tile]
     bool            &mmu_req_ready,                 // [OUTPUT] MMU can accept new DMA request
+    bool            &main_wl_accept,                // [OUTPUT] Main scheduler request accepted/captured
     bool            &main_dma_done,                 // [OUTPUT] Main scheduler DMA done pulse
 
     // Main compute request (non-headed path)
@@ -1320,10 +1528,12 @@ void mmu_fsm(
 #pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_ctx complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
-
-    bool main_compute_done = false;
-    bool head_dma_done[NUM_HEADS];
-    bool head_compute_done[NUM_HEADS];
+#pragma HLS BIND_STORAGE variable=uram_banks type=ram_t2p impl=uram
+#pragma HLS BIND_STORAGE variable=bank_offsets type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=dma_q type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=compute_q type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=regions type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=scratch type=ram_1p impl=bram
 
     // Default outputs
     dma_start = false;
@@ -1333,12 +1543,18 @@ void mmu_fsm(
     main_dma_done = false;
     mem_transfer_done = false;
     mmu_req_ready = (dma_q_count < DMA_QUEUE_DEPTH);
+    if (!mmu_dma_req_start) {
+        main_wl_accepted = false;
+    }
+    main_wl_accept = main_wl_accepted;
     for (int h = 0; h < NUM_HEADS; ++h) {
 #pragma HLS UNROLL
         head_ctx[h].wl_ready = mmu_req_ready;
+        if (!head_ctx[h].wl_start) {
+            head_wl_accepted[h] = false;
+        }
+        head_ctx[h].wl_accept = head_wl_accepted[h];
         head_ctx[h].dma_done = false;
-        head_dma_done[h] = false;
-        head_compute_done[h] = false;
     }
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
@@ -1349,8 +1565,10 @@ void mmu_fsm(
         g_state = State::IDLE;
         g_overflow = false;
         g_invalid = false;
+        g_error_code = ERR_NONE;
         g_active_bank = 0;
         region_count = 0;
+        g_current_layer = -1;
 
         active_dma_valid = false;
         active_compute_valid = false;
@@ -1364,7 +1582,18 @@ void mmu_fsm(
 #pragma HLS UNROLL
             arb_pending[i] = false;
             arb_grant[i] = false;
+            head_wl_accepted[i] = false;
         }
+        main_wl_accepted = false;
+        prev_main_mem_req = false;
+        prev_main_mem_op = 0;
+        for (int i = 0; i < HEADS_PARALLEL; ++i) {
+#pragma HLS UNROLL
+            prev_head_mem_req[i] = false;
+            prev_head_mem_op[i] = 0;
+        }
+        prev_axis_in_start = false;
+        prev_stream_start = false;
         for (int i = 0; i < URAM_BANKS; ++i) {
 #pragma HLS UNROLL factor=8
             bank_offsets[i] = 0;
@@ -1381,29 +1610,93 @@ void mmu_fsm(
 #pragma HLS UNROLL factor=8
             regions[i] = Region{};
         }
+
+        status.state = g_state;
+        status.overflow = g_overflow;
+        status.invalid = g_invalid;
+        status.error_code = g_error_code;
+        status.region_count = region_count;
+        return;
     }
 
-    // Enqueue main DMA request.
-    if (mmu_dma_req_start) {
-        if (dma_q_count >= DMA_QUEUE_DEPTH) {
-            g_overflow = true;
-        } else {
-        DmaSel sel = DMASEL_NONE;
-        int layer = 0, head = -1, tile = -1;
-        unpack_dma(mmu_dma_instruction, sel, layer, head, tile);
-        const bool headed = is_headed_dma(sel);
-        if (!dma_q_push(mmu_dma_instruction, headed)) {
-            g_overflow = true;
+    const bool axis_in_start_edge = reset_n && axis_in_ready && axis_in_start && !prev_axis_in_start;
+    if (axis_in_start_edge) {
+        const int idx = get_or_create_region(
+            Tag::STREAM_IN_TOKEN, 0, -1, -1,
+            static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
+            1,
+            static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
+            g_overflow);
+        if (idx < 0) {
+            mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_STREAM_IN);
+        } else if (!region_write_part(
+                       idx,
+                       0,
+                       stream_in_buf,
+                       static_cast<uint32_t>(STREAM_IN_BUF_BYTES))) {
+            mmu_set_invalid(ERR_MMU_REGION_ACCESS);
         }
+    }
+    prev_axis_in_start = axis_in_start;
+
+    const bool stream_start_edge = reset_n && stream_start && !prev_stream_start;
+    if (stream_start_edge) {
+        bool stream_invalid = false;
+        zero_buf(stream_out_buf, STREAM_OUT_BUF_BYTES);
+        const int out_layer = (NUM_LAYERS > 0) ? (NUM_LAYERS - 1) : 0;
+        bool ok = load_region_partial_to_buf(
+            Tag::FINAL_NORM_OUT,
+            out_layer,
+            -1,
+            -1,
+            stream_out_buf,
+            0,
+            static_cast<uint32_t>(STREAM_OUT_BUF_BYTES),
+            false,
+            stream_invalid);
+        if (!ok) {
+            // Fallback to layer 0 when single-layer test payloads are used.
+            stream_invalid = false;
+            ok = load_region_partial_to_buf(
+                Tag::FINAL_NORM_OUT,
+                0,
+                -1,
+                -1,
+                stream_out_buf,
+                0,
+                static_cast<uint32_t>(STREAM_OUT_BUF_BYTES),
+                false,
+                stream_invalid);
+        }
+        if (!ok) {
+            mmu_set_invalid(ERR_MMU_STREAM_OUTPUT_MISSING);
+        }
+    }
+    prev_stream_start = stream_start;
+
+    // Enqueue main DMA request.
+    // Level handshake: MMU accepts when wl_start is high and holds wl_accept until wl_start drops.
+    const bool main_dma_req_pending = reset_n && mmu_dma_req_start && !main_wl_accepted;
+    if (main_dma_req_pending) {
+        if (dma_q_count < DMA_QUEUE_DEPTH) {
+            DmaSel sel = DMASEL_NONE;
+            int layer = 0, head = -1, tile = -1;
+            unpack_dma(mmu_dma_instruction, sel, layer, head, tile);
+            const bool headed = is_headed_dma(sel);
+            if (dma_q_push(mmu_dma_instruction, headed)) {
+                main_wl_accepted = true;
+                main_wl_accept = true;
+            }
         }
     }
 
     // Enqueue per-head DMA requests via HeadCtx.
+    // Level handshake: MMU accepts when wl_start is high and holds wl_accept until wl_start drops.
     for (int h = 0; h < NUM_HEADS; ++h) {
 #pragma HLS UNROLL
-        if (head_ctx[h].wl_start) {
+        const bool head_dma_req_pending = reset_n && head_ctx[h].wl_start && !head_wl_accepted[h];
+        if (head_dma_req_pending) {
             if (dma_q_count >= DMA_QUEUE_DEPTH) {
-                g_overflow = true;
                 continue;
             }
             DmaSel sel = DMASEL_NONE;
@@ -1411,15 +1704,21 @@ void mmu_fsm(
             unpack_dma(head_ctx[h].wl_instruction, sel, layer, head, tile);
             const bool headed = is_headed_dma(sel);
             if (!dma_q_push(head_ctx[h].wl_instruction, headed)) {
-                g_overflow = true;
+                continue;
+            } else {
+                head_wl_accepted[h] = true;
+                head_ctx[h].wl_accept = true;
             }
         }
     }
 
-    // Enqueue main compute request.
-    if (mem_read_request || mem_write_request) {
+    // Enqueue main compute request (edge-triggered).
+    const bool main_mem_req = (mem_read_request || mem_write_request);
+    const bool main_mem_req_edge = reset_n && main_mem_req &&
+                                   (!prev_main_mem_req || (mem_op != prev_main_mem_op));
+    if (main_mem_req_edge) {
         if (compute_q_count >= COMPUTE_QUEUE_DEPTH) {
-            g_overflow = true;
+            mmu_set_overflow(ERR_MMU_QUEUE_OVERFLOW);
         } else {
         ComputeOp op = ComputeOp::CMP_NONE;
         int layer = 0, head = -1, tile = -1;
@@ -1429,7 +1728,7 @@ void mmu_fsm(
         if (head >= 0 && head < NUM_HEADS) req_head = static_cast<uint8_t>(head);
         const ComputeReqType req_type = mem_read_request ? ComputeReqType::READ : ComputeReqType::WRITE;
         if (!compute_q_push(mem_op, req_type, headed, req_head)) {
-            g_overflow = true;
+            mmu_set_overflow(ERR_MMU_QUEUE_OVERFLOW);
         }
         }
     }
@@ -1439,9 +1738,13 @@ void mmu_fsm(
 #pragma HLS UNROLL
         const bool req_read = head_compute_ctx[lane].mem_read_request;
         const bool req_write = head_compute_ctx[lane].mem_write_request;
-        if (!(req_read || req_write)) continue;
+        const bool req_active = (req_read || req_write);
+        const bool lane_mem_req_edge =
+            reset_n && req_active &&
+            (!prev_head_mem_req[lane] || (head_compute_ctx[lane].mem_op != prev_head_mem_op[lane]));
+        if (!lane_mem_req_edge) continue;
         if (compute_q_count >= COMPUTE_QUEUE_DEPTH) {
-            g_overflow = true;
+            mmu_set_overflow(ERR_MMU_QUEUE_OVERFLOW);
             continue;
         }
 
@@ -1453,8 +1756,18 @@ void mmu_fsm(
         if (head >= 0 && head < NUM_HEADS) req_head = static_cast<uint8_t>(head);
         const ComputeReqType req_type = req_read ? ComputeReqType::READ : ComputeReqType::WRITE;
         if (!compute_q_push(head_compute_ctx[lane].mem_op, req_type, headed, req_head)) {
-            g_overflow = true;
+            mmu_set_overflow(ERR_MMU_QUEUE_OVERFLOW);
         }
+    }
+
+    // Update edge-detect latches.
+    prev_main_mem_req = main_mem_req;
+    prev_main_mem_op = mem_op;
+    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+#pragma HLS UNROLL
+        const bool req_active = head_compute_ctx[lane].mem_read_request || head_compute_ctx[lane].mem_write_request;
+        prev_head_mem_req[lane] = req_active;
+        prev_head_mem_op[lane] = head_compute_ctx[lane].mem_op;
     }
 
     // Arbitration progression
@@ -1486,6 +1799,14 @@ void mmu_fsm(
                 active_dma_valid = true;
                 active_dma_headed = q.headed;
                 unpack_dma(q.packed, active_dma_sel, active_dma_layer, active_dma_head, active_dma_tile);
+                on_layer_transition(active_dma_layer);
+            }
+
+            // No-op guard: ignore placeholder/no-request DMA entries.
+            if (active_dma_sel == DMASEL_NONE) {
+                active_dma_valid = false;
+                g_state = State::IDLE;
+                break;
             }
 
             if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
@@ -1509,7 +1830,7 @@ void mmu_fsm(
             // Internal operation: build contiguous concat output from packed head requant output.
             const int src_idx = find_region(Tag::HEAD_REQUANT_PACKED, active_dma_layer, -1, -1);
             if (src_idx < 0 || !region_ready(regions[src_idx])) {
-                g_invalid = true;
+                mmu_set_invalid(ERR_MMU_CONCAT_SOURCE);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -1519,6 +1840,7 @@ void mmu_fsm(
                 Tag::CONCAT_OUT, active_dma_layer, -1, -1,
                 static_cast<uint32_t>(D_MODEL), 1, static_cast<uint32_t>(D_MODEL), g_overflow);
             if (dst_idx < 0) {
+                mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_DMA_CONCAT);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -1529,17 +1851,17 @@ void mmu_fsm(
                 : static_cast<uint32_t>(D_MODEL);
             zero_buf(scratch, D_MODEL);
             if (!region_read_bytes(regions[src_idx], 0, scratch, copy_bytes)) {
-                g_invalid = true;
+                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
             } else {
                 if (!region_write_part(dst_idx, 0, scratch, static_cast<uint32_t>(D_MODEL))) {
-                    g_invalid = true;
+                    mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 }
             }
 
             main_dma_done = true;
             if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
                 arb_release(active_dma_head);
-                head_dma_done[active_dma_head] = true;
+                head_ctx[active_dma_head].dma_done = true;
             }
             active_dma_valid = false;
             g_state = State::IDLE;
@@ -1548,7 +1870,7 @@ void mmu_fsm(
         case State::DMA_PREP: {
             if (!build_dma_piece_plan(active_dma_sel,
                                       active_piece_count, active_piece_bytes, active_piece_addr_off, active_piece_tag)) {
-                g_invalid = true;
+                mmu_set_invalid(ERR_MMU_UNSUPPORTED_REQ_DMA);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -1556,7 +1878,7 @@ void mmu_fsm(
             if (active_piece_count == 0) {
                 main_dma_done = true;
                 if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                    head_dma_done[active_dma_head] = true;
+                    head_ctx[active_dma_head].dma_done = true;
                     arb_release(active_dma_head);
                 }
                 active_dma_valid = false;
@@ -1566,7 +1888,7 @@ void mmu_fsm(
 
             if (!calc_dma_base_addr(ctrl_mem, active_dma_sel, active_dma_layer, active_dma_head, active_dma_tile,
                                     active_dma_addr_base)) {
-                g_invalid = true;
+                mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -1577,9 +1899,10 @@ void mmu_fsm(
         }
         case State::DMA_ISSUE: {
             if (!dma_ready) break;
-            const uint32_t sz = active_piece_bytes[active_piece_idx];
+            const int piece_idx = static_cast<int>(active_piece_idx);
+            const uint32_t sz = active_piece_bytes[piece_idx];
             if (sz > DMA_BUF_BYTES) {
-                g_overflow = true;
+                mmu_set_overflow(ERR_MMU_BAD_DMA_PLAN);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -1587,7 +1910,15 @@ void mmu_fsm(
             dma_start = true;
             dma_is_write = false;
             dma_len = sz;
-            dma_addr = active_dma_addr_base + active_piece_addr_off[active_piece_idx];
+            if (active_dma_sel == DMASEL_LN0 && piece_idx == 1) {
+                dma_addr = ctrl_mem.ln0_eps_base_addr
+                         + static_cast<uint32_t>(active_dma_layer) * ctrl_mem.ln0_eps_stride;
+            } else if (active_dma_sel == DMASEL_LN1 && piece_idx == 1) {
+                dma_addr = ctrl_mem.ln1_eps_base_addr
+                         + static_cast<uint32_t>(active_dma_layer) * ctrl_mem.ln1_eps_stride;
+            } else {
+                dma_addr = active_dma_addr_base + active_piece_addr_off[piece_idx];
+            }
             g_state = State::DMA_WAIT;
             break;
         }
@@ -1597,8 +1928,9 @@ void mmu_fsm(
             break;
         }
         case State::DMA_STORE: {
-            const uint32_t sz = active_piece_bytes[active_piece_idx];
-            const Tag tag = active_piece_tag[active_piece_idx];
+            const int piece_idx = static_cast<int>(active_piece_idx);
+            const uint32_t sz = active_piece_bytes[piece_idx];
+            const Tag tag = active_piece_tag[piece_idx];
             const int key_head = (tag == Tag::WQ_W || tag == Tag::WQ_B ||
                                   tag == Tag::WK_W || tag == Tag::WK_B ||
                                   tag == Tag::WV_W || tag == Tag::WV_B ||
@@ -1612,13 +1944,14 @@ void mmu_fsm(
             const int idx = get_or_create_region(tag, active_dma_layer, key_head, key_tile,
                                                  sz, 1, sz, g_overflow);
             if (idx < 0) {
+                mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_DMA_STORE);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
             }
 
             if (!region_write_part(idx, 0, dma_rx_buf, sz)) {
-                g_invalid = true;
+                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -1630,7 +1963,7 @@ void mmu_fsm(
             } else {
                 main_dma_done = true;
                 if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                    head_dma_done[active_dma_head] = true;
+                    head_ctx[active_dma_head].dma_done = true;
                     arb_release(active_dma_head);
                 }
                 active_dma_valid = false;
@@ -1643,20 +1976,20 @@ void mmu_fsm(
             const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
             const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
             if (src_idx < 0 || !region_ready(regions[src_idx])) {
-                g_invalid = true;
+                mmu_set_invalid(ERR_MMU_WRITEBACK_SRC);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
             }
             const uint32_t wb_len = static_cast<uint32_t>(D_HEADS);
             if (wb_len > DMA_BUF_BYTES) {
-                g_overflow = true;
+                mmu_set_overflow(ERR_MMU_BAD_DMA_PLAN);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
             }
             if (!region_read_bytes(regions[src_idx], 0, dma_tx_buf, wb_len)) {
-                g_invalid = true;
+                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -1680,9 +2013,14 @@ void mmu_fsm(
         }
         case State::DMA_WRITEBACK_WAIT: {
             if (!dma_done) break;
+            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
+            const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
+            if (src_idx >= 0 && should_consume(src_tag)) {
+                maybe_consume(src_idx);
+            }
             main_dma_done = true;
             if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                head_dma_done[active_dma_head] = true;
+                head_ctx[active_dma_head].dma_done = true;
                 arb_release(active_dma_head);
             }
             active_dma_valid = false;
@@ -1700,18 +2038,26 @@ void mmu_fsm(
                 active_compute_headed = q.headed;
                 active_compute_type = q.type;
                 unpack_compute(q.packed, active_compute_op, active_compute_layer, active_compute_head, active_compute_tile);
+                on_layer_transition(active_compute_layer);
                 if (active_compute_head < 0 && q.head < NUM_HEADS) {
                     active_compute_head = q.head;
                 }
+            }
+
+            // No-op guard: ignore placeholder/no-request compute entries.
+            if (active_compute_op == ComputeOp::CMP_NONE) {
+                active_compute_valid = false;
+                g_state = State::IDLE;
+                break;
             }
 
             // These ops are intentionally disabled in MMU compute path.
             // Reformat/concat is done by DMASEL_CONCAT internal DMA flow.
             if (is_disabled_compute_op(active_compute_op)) {
                 if (active_compute_headed && active_compute_head >= 0 && active_compute_head < NUM_HEADS) {
-                    head_compute_done[active_compute_head] = true;
+                    signal_head_compute_done(head_compute_ctx, active_compute_head);
                 } else {
-                    main_compute_done = true;
+                    mem_transfer_done = true;
                 }
                 active_compute_valid = false;
                 g_state = State::IDLE;
@@ -1729,7 +2075,9 @@ void mmu_fsm(
             } else if (active_compute_type == ComputeReqType::WRITE) {
                 g_state = State::COMPUTE_WRITE_PREP;
             } else {
-                g_invalid = true;
+                mmu_set_invalid(active_compute_headed
+                    ? ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED
+                    : ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED);
                 active_compute_valid = false;
                 g_state = State::IDLE;
             }
@@ -1746,6 +2094,9 @@ void mmu_fsm(
                                        in_buf, g_invalid);
             }
             if (!ok) {
+                if (g_error_code == ERR_NONE) {
+                    mmu_set_invalid(ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP);
+                }
                 active_compute_valid = false;
                 if (active_compute_headed) arb_release(active_compute_head);
                 g_state = State::IDLE;
@@ -1756,10 +2107,10 @@ void mmu_fsm(
         }
         case State::COMPUTE_READ_DONE: {
             if (active_compute_headed && active_compute_head >= 0 && active_compute_head < NUM_HEADS) {
-                head_compute_done[active_compute_head] = true;
+                signal_head_compute_done(head_compute_ctx, active_compute_head);
                 arb_release(active_compute_head);
             } else {
-                main_compute_done = true;
+                mem_transfer_done = true;
             }
             active_compute_valid = false;
             g_state = State::IDLE;
@@ -1768,26 +2119,28 @@ void mmu_fsm(
         case State::COMPUTE_WRITE_PREP: {
             const bool headed = active_compute_headed;
             const WriteSpec spec = build_write_spec(active_compute_op, headed, active_compute_head, active_compute_tile);
-            const uint8_t *src = nullptr;
-            if (headed) {
-                const int lane = head_to_lane(active_compute_head);
-                src = head_out_buf[lane];
-            } else {
-                src = out_buf;
-            }
 
             const int idx = get_or_create_region(
                 spec.tag, active_compute_layer, spec.key_head, spec.key_tile,
                 spec.total_bytes, spec.expected_parts, spec.part_bytes, g_overflow);
             if (idx < 0) {
+                mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE);
                 active_compute_valid = false;
                 if (active_compute_headed) arb_release(active_compute_head);
                 g_state = State::IDLE;
                 break;
             }
 
-            if (!region_write_part(idx, spec.part_idx, src, spec.part_bytes)) {
-                g_invalid = true;
+            bool write_ok = false;
+            if (headed) {
+                const int lane = head_to_lane(active_compute_head);
+                write_ok = region_write_part(idx, spec.part_idx, head_out_buf[lane], spec.part_bytes);
+            } else {
+                write_ok = region_write_part(idx, spec.part_idx, out_buf, spec.part_bytes);
+            }
+
+            if (!write_ok) {
+                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 active_compute_valid = false;
                 if (active_compute_headed) arb_release(active_compute_head);
                 g_state = State::IDLE;
@@ -1799,10 +2152,10 @@ void mmu_fsm(
         }
         case State::COMPUTE_WRITE_DONE: {
             if (active_compute_headed && active_compute_head >= 0 && active_compute_head < NUM_HEADS) {
-                head_compute_done[active_compute_head] = true;
+                signal_head_compute_done(head_compute_ctx, active_compute_head);
                 arb_release(active_compute_head);
             } else {
-                main_compute_done = true;
+                mem_transfer_done = true;
             }
             active_compute_valid = false;
             g_state = State::IDLE;
@@ -1816,27 +2169,7 @@ void mmu_fsm(
     status.state = g_state;
     status.overflow = g_overflow;
     status.invalid = g_invalid;
+    status.error_code = g_error_code;
     status.region_count = region_count;
 
-    if (main_compute_done) {
-        mem_transfer_done = true;
-    }
-    for (int h = 0; h < NUM_HEADS; ++h) {
-#pragma HLS UNROLL
-        if (head_dma_done[h]) {
-            head_ctx[h].dma_done = true;
-        }
-    }
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
-        ComputeOp op = ComputeOp::CMP_NONE;
-        int layer = 0, head = -1, tile = -1;
-        unpack_compute(head_compute_ctx[lane].mem_op, op, layer, head, tile);
-        if (head < 0 || head >= NUM_HEADS) {
-            unpack_compute(head_compute_ctx[lane].compute_instruction, op, layer, head, tile);
-        }
-        if (head >= 0 && head < NUM_HEADS && head_compute_done[head]) {
-            head_compute_ctx[lane].mem_transfer_done = true;
-        }
-    }
 }

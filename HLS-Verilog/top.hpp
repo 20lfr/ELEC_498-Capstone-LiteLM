@@ -7,6 +7,7 @@
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
 #include "Transformer_logic/src-hls/compute_controller.hpp"
 #include "Transformer_logic/src-hls/headed_compute_controller.hpp"
+#include "MMU/mmu_luka.hpp"
 
 constexpr int TOP_DMA_BUF_BYTES = 65536;
 
@@ -15,10 +16,13 @@ void transformer_top(
     bool axis_in_valid,                 // [INPUT]  s_axis_in_tvalid
     bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
+    bool &axis_in_start,                // [OUTPUT] Pulse to commit constructed stream-in payload into MMU
 
     bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
     bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
     bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
+    const uint8_t stream_in_buf[STREAM_IN_BUF_BYTES],   // [INPUT] Stream-in payload buffer (constructed token)
+    uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES],        // [OUTPUT] Stream-out payload buffer (MMU produced)
     ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
     StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
     bool &irq_ps,                       // [OUTPUT] Interrupt signal
@@ -76,6 +80,8 @@ void transformer_top(
     bool     &dbg_wl_ready,
     uint32_t &dbg_wl_instruction,
     bool     &dbg_wl_start,
+    bool     &dbg_wl_accept,
+    bool     &dbg_dma_done,
     bool     &dbg_mem_transfer_done,
     bool     &dbg_mem_read_request,
     bool     &dbg_mem_write_request,
@@ -85,5 +91,7 @@ void transformer_top(
     uint8_t  dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t  dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
 
+    bool &dbg_error,
+    uint32_t &dbg_error_code,
     bool &dbg_done
 );

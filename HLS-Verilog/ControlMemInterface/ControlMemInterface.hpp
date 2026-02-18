@@ -13,7 +13,12 @@ public:
 
     // 1. Process Inputs (PS -> PL)
     // Call this at the start
-    void check_errors(const ControlMemSpace &ctrl_mem, bool scheduler_error, bool compute_error) {
+    void check_errors(const ControlMemSpace &ctrl_mem,
+                      bool scheduler_error,
+                      bool compute_error,
+                      bool mmu_invalid,
+                      bool mmu_overflow,
+                      uint32_t mmu_error_code) {
         #pragma HLS INLINE
 
         const bool irq_error_en = (((ctrl_mem.irq_mask & 2u) >> 1) & 0x1u) != 0;
@@ -63,6 +68,27 @@ public:
                 local_status.irq_status |= IRQ_ERROR_BIT;
                 local_status.status = STATUS_ERROR;
                 local_status.error_code |= ERR_COMPUTE_ERROR;
+            }
+        }
+        if(mmu_invalid){
+            if (irq_error_en) {
+                local_status.irq_status |= IRQ_ERROR_BIT;
+                local_status.status = STATUS_ERROR;
+                local_status.error_code |= ERR_MMU_INVALID;
+            }
+        }
+        if(mmu_overflow){
+            if (irq_error_en) {
+                local_status.irq_status |= IRQ_ERROR_BIT;
+                local_status.status = STATUS_ERROR;
+                local_status.error_code |= ERR_MMU_OVERFLOW;
+            }
+        }
+        if (mmu_error_code != ERR_NONE) {
+            if (irq_error_en) {
+                local_status.irq_status |= IRQ_ERROR_BIT;
+                local_status.status = STATUS_ERROR;
+                local_status.error_code |= mmu_error_code;
             }
         }
     

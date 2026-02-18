@@ -249,22 +249,6 @@ void att_value_expected(
     }
 }
 
-void dump_dbg_head_vec(int lane, const int8_t vec[HEAD_VECTOR_MAX]) {
-    std::printf("DBG L%d head_vec[%d]:", lane, HEAD_VECTOR_MAX);
-    for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
-        std::printf(" %d", static_cast<int>(vec[i]));
-    }
-    std::printf("\n");
-}
-
-void dump_dbg_head_out(int lane, const int32_t vec[HEAD_ACCUM_MAX]) {
-    std::printf("DBG L%d head_out[%d]:", lane, HEAD_ACCUM_MAX);
-    for (int i = 0; i < HEAD_ACCUM_MAX; ++i) {
-        std::printf(" %d", static_cast<int>(vec[i]));
-    }
-    std::printf("\n");
-}
-
 } // namespace
 
 int main() {
@@ -277,8 +261,6 @@ int main() {
     ComputeHeadCtx ctx[HEADS_PARALLEL] = {};
     uint8_t in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES] = {};
     uint8_t out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES] = {};
-    int8_t dbg_head_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX] = {};
-    int32_t dbg_head_out[HEADS_PARALLEL][HEAD_ACCUM_MAX] = {};
     bool error = false;
 
     int8_t q_act[HEADS_PARALLEL][D_MODEL] = {};
@@ -665,7 +647,7 @@ int main() {
                 mem_pending[lane] = MemPending::NONE;
             }
             state = TbState::RESET;
-            drive_headed_compute_controller(ctx, false, in_buf, out_buf, dbg_head_vec, dbg_head_out, error);
+            drive_headed_compute_controller(ctx, false, in_buf, out_buf, error);
             continue;
         }
 
@@ -710,7 +692,7 @@ int main() {
                 break;
         }
 
-        drive_headed_compute_controller(ctx, reset_n, in_buf, out_buf, dbg_head_vec, dbg_head_out, error);
+        drive_headed_compute_controller(ctx, reset_n, in_buf, out_buf, error);
 
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
             if (!mem_busy[lane]) {
@@ -765,8 +747,6 @@ int main() {
             if (all_done) {
                 const ComputeOp op = steps[step_idx].op;
                 for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-                    dump_dbg_head_vec(lane, dbg_head_vec[lane]);
-                    dump_dbg_head_out(lane, dbg_head_out[lane]);
                     switch (op) {
                         case ComputeOp::CMP_Q: {
                             for (int h = 0; h < D_HEADS; ++h) {

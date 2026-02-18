@@ -240,8 +240,6 @@ void REQUANT_D_HEADS_int32_to_int8(
     int8_t y8[D_HEADS]      // output vector
 ) {
 #pragma HLS INLINE
-#pragma HLS ARRAY_PARTITION variable=x32 cyclic factor=D_HEADS dim=1
-#pragma HLS ARRAY_PARTITION variable=y8 cyclic factor=D_HEADS dim=1
 
     for (int t = 0; t < D_HEADS; ++t) {
 #pragma HLS UNROLL
@@ -408,9 +406,6 @@ static void headed_compute_controller_lane(
             if (ctx.req.op == ComputeOp::CMP_Q ||
                 ctx.req.op == ComputeOp::CMP_K ||
                 ctx.req.op == ComputeOp::CMP_V ||
-                ctx.req.op == ComputeOp::CMP_K_REQUANT ||
-                ctx.req.op == ComputeOp::CMP_V_REQUANT ||
-                ctx.req.op == ComputeOp::CMP_REQUANT_Q ||
                 ctx.req.op == ComputeOp::CMP_ATT_SCORES ||
                 ctx.req.op == ComputeOp::CMP_VALUE_SCALE ||
                 ctx.req.op == ComputeOp::CMP_SOFTMAX ||
@@ -514,9 +509,6 @@ static void headed_compute_controller_lane(
                     }
                     break;
                 }
-                case ComputeOp::CMP_K_REQUANT:      // Qacc   -> Q0.7    [After K]
-                case ComputeOp::CMP_V_REQUANT:      // Qacc   -> Q0.7    [After V]
-                case ComputeOp::CMP_REQUANT_Q:      // Qacc   -> Q0.7    [After Q]
                 case ComputeOp::CMP_HEAD_REQUANT:{  // Qacc   -> Q0.7    [After Attention Values]
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
@@ -531,18 +523,6 @@ static void headed_compute_controller_lane(
 
                     // M and N mux
                     switch (ctx.req.op) {
-                        case ComputeOp::CMP_K_REQUANT:
-                            M = requant_params::REQUANT_K_M_L[layer];
-                            n = requant_params::REQUANT_K_N_L[layer];
-                            break;
-                        case ComputeOp::CMP_V_REQUANT:
-                            M = requant_params::REQUANT_V_M_L[layer];
-                            n = requant_params::REQUANT_V_N_L[layer];
-                            break;
-                        case ComputeOp::CMP_REQUANT_Q:
-                            M = requant_params::REQUANT_Q_M_L[layer];
-                            n = requant_params::REQUANT_Q_N_L[layer];
-                            break;
                         case ComputeOp::CMP_HEAD_REQUANT:
                             M = requant_params::REQUANT_HEAD_M_L[layer];
                             n = requant_params::REQUANT_HEAD_N_L[layer];
@@ -725,8 +705,6 @@ void drive_headed_compute_controller(
     bool        reset_n,
     const uint8_t in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
-    int8_t        dbg_head_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX],
-    int32_t       dbg_head_out[HEADS_PARALLEL][HEAD_ACCUM_MAX],
     bool        &error
 ) {
 #pragma HLS INLINE off
@@ -823,13 +801,6 @@ void drive_headed_compute_controller(
             head_vec_att[lane],
             head_mat_att[lane],
             head_out_att[lane]);
-
-        for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
-            dbg_head_vec[lane][i] = head_vec[lane][i];
-        }
-        for (int i = 0; i < HEAD_ACCUM_MAX; ++i) {
-            dbg_head_out[lane][i] = head_out[lane][i];
-        }
 
         if (lane_error) {
             error = true;

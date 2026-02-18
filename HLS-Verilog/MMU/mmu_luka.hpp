@@ -48,8 +48,13 @@ enum class Tag : uint8_t {
     W2_W, W2_B,
     CTX_K,
     CTX_V,
+    LN0_GAMMA,
+    LN0_EPS,
+    LN1_GAMMA,
+    LN1_EPS,
 
     // Main compute outputs
+    STREAM_IN_TOKEN,
     LN0_OUT,
     REQUANT1_OUT,
     CONCAT_OUT,
@@ -105,6 +110,7 @@ struct Status {
     State state = State::IDLE;
     bool overflow = false;
     bool invalid = false;
+    uint32_t error_code = ERR_NONE;
     uint16_t region_count = 0;
 };
 
@@ -128,11 +134,21 @@ void mmu_fsm(
     bool &dma_is_write,                 // [OUTPUT] DMA direction (1 = write to DDR)
 
     // ------------------------------------------------------------
+    // Stream ingress/egress buffers controlled by scheduler pulses
+    // ------------------------------------------------------------
+    bool axis_in_ready,                 // [INPUT] Scheduler AXIS ingress ready flag
+    bool axis_in_start,                 // [INPUT] Scheduler pulse: stream-in payload complete
+    bool stream_start,                  // [INPUT] Scheduler pulse: begin stream-out payload
+    const uint8_t stream_in_buf[STREAM_IN_BUF_BYTES], // [INPUT] Constructed stream-in payload
+    uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES],     // [OUTPUT] Stream-out payload produced by MMU
+
+    // ------------------------------------------------------------
     // Main scheduler DMA requests
     // ------------------------------------------------------------
     bool mmu_dma_req_start,             // [INPUT] Main scheduler DMA request valid
     uint32_t mmu_dma_instruction,       // [INPUT] Packed DMA request [sel|layer|head|tile]
     bool &mmu_req_ready,                // [OUTPUT] MMU ready for new DMA request
+    bool &main_wl_accept,               // [OUTPUT] Main scheduler wl request accepted/captured
     bool &main_dma_done,                // [OUTPUT] Main scheduler DMA completion pulse
 
     // ------------------------------------------------------------

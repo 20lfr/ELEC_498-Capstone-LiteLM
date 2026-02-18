@@ -550,13 +550,13 @@ module top_module_hls_tb;
   localparam int CMP_LN0        = 8'h01;
   localparam int CMP_REQUANT1   = 8'h02;
   localparam int CMP_OUT_PROJ   = 8'h0F;
-  localparam int CMP_RESID0     = 8'h10;
+  localparam int CMP_RESID1     = 8'h10;
   localparam int CMP_REQUANT2   = 8'h11;
   localparam int CMP_FFN_W1     = 8'h12;
   localparam int CMP_FFN_ACT    = 8'h13;
   localparam int CMP_FFN_W2     = 8'h14;
   localparam int CMP_REQUANT3   = 8'h15;
-  localparam int CMP_RESID1     = 8'h16;
+  localparam int CMP_RESID2     = 8'h16;
   localparam int CMP_LN1        = 8'h17;
   localparam int CMP_REQUANT4   = 8'h18;
   localparam int CMP_FINAL_NORM = 8'h19;
@@ -2660,13 +2660,13 @@ module top_module_hls_tb;
                   write_i32_to_in_buf(REQUANT_X_OFFSET + (j * 4), rq4_x[j]);
                 end
               end
-              CMP_RESID0: begin
+              CMP_RESID1: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
                   in_buf_mem[RESID_X_OFFSET + j] = resid0_x[j];
                   in_buf_mem[RESID_R_OFFSET + j] = resid0_r[j];
                 end
               end
-              CMP_RESID1: begin
+              CMP_RESID2: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
                   in_buf_mem[RESID_X_OFFSET + j] = resid1_x[j];
                   in_buf_mem[RESID_R_OFFSET + j] = resid1_r[j];
@@ -2775,12 +2775,12 @@ module top_module_hls_tb;
                   rq4_out[t] <= out_buf_mem[t];
                 end
               end
-              CMP_RESID0: begin
+              CMP_RESID1: begin
                 for (t = 0; t < D_MODEL; t = t + 1) begin
                   resid0_out[t] <= out_buf_mem[t];
                 end
               end
-              CMP_RESID1: begin
+              CMP_RESID2: begin
                 for (t = 0; t < D_MODEL; t = t + 1) begin
                   resid1_out[t] <= out_buf_mem[t];
                 end

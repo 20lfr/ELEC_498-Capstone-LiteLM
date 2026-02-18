@@ -37,10 +37,10 @@ void MAC_ARCHITECTURE(
         
         // Perform the actual computation
         for (int out = 0; out < ACCUM_MAX; ++out) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
+#pragma HLS UNROLL
             int32_t acc = bias[out];
             for (int i = 0; i < VECTOR_MAX; ++i) {
-#pragma HLS UNROLL factor=MAC_VEC_UNROLL
+#pragma HLS UNROLL
                 const int4_t w = matrixB[out * VECTOR_MAX + i];
                 acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
             }
@@ -134,11 +134,12 @@ void REQUANT_D_TILE_int32_to_int8(
 
 void RMS_NORM(
     const int8_t x[D_MODEL],        // input vector
-    const int32_t gamma[D_MODEL],   // scale parameter
-    const int32_t epsilon,          // divide-by-zero guard
+    const int32_t gamma[D_MODEL],   // Q19.13 scale parameter (raw bits)
+    const int32_t epsilon,          // Q19.13 epsilon (raw bits)
     int32_t y[D_MODEL]              // output vector
 ) {
 #pragma HLS INLINE off
+    const ap_fixed<32, 19> q19_13_scale = ap_fixed<32, 19>(8192);
 
     int32_t square = 0;
 
@@ -150,7 +151,8 @@ void RMS_NORM(
     if (mean_square < 0) {
         mean_square = 0;
     }
-    ap_fixed<32, 19> v = mean_square + ap_fixed<32, 19>(epsilon);
+    // Convert epsilon from raw Q19.13 bits to numeric fixed-point value.
+    ap_fixed<32, 19> v = mean_square + (ap_fixed<32, 19>(epsilon) / q19_13_scale);
     ap_fixed<32, 19> inv_rms = ap_fixed<32, 19>(1) / hls::sqrt(v); //  NEED TO FIX THIS!!!
     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS UNROLL          
@@ -161,8 +163,9 @@ void RMS_NORM(
         //             (float)normalized,
         //             (unsigned)normalized_bits,
         //             (int)normalized_bits);
-
-        ap_fixed<32, 19> scaled = normalized * ap_fixed<32, 19>(gamma[i]);
+        // Convert gamma from raw Q19.13 bits to numeric fixed-point value.
+        ap_fixed<32, 19> gamma_fx = ap_fixed<32, 19>(gamma[i]) / q19_13_scale;
+        ap_fixed<32, 19> scaled = normalized * gamma_fx;
         ap_int<32> scaled_bits = scaled.range(31, 0); 
         // std::printf("ln_cycle[%d] scaled: %f 0x%08x (signed=%d)\n",
         //             i,
@@ -534,17 +537,13 @@ void compute_controller(
             // This state is now merged into IDLE.
             // Check from proper op request
             if (req.op == ComputeOp::CMP_OUT_PROJ || 
-                req.op == ComputeOp::CMP_REQUANT1 || 
-                req.op == ComputeOp::CMP_RESID0 || 
+                req.op == ComputeOp::CMP_RESID1 || 
                 req.op == ComputeOp::CMP_LN0 || 
-                req.op == ComputeOp::CMP_REQUANT2 || 
                 req.op == ComputeOp::CMP_FFN_W1 || 
                 req.op == ComputeOp::CMP_FFN_ACT || 
                 req.op == ComputeOp::CMP_FFN_W2 || 
-                req.op == ComputeOp::CMP_REQUANT3 || 
-                req.op == ComputeOp::CMP_RESID1 || 
+                req.op == ComputeOp::CMP_RESID2 || 
                 req.op == ComputeOp::CMP_LN1 || 
-                req.op == ComputeOp::CMP_REQUANT4 || 
                 req.op == ComputeOp::CMP_DEQUANT || 
                 req.op == ComputeOp::CMP_FINAL_NORM || 
                 req.op == ComputeOp::CMP_LOGITS) {
@@ -623,58 +622,8 @@ void compute_controller(
                     }
                     break;
                 }
-                case ComputeOp::CMP_REQUANT1:       // Q19.13 -> Q0.7    [After RMSNorm0]
-                case ComputeOp::CMP_REQUANT2:       // Qacc   -> Q0.7    [After OutputProj]
-                case ComputeOp::CMP_REQUANT3:       // Q19.13 -> Q0.7    [After RMSNorm1]
-                case ComputeOp::CMP_REQUANT4: {     // Qacc   -> Q0.7    [After FFN final stage] 
-                    for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
-                        x32[i] = compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4));
-                    }
-                    int32_t M = 1;
-                    int32_t n = 0;
-                    int layer = static_cast<int>(req.layer_idx);
-                    if (layer < 0 || layer >= MODEL_LAYERS) {
-                        layer = 0;
-                    }
-
-                    // M and N mux
-                    switch (req.op) {
-                        case ComputeOp::CMP_REQUANT1:
-                            M = requant_params::REQUANT1_M_L[layer];
-                            n = requant_params::REQUANT1_N_L[layer];
-                            break;
-                        case ComputeOp::CMP_REQUANT2:
-                            M = requant_params::REQUANT2_M_L[layer];
-                            n = requant_params::REQUANT2_N_L[layer];
-                            break;
-                        case ComputeOp::CMP_REQUANT3:
-                            M = requant_params::REQUANT3_M_L[layer];
-                            n = requant_params::REQUANT3_N_L[layer];
-                            break;
-                        case ComputeOp::CMP_REQUANT4:
-                            M = requant_params::REQUANT4_M_L[layer];
-                            n = requant_params::REQUANT4_N_L[layer];
-                            break;
-                        default:
-                            break;
-                    }
-                    REQUANT_D_MODEL_int32_to_int8(
-                        x32,
-                        M,
-                        n,
-                        y8
-                    );
-                    for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
-                        compute_buf::write_i8(out_buf, compute_buf::INRequantLayout::X + i, y8[i]);
-                        // compute_buf::write_i32(out_buf, compute_buf::INRequantLayout::X + i, x32[i]);
-                    }
-                    next_state = ComputeState::MEM_WRITEBACK;
-                    break;
-                }
-                case ComputeOp::CMP_RESID0:         // Q0.7   -> Q0.7    [After OutputProj] 
-                case ComputeOp::CMP_RESID1:{        // Q0.7   -> Q0.7    [After FFN] 
+                case ComputeOp::CMP_RESID1:         // Q0.7   -> Q0.7    [After OutputProj] 
+                case ComputeOp::CMP_RESID2:{        // Q0.7   -> Q0.7    [After FFN] 
                     for (int i = 0; i < D_MODEL; ++i) {
 #pragma HLS PIPELINE II=1
                         x_act[i] = static_cast<int8_t>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i));
