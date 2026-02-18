@@ -21,13 +21,12 @@ Logger *g_logger = nullptr;
 ErrorHandler *g_err = nullptr;
 SystemConfig cfg;
 PLInterface *g_pl = nullptr;
-bool g_inited = false;
 
 // ─── Helpers ───────────────────────────────────────────────────
 
 static void print_status() {
-    if (!g_pl) {
-        printf("  (not initialised)\n");
+    if (!g_pl || !g_pl->isInitialized()) {
+        printf("  ERROR: call 'init' first\n");
         return;
     }
     printf("  AP_CTRL:    0x%08X\n", g_pl->readReg(PLReg::AXIL_AP_CTRL));
@@ -41,9 +40,10 @@ static void print_status() {
 
 /** Issue a single FSM command, poll for AXI_DONE or INFER_DONE, clear IRQs.
  *  For fire-and-forget commands (INCR_*), set wait_irq=false. */
-static bool send_cmd(uint32_t cmd_bit, const char *name, bool wait_irq = true,
+static bool send_cmd(uint32_t cmd_bit, const char *name,
+                     uint32_t expected_status, bool wait_irq = true,
                      uint32_t timeout_ms = 5000) {
-    if (!g_inited) {
+    if (!g_pl || !g_pl->isInitialized()) {
         printf("  ERROR: call 'init' first\n");
         return false;
     }
@@ -52,13 +52,21 @@ static bool send_cmd(uint32_t cmd_bit, const char *name, bool wait_irq = true,
     g_pl->writeReg(PLReg::CONTROL, PLRegBits::CTRL_RESETN_BIT |
                                        PLRegBits::CTRL_START_BIT | cmd_bit);
 
+    // Verify the IP entered the expected FSM state
+    usleep(500);
+    uint32_t st = g_pl->readReg(PLReg::STATUS);
+    uint32_t expect = PLRegBits::STAT_BUSY_BIT | expected_status;
+    if ((st & expect) == expect) {
+        printf("  [%s] state OK (status=0x%04X)\n", name, st);
+    } else {
+        printf("  [%s] state MISMATCH: got 0x%04X, expected 0x%04X\n", name, st,
+               expect);
+    }
+
     bool result = false;
 
     if (!wait_irq) {
-        // Fire-and-forget: read status once
-        usleep(1000);
-        uint32_t st = g_pl->readReg(PLReg::STATUS);
-        printf("  [%s] OK  (status=0x%02X, no IRQ expected)\n", name, st);
+        // Fire-and-forget: state check above is sufficient
         result = true;
     } else {
         // Poll for completion
@@ -80,13 +88,14 @@ static bool send_cmd(uint32_t cmd_bit, const char *name, bool wait_irq = true,
             }
             usleep(5000);
         }
-        if (!result) printf("  [%s] TIMEOUT\n", name);
+        if (!result)
+            printf("  [%s] TIMEOUT\n", name);
     }
 
-    // Cleanup: clear command bits so the IP returns to IDLE on next auto-restart.
-    // This mirrors the testbench's cleanup cycle.
-    g_pl->writeReg(PLReg::CONTROL, PLRegBits::CTRL_RESETN_BIT |
-                                       PLRegBits::CTRL_START_BIT);
+    // Cleanup: clear command bits so the IP returns to IDLE on next
+    // auto-restart.
+    g_pl->writeReg(PLReg::CONTROL,
+                   PLRegBits::CTRL_RESETN_BIT | PLRegBits::CTRL_START_BIT);
 
     return result;
 }
@@ -94,7 +103,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name, bool wait_irq = true,
 // ─── Command Implementations ──────────────────────────────────
 
 static bool cmd_init(bool mock) {
-    if (g_inited) {
+    if (g_pl && g_pl->isInitialized()) {
         printf("  Already initialised. Use 'reset' to re-init.\n");
         return true;
     }
@@ -158,17 +167,17 @@ static bool cmd_init(bool mock) {
 
     g_pl->endConfig();
 
-    g_inited = true;
     printf("  Initialised OK\n");
     print_status();
     return true;
 }
 
 static bool cmd_reset() {
-    if (!g_pl) {
+    if (!g_pl || !g_pl->isInitialized()) {
         printf("  ERROR: call 'init' first\n");
         return false;
     }
+
     g_pl->reset();
     printf("  Reset OK\n");
     print_status();
@@ -186,7 +195,8 @@ static bool cmd_weights() {
     printf("  DDR weights seeded (%u bytes at offset 0x%X)\n", sz,
            cfg.memory.wq_offset);
 
-    return send_cmd(PLRegBits::CTRL_WEIGHTS_GET_BIT, "WEIGHTS_GET");
+    return send_cmd(PLRegBits::CTRL_WEIGHTS_GET_BIT, "WEIGHTS_GET",
+                    PLRegBits::STAT_WEIGHTS_GET_BIT);
 }
 
 static bool cmd_kcache_read() {
@@ -198,7 +208,8 @@ static bool cmd_kcache_read() {
     delete[] pat;
     printf("  DDR K-cache seeded (0xBB x %u bytes)\n", sz);
 
-    return send_cmd(PLRegBits::CTRL_KCACHE_GET_BIT, "KCACHE_GET");
+    return send_cmd(PLRegBits::CTRL_KCACHE_GET_BIT, "KCACHE_GET",
+                    PLRegBits::STAT_KCACHE_GET_BIT);
 }
 
 static bool cmd_vcache_read() {
@@ -210,11 +221,13 @@ static bool cmd_vcache_read() {
     delete[] pat;
     printf("  DDR V-cache seeded (0xCC x %u bytes)\n", sz);
 
-    return send_cmd(PLRegBits::CTRL_VCACHE_GET_BIT, "VCACHE_GET");
+    return send_cmd(PLRegBits::CTRL_VCACHE_GET_BIT, "VCACHE_GET",
+                    PLRegBits::STAT_VCACHE_GET_BIT);
 }
 
 static bool cmd_kcache_write() {
-    bool ok = send_cmd(PLRegBits::CTRL_KCACHE_SEND_BIT, "KCACHE_SEND");
+    bool ok = send_cmd(PLRegBits::CTRL_KCACHE_SEND_BIT, "KCACHE_SEND",
+                       PLRegBits::STAT_KCACHE_SEND_BIT);
     if (ok) {
         // Read back a few words to verify
         uint32_t peek[4] = {0};
@@ -227,7 +240,8 @@ static bool cmd_kcache_write() {
 }
 
 static bool cmd_vcache_write() {
-    bool ok = send_cmd(PLRegBits::CTRL_VCACHE_SEND_BIT, "VCACHE_SEND");
+    bool ok = send_cmd(PLRegBits::CTRL_VCACHE_SEND_BIT, "VCACHE_SEND",
+                       PLRegBits::STAT_VCACHE_SEND_BIT);
     if (ok) {
         uint32_t peek[4] = {0};
         g_pl->readDDR(DmaBufType::KV_CACHE, cfg.memory.v_cache_offset, peek,
@@ -253,7 +267,8 @@ static bool cmd_stream_in() {
         return false;
     }
 
-    bool ok = send_cmd(PLRegBits::CTRL_STREAM_IN_BIT, "STREAM_IN");
+    bool ok = send_cmd(PLRegBits::CTRL_STREAM_IN_BIT, "STREAM_IN",
+                       PLRegBits::STAT_STREAM_IN_BIT);
 
     if (!g_pl->streamWaitSend(5000))
         printf("  Stream send DMA timeout: %s\n",
@@ -263,7 +278,8 @@ static bool cmd_stream_in() {
 }
 
 static bool cmd_compute() {
-    return send_cmd(PLRegBits::CTRL_COMPUTE_BIT, "COMPUTE");
+    return send_cmd(PLRegBits::CTRL_COMPUTE_BIT, "COMPUTE",
+                    PLRegBits::STAT_COMPUTE_BIT);
 }
 
 static bool cmd_stream_out() {
@@ -275,7 +291,8 @@ static bool cmd_stream_out() {
         return false;
     }
 
-    bool ok = send_cmd(PLRegBits::CTRL_STREAM_OUT_BIT, "STREAM_OUT");
+    bool ok = send_cmd(PLRegBits::CTRL_STREAM_OUT_BIT, "STREAM_OUT",
+                       PLRegBits::STAT_STREAM_OUT_BIT);
 
     if (!g_pl->streamWaitRecv(cfg.memory.output_offset, g_recv_data,
                               Phi3Mini4K::d_model, 5000)) {
@@ -293,13 +310,13 @@ static bool cmd_stream_out() {
     return ok;
 }
 
-static bool cmd_incr(const char *name, uint32_t bit) {
-    return send_cmd(bit, name, /*wait_irq=*/false);
+static bool cmd_incr(const char *name, uint32_t ctrl_bit, uint32_t stat_bit) {
+    return send_cmd(ctrl_bit, name, stat_bit, /*wait_irq=*/false);
 }
 
 static bool cmd_run() {
     printf("═══ Phase 1: Token → Weights → Compute → Stream Out ═══\n");
-    if (!g_inited) {
+    if (!g_pl || !g_pl->isInitialized()) {
         printf("  ERROR: call 'init' first\n");
         return false;
     }
@@ -425,11 +442,14 @@ int main(int argc, char *argv[]) {
         else if (cmd == "stream_out")
             cmd_stream_out();
         else if (cmd == "incr_layer")
-            cmd_incr("INCR_LAYER", PLRegBits::CTRL_INCR_LAYER_BIT);
+            cmd_incr("INCR_LAYER", PLRegBits::CTRL_INCR_LAYER_BIT,
+                     PLRegBits::STAT_INCR_LAYER_BIT);
         else if (cmd == "incr_head")
-            cmd_incr("INCR_HEAD", PLRegBits::CTRL_INCR_HEAD_BIT);
+            cmd_incr("INCR_HEAD", PLRegBits::CTRL_INCR_HEAD_BIT,
+                     PLRegBits::STAT_INCR_HEAD_BIT);
         else if (cmd == "incr_matrix")
-            cmd_incr("INCR_MATRIX", PLRegBits::CTRL_INCR_MATRIX_BIT);
+            cmd_incr("INCR_MATRIX", PLRegBits::CTRL_INCR_MATRIX_BIT,
+                     PLRegBits::STAT_INCR_MATRIX_BIT);
         else if (cmd == "run")
             cmd_run();
         else if (cmd == "help")
