@@ -1,8 +1,10 @@
 #include <cstdio>
 #include <cstdint>
 #include <cstring>
+#include <cerrno>
 #include <vector>
 #include <string>
+#include <sys/stat.h>
 
 #include "mmu_luka.hpp"
 
@@ -125,6 +127,30 @@ static void dump_bytes(const char *label, const uint8_t *buf, int n) {
     }
 }
 
+static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint32_t byte_idx) {
+    const uint32_t word = buf[byte_idx >> 2];
+    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    return static_cast<uint8_t>((word >> shift) & 0xFFu);
+}
+
+static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
+    const uint32_t word_idx = byte_idx >> 2;
+    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    uint32_t word = buf[word_idx];
+    word &= ~(0xFFu << shift);
+    word |= (static_cast<uint32_t>(value) << shift);
+    buf[word_idx] = word;
+}
+
+static void dump_dma_bytes(const char *label, const uint32_t *buf, int n) {
+    std::printf("%s", label);
+    for (int i = 0; i < n; ++i) {
+        std::printf("%02x%s",
+                    static_cast<unsigned>(dma_word_get_byte(buf, static_cast<uint32_t>(i))),
+                    (i + 1 == n) ? "\n" : " ");
+    }
+}
+
 static void prep_main_out(uint8_t *out_buf, int step_id) {
     for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
         out_buf[i] = static_cast<uint8_t>((0x30 + step_id + i) & 0xFF);
@@ -207,9 +233,149 @@ static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
     std::printf("  final_norm_eps_base_addr=0x%llx\n", static_cast<unsigned long long>(ctrl.final_norm_eps_base_addr));
 }
 
+static void print_error_code_bits(uint32_t err) {
+    if (err == ERR_NONE) {
+        std::printf("ERR_NONE");
+        return;
+    }
+
+    bool first = true;
+    auto emit = [&](const char *name) {
+        if (!first) {
+            std::printf("|");
+        }
+        std::printf("%s", name);
+        first = false;
+    };
+
+    if (err & ERR_DMA_ALIGNMENT) emit("ERR_DMA_ALIGNMENT");
+    if (err & ERR_DMA_ZERO_LEN) emit("ERR_DMA_ZERO_LEN");
+    if (err & ERR_DMA_ZERO_STRIDE) emit("ERR_DMA_ZERO_STRIDE");
+    if (err & ERR_SCHEDULER_ERROR) emit("ERR_SCHEDULER_ERROR");
+    if (err & ERR_COMPUTE_ERROR) emit("ERR_COMPUTE_ERROR");
+    if (err & ERR_MMU_INVALID) emit("ERR_MMU_INVALID");
+    if (err & ERR_MMU_OVERFLOW) emit("ERR_MMU_OVERFLOW");
+    if (err & ERR_MMU_UNSUPPORTED_REQ_DMA) emit("ERR_MMU_UNSUPPORTED_REQ_DMA");
+    if (err & ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED) emit("ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED");
+    if (err & ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED) emit("ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED");
+    if (err & ERR_MMU_BAD_DMA_PLAN) emit("ERR_MMU_BAD_DMA_PLAN");
+    if (err & ERR_MMU_BAD_DMA_ADDR) emit("ERR_MMU_BAD_DMA_ADDR");
+    if (err & ERR_MMU_REGION_ACCESS) emit("ERR_MMU_REGION_ACCESS");
+    if (err & ERR_MMU_CONCAT_SOURCE) emit("ERR_MMU_CONCAT_SOURCE");
+    if (err & ERR_MMU_WRITEBACK_SRC) emit("ERR_MMU_WRITEBACK_SRC");
+    if (err & ERR_MMU_QUEUE_OVERFLOW) emit("ERR_MMU_QUEUE_OVERFLOW");
+    if (err & ERR_MMU_REGION_OVERFLOW) emit("ERR_MMU_REGION_OVERFLOW");
+    if (err & ERR_MMU_STREAM_OUTPUT_MISSING) emit("ERR_MMU_STREAM_OUTPUT_MISSING");
+    if (err & ERR_MMU_MISSING_REGION_FULL_READ) emit("ERR_MMU_MISSING_REGION_FULL_READ");
+    if (err & ERR_MMU_MISSING_REGION_PARTIAL_READ) emit("ERR_MMU_MISSING_REGION_PARTIAL_READ");
+    if (err & ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP) emit("ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP");
+    if (err & ERR_MMU_REGION_OVERFLOW_STREAM_IN) emit("ERR_MMU_REGION_OVERFLOW_STREAM_IN");
+    if (err & ERR_MMU_REGION_OVERFLOW_DMA_CONCAT) emit("ERR_MMU_REGION_OVERFLOW_DMA_CONCAT");
+    if (err & ERR_MMU_REGION_OVERFLOW_DMA_STORE) emit("ERR_MMU_REGION_OVERFLOW_DMA_STORE");
+    if (err & ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE) emit("ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE");
+    if (err & ERR_MMU_REGION_TABLE_FULL) emit("ERR_MMU_REGION_TABLE_FULL");
+    if (err & ERR_MMU_URAM_CHUNK_ALLOC_FAIL) emit("ERR_MMU_URAM_CHUNK_ALLOC_FAIL");
+    if (err & ERR_MMU_REGION_TOO_LARGE) emit("ERR_MMU_REGION_TOO_LARGE");
+}
+
+static const char *mmu_subcode_name(uint32_t subcode) {
+    switch (subcode) {
+        case MMU_ERR_SUBCODE_NONE: return "NONE";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_DMA: return "UNSUPPORTED_REQ_DMA";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_HEADED: return "UNSUPPORTED_REQ_COMPUTE_HEADED";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_NONHEADED: return "UNSUPPORTED_REQ_COMPUTE_NONHEADED";
+        case MMU_ERR_SUBCODE_BAD_DMA_PLAN: return "BAD_DMA_PLAN";
+        case MMU_ERR_SUBCODE_BAD_DMA_ADDR: return "BAD_DMA_ADDR";
+        case MMU_ERR_SUBCODE_REGION_ACCESS: return "REGION_ACCESS";
+        case MMU_ERR_SUBCODE_CONCAT_SOURCE: return "CONCAT_SOURCE";
+        case MMU_ERR_SUBCODE_WRITEBACK_SRC: return "WRITEBACK_SRC";
+        case MMU_ERR_SUBCODE_QUEUE_OVERFLOW: return "QUEUE_OVERFLOW";
+        case MMU_ERR_SUBCODE_STREAM_OUTPUT_MISSING: return "STREAM_OUTPUT_MISSING";
+        case MMU_ERR_SUBCODE_MISSING_REGION_FULL_READ: return "MISSING_REGION_FULL_READ";
+        case MMU_ERR_SUBCODE_MISSING_REGION_PARTIAL_READ: return "MISSING_REGION_PARTIAL_READ";
+        case MMU_ERR_SUBCODE_MISSING_REGION_COMPUTE_READ_PREP: return "MISSING_REGION_COMPUTE_READ_PREP";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_STREAM_IN: return "REGION_OVERFLOW_STREAM_IN";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_CONCAT: return "REGION_OVERFLOW_DMA_CONCAT";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_STORE: return "REGION_OVERFLOW_DMA_STORE";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_COMPUTE_WRITE: return "REGION_OVERFLOW_COMPUTE_WRITE";
+        case MMU_ERR_SUBCODE_REGION_TABLE_FULL: return "REGION_TABLE_FULL";
+        case MMU_ERR_SUBCODE_URAM_CHUNK_ALLOC_FAIL: return "URAM_CHUNK_ALLOC_FAIL";
+        case MMU_ERR_SUBCODE_REGION_TOO_LARGE: return "REGION_TOO_LARGE";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC: return "REGION_OVERFLOW_GENERIC";
+        case MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN: return "MISSING_STREAM_IN_TOKEN";
+        case MMU_ERR_SUBCODE_MISSING_LN0_OUT: return "MISSING_LN0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_WQ_W: return "MISSING_WQ_W";
+        case MMU_ERR_SUBCODE_MISSING_WQ_B: return "MISSING_WQ_B";
+        case MMU_ERR_SUBCODE_MISSING_WK_W: return "MISSING_WK_W";
+        case MMU_ERR_SUBCODE_MISSING_WK_B: return "MISSING_WK_B";
+        case MMU_ERR_SUBCODE_MISSING_WV_W: return "MISSING_WV_W";
+        case MMU_ERR_SUBCODE_MISSING_WV_B: return "MISSING_WV_B";
+        case MMU_ERR_SUBCODE_MISSING_Q_OUT: return "MISSING_Q_OUT";
+        case MMU_ERR_SUBCODE_MISSING_CTX_K: return "MISSING_CTX_K";
+        case MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT: return "MISSING_ATT_SCORES_OUT";
+        case MMU_ERR_SUBCODE_MISSING_VALUE_SCALE_OUT: return "MISSING_VALUE_SCALE_OUT";
+        case MMU_ERR_SUBCODE_MISSING_SOFTMAX_OUT: return "MISSING_SOFTMAX_OUT";
+        case MMU_ERR_SUBCODE_MISSING_CTX_V: return "MISSING_CTX_V";
+        case MMU_ERR_SUBCODE_MISSING_ATT_VALUE_OUT: return "MISSING_ATT_VALUE_OUT";
+        case MMU_ERR_SUBCODE_MISSING_HEAD_REQUANT_PACKED: return "MISSING_HEAD_REQUANT_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_CONCAT_OUT: return "MISSING_CONCAT_OUT";
+        case MMU_ERR_SUBCODE_MISSING_WO_W: return "MISSING_WO_W";
+        case MMU_ERR_SUBCODE_MISSING_WO_B: return "MISSING_WO_B";
+        case MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED: return "MISSING_OUT_PROJ_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_RESID0_OUT: return "MISSING_RESID0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_LN1_OUT: return "MISSING_LN1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_W1_W: return "MISSING_W1_W";
+        case MMU_ERR_SUBCODE_MISSING_W1_B: return "MISSING_W1_B";
+        case MMU_ERR_SUBCODE_MISSING_FFN_W1_PACKED: return "MISSING_FFN_W1_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_FFN_ACT_OUT: return "MISSING_FFN_ACT_OUT";
+        case MMU_ERR_SUBCODE_MISSING_W2_W: return "MISSING_W2_W";
+        case MMU_ERR_SUBCODE_MISSING_W2_B: return "MISSING_W2_B";
+        case MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED: return "MISSING_FFN_W2_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_LN0_GAMMA: return "MISSING_LN0_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
+        case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_LN1_EPS: return "MISSING_LN1_EPS";
+        default: return "UNKNOWN_SUBCODE";
+    }
+}
+
+static bool ensure_dir(const char *path) {
+    if (mkdir(path, 0777) == 0) {
+        return true;
+    }
+    return (errno == EEXIST);
+}
+
+static bool init_tb_logs() {
+    const char *base_dir = "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/logs";
+    const char *tb_dir = "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/logs/mmu_luka_tb";
+    const char *stdout_path = "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/logs/mmu_luka_tb/mmu_luka_tb_stdout.log";
+    const char *stderr_path = "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/logs/mmu_luka_tb/mmu_luka_tb_stderr.log";
+
+    if (!ensure_dir(base_dir) || !ensure_dir(tb_dir)) {
+        std::fprintf(stderr, "[TB][ERROR] failed to create log directories\n");
+        return false;
+    }
+    if (std::freopen(stdout_path, "w", stdout) == nullptr) {
+        std::fprintf(stderr, "[TB][ERROR] failed to open stdout log: %s\n", stdout_path);
+        return false;
+    }
+    if (std::freopen(stderr_path, "w", stderr) == nullptr) {
+        std::fprintf(stdout, "[TB][ERROR] failed to open stderr log: %s\n", stderr_path);
+        return false;
+    }
+    setvbuf(stdout, nullptr, _IOLBF, 0);
+    setvbuf(stderr, nullptr, _IOLBF, 0);
+    return true;
+}
+
 } // namespace
 
 int main() {
+    if (!init_tb_logs()) {
+        return 1;
+    }
     constexpr int MAX_CYCLES = 5000;
     constexpr int DMA_LATENCY = 3;
 
@@ -236,8 +402,8 @@ int main() {
     ctrl.k_cache_addr = 0x20000000ULL;
     ctrl.v_cache_addr = 0x21000000ULL;
 
-    static uint8_t dma_rx_buf[DMA_BUF_BYTES];
-    static uint8_t dma_tx_buf[DMA_BUF_BYTES];
+    static uint32_t dma_rx_buf[DMA_BUF_WORDS];
+    static uint32_t dma_tx_buf[DMA_BUF_WORDS];
     static uint8_t in_buf[compute_buf::IN_BUF_BYTES];
     static uint8_t out_buf[compute_buf::OUT_BUF_BYTES];
     static uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES];
@@ -346,7 +512,6 @@ int main() {
     add_idle(12, "Observe IDLE/GC before traffic");
 
     // 2) Single-request phase for NON-HEADED path first.
-    add_dma(DMASEL_WO, 0, -1, 0, "Load WO tile0 + BO tile0");
     add_dma(DMASEL_W1, 0, -1, 0, "Load W1 tile0 + B1 tile0");
     add_dma(DMASEL_W2, 0, -1, 0, "Load W2 tile0 + B2 tile0");
 
@@ -356,6 +521,7 @@ int main() {
     }
     add_cmp(CMP_RESID1, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID0_OUT");
     add_cmp(CMP_LN1, ComputeReqType::WRITE, 0, -1, -1, "Single: write LN1_OUT");
+    add_cmp(CMP_FFN_W1, ComputeReqType::READ, 0, -1, 0, "Consume W1/B1 via CMP_FFN_W1 READ tile0");
 
     for (int t = 0; t < NUM_W1_TILES; ++t) {
         add_cmp(CMP_FFN_W1, ComputeReqType::WRITE, 0, -1, t, "Single: write FFN_W1 tile");
@@ -372,10 +538,17 @@ int main() {
 
     // 3) Headed DMA preloads.
     add_dma(DMASEL_WQ, 0, 0, -1, "Headed preload WQ+BQ for head0");
+    add_cmp(CMP_Q, ComputeReqType::READ, 0, 0, -1, "Consume WQ/BQ via CMP_Q READ (head0)");
     add_dma(DMASEL_WK, 0, 1, -1, "Headed preload WK+BK for head1");
+    add_cmp(CMP_K, ComputeReqType::READ, 0, 1, -1, "Consume WK/BK via CMP_K READ (head1)");
     add_dma(DMASEL_WV, 0, 0, -1, "Headed preload WV+BV for head0");
+    add_cmp(CMP_V, ComputeReqType::READ, 0, 0, -1, "Consume WV/BV via CMP_V READ (head0)");
     add_dma(DMASEL_CTX_K, 0, 0, -1, "Headed preload K cache for head0");
+    add_cmp(CMP_Q, ComputeReqType::WRITE, 0, 0, -1, "Seed Q_OUT for ATT_SCORES consume path (head0)");
+    add_cmp(CMP_ATT_SCORES, ComputeReqType::READ, 0, 0, -1, "Consume CTX_K via CMP_ATT_SCORES READ (head0)");
     add_dma(DMASEL_CTX_V, 0, 1, -1, "Headed preload V cache for head1");
+    add_cmp(CMP_SOFTMAX, ComputeReqType::WRITE, 0, 1, -1, "Seed SOFTMAX_OUT for ATT_VALUE consume path (head1)");
+    add_cmp(CMP_ATT_VALUE, ComputeReqType::READ, 0, 1, -1, "Consume CTX_V via CMP_ATT_VALUE READ (head1)");
 
     // 4) Headed parallel requests (DMA + compute in same cycle).
     add_parallel_head(DMASEL_CTX_K, 0, 0, -1, CMP_Q, ComputeReqType::WRITE, 0, 1, -1,
@@ -386,10 +559,22 @@ int main() {
                       "Parallel #3: DMA WQ(h1) + CMP_V WRITE(h1)");
     add_parallel_head(DMASEL_K_WRITE, 0, 0, -1, CMP_HEAD_REQUANT, ComputeReqType::WRITE, 0, 1, -1,
                       "Parallel #4: DMA K_WRITE(h0) + CMP_HEAD_REQUANT WRITE(h1)");
+
+    // Follow-up consumes for all non-sticky regions introduced by parallel traffic.
+    add_cmp(CMP_Q, ComputeReqType::WRITE, 0, 0, -1, "Seed Q_OUT(h0) for CTX_K consume after parallel");
+    add_cmp(CMP_ATT_SCORES, ComputeReqType::READ, 0, 0, -1, "Consume CTX_K(h0)+Q_OUT(h0) after parallel");
+    add_cmp(CMP_SOFTMAX, ComputeReqType::WRITE, 0, 1, -1, "Seed SOFTMAX_OUT(h1) for CTX_V consume after parallel");
+    add_cmp(CMP_ATT_VALUE, ComputeReqType::READ, 0, 1, -1, "Consume CTX_V(h1)+SOFTMAX_OUT(h1) after parallel");
+    add_cmp(CMP_Q, ComputeReqType::READ, 0, 1, -1, "Consume WQ/BQ(h1) after parallel");
+    add_dma(DMASEL_V_WRITE, 0, 1, -1, "Consume V_OUT(h1) via V_WRITE after parallel");
+
     for (int h = 0; h < NUM_HEADS; ++h) {
         add_cmp(CMP_HEAD_REQUANT, ComputeReqType::WRITE, 0, h, -1, "Build packed HEAD_REQUANT for concat");
     }
     add_dma(DMASEL_CONCAT, 0, -1, -1, "Internal concat/reformat HEAD_REQUANT_PACKED -> CONCAT_OUT");
+    add_dma(DMASEL_WO, 0, -1, (NUM_WO_TILES - 1), "Load WO last tile + BO last tile");
+    add_cmp(CMP_OUT_PROJ, ComputeReqType::READ, 0, -1, (NUM_WO_TILES - 1),
+            "Consume WO/BO + CONCAT via CMP_OUT_PROJ READ last tile");
 
     size_t step_idx = 0;
     bool step_issued = false;
@@ -400,7 +585,9 @@ int main() {
 
     uint16_t prev_regions = 0;
 
-    std::printf("cycle state          step idx kind issued ready(d/c) done(m/h0) regions ov inv\n");
+    std::printf("%6s | %5s | %-12s | %6s | %8s | %8s | %7s | %9s | %9s | %8s | %8s | %8s | %8s | %7s | %7s | %7s\n",
+                "cycle", "rst_n", "mmu_state", "step", "dma_req", "cmp_req", "dma_st",
+                "dma_done", "main_done", "head0_d", "head1_d", "cmp0_d", "cmp1_d", "regions", "err", "suberr");
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
         const bool reset_n = (cycle >= 2);
@@ -574,7 +761,8 @@ int main() {
 
             if (!dma_is_write_latched) {
                 for (uint32_t i = 0; i < dma_len_latched && i < DMA_BUF_BYTES; ++i) {
-                    dma_rx_buf[i] = static_cast<uint8_t>((dma_addr_latched + i + static_cast<uint32_t>(step_idx) * 17u) & 0xFFu);
+                    dma_word_set_byte(dma_rx_buf, i,
+                                      static_cast<uint8_t>((dma_addr_latched + i + static_cast<uint32_t>(step_idx) * 17u) & 0xFFu));
                 }
             }
 
@@ -593,20 +781,23 @@ int main() {
             prev_regions = status.region_count;
         }
 
-        if (cycle < 30 || (cycle % 25) == 0) {
-            std::printf("%5d %-14s step=%3zu issued=%d rdy=%d/%d done=%d/%d regions=%3u ov=%d inv=%d\n",
-                        cycle,
-                        state_name(status.state),
-                        step_idx,
-                        static_cast<int>(step_issued),
-                        static_cast<int>(mmu_req_ready),
-                        static_cast<int>(mmu_req_ready),
-                        static_cast<int>(main_dma_done),
-                        static_cast<int>(head_ctx[0].dma_done || head_compute_ctx[0].mem_transfer_done),
-                        static_cast<unsigned>(status.region_count),
-                        static_cast<int>(status.overflow),
-                        static_cast<int>(status.invalid));
-        }
+        std::printf("%6d | %5d | %-12s | %6u | %8d | %8d | %7d | %9d | %9d | %8d | %8d | %8d | %8d | %7u | %7d | %7u\n",
+                    cycle,
+                    reset_n ? 1 : 0,
+                    state_name(status.state),
+                    static_cast<unsigned>(step_idx),
+                    mmu_dma_req_start ? 1 : 0,
+                    (mem_read_request || mem_write_request) ? 1 : 0,
+                    dma_start ? 1 : 0,
+                    dma_done ? 1 : 0,
+                    main_dma_done ? 1 : 0,
+                    head_ctx[0].dma_done ? 1 : 0,
+                    (NUM_HEADS > 1 ? (head_ctx[1].dma_done ? 1 : 0) : 0),
+                    head_compute_ctx[0].mem_transfer_done ? 1 : 0,
+                    (HEADS_PARALLEL > 1 ? (head_compute_ctx[1].mem_transfer_done ? 1 : 0) : 0),
+                    static_cast<unsigned>(status.region_count),
+                    (status.overflow || status.invalid) ? 1 : 0,
+                    status.error_subcode);
 
         if (step_idx < steps.size() && step_issued) {
             Step &s = steps[step_idx];
@@ -652,7 +843,7 @@ int main() {
                 std::printf("[STEP %zu] DONE in %d cycles\n", step_idx, lat);
 
                 if (s.kind == Step::Kind::DMA_REQ && dma_is_write_latched) {
-                    dump_bytes("  dma_tx_buf[0:16] = ", dma_tx_buf, 16);
+                    dump_dma_bytes("  dma_tx_buf[0:16] = ", dma_tx_buf, 16);
                 }
                 if ((s.kind == Step::Kind::CMP_REQ || s.kind == Step::Kind::HEAD_PARALLEL) &&
                     s.cmp_type == ComputeReqType::READ) {
@@ -671,10 +862,15 @@ int main() {
         }
 
         if (status.overflow || status.invalid) {
-            std::printf("\n[TB] stopping on MMU error: overflow=%d invalid=%d at cycle %d\n",
+            std::printf("\n[TB] stopping on MMU error: overflow=%d invalid=%d cycle=%d code=0x%08X suberr=0x%08X(%s) : ",
                         static_cast<int>(status.overflow),
                         static_cast<int>(status.invalid),
-                        cycle);
+                        cycle,
+                        status.error_code,
+                        status.error_subcode,
+                        mmu_subcode_name(status.error_subcode));
+            print_error_code_bits(status.error_code);
+            std::printf("\n");
             return 1;
         }
 

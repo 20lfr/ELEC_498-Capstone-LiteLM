@@ -22,6 +22,15 @@ static inline uint32_t pack_dma_instruction(DmaSel op, int layer, int head, int 
          | ((static_cast<uint32_t>(tile) & 0xFFu) << 24);
 }
 
+static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
+    const uint32_t word_idx = byte_idx >> 2;
+    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    uint32_t word = buf[word_idx];
+    word &= ~(0xFFu << shift);
+    word |= (static_cast<uint32_t>(value) << shift);
+    buf[word_idx] = word;
+}
+
 static const char *sched_state_name(SchedState st) {
     switch (st) {
         case S_IDLE: return "S_IDLE";
@@ -338,8 +347,8 @@ static void run_mmu_tb() {
 
     bool dma_ready = true;
     bool dma_done = false;
-    static uint8_t dma_rx_buf[DMA_BUF_BYTES]{};
-    static uint8_t dma_tx_buf[DMA_BUF_BYTES]{};
+    static uint32_t dma_rx_buf[DMA_BUF_WORDS]{};
+    static uint32_t dma_tx_buf[DMA_BUF_WORDS]{};
     bool dma_start = false;
     uint32_t dma_addr = 0;
     uint32_t dma_len = 0;
@@ -394,7 +403,7 @@ static void run_mmu_tb() {
             dma_resp_timer--;
             if (dma_resp_timer == 0) {
                 for (uint32_t i = 0; i < dma_last_len && i < DMA_BUF_BYTES; ++i) {
-                    dma_rx_buf[i] = static_cast<uint8_t>(0x10u + (i & 0x7Fu));
+                    dma_word_set_byte(dma_rx_buf, i, static_cast<uint8_t>(0x10u + (i & 0x7Fu)));
                 }
                 dma_done = true;
                 dma_resp_timer = -1;

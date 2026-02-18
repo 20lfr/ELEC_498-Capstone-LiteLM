@@ -48,6 +48,7 @@ static State g_state = State::IDLE;
 static bool g_overflow = false;
 static bool g_invalid = false;
 static uint32_t g_error_code = ERR_NONE;
+static uint32_t g_error_subcode = MMU_ERR_SUBCODE_NONE;
 static uint8_t g_active_bank = 0;
 
 // Active DMA request context
@@ -94,16 +95,125 @@ static inline int decode_s8(uint32_t v) {
     return static_cast<int>(static_cast<int8_t>(v & 0xFFu));
 }
 
-static inline void mmu_set_invalid(uint32_t err_bit) {
+static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint32_t byte_idx) {
+#pragma HLS INLINE
+    const uint32_t word = buf[byte_idx >> 2];
+    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    return static_cast<uint8_t>((word >> shift) & 0xFFu);
+}
+
+static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
+#pragma HLS INLINE
+    const uint32_t word_idx = byte_idx >> 2;
+    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    uint32_t word = buf[word_idx];
+    word &= ~(0xFFu << shift);
+    word |= (static_cast<uint32_t>(value) << shift);
+    buf[word_idx] = word;
+}
+
+static inline void dma_word_clear_bytes(uint32_t *buf, uint32_t bytes) {
+    const uint32_t words = (bytes + 3u) >> 2;
+    for (uint32_t i = 0; i < words; ++i) {
+#pragma HLS PIPELINE II=1
+        buf[i] = 0;
+    }
+}
+
+static inline uint32_t mmu_subcode_from_errbit(uint32_t err_bit) {
+#pragma HLS INLINE
+    switch (err_bit) {
+        case ERR_MMU_UNSUPPORTED_REQ_DMA: return MMU_ERR_SUBCODE_UNSUPPORTED_REQ_DMA;
+        case ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED: return MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_HEADED;
+        case ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED: return MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_NONHEADED;
+        case ERR_MMU_BAD_DMA_PLAN: return MMU_ERR_SUBCODE_BAD_DMA_PLAN;
+        case ERR_MMU_BAD_DMA_ADDR: return MMU_ERR_SUBCODE_BAD_DMA_ADDR;
+        case ERR_MMU_REGION_ACCESS: return MMU_ERR_SUBCODE_REGION_ACCESS;
+        case ERR_MMU_CONCAT_SOURCE: return MMU_ERR_SUBCODE_CONCAT_SOURCE;
+        case ERR_MMU_WRITEBACK_SRC: return MMU_ERR_SUBCODE_WRITEBACK_SRC;
+        case ERR_MMU_QUEUE_OVERFLOW: return MMU_ERR_SUBCODE_QUEUE_OVERFLOW;
+        case ERR_MMU_STREAM_OUTPUT_MISSING: return MMU_ERR_SUBCODE_STREAM_OUTPUT_MISSING;
+        case ERR_MMU_MISSING_REGION_FULL_READ: return MMU_ERR_SUBCODE_MISSING_REGION_FULL_READ;
+        case ERR_MMU_MISSING_REGION_PARTIAL_READ: return MMU_ERR_SUBCODE_MISSING_REGION_PARTIAL_READ;
+        case ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP: return MMU_ERR_SUBCODE_MISSING_REGION_COMPUTE_READ_PREP;
+        case ERR_MMU_REGION_OVERFLOW_STREAM_IN: return MMU_ERR_SUBCODE_REGION_OVERFLOW_STREAM_IN;
+        case ERR_MMU_REGION_OVERFLOW_DMA_CONCAT: return MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_CONCAT;
+        case ERR_MMU_REGION_OVERFLOW_DMA_STORE: return MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_STORE;
+        case ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE: return MMU_ERR_SUBCODE_REGION_OVERFLOW_COMPUTE_WRITE;
+        case ERR_MMU_REGION_TABLE_FULL: return MMU_ERR_SUBCODE_REGION_TABLE_FULL;
+        case ERR_MMU_URAM_CHUNK_ALLOC_FAIL: return MMU_ERR_SUBCODE_URAM_CHUNK_ALLOC_FAIL;
+        case ERR_MMU_REGION_TOO_LARGE: return MMU_ERR_SUBCODE_REGION_TOO_LARGE;
+        case ERR_MMU_REGION_OVERFLOW: return MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC;
+        default: return MMU_ERR_SUBCODE_NONE;
+    }
+}
+
+static inline uint32_t mmu_missing_subcode_from_tag(Tag tag) {
+#pragma HLS INLINE
+    switch (tag) {
+        case Tag::STREAM_IN_TOKEN: return MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN;
+        case Tag::LN0_OUT: return MMU_ERR_SUBCODE_MISSING_LN0_OUT;
+        case Tag::WQ_W: return MMU_ERR_SUBCODE_MISSING_WQ_W;
+        case Tag::WQ_B: return MMU_ERR_SUBCODE_MISSING_WQ_B;
+        case Tag::WK_W: return MMU_ERR_SUBCODE_MISSING_WK_W;
+        case Tag::WK_B: return MMU_ERR_SUBCODE_MISSING_WK_B;
+        case Tag::WV_W: return MMU_ERR_SUBCODE_MISSING_WV_W;
+        case Tag::WV_B: return MMU_ERR_SUBCODE_MISSING_WV_B;
+        case Tag::Q_OUT: return MMU_ERR_SUBCODE_MISSING_Q_OUT;
+        case Tag::CTX_K: return MMU_ERR_SUBCODE_MISSING_CTX_K;
+        case Tag::ATT_SCORES_OUT: return MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT;
+        case Tag::VALUE_SCALE_OUT: return MMU_ERR_SUBCODE_MISSING_VALUE_SCALE_OUT;
+        case Tag::SOFTMAX_OUT: return MMU_ERR_SUBCODE_MISSING_SOFTMAX_OUT;
+        case Tag::CTX_V: return MMU_ERR_SUBCODE_MISSING_CTX_V;
+        case Tag::ATT_VALUE_OUT: return MMU_ERR_SUBCODE_MISSING_ATT_VALUE_OUT;
+        case Tag::HEAD_REQUANT_PACKED: return MMU_ERR_SUBCODE_MISSING_HEAD_REQUANT_PACKED;
+        case Tag::CONCAT_OUT: return MMU_ERR_SUBCODE_MISSING_CONCAT_OUT;
+        case Tag::WO_W: return MMU_ERR_SUBCODE_MISSING_WO_W;
+        case Tag::WO_B: return MMU_ERR_SUBCODE_MISSING_WO_B;
+        case Tag::OUT_PROJ_PACKED: return MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED;
+        case Tag::RESID0_OUT: return MMU_ERR_SUBCODE_MISSING_RESID0_OUT;
+        case Tag::LN1_OUT: return MMU_ERR_SUBCODE_MISSING_LN1_OUT;
+        case Tag::W1_W: return MMU_ERR_SUBCODE_MISSING_W1_W;
+        case Tag::W1_B: return MMU_ERR_SUBCODE_MISSING_W1_B;
+        case Tag::FFN_W1_PACKED: return MMU_ERR_SUBCODE_MISSING_FFN_W1_PACKED;
+        case Tag::FFN_ACT_OUT: return MMU_ERR_SUBCODE_MISSING_FFN_ACT_OUT;
+        case Tag::W2_W: return MMU_ERR_SUBCODE_MISSING_W2_W;
+        case Tag::W2_B: return MMU_ERR_SUBCODE_MISSING_W2_B;
+        case Tag::FFN_W2_PACKED: return MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED;
+        case Tag::RESID1_OUT: return MMU_ERR_SUBCODE_MISSING_RESID1_OUT;
+        case Tag::LN0_GAMMA: return MMU_ERR_SUBCODE_MISSING_LN0_GAMMA;
+        case Tag::LN0_EPS: return MMU_ERR_SUBCODE_MISSING_LN0_EPS;
+        case Tag::LN1_GAMMA: return MMU_ERR_SUBCODE_MISSING_LN1_GAMMA;
+        case Tag::LN1_EPS: return MMU_ERR_SUBCODE_MISSING_LN1_EPS;
+        default: return MMU_ERR_SUBCODE_NONE;
+    }
+}
+
+static inline void mmu_latch_subcode(uint32_t err_subcode) {
+#pragma HLS INLINE
+    if (g_error_subcode == MMU_ERR_SUBCODE_NONE && err_subcode != MMU_ERR_SUBCODE_NONE) {
+        g_error_subcode = err_subcode;
+    }
+}
+
+static inline void mmu_set_invalid(uint32_t err_bit, uint32_t err_subcode = MMU_ERR_SUBCODE_NONE) {
 #pragma HLS INLINE
     g_invalid = true;
     g_error_code |= err_bit;
+    if (err_subcode == MMU_ERR_SUBCODE_NONE) {
+        err_subcode = mmu_subcode_from_errbit(err_bit);
+    }
+    mmu_latch_subcode(err_subcode);
 }
 
-static inline void mmu_set_overflow(uint32_t err_bit) {
+static inline void mmu_set_overflow(uint32_t err_bit, uint32_t err_subcode = MMU_ERR_SUBCODE_NONE) {
 #pragma HLS INLINE
     g_overflow = true;
     g_error_code |= err_bit;
+    if (err_subcode == MMU_ERR_SUBCODE_NONE) {
+        err_subcode = mmu_subcode_from_errbit(err_bit);
+    }
+    mmu_latch_subcode(err_subcode);
 }
 
 static inline void unpack_dma(uint32_t packed, DmaSel &sel, int &layer, int &head, int &tile) {
@@ -610,6 +720,13 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
                          uint16_t expected_parts, uint32_t part_bytes, uint8_t retain_count,
                          bool &overflow_flag) {
 #pragma HLS INLINE
+    const uint32_t max_region_bytes = static_cast<uint32_t>(MAX_CHUNKS) * URAM_BANK_BYTES;
+    if (total_bytes > max_region_bytes) {
+        overflow_flag = true;
+        mmu_set_overflow(ERR_MMU_REGION_TOO_LARGE);
+        return -1;
+    }
+
     int free_idx = -1;
     for (int i = 0; i < MAX_REGIONS; ++i) {
         if (!regions[i].valid) {
@@ -676,7 +793,18 @@ static int get_or_create_region(Tag tag, int layer, int head, int tile, uint32_t
                                 bool &overflow_flag) {
 #pragma HLS INLINE
     const int idx = find_region(tag, layer, head, tile);
-    if (idx >= 0) return idx;
+    if (idx >= 0) {
+        // If a matching entry exists but has already been consumed (used=0),
+        // treat it as dead and recreate it so retain/written bookkeeping resets.
+        if (!regions[idx].used) {
+            regions[idx].valid = false;
+            if (region_count > 0) {
+                region_count--;
+            }
+        } else {
+            return idx;
+        }
+    }
     return create_region(tag, layer, head, tile, total_bytes, expected_parts,
                          part_bytes, default_retain(tag), overflow_flag);
 }
@@ -763,7 +891,7 @@ static bool load_region_to_buf(Tag tag, int layer, int head, int tile,
 #pragma HLS INLINE
     const int idx = find_region(tag, layer, head, tile);
     if (idx < 0 || !region_ready(regions[idx])) {
-        mmu_set_invalid(ERR_MMU_MISSING_REGION_FULL_READ);
+        mmu_set_invalid(ERR_MMU_MISSING_REGION_FULL_READ, mmu_missing_subcode_from_tag(tag));
         invalid_flag = true;
         return false;
     }
@@ -784,7 +912,7 @@ static bool load_region_partial_to_buf(Tag tag, int layer, int head, int tile,
 #pragma HLS INLINE
     const int idx = find_region(tag, layer, head, tile);
     if (idx < 0 || !region_ready(regions[idx])) {
-        mmu_set_invalid(ERR_MMU_MISSING_REGION_PARTIAL_READ);
+        mmu_set_invalid(ERR_MMU_MISSING_REGION_PARTIAL_READ, mmu_missing_subcode_from_tag(tag));
         invalid_flag = true;
         return false;
     }
@@ -1507,8 +1635,8 @@ void mmu_fsm(
     // External DMA control/payload
     bool            dma_ready,                      // [INPUT] DMA command interface ready
     bool            dma_done,                       // [INPUT] DMA completion pulse
-    const uint8_t   dma_rx_buf[DMA_BUF_BYTES],      // [INPUT] DMA read payload into MMU
-    uint8_t         dma_tx_buf[DMA_BUF_BYTES],      // [OUTPUT] DMA write payload from MMU
+    const uint32_t  dma_rx_buf[DMA_BUF_WORDS],      // [INPUT] DMA read payload words into MMU
+    uint32_t        dma_tx_buf[DMA_BUF_WORDS],      // [OUTPUT] DMA write payload words from MMU
     bool            &dma_start,                     // [OUTPUT] Start DMA transfer
     uint32_t        &dma_addr,                      // [OUTPUT] DMA address
     uint32_t        &dma_len,                       // [OUTPUT] DMA transfer length
@@ -1589,6 +1717,7 @@ void mmu_fsm(
         g_overflow = false;
         g_invalid = false;
         g_error_code = ERR_NONE;
+        g_error_subcode = MMU_ERR_SUBCODE_NONE;
         g_active_bank = 0;
         region_count = 0;
         g_current_layer = -1;
@@ -1632,6 +1761,7 @@ void mmu_fsm(
         status.overflow = g_overflow;
         status.invalid = g_invalid;
         status.error_code = g_error_code;
+        status.error_subcode = g_error_subcode;
         status.region_count = region_count;
         return;
     }
@@ -1871,6 +2001,9 @@ void mmu_fsm(
                     mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 }
             }
+            if (should_consume(Tag::HEAD_REQUANT_PACKED)) {
+                maybe_consume(src_idx);
+            }
 
             main_dma_done = true;
             if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
@@ -1964,7 +2097,12 @@ void mmu_fsm(
                 break;
             }
 
-            if (!region_write_part(idx, 0, dma_rx_buf, sz)) {
+            for (uint32_t i = 0; i < sz; ++i) {
+#pragma HLS PIPELINE II=1
+                scratch[i] = dma_word_get_byte(dma_rx_buf, i);
+            }
+
+            if (!region_write_part(idx, 0, scratch, sz)) {
                 mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 active_dma_valid = false;
                 g_state = State::IDLE;
@@ -2002,11 +2140,16 @@ void mmu_fsm(
                 g_state = State::IDLE;
                 break;
             }
-            if (!region_read_bytes(regions[src_idx], 0, dma_tx_buf, wb_len)) {
+            if (!region_read_bytes(regions[src_idx], 0, scratch, wb_len)) {
                 mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
+            }
+            dma_word_clear_bytes(dma_tx_buf, wb_len);
+            for (uint32_t i = 0; i < wb_len; ++i) {
+#pragma HLS PIPELINE II=1
+                dma_word_set_byte(dma_tx_buf, i, scratch[i]);
             }
             if (token_pos >= static_cast<uint16_t>(CONTEXT_LENGTH)) {
                 mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
@@ -2190,6 +2333,7 @@ void mmu_fsm(
     status.overflow = g_overflow;
     status.invalid = g_invalid;
     status.error_code = g_error_code;
+    status.error_subcode = g_error_subcode;
     status.region_count = region_count;
 
 }

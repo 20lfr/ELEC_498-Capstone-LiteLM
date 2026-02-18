@@ -5,11 +5,13 @@
 #include "ControlMemInterface/ControlMemInterface.hpp"
 // IRQ_Wizard functionality now integrated into ControlMemInterface
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
-#include "Transformer_logic/src-hls/compute_controller.hpp"
-#include "Transformer_logic/src-hls/headed_compute_controller.hpp"
+#include "Compute_Controller_Logic/src-hls/compute_controller.hpp"
+#include "Compute_Controller_Logic/src-hls/headed_compute_controller.hpp"
 #include "MMU/mmu_luka.hpp"
 
 constexpr int TOP_DMA_BUF_BYTES = 65536;
+constexpr int TOP_DMA_BUF_WORDS = TOP_DMA_BUF_BYTES / static_cast<int>(sizeof(uint32_t));
+static_assert((TOP_DMA_BUF_BYTES % static_cast<int>(sizeof(uint32_t))) == 0, "TOP_DMA_BUF_BYTES must be word-aligned");
 
 // Top-level wrapper prototype
 void transformer_top(
@@ -28,8 +30,8 @@ void transformer_top(
     bool &irq_ps,                       // [OUTPUT] Interrupt signal
     bool dma_ready,                     // [INPUT] DMA command interface ready
     bool dma_done,                      // [INPUT] DMA completion pulse
-    const uint8_t dma_rx_buf[TOP_DMA_BUF_BYTES], // [INPUT] DMA read payload into MMU
-    uint8_t dma_tx_buf[TOP_DMA_BUF_BYTES],       // [OUTPUT] DMA write payload from MMU
+    const uint32_t dma_rx_buf[TOP_DMA_BUF_WORDS], // [INPUT] DMA read payload words into MMU
+    uint32_t dma_tx_buf[TOP_DMA_BUF_WORDS],       // [OUTPUT] DMA write payload words from MMU
     bool &dma_start,                    // [OUTPUT] Start DMA transfer
     uint32_t &dma_addr,                 // [OUTPUT] DMA address
     uint32_t &dma_len,                  // [OUTPUT] DMA transfer length

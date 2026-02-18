@@ -405,6 +405,65 @@ constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_STORE         = 16777216;
 constexpr uint32_t ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE     = 33554432;
 constexpr uint32_t ERR_MMU_REGION_TABLE_FULL                 = 67108864;
 constexpr uint32_t ERR_MMU_URAM_CHUNK_ALLOC_FAIL             = 134217728;
+constexpr uint32_t ERR_MMU_REGION_TOO_LARGE                  = 268435456;
+
+// MMU detailed subcodes (for richer debug than bitmask error_code alone)
+constexpr uint32_t MMU_ERR_SUBCODE_NONE                              = 0;
+constexpr uint32_t MMU_ERR_SUBCODE_UNSUPPORTED_REQ_DMA               = 1;
+constexpr uint32_t MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_HEADED    = 2;
+constexpr uint32_t MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_NONHEADED = 3;
+constexpr uint32_t MMU_ERR_SUBCODE_BAD_DMA_PLAN                      = 4;
+constexpr uint32_t MMU_ERR_SUBCODE_BAD_DMA_ADDR                      = 5;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_ACCESS                     = 6;
+constexpr uint32_t MMU_ERR_SUBCODE_CONCAT_SOURCE                     = 7;
+constexpr uint32_t MMU_ERR_SUBCODE_WRITEBACK_SRC                     = 8;
+constexpr uint32_t MMU_ERR_SUBCODE_QUEUE_OVERFLOW                    = 9;
+constexpr uint32_t MMU_ERR_SUBCODE_STREAM_OUTPUT_MISSING             = 10;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_REGION_FULL_READ          = 11;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_REGION_PARTIAL_READ       = 12;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_REGION_COMPUTE_READ_PREP  = 13;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_STREAM_IN         = 14;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_CONCAT        = 15;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_STORE         = 16;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_COMPUTE_WRITE     = 17;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_TABLE_FULL                 = 18;
+constexpr uint32_t MMU_ERR_SUBCODE_URAM_CHUNK_ALLOC_FAIL             = 19;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_TOO_LARGE                  = 20;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC           = 21;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN           = 100;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_OUT                   = 101;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WQ_W                      = 102;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WQ_B                      = 103;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WK_W                      = 104;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WK_B                      = 105;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WV_W                      = 106;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WV_B                      = 107;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_Q_OUT                     = 108;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_CTX_K                     = 109;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT            = 110;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_VALUE_SCALE_OUT           = 111;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_SOFTMAX_OUT               = 112;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_CTX_V                     = 113;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_ATT_VALUE_OUT             = 114;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_HEAD_REQUANT_PACKED       = 115;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_CONCAT_OUT                = 116;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WO_W                      = 117;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WO_B                      = 118;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED           = 119;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_RESID0_OUT                = 120;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_OUT                   = 121;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W1_W                      = 122;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W1_B                      = 123;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_FFN_W1_PACKED             = 124;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_FFN_ACT_OUT               = 125;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W2_W                      = 126;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W2_B                      = 127;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED             = 128;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_RESID1_OUT                = 129;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_GAMMA                 = 130;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_EPS                   = 131;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_GAMMA                 = 132;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_EPS                   = 133;
 
 
 
@@ -492,6 +551,7 @@ struct StatusMemSpace {
     uint32_t status = STATUS_IDLE;
     uint32_t irq_status     = 0;
     uint32_t error_code     = ERR_NONE;
+    uint32_t mmu_error_subcode = MMU_ERR_SUBCODE_NONE;
     uint32_t layer_index    = 0;
 };
 

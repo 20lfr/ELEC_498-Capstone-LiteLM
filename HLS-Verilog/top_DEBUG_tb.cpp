@@ -1197,7 +1197,70 @@ static void print_error_code_bits(uint32_t err) {
     if (err & ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE) emit("ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE");
     if (err & ERR_MMU_REGION_TABLE_FULL) emit("ERR_MMU_REGION_TABLE_FULL");
     if (err & ERR_MMU_URAM_CHUNK_ALLOC_FAIL) emit("ERR_MMU_URAM_CHUNK_ALLOC_FAIL");
+    if (err & ERR_MMU_REGION_TOO_LARGE) emit("ERR_MMU_REGION_TOO_LARGE");
     if (err & ERR_MMU_STREAM_OUTPUT_MISSING) emit("ERR_MMU_STREAM_OUTPUT_MISSING");
+}
+
+static const char *mmu_subcode_name(uint32_t subcode) {
+    switch (subcode) {
+        case MMU_ERR_SUBCODE_NONE: return "NONE";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_DMA: return "UNSUPPORTED_REQ_DMA";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_HEADED: return "UNSUPPORTED_REQ_COMPUTE_HEADED";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_NONHEADED: return "UNSUPPORTED_REQ_COMPUTE_NONHEADED";
+        case MMU_ERR_SUBCODE_BAD_DMA_PLAN: return "BAD_DMA_PLAN";
+        case MMU_ERR_SUBCODE_BAD_DMA_ADDR: return "BAD_DMA_ADDR";
+        case MMU_ERR_SUBCODE_REGION_ACCESS: return "REGION_ACCESS";
+        case MMU_ERR_SUBCODE_CONCAT_SOURCE: return "CONCAT_SOURCE";
+        case MMU_ERR_SUBCODE_WRITEBACK_SRC: return "WRITEBACK_SRC";
+        case MMU_ERR_SUBCODE_QUEUE_OVERFLOW: return "QUEUE_OVERFLOW";
+        case MMU_ERR_SUBCODE_STREAM_OUTPUT_MISSING: return "STREAM_OUTPUT_MISSING";
+        case MMU_ERR_SUBCODE_MISSING_REGION_FULL_READ: return "MISSING_REGION_FULL_READ";
+        case MMU_ERR_SUBCODE_MISSING_REGION_PARTIAL_READ: return "MISSING_REGION_PARTIAL_READ";
+        case MMU_ERR_SUBCODE_MISSING_REGION_COMPUTE_READ_PREP: return "MISSING_REGION_COMPUTE_READ_PREP";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_STREAM_IN: return "REGION_OVERFLOW_STREAM_IN";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_CONCAT: return "REGION_OVERFLOW_DMA_CONCAT";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_STORE: return "REGION_OVERFLOW_DMA_STORE";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_COMPUTE_WRITE: return "REGION_OVERFLOW_COMPUTE_WRITE";
+        case MMU_ERR_SUBCODE_REGION_TABLE_FULL: return "REGION_TABLE_FULL";
+        case MMU_ERR_SUBCODE_URAM_CHUNK_ALLOC_FAIL: return "URAM_CHUNK_ALLOC_FAIL";
+        case MMU_ERR_SUBCODE_REGION_TOO_LARGE: return "REGION_TOO_LARGE";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC: return "REGION_OVERFLOW_GENERIC";
+        case MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN: return "MISSING_STREAM_IN_TOKEN";
+        case MMU_ERR_SUBCODE_MISSING_LN0_OUT: return "MISSING_LN0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_WQ_W: return "MISSING_WQ_W";
+        case MMU_ERR_SUBCODE_MISSING_WQ_B: return "MISSING_WQ_B";
+        case MMU_ERR_SUBCODE_MISSING_WK_W: return "MISSING_WK_W";
+        case MMU_ERR_SUBCODE_MISSING_WK_B: return "MISSING_WK_B";
+        case MMU_ERR_SUBCODE_MISSING_WV_W: return "MISSING_WV_W";
+        case MMU_ERR_SUBCODE_MISSING_WV_B: return "MISSING_WV_B";
+        case MMU_ERR_SUBCODE_MISSING_Q_OUT: return "MISSING_Q_OUT";
+        case MMU_ERR_SUBCODE_MISSING_CTX_K: return "MISSING_CTX_K";
+        case MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT: return "MISSING_ATT_SCORES_OUT";
+        case MMU_ERR_SUBCODE_MISSING_VALUE_SCALE_OUT: return "MISSING_VALUE_SCALE_OUT";
+        case MMU_ERR_SUBCODE_MISSING_SOFTMAX_OUT: return "MISSING_SOFTMAX_OUT";
+        case MMU_ERR_SUBCODE_MISSING_CTX_V: return "MISSING_CTX_V";
+        case MMU_ERR_SUBCODE_MISSING_ATT_VALUE_OUT: return "MISSING_ATT_VALUE_OUT";
+        case MMU_ERR_SUBCODE_MISSING_HEAD_REQUANT_PACKED: return "MISSING_HEAD_REQUANT_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_CONCAT_OUT: return "MISSING_CONCAT_OUT";
+        case MMU_ERR_SUBCODE_MISSING_WO_W: return "MISSING_WO_W";
+        case MMU_ERR_SUBCODE_MISSING_WO_B: return "MISSING_WO_B";
+        case MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED: return "MISSING_OUT_PROJ_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_RESID0_OUT: return "MISSING_RESID0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_LN1_OUT: return "MISSING_LN1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_W1_W: return "MISSING_W1_W";
+        case MMU_ERR_SUBCODE_MISSING_W1_B: return "MISSING_W1_B";
+        case MMU_ERR_SUBCODE_MISSING_FFN_W1_PACKED: return "MISSING_FFN_W1_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_FFN_ACT_OUT: return "MISSING_FFN_ACT_OUT";
+        case MMU_ERR_SUBCODE_MISSING_W2_W: return "MISSING_W2_W";
+        case MMU_ERR_SUBCODE_MISSING_W2_B: return "MISSING_W2_B";
+        case MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED: return "MISSING_FFN_W2_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_LN0_GAMMA: return "MISSING_LN0_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
+        case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_LN1_EPS: return "MISSING_LN1_EPS";
+        default: return "UNKNOWN_SUBCODE";
+    }
 }
 
 ControlMemSpace ctrl_mem_init(bool init) {
@@ -1275,11 +1338,23 @@ static inline void write_i4(uint8_t *buf, int nibble_idx, int8_t value) {
     }
 }
 
-static inline uint32_t read_u32_le(const uint8_t *buf) {
-    return static_cast<uint32_t>(buf[0])
-        | (static_cast<uint32_t>(buf[1]) << 8)
-        | (static_cast<uint32_t>(buf[2]) << 16)
-        | (static_cast<uint32_t>(buf[3]) << 24);
+static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint32_t byte_idx) {
+    const uint32_t word = buf[byte_idx >> 2];
+    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    return static_cast<uint8_t>((word >> shift) & 0xFFu);
+}
+
+static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
+    const uint32_t word_idx = byte_idx >> 2;
+    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    uint32_t word = buf[word_idx];
+    word &= ~(0xFFu << shift);
+    word |= (static_cast<uint32_t>(value) << shift);
+    buf[word_idx] = word;
+}
+
+static inline uint32_t read_u32_le(const uint32_t *buf) {
+    return buf[0];
 }
 
 static void seed_ln_params_ddr(const ControlMemSpace &ctrl,
@@ -1333,8 +1408,8 @@ int main() {
     uint32_t dma_addr    = 0;
     uint32_t dma_len     = 0;
     bool dma_is_write    = false;
-    uint8_t dma_rx_buf[TOP_DMA_BUF_BYTES] = {};
-    uint8_t dma_tx_buf[TOP_DMA_BUF_BYTES] = {};
+    uint32_t dma_rx_buf[TOP_DMA_BUF_WORDS] = {};
+    uint32_t dma_tx_buf[TOP_DMA_BUF_WORDS] = {};
     bool wl_dma_request  = false;
     uint64_t wl_dma_address = 0;
 
@@ -1686,16 +1761,16 @@ int main() {
                     : dma_active_len;
                 if (dma_active_write) {
                     for (uint32_t i = 0; i < safe_len; ++i) {
-                        ddr_model[static_cast<uint64_t>(dma_active_addr) + i] = dma_tx_buf[i];
+                        ddr_model[static_cast<uint64_t>(dma_active_addr) + i] = dma_word_get_byte(dma_tx_buf, i);
                     }
                 } else {
                     for (uint32_t i = 0; i < safe_len; ++i) {
                         const uint64_t a = static_cast<uint64_t>(dma_active_addr) + i;
                         auto it = ddr_model.find(a);
                         if (it != ddr_model.end()) {
-                            dma_rx_buf[i] = it->second;
+                            dma_word_set_byte(dma_rx_buf, i, it->second);
                         } else {
-                            dma_rx_buf[i] = static_cast<uint8_t>((a ^ (a >> 8) ^ 0x5Au) & 0xFFu);
+                            dma_word_set_byte(dma_rx_buf, i, static_cast<uint8_t>((a ^ (a >> 8) ^ 0x5Au) & 0xFFu));
                         }
                     }
                 }
@@ -1978,8 +2053,9 @@ int main() {
 
         if (dbg_error) {
             std::fprintf(stderr,
-                         "\nERROR: transformer_top flagged error (cycle=%d, code=0x%08X, status=0x%08X) : ",
-                         cycle, dbg_error_code, status_mem.status);
+                         "\nERROR: transformer_top flagged error (cycle=%d, code=0x%08X, status=0x%08X, mmu_subcode=%u:%s) : ",
+                         cycle, dbg_error_code, status_mem.status,
+                         status_mem.mmu_error_subcode, mmu_subcode_name(status_mem.mmu_error_subcode));
             print_error_code_bits(dbg_error_code);
             std::fprintf(stderr, "\n");
             aborted_on_error = true;

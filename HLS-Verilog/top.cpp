@@ -1,6 +1,10 @@
 #include "top.hpp"
 #include "MMU/mmu_luka.hpp"
 
+#ifndef TOP_ENABLE_HEAVY_DEBUG_MIRRORS
+#define TOP_ENABLE_HEAVY_DEBUG_MIRRORS 0
+#endif
+
 // Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
 void transformer_top(
     // ------------------------------------------------------------
@@ -32,8 +36,8 @@ void transformer_top(
     bool            &irq_ps,
     bool            dma_ready,
     bool            dma_done,
-    const uint8_t   dma_rx_buf[TOP_DMA_BUF_BYTES],
-    uint8_t         dma_tx_buf[TOP_DMA_BUF_BYTES],
+    const uint32_t  dma_rx_buf[TOP_DMA_BUF_WORDS],
+    uint32_t        dma_tx_buf[TOP_DMA_BUF_WORDS],
     bool            &dma_start,
     uint32_t        &dma_addr,
     uint32_t        &dma_len,
@@ -110,8 +114,10 @@ void transformer_top(
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 #pragma HLS INTERFACE ap_none port=irq_ps
+#if TOP_ENABLE_HEAVY_DEBUG_MIRRORS
 #pragma HLS ARRAY_PARTITION variable=dbg_head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=dbg_head_out_buf complete dim=1
+#endif
 
     bool done                   = false;    // Scheduler done flag
     bool scheduler_error        = false;
@@ -200,21 +206,21 @@ void transformer_top(
             head_compute_ctx_local[lane] = ComputeHeadCtx();
         }
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
             mmu_in_buf[i] = 0;
         }
         for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
             mmu_out_buf[i] = 0;
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
             for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 mmu_head_in_buf[lane][i] = 0;
             }
             for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 mmu_head_out_buf[lane][i] = 0;
             }
         }
@@ -361,7 +367,8 @@ void transformer_top(
                                     compute_error,
                                     mmu_status.invalid,
                                     mmu_status.overflow,
-                                    mmu_status.error_code);
+                                    mmu_status.error_code,
+                                    mmu_status.error_subcode);
     ctrl_mem_interface.check_control(ctrl_mem, done);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
@@ -397,23 +404,24 @@ void transformer_top(
         dbg_mem_read_request = mem_read_request_local;
         dbg_mem_write_request = mem_write_request_local;
         dbg_mem_op = mem_op_local;
+#if TOP_ENABLE_HEAVY_DEBUG_MIRRORS
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
-    #pragma HLS PIPELINE II=1
+    // #pragma HLS PIPELINE II=1
             dbg_in_buf[i] = mmu_in_buf[i];
         }
         for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
-    #pragma HLS PIPELINE II=1
+    // #pragma HLS PIPELINE II=1
             dbg_out_buf[i] = mmu_out_buf[i];
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
     #pragma HLS UNROLL
             dbg_head_compute_ctx[lane] = head_compute_ctx_local[lane];
             for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
-    #pragma HLS PIPELINE II=1
+    // #pragma HLS PIPELINE II=1
                 dbg_head_in_buf[lane][i] = mmu_head_in_buf[lane][i];
             }
             for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
-    #pragma HLS PIPELINE II=1
+    // #pragma HLS PIPELINE II=1
                 dbg_head_out_buf[lane][i] = mmu_head_out_buf[lane][i];
             }
         }
@@ -421,6 +429,7 @@ void transformer_top(
     #pragma HLS UNROLL
             dbg_head_ctx_ref[i] = head_ctx_local[i];
         }
+#endif
         control_reg   = ctrl_mem.control;
         irq_mask_reg   = ctrl_mem.irq_mask;
         irq_clear_reg  = ctrl_mem.irq_clear;

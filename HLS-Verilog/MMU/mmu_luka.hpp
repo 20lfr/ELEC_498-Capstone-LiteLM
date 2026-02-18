@@ -3,7 +3,12 @@
 #include <cstdint>
 #include "../top_params.hpp"
 
-constexpr int URAM_BANKS = 64;
+constexpr int URAM_BANKS_TOTAL = 64;
+#ifndef MMU_RESERVED_URAM_BANKS
+#define MMU_RESERVED_URAM_BANKS 16
+#endif
+constexpr int URAM_BANKS = URAM_BANKS_TOTAL - MMU_RESERVED_URAM_BANKS;
+static_assert(URAM_BANKS > 0, "MMU must have at least one URAM bank");
 constexpr uint32_t URAM_BANK_BYTES = 36864; // 288Kb / 8
 
 // FAST_SYNTH profile:
@@ -26,6 +31,8 @@ constexpr int DMA_QUEUE_DEPTH = 16;
 constexpr int COMPUTE_QUEUE_DEPTH = 16;
 constexpr int DMA_BUF_BYTES = 65536;
 #endif
+constexpr int DMA_BUF_WORDS = DMA_BUF_BYTES / static_cast<int>(sizeof(uint32_t));
+static_assert((DMA_BUF_BYTES % static_cast<int>(sizeof(uint32_t))) == 0, "DMA_BUF_BYTES must be word-aligned");
 
 enum class ComputeReqType : uint8_t {
     NONE = 0,
@@ -127,6 +134,7 @@ struct Status {
     bool overflow = false;
     bool invalid = false;
     uint32_t error_code = ERR_NONE;
+    uint32_t error_subcode = MMU_ERR_SUBCODE_NONE;
     uint16_t region_count = 0;
 };
 
@@ -143,8 +151,8 @@ void mmu_fsm(
     // ------------------------------------------------------------
     bool dma_ready,                     // [INPUT] External DMA can accept new command
     bool dma_done,                      // [INPUT] External DMA transfer complete pulse
-    const uint8_t dma_rx_buf[DMA_BUF_BYTES], // [INPUT] DMA read payload (DDR -> MMU)
-    uint8_t dma_tx_buf[DMA_BUF_BYTES],       // [OUTPUT] DMA write payload (MMU -> DDR)
+    const uint32_t dma_rx_buf[DMA_BUF_WORDS], // [INPUT] DMA read payload words (DDR -> MMU)
+    uint32_t dma_tx_buf[DMA_BUF_WORDS],       // [OUTPUT] DMA write payload words (MMU -> DDR)
     bool &dma_start,                    // [OUTPUT] Start DMA transfer
     uint32_t &dma_addr,                 // [OUTPUT] DMA address
     uint32_t &dma_len,                  // [OUTPUT] DMA length in bytes
