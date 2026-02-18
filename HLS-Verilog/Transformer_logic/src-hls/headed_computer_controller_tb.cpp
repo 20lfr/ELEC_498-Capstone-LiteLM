@@ -750,6 +750,7 @@ int main() {
         headed_compute_controller(
             compute_ctx,
             reset_n,
+            0,
             in_buf,
             out_buf,
             dbg_state,

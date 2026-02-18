@@ -136,6 +136,7 @@ void mmu_fsm(
     // ------------------------------------------------------------
     bool reset_n,                       // [INPUT] Active-low reset
     ControlMemSpace ctrl_mem,           // [INPUT] Control memory snapshot
+    uint16_t token_pos,                 // [INPUT] Current token position for KV cache slotting
 
     // ------------------------------------------------------------
     // External DMA control/payload

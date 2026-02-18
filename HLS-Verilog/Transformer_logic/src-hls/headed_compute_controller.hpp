@@ -6,6 +6,7 @@
 void headed_compute_controller(
     ComputeHeadCtx &ctx,            // [BOTH] Per-head persistent state
     bool        reset_n,             // [INPUT] Active-low reset
+    uint16_t    token_pos,           // [INPUT] Token position for RoPE Q phase
 
     // Flat input/output buffers
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
@@ -25,6 +26,7 @@ void headed_compute_controller(
 void drive_headed_compute_controller(
     ComputeHeadCtx (&ctx)[HEADS_PARALLEL],
     bool        reset_n,
+    uint16_t    token_pos,
     const uint8_t in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     bool        &error

@@ -647,7 +647,7 @@ int main() {
                 mem_pending[lane] = MemPending::NONE;
             }
             state = TbState::RESET;
-            drive_headed_compute_controller(ctx, false, in_buf, out_buf, error);
+            drive_headed_compute_controller(ctx, false, 0, in_buf, out_buf, error);
             continue;
         }
 
@@ -692,7 +692,7 @@ int main() {
                 break;
         }
 
-        drive_headed_compute_controller(ctx, reset_n, in_buf, out_buf, error);
+        drive_headed_compute_controller(ctx, reset_n, 0, in_buf, out_buf, error);
 
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
             if (!mem_busy[lane]) {

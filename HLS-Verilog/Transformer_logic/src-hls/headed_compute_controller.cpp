@@ -47,6 +47,23 @@ static void print_att_value_buffers(
         std::printf("\n");
     }
 }
+
+static void print_att_scores_rope_qk(
+    const int8_t vec[HEAD_VECTOR_MAX],
+    const int8_t mat[HEAD_MATRIX_MAX]
+) {
+    std::printf("Q:");
+    for (int i = 0; i < D_HEADS; ++i) {
+        std::printf(" %d", static_cast<int>(vec[i]));
+    }
+    std::printf("\n  K_CACHE:");
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+        for (int h = 0; h < D_HEADS; ++h) {
+            std::printf(" %d", static_cast<int>(mat[t * HEAD_VECTOR_MAX + h]));
+        }
+    }
+    std::printf("\n");
+}
 #else
 static inline void print_head_buffers(
     const char *,
@@ -60,7 +77,151 @@ static inline void print_att_value_buffers(
     const int16_t[CONTEXT_LENGTH],
     const int8_t[D_HEADS * CONTEXT_LENGTH]
 ) {}
+
+static inline void print_att_scores_rope_qk(
+    const int8_t[HEAD_VECTOR_MAX],
+    const int8_t[HEAD_MATRIX_MAX]
+) {}
 #endif
+
+namespace rope_lut {
+
+static inline int8_t sat_i8(int32_t x) {
+#pragma HLS INLINE
+    if (x > 127) {
+        return 127;
+    }
+    if (x < -128) {
+        return -128;
+    }
+    return static_cast<int8_t>(x);
+}
+
+// RoPE LUTs for current bring-up config (CONTEXT_LENGTH=16, D_HEADS=4).
+// Pair 0 angle: pos, Pair 1 angle: pos * 0.01, both in Q1.15.
+static constexpr int ROPE_LUT_CONTEXT = 16;
+static_assert(CONTEXT_LENGTH == ROPE_LUT_CONTEXT, "RoPE LUT expects CONTEXT_LENGTH=16");
+static_assert(D_HEADS == 4, "RoPE LUT expects D_HEADS=4");
+
+static constexpr int16_t ROPE_PAIR0_COS_Q15[ROPE_LUT_CONTEXT] = {
+    32767, 17705, -13636, -32440, -21419, 9295, 31463, 24704,
+    -4768, -29856, -27495, 145, 27651, 29735, 4481, -24893
+};
+static constexpr int16_t ROPE_PAIR0_SIN_Q15[ROPE_LUT_CONTEXT] = {
+    0, 27573, 29796, 4624, -24799, -31422, -9156, 21528,
+    32419, 13504, -17826, -32768, -17582, 13768, 32460, 21309
+};
+static constexpr int16_t ROPE_PAIR1_COS_Q15[ROPE_LUT_CONTEXT] = {
+    32767, 32766, 32761, 32753, 32742, 32727, 32709, 32688,
+    32663, 32635, 32604, 32570, 32532, 32492, 32447, 32400
+};
+static constexpr int16_t ROPE_PAIR1_SIN_Q15[ROPE_LUT_CONTEXT] = {
+    0, 328, 655, 983, 1310, 1638, 1965, 2292,
+    2619, 2945, 3271, 3597, 3923, 4248, 4573, 4897
+};
+
+static inline int clamp_pos(uint16_t pos) {
+#pragma HLS INLINE
+    return (pos < ROPE_LUT_CONTEXT) ? static_cast<int>(pos) : (ROPE_LUT_CONTEXT - 1);
+}
+
+static inline void lookup_sincos_q15(
+    uint16_t pos,
+    int pair_idx,
+    int16_t &c_q15,
+    int16_t &s_q15
+) {
+#pragma HLS INLINE
+    const int p = clamp_pos(pos);
+    if (pair_idx == 0) {
+        c_q15 = ROPE_PAIR0_COS_Q15[p];
+        s_q15 = ROPE_PAIR0_SIN_Q15[p];
+        return;
+    }
+    if (pair_idx == 1) {
+        c_q15 = ROPE_PAIR1_COS_Q15[p];
+        s_q15 = ROPE_PAIR1_SIN_Q15[p];
+        return;
+    }
+    c_q15 = 32767;
+    s_q15 = 0;
+}
+
+static inline void rotate_pair_q07(
+    int8_t x0_q07,
+    int8_t x1_q07,
+    int16_t c_q15,
+    int16_t s_q15,
+    int8_t &y0_q07,
+    int8_t &y1_q07
+) {
+#pragma HLS INLINE
+    const int16_t x0_q15 = static_cast<int16_t>(x0_q07) << 8;
+    const int16_t x1_q15 = static_cast<int16_t>(x1_q07) << 8;
+
+    const int32_t y0_mul_q30 = static_cast<int32_t>(x0_q15) * static_cast<int32_t>(c_q15) -
+                               static_cast<int32_t>(x1_q15) * static_cast<int32_t>(s_q15);
+    const int32_t y1_mul_q30 = static_cast<int32_t>(x0_q15) * static_cast<int32_t>(s_q15) +
+                               static_cast<int32_t>(x1_q15) * static_cast<int32_t>(c_q15);
+
+    const int32_t y0_q15 = (y0_mul_q30 + ((y0_mul_q30 >= 0) ? (1 << 14) : -(1 << 14))) >> 15;
+    const int32_t y1_q15 = (y1_mul_q30 + ((y1_mul_q30 >= 0) ? (1 << 14) : -(1 << 14))) >> 15;
+
+    const int32_t y0_q07_i32 = (y0_q15 + ((y0_q15 >= 0) ? (1 << 7) : -(1 << 7))) >> 8;
+    const int32_t y1_q07_i32 = (y1_q15 + ((y1_q15 >= 0) ? (1 << 7) : -(1 << 7))) >> 8;
+
+    y0_q07 = sat_i8(y0_q07_i32);
+    y1_q07 = sat_i8(y1_q07_i32);
+}
+
+static inline void apply_rope_q_vector(
+    int8_t head_vec[HEAD_VECTOR_MAX],
+    uint16_t q_pos
+) {
+#pragma HLS INLINE
+#pragma HLS ARRAY_PARTITION variable=head_vec cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
+    for (int d = 0; d + 1 < D_HEADS; d += 2) {
+#pragma HLS UNROLL
+        const int pair_idx = d >> 1;
+        int16_t c_q15 = 32767;
+        int16_t s_q15 = 0;
+        lookup_sincos_q15(q_pos, pair_idx, c_q15, s_q15);
+
+        int8_t q0_rot = 0;
+        int8_t q1_rot = 0;
+        rotate_pair_q07(head_vec[d], head_vec[d + 1], c_q15, s_q15, q0_rot, q1_rot);
+        head_vec[d] = q0_rot;
+        head_vec[d + 1] = q1_rot;
+    }
+}
+
+static inline void apply_rope_k_matrix(
+    int8_t head_mat[HEAD_MATRIX_MAX],
+    uint16_t k_pos_base
+) {
+#pragma HLS INLINE
+#pragma HLS ARRAY_PARTITION variable=head_mat cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
+    for (int d = 0; d + 1 < D_HEADS; d += 2) {
+#pragma HLS UNROLL
+        const int pair_idx = d >> 1;
+        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+#pragma HLS PIPELINE II=1
+            const uint16_t k_pos = static_cast<uint16_t>(k_pos_base + static_cast<uint16_t>(t));
+            int16_t c_k15 = 32767;
+            int16_t s_k15 = 0;
+            lookup_sincos_q15(k_pos, pair_idx, c_k15, s_k15);
+
+            const int base = (t * HEAD_VECTOR_MAX) + d;
+            int8_t k0_rot = 0;
+            int8_t k1_rot = 0;
+            rotate_pair_q07(head_mat[base], head_mat[base + 1], c_k15, s_k15, k0_rot, k1_rot);
+            head_mat[base] = k0_rot;
+            head_mat[base + 1] = k1_rot;
+        }
+    }
+}
+
+} // namespace rope_lut
 
 void MAC_HEAD_ARCHITECTURE(
     bool start,
@@ -279,6 +440,7 @@ void REQUANT_D_HEADS_int32_to_int8(
 static void headed_compute_controller_lane(
     ComputeHeadCtx &ctx,
     bool        reset_n,
+    uint16_t    token_pos,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[head_buf::OUT_BUF_BYTES],
     ComputeState &dbg_state,
@@ -492,7 +654,7 @@ static void headed_compute_controller_lane(
                     
                     if (ctx.mac_ready && !ctx.mac_start && !ctx.mac_complete) {
                         ctx.mac_start = true;
-                        print_head_buffers("MAC_START QKV", head_vec, head_mat, head_bias);
+                        // print_head_buffers("MAC_START QKV", head_vec, head_mat, head_bias);
                     }
                     if (ctx.mac_complete) {
                         int layer = static_cast<int>(ctx.req.layer_idx);
@@ -582,15 +744,20 @@ static void headed_compute_controller_lane(
                         }
                     }
                     
+                    
+                    const uint16_t q_pos = (token_pos < CONTEXT_LENGTH) ? token_pos : static_cast<uint16_t>(CONTEXT_LENGTH - 1);
+                    rope_lut::apply_rope_q_vector(head_vec, q_pos);
+                    rope_lut::apply_rope_k_matrix(head_mat, 0);
+                    print_att_scores_rope_qk(head_vec, head_mat);
+                    
                     // INIT bias to zero
                     for (int h = 0; h < HEAD_ACCUM_MAX; ++h) {
 #pragma HLS PIPELINE II=1
                         head_bias[h] = int4_t(0);
                     }
-                    
                     if (ctx.mac_ready && !ctx.mac_start && !ctx.mac_complete) {
                         ctx.mac_start = true;
-                        print_head_buffers("MAC_START ATT_SCORES", head_vec, head_mat, head_bias);
+                        // print_head_buffers("MAC_START ATT_SCORES", head_vec, head_mat, head_bias);
                     }
                     if (ctx.mac_complete) {
                         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
@@ -653,15 +820,14 @@ static void headed_compute_controller_lane(
                         }
                     }
 
-                    print_att_value_buffers("MAC_EXEC ATT_VALUE", head_vec_att, head_mat_att);
+                    // print_att_value_buffers("MAC_EXEC ATT_VALUE", head_vec_att, head_mat_att);
                     MAC_HEAD_ATT_VALUE_DIRECT(head_vec_att, head_mat_att, head_out_att);
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
                         compute_buf::write_i32(out_buf, h * 4, head_out_att[h]);
                     }
                     break;
-                }
-                
+                }      
                 default:
                     ctx.error_latched = true;
                     error = true;
@@ -722,6 +888,7 @@ static void headed_compute_controller_lane(
 void drive_headed_compute_controller(
     ComputeHeadCtx (&ctx)[HEADS_PARALLEL],
     bool        reset_n,
+    uint16_t    token_pos,
     const uint8_t in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     bool        &error
@@ -798,6 +965,7 @@ void drive_headed_compute_controller(
         headed_compute_controller_lane(
             ctx[lane],
             reset_n,
+            token_pos,
             in_buf[lane],
             out_buf[lane],
             dbg_state,
@@ -831,6 +999,7 @@ void drive_headed_compute_controller(
 void headed_compute_controller(
     ComputeHeadCtx &ctx,            // [BOTH] Per-head persistent state
     bool        reset_n,             // [INPUT] Active-low reset
+    uint16_t    token_pos,           // [INPUT] Token position for RoPE Q phase
 
     // Flat input/output buffers
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
@@ -867,6 +1036,7 @@ void headed_compute_controller(
     headed_compute_controller_lane(
         ctx,
         reset_n,
+        token_pos,
         in_buf,
         out_buf,
         dbg_state,

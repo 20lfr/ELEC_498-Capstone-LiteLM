@@ -183,7 +183,6 @@ static inline void signal_head_compute_done(
 ) {
 #pragma HLS INLINE
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
         ComputeOp op = ComputeOp::CMP_NONE;
         int layer = 0, head = -1, tile = -1;
         unpack_compute(head_compute_ctx[lane].mem_op, op, layer, head, tile);
@@ -197,7 +196,7 @@ static inline void signal_head_compute_done(
 }
 
 static inline uint32_t main_op_out_bytes(ComputeOp op) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     switch (op) {
         case CMP_OUT_PROJ: {
             return compute_buf::OUTOutProjLayout::TOTAL_BYTES;
@@ -230,7 +229,7 @@ static inline uint32_t main_op_out_bytes(ComputeOp op) {
 }
 
 static inline uint32_t head_op_out_bytes(ComputeOp op) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     switch (op) {
         case CMP_Q:
         case CMP_K:
@@ -259,7 +258,7 @@ static inline uint32_t head_op_out_bytes(ComputeOp op) {
 }
 
 static inline uint8_t default_retain(Tag tag) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     switch (tag) {
         case Tag::WQ_W:
         case Tag::WQ_B:
@@ -314,7 +313,7 @@ static inline uint8_t default_retain(Tag tag) {
 }
 
 static inline bool should_consume(Tag tag) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     switch (tag) {
         case Tag::WQ_W:
         case Tag::WQ_B:
@@ -403,7 +402,6 @@ static void arb_step() {
     if (arb_busy) return;
     int grant = -1;
     for (int i = 0; i < NUM_HEADS; ++i) {
-#pragma HLS UNROLL
         const int h = (arb_rr_ptr + i) % NUM_HEADS;
         if (arb_pending[h]) {
             grant = h;
@@ -412,7 +410,6 @@ static void arb_step() {
     }
     if (grant >= 0) {
         for (int i = 0; i < NUM_HEADS; ++i) {
-#pragma HLS UNROLL
             arb_grant[i] = (i == grant);
         }
         arb_current = grant;
@@ -1152,7 +1149,7 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
     }
 }
 
-static uint32_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head) {
+static uint32_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, uint16_t token_pos) {
 #pragma HLS INLINE
     const uint32_t base = (sel == DMASEL_K_WRITE)
         ? static_cast<uint32_t>(ctrl_mem.k_cache_addr)
@@ -1165,8 +1162,10 @@ static uint32_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int lay
                                           : static_cast<uint32_t>(CONTEXT_LENGTH * D_HEADS))
         : ((ctrl_mem.v_cache_stride != 0) ? ctrl_mem.v_cache_stride
                                           : static_cast<uint32_t>(CONTEXT_LENGTH * D_HEADS));
+    const uint32_t token_off = static_cast<uint32_t>(token_pos) * static_cast<uint32_t>(D_HEADS);
     return base + static_cast<uint32_t>(layer) * layer_stride
-                + static_cast<uint32_t>(head) * head_stride;
+                + static_cast<uint32_t>(head) * head_stride
+                + token_off;
 }
 
 // ---------------------------------------------------------------------------
@@ -1503,6 +1502,7 @@ void mmu_fsm(
     // Control / configuration
     bool            reset_n,                        // [INPUT] Active-low reset
     ControlMemSpace ctrl_mem,                       // [INPUT] Control memory snapshot
+    uint16_t        token_pos,                      // [INPUT] Current token position for KV cache slotting
 
     // External DMA control/payload
     bool            dma_ready,                      // [INPUT] DMA command interface ready
@@ -1551,9 +1551,9 @@ void mmu_fsm(
 #pragma HLS INLINE off
 #pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_ctx complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_compute_ctx complete dim=1
+
 #pragma HLS BIND_STORAGE variable=uram_banks type=ram_t2p impl=uram
+
 #pragma HLS BIND_STORAGE variable=bank_offsets type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=dma_q type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=compute_q type=ram_1p impl=bram
@@ -1573,7 +1573,6 @@ void mmu_fsm(
     }
     main_wl_accept = main_wl_accepted;
     for (int h = 0; h < NUM_HEADS; ++h) {
-#pragma HLS UNROLL
         head_ctx[h].wl_ready = mmu_req_ready;
         if (!head_ctx[h].wl_start) {
             head_wl_accepted[h] = false;
@@ -1582,7 +1581,6 @@ void mmu_fsm(
         head_ctx[h].dma_done = false;
     }
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
         head_compute_ctx[lane].mem_transfer_done = false;
     }
 
@@ -1604,7 +1602,6 @@ void mmu_fsm(
         arb_rr_ptr = 0;
         arb_busy = false;
         for (int i = 0; i < NUM_HEADS; ++i) {
-#pragma HLS UNROLL
             arb_pending[i] = false;
             arb_grant[i] = false;
             head_wl_accepted[i] = false;
@@ -1613,7 +1610,6 @@ void mmu_fsm(
         prev_main_mem_req = false;
         prev_main_mem_op = 0;
         for (int i = 0; i < HEADS_PARALLEL; ++i) {
-#pragma HLS UNROLL
             prev_head_mem_req[i] = false;
             prev_head_mem_op[i] = 0;
         }
@@ -1623,11 +1619,9 @@ void mmu_fsm(
             bank_offsets[i] = 0;
         }
         for (int i = 0; i < DMA_QUEUE_DEPTH; ++i) {
-#pragma HLS UNROLL
             dma_q[i] = DmaQueueEntry{};
         }
         for (int i = 0; i < COMPUTE_QUEUE_DEPTH; ++i) {
-#pragma HLS UNROLL
             compute_q[i] = ComputeQueueEntry{};
         }
         for (int i = 0; i < MAX_REGIONS; ++i) {
@@ -1716,7 +1710,6 @@ void mmu_fsm(
     // Enqueue per-head DMA requests via HeadCtx.
     // Level handshake: MMU accepts when wl_start is high and holds wl_accept until wl_start drops.
     for (int h = 0; h < NUM_HEADS; ++h) {
-#pragma HLS UNROLL
         const bool head_dma_req_pending = reset_n && head_ctx[h].wl_start && !head_wl_accepted[h];
         if (head_dma_req_pending) {
             if (dma_q_count >= DMA_QUEUE_DEPTH) {
@@ -1758,7 +1751,6 @@ void mmu_fsm(
 
     // Enqueue headed compute requests via ComputeHeadCtx lanes.
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
         const bool req_read = head_compute_ctx[lane].mem_read_request;
         const bool req_write = head_compute_ctx[lane].mem_write_request;
         const bool req_active = (req_read || req_write);
@@ -1787,7 +1779,6 @@ void mmu_fsm(
     prev_main_mem_req = main_mem_req;
     prev_main_mem_op = mem_op;
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
         const bool req_active = head_compute_ctx[lane].mem_read_request || head_compute_ctx[lane].mem_write_request;
         prev_head_mem_req[lane] = req_active;
         prev_head_mem_op[lane] = head_compute_ctx[lane].mem_op;
@@ -2017,8 +2008,14 @@ void mmu_fsm(
                 g_state = State::IDLE;
                 break;
             }
+            if (token_pos >= static_cast<uint16_t>(CONTEXT_LENGTH)) {
+                mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
+                active_dma_valid = false;
+                g_state = State::IDLE;
+                break;
+            }
             active_dma_addr_base = calc_kv_write_addr(ctrl_mem, active_dma_sel, active_dma_layer,
-                                                      active_dma_head);
+                                                      active_dma_head, token_pos);
             active_piece_idx = 0;
             active_piece_count = 1;
             active_piece_bytes[0] = wb_len;

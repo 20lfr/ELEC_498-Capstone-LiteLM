@@ -533,6 +533,7 @@ int main() {
         mmu_fsm(
             reset_n,
             ctrl,
+            static_cast<uint16_t>(0),
             dma_ready,
             dma_done,
             dma_rx_buf,

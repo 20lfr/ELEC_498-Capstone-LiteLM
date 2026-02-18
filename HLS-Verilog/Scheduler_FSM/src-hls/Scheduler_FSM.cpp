@@ -96,7 +96,7 @@ void scheduler_hls(
     // ------------------------------------------------------------
     
 ) {
-
+#pragma HLS INLINE off
 #pragma HLS array_partition variable = head_ctx_ref complete dim = 1
 
   // Core FSM state

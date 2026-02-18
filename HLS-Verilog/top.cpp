@@ -160,6 +160,8 @@ void transformer_top(
     static bool             main_mem_read_request         = false;
     static bool             main_mem_write_request        = false;
     static uint32_t         main_mem_op                   = 0;
+    static uint16_t         token_pos_current             = 0;
+    static uint16_t         token_pos_next                = 0;
 
     // Active-low reset derived from control register.
     const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
@@ -186,6 +188,8 @@ void transformer_top(
         main_mem_read_request = false;
         main_mem_write_request = false;
         main_mem_op = 0;
+        token_pos_current = 0;
+        token_pos_next = 0;
 
         for (int i = 0; i < NUM_HEADS; ++i) {
 #pragma HLS UNROLL
@@ -243,6 +247,15 @@ void transformer_top(
         state_local
     );
     axis_in_start = scheduler_axis_in_start;
+    if (scheduler_axis_in_start) {
+        const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
+        token_pos_current = (token_pos_next <= token_pos_max) ? token_pos_next : token_pos_max;
+        if (token_pos_next < token_pos_max) {
+            token_pos_next = static_cast<uint16_t>(token_pos_next + 1);
+        } else {
+            token_pos_next = token_pos_max;
+        }
+    }
 
     compute_controller(
         ctrl_mem,               
@@ -288,6 +301,7 @@ void transformer_top(
     drive_headed_compute_controller(
         head_compute_ctx_local,
         reset_n,
+        token_pos_current,
         mmu_head_in_buf,
         mmu_head_out_buf,
         head_error_any
@@ -309,6 +323,7 @@ void transformer_top(
     mmu_fsm(
         reset_n,
         ctrl_mem,
+        token_pos_current,
         dma_ready,
         dma_done,
         dma_rx_buf,
