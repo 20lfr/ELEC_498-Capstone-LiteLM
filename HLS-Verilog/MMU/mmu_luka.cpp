@@ -275,15 +275,23 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::W2_B:
         case Tag::CTX_K:
         case Tag::CTX_V:
-        case Tag::LN0_GAMMA:
-        case Tag::LN0_EPS:
         case Tag::LN1_GAMMA:
-        case Tag::LN1_EPS:
+        case Tag::LN1_EPS: {
+            return 1; // single-use DMA payloads
+        }
+        case Tag::LN0_GAMMA:
+        case Tag::LN0_EPS: {
+            return 1; // consumed on FINAL_NORM after LN0 use
+        }
         case Tag::STREAM_IN_TOKEN: {
             return 0xFF; // keep indefinitely unless explicitly reset
         }
-        case Tag::HEAD_REQUANT_PACKED:
-        case Tag::CONCAT_OUT:
+        case Tag::RESID1_OUT: {
+            return 0xFF; // cross-layer carry
+        }
+        case Tag::RESID0_OUT:
+        case Tag::LN0_OUT:
+        case Tag::LN1_OUT:
         case Tag::OUT_PROJ_PACKED:
         case Tag::FFN_W1_PACKED:
         case Tag::FFN_ACT_OUT:
@@ -294,7 +302,9 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::ATT_SCORES_OUT:
         case Tag::VALUE_SCALE_OUT:
         case Tag::SOFTMAX_OUT:
-        case Tag::ATT_VALUE_OUT: {
+        case Tag::ATT_VALUE_OUT:
+        case Tag::HEAD_REQUANT_PACKED:
+        case Tag::CONCAT_OUT: {
             return 1;
         }
         default: {
@@ -306,6 +316,24 @@ static inline uint8_t default_retain(Tag tag) {
 static inline bool should_consume(Tag tag) {
 #pragma HLS INLINE
     switch (tag) {
+        case Tag::WQ_W:
+        case Tag::WQ_B:
+        case Tag::WK_W:
+        case Tag::WK_B:
+        case Tag::WV_W:
+        case Tag::WV_B:
+        case Tag::WO_W:
+        case Tag::WO_B:
+        case Tag::W1_W:
+        case Tag::W1_B:
+        case Tag::W2_W:
+        case Tag::W2_B:
+        case Tag::CTX_K:
+        case Tag::CTX_V:
+        case Tag::LN0_GAMMA:
+        case Tag::LN0_EPS:
+        case Tag::LN1_GAMMA:
+        case Tag::LN1_EPS:
         case Tag::HEAD_REQUANT_PACKED:
         case Tag::CONCAT_OUT:
         case Tag::OUT_PROJ_PACKED:
@@ -558,7 +586,6 @@ static void purge_layers_before(int new_layer) {
     if (new_layer <= 0) return;
 
     for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
         if (!regions[i].valid || !regions[i].used) {
             continue;
         }
@@ -588,7 +615,6 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
 #pragma HLS INLINE
     int free_idx = -1;
     for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
         if (!regions[i].valid) {
             free_idx = i;
             break;
@@ -597,7 +623,6 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
     if (free_idx < 0) {
         gc_scan();
         for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
             if (!regions[i].valid) {
                 free_idx = i;
                 break;
@@ -792,7 +817,7 @@ struct WriteSpec {
 };
 
 static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     WriteSpec s;
     s.part_bytes = headed ? head_op_out_bytes(op) : main_op_out_bytes(op);
     s.total_bytes = s.part_bytes;
@@ -924,7 +949,7 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
 static bool build_dma_piece_plan(DmaSel sel,
                                  uint8_t &piece_count, uint32_t piece_bytes[MAX_DMA_PIECES],
                                  uint32_t piece_addr_off[MAX_DMA_PIECES], Tag piece_tag[MAX_DMA_PIECES]) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     piece_count = 0;
     for (int i = 0; i < MAX_DMA_PIECES; ++i) {
 #pragma HLS UNROLL
@@ -1044,7 +1069,7 @@ static bool build_dma_piece_plan(DmaSel sel,
 
 static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, int tile,
                                uint32_t &addr_out) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     if (layer < 0) return false;
     switch (sel) {
         case DmaSel::DMASEL_WQ: {
@@ -1156,7 +1181,7 @@ static void zero_buf(uint8_t *buf, int n) {
 
 static bool build_head_in_buf(ComputeOp op, int layer, int head,
                               uint8_t lane_buf[head_buf::IN_BUF_BYTES], bool &invalid_flag) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     zero_buf(lane_buf, head_buf::IN_BUF_BYTES);
     switch (op) {
         case CMP_Q: {
@@ -1166,11 +1191,11 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
             if (!ok) return false;
             ok = load_region_to_buf(Tag::WQ_W, layer, head, -1,
                                     lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                    false, invalid_flag);
+                                    true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::WQ_B, layer, head, -1,
                                       lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         case CMP_K: {
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
@@ -1179,11 +1204,11 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
             if (!ok) return false;
             ok = load_region_to_buf(Tag::WK_W, layer, head, -1,
                                     lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                    false, invalid_flag);
+                                    true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::WK_B, layer, head, -1,
                                       lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         case CMP_V: {
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
@@ -1192,11 +1217,11 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
             if (!ok) return false;
             ok = load_region_to_buf(Tag::WV_W, layer, head, -1,
                                     lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                    false, invalid_flag);
+                                    true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::WV_B, layer, head, -1,
                                       lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         case CMP_ATT_SCORES: {
             bool ok = load_region_to_buf(Tag::Q_OUT, layer, head, -1,
@@ -1205,7 +1230,7 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
             if (!ok) return false;
             return load_region_to_buf(Tag::CTX_K, layer, head, -1,
                                       lane_buf, head_buf::INAttScoresLayout::K_CACHE, head_buf::INAttScoresLayout::K_CACHE_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         case CMP_VALUE_SCALE: {
             return load_region_to_buf(Tag::ATT_SCORES_OUT, layer, head, -1,
@@ -1224,7 +1249,7 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
             if (!ok) return false;
             return load_region_to_buf(Tag::CTX_V, layer, head, -1,
                                       lane_buf, head_buf::INAttValueLayout::V_CACHE, head_buf::INAttValueLayout::V_CACHE_BYTES,
-                                      false, invalid_flag);
+                                      true, invalid_flag);
         }
         case CMP_HEAD_REQUANT: {
             return load_region_to_buf(Tag::ATT_VALUE_OUT, layer, head, -1,
@@ -1241,7 +1266,7 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
 
 static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                               uint8_t buf[compute_buf::IN_BUF_BYTES], bool &invalid_flag) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     zero_buf(buf, compute_buf::IN_BUF_BYTES);
     switch (op) {
         case CMP_LN0: {
@@ -1290,11 +1315,11 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             if (!ok) return false;
             ok = load_region_to_buf(Tag::WO_W, layer, -1, tile,
                                     buf, compute_buf::INOutProjLayout::W,
-                                    compute_buf::INOutProjLayout::W_BYTES, false, invalid_flag);
+                                    compute_buf::INOutProjLayout::W_BYTES, true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::WO_B, layer, -1, tile,
                                       buf, compute_buf::INOutProjLayout::B,
-                                      compute_buf::INOutProjLayout::B_BYTES, false, invalid_flag);
+                                      compute_buf::INOutProjLayout::B_BYTES, true, invalid_flag);
         }
         case CMP_RESID1: {
             Tag x_tag = Tag::STREAM_IN_TOKEN;
@@ -1327,11 +1352,11 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             } else {
                 ok = load_region_to_buf(Tag::LN1_GAMMA, layer, -1, -1,
                                         buf, compute_buf::INLayerNormLayout::GAMMA,
-                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, false, invalid_flag);
+                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, true, invalid_flag);
                 if (!ok) return false;
                 return load_region_to_buf(Tag::LN1_EPS, layer, -1, -1,
                                           buf, compute_buf::INLayerNormLayout::EPS,
-                                          compute_buf::INLayerNormLayout::EPS_BYTES, false, invalid_flag);
+                                          compute_buf::INLayerNormLayout::EPS_BYTES, true, invalid_flag);
             }
         }
         case CMP_FFN_W1: {
@@ -1341,11 +1366,11 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             if (!ok) return false;
             ok = load_region_to_buf(Tag::W1_W, layer, -1, tile,
                                     buf, compute_buf::INFfnW1Layout::W,
-                                    compute_buf::INFfnW1Layout::W_BYTES, false, invalid_flag);
+                                    compute_buf::INFfnW1Layout::W_BYTES, true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::W1_B, layer, -1, tile,
                                       buf, compute_buf::INFfnW1Layout::B,
-                                      compute_buf::INFfnW1Layout::B_BYTES, false, invalid_flag);
+                                      compute_buf::INFfnW1Layout::B_BYTES, true, invalid_flag);
         }
         case CMP_FFN_ACT: {
             return load_region_to_buf(Tag::FFN_W1_PACKED, layer, -1, -1,
@@ -1361,11 +1386,11 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             if (!ok) return false;
             ok = load_region_to_buf(Tag::W2_W, layer, -1, tile,
                                     buf, compute_buf::INFfnW2Layout::W,
-                                    compute_buf::INFfnW2Layout::W_BYTES, false, invalid_flag);
+                                    compute_buf::INFfnW2Layout::W_BYTES, true, invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::W2_B, layer, -1, tile,
                                       buf, compute_buf::INFfnW2Layout::B,
-                                      compute_buf::INFfnW2Layout::B_BYTES, false, invalid_flag);
+                                      compute_buf::INFfnW2Layout::B_BYTES, true, invalid_flag);
         }
         case CMP_RESID2: {
             bool ok = load_region_to_buf(Tag::RESID0_OUT, layer, -1, -1,
@@ -1391,11 +1416,11 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             } else {
                 ok = load_region_to_buf(Tag::LN0_GAMMA, layer, -1, -1,
                                         buf, compute_buf::INLayerNormLayout::GAMMA,
-                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, false, invalid_flag);
+                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, true, invalid_flag);
                 if (!ok) return false;
                 return load_region_to_buf(Tag::LN0_EPS, layer, -1, -1,
                                           buf, compute_buf::INLayerNormLayout::EPS,
-                                          compute_buf::INLayerNormLayout::EPS_BYTES, false, invalid_flag);
+                                          compute_buf::INLayerNormLayout::EPS_BYTES, true, invalid_flag);
             }
         }
         default: {
@@ -1595,7 +1620,6 @@ void mmu_fsm(
         prev_axis_in_start = false;
         prev_stream_start = false;
         for (int i = 0; i < URAM_BANKS; ++i) {
-#pragma HLS UNROLL factor=8
             bank_offsets[i] = 0;
         }
         for (int i = 0; i < DMA_QUEUE_DEPTH; ++i) {
@@ -1607,7 +1631,6 @@ void mmu_fsm(
             compute_q[i] = ComputeQueueEntry{};
         }
         for (int i = 0; i < MAX_REGIONS; ++i) {
-#pragma HLS UNROLL factor=8
             regions[i] = Region{};
         }
 

@@ -1,7 +1,9 @@
 #include "compute_controller.hpp"
 #include <ap_fixed.h>
 #include <hls_math.h>
+#ifndef __SYNTHESIS__
 #include <cstdio>
+#endif
 
 
 // MAC Architecture
@@ -267,6 +269,7 @@ void FFN_ACT_Silu(
         output[i] = out;
     }
 
+#ifndef __SYNTHESIS__
     std::printf("FFN_ACT gate:");
     for (int i = 0; i < D_FFN; ++i) {
         std::printf(" %d", static_cast<int>(input_gate[i]));
@@ -284,6 +287,7 @@ void FFN_ACT_Silu(
         std::printf(" %d", static_cast<int>(output[i]));
     }
     std::printf("\n");
+#endif
 }
  
 

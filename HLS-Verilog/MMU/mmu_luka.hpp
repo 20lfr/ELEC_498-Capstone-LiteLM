@@ -5,11 +5,27 @@
 
 constexpr int URAM_BANKS = 64;
 constexpr uint32_t URAM_BANK_BYTES = 36864; // 288Kb / 8
+
+// FAST_SYNTH profile:
+//   0 -> full-capacity MMU sizing (default)
+//   1 -> reduced MMU bookkeeping/buffer sizing for faster HLS synth iterations
+#ifndef FAST_SYNTH
+#define FAST_SYNTH 1
+#endif
+
+#if FAST_SYNTH
+constexpr int MAX_CHUNKS = 4;
+constexpr int MAX_REGIONS = 16;
+constexpr int DMA_QUEUE_DEPTH = 4;
+constexpr int COMPUTE_QUEUE_DEPTH = 4;
+constexpr int DMA_BUF_BYTES = 8192;
+#else
 constexpr int MAX_CHUNKS = 8;
 constexpr int MAX_REGIONS = 256;
 constexpr int DMA_QUEUE_DEPTH = 16;
 constexpr int COMPUTE_QUEUE_DEPTH = 16;
 constexpr int DMA_BUF_BYTES = 65536;
+#endif
 
 enum class ComputeReqType : uint8_t {
     NONE = 0,

@@ -341,7 +341,6 @@ void transformer_top(
     );
 
     compute_error = compute_error || head_error_any;
-    
     ctrl_mem_interface.check_errors(ctrl_mem,
                                     scheduler_error,
                                     compute_error,

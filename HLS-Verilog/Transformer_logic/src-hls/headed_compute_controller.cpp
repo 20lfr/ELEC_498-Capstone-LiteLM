@@ -1,6 +1,9 @@
 #include "headed_compute_controller.hpp"
+#ifndef __SYNTHESIS__
 #include <cstdio>
+#endif
 
+#ifndef __SYNTHESIS__
 static void print_head_buffers(
     const char *label,
     const int8_t vec[HEAD_VECTOR_MAX],
@@ -44,6 +47,20 @@ static void print_att_value_buffers(
         std::printf("\n");
     }
 }
+#else
+static inline void print_head_buffers(
+    const char *,
+    const int8_t[HEAD_VECTOR_MAX],
+    const int8_t[HEAD_MATRIX_MAX],
+    const int4_t[HEAD_ACCUM_MAX]
+) {}
+
+static inline void print_att_value_buffers(
+    const char *,
+    const int16_t[CONTEXT_LENGTH],
+    const int8_t[D_HEADS * CONTEXT_LENGTH]
+) {}
+#endif
 
 void MAC_HEAD_ARCHITECTURE(
     bool start,
@@ -206,7 +223,9 @@ void SOFTMAX(
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
 #pragma HLS PIPELINE II=1
         int16_t diff = static_cast<int16_t>(input[i] - max_val);
+#ifndef __SYNTHESIS__
         printf("diff[%d] = %d\n", i, static_cast<int>(diff));
+#endif
         uint16_t e_q15 = exp_approx_q15(diff);   // Q1.15
         // uint16_t e_q15 = diff * 2;
         exp_buf[i] = e_q15;
