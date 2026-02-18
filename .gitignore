@@ -12,6 +12,7 @@
 *.gen/
 *.xsa
 *.bit
+*.dcp
 
 # --- Vitis ---
 **/hls/
@@ -47,13 +48,15 @@ compile_commands.json
 .vscode/
 .rigel_lopper/
 
-# Language Server artifacts (Clangd seen in your logs)
+# C/C++
 .cache/clangd/
+*.o
 
 # --- Project Specific Logs ---
 compile.log
 
 # Custom outputs
 hardware_overlay/
-interface_ip/
-
+dependencies/
+package/
+.tar.gz

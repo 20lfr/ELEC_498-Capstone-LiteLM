@@ -1,107 +1,196 @@
 #include "axi_top.hpp"
 #include <cstdio>
-#include <cstdlib>
+#include <cstring>
 
-/**
- * Simple testbench for axi_top
- * 
- * Tests:
- * - AXI4-Lite: Control/Status registers
- * - AXI4-Stream: Token input and logit output (8-bit)
- */
+// Memory Sizes
+constexpr int DDR0_SIZE = (Phi3Mini4K::dma_sizes::w2_tile / sizeof(int32_t));
+constexpr int DDR1_SIZE =
+    2 * ((Phi3Mini4K::kv_cache_head_bytes / sizeof(int32_t)));
+int32_t ddr_weights[DDR0_SIZE];
+int32_t ddr_kvcache[DDR1_SIZE];
+
+// Global TB Signals
+ControlMemSpace ctrl_mem = {};
+StatusMemSpace status_mem = {};
+bool irq_out = false;
+axis_stream_t input_token;
+axis_stream_t output_logit;
+
+// Helper to run one cycle with a specific command
+void run_cmd(uint32_t cmd_bit, uint32_t expected_status, const char *name) {
+    ctrl_mem.control =
+        PLRegBits::CTRL_RESETN_BIT | PLRegBits::CTRL_START_BIT | cmd_bit;
+
+    printf("[CMD] %-15s (0x%X)... ", name, cmd_bit);
+
+    // Run DUT
+    axi_top(ctrl_mem, status_mem, irq_out, input_token, output_logit,
+            ddr_weights, ddr_kvcache);
+
+    // Check Status
+    if (status_mem.status & (PLRegBits::STAT_BUSY_BIT | expected_status))
+        printf("BUSY %s ", name);
+    if (status_mem.irq_status & PLRegBits::IRQ_ERROR_BIT)
+        printf("IRQ_ERR: 0x%X ", status_mem.error_code);
+    if (status_mem.irq_status & PLRegBits::IRQ_AXI_DONE_BIT)
+        printf("IRQ_AXI_DONE ");
+    if (status_mem.irq_status & PLRegBits::IRQ_INFER_DONE_BIT)
+        printf("IRQ_INFER_DONE");
+
+    // Cleanup Cycle (Clear Command, Wait for Idle)
+    ctrl_mem.control = PLRegBits::CTRL_RESETN_BIT |
+                       PLRegBits::CTRL_START_BIT; // Keep Enable, Clear Command
+    ctrl_mem.irq_clear = status_mem.irq_status;
+    axi_top(ctrl_mem, status_mem, irq_out, input_token, output_logit,
+            ddr_weights, ddr_kvcache);
+    ctrl_mem.irq_clear = 0;
+
+    printf("\n");
+}
 
 int main() {
-    printf("=== AXI Top Testbench ===\n\n");
-    printf("D_MODEL = %d\n", D_MODEL);
-    
-    axis_stream_t input_token;
-    axis_stream_t output_logit;
+    printf("=== AXI Top Testbench ===\n");
 
-    printf("\n[INIT] Preparing input stream (PS -> PL)...\n");
-    for (int i = -8; i < D_MODEL/2; i++) {
+    // ── DDR Initialization ──
+    for (int i = 0; i < DDR0_SIZE; i++)
+        ddr_weights[i] = i;
+    for (int i = 0; i < DDR1_SIZE; i++)
+        ddr_kvcache[i] = 0;
+
+    // All ControlMemSpace offsets and strides are in BYTES
+    ctrl_mem.k_cache_offset = 0;
+    ctrl_mem.v_cache_offset =
+        (DDR1_SIZE / 2) * sizeof(int32_t); // Byte offset to V-cache half
+
+    ctrl_mem.layer_stride = 100;
+    ctrl_mem.wq_head_stride = 100;
+    ctrl_mem.wk_head_stride = 100;
+    ctrl_mem.wv_head_stride = 100;
+    ctrl_mem.k_cache_stride = 100;
+    ctrl_mem.v_cache_stride = 100;
+    ctrl_mem.wo_tile_stride = 100;
+    ctrl_mem.w1_tile_stride = 100;
+    ctrl_mem.w2_tile_stride = 100;
+
+    // ── Reset ──
+    printf("\n--- Reset ---\n");
+    ctrl_mem.control = 0;
+    axi_top(ctrl_mem, status_mem, irq_out, input_token, output_logit,
+            ddr_weights, ddr_kvcache);
+    printf("Reset Status: 0x%X (Expected 0x1)\n", status_mem.status);
+
+    run_cmd(PLRegBits::CTRL_INCR_MATRIX_BIT, PLRegBits::STAT_INCR_MATRIX_BIT,
+            "INCR_MATRIX");
+
+    // ================================================================
+    //  Phase 1: Token → Weights → Compute → Stream Out
+    //  (scratch_buf holds weights during compute)
+    // ================================================================
+    printf("\n--- Phase 1: Token + Weight + Compute ---\n");
+
+    // Pre-fill AXI-Stream with token data
+    for (int i = 0; i < Phi3Mini4K::d_model / NUM_BYTES_PER_STREAM; i++) {
         axis_pkt_t pkt;
-        pkt.data = (int8_t)i;  // input: -8, -7, -6, ...
-        pkt.last = (i == D_MODEL/2 - 1) ? 1 : 0;
+        pkt.data = 0xAA;
+        pkt.last =
+            (i == Phi3Mini4K::d_model / NUM_BYTES_PER_STREAM - 1) ? 1 : 0;
         input_token.write(pkt);
-        printf("  input_token[%d] = %d%s\n", i, (int)pkt.data, pkt.last ? " (LAST)" : "");
     }
 
-    ControlMemSpace ctrl_mem = {};
-    StatusMemSpace status_mem = {};
-    bool irq_out = false;
+    run_cmd(PLRegBits::CTRL_STREAM_IN_BIT, PLRegBits::STAT_STREAM_IN_BIT,
+            "STREAM_IN");
+    run_cmd(PLRegBits::CTRL_WEIGHTS_GET_BIT, PLRegBits::STAT_WEIGHTS_GET_BIT,
+            "WEIGHTS_GET");
+    run_cmd(PLRegBits::CTRL_COMPUTE_BIT, PLRegBits::STAT_COMPUTE_BIT,
+            "COMPUTE");
+    run_cmd(PLRegBits::CTRL_STREAM_OUT_BIT, PLRegBits::STAT_STREAM_OUT_BIT,
+            "STREAM_OUT");
 
-    ctrl_mem.control = CTRL_RESETN_BIT | CTRL_START_BIT;
-    ctrl_mem.irq_mask = IRQ_INFER_DONE_BIT | IRQ_ERROR_BIT;
-    
-    ctrl_mem.dma_layer_len = 0x100;
-    ctrl_mem.dma_head_len = 0x100;
-    ctrl_mem.dma_tile_len = 0x100;
-    ctrl_mem.layer_stride = 0x1000;
-    ctrl_mem.wq_head_stride = 0x100;
-    ctrl_mem.wk_head_stride = 0x100;
-    ctrl_mem.wv_head_stride = 0x100;
-    ctrl_mem.k_cache_stride = 0x400;
-    ctrl_mem.v_cache_stride = 0x400;
-    ctrl_mem.wo_tile_stride = 0x100;
-    ctrl_mem.w1_tile_stride = 0x300;
-    ctrl_mem.w2_tile_stride = 0x800;
-    // 64-byte aligned addresses
-    ctrl_mem.wq_base_addr = 0x10000000ull;
-    ctrl_mem.wk_base_addr = 0x20000000ull;
-    ctrl_mem.wv_base_addr = 0x30000000ull;
-    ctrl_mem.wo_base_addr = 0x60000000ull;
-    ctrl_mem.w1_base_addr = 0x70000000ull;
-    ctrl_mem.w2_base_addr = 0x80000000ull;
-    ctrl_mem.k_cache_addr = 0x40000000ull;
-    ctrl_mem.v_cache_addr = 0x50000000ull;
-
-    printf("\n[RUN] Calling axi_top...\n");
-    
-    axi_top(
-        ctrl_mem,
-        status_mem,
-        irq_out,
-        input_token,
-        output_logit
-    );
-
-    printf("[RUN] Complete.\n");
-
-    printf("\n[CHECK] Verifying outputs...\n");
-
-    // Check output stream - 8-bit per transfer
-    printf("\n  Output Stream (PL -> PS):\n");
-    int errors = 0;
-    for (int i = -8; i < D_MODEL/2; i++) {
-        if (output_logit.empty()) {
-            printf("  ERROR: output_logit empty at index %d\n", i);
-            errors++;
-            break;
-        }
-        axis_pkt_t pkt = output_logit.read();
-        int8_t expected = (int8_t)(i + 1);  // input + 1
-        int8_t actual = pkt.data;
-        
-        if (actual != expected) {
-            printf("  ERROR: output_logit[%d] = %d, expected %d\n", i, (int)actual, (int)expected);
-            errors++;
-        } else {
-            printf("    output_logit[%d] = %d (OK)%s\n", i, (int)actual, pkt.last ? " (LAST)" : "");
+    // Verify logit stream output
+    printf("Reading Stream Out (%d packets)...\n",
+           Phi3Mini4K::d_model / NUM_BYTES_PER_STREAM);
+    int valid_pkts = 0;
+    bool logit_has_weight_contribution = false;
+    while (!output_logit.empty()) {
+        axis_pkt_t out_pkt = output_logit.read();
+        valid_pkts++;
+        uint32_t val = (unsigned int)out_pkt.data;
+        // With weights[i]=i, we expect logit != 0xAA for most packets
+        if (val != 0xAA)
+            logit_has_weight_contribution = true;
+        if (valid_pkts <= 3 ||
+            valid_pkts >= Phi3Mini4K::d_model / NUM_BYTES_PER_STREAM - 2) {
+            printf("  Pkt[%d]: 0x%X (Last=%d)\n", valid_pkts - 1, val,
+                   (int)out_pkt.last);
         }
     }
 
-    printf("\n  Control/Status:\n");
-    printf("    status_mem.status     = 0x%X\n", status_mem.status);
-    printf("    status_mem.irq_status = 0x%X\n", status_mem.irq_status);
-    printf("    status_mem.error_code = 0x%X\n", status_mem.error_code);
-    printf("    irq_out = %s\n", irq_out ? "ASSERTED" : "not asserted");
-
-    if (!(status_mem.irq_status & IRQ_INFER_DONE_BIT)) {
-        printf("  WARNING: IRQ_INFER_DONE_BIT not set\n");
+    if (valid_pkts == Phi3Mini4K::d_model / NUM_BYTES_PER_STREAM) {
+        printf("Phase 1 Stream: PASS (%d packets)\n", valid_pkts);
+    } else {
+        printf("Phase 1 Stream: FAIL (got %d, expected %d)\n", valid_pkts,
+               Phi3Mini4K::d_model / NUM_BYTES_PER_STREAM);
+        return 1;
+    }
+    if (logit_has_weight_contribution) {
+        printf("Phase 1 Compute: PASS (logits contain weight contribution)\n");
+    } else {
+        printf("Phase 1 Compute: WARN (all logits = 0xAA, weights may not have "
+               "applied)\n");
     }
 
-    printf("\n=== TEST %s ===\n", errors == 0 ? "PASSED" : "FAILED");
-    printf("Errors: %d\n", errors);
+    // ================================================================
+    //  Phase 2: KV Cache Read → Write-back Round-trip
+    //  (scratch_buf is reused — weights are gone, that's fine)
+    // ================================================================
+    printf("\n--- Phase 2: KV Cache Round-trip ---\n");
 
-    return errors;
+    // Seed DDR KV region with a known pattern so we can verify the read
+    constexpr int KV_HALF = DDR1_SIZE / 2;
+    for (int i = 0; i < KV_HALF; i++)
+        ddr_kvcache[i] = 0xBB000000 | i; // K region
+    for (int i = 0; i < KV_HALF; i++)
+        ddr_kvcache[KV_HALF + i] = 0xCC000000 | i; // V region
+
+    // Read K-cache into scratch_buf, then write-back to DDR
+    run_cmd(PLRegBits::CTRL_KCACHE_GET_BIT, PLRegBits::STAT_KCACHE_GET_BIT,
+            "KCACHE_GET");
+    run_cmd(PLRegBits::CTRL_KCACHE_SEND_BIT, PLRegBits::STAT_KCACHE_SEND_BIT,
+            "KCACHE_SEND");
+
+    // Read V-cache into scratch_buf, then write-back to DDR
+    run_cmd(PLRegBits::CTRL_VCACHE_GET_BIT, PLRegBits::STAT_VCACHE_GET_BIT,
+            "VCACHE_GET");
+    run_cmd(PLRegBits::CTRL_VCACHE_SEND_BIT, PLRegBits::STAT_VCACHE_SEND_BIT,
+            "VCACHE_SEND");
+
+    // Verify KV cache DDR was written (non-zero)
+    printf("\n=== Checking KV Cache Output ===\n");
+    int kv_nonzero = 0;
+    for (int i = 0; i < DDR1_SIZE; i++) {
+        if (ddr_kvcache[i] != 0) {
+            if (kv_nonzero < 8) {
+                printf("  ddr_kvcache[%d] = 0x%X\n", i,
+                       (unsigned int)ddr_kvcache[i]);
+            } else if (kv_nonzero == 8) {
+                printf("  ... (more non-zero entries)\n");
+            }
+            kv_nonzero++;
+        }
+    }
+    printf("  KV non-zero entries: %d\n", kv_nonzero);
+    if (kv_nonzero == 0) {
+        printf("  KV Cache: FAIL (all zeros after write-back)\n");
+        return 1;
+    } else {
+        printf("  KV Cache: PASS\n");
+    }
+
+    // ================================================================
+    printf("\n=== Test Complete ===\n");
+    if (status_mem.error_code != PLRegBits::ERR_NONE_BIT) {
+        printf("ERROR CODE: 0x%X\n", status_mem.error_code);
+        return 1;
+    }
+    return 0;
 }

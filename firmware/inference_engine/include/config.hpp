@@ -2,75 +2,40 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <string>
+#include "shared_params.hpp"
 #include <cstdint>
+#include <string>
 
 struct HardwareConfig {
-    uint64_t base_address = 0xA0000000UL;
-    std::string uio_device = "/dev/uio0";
+    uint64_t stream_reg_base_addr = 0xa0000000;
+    std::string dmabuf0_name = "udmabuf0";
+    size_t dmabuf0_size = 0x7a000000; // 2GB
+    std::string dmabuf1_name = "udmabuf1";
+    size_t dmabuf1_size = 0x20000000; // 512MB
     uint32_t timeout_ms = 30000;
     bool mock_mode = false;
-    uint64_t ddr_base_address = 0x40000000UL;
-    size_t ddr_size = 0x80000000;  // 2GB for Phi-3
-};
-
-struct MemoryLayout {
-    uint64_t wq_offset       = 0x00000000;
-    uint64_t wk_offset       = 0x10000000;
-    uint64_t wv_offset       = 0x20000000;
-    uint64_t wo_offset       = 0x30000000;
-    uint64_t w1_offset       = 0x40000000;
-    uint64_t w2_offset       = 0x50000000;
-    uint64_t k_cache_offset  = 0x60000000;
-    uint64_t v_cache_offset  = 0x68000000;
-    uint64_t input_offset    = 0x70000000;
-    uint64_t output_offset   = 0x70100000;
-    uint64_t quant_params    = 0x70200000;
-    
-    bool isAligned() const {
-        return !((wq_offset | wk_offset | wv_offset | wo_offset |
-                  w1_offset | w2_offset | k_cache_offset | v_cache_offset) & 0x3F);
-    }
 };
 
 struct ModelConfig {
     std::string weights_file = "phi3_weights_int4.bin";
     std::string quant_params_file = "quantization.bin";
     std::string tokenizer_vocab = "tokenizer.model";
-    
-    // Phi-3-mini-4k-instruct architecture
-    uint32_t d_model = 3072;
-    uint32_t d_ffn = 12288;
-    uint32_t num_layers = 32;
-    uint32_t num_heads = 32;
-    uint32_t head_dim = 96;
-    uint32_t context_len = 4096;
-    uint32_t vocab_size = 32064;
-    
-    // Tiling
-    uint32_t num_wo_tiles = 32;
-    uint32_t num_w1_tiles = 128;
-    uint32_t num_w2_tiles = 32;
-    
-    // DMA lengths
-    uint32_t dma_layer_len = 0x380000;
-    uint32_t dma_head_len = 0x12000;
-    uint32_t dma_tile_len = 0x6000;
-    
-    // Strides
-    uint32_t layer_stride = 0x380000;
-    uint32_t wq_head_stride = 0x12000;
-    uint32_t wk_head_stride = 0x12000;
-    uint32_t wv_head_stride = 0x12000;
-    uint32_t k_cache_stride = 0x60;
-    uint32_t v_cache_stride = 0x60;
-    uint32_t wo_tile_stride = 0x6000;
-    uint32_t w1_tile_stride = 0x18000;
-    uint32_t w2_tile_stride = 0x6000;
-    
-    // 1/sqrt(96) in Q1.15 ≈ 3342
-    uint32_t logit_scale_qv = 3342;
-    
+
+    uint32_t vocab_size = Phi3Mini4K::vocab_size;
+    uint32_t logit_scale_qv = Phi3Mini4K::logit_scale_qv;
+
+    struct Strides {
+        uint32_t layer = Phi3Mini4K::strides::wq_layer;
+        uint32_t wq_head = Phi3Mini4K::strides::qkv_head;
+        uint32_t wk_head = Phi3Mini4K::strides::qkv_head;
+        uint32_t wv_head = Phi3Mini4K::strides::qkv_head;
+        uint32_t k_cache = Phi3Mini4K::strides::kv_head;
+        uint32_t v_cache = Phi3Mini4K::strides::kv_head;
+        uint32_t wo_tile = Phi3Mini4K::strides::wo_tile;
+        uint32_t w1_tile = Phi3Mini4K::strides::w1_tile;
+        uint32_t w2_tile = Phi3Mini4K::strides::w2_tile;
+    } strides;
+
     // Quantization defaults
     float scale_q = 0.005f;
     int32_t zero_point_q = 0;
@@ -78,12 +43,41 @@ struct ModelConfig {
     int32_t zero_point_k = 0;
     float scale_v = 0.005f;
     int32_t zero_point_v = 0;
-    
+
     bool validate() const {
-        return dma_layer_len && dma_head_len && dma_tile_len &&
-               layer_stride && wq_head_stride && wk_head_stride && wv_head_stride &&
-               k_cache_stride && v_cache_stride &&
-               wo_tile_stride && w1_tile_stride && w2_tile_stride;
+        return strides.layer && strides.wq_head && strides.wk_head &&
+               strides.wv_head && strides.k_cache && strides.v_cache &&
+               strides.wo_tile && strides.w1_tile && strides.w2_tile;
+    }
+};
+
+struct MemoryLayout {
+
+    // relative to dmabuf0
+    uint32_t wq_offset = Phi3Mini4K::weight_offsets::wq;
+    uint32_t wk_offset = Phi3Mini4K::weight_offsets::wk;
+    uint32_t wv_offset = Phi3Mini4K::weight_offsets::wv;
+    uint32_t wo_offset = Phi3Mini4K::weight_offsets::wo;
+    uint32_t w1_offset = Phi3Mini4K::weight_offsets::w1_gate;
+    uint32_t w2_offset = Phi3Mini4K::weight_offsets::w2;
+
+    // Added your 1024 padding here
+    uint64_t dmabuf0_size = Phi3Mini4K::weight_offsets::total + 1024;
+
+    // relative to dmabuf1
+    uint32_t k_cache_offset = Phi3Mini4K::cache_offsets::k_cache;
+    uint32_t v_cache_offset = Phi3Mini4K::cache_offsets::v_cache;
+    uint32_t input_offset = Phi3Mini4K::cache_offsets::input;
+    uint32_t output_offset = Phi3Mini4K::cache_offsets::output;
+
+    // Added your 1024 padding here
+    uint64_t dmabuf1_size = Phi3Mini4K::cache_offsets::total + 1024;
+
+    bool isAligned() const {
+        return !((wq_offset | wk_offset | wv_offset | wo_offset | w1_offset |
+                  w2_offset | k_cache_offset | v_cache_offset | input_offset |
+                  output_offset) &
+                 0x3F);
     }
 };
 
@@ -99,9 +93,13 @@ struct SystemConfig {
     ModelConfig model;
     MemoryLayout memory;
     GenerationConfig generation;
-    
-    bool validate() const { return model.validate() && memory.isAligned(); }
-    bool loadFromFile(const std::string&) { return true; }
+
+    bool validate() const {
+        return (memory.dmabuf1_size < hardware.dmabuf1_size) &&
+               (memory.dmabuf0_size < hardware.dmabuf0_size) &&
+               model.validate() && memory.isAligned();
+    }
+    bool loadFromFile(const std::string &) { return true; }
 };
 
 #endif

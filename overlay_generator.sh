@@ -16,15 +16,17 @@ XSA_FILE="$VIVADO_DIR/$HW_WRAPPER.xsa"
 # RTL CONFIGURATION
 APP_NAME="axi_top_0"
 COMPAT_ID="xlnx,axi-top-1.0" # Found in dtsi file
+# Replace this with your actual DMA register base address
+DMA_REG_BASE_ADDR="a0000000"
 
 set -e # Exit immediately if a command exits with a non-zero status
 
 echo ">>> Sourcing Xilinx Environment..."
 if [ -f "$XILINX_SETTINGS" ]; then
-  source "$XILINX_SETTINGS"
+    source "$XILINX_SETTINGS"
 else
-  echo "ERROR: Xilinx settings not found at $XILINX_SETTINGS"
-  exit 1
+    echo "ERROR: Xilinx settings not found at $XILINX_SETTINGS"
+    exit 1
 fi
 
 mkdir -p "$TARGET_DIR"
@@ -32,12 +34,12 @@ cd "$TARGET_DIR"
 
 echo ">>> Step 1: Preparing Device Tree Repository..."
 if [ ! -d "device-tree-xlnx" ]; then
-  git clone https://github.com/Xilinx/device-tree-xlnx.git
-  cd device-tree-xlnx
-  git checkout $DTG_BRANCH
-  cd ..
+    git clone https://github.com/Xilinx/device-tree-xlnx.git
+    cd device-tree-xlnx
+    git checkout $DTG_BRANCH
+    cd ..
 else
-  echo "    Repo already exists, skipping clone."
+    echo "    Repo already exists, skipping clone."
 fi
 
 echo ">>> Step 2: Generating Device Tree Source (DTSI) via XSCT..."
@@ -61,8 +63,8 @@ EOT
 xsct generate_dts.tcl
 
 if [ ! -f "$HW_WRAPPER.bit" ]; then
-  echo "ERROR: No .bit file found inside the XSA!"
-  exit 1
+    echo "ERROR: No .bit file found inside the XSA!"
+    exit 1
 fi
 
 echo ">>> Step 4: Compiling DTBO and Extracting Compatible ID..."
@@ -70,12 +72,16 @@ DTS_FILE="./dts_output/pl.dtsi"
 INCLUDE_PATH="./device-tree-xlnx/include"
 
 if [ ! -f "$DTS_FILE" ]; then
-  echo "ERROR: XSCT failed to generate pl.dtsi"
-  exit 1
+    echo "ERROR: XSCT failed to generate pl.dtsi"
+    exit 1
 fi
 
 # 4b. Pre-process and compile
 gcc -E -nostdinc -undef -D__DTS__ -x assembler-with-cpp -I "$INCLUDE_PATH" "$DTS_FILE" -o pl.preprocessed.dtsi
+
+echo ">>> Patching missing commas in interrupts arrays..."
+sed -i 's/<0 105 4 0 106 4>/<0 105 4>, <0 106 4>/g' pl.preprocessed.dtsi
+
 dtc -@ -O dtb -o pl.dtbo pl.preprocessed.dtsi
 
 echo ">>> Step 5: Converting Bitstream to Bin..."
@@ -111,16 +117,19 @@ cat <<EOF >"$LOAD_SCRIPT"
 
 APP_NAME="$APP_NAME"
 COMPAT_ID="$COMPAT_ID"
+DMA_ADDR="$DMA_REG_BASE_ADDR"
 TARGET_DIR=/lib/firmware/xilinx
 
 sudo rm -r /\$TARGET_DIR/\$APP_NAME
-cp -r ./\$APP_NAME /\$TARGET_DIR
+sudo cp -r ./\$APP_NAME /\$TARGET_DIR
 
-# 1. Unload any existing app
 echo ">>> Unloading current firmware..."
 sudo xmutil unloadapp > /dev/null 2>&1
 
-# 2. Load this app
+echo ">>> Registering UIO driver for ID: \$COMPAT_ID..."
+sudo modprobe -r uio_pdrv_genirq
+sudo modprobe uio_pdrv_genirq of_id="\$COMPAT_ID"
+
 echo ">>> Loading app: \$APP_NAME..."
 sudo xmutil loadapp \$APP_NAME
 if [ \$? -ne 0 ]; then
@@ -128,22 +137,20 @@ if [ \$? -ne 0 ]; then
     exit 1
 fi
 
-# 3. Register Driver
-echo ">>> Registering UIO driver for ID: \$COMPAT_ID..."
-sudo modprobe -r uio_pdrv_genirq
-sudo modprobe uio_pdrv_genirq of_id="\$COMPAT_ID"
+if [ -e "/sys/bus/platform/drivers/xilinx-vdma/\${DMA_ADDR}.dma" ]; then
+    echo ">>> Unbinding DMA from xilinx-vdma driver..."
+    echo "\${DMA_ADDR}.dma" | sudo tee /sys/bus/platform/drivers/xilinx-vdma/unbind >/dev/null
+    echo "Unbind successful."
+else
+    echo "DMA driver is already unbound or not attached to xilinx-vdma."
+fi
 
-# 4. Find and print the UIO Instance Name
 echo ">>> checking /sys/class/uio for device name..."
-# We sleep briefly to let the kernel settle
 sleep 1
-# Find the UIO device that matches the compatible name (often partially matched in name file)
-# OR simply list all to help the user.
 echo "--------------------------------------------------"
 echo "Available UIO Devices:"
 cat /sys/class/uio/uio*/name
 echo "--------------------------------------------------"
-echo "Success! Your hardware is ready."
 EOF
 
 chmod +x "$LOAD_SCRIPT"
