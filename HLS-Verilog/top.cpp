@@ -13,7 +13,6 @@ void transformer_top(
     bool axis_in_valid,                 // [INPUT]  s_axis_in_tvalid
     bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
-    bool &axis_in_start,                // [OUTPUT] Pulse to commit stream-in payload into MMU
 
     // ------------------------------------------------------------
     // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
@@ -162,7 +161,6 @@ void transformer_top(
     static bool             scheduler_wl_start            = false;
     static bool             scheduler_wl_accept           = false;
     static uint32_t         scheduler_wl_instruction      = 0;
-    static bool             scheduler_axis_in_start       = false;
     static bool             main_mem_read_request         = false;
     static bool             main_mem_write_request        = false;
     static uint32_t         main_mem_op                   = 0;
@@ -190,7 +188,6 @@ void transformer_top(
         scheduler_wl_start = false;
         scheduler_wl_accept = false;
         scheduler_wl_instruction = 0;
-        scheduler_axis_in_start = false;
         main_mem_read_request = false;
         main_mem_write_request = false;
         main_mem_op = 0;
@@ -226,14 +223,15 @@ void transformer_top(
         }
     }
 
+    bool axis_in_ready_wire = false;
+
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
     scheduler_hls(
         ctrl_mem,
         active_status_mem,
         axis_in_valid,
         axis_in_last,
-        axis_in_ready,
-        scheduler_axis_in_start,
+        axis_in_ready_wire,
         mmu_main_dma_done_wire,
         mmu_req_ready_wire,
         scheduler_wl_accept,
@@ -252,8 +250,10 @@ void transformer_top(
         scheduler_error,
         state_local
     );
-    axis_in_start = scheduler_axis_in_start;
-    if (scheduler_axis_in_start) {
+    // Drive top-level AXIS ready pin from scheduler wire.
+    axis_in_ready = axis_in_ready_wire;
+
+    if (axis_in_valid && axis_in_last && axis_in_ready_wire) {
         const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
         token_pos_current = (token_pos_next <= token_pos_max) ? token_pos_next : token_pos_max;
         if (token_pos_next < token_pos_max) {
@@ -338,8 +338,9 @@ void transformer_top(
         dma_addr,
         dma_len,
         dma_is_write,
-        axis_in_ready,
-        scheduler_axis_in_start,
+        axis_in_valid,
+        axis_in_last,
+        axis_in_ready_wire,
         stream_start,
         stream_in_buf,
         stream_out_buf,

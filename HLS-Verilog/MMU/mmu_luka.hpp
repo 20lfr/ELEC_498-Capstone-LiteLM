@@ -159,10 +159,11 @@ void mmu_fsm(
     bool &dma_is_write,                 // [OUTPUT] DMA direction (1 = write to DDR)
 
     // ------------------------------------------------------------
-    // Stream ingress/egress buffers controlled by scheduler pulses
+    // Stream ingress/egress buffers (beat capture on AXIS valid/ready)
     // ------------------------------------------------------------
+    bool axis_in_valid,                 // [INPUT] AXIS ingress valid
+    bool axis_in_last,                  // [INPUT] AXIS ingress TLAST
     bool axis_in_ready,                 // [INPUT] Scheduler AXIS ingress ready flag
-    bool axis_in_start,                 // [INPUT] Scheduler pulse: stream-in payload complete
     bool stream_start,                  // [INPUT] Scheduler pulse: begin stream-out payload
     const uint8_t stream_in_buf[STREAM_IN_BUF_BYTES], // [INPUT] Constructed stream-in payload
     uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES],     // [OUTPUT] Stream-out payload produced by MMU

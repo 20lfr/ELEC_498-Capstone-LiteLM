@@ -81,7 +81,9 @@ static bool prev_main_mem_req = false;
 static uint32_t prev_main_mem_op = 0;
 static bool prev_head_mem_req[HEADS_PARALLEL];
 static uint32_t prev_head_mem_op[HEADS_PARALLEL];
-static bool prev_axis_in_start = false;
+static bool stream_in_capturing = false;
+static uint16_t stream_in_write_idx = 0;
+static uint8_t stream_in_capture_buf[STREAM_IN_BUF_BYTES];
 static bool prev_stream_start = false;
 static int g_current_layer = -1;
 
@@ -1642,9 +1644,10 @@ void mmu_fsm(
     uint32_t        &dma_len,                       // [OUTPUT] DMA transfer length
     bool            &dma_is_write,                  // [OUTPUT] DMA direction (1=MMU->DDR)
 
-    // Stream ingress/egress buffers controlled by scheduler pulses
+    // Stream ingress/egress interfaces
+    bool            axis_in_valid,                  // [INPUT] AXIS ingress valid
+    bool            axis_in_last,                   // [INPUT] AXIS ingress TLAST
     bool            axis_in_ready,                  // [INPUT] Scheduler AXIS ingress ready flag
-    bool            axis_in_start,                  // [INPUT] Scheduler pulse: stream-in payload complete
     bool            stream_start,                   // [INPUT] Scheduler pulse: begin stream-out payload
     const uint8_t   stream_in_buf[STREAM_IN_BUF_BYTES], // [INPUT] Constructed stream-in payload
     uint8_t         stream_out_buf[STREAM_OUT_BUF_BYTES], // [OUTPUT] Stream-out payload produced by MMU
@@ -1742,7 +1745,12 @@ void mmu_fsm(
             prev_head_mem_req[i] = false;
             prev_head_mem_op[i] = 0;
         }
-        prev_axis_in_start = false;
+        stream_in_capturing = false;
+        stream_in_write_idx = 0;
+        for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+#pragma HLS PIPELINE II=1
+            stream_in_capture_buf[i] = 0;
+        }
         prev_stream_start = false;
         for (int i = 0; i < URAM_BANKS; ++i) {
             bank_offsets[i] = 0;
@@ -1766,25 +1774,47 @@ void mmu_fsm(
         return;
     }
 
-    const bool axis_in_start_edge = reset_n && axis_in_ready && axis_in_start && !prev_axis_in_start;
-    if (axis_in_start_edge) {
-        const int idx = get_or_create_region(
-            Tag::STREAM_IN_TOKEN, 0, -1, -1,
-            static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
-            1,
-            static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
-            g_overflow);
-        if (idx < 0) {
-            mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_STREAM_IN);
-        } else if (!region_write_part(
-                       idx,
-                       0,
-                       stream_in_buf,
-                       static_cast<uint32_t>(STREAM_IN_BUF_BYTES))) {
-            mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+    const bool axis_in_handshake = reset_n && axis_in_ready && axis_in_valid;
+    if (axis_in_handshake) {
+        if (!stream_in_capturing) {
+            stream_in_capturing = true;
+            stream_in_write_idx = 0;
+        }
+
+        if (stream_in_write_idx < STREAM_IN_BUF_BYTES) {
+            stream_in_capture_buf[stream_in_write_idx] = stream_in_buf[stream_in_write_idx];
+            ++stream_in_write_idx;
+        } else {
+            mmu_set_invalid(ERR_MMU_INVALID);
+            stream_in_capturing = false;
+            stream_in_write_idx = 0;
+        }
+
+        if (axis_in_last) {
+            if (stream_in_write_idx == STREAM_IN_BUF_BYTES) {
+                const int idx = get_or_create_region(
+                    Tag::STREAM_IN_TOKEN, 0, -1, -1,
+                    static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
+                    1,
+                    static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
+                    g_overflow);
+                if (idx < 0) {
+                    mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_STREAM_IN);
+                } else if (!region_write_part(
+                               idx,
+                               0,
+                               stream_in_capture_buf,
+                               static_cast<uint32_t>(STREAM_IN_BUF_BYTES))) {
+                    mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+                }
+            } else {
+                // Early TLAST before full token payload is assembled.
+                mmu_set_invalid(ERR_MMU_INVALID);
+            }
+            stream_in_capturing = false;
+            stream_in_write_idx = 0;
         }
     }
-    prev_axis_in_start = axis_in_start;
 
     const bool stream_start_edge = reset_n && stream_start && !prev_stream_start;
     if (stream_start_edge) {

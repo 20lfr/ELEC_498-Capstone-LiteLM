@@ -19,17 +19,17 @@ input  [4:0] op;
 output  [6:0] ap_return;
 input   ap_rst;
 
-wire   [0:0] icmp_ln343_1_fu_52_p2;
-wire   [0:0] icmp_ln343_2_fu_58_p2;
-wire   [0:0] icmp_ln343_3_fu_70_p2;
-wire   [0:0] icmp_ln343_4_fu_76_p2;
-wire   [0:0] icmp_ln343_5_fu_82_p2;
-wire   [0:0] icmp_ln343_6_fu_88_p2;
-wire   [0:0] or_ln343_2_fu_100_p2;
-wire   [0:0] or_ln343_1_fu_94_p2;
-wire   [0:0] icmp_ln343_fu_46_p2;
-wire   [0:0] or_ln343_fu_64_p2;
-wire   [0:0] or_ln343_3_fu_106_p2;
+wire   [0:0] icmp_ln345_1_fu_52_p2;
+wire   [0:0] icmp_ln345_2_fu_58_p2;
+wire   [0:0] icmp_ln345_3_fu_70_p2;
+wire   [0:0] icmp_ln345_4_fu_76_p2;
+wire   [0:0] icmp_ln345_5_fu_82_p2;
+wire   [0:0] icmp_ln345_6_fu_88_p2;
+wire   [0:0] or_ln345_2_fu_100_p2;
+wire   [0:0] or_ln345_1_fu_94_p2;
+wire   [0:0] icmp_ln345_fu_46_p2;
+wire   [0:0] or_ln345_fu_64_p2;
+wire   [0:0] or_ln345_3_fu_106_p2;
 wire   [6:0] retval_fu_122_p9;
 wire   [2:0] retval_fu_122_p10;
 wire   [6:0] retval_fu_122_p11;
@@ -64,31 +64,31 @@ sparsemux_9_3_7_1_1_U3846(
 
 assign ap_ready = 1'b1;
 
-assign or_ln343_1_fu_94_p2 = (icmp_ln343_4_fu_76_p2 | icmp_ln343_3_fu_70_p2);
+assign or_ln345_1_fu_94_p2 = (icmp_ln345_4_fu_76_p2 | icmp_ln345_3_fu_70_p2);
 
-assign or_ln343_2_fu_100_p2 = (icmp_ln343_6_fu_88_p2 | icmp_ln343_5_fu_82_p2);
+assign or_ln345_2_fu_100_p2 = (icmp_ln345_6_fu_88_p2 | icmp_ln345_5_fu_82_p2);
 
-assign or_ln343_3_fu_106_p2 = (or_ln343_2_fu_100_p2 | or_ln343_1_fu_94_p2);
+assign or_ln345_3_fu_106_p2 = (or_ln345_2_fu_100_p2 | or_ln345_1_fu_94_p2);
 
-assign or_ln343_fu_64_p2 = (icmp_ln343_2_fu_58_p2 | icmp_ln343_1_fu_52_p2);
+assign or_ln345_fu_64_p2 = (icmp_ln345_2_fu_58_p2 | icmp_ln345_1_fu_52_p2);
 
 assign ap_return = retval_fu_122_p11;
 
-assign icmp_ln343_1_fu_52_p2 = ((op == 5'd10) ? 1'b1 : 1'b0);
+assign icmp_ln345_1_fu_52_p2 = ((op == 5'd10) ? 1'b1 : 1'b0);
 
-assign icmp_ln343_2_fu_58_p2 = ((op == 5'd11) ? 1'b1 : 1'b0);
+assign icmp_ln345_2_fu_58_p2 = ((op == 5'd11) ? 1'b1 : 1'b0);
 
-assign icmp_ln343_3_fu_70_p2 = ((op == 5'd3) ? 1'b1 : 1'b0);
+assign icmp_ln345_3_fu_70_p2 = ((op == 5'd3) ? 1'b1 : 1'b0);
 
-assign icmp_ln343_4_fu_76_p2 = ((op == 5'd4) ? 1'b1 : 1'b0);
+assign icmp_ln345_4_fu_76_p2 = ((op == 5'd4) ? 1'b1 : 1'b0);
 
-assign icmp_ln343_5_fu_82_p2 = ((op == 5'd6) ? 1'b1 : 1'b0);
+assign icmp_ln345_5_fu_82_p2 = ((op == 5'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln343_6_fu_88_p2 = ((op == 5'd13) ? 1'b1 : 1'b0);
+assign icmp_ln345_6_fu_88_p2 = ((op == 5'd13) ? 1'b1 : 1'b0);
 
-assign icmp_ln343_fu_46_p2 = ((op == 5'd12) ? 1'b1 : 1'b0);
+assign icmp_ln345_fu_46_p2 = ((op == 5'd12) ? 1'b1 : 1'b0);
 
-assign retval_fu_122_p10 = {{{icmp_ln343_fu_46_p2}, {or_ln343_fu_64_p2}}, {or_ln343_3_fu_106_p2}};
+assign retval_fu_122_p10 = {{{icmp_ln345_fu_46_p2}, {or_ln345_fu_64_p2}}, {or_ln345_3_fu_106_p2}};
 
 assign retval_fu_122_p9 = 'bx;
 

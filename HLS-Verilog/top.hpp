@@ -18,7 +18,6 @@ void transformer_top(
     bool axis_in_valid,                 // [INPUT]  s_axis_in_tvalid
     bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
     bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
-    bool &axis_in_start,                // [OUTPUT] Pulse to commit constructed stream-in payload into MMU
 
     bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
     bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming

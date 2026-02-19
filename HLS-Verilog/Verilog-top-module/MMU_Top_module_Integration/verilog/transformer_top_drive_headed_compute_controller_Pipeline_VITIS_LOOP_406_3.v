@@ -149,7 +149,7 @@ wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [14:0] prob_q15_fu_370_p3;
 wire   [3:0] trunc_ln406_fu_271_p1;
-reg   [4:0] i_49_fu_140;
+reg   [4:0] i_50_fu_140;
 wire   [4:0] add_ln406_fu_265_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_i;
@@ -190,7 +190,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_49_fu_140 = 5'd0;
+#0 i_50_fu_140 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -200,7 +200,7 @@ transformer_top_mul_31s_16ns_31_1_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 31 ))
-mul_31s_16ns_31_1_1_U2260(
+mul_31s_16ns_31_1_1_U2259(
     .din0(inv_sum_q15_1),
     .din1(mul_ln408_fu_246_p1),
     .dout(mul_ln408_fu_246_p2)
@@ -244,7 +244,7 @@ mul_31s_16ns_31_1_1_U2260(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U2261(
+sparsemux_33_4_16_1_1_U2260(
     .din0(exp_buf_reload),
     .din1(exp_buf_1_reload),
     .din2(exp_buf_2_reload),
@@ -304,9 +304,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         if ((icmp_ln406_fu_259_p2 == 1'd0)) begin
-            i_49_fu_140 <= add_ln406_fu_265_p2;
+            i_50_fu_140 <= add_ln406_fu_265_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_49_fu_140 <= 5'd0;
+            i_50_fu_140 <= 5'd0;
         end
     end
 end
@@ -355,7 +355,7 @@ always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
         ap_sig_allocacmp_i = 5'd0;
     end else begin
-        ap_sig_allocacmp_i = i_49_fu_140;
+        ap_sig_allocacmp_i = i_50_fu_140;
     end
 end
 

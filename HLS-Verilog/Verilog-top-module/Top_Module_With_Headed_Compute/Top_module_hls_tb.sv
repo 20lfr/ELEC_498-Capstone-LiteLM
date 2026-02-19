@@ -3571,7 +3571,7 @@ module top_module_hls_tb;
           end
         end
         endcase
-      end
+    end
   end
 
   // Main stimulus and control

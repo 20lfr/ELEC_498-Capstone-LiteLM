@@ -299,7 +299,7 @@ end
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U3023(
+sparsemux_33_4_16_1_1_U3022(
     .din0(max_val_3),
     .din1(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_294),
     .din2(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_295),
@@ -333,7 +333,7 @@ sparsemux_33_4_16_1_1_U3023(
     .def_WIDTH( 15 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 15 ))
-sparsemux_7_2_15_1_1_U3024(
+sparsemux_7_2_15_1_1_U3023(
     .din0(15'd32767),
     .din1(15'd12055),
     .din2(exp_lut_q15_1_q0),

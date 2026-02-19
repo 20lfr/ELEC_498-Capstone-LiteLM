@@ -106,7 +106,6 @@ int main() {
     bool axis_in_valid = false;
     bool axis_in_last = false;
     bool axis_in_ready = false;
-    bool axis_in_start = false;
 
     bool dma_done = false;
     bool wl_ready = true;
@@ -230,7 +229,6 @@ int main() {
             axis_in_valid,
             axis_in_last,
             axis_in_ready,
-            axis_in_start,
             dma_done,
             wl_ready,
             wl_accept,

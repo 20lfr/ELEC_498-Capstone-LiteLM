@@ -91,7 +91,7 @@ wire  signed [31:0] tmp_91_fu_177_p11;
 wire   [62:0] product_fu_128_p2;
 wire   [62:0] rounded_7_cast_cast_fu_136_p1;
 wire   [62:0] scaled_fu_227_p2;
-wire   [23:0] tmp_225_fu_235_p4;
+wire   [23:0] tmp_228_fu_235_p4;
 wire   [30:0] trunc_ln126_fu_231_p1;
 wire   [0:0] icmp_ln127_fu_245_p2;
 wire   [0:0] icmp_ln129_fu_251_p2;
@@ -127,7 +127,7 @@ transformer_top_mul_32s_31ns_63_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 63 ))
-mul_32s_31ns_63_1_1_U1566(
+mul_32s_31ns_63_1_1_U1565(
     .din0(tmp_91_fu_177_p11),
     .din1(product_fu_128_p1),
     .dout(product_fu_128_p2)
@@ -147,7 +147,7 @@ mul_32s_31ns_63_1_1_U1566(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U1567(
+sparsemux_9_2_32_1_1_U1566(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_122),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124),
@@ -346,7 +346,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln119_fu_153_p2 = ((ap_sig_allocacmp_t_22 == 3'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln127_fu_245_p2 = (($signed(tmp_225_fu_235_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln127_fu_245_p2 = (($signed(tmp_228_fu_235_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln129_fu_251_p2 = (($signed(trunc_ln126_fu_231_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
@@ -364,7 +364,7 @@ assign select_ln127_1_fu_275_p3 = ((or_ln127_fu_269_p2[0:0] == 1'b1) ? select_ln
 
 assign select_ln127_fu_261_p3 = ((icmp_ln127_fu_245_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign tmp_225_fu_235_p4 = {{scaled_fu_227_p2[30:7]}};
+assign tmp_228_fu_235_p4 = {{scaled_fu_227_p2[30:7]}};
 
 assign tmp_91_fu_177_p10 = ap_sig_allocacmp_t_22[1:0];
 

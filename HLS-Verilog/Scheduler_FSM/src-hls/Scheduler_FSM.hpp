@@ -14,7 +14,6 @@ void scheduler_hls(
     bool axis_in_valid,
     bool axis_in_last,
     bool &axis_in_ready,
-    bool &axis_in_start,
     bool      dma_done,
     bool      wl_ready,
     bool      wl_accept,

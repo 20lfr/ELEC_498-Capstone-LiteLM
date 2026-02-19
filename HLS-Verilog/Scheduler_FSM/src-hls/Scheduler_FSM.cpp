@@ -57,7 +57,6 @@ void scheduler_hls(
     bool axis_in_valid,  // [INPUT]  s_axis_in_tvalid
     bool axis_in_last,   // [INPUT]  s_axis_in_tlast
     bool &axis_in_ready, // [OUTPUT] s_axis_in_tready
-    bool &axis_in_start, // [OUTPUT] Pulse when stream-in payload is complete/ready
 
     // ------------------------------------------------------------
     // Memory Management System (WEIGHT LOADER via DMA)
@@ -222,8 +221,6 @@ void scheduler_hls(
 #pragma HLS reset variable = w1_dma_done
   static bool w2_dma_done;
 #pragma HLS reset variable = w2_dma_done
-  static bool axis_last_seen;
-#pragma HLS reset variable = axis_last_seen
   static bool stream_done_seen;
 #pragma HLS reset variable = stream_done_seen
   static bool final_norm_compute_done;
@@ -314,7 +311,6 @@ void scheduler_hls(
     ln1_compute_done = false;
     final_norm_started = false;
     final_norm_compute_done = false;
-    axis_last_seen = false;
     stream_done_seen = false;
 
     // Global progress/tiles
@@ -344,7 +340,6 @@ void scheduler_hls(
   // Default outputs
   status_mem.layer_index = layer_idx;
   axis_in_ready = 0;
-  axis_in_start = 0;
   if (wl_accept && wl_start){
         wl_start = false;
         wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
@@ -367,7 +362,6 @@ void scheduler_hls(
   if (ctrl_error) {
     // Cancel all outputs and hold in error state
     axis_in_ready = 0;
-    axis_in_start = 0;
     wl_start = false;
     wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
     compute_start = false;
@@ -385,7 +379,6 @@ void scheduler_hls(
   if (error_latched) {
     switch (st) {
       case S_STREAM_IN: {
-        axis_last_seen = false;
         break;
       }
       case S_LAYER_COUNT: {
@@ -555,13 +548,6 @@ void scheduler_hls(
     error_latched = false;
   }
 
-  // Sticky ingress TLAST capture
-  if (axis_in_valid && axis_in_last) {
-    axis_last_seen = true;
-  } else if (st != S_STREAM_IN) {
-    axis_last_seen = false;
-  }
-
   // Sticky stream_done capture
   if (stream_started && stream_done) {
     stream_done_seen = true;
@@ -699,9 +685,8 @@ void scheduler_hls(
     }
     case S_STREAM_IN: {
       axis_in_ready = 1;
-      // Wait for ingress token with tlast before starting layer processing
-      if (axis_last_seen || (axis_in_valid && axis_in_last)) {
-        axis_in_start = 1;
+      // Wait for final ingress beat handshake before starting layer processing.
+      if (axis_in_valid && axis_in_last && axis_in_ready) {
         st = S_LAYER_COUNT;
       }
       break;

@@ -13,8 +13,8 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_646_1
         ap_done,
         ap_idle,
         ap_ready,
-        p_ZZ15transformer_topbbRbS_bS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_225,
-        p_ZZ15transformer_topbbRbS_bS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_224,
+        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_225,
+        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_224,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_7,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_7_ap_vld,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_6,
@@ -33,8 +33,8 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [7:0] p_ZZ15transformer_topbbRbS_bS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_225;
-input  [7:0] p_ZZ15transformer_topbbRbS_bS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_224;
+input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_225;
+input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_224;
 output  [3:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_7;
 output   p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_7_ap_vld;
 output  [3:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_6;
@@ -235,7 +235,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign byte_val_fu_102_p3 = ((tmp_fu_94_p3[0:0] == 1'b1) ? p_ZZ15transformer_topbbRbS_bS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_225 : p_ZZ15transformer_topbbRbS_bS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_224);
+assign byte_val_fu_102_p3 = ((tmp_fu_94_p3[0:0] == 1'b1) ? p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_225 : p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_224);
 
 assign icmp_ln646_fu_74_p2 = ((ap_sig_allocacmp_h == 3'd4) ? 1'b1 : 1'b0);
 

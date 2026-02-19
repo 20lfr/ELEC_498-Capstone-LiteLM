@@ -1393,7 +1393,7 @@ int main() {
 
     const int MAX_CYCLES = 5500;
     const int DMA_LAT    = 3;
-    const int AXIS_BEATS = 3;
+    const int AXIS_BEATS = STREAM_IN_BUF_BYTES;
 
 
     bool wl_ready        = false;
@@ -1416,7 +1416,6 @@ int main() {
     bool axis_in_valid   = false;
     bool axis_in_last    = false;
     bool axis_in_ready   = false;
-    bool axis_in_start   = false;
     int  axis_sent       = 0;
     bool axis_feed_done  = false;
     bool axis_drive      = false;
@@ -1809,7 +1808,6 @@ int main() {
             axis_in_valid,
             axis_in_last,
             axis_in_ready,
-            axis_in_start,
             stream_ready,
             stream_start,
             stream_done,
@@ -2001,7 +1999,7 @@ int main() {
                     axis_in_valid ? 1 : 0,
                     axis_in_last ? 1 : 0,
                     axis_in_ready ? 1 : 0,
-                    axis_in_start ? 1 : 0,
+                    (axis_in_valid && axis_in_last && axis_in_ready) ? 1 : 0,
                     wl_start ? 1 : 0,
                     wl_accept ? 1 : 0,
                     wl_ready ? 1 : 0,

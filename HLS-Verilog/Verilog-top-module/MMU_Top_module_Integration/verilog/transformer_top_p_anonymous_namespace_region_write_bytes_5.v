@@ -27,9 +27,9 @@ module transformer_top_p_anonymous_namespace_region_write_bytes_5 (
         r_chunks_size_read_4,
         r_chunks_size_read_5,
         r_chunks_size_read_6,
-        stream_in_buf_address0,
-        stream_in_buf_ce0,
-        stream_in_buf_q0,
+        p_anonymous_namespace_stream_in_capture_buf_address0,
+        p_anonymous_namespace_stream_in_capture_buf_ce0,
+        p_anonymous_namespace_stream_in_capture_buf_q0,
         uram_banks_address0,
         uram_banks_ce0,
         uram_banks_we0,
@@ -62,9 +62,9 @@ input  [31:0] r_chunks_size_read;
 input  [31:0] r_chunks_size_read_4;
 input  [31:0] r_chunks_size_read_5;
 input  [31:0] r_chunks_size_read_6;
-output  [3:0] stream_in_buf_address0;
-output   stream_in_buf_ce0;
-input  [7:0] stream_in_buf_q0;
+output  [3:0] p_anonymous_namespace_stream_in_capture_buf_address0;
+output   p_anonymous_namespace_stream_in_capture_buf_ce0;
+input  [7:0] p_anonymous_namespace_stream_in_capture_buf_q0;
 output  [20:0] uram_banks_address0;
 output   uram_banks_ce0;
 output   uram_banks_we0;
@@ -78,67 +78,67 @@ reg[0:0] ap_return;
 
 (* fsm_encoding = "none" *) reg   [3:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
-wire   [0:0] icmp_ln819_fu_298_p2;
+wire   [0:0] icmp_ln821_fu_292_p2;
 wire    ap_CS_fsm_state2;
-wire   [2:0] add_ln819_fu_327_p2;
-reg   [2:0] add_ln819_reg_653;
-wire   [20:0] trunc_ln819_fu_339_p1;
-reg   [20:0] trunc_ln819_reg_658;
-wire   [3:0] trunc_ln819_1_fu_344_p1;
-reg   [3:0] trunc_ln819_1_reg_663;
-wire   [0:0] icmp_ln823_fu_373_p2;
-reg   [0:0] icmp_ln823_reg_668;
-wire   [20:0] mul_ln831_fu_450_p2;
-reg   [20:0] mul_ln831_reg_672;
-wire   [20:0] tmp_92_fu_457_p11;
-reg   [20:0] tmp_92_reg_677;
-wire   [31:0] xor_ln829_1_fu_510_p2;
-reg   [31:0] xor_ln829_1_reg_682;
-wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start;
-wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_done;
-wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_idle;
-wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_ready;
-wire   [3:0] grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_stream_in_buf_address0;
-wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_stream_in_buf_ce0;
-wire   [20:0] grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_address0;
-wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_ce0;
-wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_we0;
-wire   [7:0] grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_d0;
-reg   [0:0] retval_0_reg_224;
-wire   [0:0] icmp_ln814_fu_258_p2;
-wire   [0:0] or_ln819_1_fu_321_p2;
-reg    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start_reg;
+wire   [2:0] add_ln821_fu_321_p2;
+reg   [2:0] add_ln821_reg_647;
+wire   [20:0] trunc_ln821_fu_333_p1;
+reg   [20:0] trunc_ln821_reg_652;
+wire   [3:0] trunc_ln821_1_fu_338_p1;
+reg   [3:0] trunc_ln821_1_reg_657;
+wire   [0:0] icmp_ln825_fu_367_p2;
+reg   [0:0] icmp_ln825_reg_662;
+wire   [20:0] mul_ln833_fu_444_p2;
+reg   [20:0] mul_ln833_reg_666;
+wire   [20:0] tmp_92_fu_451_p11;
+reg   [20:0] tmp_92_reg_671;
+wire   [31:0] xor_ln831_1_fu_504_p2;
+reg   [31:0] xor_ln831_1_reg_676;
+wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start;
+wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_done;
+wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_idle;
+wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_ready;
+wire   [3:0] grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_p_anonymous_namespace_stream_in_capture_buf_address0;
+wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_p_anonymous_namespace_stream_in_capture_buf_ce0;
+wire   [20:0] grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_address0;
+wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_ce0;
+wire    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_we0;
+wire   [7:0] grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_d0;
+reg   [0:0] retval_0_reg_218;
+wire   [0:0] icmp_ln816_fu_252_p2;
+wire   [0:0] or_ln821_1_fu_315_p2;
+reg    grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start_reg;
 wire    ap_CS_fsm_state3;
-reg   [31:0] logical_fu_124;
-wire   [31:0] logical_1_fu_379_p2;
+reg   [31:0] logical_fu_118;
+wire   [31:0] logical_1_fu_373_p2;
 reg    ap_block_state3_on_subcall_done;
-reg   [2:0] c_fu_128;
-reg   [31:0] remaining_fu_132;
-wire   [31:0] remaining_21_fu_523_p2;
-reg   [31:0] written_fu_136;
-wire   [31:0] written_1_fu_517_p2;
-wire   [27:0] tmp_277_fu_248_p4;
-wire   [0:0] icmp_ln821_fu_304_p2;
-wire   [0:0] tmp_278_fu_290_p3;
-wire   [0:0] xor_ln821_fu_309_p2;
-wire   [0:0] or_ln819_fu_315_p2;
-wire   [31:0] tmp_fu_353_p9;
-wire   [1:0] trunc_ln819_2_fu_349_p1;
-wire   [31:0] tmp_fu_353_p11;
-wire   [31:0] room_fu_390_p2;
-wire   [0:0] icmp_ln828_fu_396_p2;
-wire   [5:0] tmp_s_fu_410_p9;
-wire   [5:0] tmp_s_fu_410_p11;
-wire   [17:0] tmp_280_fu_438_p3;
-wire   [20:0] tmp_279_fu_430_p3;
-wire   [20:0] p_shl29_fu_446_p1;
-wire   [20:0] tmp_92_fu_457_p9;
-wire   [31:0] add_ln829_fu_478_p2;
-wire   [31:0] sub_ln829_fu_484_p2;
-wire   [31:0] xor_ln829_fu_490_p2;
-wire   [0:0] empty_fu_496_p2;
-wire   [31:0] umax_fu_502_p3;
-wire   [31:0] take_fu_402_p3;
+reg   [2:0] c_fu_122;
+reg   [31:0] remaining_fu_126;
+wire   [31:0] remaining_21_fu_517_p2;
+reg   [31:0] written_fu_130;
+wire   [31:0] written_1_fu_511_p2;
+wire   [27:0] tmp_280_fu_242_p4;
+wire   [0:0] icmp_ln823_fu_298_p2;
+wire   [0:0] tmp_281_fu_284_p3;
+wire   [0:0] xor_ln823_fu_303_p2;
+wire   [0:0] or_ln821_fu_309_p2;
+wire   [31:0] tmp_fu_347_p9;
+wire   [1:0] trunc_ln821_2_fu_343_p1;
+wire   [31:0] tmp_fu_347_p11;
+wire   [31:0] room_fu_384_p2;
+wire   [0:0] icmp_ln830_fu_390_p2;
+wire   [5:0] tmp_s_fu_404_p9;
+wire   [5:0] tmp_s_fu_404_p11;
+wire   [17:0] tmp_283_fu_432_p3;
+wire   [20:0] tmp_282_fu_424_p3;
+wire   [20:0] p_shl29_fu_440_p1;
+wire   [20:0] tmp_92_fu_451_p9;
+wire   [31:0] add_ln831_fu_472_p2;
+wire   [31:0] sub_ln831_fu_478_p2;
+wire   [31:0] xor_ln831_fu_484_p2;
+wire   [0:0] empty_fu_490_p2;
+wire   [31:0] umax_fu_496_p3;
+wire   [31:0] take_fu_396_p3;
 reg   [0:0] ap_return_preg;
 wire    ap_CS_fsm_state4;
 reg   [3:0] ap_NS_fsm;
@@ -146,50 +146,50 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_ST_fsm_state2_blk;
 reg    ap_ST_fsm_state3_blk;
 wire    ap_ST_fsm_state4_blk;
-wire   [1:0] tmp_fu_353_p1;
-wire   [1:0] tmp_fu_353_p3;
-wire  signed [1:0] tmp_fu_353_p5;
-wire  signed [1:0] tmp_fu_353_p7;
-wire   [1:0] tmp_s_fu_410_p1;
-wire   [1:0] tmp_s_fu_410_p3;
-wire  signed [1:0] tmp_s_fu_410_p5;
-wire  signed [1:0] tmp_s_fu_410_p7;
-wire   [1:0] tmp_92_fu_457_p1;
-wire   [1:0] tmp_92_fu_457_p3;
-wire  signed [1:0] tmp_92_fu_457_p5;
-wire  signed [1:0] tmp_92_fu_457_p7;
+wire   [1:0] tmp_fu_347_p1;
+wire   [1:0] tmp_fu_347_p3;
+wire  signed [1:0] tmp_fu_347_p5;
+wire  signed [1:0] tmp_fu_347_p7;
+wire   [1:0] tmp_s_fu_404_p1;
+wire   [1:0] tmp_s_fu_404_p3;
+wire  signed [1:0] tmp_s_fu_404_p5;
+wire  signed [1:0] tmp_s_fu_404_p7;
+wire   [1:0] tmp_92_fu_451_p1;
+wire   [1:0] tmp_92_fu_451_p3;
+wire  signed [1:0] tmp_92_fu_451_p5;
+wire  signed [1:0] tmp_92_fu_451_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 4'd1;
-#0 grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start_reg = 1'b0;
-#0 logical_fu_124 = 32'd0;
-#0 c_fu_128 = 3'd0;
-#0 remaining_fu_132 = 32'd0;
-#0 written_fu_136 = 32'd0;
+#0 grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start_reg = 1'b0;
+#0 logical_fu_118 = 32'd0;
+#0 c_fu_122 = 3'd0;
+#0 remaining_fu_126 = 32'd0;
+#0 written_fu_130 = 32'd0;
 #0 ap_return_preg = 1'd0;
 end
 
-transformer_top_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2 grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235(
+transformer_top_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2 grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start),
-    .ap_done(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_done),
-    .ap_idle(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_idle),
-    .ap_ready(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_ready),
-    .xor_ln829_1(xor_ln829_1_reg_682),
-    .empty_399(trunc_ln819_1_reg_663),
-    .stream_in_buf_address0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_stream_in_buf_address0),
-    .stream_in_buf_ce0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_stream_in_buf_ce0),
-    .stream_in_buf_q0(stream_in_buf_q0),
-    .empty(trunc_ln819_reg_658),
-    .tmp_92(tmp_92_reg_677),
-    .mul_ln831(mul_ln831_reg_672),
-    .uram_banks_address0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_address0),
-    .uram_banks_ce0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_ce0),
-    .uram_banks_we0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_we0),
-    .uram_banks_d0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_d0)
+    .ap_start(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start),
+    .ap_done(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_done),
+    .ap_idle(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_idle),
+    .ap_ready(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_ready),
+    .xor_ln831_1(xor_ln831_1_reg_676),
+    .empty_399(trunc_ln821_1_reg_657),
+    .empty(trunc_ln821_reg_652),
+    .tmp_92(tmp_92_reg_671),
+    .mul_ln833(mul_ln833_reg_666),
+    .p_anonymous_namespace_stream_in_capture_buf_address0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_p_anonymous_namespace_stream_in_capture_buf_address0),
+    .p_anonymous_namespace_stream_in_capture_buf_ce0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_p_anonymous_namespace_stream_in_capture_buf_ce0),
+    .p_anonymous_namespace_stream_in_capture_buf_q0(p_anonymous_namespace_stream_in_capture_buf_q0),
+    .uram_banks_address0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_address0),
+    .uram_banks_ce0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_ce0),
+    .uram_banks_we0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_we0),
+    .uram_banks_d0(grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_d0)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_9_2_32_1_1 #(
@@ -211,9 +211,9 @@ sparsemux_9_2_32_1_1_U3740(
     .din1(r_chunks_size_read_4),
     .din2(r_chunks_size_read_5),
     .din3(r_chunks_size_read_6),
-    .def(tmp_fu_353_p9),
-    .sel(trunc_ln819_2_fu_349_p1),
-    .dout(tmp_fu_353_p11)
+    .def(tmp_fu_347_p9),
+    .sel(trunc_ln821_2_fu_343_p1),
+    .dout(tmp_fu_347_p11)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_9_2_6_1_1 #(
@@ -235,9 +235,9 @@ sparsemux_9_2_6_1_1_U3741(
     .din1(r_chunks_bank_read_4),
     .din2(r_chunks_bank_read_5),
     .din3(r_chunks_bank_read_6),
-    .def(tmp_s_fu_410_p9),
-    .sel(trunc_ln819_2_fu_349_p1),
-    .dout(tmp_s_fu_410_p11)
+    .def(tmp_s_fu_404_p9),
+    .sel(trunc_ln821_2_fu_343_p1),
+    .dout(tmp_s_fu_404_p11)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_9_2_21_1_1 #(
@@ -259,9 +259,9 @@ sparsemux_9_2_21_1_1_U3742(
     .din1(r_chunks_offset_read_4),
     .din2(r_chunks_offset_read_5),
     .din3(r_chunks_offset_read_6),
-    .def(tmp_92_fu_457_p9),
-    .sel(trunc_ln819_2_fu_349_p1),
-    .dout(tmp_92_fu_457_p11)
+    .def(tmp_92_fu_451_p9),
+    .sel(trunc_ln821_2_fu_343_p1),
+    .dout(tmp_92_fu_451_p11)
 );
 
 always @ (posedge ap_clk) begin
@@ -277,72 +277,72 @@ always @ (posedge ap_clk) begin
         ap_return_preg <= 1'd0;
     end else begin
         if ((1'b1 == ap_CS_fsm_state4)) begin
-            ap_return_preg <= retval_0_reg_224;
+            ap_return_preg <= retval_0_reg_218;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start_reg <= 1'b0;
+        grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start_reg <= 1'b0;
     end else begin
-        if (((icmp_ln823_fu_373_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2) & (or_ln819_1_fu_321_p2 == 1'd0))) begin
-            grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start_reg <= 1'b1;
-        end else if ((grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_ready == 1'b1)) begin
-            grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start_reg <= 1'b0;
+        if (((icmp_ln825_fu_367_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2) & (or_ln821_1_fu_315_p2 == 1'd0))) begin
+            grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start_reg <= 1'b1;
+        end else if ((grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_ready == 1'b1)) begin
+            grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln814_fu_258_p2 == 1'd0))) begin
-        c_fu_128 <= 3'd0;
+    if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln816_fu_252_p2 == 1'd0))) begin
+        c_fu_122 <= 3'd0;
     end else if (((1'b1 == ap_CS_fsm_state3) & (1'b0 == ap_block_state3_on_subcall_done))) begin
-        c_fu_128 <= add_ln819_reg_653;
+        c_fu_122 <= add_ln821_reg_647;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln823_fu_373_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2) & (or_ln819_1_fu_321_p2 == 1'd0))) begin
-        logical_fu_124 <= logical_1_fu_379_p2;
-    end else if ((((icmp_ln823_reg_668 == 1'd1) & (1'b1 == ap_CS_fsm_state3) & (1'b0 == ap_block_state3_on_subcall_done)) | ((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln814_fu_258_p2 == 1'd0)))) begin
-        logical_fu_124 <= 32'd0;
+    if (((icmp_ln825_fu_367_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2) & (or_ln821_1_fu_315_p2 == 1'd0))) begin
+        logical_fu_118 <= logical_1_fu_373_p2;
+    end else if ((((icmp_ln825_reg_662 == 1'd1) & (1'b1 == ap_CS_fsm_state3) & (1'b0 == ap_block_state3_on_subcall_done)) | ((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln816_fu_252_p2 == 1'd0)))) begin
+        logical_fu_118 <= 32'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln814_fu_258_p2 == 1'd0))) begin
-        remaining_fu_132 <= 32'd16;
-    end else if (((icmp_ln823_fu_373_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2) & (or_ln819_1_fu_321_p2 == 1'd0))) begin
-        remaining_fu_132 <= remaining_21_fu_523_p2;
+    if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln816_fu_252_p2 == 1'd0))) begin
+        remaining_fu_126 <= 32'd16;
+    end else if (((icmp_ln825_fu_367_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2) & (or_ln821_1_fu_315_p2 == 1'd0))) begin
+        remaining_fu_126 <= remaining_21_fu_517_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state2) & (or_ln819_1_fu_321_p2 == 1'd1))) begin
-        retval_0_reg_224 <= icmp_ln819_fu_298_p2;
-    end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln814_fu_258_p2 == 1'd1))) begin
-        retval_0_reg_224 <= 1'd0;
+    if (((1'b1 == ap_CS_fsm_state2) & (or_ln821_1_fu_315_p2 == 1'd1))) begin
+        retval_0_reg_218 <= icmp_ln821_fu_292_p2;
+    end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln816_fu_252_p2 == 1'd1))) begin
+        retval_0_reg_218 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln814_fu_258_p2 == 1'd0))) begin
-        written_fu_136 <= 32'd0;
-    end else if (((icmp_ln823_fu_373_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2) & (or_ln819_1_fu_321_p2 == 1'd0))) begin
-        written_fu_136 <= written_1_fu_517_p2;
+    if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln816_fu_252_p2 == 1'd0))) begin
+        written_fu_130 <= 32'd0;
+    end else if (((icmp_ln825_fu_367_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2) & (or_ln821_1_fu_315_p2 == 1'd0))) begin
+        written_fu_130 <= written_1_fu_511_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        add_ln819_reg_653 <= add_ln819_fu_327_p2;
-        icmp_ln823_reg_668 <= icmp_ln823_fu_373_p2;
-        mul_ln831_reg_672[20 : 12] <= mul_ln831_fu_450_p2[20 : 12];
-        tmp_92_reg_677 <= tmp_92_fu_457_p11;
-        trunc_ln819_1_reg_663 <= trunc_ln819_1_fu_344_p1;
-        trunc_ln819_reg_658 <= trunc_ln819_fu_339_p1;
-        xor_ln829_1_reg_682 <= xor_ln829_1_fu_510_p2;
+        add_ln821_reg_647 <= add_ln821_fu_321_p2;
+        icmp_ln825_reg_662 <= icmp_ln825_fu_367_p2;
+        mul_ln833_reg_666[20 : 12] <= mul_ln833_fu_444_p2[20 : 12];
+        tmp_92_reg_671 <= tmp_92_fu_451_p11;
+        trunc_ln821_1_reg_657 <= trunc_ln821_1_fu_338_p1;
+        trunc_ln821_reg_652 <= trunc_ln821_fu_333_p1;
+        xor_ln831_1_reg_676 <= xor_ln831_1_fu_504_p2;
     end
 end
 
@@ -392,7 +392,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state4)) begin
-        ap_return = retval_0_reg_224;
+        ap_return = retval_0_reg_218;
     end else begin
         ap_return = ap_return_preg;
     end
@@ -401,16 +401,16 @@ end
 always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_state1 : begin
-            if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln814_fu_258_p2 == 1'd0))) begin
+            if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln816_fu_252_p2 == 1'd0))) begin
                 ap_NS_fsm = ap_ST_fsm_state2;
-            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln814_fu_258_p2 == 1'd1))) begin
+            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (icmp_ln816_fu_252_p2 == 1'd1))) begin
                 ap_NS_fsm = ap_ST_fsm_state4;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state1;
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((1'b1 == ap_CS_fsm_state2) & (or_ln819_1_fu_321_p2 == 1'd1))) begin
+            if (((1'b1 == ap_CS_fsm_state2) & (or_ln821_1_fu_315_p2 == 1'd1))) begin
                 ap_NS_fsm = ap_ST_fsm_state4;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state3;
@@ -432,9 +432,9 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln819_fu_327_p2 = (c_fu_128 + 3'd1);
+assign add_ln821_fu_321_p2 = (c_fu_122 + 3'd1);
 
-assign add_ln829_fu_478_p2 = ($signed(logical_fu_124) + $signed(32'd4294967295));
+assign add_ln831_fu_472_p2 = ($signed(logical_fu_118) + $signed(32'd4294967295));
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -445,85 +445,85 @@ assign ap_CS_fsm_state3 = ap_CS_fsm[32'd2];
 assign ap_CS_fsm_state4 = ap_CS_fsm[32'd3];
 
 always @ (*) begin
-    ap_block_state3_on_subcall_done = ((icmp_ln823_reg_668 == 1'd1) & (grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_done == 1'b0));
+    ap_block_state3_on_subcall_done = ((icmp_ln825_reg_662 == 1'd1) & (grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_done == 1'b0));
 end
 
-assign empty_fu_496_p2 = ((sub_ln829_fu_484_p2 > xor_ln829_fu_490_p2) ? 1'b1 : 1'b0);
+assign empty_fu_490_p2 = ((sub_ln831_fu_478_p2 > xor_ln831_fu_484_p2) ? 1'b1 : 1'b0);
 
-assign grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_ap_start_reg;
+assign grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_ap_start_reg;
 
-assign icmp_ln814_fu_258_p2 = ((tmp_277_fu_248_p4 == 28'd0) ? 1'b1 : 1'b0);
+assign icmp_ln816_fu_252_p2 = ((tmp_280_fu_242_p4 == 28'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln819_fu_298_p2 = ((remaining_fu_132 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln821_fu_292_p2 = ((remaining_fu_126 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln821_fu_304_p2 = ((c_fu_128 < r_num_chunks_read) ? 1'b1 : 1'b0);
+assign icmp_ln823_fu_298_p2 = ((c_fu_122 < r_num_chunks_read) ? 1'b1 : 1'b0);
 
-assign icmp_ln823_fu_373_p2 = ((logical_fu_124 < tmp_fu_353_p11) ? 1'b1 : 1'b0);
+assign icmp_ln825_fu_367_p2 = ((logical_fu_118 < tmp_fu_347_p11) ? 1'b1 : 1'b0);
 
-assign icmp_ln828_fu_396_p2 = ((remaining_fu_132 < room_fu_390_p2) ? 1'b1 : 1'b0);
+assign icmp_ln830_fu_390_p2 = ((remaining_fu_126 < room_fu_384_p2) ? 1'b1 : 1'b0);
 
-assign logical_1_fu_379_p2 = (logical_fu_124 - tmp_fu_353_p11);
+assign logical_1_fu_373_p2 = (logical_fu_118 - tmp_fu_347_p11);
 
-assign mul_ln831_fu_450_p2 = (tmp_279_fu_430_p3 + p_shl29_fu_446_p1);
+assign mul_ln833_fu_444_p2 = (tmp_282_fu_424_p3 + p_shl29_fu_440_p1);
 
-assign or_ln819_1_fu_321_p2 = (or_ln819_fu_315_p2 | icmp_ln819_fu_298_p2);
+assign or_ln821_1_fu_315_p2 = (or_ln821_fu_309_p2 | icmp_ln821_fu_292_p2);
 
-assign or_ln819_fu_315_p2 = (xor_ln821_fu_309_p2 | tmp_278_fu_290_p3);
+assign or_ln821_fu_309_p2 = (xor_ln823_fu_303_p2 | tmp_281_fu_284_p3);
 
-assign p_shl29_fu_446_p1 = tmp_280_fu_438_p3;
+assign p_anonymous_namespace_stream_in_capture_buf_address0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_p_anonymous_namespace_stream_in_capture_buf_address0;
 
-assign remaining_21_fu_523_p2 = (remaining_fu_132 - take_fu_402_p3);
+assign p_anonymous_namespace_stream_in_capture_buf_ce0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_p_anonymous_namespace_stream_in_capture_buf_ce0;
 
-assign room_fu_390_p2 = (tmp_fu_353_p11 - logical_fu_124);
+assign p_shl29_fu_440_p1 = tmp_283_fu_432_p3;
 
-assign stream_in_buf_address0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_stream_in_buf_address0;
+assign remaining_21_fu_517_p2 = (remaining_fu_126 - take_fu_396_p3);
 
-assign stream_in_buf_ce0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_stream_in_buf_ce0;
+assign room_fu_384_p2 = (tmp_fu_347_p11 - logical_fu_118);
 
-assign sub_ln829_fu_484_p2 = (add_ln829_fu_478_p2 - tmp_fu_353_p11);
+assign sub_ln831_fu_478_p2 = (add_ln831_fu_472_p2 - tmp_fu_347_p11);
 
-assign take_fu_402_p3 = ((icmp_ln828_fu_396_p2[0:0] == 1'b1) ? remaining_fu_132 : room_fu_390_p2);
+assign take_fu_396_p3 = ((icmp_ln830_fu_390_p2[0:0] == 1'b1) ? remaining_fu_126 : room_fu_384_p2);
 
-assign tmp_277_fu_248_p4 = {{r_total_bytes_val[31:4]}};
+assign tmp_280_fu_242_p4 = {{r_total_bytes_val[31:4]}};
 
-assign tmp_278_fu_290_p3 = c_fu_128[32'd2];
+assign tmp_281_fu_284_p3 = c_fu_122[32'd2];
 
-assign tmp_279_fu_430_p3 = {{tmp_s_fu_410_p11}, {15'd0}};
+assign tmp_282_fu_424_p3 = {{tmp_s_fu_404_p11}, {15'd0}};
 
-assign tmp_280_fu_438_p3 = {{tmp_s_fu_410_p11}, {12'd0}};
+assign tmp_283_fu_432_p3 = {{tmp_s_fu_404_p11}, {12'd0}};
 
-assign tmp_92_fu_457_p9 = 'bx;
+assign tmp_92_fu_451_p9 = 'bx;
 
-assign tmp_fu_353_p9 = 'bx;
+assign tmp_fu_347_p9 = 'bx;
 
-assign tmp_s_fu_410_p9 = 'bx;
+assign tmp_s_fu_404_p9 = 'bx;
 
-assign trunc_ln819_1_fu_344_p1 = written_fu_136[3:0];
+assign trunc_ln821_1_fu_338_p1 = written_fu_130[3:0];
 
-assign trunc_ln819_2_fu_349_p1 = c_fu_128[1:0];
+assign trunc_ln821_2_fu_343_p1 = c_fu_122[1:0];
 
-assign trunc_ln819_fu_339_p1 = logical_fu_124[20:0];
+assign trunc_ln821_fu_333_p1 = logical_fu_118[20:0];
 
-assign umax_fu_502_p3 = ((empty_fu_496_p2[0:0] == 1'b1) ? sub_ln829_fu_484_p2 : xor_ln829_fu_490_p2);
+assign umax_fu_496_p3 = ((empty_fu_490_p2[0:0] == 1'b1) ? sub_ln831_fu_478_p2 : xor_ln831_fu_484_p2);
 
-assign uram_banks_address0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_address0;
+assign uram_banks_address0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_address0;
 
-assign uram_banks_ce0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_ce0;
+assign uram_banks_ce0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_ce0;
 
-assign uram_banks_d0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_d0;
+assign uram_banks_d0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_d0;
 
-assign uram_banks_we0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_829_2_fu_235_uram_banks_we0;
+assign uram_banks_we0 = grp_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS_LOOP_831_2_fu_229_uram_banks_we0;
 
-assign written_1_fu_517_p2 = (take_fu_402_p3 + written_fu_136);
+assign written_1_fu_511_p2 = (take_fu_396_p3 + written_fu_130);
 
-assign xor_ln821_fu_309_p2 = (icmp_ln821_fu_304_p2 ^ 1'd1);
+assign xor_ln823_fu_303_p2 = (icmp_ln823_fu_298_p2 ^ 1'd1);
 
-assign xor_ln829_1_fu_510_p2 = (umax_fu_502_p3 ^ 32'd4294967295);
+assign xor_ln831_1_fu_504_p2 = (umax_fu_496_p3 ^ 32'd4294967295);
 
-assign xor_ln829_fu_490_p2 = (remaining_fu_132 ^ 32'd4294967295);
+assign xor_ln831_fu_484_p2 = (remaining_fu_126 ^ 32'd4294967295);
 
 always @ (posedge ap_clk) begin
-    mul_ln831_reg_672[11:0] <= 12'b000000000000;
+    mul_ln833_reg_666[11:0] <= 12'b000000000000;
 end
 
 endmodule //transformer_top_p_anonymous_namespace_region_write_bytes_5

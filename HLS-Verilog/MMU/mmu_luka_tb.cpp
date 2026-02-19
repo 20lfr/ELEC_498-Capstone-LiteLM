@@ -439,8 +439,9 @@ int main() {
     bool mem_write_request = false;
     uint32_t mem_op = 0;
     bool mem_transfer_done = false;
+    bool axis_in_valid = false;
+    bool axis_in_last = false;
     bool axis_in_ready = false;
-    bool axis_in_start = false;
     bool stream_start = false;
 
     HeadCtx head_ctx[NUM_HEADS];
@@ -729,8 +730,9 @@ int main() {
             dma_addr,
             dma_len,
             dma_is_write,
+            axis_in_valid,
+            axis_in_last,
             axis_in_ready,
-            axis_in_start,
             stream_start,
             stream_in_buf,
             stream_out_buf,
