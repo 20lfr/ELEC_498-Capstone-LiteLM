@@ -73,7 +73,7 @@ wire   [1:0] tmp_s_fu_186_p10;
 wire   [0:0] tmp_s_fu_186_p11;
 wire  signed [31:0] sext_ln517_fu_178_p1;
 wire   [2:0] zext_ln516_2_fu_129_p1;
-wire   [2:0] i_20_fu_215_p2;
+wire   [2:0] i_23_fu_215_p2;
 wire   [0:0] tmp_64_fu_225_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -112,7 +112,7 @@ end
     .def_WIDTH( 1 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 1 ))
-sparsemux_9_2_1_1_1_U4563(
+sparsemux_9_2_1_1_1_U4567(
     .din0(p_ZN12_GLOBAL_N_111arb_pendingE_0_load_2),
     .din1(p_ZN12_GLOBAL_N_111arb_pendingE_1_load_2),
     .din2(p_ZN12_GLOBAL_N_111arb_pendingE_2_load_2),
@@ -276,7 +276,7 @@ assign grant_8_out = ((tmp_s_fu_186_p11[0:0] == 1'b1) ? sext_ln517_fu_178_p1 : g
 
 assign h_fu_170_p3 = ((tmp_fu_138_p3[0:0] == 1'b1) ? sub_ln517_2_fu_164_p2 : zext_ln517_fu_150_p1);
 
-assign i_20_fu_215_p2 = (zext_ln516_2_fu_129_p1 + 3'd1);
+assign i_23_fu_215_p2 = (zext_ln516_2_fu_129_p1 + 3'd1);
 
 assign or_cond182_demorgan_fu_233_p2 = (tmp_s_fu_186_p11 | tmp_64_fu_225_p3);
 
@@ -286,7 +286,7 @@ assign sub_ln517_2_fu_164_p2 = (3'd0 - zext_ln517_2_fu_160_p1);
 
 assign sub_ln517_fu_154_p2 = (2'd0 - trunc_ln517_fu_146_p1);
 
-assign tmp_64_fu_225_p3 = i_20_fu_215_p2[32'd2];
+assign tmp_64_fu_225_p3 = i_23_fu_215_p2[32'd2];
 
 assign tmp_fu_138_p3 = add_ln517_fu_133_p2[32'd31];
 
@@ -294,7 +294,7 @@ assign tmp_s_fu_186_p10 = h_fu_170_p3[1:0];
 
 assign tmp_s_fu_186_p9 = 'bx;
 
-assign trunc_ln516_fu_221_p1 = i_20_fu_215_p2[1:0];
+assign trunc_ln516_fu_221_p1 = i_23_fu_215_p2[1:0];
 
 assign trunc_ln517_fu_146_p1 = add_ln517_fu_133_p2[1:0];
 

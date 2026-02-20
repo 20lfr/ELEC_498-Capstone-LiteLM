@@ -28,7 +28,7 @@ input clk;
 (* ram_style = "hls_ultra" , cascade_height = 1 *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("./transformer_top_mmu_fsm_uram_banks_RAM_T2P_URAM_1R1W.dat", ram);
+    $readmemh("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/MMU_Top_module_Integration/verilog/transformer_top_mmu_fsm_uram_banks_RAM_T2P_URAM_1R1W.dat", ram);
 end 
 
  

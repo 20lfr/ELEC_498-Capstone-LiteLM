@@ -58,7 +58,7 @@ static DmaSel active_dma_sel = DMASEL_NONE;
 static int active_dma_layer = 0;
 static int active_dma_head = -1;
 static int active_dma_tile = -1;
-static uint32_t active_dma_addr_base = 0;
+static uint64_t active_dma_addr_base = 0;
 static uint8_t active_piece_idx = 0;
 static uint8_t active_piece_count = 0;
 static uint32_t active_piece_bytes[MAX_DMA_PIECES];
@@ -1195,7 +1195,7 @@ static bool build_dma_piece_plan(DmaSel sel,
 }
 
 static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, int tile,
-                               uint32_t &addr_out) {
+                               uint64_t &addr_out) {
 #pragma HLS INLINE off
     if (layer < 0) return false;
     switch (sel) {
@@ -1279,22 +1279,22 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
     }
 }
 
-static uint32_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, uint16_t token_pos) {
+static uint64_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, uint16_t token_pos) {
 #pragma HLS INLINE
-    const uint32_t base = (sel == DMASEL_K_WRITE)
-        ? static_cast<uint32_t>(ctrl_mem.k_cache_addr)
-        : static_cast<uint32_t>(ctrl_mem.v_cache_addr);
-    const uint32_t layer_stride = (ctrl_mem.layer_stride != 0)
-        ? ctrl_mem.layer_stride
-        : static_cast<uint32_t>(NUM_HEADS * CONTEXT_LENGTH * D_HEADS);
-    const uint32_t head_stride = (sel == DMASEL_K_WRITE)
-        ? ((ctrl_mem.k_cache_stride != 0) ? ctrl_mem.k_cache_stride
-                                          : static_cast<uint32_t>(CONTEXT_LENGTH * D_HEADS))
-        : ((ctrl_mem.v_cache_stride != 0) ? ctrl_mem.v_cache_stride
-                                          : static_cast<uint32_t>(CONTEXT_LENGTH * D_HEADS));
-    const uint32_t token_off = static_cast<uint32_t>(token_pos) * static_cast<uint32_t>(D_HEADS);
-    return base + static_cast<uint32_t>(layer) * layer_stride
-                + static_cast<uint32_t>(head) * head_stride
+    const uint64_t base = (sel == DMASEL_K_WRITE)
+        ? ctrl_mem.k_cache_addr
+        : ctrl_mem.v_cache_addr;
+    const uint64_t layer_stride = (ctrl_mem.layer_stride != 0)
+        ? static_cast<uint64_t>(ctrl_mem.layer_stride)
+        : static_cast<uint64_t>(NUM_HEADS * CONTEXT_LENGTH * D_HEADS);
+    const uint64_t head_stride = (sel == DMASEL_K_WRITE)
+        ? ((ctrl_mem.k_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.k_cache_stride)
+                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS))
+        : ((ctrl_mem.v_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.v_cache_stride)
+                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS));
+    const uint64_t token_off = static_cast<uint64_t>(token_pos) * static_cast<uint64_t>(D_HEADS);
+    return base + static_cast<uint64_t>(layer) * layer_stride
+                + static_cast<uint64_t>(head) * head_stride
                 + token_off;
 }
 
@@ -1640,7 +1640,7 @@ void mmu_fsm(
     const uint32_t  dma_rx_buf[DMA_BUF_WORDS],      // [INPUT] DMA read payload words into MMU
     uint32_t        dma_tx_buf[DMA_BUF_WORDS],      // [OUTPUT] DMA write payload words from MMU
     bool            &dma_start,                     // [OUTPUT] Start DMA transfer
-    uint32_t        &dma_addr,                      // [OUTPUT] DMA address
+    uint64_t        &dma_addr,                      // [OUTPUT] DMA address
     uint32_t        &dma_len,                       // [OUTPUT] DMA transfer length
     bool            &dma_is_write,                  // [OUTPUT] DMA direction (1=MMU->DDR)
 

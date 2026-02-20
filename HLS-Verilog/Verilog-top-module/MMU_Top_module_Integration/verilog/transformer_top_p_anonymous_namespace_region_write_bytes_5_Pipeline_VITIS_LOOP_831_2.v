@@ -14,7 +14,7 @@ module transformer_top_p_anonymous_namespace_region_write_bytes_5_Pipeline_VITIS
         ap_idle,
         ap_ready,
         xor_ln831_1,
-        empty_399,
+        empty_411,
         empty,
         tmp_92,
         mul_ln833,
@@ -36,7 +36,7 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [31:0] xor_ln831_1;
-input  [3:0] empty_399;
+input  [3:0] empty_411;
 input  [20:0] empty;
 input  [20:0] tmp_92;
 input  [20:0] mul_ln833;
@@ -69,7 +69,7 @@ wire   [63:0] zext_ln833_2_fu_165_p1;
 reg   [31:0] i_fu_42;
 wire   [31:0] add_ln831_fu_117_p2;
 wire    ap_loop_init;
-reg   [31:0] ap_sig_allocacmp_i_77;
+reg   [31:0] ap_sig_allocacmp_i_80;
 reg    p_anonymous_namespace_stream_in_capture_buf_ce0_local;
 reg    uram_banks_we0_local;
 reg    uram_banks_ce0_local;
@@ -201,9 +201,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_77 = 32'd0;
+        ap_sig_allocacmp_i_80 = 32'd0;
     end else begin
-        ap_sig_allocacmp_i_77 = i_fu_42;
+        ap_sig_allocacmp_i_80 = i_fu_42;
     end
 end
 
@@ -242,7 +242,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln831_fu_117_p2 = (ap_sig_allocacmp_i_77 + 32'd1);
+assign add_ln831_fu_117_p2 = (ap_sig_allocacmp_i_80 + 32'd1);
 
 assign add_ln833_1_fu_148_p2 = (add_ln833_2_fu_142_p2 + tmp_92);
 
@@ -250,7 +250,7 @@ assign add_ln833_2_fu_142_p2 = (empty + trunc_ln833_fu_123_p1);
 
 assign add_ln833_3_fu_154_p2 = (mul_ln833 + add_ln833_1_fu_148_p2);
 
-assign add_ln833_fu_131_p2 = (trunc_ln833_3_fu_127_p1 + empty_399);
+assign add_ln833_fu_131_p2 = (trunc_ln833_3_fu_127_p1 + empty_411);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -270,15 +270,15 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln831_fu_111_p2 = ((ap_sig_allocacmp_i_77 == xor_ln831_1) ? 1'b1 : 1'b0);
+assign icmp_ln831_fu_111_p2 = ((ap_sig_allocacmp_i_80 == xor_ln831_1) ? 1'b1 : 1'b0);
 
 assign p_anonymous_namespace_stream_in_capture_buf_address0 = zext_ln833_fu_137_p1;
 
 assign p_anonymous_namespace_stream_in_capture_buf_ce0 = p_anonymous_namespace_stream_in_capture_buf_ce0_local;
 
-assign trunc_ln833_3_fu_127_p1 = ap_sig_allocacmp_i_77[3:0];
+assign trunc_ln833_3_fu_127_p1 = ap_sig_allocacmp_i_80[3:0];
 
-assign trunc_ln833_fu_123_p1 = ap_sig_allocacmp_i_77[20:0];
+assign trunc_ln833_fu_123_p1 = ap_sig_allocacmp_i_80[20:0];
 
 assign uram_banks_address0 = zext_ln833_2_fu_165_p1;
 

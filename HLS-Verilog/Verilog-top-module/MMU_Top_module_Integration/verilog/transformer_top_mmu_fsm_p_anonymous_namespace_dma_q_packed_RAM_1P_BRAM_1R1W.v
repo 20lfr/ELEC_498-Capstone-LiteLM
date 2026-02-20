@@ -28,7 +28,7 @@ input clk;
 (* ram_style = "block"  *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("./transformer_top_mmu_fsm_p_anonymous_namespace_dma_q_packed_RAM_1P_BRAM_1R1W.dat", ram);
+    $readmemh("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/MMU_Top_module_Integration/verilog/transformer_top_mmu_fsm_p_anonymous_namespace_dma_q_packed_RAM_1P_BRAM_1R1W.dat", ram);
 end 
 
  

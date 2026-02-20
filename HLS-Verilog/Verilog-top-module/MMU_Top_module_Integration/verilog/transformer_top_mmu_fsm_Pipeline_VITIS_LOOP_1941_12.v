@@ -13,12 +13,12 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_1941_12 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_415,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_414,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_417,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_416,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_419,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_418,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_415,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_414,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_417,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_416,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_419,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_418,
         p_ZN12_GLOBAL_N_117prev_head_mem_reqE_0,
         p_ZN12_GLOBAL_N_117prev_head_mem_reqE_0_ap_vld,
         p_ZN12_GLOBAL_N_116prev_head_mem_opE_0,
@@ -37,12 +37,12 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_415;
-input  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_414;
-input  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_417;
-input  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_416;
-input  [31:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_419;
-input  [31:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_418;
+input  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_415;
+input  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_414;
+input  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_417;
+input  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_416;
+input  [31:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_419;
+input  [31:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_418;
 output  [0:0] p_ZN12_GLOBAL_N_117prev_head_mem_reqE_0;
 output   p_ZN12_GLOBAL_N_117prev_head_mem_reqE_0_ap_vld;
 output  [31:0] p_ZN12_GLOBAL_N_116prev_head_mem_opE_0;
@@ -258,10 +258,10 @@ assign p_ZN12_GLOBAL_N_117prev_head_mem_reqE_1 = req_active_fu_130_p2;
 
 assign req_active_fu_130_p2 = (select_ln1942_fu_114_p3 | select_ln1942_1_fu_122_p3);
 
-assign select_ln1942_1_fu_122_p3 = ((icmp_ln1942_fu_108_p2[0:0] == 1'b1) ? transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_417 : transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_416);
+assign select_ln1942_1_fu_122_p3 = ((icmp_ln1942_fu_108_p2[0:0] == 1'b1) ? transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_417 : transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_416);
 
-assign select_ln1942_fu_114_p3 = ((icmp_ln1942_fu_108_p2[0:0] == 1'b1) ? transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_415 : transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_414);
+assign select_ln1942_fu_114_p3 = ((icmp_ln1942_fu_108_p2[0:0] == 1'b1) ? transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_415 : transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_414);
 
-assign select_ln1944_fu_142_p3 = ((icmp_ln1942_fu_108_p2[0:0] == 1'b1) ? transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_419 : transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_418);
+assign select_ln1944_fu_142_p3 = ((icmp_ln1942_fu_108_p2[0:0] == 1'b1) ? transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_419 : transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_418);
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_1941_12

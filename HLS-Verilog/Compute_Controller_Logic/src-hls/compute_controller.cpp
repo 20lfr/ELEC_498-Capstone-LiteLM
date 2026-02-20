@@ -548,9 +548,7 @@ void compute_controller(
                 req.op == ComputeOp::CMP_FFN_W2 || 
                 req.op == ComputeOp::CMP_RESID2 || 
                 req.op == ComputeOp::CMP_LN1 || 
-                req.op == ComputeOp::CMP_DEQUANT || 
-                req.op == ComputeOp::CMP_FINAL_NORM || 
-                req.op == ComputeOp::CMP_LOGITS) {
+                req.op == ComputeOp::CMP_FINAL_NORM) {
                 
                 error = false; // Clear stale errors on a new request.
                 next_state = ComputeState::WAIT_MEM;
@@ -830,12 +828,6 @@ void compute_controller(
                     }
                     break;
                 }
-                case ComputeOp::CMP_DEQUANT:{
-                    break;
-                }
-                case ComputeOp::CMP_LOGITS:
-                    next_state = ComputeState::MEM_WRITEBACK;
-                    break;
                 default:
                     error = true;
                     next_state = ComputeState::DONE;

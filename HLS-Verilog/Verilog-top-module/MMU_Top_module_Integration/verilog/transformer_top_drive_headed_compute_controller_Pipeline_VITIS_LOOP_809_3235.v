@@ -165,7 +165,7 @@ wire   [63:0] zext_ln809_fu_356_p1;
 reg   [6:0] i_fu_94;
 wire   [6:0] add_ln809_fu_336_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i_24;
+reg   [6:0] ap_sig_allocacmp_i_27;
 reg    p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_49_we0_local;
 wire   [3:0] trunc_ln809_fu_342_p1;
 reg    p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_49_ce0_local;
@@ -304,9 +304,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_24 = 7'd0;
+        ap_sig_allocacmp_i_27 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_24 = i_fu_94;
+        ap_sig_allocacmp_i_27 = i_fu_94;
     end
 end
 
@@ -577,7 +577,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln809_fu_336_p2 = (ap_sig_allocacmp_i_24 + 7'd1);
+assign add_ln809_fu_336_p2 = (ap_sig_allocacmp_i_27 + 7'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -591,9 +591,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln809_fu_330_p2 = ((ap_sig_allocacmp_i_24 == 7'd64) ? 1'b1 : 1'b0);
+assign icmp_ln809_fu_330_p2 = ((ap_sig_allocacmp_i_27 == 7'd64) ? 1'b1 : 1'b0);
 
-assign lshr_ln809_1_fu_346_p4 = {{ap_sig_allocacmp_i_24[5:4]}};
+assign lshr_ln809_1_fu_346_p4 = {{ap_sig_allocacmp_i_27[5:4]}};
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_40_address0 = zext_ln809_fu_356_p1;
 
@@ -723,7 +723,7 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hR
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_55_we0 = p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_55_we0_local;
 
-assign trunc_ln809_fu_342_p1 = ap_sig_allocacmp_i_24[3:0];
+assign trunc_ln809_fu_342_p1 = ap_sig_allocacmp_i_27[3:0];
 
 assign zext_ln809_fu_356_p1 = lshr_ln809_1_fu_346_p4;
 

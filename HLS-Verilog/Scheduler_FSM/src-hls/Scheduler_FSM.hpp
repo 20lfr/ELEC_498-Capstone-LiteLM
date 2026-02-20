@@ -11,9 +11,7 @@
 void scheduler_hls(
     ControlMemSpace ctrl_mem,
     StatusMemSpace &status_mem,
-    bool axis_in_valid,
-    bool axis_in_last,
-    bool &axis_in_ready,
+    bool axis_token_complete,
     bool      dma_done,
     bool      wl_ready,
     bool      wl_accept,

@@ -114,8 +114,6 @@ static const char *op_name(ComputeOp op) {
         case CMP_FINAL_NORM: return "CMP_FINAL_NORM";
         case CMP_REQUANT1: return "CMP_REQUANT1";
         case CMP_REQUANT_Q: return "CMP_REQUANT_Q";
-        case CMP_DEQUANT: return "CMP_DEQUANT";
-        case CMP_LOGITS: return "CMP_LOGITS";
         default: return "CMP?";
     }
 }
@@ -426,7 +424,7 @@ int main() {
     bool dma_ready = true;
     bool dma_done = false;
     bool dma_start = false;
-    uint32_t dma_addr = 0;
+    uint64_t dma_addr = 0;
     uint32_t dma_len = 0;
     bool dma_is_write = false;
 
@@ -458,7 +456,7 @@ int main() {
     int dma_ctr = 0;
     uint32_t dma_len_latched = 0;
     bool dma_is_write_latched = false;
-    uint32_t dma_addr_latched = 0;
+    uint64_t dma_addr_latched = 0;
 
     dump_ctrl_mem(ctrl);
 
@@ -768,10 +766,10 @@ int main() {
                 }
             }
 
-            std::printf("  [DMA_CMD] start=%d write=%d addr=0x%08x len=%u\n",
+            std::printf("  [DMA_CMD] start=%d write=%d addr=0x%016llx len=%u\n",
                         static_cast<int>(dma_start),
                         static_cast<int>(dma_is_write),
-                        static_cast<unsigned>(dma_addr),
+                        static_cast<unsigned long long>(dma_addr),
                         static_cast<unsigned>(dma_len));
         }
 

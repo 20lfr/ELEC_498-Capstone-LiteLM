@@ -54,9 +54,7 @@ void scheduler_hls(
     // ------------------------------------------------------------
     // AXI4-STREAM INPUT (INGRESS: PS → PL)
     // ------------------------------------------------------------
-    bool axis_in_valid,  // [INPUT]  s_axis_in_tvalid
-    bool axis_in_last,   // [INPUT]  s_axis_in_tlast
-    bool &axis_in_ready, // [OUTPUT] s_axis_in_tready
+    bool axis_token_complete, // [INPUT] Top-level latched completion of AXIS ingress packet
 
     // ------------------------------------------------------------
     // Memory Management System (WEIGHT LOADER via DMA)
@@ -339,7 +337,6 @@ void scheduler_hls(
 
   // Default outputs
   status_mem.layer_index = layer_idx;
-  axis_in_ready = 0;
   if (wl_accept && wl_start){
         wl_start = false;
         wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
@@ -361,7 +358,6 @@ void scheduler_hls(
   // Stall FSM whenever a ControlMemInterface error is latched.
   if (ctrl_error) {
     // Cancel all outputs and hold in error state
-    axis_in_ready = 0;
     wl_start = false;
     wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
     compute_start = false;
@@ -684,9 +680,8 @@ void scheduler_hls(
       break;
     }
     case S_STREAM_IN: {
-      axis_in_ready = 1;
-      // Wait for final ingress beat handshake before starting layer processing.
-      if (axis_in_valid && axis_in_last && axis_in_ready) {
+      // Top-level handles AXIS beat handshake; scheduler waits for full token completion.
+      if (axis_token_complete) {
         st = S_LAYER_COUNT;
       }
       break;

@@ -97,7 +97,7 @@ wire    ap_block_pp0_stage1;
 reg   [4:0] i_fu_56;
 wire   [4:0] add_ln697_fu_143_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_13;
+reg   [4:0] ap_sig_allocacmp_i_16;
 reg    p_anonymous_namespace_regions_valid_ce0_local;
 reg    p_anonymous_namespace_regions_used_ce0_local;
 reg   [3:0] p_anonymous_namespace_regions_used_address0_local;
@@ -319,9 +319,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_13 = 5'd0;
+        ap_sig_allocacmp_i_16 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_13 = i_fu_56;
+        ap_sig_allocacmp_i_16 = i_fu_56;
     end
 end
 
@@ -399,7 +399,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln697_fu_143_p2 = (ap_sig_allocacmp_i_13 + 5'd1);
+assign add_ln697_fu_143_p2 = (ap_sig_allocacmp_i_16 + 5'd1);
 
 assign and_ln486_fu_187_p2 = (icmp_ln486_reg_256 & icmp_ln471_fu_181_p2);
 
@@ -433,7 +433,7 @@ assign icmp_ln485_fu_171_p2 = (($signed(req_layer_assign_cast_reg_204) > $signed
 
 assign icmp_ln486_fu_176_p2 = ((sub_i_i_i353 == trunc_ln485_fu_167_p1) ? 1'b1 : 1'b0);
 
-assign icmp_ln697_fu_137_p2 = ((ap_sig_allocacmp_i_13 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln697_fu_137_p2 = ((ap_sig_allocacmp_i_16 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_anonymous_namespace_regions_layer_address0 = zext_ln697_reg_213;
 
@@ -461,7 +461,7 @@ assign tmp_fu_159_p3 = p_anonymous_namespace_regions_layer_q0[32'd7];
 
 assign trunc_ln485_fu_167_p1 = p_anonymous_namespace_regions_layer_q0[6:0];
 
-assign zext_ln697_fu_149_p1 = ap_sig_allocacmp_i_13;
+assign zext_ln697_fu_149_p1 = ap_sig_allocacmp_i_16;
 
 always @ (posedge ap_clk) begin
     req_layer_assign_cast_reg_204[7] <= 1'b0;

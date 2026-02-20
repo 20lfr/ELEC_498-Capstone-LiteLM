@@ -60,7 +60,7 @@ wire   [1:0] trunc_ln524_fu_76_p1;
 reg   [2:0] i_fu_42;
 wire   [2:0] add_ln524_fu_66_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_i_14;
+reg   [2:0] ap_sig_allocacmp_i_17;
 wire   [30:0] zext_ln524_fu_72_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -166,9 +166,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_14 = 3'd0;
+        ap_sig_allocacmp_i_17 = 3'd0;
     end else begin
-        ap_sig_allocacmp_i_14 = i_fu_42;
+        ap_sig_allocacmp_i_17 = i_fu_42;
     end
 end
 
@@ -215,7 +215,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln524_fu_66_p2 = (ap_sig_allocacmp_i_14 + 3'd1);
+assign add_ln524_fu_66_p2 = (ap_sig_allocacmp_i_17 + 3'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -229,7 +229,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln524_fu_60_p2 = ((ap_sig_allocacmp_i_14 == 3'd4) ? 1'b1 : 1'b0);
+assign icmp_ln524_fu_60_p2 = ((ap_sig_allocacmp_i_17 == 3'd4) ? 1'b1 : 1'b0);
 
 assign icmp_ln525_fu_80_p2 = ((zext_ln524_fu_72_p1 == empty) ? 1'b1 : 1'b0);
 
@@ -241,8 +241,8 @@ assign p_ZN12_GLOBAL_N_19arb_grantE_2 = icmp_ln525_fu_80_p2;
 
 assign p_ZN12_GLOBAL_N_19arb_grantE_3 = icmp_ln525_fu_80_p2;
 
-assign trunc_ln524_fu_76_p1 = ap_sig_allocacmp_i_14[1:0];
+assign trunc_ln524_fu_76_p1 = ap_sig_allocacmp_i_17[1:0];
 
-assign zext_ln524_fu_72_p1 = ap_sig_allocacmp_i_14;
+assign zext_ln524_fu_72_p1 = ap_sig_allocacmp_i_17;
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_524_25

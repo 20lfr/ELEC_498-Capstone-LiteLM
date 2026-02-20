@@ -254,8 +254,6 @@ enum ComputeOp : uint8_t {
     CMP_LN1          = 23, // 24
     CMP_REQUANT4     = 24, // 25
     CMP_FINAL_NORM   = 25, // 26
-    CMP_DEQUANT      = 26, // 26
-    CMP_LOGITS       = 27, // 27
 };
 
 enum DmaSel : uint8_t {
@@ -535,14 +533,6 @@ struct ControlMemSpace {
     uint64_t ln0_eps_base_addr = 0;
     uint64_t ln1_eps_base_addr = 0;
     uint64_t final_norm_eps_base_addr = 0;
-
-    uint32_t logit_scale_qv = 0;
-    uint32_t scale_q        = 0;
-    uint32_t zero_point_q   = 0;
-    uint32_t scale_k        = 0;
-    uint32_t zero_point_k   = 0;
-    uint32_t scale_v        = 0;
-    uint32_t zero_point_v   = 0;
 };
 
 // Status (PS Reads <- PL Writes)

@@ -13,8 +13,8 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_741_27 (
         ap_done,
         ap_idle,
         ap_ready,
-        i_28_out,
-        i_28_out_ap_vld,
+        i_32_out,
+        i_32_out_ap_vld,
         p_anonymous_namespace_regions_valid_address0,
         p_anonymous_namespace_regions_valid_ce0,
         p_anonymous_namespace_regions_valid_q0,
@@ -33,8 +33,8 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [3:0] i_28_out;
-output   i_28_out_ap_vld;
+output  [3:0] i_32_out;
+output   i_32_out_ap_vld;
 output  [3:0] p_anonymous_namespace_regions_valid_address0;
 output   p_anonymous_namespace_regions_valid_ce0;
 input  [0:0] p_anonymous_namespace_regions_valid_q0;
@@ -43,8 +43,8 @@ output  [0:0] ap_return;
 reg ap_done;
 reg ap_idle;
 reg ap_ready;
-reg[3:0] i_28_out;
-reg i_28_out_ap_vld;
+reg[3:0] i_32_out;
+reg i_32_out_ap_vld;
 reg[0:0] ap_return;
 
 (* fsm_encoding = "none" *) reg   [4:0] ap_CS_fsm;
@@ -181,19 +181,19 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state5)) begin
-        i_28_out = 4'd0;
+        i_32_out = 4'd0;
     end else if (((icmp_ln741_reg_130 == 1'd0) & (1'b1 == ap_CS_fsm_state4))) begin
-        i_28_out = trunc_ln741_reg_125;
+        i_32_out = trunc_ln741_reg_125;
     end else begin
-        i_28_out = 'bx;
+        i_32_out = 'bx;
     end
 end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state5) | ((icmp_ln741_reg_130 == 1'd0) & (1'b1 == ap_CS_fsm_state4)))) begin
-        i_28_out_ap_vld = 1'b1;
+        i_32_out_ap_vld = 1'b1;
     end else begin
-        i_28_out_ap_vld = 1'b0;
+        i_32_out_ap_vld = 1'b0;
     end
 end
 

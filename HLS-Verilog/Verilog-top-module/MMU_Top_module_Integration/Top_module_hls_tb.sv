@@ -3,8 +3,8 @@
 module top_module_hls_tb;
   localparam int CLK_PERIOD_NS        = 10;
   localparam int MAX_CYCLES           = 50000;
-  localparam int CTRL_MEM_WORDS       = 76;
-  localparam int DBG_CTRL_MEM_WORDS   = 74;
+  localparam int CTRL_MEM_WORDS       = 68;
+  localparam int DBG_CTRL_MEM_WORDS   = 67;
   localparam int STREAM_IN_BUF_BYTES  = 16;
   localparam int STREAM_OUT_BUF_BYTES = 64;
   localparam int TOP_DMA_BUF_WORDS    = 16384;
@@ -15,10 +15,10 @@ module top_module_hls_tb;
   localparam int RAM_REGION_WORDS      = 65536;
 
   localparam logic [8:0] ADDR_AP_CTRL         = 9'h000;
-  localparam logic [8:0] ADDR_CTRL_MEM_DATA_0 = 9'h010;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_0 = 9'h144;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_1 = 9'h148;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_2 = 9'h14C;
+  localparam logic [8:0] ADDR_CTRL_MEM_DATA_0 = 9'h01c;
+  localparam logic [8:0] ADDR_STATUS_MEM_DATA_0 = 9'h130;
+  localparam logic [8:0] ADDR_STATUS_MEM_DATA_1 = 9'h134;
+  localparam logic [8:0] ADDR_STATUS_MEM_DATA_2 = 9'h138;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
@@ -144,31 +144,76 @@ module top_module_hls_tb;
     logic [63:0] ln0_eps_base_addr;
     logic [63:0] ln1_eps_base_addr;
     logic [63:0] final_norm_eps_base_addr;
-    logic [31:0] logit_scale_qv;
-    logic [31:0] scale_q;
-    logic [31:0] zero_point_q;
-    logic [31:0] scale_k;
-    logic [31:0] zero_point_k;
-    logic [31:0] scale_v;
-    logic [31:0] zero_point_v;
   } dbg_control_mem_t;
 
   logic ap_clk;
   logic ap_rst_n;
 
-  logic [0:0] axis_in_valid;
-  logic [0:0] axis_in_last;
-  logic [0:0] axis_in_ready;
+  // AXI4-Full (DDR model) interface
+  logic         m_axi_gmem_AWVALID;
+  logic         m_axi_gmem_AWREADY;
+  logic [63:0]  m_axi_gmem_AWADDR;
+  logic [0:0]   m_axi_gmem_AWID;
+  logic [7:0]   m_axi_gmem_AWLEN;
+  logic [2:0]   m_axi_gmem_AWSIZE;
+  logic [1:0]   m_axi_gmem_AWBURST;
+  logic [1:0]   m_axi_gmem_AWLOCK;
+  logic [3:0]   m_axi_gmem_AWCACHE;
+  logic [2:0]   m_axi_gmem_AWPROT;
+  logic [3:0]   m_axi_gmem_AWQOS;
+  logic [3:0]   m_axi_gmem_AWREGION;
+  logic [0:0]   m_axi_gmem_AWUSER;
 
-  logic [0:0] stream_ready;
-  logic [0:0] stream_start_i;
-  logic [0:0] stream_done;
+  logic         m_axi_gmem_WVALID;
+  logic         m_axi_gmem_WREADY;
+  logic [31:0]  m_axi_gmem_WDATA;
+  logic [3:0]   m_axi_gmem_WSTRB;
+  logic         m_axi_gmem_WLAST;
+  logic [0:0]   m_axi_gmem_WID;
+  logic [0:0]   m_axi_gmem_WUSER;
 
-  logic [0:0] dma_ready;
-  logic [0:0] dma_done;
+  logic         m_axi_gmem_ARVALID;
+  logic         m_axi_gmem_ARREADY;
+  logic [63:0]  m_axi_gmem_ARADDR;
+  logic [0:0]   m_axi_gmem_ARID;
+  logic [7:0]   m_axi_gmem_ARLEN;
+  logic [2:0]   m_axi_gmem_ARSIZE;
+  logic [1:0]   m_axi_gmem_ARBURST;
+  logic [1:0]   m_axi_gmem_ARLOCK;
+  logic [3:0]   m_axi_gmem_ARCACHE;
+  logic [2:0]   m_axi_gmem_ARPROT;
+  logic [3:0]   m_axi_gmem_ARQOS;
+  logic [3:0]   m_axi_gmem_ARREGION;
+  logic [0:0]   m_axi_gmem_ARUSER;
 
-  logic [7:0]  stream_in_buf_q0;
-  logic [31:0] dma_rx_buf_q0;
+  logic         m_axi_gmem_RVALID;
+  logic         m_axi_gmem_RREADY;
+  logic [31:0]  m_axi_gmem_RDATA;
+  logic         m_axi_gmem_RLAST;
+  logic [0:0]   m_axi_gmem_RID;
+  logic [0:0]   m_axi_gmem_RUSER;
+  logic [1:0]   m_axi_gmem_RRESP;
+
+  logic         m_axi_gmem_BVALID;
+  logic         m_axi_gmem_BREADY;
+  logic [1:0]   m_axi_gmem_BRESP;
+  logic [0:0]   m_axi_gmem_BID;
+  logic [0:0]   m_axi_gmem_BUSER;
+
+  // AXI4-Stream ingress/egress
+  logic [7:0] s_axis_in_TDATA;
+  logic       s_axis_in_TVALID;
+  logic       s_axis_in_TREADY;
+  logic [0:0] s_axis_in_TKEEP;
+  logic [0:0] s_axis_in_TSTRB;
+  logic [0:0] s_axis_in_TLAST;
+
+  logic [7:0] m_axis_out_TDATA;
+  logic       m_axis_out_TVALID;
+  logic       m_axis_out_TREADY;
+  logic [0:0] m_axis_out_TKEEP;
+  logic [0:0] m_axis_out_TSTRB;
+  logic [0:0] m_axis_out_TLAST;
 
   logic [8:0]  s_axi_control_AWADDR;
   logic        s_axi_control_AWVALID;
@@ -189,37 +234,10 @@ module top_module_hls_tb;
   logic         s_axi_control_BVALID;
   logic [1:0]   s_axi_control_BRESP;
 
-  logic       axis_in_ready_ap_vld;
-
-  logic [0:0] stream_start_o;
-  logic       stream_start_o_ap_vld;
-  logic [3:0] stream_in_buf_address0;
-  logic       stream_in_buf_ce0;
-  logic [5:0] stream_out_buf_address0;
-  logic       stream_out_buf_ce0;
-  logic       stream_out_buf_we0;
-  logic [7:0] stream_out_buf_d0;
-
-  logic [13:0] dma_rx_buf_address0;
-  logic        dma_rx_buf_ce0;
-  logic [13:0] dma_tx_buf_address0;
-  logic        dma_tx_buf_ce0;
-  logic        dma_tx_buf_we0;
-  logic [31:0] dma_tx_buf_d0;
-
-  logic [0:0] dma_start;
-  logic       dma_start_ap_vld;
-  logic [31:0] dma_addr;
-  logic       dma_addr_ap_vld;
-  logic [31:0] dma_len;
-  logic       dma_len_ap_vld;
-  logic [0:0] dma_is_write;
-  logic       dma_is_write_ap_vld;
-
   logic [0:0] irq_ps;
   logic [31:0] dbg_state;
   logic       dbg_state_ap_vld;
-  logic [2367:0] dbg_ctrl_mem;
+  logic [2143:0] dbg_ctrl_mem;
   logic       dbg_ctrl_mem_ap_vld;
   logic [31:0] control_reg;
   logic       control_reg_ap_vld;
@@ -307,6 +325,14 @@ module top_module_hls_tb;
   logic       dbg_error_code_ap_vld;
   logic [0:0] dbg_done;
   logic       dbg_done_ap_vld;
+  logic [0:0] dbg_axis_is_empty;
+  logic       dbg_axis_is_empty_ap_vld;
+  logic [0:0] dbg_axis_in_ready_wire;
+  logic       dbg_axis_in_ready_wire_ap_vld;
+  logic [0:0] dbg_axis_in_last_wire;
+  logic       dbg_axis_in_last_wire_ap_vld;
+  logic [31:0] dbg_stream_in_counter;
+  logic       dbg_stream_in_counter_ap_vld;
 
   wire [1:0]   dbg_head_ctx_ref_address0;
   wire         dbg_head_ctx_ref_ce0;
@@ -400,19 +426,29 @@ module top_module_hls_tb;
   logic [7:0] dbg_head_out_buf_mem [0:127];
 
   integer cycle_count;
-  integer dma_countdown;
-  integer stream_countdown;
   integer i;
-
-  logic dma_busy;
-  logic stream_busy;
   logic axis_packet_sent;
   logic stream_fill_active;
   logic [$clog2(STREAM_IN_BUF_BYTES+1)-1:0] stream_fill_idx;
+  logic [3:0] stream_gap_countdown;
+  integer stream_out_count;
+  logic stream_out_last_seen;
 
-  logic [31:0] dma_addr_latched;
-  logic [31:0] dma_len_latched;
-  logic [0:0]  dma_is_write_latched;
+  // Simple AXI4-Full memory model state (single outstanding read/write burst).
+  logic        axi_aw_active;
+  logic [63:0] axi_aw_addr_latched;
+  logic [7:0]  axi_aw_len_latched;
+  logic [2:0]  axi_aw_size_latched;
+  logic [7:0]  axi_w_beats_seen;
+  logic [0:0]  axi_bid_latched;
+  logic [1:0]  axi_bresp_latched;
+
+  logic        axi_ar_active;
+  logic [63:0] axi_ar_addr_latched;
+  logic [7:0]  axi_ar_len_latched;
+  logic [2:0]  axi_ar_size_latched;
+  logic [7:0]  axi_r_beats_sent;
+  logic [0:0]  axi_rid_latched;
 
   logic [31:0] ctrl_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] dbg_ctrl_words [0:DBG_CTRL_MEM_WORDS-1];
@@ -488,13 +524,6 @@ module top_module_hls_tb;
   localparam int CTRLW_LN1_EPS_BASE_HI    = 65;
   localparam int CTRLW_FINAL_NORM_EPS_BASE_LO = 66;
   localparam int CTRLW_FINAL_NORM_EPS_BASE_HI = 67;
-  localparam int CTRLW_LOGIT_SCALE_QV     = 68;
-  localparam int CTRLW_SCALE_Q            = 69;
-  localparam int CTRLW_ZERO_POINT_Q       = 70;
-  localparam int CTRLW_SCALE_K            = 71;
-  localparam int CTRLW_ZERO_POINT_K       = 72;
-  localparam int CTRLW_SCALE_V            = 73;
-  localparam int CTRLW_ZERO_POINT_V       = 74;
 
   typedef enum logic [2:0] {
     AXI_IDLE,
@@ -656,6 +685,95 @@ module top_module_hls_tb;
     end
   endfunction
 
+  function automatic [31:0] mem_read_word(input [63:0] addr64);
+    logic [31:0] addr;
+    int unsigned idx;
+    begin
+      addr = addr64[31:0];
+      if (is_k_cache_addr(addr)) begin
+        idx = kv_store_index(addr, 0);
+        mem_read_word = k_cache_store[idx];
+      end else if (is_v_cache_addr(addr)) begin
+        idx = kv_store_index(addr, 0);
+        mem_read_word = v_cache_store[idx];
+      end else if (is_wq_addr(addr)) begin
+        mem_read_word = wq_ram[region_index(addr, 0)];
+      end else if (is_wk_addr(addr)) begin
+        mem_read_word = wk_ram[region_index(addr, 0)];
+      end else if (is_wv_addr(addr)) begin
+        mem_read_word = wv_ram[region_index(addr, 0)];
+      end else if (is_wo_addr(addr)) begin
+        mem_read_word = wo_ram[region_index(addr, 0)];
+      end else if (is_w1_addr(addr)) begin
+        mem_read_word = w1_ram[region_index(addr, 0)];
+      end else if (is_w2_addr(addr)) begin
+        mem_read_word = w2_ram[region_index(addr, 0)];
+      end else if (is_ln0_gamma_addr(addr)) begin
+        mem_read_word = ln0_gamma_ram[region_index(addr, 0)];
+      end else if (is_ln1_gamma_addr(addr)) begin
+        mem_read_word = ln1_gamma_ram[region_index(addr, 0)];
+      end else if (is_ln0_eps_addr(addr)) begin
+        mem_read_word = ln0_eps_ram[region_index(addr, 0)];
+      end else if (is_ln1_eps_addr(addr)) begin
+        mem_read_word = ln1_eps_ram[region_index(addr, 0)];
+      end else begin
+        mem_read_word = dma_pattern_word(addr, 0);
+      end
+    end
+  endfunction
+
+  task automatic mem_write_word(
+    input [63:0] addr64,
+    input [31:0] wdata,
+    input [3:0]  wstrb
+  );
+    logic [31:0] addr;
+    logic [31:0] cur;
+    logic [31:0] nxt;
+    int unsigned idx;
+    int b;
+    begin
+      addr = addr64[31:0];
+
+      if (is_k_cache_addr(addr)) begin
+        idx = kv_store_index(addr, 0);
+        cur = k_cache_store[idx];
+      end else if (is_v_cache_addr(addr)) begin
+        idx = kv_store_index(addr, 0);
+        cur = v_cache_store[idx];
+      end else if (is_wo_addr(addr)) begin
+        cur = wo_ram[region_index(addr, 0)];
+      end else if (is_w1_addr(addr)) begin
+        cur = w1_ram[region_index(addr, 0)];
+      end else if (is_w2_addr(addr)) begin
+        cur = w2_ram[region_index(addr, 0)];
+      end else begin
+        cur = 32'h0000_0000;
+      end
+
+      nxt = cur;
+      for (b = 0; b < 4; b = b + 1) begin
+        if (wstrb[b]) begin
+          nxt[(b*8) +: 8] = wdata[(b*8) +: 8];
+        end
+      end
+
+      if (is_k_cache_addr(addr)) begin
+        idx = kv_store_index(addr, 0);
+        k_cache_store[idx] = nxt;
+      end else if (is_v_cache_addr(addr)) begin
+        idx = kv_store_index(addr, 0);
+        v_cache_store[idx] = nxt;
+      end else if (is_wo_addr(addr)) begin
+        wo_ram[region_index(addr, 0)] = nxt;
+      end else if (is_w1_addr(addr)) begin
+        w1_ram[region_index(addr, 0)] = nxt;
+      end else if (is_w2_addr(addr)) begin
+        w2_ram[region_index(addr, 0)] = nxt;
+      end
+    end
+  endtask
+
   // AXI writes/reads are driven by AXI_CONTROL_LOGIC + START_FSM blocks.
 
   // AXI-Lite control bus driver (single outstanding transaction).
@@ -749,22 +867,6 @@ module top_module_hls_tb;
 
 
 
-  // Stream-in memory read response for DUT stream_in_buf interface.
-  always_comb begin : p_stream_in_mem_read
-    stream_in_buf_q0 = 8'h00;
-    if (stream_in_buf_ce0) begin
-      stream_in_buf_q0 = stream_in_mem[stream_in_buf_address0];
-    end
-  end
-
-  // DMA read memory response for DUT dma_rx_buf interface.
-  always_comb begin : p_dma_rx_mem_read
-    dma_rx_buf_q0 = 32'h0000_0000;
-    if (dma_rx_buf_ce0) begin
-      dma_rx_buf_q0 = dma_rx_mem[dma_rx_buf_address0];
-    end
-  end
-
   // Debug memory model for dbg_head_ctx_ref dual-port interface.
   always_comb begin : p_dbg_head_ctx_mem_read
     dbg_head_ctx_ref_q0 = '0;
@@ -845,13 +947,6 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.ln0_eps_base_addr       = {dbg_ctrl_words[62], dbg_ctrl_words[61]};
     dbg_ctrl_mem_shadow.ln1_eps_base_addr       = {dbg_ctrl_words[64], dbg_ctrl_words[63]};
     dbg_ctrl_mem_shadow.final_norm_eps_base_addr = {dbg_ctrl_words[66], dbg_ctrl_words[65]};
-    dbg_ctrl_mem_shadow.logit_scale_qv          = dbg_ctrl_words[67];
-    dbg_ctrl_mem_shadow.scale_q                 = dbg_ctrl_words[68];
-    dbg_ctrl_mem_shadow.zero_point_q            = dbg_ctrl_words[69];
-    dbg_ctrl_mem_shadow.scale_k                 = dbg_ctrl_words[70];
-    dbg_ctrl_mem_shadow.zero_point_k            = dbg_ctrl_words[71];
-    dbg_ctrl_mem_shadow.scale_v                 = dbg_ctrl_words[72];
-    dbg_ctrl_mem_shadow.zero_point_v            = dbg_ctrl_words[73];
   end
 
   // Debug memory model for dbg_in_buf dual-port interface.
@@ -899,20 +994,6 @@ module top_module_hls_tb;
     end
     if (dbg_head_out_buf_ce1) begin
       dbg_head_out_buf_q1 = dbg_head_out_buf_mem[dbg_head_out_buf_address1];
-    end
-  end
-
-  // Capture stream-out payload written by DUT.
-  always_ff @(posedge ap_clk) begin : p_stream_out_capture
-    if (stream_out_buf_ce0 && stream_out_buf_we0) begin
-      stream_out_mem[stream_out_buf_address0] <= stream_out_buf_d0;
-    end
-  end
-
-  // Capture DMA writeback payload written by DUT.
-  always_ff @(posedge ap_clk) begin : p_dma_tx_capture
-    if (dma_tx_buf_ce0 && dma_tx_buf_we0) begin
-      dma_tx_mem[dma_tx_buf_address0] <= dma_tx_buf_d0;
     end
   end
 
@@ -975,10 +1056,16 @@ module top_module_hls_tb;
     end
   end
 
-  // Drive AXIS input pins from stream ingress state.
+  // AXI stream constants.
+  assign s_axis_in_TKEEP = 1'b1;
+  assign s_axis_in_TSTRB = 1'b1;
+  assign m_axis_out_TREADY = 1'b1;
+
+  // Build/drive AXI-stream input packet.
   always_comb begin : p_axis_ingress_outputs
-    axis_in_valid = stream_fill_active;
-    axis_in_last  = stream_fill_active && (stream_fill_idx == (STREAM_IN_BUF_BYTES-1));
+    s_axis_in_TVALID = stream_fill_active && (stream_gap_countdown == 0);
+    s_axis_in_TLAST  = s_axis_in_TVALID && (stream_fill_idx == (STREAM_IN_BUF_BYTES-1));
+    s_axis_in_TDATA  = stream_in_mem[stream_fill_idx];
   end
 
   // Build/drive stream-in beat traffic only when DUT requests ingress.
@@ -987,159 +1074,142 @@ module top_module_hls_tb;
       axis_packet_sent   <= 1'b0;
       stream_fill_active <= 1'b0;
       stream_fill_idx    <= '0;
+      stream_gap_countdown <= '0;
     end else begin
-      // Start sending one packet once DUT asserts tready in STREAM_IN.
-      if (!axis_packet_sent && !stream_fill_active && axis_in_ready[0]) begin
-        stream_fill_active <= 1'b1;
-        stream_fill_idx    <= '0;
-        stream_in_mem[0]   <= 8'h10;
+      if (stream_fill_active && (stream_gap_countdown != 0)) begin
+        stream_gap_countdown <= stream_gap_countdown - 1'b1;
       end
 
-      // Advance one beat per handshake; assert TLAST only on the final beat.
-      if (stream_fill_active && axis_in_ready[0]) begin
+      // Start ingress only once DUT is in STREAM_IN and ready.
+      if (!axis_packet_sent && !stream_fill_active && (dbg_state == 32'd1) && s_axis_in_TREADY) begin
+        stream_fill_active <= 1'b1;
+        stream_fill_idx    <= '0;
+        stream_gap_countdown <= '0;
+      end
+      if (stream_fill_active && s_axis_in_TREADY && s_axis_in_TVALID) begin
         if (stream_fill_idx == (STREAM_IN_BUF_BYTES-1)) begin
           axis_packet_sent   <= 1'b1;
           stream_fill_active <= 1'b0;
           stream_fill_idx    <= '0;
+          stream_gap_countdown <= '0;
         end else begin
-          stream_in_mem[stream_fill_idx + 1'b1] <= 8'(8'h10 + stream_fill_idx[7:0] + 8'h01);
           stream_fill_idx <= stream_fill_idx + 1'b1;
+          // Space out beats to make stream progression easier to inspect.
+          stream_gap_countdown <= 4'd5;
         end
       end
     end
   end
 
-  // Respond to stream_start by pulsing stream_done after fixed latency.
-  always_ff @(posedge ap_clk) begin : stream_model
-    int unsigned stream_checksum;
-    int si;
+  // Capture AXI-stream output payload.
+  always_ff @(posedge ap_clk) begin : axis_output_sink
     if (!ap_rst_n) begin
-      stream_done     <= 1'b0;
-      stream_busy     <= 1'b0;
-      stream_countdown <= 0;
+      stream_out_count     <= 0;
+      stream_out_last_seen <= 1'b0;
     end else begin
-      stream_done <= 1'b0;
-      if (!stream_busy && stream_start_o[0] && stream_ready[0]) begin
-        stream_busy <= 1'b1;
-        stream_countdown <= STREAM_LATENCY_CYCLES;
-      end else if (stream_busy) begin
-        if (stream_countdown > 0) begin
-          stream_countdown <= stream_countdown - 1;
-        end else begin
-          stream_busy <= 1'b0;
-          stream_done <= 1'b1;
-          stream_checksum = 0;
-          for (si = 0; si < STREAM_OUT_BUF_BYTES; si = si + 1) begin
-            stream_checksum = stream_checksum + stream_out_mem[si];
-          end
+      if (m_axis_out_TVALID && m_axis_out_TREADY) begin
+        if (stream_out_count < STREAM_OUT_BUF_BYTES) begin
+          stream_out_mem[stream_out_count] <= m_axis_out_TDATA;
+          stream_out_count <= stream_out_count + 1;
+        end
+        if (m_axis_out_TLAST[0]) begin
+          stream_out_last_seen <= 1'b1;
+          stream_out_count     <= 0;
         end
       end
     end
   end
 
-  // DMA handshake/timing model.
-  always_ff @(posedge ap_clk) begin : DMA_HANDSHAKE
+  // AXI4-Full ready/user defaults.
+  assign m_axi_gmem_AWREADY = !axi_aw_active;
+  assign m_axi_gmem_WREADY  = axi_aw_active;
+  assign m_axi_gmem_ARREADY = !axi_ar_active && !m_axi_gmem_RVALID;
+  assign m_axi_gmem_RUSER   = 1'b0;
+  assign m_axi_gmem_BUSER   = 1'b0;
+
+  // AXI4-Full memory model (single outstanding read and write burst).
+  always_ff @(posedge ap_clk) begin : m_axi_full_model
+    logic [63:0] waddr_cur;
+    logic [63:0] raddr_cur;
     if (!ap_rst_n) begin
-      dma_done             <= 1'b0;
-      dma_busy             <= 1'b0;
-      dma_countdown        <= 0;
-      dma_addr_latched     <= 32'h0;
-      dma_len_latched      <= 32'h0;
-      dma_is_write_latched <= 1'b0;
+      axi_aw_active        <= 1'b0;
+      axi_aw_addr_latched  <= 64'd0;
+      axi_aw_len_latched   <= 8'd0;
+      axi_aw_size_latched  <= 3'd2;
+      axi_w_beats_seen     <= 8'd0;
+      axi_bid_latched      <= 1'b0;
+      axi_bresp_latched    <= 2'b00;
+
+      axi_ar_active        <= 1'b0;
+      axi_ar_addr_latched  <= 64'd0;
+      axi_ar_len_latched   <= 8'd0;
+      axi_ar_size_latched  <= 3'd2;
+      axi_r_beats_sent     <= 8'd0;
+      axi_rid_latched      <= 1'b0;
+
+      m_axi_gmem_RVALID    <= 1'b0;
+      m_axi_gmem_RDATA     <= 32'd0;
+      m_axi_gmem_RLAST     <= 1'b0;
+      m_axi_gmem_RID       <= 1'b0;
+      m_axi_gmem_RRESP     <= 2'b00;
+      m_axi_gmem_BVALID    <= 1'b0;
+      m_axi_gmem_BRESP     <= 2'b00;
+      m_axi_gmem_BID       <= 1'b0;
     end else begin
-      dma_done <= 1'b0;
-      if (!dma_busy && dma_start[0] && dma_ready[0]) begin
-        dma_busy             <= 1'b1;
-        dma_countdown        <= DMA_LATENCY_CYCLES;
-        dma_addr_latched     <= dma_addr;
-        dma_len_latched      <= dma_len;
-        dma_is_write_latched <= dma_is_write;
-      end else if (dma_busy) begin
-        if (dma_countdown > 0) begin
-          dma_countdown <= dma_countdown - 1;
+      // ---------------- Write address ----------------
+      if (m_axi_gmem_AWVALID && m_axi_gmem_AWREADY && !axi_aw_active) begin
+        axi_aw_active       <= 1'b1;
+        axi_aw_addr_latched <= m_axi_gmem_AWADDR;
+        axi_aw_len_latched  <= m_axi_gmem_AWLEN;
+        axi_aw_size_latched <= m_axi_gmem_AWSIZE;
+        axi_w_beats_seen    <= 8'd0;
+        axi_bid_latched     <= m_axi_gmem_AWID;
+      end
+
+      // ---------------- Write data ----------------
+      if (axi_aw_active && m_axi_gmem_WVALID && m_axi_gmem_WREADY) begin
+        waddr_cur = axi_aw_addr_latched + ({{56{1'b0}}, axi_w_beats_seen} << axi_aw_size_latched);
+        mem_write_word(waddr_cur, m_axi_gmem_WDATA, m_axi_gmem_WSTRB);
+        if (m_axi_gmem_WLAST || (axi_w_beats_seen == axi_aw_len_latched)) begin
+          axi_aw_active     <= 1'b0;
+          m_axi_gmem_BVALID <= 1'b1;
+          m_axi_gmem_BRESP  <= axi_bresp_latched;
+          m_axi_gmem_BID    <= axi_bid_latched;
         end else begin
-          dma_busy <= 1'b0;
-          dma_done <= 1'b1;
+          axi_w_beats_seen <= axi_w_beats_seen + 1'b1;
         end
       end
-    end
-  end
 
-  // Populate DMA RX payload from RAM-style address-mapped memory.
-  always_ff @(posedge ap_clk) begin : dma_rx_loader
-    int unsigned requested_words;
-    int unsigned slot;
-    int idx;
-    if (!ap_rst_n) begin
-      for (idx = 0; idx < TOP_DMA_BUF_WORDS; idx = idx + 1) begin
-        dma_rx_mem[idx] <= 32'h0;
+      if (m_axi_gmem_BVALID && m_axi_gmem_BREADY) begin
+        m_axi_gmem_BVALID <= 1'b0;
       end
-    end else if (!dma_busy && dma_start[0] && dma_ready[0] && !dma_is_write[0]) begin
-      requested_words = (dma_len + 32'd3) >> 2;
-      if (requested_words > TOP_DMA_BUF_WORDS) begin
-        requested_words = TOP_DMA_BUF_WORDS;
-      end
-      for (idx = 0; idx < TOP_DMA_BUF_WORDS; idx = idx + 1) begin
-        if (idx < requested_words) begin
-          if (is_k_cache_addr(dma_addr)) begin
-            slot = kv_store_index(dma_addr, idx);
-            dma_rx_mem[idx] <= k_cache_store[slot];
-          end else if (is_v_cache_addr(dma_addr)) begin
-            slot = kv_store_index(dma_addr, idx);
-            dma_rx_mem[idx] <= v_cache_store[slot];
-          end else if (is_wq_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= wq_ram[region_index(dma_addr, idx)];
-          end else if (is_wk_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= wk_ram[region_index(dma_addr, idx)];
-          end else if (is_wv_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= wv_ram[region_index(dma_addr, idx)];
-          end else if (is_wo_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= wo_ram[region_index(dma_addr, idx)];
-          end else if (is_w1_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= w1_ram[region_index(dma_addr, idx)];
-          end else if (is_w2_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= w2_ram[region_index(dma_addr, idx)];
-          end else if (is_ln0_gamma_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= ln0_gamma_ram[region_index(dma_addr, idx)];
-          end else if (is_ln1_gamma_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= ln1_gamma_ram[region_index(dma_addr, idx)];
-          end else if (is_ln0_eps_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= ln0_eps_ram[region_index(dma_addr, idx)];
-          end else if (is_ln1_eps_addr(dma_addr)) begin
-            dma_rx_mem[idx] <= ln1_eps_ram[region_index(dma_addr, idx)];
-          end else begin
-            dma_rx_mem[idx] <= dma_pattern_word(dma_addr, idx);
-          end
-        end
-      end
-    end
-  end
 
-  // Consume DMA TX payload back into RAM model on write transactions.
-  always_ff @(posedge ap_clk) begin : dma_tx_reader
-    int unsigned commit_words;
-    int unsigned slot;
-    int idx;
-    if (!ap_rst_n) begin
-      // no-op
-    end else if (dma_done && dma_is_write_latched[0]) begin
-      commit_words = (dma_len_latched + 32'd3) >> 2;
-      if (commit_words > TOP_DMA_BUF_WORDS) begin
-        commit_words = TOP_DMA_BUF_WORDS;
+      // ---------------- Read address ----------------
+      if (m_axi_gmem_ARVALID && m_axi_gmem_ARREADY && !axi_ar_active && !m_axi_gmem_RVALID) begin
+        axi_ar_active       <= 1'b1;
+        axi_ar_addr_latched <= m_axi_gmem_ARADDR;
+        axi_ar_len_latched  <= m_axi_gmem_ARLEN;
+        axi_ar_size_latched <= m_axi_gmem_ARSIZE;
+        axi_r_beats_sent    <= 8'd0;
+        axi_rid_latched     <= m_axi_gmem_ARID;
       end
-      for (idx = 0; idx < commit_words; idx = idx + 1) begin
-        if (is_k_cache_addr(dma_addr_latched)) begin
-          slot = kv_store_index(dma_addr_latched, idx);
-          k_cache_store[slot] <= dma_tx_mem[idx];
-        end else if (is_v_cache_addr(dma_addr_latched)) begin
-          slot = kv_store_index(dma_addr_latched, idx);
-          v_cache_store[slot] <= dma_tx_mem[idx];
-        end else if (is_wo_addr(dma_addr_latched)) begin
-          wo_ram[region_index(dma_addr_latched, idx)] <= dma_tx_mem[idx];
-        end else if (is_w1_addr(dma_addr_latched)) begin
-          w1_ram[region_index(dma_addr_latched, idx)] <= dma_tx_mem[idx];
-        end else if (is_w2_addr(dma_addr_latched)) begin
-          w2_ram[region_index(dma_addr_latched, idx)] <= dma_tx_mem[idx];
+
+      if (axi_ar_active && !m_axi_gmem_RVALID) begin
+        raddr_cur = axi_ar_addr_latched + ({{56{1'b0}}, axi_r_beats_sent} << axi_ar_size_latched);
+        m_axi_gmem_RDATA  <= mem_read_word(raddr_cur);
+        m_axi_gmem_RID    <= axi_rid_latched;
+        m_axi_gmem_RRESP  <= 2'b00;
+        m_axi_gmem_RLAST  <= (axi_r_beats_sent == axi_ar_len_latched);
+        m_axi_gmem_RVALID <= 1'b1;
+      end else if (m_axi_gmem_RVALID && m_axi_gmem_RREADY) begin
+        if (m_axi_gmem_RLAST) begin
+          m_axi_gmem_RVALID <= 1'b0;
+          m_axi_gmem_RLAST  <= 1'b0;
+          axi_ar_active     <= 1'b0;
+          axi_r_beats_sent  <= 8'd0;
+        end else begin
+          m_axi_gmem_RVALID   <= 1'b0;
+          axi_r_beats_sent    <= axi_r_beats_sent + 1'b1;
         end
       end
     end
@@ -1414,13 +1484,7 @@ module top_module_hls_tb;
             61: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
             62: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_LO); ctrl_data_in <= 32'h6D00_0000; end
             63: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            64: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LOGIT_SCALE_QV);  ctrl_data_in <= 32'h0000_0080; end
-            65: begin ctrl_addr <= ctrl_mem_addr(CTRLW_SCALE_Q);         ctrl_data_in <= 32'h0000_0080; end
-            66: begin ctrl_addr <= ctrl_mem_addr(CTRLW_ZERO_POINT_Q);    ctrl_data_in <= 32'h0000_0000; end
-            67: begin ctrl_addr <= ctrl_mem_addr(CTRLW_SCALE_K);         ctrl_data_in <= 32'h0000_0080; end
-            68: begin ctrl_addr <= ctrl_mem_addr(CTRLW_ZERO_POINT_K);    ctrl_data_in <= 32'h0000_0000; end
-            69: begin ctrl_addr <= ctrl_mem_addr(CTRLW_SCALE_V);         ctrl_data_in <= 32'h0000_0080; end
-            70: begin ctrl_addr <= ctrl_mem_addr(CTRLW_ZERO_POINT_V);    ctrl_data_in <= 32'h0000_0000; end
+            64: begin ctrl_addr <= ctrl_mem_addr(CTRLW_IRQ_MASK);        ctrl_data_in <= 32'h0000_0006; end
             default: begin ctrl_addr <= ctrl_mem_addr(CTRLW_IRQ_MASK);   ctrl_data_in <= 32'h0000_0006; end
           endcase
           case (base_assign_step)
@@ -1488,16 +1552,10 @@ module top_module_hls_tb;
             61: ctrl_words[CTRLW_LN1_EPS_BASE_HI] <= 32'h0000_0000;
             62: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_LO] <= 32'h6D00_0000;
             63: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_HI] <= 32'h0000_0000;
-            64: ctrl_words[CTRLW_LOGIT_SCALE_QV] <= 32'h0000_0080;
-            65: ctrl_words[CTRLW_SCALE_Q] <= 32'h0000_0080;
-            66: ctrl_words[CTRLW_ZERO_POINT_Q] <= 32'h0000_0000;
-            67: ctrl_words[CTRLW_SCALE_K] <= 32'h0000_0080;
-            68: ctrl_words[CTRLW_ZERO_POINT_K] <= 32'h0000_0000;
-            69: ctrl_words[CTRLW_SCALE_V] <= 32'h0000_0080;
-            70: ctrl_words[CTRLW_ZERO_POINT_V] <= 32'h0000_0000;
+            64: ctrl_words[CTRLW_IRQ_MASK] <= 32'h0000_0006;
             default: ctrl_words[CTRLW_IRQ_MASK] <= 32'h0000_0006;
           endcase
-          if (base_assign_step >= 71) begin
+          if (base_assign_step >= 64) begin
             // IMPORTANT: program ctrl_mem.control START before ap_start so HLS kernel
             // snapshots control args with START already high.
             ctrl_stage <= CTRL_ASSERT_START;
@@ -1555,25 +1613,20 @@ module top_module_hls_tb;
       $finish;
     end
 
-    $display("[TB][%0d] state=%0d axis_in_v=%0d axis_in_l=%0d axis_in_r=%0d axis_in_r_vld=%0d stream_ready=%0d stream_start_i=%0d stream_start_o=%0d stream_start_o_vld=%0d stream_done=%0d stream_in_ce=%0d stream_in_addr=%0d stream_in_q=0x%02h stream_out_ce=%0d stream_out_we=%0d stream_out_addr=%0d stream_out_d=0x%02h",
+    $display("[TB][%0d] stream_fill_idx=%0d dbg_axis_is_empty=%0d dbg_axis_in_ready_wire=%0d dbg_axis_in_last_wire=%0d dbg_stream_in_counter=%0d stream_gap_countdown=%0d s_axis_in_TDATA=%02h s_axis_in_TKEEP=%0d s_axis_in_TLAST=%0d s_axis_in_TREADY=%0d s_axis_in_TSTRB=%0d s_axis_in_TVALID=%0d",
              cycle_count,
-             dbg_state,
-             axis_in_valid[0],
-             axis_in_last[0],
-             axis_in_ready[0],
-             axis_in_ready_ap_vld,
-             stream_ready[0],
-             stream_start_i[0],
-             stream_start_o[0],
-             stream_start_o_ap_vld,
-             stream_done[0],
-             stream_in_buf_ce0,
-             stream_in_buf_address0,
-             stream_in_buf_q0,
-             stream_out_buf_ce0,
-             stream_out_buf_we0,
-             stream_out_buf_address0,
-             stream_out_buf_d0);
+             stream_fill_idx,
+             dbg_axis_is_empty[0],
+             dbg_axis_in_ready_wire[0],
+             dbg_axis_in_last_wire[0],
+             dbg_stream_in_counter,
+             stream_gap_countdown,
+             s_axis_in_TDATA,
+             s_axis_in_TKEEP[0],
+             s_axis_in_TLAST[0],
+             s_axis_in_TREADY,
+             s_axis_in_TSTRB[0],
+             s_axis_in_TVALID);
   end
 
   // Print debug mirror updates when DUT marks outputs valid.
@@ -1588,12 +1641,19 @@ module top_module_hls_tb;
     ap_rst_n = 1'b0;
 
 
-    stream_ready   = 1'b1;
-    stream_start_i = 1'b0;
-    stream_done    = 1'b0;
+    s_axis_in_TDATA  = 8'h00;
+    s_axis_in_TVALID = 1'b0;
+    s_axis_in_TLAST  = 1'b0;
+    m_axis_out_TREADY = 1'b1;
 
-    dma_ready = 1'b1;
-    dma_done  = 1'b0;
+    m_axi_gmem_RVALID = 1'b0;
+    m_axi_gmem_RDATA  = 32'd0;
+    m_axi_gmem_RLAST  = 1'b0;
+    m_axi_gmem_RID    = 1'b0;
+    m_axi_gmem_RRESP  = 2'b00;
+    m_axi_gmem_BVALID = 1'b0;
+    m_axi_gmem_BRESP  = 2'b00;
+    m_axi_gmem_BID    = 1'b0;
 
     s_axi_control_AWADDR  = '0;
     s_axi_control_AWVALID = 1'b0;
@@ -1606,13 +1666,26 @@ module top_module_hls_tb;
     s_axi_control_BREADY  = 1'b0;
 
     cycle_count       = 0;
-    dma_countdown     = 0;
-    stream_countdown  = 0;
-    dma_busy          = 1'b0;
-    stream_busy       = 1'b0;
     axis_packet_sent  = 1'b0;
     stream_fill_active = 1'b0;
     stream_fill_idx    = '0;
+    stream_gap_countdown = '0;
+    stream_out_count   = 0;
+    stream_out_last_seen = 1'b0;
+
+    axi_aw_active       = 1'b0;
+    axi_aw_addr_latched = 64'd0;
+    axi_aw_len_latched  = 8'd0;
+    axi_aw_size_latched = 3'd2;
+    axi_w_beats_seen    = 8'd0;
+    axi_bid_latched     = 1'b0;
+    axi_bresp_latched   = 2'b00;
+    axi_ar_active       = 1'b0;
+    axi_ar_addr_latched = 64'd0;
+    axi_ar_len_latched  = 8'd0;
+    axi_ar_size_latched = 3'd2;
+    axi_r_beats_sent    = 8'd0;
+    axi_rid_latched     = 1'b0;
     ctrl_stage         = CTRL_RESET_MEM;
     ctrl_gap_cycles    = 0;
     base_assign_step   = 0;
@@ -1635,7 +1708,7 @@ module top_module_hls_tb;
     ctrl_chip_en       = 1'b0;
 
     for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
-      stream_in_mem[i] = 8'h00;
+      stream_in_mem[i] = 8'(8'h10 + i[7:0]);
     end
     for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
       ctrl_words[i] = 32'h0000_0000;
@@ -1691,45 +1764,67 @@ module top_module_hls_tb;
     .ap_clk(ap_clk),
     .ap_rst_n(ap_rst_n),
 
-    .axis_in_valid(axis_in_valid),
-    .axis_in_last(axis_in_last),
-    .axis_in_ready(axis_in_ready),
-    .axis_in_ready_ap_vld(axis_in_ready_ap_vld),
+    .m_axi_gmem_AWVALID(m_axi_gmem_AWVALID),
+    .m_axi_gmem_AWREADY(m_axi_gmem_AWREADY),
+    .m_axi_gmem_AWADDR(m_axi_gmem_AWADDR),
+    .m_axi_gmem_AWID(m_axi_gmem_AWID),
+    .m_axi_gmem_AWLEN(m_axi_gmem_AWLEN),
+    .m_axi_gmem_AWSIZE(m_axi_gmem_AWSIZE),
+    .m_axi_gmem_AWBURST(m_axi_gmem_AWBURST),
+    .m_axi_gmem_AWLOCK(m_axi_gmem_AWLOCK),
+    .m_axi_gmem_AWCACHE(m_axi_gmem_AWCACHE),
+    .m_axi_gmem_AWPROT(m_axi_gmem_AWPROT),
+    .m_axi_gmem_AWQOS(m_axi_gmem_AWQOS),
+    .m_axi_gmem_AWREGION(m_axi_gmem_AWREGION),
+    .m_axi_gmem_AWUSER(m_axi_gmem_AWUSER),
+    .m_axi_gmem_WVALID(m_axi_gmem_WVALID),
+    .m_axi_gmem_WREADY(m_axi_gmem_WREADY),
+    .m_axi_gmem_WDATA(m_axi_gmem_WDATA),
+    .m_axi_gmem_WSTRB(m_axi_gmem_WSTRB),
+    .m_axi_gmem_WLAST(m_axi_gmem_WLAST),
+    .m_axi_gmem_WID(m_axi_gmem_WID),
+    .m_axi_gmem_WUSER(m_axi_gmem_WUSER),
+    .m_axi_gmem_ARVALID(m_axi_gmem_ARVALID),
+    .m_axi_gmem_ARREADY(m_axi_gmem_ARREADY),
+    .m_axi_gmem_ARADDR(m_axi_gmem_ARADDR),
+    .m_axi_gmem_ARID(m_axi_gmem_ARID),
+    .m_axi_gmem_ARLEN(m_axi_gmem_ARLEN),
+    .m_axi_gmem_ARSIZE(m_axi_gmem_ARSIZE),
+    .m_axi_gmem_ARBURST(m_axi_gmem_ARBURST),
+    .m_axi_gmem_ARLOCK(m_axi_gmem_ARLOCK),
+    .m_axi_gmem_ARCACHE(m_axi_gmem_ARCACHE),
+    .m_axi_gmem_ARPROT(m_axi_gmem_ARPROT),
+    .m_axi_gmem_ARQOS(m_axi_gmem_ARQOS),
+    .m_axi_gmem_ARREGION(m_axi_gmem_ARREGION),
+    .m_axi_gmem_ARUSER(m_axi_gmem_ARUSER),
+    .m_axi_gmem_RVALID(m_axi_gmem_RVALID),
+    .m_axi_gmem_RREADY(m_axi_gmem_RREADY),
+    .m_axi_gmem_RDATA(m_axi_gmem_RDATA),
+    .m_axi_gmem_RLAST(m_axi_gmem_RLAST),
+    .m_axi_gmem_RID(m_axi_gmem_RID),
+    .m_axi_gmem_RUSER(m_axi_gmem_RUSER),
+    .m_axi_gmem_RRESP(m_axi_gmem_RRESP),
+    .m_axi_gmem_BVALID(m_axi_gmem_BVALID),
+    .m_axi_gmem_BREADY(m_axi_gmem_BREADY),
+    .m_axi_gmem_BRESP(m_axi_gmem_BRESP),
+    .m_axi_gmem_BID(m_axi_gmem_BID),
+    .m_axi_gmem_BUSER(m_axi_gmem_BUSER),
 
-    .stream_ready(stream_ready),
-    .stream_start_i(stream_start_i),
-    .stream_start_o(stream_start_o),
-    .stream_start_o_ap_vld(stream_start_o_ap_vld),
-    .stream_done(stream_done),
+    .s_axis_in_TDATA(s_axis_in_TDATA),
+    .s_axis_in_TVALID(s_axis_in_TVALID),
+    .s_axis_in_TREADY(s_axis_in_TREADY),
+    .s_axis_in_TKEEP(s_axis_in_TKEEP),
+    .s_axis_in_TSTRB(s_axis_in_TSTRB),
+    .s_axis_in_TLAST(s_axis_in_TLAST),
 
-    .stream_in_buf_address0(stream_in_buf_address0),
-    .stream_in_buf_ce0(stream_in_buf_ce0),
-    .stream_in_buf_q0(stream_in_buf_q0),
-
-    .stream_out_buf_address0(stream_out_buf_address0),
-    .stream_out_buf_ce0(stream_out_buf_ce0),
-    .stream_out_buf_we0(stream_out_buf_we0),
-    .stream_out_buf_d0(stream_out_buf_d0),
+    .m_axis_out_TDATA(m_axis_out_TDATA),
+    .m_axis_out_TVALID(m_axis_out_TVALID),
+    .m_axis_out_TREADY(m_axis_out_TREADY),
+    .m_axis_out_TKEEP(m_axis_out_TKEEP),
+    .m_axis_out_TSTRB(m_axis_out_TSTRB),
+    .m_axis_out_TLAST(m_axis_out_TLAST),
 
     .irq_ps(irq_ps),
-
-    .dma_ready(dma_ready),
-    .dma_done(dma_done),
-    .dma_rx_buf_address0(dma_rx_buf_address0),
-    .dma_rx_buf_ce0(dma_rx_buf_ce0),
-    .dma_rx_buf_q0(dma_rx_buf_q0),
-    .dma_tx_buf_address0(dma_tx_buf_address0),
-    .dma_tx_buf_ce0(dma_tx_buf_ce0),
-    .dma_tx_buf_we0(dma_tx_buf_we0),
-    .dma_tx_buf_d0(dma_tx_buf_d0),
-    .dma_start(dma_start),
-    .dma_start_ap_vld(dma_start_ap_vld),
-    .dma_addr(dma_addr),
-    .dma_addr_ap_vld(dma_addr_ap_vld),
-    .dma_len(dma_len),
-    .dma_len_ap_vld(dma_len_ap_vld),
-    .dma_is_write(dma_is_write),
-    .dma_is_write_ap_vld(dma_is_write_ap_vld),
 
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
@@ -1889,6 +1984,14 @@ module top_module_hls_tb;
     .dbg_error_code_ap_vld(dbg_error_code_ap_vld),
     .dbg_done(dbg_done),
     .dbg_done_ap_vld(dbg_done_ap_vld),
+    .dbg_axis_is_empty(dbg_axis_is_empty),
+    .dbg_axis_is_empty_ap_vld(dbg_axis_is_empty_ap_vld),
+    .dbg_axis_in_ready_wire(dbg_axis_in_ready_wire),
+    .dbg_axis_in_ready_wire_ap_vld(dbg_axis_in_ready_wire_ap_vld),
+    .dbg_axis_in_last_wire(dbg_axis_in_last_wire),
+    .dbg_axis_in_last_wire_ap_vld(dbg_axis_in_last_wire_ap_vld),
+    .dbg_stream_in_counter(dbg_stream_in_counter),
+    .dbg_stream_in_counter_ap_vld(dbg_stream_in_counter_ap_vld),
 
     .s_axi_control_AWVALID(s_axi_control_AWVALID),
     .s_axi_control_AWREADY(s_axi_control_AWREADY),

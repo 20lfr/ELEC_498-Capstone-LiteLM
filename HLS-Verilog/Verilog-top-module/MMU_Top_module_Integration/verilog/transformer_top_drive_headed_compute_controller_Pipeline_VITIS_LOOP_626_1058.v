@@ -15,30 +15,30 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_626_1
         ap_ready,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_23,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_23_ap_vld,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_q0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_q0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_q0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_q0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_q0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_q0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_q0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_address0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_ce0,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_q0,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_22,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_22_ap_vld,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_15,
@@ -81,30 +81,30 @@ output   ap_idle;
 output   ap_ready;
 output  [7:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_23;
 output   drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_23_ap_vld;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_q0;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_q0;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_q0;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_q0;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_q0;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_q0;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_q0;
-output  [3:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_address0;
-output   p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_ce0;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_q0;
 output  [7:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_22;
 output   drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_22_ap_vld;
 output  [7:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_15;
@@ -167,23 +167,23 @@ reg    ap_ready_int;
 wire   [3:0] byte_addr_fu_254_p1;
 reg   [3:0] byte_addr_reg_466;
 wire    ap_block_pp0_stage0_11001;
-wire   [2:0] trunc_ln779_fu_258_p1;
-reg   [2:0] trunc_ln779_reg_470;
-wire   [63:0] zext_ln779_fu_270_p1;
+wire   [2:0] trunc_ln769_fu_258_p1;
+reg   [2:0] trunc_ln769_reg_470;
+wire   [63:0] zext_ln769_fu_270_p1;
 wire    ap_block_pp0_stage0;
 wire   [7:0] tmp_i2_fu_321_p19;
 reg   [4:0] i_fu_126;
 wire   [4:0] add_ln626_fu_248_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_34;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_ce0_local;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_ce0_local;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_ce0_local;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_ce0_local;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_ce0_local;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_ce0_local;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_ce0_local;
-reg    p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_ce0_local;
+reg   [4:0] ap_sig_allocacmp_i_37;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0_local;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0_local;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0_local;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0_local;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0_local;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0_local;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0_local;
+reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0_local;
 wire   [0:0] tmp_fu_262_p3;
 wire   [7:0] tmp_i2_fu_321_p17;
 reg    ap_done_reg;
@@ -234,17 +234,17 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 8 ))
-sparsemux_17_3_8_1_1_U3312(
-    .din0(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_q0),
-    .din1(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_q0),
-    .din2(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_q0),
-    .din3(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_q0),
-    .din4(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_q0),
-    .din5(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_q0),
-    .din6(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_q0),
-    .din7(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_q0),
+sparsemux_17_3_8_1_1_U3316(
+    .din0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_q0),
+    .din1(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q0),
+    .din2(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q0),
+    .din3(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_q0),
+    .din4(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_q0),
+    .din5(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_q0),
+    .din6(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_q0),
+    .din7(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_q0),
     .def(tmp_i2_fu_321_p17),
-    .sel(trunc_ln779_reg_470),
+    .sel(trunc_ln769_reg_470),
     .dout(tmp_i2_fu_321_p19)
 );
 
@@ -308,7 +308,7 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         byte_addr_reg_466 <= byte_addr_fu_254_p1;
-        trunc_ln779_reg_470 <= trunc_ln779_fu_258_p1;
+        trunc_ln769_reg_470 <= trunc_ln769_fu_258_p1;
     end
 end
 
@@ -354,9 +354,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_34 = 5'd0;
+        ap_sig_allocacmp_i_37 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_34 = i_fu_126;
+        ap_sig_allocacmp_i_37 = i_fu_126;
     end
 end
 
@@ -474,65 +474,65 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_ce0_local = 1'b1;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0_local = 1'b1;
     end else begin
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_ce0_local = 1'b0;
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0_local = 1'b0;
     end
 end
 
@@ -563,7 +563,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln626_fu_248_p2 = (ap_sig_allocacmp_i_34 + 5'd1);
+assign add_ln626_fu_248_p2 = (ap_sig_allocacmp_i_37 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -583,7 +583,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign byte_addr_fu_254_p1 = ap_sig_allocacmp_i_34[3:0];
+assign byte_addr_fu_254_p1 = ap_sig_allocacmp_i_37[3:0];
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_10_3 = tmp_i2_fu_321_p19;
 
@@ -613,50 +613,50 @@ assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_23 = tmp_i2_fu_321_p19;
 
-assign icmp_ln626_fu_242_p2 = ((ap_sig_allocacmp_i_34 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln626_fu_242_p2 = ((ap_sig_allocacmp_i_37 == 5'd16) ? 1'b1 : 1'b0);
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_10_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0_local;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_11_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0_local;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_4_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0_local;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_5_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0_local;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_6_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0_local;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_7_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0_local;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_8_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0_local;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_address0 = zext_ln779_fu_270_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0 = zext_ln769_fu_270_p1;
 
-assign p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_ce0 = p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_9_ce0_local;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0_local;
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE8head_8 = tmp_i2_fu_321_p19;
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE8head_9 = tmp_i2_fu_321_p19;
 
-assign tmp_fu_262_p3 = ap_sig_allocacmp_i_34[32'd3];
+assign tmp_fu_262_p3 = ap_sig_allocacmp_i_37[32'd3];
 
 assign tmp_i2_fu_321_p17 = 'bx;
 
-assign trunc_ln779_fu_258_p1 = ap_sig_allocacmp_i_34[2:0];
+assign trunc_ln769_fu_258_p1 = ap_sig_allocacmp_i_37[2:0];
 
-assign zext_ln779_fu_270_p1 = tmp_fu_262_p3;
+assign zext_ln769_fu_270_p1 = tmp_fu_262_p3;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_626_1058

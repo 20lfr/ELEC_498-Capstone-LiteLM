@@ -154,7 +154,7 @@ void mmu_fsm(
     const uint32_t dma_rx_buf[DMA_BUF_WORDS], // [INPUT] DMA read payload words (DDR -> MMU)
     uint32_t dma_tx_buf[DMA_BUF_WORDS],       // [OUTPUT] DMA write payload words (MMU -> DDR)
     bool &dma_start,                    // [OUTPUT] Start DMA transfer
-    uint32_t &dma_addr,                 // [OUTPUT] DMA address
+    uint64_t &dma_addr,                 // [OUTPUT] DMA address
     uint32_t &dma_len,                  // [OUTPUT] DMA length in bytes
     bool &dma_is_write,                 // [OUTPUT] DMA direction (1 = write to DDR)
 

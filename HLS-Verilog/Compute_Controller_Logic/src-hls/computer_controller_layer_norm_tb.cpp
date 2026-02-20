@@ -73,8 +73,6 @@ static const char *op_name(ComputeOp op) {
     case CMP_REQUANT4:     return "RQ4";
     case CMP_RESID2:       return "RESID2";
     case CMP_LN1:          return "LN1";
-    case CMP_DEQUANT:      return "DEQUANT";
-    case CMP_LOGITS:       return "LOGITS";
     default:               return "UNK";
     }
 }
@@ -437,9 +435,6 @@ int main() {
                             }
                             break;
                         }
-                        case ComputeOp::CMP_DEQUANT:
-                        case ComputeOp::CMP_LOGITS:
-                            break;
                         default:
                             break;
                     }

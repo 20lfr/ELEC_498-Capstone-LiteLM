@@ -13,10 +13,10 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_727_2
         ap_done,
         ap_idle,
         ap_ready,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_254,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_255,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_256,
-        p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_257,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_254,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_255,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_256,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_257,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_39,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_39_ap_vld,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_38,
@@ -35,10 +35,10 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_254;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_255;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_256;
-input  [7:0] p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_257;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_254;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_255;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_256;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_257;
 output  [7:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_39;
 output   drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_39_ap_vld;
 output  [7:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_38;
@@ -104,11 +104,11 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U2407(
-    .din0(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_254),
-    .din1(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_255),
-    .din2(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_256),
-    .din3(p_ZZ15transformer_topbbRbbS_bPKhPh15ControlMemSpaceR14StatusMemSpaceS_bbPKjPjS_Rj_257),
+sparsemux_9_2_8_1_1_U2411(
+    .din0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_254),
+    .din1(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_255),
+    .din2(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_256),
+    .din3(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_257),
     .def(tmp_i1_fu_104_p9),
     .sel(tmp_i1_fu_104_p10),
     .dout(tmp_i1_fu_104_p11)

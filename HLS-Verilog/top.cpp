@@ -8,20 +8,11 @@
 // Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
 void transformer_top(
     // ------------------------------------------------------------
-    // AXI4-STREAM INPUT (INGRESS: PS → PL)
+    // AXI4-STREAM INPUT/OUTPUT
     // ------------------------------------------------------------
-    bool axis_in_valid,                 // [INPUT]  s_axis_in_tvalid
-    bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
-    bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
-
-    // ------------------------------------------------------------
-    // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
-    // ------------------------------------------------------------
-    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
-    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
-    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence
-    const uint8_t stream_in_buf[STREAM_IN_BUF_BYTES], // [INPUT] Constructed stream-in payload buffer
-    uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES],     // [OUTPUT] MMU-produced stream-out payload buffer
+    hls::stream<axis8_t> &s_axis_in,
+    hls::stream<axis8_t> &m_axis_out,
+    volatile uint32_t *ddr_mem,
 
     // ------------------------------------------------------------
     // AXI4-LITE INTERFACING (PL <-> PS)
@@ -33,14 +24,6 @@ void transformer_top(
     // INTERUPT INTERFACING (PL → PS)
     // ------------------------------------------------------------
     bool            &irq_ps,
-    bool            dma_ready,
-    bool            dma_done,
-    const uint32_t  dma_rx_buf[TOP_DMA_BUF_WORDS],
-    uint32_t        dma_tx_buf[TOP_DMA_BUF_WORDS],
-    bool            &dma_start,
-    uint32_t        &dma_addr,
-    uint32_t        &dma_len,
-    bool            &dma_is_write,
 
 
     /*
@@ -103,12 +86,21 @@ void transformer_top(
     uint8_t  dbg_out_buf[compute_buf::OUT_BUF_BYTES],
     uint8_t  dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t  dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
+    uint8_t  dbg_stream_in_buf[STREAM_IN_BUF_BYTES],
 
     bool &dbg_error,
     uint32_t &dbg_error_code,
-    bool &dbg_done
+    bool &dbg_done,
+    bool &dbg_axis_is_empty,
+    bool &dbg_axis_in_ready_wire,
+    bool &dbg_axis_in_last_wire,
+    uint32_t &dbg_stream_in_counter
 ) {
 #pragma HLS INLINE off   
+#pragma HLS INTERFACE axis port=s_axis_in
+#pragma HLS INTERFACE axis port=m_axis_out
+#pragma HLS INTERFACE m_axi port=ddr_mem offset=slave bundle=gmem depth=TOP_DMA_BUF_WORDS
+#pragma HLS INTERFACE s_axilite port=ddr_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
@@ -143,6 +135,28 @@ void transformer_top(
     static uint8_t          mmu_out_buf[compute_buf::OUT_BUF_BYTES];
     static uint8_t          mmu_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES];
     static uint8_t          mmu_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES];
+    static uint8_t          stream_in_buf_local[STREAM_IN_BUF_BYTES];
+    static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
+    static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
+    static uint32_t         dma_tx_buf_local[TOP_DMA_BUF_WORDS];
+    static bool             dma_ready_local                = true;
+    static bool             dma_done_local                 = false;
+    static bool             dma_busy_local                 = false;
+    static int              dma_countdown_local            = 0;
+    static uint64_t         dma_addr_latched_local         = 0;
+    static uint32_t         dma_len_latched_local          = 0;
+    static bool             dma_is_write_latched_local     = false;
+    static bool             dma_start_local                = false;
+    static uint64_t         dma_addr_local                 = 0;
+    static uint32_t         dma_len_local                  = 0;
+    static bool             dma_is_write_local             = false;
+    static bool             stream_start_local             = false;
+    static bool             stream_done_local              = false;
+    static bool             stream_done_pulse_local        = false;
+    static bool             stream_tx_active_local         = false;
+    static uint16_t         stream_tx_index_local          = 0;
+    static uint32_t         stream_in_counter              = 0;
+    static bool             token_complete_local           = false;
 
     // MMU external DMA/status interface state
     static Status           mmu_status;
@@ -193,6 +207,23 @@ void transformer_top(
         main_mem_op = 0;
         token_pos_current = 0;
         token_pos_next = 0;
+        dma_done_local = false;
+        dma_busy_local = false;
+        dma_countdown_local = 0;
+        dma_addr_latched_local = 0;
+        dma_len_latched_local = 0;
+        dma_is_write_latched_local = false;
+        dma_start_local = false;
+        dma_addr_local = 0;
+        dma_len_local = 0;
+        dma_is_write_local = false;
+        stream_start_local = false;
+        stream_done_local = false;
+        stream_done_pulse_local = false;
+        stream_tx_active_local = false;
+        stream_tx_index_local = 0;
+        stream_in_counter = 0;
+        token_complete_local = false;
 
         for (int i = 0; i < NUM_HEADS; ++i) {
 #pragma HLS UNROLL
@@ -221,17 +252,53 @@ void transformer_top(
                 mmu_head_out_buf[lane][i] = 0;
             }
         }
+        for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+            stream_in_buf_local[i] = 0;
+        }
+        for (int i = 0; i < STREAM_OUT_BUF_BYTES; ++i) {
+            stream_out_buf_local[i] = 0;
+        }
+        for (int i = 0; i < TOP_DMA_BUF_WORDS; ++i) {
+            dma_rx_buf_local[i] = 0;
+            dma_tx_buf_local[i] = 0;
+        }
     }
 
-    bool axis_in_ready_wire = false;
+    if (state_local == S_IDLE) {
+        token_complete_local = false;
+        stream_in_counter = 0;
+    }
+
+    const bool axis_buf_full = (stream_in_counter >= static_cast<uint32_t>(STREAM_IN_BUF_BYTES));
+    const bool axis_in_ready_wire = (reset_n && (state_local == S_STREAM_IN) && !axis_buf_full && !token_complete_local);
+
+    bool axis_in_valid = false;
+    bool axis_in_last = false;
+    bool axis_is_empty = s_axis_in.empty();
+    if (axis_in_ready_wire && !axis_is_empty) {
+        axis8_t beat = s_axis_in.read();
+        axis_in_valid = true;
+        axis_in_last = (beat.last != 0);
+
+        if (stream_in_counter < static_cast<uint32_t>(STREAM_IN_BUF_BYTES)) {
+            stream_in_buf_local[stream_in_counter] = static_cast<uint8_t>(beat.data);
+            stream_in_counter++;
+        }
+        if (beat.last != 0) {
+            token_complete_local = true;
+            stream_in_counter = 0;
+        }
+    }
+
+    const bool stream_ready_local = !stream_tx_active_local;
+    stream_done_local = stream_done_pulse_local;
+    stream_done_pulse_local = false;
 
     // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
     scheduler_hls(
         ctrl_mem,
         active_status_mem,
-        axis_in_valid,
-        axis_in_last,
-        axis_in_ready_wire,
+        token_complete_local,
         mmu_main_dma_done_wire,
         mmu_req_ready_wire,
         scheduler_wl_accept,
@@ -243,15 +310,13 @@ void transformer_top(
         head_group_idx,
         compute_start,
         compute_instruction,
-        stream_ready,
-        stream_start,
-        stream_done,
+        stream_ready_local,
+        stream_start_local,
+        stream_done_local,
         done,
         scheduler_error,
         state_local
     );
-    // Drive top-level AXIS ready pin from scheduler wire.
-    axis_in_ready = axis_in_ready_wire;
 
     if (axis_in_valid && axis_in_last && axis_in_ready_wire) {
         const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
@@ -330,20 +395,20 @@ void transformer_top(
         reset_n,
         ctrl_mem,
         token_pos_current,
-        dma_ready,
-        dma_done,
-        dma_rx_buf,
-        dma_tx_buf,
-        dma_start,
-        dma_addr,
-        dma_len,
-        dma_is_write,
+        dma_ready_local,
+        dma_done_local,
+        dma_rx_buf_local,
+        dma_tx_buf_local,
+        dma_start_local,
+        dma_addr_local,
+        dma_len_local,
+        dma_is_write_local,
         axis_in_valid,
         axis_in_last,
         axis_in_ready_wire,
-        stream_start,
-        stream_in_buf,
-        stream_out_buf,
+        stream_start_local,
+        stream_in_buf_local,
+        stream_out_buf_local,
         scheduler_wl_start,
         scheduler_wl_instruction,
         mmu_req_ready_wire,
@@ -361,6 +426,61 @@ void transformer_top(
         mmu_head_out_buf,
         mmu_status
     );
+
+    if (!dma_busy_local && dma_start_local && dma_ready_local) {
+        dma_busy_local = true;
+        dma_countdown_local = 1;
+        dma_addr_latched_local = dma_addr_local;
+        dma_len_latched_local = dma_len_local;
+        dma_is_write_latched_local = dma_is_write_local;
+    } else if (dma_busy_local) {
+        if (dma_countdown_local > 0) {
+            dma_countdown_local--;
+        } else {
+            const uint32_t words = (dma_len_latched_local + 3u) >> 2;
+            const uint64_t base_word = (dma_addr_latched_local >> 2);
+            for (uint32_t i = 0; i < words; ++i) {
+#pragma HLS PIPELINE II=1
+                // For synthesized RTL, preserve full DDR addressing.
+#ifdef __SYNTHESIS__
+                const uint64_t idx = base_word + static_cast<uint64_t>(i);
+#else
+                // In C-sim, keep accesses bounded to the local mock backing array.
+                const uint32_t idx = static_cast<uint32_t>((base_word + static_cast<uint64_t>(i)) & (TOP_DMA_BUF_WORDS - 1));
+#endif
+                if (dma_is_write_latched_local) {
+                    ddr_mem[idx] = dma_tx_buf_local[i];
+                } else {
+                    dma_rx_buf_local[i] = ddr_mem[idx];
+                }
+            }
+            dma_busy_local = false;
+            dma_done_local = true;
+        }
+    } else {
+        dma_done_local = false;
+    }
+
+    if (!stream_tx_active_local && stream_start_local) {
+        stream_tx_active_local = true;
+        stream_tx_index_local = 0;
+    }
+    if (stream_tx_active_local) {
+        axis8_t out_beat{};
+        out_beat.data = stream_out_buf_local[stream_tx_index_local];
+        out_beat.last = (stream_tx_index_local == static_cast<uint16_t>(STREAM_OUT_BUF_BYTES - 1)) ? 1 : 0;
+        out_beat.keep = 1;
+        out_beat.strb = 1;
+        if (m_axis_out.write_nb(out_beat)) {
+            if (out_beat.last) {
+                stream_tx_active_local = false;
+                stream_done_pulse_local = true;
+                stream_tx_index_local = 0;
+            } else {
+                stream_tx_index_local = static_cast<uint16_t>(stream_tx_index_local + 1);
+            }
+        }
+    }
 
     compute_error = compute_error || head_error_any;
     ctrl_mem_interface.check_errors(ctrl_mem,
@@ -405,6 +525,9 @@ void transformer_top(
         dbg_mem_read_request = mem_read_request_local;
         dbg_mem_write_request = mem_write_request_local;
         dbg_mem_op = mem_op_local;
+        for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+            dbg_stream_in_buf[i] = stream_in_buf_local[i];
+        }
 #if TOP_ENABLE_HEAVY_DEBUG_MIRRORS
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
     // #pragma HLS PIPELINE II=1
@@ -455,6 +578,10 @@ void transformer_top(
             mmu_status.overflow ||
             ((active_status_mem.status & STATUS_ERROR) != 0u) ||
             (active_status_mem.error_code != ERR_NONE);
+        dbg_axis_is_empty = s_axis_in.empty();
+        dbg_axis_in_ready_wire = axis_in_ready_wire;
+        dbg_axis_in_last_wire = axis_in_last;
+        dbg_stream_in_counter = stream_in_counter;
     }
 
 

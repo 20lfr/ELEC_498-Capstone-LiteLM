@@ -25,7 +25,7 @@ reg [DataWidth-1:0] rom0[0:AddressRange-1];
 
 initial begin
      
-    $readmemh("./transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_207_224_rope_lut_ROPE_PAIbwn.dat", rom0);
+    $readmemh("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/MMU_Top_module_Integration/verilog/transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_207_224_rope_lut_ROPE_PAIbwn.dat", rom0);
 end
 
   

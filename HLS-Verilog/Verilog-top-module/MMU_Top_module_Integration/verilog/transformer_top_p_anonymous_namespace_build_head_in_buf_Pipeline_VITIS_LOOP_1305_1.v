@@ -101,7 +101,7 @@ wire   [63:0] zext_ln1305_fu_212_p1;
 reg   [6:0] i_fu_62;
 wire   [6:0] add_ln1305_fu_192_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i_88;
+reg   [6:0] ap_sig_allocacmp_i_91;
 reg    lane_buf_6_we0_local;
 wire   [2:0] trunc_ln1305_fu_198_p1;
 reg    lane_buf_6_ce0_local;
@@ -224,9 +224,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_88 = 7'd0;
+        ap_sig_allocacmp_i_91 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_88 = i_fu_62;
+        ap_sig_allocacmp_i_91 = i_fu_62;
     end
 end
 
@@ -369,7 +369,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln1305_fu_192_p2 = (ap_sig_allocacmp_i_88 + 7'd1);
+assign add_ln1305_fu_192_p2 = (ap_sig_allocacmp_i_91 + 7'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -383,7 +383,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln1305_fu_186_p2 = ((ap_sig_allocacmp_i_88 == 7'd96) ? 1'b1 : 1'b0);
+assign icmp_ln1305_fu_186_p2 = ((ap_sig_allocacmp_i_91 == 7'd96) ? 1'b1 : 1'b0);
 
 assign lane_buf_0_address0 = zext_ln1305_fu_212_p1;
 
@@ -449,9 +449,9 @@ assign lane_buf_7_d0 = 8'd0;
 
 assign lane_buf_7_we0 = lane_buf_7_we0_local;
 
-assign lshr_ln_fu_202_p4 = {{ap_sig_allocacmp_i_88[6:3]}};
+assign lshr_ln_fu_202_p4 = {{ap_sig_allocacmp_i_91[6:3]}};
 
-assign trunc_ln1305_fu_198_p1 = ap_sig_allocacmp_i_88[2:0];
+assign trunc_ln1305_fu_198_p1 = ap_sig_allocacmp_i_91[2:0];
 
 assign zext_ln1305_fu_212_p1 = lshr_ln_fu_202_p4;
 

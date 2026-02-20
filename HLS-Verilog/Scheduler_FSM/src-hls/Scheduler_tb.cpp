@@ -105,7 +105,8 @@ int main() {
 
     bool axis_in_valid = false;
     bool axis_in_last = false;
-    bool axis_in_ready = false;
+    bool axis_in_accept = false;
+    bool axis_token_complete = false;
 
     bool dma_done = false;
     bool wl_ready = true;
@@ -215,7 +216,11 @@ int main() {
             }
         }
 
-        if (!axis_feed_done && reset_n && axis_in_ready) {
+        axis_in_accept = (!axis_feed_done && reset_n);
+        if (state == S_IDLE) {
+            axis_token_complete = false;
+        }
+        if (!axis_feed_done && reset_n && axis_in_accept) {
             axis_in_valid = true;
             axis_in_last = (axis_sent == (AXIS_BEATS - 1));
         } else {
@@ -226,9 +231,7 @@ int main() {
         scheduler_hls(
             ctrl_mem,
             status_mem,
-            axis_in_valid,
-            axis_in_last,
-            axis_in_ready,
+            axis_token_complete,
             dma_done,
             wl_ready,
             wl_accept,
@@ -248,10 +251,11 @@ int main() {
             state
         );
 
-        if (axis_in_valid && axis_in_ready) {
+        if (axis_in_valid && axis_in_accept) {
             ++axis_sent;
             if (axis_in_last) {
                 axis_feed_done = true;
+                axis_token_complete = true;
             }
         }
 
@@ -292,7 +296,7 @@ int main() {
                     state_name(state),
                     axis_in_valid ? 1 : 0,
                     axis_in_last ? 1 : 0,
-                    axis_in_ready ? 1 : 0,
+                    axis_in_accept ? 1 : 0,
                     wl_start ? 1 : 0,
                     wl_accept ? 1 : 0,
                     compute_start ? 1 : 0,

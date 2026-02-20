@@ -28,7 +28,7 @@ input clk;
 (* ram_style = "auto"  *)reg [DataWidth-1:0] ram[0:AddressRange-1];
 
 initial begin
-    $readmemh("./transformer_top_drive_headed_compute_controller_drive_headed_compute_controller_ComputeHeadCtbFp.dat", ram);
+    $readmemh("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/MMU_Top_module_Integration/verilog/transformer_top_drive_headed_compute_controller_drive_headed_compute_controller_ComputeHeadCtbFp.dat", ram);
 end 
 
  

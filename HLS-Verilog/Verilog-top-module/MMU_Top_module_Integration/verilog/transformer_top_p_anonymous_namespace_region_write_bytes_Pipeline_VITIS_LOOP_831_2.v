@@ -14,7 +14,7 @@ module transformer_top_p_anonymous_namespace_region_write_bytes_Pipeline_VITIS_L
         ap_idle,
         ap_ready,
         xor_ln831_3,
-        empty_398,
+        empty_410,
         src_0_address0,
         src_0_ce0,
         src_0_q0,
@@ -39,7 +39,7 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [31:0] xor_ln831_3;
-input  [5:0] empty_398;
+input  [5:0] empty_410;
 output  [4:0] src_0_address0;
 output   src_0_ce0;
 input  [7:0] src_0_q0;
@@ -77,7 +77,7 @@ wire   [63:0] zext_ln833_1_fu_206_p1;
 reg   [31:0] i_fu_48;
 wire   [31:0] add_ln831_fu_135_p2;
 wire    ap_loop_init;
-reg   [31:0] ap_sig_allocacmp_i_76;
+reg   [31:0] ap_sig_allocacmp_i_79;
 reg    src_0_ce0_local;
 reg    src_1_ce0_local;
 reg    uram_banks_we0_local;
@@ -213,9 +213,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_76 = 32'd0;
+        ap_sig_allocacmp_i_79 = 32'd0;
     end else begin
-        ap_sig_allocacmp_i_76 = i_fu_48;
+        ap_sig_allocacmp_i_79 = i_fu_48;
     end
 end
 
@@ -262,7 +262,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln831_fu_135_p2 = (ap_sig_allocacmp_i_76 + 32'd1);
+assign add_ln831_fu_135_p2 = (ap_sig_allocacmp_i_79 + 32'd1);
 
 assign add_ln833_1_fu_175_p2 = (empty + trunc_ln833_fu_141_p1);
 
@@ -270,7 +270,7 @@ assign add_ln833_2_fu_181_p2 = (add_ln833_1_fu_175_p2 + tmp_94);
 
 assign add_ln833_3_fu_187_p2 = (mul_ln833 + add_ln833_2_fu_181_p2);
 
-assign add_ln833_fu_149_p2 = (trunc_ln833_1_fu_145_p1 + empty_398);
+assign add_ln833_fu_149_p2 = (trunc_ln833_1_fu_145_p1 + empty_410);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -290,7 +290,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln831_fu_129_p2 = ((ap_sig_allocacmp_i_76 == xor_ln831_3) ? 1'b1 : 1'b0);
+assign icmp_ln831_fu_129_p2 = ((ap_sig_allocacmp_i_79 == xor_ln831_3) ? 1'b1 : 1'b0);
 
 assign lshr_ln_fu_159_p4 = {{add_ln833_fu_149_p2[5:1]}};
 
@@ -304,11 +304,11 @@ assign src_1_address0 = zext_ln833_fu_169_p1;
 
 assign src_1_ce0 = src_1_ce0_local;
 
-assign trunc_ln833_1_fu_145_p1 = ap_sig_allocacmp_i_76[5:0];
+assign trunc_ln833_1_fu_145_p1 = ap_sig_allocacmp_i_79[5:0];
 
 assign trunc_ln833_2_fu_155_p1 = add_ln833_fu_149_p2[0:0];
 
-assign trunc_ln833_fu_141_p1 = ap_sig_allocacmp_i_76[20:0];
+assign trunc_ln833_fu_141_p1 = ap_sig_allocacmp_i_79[20:0];
 
 assign uram_banks_address0 = zext_ln833_1_fu_206_p1;
 

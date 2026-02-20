@@ -13,15 +13,15 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_297_1 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_419,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_418,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_421,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_420,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_419,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_418,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_421,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_420,
         done_head_assign_1,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld
 );
 
 parameter    ap_ST_fsm_state1 = 1'd1;
@@ -32,19 +32,19 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [23:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_419;
-input  [23:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_418;
-input  [23:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_421;
-input  [23:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_420;
+input  [23:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_419;
+input  [23:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_418;
+input  [23:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_421;
+input  [23:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_420;
 input  [7:0] done_head_assign_1;
-output  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149;
-output   transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld;
-output  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150;
-output   transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld;
+output  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149;
+output   transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld;
+output  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150;
+output   transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld;
 
 reg ap_idle;
-reg transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld;
-reg transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld;
+reg transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld;
+reg transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld;
 
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
@@ -181,17 +181,17 @@ end
 
 always @ (*) begin
     if (((icmp_ln305_fu_204_p2 == 1'd1) & (icmp_ln304_fu_198_p2 == 1'd1) & (icmp_ln297_fu_100_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld = 1'b1;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld = 1'b1;
     end else begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld = 1'b0;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((icmp_ln305_fu_204_p2 == 1'd0) & (icmp_ln304_fu_198_p2 == 1'd1) & (icmp_ln297_fu_100_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld = 1'b1;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld = 1'b1;
     end else begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld = 1'b0;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld = 1'b0;
     end
 end
 
@@ -236,18 +236,18 @@ assign select_ln300_fu_138_p3 = ((icmp_ln300_fu_112_p2[0:0] == 1'b1) ? tmp_s_fu_
 
 assign select_ln302_fu_182_p3 = ((icmp_ln300_fu_112_p2[0:0] == 1'b1) ? tmp_55_fu_162_p4 : tmp_56_fu_172_p4);
 
-assign tmp_54_fu_128_p4 = {{transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_418[23:16]}};
+assign tmp_54_fu_128_p4 = {{transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_418[23:16]}};
 
-assign tmp_55_fu_162_p4 = {{transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_421[23:16]}};
+assign tmp_55_fu_162_p4 = {{transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_421[23:16]}};
 
-assign tmp_56_fu_172_p4 = {{transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_420[23:16]}};
+assign tmp_56_fu_172_p4 = {{transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_420[23:16]}};
 
 assign tmp_fu_146_p4 = {{select_ln300_fu_138_p3[7:2]}};
 
-assign tmp_s_fu_118_p4 = {{transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_419[23:16]}};
+assign tmp_s_fu_118_p4 = {{transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_419[23:16]}};
 
-assign transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149 = 1'd1;
+assign transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149 = 1'd1;
 
-assign transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150 = 1'd1;
+assign transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150 = 1'd1;
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_297_1

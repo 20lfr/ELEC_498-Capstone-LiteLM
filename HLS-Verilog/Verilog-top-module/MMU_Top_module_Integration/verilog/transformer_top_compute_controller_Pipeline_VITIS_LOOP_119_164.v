@@ -127,7 +127,7 @@ transformer_top_mul_32s_31ns_63_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 63 ))
-mul_32s_31ns_63_1_1_U525(
+mul_32s_31ns_63_1_1_U529(
     .din0(tmp_90_fu_177_p11),
     .din1(product_fu_128_p1),
     .dout(product_fu_128_p2)
@@ -147,7 +147,7 @@ mul_32s_31ns_63_1_1_U525(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U526(
+sparsemux_9_2_32_1_1_U530(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_122),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124),

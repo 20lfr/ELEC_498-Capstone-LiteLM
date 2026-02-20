@@ -13,10 +13,10 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_1714_2 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150,
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150,
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld
 );
 
 parameter    ap_ST_fsm_state1 = 1'd1;
@@ -27,14 +27,14 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149;
-output   transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld;
-output  [0:0] transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150;
-output   transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld;
+output  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149;
+output   transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld;
+output  [0:0] transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150;
+output   transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld;
 
 reg ap_idle;
-reg transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld;
-reg transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld;
+reg transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld;
+reg transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld;
 
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
@@ -160,17 +160,17 @@ end
 
 always @ (*) begin
     if (((icmp_ln1715_fu_54_p2 == 1'd1) & (icmp_ln1714_fu_42_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld = 1'b1;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld = 1'b1;
     end else begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149_ap_vld = 1'b0;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149_ap_vld = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((icmp_ln1715_fu_54_p2 == 1'd0) & (icmp_ln1714_fu_42_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld = 1'b1;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld = 1'b1;
     end else begin
-        transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150_ap_vld = 1'b0;
+        transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150_ap_vld = 1'b0;
     end
 end
 
@@ -203,8 +203,8 @@ assign icmp_ln1714_fu_42_p2 = ((ap_sig_allocacmp_lane_5 == 2'd2) ? 1'b1 : 1'b0);
 
 assign icmp_ln1715_fu_54_p2 = ((ap_sig_allocacmp_lane_5 == 2'd0) ? 1'b1 : 1'b0);
 
-assign transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_149 = 1'd0;
+assign transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_149 = 1'd0;
 
-assign transformer_top_bool_bool_bool_bool_bool_bool_unsigned_char_const_unsi_150 = 1'd0;
+assign transformer_top_stream_stream_unsigned_int_volatile_ControlMemSpace_StatusMem_150 = 1'd0;
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_1714_2

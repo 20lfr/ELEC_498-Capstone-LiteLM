@@ -1,5 +1,7 @@
 #pragma once
 #include <cstdint>
+#include <hls_stream.h>
+#include <ap_axi_sdata.h>
 #include "top_params.hpp"
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
@@ -12,29 +14,16 @@
 constexpr int TOP_DMA_BUF_BYTES = 65536;
 constexpr int TOP_DMA_BUF_WORDS = TOP_DMA_BUF_BYTES / static_cast<int>(sizeof(uint32_t));
 static_assert((TOP_DMA_BUF_BYTES % static_cast<int>(sizeof(uint32_t))) == 0, "TOP_DMA_BUF_BYTES must be word-aligned");
+using axis8_t = ap_axiu<8, 0, 0, 0>;
 
 // Top-level wrapper prototype
 void transformer_top(
-    bool axis_in_valid,                 // [INPUT]  s_axis_in_tvalid
-    bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
-    bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
-
-    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
-    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
-    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
-    const uint8_t stream_in_buf[STREAM_IN_BUF_BYTES],   // [INPUT] Stream-in payload buffer (constructed token)
-    uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES],        // [OUTPUT] Stream-out payload buffer (MMU produced)
+    hls::stream<axis8_t> &s_axis_in,    // [INPUT]  AXI4-Stream ingress
+    hls::stream<axis8_t> &m_axis_out,   // [OUTPUT] AXI4-Stream egress
+    volatile uint32_t *ddr_mem,         // [BOTH]   AXI4-Full external memory
     ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
     StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
     bool &irq_ps,                       // [OUTPUT] Interrupt signal
-    bool dma_ready,                     // [INPUT] DMA command interface ready
-    bool dma_done,                      // [INPUT] DMA completion pulse
-    const uint32_t dma_rx_buf[TOP_DMA_BUF_WORDS], // [INPUT] DMA read payload words into MMU
-    uint32_t dma_tx_buf[TOP_DMA_BUF_WORDS],       // [OUTPUT] DMA write payload words from MMU
-    bool &dma_start,                    // [OUTPUT] Start DMA transfer
-    uint32_t &dma_addr,                 // [OUTPUT] DMA address
-    uint32_t &dma_len,                  // [OUTPUT] DMA transfer length
-    bool &dma_is_write,                 // [OUTPUT] DMA direction (1=MMU->DDR)
 
     /*
         TEMPORARY OUTPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
@@ -91,8 +80,13 @@ void transformer_top(
     uint8_t  dbg_out_buf[compute_buf::OUT_BUF_BYTES],
     uint8_t  dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
     uint8_t  dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
+    uint8_t  dbg_stream_in_buf[STREAM_IN_BUF_BYTES],
 
     bool &dbg_error,
     uint32_t &dbg_error_code,
-    bool &dbg_done
+    bool &dbg_done,
+    bool &dbg_axis_is_empty,
+    bool &dbg_axis_in_ready_wire,
+    bool &dbg_axis_in_last_wire,
+    uint32_t &dbg_stream_in_counter
 );

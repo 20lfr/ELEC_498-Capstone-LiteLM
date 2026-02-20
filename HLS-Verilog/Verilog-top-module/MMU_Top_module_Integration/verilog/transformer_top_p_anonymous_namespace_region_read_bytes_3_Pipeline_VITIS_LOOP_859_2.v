@@ -14,7 +14,7 @@ module transformer_top_p_anonymous_namespace_region_read_bytes_3_Pipeline_VITIS_
         ap_idle,
         ap_ready,
         xor_ln859_2,
-        empty_402,
+        empty_414,
         tmp_96,
         mul_ln861,
         empty,
@@ -36,7 +36,7 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [31:0] xor_ln859_2;
-input  [20:0] empty_402;
+input  [20:0] empty_414;
 input  [20:0] tmp_96;
 input  [20:0] mul_ln861;
 input  [12:0] empty;
@@ -69,7 +69,7 @@ wire   [63:0] zext_ln861_2_fu_167_p1;
 reg   [31:0] i_fu_44;
 wire   [31:0] add_ln859_fu_119_p2;
 wire    ap_loop_init;
-reg   [31:0] ap_sig_allocacmp_i_81;
+reg   [31:0] ap_sig_allocacmp_i_84;
 reg    uram_banks_ce0_local;
 reg    p_anonymous_namespace_scratch_we0_local;
 reg    p_anonymous_namespace_scratch_ce0_local;
@@ -201,9 +201,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_81 = 32'd0;
+        ap_sig_allocacmp_i_84 = 32'd0;
     end else begin
-        ap_sig_allocacmp_i_81 = i_fu_44;
+        ap_sig_allocacmp_i_84 = i_fu_44;
     end
 end
 
@@ -242,11 +242,11 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln859_fu_119_p2 = (ap_sig_allocacmp_i_81 + 32'd1);
+assign add_ln859_fu_119_p2 = (ap_sig_allocacmp_i_84 + 32'd1);
 
 assign add_ln861_2_fu_156_p2 = (trunc_ln861_2_fu_129_p1 + empty);
 
-assign add_ln861_3_fu_133_p2 = (empty_402 + trunc_ln861_fu_125_p1);
+assign add_ln861_3_fu_133_p2 = (empty_414 + trunc_ln861_fu_125_p1);
 
 assign add_ln861_4_fu_145_p2 = (mul_ln861 + add_ln861_fu_139_p2);
 
@@ -270,7 +270,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln859_fu_113_p2 = ((ap_sig_allocacmp_i_81 == xor_ln859_2) ? 1'b1 : 1'b0);
+assign icmp_ln859_fu_113_p2 = ((ap_sig_allocacmp_i_84 == xor_ln859_2) ? 1'b1 : 1'b0);
 
 assign p_anonymous_namespace_scratch_address0 = zext_ln861_2_fu_167_p1;
 
@@ -280,9 +280,9 @@ assign p_anonymous_namespace_scratch_d0 = uram_banks_q0;
 
 assign p_anonymous_namespace_scratch_we0 = p_anonymous_namespace_scratch_we0_local;
 
-assign trunc_ln861_2_fu_129_p1 = ap_sig_allocacmp_i_81[12:0];
+assign trunc_ln861_2_fu_129_p1 = ap_sig_allocacmp_i_84[12:0];
 
-assign trunc_ln861_fu_125_p1 = ap_sig_allocacmp_i_81[20:0];
+assign trunc_ln861_fu_125_p1 = ap_sig_allocacmp_i_84[20:0];
 
 assign uram_banks_address0 = zext_ln861_fu_151_p1;
 

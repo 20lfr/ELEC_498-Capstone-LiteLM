@@ -7,7 +7,6 @@
 #include <cstring>
 #include <limits>
 #include <string>
-#include <unordered_map>
 #include <sys/stat.h>
 
 #include "top.hpp"
@@ -116,9 +115,7 @@ static const char *op_name(ComputeOp op) {
     case CMP_RESID2:       return "RESID2";
     case CMP_LN1:          return "LN1";
     case CMP_REQUANT4:     return "RQ4";
-    case CMP_DEQUANT:      return "DEQUANT";
     case CMP_FINAL_NORM:   return "FINAL_NORM";
-    case CMP_LOGITS:       return "LOGITS";
     default:               return "UNK";
     }
 }
@@ -1316,14 +1313,6 @@ ControlMemSpace ctrl_mem_init(bool init) {
         ctrl_mem.ln0_eps_base_addr = 0x14000000ull;
         ctrl_mem.ln1_eps_base_addr = 0x15000000ull;
         ctrl_mem.final_norm_eps_base_addr = 0x16000000ull;
-        // Quantization params
-        ctrl_mem.logit_scale_qv = 0x00000100;
-        ctrl_mem.scale_q        = 0x00000100;
-        ctrl_mem.zero_point_q   = 0x00000000;
-        ctrl_mem.scale_k        = 0x00000100;
-        ctrl_mem.zero_point_k   = 0x00000000;
-        ctrl_mem.scale_v        = 0x00000100;
-        ctrl_mem.zero_point_v   = 0x00000000;
     }
     return ctrl_mem;
 }
@@ -1338,33 +1327,31 @@ static inline void write_i4(uint8_t *buf, int nibble_idx, int8_t value) {
     }
 }
 
-static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint32_t byte_idx) {
-    const uint32_t word = buf[byte_idx >> 2];
-    const uint32_t shift = (byte_idx & 0x3u) << 3;
+static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint64_t byte_idx) {
+    const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
+    const uint32_t word = buf[(wrapped_byte >> 2) & static_cast<uint32_t>(TOP_DMA_BUF_WORDS - 1)];
+    const uint32_t shift = (wrapped_byte & 0x3u) << 3;
     return static_cast<uint8_t>((word >> shift) & 0xFFu);
 }
 
-static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
-    const uint32_t word_idx = byte_idx >> 2;
-    const uint32_t shift = (byte_idx & 0x3u) << 3;
+static inline void dma_word_set_byte(uint32_t *buf, uint64_t byte_idx, uint8_t value) {
+    const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
+    const uint32_t word_idx = (wrapped_byte >> 2) & static_cast<uint32_t>(TOP_DMA_BUF_WORDS - 1);
+    const uint32_t shift = (wrapped_byte & 0x3u) << 3;
     uint32_t word = buf[word_idx];
     word &= ~(0xFFu << shift);
     word |= (static_cast<uint32_t>(value) << shift);
     buf[word_idx] = word;
 }
 
-static inline uint32_t read_u32_le(const uint32_t *buf) {
-    return buf[0];
-}
-
 static void seed_ln_params_ddr(const ControlMemSpace &ctrl,
-                               std::unordered_map<uint64_t, uint8_t> &ddr_model) {
+                               uint32_t *ddr_mem) {
     auto write_i32_le = [&](uint64_t addr, int32_t value) {
         const uint32_t u = static_cast<uint32_t>(value);
-        ddr_model[addr + 0] = static_cast<uint8_t>(u & 0xFFu);
-        ddr_model[addr + 1] = static_cast<uint8_t>((u >> 8) & 0xFFu);
-        ddr_model[addr + 2] = static_cast<uint8_t>((u >> 16) & 0xFFu);
-        ddr_model[addr + 3] = static_cast<uint8_t>((u >> 24) & 0xFFu);
+        dma_word_set_byte(ddr_mem, addr + 0, static_cast<uint8_t>(u & 0xFFu));
+        dma_word_set_byte(ddr_mem, addr + 1, static_cast<uint8_t>((u >> 8) & 0xFFu));
+        dma_word_set_byte(ddr_mem, addr + 2, static_cast<uint8_t>((u >> 16) & 0xFFu));
+        dma_word_set_byte(ddr_mem, addr + 3, static_cast<uint8_t>((u >> 24) & 0xFFu));
     };
 
     for (int layer = 0; layer < NUM_LAYERS; ++layer) {
@@ -1392,7 +1379,6 @@ int main() {
     }
 
     const int MAX_CYCLES = 5500;
-    const int DMA_LAT    = 3;
     const int AXIS_BEATS = STREAM_IN_BUF_BYTES;
 
 
@@ -1402,23 +1388,24 @@ int main() {
     uint32_t wl_instruction = 0;
     HeadCtx head_ctx_ref[NUM_HEADS];
     ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL] = {};
-    bool dma_ready       = false;
-    bool dma_done        = false;
     bool dma_start       = false;
     uint32_t dma_addr    = 0;
-    uint32_t dma_len     = 0;
-    bool dma_is_write    = false;
-    uint32_t dma_rx_buf[TOP_DMA_BUF_WORDS] = {};
-    uint32_t dma_tx_buf[TOP_DMA_BUF_WORDS] = {};
-    bool wl_dma_request  = false;
-    uint64_t wl_dma_address = 0;
+    uint32_t dma_rx_word = 0;
+    uint32_t dma_tx_word = 0;
+    uint32_t ddr_mem[TOP_DMA_BUF_WORDS] = {};
+
+    hls::stream<axis8_t> s_axis_in("s_axis_in");
+    hls::stream<axis8_t> m_axis_out("m_axis_out");
 
     bool axis_in_valid   = false;
     bool axis_in_last    = false;
-    bool axis_in_ready   = false;
     int  axis_sent       = 0;
     bool axis_feed_done  = false;
     bool axis_drive      = false;
+    bool axis_in_ready   = false;
+    uint8_t axis_in_data = 0;
+    uint8_t axis_in_keep = 0;
+    uint8_t axis_in_strb = 0;
 
     bool mem_transfer_done = false;
     bool mem_read_request  = false;
@@ -1428,32 +1415,25 @@ int main() {
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
     uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES] = {};
     uint8_t head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES] = {};
+    uint8_t dbg_stream_in_buf[STREAM_IN_BUF_BYTES] = {};
     uint8_t prev_dbg_in_buf[compute_buf::IN_BUF_BYTES] = {};
     uint8_t prev_dbg_out_buf[compute_buf::OUT_BUF_BYTES] = {};
     uint8_t prev_dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES] = {};
     uint8_t prev_dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES] = {};
+    uint8_t prev_dbg_stream_in_buf[STREAM_IN_BUF_BYTES] = {};
     uint8_t prev_stream_in_buf[STREAM_IN_BUF_BYTES] = {};
     uint8_t prev_stream_out_buf[STREAM_OUT_BUF_BYTES] = {};
     bool dbg_buf_prev_valid = false;
 
-    bool stream_ready    = true;
-    bool stream_start    = false;
-    bool stream_done     = false;
     uint8_t stream_in_buf[STREAM_IN_BUF_BYTES] = {};
     uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES] = {};
+    int stream_out_count = 0;
 
     SchedState dbg_state     = S_IDLE;
     bool irq_ps              = false;
     bool irq_interupt_flagged = false;
     uint32_t interupt_data = 0;
 
-    bool dma_busy        = false;
-    int  dma_timer       = 0;
-    bool dma_active_write = false;
-    uint32_t dma_active_addr = 0;
-    uint32_t dma_active_len = 0;
-    std::unordered_map<uint64_t, uint8_t> ddr_model;
-    bool stream_busy     = false;
     bool reset_released  = false;
     bool start_pulsed    = false;
     bool pending_start_clear = false;
@@ -1495,6 +1475,10 @@ int main() {
     int  test_errors_passed = 0;
     int  test_errors_failed = 0;
     bool dbg_done = false;
+    bool dbg_axis_is_empty = false;
+    bool dbg_axis_in_ready_wire = false;
+    bool dbg_axis_in_last_wire = false;
+    uint32_t dbg_stream_in_counter = 0;
     
     ControlMemSpace ctrl_mem{};
     StatusMemSpace status_mem{};
@@ -1545,13 +1529,16 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%8s | %5s | %-16s | %6s | %6s | %6s | %12s | %12s | %13s | %12s | %18s | %9s | %10s | %10s | %10s | %12s | %20s | %21s | %22s | %17s | %23s | %17s | %18s | %6s | %s\n",
+    std::printf("%8s | %5s | %-16s | %10s | %8s | %8s | %8s | %8s | %8s | %12s | %12s | %13s | %12s | %18s | %9s | %10s | %10s | %10s | %12s | %20s | %21s | %22s | %17s | %23s | %17s | %18s | %6s | %11s | %11s | %11s | %13s | %s\n",
                 "cycle",
                 "reset",
                 "dbg_state",
-                "axis_v",
-                "axis_l",
-                "axis_r",
+                "s_tdata",
+                "s_tvalid",
+                "s_tready",
+                "s_tkeep",
+                "s_tstrb",
+                "s_tlast",
                 "axis_start",
                 "dbg_wl_start",
                 "dbg_wl_accept",
@@ -1570,6 +1557,10 @@ int main() {
                 "dbg_compute_state",
                 "dbg_req_instruction",
                 "irq_ps",
+                "ax_empty",
+                "ax_rdy_w",
+                "ax_last_w",
+                "stream_cnt",
                 "headed(signals)");
     std::printf("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
@@ -1691,7 +1682,7 @@ int main() {
                 // Program all ControlMemSpace fields in one shot.
                 // This includes required + optional strides/base addresses and quant data.
                 ctrl_mem = ctrl_mem_init(true);
-                seed_ln_params_ddr(ctrl_mem, ddr_model);
+                seed_ln_params_ddr(ctrl_mem, ddr_mem);
                 ctrl_data_in = CTRL_RESETN_BIT;
                 break;
             case 1:
@@ -1750,80 +1741,50 @@ int main() {
             interupt_data = status_mem.irq_status;
         }
 
-        // Complete outstanding DMA transfers.
-        dma_done = false;
-        if (dma_busy) {
-            if (dma_timer == 0) {
-                const uint32_t safe_len =
-                    (dma_active_len > static_cast<uint32_t>(TOP_DMA_BUF_BYTES))
-                    ? static_cast<uint32_t>(TOP_DMA_BUF_BYTES)
-                    : dma_active_len;
-                if (dma_active_write) {
-                    for (uint32_t i = 0; i < safe_len; ++i) {
-                        ddr_model[static_cast<uint64_t>(dma_active_addr) + i] = dma_word_get_byte(dma_tx_buf, i);
-                    }
-                } else {
-                    for (uint32_t i = 0; i < safe_len; ++i) {
-                        const uint64_t a = static_cast<uint64_t>(dma_active_addr) + i;
-                        auto it = ddr_model.find(a);
-                        if (it != ddr_model.end()) {
-                            dma_word_set_byte(dma_rx_buf, i, it->second);
-                        } else {
-                            dma_word_set_byte(dma_rx_buf, i, static_cast<uint8_t>((a ^ (a >> 8) ^ 0x5Au) & 0xFFu));
-                        }
-                    }
-                }
-                dma_done = true;
-                dma_busy = false;
-            } else {
-                --dma_timer;
-            }
-        }
-
-        // Stream completion: single-cycle pulse after start
-        stream_done = false;
-        if (stream_busy) {
-            stream_done = true;
-            stream_busy = false;
-        }
-
-        // Ready signals depend on busy flags.
-        stream_ready  = !stream_busy;
-        dma_ready = !dma_busy;
-        wl_dma_request = false;
-
-        // Drive AXIS ingress: send a short burst when ready is asserted
+        // Drive AXIS ingress beats into the true AXI stream input.
+        axis_in_valid = false;
+        axis_in_last = false;
+        axis_in_ready = false;
+        axis_in_data = 0;
+        axis_in_keep = 0;
+        axis_in_strb = 0;
         if (!axis_feed_done && (axis_drive || (((ctrl_shadow_control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
             axis_drive = true;
-            if (!axis_in_valid && axis_in_ready) {
-                axis_in_valid = true;
-                axis_in_last  = (axis_sent == AXIS_BEATS - 1);
+            if (axis_sent < AXIS_BEATS) {
+                axis8_t beat{};
+                beat.data = stream_in_buf[axis_sent];
+                beat.keep = 1;
+                beat.strb = 1;
+                beat.last = (axis_sent == AXIS_BEATS - 1) ? 1 : 0;
+                if (s_axis_in.write_nb(beat)) {
+                    axis_in_valid = true;
+                    axis_in_last = (beat.last != 0);
+                    axis_in_ready = true;
+                    axis_in_data = static_cast<uint8_t>(beat.data);
+                    axis_in_keep = static_cast<uint8_t>(beat.keep);
+                    axis_in_strb = static_cast<uint8_t>(beat.strb);
+                    axis_sent++;
+                    if (axis_in_last) {
+                        axis_feed_done = true;
+                        axis_drive = false;
+                    }
+                }
             }
-        } else {
-            axis_in_valid = false;
-            axis_in_last  = false;
         }
 
+        // Legacy DMA debug fields (DMA is now inside top/MMU over AXI-Full).
+        dma_start = false;
+        dma_addr = 0;
+        dma_rx_word = ddr_mem[0];
+        dma_tx_word = ddr_mem[1];
+
         transformer_top(
-            axis_in_valid,
-            axis_in_last,
-            axis_in_ready,
-            stream_ready,
-            stream_start,
-            stream_done,
-            stream_in_buf,
-            stream_out_buf,
+            s_axis_in,
+            m_axis_out,
+            ddr_mem,
             ctrl_mem,
             status_mem,
             irq_ps,
-            dma_ready,
-            dma_done,
-            dma_rx_buf,
-            dma_tx_buf,
-            dma_start,
-            dma_addr,
-            dma_len,
-            dma_is_write,
             dbg_state, 
             head_ctx_ref,
             head_compute_ctx,
@@ -1872,10 +1833,27 @@ int main() {
             out_buf,
             head_in_buf,
             head_out_buf,
+            dbg_stream_in_buf,
             dbg_error,
             dbg_error_code,
-            dbg_done
+            dbg_done,
+            dbg_axis_is_empty,
+            dbg_axis_in_ready_wire,
+            dbg_axis_in_last_wire,
+            dbg_stream_in_counter
         );
+
+        // Drain AXI stream output from DUT into local debug buffer.
+        axis8_t axis_out_beat{};
+        while (m_axis_out.read_nb(axis_out_beat)) {
+            if (stream_out_count < STREAM_OUT_BUF_BYTES) {
+                stream_out_buf[stream_out_count] = static_cast<uint8_t>(axis_out_beat.data);
+                stream_out_count++;
+            }
+            if (axis_out_beat.last != 0) {
+                stream_out_count = 0;
+            }
+        }
 
         if (!dbg_buf_prev_valid) {
             copy_buffer(prev_dbg_in_buf, in_buf, compute_buf::IN_BUF_BYTES);
@@ -1884,6 +1862,7 @@ int main() {
                 copy_buffer(prev_dbg_head_in_buf[lane], head_in_buf[lane], head_buf::IN_BUF_BYTES);
                 copy_buffer(prev_dbg_head_out_buf[lane], head_out_buf[lane], head_buf::OUT_BUF_BYTES);
             }
+            copy_buffer(prev_dbg_stream_in_buf, dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
             copy_buffer(prev_stream_in_buf, stream_in_buf, STREAM_IN_BUF_BYTES);
             copy_buffer(prev_stream_out_buf, stream_out_buf, STREAM_OUT_BUF_BYTES);
             dbg_buf_prev_valid = true;
@@ -1923,6 +1902,13 @@ int main() {
                 print_buffer("stream_in_buf", stream_in_buf, STREAM_IN_BUF_BYTES);
                 print_stream_in_buf_decoded(stream_in_buf);
                 copy_buffer(prev_stream_in_buf, stream_in_buf, STREAM_IN_BUF_BYTES);
+            }
+
+            const bool dbg_stream_in_changed = buffer_changed(dbg_stream_in_buf, prev_dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
+            if (dbg_stream_in_changed) {
+                std::printf("\n[CYCLE %d] dbg_stream_in_buf updated\n", cycle);
+                print_buffer("dbg_stream_in_buf", dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
+                copy_buffer(prev_dbg_stream_in_buf, dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
             }
 
             const bool stream_out_changed = buffer_changed(stream_out_buf, prev_stream_out_buf, STREAM_OUT_BUF_BYTES);
@@ -1981,24 +1967,17 @@ int main() {
             seen_attn = true;
         }
 
-        if (dma_start && !dma_busy) {
-            wl_dma_request = true;
-            wl_dma_address = static_cast<uint64_t>(dma_addr);
-            dma_active_addr = dma_addr;
-            dma_active_len = dma_len;
-            dma_active_write = dma_is_write;
-            dma_busy  = true;
-            dma_timer = DMA_LAT - 1;
-        }
-
         const bool cntrl_start = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
-        std::printf("%8d | %5d | %-16s | %6d | %6d | %6d | %12d | %12d | %13d | %12d |         0x%08X | %9d | 0x%08X | 0x%08X | 0x%08X | %12d | %20d | %21d | %22d | %17d |              0x%08X | %-17s |         0x%08X | %6d",
+        std::printf("%8d | %5d | %-16s |       0x%02X | %8d | %8d |     0x%02X |     0x%02X | %8d | %12d | %12d | %13d | %12d |         0x%08X | %9d | 0x%08X | 0x%08X | 0x%08X | %12d | %20d | %21d | %22d | %17d |              0x%08X | %-17s |         0x%08X | %6d | %11d | %11d | %11d | %13u",
                     cycle,
                     dbg_ctrl_reset_asserted ? 1 : 0,
                     state_name(dbg_state),
+                    axis_in_data,
                     axis_in_valid ? 1 : 0,
-                    axis_in_last ? 1 : 0,
                     axis_in_ready ? 1 : 0,
+                    axis_in_keep,
+                    axis_in_strb,
+                    axis_in_last ? 1 : 0,
                     (axis_in_valid && axis_in_last && axis_in_ready) ? 1 : 0,
                     wl_start ? 1 : 0,
                     wl_accept ? 1 : 0,
@@ -2006,8 +1985,8 @@ int main() {
                     wl_instruction,
                     dma_start ? 1 : 0,
                     dma_addr,
-                    read_u32_le(dma_rx_buf),
-                    read_u32_le(dma_tx_buf),
+                    dma_rx_word,
+                    dma_tx_word,
                     dbg_dma_done ? 1 : 0,
                     mem_read_request ? 1 : 0,
                     mem_write_request ? 1 : 0,
@@ -2016,7 +1995,11 @@ int main() {
                     dbg_compute_instruction,
                     compute_state_name(dbg_compute_state),
                     dbg_req_instruction,
-                    irq_ps ? 1 : 0);
+                    irq_ps ? 1 : 0,
+                    dbg_axis_is_empty ? 1 : 0,
+                    dbg_axis_in_ready_wire ? 1 : 0,
+                    dbg_axis_in_last_wire ? 1 : 0,
+                    dbg_stream_in_counter);
 
         const int hidx0 = dbg_head_group_idx * HEADS_PARALLEL;
         const int hidx1 = hidx0 + 1;
@@ -2068,21 +2051,6 @@ int main() {
             idle_after_stream++;
         } else if (seen_stream_out) {
             idle_after_stream = 0;
-        }
-
-        if (stream_start) {
-            stream_busy = true;
-        }
-
-        // Consume AXIS transfer on handshake
-        if (axis_in_valid && axis_in_ready) {
-            axis_sent++;
-            axis_in_valid = false;
-            axis_in_last  = false;
-            if (axis_sent >= AXIS_BEATS) {
-                axis_feed_done = true;
-                axis_drive     = false;
-            }
         }
 
         if (irq_interupt_flagged && (interupt_data & IRQ_INFER_DONE_BIT)) {

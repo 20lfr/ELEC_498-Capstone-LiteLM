@@ -80,7 +80,7 @@ wire   [0:0] icmp_ln688_fu_111_p2;
 reg   [4:0] i_fu_46;
 wire   [4:0] add_ln685_fu_91_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_83;
+reg   [4:0] ap_sig_allocacmp_i_86;
 reg    p_anonymous_namespace_regions_valid_ce0_local;
 reg   [3:0] p_anonymous_namespace_regions_valid_address0_local;
 reg    p_anonymous_namespace_regions_valid_we0_local;
@@ -247,9 +247,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_83 = 5'd0;
+        ap_sig_allocacmp_i_86 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_83 = i_fu_46;
+        ap_sig_allocacmp_i_86 = i_fu_46;
     end
 end
 
@@ -325,7 +325,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln685_fu_91_p2 = (ap_sig_allocacmp_i_83 + 5'd1);
+assign add_ln685_fu_91_p2 = (ap_sig_allocacmp_i_86 + 5'd1);
 
 assign add_ln688_fu_117_p2 = ($signed(p_anonymous_namespace_region_count_i) + $signed(16'd65535));
 
@@ -353,7 +353,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage1;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln685_fu_85_p2 = ((ap_sig_allocacmp_i_83 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln685_fu_85_p2 = ((ap_sig_allocacmp_i_86 == 5'd16) ? 1'b1 : 1'b0);
 
 assign icmp_ln688_fu_111_p2 = ((p_anonymous_namespace_region_count_i == 16'd0) ? 1'b1 : 1'b0);
 
@@ -371,7 +371,7 @@ assign p_anonymous_namespace_regions_valid_d0 = 1'd0;
 
 assign p_anonymous_namespace_regions_valid_we0 = p_anonymous_namespace_regions_valid_we0_local;
 
-assign zext_ln685_fu_97_p1 = ap_sig_allocacmp_i_83;
+assign zext_ln685_fu_97_p1 = ap_sig_allocacmp_i_86;
 
 always @ (posedge ap_clk) begin
     zext_ln685_reg_140[63:5] <= 59'b00000000000000000000000000000000000000000000000000000000000;
