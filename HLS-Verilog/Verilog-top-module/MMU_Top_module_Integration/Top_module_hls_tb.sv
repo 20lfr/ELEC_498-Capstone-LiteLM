@@ -23,7 +23,7 @@ module top_module_hls_tb;
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
 
-  // Debug struct mirrors copied from the working integrated TB format.
+  // Reverse order of HeadCtx so LSBs align with C layout.
   typedef struct packed {
     logic        att_value_dma_done;
     logic        att_scores_dma_done;
@@ -37,10 +37,7 @@ module top_module_hls_tb;
     logic        softmax_compute_done;
     logic        val_scale_compute_done;
     logic        att_scores_compute_done;
-    logic        requant_q_compute_done;
-    logic        v_requant_compute_done;
     logic        v_compute_done;
-    logic        k_requant_compute_done;
     logic        k_compute_done;
     logic        q_compute_done;
     logic        head_requant_started;
@@ -48,12 +45,9 @@ module top_module_hls_tb;
     logic        softmax_started;
     logic        val_scale_started;
     logic        att_scores_started;
-    logic        requant_q_started;
     logic        v_writeback_started;
-    logic        v_requant_started;
     logic        v_started;
     logic        k_writeback_started;
-    logic        k_requant_started;
     logic        k_started;
     logic        q_started;
     logic        start_head;
@@ -94,7 +88,7 @@ module top_module_hls_tb;
     logic [7:0]  req_op;
     logic [31:0] req_instruction;
     logic [7:0]  state;
-  } compute_head_ctx_t;
+  } ComputeHeadCtx_t;
 
   typedef struct packed {
     logic [31:0] control;
@@ -334,71 +328,46 @@ module top_module_hls_tb;
   logic [31:0] dbg_stream_in_counter;
   logic       dbg_stream_in_counter_ap_vld;
 
-  wire [1:0]   dbg_head_ctx_ref_address0;
-  wire         dbg_head_ctx_ref_ce0;
-  wire         dbg_head_ctx_ref_we0;
-  wire [214:0] dbg_head_ctx_ref_d0;
-  logic [214:0] dbg_head_ctx_ref_q0;
-  wire [1:0]   dbg_head_ctx_ref_address1;
-  wire         dbg_head_ctx_ref_ce1;
-  wire         dbg_head_ctx_ref_we1;
-  wire [214:0] dbg_head_ctx_ref_d1;
-  logic [214:0] dbg_head_ctx_ref_q1;
+  wire [0:0]   dbg_head_ctx_ref_0_address0;
+  wire         dbg_head_ctx_ref_0_ce0;
+  wire         dbg_head_ctx_ref_0_we0;
+  wire [$bits(head_ctx_t)-1:0] dbg_head_ctx_ref_0_d0;
 
-  wire [0:0]   dbg_head_compute_ctx_address0;
-  wire         dbg_head_compute_ctx_ce0;
-  wire         dbg_head_compute_ctx_we0;
-  wire [148:0] dbg_head_compute_ctx_d0;
-  logic [148:0] dbg_head_compute_ctx_q0;
-  wire [0:0]   dbg_head_compute_ctx_address1;
-  wire         dbg_head_compute_ctx_ce1;
-  wire         dbg_head_compute_ctx_we1;
-  wire [148:0] dbg_head_compute_ctx_d1;
-  logic [148:0] dbg_head_compute_ctx_q1;
+  wire [0:0]   dbg_head_ctx_ref_1_address0;
+  wire         dbg_head_ctx_ref_1_ce0;
+  wire         dbg_head_ctx_ref_1_we0;
+  wire [$bits(head_ctx_t)-1:0] dbg_head_ctx_ref_1_d0;
+
+  logic [148:0] dbg_head_compute_ctx_0;
+  logic [148:0] dbg_head_compute_ctx_1;
 
   wire [6:0] dbg_in_buf_address0;
   wire       dbg_in_buf_ce0;
   wire       dbg_in_buf_we0;
   wire [7:0] dbg_in_buf_d0;
-  logic [7:0] dbg_in_buf_q0;
-  wire [6:0] dbg_in_buf_address1;
-  wire       dbg_in_buf_ce1;
-  wire       dbg_in_buf_we1;
-  wire [7:0] dbg_in_buf_d1;
-  logic [7:0] dbg_in_buf_q1;
 
   wire [5:0] dbg_out_buf_address0;
   wire       dbg_out_buf_ce0;
   wire       dbg_out_buf_we0;
   wire [7:0] dbg_out_buf_d0;
-  logic [7:0] dbg_out_buf_q0;
-  wire [5:0] dbg_out_buf_address1;
-  wire       dbg_out_buf_ce1;
-  wire       dbg_out_buf_we1;
-  wire [7:0] dbg_out_buf_d1;
-  logic [7:0] dbg_out_buf_q1;
 
-  wire [7:0] dbg_head_in_buf_address0;
-  wire       dbg_head_in_buf_ce0;
-  wire       dbg_head_in_buf_we0;
-  wire [7:0] dbg_head_in_buf_d0;
-  logic [7:0] dbg_head_in_buf_q0;
-  wire [7:0] dbg_head_in_buf_address1;
-  wire       dbg_head_in_buf_ce1;
-  wire       dbg_head_in_buf_we1;
-  wire [7:0] dbg_head_in_buf_d1;
-  logic [7:0] dbg_head_in_buf_q1;
+  wire [6:0] dbg_head_in_buf_0_address0;
+  wire       dbg_head_in_buf_0_ce0;
+  wire       dbg_head_in_buf_0_we0;
+  wire [7:0] dbg_head_in_buf_0_d0;
+  wire [6:0] dbg_head_in_buf_1_address0;
+  wire       dbg_head_in_buf_1_ce0;
+  wire       dbg_head_in_buf_1_we0;
+  wire [7:0] dbg_head_in_buf_1_d0;
 
-  wire [6:0] dbg_head_out_buf_address0;
-  wire       dbg_head_out_buf_ce0;
-  wire       dbg_head_out_buf_we0;
-  wire [7:0] dbg_head_out_buf_d0;
-  logic [7:0] dbg_head_out_buf_q0;
-  wire [6:0] dbg_head_out_buf_address1;
-  wire       dbg_head_out_buf_ce1;
-  wire       dbg_head_out_buf_we1;
-  wire [7:0] dbg_head_out_buf_d1;
-  logic [7:0] dbg_head_out_buf_q1;
+  wire [5:0] dbg_head_out_buf_0_address0;
+  wire       dbg_head_out_buf_0_ce0;
+  wire       dbg_head_out_buf_0_we0;
+  wire [7:0] dbg_head_out_buf_0_d0;
+  wire [5:0] dbg_head_out_buf_1_address0;
+  wire       dbg_head_out_buf_1_ce0;
+  wire       dbg_head_out_buf_1_we0;
+  wire [7:0] dbg_head_out_buf_1_d0;
 
   logic [7:0]  stream_in_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0]  stream_out_mem[0:STREAM_OUT_BUF_BYTES-1];
@@ -416,10 +385,25 @@ module top_module_hls_tb;
   logic [31:0] ln1_eps_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] k_cache_store [0:KV_STORE_WORDS-1];
   logic [31:0] v_cache_store [0:KV_STORE_WORDS-1];
-  logic [214:0] dbg_head_ctx_mem [0:3];
-  logic [148:0] dbg_head_compute_ctx_mem [0:1];
+  logic [$bits(head_ctx_t)-1:0] dbg_head_ctx_mem [0:3];
   head_ctx_t dbg_head_ctx_shadow [0:3];
-  compute_head_ctx_t dbg_head_compute_ctx_shadow [0:1];
+  ComputeHeadCtx_t dbg_head_compute_ctx_shadow [0:1];
+  // Per-head struct mirrors (same style as legacy top-module TB).
+  head_ctx_t dbg_head_ctx_ref_0_struct;
+  head_ctx_t dbg_head_ctx_ref_1_struct;
+  head_ctx_t dbg_head_ctx_ref_2_struct;
+  head_ctx_t dbg_head_ctx_ref_3_struct;
+  ComputeHeadCtx_t dbg_head_compute_ctx_0_struct;
+  ComputeHeadCtx_t dbg_head_compute_ctx_1_struct;
+  // Active/cyclic head view for current head-group and parallel lanes.
+  logic [31:0] dbg_current_head_idx [0:1];
+  head_ctx_t dbg_current_head_ctx [0:1];
+  ComputeHeadCtx_t dbg_current_head_compute_ctx [0:1];
+  // Structured views by cyclic partition bank/slot for easier waveform debug.
+  head_ctx_t dbg_head_ctx_cyclic [0:1][0:1];
+  head_ctx_t dbg_head_ctx_q_view [0:1][0:1];
+  head_ctx_t dbg_head_ctx_d_view [0:1][0:1];
+  ComputeHeadCtx_t dbg_head_compute_ctx_cyclic [0:1];
   logic [7:0] dbg_in_buf_mem [0:127];
   logic [7:0] dbg_out_buf_mem [0:63];
   logic [7:0] dbg_head_in_buf_mem [0:255];
@@ -525,6 +509,28 @@ module top_module_hls_tb;
   localparam int CTRLW_FINAL_NORM_EPS_BASE_LO = 66;
   localparam int CTRLW_FINAL_NORM_EPS_BASE_HI = 67;
 
+  // 64-bit DDR base map for control memory programming.
+  localparam logic [63:0] BASE_WQ               = 64'h0000_0001_6000_0000;
+  localparam logic [63:0] BASE_WK               = 64'h0000_0001_6100_0000;
+  localparam logic [63:0] BASE_WV               = 64'h0000_0001_6200_0000;
+  localparam logic [63:0] BASE_WO               = 64'h0000_0001_6300_0000;
+  localparam logic [63:0] BASE_W1               = 64'h0000_0001_6400_0000;
+  localparam logic [63:0] BASE_W2               = 64'h0000_0001_6500_0000;
+  localparam logic [63:0] BASE_K_CACHE          = 64'h0000_0001_6600_0000;
+  localparam logic [63:0] BASE_V_CACHE          = 64'h0000_0001_6700_0000;
+  localparam logic [63:0] BASE_WQ_BIAS          = 64'h0000_0001_6008_0000;
+  localparam logic [63:0] BASE_WK_BIAS          = 64'h0000_0001_6108_0000;
+  localparam logic [63:0] BASE_WV_BIAS          = 64'h0000_0001_6208_0000;
+  localparam logic [63:0] BASE_WO_BIAS          = 64'h0000_0001_6308_0000;
+  localparam logic [63:0] BASE_W1_BIAS          = 64'h0000_0001_6408_0000;
+  localparam logic [63:0] BASE_W2_BIAS          = 64'h0000_0001_6508_0000;
+  localparam logic [63:0] BASE_LN0_GAMMA        = 64'h0000_0001_6800_0000;
+  localparam logic [63:0] BASE_LN1_GAMMA        = 64'h0000_0001_6900_0000;
+  localparam logic [63:0] BASE_FINAL_NORM_GAMMA = 64'h0000_0001_6C00_0000;
+  localparam logic [63:0] BASE_LN0_EPS          = 64'h0000_0001_6A00_0000;
+  localparam logic [63:0] BASE_LN1_EPS          = 64'h0000_0001_6B00_0000;
+  localparam logic [63:0] BASE_FINAL_NORM_EPS   = 64'h0000_0001_6D00_0000;
+
   typedef enum logic [2:0] {
     AXI_IDLE,
     AXI_WRITE_ADDR,
@@ -605,117 +611,129 @@ module top_module_hls_tb;
   assign error_req_fire = ctrl_can_issue && !irq_req_valid && !done_req_valid && error_req_valid;
 
   function automatic [31:0] dma_pattern_word(
-    input [31:0] base_addr,
+    input [63:0] base_addr,
     input int unsigned word_idx
   );
-    dma_pattern_word = base_addr ^ (32'h1357_0000 + word_idx);
+    dma_pattern_word = base_addr[31:0] ^ (32'h1357_0000 + word_idx);
   endfunction
 
   function automatic [8:0] ctrl_mem_addr(input int word_idx);
     ctrl_mem_addr = ADDR_CTRL_MEM_DATA_0 + (word_idx * 4);
   endfunction
 
-  function automatic bit is_k_cache_addr(input [31:0] addr);
-    is_k_cache_addr = (addr >= ctrl_words[CTRLW_K_CACHE_LO]) && (addr < (ctrl_words[CTRLW_K_CACHE_LO] + 32'h0100_0000));
+  function automatic [63:0] ctrl_base_addr64(input int lo_idx, input int hi_idx);
+    ctrl_base_addr64 = {ctrl_words[hi_idx], ctrl_words[lo_idx]};
   endfunction
 
-  function automatic bit is_v_cache_addr(input [31:0] addr);
-    is_v_cache_addr = (addr >= ctrl_words[CTRLW_V_CACHE_LO]) && (addr < (ctrl_words[CTRLW_V_CACHE_LO] + 32'h0100_0000));
+  function automatic bit in_range64(
+    input [63:0] addr,
+    input [63:0] base,
+    input [63:0] bytes
+  );
+    in_range64 = (addr >= base) && (addr < (base + bytes));
   endfunction
 
-  function automatic bit is_wq_addr(input [31:0] addr);
-    is_wq_addr = (addr >= ctrl_words[CTRLW_WQ_BASE_LO]) && (addr < (ctrl_words[CTRLW_WQ_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_k_cache_addr(input [63:0] addr);
+    is_k_cache_addr = in_range64(addr, ctrl_base_addr64(CTRLW_K_CACHE_LO, CTRLW_K_CACHE_HI), 64'h0000_0000_0100_0000);
   endfunction
 
-  function automatic bit is_wk_addr(input [31:0] addr);
-    is_wk_addr = (addr >= ctrl_words[CTRLW_WK_BASE_LO]) && (addr < (ctrl_words[CTRLW_WK_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_v_cache_addr(input [63:0] addr);
+    is_v_cache_addr = in_range64(addr, ctrl_base_addr64(CTRLW_V_CACHE_LO, CTRLW_V_CACHE_HI), 64'h0000_0000_0100_0000);
   endfunction
 
-  function automatic bit is_wv_addr(input [31:0] addr);
-    is_wv_addr = (addr >= ctrl_words[CTRLW_WV_BASE_LO]) && (addr < (ctrl_words[CTRLW_WV_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_wq_addr(input [63:0] addr);
+    is_wq_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WQ_BASE_LO, CTRLW_WQ_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
-  function automatic bit is_wo_addr(input [31:0] addr);
-    is_wo_addr = (addr >= ctrl_words[CTRLW_WO_BASE_LO]) && (addr < (ctrl_words[CTRLW_WO_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_wk_addr(input [63:0] addr);
+    is_wk_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WK_BASE_LO, CTRLW_WK_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
-  function automatic bit is_w1_addr(input [31:0] addr);
-    is_w1_addr = (addr >= ctrl_words[CTRLW_W1_BASE_LO]) && (addr < (ctrl_words[CTRLW_W1_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_wv_addr(input [63:0] addr);
+    is_wv_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WV_BASE_LO, CTRLW_WV_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
-  function automatic bit is_w2_addr(input [31:0] addr);
-    is_w2_addr = (addr >= ctrl_words[CTRLW_W2_BASE_LO]) && (addr < (ctrl_words[CTRLW_W2_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_wo_addr(input [63:0] addr);
+    is_wo_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WO_BASE_LO, CTRLW_WO_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
-  function automatic bit is_ln0_gamma_addr(input [31:0] addr);
-    is_ln0_gamma_addr = (addr >= ctrl_words[CTRLW_LN0_GAMMA_BASE_LO]) && (addr < (ctrl_words[CTRLW_LN0_GAMMA_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_w1_addr(input [63:0] addr);
+    is_w1_addr = in_range64(addr, ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
-  function automatic bit is_ln1_gamma_addr(input [31:0] addr);
-    is_ln1_gamma_addr = (addr >= ctrl_words[CTRLW_LN1_GAMMA_BASE_LO]) && (addr < (ctrl_words[CTRLW_LN1_GAMMA_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_w2_addr(input [63:0] addr);
+    is_w2_addr = in_range64(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
-  function automatic bit is_ln0_eps_addr(input [31:0] addr);
-    is_ln0_eps_addr = (addr >= ctrl_words[CTRLW_LN0_EPS_BASE_LO]) && (addr < (ctrl_words[CTRLW_LN0_EPS_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_ln0_gamma_addr(input [63:0] addr);
+    is_ln0_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN0_GAMMA_BASE_LO, CTRLW_LN0_GAMMA_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
-  function automatic bit is_ln1_eps_addr(input [31:0] addr);
-    is_ln1_eps_addr = (addr >= ctrl_words[CTRLW_LN1_EPS_BASE_LO]) && (addr < (ctrl_words[CTRLW_LN1_EPS_BASE_LO] + (RAM_REGION_WORDS << 2)));
+  function automatic bit is_ln1_gamma_addr(input [63:0] addr);
+    is_ln1_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN1_GAMMA_BASE_LO, CTRLW_LN1_GAMMA_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
+  function automatic bit is_ln0_eps_addr(input [63:0] addr);
+    is_ln0_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN0_EPS_BASE_LO, CTRLW_LN0_EPS_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
+  function automatic bit is_ln1_eps_addr(input [63:0] addr);
+    is_ln1_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN1_EPS_BASE_LO, CTRLW_LN1_EPS_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
   function automatic int unsigned region_index(
-    input [31:0] base_addr,
-    input int unsigned word_idx
+    input [63:0] addr,
+    input [63:0] base_addr
   );
-    logic [31:0] byte_addr;
+    logic [63:0] byte_off;
     begin
-      byte_addr = base_addr + (word_idx << 2);
-      region_index = byte_addr[17:2];
+      byte_off = addr - base_addr;
+      region_index = (byte_off >> 2) & (RAM_REGION_WORDS - 1);
     end
   endfunction
 
   function automatic int unsigned kv_store_index(
-    input [31:0] base_addr,
-    input int unsigned word_idx
+    input [63:0] addr,
+    input [63:0] base_addr
   );
-    logic [31:0] byte_addr;
+    logic [63:0] byte_off;
     begin
-      byte_addr = base_addr + (word_idx << 2);
-      kv_store_index = byte_addr[18:2];
+      byte_off = addr - base_addr;
+      kv_store_index = (byte_off >> 2) & (KV_STORE_WORDS - 1);
     end
   endfunction
 
   function automatic [31:0] mem_read_word(input [63:0] addr64);
-    logic [31:0] addr;
+    logic [63:0] addr;
     int unsigned idx;
     begin
-      addr = addr64[31:0];
+      addr = addr64;
       if (is_k_cache_addr(addr)) begin
-        idx = kv_store_index(addr, 0);
+        idx = kv_store_index(addr, ctrl_base_addr64(CTRLW_K_CACHE_LO, CTRLW_K_CACHE_HI));
         mem_read_word = k_cache_store[idx];
       end else if (is_v_cache_addr(addr)) begin
-        idx = kv_store_index(addr, 0);
+        idx = kv_store_index(addr, ctrl_base_addr64(CTRLW_V_CACHE_LO, CTRLW_V_CACHE_HI));
         mem_read_word = v_cache_store[idx];
       end else if (is_wq_addr(addr)) begin
-        mem_read_word = wq_ram[region_index(addr, 0)];
+        mem_read_word = wq_ram[region_index(addr, ctrl_base_addr64(CTRLW_WQ_BASE_LO, CTRLW_WQ_BASE_HI))];
       end else if (is_wk_addr(addr)) begin
-        mem_read_word = wk_ram[region_index(addr, 0)];
+        mem_read_word = wk_ram[region_index(addr, ctrl_base_addr64(CTRLW_WK_BASE_LO, CTRLW_WK_BASE_HI))];
       end else if (is_wv_addr(addr)) begin
-        mem_read_word = wv_ram[region_index(addr, 0)];
+        mem_read_word = wv_ram[region_index(addr, ctrl_base_addr64(CTRLW_WV_BASE_LO, CTRLW_WV_BASE_HI))];
       end else if (is_wo_addr(addr)) begin
-        mem_read_word = wo_ram[region_index(addr, 0)];
+        mem_read_word = wo_ram[region_index(addr, ctrl_base_addr64(CTRLW_WO_BASE_LO, CTRLW_WO_BASE_HI))];
       end else if (is_w1_addr(addr)) begin
-        mem_read_word = w1_ram[region_index(addr, 0)];
+        mem_read_word = w1_ram[region_index(addr, ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI))];
       end else if (is_w2_addr(addr)) begin
-        mem_read_word = w2_ram[region_index(addr, 0)];
+        mem_read_word = w2_ram[region_index(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI))];
       end else if (is_ln0_gamma_addr(addr)) begin
-        mem_read_word = ln0_gamma_ram[region_index(addr, 0)];
+        mem_read_word = ln0_gamma_ram[region_index(addr, ctrl_base_addr64(CTRLW_LN0_GAMMA_BASE_LO, CTRLW_LN0_GAMMA_BASE_HI))];
       end else if (is_ln1_gamma_addr(addr)) begin
-        mem_read_word = ln1_gamma_ram[region_index(addr, 0)];
+        mem_read_word = ln1_gamma_ram[region_index(addr, ctrl_base_addr64(CTRLW_LN1_GAMMA_BASE_LO, CTRLW_LN1_GAMMA_BASE_HI))];
       end else if (is_ln0_eps_addr(addr)) begin
-        mem_read_word = ln0_eps_ram[region_index(addr, 0)];
+        mem_read_word = ln0_eps_ram[region_index(addr, ctrl_base_addr64(CTRLW_LN0_EPS_BASE_LO, CTRLW_LN0_EPS_BASE_HI))];
       end else if (is_ln1_eps_addr(addr)) begin
-        mem_read_word = ln1_eps_ram[region_index(addr, 0)];
+        mem_read_word = ln1_eps_ram[region_index(addr, ctrl_base_addr64(CTRLW_LN1_EPS_BASE_LO, CTRLW_LN1_EPS_BASE_HI))];
       end else begin
         mem_read_word = dma_pattern_word(addr, 0);
       end
@@ -727,26 +745,26 @@ module top_module_hls_tb;
     input [31:0] wdata,
     input [3:0]  wstrb
   );
-    logic [31:0] addr;
+    logic [63:0] addr;
     logic [31:0] cur;
     logic [31:0] nxt;
     int unsigned idx;
     int b;
     begin
-      addr = addr64[31:0];
+      addr = addr64;
 
       if (is_k_cache_addr(addr)) begin
-        idx = kv_store_index(addr, 0);
+        idx = kv_store_index(addr, ctrl_base_addr64(CTRLW_K_CACHE_LO, CTRLW_K_CACHE_HI));
         cur = k_cache_store[idx];
       end else if (is_v_cache_addr(addr)) begin
-        idx = kv_store_index(addr, 0);
+        idx = kv_store_index(addr, ctrl_base_addr64(CTRLW_V_CACHE_LO, CTRLW_V_CACHE_HI));
         cur = v_cache_store[idx];
       end else if (is_wo_addr(addr)) begin
-        cur = wo_ram[region_index(addr, 0)];
+        cur = wo_ram[region_index(addr, ctrl_base_addr64(CTRLW_WO_BASE_LO, CTRLW_WO_BASE_HI))];
       end else if (is_w1_addr(addr)) begin
-        cur = w1_ram[region_index(addr, 0)];
+        cur = w1_ram[region_index(addr, ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI))];
       end else if (is_w2_addr(addr)) begin
-        cur = w2_ram[region_index(addr, 0)];
+        cur = w2_ram[region_index(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI))];
       end else begin
         cur = 32'h0000_0000;
       end
@@ -759,17 +777,17 @@ module top_module_hls_tb;
       end
 
       if (is_k_cache_addr(addr)) begin
-        idx = kv_store_index(addr, 0);
+        idx = kv_store_index(addr, ctrl_base_addr64(CTRLW_K_CACHE_LO, CTRLW_K_CACHE_HI));
         k_cache_store[idx] = nxt;
       end else if (is_v_cache_addr(addr)) begin
-        idx = kv_store_index(addr, 0);
+        idx = kv_store_index(addr, ctrl_base_addr64(CTRLW_V_CACHE_LO, CTRLW_V_CACHE_HI));
         v_cache_store[idx] = nxt;
       end else if (is_wo_addr(addr)) begin
-        wo_ram[region_index(addr, 0)] = nxt;
+        wo_ram[region_index(addr, ctrl_base_addr64(CTRLW_WO_BASE_LO, CTRLW_WO_BASE_HI))] = nxt;
       end else if (is_w1_addr(addr)) begin
-        w1_ram[region_index(addr, 0)] = nxt;
+        w1_ram[region_index(addr, ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI))] = nxt;
       end else if (is_w2_addr(addr)) begin
-        w2_ram[region_index(addr, 0)] = nxt;
+        w2_ram[region_index(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI))] = nxt;
       end
     end
   endtask
@@ -867,29 +885,7 @@ module top_module_hls_tb;
 
 
 
-  // Debug memory model for dbg_head_ctx_ref dual-port interface.
-  always_comb begin : p_dbg_head_ctx_mem_read
-    dbg_head_ctx_ref_q0 = '0;
-    dbg_head_ctx_ref_q1 = '0;
-    if (dbg_head_ctx_ref_ce0) begin
-      dbg_head_ctx_ref_q0 = dbg_head_ctx_mem[dbg_head_ctx_ref_address0];
-    end
-    if (dbg_head_ctx_ref_ce1) begin
-      dbg_head_ctx_ref_q1 = dbg_head_ctx_mem[dbg_head_ctx_ref_address1];
-    end
-  end
-
-  // Debug memory model for dbg_head_compute_ctx dual-port interface.
-  always_comb begin : p_dbg_head_compute_ctx_mem_read
-    dbg_head_compute_ctx_q0 = '0;
-    dbg_head_compute_ctx_q1 = '0;
-    if (dbg_head_compute_ctx_ce0) begin
-      dbg_head_compute_ctx_q0 = dbg_head_compute_ctx_mem[dbg_head_compute_ctx_address0];
-    end
-    if (dbg_head_compute_ctx_ce1) begin
-      dbg_head_compute_ctx_q1 = dbg_head_compute_ctx_mem[dbg_head_compute_ctx_address1];
-    end
-  end
+  // dbg_head_ctx_ref is write-only in this RTL.
 
   // (moved to ctx_shadow_latch)
 
@@ -949,91 +945,35 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.final_norm_eps_base_addr = {dbg_ctrl_words[66], dbg_ctrl_words[65]};
   end
 
-  // Debug memory model for dbg_in_buf dual-port interface.
-  always_comb begin : p_dbg_in_buf_mem_read
-    dbg_in_buf_q0 = 8'h00;
-    dbg_in_buf_q1 = 8'h00;
-    if (dbg_in_buf_ce0) begin
-      dbg_in_buf_q0 = dbg_in_buf_mem[dbg_in_buf_address0];
-    end
-    if (dbg_in_buf_ce1) begin
-      dbg_in_buf_q1 = dbg_in_buf_mem[dbg_in_buf_address1];
-    end
-  end
+  // dbg_in_buf/dbg_out_buf are write-only in this RTL.
 
-  // Debug memory model for dbg_out_buf dual-port interface.
-  always_comb begin : p_dbg_out_buf_mem_read
-    dbg_out_buf_q0 = 8'h00;
-    dbg_out_buf_q1 = 8'h00;
-    if (dbg_out_buf_ce0) begin
-      dbg_out_buf_q0 = dbg_out_buf_mem[dbg_out_buf_address0];
-    end
-    if (dbg_out_buf_ce1) begin
-      dbg_out_buf_q1 = dbg_out_buf_mem[dbg_out_buf_address1];
-    end
-  end
-
-  // Debug memory model for dbg_head_in_buf dual-port interface.
-  always_comb begin : p_dbg_head_in_buf_mem_read
-    dbg_head_in_buf_q0 = 8'h00;
-    dbg_head_in_buf_q1 = 8'h00;
-    if (dbg_head_in_buf_ce0) begin
-      dbg_head_in_buf_q0 = dbg_head_in_buf_mem[dbg_head_in_buf_address0];
-    end
-    if (dbg_head_in_buf_ce1) begin
-      dbg_head_in_buf_q1 = dbg_head_in_buf_mem[dbg_head_in_buf_address1];
-    end
-  end
-
-  // Debug memory model for dbg_head_out_buf dual-port interface.
-  always_comb begin : p_dbg_head_out_buf_mem_read
-    dbg_head_out_buf_q0 = 8'h00;
-    dbg_head_out_buf_q1 = 8'h00;
-    if (dbg_head_out_buf_ce0) begin
-      dbg_head_out_buf_q0 = dbg_head_out_buf_mem[dbg_head_out_buf_address0];
-    end
-    if (dbg_head_out_buf_ce1) begin
-      dbg_head_out_buf_q1 = dbg_head_out_buf_mem[dbg_head_out_buf_address1];
-    end
-  end
+  // Headed debug buffers are write-only debug egress in this RTL.
 
   // Debug memory model writes for all dual-port debug interfaces.
   always_ff @(posedge ap_clk) begin : p_dbg_mem_writes
-    if (dbg_head_ctx_ref_ce0 && dbg_head_ctx_ref_we0) begin
-      dbg_head_ctx_mem[dbg_head_ctx_ref_address0] <= dbg_head_ctx_ref_d0;
+    if (dbg_head_ctx_ref_0_ce0 && dbg_head_ctx_ref_0_we0) begin
+      dbg_head_ctx_mem[{1'b0, dbg_head_ctx_ref_0_address0}] <= dbg_head_ctx_ref_0_d0;
     end
-    if (dbg_head_ctx_ref_ce1 && dbg_head_ctx_ref_we1) begin
-      dbg_head_ctx_mem[dbg_head_ctx_ref_address1] <= dbg_head_ctx_ref_d1;
-    end
-    if (dbg_head_compute_ctx_ce0 && dbg_head_compute_ctx_we0) begin
-      dbg_head_compute_ctx_mem[dbg_head_compute_ctx_address0] <= dbg_head_compute_ctx_d0;
-    end
-    if (dbg_head_compute_ctx_ce1 && dbg_head_compute_ctx_we1) begin
-      dbg_head_compute_ctx_mem[dbg_head_compute_ctx_address1] <= dbg_head_compute_ctx_d1;
+    if (dbg_head_ctx_ref_1_ce0 && dbg_head_ctx_ref_1_we0) begin
+      dbg_head_ctx_mem[{1'b1, dbg_head_ctx_ref_1_address0}] <= dbg_head_ctx_ref_1_d0;
     end
     if (dbg_in_buf_ce0 && dbg_in_buf_we0) begin
       dbg_in_buf_mem[dbg_in_buf_address0] <= dbg_in_buf_d0;
     end
-    if (dbg_in_buf_ce1 && dbg_in_buf_we1) begin
-      dbg_in_buf_mem[dbg_in_buf_address1] <= dbg_in_buf_d1;
-    end
     if (dbg_out_buf_ce0 && dbg_out_buf_we0) begin
       dbg_out_buf_mem[dbg_out_buf_address0] <= dbg_out_buf_d0;
     end
-    if (dbg_out_buf_ce1 && dbg_out_buf_we1) begin
-      dbg_out_buf_mem[dbg_out_buf_address1] <= dbg_out_buf_d1;
+    if (dbg_head_in_buf_0_ce0 && dbg_head_in_buf_0_we0) begin
+      dbg_head_in_buf_mem[{1'b0, dbg_head_in_buf_0_address0}] <= dbg_head_in_buf_0_d0;
     end
-    if (dbg_head_in_buf_ce0 && dbg_head_in_buf_we0) begin
-      dbg_head_in_buf_mem[dbg_head_in_buf_address0] <= dbg_head_in_buf_d0;
+    if (dbg_head_in_buf_1_ce0 && dbg_head_in_buf_1_we0) begin
+      dbg_head_in_buf_mem[{1'b1, dbg_head_in_buf_1_address0}] <= dbg_head_in_buf_1_d0;
     end
-    if (dbg_head_in_buf_ce1 && dbg_head_in_buf_we1) begin
-      dbg_head_in_buf_mem[dbg_head_in_buf_address1] <= dbg_head_in_buf_d1;
+    if (dbg_head_out_buf_0_ce0 && dbg_head_out_buf_0_we0) begin
+      dbg_head_out_buf_mem[{1'b0, dbg_head_out_buf_0_address0}] <= dbg_head_out_buf_0_d0;
     end
-    if (dbg_head_out_buf_ce0 && dbg_head_out_buf_we0) begin
-      dbg_head_out_buf_mem[dbg_head_out_buf_address0] <= dbg_head_out_buf_d0;
-    end
-    if (dbg_head_out_buf_ce1 && dbg_head_out_buf_we1) begin
-      dbg_head_out_buf_mem[dbg_head_out_buf_address1] <= dbg_head_out_buf_d1;
+    if (dbg_head_out_buf_1_ce0 && dbg_head_out_buf_1_we0) begin
+      dbg_head_out_buf_mem[{1'b1, dbg_head_out_buf_1_address0}] <= dbg_head_out_buf_1_d0;
     end
   end
 
@@ -1051,9 +991,52 @@ module top_module_hls_tb;
       dbg_head_ctx_shadow[1] <= head_ctx_t'(dbg_head_ctx_mem[1]);
       dbg_head_ctx_shadow[2] <= head_ctx_t'(dbg_head_ctx_mem[2]);
       dbg_head_ctx_shadow[3] <= head_ctx_t'(dbg_head_ctx_mem[3]);
-      dbg_head_compute_ctx_shadow[0] <= compute_head_ctx_t'(dbg_head_compute_ctx_mem[0]);
-      dbg_head_compute_ctx_shadow[1] <= compute_head_ctx_t'(dbg_head_compute_ctx_mem[1]);
+      dbg_head_compute_ctx_shadow[0] <= ComputeHeadCtx_t'(dbg_head_compute_ctx_0);
+      dbg_head_compute_ctx_shadow[1] <= ComputeHeadCtx_t'(dbg_head_compute_ctx_1);
     end
+  end
+
+  // Build explicit structured debug views by cyclic factor:
+  //   head index = (slot * 2) + bank
+  always_comb begin : p_ctx_struct_views
+    int unsigned group_idx;
+
+    // Flat per-head structs for direct waveform inspection.
+    dbg_head_ctx_ref_0_struct = dbg_head_ctx_shadow[0];
+    dbg_head_ctx_ref_1_struct = dbg_head_ctx_shadow[1];
+    dbg_head_ctx_ref_2_struct = dbg_head_ctx_shadow[2];
+    dbg_head_ctx_ref_3_struct = dbg_head_ctx_shadow[3];
+
+    dbg_head_compute_ctx_0_struct = dbg_head_compute_ctx_shadow[0];
+    dbg_head_compute_ctx_1_struct = dbg_head_compute_ctx_shadow[1];
+
+    dbg_head_ctx_q_view[0][0] = '0;
+    dbg_head_ctx_q_view[0][1] = '0;
+    dbg_head_ctx_q_view[1][0] = '0;
+    dbg_head_ctx_q_view[1][1] = '0;
+
+    dbg_head_ctx_d_view[0][0] = head_ctx_t'(dbg_head_ctx_ref_0_d0);
+    dbg_head_ctx_d_view[0][1] = '0;
+    dbg_head_ctx_d_view[1][0] = head_ctx_t'(dbg_head_ctx_ref_1_d0);
+    dbg_head_ctx_d_view[1][1] = '0;
+
+    dbg_head_ctx_cyclic[0][0] = head_ctx_t'(dbg_head_ctx_mem[0]); // bank0 slot0 -> head0
+    dbg_head_ctx_cyclic[1][0] = head_ctx_t'(dbg_head_ctx_mem[1]); // bank1 slot0 -> head1
+    dbg_head_ctx_cyclic[0][1] = head_ctx_t'(dbg_head_ctx_mem[2]); // bank0 slot1 -> head2
+    dbg_head_ctx_cyclic[1][1] = head_ctx_t'(dbg_head_ctx_mem[3]); // bank1 slot1 -> head3
+
+    dbg_head_compute_ctx_cyclic[0] = ComputeHeadCtx_t'(dbg_head_compute_ctx_0);
+    dbg_head_compute_ctx_cyclic[1] = ComputeHeadCtx_t'(dbg_head_compute_ctx_1);
+
+    // Current running heads = {head_group*2 + lane}.
+    group_idx = dbg_head_group_idx;
+    if (group_idx > 1) group_idx = 1;
+    dbg_current_head_idx[0] = (group_idx << 1);
+    dbg_current_head_idx[1] = (group_idx << 1) + 1;
+    dbg_current_head_ctx[0] = dbg_head_ctx_shadow[dbg_current_head_idx[0]];
+    dbg_current_head_ctx[1] = dbg_head_ctx_shadow[dbg_current_head_idx[1]];
+    dbg_current_head_compute_ctx[0] = dbg_head_compute_ctx_shadow[0];
+    dbg_current_head_compute_ctx[1] = dbg_head_compute_ctx_shadow[1];
   end
 
   // AXI stream constants.
@@ -1444,46 +1427,46 @@ module top_module_hls_tb;
             21: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_STRIDE); ctrl_data_in <= 32'h0000_0004; end
             22: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_STRIDE); ctrl_data_in <= 32'h0000_0004; end
             23: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_STRIDE); ctrl_data_in <= 32'h0000_0004; end
-            24: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BASE_LO);      ctrl_data_in <= 32'h6000_0000; end
-            25: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BASE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            26: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BASE_LO);      ctrl_data_in <= 32'h6100_0000; end
-            27: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BASE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            28: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BASE_LO);      ctrl_data_in <= 32'h6200_0000; end
-            29: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BASE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            30: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BASE_LO);      ctrl_data_in <= 32'h6300_0000; end
-            31: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BASE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            32: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BASE_LO);      ctrl_data_in <= 32'h6400_0000; end
-            33: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BASE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            34: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BASE_LO);      ctrl_data_in <= 32'h6500_0000; end
-            35: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BASE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            36: begin ctrl_addr <= ctrl_mem_addr(CTRLW_K_CACHE_LO);      ctrl_data_in <= 32'h6600_0000; end
-            37: begin ctrl_addr <= ctrl_mem_addr(CTRLW_K_CACHE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            38: begin ctrl_addr <= ctrl_mem_addr(CTRLW_V_CACHE_LO);      ctrl_data_in <= 32'h6700_0000; end
-            39: begin ctrl_addr <= ctrl_mem_addr(CTRLW_V_CACHE_HI);      ctrl_data_in <= 32'h0000_0000; end
-            40: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BIAS_BASE_LO); ctrl_data_in <= 32'h6008_0000; end
-            41: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BIAS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            42: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BIAS_BASE_LO); ctrl_data_in <= 32'h6108_0000; end
-            43: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BIAS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            44: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BIAS_BASE_LO); ctrl_data_in <= 32'h6208_0000; end
-            45: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BIAS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            46: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BIAS_BASE_LO); ctrl_data_in <= 32'h6308_0000; end
-            47: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BIAS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            48: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BIAS_BASE_LO); ctrl_data_in <= 32'h6408_0000; end
-            49: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BIAS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            50: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BIAS_BASE_LO); ctrl_data_in <= 32'h6508_0000; end
-            51: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BIAS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            52: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_GAMMA_BASE_LO); ctrl_data_in <= 32'h6800_0000; end
-            53: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_GAMMA_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            54: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_GAMMA_BASE_LO); ctrl_data_in <= 32'h6900_0000; end
-            55: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_GAMMA_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            56: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_GAMMA_BASE_LO); ctrl_data_in <= 32'h6C00_0000; end
-            57: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_GAMMA_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            58: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_BASE_LO); ctrl_data_in <= 32'h6A00_0000; end
-            59: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            60: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_BASE_LO); ctrl_data_in <= 32'h6B00_0000; end
-            61: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
-            62: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_LO); ctrl_data_in <= 32'h6D00_0000; end
-            63: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_HI); ctrl_data_in <= 32'h0000_0000; end
+            24: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BASE_LO);      ctrl_data_in <= BASE_WQ[31:0]; end
+            25: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BASE_HI);      ctrl_data_in <= BASE_WQ[63:32]; end
+            26: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BASE_LO);      ctrl_data_in <= BASE_WK[31:0]; end
+            27: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BASE_HI);      ctrl_data_in <= BASE_WK[63:32]; end
+            28: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BASE_LO);      ctrl_data_in <= BASE_WV[31:0]; end
+            29: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BASE_HI);      ctrl_data_in <= BASE_WV[63:32]; end
+            30: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BASE_LO);      ctrl_data_in <= BASE_WO[31:0]; end
+            31: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BASE_HI);      ctrl_data_in <= BASE_WO[63:32]; end
+            32: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BASE_LO);      ctrl_data_in <= BASE_W1[31:0]; end
+            33: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BASE_HI);      ctrl_data_in <= BASE_W1[63:32]; end
+            34: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BASE_LO);      ctrl_data_in <= BASE_W2[31:0]; end
+            35: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BASE_HI);      ctrl_data_in <= BASE_W2[63:32]; end
+            36: begin ctrl_addr <= ctrl_mem_addr(CTRLW_K_CACHE_LO);      ctrl_data_in <= BASE_K_CACHE[31:0]; end
+            37: begin ctrl_addr <= ctrl_mem_addr(CTRLW_K_CACHE_HI);      ctrl_data_in <= BASE_K_CACHE[63:32]; end
+            38: begin ctrl_addr <= ctrl_mem_addr(CTRLW_V_CACHE_LO);      ctrl_data_in <= BASE_V_CACHE[31:0]; end
+            39: begin ctrl_addr <= ctrl_mem_addr(CTRLW_V_CACHE_HI);      ctrl_data_in <= BASE_V_CACHE[63:32]; end
+            40: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BIAS_BASE_LO); ctrl_data_in <= BASE_WQ_BIAS[31:0]; end
+            41: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BIAS_BASE_HI); ctrl_data_in <= BASE_WQ_BIAS[63:32]; end
+            42: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BIAS_BASE_LO); ctrl_data_in <= BASE_WK_BIAS[31:0]; end
+            43: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BIAS_BASE_HI); ctrl_data_in <= BASE_WK_BIAS[63:32]; end
+            44: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BIAS_BASE_LO); ctrl_data_in <= BASE_WV_BIAS[31:0]; end
+            45: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BIAS_BASE_HI); ctrl_data_in <= BASE_WV_BIAS[63:32]; end
+            46: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BIAS_BASE_LO); ctrl_data_in <= BASE_WO_BIAS[31:0]; end
+            47: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BIAS_BASE_HI); ctrl_data_in <= BASE_WO_BIAS[63:32]; end
+            48: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BIAS_BASE_LO); ctrl_data_in <= BASE_W1_BIAS[31:0]; end
+            49: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BIAS_BASE_HI); ctrl_data_in <= BASE_W1_BIAS[63:32]; end
+            50: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BIAS_BASE_LO); ctrl_data_in <= BASE_W2_BIAS[31:0]; end
+            51: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BIAS_BASE_HI); ctrl_data_in <= BASE_W2_BIAS[63:32]; end
+            52: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_GAMMA_BASE_LO); ctrl_data_in <= BASE_LN0_GAMMA[31:0]; end
+            53: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_GAMMA_BASE_HI); ctrl_data_in <= BASE_LN0_GAMMA[63:32]; end
+            54: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_GAMMA_BASE_LO); ctrl_data_in <= BASE_LN1_GAMMA[31:0]; end
+            55: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_GAMMA_BASE_HI); ctrl_data_in <= BASE_LN1_GAMMA[63:32]; end
+            56: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_GAMMA_BASE_LO); ctrl_data_in <= BASE_FINAL_NORM_GAMMA[31:0]; end
+            57: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_GAMMA_BASE_HI); ctrl_data_in <= BASE_FINAL_NORM_GAMMA[63:32]; end
+            58: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_BASE_LO); ctrl_data_in <= BASE_LN0_EPS[31:0]; end
+            59: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_BASE_HI); ctrl_data_in <= BASE_LN0_EPS[63:32]; end
+            60: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_BASE_LO); ctrl_data_in <= BASE_LN1_EPS[31:0]; end
+            61: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_BASE_HI); ctrl_data_in <= BASE_LN1_EPS[63:32]; end
+            62: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_LO); ctrl_data_in <= BASE_FINAL_NORM_EPS[31:0]; end
+            63: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_HI); ctrl_data_in <= BASE_FINAL_NORM_EPS[63:32]; end
             64: begin ctrl_addr <= ctrl_mem_addr(CTRLW_IRQ_MASK);        ctrl_data_in <= 32'h0000_0006; end
             default: begin ctrl_addr <= ctrl_mem_addr(CTRLW_IRQ_MASK);   ctrl_data_in <= 32'h0000_0006; end
           endcase
@@ -1512,46 +1495,46 @@ module top_module_hls_tb;
             21: ctrl_words[CTRLW_LN0_EPS_STRIDE] <= 32'h0000_0004;
             22: ctrl_words[CTRLW_LN1_EPS_STRIDE] <= 32'h0000_0004;
             23: ctrl_words[CTRLW_FINAL_NORM_EPS_STRIDE] <= 32'h0000_0004;
-            24: ctrl_words[CTRLW_WQ_BASE_LO] <= 32'h6000_0000;
-            25: ctrl_words[CTRLW_WQ_BASE_HI] <= 32'h0000_0000;
-            26: ctrl_words[CTRLW_WK_BASE_LO] <= 32'h6100_0000;
-            27: ctrl_words[CTRLW_WK_BASE_HI] <= 32'h0000_0000;
-            28: ctrl_words[CTRLW_WV_BASE_LO] <= 32'h6200_0000;
-            29: ctrl_words[CTRLW_WV_BASE_HI] <= 32'h0000_0000;
-            30: ctrl_words[CTRLW_WO_BASE_LO] <= 32'h6300_0000;
-            31: ctrl_words[CTRLW_WO_BASE_HI] <= 32'h0000_0000;
-            32: ctrl_words[CTRLW_W1_BASE_LO] <= 32'h6400_0000;
-            33: ctrl_words[CTRLW_W1_BASE_HI] <= 32'h0000_0000;
-            34: ctrl_words[CTRLW_W2_BASE_LO] <= 32'h6500_0000;
-            35: ctrl_words[CTRLW_W2_BASE_HI] <= 32'h0000_0000;
-            36: ctrl_words[CTRLW_K_CACHE_LO] <= 32'h6600_0000;
-            37: ctrl_words[CTRLW_K_CACHE_HI] <= 32'h0000_0000;
-            38: ctrl_words[CTRLW_V_CACHE_LO] <= 32'h6700_0000;
-            39: ctrl_words[CTRLW_V_CACHE_HI] <= 32'h0000_0000;
-            40: ctrl_words[CTRLW_WQ_BIAS_BASE_LO] <= 32'h6008_0000;
-            41: ctrl_words[CTRLW_WQ_BIAS_BASE_HI] <= 32'h0000_0000;
-            42: ctrl_words[CTRLW_WK_BIAS_BASE_LO] <= 32'h6108_0000;
-            43: ctrl_words[CTRLW_WK_BIAS_BASE_HI] <= 32'h0000_0000;
-            44: ctrl_words[CTRLW_WV_BIAS_BASE_LO] <= 32'h6208_0000;
-            45: ctrl_words[CTRLW_WV_BIAS_BASE_HI] <= 32'h0000_0000;
-            46: ctrl_words[CTRLW_WO_BIAS_BASE_LO] <= 32'h6308_0000;
-            47: ctrl_words[CTRLW_WO_BIAS_BASE_HI] <= 32'h0000_0000;
-            48: ctrl_words[CTRLW_W1_BIAS_BASE_LO] <= 32'h6408_0000;
-            49: ctrl_words[CTRLW_W1_BIAS_BASE_HI] <= 32'h0000_0000;
-            50: ctrl_words[CTRLW_W2_BIAS_BASE_LO] <= 32'h6508_0000;
-            51: ctrl_words[CTRLW_W2_BIAS_BASE_HI] <= 32'h0000_0000;
-            52: ctrl_words[CTRLW_LN0_GAMMA_BASE_LO] <= 32'h6800_0000;
-            53: ctrl_words[CTRLW_LN0_GAMMA_BASE_HI] <= 32'h0000_0000;
-            54: ctrl_words[CTRLW_LN1_GAMMA_BASE_LO] <= 32'h6900_0000;
-            55: ctrl_words[CTRLW_LN1_GAMMA_BASE_HI] <= 32'h0000_0000;
-            56: ctrl_words[CTRLW_FINAL_NORM_GAMMA_BASE_LO] <= 32'h6C00_0000;
-            57: ctrl_words[CTRLW_FINAL_NORM_GAMMA_BASE_HI] <= 32'h0000_0000;
-            58: ctrl_words[CTRLW_LN0_EPS_BASE_LO] <= 32'h6A00_0000;
-            59: ctrl_words[CTRLW_LN0_EPS_BASE_HI] <= 32'h0000_0000;
-            60: ctrl_words[CTRLW_LN1_EPS_BASE_LO] <= 32'h6B00_0000;
-            61: ctrl_words[CTRLW_LN1_EPS_BASE_HI] <= 32'h0000_0000;
-            62: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_LO] <= 32'h6D00_0000;
-            63: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_HI] <= 32'h0000_0000;
+            24: ctrl_words[CTRLW_WQ_BASE_LO] <= BASE_WQ[31:0];
+            25: ctrl_words[CTRLW_WQ_BASE_HI] <= BASE_WQ[63:32];
+            26: ctrl_words[CTRLW_WK_BASE_LO] <= BASE_WK[31:0];
+            27: ctrl_words[CTRLW_WK_BASE_HI] <= BASE_WK[63:32];
+            28: ctrl_words[CTRLW_WV_BASE_LO] <= BASE_WV[31:0];
+            29: ctrl_words[CTRLW_WV_BASE_HI] <= BASE_WV[63:32];
+            30: ctrl_words[CTRLW_WO_BASE_LO] <= BASE_WO[31:0];
+            31: ctrl_words[CTRLW_WO_BASE_HI] <= BASE_WO[63:32];
+            32: ctrl_words[CTRLW_W1_BASE_LO] <= BASE_W1[31:0];
+            33: ctrl_words[CTRLW_W1_BASE_HI] <= BASE_W1[63:32];
+            34: ctrl_words[CTRLW_W2_BASE_LO] <= BASE_W2[31:0];
+            35: ctrl_words[CTRLW_W2_BASE_HI] <= BASE_W2[63:32];
+            36: ctrl_words[CTRLW_K_CACHE_LO] <= BASE_K_CACHE[31:0];
+            37: ctrl_words[CTRLW_K_CACHE_HI] <= BASE_K_CACHE[63:32];
+            38: ctrl_words[CTRLW_V_CACHE_LO] <= BASE_V_CACHE[31:0];
+            39: ctrl_words[CTRLW_V_CACHE_HI] <= BASE_V_CACHE[63:32];
+            40: ctrl_words[CTRLW_WQ_BIAS_BASE_LO] <= BASE_WQ_BIAS[31:0];
+            41: ctrl_words[CTRLW_WQ_BIAS_BASE_HI] <= BASE_WQ_BIAS[63:32];
+            42: ctrl_words[CTRLW_WK_BIAS_BASE_LO] <= BASE_WK_BIAS[31:0];
+            43: ctrl_words[CTRLW_WK_BIAS_BASE_HI] <= BASE_WK_BIAS[63:32];
+            44: ctrl_words[CTRLW_WV_BIAS_BASE_LO] <= BASE_WV_BIAS[31:0];
+            45: ctrl_words[CTRLW_WV_BIAS_BASE_HI] <= BASE_WV_BIAS[63:32];
+            46: ctrl_words[CTRLW_WO_BIAS_BASE_LO] <= BASE_WO_BIAS[31:0];
+            47: ctrl_words[CTRLW_WO_BIAS_BASE_HI] <= BASE_WO_BIAS[63:32];
+            48: ctrl_words[CTRLW_W1_BIAS_BASE_LO] <= BASE_W1_BIAS[31:0];
+            49: ctrl_words[CTRLW_W1_BIAS_BASE_HI] <= BASE_W1_BIAS[63:32];
+            50: ctrl_words[CTRLW_W2_BIAS_BASE_LO] <= BASE_W2_BIAS[31:0];
+            51: ctrl_words[CTRLW_W2_BIAS_BASE_HI] <= BASE_W2_BIAS[63:32];
+            52: ctrl_words[CTRLW_LN0_GAMMA_BASE_LO] <= BASE_LN0_GAMMA[31:0];
+            53: ctrl_words[CTRLW_LN0_GAMMA_BASE_HI] <= BASE_LN0_GAMMA[63:32];
+            54: ctrl_words[CTRLW_LN1_GAMMA_BASE_LO] <= BASE_LN1_GAMMA[31:0];
+            55: ctrl_words[CTRLW_LN1_GAMMA_BASE_HI] <= BASE_LN1_GAMMA[63:32];
+            56: ctrl_words[CTRLW_FINAL_NORM_GAMMA_BASE_LO] <= BASE_FINAL_NORM_GAMMA[31:0];
+            57: ctrl_words[CTRLW_FINAL_NORM_GAMMA_BASE_HI] <= BASE_FINAL_NORM_GAMMA[63:32];
+            58: ctrl_words[CTRLW_LN0_EPS_BASE_LO] <= BASE_LN0_EPS[31:0];
+            59: ctrl_words[CTRLW_LN0_EPS_BASE_HI] <= BASE_LN0_EPS[63:32];
+            60: ctrl_words[CTRLW_LN1_EPS_BASE_LO] <= BASE_LN1_EPS[31:0];
+            61: ctrl_words[CTRLW_LN1_EPS_BASE_HI] <= BASE_LN1_EPS[63:32];
+            62: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_LO] <= BASE_FINAL_NORM_EPS[31:0];
+            63: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_HI] <= BASE_FINAL_NORM_EPS[63:32];
             64: ctrl_words[CTRLW_IRQ_MASK] <= 32'h0000_0006;
             default: ctrl_words[CTRLW_IRQ_MASK] <= 32'h0000_0006;
           endcase
@@ -1730,8 +1713,9 @@ module top_module_hls_tb;
       wo_ram[i] = 32'hA400_0000 + i;
       w1_ram[i] = 32'hA500_0000 + i;
       w2_ram[i] = 32'hA600_0000 + i;
-      ln0_gamma_ram[i] = 32'h0000_2000;
-      ln1_gamma_ram[i] = 32'h0000_2000;
+      // Give LN gamma vectors a visible ramp so per-element AXI reads are easy to inspect.
+      ln0_gamma_ram[i] = 32'h0000_2000 + i;
+      ln1_gamma_ram[i] = 32'h0000_2100 + i;
       ln0_eps_ram[i] = 32'h0000_0001;
       ln1_eps_ram[i] = 32'h0000_0001;
     end
@@ -1741,9 +1725,6 @@ module top_module_hls_tb;
     end
     for (i = 0; i < 4; i = i + 1) begin
       dbg_head_ctx_mem[i] = '0;
-    end
-    for (i = 0; i < 2; i = i + 1) begin
-      dbg_head_compute_ctx_mem[i] = '0;
     end
     for (i = 0; i < 128; i = i + 1) begin
       dbg_in_buf_mem[i] = 8'h00;
@@ -1828,26 +1809,16 @@ module top_module_hls_tb;
 
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
-    .dbg_head_ctx_ref_address0(dbg_head_ctx_ref_address0),
-    .dbg_head_ctx_ref_ce0(dbg_head_ctx_ref_ce0),
-    .dbg_head_ctx_ref_we0(dbg_head_ctx_ref_we0),
-    .dbg_head_ctx_ref_d0(dbg_head_ctx_ref_d0),
-    .dbg_head_ctx_ref_q0(dbg_head_ctx_ref_q0),
-    .dbg_head_ctx_ref_address1(dbg_head_ctx_ref_address1),
-    .dbg_head_ctx_ref_ce1(dbg_head_ctx_ref_ce1),
-    .dbg_head_ctx_ref_we1(dbg_head_ctx_ref_we1),
-    .dbg_head_ctx_ref_d1(dbg_head_ctx_ref_d1),
-    .dbg_head_ctx_ref_q1(dbg_head_ctx_ref_q1),
-    .dbg_head_compute_ctx_address0(dbg_head_compute_ctx_address0),
-    .dbg_head_compute_ctx_ce0(dbg_head_compute_ctx_ce0),
-    .dbg_head_compute_ctx_we0(dbg_head_compute_ctx_we0),
-    .dbg_head_compute_ctx_d0(dbg_head_compute_ctx_d0),
-    .dbg_head_compute_ctx_q0(dbg_head_compute_ctx_q0),
-    .dbg_head_compute_ctx_address1(dbg_head_compute_ctx_address1),
-    .dbg_head_compute_ctx_ce1(dbg_head_compute_ctx_ce1),
-    .dbg_head_compute_ctx_we1(dbg_head_compute_ctx_we1),
-    .dbg_head_compute_ctx_d1(dbg_head_compute_ctx_d1),
-    .dbg_head_compute_ctx_q1(dbg_head_compute_ctx_q1),
+    .dbg_head_ctx_ref_0_address0(dbg_head_ctx_ref_0_address0),
+    .dbg_head_ctx_ref_0_ce0(dbg_head_ctx_ref_0_ce0),
+    .dbg_head_ctx_ref_0_we0(dbg_head_ctx_ref_0_we0),
+    .dbg_head_ctx_ref_0_d0(dbg_head_ctx_ref_0_d0),
+    .dbg_head_ctx_ref_1_address0(dbg_head_ctx_ref_1_address0),
+    .dbg_head_ctx_ref_1_ce0(dbg_head_ctx_ref_1_ce0),
+    .dbg_head_ctx_ref_1_we0(dbg_head_ctx_ref_1_we0),
+    .dbg_head_ctx_ref_1_d0(dbg_head_ctx_ref_1_d0),
+    .dbg_head_compute_ctx_0(dbg_head_compute_ctx_0),
+    .dbg_head_compute_ctx_1(dbg_head_compute_ctx_1),
 
     .dbg_ctrl_mem(dbg_ctrl_mem),
     .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
@@ -1938,45 +1909,29 @@ module top_module_hls_tb;
     .dbg_in_buf_ce0(dbg_in_buf_ce0),
     .dbg_in_buf_we0(dbg_in_buf_we0),
     .dbg_in_buf_d0(dbg_in_buf_d0),
-    .dbg_in_buf_q0(dbg_in_buf_q0),
-    .dbg_in_buf_address1(dbg_in_buf_address1),
-    .dbg_in_buf_ce1(dbg_in_buf_ce1),
-    .dbg_in_buf_we1(dbg_in_buf_we1),
-    .dbg_in_buf_d1(dbg_in_buf_d1),
-    .dbg_in_buf_q1(dbg_in_buf_q1),
 
     .dbg_out_buf_address0(dbg_out_buf_address0),
     .dbg_out_buf_ce0(dbg_out_buf_ce0),
     .dbg_out_buf_we0(dbg_out_buf_we0),
     .dbg_out_buf_d0(dbg_out_buf_d0),
-    .dbg_out_buf_q0(dbg_out_buf_q0),
-    .dbg_out_buf_address1(dbg_out_buf_address1),
-    .dbg_out_buf_ce1(dbg_out_buf_ce1),
-    .dbg_out_buf_we1(dbg_out_buf_we1),
-    .dbg_out_buf_d1(dbg_out_buf_d1),
-    .dbg_out_buf_q1(dbg_out_buf_q1),
 
-    .dbg_head_in_buf_address0(dbg_head_in_buf_address0),
-    .dbg_head_in_buf_ce0(dbg_head_in_buf_ce0),
-    .dbg_head_in_buf_we0(dbg_head_in_buf_we0),
-    .dbg_head_in_buf_d0(dbg_head_in_buf_d0),
-    .dbg_head_in_buf_q0(dbg_head_in_buf_q0),
-    .dbg_head_in_buf_address1(dbg_head_in_buf_address1),
-    .dbg_head_in_buf_ce1(dbg_head_in_buf_ce1),
-    .dbg_head_in_buf_we1(dbg_head_in_buf_we1),
-    .dbg_head_in_buf_d1(dbg_head_in_buf_d1),
-    .dbg_head_in_buf_q1(dbg_head_in_buf_q1),
+    .dbg_head_in_buf_0_address0(dbg_head_in_buf_0_address0),
+    .dbg_head_in_buf_0_ce0(dbg_head_in_buf_0_ce0),
+    .dbg_head_in_buf_0_we0(dbg_head_in_buf_0_we0),
+    .dbg_head_in_buf_0_d0(dbg_head_in_buf_0_d0),
+    .dbg_head_in_buf_1_address0(dbg_head_in_buf_1_address0),
+    .dbg_head_in_buf_1_ce0(dbg_head_in_buf_1_ce0),
+    .dbg_head_in_buf_1_we0(dbg_head_in_buf_1_we0),
+    .dbg_head_in_buf_1_d0(dbg_head_in_buf_1_d0),
 
-    .dbg_head_out_buf_address0(dbg_head_out_buf_address0),
-    .dbg_head_out_buf_ce0(dbg_head_out_buf_ce0),
-    .dbg_head_out_buf_we0(dbg_head_out_buf_we0),
-    .dbg_head_out_buf_d0(dbg_head_out_buf_d0),
-    .dbg_head_out_buf_q0(dbg_head_out_buf_q0),
-    .dbg_head_out_buf_address1(dbg_head_out_buf_address1),
-    .dbg_head_out_buf_ce1(dbg_head_out_buf_ce1),
-    .dbg_head_out_buf_we1(dbg_head_out_buf_we1),
-    .dbg_head_out_buf_d1(dbg_head_out_buf_d1),
-    .dbg_head_out_buf_q1(dbg_head_out_buf_q1),
+    .dbg_head_out_buf_0_address0(dbg_head_out_buf_0_address0),
+    .dbg_head_out_buf_0_ce0(dbg_head_out_buf_0_ce0),
+    .dbg_head_out_buf_0_we0(dbg_head_out_buf_0_we0),
+    .dbg_head_out_buf_0_d0(dbg_head_out_buf_0_d0),
+    .dbg_head_out_buf_1_address0(dbg_head_out_buf_1_address0),
+    .dbg_head_out_buf_1_ce0(dbg_head_out_buf_1_ce0),
+    .dbg_head_out_buf_1_we0(dbg_head_out_buf_1_we0),
+    .dbg_head_out_buf_1_d0(dbg_head_out_buf_1_d0),
 
     .dbg_error(dbg_error),
     .dbg_error_ap_vld(dbg_error_ap_vld),

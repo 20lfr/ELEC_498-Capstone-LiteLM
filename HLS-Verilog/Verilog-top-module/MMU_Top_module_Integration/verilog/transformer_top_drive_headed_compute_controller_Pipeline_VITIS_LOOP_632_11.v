@@ -165,7 +165,7 @@ wire   [63:0] zext_ln632_fu_356_p1;
 reg   [8:0] i_fu_94;
 wire   [8:0] add_ln632_fu_336_p2;
 wire    ap_loop_init;
-reg   [8:0] ap_sig_allocacmp_i_36;
+reg   [8:0] ap_sig_allocacmp_i_40;
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_97_we0_local;
 wire   [3:0] trunc_ln632_fu_342_p1;
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_97_ce0_local;
@@ -304,9 +304,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_36 = 9'd0;
+        ap_sig_allocacmp_i_40 = 9'd0;
     end else begin
-        ap_sig_allocacmp_i_36 = i_fu_94;
+        ap_sig_allocacmp_i_40 = i_fu_94;
     end
 end
 
@@ -577,7 +577,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln632_fu_336_p2 = (ap_sig_allocacmp_i_36 + 9'd1);
+assign add_ln632_fu_336_p2 = (ap_sig_allocacmp_i_40 + 9'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -719,11 +719,11 @@ assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_99_we0 = drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_99_we0_local;
 
-assign icmp_ln632_fu_330_p2 = ((ap_sig_allocacmp_i_36 == 9'd256) ? 1'b1 : 1'b0);
+assign icmp_ln632_fu_330_p2 = ((ap_sig_allocacmp_i_40 == 9'd256) ? 1'b1 : 1'b0);
 
-assign lshr_ln_fu_346_p4 = {{ap_sig_allocacmp_i_36[7:4]}};
+assign lshr_ln_fu_346_p4 = {{ap_sig_allocacmp_i_40[7:4]}};
 
-assign trunc_ln632_fu_342_p1 = ap_sig_allocacmp_i_36[3:0];
+assign trunc_ln632_fu_342_p1 = ap_sig_allocacmp_i_40[3:0];
 
 assign zext_ln632_fu_356_p1 = lshr_ln_fu_346_p4;
 

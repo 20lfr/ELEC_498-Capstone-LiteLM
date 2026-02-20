@@ -100,7 +100,7 @@ reg    ap_ready_int;
 reg   [4:0] i_fu_70;
 wire   [4:0] add_ln714_fu_166_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_64;
+reg   [4:0] ap_sig_allocacmp_i_70;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_43_we0_local;
 wire   [2:0] trunc_ln714_fu_144_p1;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_43_ce0_local;
@@ -222,9 +222,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_64 = 5'd16;
+        ap_sig_allocacmp_i_70 = 5'd16;
     end else begin
-        ap_sig_allocacmp_i_64 = i_fu_70;
+        ap_sig_allocacmp_i_70 = i_fu_70;
     end
 end
 
@@ -367,7 +367,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln714_fu_166_p2 = (ap_sig_allocacmp_i_64 + 5'd1);
+assign add_ln714_fu_166_p2 = (ap_sig_allocacmp_i_70 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -445,8 +445,8 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0_local;
 
-assign icmp_ln714_fu_138_p2 = ((ap_sig_allocacmp_i_64 == 5'd24) ? 1'b1 : 1'b0);
+assign icmp_ln714_fu_138_p2 = ((ap_sig_allocacmp_i_70 == 5'd24) ? 1'b1 : 1'b0);
 
-assign trunc_ln714_fu_144_p1 = ap_sig_allocacmp_i_64[2:0];
+assign trunc_ln714_fu_144_p1 = ap_sig_allocacmp_i_70[2:0];
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_714_26

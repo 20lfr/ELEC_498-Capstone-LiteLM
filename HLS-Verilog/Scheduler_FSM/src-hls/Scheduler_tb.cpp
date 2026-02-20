@@ -43,12 +43,9 @@ static const char *phase_name(HeadPhase ph) {
         case HeadPhase::IDLE: return "IDLE";
         case HeadPhase::Q: return "Q";
         case HeadPhase::K: return "K";
-        case HeadPhase::K_REQUANT: return "K_RQ";
         case HeadPhase::K_WRITEBACK: return "K_WR";
         case HeadPhase::V: return "V";
-        case HeadPhase::V_REQUANT: return "V_RQ";
         case HeadPhase::V_WRITEBACK: return "V_WR";
-        case HeadPhase::REQUANT_Q: return "RQ_Q";
         case HeadPhase::ATT_SCORES: return "ATT";
         case HeadPhase::VALUE_SCALE_CLAMP: return "VAL_SCL";
         case HeadPhase::ATT_SOFTMAX: return "SOFTMAX";

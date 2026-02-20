@@ -176,12 +176,9 @@ static const char *phase_name(HeadPhase ph) {
     case HeadPhase::IDLE:              return "IDLE";
     case HeadPhase::Q:                 return "Q";
     case HeadPhase::K:                 return "K";
-    case HeadPhase::K_REQUANT:         return "K_RQ";
     case HeadPhase::K_WRITEBACK:       return "K_WR";
     case HeadPhase::V:                 return "V";
-    case HeadPhase::V_REQUANT:         return "V_RQ";
     case HeadPhase::V_WRITEBACK:       return "V_WR";
-    case HeadPhase::REQUANT_Q:         return "Q_RQ";
     case HeadPhase::ATT_SCORES:        return "ATT";
     case HeadPhase::VALUE_SCALE_CLAMP: return "SCL";
     case HeadPhase::ATT_SOFTMAX:       return "SMX";
@@ -1327,25 +1324,29 @@ static inline void write_i4(uint8_t *buf, int nibble_idx, int8_t value) {
     }
 }
 
-static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint64_t byte_idx) {
+static inline uint8_t dma_word_get_byte(const axi_gmem_word_t *buf, uint64_t byte_idx) {
     const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
-    const uint32_t word = buf[(wrapped_byte >> 2) & static_cast<uint32_t>(TOP_DMA_BUF_WORDS - 1)];
-    const uint32_t shift = (wrapped_byte & 0x3u) << 3;
-    return static_cast<uint8_t>((word >> shift) & 0xFFu);
+    const uint32_t word_idx = (wrapped_byte / AXI_GMEM_WORD_BYTES) % static_cast<uint32_t>(TOP_DMA_BUF_WORDS);
+    const uint32_t lane = wrapped_byte % AXI_GMEM_WORD_BYTES;
+    const axi_gmem_word_t word = buf[word_idx];
+    const uint32_t hi = ((lane + 1u) * 8u) - 1u;
+    const uint32_t lo = lane * 8u;
+    return static_cast<uint8_t>(word.range(hi, lo));
 }
 
-static inline void dma_word_set_byte(uint32_t *buf, uint64_t byte_idx, uint8_t value) {
+static inline void dma_word_set_byte(axi_gmem_word_t *buf, uint64_t byte_idx, uint8_t value) {
     const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
-    const uint32_t word_idx = (wrapped_byte >> 2) & static_cast<uint32_t>(TOP_DMA_BUF_WORDS - 1);
-    const uint32_t shift = (wrapped_byte & 0x3u) << 3;
-    uint32_t word = buf[word_idx];
-    word &= ~(0xFFu << shift);
-    word |= (static_cast<uint32_t>(value) << shift);
+    const uint32_t word_idx = (wrapped_byte / AXI_GMEM_WORD_BYTES) % static_cast<uint32_t>(TOP_DMA_BUF_WORDS);
+    const uint32_t lane = wrapped_byte % AXI_GMEM_WORD_BYTES;
+    axi_gmem_word_t word = buf[word_idx];
+    const uint32_t hi = ((lane + 1u) * 8u) - 1u;
+    const uint32_t lo = lane * 8u;
+    word.range(hi, lo) = static_cast<ap_uint<8> >(value);
     buf[word_idx] = word;
 }
 
 static void seed_ln_params_ddr(const ControlMemSpace &ctrl,
-                               uint32_t *ddr_mem) {
+                               axi_gmem_word_t *ddr_mem) {
     auto write_i32_le = [&](uint64_t addr, int32_t value) {
         const uint32_t u = static_cast<uint32_t>(value);
         dma_word_set_byte(ddr_mem, addr + 0, static_cast<uint8_t>(u & 0xFFu));
@@ -1392,7 +1393,7 @@ int main() {
     uint32_t dma_addr    = 0;
     uint32_t dma_rx_word = 0;
     uint32_t dma_tx_word = 0;
-    uint32_t ddr_mem[TOP_DMA_BUF_WORDS] = {};
+    axi_gmem_word_t ddr_mem[TOP_DMA_BUF_WORDS] = {};
 
     hls::stream<axis8_t> s_axis_in("s_axis_in");
     hls::stream<axis8_t> m_axis_out("m_axis_out");
@@ -1775,8 +1776,8 @@ int main() {
         // Legacy DMA debug fields (DMA is now inside top/MMU over AXI-Full).
         dma_start = false;
         dma_addr = 0;
-        dma_rx_word = ddr_mem[0];
-        dma_tx_word = ddr_mem[1];
+        dma_rx_word = static_cast<uint32_t>(ddr_mem[0] & 0xFFFF'FFFFu);
+        dma_tx_word = static_cast<uint32_t>(ddr_mem[1] & 0xFFFF'FFFFu);
 
         transformer_top(
             s_axis_in,

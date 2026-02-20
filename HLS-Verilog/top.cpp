@@ -1,9 +1,32 @@
 #include "top.hpp"
 #include "MMU/mmu_luka.hpp"
 
-#ifndef TOP_ENABLE_HEAVY_DEBUG_MIRRORS
-#define TOP_ENABLE_HEAVY_DEBUG_MIRRORS 0
-#endif
+static inline uint8_t dma_buf_get_byte_u32(const uint32_t *buf, uint32_t byte_idx) {
+    const uint32_t word = buf[byte_idx / static_cast<uint32_t>(sizeof(uint32_t))];
+    const uint32_t shift = (byte_idx % static_cast<uint32_t>(sizeof(uint32_t))) << 3;
+    return static_cast<uint8_t>((word >> shift) & 0xFFu);
+}
+
+static inline void dma_buf_set_byte_u32(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
+    const uint32_t word_idx = byte_idx / static_cast<uint32_t>(sizeof(uint32_t));
+    const uint32_t shift = (byte_idx % static_cast<uint32_t>(sizeof(uint32_t))) << 3;
+    uint32_t word = buf[word_idx];
+    word &= ~(0xFFu << shift);
+    word |= (static_cast<uint32_t>(value) << shift);
+    buf[word_idx] = word;
+}
+
+static inline uint8_t gmem_get_byte(const axi_gmem_word_t &word, uint32_t lane) {
+    const uint32_t hi = ((lane + 1u) * 8u) - 1u;
+    const uint32_t lo = lane * 8u;
+    return static_cast<uint8_t>(word.range(hi, lo));
+}
+
+static inline void gmem_set_byte(axi_gmem_word_t &word, uint32_t lane, uint8_t value) {
+    const uint32_t hi = ((lane + 1u) * 8u) - 1u;
+    const uint32_t lo = lane * 8u;
+    word.range(hi, lo) = static_cast<ap_uint<8> >(value);
+}
 
 // Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
 void transformer_top(
@@ -12,7 +35,7 @@ void transformer_top(
     // ------------------------------------------------------------
     hls::stream<axis8_t> &s_axis_in,
     hls::stream<axis8_t> &m_axis_out,
-    volatile uint32_t *ddr_mem,
+    volatile axi_gmem_word_t *ddr_mem,
 
     // ------------------------------------------------------------
     // AXI4-LITE INTERFACING (PL <-> PS)
@@ -105,10 +128,10 @@ void transformer_top(
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 #pragma HLS INTERFACE ap_none port=irq_ps
-#if TOP_ENABLE_HEAVY_DEBUG_MIRRORS
+#pragma HLS ARRAY_PARTITION variable=dbg_head_ctx_ref cyclic factor=HEADS_PARALLEL dim=1
+#pragma HLS ARRAY_PARTITION variable=dbg_head_compute_ctx cyclic factor=HEADS_PARALLEL dim=1
 #pragma HLS ARRAY_PARTITION variable=dbg_head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=dbg_head_out_buf complete dim=1
-#endif
 
     bool done                   = false;    // Scheduler done flag
     bool scheduler_error        = false;
@@ -124,6 +147,7 @@ void transformer_top(
     static uint32_t         compute_instruction            = 0;
     static SchedState       state_local                    = S_IDLE;
     static HeadCtx          head_ctx_local[NUM_HEADS];
+#pragma HLS ARRAY_PARTITION variable=head_ctx_local cyclic factor=HEADS_PARALLEL dim=1
     static ComputeHeadCtx   head_compute_ctx_local[HEADS_PARALLEL];
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx_local complete dim=1
 
@@ -368,6 +392,7 @@ void transformer_top(
             head_compute_ctx_local[lane].mem_transfer_done = false;
         }
     }
+    
     bool head_error_any = false;
     drive_headed_compute_controller(
         head_compute_ctx_local,
@@ -437,21 +462,33 @@ void transformer_top(
         if (dma_countdown_local > 0) {
             dma_countdown_local--;
         } else {
-            const uint32_t words = (dma_len_latched_local + 3u) >> 2;
-            const uint64_t base_word = (dma_addr_latched_local >> 2);
-            for (uint32_t i = 0; i < words; ++i) {
+            const uint32_t bytes = dma_len_latched_local;
+            if (!dma_is_write_latched_local) {
+                const uint32_t rx_words = (bytes + 3u) >> 2;
+                for (uint32_t i = 0; i < rx_words; ++i) {
 #pragma HLS PIPELINE II=1
-                // For synthesized RTL, preserve full DDR addressing.
+                    dma_rx_buf_local[i] = 0;
+                }
+            }
+            for (uint32_t i = 0; i < bytes; ++i) {
+#pragma HLS PIPELINE II=1
+                const uint64_t byte_addr = dma_addr_latched_local + static_cast<uint64_t>(i);
+                const uint64_t word_idx_raw =
+                    byte_addr / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
+                const uint32_t lane =
+                    static_cast<uint32_t>(byte_addr % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
 #ifdef __SYNTHESIS__
-                const uint64_t idx = base_word + static_cast<uint64_t>(i);
+                const uint64_t idx = word_idx_raw;
 #else
                 // In C-sim, keep accesses bounded to the local mock backing array.
-                const uint32_t idx = static_cast<uint32_t>((base_word + static_cast<uint64_t>(i)) & (TOP_DMA_BUF_WORDS - 1));
+                const uint64_t idx = word_idx_raw % static_cast<uint64_t>(TOP_DMA_BUF_WORDS);
 #endif
+                axi_gmem_word_t beat = ddr_mem[idx];
                 if (dma_is_write_latched_local) {
-                    ddr_mem[idx] = dma_tx_buf_local[i];
+                    gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, i));
+                    ddr_mem[idx] = beat;
                 } else {
-                    dma_rx_buf_local[i] = ddr_mem[idx];
+                    dma_buf_set_byte_u32(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
                 }
             }
             dma_busy_local = false;
@@ -460,7 +497,6 @@ void transformer_top(
     } else {
         dma_done_local = false;
     }
-
     if (!stream_tx_active_local && stream_start_local) {
         stream_tx_active_local = true;
         stream_tx_index_local = 0;
@@ -528,7 +564,6 @@ void transformer_top(
         for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
             dbg_stream_in_buf[i] = stream_in_buf_local[i];
         }
-#if TOP_ENABLE_HEAVY_DEBUG_MIRRORS
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
     // #pragma HLS PIPELINE II=1
             dbg_in_buf[i] = mmu_in_buf[i];
@@ -550,10 +585,9 @@ void transformer_top(
             }
         }
         for (int i = 0; i < NUM_HEADS; ++i) {
-    #pragma HLS UNROLL
+#pragma HLS UNROLL
             dbg_head_ctx_ref[i] = head_ctx_local[i];
         }
-#endif
         control_reg   = ctrl_mem.control;
         irq_mask_reg   = ctrl_mem.irq_mask;
         irq_clear_reg  = ctrl_mem.irq_clear;

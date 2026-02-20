@@ -31,8 +31,8 @@ constexpr int DMA_QUEUE_DEPTH = 16;
 constexpr int COMPUTE_QUEUE_DEPTH = 16;
 constexpr int DMA_BUF_BYTES = 65536;
 #endif
-constexpr int DMA_BUF_WORDS = DMA_BUF_BYTES / static_cast<int>(sizeof(uint32_t));
-static_assert((DMA_BUF_BYTES % static_cast<int>(sizeof(uint32_t))) == 0, "DMA_BUF_BYTES must be word-aligned");
+constexpr int DMA_BUF_WORDS = DMA_BUF_BYTES / AXI_GMEM_WORD_BYTES;
+static_assert((DMA_BUF_BYTES % AXI_GMEM_WORD_BYTES) == 0, "DMA_BUF_BYTES must be word-aligned");
 
 enum class ComputeReqType : uint8_t {
     NONE = 0,

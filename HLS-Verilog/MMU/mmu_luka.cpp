@@ -99,15 +99,15 @@ static inline int decode_s8(uint32_t v) {
 
 static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint32_t byte_idx) {
 #pragma HLS INLINE
-    const uint32_t word = buf[byte_idx >> 2];
-    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    const uint32_t word = buf[byte_idx / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES)];
+    const uint32_t shift = (byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES)) << 3;
     return static_cast<uint8_t>((word >> shift) & 0xFFu);
 }
 
 static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
 #pragma HLS INLINE
-    const uint32_t word_idx = byte_idx >> 2;
-    const uint32_t shift = (byte_idx & 0x3u) << 3;
+    const uint32_t word_idx = byte_idx / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t shift = (byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES)) << 3;
     uint32_t word = buf[word_idx];
     word &= ~(0xFFu << shift);
     word |= (static_cast<uint32_t>(value) << shift);
@@ -115,7 +115,9 @@ static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t v
 }
 
 static inline void dma_word_clear_bytes(uint32_t *buf, uint32_t bytes) {
-    const uint32_t words = (bytes + 3u) >> 2;
+    const uint32_t words =
+        (bytes + static_cast<uint32_t>(AXI_GMEM_WORD_BYTES - 1))
+        / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
     for (uint32_t i = 0; i < words; ++i) {
 #pragma HLS PIPELINE II=1
         buf[i] = 0;

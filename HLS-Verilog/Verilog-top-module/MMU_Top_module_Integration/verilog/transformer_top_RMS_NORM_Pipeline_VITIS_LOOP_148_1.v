@@ -87,7 +87,7 @@ wire    ap_block_pp0_stage0;
 wire    ap_loop_init;
 reg   [4:0] i_fu_104;
 wire   [4:0] add_ln148_fu_230_p2;
-reg   [4:0] ap_sig_allocacmp_i_78;
+reg   [4:0] ap_sig_allocacmp_i_84;
 reg    ap_loop_exit_ready_pp0_iter1_reg;
 reg    ap_loop_exit_ready_pp0_iter2_reg;
 wire    ap_block_pp0_stage0_01001;
@@ -171,7 +171,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 8 ))
-sparsemux_33_4_8_1_1_U1014(
+sparsemux_33_4_8_1_1_U1016(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_314),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_315),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_316),
@@ -200,7 +200,7 @@ transformer_top_mac_muladd_8s_8s_20s_20_4_1 #(
     .din1_WIDTH( 8 ),
     .din2_WIDTH( 20 ),
     .dout_WIDTH( 20 ))
-mac_muladd_8s_8s_20s_20_4_1_U1015(
+mac_muladd_8s_8s_20s_20_4_1_U1017(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_333_p0),
@@ -356,9 +356,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_78 = 5'd0;
+        ap_sig_allocacmp_i_84 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_78 = i_fu_104;
+        ap_sig_allocacmp_i_84 = i_fu_104;
     end
 end
 
@@ -389,7 +389,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln148_fu_230_p2 = (ap_sig_allocacmp_i_78 + 5'd1);
+assign add_ln148_fu_230_p2 = (ap_sig_allocacmp_i_84 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -415,7 +415,7 @@ assign grp_fu_333_p0 = sext_ln149_fu_312_p1;
 
 assign grp_fu_333_p1 = sext_ln149_fu_312_p1;
 
-assign icmp_ln148_fu_224_p2 = ((ap_sig_allocacmp_i_78 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln148_fu_224_p2 = ((ap_sig_allocacmp_i_84 == 5'd16) ? 1'b1 : 1'b0);
 
 assign sext_ln149_fu_312_p1 = $signed(tmp_fu_240_p35);
 
@@ -423,6 +423,6 @@ assign square_out = ap_sig_allocacmp_square_2[18:0];
 
 assign tmp_fu_240_p33 = 'bx;
 
-assign tmp_fu_240_p34 = ap_sig_allocacmp_i_78[3:0];
+assign tmp_fu_240_p34 = ap_sig_allocacmp_i_84[3:0];
 
 endmodule //transformer_top_RMS_NORM_Pipeline_VITIS_LOOP_148_1

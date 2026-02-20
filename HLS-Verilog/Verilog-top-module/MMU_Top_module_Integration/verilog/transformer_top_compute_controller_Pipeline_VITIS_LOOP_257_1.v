@@ -604,7 +604,7 @@ wire   [63:0] zext_ln231_fu_1035_p1;
 reg   [4:0] i_fu_198;
 wire   [4:0] add_ln257_fu_854_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_77;
+reg   [4:0] ap_sig_allocacmp_i_83;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97_ce0_local;
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96_ce0_local;
@@ -869,7 +869,7 @@ exp_lut_q15_U(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U684(
+sparsemux_33_4_16_1_1_U686(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_98_q0),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_97_q0),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_96_q0),
@@ -897,7 +897,7 @@ transformer_top_udiv_31ns_16ns_15_35_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 15 ))
-udiv_31ns_16ns_15_35_1_U685(
+udiv_31ns_16ns_15_35_1_U687(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_1077_p0),
@@ -912,7 +912,7 @@ transformer_top_udiv_30ns_16ns_15_34_1 #(
     .din0_WIDTH( 30 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 15 ))
-udiv_30ns_16ns_15_34_1_U686(
+udiv_30ns_16ns_15_34_1_U688(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_1122_p0),
@@ -959,7 +959,7 @@ udiv_30ns_16ns_15_34_1_U686(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U687(
+sparsemux_33_4_16_1_1_U689(
     .din0(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_86_q0),
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_87_q0),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_88_q0),
@@ -987,7 +987,7 @@ transformer_top_mul_16s_15ns_31_1_1 #(
     .din0_WIDTH( 16 ),
     .din1_WIDTH( 15 ),
     .dout_WIDTH( 31 ))
-mul_16s_15ns_31_1_1_U688(
+mul_16s_15ns_31_1_1_U690(
     .din0(tmp_85_fu_1170_p35),
     .din1(prod_fu_1249_p1),
     .dout(prod_fu_1249_p2)
@@ -1876,9 +1876,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_77 = 5'd0;
+        ap_sig_allocacmp_i_83 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_77 = i_fu_198;
+        ap_sig_allocacmp_i_83 = i_fu_198;
     end
 end
 
@@ -2427,7 +2427,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln257_fu_854_p2 = (ap_sig_allocacmp_i_77 + 5'd1);
+assign add_ln257_fu_854_p2 = (ap_sig_allocacmp_i_83 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -2635,7 +2635,7 @@ assign grp_fu_1122_p10 = denom_fu_1090_p3;
 
 assign icmp_ln227_fu_1019_p2 = ((x_q15_assign_fu_897_p35 == 16'd32768) ? 1'b1 : 1'b0);
 
-assign icmp_ln257_fu_848_p2 = ((ap_sig_allocacmp_i_77 == 5'd24) ? 1'b1 : 1'b0);
+assign icmp_ln257_fu_848_p2 = ((ap_sig_allocacmp_i_83 == 5'd24) ? 1'b1 : 1'b0);
 
 assign idx_fu_1006_p3 = {{xor_ln230_fu_990_p2}, {part_sel_fu_996_p4}};
 
@@ -2753,7 +2753,7 @@ assign tmp_226_fu_982_p3 = neg_fu_976_p2[32'd15];
 
 assign tmp_85_fu_1170_p33 = 'bx;
 
-assign tmp_fu_864_p3 = ap_sig_allocacmp_i_77[32'd4];
+assign tmp_fu_864_p3 = ap_sig_allocacmp_i_83[32'd4];
 
 assign tmp_s_fu_1098_p4 = {{e_fu_1083_p3[14:1]}};
 
@@ -2761,7 +2761,7 @@ assign trunc_ln241_fu_1165_p1 = grp_fu_1077_p2[14:0];
 
 assign trunc_ln247_fu_1128_p1 = grp_fu_1122_p2[14:0];
 
-assign trunc_ln257_fu_860_p1 = ap_sig_allocacmp_i_77[3:0];
+assign trunc_ln257_fu_860_p1 = ap_sig_allocacmp_i_83[3:0];
 
 assign x_q15_assign_fu_897_p33 = 'bx;
 

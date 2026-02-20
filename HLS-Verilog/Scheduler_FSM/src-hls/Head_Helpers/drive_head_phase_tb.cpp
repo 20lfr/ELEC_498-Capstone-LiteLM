@@ -12,12 +12,9 @@ static const char* phase_str(HeadPhase phase) {
         case HeadPhase::IDLE: return "IDLE";
         case HeadPhase::Q: return "Q";
         case HeadPhase::K: return "K";
-        case HeadPhase::K_REQUANT: return "K_RQ";
         case HeadPhase::K_WRITEBACK: return "K_WB";
         case HeadPhase::V: return "V";
-        case HeadPhase::V_REQUANT: return "V_RQ";
         case HeadPhase::V_WRITEBACK: return "V_WB";
-        case HeadPhase::REQUANT_Q: return "RQ_Q";
         case HeadPhase::ATT_SCORES: return "ATT_SCO";
         case HeadPhase::VALUE_SCALE_CLAMP: return "VAL_SCL";
         case HeadPhase::ATT_SOFTMAX: return "SOFT";

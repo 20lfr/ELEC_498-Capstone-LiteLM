@@ -326,11 +326,11 @@ reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [6:0] or_ln_fu_347_p3;
-wire   [2:0] i_63_load_fu_320_p1;
+wire   [2:0] i_69_load_fu_320_p1;
 reg   [2:0] i_fu_178;
 wire   [2:0] add_ln731_fu_329_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_i_63;
+reg   [2:0] ap_sig_allocacmp_i_69;
 wire   [4:0] shl_ln9_fu_335_p3;
 wire   [5:0] zext_ln733_fu_343_p1;
 reg    ap_done_reg;
@@ -437,14 +437,14 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_63 = 3'd0;
+        ap_sig_allocacmp_i_69 = 3'd0;
     end else begin
-        ap_sig_allocacmp_i_63 = i_fu_178;
+        ap_sig_allocacmp_i_69 = i_fu_178;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_63_load_fu_320_p1 == 3'd0))) begin
+    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_69_load_fu_320_p1 == 3'd0))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_121_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_121_ap_vld = 1'b0;
@@ -452,7 +452,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_63_load_fu_320_p1 == 3'd1))) begin
+    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_69_load_fu_320_p1 == 3'd1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_122_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_122_ap_vld = 1'b0;
@@ -460,7 +460,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_63_load_fu_320_p1 == 3'd2))) begin
+    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_69_load_fu_320_p1 == 3'd2))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123_ap_vld = 1'b0;
@@ -468,7 +468,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_63_load_fu_320_p1 == 3'd3))) begin
+    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_69_load_fu_320_p1 == 3'd3))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124_ap_vld = 1'b0;
@@ -476,7 +476,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_63_load_fu_320_p1 == 3'd4))) begin
+    if (((icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (i_69_load_fu_320_p1 == 3'd4))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125_ap_vld = 1'b0;
@@ -484,7 +484,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~(i_63_load_fu_320_p1 == 3'd4) & ~(i_63_load_fu_320_p1 == 3'd3) & ~(i_63_load_fu_320_p1 == 3'd2) & ~(i_63_load_fu_320_p1 == 3'd1) & ~(i_63_load_fu_320_p1 == 3'd0) & (icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if ((~(i_69_load_fu_320_p1 == 3'd4) & ~(i_69_load_fu_320_p1 == 3'd3) & ~(i_69_load_fu_320_p1 == 3'd2) & ~(i_69_load_fu_320_p1 == 3'd1) & ~(i_69_load_fu_320_p1 == 3'd0) & (icmp_ln731_fu_323_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126_ap_vld = 1'b1;
     end else begin
         compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126_ap_vld = 1'b0;
@@ -502,7 +502,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln731_fu_329_p2 = (ap_sig_allocacmp_i_63 + 3'd1);
+assign add_ln731_fu_329_p2 = (ap_sig_allocacmp_i_69 + 3'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -658,13 +658,13 @@ assign grp_read_i32_fu_4972_p_din8 = p_ZZ15transformer_topRN3hls6streamINS_4axis
 
 assign grp_read_i32_fu_4972_p_din9 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_64;
 
-assign i_63_load_fu_320_p1 = ap_sig_allocacmp_i_63;
+assign i_69_load_fu_320_p1 = ap_sig_allocacmp_i_69;
 
-assign icmp_ln731_fu_323_p2 = ((ap_sig_allocacmp_i_63 == 3'd6) ? 1'b1 : 1'b0);
+assign icmp_ln731_fu_323_p2 = ((ap_sig_allocacmp_i_69 == 3'd6) ? 1'b1 : 1'b0);
 
 assign or_ln_fu_347_p3 = {{1'd1}, {zext_ln733_fu_343_p1}};
 
-assign shl_ln9_fu_335_p3 = {{ap_sig_allocacmp_i_63}, {2'd0}};
+assign shl_ln9_fu_335_p3 = {{ap_sig_allocacmp_i_69}, {2'd0}};
 
 assign zext_ln733_fu_343_p1 = shl_ln9_fu_335_p3;
 

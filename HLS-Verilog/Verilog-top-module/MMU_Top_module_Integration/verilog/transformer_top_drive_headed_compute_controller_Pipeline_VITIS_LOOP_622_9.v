@@ -114,10 +114,10 @@ reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [3:0] trunc_ln622_fu_110_p1;
-reg   [4:0] i_39_fu_86;
+reg   [4:0] i_fu_86;
 wire   [4:0] add_ln622_fu_104_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i;
+reg   [4:0] ap_sig_allocacmp_i_44;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -131,7 +131,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_39_fu_86 = 5'd0;
+#0 i_fu_86 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -173,9 +173,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         if ((icmp_ln622_fu_98_p2 == 1'd0)) begin
-            i_39_fu_86 <= add_ln622_fu_104_p2;
+            i_fu_86 <= add_ln622_fu_104_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_39_fu_86 <= 5'd0;
+            i_fu_86 <= 5'd0;
         end
     end
 end
@@ -222,9 +222,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i = 5'd0;
+        ap_sig_allocacmp_i_44 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i = i_39_fu_86;
+        ap_sig_allocacmp_i_44 = i_fu_86;
     end
 end
 
@@ -367,7 +367,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln622_fu_104_p2 = (ap_sig_allocacmp_i + 5'd1);
+assign add_ln622_fu_104_p2 = (ap_sig_allocacmp_i_44 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -413,8 +413,8 @@ assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_39 = 8'd0;
 
-assign icmp_ln622_fu_98_p2 = ((ap_sig_allocacmp_i == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln622_fu_98_p2 = ((ap_sig_allocacmp_i_44 == 5'd16) ? 1'b1 : 1'b0);
 
-assign trunc_ln622_fu_110_p1 = ap_sig_allocacmp_i[3:0];
+assign trunc_ln622_fu_110_p1 = ap_sig_allocacmp_i_44[3:0];
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_622_9

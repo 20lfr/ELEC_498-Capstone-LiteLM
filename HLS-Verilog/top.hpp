@@ -12,15 +12,17 @@
 #include "MMU/mmu_luka.hpp"
 
 constexpr int TOP_DMA_BUF_BYTES = 65536;
-constexpr int TOP_DMA_BUF_WORDS = TOP_DMA_BUF_BYTES / static_cast<int>(sizeof(uint32_t));
-static_assert((TOP_DMA_BUF_BYTES % static_cast<int>(sizeof(uint32_t))) == 0, "TOP_DMA_BUF_BYTES must be word-aligned");
+constexpr int TOP_DMA_BUF_WORDS = TOP_DMA_BUF_BYTES / AXI_GMEM_WORD_BYTES;
+static_assert((TOP_DMA_BUF_BYTES % AXI_GMEM_WORD_BYTES) == 0, "TOP_DMA_BUF_BYTES must be word-aligned");
+static_assert(static_cast<int>(sizeof(axi_gmem_word_t)) == AXI_GMEM_WORD_BYTES,
+              "axi_gmem_word_t width must match AXI_GMEM_WORD_BYTES");
 using axis8_t = ap_axiu<8, 0, 0, 0>;
 
 // Top-level wrapper prototype
 void transformer_top(
     hls::stream<axis8_t> &s_axis_in,    // [INPUT]  AXI4-Stream ingress
     hls::stream<axis8_t> &m_axis_out,   // [OUTPUT] AXI4-Stream egress
-    volatile uint32_t *ddr_mem,         // [BOTH]   AXI4-Full external memory
+    volatile axi_gmem_word_t *ddr_mem,  // [BOTH]   AXI4-Full external memory
     ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
     StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
     bool &irq_ps,                       // [OUTPUT] Interrupt signal

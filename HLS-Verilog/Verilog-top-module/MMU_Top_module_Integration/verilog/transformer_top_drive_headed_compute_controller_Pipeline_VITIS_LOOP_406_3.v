@@ -149,10 +149,10 @@ wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [14:0] prob_q15_fu_370_p3;
 wire   [3:0] trunc_ln406_fu_271_p1;
-reg   [4:0] i_54_fu_140;
+reg   [4:0] i_fu_140;
 wire   [4:0] add_ln406_fu_265_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i;
+reg   [4:0] ap_sig_allocacmp_i_60;
 wire   [15:0] mul_ln408_fu_246_p1;
 wire   [15:0] tmp_64_fu_275_p33;
 wire   [3:0] tmp_64_fu_275_p34;
@@ -190,7 +190,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_54_fu_140 = 5'd0;
+#0 i_fu_140 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -200,7 +200,7 @@ transformer_top_mul_31s_16ns_31_1_1 #(
     .din0_WIDTH( 31 ),
     .din1_WIDTH( 16 ),
     .dout_WIDTH( 31 ))
-mul_31s_16ns_31_1_1_U2263(
+mul_31s_16ns_31_1_1_U2265(
     .din0(inv_sum_q15_1),
     .din1(mul_ln408_fu_246_p1),
     .dout(mul_ln408_fu_246_p2)
@@ -244,7 +244,7 @@ mul_31s_16ns_31_1_1_U2263(
     .def_WIDTH( 16 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 16 ))
-sparsemux_33_4_16_1_1_U2264(
+sparsemux_33_4_16_1_1_U2266(
     .din0(exp_buf_reload),
     .din1(exp_buf_1_reload),
     .din2(exp_buf_2_reload),
@@ -304,9 +304,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         if ((icmp_ln406_fu_259_p2 == 1'd0)) begin
-            i_54_fu_140 <= add_ln406_fu_265_p2;
+            i_fu_140 <= add_ln406_fu_265_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_54_fu_140 <= 5'd0;
+            i_fu_140 <= 5'd0;
         end
     end
 end
@@ -353,9 +353,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i = 5'd0;
+        ap_sig_allocacmp_i_60 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i = i_54_fu_140;
+        ap_sig_allocacmp_i_60 = i_fu_140;
     end
 end
 
@@ -498,7 +498,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln406_fu_265_p2 = (ap_sig_allocacmp_i + 5'd1);
+assign add_ln406_fu_265_p2 = (ap_sig_allocacmp_i_60 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -544,7 +544,7 @@ assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_31 = prob_q15_fu_370_p3;
 
-assign icmp_ln406_fu_259_p2 = ((ap_sig_allocacmp_i == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln406_fu_259_p2 = ((ap_sig_allocacmp_i_60 == 5'd16) ? 1'b1 : 1'b0);
 
 assign mul_ln408_fu_246_p1 = mul_ln408_fu_246_p10;
 
@@ -554,11 +554,11 @@ assign prob_q15_fu_370_p3 = ((tmp_fu_362_p3[0:0] == 1'b1) ? 15'd32767 : trunc_ln
 
 assign tmp_64_fu_275_p33 = 'bx;
 
-assign tmp_64_fu_275_p34 = ap_sig_allocacmp_i[3:0];
+assign tmp_64_fu_275_p34 = ap_sig_allocacmp_i_60[3:0];
 
 assign tmp_fu_362_p3 = mul_ln408_fu_246_p2[32'd30];
 
-assign trunc_ln406_fu_271_p1 = ap_sig_allocacmp_i[3:0];
+assign trunc_ln406_fu_271_p1 = ap_sig_allocacmp_i_60[3:0];
 
 assign trunc_ln409_1_fu_352_p4 = {{mul_ln408_fu_246_p2[29:15]}};
 

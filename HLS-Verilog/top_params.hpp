@@ -148,6 +148,13 @@ constexpr int       D_TILE_W1       = D_FFN * 2 / NUM_W1_TILES;     // Tile size
 constexpr int       D_TILE_W2       = D_MODEL   / NUM_W2_TILES;
 constexpr int       STREAM_IN_BUF_BYTES  = D_MODEL;                 // Token ingress payload (int8 activations)
 constexpr int       STREAM_OUT_BUF_BYTES = D_MODEL * 4;             // Streamed egress payload (e.g. final norm int32)
+
+// AXI-Full DDR beat sizing (one m_axi_gmem data beat).
+// Keep this aligned with the top-level DDR port element type.
+constexpr int       AXI_GMEM_WORD_BYTES  = 4;
+constexpr int       AXI_GMEM_WORD_BITS   = AXI_GMEM_WORD_BYTES * 8;
+static_assert((AXI_GMEM_WORD_BITS % 8) == 0, "AXI_GMEM_WORD_BITS must be byte aligned");
+using axi_gmem_word_t = ap_uint<AXI_GMEM_WORD_BITS>;
 constexpr int       CONTEXT_LENGTH  = 16;                           // Context window length
 constexpr int       MAX_CYCLIC_SIZE = 16;                           // << for UNROLL parallelism in MAC units
 constexpr int       HEADS_PARALLEL  = 2;
@@ -208,18 +215,15 @@ enum class HeadPhase : uint8_t {
     IDLE = 0,          // 0
     Q,                 // 1
     K,                 // 2
-    K_REQUANT,         // 3
-    K_WRITEBACK,       // 4
-    V,                 // 5
-    V_REQUANT,         // 6
-    V_WRITEBACK,       // 7
-    REQUANT_Q,         // 8
-    ATT_SCORES,        // 9
-    VALUE_SCALE_CLAMP, // 10
-    ATT_SOFTMAX,       // 11
-    ATT_VALUE,         // 12
-    HEAD_REQUANT,      // 13
-    DONE               // 14
+    K_WRITEBACK,       // 3
+    V,                 // 4
+    V_WRITEBACK,       // 5
+    ATT_SCORES,        // 6
+    VALUE_SCALE_CLAMP, // 7
+    ATT_SOFTMAX,       // 8
+    ATT_VALUE,         // 9
+    HEAD_REQUANT,      // 10
+    DONE               // 11
 };
 
 enum ComputeOp : uint8_t {
@@ -301,12 +305,9 @@ struct HeadCtx {
     // Per-head bookkeeping for started phases
     bool q_started          = false;
     bool k_started          = false;
-    bool k_requant_started  = false;
     bool k_writeback_started = false;
     bool v_started          = false;
-    bool v_requant_started  = false;
     bool v_writeback_started = false;
-    bool requant_q_started  = false;
     bool att_scores_started = false;
     bool val_scale_started  = false;
     bool softmax_started    = false;
@@ -315,10 +316,7 @@ struct HeadCtx {
 
     bool q_compute_done          = false;
     bool k_compute_done          = false;
-    bool k_requant_compute_done  = false;
     bool v_compute_done          = false;
-    bool v_requant_compute_done  = false;
-    bool requant_q_compute_done  = false;
     bool att_scores_compute_done = false;
     bool val_scale_compute_done  = false;
     bool softmax_compute_done    = false;
@@ -514,7 +512,6 @@ struct ControlMemSpace {
     uint64_t wo_base_addr   = 0;
     uint64_t w1_base_addr   = 0;
     uint64_t w2_base_addr   = 0;
-
     uint64_t k_cache_addr   = 0;
     uint64_t v_cache_addr   = 0;
 
