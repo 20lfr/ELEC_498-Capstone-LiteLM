@@ -47,7 +47,7 @@ wire   [0:0] icmp_ln602_fu_44_p2;
 reg   [2:0] i_fu_26;
 wire   [2:0] add_ln600_fu_62_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_i_78;
+reg   [2:0] ap_sig_allocacmp_i_75;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -152,9 +152,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_78 = 3'd4;
+        ap_sig_allocacmp_i_75 = 3'd4;
     end else begin
-        ap_sig_allocacmp_i_78 = i_fu_26;
+        ap_sig_allocacmp_i_75 = i_fu_26;
     end
 end
 
@@ -185,7 +185,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln600_fu_62_p2 = (ap_sig_allocacmp_i_78 + 3'd1);
+assign add_ln600_fu_62_p2 = (ap_sig_allocacmp_i_75 + 3'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -203,8 +203,8 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_126 = 32'd0;
 
-assign icmp_ln600_fu_38_p2 = ((ap_sig_allocacmp_i_78 == 3'd6) ? 1'b1 : 1'b0);
+assign icmp_ln600_fu_38_p2 = ((ap_sig_allocacmp_i_75 == 3'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln602_fu_44_p2 = ((ap_sig_allocacmp_i_78 == 3'd4) ? 1'b1 : 1'b0);
+assign icmp_ln602_fu_44_p2 = ((ap_sig_allocacmp_i_75 == 3'd4) ? 1'b1 : 1'b0);
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_600_17

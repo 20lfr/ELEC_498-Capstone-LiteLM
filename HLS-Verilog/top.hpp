@@ -33,7 +33,7 @@ void transformer_top(
 
     // Debug (scheduler)
     SchedState  &dbg_state,
-    HeadCtx (&dbg_head_ctx_ref)[NUM_HEADS],              // [OUTPUT] Debug mirror: per-head scheduler context
+    HeadCtx (&dbg_head_ctx_ref)[HEADS_PARALLEL],         // [OUTPUT] Debug mirror: active-lane scheduler context
     ComputeHeadCtx  (&dbg_head_compute_ctx)[HEADS_PARALLEL], // [OUTPUT] Debug mirror: per-lane headed compute context
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,

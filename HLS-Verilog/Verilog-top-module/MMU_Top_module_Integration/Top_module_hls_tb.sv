@@ -2,7 +2,7 @@
 
 module top_module_hls_tb;
   localparam int CLK_PERIOD_NS        = 10;
-  localparam int MAX_CYCLES           = 50000;
+  localparam int MAX_CYCLES           = 5000000;
   localparam int CTRL_MEM_WORDS       = 68;
   localparam int DBG_CTRL_MEM_WORDS   = 67;
   localparam int STREAM_IN_BUF_BYTES  = 16;
@@ -55,6 +55,7 @@ module top_module_hls_tb;
     logic [31:0] wl_instruction;
     logic        wl_start;
     logic        wl_ready;
+    logic        wl_accept;
     logic [7:0]  last_wl_addr;
     logic [31:0] last_compute_op;
     logic [31:0] compute_op;
@@ -73,7 +74,7 @@ module top_module_hls_tb;
     logic        mem_transfer_done;
     logic        compute_done;
     logic        compute_ready;
-    logic [31:0] comp_instruction;
+    logic [31:0] compute_instruction;
     logic        compute_start;
     logic        error_latched;
     logic        mac_start;
@@ -89,6 +90,82 @@ module top_module_hls_tb;
     logic [31:0] req_instruction;
     logic [7:0]  state;
   } ComputeHeadCtx_t;
+
+  // Unpack raw HLS debug buses using explicit bit positions from C-struct field order.
+  function automatic head_ctx_t unpack_head_ctx(input logic [208:0] raw);
+    head_ctx_t s;
+    begin
+      s.layer_stamp               = raw[31:0];
+      s.head_idx                  = raw[63:32];
+      s.phase                     = raw[71:64];
+      s.compute_ready             = raw[72];
+      s.compute_done              = raw[73];
+      s.compute_start             = raw[74];
+      s.compute_op                = raw[106:75];
+      s.last_compute_op           = raw[138:107];
+      s.last_wl_addr              = raw[146:139];
+      s.wl_ready                  = raw[147];
+      s.wl_accept                 = raw[148];
+      s.wl_start                  = raw[149];
+      s.wl_instruction            = raw[181:150];
+      s.dma_done                  = raw[182];
+      s.start_head                = raw[183];
+      s.q_started                 = raw[184];
+      s.k_started                 = raw[185];
+      s.k_writeback_started       = raw[186];
+      s.v_started                 = raw[187];
+      s.v_writeback_started       = raw[188];
+      s.att_scores_started        = raw[189];
+      s.val_scale_started         = raw[190];
+      s.softmax_started           = raw[191];
+      s.att_value_started         = raw[192];
+      s.head_requant_started      = raw[193];
+      s.q_compute_done            = raw[194];
+      s.k_compute_done            = raw[195];
+      s.v_compute_done            = raw[196];
+      s.att_scores_compute_done   = raw[197];
+      s.val_scale_compute_done    = raw[198];
+      s.softmax_compute_done      = raw[199];
+      s.att_value_compute_done    = raw[200];
+      s.head_requant_compute_done = raw[201];
+      s.q_dma_done                = raw[202];
+      s.k_dma_done                = raw[203];
+      s.k_writeback_dma_done      = raw[204];
+      s.v_dma_done                = raw[205];
+      s.v_writeback_dma_done      = raw[206];
+      s.att_scores_dma_done       = raw[207];
+      s.att_value_dma_done        = raw[208];
+      unpack_head_ctx = s;
+    end
+  endfunction
+
+  function automatic ComputeHeadCtx_t unpack_compute_head_ctx(input logic [148:0] raw);
+    ComputeHeadCtx_t s;
+    begin
+      s.state            = raw[7:0];
+      s.req_instruction  = raw[39:8];
+      s.req_op           = raw[47:40];
+      s.req_layer        = raw[55:48];
+      s.req_head         = raw[63:56];
+      s.req_tile         = raw[71:64];
+      s.mac_busy         = raw[72];
+      s.mac_ready        = raw[73];
+      s.mac_complete     = raw[74];
+      s.clear_pending    = raw[75];
+      s.capture_pending  = raw[76];
+      s.mac_start        = raw[77];
+      s.error_latched    = raw[78];
+      s.compute_start    = raw[79];
+      s.compute_instruction = raw[111:80];
+      s.compute_ready    = raw[112];
+      s.compute_done     = raw[113];
+      s.mem_transfer_done= raw[114];
+      s.mem_read_request = raw[115];
+      s.mem_write_request= raw[116];
+      s.mem_op           = raw[148:117];
+      unpack_compute_head_ctx = s;
+    end
+  endfunction
 
   typedef struct packed {
     logic [31:0] control;
@@ -328,18 +405,14 @@ module top_module_hls_tb;
   logic [31:0] dbg_stream_in_counter;
   logic       dbg_stream_in_counter_ap_vld;
 
-  wire [0:0]   dbg_head_ctx_ref_0_address0;
-  wire         dbg_head_ctx_ref_0_ce0;
-  wire         dbg_head_ctx_ref_0_we0;
-  wire [$bits(head_ctx_t)-1:0] dbg_head_ctx_ref_0_d0;
-
-  wire [0:0]   dbg_head_ctx_ref_1_address0;
-  wire         dbg_head_ctx_ref_1_ce0;
-  wire         dbg_head_ctx_ref_1_we0;
-  wire [$bits(head_ctx_t)-1:0] dbg_head_ctx_ref_1_d0;
-
+  logic [208:0] dbg_head_ctx_ref_0;
+  logic         dbg_head_ctx_ref_0_ap_vld;
+  logic [208:0] dbg_head_ctx_ref_1;
+  logic         dbg_head_ctx_ref_1_ap_vld;
   logic [148:0] dbg_head_compute_ctx_0;
+  logic         dbg_head_compute_ctx_0_ap_vld;
   logic [148:0] dbg_head_compute_ctx_1;
+  logic         dbg_head_compute_ctx_1_ap_vld;
 
   wire [6:0] dbg_in_buf_address0;
   wire       dbg_in_buf_ce0;
@@ -368,6 +441,10 @@ module top_module_hls_tb;
   wire       dbg_head_out_buf_1_ce0;
   wire       dbg_head_out_buf_1_we0;
   wire [7:0] dbg_head_out_buf_1_d0;
+  wire [3:0] dbg_stream_in_buf_address0;
+  wire       dbg_stream_in_buf_ce0;
+  wire       dbg_stream_in_buf_we0;
+  wire [7:0] dbg_stream_in_buf_d0;
 
   logic [7:0]  stream_in_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0]  stream_out_mem[0:STREAM_OUT_BUF_BYTES-1];
@@ -385,27 +462,14 @@ module top_module_hls_tb;
   logic [31:0] ln1_eps_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] k_cache_store [0:KV_STORE_WORDS-1];
   logic [31:0] v_cache_store [0:KV_STORE_WORDS-1];
-  logic [$bits(head_ctx_t)-1:0] dbg_head_ctx_mem [0:3];
-  head_ctx_t dbg_head_ctx_shadow [0:3];
-  ComputeHeadCtx_t dbg_head_compute_ctx_shadow [0:1];
-  // Per-head struct mirrors (same style as legacy top-module TB).
+  // Per-head struct mirrors.
   head_ctx_t dbg_head_ctx_ref_0_struct;
   head_ctx_t dbg_head_ctx_ref_1_struct;
-  head_ctx_t dbg_head_ctx_ref_2_struct;
-  head_ctx_t dbg_head_ctx_ref_3_struct;
   ComputeHeadCtx_t dbg_head_compute_ctx_0_struct;
   ComputeHeadCtx_t dbg_head_compute_ctx_1_struct;
-  // Active/cyclic head view for current head-group and parallel lanes.
-  logic [31:0] dbg_current_head_idx [0:1];
-  head_ctx_t dbg_current_head_ctx [0:1];
-  ComputeHeadCtx_t dbg_current_head_compute_ctx [0:1];
-  // Structured views by cyclic partition bank/slot for easier waveform debug.
-  head_ctx_t dbg_head_ctx_cyclic [0:1][0:1];
-  head_ctx_t dbg_head_ctx_q_view [0:1][0:1];
-  head_ctx_t dbg_head_ctx_d_view [0:1][0:1];
-  ComputeHeadCtx_t dbg_head_compute_ctx_cyclic [0:1];
   logic [7:0] dbg_in_buf_mem [0:127];
   logic [7:0] dbg_out_buf_mem [0:63];
+  logic [7:0] dbg_stream_in_buf_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0] dbg_head_in_buf_mem [0:255];
   logic [7:0] dbg_head_out_buf_mem [0:127];
 
@@ -883,12 +947,6 @@ module top_module_hls_tb;
     end
   end
 
-
-
-  // dbg_head_ctx_ref is write-only in this RTL.
-
-  // (moved to ctx_shadow_latch)
-
   // Decode packed dbg_ctrl_mem bus into named fields for waveform/debug readability.
   always_comb begin : p_dbg_ctrl_mem_shadow_unpack
     int w;
@@ -951,12 +1009,6 @@ module top_module_hls_tb;
 
   // Debug memory model writes for all dual-port debug interfaces.
   always_ff @(posedge ap_clk) begin : p_dbg_mem_writes
-    if (dbg_head_ctx_ref_0_ce0 && dbg_head_ctx_ref_0_we0) begin
-      dbg_head_ctx_mem[{1'b0, dbg_head_ctx_ref_0_address0}] <= dbg_head_ctx_ref_0_d0;
-    end
-    if (dbg_head_ctx_ref_1_ce0 && dbg_head_ctx_ref_1_we0) begin
-      dbg_head_ctx_mem[{1'b1, dbg_head_ctx_ref_1_address0}] <= dbg_head_ctx_ref_1_d0;
-    end
     if (dbg_in_buf_ce0 && dbg_in_buf_we0) begin
       dbg_in_buf_mem[dbg_in_buf_address0] <= dbg_in_buf_d0;
     end
@@ -975,68 +1027,17 @@ module top_module_hls_tb;
     if (dbg_head_out_buf_1_ce0 && dbg_head_out_buf_1_we0) begin
       dbg_head_out_buf_mem[{1'b1, dbg_head_out_buf_1_address0}] <= dbg_head_out_buf_1_d0;
     end
-  end
-
-  // Latch debug context SRAM snapshots for easier debug inspection.
-  always_ff @(posedge ap_clk) begin : ctx_shadow_latch
-    if (!ap_rst_n) begin
-      dbg_head_ctx_shadow[0] <= '0;
-      dbg_head_ctx_shadow[1] <= '0;
-      dbg_head_ctx_shadow[2] <= '0;
-      dbg_head_ctx_shadow[3] <= '0;
-      dbg_head_compute_ctx_shadow[0] <= '0;
-      dbg_head_compute_ctx_shadow[1] <= '0;
-    end else begin
-      dbg_head_ctx_shadow[0] <= head_ctx_t'(dbg_head_ctx_mem[0]);
-      dbg_head_ctx_shadow[1] <= head_ctx_t'(dbg_head_ctx_mem[1]);
-      dbg_head_ctx_shadow[2] <= head_ctx_t'(dbg_head_ctx_mem[2]);
-      dbg_head_ctx_shadow[3] <= head_ctx_t'(dbg_head_ctx_mem[3]);
-      dbg_head_compute_ctx_shadow[0] <= ComputeHeadCtx_t'(dbg_head_compute_ctx_0);
-      dbg_head_compute_ctx_shadow[1] <= ComputeHeadCtx_t'(dbg_head_compute_ctx_1);
+    if (dbg_stream_in_buf_ce0 && dbg_stream_in_buf_we0) begin
+      dbg_stream_in_buf_mem[dbg_stream_in_buf_address0] <= dbg_stream_in_buf_d0;
     end
   end
 
-  // Build explicit structured debug views by cyclic factor:
-  //   head index = (slot * 2) + bank
+  // Decode packed context debug busses into structs for waveform readability.
   always_comb begin : p_ctx_struct_views
-    int unsigned group_idx;
-
-    // Flat per-head structs for direct waveform inspection.
-    dbg_head_ctx_ref_0_struct = dbg_head_ctx_shadow[0];
-    dbg_head_ctx_ref_1_struct = dbg_head_ctx_shadow[1];
-    dbg_head_ctx_ref_2_struct = dbg_head_ctx_shadow[2];
-    dbg_head_ctx_ref_3_struct = dbg_head_ctx_shadow[3];
-
-    dbg_head_compute_ctx_0_struct = dbg_head_compute_ctx_shadow[0];
-    dbg_head_compute_ctx_1_struct = dbg_head_compute_ctx_shadow[1];
-
-    dbg_head_ctx_q_view[0][0] = '0;
-    dbg_head_ctx_q_view[0][1] = '0;
-    dbg_head_ctx_q_view[1][0] = '0;
-    dbg_head_ctx_q_view[1][1] = '0;
-
-    dbg_head_ctx_d_view[0][0] = head_ctx_t'(dbg_head_ctx_ref_0_d0);
-    dbg_head_ctx_d_view[0][1] = '0;
-    dbg_head_ctx_d_view[1][0] = head_ctx_t'(dbg_head_ctx_ref_1_d0);
-    dbg_head_ctx_d_view[1][1] = '0;
-
-    dbg_head_ctx_cyclic[0][0] = head_ctx_t'(dbg_head_ctx_mem[0]); // bank0 slot0 -> head0
-    dbg_head_ctx_cyclic[1][0] = head_ctx_t'(dbg_head_ctx_mem[1]); // bank1 slot0 -> head1
-    dbg_head_ctx_cyclic[0][1] = head_ctx_t'(dbg_head_ctx_mem[2]); // bank0 slot1 -> head2
-    dbg_head_ctx_cyclic[1][1] = head_ctx_t'(dbg_head_ctx_mem[3]); // bank1 slot1 -> head3
-
-    dbg_head_compute_ctx_cyclic[0] = ComputeHeadCtx_t'(dbg_head_compute_ctx_0);
-    dbg_head_compute_ctx_cyclic[1] = ComputeHeadCtx_t'(dbg_head_compute_ctx_1);
-
-    // Current running heads = {head_group*2 + lane}.
-    group_idx = dbg_head_group_idx;
-    if (group_idx > 1) group_idx = 1;
-    dbg_current_head_idx[0] = (group_idx << 1);
-    dbg_current_head_idx[1] = (group_idx << 1) + 1;
-    dbg_current_head_ctx[0] = dbg_head_ctx_shadow[dbg_current_head_idx[0]];
-    dbg_current_head_ctx[1] = dbg_head_ctx_shadow[dbg_current_head_idx[1]];
-    dbg_current_head_compute_ctx[0] = dbg_head_compute_ctx_shadow[0];
-    dbg_current_head_compute_ctx[1] = dbg_head_compute_ctx_shadow[1];
+    dbg_head_ctx_ref_0_struct      = unpack_head_ctx(dbg_head_ctx_ref_0);
+    dbg_head_ctx_ref_1_struct      = unpack_head_ctx(dbg_head_ctx_ref_1);
+    dbg_head_compute_ctx_0_struct  = unpack_compute_head_ctx(dbg_head_compute_ctx_0);
+    dbg_head_compute_ctx_1_struct  = unpack_compute_head_ctx(dbg_head_compute_ctx_1);
   end
 
   // AXI stream constants.
@@ -1587,8 +1588,7 @@ module top_module_hls_tb;
     if (dbg_error[0]) begin
       $finish;
     end
-
-    if (dbg_done[0]) begin
+    if (irq_seen_done) begin
       $finish;
     end
 
@@ -1723,8 +1723,8 @@ module top_module_hls_tb;
       k_cache_store[i] = 32'h0000_0000;
       v_cache_store[i] = 32'h0000_0000;
     end
-    for (i = 0; i < 4; i = i + 1) begin
-      dbg_head_ctx_mem[i] = '0;
+    for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
+      dbg_stream_in_buf_mem[i] = 8'h00;
     end
     for (i = 0; i < 128; i = i + 1) begin
       dbg_in_buf_mem[i] = 8'h00;
@@ -1809,16 +1809,14 @@ module top_module_hls_tb;
 
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
-    .dbg_head_ctx_ref_0_address0(dbg_head_ctx_ref_0_address0),
-    .dbg_head_ctx_ref_0_ce0(dbg_head_ctx_ref_0_ce0),
-    .dbg_head_ctx_ref_0_we0(dbg_head_ctx_ref_0_we0),
-    .dbg_head_ctx_ref_0_d0(dbg_head_ctx_ref_0_d0),
-    .dbg_head_ctx_ref_1_address0(dbg_head_ctx_ref_1_address0),
-    .dbg_head_ctx_ref_1_ce0(dbg_head_ctx_ref_1_ce0),
-    .dbg_head_ctx_ref_1_we0(dbg_head_ctx_ref_1_we0),
-    .dbg_head_ctx_ref_1_d0(dbg_head_ctx_ref_1_d0),
+    .dbg_head_ctx_ref_0(dbg_head_ctx_ref_0),
+    .dbg_head_ctx_ref_0_ap_vld(dbg_head_ctx_ref_0_ap_vld),
+    .dbg_head_ctx_ref_1(dbg_head_ctx_ref_1),
+    .dbg_head_ctx_ref_1_ap_vld(dbg_head_ctx_ref_1_ap_vld),
     .dbg_head_compute_ctx_0(dbg_head_compute_ctx_0),
+    .dbg_head_compute_ctx_0_ap_vld(dbg_head_compute_ctx_0_ap_vld),
     .dbg_head_compute_ctx_1(dbg_head_compute_ctx_1),
+    .dbg_head_compute_ctx_1_ap_vld(dbg_head_compute_ctx_1_ap_vld),
 
     .dbg_ctrl_mem(dbg_ctrl_mem),
     .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
@@ -1932,6 +1930,10 @@ module top_module_hls_tb;
     .dbg_head_out_buf_1_ce0(dbg_head_out_buf_1_ce0),
     .dbg_head_out_buf_1_we0(dbg_head_out_buf_1_we0),
     .dbg_head_out_buf_1_d0(dbg_head_out_buf_1_d0),
+    .dbg_stream_in_buf_address0(dbg_stream_in_buf_address0),
+    .dbg_stream_in_buf_ce0(dbg_stream_in_buf_ce0),
+    .dbg_stream_in_buf_we0(dbg_stream_in_buf_we0),
+    .dbg_stream_in_buf_d0(dbg_stream_in_buf_d0),
 
     .dbg_error(dbg_error),
     .dbg_error_ap_vld(dbg_error_ap_vld),

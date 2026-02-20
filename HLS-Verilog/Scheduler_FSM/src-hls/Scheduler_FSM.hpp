@@ -19,7 +19,7 @@ void scheduler_hls(
     bool      &wl_start,
     bool        compute_ready,
     bool        compute_done,
-    HeadCtx (&head_ctx_ref)[NUM_HEADS],
+    HeadCtx (&head_ctx_ref)[HEADS_PARALLEL],
     int         &head_group_idx,
     bool        &compute_start,
     uint32_t   &compute_instruction,

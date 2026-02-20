@@ -8,6 +8,7 @@ struct DmaQueueEntry {
     bool valid = false;
     uint32_t packed = 0;
     bool headed = false;
+    int8_t lane = -1;
 };
 
 struct ComputeQueueEntry {
@@ -16,6 +17,7 @@ struct ComputeQueueEntry {
     ComputeReqType type = ComputeReqType::NONE;
     bool headed = false;
     uint8_t head = 0;
+    int8_t lane = -1;
 };
 
 // ---------------------------------------------------------------------------
@@ -38,8 +40,8 @@ static uint8_t compute_q_count = 0;
 static Region regions[MAX_REGIONS];
 static uint16_t region_count = 0;
 
-static bool arb_pending[NUM_HEADS];
-static bool arb_grant[NUM_HEADS];
+static bool arb_pending[HEADS_PARALLEL];
+static bool arb_grant[HEADS_PARALLEL];
 static int arb_current = -1;
 static int arb_rr_ptr = 0;
 static bool arb_busy = false;
@@ -57,6 +59,7 @@ static bool active_dma_headed = false;
 static DmaSel active_dma_sel = DMASEL_NONE;
 static int active_dma_layer = 0;
 static int active_dma_head = -1;
+static int active_dma_lane = -1;
 static int active_dma_tile = -1;
 static uint64_t active_dma_addr_base = 0;
 static uint8_t active_piece_idx = 0;
@@ -72,11 +75,12 @@ static ComputeReqType active_compute_type = ComputeReqType::NONE;
 static ComputeOp active_compute_op = ComputeOp::CMP_NONE;
 static int active_compute_layer = 0;
 static int active_compute_head = -1;
+static int active_compute_lane = -1;
 static int active_compute_tile = -1;
 
 // Edge-detect latches so level-style requests do not enqueue repeatedly.
 static bool main_wl_accepted = false;
-static bool head_wl_accepted[NUM_HEADS];
+static bool head_wl_accepted[HEADS_PARALLEL];
 static bool prev_main_mem_req = false;
 static uint32_t prev_main_mem_op = 0;
 static bool prev_head_mem_req[HEADS_PARALLEL];
@@ -496,12 +500,12 @@ static inline bool keep_region_on_layer_purge(const Region &r, int new_layer) {
 // ---------------------------------------------------------------------------
 static void arb_request(int head) {
 #pragma HLS INLINE
-    if (head >= 0 && head < NUM_HEADS) arb_pending[head] = true;
+    if (head >= 0 && head < HEADS_PARALLEL) arb_pending[head] = true;
 }
 
 static void arb_release(int head) {
 #pragma HLS INLINE
-    if (head >= 0 && head < NUM_HEADS) {
+    if (head >= 0 && head < HEADS_PARALLEL) {
         arb_pending[head] = false;
         arb_grant[head] = false;
         if (arb_current == head) {
@@ -515,38 +519,39 @@ static void arb_step() {
 #pragma HLS INLINE
     if (arb_busy) return;
     int grant = -1;
-    for (int i = 0; i < NUM_HEADS; ++i) {
-        const int h = (arb_rr_ptr + i) % NUM_HEADS;
+    for (int i = 0; i < HEADS_PARALLEL; ++i) {
+        const int h = (arb_rr_ptr + i) % HEADS_PARALLEL;
         if (arb_pending[h]) {
             grant = h;
             break;
         }
     }
     if (grant >= 0) {
-        for (int i = 0; i < NUM_HEADS; ++i) {
+        for (int i = 0; i < HEADS_PARALLEL; ++i) {
             arb_grant[i] = (i == grant);
         }
         arb_current = grant;
-        arb_rr_ptr = (grant + 1) % NUM_HEADS;
+        arb_rr_ptr = (grant + 1) % HEADS_PARALLEL;
         arb_busy = true;
     }
 }
 
 static bool arb_is_granted(int head) {
 #pragma HLS INLINE
-    if (head < 0 || head >= NUM_HEADS) return false;
+    if (head < 0 || head >= HEADS_PARALLEL) return false;
     return arb_grant[head];
 }
 
 // ---------------------------------------------------------------------------
 // Queue helpers
 // ---------------------------------------------------------------------------
-static inline bool dma_q_push(uint32_t packed, bool headed) {
+static inline bool dma_q_push(uint32_t packed, bool headed, int8_t lane) {
 #pragma HLS INLINE
     if (dma_q_count >= DMA_QUEUE_DEPTH) return false;
     dma_q[dma_q_tail].valid = true;
     dma_q[dma_q_tail].packed = packed;
     dma_q[dma_q_tail].headed = headed;
+    dma_q[dma_q_tail].lane = lane;
     dma_q_tail = static_cast<uint8_t>((dma_q_tail + 1) % DMA_QUEUE_DEPTH);
     dma_q_count++;
     return true;
@@ -562,7 +567,7 @@ static inline bool dma_q_pop(DmaQueueEntry &out) {
     return true;
 }
 
-static inline bool compute_q_push(uint32_t packed, ComputeReqType type, bool headed, uint8_t head) {
+static inline bool compute_q_push(uint32_t packed, ComputeReqType type, bool headed, uint8_t head, int8_t lane) {
 #pragma HLS INLINE
     if (compute_q_count >= COMPUTE_QUEUE_DEPTH) return false;
     compute_q[compute_q_tail].valid = true;
@@ -570,6 +575,7 @@ static inline bool compute_q_push(uint32_t packed, ComputeReqType type, bool hea
     compute_q[compute_q_tail].type = type;
     compute_q[compute_q_tail].headed = headed;
     compute_q[compute_q_tail].head = head;
+    compute_q[compute_q_tail].lane = lane;
     compute_q_tail = static_cast<uint8_t>((compute_q_tail + 1) % COMPUTE_QUEUE_DEPTH);
     compute_q_count++;
     return true;
@@ -1668,7 +1674,7 @@ void mmu_fsm(
     bool            &mem_transfer_done,             // [OUTPUT] Main compute transfer done pulse
 
     // Head contexts (headed scheduler + headed compute request signals)
-    HeadCtx         (&head_ctx)[NUM_HEADS],         // [BOTH] Per-head scheduler handshake
+    HeadCtx         (&head_ctx)[HEADS_PARALLEL],    // [BOTH] Per-lane scheduler handshake
     ComputeHeadCtx  (&head_compute_ctx)[HEADS_PARALLEL], // [BOTH] Per-lane headed compute handshake
 
     
@@ -1705,7 +1711,7 @@ void mmu_fsm(
         main_wl_accepted = false;
     }
     main_wl_accept = main_wl_accepted;
-    for (int h = 0; h < NUM_HEADS; ++h) {
+    for (int h = 0; h < HEADS_PARALLEL; ++h) {
         head_ctx[h].wl_ready = mmu_req_ready;
         if (!head_ctx[h].wl_start) {
             head_wl_accepted[h] = false;
@@ -1728,14 +1734,16 @@ void mmu_fsm(
         g_current_layer = -1;
 
         active_dma_valid = false;
+        active_dma_lane = -1;
         active_compute_valid = false;
+        active_compute_lane = -1;
         dma_q_head = dma_q_tail = dma_q_count = 0;
         compute_q_head = compute_q_tail = compute_q_count = 0;
 
         arb_current = -1;
         arb_rr_ptr = 0;
         arb_busy = false;
-        for (int i = 0; i < NUM_HEADS; ++i) {
+        for (int i = 0; i < HEADS_PARALLEL; ++i) {
             arb_pending[i] = false;
             arb_grant[i] = false;
             head_wl_accepted[i] = false;
@@ -1862,7 +1870,7 @@ void mmu_fsm(
             int layer = 0, head = -1, tile = -1;
             unpack_dma(mmu_dma_instruction, sel, layer, head, tile);
             const bool headed = is_headed_dma(sel);
-            if (dma_q_push(mmu_dma_instruction, headed)) {
+            if (dma_q_push(mmu_dma_instruction, headed, -1)) {
                 main_wl_accepted = true;
                 main_wl_accept = true;
             }
@@ -1871,7 +1879,7 @@ void mmu_fsm(
 
     // Enqueue per-head DMA requests via HeadCtx.
     // Level handshake: MMU accepts when wl_start is high and holds wl_accept until wl_start drops.
-    for (int h = 0; h < NUM_HEADS; ++h) {
+    for (int h = 0; h < HEADS_PARALLEL; ++h) {
         const bool head_dma_req_pending = reset_n && head_ctx[h].wl_start && !head_wl_accepted[h];
         if (head_dma_req_pending) {
             if (dma_q_count >= DMA_QUEUE_DEPTH) {
@@ -1881,7 +1889,7 @@ void mmu_fsm(
             int layer = 0, head = -1, tile = -1;
             unpack_dma(head_ctx[h].wl_instruction, sel, layer, head, tile);
             const bool headed = is_headed_dma(sel);
-            if (!dma_q_push(head_ctx[h].wl_instruction, headed)) {
+            if (!dma_q_push(head_ctx[h].wl_instruction, headed, static_cast<int8_t>(h))) {
                 continue;
             } else {
                 head_wl_accepted[h] = true;
@@ -1905,7 +1913,7 @@ void mmu_fsm(
         uint8_t req_head = 0;
         if (head >= 0 && head < NUM_HEADS) req_head = static_cast<uint8_t>(head);
         const ComputeReqType req_type = mem_read_request ? ComputeReqType::READ : ComputeReqType::WRITE;
-        if (!compute_q_push(mem_op, req_type, headed, req_head)) {
+        if (!compute_q_push(mem_op, req_type, headed, req_head, -1)) {
             mmu_set_overflow(ERR_MMU_QUEUE_OVERFLOW);
         }
         }
@@ -1932,7 +1940,7 @@ void mmu_fsm(
         uint8_t req_head = static_cast<uint8_t>(lane);
         if (head >= 0 && head < NUM_HEADS) req_head = static_cast<uint8_t>(head);
         const ComputeReqType req_type = req_read ? ComputeReqType::READ : ComputeReqType::WRITE;
-        if (!compute_q_push(head_compute_ctx[lane].mem_op, req_type, headed, req_head)) {
+        if (!compute_q_push(head_compute_ctx[lane].mem_op, req_type, headed, req_head, static_cast<int8_t>(lane))) {
             mmu_set_overflow(ERR_MMU_QUEUE_OVERFLOW);
         }
     }
@@ -1974,6 +1982,7 @@ void mmu_fsm(
                 }
                 active_dma_valid = true;
                 active_dma_headed = q.headed;
+                active_dma_lane = q.lane;
                 unpack_dma(q.packed, active_dma_sel, active_dma_layer, active_dma_head, active_dma_tile);
                 on_layer_transition(active_dma_layer);
             }
@@ -1985,10 +1994,10 @@ void mmu_fsm(
                 break;
             }
 
-            if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                arb_request(active_dma_head);
+            if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
+                arb_request(active_dma_lane);
                 arb_step();
-                if (!arb_is_granted(active_dma_head)) {
+                if (!arb_is_granted(active_dma_lane)) {
                     break;
                 }
             }
@@ -2038,9 +2047,9 @@ void mmu_fsm(
             }
 
             main_dma_done = true;
-            if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                arb_release(active_dma_head);
-                head_ctx[active_dma_head].dma_done = true;
+            if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
+                arb_release(active_dma_lane);
+                head_ctx[active_dma_lane].dma_done = true;
             }
             active_dma_valid = false;
             g_state = State::IDLE;
@@ -2056,9 +2065,9 @@ void mmu_fsm(
             }
             if (active_piece_count == 0) {
                 main_dma_done = true;
-                if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                    head_ctx[active_dma_head].dma_done = true;
-                    arb_release(active_dma_head);
+                if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
+                    head_ctx[active_dma_lane].dma_done = true;
+                    arb_release(active_dma_lane);
                 }
                 active_dma_valid = false;
                 g_state = State::IDLE;
@@ -2146,9 +2155,9 @@ void mmu_fsm(
                 g_state = State::DMA_ISSUE;
             } else {
                 main_dma_done = true;
-                if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                    head_ctx[active_dma_head].dma_done = true;
-                    arb_release(active_dma_head);
+                if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
+                    head_ctx[active_dma_lane].dma_done = true;
+                    arb_release(active_dma_lane);
                 }
                 active_dma_valid = false;
                 g_state = State::IDLE;
@@ -2214,9 +2223,9 @@ void mmu_fsm(
                 maybe_consume(src_idx);
             }
             main_dma_done = true;
-            if (active_dma_headed && active_dma_head >= 0 && active_dma_head < NUM_HEADS) {
-                head_ctx[active_dma_head].dma_done = true;
-                arb_release(active_dma_head);
+            if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
+                head_ctx[active_dma_lane].dma_done = true;
+                arb_release(active_dma_lane);
             }
             active_dma_valid = false;
             g_state = State::IDLE;
@@ -2232,6 +2241,7 @@ void mmu_fsm(
                 active_compute_valid = true;
                 active_compute_headed = q.headed;
                 active_compute_type = q.type;
+                active_compute_lane = q.lane;
                 unpack_compute(q.packed, active_compute_op, active_compute_layer, active_compute_head, active_compute_tile);
                 on_layer_transition(active_compute_layer);
                 if (active_compute_head < 0 && q.head < NUM_HEADS) {
@@ -2249,8 +2259,8 @@ void mmu_fsm(
             // These ops are intentionally disabled in MMU compute path.
             // Reformat/concat is done by DMASEL_CONCAT internal DMA flow.
             if (is_disabled_compute_op(active_compute_op)) {
-                if (active_compute_headed && active_compute_head >= 0 && active_compute_head < NUM_HEADS) {
-                    signal_head_compute_done(head_compute_ctx, active_compute_head);
+                if (active_compute_headed && active_compute_lane >= 0 && active_compute_lane < HEADS_PARALLEL) {
+                    head_compute_ctx[active_compute_lane].mem_transfer_done = true;
                 } else {
                     mem_transfer_done = true;
                 }
@@ -2259,10 +2269,14 @@ void mmu_fsm(
                 break;
             }
 
-            if (active_compute_headed && active_compute_head >= 0 && active_compute_head < NUM_HEADS) {
-                arb_request(active_compute_head);
+            int arb_lane = active_compute_lane;
+            if (arb_lane < 0 || arb_lane >= HEADS_PARALLEL) {
+                arb_lane = head_to_lane(active_compute_head);
+            }
+            if (active_compute_headed && arb_lane >= 0 && arb_lane < HEADS_PARALLEL) {
+                arb_request(arb_lane);
                 arb_step();
-                if (!arb_is_granted(active_compute_head)) break;
+                if (!arb_is_granted(arb_lane)) break;
             }
 
             if (active_compute_type == ComputeReqType::READ) {
@@ -2280,8 +2294,11 @@ void mmu_fsm(
         }
         case State::COMPUTE_READ_PREP: {
             bool ok = false;
+            int lane = active_compute_lane;
+            if (lane < 0 || lane >= HEADS_PARALLEL) {
+                lane = head_to_lane(active_compute_head);
+            }
             if (active_compute_headed) {
-                const int lane = head_to_lane(active_compute_head);
                 ok = build_head_in_buf(active_compute_op, active_compute_layer, active_compute_head,
                                        head_in_buf[lane], g_invalid);
             } else {
@@ -2293,7 +2310,7 @@ void mmu_fsm(
                     mmu_set_invalid(ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP);
                 }
                 active_compute_valid = false;
-                if (active_compute_headed) arb_release(active_compute_head);
+                if (active_compute_headed && lane >= 0 && lane < HEADS_PARALLEL) arb_release(lane);
                 g_state = State::IDLE;
                 break;
             }
@@ -2301,9 +2318,13 @@ void mmu_fsm(
             break;
         }
         case State::COMPUTE_READ_DONE: {
-            if (active_compute_headed && active_compute_head >= 0 && active_compute_head < NUM_HEADS) {
-                signal_head_compute_done(head_compute_ctx, active_compute_head);
-                arb_release(active_compute_head);
+            int lane = active_compute_lane;
+            if (lane < 0 || lane >= HEADS_PARALLEL) {
+                lane = head_to_lane(active_compute_head);
+            }
+            if (active_compute_headed && lane >= 0 && lane < HEADS_PARALLEL) {
+                head_compute_ctx[lane].mem_transfer_done = true;
+                arb_release(lane);
             } else {
                 mem_transfer_done = true;
             }
@@ -2321,14 +2342,21 @@ void mmu_fsm(
             if (idx < 0) {
                 mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE);
                 active_compute_valid = false;
-                if (active_compute_headed) arb_release(active_compute_head);
+                if (active_compute_headed) {
+                    int lane = active_compute_lane;
+                    if (lane < 0 || lane >= HEADS_PARALLEL) lane = head_to_lane(active_compute_head);
+                    if (lane >= 0 && lane < HEADS_PARALLEL) arb_release(lane);
+                }
                 g_state = State::IDLE;
                 break;
             }
 
             bool write_ok = false;
+            int lane = active_compute_lane;
+            if (lane < 0 || lane >= HEADS_PARALLEL) {
+                lane = head_to_lane(active_compute_head);
+            }
             if (headed) {
-                const int lane = head_to_lane(active_compute_head);
                 write_ok = region_write_part(idx, spec.part_idx, head_out_buf[lane], spec.part_bytes);
             } else {
                 write_ok = region_write_part(idx, spec.part_idx, out_buf, spec.part_bytes);
@@ -2337,7 +2365,7 @@ void mmu_fsm(
             if (!write_ok) {
                 mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 active_compute_valid = false;
-                if (active_compute_headed) arb_release(active_compute_head);
+                if (active_compute_headed && lane >= 0 && lane < HEADS_PARALLEL) arb_release(lane);
                 g_state = State::IDLE;
                 break;
             }
@@ -2346,9 +2374,13 @@ void mmu_fsm(
             break;
         }
         case State::COMPUTE_WRITE_DONE: {
-            if (active_compute_headed && active_compute_head >= 0 && active_compute_head < NUM_HEADS) {
-                signal_head_compute_done(head_compute_ctx, active_compute_head);
-                arb_release(active_compute_head);
+            int lane = active_compute_lane;
+            if (lane < 0 || lane >= HEADS_PARALLEL) {
+                lane = head_to_lane(active_compute_head);
+            }
+            if (active_compute_headed && lane >= 0 && lane < HEADS_PARALLEL) {
+                head_compute_ctx[lane].mem_transfer_done = true;
+                arb_release(lane);
             } else {
                 mem_transfer_done = true;
             }

@@ -31,18 +31,18 @@ output  [31:0] ap_return_3;
 output  [31:0] ap_return_4;
 input   ap_rst;
 
-wire   [7:0] trunc_ln12_20_fu_40_p1;
+wire   [7:0] trunc_ln12_1_fu_40_p1;
 wire   [7:0] trunc_ln12_fu_36_p1;
 wire   [24:0] ctx_compute_op_write_assign_fu_44_p5;
 wire  signed [31:0] sext_ln29_fu_56_p1;
 
 assign ap_ready = 1'b1;
 
-assign ctx_compute_op_write_assign_fu_44_p5 = {{{{{{1'd1}, {trunc_ln12_20_fu_40_p1}}}, {trunc_ln12_fu_36_p1}}}, {8'd0}};
+assign ctx_compute_op_write_assign_fu_44_p5 = {{{{{{1'd1}, {trunc_ln12_1_fu_40_p1}}}, {trunc_ln12_fu_36_p1}}}, {8'd0}};
 
 assign sext_ln29_fu_56_p1 = $signed(ctx_compute_op_write_assign_fu_44_p5);
 
-assign trunc_ln12_20_fu_40_p1 = ctx_head_idx_write[7:0];
+assign trunc_ln12_1_fu_40_p1 = ctx_head_idx_write[7:0];
 
 assign trunc_ln12_fu_36_p1 = ctx_layer_stamp_write[7:0];
 

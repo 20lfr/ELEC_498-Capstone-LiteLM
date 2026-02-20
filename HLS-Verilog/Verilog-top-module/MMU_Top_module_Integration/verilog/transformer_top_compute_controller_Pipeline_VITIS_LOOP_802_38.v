@@ -320,7 +320,7 @@ wire   [1:0] trunc_ln802_fu_329_p1;
 reg   [2:0] i_fu_172;
 wire   [2:0] add_ln802_fu_323_p2;
 wire    ap_loop_init;
-reg   [2:0] ap_sig_allocacmp_i_65;
+reg   [2:0] ap_sig_allocacmp_i_62;
 wire   [3:0] shl_ln8_fu_333_p3;
 wire   [4:0] zext_ln804_fu_341_p1;
 wire   [5:0] or_ln_fu_345_p3;
@@ -428,9 +428,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_65 = 3'd0;
+        ap_sig_allocacmp_i_62 = 3'd0;
     end else begin
-        ap_sig_allocacmp_i_65 = i_fu_172;
+        ap_sig_allocacmp_i_62 = i_fu_172;
     end
 end
 
@@ -477,7 +477,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln802_fu_323_p2 = (ap_sig_allocacmp_i_65 + 3'd1);
+assign add_ln802_fu_323_p2 = (ap_sig_allocacmp_i_62 + 3'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -629,7 +629,7 @@ assign grp_read_i32_fu_4972_p_din8 = p_ZZ15transformer_topRN3hls6streamINS_4axis
 
 assign grp_read_i32_fu_4972_p_din9 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_64;
 
-assign icmp_ln802_fu_317_p2 = ((ap_sig_allocacmp_i_65 == 3'd4) ? 1'b1 : 1'b0);
+assign icmp_ln802_fu_317_p2 = ((ap_sig_allocacmp_i_62 == 3'd4) ? 1'b1 : 1'b0);
 
 assign or_ln_fu_345_p3 = {{1'd1}, {zext_ln804_fu_341_p1}};
 
@@ -637,7 +637,7 @@ assign sext_ln804_fu_353_p1 = $signed(or_ln_fu_345_p3);
 
 assign shl_ln8_fu_333_p3 = {{trunc_ln802_fu_329_p1}, {2'd0}};
 
-assign trunc_ln802_fu_329_p1 = ap_sig_allocacmp_i_65[1:0];
+assign trunc_ln802_fu_329_p1 = ap_sig_allocacmp_i_62[1:0];
 
 assign zext_ln804_fu_341_p1 = shl_ln8_fu_333_p3;
 

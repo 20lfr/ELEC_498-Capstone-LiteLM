@@ -72,15 +72,11 @@ static const char *state_name(SchedState st) {
     case S_ATTENTION_HEADS: return "S_ATT_HEADS";
     case S_HEAD_CONCAT:     return "S_HEAD_CONCAT";
     case S_OUT_PROJECTION:  return "S_OUT_PROJ";
-    case S_REQUANT1:        return "S_RQ1";
     case S_RES_ADD_1:       return "S_RES_ADD_1";
     case S_LAYER_NORM_0:    return "S_LN_0";
-    case S_REQUANT2:        return "S_RQ2";
     case S_FFN:             return "S_FFN";
-    case S_REQUANT3:        return "S_RQ3";
     case S_RES_ADD_2:       return "S_RES_ADD_2";
     case S_LAYER_NORM_1:    return "S_LN_1";
-    case S_REQUANT4:        return "S_RQ4";
     case S_LOOP_CHECK:      return "S_LOOP_CHECK";
     case S_FINAL_NORM:      return "S_FINAL_NORM";
     case S_STREAM_OUT:      return "S_STREAM_OUT";
@@ -1387,7 +1383,7 @@ int main() {
     bool wl_start        = false;
     bool wl_accept       = false;
     uint32_t wl_instruction = 0;
-    HeadCtx head_ctx_ref[NUM_HEADS];
+    HeadCtx head_ctx_ref[HEADS_PARALLEL];
     ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL] = {};
     bool dma_start       = false;
     uint32_t dma_addr    = 0;
@@ -1921,11 +1917,9 @@ int main() {
             }
 
             for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-                const int hidx = dbg_head_group_idx * HEADS_PARALLEL + lane;
-                if (hidx < 0 || hidx >= NUM_HEADS) {
-                    continue;
-                }
-                const HeadCtx &hctx = head_ctx_ref[hidx];
+                const HeadCtx &hctx = head_ctx_ref[lane];
+                const int hidx = hctx.head_idx;
+                if (hidx < 0 || hidx >= NUM_HEADS) continue;
                 const ComputeHeadCtx &cctx = head_compute_ctx[lane];
                 ComputeOp head_op = decode_op(cctx.mem_op);
                 if (head_op == ComputeOp::CMP_NONE) {
@@ -2002,16 +1996,15 @@ int main() {
                     dbg_axis_in_last_wire ? 1 : 0,
                     dbg_stream_in_counter);
 
-        const int hidx0 = dbg_head_group_idx * HEADS_PARALLEL;
-        const int hidx1 = hidx0 + 1;
-        auto print_head_signals = [&](int lane, int hidx) {
-            if (lane < 0 || lane >= HEADS_PARALLEL || hidx < 0 || hidx >= NUM_HEADS) {
+        auto print_head_signals = [&](int lane) {
+            if (lane < 0 || lane >= HEADS_PARALLEL) {
                 std::printf("H%d[h=- ph=- wl_s=0 wl_a=0 wl_i=0x00000000 c_s=0 c_i=0x00000000 c_st=- mr=0 mw=0 md=0]",
                             lane);
                 return;
             }
-            const HeadCtx &hctx = head_ctx_ref[hidx];
+            const HeadCtx &hctx = head_ctx_ref[lane];
             const ComputeHeadCtx &cctx = head_compute_ctx[lane];
+            const int hidx = hctx.head_idx;
             std::printf(
                 "H%d[h=%d ph=%-7s wl_s=%d wl_a=%d wl_i=0x%08X c_s=%d c_i=0x%08X c_st=%-10s mr=%d mw=%d md=%d]",
                 lane,
@@ -2028,9 +2021,9 @@ int main() {
                 cctx.mem_transfer_done ? 1 : 0);
         };
         std::printf(" | ");
-        print_head_signals(0, hidx0);
+        print_head_signals(0);
         std::printf(" | ");
-        print_head_signals(1, hidx1);
+        print_head_signals(1);
         std::printf("\n");
 
         if (dbg_error) {

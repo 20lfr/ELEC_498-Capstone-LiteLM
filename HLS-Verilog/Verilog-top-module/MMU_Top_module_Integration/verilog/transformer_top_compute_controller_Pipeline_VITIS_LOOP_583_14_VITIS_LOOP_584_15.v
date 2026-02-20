@@ -281,7 +281,7 @@ reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 wire   [2:0] add_ln583_fu_742_p2;
 wire   [5:0] tmp_s_fu_763_p3;
 wire   [0:0] tmp_fu_755_p3;
-wire   [0:0] tmp_223_fu_778_p3;
+wire   [0:0] tmp_210_fu_778_p3;
 wire   [5:0] zext_ln584_1_fu_775_p1;
 wire   [5:0] add_ln592_fu_791_p2;
 wire   [6:0] shl_ln6_fu_805_p3;
@@ -293,18 +293,18 @@ wire   [8:0] zext_ln592_2_fu_823_p1;
 wire   [8:0] zext_ln584_fu_771_p1;
 wire   [8:0] sub_ln587_fu_857_p2;
 wire   [8:0] nibble_idx_fu_863_p2;
-wire   [6:0] trunc_ln771_fu_873_p1;
-wire   [6:0] sub_ln771_fu_885_p2;
-wire   [5:0] trunc_ln771_3_fu_891_p4;
-wire   [0:0] tmp_224_fu_877_p3;
-wire   [5:0] sub_ln771_1_fu_901_p2;
-wire   [5:0] trunc_ln771_4_fu_907_p4;
+wire   [6:0] trunc_ln767_fu_873_p1;
+wire   [6:0] sub_ln767_fu_885_p2;
+wire   [5:0] trunc_ln767_3_fu_891_p4;
+wire   [0:0] tmp_211_fu_877_p3;
+wire   [5:0] sub_ln767_1_fu_901_p2;
+wire   [5:0] trunc_ln767_4_fu_907_p4;
 wire   [7:0] byte_val_fu_925_p65;
 wire   [5:0] byte_val_fu_925_p66;
 wire   [7:0] byte_val_fu_925_p67;
-wire   [0:0] trunc_ln770_fu_869_p1;
-wire   [3:0] tmp_151_fu_1029_p4;
-wire   [3:0] trunc_ln773_fu_1039_p1;
+wire   [0:0] trunc_ln766_fu_869_p1;
+wire   [3:0] tmp_142_fu_1029_p4;
+wire   [3:0] trunc_ln769_fu_1039_p1;
 wire   [0:0] or_ln586_fu_785_p2;
 wire   [3:0] nibble_fu_1043_p3;
 reg    ap_done_reg;
@@ -904,7 +904,7 @@ assign ap_ready = ap_ready_sig;
 
 assign byte_val_fu_925_p65 = 'bx;
 
-assign byte_val_fu_925_p66 = ((tmp_224_fu_877_p3[0:0] == 1'b1) ? sub_ln771_1_fu_901_p2 : trunc_ln771_4_fu_907_p4);
+assign byte_val_fu_925_p66 = ((tmp_211_fu_877_p3[0:0] == 1'b1) ? sub_ln767_1_fu_901_p2 : trunc_ln767_4_fu_907_p4);
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_66_address0 = zext_ln592_3_fu_837_p1;
 
@@ -992,11 +992,11 @@ assign icmp_ln584_fu_709_p2 = ((ap_sig_allocacmp_i_load == 5'd24) ? 1'b1 : 1'b0)
 
 assign lshr_ln_fu_827_p4 = {{add_ln592_1_fu_817_p2[7:4]}};
 
-assign nibble_fu_1043_p3 = ((trunc_ln770_fu_869_p1[0:0] == 1'b1) ? tmp_151_fu_1029_p4 : trunc_ln773_fu_1039_p1);
+assign nibble_fu_1043_p3 = ((trunc_ln766_fu_869_p1[0:0] == 1'b1) ? tmp_142_fu_1029_p4 : trunc_ln769_fu_1039_p1);
 
 assign nibble_idx_fu_863_p2 = (sub_ln587_fu_857_p2 + 9'd32);
 
-assign or_ln586_fu_785_p2 = (tmp_fu_755_p3 | tmp_223_fu_778_p3);
+assign or_ln586_fu_785_p2 = (tmp_fu_755_p3 | tmp_210_fu_778_p3);
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_30_address0 = zext_ln592_3_fu_837_p1;
 
@@ -1056,15 +1056,15 @@ assign storemerge363_fu_1051_p3 = ((or_ln586_fu_785_p2[0:0] == 1'b1) ? 4'd0 : ni
 
 assign sub_ln587_fu_857_p2 = (zext_ln592_2_fu_823_p1 - zext_ln584_fu_771_p1);
 
-assign sub_ln771_1_fu_901_p2 = (6'd0 - trunc_ln771_3_fu_891_p4);
+assign sub_ln767_1_fu_901_p2 = (6'd0 - trunc_ln767_3_fu_891_p4);
 
-assign sub_ln771_fu_885_p2 = (7'd0 - trunc_ln771_fu_873_p1);
+assign sub_ln767_fu_885_p2 = (7'd0 - trunc_ln767_fu_873_p1);
 
-assign tmp_151_fu_1029_p4 = {{byte_val_fu_925_p67[7:4]}};
+assign tmp_142_fu_1029_p4 = {{byte_val_fu_925_p67[7:4]}};
 
-assign tmp_223_fu_778_p3 = select_ln583_reg_1303[32'd4];
+assign tmp_210_fu_778_p3 = select_ln583_reg_1303[32'd4];
 
-assign tmp_224_fu_877_p3 = nibble_idx_fu_863_p2[32'd8];
+assign tmp_211_fu_877_p3 = nibble_idx_fu_863_p2[32'd8];
 
 assign tmp_fu_755_p3 = select_ln583_1_fu_748_p3[32'd2];
 
@@ -1072,15 +1072,15 @@ assign tmp_s_fu_763_p3 = {{select_ln583_1_fu_748_p3}, {3'd0}};
 
 assign trunc_ln592_fu_797_p1 = add_ln592_fu_791_p2[3:0];
 
-assign trunc_ln770_fu_869_p1 = nibble_idx_fu_863_p2[0:0];
+assign trunc_ln766_fu_869_p1 = nibble_idx_fu_863_p2[0:0];
 
-assign trunc_ln771_3_fu_891_p4 = {{sub_ln771_fu_885_p2[6:1]}};
+assign trunc_ln767_3_fu_891_p4 = {{sub_ln767_fu_885_p2[6:1]}};
 
-assign trunc_ln771_4_fu_907_p4 = {{nibble_idx_fu_863_p2[6:1]}};
+assign trunc_ln767_4_fu_907_p4 = {{nibble_idx_fu_863_p2[6:1]}};
 
-assign trunc_ln771_fu_873_p1 = nibble_idx_fu_863_p2[6:0];
+assign trunc_ln767_fu_873_p1 = nibble_idx_fu_863_p2[6:0];
 
-assign trunc_ln773_fu_1039_p1 = byte_val_fu_925_p67[3:0];
+assign trunc_ln769_fu_1039_p1 = byte_val_fu_925_p67[3:0];
 
 assign zext_ln584_1_fu_775_p1 = select_ln583_reg_1303;
 

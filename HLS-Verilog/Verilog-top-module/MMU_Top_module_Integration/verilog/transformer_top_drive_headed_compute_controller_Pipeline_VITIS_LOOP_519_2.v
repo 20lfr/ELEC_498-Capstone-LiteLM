@@ -162,7 +162,7 @@ reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [63:0] zext_ln519_fu_358_p1;
-reg   [8:0] i_50_fu_96;
+reg   [8:0] i_47_fu_96;
 wire   [8:0] add_ln519_fu_338_p2;
 wire    ap_loop_init;
 reg   [8:0] ap_sig_allocacmp_i;
@@ -199,7 +199,7 @@ reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_10_2_ce0_local;
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_96_we0_local;
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_96_ce0_local;
-wire   [3:0] lshr_ln_fu_348_p4;
+wire   [3:0] lshr_ln7_fu_348_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -213,7 +213,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_50_fu_96 = 9'd0;
+#0 i_47_fu_96 = 9'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -255,9 +255,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         if ((icmp_ln519_fu_332_p2 == 1'd0)) begin
-            i_50_fu_96 <= add_ln519_fu_338_p2;
+            i_47_fu_96 <= add_ln519_fu_338_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_50_fu_96 <= 9'd0;
+            i_47_fu_96 <= 9'd0;
         end
     end
 end
@@ -306,7 +306,7 @@ always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
         ap_sig_allocacmp_i = 9'd0;
     end else begin
-        ap_sig_allocacmp_i = i_50_fu_96;
+        ap_sig_allocacmp_i = i_47_fu_96;
     end
 end
 
@@ -721,10 +721,10 @@ assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 
 assign icmp_ln519_fu_332_p2 = ((ap_sig_allocacmp_i == 9'd256) ? 1'b1 : 1'b0);
 
-assign lshr_ln_fu_348_p4 = {{ap_sig_allocacmp_i[7:4]}};
+assign lshr_ln7_fu_348_p4 = {{ap_sig_allocacmp_i[7:4]}};
 
 assign trunc_ln519_fu_344_p1 = ap_sig_allocacmp_i[3:0];
 
-assign zext_ln519_fu_358_p1 = lshr_ln_fu_348_p4;
+assign zext_ln519_fu_358_p1 = lshr_ln7_fu_348_p4;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_519_2

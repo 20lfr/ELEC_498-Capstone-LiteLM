@@ -16,7 +16,7 @@ bool run_single_head(
 );
 
 bool drive_group_head_phase(
-    HeadCtx     (&head_ctx_ref)[NUM_HEADS],
+    HeadCtx     (&head_ctx_ref)[HEADS_PARALLEL],
     int         group_base,
     int         layer_idx,
     bool        start

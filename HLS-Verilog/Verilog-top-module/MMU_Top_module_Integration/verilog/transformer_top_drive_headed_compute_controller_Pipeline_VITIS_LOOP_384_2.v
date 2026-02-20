@@ -14,20 +14,20 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_384_2
         ap_idle,
         ap_ready,
         max_val,
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_325,
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_326,
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_327,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_328,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_329,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_330,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_331,
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_332,
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_333,
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_334,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3,
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_332,
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_333,
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_334,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_335,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_336,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_337,
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_338,
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_339,
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_340,
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4,
         max_val_1_reload,
         exp_buf_15_out,
@@ -78,20 +78,20 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [15:0] max_val;
+input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_325;
+input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_326;
+input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_327;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_328;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_329;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_330;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_331;
-input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_332;
-input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_333;
-input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_334;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3;
+input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_332;
+input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_333;
+input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_334;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_335;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_336;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_337;
-input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_338;
-input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_339;
-input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_340;
 input  [15:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4;
 input  [15:0] max_val_1_reload;
 output  [15:0] exp_buf_15_out;
@@ -173,7 +173,7 @@ wire    ap_block_pp0_stage0;
 reg   [18:0] sum_exp_fu_170;
 wire   [18:0] sum_exp_2_fu_788_p2;
 wire    ap_loop_init;
-reg   [4:0] i_58_fu_174;
+reg   [4:0] i_55_fu_174;
 wire   [4:0] add_ln384_fu_495_p2;
 reg   [4:0] ap_sig_allocacmp_i;
 reg   [15:0] exp_buf_fu_178;
@@ -195,9 +195,9 @@ reg   [15:0] exp_buf_14_fu_234;
 reg   [15:0] exp_buf_15_fu_238;
 wire    ap_block_pp0_stage0_01001;
 reg    exp_lut_q15_1_ce0_local;
-wire   [15:0] tmp_63_fu_505_p33;
-wire   [3:0] tmp_63_fu_505_p34;
-wire   [15:0] tmp_63_fu_505_p35;
+wire   [15:0] tmp_56_fu_505_p33;
+wire   [3:0] tmp_56_fu_505_p34;
+wire   [15:0] tmp_56_fu_505_p35;
 wire   [15:0] diff_fu_577_p2;
 wire   [0:0] tmp_fu_583_p3;
 wire   [7:0] part_sel_fu_603_p4;
@@ -215,22 +215,22 @@ wire    ap_enable_pp0;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [3:0] tmp_63_fu_505_p1;
-wire   [3:0] tmp_63_fu_505_p3;
-wire   [3:0] tmp_63_fu_505_p5;
-wire   [3:0] tmp_63_fu_505_p7;
-wire   [3:0] tmp_63_fu_505_p9;
-wire   [3:0] tmp_63_fu_505_p11;
-wire   [3:0] tmp_63_fu_505_p13;
-wire   [3:0] tmp_63_fu_505_p15;
-wire  signed [3:0] tmp_63_fu_505_p17;
-wire  signed [3:0] tmp_63_fu_505_p19;
-wire  signed [3:0] tmp_63_fu_505_p21;
-wire  signed [3:0] tmp_63_fu_505_p23;
-wire  signed [3:0] tmp_63_fu_505_p25;
-wire  signed [3:0] tmp_63_fu_505_p27;
-wire  signed [3:0] tmp_63_fu_505_p29;
-wire  signed [3:0] tmp_63_fu_505_p31;
+wire   [3:0] tmp_56_fu_505_p1;
+wire   [3:0] tmp_56_fu_505_p3;
+wire   [3:0] tmp_56_fu_505_p5;
+wire   [3:0] tmp_56_fu_505_p7;
+wire   [3:0] tmp_56_fu_505_p9;
+wire   [3:0] tmp_56_fu_505_p11;
+wire   [3:0] tmp_56_fu_505_p13;
+wire   [3:0] tmp_56_fu_505_p15;
+wire  signed [3:0] tmp_56_fu_505_p17;
+wire  signed [3:0] tmp_56_fu_505_p19;
+wire  signed [3:0] tmp_56_fu_505_p21;
+wire  signed [3:0] tmp_56_fu_505_p23;
+wire  signed [3:0] tmp_56_fu_505_p25;
+wire  signed [3:0] tmp_56_fu_505_p27;
+wire  signed [3:0] tmp_56_fu_505_p29;
+wire  signed [3:0] tmp_56_fu_505_p31;
 wire  signed [1:0] e_q15_fu_677_p1;
 wire   [1:0] e_q15_fu_677_p3;
 wire   [1:0] e_q15_fu_677_p5;
@@ -241,7 +241,7 @@ initial begin
 #0 ap_CS_fsm = 1'd1;
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
 #0 sum_exp_fu_170 = 19'd0;
-#0 i_58_fu_174 = 5'd0;
+#0 i_55_fu_174 = 5'd0;
 #0 exp_buf_fu_178 = 16'd0;
 #0 exp_buf_1_fu_182 = 16'd0;
 #0 exp_buf_2_fu_186 = 16'd0;
@@ -301,24 +301,24 @@ end
     .dout_WIDTH( 16 ))
 sparsemux_33_4_16_1_1_U2227(
     .din0(max_val),
-    .din1(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_328),
-    .din2(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_329),
-    .din3(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_330),
-    .din4(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_331),
-    .din5(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_332),
-    .din6(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_333),
-    .din7(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_334),
+    .din1(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_325),
+    .din2(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_326),
+    .din3(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_327),
+    .din4(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_328),
+    .din5(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_329),
+    .din6(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_330),
+    .din7(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3_331),
     .din8(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_3),
-    .din9(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_335),
-    .din10(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_336),
-    .din11(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_337),
-    .din12(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_338),
-    .din13(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_339),
-    .din14(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_340),
+    .din9(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_332),
+    .din10(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_333),
+    .din11(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_334),
+    .din12(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_335),
+    .din13(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_336),
+    .din14(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4_337),
     .din15(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_4),
-    .def(tmp_63_fu_505_p33),
-    .sel(tmp_63_fu_505_p34),
-    .dout(tmp_63_fu_505_p35)
+    .def(tmp_56_fu_505_p33),
+    .sel(tmp_56_fu_505_p34),
+    .dout(tmp_56_fu_505_p35)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_7_2_15_1_1 #(
@@ -392,9 +392,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         if (((icmp_ln384_fu_489_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_58_fu_174 <= add_ln384_fu_495_p2;
+            i_55_fu_174 <= add_ln384_fu_495_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_58_fu_174 <= 5'd0;
+            i_55_fu_174 <= 5'd0;
         end
     end
 end
@@ -557,7 +557,7 @@ always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
         ap_sig_allocacmp_i = 5'd0;
     end else begin
-        ap_sig_allocacmp_i = i_58_fu_174;
+        ap_sig_allocacmp_i = i_55_fu_174;
     end
 end
 
@@ -740,7 +740,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign diff_fu_577_p2 = (tmp_63_fu_505_p35 - max_val_1_reload);
+assign diff_fu_577_p2 = (tmp_56_fu_505_p35 - max_val_1_reload);
 
 assign e_q15_fu_677_p7 = 'bx;
 
@@ -794,9 +794,9 @@ assign sum_exp_2_fu_788_p2 = (zext_ln393_fu_784_p1 + sum_exp_fu_170);
 
 assign sum_exp_out = sum_exp_fu_170;
 
-assign tmp_63_fu_505_p33 = 'bx;
+assign tmp_56_fu_505_p33 = 'bx;
 
-assign tmp_63_fu_505_p34 = ap_sig_allocacmp_i[3:0];
+assign tmp_56_fu_505_p34 = ap_sig_allocacmp_i[3:0];
 
 assign tmp_fu_583_p3 = diff_fu_577_p2[32'd15];
 

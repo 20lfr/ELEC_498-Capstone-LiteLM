@@ -57,13 +57,13 @@ wire   [0:0] icmp_ln715_fu_114_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln794_fu_168_p1;
+wire   [63:0] zext_ln790_fu_168_p1;
 reg   [2:0] h_10_fu_52;
 wire   [2:0] add_ln715_fu_120_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_h;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we0_local;
-wire   [0:0] trunc_ln794_fu_156_p1;
+wire   [0:0] trunc_ln790_fu_156_p1;
 wire   [7:0] value_assign_fu_130_p11;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0_local;
@@ -218,7 +218,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln794_fu_156_p1 == 1'd1) & (icmp_ln715_fu_114_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln790_fu_156_p1 == 1'd1) & (icmp_ln715_fu_114_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0_local = 1'b1;
     end else begin
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0_local = 1'b0;
@@ -234,7 +234,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln794_fu_156_p1 == 1'd0) & (icmp_ln715_fu_114_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln790_fu_156_p1 == 1'd0) & (icmp_ln715_fu_114_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we0_local = 1'b1;
     end else begin
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we0_local = 1'b0;
@@ -268,7 +268,7 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln715_fu_114_p2 = ((ap_sig_allocacmp_h == 3'd4) ? 1'b1 : 1'b0);
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln794_fu_168_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln790_fu_168_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0_local;
 
@@ -276,7 +276,7 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_address0 = zext_ln794_fu_168_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_address0 = zext_ln790_fu_168_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0_local;
 
@@ -286,12 +286,12 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign tmp_fu_160_p3 = ap_sig_allocacmp_h[32'd1];
 
-assign trunc_ln794_fu_156_p1 = ap_sig_allocacmp_h[0:0];
+assign trunc_ln790_fu_156_p1 = ap_sig_allocacmp_h[0:0];
 
 assign value_assign_fu_130_p10 = ap_sig_allocacmp_h[1:0];
 
 assign value_assign_fu_130_p9 = 'bx;
 
-assign zext_ln794_fu_168_p1 = tmp_fu_160_p3;
+assign zext_ln790_fu_168_p1 = tmp_fu_160_p3;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_715_18

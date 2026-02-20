@@ -193,20 +193,16 @@ enum SchedState {
     S_STREAM_IN,       // 1
     S_LAYER_COUNT,     // 2
     S_LAYER_NORM_0,    // 3
-    S_REQUANT1,        // 4
-    S_ATTENTION_HEADS, // 5
-    S_HEAD_CONCAT,     // 6
-    S_OUT_PROJECTION,  // 7
-    S_REQUANT2,        // 8
-    S_RES_ADD_1,       // 9
-    S_LAYER_NORM_1,    // 10
-    S_REQUANT3,        // 11
-    S_FFN,             // 12
-    S_REQUANT4,        // 13
-    S_RES_ADD_2,       // 14
-    S_LOOP_CHECK,      // 15
-    S_FINAL_NORM,      // 16
-    S_STREAM_OUT       // 17
+    S_ATTENTION_HEADS, // 4
+    S_HEAD_CONCAT,     // 5
+    S_OUT_PROJECTION,  // 6
+    S_RES_ADD_1,       // 7
+    S_LAYER_NORM_1,    // 8
+    S_FFN,             // 9
+    S_RES_ADD_2,       // 10
+    S_LOOP_CHECK,      // 11
+    S_FINAL_NORM,      // 12
+    S_STREAM_OUT       // 13
 };
 // ------------------------------------------------------------
 // Headed Attention and FSM enums

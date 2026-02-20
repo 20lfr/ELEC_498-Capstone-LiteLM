@@ -268,32 +268,32 @@ wire  signed [15:0] mul_ln284_15_fu_654_p0;
 wire  signed [23:0] mul_ln284_15_fu_654_p2;
 wire  signed [24:0] grp_fu_785_p3;
 wire  signed [24:0] grp_fu_793_p3;
-wire  signed [25:0] sext_ln284_18_fu_666_p1;
-wire  signed [25:0] sext_ln284_17_fu_663_p1;
+wire  signed [25:0] sext_ln284_19_fu_666_p1;
+wire  signed [25:0] sext_ln284_18_fu_663_p1;
 wire   [25:0] add_ln284_2_fu_669_p2;
 wire  signed [24:0] grp_fu_809_p3;
 wire  signed [24:0] grp_fu_801_p3;
-wire  signed [25:0] sext_ln284_21_fu_682_p1;
-wire  signed [25:0] sext_ln284_20_fu_679_p1;
+wire  signed [25:0] sext_ln284_22_fu_682_p1;
+wire  signed [25:0] sext_ln284_21_fu_679_p1;
 wire   [25:0] add_ln284_5_fu_685_p2;
-wire  signed [26:0] sext_ln284_22_fu_691_p1;
-wire  signed [26:0] sext_ln284_19_fu_675_p1;
+wire  signed [26:0] sext_ln284_23_fu_691_p1;
+wire  signed [26:0] sext_ln284_20_fu_675_p1;
 wire   [26:0] add_ln284_6_fu_695_p2;
 wire  signed [24:0] grp_fu_833_p3;
 wire  signed [24:0] grp_fu_825_p3;
-wire  signed [25:0] sext_ln284_25_fu_708_p1;
-wire  signed [25:0] sext_ln284_24_fu_705_p1;
+wire  signed [25:0] sext_ln284_26_fu_708_p1;
+wire  signed [25:0] sext_ln284_25_fu_705_p1;
 wire   [25:0] add_ln284_9_fu_711_p2;
 wire  signed [24:0] grp_fu_817_p3;
 wire  signed [24:0] grp_fu_777_p3;
-wire  signed [25:0] sext_ln284_28_fu_724_p1;
-wire  signed [25:0] sext_ln284_27_fu_721_p1;
+wire  signed [25:0] sext_ln284_29_fu_724_p1;
+wire  signed [25:0] sext_ln284_28_fu_721_p1;
 wire   [25:0] add_ln284_12_fu_727_p2;
-wire  signed [26:0] sext_ln284_29_fu_733_p1;
-wire  signed [26:0] sext_ln284_26_fu_717_p1;
+wire  signed [26:0] sext_ln284_30_fu_733_p1;
+wire  signed [26:0] sext_ln284_27_fu_717_p1;
 wire   [26:0] add_ln284_13_fu_737_p2;
-wire  signed [27:0] sext_ln284_30_fu_743_p1;
-wire  signed [27:0] sext_ln284_23_fu_701_p1;
+wire  signed [27:0] sext_ln284_31_fu_743_p1;
+wire  signed [27:0] sext_ln284_24_fu_701_p1;
 wire  signed [15:0] grp_fu_777_p0;
 wire  signed [15:0] grp_fu_785_p0;
 wire  signed [15:0] grp_fu_793_p0;
@@ -899,21 +899,21 @@ always @ (*) begin
     endcase
 end
 
-assign acc_fu_747_p2 = ($signed(sext_ln284_30_fu_743_p1) + $signed(sext_ln284_23_fu_701_p1));
+assign acc_fu_747_p2 = ($signed(sext_ln284_31_fu_743_p1) + $signed(sext_ln284_24_fu_701_p1));
 
 assign add_ln278_fu_490_p2 = (ap_sig_allocacmp_out_2 + 3'd1);
 
-assign add_ln284_12_fu_727_p2 = ($signed(sext_ln284_28_fu_724_p1) + $signed(sext_ln284_27_fu_721_p1));
+assign add_ln284_12_fu_727_p2 = ($signed(sext_ln284_29_fu_724_p1) + $signed(sext_ln284_28_fu_721_p1));
 
-assign add_ln284_13_fu_737_p2 = ($signed(sext_ln284_29_fu_733_p1) + $signed(sext_ln284_26_fu_717_p1));
+assign add_ln284_13_fu_737_p2 = ($signed(sext_ln284_30_fu_733_p1) + $signed(sext_ln284_27_fu_717_p1));
 
-assign add_ln284_2_fu_669_p2 = ($signed(sext_ln284_18_fu_666_p1) + $signed(sext_ln284_17_fu_663_p1));
+assign add_ln284_2_fu_669_p2 = ($signed(sext_ln284_19_fu_666_p1) + $signed(sext_ln284_18_fu_663_p1));
 
-assign add_ln284_5_fu_685_p2 = ($signed(sext_ln284_21_fu_682_p1) + $signed(sext_ln284_20_fu_679_p1));
+assign add_ln284_5_fu_685_p2 = ($signed(sext_ln284_22_fu_682_p1) + $signed(sext_ln284_21_fu_679_p1));
 
-assign add_ln284_6_fu_695_p2 = ($signed(sext_ln284_22_fu_691_p1) + $signed(sext_ln284_19_fu_675_p1));
+assign add_ln284_6_fu_695_p2 = ($signed(sext_ln284_23_fu_691_p1) + $signed(sext_ln284_20_fu_675_p1));
 
-assign add_ln284_9_fu_711_p2 = ($signed(sext_ln284_25_fu_708_p1) + $signed(sext_ln284_24_fu_705_p1));
+assign add_ln284_9_fu_711_p2 = ($signed(sext_ln284_26_fu_708_p1) + $signed(sext_ln284_25_fu_705_p1));
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -1071,33 +1071,33 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hR
 
 assign sext_ln278_cast_fu_472_p1 = $signed(sext_ln278);
 
-assign sext_ln284_17_fu_663_p1 = grp_fu_785_p3;
+assign sext_ln284_18_fu_663_p1 = grp_fu_785_p3;
 
-assign sext_ln284_18_fu_666_p1 = grp_fu_793_p3;
+assign sext_ln284_19_fu_666_p1 = grp_fu_793_p3;
 
-assign sext_ln284_19_fu_675_p1 = $signed(add_ln284_2_fu_669_p2);
+assign sext_ln284_20_fu_675_p1 = $signed(add_ln284_2_fu_669_p2);
 
-assign sext_ln284_20_fu_679_p1 = grp_fu_809_p3;
+assign sext_ln284_21_fu_679_p1 = grp_fu_809_p3;
 
-assign sext_ln284_21_fu_682_p1 = grp_fu_801_p3;
+assign sext_ln284_22_fu_682_p1 = grp_fu_801_p3;
 
-assign sext_ln284_22_fu_691_p1 = $signed(add_ln284_5_fu_685_p2);
+assign sext_ln284_23_fu_691_p1 = $signed(add_ln284_5_fu_685_p2);
 
-assign sext_ln284_23_fu_701_p1 = $signed(add_ln284_6_fu_695_p2);
+assign sext_ln284_24_fu_701_p1 = $signed(add_ln284_6_fu_695_p2);
 
-assign sext_ln284_24_fu_705_p1 = grp_fu_833_p3;
+assign sext_ln284_25_fu_705_p1 = grp_fu_833_p3;
 
-assign sext_ln284_25_fu_708_p1 = grp_fu_825_p3;
+assign sext_ln284_26_fu_708_p1 = grp_fu_825_p3;
 
-assign sext_ln284_26_fu_717_p1 = $signed(add_ln284_9_fu_711_p2);
+assign sext_ln284_27_fu_717_p1 = $signed(add_ln284_9_fu_711_p2);
 
-assign sext_ln284_27_fu_721_p1 = grp_fu_817_p3;
+assign sext_ln284_28_fu_721_p1 = grp_fu_817_p3;
 
-assign sext_ln284_28_fu_724_p1 = grp_fu_777_p3;
+assign sext_ln284_29_fu_724_p1 = grp_fu_777_p3;
 
-assign sext_ln284_29_fu_733_p1 = $signed(add_ln284_12_fu_727_p2);
+assign sext_ln284_30_fu_733_p1 = $signed(add_ln284_12_fu_727_p2);
 
-assign sext_ln284_30_fu_743_p1 = $signed(add_ln284_13_fu_737_p2);
+assign sext_ln284_31_fu_743_p1 = $signed(add_ln284_13_fu_737_p2);
 
 assign trunc_ln278_fu_508_p1 = ap_sig_allocacmp_out_2[1:0];
 

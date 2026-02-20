@@ -341,7 +341,7 @@ bool run_single_head(
 
 
 bool drive_group_head_phase(
-    HeadCtx     (&head_ctx_ref)[NUM_HEADS],      // [BOTH]: Full head context array
+    HeadCtx     (&head_ctx_ref)[HEADS_PARALLEL], // [BOTH]: Active lane context array
     int         group_base,                      // [INPUT]: Base head index of active group
     int         layer_idx,                      // [INPUT]: Current Layer ID
     bool        start                           // [INPUT]: Start the driving phase
@@ -352,11 +352,17 @@ bool drive_group_head_phase(
 
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
-        const int h = group_base + lane;
-        if (h >= NUM_HEADS) {
+        HeadCtx &ctx = head_ctx_ref[lane];
+
+        int abs_head = ctx.head_idx;
+        if (abs_head < 0) {
+            abs_head = group_base + lane;
+        }
+        if (abs_head < 0 || abs_head >= NUM_HEADS) {
+            ctx.start_head = false;
             continue;
         }
-        HeadCtx &ctx = head_ctx_ref[h]; // Current head in this group
+        ctx.head_idx = abs_head;
 
         // One-cycle start pulse only when idle
         ctx.start_head = start && (ctx.phase == HeadPhase::IDLE);

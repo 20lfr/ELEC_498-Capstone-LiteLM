@@ -188,7 +188,7 @@ void mmu_fsm(
     // ------------------------------------------------------------
     // Head scheduler + headed compute contexts
     // ------------------------------------------------------------
-    HeadCtx (&head_ctx)[NUM_HEADS],                 // [BOTH] Per-head scheduler handshake
+    HeadCtx (&head_ctx)[HEADS_PARALLEL],            // [BOTH] Per-lane scheduler handshake
     ComputeHeadCtx (&head_compute_ctx)[HEADS_PARALLEL], // [BOTH] Headed compute handshake
 
     // ------------------------------------------------------------

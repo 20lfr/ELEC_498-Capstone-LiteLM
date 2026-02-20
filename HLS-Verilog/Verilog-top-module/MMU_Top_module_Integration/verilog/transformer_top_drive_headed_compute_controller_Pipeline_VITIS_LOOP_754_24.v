@@ -57,7 +57,7 @@ wire   [3:0] trunc_ln754_fu_84_p1;
 reg   [4:0] h_fu_60;
 wire   [4:0] add_ln754_fu_78_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_h_8;
+reg   [4:0] ap_sig_allocacmp_h_9;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -162,9 +162,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_h_8 = 5'd0;
+        ap_sig_allocacmp_h_9 = 5'd0;
     end else begin
-        ap_sig_allocacmp_h_8 = h_fu_60;
+        ap_sig_allocacmp_h_9 = h_fu_60;
     end
 end
 
@@ -211,7 +211,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln754_fu_78_p2 = (ap_sig_allocacmp_h_8 + 5'd1);
+assign add_ln754_fu_78_p2 = (ap_sig_allocacmp_h_9 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -225,7 +225,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln754_fu_72_p2 = ((ap_sig_allocacmp_h_8 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln754_fu_72_p2 = ((ap_sig_allocacmp_h_9 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_4 = 4'd0;
 
@@ -235,6 +235,6 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hR
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_7 = 4'd0;
 
-assign trunc_ln754_fu_84_p1 = ap_sig_allocacmp_h_8[3:0];
+assign trunc_ln754_fu_84_p1 = ap_sig_allocacmp_h_9[3:0];
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_754_24

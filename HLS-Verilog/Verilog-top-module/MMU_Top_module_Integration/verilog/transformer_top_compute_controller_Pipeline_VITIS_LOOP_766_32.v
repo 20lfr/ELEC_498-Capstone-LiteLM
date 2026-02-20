@@ -13,11 +13,11 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_766_32 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_710,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_712,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_714,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_716,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_718,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1358,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1360,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1362,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1364,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_668,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_670,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_672,
@@ -37,11 +37,11 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_766_32 (
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_700,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_702,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_704,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_711,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_713,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_715,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_717,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_719,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1359,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1361,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1363,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1365,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_669,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_671,
         p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_673,
@@ -247,11 +247,11 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_710;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_712;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_714;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_716;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_718;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1358;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1360;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1362;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1364;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_668;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_670;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_672;
@@ -271,11 +271,11 @@ input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0EL
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_700;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_702;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_704;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_711;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_713;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_715;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_717;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_719;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1359;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1361;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1363;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1365;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_669;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_671;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_673;
@@ -485,7 +485,7 @@ wire   [63:0] zext_ln766_fu_1394_p1;
 reg   [4:0] i_fu_366;
 wire   [4:0] add_ln766_fu_1376_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_68;
+reg   [4:0] ap_sig_allocacmp_i_65;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_13_we0_local;
 wire   [3:0] trunc_ln766_fu_1382_p1;
 wire   [15:0] v_fu_1638_p3;
@@ -554,14 +554,14 @@ reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_36_ce0_local;
 wire   [0:0] tmp_fu_1386_p3;
-wire   [7:0] tmp_79_fu_1430_p49;
-wire   [7:0] tmp_80_fu_1534_p49;
-wire   [7:0] tmp_80_fu_1534_p51;
-wire   [7:0] tmp_79_fu_1430_p51;
-wire   [7:0] tmp_81_fu_1662_p49;
-wire   [7:0] tmp_82_fu_1766_p49;
-wire   [7:0] tmp_82_fu_1766_p51;
-wire   [7:0] tmp_81_fu_1662_p51;
+wire   [7:0] tmp_72_fu_1430_p49;
+wire   [7:0] tmp_73_fu_1534_p49;
+wire   [7:0] tmp_73_fu_1534_p51;
+wire   [7:0] tmp_72_fu_1430_p51;
+wire   [7:0] tmp_74_fu_1662_p49;
+wire   [7:0] tmp_75_fu_1766_p49;
+wire   [7:0] tmp_75_fu_1766_p51;
+wire   [7:0] tmp_74_fu_1662_p51;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -570,102 +570,102 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [4:0] tmp_79_fu_1430_p1;
-wire   [4:0] tmp_79_fu_1430_p3;
-wire   [4:0] tmp_79_fu_1430_p5;
-wire   [4:0] tmp_79_fu_1430_p7;
-wire   [4:0] tmp_79_fu_1430_p9;
-wire   [4:0] tmp_79_fu_1430_p11;
-wire   [4:0] tmp_79_fu_1430_p13;
-wire   [4:0] tmp_79_fu_1430_p15;
-wire   [4:0] tmp_79_fu_1430_p17;
-wire   [4:0] tmp_79_fu_1430_p19;
-wire   [4:0] tmp_79_fu_1430_p21;
-wire   [4:0] tmp_79_fu_1430_p23;
-wire   [4:0] tmp_79_fu_1430_p25;
-wire   [4:0] tmp_79_fu_1430_p27;
-wire   [4:0] tmp_79_fu_1430_p29;
-wire   [4:0] tmp_79_fu_1430_p31;
-wire  signed [4:0] tmp_79_fu_1430_p33;
-wire  signed [4:0] tmp_79_fu_1430_p35;
-wire  signed [4:0] tmp_79_fu_1430_p37;
-wire  signed [4:0] tmp_79_fu_1430_p39;
-wire  signed [4:0] tmp_79_fu_1430_p41;
-wire  signed [4:0] tmp_79_fu_1430_p43;
-wire  signed [4:0] tmp_79_fu_1430_p45;
-wire  signed [4:0] tmp_79_fu_1430_p47;
-wire   [4:0] tmp_80_fu_1534_p1;
-wire   [4:0] tmp_80_fu_1534_p3;
-wire   [4:0] tmp_80_fu_1534_p5;
-wire   [4:0] tmp_80_fu_1534_p7;
-wire   [4:0] tmp_80_fu_1534_p9;
-wire   [4:0] tmp_80_fu_1534_p11;
-wire   [4:0] tmp_80_fu_1534_p13;
-wire   [4:0] tmp_80_fu_1534_p15;
-wire   [4:0] tmp_80_fu_1534_p17;
-wire   [4:0] tmp_80_fu_1534_p19;
-wire   [4:0] tmp_80_fu_1534_p21;
-wire   [4:0] tmp_80_fu_1534_p23;
-wire   [4:0] tmp_80_fu_1534_p25;
-wire   [4:0] tmp_80_fu_1534_p27;
-wire   [4:0] tmp_80_fu_1534_p29;
-wire   [4:0] tmp_80_fu_1534_p31;
-wire  signed [4:0] tmp_80_fu_1534_p33;
-wire  signed [4:0] tmp_80_fu_1534_p35;
-wire  signed [4:0] tmp_80_fu_1534_p37;
-wire  signed [4:0] tmp_80_fu_1534_p39;
-wire  signed [4:0] tmp_80_fu_1534_p41;
-wire  signed [4:0] tmp_80_fu_1534_p43;
-wire  signed [4:0] tmp_80_fu_1534_p45;
-wire  signed [4:0] tmp_80_fu_1534_p47;
-wire   [4:0] tmp_81_fu_1662_p1;
-wire   [4:0] tmp_81_fu_1662_p3;
-wire   [4:0] tmp_81_fu_1662_p5;
-wire   [4:0] tmp_81_fu_1662_p7;
-wire   [4:0] tmp_81_fu_1662_p9;
-wire   [4:0] tmp_81_fu_1662_p11;
-wire   [4:0] tmp_81_fu_1662_p13;
-wire   [4:0] tmp_81_fu_1662_p15;
-wire   [4:0] tmp_81_fu_1662_p17;
-wire   [4:0] tmp_81_fu_1662_p19;
-wire   [4:0] tmp_81_fu_1662_p21;
-wire   [4:0] tmp_81_fu_1662_p23;
-wire   [4:0] tmp_81_fu_1662_p25;
-wire   [4:0] tmp_81_fu_1662_p27;
-wire   [4:0] tmp_81_fu_1662_p29;
-wire   [4:0] tmp_81_fu_1662_p31;
-wire  signed [4:0] tmp_81_fu_1662_p33;
-wire  signed [4:0] tmp_81_fu_1662_p35;
-wire  signed [4:0] tmp_81_fu_1662_p37;
-wire  signed [4:0] tmp_81_fu_1662_p39;
-wire  signed [4:0] tmp_81_fu_1662_p41;
-wire  signed [4:0] tmp_81_fu_1662_p43;
-wire  signed [4:0] tmp_81_fu_1662_p45;
-wire  signed [4:0] tmp_81_fu_1662_p47;
-wire   [4:0] tmp_82_fu_1766_p1;
-wire   [4:0] tmp_82_fu_1766_p3;
-wire   [4:0] tmp_82_fu_1766_p5;
-wire   [4:0] tmp_82_fu_1766_p7;
-wire   [4:0] tmp_82_fu_1766_p9;
-wire   [4:0] tmp_82_fu_1766_p11;
-wire   [4:0] tmp_82_fu_1766_p13;
-wire   [4:0] tmp_82_fu_1766_p15;
-wire   [4:0] tmp_82_fu_1766_p17;
-wire   [4:0] tmp_82_fu_1766_p19;
-wire   [4:0] tmp_82_fu_1766_p21;
-wire   [4:0] tmp_82_fu_1766_p23;
-wire   [4:0] tmp_82_fu_1766_p25;
-wire   [4:0] tmp_82_fu_1766_p27;
-wire   [4:0] tmp_82_fu_1766_p29;
-wire   [4:0] tmp_82_fu_1766_p31;
-wire  signed [4:0] tmp_82_fu_1766_p33;
-wire  signed [4:0] tmp_82_fu_1766_p35;
-wire  signed [4:0] tmp_82_fu_1766_p37;
-wire  signed [4:0] tmp_82_fu_1766_p39;
-wire  signed [4:0] tmp_82_fu_1766_p41;
-wire  signed [4:0] tmp_82_fu_1766_p43;
-wire  signed [4:0] tmp_82_fu_1766_p45;
-wire  signed [4:0] tmp_82_fu_1766_p47;
+wire   [4:0] tmp_72_fu_1430_p1;
+wire   [4:0] tmp_72_fu_1430_p3;
+wire   [4:0] tmp_72_fu_1430_p5;
+wire   [4:0] tmp_72_fu_1430_p7;
+wire   [4:0] tmp_72_fu_1430_p9;
+wire   [4:0] tmp_72_fu_1430_p11;
+wire   [4:0] tmp_72_fu_1430_p13;
+wire   [4:0] tmp_72_fu_1430_p15;
+wire   [4:0] tmp_72_fu_1430_p17;
+wire   [4:0] tmp_72_fu_1430_p19;
+wire   [4:0] tmp_72_fu_1430_p21;
+wire   [4:0] tmp_72_fu_1430_p23;
+wire   [4:0] tmp_72_fu_1430_p25;
+wire   [4:0] tmp_72_fu_1430_p27;
+wire   [4:0] tmp_72_fu_1430_p29;
+wire   [4:0] tmp_72_fu_1430_p31;
+wire  signed [4:0] tmp_72_fu_1430_p33;
+wire  signed [4:0] tmp_72_fu_1430_p35;
+wire  signed [4:0] tmp_72_fu_1430_p37;
+wire  signed [4:0] tmp_72_fu_1430_p39;
+wire  signed [4:0] tmp_72_fu_1430_p41;
+wire  signed [4:0] tmp_72_fu_1430_p43;
+wire  signed [4:0] tmp_72_fu_1430_p45;
+wire  signed [4:0] tmp_72_fu_1430_p47;
+wire   [4:0] tmp_73_fu_1534_p1;
+wire   [4:0] tmp_73_fu_1534_p3;
+wire   [4:0] tmp_73_fu_1534_p5;
+wire   [4:0] tmp_73_fu_1534_p7;
+wire   [4:0] tmp_73_fu_1534_p9;
+wire   [4:0] tmp_73_fu_1534_p11;
+wire   [4:0] tmp_73_fu_1534_p13;
+wire   [4:0] tmp_73_fu_1534_p15;
+wire   [4:0] tmp_73_fu_1534_p17;
+wire   [4:0] tmp_73_fu_1534_p19;
+wire   [4:0] tmp_73_fu_1534_p21;
+wire   [4:0] tmp_73_fu_1534_p23;
+wire   [4:0] tmp_73_fu_1534_p25;
+wire   [4:0] tmp_73_fu_1534_p27;
+wire   [4:0] tmp_73_fu_1534_p29;
+wire   [4:0] tmp_73_fu_1534_p31;
+wire  signed [4:0] tmp_73_fu_1534_p33;
+wire  signed [4:0] tmp_73_fu_1534_p35;
+wire  signed [4:0] tmp_73_fu_1534_p37;
+wire  signed [4:0] tmp_73_fu_1534_p39;
+wire  signed [4:0] tmp_73_fu_1534_p41;
+wire  signed [4:0] tmp_73_fu_1534_p43;
+wire  signed [4:0] tmp_73_fu_1534_p45;
+wire  signed [4:0] tmp_73_fu_1534_p47;
+wire   [4:0] tmp_74_fu_1662_p1;
+wire   [4:0] tmp_74_fu_1662_p3;
+wire   [4:0] tmp_74_fu_1662_p5;
+wire   [4:0] tmp_74_fu_1662_p7;
+wire   [4:0] tmp_74_fu_1662_p9;
+wire   [4:0] tmp_74_fu_1662_p11;
+wire   [4:0] tmp_74_fu_1662_p13;
+wire   [4:0] tmp_74_fu_1662_p15;
+wire   [4:0] tmp_74_fu_1662_p17;
+wire   [4:0] tmp_74_fu_1662_p19;
+wire   [4:0] tmp_74_fu_1662_p21;
+wire   [4:0] tmp_74_fu_1662_p23;
+wire   [4:0] tmp_74_fu_1662_p25;
+wire   [4:0] tmp_74_fu_1662_p27;
+wire   [4:0] tmp_74_fu_1662_p29;
+wire   [4:0] tmp_74_fu_1662_p31;
+wire  signed [4:0] tmp_74_fu_1662_p33;
+wire  signed [4:0] tmp_74_fu_1662_p35;
+wire  signed [4:0] tmp_74_fu_1662_p37;
+wire  signed [4:0] tmp_74_fu_1662_p39;
+wire  signed [4:0] tmp_74_fu_1662_p41;
+wire  signed [4:0] tmp_74_fu_1662_p43;
+wire  signed [4:0] tmp_74_fu_1662_p45;
+wire  signed [4:0] tmp_74_fu_1662_p47;
+wire   [4:0] tmp_75_fu_1766_p1;
+wire   [4:0] tmp_75_fu_1766_p3;
+wire   [4:0] tmp_75_fu_1766_p5;
+wire   [4:0] tmp_75_fu_1766_p7;
+wire   [4:0] tmp_75_fu_1766_p9;
+wire   [4:0] tmp_75_fu_1766_p11;
+wire   [4:0] tmp_75_fu_1766_p13;
+wire   [4:0] tmp_75_fu_1766_p15;
+wire   [4:0] tmp_75_fu_1766_p17;
+wire   [4:0] tmp_75_fu_1766_p19;
+wire   [4:0] tmp_75_fu_1766_p21;
+wire   [4:0] tmp_75_fu_1766_p23;
+wire   [4:0] tmp_75_fu_1766_p25;
+wire   [4:0] tmp_75_fu_1766_p27;
+wire   [4:0] tmp_75_fu_1766_p29;
+wire   [4:0] tmp_75_fu_1766_p31;
+wire  signed [4:0] tmp_75_fu_1766_p33;
+wire  signed [4:0] tmp_75_fu_1766_p35;
+wire  signed [4:0] tmp_75_fu_1766_p37;
+wire  signed [4:0] tmp_75_fu_1766_p39;
+wire  signed [4:0] tmp_75_fu_1766_p41;
+wire  signed [4:0] tmp_75_fu_1766_p43;
+wire  signed [4:0] tmp_75_fu_1766_p45;
+wire  signed [4:0] tmp_75_fu_1766_p47;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -730,11 +730,11 @@ end
     .sel_WIDTH( 5 ),
     .dout_WIDTH( 8 ))
 sparsemux_49_5_8_1_1_U554(
-    .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_710),
-    .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_712),
-    .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_714),
-    .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_716),
-    .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_718),
+    .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356),
+    .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1358),
+    .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1360),
+    .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1362),
+    .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1364),
     .din5(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_668),
     .din6(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_670),
     .din7(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_672),
@@ -754,9 +754,9 @@ sparsemux_49_5_8_1_1_U554(
     .din21(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_700),
     .din22(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_702),
     .din23(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_704),
-    .def(tmp_79_fu_1430_p49),
-    .sel(ap_sig_allocacmp_i_68),
-    .dout(tmp_79_fu_1430_p51)
+    .def(tmp_72_fu_1430_p49),
+    .sel(ap_sig_allocacmp_i_65),
+    .dout(tmp_72_fu_1430_p51)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_49_5_8_1_1 #(
@@ -814,11 +814,11 @@ sparsemux_49_5_8_1_1_U554(
     .sel_WIDTH( 5 ),
     .dout_WIDTH( 8 ))
 sparsemux_49_5_8_1_1_U555(
-    .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_711),
-    .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_713),
-    .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_715),
-    .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_717),
-    .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_719),
+    .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357),
+    .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1359),
+    .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1361),
+    .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1363),
+    .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1365),
     .din5(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_669),
     .din6(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_671),
     .din7(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_673),
@@ -838,9 +838,9 @@ sparsemux_49_5_8_1_1_U555(
     .din21(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_701),
     .din22(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_703),
     .din23(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_705),
-    .def(tmp_80_fu_1534_p49),
-    .sel(ap_sig_allocacmp_i_68),
-    .dout(tmp_80_fu_1534_p51)
+    .def(tmp_73_fu_1534_p49),
+    .sel(ap_sig_allocacmp_i_65),
+    .dout(tmp_73_fu_1534_p51)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_49_5_8_1_1 #(
@@ -922,9 +922,9 @@ sparsemux_49_5_8_1_1_U556(
     .din21(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_807),
     .din22(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_808),
     .din23(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_809),
-    .def(tmp_81_fu_1662_p49),
-    .sel(ap_sig_allocacmp_i_68),
-    .dout(tmp_81_fu_1662_p51)
+    .def(tmp_74_fu_1662_p49),
+    .sel(ap_sig_allocacmp_i_65),
+    .dout(tmp_74_fu_1662_p51)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_49_5_8_1_1 #(
@@ -1006,9 +1006,9 @@ sparsemux_49_5_8_1_1_U557(
     .din21(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_831),
     .din22(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_832),
     .din23(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_833),
-    .def(tmp_82_fu_1766_p49),
-    .sel(ap_sig_allocacmp_i_68),
-    .dout(tmp_82_fu_1766_p51)
+    .def(tmp_75_fu_1766_p49),
+    .sel(ap_sig_allocacmp_i_65),
+    .dout(tmp_75_fu_1766_p51)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -1098,9 +1098,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_68 = 5'd0;
+        ap_sig_allocacmp_i_65 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_68 = i_fu_366;
+        ap_sig_allocacmp_i_65 = i_fu_366;
     end
 end
 
@@ -1627,7 +1627,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln766_fu_1376_p2 = (ap_sig_allocacmp_i_68 + 5'd1);
+assign add_ln766_fu_1376_p2 = (ap_sig_allocacmp_i_65 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -1801,7 +1801,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_99_we0_local;
 
-assign icmp_ln766_fu_1370_p2 = ((ap_sig_allocacmp_i_68 == 5'd24) ? 1'b1 : 1'b0);
+assign icmp_ln766_fu_1370_p2 = ((ap_sig_allocacmp_i_65 == 5'd24) ? 1'b1 : 1'b0);
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_12_address0 = zext_ln766_fu_1394_p1;
 
@@ -1899,21 +1899,21 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_41_we0_local;
 
-assign tmp_79_fu_1430_p49 = 'bx;
+assign tmp_72_fu_1430_p49 = 'bx;
 
-assign tmp_80_fu_1534_p49 = 'bx;
+assign tmp_73_fu_1534_p49 = 'bx;
 
-assign tmp_81_fu_1662_p49 = 'bx;
+assign tmp_74_fu_1662_p49 = 'bx;
 
-assign tmp_82_fu_1766_p49 = 'bx;
+assign tmp_75_fu_1766_p49 = 'bx;
 
-assign tmp_fu_1386_p3 = ap_sig_allocacmp_i_68[32'd4];
+assign tmp_fu_1386_p3 = ap_sig_allocacmp_i_65[32'd4];
 
-assign trunc_ln766_fu_1382_p1 = ap_sig_allocacmp_i_68[3:0];
+assign trunc_ln766_fu_1382_p1 = ap_sig_allocacmp_i_65[3:0];
 
-assign v_1_fu_1870_p3 = {{tmp_82_fu_1766_p51}, {tmp_81_fu_1662_p51}};
+assign v_1_fu_1870_p3 = {{tmp_75_fu_1766_p51}, {tmp_74_fu_1662_p51}};
 
-assign v_fu_1638_p3 = {{tmp_80_fu_1534_p51}, {tmp_79_fu_1430_p51}};
+assign v_fu_1638_p3 = {{tmp_73_fu_1534_p51}, {tmp_72_fu_1430_p51}};
 
 assign zext_ln766_fu_1394_p1 = tmp_fu_1386_p3;
 

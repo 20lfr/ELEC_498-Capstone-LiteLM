@@ -53,13 +53,13 @@ wire   [63:0] zext_ln567_fu_100_p1;
 reg   [6:0] i_fu_34;
 wire   [6:0] add_ln567_fu_80_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i_46;
+reg   [6:0] ap_sig_allocacmp_i_42;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we0_local;
 wire   [0:0] trunc_ln567_fu_86_p1;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0_local;
-wire   [4:0] lshr_ln_fu_90_p4;
+wire   [4:0] lshr_ln8_fu_90_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -164,9 +164,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_46 = 7'd0;
+        ap_sig_allocacmp_i_42 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_46 = i_fu_34;
+        ap_sig_allocacmp_i_42 = i_fu_34;
     end
 end
 
@@ -213,7 +213,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln567_fu_80_p2 = (ap_sig_allocacmp_i_46 + 7'd1);
+assign add_ln567_fu_80_p2 = (ap_sig_allocacmp_i_42 + 7'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -227,9 +227,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln567_fu_74_p2 = ((ap_sig_allocacmp_i_46 == 7'd64) ? 1'b1 : 1'b0);
+assign icmp_ln567_fu_74_p2 = ((ap_sig_allocacmp_i_42 == 7'd64) ? 1'b1 : 1'b0);
 
-assign lshr_ln_fu_90_p4 = {{ap_sig_allocacmp_i_46[5:1]}};
+assign lshr_ln8_fu_90_p4 = {{ap_sig_allocacmp_i_42[5:1]}};
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln567_fu_100_p1;
 
@@ -247,8 +247,8 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we0_local;
 
-assign trunc_ln567_fu_86_p1 = ap_sig_allocacmp_i_46[0:0];
+assign trunc_ln567_fu_86_p1 = ap_sig_allocacmp_i_42[0:0];
 
-assign zext_ln567_fu_100_p1 = lshr_ln_fu_90_p4;
+assign zext_ln567_fu_100_p1 = lshr_ln8_fu_90_p4;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_567_8

@@ -57,7 +57,7 @@ void transformer_top(
     // DEBUG MIRRORS
     // ------------------------------------------------------------
     SchedState      &dbg_state,
-    HeadCtx         (&dbg_head_ctx_ref)[NUM_HEADS],
+    HeadCtx         (&dbg_head_ctx_ref)[HEADS_PARALLEL],
     ComputeHeadCtx  (&dbg_head_compute_ctx)[HEADS_PARALLEL],
     // ------------------------------------------------------------
     // DEBUG OUTPUTS
@@ -128,8 +128,8 @@ void transformer_top(
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 #pragma HLS INTERFACE ap_none port=irq_ps
-#pragma HLS ARRAY_PARTITION variable=dbg_head_ctx_ref cyclic factor=HEADS_PARALLEL dim=1
-#pragma HLS ARRAY_PARTITION variable=dbg_head_compute_ctx cyclic factor=HEADS_PARALLEL dim=1
+#pragma HLS ARRAY_PARTITION variable=dbg_head_ctx_ref complete dim=1
+#pragma HLS ARRAY_PARTITION variable=dbg_head_compute_ctx complete dim=1
 #pragma HLS ARRAY_PARTITION variable=dbg_head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=dbg_head_out_buf complete dim=1
 
@@ -146,8 +146,8 @@ void transformer_top(
     static bool             compute_start                  = false;
     static uint32_t         compute_instruction            = 0;
     static SchedState       state_local                    = S_IDLE;
-    static HeadCtx          head_ctx_local[NUM_HEADS];
-#pragma HLS ARRAY_PARTITION variable=head_ctx_local cyclic factor=HEADS_PARALLEL dim=1
+    static HeadCtx          head_ctx_local[HEADS_PARALLEL];
+#pragma HLS ARRAY_PARTITION variable=head_ctx_local complete dim=1
     static ComputeHeadCtx   head_compute_ctx_local[HEADS_PARALLEL];
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx_local complete dim=1
 
@@ -249,7 +249,7 @@ void transformer_top(
         stream_in_counter = 0;
         token_complete_local = false;
 
-        for (int i = 0; i < NUM_HEADS; ++i) {
+        for (int i = 0; i < HEADS_PARALLEL; ++i) {
 #pragma HLS UNROLL
             head_ctx_local[i] = HeadCtx();
         }
@@ -382,15 +382,8 @@ void transformer_top(
     // Mirror headed compute contexts for debug visibility and MMU handshake (head scheduler only looks at head_ctx fields, so this is safe to do in-place).
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
-        const int idx = head_group_idx * HEADS_PARALLEL + lane;
-        if (idx >= 0 && idx < NUM_HEADS) {
-            head_compute_ctx_local[lane].compute_start = head_ctx_local[idx].compute_start;
-            head_compute_ctx_local[lane].compute_instruction = head_ctx_local[idx].compute_op;
-        } else {
-            head_compute_ctx_local[lane].compute_start = false;
-            head_compute_ctx_local[lane].compute_instruction = 0;
-            head_compute_ctx_local[lane].mem_transfer_done = false;
-        }
+        head_compute_ctx_local[lane].compute_start = head_ctx_local[lane].compute_start;
+        head_compute_ctx_local[lane].compute_instruction = head_ctx_local[lane].compute_op;
     }
     
     bool head_error_any = false;
@@ -406,11 +399,8 @@ void transformer_top(
     // Mirror headed compute contexts back to main scheduler context for debug visibility (main scheduler has full view of all heads, so it takes priority in this mirror).
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
-        const int idx = head_group_idx * HEADS_PARALLEL + lane;
-        if (idx >= 0 && idx < NUM_HEADS) {
-            head_ctx_local[idx].compute_ready = head_compute_ctx_local[lane].compute_ready;
-            head_ctx_local[idx].compute_done  = head_compute_ctx_local[lane].compute_done;
-        }
+        head_ctx_local[lane].compute_ready = head_compute_ctx_local[lane].compute_ready;
+        head_ctx_local[lane].compute_done  = head_compute_ctx_local[lane].compute_done;
     }
 
     // Main-scheduler DMA instruction mirror.
@@ -575,6 +565,7 @@ void transformer_top(
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
     #pragma HLS UNROLL
             dbg_head_compute_ctx[lane] = head_compute_ctx_local[lane];
+            dbg_head_ctx_ref[lane] = head_ctx_local[lane];
             for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
     // #pragma HLS PIPELINE II=1
                 dbg_head_in_buf[lane][i] = mmu_head_in_buf[lane][i];
@@ -583,10 +574,6 @@ void transformer_top(
     // #pragma HLS PIPELINE II=1
                 dbg_head_out_buf[lane][i] = mmu_head_out_buf[lane][i];
             }
-        }
-        for (int i = 0; i < NUM_HEADS; ++i) {
-#pragma HLS UNROLL
-            dbg_head_ctx_ref[i] = head_ctx_local[i];
         }
         control_reg   = ctrl_mem.control;
         irq_mask_reg   = ctrl_mem.irq_mask;

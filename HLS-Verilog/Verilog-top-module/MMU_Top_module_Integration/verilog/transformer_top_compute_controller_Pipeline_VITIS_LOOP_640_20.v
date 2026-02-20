@@ -81,13 +81,13 @@ wire   [0:0] icmp_ln640_fu_236_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln794_fu_340_p1;
+wire   [63:0] zext_ln790_fu_340_p1;
 reg   [4:0] i_fu_102;
 wire   [4:0] add_ln640_fu_242_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_76;
+reg   [4:0] ap_sig_allocacmp_i_73;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_we0_local;
-wire   [0:0] trunc_ln794_fu_326_p1;
+wire   [0:0] trunc_ln790_fu_326_p1;
 wire   [7:0] value_assign_fu_252_p35;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_ce0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_we0_local;
@@ -275,9 +275,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_76 = 5'd0;
+        ap_sig_allocacmp_i_73 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_76 = i_fu_102;
+        ap_sig_allocacmp_i_73 = i_fu_102;
     end
 end
 
@@ -290,7 +290,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln794_fu_326_p1 == 1'd0) & (icmp_ln640_fu_236_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln790_fu_326_p1 == 1'd0) & (icmp_ln640_fu_236_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_we0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_we0_local = 1'b0;
@@ -306,7 +306,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln794_fu_326_p1 == 1'd1) & (icmp_ln640_fu_236_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((trunc_ln790_fu_326_p1 == 1'd1) & (icmp_ln640_fu_236_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_we0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_we0_local = 1'b0;
@@ -324,7 +324,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln640_fu_242_p2 = (ap_sig_allocacmp_i_76 + 5'd1);
+assign add_ln640_fu_242_p2 = (ap_sig_allocacmp_i_73 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -338,11 +338,11 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln640_fu_236_p2 = ((ap_sig_allocacmp_i_76 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln640_fu_236_p2 = ((ap_sig_allocacmp_i_73 == 5'd16) ? 1'b1 : 1'b0);
 
-assign lshr_ln_fu_330_p4 = {{ap_sig_allocacmp_i_76[3:1]}};
+assign lshr_ln_fu_330_p4 = {{ap_sig_allocacmp_i_73[3:1]}};
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_address0 = zext_ln794_fu_340_p1;
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_address0 = zext_ln790_fu_340_p1;
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_ce0_local;
 
@@ -350,7 +350,7 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_we0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1_we0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_address0 = zext_ln794_fu_340_p1;
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_address0 = zext_ln790_fu_340_p1;
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_ce0_local;
 
@@ -358,12 +358,12 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_we0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_we0_local;
 
-assign trunc_ln794_fu_326_p1 = ap_sig_allocacmp_i_76[0:0];
+assign trunc_ln790_fu_326_p1 = ap_sig_allocacmp_i_73[0:0];
 
 assign value_assign_fu_252_p33 = 'bx;
 
-assign value_assign_fu_252_p34 = ap_sig_allocacmp_i_76[3:0];
+assign value_assign_fu_252_p34 = ap_sig_allocacmp_i_73[3:0];
 
-assign zext_ln794_fu_340_p1 = lshr_ln_fu_330_p4;
+assign zext_ln790_fu_340_p1 = lshr_ln_fu_330_p4;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_640_20

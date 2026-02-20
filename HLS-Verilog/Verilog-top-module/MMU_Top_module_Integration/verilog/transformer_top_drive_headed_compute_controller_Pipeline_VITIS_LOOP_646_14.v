@@ -65,9 +65,9 @@ wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_h;
 wire   [0:0] tmp_fu_94_p3;
 wire   [7:0] byte_val_fu_102_p3;
-wire   [0:0] trunc_ln770_fu_90_p1;
+wire   [0:0] trunc_ln766_fu_90_p1;
 wire   [3:0] tmp_s_fu_110_p4;
-wire   [3:0] trunc_ln773_fu_120_p1;
+wire   [3:0] trunc_ln769_fu_120_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -239,7 +239,7 @@ assign byte_val_fu_102_p3 = ((tmp_fu_94_p3[0:0] == 1'b1) ? p_ZZ15transformer_top
 
 assign icmp_ln646_fu_74_p2 = ((ap_sig_allocacmp_h == 3'd4) ? 1'b1 : 1'b0);
 
-assign nibble_fu_124_p3 = ((trunc_ln770_fu_90_p1[0:0] == 1'b1) ? tmp_s_fu_110_p4 : trunc_ln773_fu_120_p1);
+assign nibble_fu_124_p3 = ((trunc_ln766_fu_90_p1[0:0] == 1'b1) ? tmp_s_fu_110_p4 : trunc_ln769_fu_120_p1);
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_4 = nibble_fu_124_p3;
 
@@ -255,8 +255,8 @@ assign tmp_s_fu_110_p4 = {{byte_val_fu_102_p3[7:4]}};
 
 assign trunc_ln646_fu_86_p1 = ap_sig_allocacmp_h[1:0];
 
-assign trunc_ln770_fu_90_p1 = ap_sig_allocacmp_h[0:0];
+assign trunc_ln766_fu_90_p1 = ap_sig_allocacmp_h[0:0];
 
-assign trunc_ln773_fu_120_p1 = byte_val_fu_102_p3[3:0];
+assign trunc_ln769_fu_120_p1 = byte_val_fu_102_p3[3:0];
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_646_14

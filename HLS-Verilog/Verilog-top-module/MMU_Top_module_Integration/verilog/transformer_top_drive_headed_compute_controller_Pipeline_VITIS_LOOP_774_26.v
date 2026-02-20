@@ -167,9 +167,9 @@ reg    ap_ready_int;
 wire   [3:0] trunc_ln774_fu_236_p1;
 reg   [3:0] trunc_ln774_reg_451;
 wire    ap_block_pp0_stage0_11001;
-wire   [0:0] trunc_ln785_fu_240_p1;
-reg   [0:0] trunc_ln785_reg_455;
-wire   [63:0] zext_ln785_fu_254_p1;
+wire   [0:0] trunc_ln781_fu_240_p1;
+reg   [0:0] trunc_ln781_reg_455;
+wire   [63:0] zext_ln781_fu_254_p1;
 wire    ap_block_pp0_stage0;
 wire   [31:0] v_fu_333_p5;
 reg   [4:0] t_fu_108;
@@ -184,11 +184,11 @@ reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce0_local;
-wire   [2:0] lshr_ln785_1_fu_244_p4;
-wire   [7:0] select_ln789_fu_326_p3;
-wire   [7:0] select_ln788_fu_319_p3;
-wire   [7:0] select_ln787_1_fu_312_p3;
-wire   [7:0] select_ln786_fu_305_p3;
+wire   [2:0] lshr_ln781_1_fu_244_p4;
+wire   [7:0] select_ln785_fu_326_p3;
+wire   [7:0] select_ln784_fu_319_p3;
+wire   [7:0] select_ln783_fu_312_p3;
+wire   [7:0] select_ln782_fu_305_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -267,7 +267,7 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         trunc_ln774_reg_451 <= trunc_ln774_fu_236_p1;
-        trunc_ln785_reg_455 <= trunc_ln785_fu_240_p1;
+        trunc_ln781_reg_455 <= trunc_ln781_fu_240_p1;
     end
 end
 
@@ -576,54 +576,54 @@ assign drive_mulmulheaded_compute_controller_ComputeHeadCtx_2_bool_unsigned_shor
 
 assign icmp_ln774_fu_224_p2 = ((ap_sig_allocacmp_t_8 == 5'd16) ? 1'b1 : 1'b0);
 
-assign lshr_ln785_1_fu_244_p4 = {{ap_sig_allocacmp_t_8[3:1]}};
+assign lshr_ln781_1_fu_244_p4 = {{ap_sig_allocacmp_t_8[3:1]}};
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_address0 = zext_ln785_fu_254_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_address0 = zext_ln781_fu_254_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_ce0_local;
 
-assign select_ln786_fu_305_p3 = ((trunc_ln785_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_q0);
+assign select_ln782_fu_305_p3 = ((trunc_ln781_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_q0);
 
-assign select_ln787_1_fu_312_p3 = ((trunc_ln785_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_q0);
+assign select_ln783_fu_312_p3 = ((trunc_ln781_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_q0);
 
-assign select_ln788_fu_319_p3 = ((trunc_ln785_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_q0);
+assign select_ln784_fu_319_p3 = ((trunc_ln781_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_q0);
 
-assign select_ln789_fu_326_p3 = ((trunc_ln785_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_q0);
+assign select_ln785_fu_326_p3 = ((trunc_ln781_reg_455[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_q0);
 
 assign trunc_ln774_fu_236_p1 = ap_sig_allocacmp_t_8[3:0];
 
-assign trunc_ln785_fu_240_p1 = ap_sig_allocacmp_t_8[0:0];
+assign trunc_ln781_fu_240_p1 = ap_sig_allocacmp_t_8[0:0];
 
-assign v_fu_333_p5 = {{{{select_ln789_fu_326_p3}, {select_ln788_fu_319_p3}}, {select_ln787_1_fu_312_p3}}, {select_ln786_fu_305_p3}};
+assign v_fu_333_p5 = {{{{select_ln785_fu_326_p3}, {select_ln784_fu_319_p3}}, {select_ln783_fu_312_p3}}, {select_ln782_fu_305_p3}};
 
-assign zext_ln785_fu_254_p1 = lshr_ln785_1_fu_244_p4;
+assign zext_ln781_fu_254_p1 = lshr_ln781_1_fu_244_p4;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_774_26
