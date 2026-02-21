@@ -13,6 +13,36 @@ module top_module_hls_tb;
   localparam int STREAM_LATENCY_CYCLES = 6;
   localparam int CTRL_START_HOLD_CYCLES = 24;
   localparam int RAM_REGION_WORDS      = 65536;
+  localparam int TB_HEADS_PARALLEL     = 2;
+  localparam int TB_NUM_HEADS          = 4;
+  localparam int TB_D_MODEL            = 16;
+  localparam int TB_D_FFN              = 24;
+  localparam int TB_D_HEADS            = (TB_D_MODEL / TB_NUM_HEADS);
+  localparam int TB_CONTEXT_LENGTH     = 16;
+  localparam int DBG_MAIN_IN_BYTES     = 128;
+  localparam int DBG_MAIN_OUT_BYTES    = 64;
+  localparam int DBG_HEAD_IN_BYTES     = 128;
+  localparam int DBG_HEAD_OUT_BYTES    = 64;
+  localparam int DBG_SNAP_DEPTH        = 64;
+  localparam int DBG_SNAP_QUIET_CYCLES = 2;
+
+  localparam int OP_CMP_LN0         = 1;
+  localparam int OP_CMP_Q           = 3;
+  localparam int OP_CMP_K           = 4;
+  localparam int OP_CMP_V           = 6;
+  localparam int OP_CMP_ATT_SCORES  = 9;
+  localparam int OP_CMP_VALUE_SCALE = 10;
+  localparam int OP_CMP_SOFTMAX     = 11;
+  localparam int OP_CMP_ATT_VALUE   = 12;
+  localparam int OP_CMP_HEAD_REQUANT= 13;
+  localparam int OP_CMP_OUT_PROJ    = 15;
+  localparam int OP_CMP_RESID1      = 16;
+  localparam int OP_CMP_FFN_W1      = 18;
+  localparam int OP_CMP_FFN_ACT     = 19;
+  localparam int OP_CMP_FFN_W2      = 20;
+  localparam int OP_CMP_RESID2      = 22;
+  localparam int OP_CMP_LN1         = 23;
+  localparam int OP_CMP_FINAL_NORM  = 25;
 
   localparam logic [8:0] ADDR_AP_CTRL         = 9'h000;
   localparam logic [8:0] ADDR_CTRL_MEM_DATA_0 = 9'h01c;
@@ -472,6 +502,104 @@ module top_module_hls_tb;
   logic [7:0] dbg_stream_in_buf_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0] dbg_head_in_buf_mem [0:255];
   logic [7:0] dbg_head_out_buf_mem [0:127];
+
+  // --------------------------------------------------------------------------
+  // Debug buffer snapshots (for easier full-buffer validation in waveform)
+  // --------------------------------------------------------------------------
+  logic [7:0] main_in_snap  [0:DBG_SNAP_DEPTH-1][0:DBG_MAIN_IN_BYTES-1];
+  logic [7:0] main_out_snap [0:DBG_SNAP_DEPTH-1][0:DBG_MAIN_OUT_BYTES-1];
+  logic       main_in_snap_valid  [0:DBG_SNAP_DEPTH-1];
+  logic       main_out_snap_valid [0:DBG_SNAP_DEPTH-1];
+  logic [31:0] main_in_snap_cycle [0:DBG_SNAP_DEPTH-1];
+  logic [31:0] main_out_snap_cycle[0:DBG_SNAP_DEPTH-1];
+  logic [31:0] main_in_snap_instr [0:DBG_SNAP_DEPTH-1];
+  logic [31:0] main_out_snap_instr[0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_in_snap_op    [0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_out_snap_op   [0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_in_snap_layer [0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_out_snap_layer[0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_in_snap_head  [0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_out_snap_head [0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_in_snap_tile  [0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  main_out_snap_tile [0:DBG_SNAP_DEPTH-1];
+  logic [$clog2(DBG_SNAP_DEPTH)-1:0] main_in_snap_wr_idx;
+  logic [$clog2(DBG_SNAP_DEPTH)-1:0] main_out_snap_wr_idx;
+  logic main_in_capture_pending;
+  logic main_out_capture_pending;
+  logic [3:0] main_in_quiet_ctr;
+  logic [3:0] main_out_quiet_ctr;
+  logic [31:0] main_in_pending_instr;
+  logic [31:0] main_out_pending_instr;
+  logic [7:0]  main_in_pending_op;
+  logic [7:0]  main_out_pending_op;
+  logic [7:0]  main_in_pending_layer;
+  logic [7:0]  main_out_pending_layer;
+  logic [7:0]  main_in_pending_head;
+  logic [7:0]  main_out_pending_head;
+  logic [7:0]  main_in_pending_tile;
+  logic [7:0]  main_out_pending_tile;
+  logic dbg_compute_start_d;
+  logic dbg_compute_done_d;
+
+  logic [7:0] head_in_snap  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1][0:DBG_HEAD_IN_BYTES-1];
+  logic [7:0] head_out_snap [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1][0:DBG_HEAD_OUT_BYTES-1];
+  logic       head_in_snap_valid  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic       head_out_snap_valid [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [31:0] head_in_snap_cycle [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [31:0] head_out_snap_cycle[0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [31:0] head_in_snap_instr [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [31:0] head_out_snap_instr[0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_in_snap_op    [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_out_snap_op   [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_in_snap_layer [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_out_snap_layer[0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_in_snap_head  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_out_snap_head [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_in_snap_tile  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [7:0]  head_out_snap_tile [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
+  logic [$clog2(DBG_SNAP_DEPTH)-1:0] head_in_snap_wr_idx  [0:TB_HEADS_PARALLEL-1];
+  logic [$clog2(DBG_SNAP_DEPTH)-1:0] head_out_snap_wr_idx [0:TB_HEADS_PARALLEL-1];
+  logic head_in_capture_pending [0:TB_HEADS_PARALLEL-1];
+  logic head_out_capture_pending[0:TB_HEADS_PARALLEL-1];
+  logic [3:0] head_in_quiet_ctr  [0:TB_HEADS_PARALLEL-1];
+  logic [3:0] head_out_quiet_ctr [0:TB_HEADS_PARALLEL-1];
+  logic [31:0] head_in_pending_instr [0:TB_HEADS_PARALLEL-1];
+  logic [31:0] head_out_pending_instr[0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_in_pending_op    [0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_out_pending_op   [0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_in_pending_layer [0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_out_pending_layer[0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_in_pending_head  [0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_out_pending_head [0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_in_pending_tile  [0:TB_HEADS_PARALLEL-1];
+  logic [7:0]  head_out_pending_tile [0:TB_HEADS_PARALLEL-1];
+  logic head_compute_start_d [0:TB_HEADS_PARALLEL-1];
+  logic head_compute_done_d  [0:TB_HEADS_PARALLEL-1];
+
+  // Operation-indexed banks for easier debug (inputs/outputs separated by op).
+  logic [7:0] main_in_by_op   [0:31][0:DBG_MAIN_IN_BYTES-1];
+  logic [7:0] main_out_by_op  [0:31][0:DBG_MAIN_OUT_BYTES-1];
+  logic [7:0] head_in_by_op   [0:TB_NUM_HEADS-1][0:31][0:DBG_HEAD_IN_BYTES-1];
+  logic [7:0] head_out_by_op  [0:TB_NUM_HEADS-1][0:31][0:DBG_HEAD_OUT_BYTES-1];
+
+  // Decoded per-op output banks (same debug style as legacy TB).
+  logic [7:0] out_proj_out [0:TB_D_MODEL-1];
+  logic [7:0] resid1_out   [0:TB_D_MODEL-1];
+  logic [7:0] resid2_out   [0:TB_D_MODEL-1];
+  logic [7:0] ln0_out      [0:TB_D_MODEL-1];
+  logic [7:0] ln1_out      [0:TB_D_MODEL-1];
+  logic [7:0] ffn_w2_out   [0:TB_D_MODEL-1];
+  logic signed [31:0] final_norm_out [0:TB_D_MODEL-1];
+  logic signed [15:0] ffn_w1_out [0:TB_D_FFN-1];
+  logic signed [15:0] ffn_act_out[0:TB_D_FFN-1];
+  logic signed [7:0] q_out_all        [0:(TB_NUM_HEADS*TB_D_HEADS)-1];
+  logic signed [7:0] k_out_all        [0:(TB_NUM_HEADS*TB_D_HEADS)-1];
+  logic signed [7:0] v_out_all        [0:(TB_NUM_HEADS*TB_D_HEADS)-1];
+  logic signed [7:0] head_rq_out_all  [0:(TB_NUM_HEADS*TB_D_HEADS)-1];
+  logic signed [31:0] att_scores_out_all [0:(TB_NUM_HEADS*TB_CONTEXT_LENGTH)-1];
+  logic signed [15:0] val_scale_out_all  [0:(TB_NUM_HEADS*TB_CONTEXT_LENGTH)-1];
+  logic signed [15:0] softmax_out_all    [0:(TB_NUM_HEADS*TB_CONTEXT_LENGTH)-1];
+  logic signed [31:0] att_value_out_all  [0:(TB_NUM_HEADS*TB_D_HEADS)-1];
 
   integer cycle_count;
   integer i;
@@ -1029,6 +1157,419 @@ module top_module_hls_tb;
     end
     if (dbg_stream_in_buf_ce0 && dbg_stream_in_buf_we0) begin
       dbg_stream_in_buf_mem[dbg_stream_in_buf_address0] <= dbg_stream_in_buf_d0;
+    end
+  end
+
+  // Capture full debug buffers into snapshot RAMs for operation-level verification.
+  always_ff @(posedge ap_clk) begin : p_dbg_buffer_snapshots
+    int b;
+    int lane;
+    int op_idx;
+    int head_idx;
+    int elem_idx;
+    logic lane_start_rise;
+    logic lane_done_rise;
+    logic lane_in_write_event;
+    logic lane_out_write_event;
+    logic [31:0] lane_instr;
+    logic [7:0] lane_op;
+    logic [7:0] lane_layer;
+    logic [7:0] lane_head;
+    logic [7:0] lane_tile;
+    if (!ap_rst_n) begin
+      main_in_snap_wr_idx      <= '0;
+      main_out_snap_wr_idx     <= '0;
+      main_in_capture_pending  <= 1'b0;
+      main_out_capture_pending <= 1'b0;
+      main_in_quiet_ctr        <= '0;
+      main_out_quiet_ctr       <= '0;
+      dbg_compute_start_d      <= 1'b0;
+      dbg_compute_done_d       <= 1'b0;
+      main_in_pending_instr    <= 32'd0;
+      main_out_pending_instr   <= 32'd0;
+      main_in_pending_op       <= 8'd0;
+      main_out_pending_op      <= 8'd0;
+      main_in_pending_layer    <= 8'd0;
+      main_out_pending_layer   <= 8'd0;
+      main_in_pending_head     <= 8'd0;
+      main_out_pending_head    <= 8'd0;
+      main_in_pending_tile     <= 8'd0;
+      main_out_pending_tile    <= 8'd0;
+      for (b = 0; b < DBG_SNAP_DEPTH; b = b + 1) begin
+        main_in_snap_valid[b]  <= 1'b0;
+        main_out_snap_valid[b] <= 1'b0;
+      end
+      for (op_idx = 0; op_idx < 32; op_idx = op_idx + 1) begin
+        for (b = 0; b < DBG_MAIN_IN_BYTES; b = b + 1) begin
+          main_in_by_op[op_idx][b] <= 8'd0;
+        end
+        for (b = 0; b < DBG_MAIN_OUT_BYTES; b = b + 1) begin
+          main_out_by_op[op_idx][b] <= 8'd0;
+        end
+      end
+      for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+        out_proj_out[elem_idx]   <= 8'd0;
+        resid1_out[elem_idx]     <= 8'd0;
+        resid2_out[elem_idx]     <= 8'd0;
+        ln0_out[elem_idx]        <= 8'd0;
+        ln1_out[elem_idx]        <= 8'd0;
+        ffn_w2_out[elem_idx]     <= 8'd0;
+        final_norm_out[elem_idx] <= 32'sd0;
+      end
+      for (elem_idx = 0; elem_idx < TB_D_FFN; elem_idx = elem_idx + 1) begin
+        ffn_w1_out[elem_idx] <= 16'sd0;
+        ffn_act_out[elem_idx] <= 16'sd0;
+      end
+      for (elem_idx = 0; elem_idx < (TB_NUM_HEADS*TB_D_HEADS); elem_idx = elem_idx + 1) begin
+        q_out_all[elem_idx]       <= 8'sd0;
+        k_out_all[elem_idx]       <= 8'sd0;
+        v_out_all[elem_idx]       <= 8'sd0;
+        head_rq_out_all[elem_idx] <= 8'sd0;
+        att_value_out_all[elem_idx] <= 32'sd0;
+      end
+      for (elem_idx = 0; elem_idx < (TB_NUM_HEADS*TB_CONTEXT_LENGTH); elem_idx = elem_idx + 1) begin
+        att_scores_out_all[elem_idx] <= 32'sd0;
+        val_scale_out_all[elem_idx]  <= 16'sd0;
+        softmax_out_all[elem_idx]    <= 16'sd0;
+      end
+      for (lane = 0; lane < TB_HEADS_PARALLEL; lane = lane + 1) begin
+        head_in_snap_wr_idx[lane]      <= '0;
+        head_out_snap_wr_idx[lane]     <= '0;
+        head_in_capture_pending[lane]  <= 1'b0;
+        head_out_capture_pending[lane] <= 1'b0;
+        head_in_quiet_ctr[lane]        <= '0;
+        head_out_quiet_ctr[lane]       <= '0;
+        head_compute_start_d[lane]     <= 1'b0;
+        head_compute_done_d[lane]      <= 1'b0;
+        head_in_pending_instr[lane]    <= 32'd0;
+        head_out_pending_instr[lane]   <= 32'd0;
+        head_in_pending_op[lane]       <= 8'd0;
+        head_out_pending_op[lane]      <= 8'd0;
+        head_in_pending_layer[lane]    <= 8'd0;
+        head_out_pending_layer[lane]   <= 8'd0;
+        head_in_pending_head[lane]     <= 8'd0;
+        head_out_pending_head[lane]    <= 8'd0;
+        head_in_pending_tile[lane]     <= 8'd0;
+        head_out_pending_tile[lane]    <= 8'd0;
+        for (b = 0; b < DBG_SNAP_DEPTH; b = b + 1) begin
+          head_in_snap_valid[lane][b]  <= 1'b0;
+          head_out_snap_valid[lane][b] <= 1'b0;
+        end
+      end
+      for (head_idx = 0; head_idx < TB_NUM_HEADS; head_idx = head_idx + 1) begin
+        for (op_idx = 0; op_idx < 32; op_idx = op_idx + 1) begin
+          for (b = 0; b < DBG_HEAD_IN_BYTES; b = b + 1) begin
+            head_in_by_op[head_idx][op_idx][b] <= 8'd0;
+          end
+          for (b = 0; b < DBG_HEAD_OUT_BYTES; b = b + 1) begin
+            head_out_by_op[head_idx][op_idx][b] <= 8'd0;
+          end
+        end
+      end
+    end else begin
+      // -------------------------
+      // Main path snapshots
+      // -------------------------
+      if (!dbg_compute_start_d && dbg_compute_start[0]) begin
+        main_in_capture_pending <= 1'b1;
+        main_in_quiet_ctr       <= '0;
+        main_in_pending_instr   <= dbg_req_instruction;
+        main_in_pending_op      <= dbg_req_op;
+        main_in_pending_layer   <= dbg_req_layer;
+        main_in_pending_head    <= dbg_req_head;
+        main_in_pending_tile    <= dbg_req_tile;
+      end
+      if (!dbg_compute_done_d && dbg_compute_done[0]) begin
+        main_out_capture_pending <= 1'b1;
+        main_out_quiet_ctr       <= '0;
+        main_out_pending_instr   <= dbg_req_instruction;
+        main_out_pending_op      <= dbg_req_op;
+        main_out_pending_layer   <= dbg_req_layer;
+        main_out_pending_head    <= dbg_req_head;
+        main_out_pending_tile    <= dbg_req_tile;
+      end
+
+      if (main_in_capture_pending) begin
+        if (dbg_in_buf_ce0 && dbg_in_buf_we0) begin
+          main_in_quiet_ctr <= '0;
+        end else if (main_in_quiet_ctr < DBG_SNAP_QUIET_CYCLES) begin
+          main_in_quiet_ctr <= main_in_quiet_ctr + 1'b1;
+        end
+        if (main_in_quiet_ctr >= DBG_SNAP_QUIET_CYCLES) begin
+          for (b = 0; b < DBG_MAIN_IN_BYTES; b = b + 1) begin
+            main_in_snap[main_in_snap_wr_idx][b] <= dbg_in_buf_mem[b];
+          end
+          if (main_in_pending_op < 32) begin
+            for (b = 0; b < DBG_MAIN_IN_BYTES; b = b + 1) begin
+              main_in_by_op[main_in_pending_op][b] <= dbg_in_buf_mem[b];
+            end
+          end
+          main_in_snap_valid[main_in_snap_wr_idx] <= 1'b1;
+          main_in_snap_cycle[main_in_snap_wr_idx] <= cycle_count;
+          main_in_snap_instr[main_in_snap_wr_idx] <= main_in_pending_instr;
+          main_in_snap_op[main_in_snap_wr_idx]    <= main_in_pending_op;
+          main_in_snap_layer[main_in_snap_wr_idx] <= main_in_pending_layer;
+          main_in_snap_head[main_in_snap_wr_idx]  <= main_in_pending_head;
+          main_in_snap_tile[main_in_snap_wr_idx]  <= main_in_pending_tile;
+          main_in_snap_wr_idx <= (main_in_snap_wr_idx == (DBG_SNAP_DEPTH-1)) ? '0 : (main_in_snap_wr_idx + 1'b1);
+          main_in_capture_pending <= 1'b0;
+          main_in_quiet_ctr <= '0;
+        end
+      end
+
+      if (main_out_capture_pending) begin
+        if (dbg_out_buf_ce0 && dbg_out_buf_we0) begin
+          main_out_quiet_ctr <= '0;
+        end else if (main_out_quiet_ctr < DBG_SNAP_QUIET_CYCLES) begin
+          main_out_quiet_ctr <= main_out_quiet_ctr + 1'b1;
+        end
+        if (main_out_quiet_ctr >= DBG_SNAP_QUIET_CYCLES) begin
+          for (b = 0; b < DBG_MAIN_OUT_BYTES; b = b + 1) begin
+            main_out_snap[main_out_snap_wr_idx][b] <= dbg_out_buf_mem[b];
+          end
+          if (main_out_pending_op < 32) begin
+            for (b = 0; b < DBG_MAIN_OUT_BYTES; b = b + 1) begin
+              main_out_by_op[main_out_pending_op][b] <= dbg_out_buf_mem[b];
+            end
+          end
+
+          case (main_out_pending_op)
+            OP_CMP_LN0: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                ln0_out[elem_idx] <= dbg_out_buf_mem[elem_idx];
+              end
+            end
+            OP_CMP_LN1: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                ln1_out[elem_idx] <= dbg_out_buf_mem[elem_idx];
+              end
+            end
+            OP_CMP_OUT_PROJ: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                out_proj_out[elem_idx] <= dbg_out_buf_mem[elem_idx];
+              end
+            end
+            OP_CMP_RESID1: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                resid1_out[elem_idx] <= dbg_out_buf_mem[elem_idx];
+              end
+            end
+            OP_CMP_RESID2: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                resid2_out[elem_idx] <= dbg_out_buf_mem[elem_idx];
+              end
+            end
+            OP_CMP_FFN_W2: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                ffn_w2_out[elem_idx] <= dbg_out_buf_mem[elem_idx];
+              end
+            end
+            OP_CMP_FFN_W1: begin
+              for (elem_idx = 0; elem_idx < TB_D_FFN; elem_idx = elem_idx + 1) begin
+                ffn_w1_out[elem_idx] <= {dbg_out_buf_mem[(2*elem_idx)+1], dbg_out_buf_mem[(2*elem_idx)+0]};
+              end
+            end
+            OP_CMP_FFN_ACT: begin
+              for (elem_idx = 0; elem_idx < TB_D_FFN; elem_idx = elem_idx + 1) begin
+                ffn_act_out[elem_idx] <= {dbg_out_buf_mem[(2*elem_idx)+1], dbg_out_buf_mem[(2*elem_idx)+0]};
+              end
+            end
+            OP_CMP_FINAL_NORM: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                final_norm_out[elem_idx] <= {dbg_out_buf_mem[(4*elem_idx)+3], dbg_out_buf_mem[(4*elem_idx)+2], dbg_out_buf_mem[(4*elem_idx)+1], dbg_out_buf_mem[(4*elem_idx)+0]};
+              end
+            end
+            default: begin
+            end
+          endcase
+
+          main_out_snap_valid[main_out_snap_wr_idx] <= 1'b1;
+          main_out_snap_cycle[main_out_snap_wr_idx] <= cycle_count;
+          main_out_snap_instr[main_out_snap_wr_idx] <= main_out_pending_instr;
+          main_out_snap_op[main_out_snap_wr_idx]    <= main_out_pending_op;
+          main_out_snap_layer[main_out_snap_wr_idx] <= main_out_pending_layer;
+          main_out_snap_head[main_out_snap_wr_idx]  <= main_out_pending_head;
+          main_out_snap_tile[main_out_snap_wr_idx]  <= main_out_pending_tile;
+          main_out_snap_wr_idx <= (main_out_snap_wr_idx == (DBG_SNAP_DEPTH-1)) ? '0 : (main_out_snap_wr_idx + 1'b1);
+          main_out_capture_pending <= 1'b0;
+          main_out_quiet_ctr <= '0;
+        end
+      end
+
+      // -------------------------
+      // Headed path snapshots (per lane)
+      // -------------------------
+      for (lane = 0; lane < TB_HEADS_PARALLEL; lane = lane + 1) begin
+        lane_start_rise = 1'b0;
+        lane_done_rise  = 1'b0;
+        lane_instr      = 32'd0;
+        lane_op         = 8'd0;
+        lane_layer      = 8'd0;
+        lane_head       = 8'd0;
+        lane_tile       = 8'd0;
+        lane_in_write_event  = 1'b0;
+        lane_out_write_event = 1'b0;
+        if (lane == 0) begin
+          lane_start_rise = (!head_compute_start_d[0] && dbg_head_compute_ctx_0_struct.compute_start);
+          lane_done_rise  = (!head_compute_done_d[0]  && dbg_head_compute_ctx_0_struct.compute_done);
+          lane_instr      = dbg_head_compute_ctx_0_struct.req_instruction;
+          lane_op         = dbg_head_compute_ctx_0_struct.req_op;
+          lane_layer      = dbg_head_compute_ctx_0_struct.req_layer;
+          lane_head       = dbg_head_compute_ctx_0_struct.req_head;
+          lane_tile       = dbg_head_compute_ctx_0_struct.req_tile;
+          lane_in_write_event  = dbg_head_in_buf_0_ce0 && dbg_head_in_buf_0_we0;
+          lane_out_write_event = dbg_head_out_buf_0_ce0 && dbg_head_out_buf_0_we0;
+        end else begin
+          lane_start_rise = (!head_compute_start_d[1] && dbg_head_compute_ctx_1_struct.compute_start);
+          lane_done_rise  = (!head_compute_done_d[1]  && dbg_head_compute_ctx_1_struct.compute_done);
+          lane_instr      = dbg_head_compute_ctx_1_struct.req_instruction;
+          lane_op         = dbg_head_compute_ctx_1_struct.req_op;
+          lane_layer      = dbg_head_compute_ctx_1_struct.req_layer;
+          lane_head       = dbg_head_compute_ctx_1_struct.req_head;
+          lane_tile       = dbg_head_compute_ctx_1_struct.req_tile;
+          lane_in_write_event  = dbg_head_in_buf_1_ce0 && dbg_head_in_buf_1_we0;
+          lane_out_write_event = dbg_head_out_buf_1_ce0 && dbg_head_out_buf_1_we0;
+        end
+
+        if (lane_start_rise) begin
+          head_in_capture_pending[lane] <= 1'b1;
+          head_in_quiet_ctr[lane]       <= '0;
+          head_in_pending_instr[lane]   <= lane_instr;
+          head_in_pending_op[lane]      <= lane_op;
+          head_in_pending_layer[lane]   <= lane_layer;
+          head_in_pending_head[lane]    <= lane_head;
+          head_in_pending_tile[lane]    <= lane_tile;
+        end
+        if (lane_done_rise) begin
+          head_out_capture_pending[lane] <= 1'b1;
+          head_out_quiet_ctr[lane]       <= '0;
+          head_out_pending_instr[lane]   <= lane_instr;
+          head_out_pending_op[lane]      <= lane_op;
+          head_out_pending_layer[lane]   <= lane_layer;
+          head_out_pending_head[lane]    <= lane_head;
+          head_out_pending_tile[lane]    <= lane_tile;
+        end
+
+        if (head_in_capture_pending[lane]) begin
+          if (lane_in_write_event) begin
+            head_in_quiet_ctr[lane] <= '0;
+          end else if (head_in_quiet_ctr[lane] < DBG_SNAP_QUIET_CYCLES) begin
+            head_in_quiet_ctr[lane] <= head_in_quiet_ctr[lane] + 1'b1;
+          end
+          if (head_in_quiet_ctr[lane] >= DBG_SNAP_QUIET_CYCLES) begin
+            for (b = 0; b < DBG_HEAD_IN_BYTES; b = b + 1) begin
+              head_in_snap[lane][head_in_snap_wr_idx[lane]][b] <= dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + b];
+            end
+            if ((head_in_pending_head[lane] < TB_NUM_HEADS) && (head_in_pending_op[lane] < 32)) begin
+              for (b = 0; b < DBG_HEAD_IN_BYTES; b = b + 1) begin
+                head_in_by_op[head_in_pending_head[lane]][head_in_pending_op[lane]][b] <= dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + b];
+              end
+            end
+            head_in_snap_valid[lane][head_in_snap_wr_idx[lane]] <= 1'b1;
+            head_in_snap_cycle[lane][head_in_snap_wr_idx[lane]] <= cycle_count;
+            head_in_snap_instr[lane][head_in_snap_wr_idx[lane]] <= head_in_pending_instr[lane];
+            head_in_snap_op[lane][head_in_snap_wr_idx[lane]]    <= head_in_pending_op[lane];
+            head_in_snap_layer[lane][head_in_snap_wr_idx[lane]] <= head_in_pending_layer[lane];
+            head_in_snap_head[lane][head_in_snap_wr_idx[lane]]  <= head_in_pending_head[lane];
+            head_in_snap_tile[lane][head_in_snap_wr_idx[lane]]  <= head_in_pending_tile[lane];
+            head_in_snap_wr_idx[lane] <= (head_in_snap_wr_idx[lane] == (DBG_SNAP_DEPTH-1)) ? '0 : (head_in_snap_wr_idx[lane] + 1'b1);
+            head_in_capture_pending[lane] <= 1'b0;
+            head_in_quiet_ctr[lane] <= '0;
+          end
+        end
+
+        if (head_out_capture_pending[lane]) begin
+          if (lane_out_write_event) begin
+            head_out_quiet_ctr[lane] <= '0;
+          end else if (head_out_quiet_ctr[lane] < DBG_SNAP_QUIET_CYCLES) begin
+            head_out_quiet_ctr[lane] <= head_out_quiet_ctr[lane] + 1'b1;
+          end
+          if (head_out_quiet_ctr[lane] >= DBG_SNAP_QUIET_CYCLES) begin
+            for (b = 0; b < DBG_HEAD_OUT_BYTES; b = b + 1) begin
+              head_out_snap[lane][head_out_snap_wr_idx[lane]][b] <= dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + b];
+            end
+            if ((head_out_pending_head[lane] < TB_NUM_HEADS) && (head_out_pending_op[lane] < 32)) begin
+              for (b = 0; b < DBG_HEAD_OUT_BYTES; b = b + 1) begin
+                head_out_by_op[head_out_pending_head[lane]][head_out_pending_op[lane]][b] <= dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + b];
+              end
+
+              case (head_out_pending_op[lane])
+                OP_CMP_Q: begin
+                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
+                    q_out_all[(head_out_pending_head[lane] * TB_D_HEADS) + elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                  end
+                end
+                OP_CMP_K: begin
+                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
+                    k_out_all[(head_out_pending_head[lane] * TB_D_HEADS) + elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                  end
+                end
+                OP_CMP_V: begin
+                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
+                    v_out_all[(head_out_pending_head[lane] * TB_D_HEADS) + elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                  end
+                end
+                OP_CMP_HEAD_REQUANT: begin
+                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
+                    head_rq_out_all[(head_out_pending_head[lane] * TB_D_HEADS) + elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                  end
+                end
+                OP_CMP_ATT_SCORES: begin
+                  for (elem_idx = 0; elem_idx < TB_CONTEXT_LENGTH; elem_idx = elem_idx + 1) begin
+                    att_scores_out_all[(head_out_pending_head[lane] * TB_CONTEXT_LENGTH) + elem_idx] <=
+                      {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 3],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 2],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 1],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 0]};
+                  end
+                end
+                OP_CMP_VALUE_SCALE: begin
+                  for (elem_idx = 0; elem_idx < TB_CONTEXT_LENGTH; elem_idx = elem_idx + 1) begin
+                    val_scale_out_all[(head_out_pending_head[lane] * TB_CONTEXT_LENGTH) + elem_idx] <=
+                      {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (2*elem_idx) + 1],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (2*elem_idx) + 0]};
+                  end
+                end
+                OP_CMP_SOFTMAX: begin
+                  for (elem_idx = 0; elem_idx < TB_CONTEXT_LENGTH; elem_idx = elem_idx + 1) begin
+                    softmax_out_all[(head_out_pending_head[lane] * TB_CONTEXT_LENGTH) + elem_idx] <=
+                      {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (2*elem_idx) + 1],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (2*elem_idx) + 0]};
+                  end
+                end
+                OP_CMP_ATT_VALUE: begin
+                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
+                    att_value_out_all[(head_out_pending_head[lane] * TB_D_HEADS) + elem_idx] <=
+                      {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 3],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 2],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 1],
+                       dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 0]};
+                  end
+                end
+                default: begin
+                end
+              endcase
+            end
+            head_out_snap_valid[lane][head_out_snap_wr_idx[lane]] <= 1'b1;
+            head_out_snap_cycle[lane][head_out_snap_wr_idx[lane]] <= cycle_count;
+            head_out_snap_instr[lane][head_out_snap_wr_idx[lane]] <= head_out_pending_instr[lane];
+            head_out_snap_op[lane][head_out_snap_wr_idx[lane]]    <= head_out_pending_op[lane];
+            head_out_snap_layer[lane][head_out_snap_wr_idx[lane]] <= head_out_pending_layer[lane];
+            head_out_snap_head[lane][head_out_snap_wr_idx[lane]]  <= head_out_pending_head[lane];
+            head_out_snap_tile[lane][head_out_snap_wr_idx[lane]]  <= head_out_pending_tile[lane];
+            head_out_snap_wr_idx[lane] <= (head_out_snap_wr_idx[lane] == (DBG_SNAP_DEPTH-1)) ? '0 : (head_out_snap_wr_idx[lane] + 1'b1);
+            head_out_capture_pending[lane] <= 1'b0;
+            head_out_quiet_ctr[lane] <= '0;
+          end
+        end
+      end
+
+      dbg_compute_start_d <= dbg_compute_start[0];
+      dbg_compute_done_d  <= dbg_compute_done[0];
+      head_compute_start_d[0] <= dbg_head_compute_ctx_0_struct.compute_start;
+      head_compute_start_d[1] <= dbg_head_compute_ctx_1_struct.compute_start;
+      head_compute_done_d[0]  <= dbg_head_compute_ctx_0_struct.compute_done;
+      head_compute_done_d[1]  <= dbg_head_compute_ctx_1_struct.compute_done;
     end
   end
 
