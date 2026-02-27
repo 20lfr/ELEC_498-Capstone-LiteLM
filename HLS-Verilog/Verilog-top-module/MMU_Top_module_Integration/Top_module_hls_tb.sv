@@ -612,7 +612,7 @@ module top_module_hls_tb;
   logic [7:0]  head_in_pending_tile  [0:TB_HEADS_PARALLEL-1];
   logic [7:0]  head_out_pending_tile [0:TB_HEADS_PARALLEL-1];
   logic [7:0]  head_active_tile      [0:TB_HEADS_PARALLEL-1];
-  logic [31:0] head_last_seen_instr  [0:TB_HEADS_PARALLEL-1];
+  logic        head_exec_valid       [0:TB_HEADS_PARALLEL-1];
   logic head_compute_start_d [0:TB_HEADS_PARALLEL-1];
   logic head_compute_done_d  [0:TB_HEADS_PARALLEL-1];
 
@@ -1358,7 +1358,7 @@ module top_module_hls_tb;
         head_in_pending_tile[lane]     <= 8'd0;
         head_out_pending_tile[lane]    <= 8'd0;
         head_active_tile[lane]         <= 8'd0;
-        head_last_seen_instr[lane]     <= 32'd0;
+        head_exec_valid[lane]          <= 1'b0;
         for (b = 0; b < DBG_SNAP_DEPTH; b = b + 1) begin
           head_in_snap_valid[lane][b]  <= 1'b0;
           head_out_snap_valid[lane][b] <= 1'b0;
@@ -1558,16 +1558,13 @@ module top_module_hls_tb;
           lane_out_write_event = dbg_head_out_buf_1_ce0 && dbg_head_out_buf_1_we0;
         end
 
-        if ((lane_instr != 32'd0) && (lane_instr != head_last_seen_instr[lane])) begin
-          head_last_seen_instr[lane]   <= lane_instr;
+        if (lane_start_rise && (lane_instr != 32'd0)) begin
+          head_exec_valid[lane]        <= 1'b1;
           head_active_instr[lane]      <= lane_instr;
           head_active_op[lane]         <= lane_op;
           head_active_layer[lane]      <= lane_layer;
           head_active_head[lane]       <= lane_head;
           head_active_tile[lane]       <= lane_tile;
-        end
-
-        if (lane_start_rise || ((lane_instr != 32'd0) && (lane_instr != head_in_pending_instr[lane]) && (head_in_capture_pending[lane] == 1'b0))) begin
           head_in_capture_pending[lane] <= 1'b1;
           head_in_quiet_ctr[lane]       <= '0;
           head_in_pending_instr[lane]   <= lane_instr;
@@ -1576,7 +1573,7 @@ module top_module_hls_tb;
           head_in_pending_head[lane]    <= lane_head;
           head_in_pending_tile[lane]    <= lane_tile;
         end
-        if (lane_done_rise) begin
+        if (lane_done_rise && head_exec_valid[lane]) begin
           head_out_capture_pending[lane] <= 1'b1;
           head_out_quiet_ctr[lane]       <= '0;
           head_out_pending_instr[lane]   <= head_active_instr[lane];
@@ -1690,6 +1687,7 @@ module top_module_hls_tb;
           head_out_snap_wr_idx[lane] <= (head_out_snap_wr_idx[lane] == (DBG_SNAP_DEPTH-1)) ? '0 : (head_out_snap_wr_idx[lane] + 1'b1);
           head_out_capture_pending[lane] <= 1'b0;
           head_out_quiet_ctr[lane] <= '0;
+          head_exec_valid[lane] <= 1'b0;
         end
       end
 
