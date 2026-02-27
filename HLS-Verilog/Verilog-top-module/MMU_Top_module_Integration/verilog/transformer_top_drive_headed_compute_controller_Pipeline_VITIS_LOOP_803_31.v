@@ -185,10 +185,10 @@ reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce0_local;
 wire   [1:0] lshr_ln774_1_fu_258_p4;
-wire   [7:0] tmp_54_fu_319_p9;
-wire   [7:0] tmp_55_fu_342_p9;
-wire   [7:0] tmp_55_fu_342_p11;
-wire   [7:0] tmp_54_fu_319_p11;
+wire   [7:0] tmp_56_fu_319_p9;
+wire   [7:0] tmp_57_fu_342_p9;
+wire   [7:0] tmp_57_fu_342_p11;
+wire   [7:0] tmp_56_fu_319_p11;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -197,14 +197,14 @@ wire    ap_enable_pp0;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [1:0] tmp_54_fu_319_p1;
-wire   [1:0] tmp_54_fu_319_p3;
-wire  signed [1:0] tmp_54_fu_319_p5;
-wire  signed [1:0] tmp_54_fu_319_p7;
-wire   [1:0] tmp_55_fu_342_p1;
-wire   [1:0] tmp_55_fu_342_p3;
-wire  signed [1:0] tmp_55_fu_342_p5;
-wire  signed [1:0] tmp_55_fu_342_p7;
+wire   [1:0] tmp_56_fu_319_p1;
+wire   [1:0] tmp_56_fu_319_p3;
+wire  signed [1:0] tmp_56_fu_319_p5;
+wire  signed [1:0] tmp_56_fu_319_p7;
+wire   [1:0] tmp_57_fu_342_p1;
+wire   [1:0] tmp_57_fu_342_p3;
+wire  signed [1:0] tmp_57_fu_342_p5;
+wire  signed [1:0] tmp_57_fu_342_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -234,9 +234,9 @@ sparsemux_9_2_8_1_1_U2054(
     .din1(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_q0),
     .din2(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_q0),
     .din3(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_q0),
-    .def(tmp_54_fu_319_p9),
+    .def(tmp_56_fu_319_p9),
     .sel(trunc_ln774_reg_483),
-    .dout(tmp_54_fu_319_p11)
+    .dout(tmp_56_fu_319_p11)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_9_2_8_1_1 #(
@@ -258,9 +258,9 @@ sparsemux_9_2_8_1_1_U2055(
     .din1(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_16_q0),
     .din2(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_14_q0),
     .din3(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_q0),
-    .def(tmp_55_fu_342_p9),
+    .def(tmp_57_fu_342_p9),
     .sel(trunc_ln774_reg_483),
-    .dout(tmp_55_fu_342_p11)
+    .dout(tmp_57_fu_342_p11)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -666,15 +666,15 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hR
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_31 = v_fu_365_p3;
 
-assign tmp_54_fu_319_p9 = 'bx;
+assign tmp_56_fu_319_p9 = 'bx;
 
-assign tmp_55_fu_342_p9 = 'bx;
+assign tmp_57_fu_342_p9 = 'bx;
 
 assign trunc_ln774_fu_254_p1 = ap_sig_allocacmp_t_2[1:0];
 
 assign trunc_ln803_fu_250_p1 = ap_sig_allocacmp_t_2[3:0];
 
-assign v_fu_365_p3 = {{tmp_55_fu_342_p11}, {tmp_54_fu_319_p11}};
+assign v_fu_365_p3 = {{tmp_57_fu_342_p11}, {tmp_56_fu_319_p11}};
 
 assign zext_ln774_fu_268_p1 = lshr_ln774_1_fu_258_p4;
 

@@ -321,7 +321,7 @@ reg   [2:0] i_fu_172;
 wire   [2:0] add_ln802_fu_323_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_i_62;
-wire   [3:0] shl_ln8_fu_333_p3;
+wire   [3:0] shl_ln_fu_333_p3;
 wire   [4:0] zext_ln804_fu_341_p1;
 wire   [5:0] or_ln_fu_345_p3;
 reg    ap_done_reg;
@@ -635,10 +635,10 @@ assign or_ln_fu_345_p3 = {{1'd1}, {zext_ln804_fu_341_p1}};
 
 assign sext_ln804_fu_353_p1 = $signed(or_ln_fu_345_p3);
 
-assign shl_ln8_fu_333_p3 = {{trunc_ln802_fu_329_p1}, {2'd0}};
+assign shl_ln_fu_333_p3 = {{trunc_ln802_fu_329_p1}, {2'd0}};
 
 assign trunc_ln802_fu_329_p1 = ap_sig_allocacmp_i_62[1:0];
 
-assign zext_ln804_fu_341_p1 = shl_ln8_fu_333_p3;
+assign zext_ln804_fu_341_p1 = shl_ln_fu_333_p3;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_802_38

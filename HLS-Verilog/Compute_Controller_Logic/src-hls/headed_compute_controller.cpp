@@ -8,7 +8,7 @@ static void print_head_buffers(
     const char *label,
     const int8_t vec[HEAD_VECTOR_MAX],
     const int8_t mat[HEAD_MATRIX_MAX],
-    const int4_t bias[HEAD_ACCUM_MAX]
+    const int32_t bias[HEAD_ACCUM_MAX]
 ) {
     std::printf("%s head_vec[%d]:", label, HEAD_VECTOR_MAX);
     for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
@@ -69,7 +69,7 @@ static inline void print_head_buffers(
     const char *,
     const int8_t[HEAD_VECTOR_MAX],
     const int8_t[HEAD_MATRIX_MAX],
-    const int4_t[HEAD_ACCUM_MAX]
+    const int32_t[HEAD_ACCUM_MAX]
 ) {}
 
 static inline void print_att_value_buffers(
@@ -228,7 +228,7 @@ void MAC_HEAD_ARCHITECTURE(
     bool &ready,
     const int8_t vectorA[HEAD_VECTOR_MAX],
     const int8_t matrixB[HEAD_MATRIX_MAX],
-    const int4_t bias[HEAD_ACCUM_MAX],
+    const int32_t bias[HEAD_ACCUM_MAX],
     bool &complete,
     int32_t accum_out[HEAD_ACCUM_MAX],
     bool &busy
@@ -452,7 +452,7 @@ static void headed_compute_controller_lane(
     bool        &error,
     int8_t head_vec[HEAD_VECTOR_MAX],
     int8_t head_mat[HEAD_MATRIX_MAX],
-    int4_t head_bias[HEAD_ACCUM_MAX],
+    int32_t head_bias[HEAD_ACCUM_MAX],
     int32_t head_out[HEAD_ACCUM_MAX],
     int32_t head_x32[D_HEADS],
     int8_t head_y8[D_HEADS],
@@ -522,7 +522,7 @@ static void headed_compute_controller_lane(
         }
         for (int i = 0; i < HEAD_ACCUM_MAX; ++i) {
 // #pragma HLS UNROLL
-            head_bias[i] = int4_t(0);
+            head_bias[i] = 0;
             head_out[i] = 0;
         }
         for (int i = 0; i < D_HEADS; ++i) {
@@ -645,11 +645,11 @@ static void headed_compute_controller_lane(
                     // INIT the Bias Buffer
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                        head_bias[h] = compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::B * 2) + h);
+                        head_bias[h] = compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (h * 4));
                     }
                     for (int h = D_HEADS; h < HEAD_ACCUM_MAX; ++h) {
 #pragma HLS PIPELINE II=1
-                        head_bias[h] = int4_t(0);
+                        head_bias[h] = 0;
                     }
                     
                     if (ctx.mac_ready && !ctx.mac_start && !ctx.mac_complete) {
@@ -753,7 +753,7 @@ static void headed_compute_controller_lane(
                     // INIT bias to zero
                     for (int h = 0; h < HEAD_ACCUM_MAX; ++h) {
 #pragma HLS PIPELINE II=1
-                        head_bias[h] = int4_t(0);
+                        head_bias[h] = 0;
                     }
                     if (ctx.mac_ready && !ctx.mac_start && !ctx.mac_complete) {
                         ctx.mac_start = true;
@@ -898,7 +898,7 @@ void drive_headed_compute_controller(
 
     static int8_t head_vec[HEADS_PARALLEL][HEAD_VECTOR_MAX];
     static int8_t head_mat[HEADS_PARALLEL][HEAD_MATRIX_MAX];
-    static int4_t head_bias[HEADS_PARALLEL][HEAD_ACCUM_MAX];
+    static int32_t head_bias[HEADS_PARALLEL][HEAD_ACCUM_MAX];
     static int32_t head_out[HEADS_PARALLEL][HEAD_ACCUM_MAX];
 
     static int32_t head_x32[HEADS_PARALLEL][D_HEADS];
@@ -1019,7 +1019,7 @@ void headed_compute_controller(
 
     static int8_t head_vec[HEAD_VECTOR_MAX];
     static int8_t head_mat[HEAD_MATRIX_MAX];
-    static int4_t head_bias[HEAD_ACCUM_MAX];
+    static int32_t head_bias[HEAD_ACCUM_MAX];
     static int32_t head_out[HEAD_ACCUM_MAX];
 
     int32_t head_x32[D_HEADS];

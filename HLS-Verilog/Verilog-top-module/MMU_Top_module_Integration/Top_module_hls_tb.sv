@@ -508,6 +508,12 @@ module top_module_hls_tb;
   logic [31:0] wo_ram        [0:RAM_REGION_WORDS-1];
   logic [31:0] w1_ram        [0:RAM_REGION_WORDS-1];
   logic [31:0] w2_ram        [0:RAM_REGION_WORDS-1];
+  logic [31:0] wq_bias_ram   [0:RAM_REGION_WORDS-1];
+  logic [31:0] wk_bias_ram   [0:RAM_REGION_WORDS-1];
+  logic [31:0] wv_bias_ram   [0:RAM_REGION_WORDS-1];
+  logic [31:0] wo_bias_ram   [0:RAM_REGION_WORDS-1];
+  logic [31:0] w1_bias_ram   [0:RAM_REGION_WORDS-1];
+  logic [31:0] w2_bias_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] ln0_gamma_ram [0:RAM_REGION_WORDS-1];
   logic [31:0] ln1_gamma_ram [0:RAM_REGION_WORDS-1];
   logic [31:0] ln0_eps_ram   [0:RAM_REGION_WORDS-1];
@@ -894,6 +900,30 @@ module top_module_hls_tb;
     is_w2_addr = in_range64(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
 
+  function automatic bit is_wq_bias_addr(input [63:0] addr);
+    is_wq_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WQ_BIAS_BASE_LO, CTRLW_WQ_BIAS_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
+  function automatic bit is_wk_bias_addr(input [63:0] addr);
+    is_wk_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WK_BIAS_BASE_LO, CTRLW_WK_BIAS_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
+  function automatic bit is_wv_bias_addr(input [63:0] addr);
+    is_wv_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WV_BIAS_BASE_LO, CTRLW_WV_BIAS_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
+  function automatic bit is_wo_bias_addr(input [63:0] addr);
+    is_wo_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WO_BIAS_BASE_LO, CTRLW_WO_BIAS_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
+  function automatic bit is_w1_bias_addr(input [63:0] addr);
+    is_w1_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_W1_BIAS_BASE_LO, CTRLW_W1_BIAS_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
+  function automatic bit is_w2_bias_addr(input [63:0] addr);
+    is_w2_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_W2_BIAS_BASE_LO, CTRLW_W2_BIAS_BASE_HI), (RAM_REGION_WORDS << 2));
+  endfunction
+
   function automatic bit is_ln0_gamma_addr(input [63:0] addr);
     is_ln0_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN0_GAMMA_BASE_LO, CTRLW_LN0_GAMMA_BASE_HI), (RAM_REGION_WORDS << 2));
   endfunction
@@ -955,6 +985,18 @@ module top_module_hls_tb;
         mem_read_word = w1_ram[region_index(addr, ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI))];
       end else if (is_w2_addr(addr)) begin
         mem_read_word = w2_ram[region_index(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI))];
+      end else if (is_wq_bias_addr(addr)) begin
+        mem_read_word = wq_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WQ_BIAS_BASE_LO, CTRLW_WQ_BIAS_BASE_HI))];
+      end else if (is_wk_bias_addr(addr)) begin
+        mem_read_word = wk_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WK_BIAS_BASE_LO, CTRLW_WK_BIAS_BASE_HI))];
+      end else if (is_wv_bias_addr(addr)) begin
+        mem_read_word = wv_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WV_BIAS_BASE_LO, CTRLW_WV_BIAS_BASE_HI))];
+      end else if (is_wo_bias_addr(addr)) begin
+        mem_read_word = wo_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WO_BIAS_BASE_LO, CTRLW_WO_BIAS_BASE_HI))];
+      end else if (is_w1_bias_addr(addr)) begin
+        mem_read_word = w1_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_W1_BIAS_BASE_LO, CTRLW_W1_BIAS_BASE_HI))];
+      end else if (is_w2_bias_addr(addr)) begin
+        mem_read_word = w2_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_W2_BIAS_BASE_LO, CTRLW_W2_BIAS_BASE_HI))];
       end else if (is_ln0_gamma_addr(addr)) begin
         mem_read_word = ln0_gamma_ram[region_index(addr, ctrl_base_addr64(CTRLW_LN0_GAMMA_BASE_LO, CTRLW_LN0_GAMMA_BASE_HI))];
       end else if (is_ln1_gamma_addr(addr)) begin
@@ -2341,6 +2383,12 @@ module top_module_hls_tb;
       wo_ram[i] = 32'hA400_0000 + i;
       w1_ram[i] = 32'hA500_0000 + i;
       w2_ram[i] = 32'hA600_0000 + i;
+      wq_bias_ram[i] = 32'h0000_0100 + i;
+      wk_bias_ram[i] = 32'h0000_0200 + i;
+      wv_bias_ram[i] = 32'h0000_0300 + i;
+      wo_bias_ram[i] = 32'h0000_0400 + i;
+      w1_bias_ram[i] = 32'h0000_0500 + i;
+      w2_bias_ram[i] = 32'h0000_0600 + i;
       // Give LN gamma vectors a visible ramp so per-element AXI reads are easy to inspect.
       ln0_gamma_ram[i] = 32'h0000_2000 + i;
       ln1_gamma_ram[i] = 32'h0000_2100 + i;

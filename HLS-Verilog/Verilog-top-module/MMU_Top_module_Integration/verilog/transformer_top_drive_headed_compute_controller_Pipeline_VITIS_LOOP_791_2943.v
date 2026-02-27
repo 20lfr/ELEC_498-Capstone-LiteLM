@@ -167,7 +167,7 @@ end
     .def_WIDTH( 15 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 15 ))
-sparsemux_33_4_15_1_1_U3100(
+sparsemux_33_4_15_1_1_U3121(
     .din0(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_48),
     .din1(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_49),
     .din2(drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_soft_50),

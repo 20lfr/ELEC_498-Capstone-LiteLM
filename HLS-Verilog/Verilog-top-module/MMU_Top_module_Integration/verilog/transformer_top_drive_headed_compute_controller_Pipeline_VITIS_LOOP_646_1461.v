@@ -13,10 +13,32 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_646_1
         ap_done,
         ap_idle,
         ap_ready,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_655,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_654,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3_ap_vld,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_q0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_address0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_q0,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2_ap_vld,
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1,
@@ -25,7 +47,7 @@ module transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_646_1
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s_ap_vld
 );
 
-parameter    ap_ST_fsm_state1 = 1'd1;
+parameter    ap_ST_fsm_pp0_stage0 = 1'd1;
 
 input   ap_clk;
 input   ap_rst;
@@ -33,15 +55,37 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_655;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_654;
-output  [3:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3;
+output  [31:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3;
 output   p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3_ap_vld;
-output  [3:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_q0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_address0;
+output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_q0;
+output  [31:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2;
 output   p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2_ap_vld;
-output  [3:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1;
+output  [31:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1;
 output   p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1_ap_vld;
-output  [3:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s;
+output  [31:0] p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s;
 output   p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s_ap_vld;
 
 reg ap_idle;
@@ -51,28 +95,64 @@ reg p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9
 reg p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s_ap_vld;
 
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
-wire    ap_CS_fsm_state1;
-reg    ap_block_state1_pp0_stage0_iter0;
-wire   [0:0] icmp_ln646_fu_74_p2;
+wire    ap_CS_fsm_pp0_stage0;
+wire    ap_enable_reg_pp0_iter0;
+reg    ap_enable_reg_pp0_iter1;
+reg    ap_enable_reg_pp0_iter2;
+reg    ap_enable_reg_pp0_iter3;
+reg    ap_idle_pp0;
+wire    ap_block_pp0_stage0_subdone;
+wire   [0:0] icmp_ln646_fu_91_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [3:0] nibble_fu_124_p3;
-wire   [1:0] trunc_ln646_fu_86_p1;
-reg   [2:0] h_fu_50;
-wire   [2:0] add_ln646_fu_80_p2;
+reg   [0:0] icmp_ln646_reg_167;
+wire    ap_block_pp0_stage0_11001;
+reg   [0:0] icmp_ln646_reg_167_pp0_iter1_reg;
+reg   [0:0] icmp_ln646_reg_167_pp0_iter2_reg;
+wire   [1:0] trunc_ln646_fu_103_p1;
+reg   [1:0] trunc_ln646_reg_171;
+reg   [1:0] trunc_ln646_reg_171_pp0_iter1_reg;
+reg   [1:0] trunc_ln646_reg_171_pp0_iter2_reg;
+wire    grp_read_i32_1_fu_62_ap_start;
+wire    grp_read_i32_1_fu_62_ap_done;
+wire    grp_read_i32_1_fu_62_ap_idle;
+wire    grp_read_i32_1_fu_62_ap_ready;
+wire   [3:0] grp_read_i32_1_fu_62_buf_0_address0;
+wire    grp_read_i32_1_fu_62_buf_0_ce0;
+wire   [3:0] grp_read_i32_1_fu_62_buf_1_address0;
+wire    grp_read_i32_1_fu_62_buf_1_ce0;
+wire   [3:0] grp_read_i32_1_fu_62_buf_2_address0;
+wire    grp_read_i32_1_fu_62_buf_2_ce0;
+wire   [3:0] grp_read_i32_1_fu_62_buf_3_address0;
+wire    grp_read_i32_1_fu_62_buf_3_ce0;
+wire   [3:0] grp_read_i32_1_fu_62_buf_4_address0;
+wire    grp_read_i32_1_fu_62_buf_4_ce0;
+wire   [3:0] grp_read_i32_1_fu_62_buf_5_address0;
+wire    grp_read_i32_1_fu_62_buf_5_ce0;
+wire   [3:0] grp_read_i32_1_fu_62_buf_6_address0;
+wire    grp_read_i32_1_fu_62_buf_6_ce0;
+wire   [3:0] grp_read_i32_1_fu_62_buf_7_address0;
+wire    grp_read_i32_1_fu_62_buf_7_ce0;
+wire   [5:0] grp_read_i32_1_fu_62_byte_addr;
+wire   [31:0] grp_read_i32_1_fu_62_ap_return;
+reg    grp_read_i32_1_fu_62_ap_start_reg;
+wire    ap_block_pp0_stage0_ignoreCallOp21;
+wire    ap_block_pp0_stage0_ignoreCallOp25;
+wire    ap_block_pp0_stage0_ignoreCallOp20;
+wire    ap_block_pp0_stage0;
+reg   [2:0] h_fu_58;
+wire   [2:0] add_ln646_fu_97_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_h_16;
-wire   [0:0] tmp_fu_94_p3;
-wire   [7:0] byte_val_fu_102_p3;
-wire   [0:0] trunc_ln766_fu_90_p1;
-wire   [3:0] tmp_s_fu_110_p4;
-wire   [3:0] trunc_ln769_fu_120_p1;
+wire   [4:0] or_ln648_1_fu_122_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
+reg    ap_loop_exit_ready_pp0_iter1_reg;
+reg    ap_loop_exit_ready_pp0_iter2_reg;
 reg   [0:0] ap_NS_fsm;
-reg    ap_ST_fsm_state1_blk;
+wire    ap_enable_pp0;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
@@ -81,9 +161,48 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 h_fu_50 = 3'd0;
+#0 ap_enable_reg_pp0_iter1 = 1'b0;
+#0 ap_enable_reg_pp0_iter2 = 1'b0;
+#0 ap_enable_reg_pp0_iter3 = 1'b0;
+#0 grp_read_i32_1_fu_62_ap_start_reg = 1'b0;
+#0 h_fu_58 = 3'd0;
 #0 ap_done_reg = 1'b0;
 end
+
+transformer_top_read_i32_1 grp_read_i32_1_fu_62(
+    .ap_clk(ap_clk),
+    .ap_rst(ap_rst),
+    .ap_start(grp_read_i32_1_fu_62_ap_start),
+    .ap_done(grp_read_i32_1_fu_62_ap_done),
+    .ap_idle(grp_read_i32_1_fu_62_ap_idle),
+    .ap_ready(grp_read_i32_1_fu_62_ap_ready),
+    .buf_0_address0(grp_read_i32_1_fu_62_buf_0_address0),
+    .buf_0_ce0(grp_read_i32_1_fu_62_buf_0_ce0),
+    .buf_0_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_q0),
+    .buf_1_address0(grp_read_i32_1_fu_62_buf_1_address0),
+    .buf_1_ce0(grp_read_i32_1_fu_62_buf_1_ce0),
+    .buf_1_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q0),
+    .buf_2_address0(grp_read_i32_1_fu_62_buf_2_address0),
+    .buf_2_ce0(grp_read_i32_1_fu_62_buf_2_ce0),
+    .buf_2_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q0),
+    .buf_3_address0(grp_read_i32_1_fu_62_buf_3_address0),
+    .buf_3_ce0(grp_read_i32_1_fu_62_buf_3_ce0),
+    .buf_3_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_q0),
+    .buf_4_address0(grp_read_i32_1_fu_62_buf_4_address0),
+    .buf_4_ce0(grp_read_i32_1_fu_62_buf_4_ce0),
+    .buf_4_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_q0),
+    .buf_5_address0(grp_read_i32_1_fu_62_buf_5_address0),
+    .buf_5_ce0(grp_read_i32_1_fu_62_buf_5_ce0),
+    .buf_5_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_q0),
+    .buf_6_address0(grp_read_i32_1_fu_62_buf_6_address0),
+    .buf_6_ce0(grp_read_i32_1_fu_62_buf_6_ce0),
+    .buf_6_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_q0),
+    .buf_7_address0(grp_read_i32_1_fu_62_buf_7_address0),
+    .buf_7_ce0(grp_read_i32_1_fu_62_buf_7_ce0),
+    .buf_7_q0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_q0),
+    .byte_addr(grp_read_i32_1_fu_62_byte_addr),
+    .ap_return(grp_read_i32_1_fu_62_ap_return)
+);
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
     .ap_clk(ap_clk),
@@ -102,7 +221,7 @@ transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_se
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        ap_CS_fsm <= ap_ST_fsm_state1;
+        ap_CS_fsm <= ap_ST_fsm_pp0_stage0;
     end else begin
         ap_CS_fsm <= ap_NS_fsm;
     end
@@ -114,32 +233,86 @@ always @ (posedge ap_clk) begin
     end else begin
         if ((ap_continue_int == 1'b1)) begin
             ap_done_reg <= 1'b0;
-        end else if (((ap_loop_exit_ready == 1'b1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+        end else if (((1'b0 == ap_block_pp0_stage0_subdone) & (ap_loop_exit_ready_pp0_iter2_reg == 1'b1))) begin
             ap_done_reg <= 1'b1;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((icmp_ln646_fu_74_p2 == 1'd0)) begin
-            h_fu_50 <= add_ln646_fu_80_p2;
-        end else if ((ap_loop_init == 1'b1)) begin
-            h_fu_50 <= 3'd0;
+    if (ap_rst == 1'b1) begin
+        ap_enable_reg_pp0_iter1 <= 1'b0;
+    end else begin
+        if ((1'b1 == ap_condition_exit_pp0_iter0_stage0)) begin
+            ap_enable_reg_pp0_iter1 <= 1'b0;
+        end else if (((1'b0 == ap_block_pp0_stage0_subdone) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+            ap_enable_reg_pp0_iter1 <= ap_start_int;
         end
     end
 end
 
-always @ (*) begin
-    if ((1'b1 == ap_block_state1_pp0_stage0_iter0)) begin
-        ap_ST_fsm_state1_blk = 1'b1;
+always @ (posedge ap_clk) begin
+    if (ap_rst == 1'b1) begin
+        ap_enable_reg_pp0_iter2 <= 1'b0;
     end else begin
-        ap_ST_fsm_state1_blk = 1'b0;
+        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+            ap_enable_reg_pp0_iter2 <= ap_enable_reg_pp0_iter1;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (ap_rst == 1'b1) begin
+        ap_enable_reg_pp0_iter3 <= 1'b0;
+    end else begin
+        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+            ap_enable_reg_pp0_iter3 <= ap_enable_reg_pp0_iter2;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (ap_rst == 1'b1) begin
+        grp_read_i32_1_fu_62_ap_start_reg <= 1'b0;
+    end else begin
+        if (((icmp_ln646_fu_91_p2 == 1'd0) & (1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+            grp_read_i32_1_fu_62_ap_start_reg <= 1'b1;
+        end else if ((grp_read_i32_1_fu_62_ap_ready == 1'b1)) begin
+            grp_read_i32_1_fu_62_ap_start_reg <= 1'b0;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        if (((icmp_ln646_fu_91_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
+            h_fu_58 <= add_ln646_fu_97_p2;
+        end else if ((ap_loop_init == 1'b1)) begin
+            h_fu_58 <= 3'd0;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        ap_loop_exit_ready_pp0_iter1_reg <= ap_loop_exit_ready;
+        ap_loop_exit_ready_pp0_iter2_reg <= ap_loop_exit_ready_pp0_iter1_reg;
+        icmp_ln646_reg_167 <= icmp_ln646_fu_91_p2;
+        icmp_ln646_reg_167_pp0_iter1_reg <= icmp_ln646_reg_167;
+        trunc_ln646_reg_171 <= trunc_ln646_fu_103_p1;
+        trunc_ln646_reg_171_pp0_iter1_reg <= trunc_ln646_reg_171;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b0 == ap_block_pp0_stage0_11001)) begin
+        icmp_ln646_reg_167_pp0_iter2_reg <= icmp_ln646_reg_167_pp0_iter1_reg;
+        trunc_ln646_reg_171_pp0_iter2_reg <= trunc_ln646_reg_171_pp0_iter1_reg;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln646_fu_74_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((icmp_ln646_fu_91_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -147,7 +320,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((ap_loop_exit_ready == 1'b1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b0 == ap_block_pp0_stage0_subdone) & (ap_loop_exit_ready_pp0_iter2_reg == 1'b1))) begin
         ap_done_int = 1'b1;
     end else begin
         ap_done_int = ap_done_reg;
@@ -155,7 +328,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start_int == 1'b0))) begin
+    if (((ap_idle_pp0 == 1'b1) & (ap_start_int == 1'b0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_idle = 1'b1;
     end else begin
         ap_idle = 1'b0;
@@ -163,7 +336,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((ap_enable_reg_pp0_iter3 == 1'b0) & (ap_enable_reg_pp0_iter2 == 1'b0) & (ap_enable_reg_pp0_iter1 == 1'b0) & (ap_enable_reg_pp0_iter0 == 1'b0))) begin
+        ap_idle_pp0 = 1'b1;
+    end else begin
+        ap_idle_pp0 = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_ready_int = 1'b1;
     end else begin
         ap_ready_int = 1'b0;
@@ -171,15 +352,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_sig_allocacmp_h_16 = 3'd0;
     end else begin
-        ap_sig_allocacmp_h_16 = h_fu_50;
+        ap_sig_allocacmp_h_16 = h_fu_58;
     end
 end
 
 always @ (*) begin
-    if (((trunc_ln646_fu_86_p1 == 2'd2) & (icmp_ln646_fu_74_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter3 == 1'b1) & (trunc_ln646_reg_171_pp0_iter2_reg == 2'd2))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1_ap_vld = 1'b0;
@@ -187,7 +368,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln646_fu_86_p1 == 2'd1) & (icmp_ln646_fu_74_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter3 == 1'b1) & (trunc_ln646_reg_171_pp0_iter2_reg == 2'd1))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2_ap_vld = 1'b0;
@@ -195,7 +376,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln646_fu_86_p1 == 2'd0) & (icmp_ln646_fu_74_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter3 == 1'b1) & (trunc_ln646_reg_171_pp0_iter2_reg == 2'd0))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3_ap_vld = 1'b0;
@@ -203,7 +384,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln646_fu_86_p1 == 2'd3) & (icmp_ln646_fu_74_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter3 == 1'b1) & (trunc_ln646_reg_171_pp0_iter2_reg == 2'd3))) begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s_ap_vld = 1'b1;
     end else begin
         p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s_ap_vld = 1'b0;
@@ -212,8 +393,8 @@ end
 
 always @ (*) begin
     case (ap_CS_fsm)
-        ap_ST_fsm_state1 : begin
-            ap_NS_fsm = ap_ST_fsm_state1;
+        ap_ST_fsm_pp0_stage0 : begin
+            ap_NS_fsm = ap_ST_fsm_pp0_stage0;
         end
         default : begin
             ap_NS_fsm = 'bx;
@@ -221,42 +402,80 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln646_fu_80_p2 = (ap_sig_allocacmp_h_16 + 3'd1);
+assign add_ln646_fu_97_p2 = (ap_sig_allocacmp_h_16 + 3'd1);
 
-assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
+assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
-always @ (*) begin
-    ap_block_state1_pp0_stage0_iter0 = (ap_start_int == 1'b0);
-end
+assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
+
+assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+
+assign ap_block_pp0_stage0_ignoreCallOp20 = ~(1'b1 == 1'b1);
+
+assign ap_block_pp0_stage0_ignoreCallOp21 = ~(1'b1 == 1'b1);
+
+assign ap_block_pp0_stage0_ignoreCallOp25 = ~(1'b1 == 1'b1);
+
+assign ap_block_pp0_stage0_subdone = ~(1'b1 == 1'b1);
 
 assign ap_done = ap_done_sig;
+
+assign ap_enable_pp0 = (ap_idle_pp0 ^ 1'b1);
+
+assign ap_enable_reg_pp0_iter0 = ap_start_int;
 
 assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign byte_val_fu_102_p3 = ((tmp_fu_94_p3[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_655 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_654);
+assign grp_read_i32_1_fu_62_ap_start = grp_read_i32_1_fu_62_ap_start_reg;
 
-assign icmp_ln646_fu_74_p2 = ((ap_sig_allocacmp_h_16 == 3'd4) ? 1'b1 : 1'b0);
+assign grp_read_i32_1_fu_62_byte_addr = $signed(or_ln648_1_fu_122_p4);
 
-assign nibble_fu_124_p3 = ((trunc_ln766_fu_90_p1[0:0] == 1'b1) ? tmp_s_fu_110_p4 : trunc_ln769_fu_120_p1);
+assign icmp_ln646_fu_91_p2 = ((ap_sig_allocacmp_h_16 == 3'd4) ? 1'b1 : 1'b0);
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1 = nibble_fu_124_p3;
+assign or_ln648_1_fu_122_p4 = {{{{1'd1}, {trunc_ln646_reg_171}}}, {2'd0}};
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2 = nibble_fu_124_p3;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0 = grp_read_i32_1_fu_62_buf_1_address0;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3 = nibble_fu_124_p3;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0 = grp_read_i32_1_fu_62_buf_1_ce0;
 
-assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s = nibble_fu_124_p3;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0 = grp_read_i32_1_fu_62_buf_0_address0;
 
-assign tmp_fu_94_p3 = ap_sig_allocacmp_h_16[32'd1];
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0 = grp_read_i32_1_fu_62_buf_0_ce0;
 
-assign tmp_s_fu_110_p4 = {{byte_val_fu_102_p3[7:4]}};
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_address0 = grp_read_i32_1_fu_62_buf_7_address0;
 
-assign trunc_ln646_fu_86_p1 = ap_sig_allocacmp_h_16[1:0];
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_4_ce0 = grp_read_i32_1_fu_62_buf_7_ce0;
 
-assign trunc_ln766_fu_90_p1 = ap_sig_allocacmp_h_16[0:0];
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_address0 = grp_read_i32_1_fu_62_buf_6_address0;
 
-assign trunc_ln769_fu_120_p1 = byte_val_fu_102_p3[3:0];
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_5_ce0 = grp_read_i32_1_fu_62_buf_6_ce0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_address0 = grp_read_i32_1_fu_62_buf_5_address0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_6_ce0 = grp_read_i32_1_fu_62_buf_5_ce0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_address0 = grp_read_i32_1_fu_62_buf_4_address0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_7_ce0 = grp_read_i32_1_fu_62_buf_4_ce0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_address0 = grp_read_i32_1_fu_62_buf_3_address0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_8_ce0 = grp_read_i32_1_fu_62_buf_3_ce0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0 = grp_read_i32_1_fu_62_buf_2_address0;
+
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0 = grp_read_i32_1_fu_62_buf_2_ce0;
+
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_1 = grp_read_i32_1_fu_62_ap_return;
+
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_2 = grp_read_i32_1_fu_62_ap_return;
+
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_3 = grp_read_i32_1_fu_62_ap_return;
+
+assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE9head_s = grp_read_i32_1_fu_62_ap_return;
+
+assign trunc_ln646_fu_103_p1 = ap_sig_allocacmp_h_16[1:0];
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_646_1461

@@ -13,18 +13,18 @@ module transformer_top_p_anonymous_namespace_region_read_bytes_4_Pipeline_VITIS_
         ap_done,
         ap_idle,
         ap_ready,
-        xor_ln867_1,
-        empty_420,
-        tmp_88,
+        xor_ln867_2,
+        empty_421,
+        tmp_95,
         mul_ln869,
         empty,
         uram_banks_address0,
         uram_banks_ce0,
         uram_banks_q0,
-        stream_out_buf_local_address0,
-        stream_out_buf_local_ce0,
-        stream_out_buf_local_we0,
-        stream_out_buf_local_d0
+        p_anonymous_namespace_scratch_address0,
+        p_anonymous_namespace_scratch_ce0,
+        p_anonymous_namespace_scratch_we0,
+        p_anonymous_namespace_scratch_d0
 );
 
 parameter    ap_ST_fsm_pp0_stage0 = 1'd1;
@@ -35,18 +35,18 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [31:0] xor_ln867_1;
-input  [20:0] empty_420;
-input  [20:0] tmp_88;
+input  [31:0] xor_ln867_2;
+input  [20:0] empty_421;
+input  [20:0] tmp_95;
 input  [20:0] mul_ln869;
-input  [5:0] empty;
+input  [12:0] empty;
 output  [20:0] uram_banks_address0;
 output   uram_banks_ce0;
 input  [7:0] uram_banks_q0;
-output  [5:0] stream_out_buf_local_address0;
-output   stream_out_buf_local_ce0;
-output   stream_out_buf_local_we0;
-output  [7:0] stream_out_buf_local_d0;
+output  [12:0] p_anonymous_namespace_scratch_address0;
+output   p_anonymous_namespace_scratch_ce0;
+output   p_anonymous_namespace_scratch_we0;
+output  [7:0] p_anonymous_namespace_scratch_d0;
 
 reg ap_idle;
 
@@ -56,28 +56,28 @@ wire    ap_enable_reg_pp0_iter0;
 reg    ap_enable_reg_pp0_iter1;
 reg    ap_idle_pp0;
 wire    ap_block_pp0_stage0_subdone;
-wire   [0:0] icmp_ln867_fu_111_p2;
+wire   [0:0] icmp_ln867_fu_113_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire    ap_block_pp0_stage0_11001;
-wire   [5:0] add_ln869_1_fu_154_p2;
-reg   [5:0] add_ln869_1_reg_184;
-wire   [63:0] zext_ln869_fu_149_p1;
+wire   [12:0] add_ln869_2_fu_156_p2;
+reg   [12:0] add_ln869_2_reg_186;
+wire   [63:0] zext_ln869_fu_151_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln869_1_fu_165_p1;
-reg   [31:0] i_fu_42;
-wire   [31:0] add_ln867_fu_117_p2;
+wire   [63:0] zext_ln869_2_fu_167_p1;
+reg   [31:0] i_fu_44;
+wire   [31:0] add_ln867_fu_119_p2;
 wire    ap_loop_init;
-reg   [31:0] ap_sig_allocacmp_i_86;
+reg   [31:0] ap_sig_allocacmp_i_87;
 reg    uram_banks_ce0_local;
-reg    stream_out_buf_local_we0_local;
-reg    stream_out_buf_local_ce0_local;
-wire   [20:0] trunc_ln869_fu_123_p1;
-wire   [20:0] add_ln869_2_fu_131_p2;
-wire   [20:0] add_ln869_fu_137_p2;
-wire   [20:0] add_ln869_3_fu_143_p2;
-wire   [5:0] trunc_ln869_1_fu_127_p1;
+reg    p_anonymous_namespace_scratch_we0_local;
+reg    p_anonymous_namespace_scratch_ce0_local;
+wire   [20:0] trunc_ln869_fu_125_p1;
+wire   [20:0] add_ln869_3_fu_133_p2;
+wire   [20:0] add_ln869_fu_139_p2;
+wire   [20:0] add_ln869_4_fu_145_p2;
+wire   [12:0] trunc_ln869_2_fu_129_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -92,7 +92,7 @@ wire    ap_ce_reg;
 initial begin
 #0 ap_CS_fsm = 1'd1;
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
-#0 i_fu_42 = 32'd0;
+#0 i_fu_44 = 32'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -145,22 +145,22 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        if (((icmp_ln867_fu_111_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_fu_42 <= add_ln867_fu_117_p2;
+        if (((icmp_ln867_fu_113_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
+            i_fu_44 <= add_ln867_fu_119_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_42 <= 32'd0;
+            i_fu_44 <= 32'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        add_ln869_1_reg_184 <= add_ln869_1_fu_154_p2;
+        add_ln869_2_reg_186 <= add_ln869_2_fu_156_p2;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln867_fu_111_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((icmp_ln867_fu_113_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -201,25 +201,25 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_86 = 32'd0;
+        ap_sig_allocacmp_i_87 = 32'd0;
     end else begin
-        ap_sig_allocacmp_i_86 = i_fu_42;
+        ap_sig_allocacmp_i_87 = i_fu_44;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        stream_out_buf_local_ce0_local = 1'b1;
+        p_anonymous_namespace_scratch_ce0_local = 1'b1;
     end else begin
-        stream_out_buf_local_ce0_local = 1'b0;
+        p_anonymous_namespace_scratch_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        stream_out_buf_local_we0_local = 1'b1;
+        p_anonymous_namespace_scratch_we0_local = 1'b1;
     end else begin
-        stream_out_buf_local_we0_local = 1'b0;
+        p_anonymous_namespace_scratch_we0_local = 1'b0;
     end
 end
 
@@ -242,15 +242,15 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln867_fu_117_p2 = (ap_sig_allocacmp_i_86 + 32'd1);
+assign add_ln867_fu_119_p2 = (ap_sig_allocacmp_i_87 + 32'd1);
 
-assign add_ln869_1_fu_154_p2 = (trunc_ln869_1_fu_127_p1 + empty);
+assign add_ln869_2_fu_156_p2 = (trunc_ln869_2_fu_129_p1 + empty);
 
-assign add_ln869_2_fu_131_p2 = (empty_420 + trunc_ln869_fu_123_p1);
+assign add_ln869_3_fu_133_p2 = (empty_421 + trunc_ln869_fu_125_p1);
 
-assign add_ln869_3_fu_143_p2 = (mul_ln869 + add_ln869_fu_137_p2);
+assign add_ln869_4_fu_145_p2 = (mul_ln869 + add_ln869_fu_139_p2);
 
-assign add_ln869_fu_137_p2 = (add_ln869_2_fu_131_p2 + tmp_88);
+assign add_ln869_fu_139_p2 = (add_ln869_3_fu_133_p2 + tmp_95);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -270,26 +270,26 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln867_fu_111_p2 = ((ap_sig_allocacmp_i_86 == xor_ln867_1) ? 1'b1 : 1'b0);
+assign icmp_ln867_fu_113_p2 = ((ap_sig_allocacmp_i_87 == xor_ln867_2) ? 1'b1 : 1'b0);
 
-assign stream_out_buf_local_address0 = zext_ln869_1_fu_165_p1;
+assign p_anonymous_namespace_scratch_address0 = zext_ln869_2_fu_167_p1;
 
-assign stream_out_buf_local_ce0 = stream_out_buf_local_ce0_local;
+assign p_anonymous_namespace_scratch_ce0 = p_anonymous_namespace_scratch_ce0_local;
 
-assign stream_out_buf_local_d0 = uram_banks_q0;
+assign p_anonymous_namespace_scratch_d0 = uram_banks_q0;
 
-assign stream_out_buf_local_we0 = stream_out_buf_local_we0_local;
+assign p_anonymous_namespace_scratch_we0 = p_anonymous_namespace_scratch_we0_local;
 
-assign trunc_ln869_1_fu_127_p1 = ap_sig_allocacmp_i_86[5:0];
+assign trunc_ln869_2_fu_129_p1 = ap_sig_allocacmp_i_87[12:0];
 
-assign trunc_ln869_fu_123_p1 = ap_sig_allocacmp_i_86[20:0];
+assign trunc_ln869_fu_125_p1 = ap_sig_allocacmp_i_87[20:0];
 
-assign uram_banks_address0 = zext_ln869_fu_149_p1;
+assign uram_banks_address0 = zext_ln869_fu_151_p1;
 
 assign uram_banks_ce0 = uram_banks_ce0_local;
 
-assign zext_ln869_1_fu_165_p1 = add_ln869_1_reg_184;
+assign zext_ln869_2_fu_167_p1 = add_ln869_2_reg_186;
 
-assign zext_ln869_fu_149_p1 = add_ln869_3_fu_143_p2;
+assign zext_ln869_fu_151_p1 = add_ln869_4_fu_145_p2;
 
 endmodule //transformer_top_p_anonymous_namespace_region_read_bytes_4_Pipeline_VITIS_LOOP_867_2

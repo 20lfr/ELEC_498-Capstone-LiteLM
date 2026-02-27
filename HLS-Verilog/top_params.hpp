@@ -864,8 +864,7 @@ using OutDType = BufDType;
 
 constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
 constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
-constexpr int QKV_B_NIBBLES = D_HEADS;
-constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
+constexpr int QKV_B_BYTES = D_HEADS * 4;
 constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
 constexpr int QKV_OUT_BYTES = D_HEADS;
 

@@ -14,7 +14,7 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_705_1 (
         ap_idle,
         ap_ready,
         req_layer_assign,
-        sub_i_i_i716,
+        sub_i_i_i713,
         p_anonymous_namespace_regions_valid_address0,
         p_anonymous_namespace_regions_valid_ce0,
         p_anonymous_namespace_regions_valid_q0,
@@ -41,7 +41,7 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [6:0] req_layer_assign;
-input  [6:0] sub_i_i_i716;
+input  [6:0] sub_i_i_i713;
 output  [3:0] p_anonymous_namespace_regions_valid_address0;
 output   p_anonymous_namespace_regions_valid_ce0;
 input  [0:0] p_anonymous_namespace_regions_valid_q0;
@@ -97,7 +97,7 @@ wire    ap_block_pp0_stage1;
 reg   [4:0] i_fu_56;
 wire   [4:0] add_ln705_fu_143_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_19;
+reg   [4:0] ap_sig_allocacmp_i_20;
 reg    p_anonymous_namespace_regions_valid_ce0_local;
 reg    p_anonymous_namespace_regions_used_ce0_local;
 reg   [3:0] p_anonymous_namespace_regions_used_address0_local;
@@ -319,9 +319,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_19 = 5'd0;
+        ap_sig_allocacmp_i_20 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_19 = i_fu_56;
+        ap_sig_allocacmp_i_20 = i_fu_56;
     end
 end
 
@@ -399,7 +399,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln705_fu_143_p2 = (ap_sig_allocacmp_i_19 + 5'd1);
+assign add_ln705_fu_143_p2 = (ap_sig_allocacmp_i_20 + 5'd1);
 
 assign and_ln492_fu_187_p2 = (icmp_ln492_reg_256 & icmp_ln477_fu_181_p2);
 
@@ -431,9 +431,9 @@ assign icmp_ln477_fu_181_p2 = ((p_anonymous_namespace_regions_tag_q0 == 8'd32) ?
 
 assign icmp_ln491_fu_171_p2 = (($signed(req_layer_assign_cast_reg_204) > $signed(p_anonymous_namespace_regions_layer_q0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln492_fu_176_p2 = ((sub_i_i_i716 == trunc_ln491_fu_167_p1) ? 1'b1 : 1'b0);
+assign icmp_ln492_fu_176_p2 = ((sub_i_i_i713 == trunc_ln491_fu_167_p1) ? 1'b1 : 1'b0);
 
-assign icmp_ln705_fu_137_p2 = ((ap_sig_allocacmp_i_19 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln705_fu_137_p2 = ((ap_sig_allocacmp_i_20 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_anonymous_namespace_regions_layer_address0 = zext_ln705_reg_213;
 
@@ -461,7 +461,7 @@ assign tmp_fu_159_p3 = p_anonymous_namespace_regions_layer_q0[32'd7];
 
 assign trunc_ln491_fu_167_p1 = p_anonymous_namespace_regions_layer_q0[6:0];
 
-assign zext_ln705_fu_149_p1 = ap_sig_allocacmp_i_19;
+assign zext_ln705_fu_149_p1 = ap_sig_allocacmp_i_20;
 
 always @ (posedge ap_clk) begin
     req_layer_assign_cast_reg_204[7] <= 1'b0;

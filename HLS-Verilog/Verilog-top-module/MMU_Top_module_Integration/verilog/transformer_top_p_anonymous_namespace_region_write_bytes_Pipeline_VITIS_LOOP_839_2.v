@@ -22,7 +22,7 @@ module transformer_top_p_anonymous_namespace_region_write_bytes_Pipeline_VITIS_L
         src_1_ce0,
         src_1_q0,
         empty,
-        tmp_87,
+        tmp_93,
         mul_ln841,
         uram_banks_address0,
         uram_banks_ce0,
@@ -47,7 +47,7 @@ output  [4:0] src_1_address0;
 output   src_1_ce0;
 input  [7:0] src_1_q0;
 input  [20:0] empty;
-input  [20:0] tmp_87;
+input  [20:0] tmp_93;
 input  [20:0] mul_ln841;
 output  [20:0] uram_banks_address0;
 output   uram_banks_ce0;
@@ -266,7 +266,7 @@ assign add_ln839_fu_135_p2 = (ap_sig_allocacmp_i_82 + 32'd1);
 
 assign add_ln841_1_fu_175_p2 = (empty + trunc_ln841_fu_141_p1);
 
-assign add_ln841_2_fu_181_p2 = (add_ln841_1_fu_175_p2 + tmp_87);
+assign add_ln841_2_fu_181_p2 = (add_ln841_1_fu_175_p2 + tmp_93);
 
 assign add_ln841_3_fu_187_p2 = (mul_ln841 + add_ln841_2_fu_181_p2);
 

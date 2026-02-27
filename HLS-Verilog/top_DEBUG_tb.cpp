@@ -707,7 +707,7 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         }
         std::printf("\n  B:");
         for (int i = 0; i < D_HEADS; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::B * 2) + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (i * 4))));
         }
         std::printf("\n");
         break;
@@ -852,9 +852,9 @@ static int8_t g_v_act[HEADS_PARALLEL][D_MODEL] = {};
 static int4_t g_wq[HEADS_PARALLEL][D_MODEL * D_HEADS] = {};
 static int4_t g_wk[HEADS_PARALLEL][D_MODEL * D_HEADS] = {};
 static int4_t g_wv[HEADS_PARALLEL][D_MODEL * D_HEADS] = {};
-static int4_t g_bq[HEADS_PARALLEL][D_HEADS] = {};
-static int4_t g_bk[HEADS_PARALLEL][D_HEADS] = {};
-static int4_t g_bv[HEADS_PARALLEL][D_HEADS] = {};
+static int32_t g_bq[HEADS_PARALLEL][D_HEADS] = {};
+static int32_t g_bk[HEADS_PARALLEL][D_HEADS] = {};
+static int32_t g_bv[HEADS_PARALLEL][D_HEADS] = {};
 
 static int32_t g_rq_k_x[HEADS_PARALLEL][D_HEADS] = {};
 static int32_t g_rq_v_x[HEADS_PARALLEL][D_HEADS] = {};
@@ -896,15 +896,9 @@ static void fill_head_lane_inputs(int lane, int layer) {
         g_wv[lane][i] = stim_i4(layer, i, 61 + lane);
     }
     for (int h = 0; h < D_HEADS; ++h) {
-        int q_b = static_cast<int>(stim_i4(layer, h, 71 + lane));
-        if (q_b > 2) {
-            q_b = 2;
-        } else if (q_b < -2) {
-            q_b = -2;
-        }
-        g_bq[lane][h] = static_cast<int4_t>(q_b);
-        g_bk[lane][h] = stim_i4(layer, h, 81 + lane);
-        g_bv[lane][h] = stim_i4(layer, h, 91 + lane);
+        g_bq[lane][h] = stim_i32(layer, h, 71 + lane);
+        g_bk[lane][h] = stim_i32(layer, h, 81 + lane);
+        g_bv[lane][h] = stim_i32(layer, h, 91 + lane);
         g_att_q[lane][h] = stim_i8_mid(layer, h, 101 + lane);
         g_rq_k_x[lane][h] = stim_i32(layer, h, 111 + lane);
         g_rq_v_x[lane][h] = stim_i32(layer, h, 121 + lane);
@@ -953,9 +947,9 @@ static void build_head_in_buf(int lane, int layer, ComputeOp op, uint8_t head_in
         const int4_t *w = (op == ComputeOp::CMP_Q) ? g_wq[lane]
                           : (op == ComputeOp::CMP_K) ? g_wk[lane]
                           : g_wv[lane];
-        const int4_t *b = (op == ComputeOp::CMP_Q) ? g_bq[lane]
-                          : (op == ComputeOp::CMP_K) ? g_bk[lane]
-                          : g_bv[lane];
+        const int32_t *b = (op == ComputeOp::CMP_Q) ? g_bq[lane]
+                           : (op == ComputeOp::CMP_K) ? g_bk[lane]
+                           : g_bv[lane];
         for (int i = 0; i < D_MODEL; ++i) {
             compute_buf::write_i8(buf, head_buf::INQkvLayout::ACT + i, act[i]);
         }
@@ -963,7 +957,7 @@ static void build_head_in_buf(int lane, int layer, ComputeOp op, uint8_t head_in
             compute_buf::write_i4(buf, (head_buf::INQkvLayout::W * 2) + i, w[i]);
         }
         for (int h = 0; h < D_HEADS; ++h) {
-            compute_buf::write_i4(buf, (head_buf::INQkvLayout::B * 2) + h, b[h]);
+            compute_buf::write_i32(buf, head_buf::INQkvLayout::B + (h * 4), b[h]);
         }
         break;
     }

@@ -1099,7 +1099,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[0] = head_buf::INQkvLayout::W_BYTES;
             piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = piece_bytes[0];
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WQ_W;
             piece_tag[1] = Tag::WQ_B;
             return true;
@@ -1109,7 +1109,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[0] = head_buf::INQkvLayout::W_BYTES;
             piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = piece_bytes[0];
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WK_W;
             piece_tag[1] = Tag::WK_B;
             return true;
@@ -1119,7 +1119,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[0] = head_buf::INQkvLayout::W_BYTES;
             piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = piece_bytes[0];
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WV_W;
             piece_tag[1] = Tag::WV_B;
             return true;
@@ -1129,7 +1129,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[0] = compute_buf::INOutProjLayout::W_BYTES;
             piece_bytes[1] = compute_buf::INOutProjLayout::B_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = piece_bytes[0];
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WO_W;
             piece_tag[1] = Tag::WO_B;
             return true;
@@ -1139,7 +1139,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[0] = compute_buf::INFfnW1Layout::W_BYTES;
             piece_bytes[1] = compute_buf::INFfnW1Layout::B_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = piece_bytes[0];
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::W1_W;
             piece_tag[1] = Tag::W1_B;
             return true;
@@ -1149,7 +1149,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[0] = compute_buf::INFfnW2Layout::W_BYTES;
             piece_bytes[1] = compute_buf::INFfnW2Layout::B_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = piece_bytes[0];
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::W2_W;
             piece_tag[1] = Tag::W2_B;
             return true;
@@ -1283,6 +1283,75 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
         }
         default: {
             return false;
+        }
+    }
+}
+
+static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, int tile,
+                                uint64_t dma_base_addr, uint8_t piece_idx, uint32_t piece_addr_off,
+                                uint64_t &addr_out) {
+#pragma HLS INLINE off
+    if (piece_idx == 0) {
+        addr_out = dma_base_addr + piece_addr_off;
+        return true;
+    }
+
+    switch (sel) {
+        case DMASEL_WQ: {
+            if (head < 0) return false;
+            addr_out = ctrl_mem.wq_bias_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
+                     + static_cast<uint32_t>(head) * ctrl_mem.wq_bias_head_stride;
+            return true;
+        }
+        case DMASEL_WK: {
+            if (head < 0) return false;
+            addr_out = ctrl_mem.wk_bias_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
+                     + static_cast<uint32_t>(head) * ctrl_mem.wk_bias_head_stride;
+            return true;
+        }
+        case DMASEL_WV: {
+            if (head < 0) return false;
+            addr_out = ctrl_mem.wv_bias_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
+                     + static_cast<uint32_t>(head) * ctrl_mem.wv_bias_head_stride;
+            return true;
+        }
+        case DMASEL_WO: {
+            if (tile < 0) return false;
+            addr_out = ctrl_mem.wo_bias_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
+                     + static_cast<uint32_t>(tile) * ctrl_mem.wo_bias_tile_stride;
+            return true;
+        }
+        case DMASEL_W1: {
+            if (tile < 0) return false;
+            addr_out = ctrl_mem.w1_bias_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
+                     + static_cast<uint32_t>(tile) * ctrl_mem.w1_bias_tile_stride;
+            return true;
+        }
+        case DMASEL_W2: {
+            if (tile < 0) return false;
+            addr_out = ctrl_mem.w2_bias_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
+                     + static_cast<uint32_t>(tile) * ctrl_mem.w2_bias_tile_stride;
+            return true;
+        }
+        case DMASEL_LN0: {
+            addr_out = ctrl_mem.ln0_eps_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.ln0_eps_stride;
+            return true;
+        }
+        case DMASEL_LN1: {
+            addr_out = ctrl_mem.ln1_eps_base_addr
+                     + static_cast<uint32_t>(layer) * ctrl_mem.ln1_eps_stride;
+            return true;
+        }
+        default: {
+            addr_out = dma_base_addr + piece_addr_off;
+            return true;
         }
     }
 }
@@ -2089,8 +2158,17 @@ void mmu_fsm(
             if (!dma_ready) break;
             const int piece_idx = static_cast<int>(active_piece_idx);
             const uint32_t sz = active_piece_bytes[piece_idx];
+            uint64_t piece_addr = 0;
             if (sz > DMA_BUF_BYTES) {
                 mmu_set_overflow(ERR_MMU_BAD_DMA_PLAN);
+                active_dma_valid = false;
+                g_state = State::IDLE;
+                break;
+            }
+            if (!calc_dma_piece_addr(ctrl_mem, active_dma_sel, active_dma_layer, active_dma_head, active_dma_tile,
+                                     active_dma_addr_base, active_piece_idx, active_piece_addr_off[piece_idx],
+                                     piece_addr)) {
+                mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
@@ -2098,15 +2176,7 @@ void mmu_fsm(
             dma_start = true;
             dma_is_write = false;
             dma_len = sz;
-            if (active_dma_sel == DMASEL_LN0 && piece_idx == 1) {
-                dma_addr = ctrl_mem.ln0_eps_base_addr
-                         + static_cast<uint32_t>(active_dma_layer) * ctrl_mem.ln0_eps_stride;
-            } else if (active_dma_sel == DMASEL_LN1 && piece_idx == 1) {
-                dma_addr = ctrl_mem.ln1_eps_base_addr
-                         + static_cast<uint32_t>(active_dma_layer) * ctrl_mem.ln1_eps_stride;
-            } else {
-                dma_addr = active_dma_addr_base + active_piece_addr_off[piece_idx];
-            }
+            dma_addr = piece_addr;
             g_state = State::DMA_WAIT;
             break;
         }

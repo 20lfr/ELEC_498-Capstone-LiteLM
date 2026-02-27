@@ -272,7 +272,7 @@ reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_96_we0_local;
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_96_ce0_local;
 wire   [1:0] trunc_ln641_fu_424_p1;
-wire   [5:0] shl_ln_fu_428_p3;
+wire   [5:0] shl_ln3_fu_428_p3;
 wire   [6:0] zext_ln767_1_fu_436_p1;
 wire   [6:0] add_ln767_fu_440_p2;
 wire   [2:0] trunc_ln_fu_446_p4;
@@ -952,7 +952,7 @@ assign sext_ln641_3_fu_535_p1 = $signed(nibble_3_fu_525_p4);
 
 assign sext_ln641_fu_496_p1 = $signed(byte_val_37_fu_492_p1);
 
-assign shl_ln_fu_428_p3 = {{trunc_ln641_fu_424_p1}, {4'd0}};
+assign shl_ln3_fu_428_p3 = {{trunc_ln641_fu_424_p1}, {4'd0}};
 
 assign trunc_ln641_fu_424_p1 = ap_sig_allocacmp_h[1:0];
 
@@ -960,7 +960,7 @@ assign trunc_ln_fu_446_p4 = {{add_ln767_fu_440_p2[6:4]}};
 
 assign zext_ln636_fu_473_p1 = h_reg_643;
 
-assign zext_ln767_1_fu_436_p1 = shl_ln_fu_428_p3;
+assign zext_ln767_1_fu_436_p1 = shl_ln3_fu_428_p3;
 
 assign zext_ln767_fu_456_p1 = trunc_ln_fu_446_p4;
 

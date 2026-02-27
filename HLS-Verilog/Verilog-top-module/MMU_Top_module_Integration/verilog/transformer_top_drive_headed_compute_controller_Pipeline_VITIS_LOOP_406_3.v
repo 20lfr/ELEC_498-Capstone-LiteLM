@@ -154,9 +154,9 @@ wire   [4:0] add_ln406_fu_265_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_i_57;
 wire   [15:0] mul_ln408_fu_246_p1;
-wire   [15:0] tmp_57_fu_275_p33;
-wire   [3:0] tmp_57_fu_275_p34;
-wire   [15:0] tmp_57_fu_275_p35;
+wire   [15:0] tmp_60_fu_275_p33;
+wire   [3:0] tmp_60_fu_275_p34;
+wire   [15:0] tmp_60_fu_275_p35;
 wire   [30:0] mul_ln408_fu_246_p2;
 wire   [0:0] tmp_fu_362_p3;
 wire   [14:0] trunc_ln409_1_fu_352_p4;
@@ -169,22 +169,22 @@ wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
 wire   [30:0] mul_ln408_fu_246_p10;
-wire   [3:0] tmp_57_fu_275_p1;
-wire   [3:0] tmp_57_fu_275_p3;
-wire   [3:0] tmp_57_fu_275_p5;
-wire   [3:0] tmp_57_fu_275_p7;
-wire   [3:0] tmp_57_fu_275_p9;
-wire   [3:0] tmp_57_fu_275_p11;
-wire   [3:0] tmp_57_fu_275_p13;
-wire   [3:0] tmp_57_fu_275_p15;
-wire  signed [3:0] tmp_57_fu_275_p17;
-wire  signed [3:0] tmp_57_fu_275_p19;
-wire  signed [3:0] tmp_57_fu_275_p21;
-wire  signed [3:0] tmp_57_fu_275_p23;
-wire  signed [3:0] tmp_57_fu_275_p25;
-wire  signed [3:0] tmp_57_fu_275_p27;
-wire  signed [3:0] tmp_57_fu_275_p29;
-wire  signed [3:0] tmp_57_fu_275_p31;
+wire   [3:0] tmp_60_fu_275_p1;
+wire   [3:0] tmp_60_fu_275_p3;
+wire   [3:0] tmp_60_fu_275_p5;
+wire   [3:0] tmp_60_fu_275_p7;
+wire   [3:0] tmp_60_fu_275_p9;
+wire   [3:0] tmp_60_fu_275_p11;
+wire   [3:0] tmp_60_fu_275_p13;
+wire   [3:0] tmp_60_fu_275_p15;
+wire  signed [3:0] tmp_60_fu_275_p17;
+wire  signed [3:0] tmp_60_fu_275_p19;
+wire  signed [3:0] tmp_60_fu_275_p21;
+wire  signed [3:0] tmp_60_fu_275_p23;
+wire  signed [3:0] tmp_60_fu_275_p25;
+wire  signed [3:0] tmp_60_fu_275_p27;
+wire  signed [3:0] tmp_60_fu_275_p29;
+wire  signed [3:0] tmp_60_fu_275_p31;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -261,9 +261,9 @@ sparsemux_33_4_16_1_1_U2266(
     .din13(exp_buf_13_reload),
     .din14(exp_buf_14_reload),
     .din15(exp_buf_15_reload),
-    .def(tmp_57_fu_275_p33),
-    .sel(tmp_57_fu_275_p34),
-    .dout(tmp_57_fu_275_p35)
+    .def(tmp_60_fu_275_p33),
+    .sel(tmp_60_fu_275_p34),
+    .dout(tmp_60_fu_275_p35)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -548,13 +548,13 @@ assign icmp_ln406_fu_259_p2 = ((ap_sig_allocacmp_i_57 == 5'd16) ? 1'b1 : 1'b0);
 
 assign mul_ln408_fu_246_p1 = mul_ln408_fu_246_p10;
 
-assign mul_ln408_fu_246_p10 = tmp_57_fu_275_p35;
+assign mul_ln408_fu_246_p10 = tmp_60_fu_275_p35;
 
 assign prob_q15_fu_370_p3 = ((tmp_fu_362_p3[0:0] == 1'b1) ? 15'd32767 : trunc_ln409_1_fu_352_p4);
 
-assign tmp_57_fu_275_p33 = 'bx;
+assign tmp_60_fu_275_p33 = 'bx;
 
-assign tmp_57_fu_275_p34 = ap_sig_allocacmp_i_57[3:0];
+assign tmp_60_fu_275_p34 = ap_sig_allocacmp_i_57[3:0];
 
 assign tmp_fu_362_p3 = mul_ln408_fu_246_p2[32'd30];
 
