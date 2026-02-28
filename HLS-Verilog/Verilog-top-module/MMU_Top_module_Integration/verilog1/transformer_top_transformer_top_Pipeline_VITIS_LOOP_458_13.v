@@ -47,7 +47,7 @@ wire   [63:0] zext_ln458_fu_72_p1;
 reg   [5:0] i_fu_28;
 wire   [5:0] add_ln458_fu_66_p2;
 wire    ap_loop_init;
-reg   [5:0] ap_sig_allocacmp_i_8;
+reg   [5:0] ap_sig_allocacmp_i_9;
 reg    dma_rx_buf_local_we0_local;
 reg    dma_rx_buf_local_ce0_local;
 reg    ap_done_reg;
@@ -154,9 +154,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_8 = 6'd0;
+        ap_sig_allocacmp_i_9 = 6'd0;
     end else begin
-        ap_sig_allocacmp_i_8 = i_fu_28;
+        ap_sig_allocacmp_i_9 = i_fu_28;
     end
 end
 
@@ -187,7 +187,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln458_fu_66_p2 = (ap_sig_allocacmp_i_8 + 6'd1);
+assign add_ln458_fu_66_p2 = (ap_sig_allocacmp_i_9 + 6'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -209,8 +209,8 @@ assign dma_rx_buf_local_d0 = 32'd0;
 
 assign dma_rx_buf_local_we0 = dma_rx_buf_local_we0_local;
 
-assign icmp_ln458_fu_60_p2 = ((ap_sig_allocacmp_i_8 == rx_words) ? 1'b1 : 1'b0);
+assign icmp_ln458_fu_60_p2 = ((ap_sig_allocacmp_i_9 == rx_words) ? 1'b1 : 1'b0);
 
-assign zext_ln458_fu_72_p1 = ap_sig_allocacmp_i_8;
+assign zext_ln458_fu_72_p1 = ap_sig_allocacmp_i_9;
 
 endmodule //transformer_top_transformer_top_Pipeline_VITIS_LOOP_458_13

@@ -28,6 +28,47 @@ static inline void gmem_set_byte(axi_gmem_word_t &word, uint32_t lane, uint8_t v
     word.range(hi, lo) = static_cast<ap_uint<8> >(value);
 }
 
+#ifndef __SYNTHESIS__
+static inline uint64_t map_csim_ddr_addr(uint64_t byte_addr, const ControlMemSpace &ctrl_mem) {
+    struct RegionMap {
+        uint64_t base;
+        uint64_t size;
+        uint64_t image_base;
+    };
+
+    const RegionMap regions[] = {
+        {ctrl_mem.wq_base_addr,               0x4000ull, 0x00000ull},
+        {ctrl_mem.wk_base_addr,               0x4000ull, 0x04000ull},
+        {ctrl_mem.wv_base_addr,               0x4000ull, 0x08000ull},
+        {ctrl_mem.wo_base_addr,               0x4000ull, 0x0C000ull},
+        {ctrl_mem.w1_base_addr,               0x6000ull, 0x10000ull},
+        {ctrl_mem.w2_base_addr,               0x6000ull, 0x16000ull},
+        {ctrl_mem.k_cache_addr,               0x4000ull, 0x1C000ull},
+        {ctrl_mem.v_cache_addr,               0x4000ull, 0x20000ull},
+        {ctrl_mem.wq_bias_base_addr,          0x4000ull, 0x24000ull},
+        {ctrl_mem.wk_bias_base_addr,          0x4000ull, 0x28000ull},
+        {ctrl_mem.wv_bias_base_addr,          0x4000ull, 0x2C000ull},
+        {ctrl_mem.wo_bias_base_addr,          0x4000ull, 0x30000ull},
+        {ctrl_mem.w1_bias_base_addr,          0x6000ull, 0x34000ull},
+        {ctrl_mem.w2_bias_base_addr,          0x6000ull, 0x3A000ull},
+        {ctrl_mem.ln0_gamma_base_addr,        0x0400ull, 0x42000ull},
+        {ctrl_mem.ln1_gamma_base_addr,        0x0400ull, 0x42400ull},
+        {ctrl_mem.final_norm_gamma_base_addr, 0x0400ull, 0x42800ull},
+        {ctrl_mem.ln0_eps_base_addr,          0x0040ull, 0x42C00ull},
+        {ctrl_mem.ln1_eps_base_addr,          0x0040ull, 0x42C40ull},
+        {ctrl_mem.final_norm_eps_base_addr,   0x0040ull, 0x42C80ull},
+    };
+
+    for (unsigned i = 0; i < (sizeof(regions) / sizeof(regions[0])); ++i) {
+        const RegionMap &r = regions[i];
+        if (byte_addr >= r.base && byte_addr < (r.base + r.size)) {
+            return r.image_base + (byte_addr - r.base);
+        }
+    }
+    return byte_addr;
+}
+#endif
+
 // Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
 void transformer_top(
     // ------------------------------------------------------------
@@ -463,16 +504,16 @@ void transformer_top(
             for (uint32_t i = 0; i < bytes; ++i) {
 #pragma HLS PIPELINE II=1
                 const uint64_t byte_addr = dma_addr_latched_local + static_cast<uint64_t>(i);
-                const uint64_t word_idx_raw =
-                    byte_addr / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
-                const uint32_t lane =
-                    static_cast<uint32_t>(byte_addr % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
-#ifdef __SYNTHESIS__
-                const uint64_t idx = word_idx_raw;
+#ifndef __SYNTHESIS__
+                const uint64_t sim_byte_addr = map_csim_ddr_addr(byte_addr, ctrl_mem);
 #else
-                // In C-sim, keep accesses bounded to the local mock backing array.
-                const uint64_t idx = word_idx_raw % static_cast<uint64_t>(TOP_DMA_BUF_WORDS);
+                const uint64_t sim_byte_addr = byte_addr;
 #endif
+                const uint64_t word_idx_raw =
+                    sim_byte_addr / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
+                const uint32_t lane =
+                    static_cast<uint32_t>(sim_byte_addr % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
+                const uint64_t idx = word_idx_raw;
                 axi_gmem_word_t beat = ddr_mem[idx];
                 if (dma_is_write_latched_local) {
                     gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, i));

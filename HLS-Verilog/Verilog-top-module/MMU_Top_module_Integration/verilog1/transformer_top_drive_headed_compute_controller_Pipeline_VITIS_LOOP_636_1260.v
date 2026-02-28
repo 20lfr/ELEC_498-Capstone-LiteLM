@@ -275,7 +275,7 @@ wire   [1:0] trunc_ln641_fu_424_p1;
 wire   [5:0] shl_ln641_1_fu_428_p3;
 wire   [6:0] zext_ln767_fu_436_p1;
 wire   [6:0] add_ln767_fu_440_p2;
-wire   [2:0] trunc_ln767_1_fu_446_p4;
+wire   [2:0] trunc_ln767_s_fu_446_p4;
 wire   [3:0] byte_val_15_fu_492_p1;
 wire   [3:0] nibble_1_fu_501_p4;
 wire   [3:0] byte_val_16_fu_516_p1;
@@ -956,11 +956,11 @@ assign shl_ln641_1_fu_428_p3 = {{trunc_ln641_fu_424_p1}, {4'd0}};
 
 assign trunc_ln641_fu_424_p1 = ap_sig_allocacmp_h_17[1:0];
 
-assign trunc_ln767_1_fu_446_p4 = {{add_ln767_fu_440_p2[6:4]}};
+assign trunc_ln767_s_fu_446_p4 = {{add_ln767_fu_440_p2[6:4]}};
 
 assign zext_ln636_fu_473_p1 = h_17_reg_643;
 
-assign zext_ln767_1_fu_456_p1 = trunc_ln767_1_fu_446_p4;
+assign zext_ln767_1_fu_456_p1 = trunc_ln767_s_fu_446_p4;
 
 assign zext_ln767_fu_436_p1 = shl_ln641_1_fu_428_p3;
 

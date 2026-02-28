@@ -25,7 +25,7 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_602_116 (
         p_reload3049,
         p_reload3050,
         p_reload3051,
-        zext_ln2120_1,
+        zext_ln2190_1,
         bank_7,
         p_out,
         p_out_ap_vld,
@@ -79,7 +79,7 @@ input  [7:0] p_reload3048;
 input  [31:0] p_reload3049;
 input  [31:0] p_reload3050;
 input  [7:0] p_reload3051;
-input  [6:0] zext_ln2120_1;
+input  [6:0] zext_ln2190_1;
 input  [5:0] bank_7;
 output  [31:0] p_out;
 output   p_out_ap_vld;
@@ -166,7 +166,7 @@ wire   [5:0] select_ln608_fu_528_p3;
 wire    ap_loop_init;
 reg   [31:0] remaining_fu_134;
 wire   [31:0] remaining_12_fu_833_p3;
-wire   [31:0] zext_ln2120_1_cast_fu_390_p1;
+wire   [31:0] zext_ln2190_1_cast_fu_390_p1;
 reg   [31:0] ap_sig_allocacmp_remaining_10;
 reg   [2:0] num_chunks_fu_138;
 wire   [2:0] num_chunks_12_fu_826_p3;
@@ -499,7 +499,7 @@ end
 always @ (posedge ap_clk) begin
     if ((1'b0 == ap_block_pp0_stage0_11001)) begin
         if (((1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
-            remaining_fu_134 <= zext_ln2120_1_cast_fu_390_p1;
+            remaining_fu_134 <= zext_ln2190_1_cast_fu_390_p1;
         end else if ((ap_enable_reg_pp0_iter2 == 1'b1)) begin
             remaining_fu_134 <= remaining_12_fu_833_p3;
         end
@@ -1218,7 +1218,7 @@ assign tmp_fu_489_p3 = ap_sig_allocacmp_num_chunks_10[32'd2];
 
 assign trunc_ln611_fu_524_p1 = add_ln608_fu_506_p2[5:0];
 
-assign zext_ln2120_1_cast_fu_390_p1 = zext_ln2120_1;
+assign zext_ln2190_1_cast_fu_390_p1 = zext_ln2190_1;
 
 assign zext_ln605_fu_497_p1 = chunks_bank_fu_130;
 

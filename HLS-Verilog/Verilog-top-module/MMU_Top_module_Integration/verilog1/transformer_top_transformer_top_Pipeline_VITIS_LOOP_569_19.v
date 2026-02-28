@@ -163,7 +163,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 8 ))
-sparsemux_17_3_8_1_1_U5197(
+sparsemux_17_3_8_1_1_U5256(
     .din0(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_q0),
     .din1(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_q0),
     .din2(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_q0),

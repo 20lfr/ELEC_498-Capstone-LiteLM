@@ -221,7 +221,7 @@ wire    ap_block_pp0_stage10_subdone_grp0;
 reg    ap_block_pp0_stage10_subdone;
 wire   [63:0] zext_ln13_fu_265_p1;
 wire    ap_block_pp0_stage0;
-wire  signed [63:0] sext_ln476_fu_245_p1;
+wire  signed [63:0] sext_ln471_fu_245_p1;
 reg    ap_block_state2_io_grp1;
 reg    ap_block_pp0_stage1_11001_grp1;
 reg    ap_predicate_op83_writereq_state11;
@@ -246,7 +246,7 @@ wire   [63:0] zext_ln463_fu_201_p1;
 wire   [63:0] byte_addr_fu_205_p2;
 wire   [61:0] tmp_2_fu_211_p4;
 wire   [63:0] and_ln_fu_221_p3;
-wire   [63:0] add_ln476_fu_229_p2;
+wire   [63:0] add_ln471_fu_229_p2;
 wire   [61:0] trunc_ln_fu_235_p4;
 wire   [4:0] tmp_fu_255_p4;
 wire   [1:0] trunc_ln12_fu_271_p1;
@@ -429,7 +429,7 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0_11001))) begin
         dma_rx_buf_local_addr_reg_405[4 : 0] <= zext_ln13_fu_265_p1[4 : 0];
-        gmem_addr_reg_385 <= sext_ln476_fu_245_p1;
+        gmem_addr_reg_385 <= sext_ln471_fu_245_p1;
         icmp_ln463_reg_381 <= icmp_ln463_fu_189_p2;
         shl_ln14_reg_410 <= shl_ln14_fu_291_p2;
         shl_ln28_reg_420 <= shl_ln28_fu_301_p2;
@@ -752,7 +752,7 @@ end
 
 assign add_ln463_fu_195_p2 = (ap_sig_allocacmp_i_8 + 7'd1);
 
-assign add_ln476_fu_229_p2 = (and_ln_fu_221_p3 + ddr_mem);
+assign add_ln471_fu_229_p2 = (and_ln_fu_221_p3 + ddr_mem);
 
 assign and_ln15_fu_349_p2 = (xor_ln15_fu_344_p2 & word_1_reg_425);
 
@@ -974,7 +974,7 @@ assign m_axi_gmem_0_WSTRB = shl_ln28_reg_420;
 
 assign m_axi_gmem_0_WUSER = 1'd0;
 
-assign sext_ln476_fu_245_p1 = $signed(trunc_ln_fu_235_p4);
+assign sext_ln471_fu_245_p1 = $signed(trunc_ln_fu_235_p4);
 
 assign shift_fu_275_p3 = {{trunc_ln12_fu_271_p1}, {3'd0}};
 
@@ -992,7 +992,7 @@ assign trunc_ln12_fu_271_p1 = ap_sig_allocacmp_i_8[1:0];
 
 assign trunc_ln21_fu_287_p1 = byte_addr_fu_205_p2[1:0];
 
-assign trunc_ln_fu_235_p4 = {{add_ln476_fu_229_p2[63:2]}};
+assign trunc_ln_fu_235_p4 = {{add_ln471_fu_229_p2[63:2]}};
 
 assign value_fu_317_p1 = lshr_ln7_fu_312_p2[7:0];
 

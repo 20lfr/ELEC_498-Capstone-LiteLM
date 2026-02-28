@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cerrno>
 #include <cstring>
+#include <fstream>
 #include <limits>
 #include <string>
 #include <sys/stat.h>
@@ -61,6 +62,115 @@ static bool init_tb_logs() {
 
     std::printf("[LOG] top_DEBUG_tb stdout: %s\n", stdout_path);
     std::fprintf(stderr, "[LOG] top_DEBUG_tb stderr: %s\n", stderr_path);
+    return true;
+}
+
+constexpr uint64_t TB_BASE_WQ               = 0x00000ull;
+constexpr uint64_t TB_BASE_WK               = 0x04000ull;
+constexpr uint64_t TB_BASE_WV               = 0x08000ull;
+constexpr uint64_t TB_BASE_WO               = 0x0C000ull;
+constexpr uint64_t TB_BASE_W1               = 0x10000ull;
+constexpr uint64_t TB_BASE_W2               = 0x16000ull;
+constexpr uint64_t TB_BASE_K_CACHE          = 0x1C000ull;
+constexpr uint64_t TB_BASE_V_CACHE          = 0x20000ull;
+constexpr uint64_t TB_BASE_WQ_BIAS          = 0x24000ull;
+constexpr uint64_t TB_BASE_WK_BIAS          = 0x28000ull;
+constexpr uint64_t TB_BASE_WV_BIAS          = 0x2C000ull;
+constexpr uint64_t TB_BASE_WO_BIAS          = 0x30000ull;
+constexpr uint64_t TB_BASE_W1_BIAS          = 0x34000ull;
+constexpr uint64_t TB_BASE_W2_BIAS          = 0x3A000ull;
+constexpr uint64_t TB_BASE_LN0_GAMMA        = 0x42000ull;
+constexpr uint64_t TB_BASE_LN1_GAMMA        = 0x42400ull;
+constexpr uint64_t TB_BASE_FINAL_NORM_GAMMA = 0x42800ull;
+constexpr uint64_t TB_BASE_LN0_EPS          = 0x42C00ull;
+constexpr uint64_t TB_BASE_LN1_EPS          = 0x42C40ull;
+constexpr uint64_t TB_BASE_FINAL_NORM_EPS   = 0x42C80ull;
+constexpr uint64_t TB_DDR_IMAGE_BYTES       = 0x43000ull;
+constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
+constexpr size_t   TB_CTRL_MEM_BYTES        = sizeof(ControlMemSpace);
+static_assert(sizeof(ControlMemSpace) == (68u * sizeof(uint32_t)),
+              "ControlMemSpace binary image must match ctrl_mem.bin layout");
+
+static ControlMemSpace g_loaded_ctrl_mem{};
+static bool g_loaded_ctrl_mem_valid = false;
+
+static std::string tb_source_dir() {
+    std::string path(__FILE__);
+    const std::string::size_type slash = path.find_last_of("/\\");
+    if (slash == std::string::npos) {
+        return ".";
+    }
+    return path.substr(0, slash);
+}
+
+static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count) {
+    for (uint64_t i = 0; i < word_count; ++i) {
+        ddr_mem[i] = 0;
+    }
+
+    const std::string image_path = tb_source_dir() + "/test_data/ddr_image.bin";
+    std::ifstream in(image_path.c_str(), std::ios::binary);
+    if (!in) {
+        std::fprintf(stderr, "ERROR: Failed to open shared DDR image '%s'\n", image_path.c_str());
+        return false;
+    }
+
+    for (uint64_t i = 0; i < word_count; ++i) {
+        uint8_t bytes[AXI_GMEM_WORD_BYTES] = {};
+        in.read(reinterpret_cast<char *>(bytes), AXI_GMEM_WORD_BYTES);
+        const std::streamsize got = in.gcount();
+        if (got <= 0) {
+            break;
+        }
+        axi_gmem_word_t word = 0;
+        for (int b = 0; b < AXI_GMEM_WORD_BYTES; ++b) {
+            const uint8_t byte = (b < got) ? bytes[b] : 0;
+            word.range(((b + 1) * 8) - 1, b * 8) = static_cast<ap_uint<8> >(byte);
+        }
+        ddr_mem[i] = word;
+        if (got < AXI_GMEM_WORD_BYTES) {
+            break;
+        }
+    }
+
+    return true;
+}
+
+static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
+    const std::string ctrl_path = tb_source_dir() + "/test_data/ctrl_mem.bin";
+    std::ifstream in(ctrl_path.c_str(), std::ios::binary);
+    if (!in) {
+        std::fprintf(stderr, "ERROR: Failed to open shared ctrl image '%s'\n", ctrl_path.c_str());
+        return false;
+    }
+
+    ControlMemSpace tmp{};
+    in.read(reinterpret_cast<char *>(&tmp), static_cast<std::streamsize>(TB_CTRL_MEM_BYTES));
+    if (in.gcount() != static_cast<std::streamsize>(TB_CTRL_MEM_BYTES)) {
+        std::fprintf(stderr, "ERROR: Failed to read full shared ctrl image '%s' (got %lld bytes)\n",
+                     ctrl_path.c_str(),
+                     static_cast<long long>(in.gcount()));
+        return false;
+    }
+    ctrl_mem = tmp;
+    return true;
+}
+
+static bool load_shared_stream_in(uint8_t *stream_in_buf, size_t num_bytes) {
+    const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
+    std::ifstream in(stream_path.c_str(), std::ios::binary);
+    if (!in) {
+        std::fprintf(stderr, "ERROR: Failed to open shared stream image '%s'\n", stream_path.c_str());
+        return false;
+    }
+
+    std::memset(stream_in_buf, 0, num_bytes);
+    in.read(reinterpret_cast<char *>(stream_in_buf), static_cast<std::streamsize>(num_bytes));
+    const std::streamsize got = in.gcount();
+    if (got <= 0) {
+        std::fprintf(stderr, "ERROR: Failed to read shared stream image '%s'\n", stream_path.c_str());
+        return false;
+    }
     return true;
 }
 
@@ -1250,56 +1360,59 @@ static const char *mmu_subcode_name(uint32_t subcode) {
 ControlMemSpace ctrl_mem_init(bool init) {
     ControlMemSpace ctrl_mem{};
     if(init) {
+        if (g_loaded_ctrl_mem_valid) {
+            return g_loaded_ctrl_mem;
+        }
         ctrl_mem.control = CTRL_RESETN_BIT;
         ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
         ctrl_mem.irq_clear = 0;
         // DMA lengths (non-zero required)
         ctrl_mem.dma_layer_len = 0x00000100;
-        ctrl_mem.dma_head_len  = 0x00000100;
-        ctrl_mem.dma_tile_len  = 0x00000100;
+        ctrl_mem.dma_head_len  = 0x00000040;
+        ctrl_mem.dma_tile_len  = 0x00000020;
         // Strides (non-zero required) - match OG testbench values
         ctrl_mem.layer_stride    = 0x00001000;
         ctrl_mem.wq_head_stride  = 0x00000100;
         ctrl_mem.wk_head_stride  = 0x00000100;
         ctrl_mem.wv_head_stride  = 0x00000100;
-        ctrl_mem.k_cache_stride  = 0x00000400;
-        ctrl_mem.v_cache_stride  = 0x00000400;
-        ctrl_mem.wo_tile_stride  = 0x00000100;
-        ctrl_mem.w1_tile_stride  = 0x00000300;
-        ctrl_mem.w2_tile_stride  = 0x00000800;
+        ctrl_mem.k_cache_stride  = 0x00000100;
+        ctrl_mem.v_cache_stride  = 0x00000100;
+        ctrl_mem.wo_tile_stride  = 0x00000020;
+        ctrl_mem.w1_tile_stride  = 0x00000040;
+        ctrl_mem.w2_tile_stride  = 0x00000020;
         ctrl_mem.wq_bias_head_stride = 0x00000100;
         ctrl_mem.wk_bias_head_stride = 0x00000100;
         ctrl_mem.wv_bias_head_stride = 0x00000100;
-        ctrl_mem.wo_bias_tile_stride = 0x00000100;
-        ctrl_mem.w1_bias_tile_stride = 0x00000300;
-        ctrl_mem.w2_bias_tile_stride = 0x00000800;
-        ctrl_mem.ln0_gamma_stride = 0x00000100;
-        ctrl_mem.ln1_gamma_stride = 0x00000100;
-        ctrl_mem.final_norm_gamma_stride = 0x00000100;
+        ctrl_mem.wo_bias_tile_stride = 0x00000020;
+        ctrl_mem.w1_bias_tile_stride = 0x00000040;
+        ctrl_mem.w2_bias_tile_stride = 0x00000020;
+        ctrl_mem.ln0_gamma_stride = 0x00000004;
+        ctrl_mem.ln1_gamma_stride = 0x00000004;
+        ctrl_mem.final_norm_gamma_stride = 0x00000004;
         ctrl_mem.ln0_eps_stride = 0x00000004;
         ctrl_mem.ln1_eps_stride = 0x00000004;
         ctrl_mem.final_norm_eps_stride = 0x00000004;
         // Base addresses - MUST be 64-byte aligned (& 0x3F == 0)
-        ctrl_mem.wq_base_addr = 0x10000000ull;
-        ctrl_mem.wk_base_addr = 0x20000000ull;
-        ctrl_mem.wv_base_addr = 0x30000000ull;
-        ctrl_mem.wo_base_addr = 0x60000000ull;
-        ctrl_mem.w1_base_addr = 0x70000000ull;
-        ctrl_mem.w2_base_addr = 0x80000000ull;
-        ctrl_mem.k_cache_addr = 0x40000000ull;
-        ctrl_mem.v_cache_addr = 0x50000000ull;
-        ctrl_mem.wq_bias_base_addr = 0x90000000ull;
-        ctrl_mem.wk_bias_base_addr = 0xA0000000ull;
-        ctrl_mem.wv_bias_base_addr = 0xB0000000ull;
-        ctrl_mem.wo_bias_base_addr = 0xC0000000ull;
-        ctrl_mem.w1_bias_base_addr = 0xD0000000ull;
-        ctrl_mem.w2_bias_base_addr = 0xE0000000ull;
-        ctrl_mem.ln0_gamma_base_addr = 0x11000000ull;
-        ctrl_mem.ln1_gamma_base_addr = 0x12000000ull;
-        ctrl_mem.final_norm_gamma_base_addr = 0x13000000ull;
-        ctrl_mem.ln0_eps_base_addr = 0x14000000ull;
-        ctrl_mem.ln1_eps_base_addr = 0x15000000ull;
-        ctrl_mem.final_norm_eps_base_addr = 0x16000000ull;
+        ctrl_mem.wq_base_addr = 0x0000000160000000ull;
+        ctrl_mem.wk_base_addr = 0x0000000161000000ull;
+        ctrl_mem.wv_base_addr = 0x0000000162000000ull;
+        ctrl_mem.wo_base_addr = 0x0000000163000000ull;
+        ctrl_mem.w1_base_addr = 0x0000000164000000ull;
+        ctrl_mem.w2_base_addr = 0x0000000165000000ull;
+        ctrl_mem.k_cache_addr = 0x0000000166000000ull;
+        ctrl_mem.v_cache_addr = 0x0000000167000000ull;
+        ctrl_mem.wq_bias_base_addr = 0x0000000160080000ull;
+        ctrl_mem.wk_bias_base_addr = 0x0000000161080000ull;
+        ctrl_mem.wv_bias_base_addr = 0x0000000162080000ull;
+        ctrl_mem.wo_bias_base_addr = 0x0000000163080000ull;
+        ctrl_mem.w1_bias_base_addr = 0x0000000164080000ull;
+        ctrl_mem.w2_bias_base_addr = 0x0000000165080000ull;
+        ctrl_mem.ln0_gamma_base_addr = 0x0000000168000000ull;
+        ctrl_mem.ln1_gamma_base_addr = 0x0000000169000000ull;
+        ctrl_mem.final_norm_gamma_base_addr = 0x000000016C000000ull;
+        ctrl_mem.ln0_eps_base_addr = 0x000000016A000000ull;
+        ctrl_mem.ln1_eps_base_addr = 0x000000016B000000ull;
+        ctrl_mem.final_norm_eps_base_addr = 0x000000016D000000ull;
     }
     return ctrl_mem;
 }
@@ -1383,7 +1496,7 @@ int main() {
     uint32_t dma_addr    = 0;
     uint32_t dma_rx_word = 0;
     uint32_t dma_tx_word = 0;
-    axi_gmem_word_t ddr_mem[TOP_DMA_BUF_WORDS] = {};
+    axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
 
     hls::stream<axis8_t> s_axis_in("s_axis_in");
     hls::stream<axis8_t> m_axis_out("m_axis_out");
@@ -1439,8 +1552,15 @@ int main() {
     bool aborted_on_error = false;
     int  base_assign_step = 0;
 
-    for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
-        stream_in_buf[i] = static_cast<uint8_t>((i * 3 + 5) & 0x7F);
+    if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
+        return 1;
+    }
+    g_loaded_ctrl_mem_valid = true;
+    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS)) {
+        return 1;
+    }
+    if (!load_shared_stream_in(stream_in_buf, STREAM_IN_BUF_BYTES)) {
+        return 1;
     }
     enum class CtrlInitStage { 
         TestCtrlInit,           // 0: Initialize with valid config
@@ -1673,7 +1793,6 @@ int main() {
                 // Program all ControlMemSpace fields in one shot.
                 // This includes required + optional strides/base addresses and quant data.
                 ctrl_mem = ctrl_mem_init(true);
-                seed_ln_params_ddr(ctrl_mem, ddr_mem);
                 ctrl_data_in = CTRL_RESETN_BIT;
                 break;
             case 1:

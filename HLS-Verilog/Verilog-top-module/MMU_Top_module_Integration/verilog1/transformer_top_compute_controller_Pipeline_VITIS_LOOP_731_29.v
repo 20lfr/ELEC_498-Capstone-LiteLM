@@ -331,7 +331,7 @@ reg   [2:0] i_fu_178;
 wire   [2:0] add_ln731_fu_329_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_i_66;
-wire   [4:0] shl_ln9_fu_335_p3;
+wire   [4:0] shl_ln_fu_335_p3;
 wire   [5:0] zext_ln733_fu_343_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -664,8 +664,8 @@ assign icmp_ln731_fu_323_p2 = ((ap_sig_allocacmp_i_66 == 3'd6) ? 1'b1 : 1'b0);
 
 assign or_ln_fu_347_p3 = {{1'd1}, {zext_ln733_fu_343_p1}};
 
-assign shl_ln9_fu_335_p3 = {{ap_sig_allocacmp_i_66}, {2'd0}};
+assign shl_ln_fu_335_p3 = {{ap_sig_allocacmp_i_66}, {2'd0}};
 
-assign zext_ln733_fu_343_p1 = shl_ln9_fu_335_p3;
+assign zext_ln733_fu_343_p1 = shl_ln_fu_335_p3;
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_731_29

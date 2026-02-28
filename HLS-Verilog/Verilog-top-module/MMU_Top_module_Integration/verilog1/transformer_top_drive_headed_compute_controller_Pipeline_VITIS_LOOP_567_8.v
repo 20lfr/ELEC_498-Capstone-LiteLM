@@ -59,7 +59,7 @@ wire   [0:0] trunc_ln567_fu_86_p1;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0_local;
-wire   [4:0] lshr_ln8_fu_90_p4;
+wire   [4:0] lshr_ln_fu_90_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -229,7 +229,7 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln567_fu_74_p2 = ((ap_sig_allocacmp_i_42 == 7'd64) ? 1'b1 : 1'b0);
 
-assign lshr_ln8_fu_90_p4 = {{ap_sig_allocacmp_i_42[5:1]}};
+assign lshr_ln_fu_90_p4 = {{ap_sig_allocacmp_i_42[5:1]}};
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln567_fu_100_p1;
 
@@ -249,6 +249,6 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign trunc_ln567_fu_86_p1 = ap_sig_allocacmp_i_42[0:0];
 
-assign zext_ln567_fu_100_p1 = lshr_ln8_fu_90_p4;
+assign zext_ln567_fu_100_p1 = lshr_ln_fu_90_p4;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_567_8

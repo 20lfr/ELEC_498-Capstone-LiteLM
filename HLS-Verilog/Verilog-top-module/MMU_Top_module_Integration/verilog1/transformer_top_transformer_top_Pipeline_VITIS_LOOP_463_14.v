@@ -232,10 +232,10 @@ reg    ap_block_state12_io_grp4;
 reg    ap_block_pp0_stage11_11001_grp4;
 wire    ap_block_pp0_stage11_01001_grp4;
 reg    ap_block_pp0_stage0_11001_grp5;
-reg   [6:0] i_10_fu_96;
+reg   [6:0] i_fu_96;
 wire   [6:0] add_ln463_fu_195_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i;
+reg   [6:0] ap_sig_allocacmp_i_8;
 reg    dma_rx_buf_local_ce0_local;
 reg   [13:0] dma_rx_buf_local_address0_local;
 reg    dma_rx_buf_local_we0_local;
@@ -292,7 +292,7 @@ initial begin
 #0 ap_enable_reg_pp0_iter0_reg = 1'b0;
 #0 ap_block_pp0_stage1_subdone_grp0_done_reg = 1'b0;
 #0 ap_block_pp0_stage10_subdone_grp0_done_reg = 1'b0;
-#0 i_10_fu_96 = 7'd0;
+#0 i_fu_96 = 7'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -300,7 +300,7 @@ transformer_top_partselect_8ns_32ns_5ns_8_1_1 #(
     .DATAWIDTH( 32 ),
     .ADDRWIDTH( 5 ),
     .DATA1WIDTH( 8 ))
-partselect_8ns_32ns_5ns_8_1_1_U5066(
+partselect_8ns_32ns_5ns_8_1_1_U5125(
     .din(beat_reg_435),
     .sel(lo_fu_321_p3),
     .dout(value_assign_fu_328_p3)
@@ -310,7 +310,7 @@ transformer_top_partset_32ns_32ns_8ns_5ns_32_1_1 #(
     .DATAWIDTH( 32 ),
     .DATA1WIDTH( 8 ),
     .ADDRWIDTH( 5 ))
-partset_32ns_32ns_8ns_5ns_32_1_1_U5067(
+partset_32ns_32ns_8ns_5ns_32_1_1_U5126(
     .din(32'd0),
     .value(value_reg_430),
     .sel(lo_fu_321_p3),
@@ -407,9 +407,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0_11001))) begin
         if (((ap_enable_reg_pp0_iter0 == 1'b1) & (icmp_ln463_fu_189_p2 == 1'd0))) begin
-            i_10_fu_96 <= add_ln463_fu_195_p2;
+            i_fu_96 <= add_ln463_fu_195_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_10_fu_96 <= 7'd0;
+            i_fu_96 <= 7'd0;
         end
     end
 end
@@ -508,9 +508,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0) & (1'b0 == ap_block_pp0_stage0))) begin
-        ap_sig_allocacmp_i = 7'd0;
+        ap_sig_allocacmp_i_8 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i = i_10_fu_96;
+        ap_sig_allocacmp_i_8 = i_fu_96;
     end
 end
 
@@ -750,7 +750,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln463_fu_195_p2 = (ap_sig_allocacmp_i + 7'd1);
+assign add_ln463_fu_195_p2 = (ap_sig_allocacmp_i_8 + 7'd1);
 
 assign add_ln476_fu_229_p2 = (and_ln_fu_221_p3 + ddr_mem);
 
@@ -914,7 +914,7 @@ assign dma_tx_buf_local_address0 = zext_ln13_fu_265_p1;
 
 assign dma_tx_buf_local_ce0 = dma_tx_buf_local_ce0_local;
 
-assign icmp_ln463_fu_189_p2 = ((ap_sig_allocacmp_i == bytes) ? 1'b1 : 1'b0);
+assign icmp_ln463_fu_189_p2 = ((ap_sig_allocacmp_i_8 == bytes) ? 1'b1 : 1'b0);
 
 assign lo_fu_321_p3 = {{trunc_ln21_reg_400}, {3'd0}};
 
@@ -986,9 +986,9 @@ assign shl_ln28_fu_301_p2 = 4'd1 << zext_ln28_fu_297_p1;
 
 assign tmp_2_fu_211_p4 = {{byte_addr_fu_205_p2[63:2]}};
 
-assign tmp_fu_255_p4 = {{ap_sig_allocacmp_i[6:2]}};
+assign tmp_fu_255_p4 = {{ap_sig_allocacmp_i_8[6:2]}};
 
-assign trunc_ln12_fu_271_p1 = ap_sig_allocacmp_i[1:0];
+assign trunc_ln12_fu_271_p1 = ap_sig_allocacmp_i_8[1:0];
 
 assign trunc_ln21_fu_287_p1 = byte_addr_fu_205_p2[1:0];
 
@@ -1008,7 +1008,7 @@ assign zext_ln21_fu_283_p1 = shift_fu_275_p3;
 
 assign zext_ln28_fu_297_p1 = trunc_ln21_fu_287_p1;
 
-assign zext_ln463_fu_201_p1 = ap_sig_allocacmp_i;
+assign zext_ln463_fu_201_p1 = ap_sig_allocacmp_i_8;
 
 always @ (posedge ap_clk) begin
     zext_ln21_reg_394[2:0] <= 3'b000;

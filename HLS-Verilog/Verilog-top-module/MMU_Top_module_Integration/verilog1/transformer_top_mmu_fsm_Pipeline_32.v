@@ -93,10 +93,10 @@ wire   [0:0] icmp_ln762_fu_376_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-reg   [1:0] indvars_iv213_fu_52;
+reg   [1:0] indvars_iv211_fu_52;
 wire   [1:0] add_ln762_fu_232_p2;
 wire    ap_loop_init;
-reg   [1:0] ap_sig_allocacmp_indvars_iv213_load;
+reg   [1:0] ap_sig_allocacmp_indvars_iv211_load;
 reg   [7:0] empty_fu_56;
 wire   [7:0] empty_556_fu_331_p3;
 reg   [31:0] empty_538_fu_60;
@@ -139,7 +139,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 indvars_iv213_fu_52 = 2'd0;
+#0 indvars_iv211_fu_52 = 2'd0;
 #0 empty_fu_56 = 8'd0;
 #0 empty_538_fu_60 = 32'd0;
 #0 empty_539_fu_64 = 32'd0;
@@ -192,7 +192,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        indvars_iv213_fu_52 <= add_ln762_fu_232_p2;
+        indvars_iv211_fu_52 <= add_ln762_fu_232_p2;
     end
 end
 
@@ -255,9 +255,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_indvars_iv213_load = 2'd0;
+        ap_sig_allocacmp_indvars_iv211_load = 2'd0;
     end else begin
-        ap_sig_allocacmp_indvars_iv213_load = indvars_iv213_fu_52;
+        ap_sig_allocacmp_indvars_iv211_load = indvars_iv211_fu_52;
     end
 end
 
@@ -368,7 +368,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln762_fu_232_p2 = (ap_sig_allocacmp_indvars_iv213_load + 2'd1);
+assign add_ln762_fu_232_p2 = (ap_sig_allocacmp_indvars_iv211_load + 2'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -406,13 +406,13 @@ assign empty_559_fu_358_p3 = ((icmp_ln108_4_fu_253_p2[0:0] == 1'b1) ? 32'd0 : em
 
 assign empty_560_fu_367_p3 = ((icmp_ln108_fu_238_p2[0:0] == 1'b1) ? 32'd0 : empty_539_fu_64);
 
-assign icmp_ln108_4_fu_253_p2 = ((ap_sig_allocacmp_indvars_iv213_load == 2'd1) ? 1'b1 : 1'b0);
+assign icmp_ln108_4_fu_253_p2 = ((ap_sig_allocacmp_indvars_iv211_load == 2'd1) ? 1'b1 : 1'b0);
 
-assign icmp_ln108_5_fu_268_p2 = ((ap_sig_allocacmp_indvars_iv213_load == 2'd2) ? 1'b1 : 1'b0);
+assign icmp_ln108_5_fu_268_p2 = ((ap_sig_allocacmp_indvars_iv211_load == 2'd2) ? 1'b1 : 1'b0);
 
-assign icmp_ln108_fu_238_p2 = ((ap_sig_allocacmp_indvars_iv213_load == 2'd0) ? 1'b1 : 1'b0);
+assign icmp_ln108_fu_238_p2 = ((ap_sig_allocacmp_indvars_iv211_load == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln762_fu_376_p2 = ((ap_sig_allocacmp_indvars_iv213_load == 2'd3) ? 1'b1 : 1'b0);
+assign icmp_ln762_fu_376_p2 = ((ap_sig_allocacmp_indvars_iv211_load == 2'd3) ? 1'b1 : 1'b0);
 
 assign or_ln108_3_fu_289_p2 = (or_ln108_fu_283_p2 | icmp_ln108_fu_238_p2);
 

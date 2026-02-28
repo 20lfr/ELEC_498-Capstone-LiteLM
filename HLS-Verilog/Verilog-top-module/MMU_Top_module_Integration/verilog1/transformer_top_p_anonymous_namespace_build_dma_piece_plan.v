@@ -13,8 +13,6 @@ module transformer_top_p_anonymous_namespace_build_dma_piece_plan (
         p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld,
         p_ZN12_GLOBAL_N_116active_piece_tagE_0,
         p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld,
-        p_ZN12_GLOBAL_N_121active_piece_addr_offE_1,
-        p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_ap_vld,
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1,
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld,
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0,
@@ -31,8 +29,6 @@ output  [4:0] p_ZN12_GLOBAL_N_116active_piece_tagE_1;
 output   p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld;
 output  [4:0] p_ZN12_GLOBAL_N_116active_piece_tagE_0;
 output   p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld;
-output  [5:0] p_ZN12_GLOBAL_N_121active_piece_addr_offE_1;
-output   p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_ap_vld;
 output  [4:0] p_ZN12_GLOBAL_N_118active_piece_bytesE_1;
 output   p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld;
 output  [6:0] p_ZN12_GLOBAL_N_118active_piece_bytesE_0;
@@ -41,150 +37,131 @@ output  [1:0] p_anonymous_namespace_active_piece_count;
 output   p_anonymous_namespace_active_piece_count_ap_vld;
 input   ap_rst;
 
-reg   [1:0] ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_109_p24;
-wire   [3:0] sel_read_read_fu_100_p2;
-reg   [6:0] ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_150_p24;
-reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24;
-reg   [5:0] ap_phi_mux_p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_new_0_phi_fu_232_p24;
-reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24;
-wire   [4:0] zext_ln1084_fu_351_p1;
-reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24;
+reg   [1:0] ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_101_p24;
+wire   [3:0] sel_read_read_fu_92_p2;
+reg   [6:0] ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24;
+reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24;
+reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24;
+wire   [4:0] zext_ln1084_fu_302_p1;
+reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24;
 wire    ap_ce_reg;
 
 always @ (*) begin
-    if ((sel_read_read_fu_100_p2 == 4'd1)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = zext_ln1084_fu_351_p1;
-    end else if ((sel_read_read_fu_100_p2 == 4'd2)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd3;
-    end else if ((sel_read_read_fu_100_p2 == 4'd4)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd5;
-    end else if ((sel_read_read_fu_100_p2 == 4'd8)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd7;
-    end else if ((sel_read_read_fu_100_p2 == 4'd9)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd9;
-    end else if ((sel_read_read_fu_100_p2 == 4'd10)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd11;
-    end else if ((sel_read_read_fu_100_p2 == 4'd6)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd13;
-    end else if ((sel_read_read_fu_100_p2 == 4'd7)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd14;
-    end else if ((sel_read_read_fu_100_p2 == 4'd13)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd15;
-    end else if ((sel_read_read_fu_100_p2 == 4'd14)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd17;
-    end else if (((sel_read_read_fu_100_p2 == 4'd3) | (sel_read_read_fu_100_p2 == 4'd5) | (sel_read_read_fu_100_p2 == 4'd12) | (sel_read_read_fu_100_p2 == 4'd0) | (sel_read_read_fu_100_p2 == 4'd11) | (sel_read_read_fu_100_p2 == 4'd15))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 5'd0;
+    if ((sel_read_read_fu_92_p2 == 4'd1)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = zext_ln1084_fu_302_p1;
+    end else if ((sel_read_read_fu_92_p2 == 4'd2)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd3;
+    end else if ((sel_read_read_fu_92_p2 == 4'd4)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd5;
+    end else if ((sel_read_read_fu_92_p2 == 4'd8)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd7;
+    end else if ((sel_read_read_fu_92_p2 == 4'd9)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd9;
+    end else if ((sel_read_read_fu_92_p2 == 4'd10)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd11;
+    end else if ((sel_read_read_fu_92_p2 == 4'd6)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd13;
+    end else if ((sel_read_read_fu_92_p2 == 4'd7)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd14;
+    end else if ((sel_read_read_fu_92_p2 == 4'd13)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd15;
+    end else if ((sel_read_read_fu_92_p2 == 4'd14)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd17;
+    end else if (((sel_read_read_fu_92_p2 == 4'd3) | (sel_read_read_fu_92_p2 == 4'd5) | (sel_read_read_fu_92_p2 == 4'd12) | (sel_read_read_fu_92_p2 == 4'd0) | (sel_read_read_fu_92_p2 == 4'd11) | (sel_read_read_fu_92_p2 == 4'd15))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd0;
     end else begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24 = 'bx;
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((sel_read_read_fu_100_p2 == 4'd1)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd2;
-    end else if ((sel_read_read_fu_100_p2 == 4'd2)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd4;
-    end else if ((sel_read_read_fu_100_p2 == 4'd4)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd6;
-    end else if ((sel_read_read_fu_100_p2 == 4'd8)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd8;
-    end else if ((sel_read_read_fu_100_p2 == 4'd9)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd10;
-    end else if ((sel_read_read_fu_100_p2 == 4'd10)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd12;
-    end else if ((sel_read_read_fu_100_p2 == 4'd13)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd16;
-    end else if ((sel_read_read_fu_100_p2 == 4'd14)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd18;
-    end else if (((sel_read_read_fu_100_p2 == 4'd3) | (sel_read_read_fu_100_p2 == 4'd5) | (sel_read_read_fu_100_p2 == 4'd12) | (sel_read_read_fu_100_p2 == 4'd6) | (sel_read_read_fu_100_p2 == 4'd7) | (sel_read_read_fu_100_p2 == 4'd0) | (sel_read_read_fu_100_p2 == 4'd11) | (sel_read_read_fu_100_p2 == 4'd15))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 5'd0;
+    if ((sel_read_read_fu_92_p2 == 4'd1)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd2;
+    end else if ((sel_read_read_fu_92_p2 == 4'd2)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd4;
+    end else if ((sel_read_read_fu_92_p2 == 4'd4)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd6;
+    end else if ((sel_read_read_fu_92_p2 == 4'd8)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd8;
+    end else if ((sel_read_read_fu_92_p2 == 4'd9)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd10;
+    end else if ((sel_read_read_fu_92_p2 == 4'd10)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd12;
+    end else if ((sel_read_read_fu_92_p2 == 4'd13)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd16;
+    end else if ((sel_read_read_fu_92_p2 == 4'd14)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd18;
+    end else if (((sel_read_read_fu_92_p2 == 4'd3) | (sel_read_read_fu_92_p2 == 4'd5) | (sel_read_read_fu_92_p2 == 4'd12) | (sel_read_read_fu_92_p2 == 4'd6) | (sel_read_read_fu_92_p2 == 4'd7) | (sel_read_read_fu_92_p2 == 4'd0) | (sel_read_read_fu_92_p2 == 4'd11) | (sel_read_read_fu_92_p2 == 4'd15))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 5'd0;
     end else begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24 = 'bx;
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24 = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((sel_read_read_fu_100_p2 == 4'd1) | (sel_read_read_fu_100_p2 == 4'd2) | (sel_read_read_fu_100_p2 == 4'd4) | (sel_read_read_fu_100_p2 == 4'd8))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_150_p24 = 7'd32;
-    end else if (((sel_read_read_fu_100_p2 == 4'd9) | (sel_read_read_fu_100_p2 == 4'd10))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_150_p24 = 7'd48;
-    end else if (((sel_read_read_fu_100_p2 == 4'd6) | (sel_read_read_fu_100_p2 == 4'd7) | (sel_read_read_fu_100_p2 == 4'd13) | (sel_read_read_fu_100_p2 == 4'd14))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_150_p24 = 7'd64;
-    end else if (((sel_read_read_fu_100_p2 == 4'd3) | (sel_read_read_fu_100_p2 == 4'd5) | (sel_read_read_fu_100_p2 == 4'd12) | (sel_read_read_fu_100_p2 == 4'd0) | (sel_read_read_fu_100_p2 == 4'd11) | (sel_read_read_fu_100_p2 == 4'd15))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_150_p24 = 7'd0;
+    if (((sel_read_read_fu_92_p2 == 4'd1) | (sel_read_read_fu_92_p2 == 4'd2) | (sel_read_read_fu_92_p2 == 4'd4) | (sel_read_read_fu_92_p2 == 4'd8))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24 = 7'd32;
+    end else if (((sel_read_read_fu_92_p2 == 4'd9) | (sel_read_read_fu_92_p2 == 4'd10))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24 = 7'd48;
+    end else if (((sel_read_read_fu_92_p2 == 4'd6) | (sel_read_read_fu_92_p2 == 4'd7) | (sel_read_read_fu_92_p2 == 4'd13) | (sel_read_read_fu_92_p2 == 4'd14))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24 = 7'd64;
+    end else if (((sel_read_read_fu_92_p2 == 4'd3) | (sel_read_read_fu_92_p2 == 4'd5) | (sel_read_read_fu_92_p2 == 4'd12) | (sel_read_read_fu_92_p2 == 4'd0) | (sel_read_read_fu_92_p2 == 4'd11) | (sel_read_read_fu_92_p2 == 4'd15))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24 = 7'd0;
     end else begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_150_p24 = 'bx;
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24 = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((sel_read_read_fu_100_p2 == 4'd1) | (sel_read_read_fu_100_p2 == 4'd2) | (sel_read_read_fu_100_p2 == 4'd4))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24 = 5'd2;
-    end else if ((sel_read_read_fu_100_p2 == 4'd9)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24 = 5'd24;
-    end else if (((sel_read_read_fu_100_p2 == 4'd8) | (sel_read_read_fu_100_p2 == 4'd10))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24 = 5'd16;
-    end else if (((sel_read_read_fu_100_p2 == 4'd13) | (sel_read_read_fu_100_p2 == 4'd14))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24 = 5'd4;
-    end else if (((sel_read_read_fu_100_p2 == 4'd3) | (sel_read_read_fu_100_p2 == 4'd5) | (sel_read_read_fu_100_p2 == 4'd12) | (sel_read_read_fu_100_p2 == 4'd6) | (sel_read_read_fu_100_p2 == 4'd7) | (sel_read_read_fu_100_p2 == 4'd0) | (sel_read_read_fu_100_p2 == 4'd11) | (sel_read_read_fu_100_p2 == 4'd15))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24 = 5'd0;
+    if ((sel_read_read_fu_92_p2 == 4'd9)) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24 = 5'd24;
+    end else if (((sel_read_read_fu_92_p2 == 4'd1) | (sel_read_read_fu_92_p2 == 4'd2) | (sel_read_read_fu_92_p2 == 4'd4) | (sel_read_read_fu_92_p2 == 4'd8) | (sel_read_read_fu_92_p2 == 4'd10))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24 = 5'd16;
+    end else if (((sel_read_read_fu_92_p2 == 4'd13) | (sel_read_read_fu_92_p2 == 4'd14))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24 = 5'd4;
+    end else if (((sel_read_read_fu_92_p2 == 4'd3) | (sel_read_read_fu_92_p2 == 4'd5) | (sel_read_read_fu_92_p2 == 4'd12) | (sel_read_read_fu_92_p2 == 4'd6) | (sel_read_read_fu_92_p2 == 4'd7) | (sel_read_read_fu_92_p2 == 4'd0) | (sel_read_read_fu_92_p2 == 4'd11) | (sel_read_read_fu_92_p2 == 4'd15))) begin
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24 = 5'd0;
     end else begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24 = 'bx;
+        ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24 = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((sel_read_read_fu_100_p2 == 4'd1) | (sel_read_read_fu_100_p2 == 4'd2) | (sel_read_read_fu_100_p2 == 4'd4) | (sel_read_read_fu_100_p2 == 4'd8))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_new_0_phi_fu_232_p24 = 6'd32;
-    end else if (((sel_read_read_fu_100_p2 == 4'd9) | (sel_read_read_fu_100_p2 == 4'd10))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_new_0_phi_fu_232_p24 = 6'd48;
-    end else if (((sel_read_read_fu_100_p2 == 4'd3) | (sel_read_read_fu_100_p2 == 4'd5) | (sel_read_read_fu_100_p2 == 4'd12) | (sel_read_read_fu_100_p2 == 4'd6) | (sel_read_read_fu_100_p2 == 4'd7) | (sel_read_read_fu_100_p2 == 4'd13) | (sel_read_read_fu_100_p2 == 4'd14) | (sel_read_read_fu_100_p2 == 4'd0) | (sel_read_read_fu_100_p2 == 4'd11) | (sel_read_read_fu_100_p2 == 4'd15))) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_new_0_phi_fu_232_p24 = 6'd0;
+    if (((sel_read_read_fu_92_p2 == 4'd6) | (sel_read_read_fu_92_p2 == 4'd7))) begin
+        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_101_p24 = 2'd1;
+    end else if (((sel_read_read_fu_92_p2 == 4'd1) | (sel_read_read_fu_92_p2 == 4'd2) | (sel_read_read_fu_92_p2 == 4'd4) | (sel_read_read_fu_92_p2 == 4'd8) | (sel_read_read_fu_92_p2 == 4'd9) | (sel_read_read_fu_92_p2 == 4'd10) | (sel_read_read_fu_92_p2 == 4'd13) | (sel_read_read_fu_92_p2 == 4'd14))) begin
+        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_101_p24 = 2'd2;
+    end else if (((sel_read_read_fu_92_p2 == 4'd3) | (sel_read_read_fu_92_p2 == 4'd5) | (sel_read_read_fu_92_p2 == 4'd12) | (sel_read_read_fu_92_p2 == 4'd0) | (sel_read_read_fu_92_p2 == 4'd11) | (sel_read_read_fu_92_p2 == 4'd15))) begin
+        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_101_p24 = 2'd0;
     end else begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_new_0_phi_fu_232_p24 = 'bx;
-    end
-end
-
-always @ (*) begin
-    if (((sel_read_read_fu_100_p2 == 4'd6) | (sel_read_read_fu_100_p2 == 4'd7))) begin
-        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_109_p24 = 2'd1;
-    end else if (((sel_read_read_fu_100_p2 == 4'd1) | (sel_read_read_fu_100_p2 == 4'd2) | (sel_read_read_fu_100_p2 == 4'd4) | (sel_read_read_fu_100_p2 == 4'd8) | (sel_read_read_fu_100_p2 == 4'd9) | (sel_read_read_fu_100_p2 == 4'd10) | (sel_read_read_fu_100_p2 == 4'd13) | (sel_read_read_fu_100_p2 == 4'd14))) begin
-        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_109_p24 = 2'd2;
-    end else if (((sel_read_read_fu_100_p2 == 4'd3) | (sel_read_read_fu_100_p2 == 4'd5) | (sel_read_read_fu_100_p2 == 4'd12) | (sel_read_read_fu_100_p2 == 4'd0) | (sel_read_read_fu_100_p2 == 4'd11) | (sel_read_read_fu_100_p2 == 4'd15))) begin
-        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_109_p24 = 2'd0;
-    end else begin
-        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_109_p24 = 'bx;
+        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_101_p24 = 'bx;
     end
 end
 
 assign ap_ready = 1'b1;
 
-assign zext_ln1084_fu_351_p1 = sel;
+assign zext_ln1084_fu_302_p1 = sel;
 
-assign p_ZN12_GLOBAL_N_116active_piece_tagE_0 = ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_273_p24;
+assign p_ZN12_GLOBAL_N_116active_piece_tagE_0 = ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24;
 
 assign p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld = 1'b1;
 
-assign p_ZN12_GLOBAL_N_116active_piece_tagE_1 = ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_313_p24;
+assign p_ZN12_GLOBAL_N_116active_piece_tagE_1 = ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24;
 
 assign p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld = 1'b1;
 
-assign p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_150_p24;
+assign p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24;
 
 assign p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld = 1'b1;
 
-assign p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_191_p24;
+assign p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24;
 
 assign p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld = 1'b1;
 
-assign p_ZN12_GLOBAL_N_121active_piece_addr_offE_1 = ap_phi_mux_p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_new_0_phi_fu_232_p24;
-
-assign p_ZN12_GLOBAL_N_121active_piece_addr_offE_1_ap_vld = 1'b1;
-
-assign p_anonymous_namespace_active_piece_count = ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_109_p24;
+assign p_anonymous_namespace_active_piece_count = ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_101_p24;
 
 assign p_anonymous_namespace_active_piece_count_ap_vld = 1'b1;
 
-assign sel_read_read_fu_100_p2 = sel;
+assign sel_read_read_fu_92_p2 = sel;
 
 endmodule //transformer_top_p_anonymous_namespace_build_dma_piece_plan

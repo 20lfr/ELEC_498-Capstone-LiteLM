@@ -40,7 +40,7 @@ reg grant_8_out_ap_vld;
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg    ap_block_state1_pp0_stage0_iter0;
-wire   [0:0] or_cond182_demorgan_fu_172_p2;
+wire   [0:0] or_cond180_demorgan_fu_172_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
@@ -120,7 +120,7 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((or_cond182_demorgan_fu_172_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((or_cond180_demorgan_fu_172_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         i_reg_79 <= xor_ln522_fu_166_p2;
     end
 end
@@ -134,7 +134,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((or_cond182_demorgan_fu_172_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((or_cond180_demorgan_fu_172_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -182,7 +182,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((ap_loop_exit_ready == 1'b1) & (or_cond182_demorgan_fu_172_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((ap_loop_exit_ready == 1'b1) & (or_cond180_demorgan_fu_172_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         grant_8_out_ap_vld = 1'b1;
     end else begin
         grant_8_out_ap_vld = 1'b0;
@@ -222,7 +222,7 @@ assign h_fu_131_p3 = ((tmp_fu_107_p3[0:0] == 1'b1) ? select_ln523_fu_123_p3 : ze
 
 assign icmp_ln524_fu_143_p2 = ((h_fu_131_p3 == 2'd1) ? 1'b1 : 1'b0);
 
-assign or_cond182_demorgan_fu_172_p2 = (select_ln524_fu_149_p3 | ap_phi_mux_i_phi_fu_82_p4);
+assign or_cond180_demorgan_fu_172_p2 = (select_ln524_fu_149_p3 | ap_phi_mux_i_phi_fu_82_p4);
 
 assign select_ln523_fu_123_p3 = ((trunc_ln523_fu_115_p1[0:0] == 1'b1) ? 2'd3 : 2'd0);
 

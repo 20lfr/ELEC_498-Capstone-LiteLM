@@ -130,7 +130,7 @@ wire   [0:0] icmp_ln1992_fu_263_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln573_1_fu_574_p1;
+wire   [63:0] zext_ln573_fu_574_p1;
 wire   [0:0] req_active_fu_297_p2;
 wire   [0:0] lane_mem_req_edge_fu_327_p2;
 wire   [0:0] icmp_ln2000_fu_351_p2;
@@ -524,7 +524,7 @@ assign or_ln263_5_fu_514_p2 = (or_ln263_4_fu_508_p2 | or_ln263_3_fu_502_p2);
 
 assign or_ln263_fu_484_p2 = (icmp_ln263_fu_436_p2 | icmp_ln263_1_fu_442_p2);
 
-assign p_anonymous_namespace_compute_q_head_56_address0 = zext_ln573_1_fu_574_p1;
+assign p_anonymous_namespace_compute_q_head_56_address0 = zext_ln573_fu_574_p1;
 
 assign p_anonymous_namespace_compute_q_head_56_ce0 = p_anonymous_namespace_compute_q_head_56_ce0_local;
 
@@ -532,7 +532,7 @@ assign p_anonymous_namespace_compute_q_head_56_d0 = req_head_1_fu_552_p3;
 
 assign p_anonymous_namespace_compute_q_head_56_we0 = p_anonymous_namespace_compute_q_head_56_we0_local;
 
-assign p_anonymous_namespace_compute_q_headed_address0 = zext_ln573_1_fu_574_p1;
+assign p_anonymous_namespace_compute_q_headed_address0 = zext_ln573_fu_574_p1;
 
 assign p_anonymous_namespace_compute_q_headed_ce0 = p_anonymous_namespace_compute_q_headed_ce0_local;
 
@@ -540,7 +540,7 @@ assign p_anonymous_namespace_compute_q_headed_d0 = headed_fu_520_p2;
 
 assign p_anonymous_namespace_compute_q_headed_we0 = p_anonymous_namespace_compute_q_headed_we0_local;
 
-assign p_anonymous_namespace_compute_q_lane_address0 = zext_ln573_1_fu_574_p1;
+assign p_anonymous_namespace_compute_q_lane_address0 = zext_ln573_fu_574_p1;
 
 assign p_anonymous_namespace_compute_q_lane_ce0 = p_anonymous_namespace_compute_q_lane_ce0_local;
 
@@ -548,7 +548,7 @@ assign p_anonymous_namespace_compute_q_lane_d0 = zext_ln2009_fu_531_p1;
 
 assign p_anonymous_namespace_compute_q_lane_we0 = p_anonymous_namespace_compute_q_lane_we0_local;
 
-assign p_anonymous_namespace_compute_q_packed_address0 = zext_ln573_1_fu_574_p1;
+assign p_anonymous_namespace_compute_q_packed_address0 = zext_ln573_fu_574_p1;
 
 assign p_anonymous_namespace_compute_q_packed_ce0 = p_anonymous_namespace_compute_q_packed_ce0_local;
 
@@ -556,7 +556,7 @@ assign p_anonymous_namespace_compute_q_packed_d0 = select_ln2007_fu_413_p3;
 
 assign p_anonymous_namespace_compute_q_packed_we0 = p_anonymous_namespace_compute_q_packed_we0_local;
 
-assign p_anonymous_namespace_compute_q_type_address0 = zext_ln573_1_fu_574_p1;
+assign p_anonymous_namespace_compute_q_type_address0 = zext_ln573_fu_574_p1;
 
 assign p_anonymous_namespace_compute_q_type_ce0 = p_anonymous_namespace_compute_q_type_ce0_local;
 
@@ -600,7 +600,7 @@ assign trunc_ln261_1_fu_426_p4 = {{select_ln2007_fu_413_p3[17:16]}};
 
 assign zext_ln2009_fu_531_p1 = req_head_fu_527_p1;
 
-assign zext_ln573_1_fu_574_p1 = p_anonymous_namespace_compute_q_tail_i;
+assign zext_ln573_fu_574_p1 = p_anonymous_namespace_compute_q_tail_i;
 
 assign zext_ln580_fu_601_p1 = add_ln580_fu_595_p2;
 

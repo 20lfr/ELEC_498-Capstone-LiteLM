@@ -646,6 +646,9 @@ module top_module_hls_tb;
 
   integer cycle_count;
   integer i;
+  integer file_fd;
+  integer bytes_read;
+  integer prog_word_idx;
   logic axis_packet_sent;
   logic stream_fill_active;
   logic [$clog2(STREAM_IN_BUF_BYTES+1)-1:0] stream_fill_idx;
@@ -670,8 +673,12 @@ module top_module_hls_tb;
   logic [0:0]  axi_rid_latched;
 
   logic [31:0] ctrl_words [0:CTRL_MEM_WORDS-1];
+  logic [31:0] ctrl_init_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] dbg_ctrl_words [0:DBG_CTRL_MEM_WORDS-1];
   dbg_control_mem_t dbg_ctrl_mem_shadow;
+  byte unsigned ctrl_mem_file_bytes [0:(CTRL_MEM_WORDS*4)-1];
+  byte unsigned ddr_image_bytes [0:('h43000)-1];
+  byte unsigned stream_in_file_bytes [0:STREAM_IN_BUF_BYTES-1];
 
   // AXI ctrl_mem word map for ControlMemSpace.
   // Note: there is one 32-bit alignment padding word before the first uint64_t field.
@@ -766,6 +773,23 @@ module top_module_hls_tb;
   localparam logic [63:0] BASE_LN1_EPS          = 64'h0000_0001_6B00_0000;
   localparam logic [63:0] BASE_FINAL_NORM_EPS   = 64'h0000_0001_6D00_0000;
 
+  localparam int IMG_BASE_WQ               = 'h00000;
+  localparam int IMG_BASE_WK               = 'h04000;
+  localparam int IMG_BASE_WV               = 'h08000;
+  localparam int IMG_BASE_WO               = 'h0C000;
+  localparam int IMG_BASE_W1               = 'h10000;
+  localparam int IMG_BASE_W2               = 'h16000;
+  localparam int IMG_BASE_WQ_BIAS          = 'h24000;
+  localparam int IMG_BASE_WK_BIAS          = 'h28000;
+  localparam int IMG_BASE_WV_BIAS          = 'h2C000;
+  localparam int IMG_BASE_WO_BIAS          = 'h30000;
+  localparam int IMG_BASE_W1_BIAS          = 'h34000;
+  localparam int IMG_BASE_W2_BIAS          = 'h3A000;
+  localparam int IMG_BASE_LN0_GAMMA        = 'h42000;
+  localparam int IMG_BASE_LN1_GAMMA        = 'h42400;
+  localparam int IMG_BASE_LN0_EPS          = 'h42C00;
+  localparam int IMG_BASE_LN1_EPS          = 'h42C40;
+
   typedef enum logic [2:0] {
     AXI_IDLE,
     AXI_WRITE_ADDR,
@@ -858,6 +882,33 @@ module top_module_hls_tb;
 
   function automatic [63:0] ctrl_base_addr64(input int lo_idx, input int hi_idx);
     ctrl_base_addr64 = {ctrl_words[hi_idx], ctrl_words[lo_idx]};
+  endfunction
+
+  function automatic [31:0] load_image_word(input int unsigned addr);
+    begin
+      if ((addr + 3) < 'h43000) begin
+        load_image_word = {ddr_image_bytes[addr + 3],
+                           ddr_image_bytes[addr + 2],
+                           ddr_image_bytes[addr + 1],
+                           ddr_image_bytes[addr + 0]};
+      end else begin
+        load_image_word = 32'h0000_0000;
+      end
+    end
+  endfunction
+
+  function automatic int ctrl_prog_word_idx(input int step);
+    begin
+      if (step >= 0 && step <= 23) begin
+        ctrl_prog_word_idx = step + 3;
+      end else if (step >= 24 && step <= 63) begin
+        ctrl_prog_word_idx = step + 4;
+      end else if (step == 64) begin
+        ctrl_prog_word_idx = CTRLW_IRQ_MASK;
+      end else begin
+        ctrl_prog_word_idx = CTRLW_IRQ_MASK;
+      end
+    end
   endfunction
 
   function automatic bit in_range64(
@@ -2071,142 +2122,10 @@ module top_module_hls_tb;
         CTRL_PROGRAM_BASES: begin
           ctrl_write_en <= 1'b1;
           ctrl_chip_en  <= 1'b1;
-          case (base_assign_step)
-            0:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_DMA_LAYER_LEN);  ctrl_data_in <= 32'h0000_0100; end
-            1:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_DMA_HEAD_LEN);   ctrl_data_in <= 32'h0000_0040; end
-            2:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_DMA_TILE_LEN);   ctrl_data_in <= 32'h0000_0020; end
-            3:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_LAYER_STRIDE);   ctrl_data_in <= 32'h0000_1000; end
-            4:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_HEAD_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            5:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_HEAD_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            6:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_HEAD_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            7:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_K_CACHE_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            8:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_V_CACHE_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            9:  begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_TILE_STRIDE); ctrl_data_in <= 32'h0000_0020; end
-            10: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_TILE_STRIDE); ctrl_data_in <= 32'h0000_0040; end
-            11: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_TILE_STRIDE); ctrl_data_in <= 32'h0000_0020; end
-            12: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BIAS_HEAD_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            13: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BIAS_HEAD_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            14: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BIAS_HEAD_STRIDE); ctrl_data_in <= 32'h0000_0100; end
-            15: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BIAS_TILE_STRIDE); ctrl_data_in <= 32'h0000_0020; end
-            16: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BIAS_TILE_STRIDE); ctrl_data_in <= 32'h0000_0040; end
-            17: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BIAS_TILE_STRIDE); ctrl_data_in <= 32'h0000_0020; end
-            18: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_GAMMA_STRIDE); ctrl_data_in <= 32'h0000_0004; end
-            19: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_GAMMA_STRIDE); ctrl_data_in <= 32'h0000_0004; end
-            20: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_GAMMA_STRIDE); ctrl_data_in <= 32'h0000_0004; end
-            21: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_STRIDE); ctrl_data_in <= 32'h0000_0004; end
-            22: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_STRIDE); ctrl_data_in <= 32'h0000_0004; end
-            23: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_STRIDE); ctrl_data_in <= 32'h0000_0004; end
-            24: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BASE_LO);      ctrl_data_in <= BASE_WQ[31:0]; end
-            25: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BASE_HI);      ctrl_data_in <= BASE_WQ[63:32]; end
-            26: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BASE_LO);      ctrl_data_in <= BASE_WK[31:0]; end
-            27: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BASE_HI);      ctrl_data_in <= BASE_WK[63:32]; end
-            28: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BASE_LO);      ctrl_data_in <= BASE_WV[31:0]; end
-            29: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BASE_HI);      ctrl_data_in <= BASE_WV[63:32]; end
-            30: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BASE_LO);      ctrl_data_in <= BASE_WO[31:0]; end
-            31: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BASE_HI);      ctrl_data_in <= BASE_WO[63:32]; end
-            32: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BASE_LO);      ctrl_data_in <= BASE_W1[31:0]; end
-            33: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BASE_HI);      ctrl_data_in <= BASE_W1[63:32]; end
-            34: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BASE_LO);      ctrl_data_in <= BASE_W2[31:0]; end
-            35: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BASE_HI);      ctrl_data_in <= BASE_W2[63:32]; end
-            36: begin ctrl_addr <= ctrl_mem_addr(CTRLW_K_CACHE_LO);      ctrl_data_in <= BASE_K_CACHE[31:0]; end
-            37: begin ctrl_addr <= ctrl_mem_addr(CTRLW_K_CACHE_HI);      ctrl_data_in <= BASE_K_CACHE[63:32]; end
-            38: begin ctrl_addr <= ctrl_mem_addr(CTRLW_V_CACHE_LO);      ctrl_data_in <= BASE_V_CACHE[31:0]; end
-            39: begin ctrl_addr <= ctrl_mem_addr(CTRLW_V_CACHE_HI);      ctrl_data_in <= BASE_V_CACHE[63:32]; end
-            40: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BIAS_BASE_LO); ctrl_data_in <= BASE_WQ_BIAS[31:0]; end
-            41: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WQ_BIAS_BASE_HI); ctrl_data_in <= BASE_WQ_BIAS[63:32]; end
-            42: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BIAS_BASE_LO); ctrl_data_in <= BASE_WK_BIAS[31:0]; end
-            43: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WK_BIAS_BASE_HI); ctrl_data_in <= BASE_WK_BIAS[63:32]; end
-            44: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BIAS_BASE_LO); ctrl_data_in <= BASE_WV_BIAS[31:0]; end
-            45: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WV_BIAS_BASE_HI); ctrl_data_in <= BASE_WV_BIAS[63:32]; end
-            46: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BIAS_BASE_LO); ctrl_data_in <= BASE_WO_BIAS[31:0]; end
-            47: begin ctrl_addr <= ctrl_mem_addr(CTRLW_WO_BIAS_BASE_HI); ctrl_data_in <= BASE_WO_BIAS[63:32]; end
-            48: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BIAS_BASE_LO); ctrl_data_in <= BASE_W1_BIAS[31:0]; end
-            49: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W1_BIAS_BASE_HI); ctrl_data_in <= BASE_W1_BIAS[63:32]; end
-            50: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BIAS_BASE_LO); ctrl_data_in <= BASE_W2_BIAS[31:0]; end
-            51: begin ctrl_addr <= ctrl_mem_addr(CTRLW_W2_BIAS_BASE_HI); ctrl_data_in <= BASE_W2_BIAS[63:32]; end
-            52: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_GAMMA_BASE_LO); ctrl_data_in <= BASE_LN0_GAMMA[31:0]; end
-            53: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_GAMMA_BASE_HI); ctrl_data_in <= BASE_LN0_GAMMA[63:32]; end
-            54: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_GAMMA_BASE_LO); ctrl_data_in <= BASE_LN1_GAMMA[31:0]; end
-            55: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_GAMMA_BASE_HI); ctrl_data_in <= BASE_LN1_GAMMA[63:32]; end
-            56: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_GAMMA_BASE_LO); ctrl_data_in <= BASE_FINAL_NORM_GAMMA[31:0]; end
-            57: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_GAMMA_BASE_HI); ctrl_data_in <= BASE_FINAL_NORM_GAMMA[63:32]; end
-            58: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_BASE_LO); ctrl_data_in <= BASE_LN0_EPS[31:0]; end
-            59: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN0_EPS_BASE_HI); ctrl_data_in <= BASE_LN0_EPS[63:32]; end
-            60: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_BASE_LO); ctrl_data_in <= BASE_LN1_EPS[31:0]; end
-            61: begin ctrl_addr <= ctrl_mem_addr(CTRLW_LN1_EPS_BASE_HI); ctrl_data_in <= BASE_LN1_EPS[63:32]; end
-            62: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_LO); ctrl_data_in <= BASE_FINAL_NORM_EPS[31:0]; end
-            63: begin ctrl_addr <= ctrl_mem_addr(CTRLW_FINAL_NORM_EPS_BASE_HI); ctrl_data_in <= BASE_FINAL_NORM_EPS[63:32]; end
-            64: begin ctrl_addr <= ctrl_mem_addr(CTRLW_IRQ_MASK);        ctrl_data_in <= 32'h0000_0006; end
-            default: begin ctrl_addr <= ctrl_mem_addr(CTRLW_IRQ_MASK);   ctrl_data_in <= 32'h0000_0006; end
-          endcase
-          case (base_assign_step)
-            0: ctrl_words[CTRLW_DMA_LAYER_LEN] <= 32'h0000_0100;
-            1: ctrl_words[CTRLW_DMA_HEAD_LEN] <= 32'h0000_0040;
-            2: ctrl_words[CTRLW_DMA_TILE_LEN] <= 32'h0000_0020;
-            3: ctrl_words[CTRLW_LAYER_STRIDE] <= 32'h0000_1000;
-            4: ctrl_words[CTRLW_WQ_HEAD_STRIDE] <= 32'h0000_0100;
-            5: ctrl_words[CTRLW_WK_HEAD_STRIDE] <= 32'h0000_0100;
-            6: ctrl_words[CTRLW_WV_HEAD_STRIDE] <= 32'h0000_0100;
-            7: ctrl_words[CTRLW_K_CACHE_STRIDE] <= 32'h0000_0100;
-            8: ctrl_words[CTRLW_V_CACHE_STRIDE] <= 32'h0000_0100;
-            9: ctrl_words[CTRLW_WO_TILE_STRIDE] <= 32'h0000_0020;
-            10: ctrl_words[CTRLW_W1_TILE_STRIDE] <= 32'h0000_0040;
-            11: ctrl_words[CTRLW_W2_TILE_STRIDE] <= 32'h0000_0020;
-            12: ctrl_words[CTRLW_WQ_BIAS_HEAD_STRIDE] <= 32'h0000_0100;
-            13: ctrl_words[CTRLW_WK_BIAS_HEAD_STRIDE] <= 32'h0000_0100;
-            14: ctrl_words[CTRLW_WV_BIAS_HEAD_STRIDE] <= 32'h0000_0100;
-            15: ctrl_words[CTRLW_WO_BIAS_TILE_STRIDE] <= 32'h0000_0020;
-            16: ctrl_words[CTRLW_W1_BIAS_TILE_STRIDE] <= 32'h0000_0040;
-            17: ctrl_words[CTRLW_W2_BIAS_TILE_STRIDE] <= 32'h0000_0020;
-            18: ctrl_words[CTRLW_LN0_GAMMA_STRIDE] <= 32'h0000_0004;
-            19: ctrl_words[CTRLW_LN1_GAMMA_STRIDE] <= 32'h0000_0004;
-            20: ctrl_words[CTRLW_FINAL_NORM_GAMMA_STRIDE] <= 32'h0000_0004;
-            21: ctrl_words[CTRLW_LN0_EPS_STRIDE] <= 32'h0000_0004;
-            22: ctrl_words[CTRLW_LN1_EPS_STRIDE] <= 32'h0000_0004;
-            23: ctrl_words[CTRLW_FINAL_NORM_EPS_STRIDE] <= 32'h0000_0004;
-            24: ctrl_words[CTRLW_WQ_BASE_LO] <= BASE_WQ[31:0];
-            25: ctrl_words[CTRLW_WQ_BASE_HI] <= BASE_WQ[63:32];
-            26: ctrl_words[CTRLW_WK_BASE_LO] <= BASE_WK[31:0];
-            27: ctrl_words[CTRLW_WK_BASE_HI] <= BASE_WK[63:32];
-            28: ctrl_words[CTRLW_WV_BASE_LO] <= BASE_WV[31:0];
-            29: ctrl_words[CTRLW_WV_BASE_HI] <= BASE_WV[63:32];
-            30: ctrl_words[CTRLW_WO_BASE_LO] <= BASE_WO[31:0];
-            31: ctrl_words[CTRLW_WO_BASE_HI] <= BASE_WO[63:32];
-            32: ctrl_words[CTRLW_W1_BASE_LO] <= BASE_W1[31:0];
-            33: ctrl_words[CTRLW_W1_BASE_HI] <= BASE_W1[63:32];
-            34: ctrl_words[CTRLW_W2_BASE_LO] <= BASE_W2[31:0];
-            35: ctrl_words[CTRLW_W2_BASE_HI] <= BASE_W2[63:32];
-            36: ctrl_words[CTRLW_K_CACHE_LO] <= BASE_K_CACHE[31:0];
-            37: ctrl_words[CTRLW_K_CACHE_HI] <= BASE_K_CACHE[63:32];
-            38: ctrl_words[CTRLW_V_CACHE_LO] <= BASE_V_CACHE[31:0];
-            39: ctrl_words[CTRLW_V_CACHE_HI] <= BASE_V_CACHE[63:32];
-            40: ctrl_words[CTRLW_WQ_BIAS_BASE_LO] <= BASE_WQ_BIAS[31:0];
-            41: ctrl_words[CTRLW_WQ_BIAS_BASE_HI] <= BASE_WQ_BIAS[63:32];
-            42: ctrl_words[CTRLW_WK_BIAS_BASE_LO] <= BASE_WK_BIAS[31:0];
-            43: ctrl_words[CTRLW_WK_BIAS_BASE_HI] <= BASE_WK_BIAS[63:32];
-            44: ctrl_words[CTRLW_WV_BIAS_BASE_LO] <= BASE_WV_BIAS[31:0];
-            45: ctrl_words[CTRLW_WV_BIAS_BASE_HI] <= BASE_WV_BIAS[63:32];
-            46: ctrl_words[CTRLW_WO_BIAS_BASE_LO] <= BASE_WO_BIAS[31:0];
-            47: ctrl_words[CTRLW_WO_BIAS_BASE_HI] <= BASE_WO_BIAS[63:32];
-            48: ctrl_words[CTRLW_W1_BIAS_BASE_LO] <= BASE_W1_BIAS[31:0];
-            49: ctrl_words[CTRLW_W1_BIAS_BASE_HI] <= BASE_W1_BIAS[63:32];
-            50: ctrl_words[CTRLW_W2_BIAS_BASE_LO] <= BASE_W2_BIAS[31:0];
-            51: ctrl_words[CTRLW_W2_BIAS_BASE_HI] <= BASE_W2_BIAS[63:32];
-            52: ctrl_words[CTRLW_LN0_GAMMA_BASE_LO] <= BASE_LN0_GAMMA[31:0];
-            53: ctrl_words[CTRLW_LN0_GAMMA_BASE_HI] <= BASE_LN0_GAMMA[63:32];
-            54: ctrl_words[CTRLW_LN1_GAMMA_BASE_LO] <= BASE_LN1_GAMMA[31:0];
-            55: ctrl_words[CTRLW_LN1_GAMMA_BASE_HI] <= BASE_LN1_GAMMA[63:32];
-            56: ctrl_words[CTRLW_FINAL_NORM_GAMMA_BASE_LO] <= BASE_FINAL_NORM_GAMMA[31:0];
-            57: ctrl_words[CTRLW_FINAL_NORM_GAMMA_BASE_HI] <= BASE_FINAL_NORM_GAMMA[63:32];
-            58: ctrl_words[CTRLW_LN0_EPS_BASE_LO] <= BASE_LN0_EPS[31:0];
-            59: ctrl_words[CTRLW_LN0_EPS_BASE_HI] <= BASE_LN0_EPS[63:32];
-            60: ctrl_words[CTRLW_LN1_EPS_BASE_LO] <= BASE_LN1_EPS[31:0];
-            61: ctrl_words[CTRLW_LN1_EPS_BASE_HI] <= BASE_LN1_EPS[63:32];
-            62: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_LO] <= BASE_FINAL_NORM_EPS[31:0];
-            63: ctrl_words[CTRLW_FINAL_NORM_EPS_BASE_HI] <= BASE_FINAL_NORM_EPS[63:32];
-            64: ctrl_words[CTRLW_IRQ_MASK] <= 32'h0000_0006;
-            default: ctrl_words[CTRLW_IRQ_MASK] <= 32'h0000_0006;
-          endcase
+          prog_word_idx = ctrl_prog_word_idx(base_assign_step);
+          ctrl_addr <= ctrl_mem_addr(prog_word_idx);
+          ctrl_data_in <= ctrl_init_words[prog_word_idx];
+          ctrl_words[prog_word_idx] <= ctrl_init_words[prog_word_idx];
           if (base_assign_step >= 64) begin
             // IMPORTANT: program ctrl_mem.control START before ap_start so HLS kernel
             // snapshots control args with START already high.
@@ -2359,10 +2278,15 @@ module top_module_hls_tb;
     ctrl_chip_en       = 1'b0;
 
     for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
-      stream_in_mem[i] = 8'(8'h10 + i[7:0]);
+      stream_in_mem[i] = 8'h00;
+      stream_in_file_bytes[i] = 8'h00;
     end
     for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
       ctrl_words[i] = 32'h0000_0000;
+      ctrl_init_words[i] = 32'h0000_0000;
+    end
+    for (i = 0; i < (CTRL_MEM_WORDS*4); i = i + 1) begin
+      ctrl_mem_file_bytes[i] = 8'h00;
     end
     for (i = 0; i < DBG_CTRL_MEM_WORDS; i = i + 1) begin
       dbg_ctrl_words[i] = 32'h0000_0000;
@@ -2374,24 +2298,65 @@ module top_module_hls_tb;
       dma_rx_mem[i] = 32'h0000_0000;
       dma_tx_mem[i] = 32'h0000_0000;
     end
+    for (i = 0; i < 'h43000; i = i + 1) begin
+      ddr_image_bytes[i] = 8'h00;
+    end
+
+    file_fd = $fopen("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/ctrl_mem.bin", "rb");
+    if (file_fd == 0) begin
+      $fatal(1, "Failed to open ctrl_mem.bin");
+    end
+    bytes_read = $fread(ctrl_mem_file_bytes, file_fd);
+    $fclose(file_fd);
+    if (bytes_read <= 0) begin
+      $fatal(1, "Failed to read ctrl_mem.bin");
+    end
+    for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
+      ctrl_init_words[i] = {ctrl_mem_file_bytes[(i*4)+3],
+                            ctrl_mem_file_bytes[(i*4)+2],
+                            ctrl_mem_file_bytes[(i*4)+1],
+                            ctrl_mem_file_bytes[(i*4)+0]};
+    end
+
+    file_fd = $fopen("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/stream_in.bin", "rb");
+    if (file_fd == 0) begin
+      $fatal(1, "Failed to open stream_in.bin");
+    end
+    bytes_read = $fread(stream_in_file_bytes, file_fd);
+    $fclose(file_fd);
+    if (bytes_read <= 0) begin
+      $fatal(1, "Failed to read stream_in.bin");
+    end
+    for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
+      stream_in_mem[i] = stream_in_file_bytes[i];
+    end
+
+    file_fd = $fopen("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/ddr_image.bin", "rb");
+    if (file_fd == 0) begin
+      $fatal(1, "Failed to open ddr_image.bin");
+    end
+    bytes_read = $fread(ddr_image_bytes, file_fd);
+    $fclose(file_fd);
+    if (bytes_read <= 0) begin
+      $fatal(1, "Failed to read ddr_image.bin");
+    end
     for (i = 0; i < RAM_REGION_WORDS; i = i + 1) begin
-      wq_ram[i] = 32'hA100_0000 + i;
-      wk_ram[i] = 32'hA200_0000 + i;
-      wv_ram[i] = 32'hA300_0000 + i;
-      wo_ram[i] = 32'hA400_0000 + i;
-      w1_ram[i] = 32'hA500_0000 + i;
-      w2_ram[i] = 32'hA600_0000 + i;
-      wq_bias_ram[i] = 32'h0000_0100 + i;
-      wk_bias_ram[i] = 32'h0000_0200 + i;
-      wv_bias_ram[i] = 32'h0000_0300 + i;
-      wo_bias_ram[i] = 32'h0000_0400 + i;
-      w1_bias_ram[i] = 32'h0000_0500 + i;
-      w2_bias_ram[i] = 32'h0000_0600 + i;
-      // Give LN gamma vectors a visible ramp so per-element AXI reads are easy to inspect.
-      ln0_gamma_ram[i] = 32'h0000_2000 + i;
-      ln1_gamma_ram[i] = 32'h0000_2100 + i;
-      ln0_eps_ram[i] = 32'h0000_0001;
-      ln1_eps_ram[i] = 32'h0000_0001;
+      wq_ram[i] = load_image_word(IMG_BASE_WQ + (i * 4));
+      wk_ram[i] = load_image_word(IMG_BASE_WK + (i * 4));
+      wv_ram[i] = load_image_word(IMG_BASE_WV + (i * 4));
+      wo_ram[i] = load_image_word(IMG_BASE_WO + (i * 4));
+      w1_ram[i] = load_image_word(IMG_BASE_W1 + (i * 4));
+      w2_ram[i] = load_image_word(IMG_BASE_W2 + (i * 4));
+      wq_bias_ram[i] = load_image_word(IMG_BASE_WQ_BIAS + (i * 4));
+      wk_bias_ram[i] = load_image_word(IMG_BASE_WK_BIAS + (i * 4));
+      wv_bias_ram[i] = load_image_word(IMG_BASE_WV_BIAS + (i * 4));
+      wo_bias_ram[i] = load_image_word(IMG_BASE_WO_BIAS + (i * 4));
+      w1_bias_ram[i] = load_image_word(IMG_BASE_W1_BIAS + (i * 4));
+      w2_bias_ram[i] = load_image_word(IMG_BASE_W2_BIAS + (i * 4));
+      ln0_gamma_ram[i] = load_image_word(IMG_BASE_LN0_GAMMA + (i * 4));
+      ln1_gamma_ram[i] = load_image_word(IMG_BASE_LN1_GAMMA + (i * 4));
+      ln0_eps_ram[i] = load_image_word(IMG_BASE_LN0_EPS + (i * 4));
+      ln1_eps_ram[i] = load_image_word(IMG_BASE_LN1_EPS + (i * 4));
     end
     for (i = 0; i < KV_STORE_WORDS; i = i + 1) begin
       k_cache_store[i] = 32'h0000_0000;

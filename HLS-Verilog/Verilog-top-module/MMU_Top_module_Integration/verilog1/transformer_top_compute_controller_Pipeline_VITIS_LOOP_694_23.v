@@ -24,12 +24,12 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_694_23 (
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1363,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1364,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1365,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_668,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_669,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_670,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_671,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_672,
-        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_673,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_600,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_601,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_602,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_603,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_604,
+        p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_605,
         thr_or18,
         thr_or19,
         thr_or20,
@@ -130,12 +130,12 @@ input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_Stat
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1363;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1364;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1365;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_668;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_669;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_670;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_671;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_672;
-input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_673;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_600;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_601;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_602;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_603;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_604;
+input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_605;
 input  [18:0] thr_or18;
 input  [18:0] thr_or19;
 input  [18:0] thr_or20;
@@ -257,14 +257,14 @@ wire   [0:0] icmp_ln694_fu_430_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [7:0] tmp_70_fu_446_p35;
+wire   [7:0] tmp_76_fu_446_p35;
 wire   [3:0] trunc_ln694_fu_442_p1;
 reg   [4:0] i_fu_226;
 wire   [4:0] add_ln694_fu_436_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_i_70;
-wire   [7:0] tmp_70_fu_446_p33;
-wire   [3:0] tmp_70_fu_446_p34;
+wire   [7:0] tmp_76_fu_446_p33;
+wire   [3:0] tmp_76_fu_446_p34;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -273,22 +273,22 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [3:0] tmp_70_fu_446_p1;
-wire   [3:0] tmp_70_fu_446_p3;
-wire   [3:0] tmp_70_fu_446_p5;
-wire   [3:0] tmp_70_fu_446_p7;
-wire   [3:0] tmp_70_fu_446_p9;
-wire   [3:0] tmp_70_fu_446_p11;
-wire   [3:0] tmp_70_fu_446_p13;
-wire   [3:0] tmp_70_fu_446_p15;
-wire  signed [3:0] tmp_70_fu_446_p17;
-wire  signed [3:0] tmp_70_fu_446_p19;
-wire  signed [3:0] tmp_70_fu_446_p21;
-wire  signed [3:0] tmp_70_fu_446_p23;
-wire  signed [3:0] tmp_70_fu_446_p25;
-wire  signed [3:0] tmp_70_fu_446_p27;
-wire  signed [3:0] tmp_70_fu_446_p29;
-wire  signed [3:0] tmp_70_fu_446_p31;
+wire   [3:0] tmp_76_fu_446_p1;
+wire   [3:0] tmp_76_fu_446_p3;
+wire   [3:0] tmp_76_fu_446_p5;
+wire   [3:0] tmp_76_fu_446_p7;
+wire   [3:0] tmp_76_fu_446_p9;
+wire   [3:0] tmp_76_fu_446_p11;
+wire   [3:0] tmp_76_fu_446_p13;
+wire   [3:0] tmp_76_fu_446_p15;
+wire  signed [3:0] tmp_76_fu_446_p17;
+wire  signed [3:0] tmp_76_fu_446_p19;
+wire  signed [3:0] tmp_76_fu_446_p21;
+wire  signed [3:0] tmp_76_fu_446_p23;
+wire  signed [3:0] tmp_76_fu_446_p25;
+wire  signed [3:0] tmp_76_fu_446_p27;
+wire  signed [3:0] tmp_76_fu_446_p29;
+wire  signed [3:0] tmp_76_fu_446_p31;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -347,15 +347,15 @@ sparsemux_33_4_8_1_1_U951(
     .din7(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1363),
     .din8(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1364),
     .din9(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1365),
-    .din10(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_668),
-    .din11(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_669),
-    .din12(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_670),
-    .din13(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_671),
-    .din14(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_672),
-    .din15(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_673),
-    .def(tmp_70_fu_446_p33),
-    .sel(tmp_70_fu_446_p34),
-    .dout(tmp_70_fu_446_p35)
+    .din10(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_600),
+    .din11(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_601),
+    .din12(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_602),
+    .din13(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_603),
+    .din14(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_604),
+    .din15(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_605),
+    .def(tmp_76_fu_446_p33),
+    .sel(tmp_76_fu_446_p34),
+    .dout(tmp_76_fu_446_p35)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -732,25 +732,25 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_30 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_31 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_32 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_33 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_34 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_35 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_36 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_37 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_38 = tmp_76_fu_446_p35;
 
-assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39 = tmp_70_fu_446_p35;
+assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_39 = tmp_76_fu_446_p35;
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_76 = thr_or26;
 
@@ -778,17 +778,17 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_11 = thr_or27;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48 = tmp_70_fu_446_p35;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_48 = tmp_76_fu_446_p35;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49 = tmp_70_fu_446_p35;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_49 = tmp_76_fu_446_p35;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50 = tmp_70_fu_446_p35;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_50 = tmp_76_fu_446_p35;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51 = tmp_70_fu_446_p35;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_51 = tmp_76_fu_446_p35;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52 = tmp_70_fu_446_p35;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_52 = tmp_76_fu_446_p35;
 
-assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53 = tmp_70_fu_446_p35;
+assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_53 = tmp_76_fu_446_p35;
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_6 = thr_or16;
 
@@ -798,9 +798,9 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_9 = thr_or29;
 
-assign tmp_70_fu_446_p33 = 'bx;
+assign tmp_76_fu_446_p33 = 'bx;
 
-assign tmp_70_fu_446_p34 = ap_sig_allocacmp_i_70[3:0];
+assign tmp_76_fu_446_p34 = ap_sig_allocacmp_i_70[3:0];
 
 assign trunc_ln694_fu_442_p1 = ap_sig_allocacmp_i_70[3:0];
 
