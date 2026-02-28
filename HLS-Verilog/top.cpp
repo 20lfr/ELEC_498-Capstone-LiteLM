@@ -1,12 +1,14 @@
 #include "top.hpp"
 #include "MMU/mmu_luka.hpp"
 
+// C-sim helper: access the local testbench DMA staging buffer as byte-addressable storage.
 static inline uint8_t dma_buf_get_byte_u32(const uint32_t *buf, uint32_t byte_idx) {
     const uint32_t word = buf[byte_idx / static_cast<uint32_t>(sizeof(uint32_t))];
     const uint32_t shift = (byte_idx % static_cast<uint32_t>(sizeof(uint32_t))) << 3;
     return static_cast<uint8_t>((word >> shift) & 0xFFu);
 }
 
+// C-sim helper: write a single byte into the local testbench DMA staging buffer.
 static inline void dma_buf_set_byte_u32(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
     const uint32_t word_idx = byte_idx / static_cast<uint32_t>(sizeof(uint32_t));
     const uint32_t shift = (byte_idx % static_cast<uint32_t>(sizeof(uint32_t))) << 3;
@@ -16,12 +18,14 @@ static inline void dma_buf_set_byte_u32(uint32_t *buf, uint32_t byte_idx, uint8_
     buf[word_idx] = word;
 }
 
+// Shared helper: extract one byte lane from an AXI-Full word.
 static inline uint8_t gmem_get_byte(const axi_gmem_word_t &word, uint32_t lane) {
     const uint32_t hi = ((lane + 1u) * 8u) - 1u;
     const uint32_t lo = lane * 8u;
     return static_cast<uint8_t>(word.range(hi, lo));
 }
 
+// Shared helper: overwrite one byte lane inside an AXI-Full word.
 static inline void gmem_set_byte(axi_gmem_word_t &word, uint32_t lane, uint8_t value) {
     const uint32_t hi = ((lane + 1u) * 8u) - 1u;
     const uint32_t lo = lane * 8u;
@@ -29,6 +33,8 @@ static inline void gmem_set_byte(axi_gmem_word_t &word, uint32_t lane, uint8_t v
 }
 
 #ifndef __SYNTHESIS__
+// C-sim helper: translate large programmed DDR addresses into compact offsets inside the
+// shared testbench DDR image so software simulation can use a small backing array.
 static inline uint64_t map_csim_ddr_addr(uint64_t byte_addr, const ControlMemSpace &ctrl_mem) {
     struct RegionMap {
         uint64_t base;
