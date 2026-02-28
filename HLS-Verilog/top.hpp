@@ -1,23 +1,28 @@
 #pragma once
 #include <cstdint>
+#include <hls_stream.h>
+#include <ap_axi_sdata.h>
 #include "top_params.hpp"
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
 // IRQ_Wizard functionality now integrated into ControlMemInterface
 // #include "Weight_Loader-Stager/Weight_stager.hpp"
-#include "Transformer_logic/src-hls/compute_controller.hpp"
-#include "Transformer_logic/src-hls/headed_compute_controller.hpp"
+#include "Compute_Controller_Logic/src-hls/compute_controller.hpp"
+#include "Compute_Controller_Logic/src-hls/headed_compute_controller.hpp"
+#include "MMU/mmu_luka.hpp"
 
+constexpr int TOP_DMA_BUF_BYTES = 65536;
+constexpr int TOP_DMA_BUF_WORDS = TOP_DMA_BUF_BYTES / AXI_GMEM_WORD_BYTES;
+static_assert((TOP_DMA_BUF_BYTES % AXI_GMEM_WORD_BYTES) == 0, "TOP_DMA_BUF_BYTES must be word-aligned");
+static_assert(static_cast<int>(sizeof(axi_gmem_word_t)) == AXI_GMEM_WORD_BYTES,
+              "axi_gmem_word_t width must match AXI_GMEM_WORD_BYTES");
+using axis8_t = ap_axiu<8, 0, 0, 0>;
 
 // Top-level wrapper prototype
 void transformer_top(
-    bool axis_in_valid,                 // [INPUT]  s_axis_in_tvalid
-    bool axis_in_last,                  // [INPUT]  s_axis_in_tlast
-    bool &axis_in_ready,                // [OUTPUT] s_axis_in_tready
-
-    bool stream_ready,                  // [INPUT]  Stream-out engine is idle & ready to start
-    bool &stream_start,                 // [OUTPUT] Tell stream-out module to begin streaming
-    bool stream_done,                   // [INPUT]  Stream-out finished entire sequence     
+    hls::stream<axis8_t> &s_axis_in,    // [INPUT]  AXI4-Stream ingress
+    hls::stream<axis8_t> &m_axis_out,   // [OUTPUT] AXI4-Stream egress
+    volatile axi_gmem_word_t *ddr_mem,  // [BOTH]   AXI4-Full external memory
     ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interfaceo
     StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
     bool &irq_ps,                       // [OUTPUT] Interrupt signal
@@ -26,32 +31,10 @@ void transformer_top(
         TEMPORARY OUTPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
     */
 
-    // ------------------------------------------------------------
-    // Memory Management System (WEIGHT LOADER via DMA)
-    // ------------------------------------------------------------
-    bool        dma_done,               // [INPUT]  DMA transfer completed (single-cycle pulse)
-    bool        wl_ready,               // [INPUT]  Weight loader ready for a new request
-    uint32_t    &wl_instruction,        // [OUTPUT] Packed dma op|layer|head|tile
-    bool        &wl_start,              // [OUTPUT] Start weight load request
-
-    // Compute Controller communication signals
-    bool        mem_transfer_done,      // [INPUT] Memory manager transfer complete
-    bool        &mem_read_request,      // [OUTPUT] Request memory manager read
-    bool        &mem_write_request,     // [OUTPUT] Request memory manager write
-    uint32_t    &mem_op,                // [OUTPUT] Opcode for memory manager
-    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[compute_buf::OUT_BUF_BYTES],
-
-    // ------------------------------------------------------------
-    // COMPUTE CORE (MAC ARRAY + PIPELINE)
-    // ------------------------------------------------------------
-    const uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
-    uint8_t       head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
-    HeadCtx (&head_ctx_ref)[NUM_HEADS], // [BOTH]   Per-head context (in/out)
-    ComputeHeadCtx  (&head_compute_ctx)[HEADS_PARALLEL],
-
     // Debug (scheduler)
     SchedState  &dbg_state,
+    HeadCtx (&dbg_head_ctx_ref)[HEADS_PARALLEL],         // [OUTPUT] Debug mirror: active-lane scheduler context
+    ComputeHeadCtx  (&dbg_head_compute_ctx)[HEADS_PARALLEL], // [OUTPUT] Debug mirror: per-lane headed compute context
     ControlMemSpace &dbg_ctrl_mem,
     uint32_t &control_reg,
     uint32_t &irq_status_reg,
@@ -86,6 +69,26 @@ void transformer_top(
     bool     &dbg_mac_complete,
     bool     &dbg_ctrl_reset_asserted,
     int      &dbg_head_group_idx,
+    bool     &dbg_wl_ready,
+    uint32_t &dbg_wl_instruction,
+    bool     &dbg_wl_start,
+    bool     &dbg_wl_accept,
+    bool     &dbg_dma_done,
+    bool     &dbg_mem_transfer_done,
+    bool     &dbg_mem_read_request,
+    bool     &dbg_mem_write_request,
+    uint32_t &dbg_mem_op,
+    uint8_t  dbg_in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t  dbg_out_buf[compute_buf::OUT_BUF_BYTES],
+    uint8_t  dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
+    uint8_t  dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
+    uint8_t  dbg_stream_in_buf[STREAM_IN_BUF_BYTES],
 
-    bool &dbg_done
+    bool &dbg_error,
+    uint32_t &dbg_error_code,
+    bool &dbg_done,
+    bool &dbg_axis_is_empty,
+    bool &dbg_axis_in_ready_wire,
+    bool &dbg_axis_in_last_wire,
+    uint32_t &dbg_stream_in_counter
 );

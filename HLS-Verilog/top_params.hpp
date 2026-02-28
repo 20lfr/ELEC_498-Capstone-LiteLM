@@ -141,20 +141,32 @@ constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
 
 // Params used in architecture
-constexpr int NUM_HEADS = 4;
-constexpr int NUM_LAYERS = 4;
-constexpr int D_MODEL = 16; // Number of heads processed in parallel
-constexpr int D_FFN = 24;   // Feed-Forward hidden layer size
-constexpr int D_HEADS =
-    D_MODEL / NUM_HEADS; // Number of heads processed in parallel
-constexpr int D_TILE_WO = D_MODEL / NUM_WO_TILES;   // Tile size for WO
-constexpr int D_TILE_W1 = D_FFN * 2 / NUM_W1_TILES; // Tile size for W1
-constexpr int D_TILE_W2 = D_MODEL / NUM_W2_TILES;
-constexpr int CONTEXT_LENGTH = 16;  // Context window length
-constexpr int MAX_CYCLIC_SIZE = 16; // << for UNROLL parallelism in MAC units
-constexpr int HEADS_PARALLEL = 2;
-constexpr int NUM_HEAD_GROUPS =
-    (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
+constexpr int       NUM_HEADS       = 4;
+constexpr int       NUM_LAYERS      = 4;
+constexpr int       D_MODEL         = 16;                           // Number of heads processed in parallel
+constexpr int       D_FFN           = 24;                           // Feed-Forward hidden layer size
+constexpr int       D_HEADS         = D_MODEL / NUM_HEADS;          // Number of heads processed in parallel
+constexpr int       D_TILE_WO       = D_MODEL / NUM_WO_TILES;       // Tile size for WO
+constexpr int       D_TILE_W1       = D_FFN * 2 / NUM_W1_TILES;     // Tile size for W1
+constexpr int       D_TILE_W2       = D_MODEL   / NUM_W2_TILES;
+constexpr int       STREAM_IN_BUF_BYTES  = D_MODEL;                 // Token ingress payload (int8 activations)
+constexpr int       STREAM_OUT_BUF_BYTES = D_MODEL * 4;             // Streamed egress payload (e.g. final norm int32)
+
+// AXI-Full DDR beat sizing (one m_axi_gmem data beat).
+// Keep this aligned with the top-level DDR port element type.
+constexpr int       AXI_GMEM_WORD_BYTES  = 4;
+constexpr int       AXI_GMEM_WORD_BITS   = AXI_GMEM_WORD_BYTES * 8;
+static_assert((AXI_GMEM_WORD_BITS % 8) == 0, "AXI_GMEM_WORD_BITS must be byte aligned");
+using axi_gmem_word_t = ap_uint<AXI_GMEM_WORD_BITS>;
+constexpr int       CONTEXT_LENGTH  = 16;                           // Context window length
+constexpr int       MAX_CYCLIC_SIZE = 16;                           // << for UNROLL parallelism in MAC units
+constexpr int       HEADS_PARALLEL  = 2;
+constexpr int       NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
+
+// MMU LN parameter source selection:
+//   true  -> MMU hardcodes LN0 gamma/eps for bring-up
+//   false -> MMU requires LN0 gamma/eps to exist in URAM regions
+constexpr bool MMU_USE_HARDCODED_LN_PARAMS = false;
 
 // ---------------------------------------------------------------------------
 // Requant configuration (compile-time)
@@ -184,20 +196,16 @@ enum SchedState {
     S_STREAM_IN,       // 1
     S_LAYER_COUNT,     // 2
     S_LAYER_NORM_0,    // 3
-    S_REQUANT1,        // 4
-    S_ATTENTION_HEADS, // 5
-    S_HEAD_CONCAT,     // 6
-    S_OUT_PROJECTION,  // 7
-    S_REQUANT2,        // 8
-    S_RES_ADD_1,       // 9
-    S_LAYER_NORM_1,    // 10
-    S_REQUANT3,        // 11
-    S_FFN,             // 12
-    S_REQUANT4,        // 13
-    S_RES_ADD_2,       // 14
-    S_LOOP_CHECK,      // 15
-    S_FINAL_NORM,      // 16
-    S_STREAM_OUT       // 17
+    S_ATTENTION_HEADS, // 4
+    S_HEAD_CONCAT,     // 5
+    S_OUT_PROJECTION,  // 6
+    S_RES_ADD_1,       // 7
+    S_LAYER_NORM_1,    // 8
+    S_FFN,             // 9
+    S_RES_ADD_2,       // 10
+    S_LOOP_CHECK,      // 11
+    S_FINAL_NORM,      // 12
+    S_STREAM_OUT       // 13
 };
 // ------------------------------------------------------------
 // Headed Attention and FSM enums
@@ -206,18 +214,15 @@ enum class HeadPhase : uint8_t {
     IDLE = 0,          // 0
     Q,                 // 1
     K,                 // 2
-    K_REQUANT,         // 3
-    K_WRITEBACK,       // 4
-    V,                 // 5
-    V_REQUANT,         // 6
-    V_WRITEBACK,       // 7
-    REQUANT_Q,         // 8
-    ATT_SCORES,        // 9
-    VALUE_SCALE_CLAMP, // 10
-    ATT_SOFTMAX,       // 11
-    ATT_VALUE,         // 12
-    HEAD_REQUANT,      // 13
-    DONE               // 14
+    K_WRITEBACK,       // 3
+    V,                 // 4
+    V_WRITEBACK,       // 5
+    ATT_SCORES,        // 6
+    VALUE_SCALE_CLAMP, // 7
+    ATT_SOFTMAX,       // 8
+    ATT_VALUE,         // 9
+    HEAD_REQUANT,      // 10
+    DONE               // 11
 };
 
 enum ComputeOp : uint8_t {
@@ -239,37 +244,37 @@ enum ComputeOp : uint8_t {
     CMP_ATT_VALUE = 12,   // 10
 
     // Scheduler-level ops
-    CMP_HEAD_REQUANT = 13,
-    CMP_CONCAT = 14,     // 13
-    CMP_OUT_PROJ = 15,   // 14
-    CMP_RESID0 = 16,     // 16
-    CMP_REQUANT2 = 17,   // 18
-    CMP_FFN_W1 = 18,     // 19
-    CMP_FFN_ACT = 19,    // 20
-    CMP_FFN_W2 = 20,     // 21
-    CMP_REQUANT3 = 21,   // 22
-    CMP_RESID1 = 22,     // 23
-    CMP_LN1 = 23,        // 24
-    CMP_REQUANT4 = 24,   // 25
-    CMP_FINAL_NORM = 25, // 26
-    CMP_DEQUANT = 26,    // 26
-    CMP_LOGITS = 27,     // 27
+    CMP_HEAD_REQUANT = 13, 
+    CMP_CONCAT       = 14, // 13
+    CMP_OUT_PROJ     = 15, // 14
+    CMP_RESID1       = 16, // 16
+    CMP_REQUANT2     = 17, // 18
+    CMP_FFN_W1       = 18, // 19
+    CMP_FFN_ACT      = 19, // 20
+    CMP_FFN_W2       = 20, // 21
+    CMP_REQUANT3     = 21, // 22
+    CMP_RESID2       = 22, // 23
+    CMP_LN1          = 23, // 24
+    CMP_REQUANT4     = 24, // 25
+    CMP_FINAL_NORM   = 25, // 26
 };
 
 enum DmaSel : uint8_t {
-    DMASEL_NONE = 0, // 0
-    DMASEL_WQ,       // 1
-    DMASEL_WK,       // 2
-    DMASEL_K_WRITE,  // 3
-    DMASEL_WV,       // 4
-    DMASEL_V_WRITE,  // 5
-    DMASEL_CTX_K,    // 6
-    DMASEL_CTX_V,    // 7
-    DMASEL_WO,       // 8
-    DMASEL_W1,       // 9
-    DMASEL_W2,       // 10
-    DMASEL_WLOGIT,   // 11
-    DMASEL_CONCAT    // 12
+    DMASEL_NONE = 0,    // 0
+    DMASEL_WQ,          // 1
+    DMASEL_WK,          // 2
+    DMASEL_K_WRITE,     // 3
+    DMASEL_WV,          // 4
+    DMASEL_V_WRITE,     // 5
+    DMASEL_CTX_K,       // 6
+    DMASEL_CTX_V,       // 7
+    DMASEL_WO,          // 8
+    DMASEL_W1,          // 9
+    DMASEL_W2,          // 10
+    DMASEL_WLOGIT,      // 11
+    DMASEL_CONCAT,      // 12
+    DMASEL_LN0,         // 13
+    DMASEL_LN1          // 14
 };
 
 enum class ComputeErrorCodes { IncorrectRequest, InvalidComputationForamt };
@@ -286,34 +291,29 @@ struct HeadCtx {
     DmaSel last_wl_addr = DmaSel::DMASEL_NONE; // Tracks last issued WL request
                                                // for dma_done attribution
 
-    bool wl_ready = false;       // INPUT FROM WL
-    bool wl_start = false;       // OUTPUT signal for head
-    uint32_t wl_instruction = 0; // OUTPUT packed DMA op|layer|head|tile
-    bool dma_done = false;       // INPUT FROM AXI-FULL
+    bool    wl_ready    = false;                  // INPUT FROM WL/MMU
+    bool    wl_accept   = false;                  // INPUT FROM MMU: request captured
+    bool    wl_start    = false;                  // OUTPUT signal for head
+    uint32_t wl_instruction = 0;                  // OUTPUT packed DMA op|layer|head|tile
+    bool    dma_done    = false;                  // INPUT FROM AXI-FULL/MMU
 
     bool start_head = false;
 
     // Per-head bookkeeping for started phases
-    bool q_started = false;
-    bool k_started = false;
-    bool k_requant_started = false;
+    bool q_started          = false;
+    bool k_started          = false;
     bool k_writeback_started = false;
-    bool v_started = false;
-    bool v_requant_started = false;
+    bool v_started          = false;
     bool v_writeback_started = false;
-    bool requant_q_started = false;
     bool att_scores_started = false;
     bool val_scale_started = false;
     bool softmax_started = false;
     bool att_value_started = false;
     bool head_requant_started = false;
 
-    bool q_compute_done = false;
-    bool k_compute_done = false;
-    bool k_requant_compute_done = false;
-    bool v_compute_done = false;
-    bool v_requant_compute_done = false;
-    bool requant_q_compute_done = false;
+    bool q_compute_done          = false;
+    bool k_compute_done          = false;
+    bool v_compute_done          = false;
     bool att_scores_compute_done = false;
     bool val_scale_compute_done = false;
     bool softmax_compute_done = false;
@@ -352,6 +352,117 @@ struct PendingRequest {
     uint8_t tile_idx = 0;
 };
 
+
+// ------------------------------------------------------------
+// Control + IRQ bitfields
+// ------------------------------------------------------------
+// Bit positions: bit0 = reset_n, bit1 = start
+constexpr uint32_t CTRL_RESETN_BIT      = 1u << 0;
+constexpr uint32_t CTRL_START_BIT       = 1u << 1;
+
+// IRQ Bits
+constexpr uint32_t IRQ_ERROR_BIT        = 1u << 1;
+constexpr uint32_t IRQ_INFER_DONE_BIT   = 1u << 2;
+
+// Status bits
+constexpr uint32_t STATUS_IDLE          = 1u << 0;
+constexpr uint32_t STATUS_ERROR         = 1u << 1;
+constexpr uint32_t STATUS_BUSY_BIT      = 1u << 2;
+
+// Error Codes
+constexpr uint32_t ERR_NONE             = 0;
+constexpr uint32_t ERR_DMA_ALIGNMENT    = 1;
+constexpr uint32_t ERR_DMA_ZERO_LEN     = 2;
+constexpr uint32_t ERR_DMA_ZERO_STRIDE  = 4;
+constexpr uint32_t ERR_SCHEDULER_ERROR  = 8;
+constexpr uint32_t ERR_COMPUTE_ERROR    = 16;
+constexpr uint32_t ERR_MMU_INVALID      = 32;
+constexpr uint32_t ERR_MMU_OVERFLOW     = 64;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_DMA                = 128;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED  = 256;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED = 512;
+constexpr uint32_t ERR_MMU_BAD_DMA_PLAN    = 2048;
+constexpr uint32_t ERR_MMU_BAD_DMA_ADDR    = 4096;
+constexpr uint32_t ERR_MMU_REGION_ACCESS   = 8192;
+constexpr uint32_t ERR_MMU_CONCAT_SOURCE   = 16384;
+constexpr uint32_t ERR_MMU_WRITEBACK_SRC   = 32768;
+constexpr uint32_t ERR_MMU_QUEUE_OVERFLOW  = 65536;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW = 131072; // legacy/general
+constexpr uint32_t ERR_MMU_STREAM_OUTPUT_MISSING = 262144;
+constexpr uint32_t ERR_MMU_MISSING_REGION_FULL_READ         = 524288;
+constexpr uint32_t ERR_MMU_MISSING_REGION_PARTIAL_READ      = 1048576;
+constexpr uint32_t ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP = 2097152;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_STREAM_IN         = 4194304;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_CONCAT        = 8388608;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_STORE         = 16777216;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE     = 33554432;
+constexpr uint32_t ERR_MMU_REGION_TABLE_FULL                 = 67108864;
+constexpr uint32_t ERR_MMU_URAM_CHUNK_ALLOC_FAIL             = 134217728;
+constexpr uint32_t ERR_MMU_REGION_TOO_LARGE                  = 268435456;
+
+// MMU detailed subcodes (for richer debug than bitmask error_code alone)
+constexpr uint32_t MMU_ERR_SUBCODE_NONE                              = 0;
+constexpr uint32_t MMU_ERR_SUBCODE_UNSUPPORTED_REQ_DMA               = 1;
+constexpr uint32_t MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_HEADED    = 2;
+constexpr uint32_t MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_NONHEADED = 3;
+constexpr uint32_t MMU_ERR_SUBCODE_BAD_DMA_PLAN                      = 4;
+constexpr uint32_t MMU_ERR_SUBCODE_BAD_DMA_ADDR                      = 5;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_ACCESS                     = 6;
+constexpr uint32_t MMU_ERR_SUBCODE_CONCAT_SOURCE                     = 7;
+constexpr uint32_t MMU_ERR_SUBCODE_WRITEBACK_SRC                     = 8;
+constexpr uint32_t MMU_ERR_SUBCODE_QUEUE_OVERFLOW                    = 9;
+constexpr uint32_t MMU_ERR_SUBCODE_STREAM_OUTPUT_MISSING             = 10;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_REGION_FULL_READ          = 11;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_REGION_PARTIAL_READ       = 12;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_REGION_COMPUTE_READ_PREP  = 13;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_STREAM_IN         = 14;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_CONCAT        = 15;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_STORE         = 16;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_COMPUTE_WRITE     = 17;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_TABLE_FULL                 = 18;
+constexpr uint32_t MMU_ERR_SUBCODE_URAM_CHUNK_ALLOC_FAIL             = 19;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_TOO_LARGE                  = 20;
+constexpr uint32_t MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC           = 21;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN           = 100;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_OUT                   = 101;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WQ_W                      = 102;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WQ_B                      = 103;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WK_W                      = 104;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WK_B                      = 105;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WV_W                      = 106;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WV_B                      = 107;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_Q_OUT                     = 108;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_CTX_K                     = 109;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT            = 110;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_VALUE_SCALE_OUT           = 111;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_SOFTMAX_OUT               = 112;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_CTX_V                     = 113;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_ATT_VALUE_OUT             = 114;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_HEAD_REQUANT_PACKED       = 115;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_CONCAT_OUT                = 116;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WO_W                      = 117;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_WO_B                      = 118;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED           = 119;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_RESID0_OUT                = 120;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_OUT                   = 121;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W1_W                      = 122;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W1_B                      = 123;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_FFN_W1_PACKED             = 124;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_FFN_ACT_OUT               = 125;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W2_W                      = 126;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_W2_B                      = 127;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED             = 128;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_RESID1_OUT                = 129;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_GAMMA                 = 130;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_EPS                   = 131;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_GAMMA                 = 132;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_EPS                   = 133;
+
+
+
+// Register Addr mapping is auto generated in a HLS project
+// `mask_allowed/hel/impl/ip/drivers/<top_function>/src/x<top_function>_hw.h`
+
 // Config (PS Writes -> PL Reads)
 // Passed by value
 // NOTE: All offsets and strides are in BYTES (matching AXI byte-addressing).
@@ -362,6 +473,11 @@ struct ControlMemSpace {
     uint32_t irq_mask =
         0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
+
+    // DMA sizing fields used by the current control/test harness.
+    uint32_t dma_layer_len = 0;
+    uint32_t dma_head_len = 0;
+    uint32_t dma_tile_len = 0;
 
     uint32_t layer_stride = 0;
     uint32_t wq_head_stride = 0;
@@ -375,6 +491,23 @@ struct ControlMemSpace {
     uint32_t w1_tile_stride = 0;
     uint32_t w2_tile_stride = 0;
 
+    // Optional dedicated bias strides (if biases are not packed right after
+    // weights).
+    uint32_t wq_bias_head_stride = 0;
+    uint32_t wk_bias_head_stride = 0;
+    uint32_t wv_bias_head_stride = 0;
+    uint32_t wo_bias_tile_stride = 0;
+    uint32_t w1_bias_tile_stride = 0;
+    uint32_t w2_bias_tile_stride = 0;
+
+    // Optional LN/RMS parameter strides (per-layer tables).
+    uint32_t ln0_gamma_stride = 0;
+    uint32_t ln1_gamma_stride = 0;
+    uint32_t final_norm_gamma_stride = 0;
+    uint32_t ln0_eps_stride = 0;
+    uint32_t ln1_eps_stride = 0;
+    uint32_t final_norm_eps_stride = 0;
+
     // Word offsets relative to AXI Full base (set by PS)
     // wq=0, wk=size(wq), wv=size(wq)+size(wk), ...
     uint32_t wq_offset = 0;
@@ -385,6 +518,20 @@ struct ControlMemSpace {
     uint32_t w2_offset = 0;
     uint32_t k_cache_offset = 0;
     uint32_t v_cache_offset = 0;
+
+    // Dedicated offset tables for bias and norm parameters.
+    uint32_t wq_bias_offset = 0;
+    uint32_t wk_bias_offset = 0;
+    uint32_t wv_bias_offset = 0;
+    uint32_t wo_bias_offset = 0;
+    uint32_t w1_bias_offset = 0;
+    uint32_t w2_bias_offset = 0;
+    uint32_t ln0_gamma_offset = 0;
+    uint32_t ln1_gamma_offset = 0;
+    uint32_t final_norm_gamma_offset = 0;
+    uint32_t ln0_eps_offset = 0;
+    uint32_t ln1_eps_offset = 0;
+    uint32_t final_norm_eps_offset = 0;
 
     uint32_t logit_scale_qv = 0;
     uint32_t scale_q = 0;
@@ -401,6 +548,7 @@ struct StatusMemSpace {
     uint32_t status = PLRegBits::STAT_IDLE_BIT;
     uint32_t irq_status = 0;
     uint32_t error_code = PLRegBits::ERR_NONE_BIT;
+    uint32_t mmu_error_subcode = MMU_ERR_SUBCODE_NONE;
     uint32_t layer_index = 0;
     // Testing registers
     uint32_t head_index = 0;
@@ -722,12 +870,11 @@ namespace head_buf {
 
     using OutDType = BufDType;
 
-    constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
-    constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
-    constexpr int QKV_B_NIBBLES = D_HEADS;
-    constexpr int QKV_B_BYTES = compute_buf::div_ceil(QKV_B_NIBBLES, 2);
-    constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
-    constexpr int QKV_OUT_BYTES = D_HEADS;
+constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
+constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
+constexpr int QKV_B_BYTES = D_HEADS * 4;
+constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
+constexpr int QKV_OUT_BYTES = D_HEADS;
 
     constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4);
     constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;

@@ -17,14 +17,14 @@ int main() {
     mem.w1_tile_stride  = 0x0700;
     mem.w2_tile_stride  = 0x0800;
 
-    mem.wq_base_addr    = 0x10000000;
-    mem.wk_base_addr    = 0x20000000;
-    mem.wv_base_addr    = 0x30000000;
-    mem.k_cache_addr    = 0x40000000;
-    mem.v_cache_addr    = 0x50000000;
-    mem.wo_base_addr    = 0x60000000;
-    mem.w1_base_addr    = 0x70000000;
-    mem.w2_base_addr    = 0x80000000;
+    mem.wq_offset       = 0x10000000;
+    mem.wk_offset       = 0x20000000;
+    mem.wv_offset       = 0x30000000;
+    mem.k_cache_offset  = 0x40000000;
+    mem.v_cache_offset  = 0x50000000;
+    mem.wo_offset       = 0x60000000;
+    mem.w1_offset       = 0x70000000;
+    mem.w2_offset       = 0x80000000;
 
     struct Stim {
         int cycle;

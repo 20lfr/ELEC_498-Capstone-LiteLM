@@ -231,13 +231,13 @@ module transformer_top_tb;
   localparam int CMP_LN0        = 8'h01;
   localparam int CMP_REQUANT1   = 8'h02;
   localparam int CMP_OUT_PROJ   = 8'h0F;
-  localparam int CMP_RESID0     = 8'h10;
+  localparam int CMP_RESID1     = 8'h10;
   localparam int CMP_REQUANT2   = 8'h11;
   localparam int CMP_FFN_W1     = 8'h12;
   localparam int CMP_FFN_ACT    = 8'h13;
   localparam int CMP_FFN_W2     = 8'h14;
   localparam int CMP_REQUANT3   = 8'h15;
-  localparam int CMP_RESID1     = 8'h16;
+  localparam int CMP_RESID2     = 8'h16;
   localparam int CMP_LN1        = 8'h17;
   localparam int CMP_REQUANT4   = 8'h18;
   localparam int CMP_FINAL_NORM = 8'h19;
@@ -677,13 +677,13 @@ module transformer_top_tb;
                 write_i32_to_in_buf(REQUANT_N_OFFSET, rq4_N + layer_off);
                 write_i32_to_in_buf(REQUANT_Z_OFFSET, rq4_Z + layer_off);
               end
-              CMP_RESID0: begin
+              CMP_RESID1: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
                   in_buf_mem[RESID_X_OFFSET + j] = resid0_x[j] + layer_off;
                   in_buf_mem[RESID_R_OFFSET + j] = resid0_r[j] + layer_off;
                 end
               end
-              CMP_RESID1: begin
+              CMP_RESID2: begin
                 for (j = 0; j < D_MODEL; j = j + 1) begin
                   in_buf_mem[RESID_X_OFFSET + j] = resid1_x[j] + layer_off;
                   in_buf_mem[RESID_R_OFFSET + j] = resid1_r[j] + layer_off;
@@ -790,12 +790,12 @@ module transformer_top_tb;
                   rq4_out[t] <= out_buf_mem[t];
                 end
               end
-              CMP_RESID0: begin
+              CMP_RESID1: begin
                 for (t = 0; t < D_MODEL; t = t + 1) begin
                   resid0_out[t] <= out_buf_mem[t];
                 end
               end
-              CMP_RESID1: begin
+              CMP_RESID2: begin
                 for (t = 0; t < D_MODEL; t = t + 1) begin
                   resid1_out[t] <= out_buf_mem[t];
                 end
@@ -1436,20 +1436,16 @@ module transformer_top_tb;
       32'd1:  return "S_STREAM_IN";
       32'd2:  return "S_LAYER_COUNT";
       32'd3:  return "S_LAYER_NORM_0";
-      32'd4:  return "S_REQUANT1";
-      32'd5:  return "S_ATTENTION_HEADS";
-      32'd6:  return "S_HEAD_CONCAT";
-      32'd7:  return "S_OUT_PROJECTION";
-      32'd8:  return "S_REQUANT2";
-      32'd9:  return "S_RES_ADD_1";
-      32'd10: return "S_LAYER_NORM_1";
-      32'd11: return "S_REQUANT3";
-      32'd12: return "S_FFN";
-      32'd13: return "S_REQUANT4";
-      32'd14: return "S_RES_ADD_2";
-      32'd15: return "S_LOOP_CHECK";
-      32'd16: return "S_FINAL_NORM";
-      32'd17: return "S_STREAM_OUT";
+      32'd4:  return "S_ATTENTION_HEADS";
+      32'd5:  return "S_HEAD_CONCAT";
+      32'd6:  return "S_OUT_PROJECTION";
+      32'd7:  return "S_RES_ADD_1";
+      32'd8:  return "S_LAYER_NORM_1";
+      32'd9:  return "S_FFN";
+      32'd10: return "S_RES_ADD_2";
+      32'd11: return "S_LOOP_CHECK";
+      32'd12: return "S_FINAL_NORM";
+      32'd13: return "S_STREAM_OUT";
       default: return "UNKNOWN";
     endcase
   endfunction

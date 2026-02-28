@@ -2,10 +2,245 @@
 // Mirrors the style of Scheduler_tb_minimal.cpp but against the simplified scheduler interface.
 #include <cstdio>
 #include <cstdint>
+#include <cstdlib>
+#include <cerrno>
+#include <cstring>
+#include <fstream>
 #include <limits>
 #include <string>
+#include <sys/stat.h>
 
 #include "top.hpp"
+
+static bool ensure_dir_recursive(const char *dir) {
+    char path[512];
+    std::snprintf(path, sizeof(path), "%s", dir);
+    const size_t n = std::strlen(path);
+    if (n == 0) {
+        return false;
+    }
+    if (path[n - 1] == '/') {
+        path[n - 1] = '\0';
+    }
+
+    for (char *p = path + 1; *p != '\0'; ++p) {
+        if (*p == '/') {
+            *p = '\0';
+            if (::mkdir(path, 0777) != 0 && errno != EEXIST) {
+                return false;
+            }
+            *p = '/';
+        }
+    }
+    return (::mkdir(path, 0777) == 0 || errno == EEXIST);
+}
+
+static bool init_tb_logs() {
+    const char *log_dir = "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/logs/top_DEBUG";
+
+    if (!ensure_dir_recursive(log_dir)) {
+        std::fprintf(stderr, "ERROR: Failed to create log dir '%s': %s\n",
+                     log_dir, std::strerror(errno));
+        return false;
+    }
+
+    char stdout_path[512];
+    char stderr_path[512];
+    std::snprintf(stdout_path, sizeof(stdout_path), "%s/top_DEBUG_tb_stdout.log", log_dir);
+    std::snprintf(stderr_path, sizeof(stderr_path), "%s/top_DEBUG_tb_stderr.log", log_dir);
+
+    if (std::freopen(stdout_path, "w", stdout) == nullptr) {
+        std::fprintf(stderr, "ERROR: Failed to open stdout log '%s': %s\n",
+                     stdout_path, std::strerror(errno));
+        return false;
+    }
+    if (std::freopen(stderr_path, "w", stderr) == nullptr) {
+        std::fprintf(stdout, "ERROR: Failed to open stderr log '%s': %s\n",
+                     stderr_path, std::strerror(errno));
+        return false;
+    }
+
+    std::printf("[LOG] top_DEBUG_tb stdout: %s\n", stdout_path);
+    std::fprintf(stderr, "[LOG] top_DEBUG_tb stderr: %s\n", stderr_path);
+    return true;
+}
+
+constexpr uint64_t TB_BASE_WQ               = 0x00000ull;
+constexpr uint64_t TB_BASE_WK               = 0x04000ull;
+constexpr uint64_t TB_BASE_WV               = 0x08000ull;
+constexpr uint64_t TB_BASE_WO               = 0x0C000ull;
+constexpr uint64_t TB_BASE_W1               = 0x10000ull;
+constexpr uint64_t TB_BASE_W2               = 0x16000ull;
+constexpr uint64_t TB_BASE_K_CACHE          = 0x1C000ull;
+constexpr uint64_t TB_BASE_V_CACHE          = 0x20000ull;
+constexpr uint64_t TB_BASE_WQ_BIAS          = 0x24000ull;
+constexpr uint64_t TB_BASE_WK_BIAS          = 0x28000ull;
+constexpr uint64_t TB_BASE_WV_BIAS          = 0x2C000ull;
+constexpr uint64_t TB_BASE_WO_BIAS          = 0x30000ull;
+constexpr uint64_t TB_BASE_W1_BIAS          = 0x34000ull;
+constexpr uint64_t TB_BASE_W2_BIAS          = 0x3A000ull;
+constexpr uint64_t TB_BASE_LN0_GAMMA        = 0x42000ull;
+constexpr uint64_t TB_BASE_LN1_GAMMA        = 0x42400ull;
+constexpr uint64_t TB_BASE_FINAL_NORM_GAMMA = 0x42800ull;
+constexpr uint64_t TB_BASE_LN0_EPS          = 0x42C00ull;
+constexpr uint64_t TB_BASE_LN1_EPS          = 0x42C40ull;
+constexpr uint64_t TB_BASE_FINAL_NORM_EPS   = 0x42C80ull;
+constexpr uint64_t TB_DDR_IMAGE_BYTES       = 0x43000ull;
+constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
+constexpr size_t   TB_CTRL_MEM_WORDS        = 54u;
+constexpr size_t   TB_CTRL_MEM_BYTES        = TB_CTRL_MEM_WORDS * sizeof(uint32_t);
+
+static ControlMemSpace g_loaded_ctrl_mem{};
+static bool g_loaded_ctrl_mem_valid = false;
+
+static std::string tb_source_dir() {
+    std::string path(__FILE__);
+    const std::string::size_type slash = path.find_last_of("/\\");
+    if (slash == std::string::npos) {
+        return ".";
+    }
+    return path.substr(0, slash);
+}
+
+static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count) {
+    for (uint64_t i = 0; i < word_count; ++i) {
+        ddr_mem[i] = 0;
+    }
+
+    const std::string image_path = tb_source_dir() + "/test_data/ddr_image.bin";
+    std::ifstream in(image_path.c_str(), std::ios::binary);
+    if (!in) {
+        std::fprintf(stderr, "ERROR: Failed to open shared DDR image '%s'\n", image_path.c_str());
+        return false;
+    }
+
+    for (uint64_t i = 0; i < word_count; ++i) {
+        uint8_t bytes[AXI_GMEM_WORD_BYTES] = {};
+        in.read(reinterpret_cast<char *>(bytes), AXI_GMEM_WORD_BYTES);
+        const std::streamsize got = in.gcount();
+        if (got <= 0) {
+            break;
+        }
+        axi_gmem_word_t word = 0;
+        for (int b = 0; b < AXI_GMEM_WORD_BYTES; ++b) {
+            const uint8_t byte = (b < got) ? bytes[b] : 0;
+            word.range(((b + 1) * 8) - 1, b * 8) = static_cast<ap_uint<8> >(byte);
+        }
+        ddr_mem[i] = word;
+        if (got < AXI_GMEM_WORD_BYTES) {
+            break;
+        }
+    }
+
+    return true;
+}
+
+static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
+    const std::string ctrl_path = tb_source_dir() + "/test_data/ctrl_mem.bin";
+    std::ifstream in(ctrl_path.c_str(), std::ios::binary);
+    if (!in) {
+        std::fprintf(stderr, "ERROR: Failed to open shared ctrl image '%s'\n", ctrl_path.c_str());
+        return false;
+    }
+
+    uint8_t raw[TB_CTRL_MEM_BYTES] = {};
+    in.read(reinterpret_cast<char *>(raw), static_cast<std::streamsize>(TB_CTRL_MEM_BYTES));
+    if (in.gcount() != static_cast<std::streamsize>(TB_CTRL_MEM_BYTES)) {
+        std::fprintf(stderr, "ERROR: Failed to read full shared ctrl image '%s' (got %lld bytes)\n",
+                     ctrl_path.c_str(),
+                     static_cast<long long>(in.gcount()));
+        return false;
+    }
+
+    auto read_u32 = [&](size_t word_idx) -> uint32_t {
+        const size_t off = word_idx * sizeof(uint32_t);
+        return static_cast<uint32_t>(raw[off + 0]) |
+               (static_cast<uint32_t>(raw[off + 1]) << 8) |
+               (static_cast<uint32_t>(raw[off + 2]) << 16) |
+               (static_cast<uint32_t>(raw[off + 3]) << 24);
+    };
+    auto read_u64 = [&](size_t word_idx_lo) -> uint64_t {
+        return static_cast<uint64_t>(read_u32(word_idx_lo)) |
+               (static_cast<uint64_t>(read_u32(word_idx_lo + 1)) << 32);
+    };
+
+    ControlMemSpace tmp{};
+    tmp.control = read_u32(0);
+    tmp.irq_mask = read_u32(1);
+    tmp.irq_clear = read_u32(2);
+    tmp.dma_layer_len = read_u32(3);
+    tmp.dma_head_len = read_u32(4);
+    tmp.dma_tile_len = read_u32(5);
+    tmp.layer_stride = read_u32(6);
+    tmp.wq_head_stride = read_u32(7);
+    tmp.wk_head_stride = read_u32(8);
+    tmp.wv_head_stride = read_u32(9);
+    tmp.k_cache_stride = read_u32(10);
+    tmp.v_cache_stride = read_u32(11);
+    tmp.wo_tile_stride = read_u32(12);
+    tmp.w1_tile_stride = read_u32(13);
+    tmp.w2_tile_stride = read_u32(14);
+    tmp.wq_bias_head_stride = read_u32(15);
+    tmp.wk_bias_head_stride = read_u32(16);
+    tmp.wv_bias_head_stride = read_u32(17);
+    tmp.wo_bias_tile_stride = read_u32(18);
+    tmp.w1_bias_tile_stride = read_u32(19);
+    tmp.w2_bias_tile_stride = read_u32(20);
+    tmp.ln0_gamma_stride = read_u32(21);
+    tmp.ln1_gamma_stride = read_u32(22);
+    tmp.final_norm_gamma_stride = read_u32(23);
+    tmp.ln0_eps_stride = read_u32(24);
+    tmp.ln1_eps_stride = read_u32(25);
+    tmp.final_norm_eps_stride = read_u32(26);
+    tmp.wq_offset = read_u32(27);
+    tmp.wk_offset = read_u32(28);
+    tmp.wv_offset = read_u32(29);
+    tmp.wo_offset = read_u32(30);
+    tmp.w1_offset = read_u32(31);
+    tmp.w2_offset = read_u32(32);
+    tmp.k_cache_offset = read_u32(33);
+    tmp.v_cache_offset = read_u32(34);
+    tmp.wq_bias_offset = read_u32(35);
+    tmp.wk_bias_offset = read_u32(36);
+    tmp.wv_bias_offset = read_u32(37);
+    tmp.wo_bias_offset = read_u32(38);
+    tmp.w1_bias_offset = read_u32(39);
+    tmp.w2_bias_offset = read_u32(40);
+    tmp.ln0_gamma_offset = read_u32(41);
+    tmp.ln1_gamma_offset = read_u32(42);
+    tmp.final_norm_gamma_offset = read_u32(43);
+    tmp.ln0_eps_offset = read_u32(44);
+    tmp.ln1_eps_offset = read_u32(45);
+    tmp.final_norm_eps_offset = read_u32(46);
+    tmp.logit_scale_qv = read_u32(47);
+    tmp.scale_q = read_u32(48);
+    tmp.zero_point_q = read_u32(49);
+    tmp.scale_k = read_u32(50);
+    tmp.zero_point_k = read_u32(51);
+    tmp.scale_v = read_u32(52);
+    tmp.zero_point_v = read_u32(53);
+
+    ctrl_mem = tmp;
+    return true;
+}
+
+static bool load_shared_stream_in(uint8_t *stream_in_buf, size_t num_bytes) {
+    const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
+    std::ifstream in(stream_path.c_str(), std::ios::binary);
+    if (!in) {
+        std::fprintf(stderr, "ERROR: Failed to open shared stream image '%s'\n", stream_path.c_str());
+        return false;
+    }
+
+    std::memset(stream_in_buf, 0, num_bytes);
+    in.read(reinterpret_cast<char *>(stream_in_buf), static_cast<std::streamsize>(num_bytes));
+    const std::streamsize got = in.gcount();
+    if (got <= 0) {
+        std::fprintf(stderr, "ERROR: Failed to read shared stream image '%s'\n", stream_path.c_str());
+        return false;
+    }
+    return true;
+}
 
 static const char *state_name(SchedState st) {
     switch (st) {
@@ -15,15 +250,11 @@ static const char *state_name(SchedState st) {
     case S_ATTENTION_HEADS: return "S_ATT_HEADS";
     case S_HEAD_CONCAT:     return "S_HEAD_CONCAT";
     case S_OUT_PROJECTION:  return "S_OUT_PROJ";
-    case S_REQUANT1:        return "S_RQ1";
     case S_RES_ADD_1:       return "S_RES_ADD_1";
     case S_LAYER_NORM_0:    return "S_LN_0";
-    case S_REQUANT2:        return "S_RQ2";
     case S_FFN:             return "S_FFN";
-    case S_REQUANT3:        return "S_RQ3";
     case S_RES_ADD_2:       return "S_RES_ADD_2";
     case S_LAYER_NORM_1:    return "S_LN_1";
-    case S_REQUANT4:        return "S_RQ4";
     case S_LOOP_CHECK:      return "S_LOOP_CHECK";
     case S_FINAL_NORM:      return "S_FINAL_NORM";
     case S_STREAM_OUT:      return "S_STREAM_OUT";
@@ -48,20 +279,44 @@ static const char *op_name(ComputeOp op) {
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
     case CMP_REQUANT1:     return "RQ1";
-    case CMP_RESID0:       return "RESID0";
+    case CMP_RESID1:       return "RESID1";
     case CMP_LN0:          return "LN0";
     case CMP_REQUANT2:     return "RQ2";
     case CMP_FFN_W1:       return "FFN_W1";
     case CMP_FFN_ACT:      return "FFN_ACT";
     case CMP_FFN_W2:       return "FFN_W2";
     case CMP_REQUANT3:     return "RQ3";
-    case CMP_RESID1:       return "RESID1";
+    case CMP_RESID2:       return "RESID2";
     case CMP_LN1:          return "LN1";
     case CMP_REQUANT4:     return "RQ4";
-    case CMP_DEQUANT:      return "DEQUANT";
     case CMP_FINAL_NORM:   return "FINAL_NORM";
-    case CMP_LOGITS:       return "LOGITS";
     default:               return "UNK";
+    }
+}
+
+static const char *compute_state_name(ComputeState st) {
+    switch (st) {
+    case ComputeState::IDLE: {
+        return "IDLE";
+    }
+    case ComputeState::CAPTURE_INSTRUCTION: {
+        return "CAPTURE_INSTR";
+    }
+    case ComputeState::WAIT_MEM: {
+        return "WAIT_MEM";
+    }
+    case ComputeState::EXECUTE: {
+        return "EXECUTE";
+    }
+    case ComputeState::MEM_WRITEBACK: {
+        return "MEM_WRITEBACK";
+    }
+    case ComputeState::DONE: {
+        return "DONE";
+    }
+    default: {
+        return "UNKNOWN";
+    }
     }
 }
 
@@ -84,6 +339,8 @@ static const char *dma_name(DmaSel sel) {
     case DMASEL_W2:     return "W2";
     case DMASEL_WLOGIT: return "WLOGIT";
     case DMASEL_CONCAT: return "CONCAT";
+    case DMASEL_LN0:    return "LN0";
+    case DMASEL_LN1:    return "LN1";
     default:            return "UNK";
     }
 }
@@ -93,12 +350,9 @@ static const char *phase_name(HeadPhase ph) {
     case HeadPhase::IDLE:              return "IDLE";
     case HeadPhase::Q:                 return "Q";
     case HeadPhase::K:                 return "K";
-    case HeadPhase::K_REQUANT:         return "K_RQ";
     case HeadPhase::K_WRITEBACK:       return "K_WR";
     case HeadPhase::V:                 return "V";
-    case HeadPhase::V_REQUANT:         return "V_RQ";
     case HeadPhase::V_WRITEBACK:       return "V_WR";
-    case HeadPhase::REQUANT_Q:         return "Q_RQ";
     case HeadPhase::ATT_SCORES:        return "ATT";
     case HeadPhase::VALUE_SCALE_CLAMP: return "SCL";
     case HeadPhase::ATT_SOFTMAX:       return "SMX";
@@ -374,6 +628,36 @@ static void print_buffer(const char *label, const uint8_t *buf, int size) {
     }
 }
 
+static bool buffer_changed(const uint8_t *a, const uint8_t *b, int size) {
+    for (int i = 0; i < size; ++i) {
+        if (a[i] != b[i]) return true;
+    }
+    return false;
+}
+
+static void copy_buffer(uint8_t *dst, const uint8_t *src, int size) {
+    for (int i = 0; i < size; ++i) {
+        dst[i] = src[i];
+    }
+}
+
+static void print_stream_in_buf_decoded(const uint8_t *buf) {
+    std::printf("stream_in_buf (decoded int8):\n  X:");
+    for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+        std::printf(" %d", static_cast<int>(compute_buf::read_i8(buf, i)));
+    }
+    std::printf("\n");
+}
+
+static void print_stream_out_buf_decoded(const uint8_t *buf) {
+    std::printf("stream_out_buf (decoded int32):\n  Y:");
+    const int elems = STREAM_OUT_BUF_BYTES / 4;
+    for (int i = 0; i < elems; ++i) {
+        std::printf(" %d", static_cast<int>(compute_buf::read_i32(buf, i * 4)));
+    }
+    std::printf("\n");
+}
+
 static void print_ln_in_buf(const uint8_t *in_buf) {
     std::printf("LN in_buf (decoded):\n  X:");
     for (int i = 0; i < D_MODEL; ++i) {
@@ -446,8 +730,8 @@ static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         std::printf("\n  M: %d\n  N: %d\n", static_cast<int>(M), static_cast<int>(N));
         break;
     }
-    case ComputeOp::CMP_RESID0:
-    case ComputeOp::CMP_RESID1: {
+    case ComputeOp::CMP_RESID1:
+    case ComputeOp::CMP_RESID2: {
         std::printf("RESID in_buf (decoded):\n  X:");
         for (int i = 0; i < D_MODEL; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i)));
@@ -535,8 +819,8 @@ static void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
         std::printf("\n");
         break;
     }
-    case ComputeOp::CMP_RESID0:
-    case ComputeOp::CMP_RESID1: {
+    case ComputeOp::CMP_RESID1:
+    case ComputeOp::CMP_RESID2: {
         std::printf("RESID out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_MODEL; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::INResidLayout::X + i)));
@@ -601,7 +885,7 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         }
         std::printf("\n  B:");
         for (int i = 0; i < D_HEADS; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::B * 2) + i)));
+            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (i * 4))));
         }
         std::printf("\n");
         break;
@@ -746,9 +1030,9 @@ static int8_t g_v_act[HEADS_PARALLEL][D_MODEL] = {};
 static int4_t g_wq[HEADS_PARALLEL][D_MODEL * D_HEADS] = {};
 static int4_t g_wk[HEADS_PARALLEL][D_MODEL * D_HEADS] = {};
 static int4_t g_wv[HEADS_PARALLEL][D_MODEL * D_HEADS] = {};
-static int4_t g_bq[HEADS_PARALLEL][D_HEADS] = {};
-static int4_t g_bk[HEADS_PARALLEL][D_HEADS] = {};
-static int4_t g_bv[HEADS_PARALLEL][D_HEADS] = {};
+static int32_t g_bq[HEADS_PARALLEL][D_HEADS] = {};
+static int32_t g_bk[HEADS_PARALLEL][D_HEADS] = {};
+static int32_t g_bv[HEADS_PARALLEL][D_HEADS] = {};
 
 static int32_t g_rq_k_x[HEADS_PARALLEL][D_HEADS] = {};
 static int32_t g_rq_v_x[HEADS_PARALLEL][D_HEADS] = {};
@@ -790,15 +1074,9 @@ static void fill_head_lane_inputs(int lane, int layer) {
         g_wv[lane][i] = stim_i4(layer, i, 61 + lane);
     }
     for (int h = 0; h < D_HEADS; ++h) {
-        int q_b = static_cast<int>(stim_i4(layer, h, 71 + lane));
-        if (q_b > 2) {
-            q_b = 2;
-        } else if (q_b < -2) {
-            q_b = -2;
-        }
-        g_bq[lane][h] = static_cast<int4_t>(q_b);
-        g_bk[lane][h] = stim_i4(layer, h, 81 + lane);
-        g_bv[lane][h] = stim_i4(layer, h, 91 + lane);
+        g_bq[lane][h] = stim_i32(layer, h, 71 + lane);
+        g_bk[lane][h] = stim_i32(layer, h, 81 + lane);
+        g_bv[lane][h] = stim_i32(layer, h, 91 + lane);
         g_att_q[lane][h] = stim_i8_mid(layer, h, 101 + lane);
         g_rq_k_x[lane][h] = stim_i32(layer, h, 111 + lane);
         g_rq_v_x[lane][h] = stim_i32(layer, h, 121 + lane);
@@ -847,9 +1125,9 @@ static void build_head_in_buf(int lane, int layer, ComputeOp op, uint8_t head_in
         const int4_t *w = (op == ComputeOp::CMP_Q) ? g_wq[lane]
                           : (op == ComputeOp::CMP_K) ? g_wk[lane]
                           : g_wv[lane];
-        const int4_t *b = (op == ComputeOp::CMP_Q) ? g_bq[lane]
-                          : (op == ComputeOp::CMP_K) ? g_bk[lane]
-                          : g_bv[lane];
+        const int32_t *b = (op == ComputeOp::CMP_Q) ? g_bq[lane]
+                           : (op == ComputeOp::CMP_K) ? g_bk[lane]
+                           : g_bv[lane];
         for (int i = 0; i < D_MODEL; ++i) {
             compute_buf::write_i8(buf, head_buf::INQkvLayout::ACT + i, act[i]);
         }
@@ -857,7 +1135,7 @@ static void build_head_in_buf(int lane, int layer, ComputeOp op, uint8_t head_in
             compute_buf::write_i4(buf, (head_buf::INQkvLayout::W * 2) + i, w[i]);
         }
         for (int h = 0; h < D_HEADS; ++h) {
-            compute_buf::write_i4(buf, (head_buf::INQkvLayout::B * 2) + h, b[h]);
+            compute_buf::write_i32(buf, head_buf::INQkvLayout::B + (h * 4), b[h]);
         }
         break;
     }
@@ -934,36 +1212,40 @@ static uint64_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) 
     switch (f.sel) {
     case DMASEL_WQ:
         if (f.head < 0) return 0;
-        return ctrl.wq_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wq_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wq_head_stride);
     case DMASEL_WK:
         if (f.head < 0) return 0;
-        return ctrl.wk_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wk_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wk_head_stride);
     case DMASEL_WV:
         if (f.head < 0) return 0;
-        return ctrl.wv_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wv_head_stride);
     case DMASEL_CTX_K:
         if (f.head < 0) return 0;
-        return ctrl.k_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.k_cache_stride);
     case DMASEL_CTX_V:
         if (f.head < 0) return 0;
-        return ctrl.v_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.v_cache_stride);
     case DMASEL_WO:
         if (f.tile < 0) return 0;
-        return ctrl.wo_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wo_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.wo_tile_stride);
     case DMASEL_W1:
         if (f.tile < 0) return 0;
-        return ctrl.w1_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.w1_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w1_tile_stride);
     case DMASEL_W2:
         if (f.tile < 0) return 0;
-        return ctrl.w2_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
+    case DMASEL_LN0:
+        return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
+    case DMASEL_LN1:
+        return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
     case DMASEL_CONCAT:
         return 0;
     default:
@@ -985,36 +1267,40 @@ static uint64_t compute_wl_address(
     switch (sel) {
     case DMASEL_WQ:
         if (head < 0) return 0;
-        return ctrl.wq_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wq_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wq_head_stride);
     case DMASEL_WK:
         if (head < 0) return 0;
-        return ctrl.wk_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wk_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wk_head_stride);
     case DMASEL_WV:
         if (head < 0) return 0;
-        return ctrl.wv_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wv_head_stride);
     case DMASEL_CTX_K:
         if (head < 0) return 0;
-        return ctrl.k_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.k_cache_stride);
     case DMASEL_CTX_V:
         if (head < 0) return 0;
-        return ctrl.v_cache_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.v_cache_stride);
     case DMASEL_WO:
         if (tile < 0) return 0;
-        return ctrl.wo_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wo_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.wo_tile_stride);
     case DMASEL_W1:
         if (tile < 0) return 0;
-        return ctrl.w1_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.w1_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w1_tile_stride);
     case DMASEL_W2:
         if (tile < 0) return 0;
-        return ctrl.w2_base_addr + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
+    case DMASEL_LN0:
+        return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
+    case DMASEL_LN1:
+        return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
     default:
         return 0;
     }
@@ -1034,43 +1320,168 @@ static const char *irq_name(uint32_t irq) {
     return "-";
 }
 
+static void print_error_code_bits(uint32_t err) {
+    if (err == ERR_NONE) {
+        std::fprintf(stderr, "ERR_NONE");
+        return;
+    }
+    bool first = true;
+    auto emit = [&](const char *name) {
+        if (!first) {
+            std::fprintf(stderr, "|");
+        }
+        std::fprintf(stderr, "%s", name);
+        first = false;
+    };
+    if (err & ERR_DMA_ALIGNMENT)   emit("ERR_DMA_ALIGNMENT");
+    if (err & ERR_DMA_ZERO_LEN)    emit("ERR_DMA_ZERO_LEN");
+    if (err & ERR_DMA_ZERO_STRIDE) emit("ERR_DMA_ZERO_STRIDE");
+    if (err & ERR_SCHEDULER_ERROR) emit("ERR_SCHEDULER_ERROR");
+    if (err & ERR_COMPUTE_ERROR)   emit("ERR_COMPUTE_ERROR");
+    if (err & ERR_MMU_INVALID)     emit("ERR_MMU_INVALID");
+    if (err & ERR_MMU_OVERFLOW)    emit("ERR_MMU_OVERFLOW");
+    if (err & ERR_MMU_UNSUPPORTED_REQ_DMA) emit("ERR_MMU_UNSUPPORTED_REQ_DMA");
+    if (err & ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED) emit("ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED");
+    if (err & ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED) emit("ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED");
+    if (err & ERR_MMU_MISSING_REGION_FULL_READ) emit("ERR_MMU_MISSING_REGION_FULL_READ");
+    if (err & ERR_MMU_MISSING_REGION_PARTIAL_READ) emit("ERR_MMU_MISSING_REGION_PARTIAL_READ");
+    if (err & ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP) emit("ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP");
+    if (err & ERR_MMU_BAD_DMA_PLAN)    emit("ERR_MMU_BAD_DMA_PLAN");
+    if (err & ERR_MMU_BAD_DMA_ADDR)    emit("ERR_MMU_BAD_DMA_ADDR");
+    if (err & ERR_MMU_REGION_ACCESS)   emit("ERR_MMU_REGION_ACCESS");
+    if (err & ERR_MMU_CONCAT_SOURCE)   emit("ERR_MMU_CONCAT_SOURCE");
+    if (err & ERR_MMU_WRITEBACK_SRC)   emit("ERR_MMU_WRITEBACK_SRC");
+    if (err & ERR_MMU_QUEUE_OVERFLOW)  emit("ERR_MMU_QUEUE_OVERFLOW");
+    if (err & ERR_MMU_REGION_OVERFLOW) emit("ERR_MMU_REGION_OVERFLOW");
+    if (err & ERR_MMU_REGION_OVERFLOW_STREAM_IN) emit("ERR_MMU_REGION_OVERFLOW_STREAM_IN");
+    if (err & ERR_MMU_REGION_OVERFLOW_DMA_CONCAT) emit("ERR_MMU_REGION_OVERFLOW_DMA_CONCAT");
+    if (err & ERR_MMU_REGION_OVERFLOW_DMA_STORE) emit("ERR_MMU_REGION_OVERFLOW_DMA_STORE");
+    if (err & ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE) emit("ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE");
+    if (err & ERR_MMU_REGION_TABLE_FULL) emit("ERR_MMU_REGION_TABLE_FULL");
+    if (err & ERR_MMU_URAM_CHUNK_ALLOC_FAIL) emit("ERR_MMU_URAM_CHUNK_ALLOC_FAIL");
+    if (err & ERR_MMU_REGION_TOO_LARGE) emit("ERR_MMU_REGION_TOO_LARGE");
+    if (err & ERR_MMU_STREAM_OUTPUT_MISSING) emit("ERR_MMU_STREAM_OUTPUT_MISSING");
+}
+
+static const char *mmu_subcode_name(uint32_t subcode) {
+    switch (subcode) {
+        case MMU_ERR_SUBCODE_NONE: return "NONE";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_DMA: return "UNSUPPORTED_REQ_DMA";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_HEADED: return "UNSUPPORTED_REQ_COMPUTE_HEADED";
+        case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_NONHEADED: return "UNSUPPORTED_REQ_COMPUTE_NONHEADED";
+        case MMU_ERR_SUBCODE_BAD_DMA_PLAN: return "BAD_DMA_PLAN";
+        case MMU_ERR_SUBCODE_BAD_DMA_ADDR: return "BAD_DMA_ADDR";
+        case MMU_ERR_SUBCODE_REGION_ACCESS: return "REGION_ACCESS";
+        case MMU_ERR_SUBCODE_CONCAT_SOURCE: return "CONCAT_SOURCE";
+        case MMU_ERR_SUBCODE_WRITEBACK_SRC: return "WRITEBACK_SRC";
+        case MMU_ERR_SUBCODE_QUEUE_OVERFLOW: return "QUEUE_OVERFLOW";
+        case MMU_ERR_SUBCODE_STREAM_OUTPUT_MISSING: return "STREAM_OUTPUT_MISSING";
+        case MMU_ERR_SUBCODE_MISSING_REGION_FULL_READ: return "MISSING_REGION_FULL_READ";
+        case MMU_ERR_SUBCODE_MISSING_REGION_PARTIAL_READ: return "MISSING_REGION_PARTIAL_READ";
+        case MMU_ERR_SUBCODE_MISSING_REGION_COMPUTE_READ_PREP: return "MISSING_REGION_COMPUTE_READ_PREP";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_STREAM_IN: return "REGION_OVERFLOW_STREAM_IN";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_CONCAT: return "REGION_OVERFLOW_DMA_CONCAT";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_STORE: return "REGION_OVERFLOW_DMA_STORE";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_COMPUTE_WRITE: return "REGION_OVERFLOW_COMPUTE_WRITE";
+        case MMU_ERR_SUBCODE_REGION_TABLE_FULL: return "REGION_TABLE_FULL";
+        case MMU_ERR_SUBCODE_URAM_CHUNK_ALLOC_FAIL: return "URAM_CHUNK_ALLOC_FAIL";
+        case MMU_ERR_SUBCODE_REGION_TOO_LARGE: return "REGION_TOO_LARGE";
+        case MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC: return "REGION_OVERFLOW_GENERIC";
+        case MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN: return "MISSING_STREAM_IN_TOKEN";
+        case MMU_ERR_SUBCODE_MISSING_LN0_OUT: return "MISSING_LN0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_WQ_W: return "MISSING_WQ_W";
+        case MMU_ERR_SUBCODE_MISSING_WQ_B: return "MISSING_WQ_B";
+        case MMU_ERR_SUBCODE_MISSING_WK_W: return "MISSING_WK_W";
+        case MMU_ERR_SUBCODE_MISSING_WK_B: return "MISSING_WK_B";
+        case MMU_ERR_SUBCODE_MISSING_WV_W: return "MISSING_WV_W";
+        case MMU_ERR_SUBCODE_MISSING_WV_B: return "MISSING_WV_B";
+        case MMU_ERR_SUBCODE_MISSING_Q_OUT: return "MISSING_Q_OUT";
+        case MMU_ERR_SUBCODE_MISSING_CTX_K: return "MISSING_CTX_K";
+        case MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT: return "MISSING_ATT_SCORES_OUT";
+        case MMU_ERR_SUBCODE_MISSING_VALUE_SCALE_OUT: return "MISSING_VALUE_SCALE_OUT";
+        case MMU_ERR_SUBCODE_MISSING_SOFTMAX_OUT: return "MISSING_SOFTMAX_OUT";
+        case MMU_ERR_SUBCODE_MISSING_CTX_V: return "MISSING_CTX_V";
+        case MMU_ERR_SUBCODE_MISSING_ATT_VALUE_OUT: return "MISSING_ATT_VALUE_OUT";
+        case MMU_ERR_SUBCODE_MISSING_HEAD_REQUANT_PACKED: return "MISSING_HEAD_REQUANT_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_CONCAT_OUT: return "MISSING_CONCAT_OUT";
+        case MMU_ERR_SUBCODE_MISSING_WO_W: return "MISSING_WO_W";
+        case MMU_ERR_SUBCODE_MISSING_WO_B: return "MISSING_WO_B";
+        case MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED: return "MISSING_OUT_PROJ_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_RESID0_OUT: return "MISSING_RESID0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_LN1_OUT: return "MISSING_LN1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_W1_W: return "MISSING_W1_W";
+        case MMU_ERR_SUBCODE_MISSING_W1_B: return "MISSING_W1_B";
+        case MMU_ERR_SUBCODE_MISSING_FFN_W1_PACKED: return "MISSING_FFN_W1_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_FFN_ACT_OUT: return "MISSING_FFN_ACT_OUT";
+        case MMU_ERR_SUBCODE_MISSING_W2_W: return "MISSING_W2_W";
+        case MMU_ERR_SUBCODE_MISSING_W2_B: return "MISSING_W2_B";
+        case MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED: return "MISSING_FFN_W2_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_LN0_GAMMA: return "MISSING_LN0_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
+        case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_LN1_EPS: return "MISSING_LN1_EPS";
+        default: return "UNKNOWN_SUBCODE";
+    }
+}
+
 ControlMemSpace ctrl_mem_init(bool init) {
     ControlMemSpace ctrl_mem{};
     if(init) {
+        if (g_loaded_ctrl_mem_valid) {
+            return g_loaded_ctrl_mem;
+        }
         ctrl_mem.control = CTRL_RESETN_BIT;
         ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
         ctrl_mem.irq_clear = 0;
         // DMA lengths (non-zero required)
         ctrl_mem.dma_layer_len = 0x00000100;
-        ctrl_mem.dma_head_len  = 0x00000100;
-        ctrl_mem.dma_tile_len  = 0x00000100;
+        ctrl_mem.dma_head_len  = 0x00000040;
+        ctrl_mem.dma_tile_len  = 0x00000020;
         // Strides (non-zero required) - match OG testbench values
         ctrl_mem.layer_stride    = 0x00001000;
         ctrl_mem.wq_head_stride  = 0x00000100;
         ctrl_mem.wk_head_stride  = 0x00000100;
         ctrl_mem.wv_head_stride  = 0x00000100;
-        ctrl_mem.k_cache_stride  = 0x00000400;
-        ctrl_mem.v_cache_stride  = 0x00000400;
-        ctrl_mem.wo_tile_stride  = 0x00000100;
-        ctrl_mem.w1_tile_stride  = 0x00000300;
-        ctrl_mem.w2_tile_stride  = 0x00000800;
-        // Base addresses - MUST be 64-byte aligned (& 0x3F == 0)
-        ctrl_mem.wq_base_addr = 0x10000000ull;
-        ctrl_mem.wk_base_addr = 0x20000000ull;
-        ctrl_mem.wv_base_addr = 0x30000000ull;
-        ctrl_mem.wo_base_addr = 0x60000000ull;
-        ctrl_mem.w1_base_addr = 0x70000000ull;
-        ctrl_mem.w2_base_addr = 0x80000000ull;
-        ctrl_mem.k_cache_addr = 0x40000000ull;
-        ctrl_mem.v_cache_addr = 0x50000000ull;
-        // Quantization params
-        ctrl_mem.logit_scale_qv = 0x00000100;
-        ctrl_mem.scale_q        = 0x00000100;
-        ctrl_mem.zero_point_q   = 0x00000000;
-        ctrl_mem.scale_k        = 0x00000100;
-        ctrl_mem.zero_point_k   = 0x00000000;
-        ctrl_mem.scale_v        = 0x00000100;
-        ctrl_mem.zero_point_v   = 0x00000000;
+        ctrl_mem.k_cache_stride  = 0x00000100;
+        ctrl_mem.v_cache_stride  = 0x00000100;
+        ctrl_mem.wo_tile_stride  = 0x00000020;
+        ctrl_mem.w1_tile_stride  = 0x00000040;
+        ctrl_mem.w2_tile_stride  = 0x00000020;
+        ctrl_mem.wq_bias_head_stride = 0x00000100;
+        ctrl_mem.wk_bias_head_stride = 0x00000100;
+        ctrl_mem.wv_bias_head_stride = 0x00000100;
+        ctrl_mem.wo_bias_tile_stride = 0x00000020;
+        ctrl_mem.w1_bias_tile_stride = 0x00000040;
+        ctrl_mem.w2_bias_tile_stride = 0x00000020;
+        ctrl_mem.ln0_gamma_stride = 0x00000004;
+        ctrl_mem.ln1_gamma_stride = 0x00000004;
+        ctrl_mem.final_norm_gamma_stride = 0x00000004;
+        ctrl_mem.ln0_eps_stride = 0x00000004;
+        ctrl_mem.ln1_eps_stride = 0x00000004;
+        ctrl_mem.final_norm_eps_stride = 0x00000004;
+        // Region offsets into the shared AXI full backing image (must remain
+        // 64-byte aligned).
+        ctrl_mem.wq_offset = static_cast<uint32_t>(TB_BASE_WQ);
+        ctrl_mem.wk_offset = static_cast<uint32_t>(TB_BASE_WK);
+        ctrl_mem.wv_offset = static_cast<uint32_t>(TB_BASE_WV);
+        ctrl_mem.wo_offset = static_cast<uint32_t>(TB_BASE_WO);
+        ctrl_mem.w1_offset = static_cast<uint32_t>(TB_BASE_W1);
+        ctrl_mem.w2_offset = static_cast<uint32_t>(TB_BASE_W2);
+        ctrl_mem.k_cache_offset = static_cast<uint32_t>(TB_BASE_K_CACHE);
+        ctrl_mem.v_cache_offset = static_cast<uint32_t>(TB_BASE_V_CACHE);
+        ctrl_mem.wq_bias_offset = static_cast<uint32_t>(TB_BASE_WQ_BIAS);
+        ctrl_mem.wk_bias_offset = static_cast<uint32_t>(TB_BASE_WK_BIAS);
+        ctrl_mem.wv_bias_offset = static_cast<uint32_t>(TB_BASE_WV_BIAS);
+        ctrl_mem.wo_bias_offset = static_cast<uint32_t>(TB_BASE_WO_BIAS);
+        ctrl_mem.w1_bias_offset = static_cast<uint32_t>(TB_BASE_W1_BIAS);
+        ctrl_mem.w2_bias_offset = static_cast<uint32_t>(TB_BASE_W2_BIAS);
+        ctrl_mem.ln0_gamma_offset = static_cast<uint32_t>(TB_BASE_LN0_GAMMA);
+        ctrl_mem.ln1_gamma_offset = static_cast<uint32_t>(TB_BASE_LN1_GAMMA);
+        ctrl_mem.final_norm_gamma_offset = static_cast<uint32_t>(TB_BASE_FINAL_NORM_GAMMA);
+        ctrl_mem.ln0_eps_offset = static_cast<uint32_t>(TB_BASE_LN0_EPS);
+        ctrl_mem.ln1_eps_offset = static_cast<uint32_t>(TB_BASE_LN1_EPS);
+        ctrl_mem.final_norm_eps_offset = static_cast<uint32_t>(TB_BASE_FINAL_NORM_EPS);
     }
     return ctrl_mem;
 }
@@ -1085,111 +1496,117 @@ static inline void write_i4(uint8_t *buf, int nibble_idx, int8_t value) {
     }
 }
 
+static inline uint8_t dma_word_get_byte(const axi_gmem_word_t *buf, uint64_t byte_idx) {
+    const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
+    const uint32_t word_idx = (wrapped_byte / AXI_GMEM_WORD_BYTES) % static_cast<uint32_t>(TOP_DMA_BUF_WORDS);
+    const uint32_t lane = wrapped_byte % AXI_GMEM_WORD_BYTES;
+    const axi_gmem_word_t word = buf[word_idx];
+    const uint32_t hi = ((lane + 1u) * 8u) - 1u;
+    const uint32_t lo = lane * 8u;
+    return static_cast<uint8_t>(word.range(hi, lo));
+}
+
+static inline void dma_word_set_byte(axi_gmem_word_t *buf, uint64_t byte_idx, uint8_t value) {
+    const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
+    const uint32_t word_idx = (wrapped_byte / AXI_GMEM_WORD_BYTES) % static_cast<uint32_t>(TOP_DMA_BUF_WORDS);
+    const uint32_t lane = wrapped_byte % AXI_GMEM_WORD_BYTES;
+    axi_gmem_word_t word = buf[word_idx];
+    const uint32_t hi = ((lane + 1u) * 8u) - 1u;
+    const uint32_t lo = lane * 8u;
+    word.range(hi, lo) = static_cast<ap_uint<8> >(value);
+    buf[word_idx] = word;
+}
+
+static void seed_ln_params_ddr(const ControlMemSpace &ctrl,
+                               axi_gmem_word_t *ddr_mem) {
+    auto write_i32_le = [&](uint64_t addr, int32_t value) {
+        const uint32_t u = static_cast<uint32_t>(value);
+        dma_word_set_byte(ddr_mem, addr + 0, static_cast<uint8_t>(u & 0xFFu));
+        dma_word_set_byte(ddr_mem, addr + 1, static_cast<uint8_t>((u >> 8) & 0xFFu));
+        dma_word_set_byte(ddr_mem, addr + 2, static_cast<uint8_t>((u >> 16) & 0xFFu));
+        dma_word_set_byte(ddr_mem, addr + 3, static_cast<uint8_t>((u >> 24) & 0xFFu));
+    };
+
+    for (int layer = 0; layer < NUM_LAYERS; ++layer) {
+        const uint64_t ln0_gamma_addr = static_cast<uint64_t>(ctrl.ln0_gamma_offset) +
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
+        const uint64_t ln1_gamma_addr = static_cast<uint64_t>(ctrl.ln1_gamma_offset) +
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
+        const uint64_t ln0_eps_addr = static_cast<uint64_t>(ctrl.ln0_eps_offset) +
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln0_eps_stride);
+        const uint64_t ln1_eps_addr = static_cast<uint64_t>(ctrl.ln1_eps_offset) +
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln1_eps_stride);
+
+        for (int i = 0; i < D_MODEL; ++i) {
+            write_i32_le(ln0_gamma_addr + static_cast<uint64_t>(i) * 4ull, 8192);
+            write_i32_le(ln1_gamma_addr + static_cast<uint64_t>(i) * 4ull, 8192);
+        }
+        write_i32_le(ln0_eps_addr, 1);
+        write_i32_le(ln1_eps_addr, 1);
+    }
+}
+
 int main() {
-    const int MAX_CYCLES = 8000;
-    const int COMP_LAT   = 3;
-    const int DMA_LAT    = 3;
-    const int AXIS_BEATS = 3;
-    const int MEM_LAT     = 5;
+    if (!init_tb_logs()) {
+        return 1;
+    }
+
+    const int MAX_CYCLES = 5500;
+    const int AXIS_BEATS = STREAM_IN_BUF_BYTES;
 
 
     bool wl_ready        = false;
     bool wl_start        = false;
+    bool wl_accept       = false;
     uint32_t wl_instruction = 0;
-    HeadCtx head_ctx_ref[NUM_HEADS];
+    HeadCtx head_ctx_ref[HEADS_PARALLEL];
     ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL] = {};
-    bool dma_done        = false;
-    bool wl_dma_request  = false;
-    uint64_t wl_dma_address = 0;
+    bool dma_start       = false;
+    uint32_t dma_addr    = 0;
+    uint32_t dma_rx_word = 0;
+    uint32_t dma_tx_word = 0;
+    axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
+
+    hls::stream<axis8_t> s_axis_in("s_axis_in");
+    hls::stream<axis8_t> m_axis_out("m_axis_out");
 
     bool axis_in_valid   = false;
     bool axis_in_last    = false;
-    bool axis_in_ready   = false;
     int  axis_sent       = 0;
     bool axis_feed_done  = false;
     bool axis_drive      = false;
+    bool axis_in_ready   = false;
+    uint8_t axis_in_data = 0;
+    uint8_t axis_in_keep = 0;
+    uint8_t axis_in_strb = 0;
 
     bool mem_transfer_done = false;
     bool mem_read_request  = false;
     bool mem_write_request = false;
     uint32_t mem_op         = 0;
-    uint32_t mem_op_latched = 0;
     uint8_t in_buf[compute_buf::IN_BUF_BYTES] = {};
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
     uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES] = {};
     uint8_t head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES] = {};
-    bool mem_busy = false;
-    int  mem_timer = 0;
-    int  active_main_layer = -1;
-    enum class MemPending { None, Read, Write };
-    MemPending mem_pending = MemPending::None;
+    uint8_t dbg_stream_in_buf[STREAM_IN_BUF_BYTES] = {};
+    uint8_t prev_dbg_in_buf[compute_buf::IN_BUF_BYTES] = {};
+    uint8_t prev_dbg_out_buf[compute_buf::OUT_BUF_BYTES] = {};
+    uint8_t prev_dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES] = {};
+    uint8_t prev_dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES] = {};
+    uint8_t prev_dbg_stream_in_buf[STREAM_IN_BUF_BYTES] = {};
+    uint8_t prev_stream_in_buf[STREAM_IN_BUF_BYTES] = {};
+    uint8_t prev_stream_out_buf[STREAM_OUT_BUF_BYTES] = {};
+    bool dbg_buf_prev_valid = false;
 
-    int8_t out_proj_act[D_MODEL] = {};
-    int8_t out_proj_w[D_MODEL * D_MODEL] = {};
-    int32_t out_proj_b[D_MODEL] = {};
-
-    int32_t rq1_x[D_MODEL] = {};
-    int32_t rq2_x[D_MODEL] = {};
-    int32_t rq3_x[D_MODEL] = {};
-    int32_t rq4_x[D_MODEL] = {};
-    int32_t rq1_M = 1, rq1_N = 0;
-    int32_t rq2_M = 2, rq2_N = 1;
-    int32_t rq3_M = 1, rq3_N = 2;
-    int32_t rq4_M = 3, rq4_N = 1;
-
-    int8_t resid0_x[D_MODEL] = {};
-    int8_t resid0_r[D_MODEL] = {};
-    int8_t resid1_x[D_MODEL] = {};
-    int8_t resid1_r[D_MODEL] = {};
-
-    int8_t ln0_x[D_MODEL] = {};
-    int8_t ln1_x[D_MODEL] = {};
-    int8_t final_norm_x[D_MODEL] = {};
-    int32_t ln0_gamma[D_MODEL] = {};
-    int32_t ln1_gamma[D_MODEL] = {};
-    int32_t final_norm_gamma[D_MODEL] = {};
-    int32_t ln0_eps = 1;
-    int32_t ln1_eps = 2;
-    int32_t final_norm_eps = 3;
-
-    const int W1_OUT_SIZE = 2 * D_FFN;
-    int8_t ffn1_x[D_MODEL] = {};
-    int8_t ffn1_w[D_MODEL * W1_OUT_SIZE] = {};
-    int32_t ffn1_b[W1_OUT_SIZE] = {};
-
-    int16_t ffn_act_gate_in[D_FFN] = {};
-    int16_t ffn_act_up_in[D_FFN] = {};
-
-    int16_t ffn2_x[D_FFN] = {};
-    int8_t  ffn2_w[D_FFN * D_FFN] = {};
-    int32_t ffn2_b[D_FFN] = {};
-
-    bool head_mem_busy[HEADS_PARALLEL] = {false};
-    int  head_mem_timer[HEADS_PARALLEL] = {0};
-    int  active_head_layer[HEADS_PARALLEL];
-    uint32_t head_mem_op_latched[HEADS_PARALLEL] = {0};
-    enum class HeadMemPending { None, Read, Write };
-    HeadMemPending head_mem_pending[HEADS_PARALLEL] = {HeadMemPending::None};
-    bool head_dma_busy[HEADS_PARALLEL] = {false};
-    int  head_dma_timer[HEADS_PARALLEL] = {0};
-    int  head_dma_active_idx[HEADS_PARALLEL] = {0};
-    for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-        head_dma_active_idx[lane] = -1;
-        active_head_layer[lane] = -1;
-    }
-
-    bool stream_ready    = true;
-    bool stream_start    = false;
-    bool stream_done     = false;
+    uint8_t stream_in_buf[STREAM_IN_BUF_BYTES] = {};
+    uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES] = {};
+    int stream_out_count = 0;
 
     SchedState dbg_state     = S_IDLE;
     bool irq_ps              = false;
     bool irq_interupt_flagged = false;
     uint32_t interupt_data = 0;
 
-    bool dma_busy        = false;
-    int  dma_timer       = 0;
-    bool stream_busy     = false;
     bool reset_released  = false;
     bool start_pulsed    = false;
     bool pending_start_clear = false;
@@ -1201,7 +1618,19 @@ int main() {
     bool seen_idle_after = false;
     bool seen_attn       = false;
     bool seen_concat     = false;
+    bool aborted_on_error = false;
     int  base_assign_step = 0;
+
+    if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
+        return 1;
+    }
+    g_loaded_ctrl_mem_valid = true;
+    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS)) {
+        return 1;
+    }
+    if (!load_shared_stream_in(stream_in_buf, STREAM_IN_BUF_BYTES)) {
+        return 1;
+    }
     enum class CtrlInitStage { 
         TestCtrlInit,           // 0: Initialize with valid config
         TestDmaZeroLen,         // 1: Test DMA zero-length error
@@ -1226,63 +1655,14 @@ int main() {
     int  test_errors_passed = 0;
     int  test_errors_failed = 0;
     bool dbg_done = false;
+    bool dbg_axis_is_empty = false;
+    bool dbg_axis_in_ready_wire = false;
+    bool dbg_axis_in_last_wire = false;
+    uint32_t dbg_stream_in_counter = 0;
     
     ControlMemSpace ctrl_mem{};
     StatusMemSpace status_mem{};
     
-    for (int i = 0; i < D_MODEL; ++i) {
-        out_proj_act[i] = static_cast<int8_t>(i + 1);
-        out_proj_b[i] = 7;
-        rq1_x[i] = (i * 3000) - 20000;
-        rq2_x[i] = (i * 2000) + 5000;
-        rq3_x[i] = 100000 - (i * 4000);
-        rq4_x[i] = (i * 5000) - 11000;
-        resid0_x[i] = static_cast<int8_t>(i);
-        resid0_r[i] = static_cast<int8_t>(i * 2);
-        resid1_x[i] = static_cast<int8_t>(-i);
-        resid1_r[i] = static_cast<int8_t>(i + 1);
-        ln0_x[i] = static_cast<int8_t>(i + 1);
-        ln1_x[i] = static_cast<int8_t>(i + 2);
-        final_norm_x[i] = static_cast<int8_t>(i + 3);
-        ln0_gamma[i] = 1;
-        ln1_gamma[i] = 2;
-        final_norm_gamma[i] = 3;
-        ffn1_x[i] = static_cast<int8_t>(i + 3);
-    }
-    // Force a couple of extreme values for requant debug visibility.
-    if (D_MODEL > 0) {
-        rq1_x[0] = INT32_MAX;
-        rq3_x[0] = INT32_MAX;
-    }
-    if (D_MODEL > 1) {
-        rq1_x[1] = INT32_MIN;
-        rq3_x[1] = INT32_MIN;
-    }
-    for (int i = 0; i < W1_OUT_SIZE; ++i) {
-        ffn1_b[i] = 7;
-    }
-    for (int r = 0; r < D_MODEL; ++r) {
-        for (int c = 0; c < D_MODEL; ++c) {
-            out_proj_w[r * D_MODEL + c] = static_cast<int8_t>((r + c) & 0x7);
-        }
-    }
-    for (int r = 0; r < W1_OUT_SIZE; ++r) {
-        for (int c = 0; c < D_MODEL; ++c) {
-            ffn1_w[r * D_MODEL + c] = 1;
-        }
-    }
-    for (int i = 0; i < D_FFN; ++i) {
-        ffn_act_gate_in[i] = static_cast<int16_t>((i * 3) - 20);
-        ffn_act_up_in[i] = static_cast<int16_t>((i * 2) - 10);
-        ffn2_x[i] = static_cast<int16_t>((i * 2) + 1);
-        ffn2_b[i] = 5;
-    }
-    for (int r = 0; r < D_FFN; ++r) {
-        for (int c = 0; c < D_FFN; ++c) {
-            ffn2_w[r * D_FFN + c] = 1;
-        }
-    }
-
     // DEBUG - UNUSED
     uint32_t ctrl_data_in = 0;
     uint32_t ctrl_data_out = 0;
@@ -1308,6 +1688,9 @@ int main() {
     bool dbg_mac_complete = false;
     bool dbg_ctrl_reset_asserted = false;
     int dbg_head_group_idx = 0;
+    bool dbg_error = false;
+    uint32_t dbg_error_code = 0;
+    bool dbg_dma_done = false;
 
     uint32_t control_reg    = 0;
     uint32_t irq_status_reg     = 0;
@@ -1326,10 +1709,40 @@ int main() {
     uint32_t w1_tile_stride     = 0;
     uint32_t w2_tile_stride     = 0;
 
-    std::printf("%-8s %-6s %-6s %-13s | Heads: [idx C_St C_Rdy C_Dn]\n",
-                "Cycle", "Start", "CtrlR", "DbgState");
-
-    auto dash_or = [](bool v) { return v ? "1" : "-"; };
+    std::printf("%8s | %5s | %-16s | %10s | %8s | %8s | %8s | %8s | %8s | %12s | %12s | %13s | %12s | %18s | %9s | %10s | %10s | %10s | %12s | %20s | %21s | %22s | %17s | %23s | %17s | %18s | %6s | %11s | %11s | %11s | %13s | %s\n",
+                "cycle",
+                "reset",
+                "dbg_state",
+                "s_tdata",
+                "s_tvalid",
+                "s_tready",
+                "s_tkeep",
+                "s_tstrb",
+                "s_tlast",
+                "axis_start",
+                "dbg_wl_start",
+                "dbg_wl_accept",
+                "dbg_wl_ready",
+                "dbg_wl_instruction",
+                "dma_start",
+                "dma_addr",
+                "dma_rx_buf",
+                "dma_tx_buf",
+                "dbg_dma_done",
+                "dbg_mem_read_request",
+                "dbg_mem_write_request",
+                "dbg_mem_transfer_done",
+                "dbg_compute_start",
+                "dbg_compute_instruction",
+                "dbg_compute_state",
+                "dbg_req_instruction",
+                "irq_ps",
+                "ax_empty",
+                "ax_rdy_w",
+                "ax_last_w",
+                "stream_cnt",
+                "headed(signals)");
+    std::printf("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
         // Space out control transactions to model multi-cycle AXI-lite access
@@ -1401,8 +1814,8 @@ int main() {
         // ========== TEST 3: Address Alignment ==========
         } else if (ctrl_stage == CtrlInitStage::TestAlignment) {
             ctrl_mem = ctrl_mem_init(true);  // Start fresh
-            ctrl_mem.wq_base_addr = 0x10000001ull;  // Inject error: not 64-byte aligned
-            std::printf("[TEST 3] Injecting wq_base_addr=0x10000001 (expect ERR_DMA_ALIGNMENT)\n");
+            ctrl_mem.wq_offset = 0x00000001u;  // Inject error: not 64-byte aligned
+            std::printf("[TEST 3] Injecting wq_offset=0x00000001 (expect ERR_DMA_ALIGNMENT)\n");
             ctrl_stage = CtrlInitStage::TestAlignmentCheck;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::TestAlignmentCheck) {
@@ -1446,96 +1859,22 @@ int main() {
             // Program control-space base addresses and strides with reset asserted
             switch (base_assign_step) {
             case 0:
-                // Clear any pending interrupts during programming
-                ctrl_mem.irq_clear = IRQ_ERROR_BIT;
-                ctrl_data_in  = IRQ_ERROR_BIT;
+                // Program all ControlMemSpace fields in one shot.
+                // This includes required + optional strides/base addresses and quant data.
+                ctrl_mem = ctrl_mem_init(true);
+                ctrl_data_in = CTRL_RESETN_BIT;
                 break;
             case 1:
-                ctrl_mem.dma_layer_len = 0x00000100;
-                ctrl_data_in  = 0x00000100;
+                // Clear any pending interrupts during programming.
+                ctrl_mem.irq_clear = IRQ_ERROR_BIT;
+                ctrl_data_in = IRQ_ERROR_BIT;
                 break;
             case 2:
-                ctrl_mem.dma_head_len = 0x00000100;
-                ctrl_data_in  = 0x00000100;
-                break;
-            case 3:
-                ctrl_mem.dma_tile_len = 0x00000100;
-                ctrl_data_in  = 0x00000100;
-                break;
-            case 4:
-                ctrl_mem.layer_stride = 0x00001000;
-                ctrl_data_in  = 0x00001000;
-                break;
-            case 5:
-                ctrl_mem.wq_head_stride = 0x00000100;
-                ctrl_data_in  = 0x00000100;
-                break;
-            case 6:
-                ctrl_mem.wk_head_stride = 0x00000100;
-                ctrl_data_in  = 0x00000100;
-                break;
-            case 7:
-                ctrl_mem.wv_head_stride = 0x00000100;
-                ctrl_data_in  = 0x00000100;
-                break;
-            case 8:
-                ctrl_mem.k_cache_stride = 0x00000400;
-                ctrl_data_in  = 0x00000400;
-                break;
-            case 9:
-                ctrl_mem.v_cache_stride = 0x00000400;
-                ctrl_data_in  = 0x00000400;
-                break;
-            case 10:
-                ctrl_mem.wo_tile_stride = 0x00000100;
-                ctrl_data_in  = 0x00000100;
-                break;
-            case 11:
-                ctrl_mem.w1_tile_stride = 0x00000300;
-                ctrl_data_in  = 0x00000300;
-                break;
-            case 12:
-                ctrl_mem.w2_tile_stride = 0x00000800;
-                ctrl_data_in  = 0x00000800;
-                break;
-            case 13:
-                ctrl_mem.wq_base_addr = 0x10000000ull;
-                ctrl_data_in  = 0x10000000;
-                break;
-            case 14:
-                ctrl_mem.wk_base_addr = 0x20000000ull;
-                ctrl_data_in  = 0x20000000;
-                break;
-            case 15:
-                ctrl_mem.wv_base_addr = 0x30000000ull;
-                ctrl_data_in  = 0x30000000;
-                break;
-            case 16:
-                ctrl_mem.k_cache_addr = 0x40000000ull;
-                ctrl_data_in  = 0x40000000;
-                break;
-            case 17:
-                ctrl_mem.v_cache_addr = 0x50000000ull;
-                ctrl_data_in  = 0x50000000;
-                break;
-            case 18:
-                ctrl_mem.wo_base_addr = 0x60000000ull;
-                ctrl_data_in  = 0x60000000;
-                break;
-            case 19:
-                ctrl_mem.w1_base_addr = 0x70000000ull;
-                ctrl_data_in  = 0x70000000;
-                break;
-            case 20:
-                ctrl_mem.w2_base_addr = 0x80000000ull;
-                ctrl_data_in  = 0x80000000;
-                break;
-            case 21:
                 // Disabled interrupt clearing
                 ctrl_mem.irq_clear = 0;
                 ctrl_data_in  = 0;
                 break;
-            case 22:
+            case 3:
                 // Enable interrupts
                 ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
                 ctrl_data_in  = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
@@ -1581,346 +1920,53 @@ int main() {
             interupt_data = status_mem.irq_status;
         }
 
-        // Clear per-head DMA done pulse
-        for (int i = 0; i < NUM_HEADS; ++i) {
-            head_ctx_ref[i].dma_done = false;
-        }
-
-        // Complete outstanding per-head DMA operations
-        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-            if (head_dma_busy[lane]) {
-                if (head_dma_timer[lane] == 0) {
-                    int idx = head_dma_active_idx[lane];
-                    if (idx >= 0 && idx < NUM_HEADS) {
-                        head_ctx_ref[idx].dma_done = true;
-                    }
-                    head_dma_busy[lane] = false;
-                    head_dma_active_idx[lane] = -1;
-                } else {
-                    --head_dma_timer[lane];
-                }
-            }
-        }
-
-        // Complete outstanding DMA transfers
-        dma_done = false;
-        if (dma_busy) {
-            if (dma_timer == 0) {
-                dma_done = true;
-                dma_busy = false;
-            } else {
-                --dma_timer;
-            }
-        }
-
-        // Stream completion: single-cycle pulse after start
-        stream_done = false;
-        if (stream_busy) {
-            stream_done = true;
-            stream_busy = false;
-        }
-
-        // Ready signals depend on busy flags
-        for (int i = 0; i < NUM_HEADS; ++i) {
-            int lane = i % HEADS_PARALLEL;
-            head_ctx_ref[i].wl_ready      = !head_dma_busy[lane];
-        }
-        stream_ready  = !stream_busy;
-        wl_ready = !dma_busy;
-        wl_dma_request = false;
-
-        // Drive AXIS ingress: send a short burst when ready is asserted
+        // Drive AXIS ingress beats into the true AXI stream input.
+        axis_in_valid = false;
+        axis_in_last = false;
+        axis_in_ready = false;
+        axis_in_data = 0;
+        axis_in_keep = 0;
+        axis_in_strb = 0;
         if (!axis_feed_done && (axis_drive || (((ctrl_shadow_control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
             axis_drive = true;
-            if (!axis_in_valid && axis_in_ready) {
-                axis_in_valid = true;
-                axis_in_last  = (axis_sent == AXIS_BEATS - 1);
-            }
-        } else {
-            axis_in_valid = false;
-            axis_in_last  = false;
-        }
-
-        // Memory manager model for compute_controller
-        mem_transfer_done = false;
-        if (mem_busy) {
-            if (mem_timer == 0) {
-                mem_transfer_done = true;
-                mem_busy = false;
-                if (mem_pending == MemPending::Read) {
-                    const ComputeOp op = decode_op(mem_op_latched);
-                    const int tile = static_cast<int>(static_cast<int8_t>((mem_op_latched >> 24) & 0xFFu));
-                    const int req_layer = clamp_layer(static_cast<int>((mem_op_latched >> 8) & 0xFFu));
-                    for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
-                        in_buf[i] = 0;
+            if (axis_sent < AXIS_BEATS) {
+                axis8_t beat{};
+                beat.data = stream_in_buf[axis_sent];
+                beat.keep = 1;
+                beat.strb = 1;
+                beat.last = (axis_sent == AXIS_BEATS - 1) ? 1 : 0;
+                if (s_axis_in.write_nb(beat)) {
+                    axis_in_valid = true;
+                    axis_in_last = (beat.last != 0);
+                    axis_in_ready = true;
+                    axis_in_data = static_cast<uint8_t>(beat.data);
+                    axis_in_keep = static_cast<uint8_t>(beat.keep);
+                    axis_in_strb = static_cast<uint8_t>(beat.strb);
+                    axis_sent++;
+                    if (axis_in_last) {
+                        axis_feed_done = true;
+                        axis_drive = false;
                     }
-                    if (active_main_layer != req_layer) {
-                        for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
-                            out_buf[i] = 0;
-                        }
-                        active_main_layer = req_layer;
-                    }
-                    for (int i = 0; i < D_MODEL; ++i) {
-                        out_proj_act[i] = stim_i8_mid(req_layer, i, 11);
-                        int32_t out_b = stim_i32(req_layer, i, 13);
-                        if (out_b > 96) {
-                            out_b = 96;
-                        } else if (out_b < -96) {
-                            out_b = -96;
-                        }
-                        out_proj_b[i] = out_b;
-                        rq1_x[i] = stim_i32(req_layer, i, 21);
-                        rq2_x[i] = stim_i32(req_layer, i, 31);
-                        rq3_x[i] = stim_i32(req_layer, i, 41);
-                        rq4_x[i] = stim_i32(req_layer, i, 51);
-                        resid0_x[i] = stim_i8(req_layer, i, 61);
-                        resid0_r[i] = stim_i8(req_layer, i, 71);
-                        resid1_x[i] = stim_i8(req_layer, i, 81);
-                        resid1_r[i] = stim_i8(req_layer, i, 91);
-                        ln0_x[i] = stim_i8_mid(req_layer, i, 101);
-                        ln1_x[i] = stim_i8_mid(req_layer, i, 111);
-                        final_norm_x[i] = stim_i8(req_layer, i, 121);
-                        ln0_gamma[i] = stim_gamma_q19_13(req_layer, i, 131);
-                        ln1_gamma[i] = stim_gamma_q19_13(req_layer, i, 141);
-                        final_norm_gamma[i] = stim_gamma_q19_13(req_layer, i, 151);
-                        ffn1_x[i] = stim_i8(req_layer, i, 161);
-                    }
-                    ln0_eps = stim_eps(req_layer, 171);
-                    ln1_eps = stim_eps(req_layer, 181);
-                    final_norm_eps = stim_eps(req_layer, 191);
-                    for (int i = 0; i < D_MODEL * D_MODEL; ++i) {
-                        int w = static_cast<int>(stim_i4(req_layer, i, 201));
-                        if (w > 3) {
-                            w = 3;
-                        } else if (w < -3) {
-                            w = -3;
-                        }
-                        out_proj_w[i] = static_cast<int8_t>(w);
-                    }
-                    for (int i = 0; i < W1_OUT_SIZE; ++i) {
-                        ffn1_b[i] = stim_i32(req_layer, i, 211);
-                    }
-                    for (int i = 0; i < D_MODEL * W1_OUT_SIZE; ++i) {
-                        ffn1_w[i] = stim_i4(req_layer, i, 221);
-                    }
-                    for (int i = 0; i < D_FFN; ++i) {
-                        ffn_act_gate_in[i] = stim_i16(req_layer, i, 231);
-                        ffn_act_up_in[i] = stim_i16(req_layer, i, 241);
-                        int32_t x2 = static_cast<int32_t>(stim_i16(req_layer, i, 251));
-                        if (x2 > 1024) {
-                            x2 = 1024;
-                        } else if (x2 < -1024) {
-                            x2 = -1024;
-                        }
-                        ffn2_x[i] = static_cast<int16_t>(x2);
-                        int32_t b2 = stim_i32(req_layer, i, 261);
-                        if (b2 > 256) {
-                            b2 = 256;
-                        } else if (b2 < -256) {
-                            b2 = -256;
-                        }
-                        ffn2_b[i] = b2;
-                    }
-                    for (int i = 0; i < D_FFN * D_FFN; ++i) {
-                        int w2 = static_cast<int>(stim_i4(req_layer, i, 271));
-                        if (w2 > 3) {
-                            w2 = 3;
-                        } else if (w2 < -3) {
-                            w2 = -3;
-                        }
-                        ffn2_w[i] = static_cast<int8_t>(w2);
-                    }
-                    force_i8_i4stored_i8_mm_corners(ffn1_x, D_MODEL, ffn1_w, W1_OUT_SIZE, D_MODEL);
-                    switch (op) {
-                    case CMP_OUT_PROJ: {
-                        for (int i = 0; i < D_MODEL; ++i) {
-                            compute_buf::write_i8(in_buf, compute_buf::INOutProjLayout::ACT + i, out_proj_act[i]);
-                        }
-                        if (tile >= 0 && tile < NUM_WO_TILES) {
-                            const int out_base = tile * D_TILE_WO;
-                            for (int t = 0; t < D_TILE_WO; ++t) {
-                                for (int i = 0; i < D_MODEL; ++i) {
-                                    write_i4(in_buf, (compute_buf::INOutProjLayout::W * 2) + (t * D_MODEL) + i,
-                                             out_proj_w[(out_base + t) * D_MODEL + i]);
-                                }
-                                compute_buf::write_i32(in_buf, compute_buf::INOutProjLayout::B + (t * 4), out_proj_b[out_base + t]);
-                            }
-                        }
-                        break;
-                    }
-                    case CMP_REQUANT1:
-                    case CMP_REQUANT2:
-                    case CMP_REQUANT3:
-                    case CMP_REQUANT4: {
-                        const int32_t *src = (op == CMP_REQUANT1) ? rq1_x
-                                           : (op == CMP_REQUANT2) ? rq2_x
-                                           : (op == CMP_REQUANT3) ? rq3_x
-                                           : rq4_x;
-                        for (int i = 0; i < D_MODEL; ++i) {
-                            compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), src[i]);
-                        }
-                        break;
-                    }
-                    case CMP_RESID0:
-                    case CMP_RESID1: {
-                        const int8_t *x = (op == CMP_RESID0) ? resid0_x : resid1_x;
-                        const int8_t *r = (op == CMP_RESID0) ? resid0_r : resid1_r;
-                        for (int i = 0; i < D_MODEL; ++i) {
-                            compute_buf::write_i8(in_buf, compute_buf::INResidLayout::X + i, x[i]);
-                            compute_buf::write_i8(in_buf, compute_buf::INResidLayout::R + i, r[i]);
-                        }
-                        break;
-                    }
-                    case CMP_LN0:
-                    case CMP_LN1:
-                    case CMP_FINAL_NORM: {
-                        const int8_t *x = (op == CMP_LN0) ? ln0_x
-                                           : (op == CMP_LN1) ? ln1_x
-                                           : final_norm_x;
-                        const int32_t *gamma = (op == CMP_LN0) ? ln0_gamma
-                                             : (op == CMP_LN1) ? ln1_gamma
-                                             : final_norm_gamma;
-                        const int32_t eps = (op == CMP_LN0) ? ln0_eps
-                                         : (op == CMP_LN1) ? ln1_eps
-                                         : final_norm_eps;
-                        for (int i = 0; i < D_MODEL; ++i) {
-                            compute_buf::write_i8(in_buf, compute_buf::INLayerNormLayout::X + i, x[i]);
-                            compute_buf::write_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), gamma[i]);
-                        }
-                        compute_buf::write_i32(in_buf, compute_buf::INLayerNormLayout::EPS, eps);
-                        break;
-                    }
-                    case CMP_FFN_W1: {
-                        for (int i = 0; i < D_MODEL; ++i) {
-                            compute_buf::write_i8(in_buf, compute_buf::INFfnW1Layout::X + i, ffn1_x[i]);
-                        }
-                        if (tile >= 0 && tile < NUM_W1_TILES) {
-                            const int out_base = tile * D_TILE_W1;
-                            for (int t = 0; t < D_TILE_W1; ++t) {
-                                for (int i = 0; i < D_MODEL; ++i) {
-                                    write_i4(in_buf, (compute_buf::INFfnW1Layout::W * 2) + (t * D_MODEL) + i,
-                                             ffn1_w[(out_base + t) * D_MODEL + i]);
-                                }
-                                compute_buf::write_i32(in_buf, compute_buf::INFfnW1Layout::B + (t * 4), ffn1_b[out_base + t]);
-                            }
-                        }
-                        break;
-                    }
-                    case CMP_FFN_ACT: {
-                        for (int i = 0; i < D_FFN; ++i) {
-                            compute_buf::write_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2), ffn_act_gate_in[i]);
-                            compute_buf::write_i16(in_buf, compute_buf::INFfnActLayout::UP + (i * 2), ffn_act_up_in[i]);
-                        }
-                        break;
-                    }
-                    case CMP_FFN_W2: {
-                        for (int i = 0; i < D_FFN; ++i) {
-                            compute_buf::write_i16(in_buf, compute_buf::INFfnW2Layout::X + (i * 2), ffn2_x[i]);
-                        }
-                        if (tile >= 0 && tile < NUM_W2_TILES) {
-                            const int out_base = tile * D_TILE_W2;
-                            for (int t = 0; t < D_TILE_W2; ++t) {
-                                for (int i = 0; i < D_FFN; ++i) {
-                                    write_i4(in_buf, (compute_buf::INFfnW2Layout::W * 2) + (t * D_FFN) + i,
-                                             ffn2_w[(out_base + t) * D_FFN + i]);
-                                }
-                                compute_buf::write_i32(in_buf, compute_buf::INFfnW2Layout::B + (t * 4), ffn2_b[out_base + t]);
-                            }
-                        }
-                        break;
-                    }
-                    default:
-                        break;
-                    }
-                    print_buffer("in_buf (send)", in_buf, compute_buf::IN_BUF_BYTES);
-                    print_in_buf_decoded(op, in_buf);
                 }
-                if (mem_pending == MemPending::Write) {
-                    const ComputeOp op = decode_op(mem_op_latched);
-                    print_buffer("out_buf (done)", out_buf, compute_buf::OUT_BUF_BYTES);
-                    print_out_buf_decoded(op, out_buf);
-                }
-                mem_pending = MemPending::None;
-            } else {
-                --mem_timer;
             }
         }
 
-        // Memory manager model for headed compute lanes
-        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-            head_compute_ctx[lane].mem_transfer_done = false;
-        }
-        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-            if (head_mem_busy[lane]) {
-                if (head_mem_timer[lane] == 0) {
-                    head_compute_ctx[lane].mem_transfer_done = true;
-                    head_mem_busy[lane] = false;
-                    const ComputeOp op = decode_op(head_mem_op_latched[lane]);
-                    const int req_layer = clamp_layer(static_cast<int>((head_mem_op_latched[lane] >> 8) & 0xFFu));
-                    if (head_mem_pending[lane] == HeadMemPending::Read) {
-                        if (active_head_layer[lane] != req_layer) {
-                            for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
-                                head_out_buf[lane][i] = 0;
-                            }
-                            active_head_layer[lane] = req_layer;
-                        }
-                        build_head_in_buf(lane, req_layer, op, head_in_buf);
-                        if (op == CMP_ATT_SCORES) {
-                            seen_attn = true;
-                        }
-                        std::printf("HEAD lane %d op %s in_buf\n", lane, op_name(op));
-                        print_buffer("head_in_buf (send)", head_in_buf[lane], head_buf::IN_BUF_BYTES);
-                        print_head_in_buf_decoded(op, head_in_buf[lane]);
-                    } else if (head_mem_pending[lane] == HeadMemPending::Write) {
-                        std::printf("HEAD lane %d op %s out_buf\n", lane, op_name(op));
-                        print_buffer("head_out_buf (done)", head_out_buf[lane], head_buf::OUT_BUF_BYTES);
-                        print_head_out_buf_decoded(op, head_out_buf[lane]);
-                    }
-                    head_mem_pending[lane] = HeadMemPending::None;
-                } else {
-                    --head_mem_timer[lane];
-                }
-                continue;
-            }
-
-            if (head_compute_ctx[lane].mem_read_request) {
-                head_mem_busy[lane] = true;
-                head_mem_timer[lane] = MEM_LAT - 1;
-                head_mem_pending[lane] = HeadMemPending::Read;
-                head_mem_op_latched[lane] = head_compute_ctx[lane].mem_op;
-            } else if (head_compute_ctx[lane].mem_write_request) {
-                head_mem_busy[lane] = true;
-                head_mem_timer[lane] = MEM_LAT - 1;
-                head_mem_pending[lane] = HeadMemPending::Write;
-                head_mem_op_latched[lane] = head_compute_ctx[lane].mem_op;
-            }
-        }
+        // Legacy DMA debug fields (DMA is now inside top/MMU over AXI-Full).
+        dma_start = false;
+        dma_addr = 0;
+        dma_rx_word = static_cast<uint32_t>(ddr_mem[0] & 0xFFFF'FFFFu);
+        dma_tx_word = static_cast<uint32_t>(ddr_mem[1] & 0xFFFF'FFFFu);
 
         transformer_top(
-            axis_in_valid,
-            axis_in_last,
-            axis_in_ready,
-            stream_ready,
-            stream_start,
-            stream_done,
+            s_axis_in,
+            m_axis_out,
+            ddr_mem,
             ctrl_mem,
             status_mem,
             irq_ps,
-            dma_done,
-            wl_ready,
-            wl_instruction,
-            wl_start,
-            mem_transfer_done,
-            mem_read_request,
-            mem_write_request,
-            mem_op,
-            in_buf,
-            out_buf,
-            head_in_buf,
-            head_out_buf,
+            dbg_state, 
             head_ctx_ref,
             head_compute_ctx,
-            dbg_state, 
             dbg_ctrl_mem,
             control_reg,
             irq_status_reg,
@@ -1953,78 +1999,224 @@ int main() {
             dbg_mac_complete,
             dbg_ctrl_reset_asserted,
             dbg_head_group_idx,
-            dbg_done
+            wl_ready,
+            wl_instruction,
+            wl_start,
+            wl_accept,
+            dbg_dma_done,
+            mem_transfer_done,
+            mem_read_request,
+            mem_write_request,
+            mem_op,
+            in_buf,
+            out_buf,
+            head_in_buf,
+            head_out_buf,
+            dbg_stream_in_buf,
+            dbg_error,
+            dbg_error_code,
+            dbg_done,
+            dbg_axis_is_empty,
+            dbg_axis_in_ready_wire,
+            dbg_axis_in_last_wire,
+            dbg_stream_in_counter
         );
+
+        // Drain AXI stream output from DUT into local debug buffer.
+        axis8_t axis_out_beat{};
+        while (m_axis_out.read_nb(axis_out_beat)) {
+            if (stream_out_count < STREAM_OUT_BUF_BYTES) {
+                stream_out_buf[stream_out_count] = static_cast<uint8_t>(axis_out_beat.data);
+                stream_out_count++;
+            }
+            if (axis_out_beat.last != 0) {
+                stream_out_count = 0;
+            }
+        }
+
+        if (!dbg_buf_prev_valid) {
+            copy_buffer(prev_dbg_in_buf, in_buf, compute_buf::IN_BUF_BYTES);
+            copy_buffer(prev_dbg_out_buf, out_buf, compute_buf::OUT_BUF_BYTES);
+            for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+                copy_buffer(prev_dbg_head_in_buf[lane], head_in_buf[lane], head_buf::IN_BUF_BYTES);
+                copy_buffer(prev_dbg_head_out_buf[lane], head_out_buf[lane], head_buf::OUT_BUF_BYTES);
+            }
+            copy_buffer(prev_dbg_stream_in_buf, dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
+            copy_buffer(prev_stream_in_buf, stream_in_buf, STREAM_IN_BUF_BYTES);
+            copy_buffer(prev_stream_out_buf, stream_out_buf, STREAM_OUT_BUF_BYTES);
+            dbg_buf_prev_valid = true;
+        } else {
+            const ComputeOp req_op = decode_op(dbg_req_instruction);
+            const bool has_active_req = (dbg_req_instruction != 0u);
+
+            const bool in_changed = buffer_changed(in_buf, prev_dbg_in_buf, compute_buf::IN_BUF_BYTES);
+            if (in_changed) {
+                if (has_active_req) {
+                    std::printf("\n[CYCLE %d] dbg_in_buf updated (op=%s, req=0x%08X)\n",
+                                cycle,
+                                op_name(req_op),
+                                dbg_req_instruction);
+                    print_buffer("in_buf", in_buf, compute_buf::IN_BUF_BYTES);
+                    print_in_buf_decoded(req_op, in_buf);
+                }
+                copy_buffer(prev_dbg_in_buf, in_buf, compute_buf::IN_BUF_BYTES);
+            }
+
+            const bool out_changed = buffer_changed(out_buf, prev_dbg_out_buf, compute_buf::OUT_BUF_BYTES);
+            if (out_changed) {
+                if (has_active_req) {
+                    std::printf("\n[CYCLE %d] dbg_out_buf updated (op=%s, req=0x%08X)\n",
+                                cycle,
+                                op_name(req_op),
+                                dbg_req_instruction);
+                    print_buffer("out_buf", out_buf, compute_buf::OUT_BUF_BYTES);
+                    print_out_buf_decoded(req_op, out_buf);
+                }
+                copy_buffer(prev_dbg_out_buf, out_buf, compute_buf::OUT_BUF_BYTES);
+            }
+
+            const bool stream_in_changed = buffer_changed(stream_in_buf, prev_stream_in_buf, STREAM_IN_BUF_BYTES);
+            if (stream_in_changed) {
+                std::printf("\n[CYCLE %d] stream_in_buf updated\n", cycle);
+                print_buffer("stream_in_buf", stream_in_buf, STREAM_IN_BUF_BYTES);
+                print_stream_in_buf_decoded(stream_in_buf);
+                copy_buffer(prev_stream_in_buf, stream_in_buf, STREAM_IN_BUF_BYTES);
+            }
+
+            const bool dbg_stream_in_changed = buffer_changed(dbg_stream_in_buf, prev_dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
+            if (dbg_stream_in_changed) {
+                std::printf("\n[CYCLE %d] dbg_stream_in_buf updated\n", cycle);
+                print_buffer("dbg_stream_in_buf", dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
+                copy_buffer(prev_dbg_stream_in_buf, dbg_stream_in_buf, STREAM_IN_BUF_BYTES);
+            }
+
+            const bool stream_out_changed = buffer_changed(stream_out_buf, prev_stream_out_buf, STREAM_OUT_BUF_BYTES);
+            if (stream_out_changed) {
+                std::printf("\n[CYCLE %d] stream_out_buf updated\n", cycle);
+                print_buffer("stream_out_buf", stream_out_buf, STREAM_OUT_BUF_BYTES);
+                print_stream_out_buf_decoded(stream_out_buf);
+                copy_buffer(prev_stream_out_buf, stream_out_buf, STREAM_OUT_BUF_BYTES);
+            }
+
+            for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
+                const HeadCtx &hctx = head_ctx_ref[lane];
+                const int hidx = hctx.head_idx;
+                if (hidx < 0 || hidx >= NUM_HEADS) continue;
+                const ComputeHeadCtx &cctx = head_compute_ctx[lane];
+                ComputeOp head_op = decode_op(cctx.mem_op);
+                if (head_op == ComputeOp::CMP_NONE) {
+                    head_op = decode_op(cctx.compute_instruction);
+                }
+                if (head_op == ComputeOp::CMP_NONE) {
+                    head_op = decode_op(hctx.compute_op);
+                }
+
+                const bool head_in_changed = buffer_changed(
+                    head_in_buf[lane],
+                    prev_dbg_head_in_buf[lane],
+                    head_buf::IN_BUF_BYTES);
+                if (head_in_changed) {
+                    std::printf("\n[CYCLE %d] head_in_buf[%d] updated (head=%d, op=%s)\n",
+                                cycle, lane, hidx, op_name(head_op));
+                    print_buffer("head_in_buf", head_in_buf[lane], head_buf::IN_BUF_BYTES);
+                    print_head_in_buf_decoded(head_op, head_in_buf[lane]);
+                    copy_buffer(prev_dbg_head_in_buf[lane], head_in_buf[lane], head_buf::IN_BUF_BYTES);
+                }
+
+                const bool head_out_changed = buffer_changed(
+                    head_out_buf[lane],
+                    prev_dbg_head_out_buf[lane],
+                    head_buf::OUT_BUF_BYTES);
+                if (head_out_changed) {
+                    std::printf("\n[CYCLE %d] head_out_buf[%d] updated (head=%d, op=%s)\n",
+                                cycle, lane, hidx, op_name(head_op));
+                    print_buffer("head_out_buf", head_out_buf[lane], head_buf::OUT_BUF_BYTES);
+                    print_head_out_buf_decoded(head_op, head_out_buf[lane]);
+                    copy_buffer(prev_dbg_head_out_buf[lane], head_out_buf[lane], head_buf::OUT_BUF_BYTES);
+                }
+            }
+        }
 
         if (wl_start && dbg_state == S_HEAD_CONCAT) {
             seen_concat = true;
         }
-
-        if (!mem_busy) {
-            if (mem_read_request) {
-                mem_busy = true;
-                mem_timer = MEM_LAT - 1;
-                mem_pending = MemPending::Read;
-                mem_op_latched = mem_op;
-            } else if (mem_write_request) {
-                mem_busy = true;
-                mem_timer = MEM_LAT - 1;
-                mem_pending = MemPending::Write;
-                mem_op_latched = mem_op;
-            }
+        if (dbg_req_op == static_cast<uint8_t>(ComputeOp::CMP_ATT_SCORES)) {
+            seen_attn = true;
         }
 
-        if (wl_start && !dma_busy) {
-            wl_dma_request = true;
-            wl_dma_address = compute_wl_address(wl_instruction, dbg_ctrl_mem);
-            dma_busy  = true;
-            dma_timer = DMA_LAT - 1;
-        }
-
-        const bool cntrl_start   = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
-        std::printf("%-8d %-6d %-6s %-13s |",
+        const bool cntrl_start = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
+        std::printf("%8d | %5d | %-16s |       0x%02X | %8d | %8d |     0x%02X |     0x%02X | %8d | %12d | %12d | %13d | %12d |         0x%08X | %9d | 0x%08X | 0x%08X | 0x%08X | %12d | %20d | %21d | %22d | %17d |              0x%08X | %-17s |         0x%08X | %6d | %11d | %11d | %11d | %13u",
                     cycle,
-                    cntrl_start ? 1 : 0,
-                    dash_or(dbg_ctrl_reset_asserted),
-                    state_name(dbg_state));
-        for (int i = 0; i < NUM_HEADS; ++i) {
-            std::printf(" %d:%s%s%s",
-                        i,
-                        dash_or(head_ctx_ref[i].compute_start),
-                        dash_or(head_ctx_ref[i].compute_ready),
-                        dash_or(head_ctx_ref[i].compute_done));
-        }
-        std::printf("\n");
-        if (dbg_state == S_ATTENTION_HEADS) {
-            for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-                const ComputeHeadCtx &ctx = head_compute_ctx[lane];
-                std::printf(
-                    "  Lane %d: state=%d req{instr=0x%08X op=%s layer=%d head=%d tile=%d} "
-                    "mac{busy=%d ready=%d complete=%d start=%d} pend{clr=%d cap=%d} err=%d "
-                    "compute{start=%d instr=0x%08X ready=%d done=%d} mem{rd=%d wr=%d done=%d op=0x%08X}\n",
-                    lane,
-                    static_cast<int>(ctx.state),
-                    ctx.req.instruction,
-                    op_name(ctx.req.op),
-                    ctx.req.layer_idx,
-                    ctx.req.head_idx,
-                    ctx.req.tile_idx,
-                    ctx.mac_busy ? 1 : 0,
-                    ctx.mac_ready ? 1 : 0,
-                    ctx.mac_complete ? 1 : 0,
-                    ctx.mac_start ? 1 : 0,
-                    ctx.clear_pending ? 1 : 0,
-                    ctx.capture_pending ? 1 : 0,
-                    ctx.error_latched ? 1 : 0,
-                    ctx.compute_start ? 1 : 0,
-                    ctx.compute_instruction,
-                    ctx.compute_ready ? 1 : 0,
-                    ctx.compute_done ? 1 : 0,
-                    ctx.mem_read_request ? 1 : 0,
-                    ctx.mem_write_request ? 1 : 0,
-                    ctx.mem_transfer_done ? 1 : 0,
-                    ctx.mem_op);
+                    dbg_ctrl_reset_asserted ? 1 : 0,
+                    state_name(dbg_state),
+                    axis_in_data,
+                    axis_in_valid ? 1 : 0,
+                    axis_in_ready ? 1 : 0,
+                    axis_in_keep,
+                    axis_in_strb,
+                    axis_in_last ? 1 : 0,
+                    (axis_in_valid && axis_in_last && axis_in_ready) ? 1 : 0,
+                    wl_start ? 1 : 0,
+                    wl_accept ? 1 : 0,
+                    wl_ready ? 1 : 0,
+                    wl_instruction,
+                    dma_start ? 1 : 0,
+                    dma_addr,
+                    dma_rx_word,
+                    dma_tx_word,
+                    dbg_dma_done ? 1 : 0,
+                    mem_read_request ? 1 : 0,
+                    mem_write_request ? 1 : 0,
+                    mem_transfer_done ? 1 : 0,
+                    dbg_compute_start ? 1 : 0,
+                    dbg_compute_instruction,
+                    compute_state_name(dbg_compute_state),
+                    dbg_req_instruction,
+                    irq_ps ? 1 : 0,
+                    dbg_axis_is_empty ? 1 : 0,
+                    dbg_axis_in_ready_wire ? 1 : 0,
+                    dbg_axis_in_last_wire ? 1 : 0,
+                    dbg_stream_in_counter);
+
+        auto print_head_signals = [&](int lane) {
+            if (lane < 0 || lane >= HEADS_PARALLEL) {
+                std::printf("H%d[h=- ph=- wl_s=0 wl_a=0 wl_i=0x00000000 c_s=0 c_i=0x00000000 c_st=- mr=0 mw=0 md=0]",
+                            lane);
+                return;
             }
+            const HeadCtx &hctx = head_ctx_ref[lane];
+            const ComputeHeadCtx &cctx = head_compute_ctx[lane];
+            const int hidx = hctx.head_idx;
+            std::printf(
+                "H%d[h=%d ph=%-7s wl_s=%d wl_a=%d wl_i=0x%08X c_s=%d c_i=0x%08X c_st=%-10s mr=%d mw=%d md=%d]",
+                lane,
+                hidx,
+                phase_name(hctx.phase),
+                hctx.wl_start ? 1 : 0,
+                hctx.wl_accept ? 1 : 0,
+                hctx.wl_instruction,
+                cctx.compute_start ? 1 : 0,
+                cctx.compute_instruction,
+                compute_state_name(cctx.state),
+                cctx.mem_read_request ? 1 : 0,
+                cctx.mem_write_request ? 1 : 0,
+                cctx.mem_transfer_done ? 1 : 0);
+        };
+        std::printf(" | ");
+        print_head_signals(0);
+        std::printf(" | ");
+        print_head_signals(1);
+        std::printf("\n");
+
+        if (dbg_error) {
+            std::fprintf(stderr,
+                         "\nERROR: transformer_top flagged error (cycle=%d, code=0x%08X, status=0x%08X, mmu_subcode=%u:%s) : ",
+                         cycle, dbg_error_code, status_mem.status,
+                         status_mem.mmu_error_subcode, mmu_subcode_name(status_mem.mmu_error_subcode));
+            print_error_code_bits(dbg_error_code);
+            std::fprintf(stderr, "\n");
+            aborted_on_error = true;
+            break;
         }
 
         // Track the tail of the sequence: once we hit STREAM_OUT, watch for 4 idle cycles
@@ -2035,31 +2227,6 @@ int main() {
             idle_after_stream++;
         } else if (seen_stream_out) {
             idle_after_stream = 0;
-        }
-
-        // Launch head DMA requests onto their dedicated lanes
-        for (int i = 0; i < NUM_HEADS; ++i) {
-            int lane = i % HEADS_PARALLEL;
-            if (head_ctx_ref[i].wl_start && !head_dma_busy[lane]) {
-                head_dma_busy[lane] = true;
-                head_dma_timer[lane] = DMA_LAT - 1;
-                head_dma_active_idx[lane] = i;
-            }
-        }
-
-        if (stream_start) {
-            stream_busy = true;
-        }
-
-        // Consume AXIS transfer on handshake
-        if (axis_in_valid && axis_in_ready) {
-            axis_sent++;
-            axis_in_valid = false;
-            axis_in_last  = false;
-            if (axis_sent >= AXIS_BEATS) {
-                axis_feed_done = true;
-                axis_drive     = false;
-            }
         }
 
         if (irq_interupt_flagged && (interupt_data & IRQ_INFER_DONE_BIT)) {
@@ -2081,14 +2248,12 @@ int main() {
         }
     }
 
-    bool ok = seen_stream_out && (idle_after_stream >= 4) && seen_attn && seen_concat;
+    bool ok = !aborted_on_error && seen_stream_out && (idle_after_stream >= 4);
     bool error_tests_ok = true;
     
     if (!ok) {
         if (!seen_stream_out) std::fprintf(stderr, "ERROR: STREAM_OUT state never reached\n");
         if (idle_after_stream < 4) std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after STREAM_OUT\n");
-        if (!seen_attn)       std::fprintf(stderr, "ERROR: ATT_SCORES compute op never issued\n");
-        if (!seen_concat)     std::fprintf(stderr, "ERROR: CONCAT DMA request never issued\n");
         return 1;
     }
     

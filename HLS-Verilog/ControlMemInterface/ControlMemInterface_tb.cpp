@@ -11,7 +11,7 @@ int main() {
     std::cout << "--- Control Logic Verification ---" << std::endl;
 
     // TEST 1: Alignment Check
-    cfg.wq_base_addr = 0x10000003; // Misaligned
+    cfg.wq_offset = 0x00000003; // Misaligned
     cfg.dma_layer_len = 100;       // Valid
     
     ControlTest_Top(cfg, stat, false, false);
@@ -24,7 +24,7 @@ int main() {
     }
 
     // TEST 2: Valid Config & Execution
-    cfg.wq_base_addr = 0x10000000; // Aligned 64-byte
+    cfg.wq_offset = 0x00000040; // Aligned 64-byte
     
     // Clear previous error
     cfg.irq_clear = IRQ_ERROR_BIT;
