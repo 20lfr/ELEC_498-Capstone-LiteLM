@@ -13,7 +13,7 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_127_1 (
         ap_done,
         ap_idle,
         ap_ready,
-        trunc_ln59,
+        trunc_ln61,
         dma_tx_buf_local_address0,
         dma_tx_buf_local_ce0,
         dma_tx_buf_local_we0,
@@ -28,7 +28,7 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [11:0] trunc_ln59;
+input  [11:0] trunc_ln61;
 output  [10:0] dma_tx_buf_local_address0;
 output   dma_tx_buf_local_ce0;
 output   dma_tx_buf_local_we0;
@@ -209,7 +209,7 @@ assign dma_tx_buf_local_d0 = 32'd0;
 
 assign dma_tx_buf_local_we0 = dma_tx_buf_local_we0_local;
 
-assign icmp_ln127_fu_60_p2 = ((ap_sig_allocacmp_i_27 == trunc_ln59) ? 1'b1 : 1'b0);
+assign icmp_ln127_fu_60_p2 = ((ap_sig_allocacmp_i_27 == trunc_ln61) ? 1'b1 : 1'b0);
 
 assign zext_ln127_fu_72_p1 = ap_sig_allocacmp_i_27;
 

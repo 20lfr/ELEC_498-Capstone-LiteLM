@@ -13,8 +13,8 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_1877_1 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1373,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1372,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356,
         icmp,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_16,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_16_ap_vld,
@@ -44,8 +44,8 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1373;
-input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1372;
+input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357;
+input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356;
 input  [0:0] icmp;
 output  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_16;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_16_ap_vld;
@@ -347,7 +347,7 @@ assign icmp_ln1878_fu_92_p2 = ((ap_sig_allocacmp_h_3 == 2'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln1879_fu_110_p2 = ((ap_sig_allocacmp_h_3 == 2'd1) ? 1'b1 : 1'b0);
 
-assign select_ln1879_fu_116_p3 = ((icmp_ln1879_fu_110_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1373 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1372);
+assign select_ln1879_fu_116_p3 = ((icmp_ln1879_fu_110_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356);
 
 assign select_ln1882_fu_149_p3 = ((icmp_ln1879_reg_194[0:0] == 1'b1) ? p_ZN12_GLOBAL_N_116head_wl_acceptedE_1_i : p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_i);
 

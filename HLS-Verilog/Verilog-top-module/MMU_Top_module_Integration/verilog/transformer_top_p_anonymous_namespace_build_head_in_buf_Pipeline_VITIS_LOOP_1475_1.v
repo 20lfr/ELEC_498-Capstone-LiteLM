@@ -83,7 +83,7 @@ wire   [14:0] add_ln1475_3_fu_174_p2;
 reg   [14:0] ap_sig_allocacmp_phi_mul_load;
 reg   [6:0] i_fu_64;
 wire   [6:0] add_ln1475_fu_165_p2;
-reg   [6:0] ap_sig_allocacmp_i_60;
+reg   [6:0] ap_sig_allocacmp_i_45;
 reg    lane_buf_3_we0_local;
 wire   [2:0] trunc_ln1475_fu_199_p1;
 reg    lane_buf_3_ce0_local;
@@ -224,9 +224,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_60 = 7'd0;
+        ap_sig_allocacmp_i_45 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_60 = i_fu_64;
+        ap_sig_allocacmp_i_45 = i_fu_64;
     end
 end
 
@@ -341,7 +341,7 @@ assign add_ln1475_3_fu_174_p2 = (ap_sig_allocacmp_phi_mul_load + 15'd205);
 
 assign add_ln1475_4_fu_215_p2 = (ap_sig_allocacmp_phi_urem_load + 7'd1);
 
-assign add_ln1475_fu_165_p2 = (ap_sig_allocacmp_i_60 + 7'd1);
+assign add_ln1475_fu_165_p2 = (ap_sig_allocacmp_i_45 + 7'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -357,7 +357,7 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln1475_2_fu_221_p2 = ((ap_sig_allocacmp_phi_urem_load == 7'd4) ? 1'b1 : 1'b0);
 
-assign icmp_ln1475_fu_159_p2 = ((ap_sig_allocacmp_i_60 == 7'd96) ? 1'b1 : 1'b0);
+assign icmp_ln1475_fu_159_p2 = ((ap_sig_allocacmp_i_45 == 7'd96) ? 1'b1 : 1'b0);
 
 assign lane_buf_0_address0 = zext_ln1475_fu_190_p1;
 

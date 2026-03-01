@@ -18,9 +18,6 @@ module transformer_top_read_i4 (
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0,
@@ -30,6 +27,9 @@ module transformer_top_read_i4 (
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0,
         ap_return
 );
 
@@ -46,9 +46,6 @@ input  [7:0] nibble_idx;
 output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address0;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q0;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0;
 output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0;
@@ -58,6 +55,9 @@ input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_Stat
 output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address0;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0;
 output  [3:0] ap_return;
 
 reg ap_done;
@@ -92,22 +92,22 @@ reg   [0:0] trunc_ln771_reg_222_pp0_iter7_reg;
 reg   [0:0] trunc_ln771_reg_222_pp0_iter8_reg;
 reg   [0:0] trunc_ln771_reg_222_pp0_iter9_reg;
 wire   [6:0] trunc_ln_fu_125_p4;
-reg   [4:0] tmp_68_reg_232;
-reg   [4:0] tmp_68_reg_232_pp0_iter1_reg;
-reg   [4:0] tmp_68_reg_232_pp0_iter2_reg;
-reg   [4:0] tmp_68_reg_232_pp0_iter3_reg;
-reg   [4:0] tmp_68_reg_232_pp0_iter4_reg;
-reg   [4:0] tmp_68_reg_232_pp0_iter5_reg;
-reg   [4:0] tmp_68_reg_232_pp0_iter6_reg;
-reg   [4:0] tmp_68_reg_232_pp0_iter7_reg;
-reg   [4:0] tmp_68_reg_232_pp0_iter8_reg;
+reg   [4:0] tmp_71_reg_232;
+reg   [4:0] tmp_71_reg_232_pp0_iter1_reg;
+reg   [4:0] tmp_71_reg_232_pp0_iter2_reg;
+reg   [4:0] tmp_71_reg_232_pp0_iter3_reg;
+reg   [4:0] tmp_71_reg_232_pp0_iter4_reg;
+reg   [4:0] tmp_71_reg_232_pp0_iter5_reg;
+reg   [4:0] tmp_71_reg_232_pp0_iter6_reg;
+reg   [4:0] tmp_71_reg_232_pp0_iter7_reg;
+reg   [4:0] tmp_71_reg_232_pp0_iter8_reg;
 wire   [63:0] zext_ln772_fu_161_p1;
 wire    ap_block_pp0_stage0;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0_local;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0_local;
+reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0_local;
 wire   [6:0] mul_ln772_fu_139_p0;
 wire   [8:0] mul_ln772_fu_139_p1;
 wire   [14:0] mul_ln772_fu_139_p2;
@@ -192,10 +192,10 @@ urem_7ns_4ns_3_11_1_U280(
     .dout_WIDTH( 8 ))
 sparsemux_11_3_8_1_1_U281(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q0),
-    .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
-    .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
-    .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0),
-    .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0),
+    .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
+    .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0),
+    .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0),
+    .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
     .def(byte_val_fu_173_p11),
     .sel(byte_val_fu_173_p12),
     .dout(byte_val_fu_173_p13)
@@ -311,8 +311,8 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_ce) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        tmp_68_reg_232 <= {{mul_ln772_fu_139_p2[14:10]}};
-        tmp_68_reg_232_pp0_iter1_reg <= tmp_68_reg_232;
+        tmp_71_reg_232 <= {{mul_ln772_fu_139_p2[14:10]}};
+        tmp_71_reg_232_pp0_iter1_reg <= tmp_71_reg_232;
         trunc_ln771_reg_222 <= trunc_ln771_fu_121_p1;
         trunc_ln771_reg_222_pp0_iter1_reg <= trunc_ln771_reg_222;
     end
@@ -320,13 +320,13 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_ce))) begin
-        tmp_68_reg_232_pp0_iter2_reg <= tmp_68_reg_232_pp0_iter1_reg;
-        tmp_68_reg_232_pp0_iter3_reg <= tmp_68_reg_232_pp0_iter2_reg;
-        tmp_68_reg_232_pp0_iter4_reg <= tmp_68_reg_232_pp0_iter3_reg;
-        tmp_68_reg_232_pp0_iter5_reg <= tmp_68_reg_232_pp0_iter4_reg;
-        tmp_68_reg_232_pp0_iter6_reg <= tmp_68_reg_232_pp0_iter5_reg;
-        tmp_68_reg_232_pp0_iter7_reg <= tmp_68_reg_232_pp0_iter6_reg;
-        tmp_68_reg_232_pp0_iter8_reg <= tmp_68_reg_232_pp0_iter7_reg;
+        tmp_71_reg_232_pp0_iter2_reg <= tmp_71_reg_232_pp0_iter1_reg;
+        tmp_71_reg_232_pp0_iter3_reg <= tmp_71_reg_232_pp0_iter2_reg;
+        tmp_71_reg_232_pp0_iter4_reg <= tmp_71_reg_232_pp0_iter3_reg;
+        tmp_71_reg_232_pp0_iter5_reg <= tmp_71_reg_232_pp0_iter4_reg;
+        tmp_71_reg_232_pp0_iter6_reg <= tmp_71_reg_232_pp0_iter5_reg;
+        tmp_71_reg_232_pp0_iter7_reg <= tmp_71_reg_232_pp0_iter6_reg;
+        tmp_71_reg_232_pp0_iter8_reg <= tmp_71_reg_232_pp0_iter7_reg;
         trunc_ln771_reg_222_pp0_iter2_reg <= trunc_ln771_reg_222_pp0_iter1_reg;
         trunc_ln771_reg_222_pp0_iter3_reg <= trunc_ln771_reg_222_pp0_iter2_reg;
         trunc_ln771_reg_222_pp0_iter4_reg <= trunc_ln771_reg_222_pp0_iter3_reg;
@@ -503,6 +503,6 @@ assign trunc_ln774_fu_211_p1 = byte_val_fu_173_p13[3:0];
 
 assign trunc_ln_fu_125_p4 = {{nibble_idx[7:1]}};
 
-assign zext_ln772_fu_161_p1 = tmp_68_reg_232_pp0_iter8_reg;
+assign zext_ln772_fu_161_p1 = tmp_71_reg_232_pp0_iter8_reg;
 
 endmodule //transformer_top_read_i4
