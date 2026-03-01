@@ -170,7 +170,7 @@ wire   [1:0] trunc_ln842_fu_155_p1;
 wire   [3:0] shl_ln842_1_fu_158_p3;
 wire   [62:0] product_fu_115_p2;
 wire   [62:0] add_ln448_fu_176_p2;
-wire   [18:0] tmp_167_fu_202_p4;
+wire   [18:0] tmp_166_fu_202_p4;
 wire   [25:0] trunc_ln457_s_fu_182_p4;
 wire   [0:0] icmp_ln451_fu_212_p2;
 wire   [0:0] icmp_ln454_fu_218_p2;
@@ -253,7 +253,7 @@ transformer_top_mul_32s_32ns_63_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 63 ))
-mul_32s_32ns_63_1_1_U745(
+mul_32s_32ns_63_1_1_U956(
     .din0(grp_read_i32_1_fu_100_ap_return),
     .din1(product_fu_115_p1),
     .dout(product_fu_115_p2)
@@ -631,7 +631,7 @@ assign grp_read_i32_1_fu_100_ap_start = grp_read_i32_1_fu_100_ap_start_reg;
 
 assign grp_read_i32_1_fu_100_byte_addr = shl_ln842_1_fu_158_p3;
 
-assign icmp_ln451_fu_212_p2 = (($signed(tmp_167_fu_202_p4) > $signed(19'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln451_fu_212_p2 = (($signed(tmp_166_fu_202_p4) > $signed(19'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln454_fu_218_p2 = (($signed(trunc_ln457_s_fu_182_p4) < $signed(26'd67108736)) ? 1'b1 : 1'b0);
 
@@ -683,7 +683,7 @@ assign select_ln451_fu_224_p3 = ((icmp_ln451_fu_212_p2[0:0] == 1'b1) ? 8'd127 : 
 
 assign shl_ln842_1_fu_158_p3 = {{trunc_ln842_fu_155_p1}, {2'd0}};
 
-assign tmp_167_fu_202_p4 = {{add_ln448_fu_176_p2[62:44]}};
+assign tmp_166_fu_202_p4 = {{add_ln448_fu_176_p2[62:44]}};
 
 assign trunc_ln457_9_fu_192_p4 = {{add_ln448_fu_176_p2[44:37]}};
 

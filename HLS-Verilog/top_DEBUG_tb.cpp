@@ -79,6 +79,8 @@ constexpr uint64_t TB_BASE_WV_BIAS          = 0x2C000ull;
 constexpr uint64_t TB_BASE_WO_BIAS          = 0x30000ull;
 constexpr uint64_t TB_BASE_W1_BIAS          = 0x34000ull;
 constexpr uint64_t TB_BASE_W2_BIAS          = 0x3A000ull;
+constexpr uint64_t TB_BASE_WVOCAB           = 0x40000ull;
+constexpr uint64_t TB_BASE_WVOCAB_BIAS      = 0x41000ull;
 constexpr uint64_t TB_BASE_LN0_GAMMA        = 0x42000ull;
 constexpr uint64_t TB_BASE_LN1_GAMMA        = 0x42400ull;
 constexpr uint64_t TB_BASE_FINAL_NORM_GAMMA = 0x42800ull;
@@ -87,7 +89,7 @@ constexpr uint64_t TB_BASE_LN1_EPS          = 0x42C40ull;
 constexpr uint64_t TB_BASE_FINAL_NORM_EPS   = 0x42C80ull;
 constexpr uint64_t TB_DDR_IMAGE_BYTES       = 0x43000ull;
 constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
-constexpr size_t   TB_CTRL_MEM_WORDS        = 54u;
+constexpr size_t   TB_CTRL_MEM_WORDS        = 56u;
 constexpr size_t   TB_CTRL_MEM_BYTES        = TB_CTRL_MEM_WORDS * sizeof(uint32_t);
 
 static ControlMemSpace g_loaded_ctrl_mem{};
@@ -186,39 +188,41 @@ static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
     tmp.wo_bias_tile_stride = read_u32(18);
     tmp.w1_bias_tile_stride = read_u32(19);
     tmp.w2_bias_tile_stride = read_u32(20);
-    tmp.ln0_gamma_stride = read_u32(21);
-    tmp.ln1_gamma_stride = read_u32(22);
-    tmp.final_norm_gamma_stride = read_u32(23);
-    tmp.ln0_eps_stride = read_u32(24);
-    tmp.ln1_eps_stride = read_u32(25);
-    tmp.final_norm_eps_stride = read_u32(26);
-    tmp.wq_offset = read_u32(27);
-    tmp.wk_offset = read_u32(28);
-    tmp.wv_offset = read_u32(29);
-    tmp.wo_offset = read_u32(30);
-    tmp.w1_offset = read_u32(31);
-    tmp.w2_offset = read_u32(32);
-    tmp.k_cache_offset = read_u32(33);
-    tmp.v_cache_offset = read_u32(34);
-    tmp.wq_bias_offset = read_u32(35);
-    tmp.wk_bias_offset = read_u32(36);
-    tmp.wv_bias_offset = read_u32(37);
-    tmp.wo_bias_offset = read_u32(38);
-    tmp.w1_bias_offset = read_u32(39);
-    tmp.w2_bias_offset = read_u32(40);
-    tmp.ln0_gamma_offset = read_u32(41);
-    tmp.ln1_gamma_offset = read_u32(42);
-    tmp.final_norm_gamma_offset = read_u32(43);
-    tmp.ln0_eps_offset = read_u32(44);
-    tmp.ln1_eps_offset = read_u32(45);
-    tmp.final_norm_eps_offset = read_u32(46);
-    tmp.logit_scale_qv = read_u32(47);
-    tmp.scale_q = read_u32(48);
-    tmp.zero_point_q = read_u32(49);
-    tmp.scale_k = read_u32(50);
-    tmp.zero_point_k = read_u32(51);
-    tmp.scale_v = read_u32(52);
-    tmp.zero_point_v = read_u32(53);
+    tmp.wlogit_tile_stride = read_u32(21);
+    tmp.ln0_gamma_stride = read_u32(22);
+    tmp.ln1_gamma_stride = read_u32(23);
+    tmp.final_norm_gamma_stride = read_u32(24);
+    tmp.ln0_eps_stride = read_u32(25);
+    tmp.ln1_eps_stride = read_u32(26);
+    tmp.final_norm_eps_stride = read_u32(27);
+    tmp.wq_offset = read_u32(28);
+    tmp.wk_offset = read_u32(29);
+    tmp.wv_offset = read_u32(30);
+    tmp.wo_offset = read_u32(31);
+    tmp.w1_offset = read_u32(32);
+    tmp.w2_offset = read_u32(33);
+    tmp.k_cache_offset = read_u32(34);
+    tmp.v_cache_offset = read_u32(35);
+    tmp.wq_bias_offset = read_u32(36);
+    tmp.wk_bias_offset = read_u32(37);
+    tmp.wv_bias_offset = read_u32(38);
+    tmp.wo_bias_offset = read_u32(39);
+    tmp.w1_bias_offset = read_u32(40);
+    tmp.w2_bias_offset = read_u32(41);
+    tmp.ln0_gamma_offset = read_u32(42);
+    tmp.ln1_gamma_offset = read_u32(43);
+    tmp.final_norm_gamma_offset = read_u32(44);
+    tmp.ln0_eps_offset = read_u32(45);
+    tmp.ln1_eps_offset = read_u32(46);
+    tmp.final_norm_eps_offset = read_u32(47);
+    tmp.wlogit_offset = read_u32(48);
+    tmp.logit_scale_qv = read_u32(49);
+    tmp.scale_q = read_u32(50);
+    tmp.zero_point_q = read_u32(51);
+    tmp.scale_k = read_u32(52);
+    tmp.zero_point_k = read_u32(53);
+    tmp.scale_v = read_u32(54);
+    tmp.zero_point_v = read_u32(55);
 
     ctrl_mem = tmp;
     return true;
@@ -257,6 +261,8 @@ static const char *state_name(SchedState st) {
     case S_LAYER_NORM_1:    return "S_LN_1";
     case S_LOOP_CHECK:      return "S_LOOP_CHECK";
     case S_FINAL_NORM:      return "S_FINAL_NORM";
+    case S_LOGITS:          return "S_LOGITS";
+    case S_ARGMAX:          return "S_ARGMAX";
     case S_STREAM_OUT:      return "S_STREAM_OUT";
     default:                return "UNKNOWN";
     }
@@ -290,6 +296,8 @@ static const char *op_name(ComputeOp op) {
     case CMP_LN1:          return "LN1";
     case CMP_REQUANT4:     return "RQ4";
     case CMP_FINAL_NORM:   return "FINAL_NORM";
+    case CMP_LOGITS:       return "LOGITS";
+    case CMP_ARGMAX:       return "ARGMAX";
     default:               return "UNK";
     }
 }
@@ -1242,6 +1250,10 @@ static uint64_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) 
         if (f.tile < 0) return 0;
         return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
+    case DMASEL_WLOGIT:
+        if (f.tile < 0) return 0;
+        return static_cast<uint64_t>(ctrl.wlogit_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.wlogit_tile_stride);
     case DMASEL_LN0:
         return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
     case DMASEL_LN1:
@@ -1297,6 +1309,10 @@ static uint64_t compute_wl_address(
         if (tile < 0) return 0;
         return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
                static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
+    case DMASEL_WLOGIT:
+        if (tile < 0) return 0;
+        return static_cast<uint64_t>(ctrl.wlogit_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.wlogit_tile_stride);
     case DMASEL_LN0:
         return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
     case DMASEL_LN1:
@@ -1417,6 +1433,9 @@ static const char *mmu_subcode_name(uint32_t subcode) {
         case MMU_ERR_SUBCODE_MISSING_W2_B: return "MISSING_W2_B";
         case MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED: return "MISSING_FFN_W2_PACKED";
         case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_LOGITS_W: return "MISSING_LOGITS_W";
+        case MMU_ERR_SUBCODE_MISSING_LOGITS_PACKED: return "MISSING_LOGITS_PACKED";
+        case MMU_ERR_SUBCODE_MISSING_ARGMAX_OUT: return "MISSING_ARGMAX_OUT";
         case MMU_ERR_SUBCODE_MISSING_LN0_GAMMA: return "MISSING_LN0_GAMMA";
         case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
         case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
@@ -1482,6 +1501,8 @@ ControlMemSpace ctrl_mem_init(bool init) {
         ctrl_mem.ln0_eps_offset = static_cast<uint32_t>(TB_BASE_LN0_EPS);
         ctrl_mem.ln1_eps_offset = static_cast<uint32_t>(TB_BASE_LN1_EPS);
         ctrl_mem.final_norm_eps_offset = static_cast<uint32_t>(TB_BASE_FINAL_NORM_EPS);
+        ctrl_mem.wlogit_tile_stride = 0x00000080;
+        ctrl_mem.wlogit_offset = static_cast<uint32_t>(TB_BASE_WVOCAB);
     }
     return ctrl_mem;
 }

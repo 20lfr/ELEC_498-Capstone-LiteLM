@@ -42,13 +42,13 @@ wire   [3:0] sel_read_read_fu_92_p2;
 reg   [6:0] ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_new_0_phi_fu_142_p24;
 reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_new_0_phi_fu_183_p24;
 reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24;
-wire   [4:0] zext_ln1084_fu_302_p1;
+wire   [4:0] zext_ln1177_fu_302_p1;
 reg   [4:0] ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_1_new_0_phi_fu_264_p24;
 wire    ap_ce_reg;
 
 always @ (*) begin
     if ((sel_read_read_fu_92_p2 == 4'd1)) begin
-        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = zext_ln1084_fu_302_p1;
+        ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = zext_ln1177_fu_302_p1;
     end else if ((sel_read_read_fu_92_p2 == 4'd2)) begin
         ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24 = 5'd3;
     end else if ((sel_read_read_fu_92_p2 == 4'd4)) begin
@@ -140,7 +140,7 @@ end
 
 assign ap_ready = 1'b1;
 
-assign zext_ln1084_fu_302_p1 = sel;
+assign zext_ln1177_fu_302_p1 = sel;
 
 assign p_ZN12_GLOBAL_N_116active_piece_tagE_0 = ap_phi_mux_p_ZN12_GLOBAL_N_116active_piece_tagE_0_new_0_phi_fu_224_p24;
 

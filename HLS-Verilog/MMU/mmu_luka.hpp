@@ -77,6 +77,7 @@ enum class Tag : uint8_t {
     WO_W, WO_B,
     W1_W, W1_B,
     W2_W, W2_B,
+    LOGITS_W,
     CTX_K,
     CTX_V,
     LN0_GAMMA,
@@ -100,6 +101,8 @@ enum class Tag : uint8_t {
     REQUANT4_OUT,
     RESID1_OUT,
     FINAL_NORM_OUT,
+    LOGITS_PACKED,
+    ARGMAX_OUT,
 
     // Headed compute outputs
     Q_OUT,
