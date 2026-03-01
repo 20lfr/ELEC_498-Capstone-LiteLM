@@ -144,12 +144,15 @@ constexpr int       NUM_HEADS       = 4;
 constexpr int       NUM_LAYERS      = 4;
 constexpr int       D_MODEL         = 16;                           // Number of heads processed in parallel
 constexpr int       D_FFN           = 24;                           // Feed-Forward hidden layer size
+constexpr int       D_VOCAB         = 32;                           // Vocab projection output size
 constexpr int       D_HEADS         = D_MODEL / NUM_HEADS;          // Number of heads processed in parallel
 constexpr int       D_TILE_WO       = D_MODEL / NUM_WO_TILES;       // Tile size for WO
 constexpr int       D_TILE_W1       = D_FFN * 2 / NUM_W1_TILES;     // Tile size for W1
 constexpr int       D_TILE_W2       = D_MODEL   / NUM_W2_TILES;
+static_assert((D_VOCAB % NUM_LOGIT_TILES) == 0, "D_VOCAB must divide NUM_LOGIT_TILES");
+constexpr int       D_TILE_LOGIT    = D_VOCAB / NUM_LOGIT_TILES;    // Tile size for vocab projection
 constexpr int       STREAM_IN_BUF_BYTES  = D_MODEL;                 // Token ingress payload (int8 activations)
-constexpr int       STREAM_OUT_BUF_BYTES = D_MODEL * 4;             // Streamed egress payload (e.g. final norm int32)
+constexpr int       STREAM_OUT_BUF_BYTES = 4;                       // Streamed egress payload (argmax token id)
 
 // AXI-Full DDR beat sizing (one m_axi_gmem data beat).
 // Keep this aligned with the top-level DDR port element type.
@@ -205,7 +208,9 @@ enum SchedState {
     S_RES_ADD_2,       // 10
     S_LOOP_CHECK,      // 11
     S_FINAL_NORM,      // 12
-    S_STREAM_OUT       // 13
+    S_LOGITS,          // 13
+    S_ARGMAX,          // 14
+    S_STREAM_OUT       // 15
 };
 // ------------------------------------------------------------
 // Headed Attention and FSM enums
@@ -257,6 +262,8 @@ enum ComputeOp : uint8_t {
     CMP_LN1          = 23, // 24
     CMP_REQUANT4     = 24, // 25
     CMP_FINAL_NORM   = 25, // 26
+    CMP_LOGITS       = 26, // 27
+    CMP_ARGMAX       = 27, // 28
 };
 
 enum DmaSel : uint8_t {
@@ -271,7 +278,8 @@ enum DmaSel : uint8_t {
     DMASEL_WO,          // 8
     DMASEL_W1,          // 9
     DMASEL_W2,          // 10
-    DMASEL_WLOGIT,      // 11
+    DMASEL_LOGITS,      // 11
+    DMASEL_WLOGIT = DMASEL_LOGITS,
     DMASEL_CONCAT,      // 12
     DMASEL_LN0,         // 13
     DMASEL_LN1          // 14
@@ -457,6 +465,9 @@ constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_GAMMA                 = 130;
 constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN0_EPS                   = 131;
 constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_GAMMA                 = 132;
 constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LN1_EPS                   = 133;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LOGITS_W                  = 134;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_LOGITS_PACKED             = 135;
+constexpr uint32_t MMU_ERR_SUBCODE_MISSING_ARGMAX_OUT                = 136;
 
 
 
@@ -499,6 +510,7 @@ struct ControlMemSpace {
     uint32_t wo_bias_tile_stride = 0;
     uint32_t w1_bias_tile_stride = 0;
     uint32_t w2_bias_tile_stride = 0;
+    uint32_t wlogit_tile_stride = 0;
 
     // Optional LN/RMS parameter strides (per-layer tables).
     uint32_t ln0_gamma_stride = 0;
@@ -507,6 +519,7 @@ struct ControlMemSpace {
     uint32_t ln0_eps_stride = 0;
     uint32_t ln1_eps_stride = 0;
     uint32_t final_norm_eps_stride = 0;
+    
 
     // Word offsets relative to AXI Full base (set by PS)
     // wq=0, wk=size(wq), wv=size(wq)+size(wk), ...
@@ -532,6 +545,7 @@ struct ControlMemSpace {
     uint32_t ln0_eps_offset = 0;
     uint32_t ln1_eps_offset = 0;
     uint32_t final_norm_eps_offset = 0;
+    uint32_t wlogit_offset = 0;
 
     uint32_t logit_scale_qv = 0;
     uint32_t scale_q = 0;
@@ -572,7 +586,7 @@ enum class BufDType : uint8_t {
 // For MAIN MAC unit input and output buffer sizing
 constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
 constexpr int ACCUM_MAX =
-    max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, D_TILE_W2));
+    max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, max2_constexpr(D_TILE_W2, D_TILE_LOGIT)));
 constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
 
 constexpr int MAC_VEC_UNROLL = min2_constexpr(
@@ -613,13 +627,21 @@ namespace compute_buf {
     constexpr int FFN_W2_IN_BYTES =
         (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES;
 
+    constexpr int LOGITS_X_BYTES = D_MODEL * 4;
+    constexpr int LOGITS_W_NIBBLES = D_MODEL * D_TILE_LOGIT;
+    constexpr int LOGITS_W_BYTES = div_ceil(LOGITS_W_NIBBLES, 2);
+    constexpr int LOGITS_IN_BYTES = LOGITS_X_BYTES + LOGITS_W_BYTES;
+    constexpr int ARGMAX_IN_BYTES = D_VOCAB * 4;
+
     constexpr int IN_BUF_BYTES =
         max2(OUT_PROJ_IN_BYTES,
              max2(REQUANT_IN_BYTES,
                   max2(RESID_IN_BYTES,
                        max2(LN_IN_BYTES,
                             max2(FFN_W1_IN_BYTES,
-                                 max2(FFN_ACT_IN_BYTES, FFN_W2_IN_BYTES))))));
+                                 max2(FFN_ACT_IN_BYTES,
+                                      max2(FFN_W2_IN_BYTES,
+                                           max2(LOGITS_IN_BYTES, ARGMAX_IN_BYTES))))))));
 
     // -------------------------------
     // Output buffer size calculations
@@ -631,6 +653,8 @@ namespace compute_buf {
     constexpr int FFN_W1_OUT_BYTES = D_TILE_W1 * 2;
     constexpr int FFN_ACT_OUT_BYTES = D_FFN * 2;
     constexpr int FFN_W2_OUT_BYTES = D_TILE_W2;
+    constexpr int LOGITS_OUT_BYTES = D_TILE_LOGIT * 4;
+    constexpr int ARGMAX_OUT_BYTES = 4;
 
     constexpr int OUT_BUF_BYTES =
         max2(OUT_PROJ_OUT_BYTES,
@@ -638,7 +662,9 @@ namespace compute_buf {
                   max2(RESID_OUT_BYTES,
                        max2(LN_OUT_BYTES,
                             max2(FFN_W1_OUT_BYTES,
-                                 max2(FFN_ACT_OUT_BYTES, FFN_W2_OUT_BYTES))))));
+                                 max2(FFN_ACT_OUT_BYTES,
+                                      max2(FFN_W2_OUT_BYTES,
+                                           max2(LOGITS_OUT_BYTES, ARGMAX_OUT_BYTES))))))));
 
     // -------------------------------
     // Per-op layouts (byte offsets)
@@ -708,6 +734,20 @@ namespace compute_buf {
         static constexpr int B = W + W_BYTES;
     };
 
+    struct INLogitsLayout {
+        static constexpr int X_BYTES = LOGITS_X_BYTES;
+        static constexpr int W_BYTES = LOGITS_W_BYTES;
+        static constexpr int TOTAL_BYTES = LOGITS_IN_BYTES;
+        static constexpr int X = 0;
+        static constexpr int W = X + X_BYTES;
+    };
+
+    struct INArgmaxLayout {
+        static constexpr int X_BYTES = ARGMAX_IN_BYTES;
+        static constexpr int TOTAL_BYTES = ARGMAX_IN_BYTES;
+        static constexpr int X = 0;
+    };
+
     // -------------------------------
     // Per-op output layouts (byte offsets)
     // -------------------------------
@@ -758,6 +798,20 @@ namespace compute_buf {
         static constexpr int NUM_ELEMS = D_TILE_W2;
         static constexpr BufDType TYPE = BufDType::I8;
         static constexpr int TOTAL_BYTES = FFN_W2_OUT_BYTES;
+        static constexpr int Y = 0;
+    };
+
+    struct OUTLogitsLayout {
+        static constexpr int NUM_ELEMS = D_TILE_LOGIT;
+        static constexpr BufDType TYPE = BufDType::I32;
+        static constexpr int TOTAL_BYTES = LOGITS_OUT_BYTES;
+        static constexpr int Y = 0;
+    };
+
+    struct OUTArgmaxLayout {
+        static constexpr int NUM_ELEMS = 1;
+        static constexpr BufDType TYPE = BufDType::I32;
+        static constexpr int TOTAL_BYTES = ARGMAX_OUT_BYTES;
         static constexpr int Y = 0;
     };
 

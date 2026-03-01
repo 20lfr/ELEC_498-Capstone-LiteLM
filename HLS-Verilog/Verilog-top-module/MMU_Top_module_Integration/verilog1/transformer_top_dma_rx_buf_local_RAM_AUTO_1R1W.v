@@ -13,8 +13,8 @@ module transformer_top_dma_rx_buf_local_RAM_AUTO_1R1W (
     reset, clk);
 
 parameter DataWidth = 32;
-parameter AddressWidth = 14;
-parameter AddressRange = 16384;
+parameter AddressWidth = 11;
+parameter AddressRange = 2048;
  
 input[AddressWidth-1:0] address0;
 input ce0;

@@ -3,7 +3,7 @@ import os
 import struct
 
 
-CTRL_MEM_WORDS = 54
+CTRL_MEM_WORDS = 56
 STREAM_IN_BUF_BYTES = 16
 
 NUM_LAYERS = 4
@@ -23,6 +23,8 @@ IMG_BASE_WV_BIAS = 0x2C000
 IMG_BASE_WO_BIAS = 0x30000
 IMG_BASE_W1_BIAS = 0x34000
 IMG_BASE_W2_BIAS = 0x3A000
+IMG_BASE_WVOCAB = 0x40000
+IMG_BASE_WVOCAB_BIAS = 0x41000
 IMG_BASE_LN0_GAMMA = 0x42000
 IMG_BASE_LN1_GAMMA = 0x42400
 IMG_BASE_FINAL_NORM_GAMMA = 0x42800
@@ -66,39 +68,41 @@ def build_ctrl_words() -> list[int]:
     words[18] = 0x0000_0020  # wo bias tile stride
     words[19] = 0x0000_0040  # w1 bias tile stride
     words[20] = 0x0000_0020  # w2 bias tile stride
-    words[21] = 0x0000_0004  # ln0 gamma stride
-    words[22] = 0x0000_0004  # ln1 gamma stride
-    words[23] = 0x0000_0004  # final norm gamma stride
-    words[24] = 0x0000_0004  # ln0 eps stride
-    words[25] = 0x0000_0004  # ln1 eps stride
-    words[26] = 0x0000_0004  # final norm eps stride
-    words[27] = IMG_BASE_WQ
-    words[28] = IMG_BASE_WK
-    words[29] = IMG_BASE_WV
-    words[30] = IMG_BASE_WO
-    words[31] = IMG_BASE_W1
-    words[32] = IMG_BASE_W2
-    words[33] = IMG_BASE_K_CACHE
-    words[34] = IMG_BASE_V_CACHE
-    words[35] = IMG_BASE_WQ_BIAS
-    words[36] = IMG_BASE_WK_BIAS
-    words[37] = IMG_BASE_WV_BIAS
-    words[38] = IMG_BASE_WO_BIAS
-    words[39] = IMG_BASE_W1_BIAS
-    words[40] = IMG_BASE_W2_BIAS
-    words[41] = IMG_BASE_LN0_GAMMA
-    words[42] = IMG_BASE_LN1_GAMMA
-    words[43] = IMG_BASE_FINAL_NORM_GAMMA
-    words[44] = IMG_BASE_LN0_EPS
-    words[45] = IMG_BASE_LN1_EPS
-    words[46] = IMG_BASE_FINAL_NORM_EPS
-    words[47] = 0x00000D10  # logit_scale_qv (legacy test value)
-    words[48] = 0x00002000  # scale_q
-    words[49] = 0x00000000  # zero_point_q
-    words[50] = 0x00002000  # scale_k
-    words[51] = 0x00000000  # zero_point_k
-    words[52] = 0x00002000  # scale_v
-    words[53] = 0x00000000  # zero_point_v
+    words[21] = 0x0000_0080  # wlogit tile stride
+    words[22] = 0x0000_0004  # ln0 gamma stride
+    words[23] = 0x0000_0004  # ln1 gamma stride
+    words[24] = 0x0000_0004  # final norm gamma stride
+    words[25] = 0x0000_0004  # ln0 eps stride
+    words[26] = 0x0000_0004  # ln1 eps stride
+    words[27] = 0x0000_0004  # final norm eps stride
+    words[28] = IMG_BASE_WQ
+    words[29] = IMG_BASE_WK
+    words[30] = IMG_BASE_WV
+    words[31] = IMG_BASE_WO
+    words[32] = IMG_BASE_W1
+    words[33] = IMG_BASE_W2
+    words[34] = IMG_BASE_K_CACHE
+    words[35] = IMG_BASE_V_CACHE
+    words[36] = IMG_BASE_WQ_BIAS
+    words[37] = IMG_BASE_WK_BIAS
+    words[38] = IMG_BASE_WV_BIAS
+    words[39] = IMG_BASE_WO_BIAS
+    words[40] = IMG_BASE_W1_BIAS
+    words[41] = IMG_BASE_W2_BIAS
+    words[42] = IMG_BASE_LN0_GAMMA
+    words[43] = IMG_BASE_LN1_GAMMA
+    words[44] = IMG_BASE_FINAL_NORM_GAMMA
+    words[45] = IMG_BASE_LN0_EPS
+    words[46] = IMG_BASE_LN1_EPS
+    words[47] = IMG_BASE_FINAL_NORM_EPS
+    words[48] = IMG_BASE_WVOCAB  # wlogit offset
+    words[49] = 0x00000D10  # logit_scale_qv (legacy test value)
+    words[50] = 0x00002000  # scale_q
+    words[51] = 0x00000000  # zero_point_q
+    words[52] = 0x00002000  # scale_k
+    words[53] = 0x00000000  # zero_point_k
+    words[54] = 0x00002000  # scale_v
+    words[55] = 0x00000000  # zero_point_v
     return words
 
 
@@ -124,6 +128,8 @@ def build_generated_mem_map_svh() -> str:
   localparam int IMG_SPAN_WO_BIAS      = 'h04000;
   localparam int IMG_SPAN_W1_BIAS      = 'h06000;
   localparam int IMG_SPAN_W2_BIAS      = 'h06000;
+  localparam int IMG_SPAN_WVOCAB       = 'h01000;
+  localparam int IMG_SPAN_WVOCAB_BIAS  = 'h01000;
   localparam int IMG_SPAN_LN_GAMMA     = 'h00400;
   localparam int IMG_SPAN_LN_EPS       = 'h00040;
 
@@ -141,6 +147,8 @@ def build_generated_mem_map_svh() -> str:
   localparam int IMG_BASE_WO_BIAS          = 'h{IMG_BASE_WO_BIAS:05X};
   localparam int IMG_BASE_W1_BIAS          = 'h{IMG_BASE_W1_BIAS:05X};
   localparam int IMG_BASE_W2_BIAS          = 'h{IMG_BASE_W2_BIAS:05X};
+  localparam int IMG_BASE_WVOCAB           = 'h{IMG_BASE_WVOCAB:05X};
+  localparam int IMG_BASE_WVOCAB_BIAS      = 'h{IMG_BASE_WVOCAB_BIAS:05X};
   localparam int IMG_BASE_LN0_GAMMA        = 'h{IMG_BASE_LN0_GAMMA:05X};
   localparam int IMG_BASE_LN1_GAMMA        = 'h{IMG_BASE_LN1_GAMMA:05X};
   localparam int IMG_BASE_FINAL_NORM_GAMMA = 'h{IMG_BASE_FINAL_NORM_GAMMA:05X};
@@ -160,6 +168,7 @@ def main() -> None:
     fill_pattern_region(image, IMG_BASE_WO, 0x4000, 0xA4000000)
     fill_pattern_region(image, IMG_BASE_W1, 0x6000, 0xA5000000)
     fill_pattern_region(image, IMG_BASE_W2, 0x6000, 0xA6000000)
+    fill_pattern_region(image, IMG_BASE_WVOCAB, 0x1000, 0xA7000000)
 
     fill_pattern_region(image, IMG_BASE_WQ_BIAS, 0x4000, 0x00000100)
     fill_pattern_region(image, IMG_BASE_WK_BIAS, 0x4000, 0x00000200)
@@ -167,6 +176,7 @@ def main() -> None:
     fill_pattern_region(image, IMG_BASE_WO_BIAS, 0x4000, 0x00000400)
     fill_pattern_region(image, IMG_BASE_W1_BIAS, 0x6000, 0x00000500)
     fill_pattern_region(image, IMG_BASE_W2_BIAS, 0x6000, 0x00000600)
+    fill_pattern_region(image, IMG_BASE_WVOCAB_BIAS, 0x1000, 0x00000700)
 
     fill_pattern_region(image, IMG_BASE_LN0_GAMMA, 0x0400, 0x00002000)
     fill_pattern_region(image, IMG_BASE_LN1_GAMMA, 0x0400, 0x00002100)

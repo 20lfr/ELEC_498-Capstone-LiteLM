@@ -14,6 +14,8 @@
   localparam int IMG_SPAN_WO_BIAS      = 'h04000;
   localparam int IMG_SPAN_W1_BIAS      = 'h06000;
   localparam int IMG_SPAN_W2_BIAS      = 'h06000;
+  localparam int IMG_SPAN_WVOCAB       = 'h01000;
+  localparam int IMG_SPAN_WVOCAB_BIAS  = 'h01000;
   localparam int IMG_SPAN_LN_GAMMA     = 'h00400;
   localparam int IMG_SPAN_LN_EPS       = 'h00040;
 
@@ -31,6 +33,8 @@
   localparam int IMG_BASE_WO_BIAS          = 'h30000;
   localparam int IMG_BASE_W1_BIAS          = 'h34000;
   localparam int IMG_BASE_W2_BIAS          = 'h3A000;
+  localparam int IMG_BASE_WVOCAB           = 'h40000;
+  localparam int IMG_BASE_WVOCAB_BIAS      = 'h41000;
   localparam int IMG_BASE_LN0_GAMMA        = 'h42000;
   localparam int IMG_BASE_LN1_GAMMA        = 'h42400;
   localparam int IMG_BASE_FINAL_NORM_GAMMA = 'h42800;

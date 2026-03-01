@@ -17,8 +17,8 @@ module transformer_top_transformer_top_stream_stream_ap_uint_volatile_ControlMem
     reset, clk);
 
 parameter DataWidth = 8;
-parameter AddressWidth = 5;
-parameter AddressRange = 23;
+parameter AddressWidth = 6;
+parameter AddressRange = 39;
  
 input[AddressWidth-1:0] address0;
 input ce0;

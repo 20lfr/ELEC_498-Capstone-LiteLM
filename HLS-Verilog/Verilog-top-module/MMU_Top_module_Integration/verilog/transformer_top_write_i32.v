@@ -53,14 +53,14 @@ input  [5:0] byte_addr;
 input  [31:0] value_r;
 input   ap_rst;
 
-wire   [63:0] zext_ln819_fu_148_p1;
-wire   [63:0] zext_ln822_fu_188_p1;
-wire   [63:0] zext_ln823_fu_222_p1;
-wire   [63:0] zext_ln824_fu_256_p1;
+wire   [63:0] zext_ln873_fu_148_p1;
+wire   [63:0] zext_ln876_fu_188_p1;
+wire   [63:0] zext_ln877_fu_222_p1;
+wire   [63:0] zext_ln878_fu_256_p1;
 reg    buf_0_we1_local;
-wire   [0:0] trunc_ln819_fu_134_p1;
+wire   [0:0] trunc_ln873_fu_134_p1;
 reg   [7:0] buf_0_d1_local;
-wire   [7:0] trunc_ln821_fu_154_p1;
+wire   [7:0] trunc_ln875_fu_154_p1;
 reg    buf_0_ce1_local;
 reg   [4:0] buf_0_address1_local;
 reg    buf_0_we0_local;
@@ -76,36 +76,36 @@ reg   [7:0] buf_1_d0_local;
 reg    buf_1_ce0_local;
 reg   [4:0] buf_1_address0_local;
 wire   [4:0] lshr_ln_fu_138_p4;
-wire   [5:0] add_ln822_fu_172_p2;
-wire   [4:0] lshr_ln822_1_fu_178_p4;
-wire   [5:0] add_ln823_fu_206_p2;
-wire   [4:0] lshr_ln823_1_fu_212_p4;
-wire   [5:0] add_ln824_fu_240_p2;
-wire   [4:0] lshr_ln824_1_fu_246_p4;
+wire   [5:0] add_ln876_fu_172_p2;
+wire   [4:0] lshr_ln876_1_fu_178_p4;
+wire   [5:0] add_ln877_fu_206_p2;
+wire   [4:0] lshr_ln877_1_fu_212_p4;
+wire   [5:0] add_ln878_fu_240_p2;
+wire   [4:0] lshr_ln878_1_fu_246_p4;
 wire    ap_ce_reg;
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
-        buf_0_address0_local = zext_ln824_fu_256_p1;
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
-        buf_0_address0_local = zext_ln823_fu_222_p1;
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
+        buf_0_address0_local = zext_ln878_fu_256_p1;
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
+        buf_0_address0_local = zext_ln877_fu_222_p1;
     end else begin
         buf_0_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
-        buf_0_address1_local = zext_ln822_fu_188_p1;
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
-        buf_0_address1_local = zext_ln819_fu_148_p1;
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
+        buf_0_address1_local = zext_ln876_fu_188_p1;
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
+        buf_0_address1_local = zext_ln873_fu_148_p1;
     end else begin
         buf_0_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_0_ce0_local = 1'b1;
     end else begin
         buf_0_ce0_local = 1'b0;
@@ -113,7 +113,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_0_ce1_local = 1'b1;
     end else begin
         buf_0_ce1_local = 1'b0;
@@ -121,9 +121,9 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
         buf_0_d0_local = {{value_r[31:24]}};
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
         buf_0_d0_local = {{value_r[23:16]}};
     end else begin
         buf_0_d0_local = 'bx;
@@ -131,17 +131,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
         buf_0_d1_local = {{value_r[15:8]}};
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
-        buf_0_d1_local = trunc_ln821_fu_154_p1;
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
+        buf_0_d1_local = trunc_ln875_fu_154_p1;
     end else begin
         buf_0_d1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_0_we0_local = 1'b1;
     end else begin
         buf_0_we0_local = 1'b0;
@@ -149,7 +149,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_0_we1_local = 1'b1;
     end else begin
         buf_0_we1_local = 1'b0;
@@ -157,27 +157,27 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
-        buf_1_address0_local = zext_ln823_fu_222_p1;
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
-        buf_1_address0_local = zext_ln824_fu_256_p1;
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
+        buf_1_address0_local = zext_ln877_fu_222_p1;
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
+        buf_1_address0_local = zext_ln878_fu_256_p1;
     end else begin
         buf_1_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
-        buf_1_address1_local = zext_ln819_fu_148_p1;
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
-        buf_1_address1_local = zext_ln822_fu_188_p1;
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
+        buf_1_address1_local = zext_ln873_fu_148_p1;
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
+        buf_1_address1_local = zext_ln876_fu_188_p1;
     end else begin
         buf_1_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_1_ce0_local = 1'b1;
     end else begin
         buf_1_ce0_local = 1'b0;
@@ -185,7 +185,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_1_ce1_local = 1'b1;
     end else begin
         buf_1_ce1_local = 1'b0;
@@ -193,9 +193,9 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
         buf_1_d0_local = {{value_r[23:16]}};
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
         buf_1_d0_local = {{value_r[31:24]}};
     end else begin
         buf_1_d0_local = 'bx;
@@ -203,9 +203,9 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln819_fu_134_p1 == 1'd1)) begin
-        buf_1_d1_local = trunc_ln821_fu_154_p1;
-    end else if ((trunc_ln819_fu_134_p1 == 1'd0)) begin
+    if ((trunc_ln873_fu_134_p1 == 1'd1)) begin
+        buf_1_d1_local = trunc_ln875_fu_154_p1;
+    end else if ((trunc_ln873_fu_134_p1 == 1'd0)) begin
         buf_1_d1_local = {{value_r[15:8]}};
     end else begin
         buf_1_d1_local = 'bx;
@@ -213,7 +213,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_1_we0_local = 1'b1;
     end else begin
         buf_1_we0_local = 1'b0;
@@ -221,18 +221,18 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((trunc_ln819_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln819_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln873_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln873_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         buf_1_we1_local = 1'b1;
     end else begin
         buf_1_we1_local = 1'b0;
     end
 end
 
-assign add_ln822_fu_172_p2 = (byte_addr + 6'd1);
+assign add_ln876_fu_172_p2 = (byte_addr + 6'd1);
 
-assign add_ln823_fu_206_p2 = (byte_addr + 6'd2);
+assign add_ln877_fu_206_p2 = (byte_addr + 6'd2);
 
-assign add_ln824_fu_240_p2 = (byte_addr + 6'd3);
+assign add_ln878_fu_240_p2 = (byte_addr + 6'd3);
 
 assign ap_ready = ap_start;
 
@@ -268,24 +268,24 @@ assign buf_1_we0 = buf_1_we0_local;
 
 assign buf_1_we1 = buf_1_we1_local;
 
-assign lshr_ln822_1_fu_178_p4 = {{add_ln822_fu_172_p2[5:1]}};
+assign lshr_ln876_1_fu_178_p4 = {{add_ln876_fu_172_p2[5:1]}};
 
-assign lshr_ln823_1_fu_212_p4 = {{add_ln823_fu_206_p2[5:1]}};
+assign lshr_ln877_1_fu_212_p4 = {{add_ln877_fu_206_p2[5:1]}};
 
-assign lshr_ln824_1_fu_246_p4 = {{add_ln824_fu_240_p2[5:1]}};
+assign lshr_ln878_1_fu_246_p4 = {{add_ln878_fu_240_p2[5:1]}};
 
 assign lshr_ln_fu_138_p4 = {{byte_addr[5:1]}};
 
-assign trunc_ln819_fu_134_p1 = byte_addr[0:0];
+assign trunc_ln873_fu_134_p1 = byte_addr[0:0];
 
-assign trunc_ln821_fu_154_p1 = value_r[7:0];
+assign trunc_ln875_fu_154_p1 = value_r[7:0];
 
-assign zext_ln819_fu_148_p1 = lshr_ln_fu_138_p4;
+assign zext_ln873_fu_148_p1 = lshr_ln_fu_138_p4;
 
-assign zext_ln822_fu_188_p1 = lshr_ln822_1_fu_178_p4;
+assign zext_ln876_fu_188_p1 = lshr_ln876_1_fu_178_p4;
 
-assign zext_ln823_fu_222_p1 = lshr_ln823_1_fu_212_p4;
+assign zext_ln877_fu_222_p1 = lshr_ln877_1_fu_212_p4;
 
-assign zext_ln824_fu_256_p1 = lshr_ln824_1_fu_246_p4;
+assign zext_ln878_fu_256_p1 = lshr_ln878_1_fu_246_p4;
 
 endmodule //transformer_top_write_i32

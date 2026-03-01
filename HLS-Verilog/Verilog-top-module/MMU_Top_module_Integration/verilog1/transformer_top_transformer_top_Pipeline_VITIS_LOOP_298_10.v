@@ -31,11 +31,11 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [13:0] dma_rx_buf_local_address0;
+output  [10:0] dma_rx_buf_local_address0;
 output   dma_rx_buf_local_ce0;
 output   dma_rx_buf_local_we0;
 output  [31:0] dma_rx_buf_local_d0;
-output  [13:0] dma_tx_buf_local_address0;
+output  [10:0] dma_tx_buf_local_address0;
 output   dma_tx_buf_local_ce0;
 output   dma_tx_buf_local_we0;
 output  [31:0] dma_tx_buf_local_d0;
@@ -50,10 +50,10 @@ reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [63:0] zext_ln298_fu_82_p1;
-reg   [14:0] i_8_fu_30;
-wire   [14:0] add_ln298_fu_76_p2;
+reg   [11:0] i_8_fu_30;
+wire   [11:0] add_ln298_fu_76_p2;
 wire    ap_loop_init;
-reg   [14:0] ap_sig_allocacmp_i;
+reg   [11:0] ap_sig_allocacmp_i;
 reg    dma_rx_buf_local_we0_local;
 reg    dma_rx_buf_local_ce0_local;
 reg    dma_tx_buf_local_we0_local;
@@ -71,7 +71,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_8_fu_30 = 15'd0;
+#0 i_8_fu_30 = 12'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -115,7 +115,7 @@ always @ (posedge ap_clk) begin
         if ((icmp_ln298_fu_70_p2 == 1'd0)) begin
             i_8_fu_30 <= add_ln298_fu_76_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_8_fu_30 <= 15'd0;
+            i_8_fu_30 <= 12'd0;
         end
     end
 end
@@ -162,7 +162,7 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i = 15'd0;
+        ap_sig_allocacmp_i = 12'd0;
     end else begin
         ap_sig_allocacmp_i = i_8_fu_30;
     end
@@ -211,7 +211,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln298_fu_76_p2 = (ap_sig_allocacmp_i + 15'd1);
+assign add_ln298_fu_76_p2 = (ap_sig_allocacmp_i + 12'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -241,7 +241,7 @@ assign dma_tx_buf_local_d0 = 32'd0;
 
 assign dma_tx_buf_local_we0 = dma_tx_buf_local_we0_local;
 
-assign icmp_ln298_fu_70_p2 = ((ap_sig_allocacmp_i == 15'd16384) ? 1'b1 : 1'b0);
+assign icmp_ln298_fu_70_p2 = ((ap_sig_allocacmp_i == 12'd2048) ? 1'b1 : 1'b0);
 
 assign zext_ln298_fu_82_p1 = ap_sig_allocacmp_i;
 

@@ -300,7 +300,7 @@ transformer_top_partselect_8ns_32ns_5ns_8_1_1 #(
     .DATAWIDTH( 32 ),
     .ADDRWIDTH( 5 ),
     .DATA1WIDTH( 8 ))
-partselect_8ns_32ns_5ns_8_1_1_U2824(
+partselect_8ns_32ns_5ns_8_1_1_U3047(
     .din(beat_reg_431),
     .sel(lo_fu_317_p3),
     .dout(value_assign_fu_324_p3)
@@ -310,7 +310,7 @@ transformer_top_partset_32ns_32ns_8ns_5ns_32_1_1 #(
     .DATAWIDTH( 32 ),
     .DATA1WIDTH( 8 ),
     .ADDRWIDTH( 5 ))
-partset_32ns_32ns_8ns_5ns_32_1_1_U2825(
+partset_32ns_32ns_8ns_5ns_32_1_1_U3048(
     .din(32'd0),
     .value(value_reg_426),
     .sel(lo_fu_317_p3),

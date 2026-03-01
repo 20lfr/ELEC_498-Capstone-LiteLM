@@ -10,8 +10,7 @@ module transformer_top_sqrt_fixed_32_19_s (
         ap_clk,
         ap_rst,
         x,
-        ap_return,
-        ap_ce
+        ap_return
 );
 
 
@@ -19,9 +18,6 @@ input   ap_clk;
 input   ap_rst;
 input  [28:0] x;
 output  [22:0] ap_return;
-input   ap_ce;
-
-reg[22:0] ap_return;
 
 reg   [28:0] x_read_reg_3055;
 wire    ap_block_pp0_stage0_11001;
@@ -492,23 +488,15 @@ wire   [9:0] res_I_15_fu_3022_p3;
 wire   [12:0] tmp_47_fu_3029_p4;
 wire   [0:0] tmp_fu_2500_p3;
 wire   [22:0] lshr_ln345_cast_fu_3039_p3;
-wire   [22:0] agg_result_0_fu_3047_p3;
-reg    ap_ce_reg;
 reg   [28:0] x_int_reg;
-reg   [22:0] ap_return_int_reg;
+wire    ap_ce_reg;
 
 always @ (posedge ap_clk) begin
-    ap_ce_reg <= ap_ce;
+    x_int_reg <= x;
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_ce_reg)) begin
-        ap_return_int_reg <= agg_result_0_fu_3047_p3;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_ce_reg) & (1'b0 == ap_block_pp0_stage0_11001))) begin
+    if ((1'b0 == ap_block_pp0_stage0_11001)) begin
         icmp_ln258_5_reg_3077 <= icmp_ln258_5_fu_658_p2;
         or_ln295_13_reg_3281 <= or_ln295_13_fu_2470_p2;
         or_ln295_1_reg_3110 <= or_ln295_1_fu_1042_p2;
@@ -575,27 +563,9 @@ always @ (posedge ap_clk) begin
     end
 end
 
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_ce)) begin
-        x_int_reg <= x;
-    end
-end
-
-always @ (*) begin
-    if ((1'b0 == ap_ce_reg)) begin
-        ap_return = ap_return_int_reg;
-    end else if ((1'b1 == ap_ce_reg)) begin
-        ap_return = agg_result_0_fu_3047_p3;
-    end else begin
-        ap_return = 'bx;
-    end
-end
-
 assign add_ln263_fu_290_p2 = ($signed(sext_ln258_fu_280_p1) + $signed(3'd7));
 
 assign add_ln338_fu_3003_p2 = (zext_ln338_fu_2999_p1 + 15'd1);
-
-assign agg_result_0_fu_3047_p3 = ((tmp_fu_2500_p3[0:0] == 1'b1) ? 23'd0 : lshr_ln345_cast_fu_3039_p3);
 
 assign and_ln295_10_fu_2193_p2 = (xor_ln295_7_fu_2187_p2 & icmp_ln295_32_fu_2175_p2);
 
@@ -644,6 +614,8 @@ assign and_ln308_fu_2012_p2 = (icmp_ln295_27_fu_1972_p2 & delta_fu_1995_p2);
 assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
 
 assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+
+assign ap_return = ((tmp_fu_2500_p3[0:0] == 1'b1) ? 23'd0 : lshr_ln345_cast_fu_3039_p3);
 
 assign delta_1_fu_2199_p2 = ((x_l_FL_13_fu_2103_p3 < mul_FL_2_fu_2146_p3) ? 1'b1 : 1'b0);
 

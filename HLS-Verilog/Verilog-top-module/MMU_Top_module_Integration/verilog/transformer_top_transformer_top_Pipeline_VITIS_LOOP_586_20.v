@@ -70,7 +70,7 @@ reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 reg    dbg_head_out_buf_0_we0_local;
 wire   [7:0] select_ln588_fu_131_p3;
 reg    dbg_head_out_buf_0_ce0_local;
-wire   [4:0] lshr_ln5_fu_103_p4;
+wire   [4:0] lshr_ln3_fu_103_p4;
 wire   [0:0] trunc_ln586_fu_128_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -274,7 +274,7 @@ assign dbg_head_out_buf_0_we0 = dbg_head_out_buf_0_we0_local;
 
 assign icmp_ln586_fu_91_p2 = ((ap_sig_allocacmp_i_2 == 7'd64) ? 1'b1 : 1'b0);
 
-assign lshr_ln5_fu_103_p4 = {{ap_sig_allocacmp_i_2[5:1]}};
+assign lshr_ln3_fu_103_p4 = {{ap_sig_allocacmp_i_2[5:1]}};
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln586_1_fu_113_p1;
 
@@ -288,7 +288,7 @@ assign select_ln588_fu_131_p3 = ((trunc_ln586_fu_128_p1[0:0] == 1'b1) ? p_ZZ15tr
 
 assign trunc_ln586_fu_128_p1 = i_2_reg_147[0:0];
 
-assign zext_ln586_1_fu_113_p1 = lshr_ln5_fu_103_p4;
+assign zext_ln586_1_fu_113_p1 = lshr_ln3_fu_103_p4;
 
 assign zext_ln586_fu_124_p1 = i_2_reg_147;
 

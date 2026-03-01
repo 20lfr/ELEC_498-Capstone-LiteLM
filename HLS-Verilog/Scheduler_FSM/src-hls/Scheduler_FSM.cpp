@@ -127,6 +127,10 @@ void scheduler_hls(
 #pragma HLS reset variable = resid1_compute_done
   static bool ln1_compute_done;
 #pragma HLS reset variable = ln1_compute_done
+  static bool logits_compute_done;
+#pragma HLS reset variable = logits_compute_done
+  static bool argmax_compute_done;
+#pragma HLS reset variable = argmax_compute_done
   static bool error_latched;
 #pragma HLS reset variable = error_latched
 
@@ -171,6 +175,10 @@ void scheduler_hls(
 #pragma HLS reset variable = ln1_comp_busy
   static bool final_norm_started;
 #pragma HLS reset variable = final_norm_started
+  static bool logits_started;
+#pragma HLS reset variable = logits_started
+  static bool argmax_started;
+#pragma HLS reset variable = argmax_started
   static bool stream_started;
 #pragma HLS reset variable = stream_started
   static int wo_tile;
@@ -191,6 +199,12 @@ void scheduler_hls(
 #pragma HLS reset variable = w2_dma_busy
   static bool w2_comp_busy;
 #pragma HLS reset variable = w2_comp_busy
+  static int logit_tile;
+#pragma HLS reset variable = logit_tile
+  static bool logits_dma_busy;
+#pragma HLS reset variable = logits_dma_busy
+  static bool logits_comp_busy;
+#pragma HLS reset variable = logits_comp_busy
 
 
   static bool wo_dma_done;
@@ -203,6 +217,8 @@ void scheduler_hls(
 #pragma HLS reset variable = w1_dma_done
   static bool w2_dma_done;
 #pragma HLS reset variable = w2_dma_done
+  static bool logits_dma_done;
+#pragma HLS reset variable = logits_dma_done
   static bool stream_done_seen;
 #pragma HLS reset variable = stream_done_seen
   static bool final_norm_compute_done;
@@ -281,6 +297,11 @@ void scheduler_hls(
     ln1_compute_done = false;
     final_norm_started = false;
     final_norm_compute_done = false;
+    logits_started = false;
+    logits_compute_done = false;
+    argmax_started = false;
+    argmax_compute_done = false;
+    logits_dma_done = false;
     stream_done_seen = false;
 
     // Global progress/tiles
@@ -292,8 +313,11 @@ void scheduler_hls(
     w1_dma_busy = false;
     w1_comp_busy = false;
     w2_tile = 0;
+    logit_tile = 0;
     w2_dma_busy = false;
     w2_comp_busy = false;
+    logits_dma_busy = false;
+    logits_comp_busy = false;
 
     // Compute params
     compute_start = false;
@@ -382,6 +406,11 @@ void scheduler_hls(
         ln1_compute_done = false;
         final_norm_started = false;
         final_norm_compute_done = false;
+        logits_started = false;
+        logits_compute_done = false;
+        argmax_started = false;
+        argmax_compute_done = false;
+        logits_dma_done = false;
         stream_started = false;
         wo_tile = 0;
         wo_dma_busy = false;
@@ -392,6 +421,9 @@ void scheduler_hls(
         w2_tile = 0;
         w2_dma_busy = false;
         w2_comp_busy = false;
+        logit_tile = 0;
+        logits_dma_busy = false;
+        logits_comp_busy = false;
         wl_start = false;
         wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
         compute_start = false;
@@ -476,6 +508,20 @@ void scheduler_hls(
         final_norm_compute_done = false;
         break;
       }
+      case S_LOGITS: {
+        logits_started = false;
+        logits_compute_done = false;
+        logits_dma_done = false;
+        logit_tile = 0;
+        logits_dma_busy = false;
+        logits_comp_busy = false;
+        break;
+      }
+      case S_ARGMAX: {
+        argmax_started = false;
+        argmax_compute_done = false;
+        break;
+      }
       case S_STREAM_OUT: {
         stream_started = false;
         stream_done_seen = false;
@@ -501,6 +547,7 @@ void scheduler_hls(
     if (st == S_OUT_PROJECTION && outproj_started && wo_dma_busy) wo_dma_done = true;
     if (st == S_LAYER_NORM_0 && ln0_started && ln0_dma_busy) ln0_dma_done = true;
     if (st == S_LAYER_NORM_1 && ln1_started && ln1_dma_busy) ln1_dma_done = true;
+    if (st == S_LOGITS && logits_started && logits_dma_busy) logits_dma_done = true;
     if (st == S_FFN && ffn_started) {
       if (ffn_stage == FfnStage::W1 && w1_dma_busy)      w1_dma_done = true;
       else if (ffn_stage == FfnStage::W2 && w2_dma_busy) w2_dma_done = true;
@@ -510,6 +557,7 @@ void scheduler_hls(
     if (outproj_started && !wo_dma_busy) wo_dma_done = false;
     if (ln0_started && !ln0_dma_busy) ln0_dma_done = false;
     if (ln1_started && !ln1_dma_busy) ln1_dma_done = false;
+    if (logits_started && !logits_dma_busy) logits_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
     if (st == S_HEAD_CONCAT && concat_started && !concat_dma_busy) concat_dma_done = false;
@@ -527,6 +575,8 @@ void scheduler_hls(
     if (st == S_RES_ADD_2 && resid1_started)      resid1_compute_done = true;
     if (st == S_LAYER_NORM_1 && ln1_started)      ln1_compute_done = true;
     if (st == S_FINAL_NORM && final_norm_started) final_norm_compute_done = true;
+    if (st == S_LOGITS && logits_started)         logits_compute_done = true;
+    if (st == S_ARGMAX && argmax_started)         argmax_compute_done = true;
   }
 
   int head_group_idx_out = group_idx;
@@ -578,6 +628,11 @@ void scheduler_hls(
         ln1_compute_done = false;
         final_norm_started = false;
         final_norm_compute_done = false;
+        logits_started = false;
+        logits_compute_done = false;
+        argmax_started = false;
+        argmax_compute_done = false;
+        logits_dma_done = false;
 
         // Global progress/tiles
         stream_started = false;
@@ -590,6 +645,9 @@ void scheduler_hls(
         w2_tile = 0;
         w2_dma_busy = false;
         w2_comp_busy = false;
+        logit_tile = 0;
+        logits_dma_busy = false;
+        logits_comp_busy = false;
 
         // Weight Stager and Loader params
         wl_start = false;
@@ -665,6 +723,11 @@ void scheduler_hls(
       ln1_compute_done = false;
       final_norm_started = false;
       final_norm_compute_done = false;
+      logits_started = false;
+      logits_compute_done = false;
+      argmax_started = false;
+      argmax_compute_done = false;
+      logits_dma_done = false;
 
       // Global progress/tiles
       wo_tile = 0;
@@ -676,6 +739,9 @@ void scheduler_hls(
       w2_tile = 0;
       w2_dma_busy = false;
       w2_comp_busy = false;
+      logit_tile = 0;
+      logits_dma_busy = false;
+      logits_comp_busy = false;
 
 
       // Weight Stager and Loader params
@@ -950,6 +1016,51 @@ void scheduler_hls(
       } else if (final_norm_started && final_norm_compute_done) {
         final_norm_started = false;
         final_norm_compute_done = false;
+        st = S_LOGITS;
+      }
+      break;
+    }
+    case S_LOGITS: {
+      if (logit_tile >= NUM_LOGIT_TILES) {
+        logits_started = false;
+        logits_compute_done = false;
+        logits_dma_done = false;
+        logits_dma_busy = false;
+        logits_comp_busy = false;
+        logit_tile = 0;
+        st = S_ARGMAX;
+      } else if (!logits_started && wl_ready) {
+        logits_compute_done = false;
+        logits_dma_done = false;
+        wl_start = 1;
+        wl_instruction = pack_dma_op(DMASEL_LOGITS, layer_idx, -1, logit_tile);
+        logits_started = true;
+        logits_dma_busy = true;
+      } else if (logits_started && logits_dma_busy && logits_dma_done) {
+        logits_dma_busy = false;
+        logits_dma_done = false;
+        logits_comp_busy = true;
+      } else if (logits_started && logits_comp_busy && compute_ready) {
+        logits_compute_done = false;
+        compute_start = 1;
+        compute_instruction = pack_compute_instruction(CMP_LOGITS, layer_idx, -1, logit_tile);
+        logits_comp_busy = false;
+      } else if (logits_started && !logits_dma_busy && !logits_comp_busy && logits_compute_done) {
+        logits_started = false;
+        logits_compute_done = false;
+        logit_tile++;
+      }
+      break;
+    }
+    case S_ARGMAX: {
+      if (!argmax_started && compute_ready) {
+        argmax_compute_done = false;
+        compute_start = 1;
+        compute_instruction = pack_compute_instruction(CMP_ARGMAX, layer_idx, -1, -1);
+        argmax_started = true;
+      } else if (argmax_started && argmax_compute_done) {
+        argmax_started = false;
+        argmax_compute_done = false;
         st = S_STREAM_OUT;
       }
       break;

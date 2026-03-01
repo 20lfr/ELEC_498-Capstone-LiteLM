@@ -75,7 +75,7 @@ static void MAC_OP_TO_BUF(
 #pragma HLS reset variable = busy
 #pragma HLS reset variable = compute_done
 
-    int16_t vec_tile[MAC_VEC_UNROLL];
+    int32_t vec_tile[MAC_VEC_UNROLL];
     int32_t accum_tile[MAC_OUT_UNROLL];
 #pragma HLS ARRAY_PARTITION variable=vec_tile complete dim=1
 #pragma HLS ARRAY_PARTITION variable=accum_tile complete dim=1
@@ -94,6 +94,8 @@ static void MAC_OP_TO_BUF(
         int weight_nibble_base = 0;
         int bias_byte_base = 0;
         bool act_is_i16 = false;
+        bool act_is_i32 = false;
+        bool use_bias = true;
 
         switch (op) {
             case ComputeOp::CMP_OUT_PROJ:
@@ -118,6 +120,14 @@ static void MAC_OP_TO_BUF(
                 bias_byte_base = compute_buf::INFfnW2Layout::B;
                 act_is_i16 = true;
                 break;
+            case ComputeOp::CMP_LOGITS:
+                vec_count = D_MODEL;
+                out_count = D_TILE_LOGIT;
+                act_byte_base = compute_buf::INLogitsLayout::X;
+                weight_nibble_base = compute_buf::INLogitsLayout::W * 2;
+                act_is_i32 = true;
+                use_bias = false;
+                break;
             default:
                 compute_done = true;
                 break;
@@ -136,7 +146,9 @@ static void MAC_OP_TO_BUF(
                 for (int o = 0; o < MAC_OUT_UNROLL; ++o) {
 #pragma HLS UNROLL
                     if (o < tile_out_count) {
-                        accum_tile[o] = compute_buf::read_i32(in_buf, bias_byte_base + ((out_base + o) * 4));
+                        accum_tile[o] = use_bias
+                                            ? compute_buf::read_i32(in_buf, bias_byte_base + ((out_base + o) * 4))
+                                            : 0;
                     } else {
                         accum_tile[o] = 0;
                     }
@@ -149,10 +161,13 @@ static void MAC_OP_TO_BUF(
                     for (int k = 0; k < MAC_VEC_UNROLL; ++k) {
 #pragma HLS UNROLL
                         if (k < tile_k_count) {
-                            vec_tile[k] = act_is_i16
-                                              ? compute_buf::read_i16(in_buf, act_byte_base + ((k_base + k) * 2))
-                                              : static_cast<int16_t>(
-                                                    compute_buf::read_i8(in_buf, act_byte_base + (k_base + k)));
+                            vec_tile[k] = act_is_i32
+                                              ? compute_buf::read_i32(in_buf, act_byte_base + ((k_base + k) * 4))
+                                              : (act_is_i16
+                                                     ? static_cast<int32_t>(compute_buf::read_i16(
+                                                           in_buf, act_byte_base + ((k_base + k) * 2)))
+                                                     : static_cast<int32_t>(
+                                                           compute_buf::read_i8(in_buf, act_byte_base + (k_base + k))));
                         } else {
                             vec_tile[k] = 0;
                         }
@@ -200,6 +215,10 @@ static void MAC_OP_TO_BUF(
                             const int32_t M = requant_params::REQUANT4_M_L[layer];
                             const int32_t n = requant_params::REQUANT4_N_L[layer];
                             compute_buf::write_i8(out_buf, dst_idx, requant_scalar_to_i8(accum_tile[o], M, n));
+                            break;
+                        }
+                        case ComputeOp::CMP_LOGITS: {
+                            compute_buf::write_i32(out_buf, dst_idx * 4, accum_tile[o]);
                             break;
                         }
                         default:
@@ -371,6 +390,22 @@ static void FFN_ACT_Silu_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
         else if (shifted < -32768) sat = -32768;
         compute_buf::write_i16(out_buf, compute_buf::OUTFfnActLayout::Y + (i * 2), sat);
     }
+}
+
+static void ARGMAX_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+                          uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
+#pragma HLS INLINE off
+    int32_t best_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X);
+    int32_t best_idx = 0;
+    for (int i = 1; i < D_VOCAB; ++i) {
+#pragma HLS PIPELINE II=1
+        const int32_t x = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + (i * 4));
+        if (x > best_val) {
+            best_val = x;
+            best_idx = i;
+        }
+    }
+    compute_buf::write_i32(out_buf, compute_buf::OUTArgmaxLayout::Y, best_idx);
 }
 
 static void RMS_NORM_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
@@ -692,7 +727,9 @@ void compute_controller(
                 req.op == ComputeOp::CMP_FFN_W2 || 
                 req.op == ComputeOp::CMP_RESID2 || 
                 req.op == ComputeOp::CMP_LN1 || 
-                req.op == ComputeOp::CMP_FINAL_NORM) {
+                req.op == ComputeOp::CMP_FINAL_NORM ||
+                req.op == ComputeOp::CMP_LOGITS ||
+                req.op == ComputeOp::CMP_ARGMAX) {
                 
                 error = false; // Clear stale errors on a new request.
                 next_state = ComputeState::WAIT_MEM;
@@ -760,6 +797,22 @@ void compute_controller(
                 }
                 case ComputeOp::CMP_FINAL_NORM: {   // Q0.7    -> Q19.13
                     RMS_NORM_TO_BUF(in_buf, out_buf, true, 0, 0);
+                    next_state = ComputeState::MEM_WRITEBACK;
+                    break;
+                }
+                case ComputeOp::CMP_LOGITS: {       // Q19.13 -> Qacc vocab tile
+                    if(mac_ready && !mac_start && !mac_complete) {
+                        mac_start = true;
+                    }
+                    if (mac_complete) {
+                        next_state = ComputeState::MEM_WRITEBACK;
+                    } else {
+                        next_state = ComputeState::EXECUTE;
+                    }
+                    break;
+                }
+                case ComputeOp::CMP_ARGMAX: {       // logits packed -> token id
+                    ARGMAX_TO_BUF(in_buf, out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
