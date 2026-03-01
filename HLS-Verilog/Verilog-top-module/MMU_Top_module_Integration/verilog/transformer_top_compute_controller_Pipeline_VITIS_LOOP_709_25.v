@@ -196,7 +196,7 @@ reg    ap_ready_int;
 reg   [4:0] i_fu_156;
 wire   [4:0] add_ln709_fu_366_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_68;
+reg   [4:0] ap_sig_allocacmp_i_69;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_25_we0_local;
 wire   [3:0] trunc_ln709_fu_372_p1;
 wire  signed [15:0] sext_ln712_fu_448_p1;
@@ -231,9 +231,9 @@ reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_ce0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_ce0_local;
-wire   [7:0] tmp_77_fu_376_p33;
-wire   [3:0] tmp_77_fu_376_p34;
-wire   [7:0] tmp_77_fu_376_p35;
+wire   [7:0] tmp_81_fu_376_p33;
+wire   [3:0] tmp_81_fu_376_p34;
+wire   [7:0] tmp_81_fu_376_p35;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -242,22 +242,22 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [3:0] tmp_77_fu_376_p1;
-wire   [3:0] tmp_77_fu_376_p3;
-wire   [3:0] tmp_77_fu_376_p5;
-wire   [3:0] tmp_77_fu_376_p7;
-wire   [3:0] tmp_77_fu_376_p9;
-wire   [3:0] tmp_77_fu_376_p11;
-wire   [3:0] tmp_77_fu_376_p13;
-wire   [3:0] tmp_77_fu_376_p15;
-wire  signed [3:0] tmp_77_fu_376_p17;
-wire  signed [3:0] tmp_77_fu_376_p19;
-wire  signed [3:0] tmp_77_fu_376_p21;
-wire  signed [3:0] tmp_77_fu_376_p23;
-wire  signed [3:0] tmp_77_fu_376_p25;
-wire  signed [3:0] tmp_77_fu_376_p27;
-wire  signed [3:0] tmp_77_fu_376_p29;
-wire  signed [3:0] tmp_77_fu_376_p31;
+wire   [3:0] tmp_81_fu_376_p1;
+wire   [3:0] tmp_81_fu_376_p3;
+wire   [3:0] tmp_81_fu_376_p5;
+wire   [3:0] tmp_81_fu_376_p7;
+wire   [3:0] tmp_81_fu_376_p9;
+wire   [3:0] tmp_81_fu_376_p11;
+wire   [3:0] tmp_81_fu_376_p13;
+wire   [3:0] tmp_81_fu_376_p15;
+wire  signed [3:0] tmp_81_fu_376_p17;
+wire  signed [3:0] tmp_81_fu_376_p19;
+wire  signed [3:0] tmp_81_fu_376_p21;
+wire  signed [3:0] tmp_81_fu_376_p23;
+wire  signed [3:0] tmp_81_fu_376_p25;
+wire  signed [3:0] tmp_81_fu_376_p27;
+wire  signed [3:0] tmp_81_fu_376_p29;
+wire  signed [3:0] tmp_81_fu_376_p31;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -322,9 +322,9 @@ sparsemux_33_4_8_1_1_U764(
     .din13(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_603),
     .din14(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_604),
     .din15(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_605),
-    .def(tmp_77_fu_376_p33),
-    .sel(tmp_77_fu_376_p34),
-    .dout(tmp_77_fu_376_p35)
+    .def(tmp_81_fu_376_p33),
+    .sel(tmp_81_fu_376_p34),
+    .dout(tmp_81_fu_376_p35)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -414,9 +414,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_68 = 5'd0;
+        ap_sig_allocacmp_i_69 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_68 = i_fu_156;
+        ap_sig_allocacmp_i_69 = i_fu_156;
     end
 end
 
@@ -687,7 +687,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln709_fu_366_p2 = (ap_sig_allocacmp_i_68 + 5'd1);
+assign add_ln709_fu_366_p2 = (ap_sig_allocacmp_i_69 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -781,7 +781,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0_local;
 
-assign icmp_ln709_fu_360_p2 = ((ap_sig_allocacmp_i_68 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln709_fu_360_p2 = ((ap_sig_allocacmp_i_69 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_address0 = 1'd0;
 
@@ -831,12 +831,12 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0_local;
 
-assign sext_ln712_fu_448_p1 = $signed(tmp_77_fu_376_p35);
+assign sext_ln712_fu_448_p1 = $signed(tmp_81_fu_376_p35);
 
-assign tmp_77_fu_376_p33 = 'bx;
+assign tmp_81_fu_376_p33 = 'bx;
 
-assign tmp_77_fu_376_p34 = ap_sig_allocacmp_i_68[3:0];
+assign tmp_81_fu_376_p34 = ap_sig_allocacmp_i_69[3:0];
 
-assign trunc_ln709_fu_372_p1 = ap_sig_allocacmp_i_68[3:0];
+assign trunc_ln709_fu_372_p1 = ap_sig_allocacmp_i_69[3:0];
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_709_25

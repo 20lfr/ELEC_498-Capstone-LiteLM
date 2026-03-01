@@ -11,7 +11,7 @@
 #include "Compute_Controller_Logic/src-hls/headed_compute_controller.hpp"
 #include "MMU/mmu_luka.hpp"
 
-constexpr int TOP_DMA_BUF_BYTES = 65536;
+constexpr int TOP_DMA_BUF_BYTES = DMA_BUF_BYTES;
 constexpr int TOP_DMA_BUF_WORDS = TOP_DMA_BUF_BYTES / AXI_GMEM_WORD_BYTES;
 static_assert((TOP_DMA_BUF_BYTES % AXI_GMEM_WORD_BYTES) == 0, "TOP_DMA_BUF_BYTES must be word-aligned");
 static_assert(static_cast<int>(sizeof(axi_gmem_word_t)) == AXI_GMEM_WORD_BYTES,

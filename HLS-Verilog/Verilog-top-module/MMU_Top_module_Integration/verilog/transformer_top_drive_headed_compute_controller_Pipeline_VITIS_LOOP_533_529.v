@@ -437,7 +437,7 @@ wire   [3:0] trunc_ln533_fu_242_p1;
 reg   [4:0] i_fu_218;
 wire   [4:0] add_ln533_fu_236_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_47;
+reg   [4:0] ap_sig_allocacmp_i_48;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -542,9 +542,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_47 = 5'd0;
+        ap_sig_allocacmp_i_48 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_47 = i_fu_218;
+        ap_sig_allocacmp_i_48 = i_fu_218;
     end
 end
 
@@ -1199,7 +1199,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln533_fu_236_p2 = (ap_sig_allocacmp_i_47 + 5'd1);
+assign add_ln533_fu_236_p2 = (ap_sig_allocacmp_i_48 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -1285,7 +1285,7 @@ assign drive_mulmulheaded_compute_controller_ComputeHeadCtx_2_bool_unsigned_shor
 
 assign drive_mulmulheaded_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_val_i_55 = 32'd0;
 
-assign icmp_ln533_fu_230_p2 = ((ap_sig_allocacmp_i_47 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln533_fu_230_p2 = ((ap_sig_allocacmp_i_48 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE10val_1 = 16'd0;
 
@@ -1375,6 +1375,6 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hR
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE8soft_s = 15'd0;
 
-assign trunc_ln533_fu_242_p1 = ap_sig_allocacmp_i_47[3:0];
+assign trunc_ln533_fu_242_p1 = ap_sig_allocacmp_i_48[3:0];
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_533_529

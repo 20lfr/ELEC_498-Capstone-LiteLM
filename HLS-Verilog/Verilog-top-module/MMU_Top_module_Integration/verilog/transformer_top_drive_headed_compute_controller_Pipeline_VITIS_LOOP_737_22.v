@@ -149,7 +149,7 @@ reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 wire   [7:0] select_ln768_3_fu_392_p3;
 reg    drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_94_ce0_local;
 wire   [3:0] trunc_ln743_2_fu_246_p1;
-wire   [5:0] shl_ln4_fu_250_p3;
+wire   [5:0] shl_ln3_fu_250_p3;
 wire   [6:0] zext_ln743_fu_258_p1;
 wire   [6:0] byte_addr_fu_262_p2;
 wire   [3:0] lshr_ln_fu_268_p4;
@@ -538,7 +538,7 @@ assign select_ln768_3_fu_392_p3 = ((trunc_ln743_fu_362_p1[0:0] == 1'b1) ? p_ZZ15
 
 assign select_ln768_fu_365_p3 = ((trunc_ln743_fu_362_p1[0:0] == 1'b1) ? p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_q0 : p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_15_q0);
 
-assign shl_ln4_fu_250_p3 = {{trunc_ln743_2_fu_246_p1}, {2'd0}};
+assign shl_ln3_fu_250_p3 = {{trunc_ln743_2_fu_246_p1}, {2'd0}};
 
 assign trunc_ln743_2_fu_246_p1 = ap_sig_allocacmp_t[3:0];
 
@@ -546,7 +546,7 @@ assign trunc_ln743_fu_362_p1 = t_reg_408[0:0];
 
 assign zext_ln737_fu_355_p1 = t_reg_408;
 
-assign zext_ln743_fu_258_p1 = shl_ln4_fu_250_p3;
+assign zext_ln743_fu_258_p1 = shl_ln3_fu_250_p3;
 
 assign zext_ln767_1_fu_300_p1 = lshr_ln767_1_fu_290_p4;
 

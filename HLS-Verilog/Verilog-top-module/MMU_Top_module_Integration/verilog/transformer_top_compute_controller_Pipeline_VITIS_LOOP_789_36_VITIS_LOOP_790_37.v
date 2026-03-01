@@ -340,7 +340,7 @@ wire   [4:0] select_ln789_fu_1024_p3;
 wire   [5:0] zext_ln790_fu_1062_p1;
 wire   [5:0] tmp_s_fu_1054_p3;
 wire   [5:0] add_ln798_fu_1066_p2;
-wire   [6:0] shl_ln6_fu_1080_p3;
+wire   [6:0] shl_ln5_fu_1080_p3;
 wire   [7:0] zext_ln798_fu_1076_p1;
 wire   [7:0] zext_ln798_1_fu_1088_p1;
 wire   [7:0] add_ln798_1_fu_1092_p2;
@@ -350,7 +350,7 @@ wire   [7:0] byte_val_fu_1148_p129;
 wire   [6:0] byte_val_fu_1148_p130;
 wire   [7:0] byte_val_fu_1148_p131;
 wire   [0:0] trunc_ln771_fu_1134_p1;
-wire   [3:0] tmp_158_fu_1412_p4;
+wire   [3:0] tmp_162_fu_1412_p4;
 wire   [3:0] trunc_ln774_fu_1422_p1;
 wire   [0:0] tmp_fu_1046_p3;
 wire   [3:0] nibble_fu_1426_p3;
@@ -1149,7 +1149,7 @@ assign icmp_ln790_fu_1018_p2 = ((ap_sig_allocacmp_i_load == 5'd24) ? 1'b1 : 1'b0
 
 assign lshr_ln_fu_1098_p4 = {{add_ln798_1_fu_1092_p2[7:4]}};
 
-assign nibble_fu_1426_p3 = ((trunc_ln771_fu_1134_p1[0:0] == 1'b1) ? tmp_158_fu_1412_p4 : trunc_ln774_fu_1422_p1);
+assign nibble_fu_1426_p3 = ((trunc_ln771_fu_1134_p1[0:0] == 1'b1) ? tmp_162_fu_1412_p4 : trunc_ln774_fu_1422_p1);
 
 assign nibble_idx_fu_1128_p2 = (add_ln798_1_fu_1092_p2 + 8'd96);
 
@@ -1205,11 +1205,11 @@ assign select_ln789_1_fu_1038_p3 = ((icmp_ln790_fu_1018_p2[0:0] == 1'b1) ? add_l
 
 assign select_ln789_fu_1024_p3 = ((icmp_ln790_fu_1018_p2[0:0] == 1'b1) ? 5'd0 : ap_sig_allocacmp_i_load);
 
-assign shl_ln6_fu_1080_p3 = {{select_ln789_1_fu_1038_p3}, {4'd0}};
+assign shl_ln5_fu_1080_p3 = {{select_ln789_1_fu_1038_p3}, {4'd0}};
 
 assign storemerge336_fu_1434_p3 = ((tmp_fu_1046_p3[0:0] == 1'b1) ? 4'd0 : nibble_fu_1426_p3);
 
-assign tmp_158_fu_1412_p4 = {{byte_val_fu_1148_p131[7:4]}};
+assign tmp_162_fu_1412_p4 = {{byte_val_fu_1148_p131[7:4]}};
 
 assign tmp_fu_1046_p3 = select_ln789_1_fu_1038_p3[32'd2];
 
@@ -1223,7 +1223,7 @@ assign trunc_ln798_fu_1072_p1 = add_ln798_fu_1066_p2[3:0];
 
 assign zext_ln790_fu_1062_p1 = select_ln789_fu_1024_p3;
 
-assign zext_ln798_1_fu_1088_p1 = shl_ln6_fu_1080_p3;
+assign zext_ln798_1_fu_1088_p1 = shl_ln5_fu_1080_p3;
 
 assign zext_ln798_2_fu_1108_p1 = lshr_ln_fu_1098_p4;
 

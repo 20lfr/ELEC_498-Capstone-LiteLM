@@ -145,7 +145,7 @@ reg   [2:0] h_13_fu_58;
 wire   [2:0] add_ln646_fu_97_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_h;
-wire   [4:0] or_ln21_fu_122_p4;
+wire   [4:0] or_ln20_fu_122_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -430,11 +430,11 @@ assign ap_ready = ap_ready_sig;
 
 assign grp_read_i32_1_fu_62_ap_start = grp_read_i32_1_fu_62_ap_start_reg;
 
-assign grp_read_i32_1_fu_62_byte_addr = $signed(or_ln21_fu_122_p4);
+assign grp_read_i32_1_fu_62_byte_addr = $signed(or_ln20_fu_122_p4);
 
 assign icmp_ln646_fu_91_p2 = ((ap_sig_allocacmp_h == 3'd4) ? 1'b1 : 1'b0);
 
-assign or_ln21_fu_122_p4 = {{{{1'd1}, {trunc_ln646_reg_171}}}, {2'd0}};
+assign or_ln20_fu_122_p4 = {{{{1'd1}, {trunc_ln646_reg_171}}}, {2'd0}};
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address0 = grp_read_i32_1_fu_62_buf_7_address0;
 

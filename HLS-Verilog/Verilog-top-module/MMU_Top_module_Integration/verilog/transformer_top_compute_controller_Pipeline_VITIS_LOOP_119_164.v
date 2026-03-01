@@ -85,13 +85,13 @@ wire   [2:0] add_ln119_fu_159_p2;
 wire    ap_loop_init;
 reg   [2:0] ap_sig_allocacmp_t_21;
 wire   [30:0] product_fu_128_p1;
-wire   [31:0] tmp_89_fu_177_p9;
-wire   [1:0] tmp_89_fu_177_p10;
-wire  signed [31:0] tmp_89_fu_177_p11;
+wire   [31:0] tmp_93_fu_177_p9;
+wire   [1:0] tmp_93_fu_177_p10;
+wire  signed [31:0] tmp_93_fu_177_p11;
 wire   [62:0] product_fu_128_p2;
 wire   [62:0] rounded_6_cast_cast_fu_136_p1;
 wire   [62:0] scaled_fu_227_p2;
-wire   [23:0] tmp_232_fu_235_p4;
+wire   [23:0] tmp_237_fu_235_p4;
 wire   [30:0] trunc_ln126_fu_231_p1;
 wire   [0:0] icmp_ln127_fu_245_p2;
 wire   [0:0] icmp_ln129_fu_251_p2;
@@ -107,10 +107,10 @@ wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
 wire   [62:0] product_fu_128_p10;
-wire   [1:0] tmp_89_fu_177_p1;
-wire   [1:0] tmp_89_fu_177_p3;
-wire  signed [1:0] tmp_89_fu_177_p5;
-wire  signed [1:0] tmp_89_fu_177_p7;
+wire   [1:0] tmp_93_fu_177_p1;
+wire   [1:0] tmp_93_fu_177_p3;
+wire  signed [1:0] tmp_93_fu_177_p5;
+wire  signed [1:0] tmp_93_fu_177_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -128,7 +128,7 @@ transformer_top_mul_32s_31ns_63_1_1 #(
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 63 ))
 mul_32s_31ns_63_1_1_U532(
-    .din0(tmp_89_fu_177_p11),
+    .din0(tmp_93_fu_177_p11),
     .din1(product_fu_128_p1),
     .dout(product_fu_128_p2)
 );
@@ -152,9 +152,9 @@ sparsemux_9_2_32_1_1_U533(
     .din1(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_123),
     .din2(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_124),
     .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125),
-    .def(tmp_89_fu_177_p9),
-    .sel(tmp_89_fu_177_p10),
-    .dout(tmp_89_fu_177_p11)
+    .def(tmp_93_fu_177_p9),
+    .sel(tmp_93_fu_177_p10),
+    .dout(tmp_93_fu_177_p11)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -346,7 +346,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign icmp_ln119_fu_153_p2 = ((ap_sig_allocacmp_t_21 == 3'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln127_fu_245_p2 = (($signed(tmp_232_fu_235_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln127_fu_245_p2 = (($signed(tmp_237_fu_235_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln129_fu_251_p2 = (($signed(trunc_ln126_fu_231_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
@@ -364,11 +364,11 @@ assign select_ln127_1_fu_261_p3 = ((icmp_ln127_fu_245_p2[0:0] == 1'b1) ? 8'd127 
 
 assign select_ln127_fu_275_p3 = ((or_ln127_fu_269_p2[0:0] == 1'b1) ? select_ln127_1_fu_261_p3 : trunc_ln132_fu_257_p1);
 
-assign tmp_232_fu_235_p4 = {{scaled_fu_227_p2[30:7]}};
+assign tmp_237_fu_235_p4 = {{scaled_fu_227_p2[30:7]}};
 
-assign tmp_89_fu_177_p10 = ap_sig_allocacmp_t_21[1:0];
+assign tmp_93_fu_177_p10 = ap_sig_allocacmp_t_21[1:0];
 
-assign tmp_89_fu_177_p9 = 'bx;
+assign tmp_93_fu_177_p9 = 'bx;
 
 assign trunc_ln119_fu_165_p1 = ap_sig_allocacmp_t_21[1:0];
 

@@ -102,7 +102,7 @@ wire   [63:0] zext_ln823_fu_409_p1;
 reg   [4:0] i_fu_116;
 wire   [4:0] add_ln701_fu_280_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_69;
+reg   [4:0] ap_sig_allocacmp_i_70;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we1_local;
 wire   [7:0] trunc_ln821_fu_374_p1;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce1_local;
@@ -297,9 +297,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_69 = 5'd0;
+        ap_sig_allocacmp_i_70 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_69 = i_fu_116;
+        ap_sig_allocacmp_i_70 = i_fu_116;
     end
 end
 
@@ -378,7 +378,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln701_fu_280_p2 = (ap_sig_allocacmp_i_69 + 5'd1);
+assign add_ln701_fu_280_p2 = (ap_sig_allocacmp_i_70 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -392,11 +392,11 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln701_fu_274_p2 = ((ap_sig_allocacmp_i_69 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln701_fu_274_p2 = ((ap_sig_allocacmp_i_70 == 5'd16) ? 1'b1 : 1'b0);
 
 assign or_ln_fu_401_p3 = {{trunc_ln701_fu_286_p1}, {1'd1}};
 
-assign shl_ln819_fu_362_p2 = ap_sig_allocacmp_i_69 << 5'd1;
+assign shl_ln819_fu_362_p2 = ap_sig_allocacmp_i_70 << 5'd1;
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2_address0 = zext_ln823_fu_409_p1;
 
@@ -430,7 +430,7 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we1 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we1_local;
 
-assign trunc_ln701_fu_286_p1 = ap_sig_allocacmp_i_69[3:0];
+assign trunc_ln701_fu_286_p1 = ap_sig_allocacmp_i_70[3:0];
 
 assign trunc_ln821_fu_374_p1 = v_fu_290_p35[7:0];
 
