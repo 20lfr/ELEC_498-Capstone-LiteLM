@@ -148,7 +148,7 @@ transformer_top_mul_8s_32s_32_1_1 #(
     .din0_WIDTH( 8 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 32 ))
-mul_8s_32s_32_1_1_U3045(
+mul_8s_32s_32_1_1_U2526(
     .din0(layer),
     .din1(grp_fu_326_p1),
     .dout(grp_fu_326_p2)
@@ -160,7 +160,7 @@ transformer_top_mul_8s_32s_32_1_1 #(
     .din0_WIDTH( 8 ),
     .din1_WIDTH( 32 ),
     .dout_WIDTH( 32 ))
-mul_8s_32s_32_1_1_U3046(
+mul_8s_32s_32_1_1_U2527(
     .din0(grp_fu_333_p0),
     .din1(grp_fu_333_p1),
     .dout(grp_fu_333_p2)

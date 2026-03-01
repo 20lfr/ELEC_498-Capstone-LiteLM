@@ -45,12 +45,6 @@ module transformer_top_compute_controller (
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0,
@@ -69,6 +63,12 @@ module transformer_top_compute_controller (
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1,
         main_mem_read_request,
         main_mem_read_request_ap_vld,
         compute_done,
@@ -167,12 +167,6 @@ input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_Stat
 output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1;
 output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0;
@@ -191,6 +185,12 @@ input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_Stat
 output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1;
 input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
+output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1;
 output  [0:0] main_mem_read_request;
 output   main_mem_read_request_ap_vld;
 output  [0:0] compute_done;
@@ -235,10 +235,6 @@ reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMe
 reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0;
 reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1;
 reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1;
-reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
-reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
@@ -251,6 +247,10 @@ reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMe
 reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0;
 reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1;
 reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1;
+reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+reg[4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
+reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 reg main_mem_read_request_ap_vld;
 reg compute_done_ap_vld;
 reg compute_ready_ap_vld;
@@ -341,25 +341,25 @@ wire   [31:0] grp_read_i32_fu_1537_ap_return;
 reg   [31:0] tmp_reg_4472;
 wire    ap_CS_fsm_state11;
 wire    ap_CS_fsm_state13;
-reg   [3:0] tmp_188_reg_4482;
+reg   [3:0] tmp_187_reg_4482;
 wire    ap_CS_fsm_state14;
-reg   [2:0] tmp_189_reg_4487;
-reg   [31:0] tmp_88_reg_4493;
+reg   [2:0] tmp_188_reg_4487;
+reg   [31:0] tmp_80_reg_4493;
 wire    ap_CS_fsm_state15;
 wire   [6:0] or_ln_fu_2217_p3;
 reg   [6:0] or_ln_reg_4498;
 wire    ap_CS_fsm_state16;
-reg   [31:0] tmp_89_reg_4503;
+reg   [31:0] tmp_81_reg_4503;
 wire    ap_CS_fsm_state17;
 wire   [6:0] or_ln139_1_fu_2225_p3;
 reg   [6:0] or_ln139_1_reg_4508;
 wire    ap_CS_fsm_state18;
-reg   [31:0] tmp_90_reg_4513;
+reg   [31:0] tmp_82_reg_4513;
 wire    ap_CS_fsm_state19;
 wire   [6:0] or_ln139_2_fu_2233_p3;
 reg   [6:0] or_ln139_2_reg_4518;
 wire    ap_CS_fsm_state20;
-reg   [31:0] tmp_91_reg_4523;
+reg   [31:0] tmp_83_reg_4523;
 wire    ap_CS_fsm_state21;
 wire   [5:0] shl_ln_fu_2245_p3;
 reg   [5:0] shl_ln_reg_4528;
@@ -372,8 +372,8 @@ wire   [6:0] empty_fu_2269_p2;
 reg   [6:0] empty_reg_4542;
 wire   [0:0] cmp65_i_5_fu_2276_p2;
 reg   [0:0] cmp65_i_5_reg_4547;
-wire   [6:0] tmp_420_fu_2292_p3;
-reg   [6:0] tmp_420_reg_4551;
+wire   [6:0] tmp_370_fu_2292_p3;
+reg   [6:0] tmp_370_reg_4551;
 wire   [1:0] tmp_55_fu_2301_p4;
 reg   [1:0] tmp_55_reg_4556;
 wire   [6:0] tmp_56_fu_2312_p3;
@@ -384,14 +384,14 @@ reg   [4:0] requant_params_REQUANT4_M_L_addr_reg_4589;
 reg   [4:0] requant_params_REQUANT2_N_L_addr_reg_4594;
 reg   [4:0] requant_params_REQUANT4_N_L_addr_reg_4599;
 wire   [62:0] grp_fu_1611_p2;
-reg   [62:0] product_5_reg_4604;
+reg   [62:0] product_12_reg_4604;
 wire   [62:0] grp_fu_1615_p2;
-reg   [62:0] product_6_reg_4609;
+reg   [62:0] product_13_reg_4609;
 wire   [62:0] grp_fu_1619_p2;
-reg   [62:0] product_7_reg_4614;
-reg   [62:0] product_1_reg_4619;
-reg   [62:0] product_2_reg_4624;
-reg   [62:0] product_3_reg_4629;
+reg   [62:0] product_14_reg_4614;
+reg   [62:0] product_8_reg_4619;
+reg   [62:0] product_9_reg_4624;
+reg   [62:0] product_10_reg_4629;
 wire   [0:0] xor_ln708_fu_4115_p2;
 wire    ap_CS_fsm_state36;
 wire   [7:0] select_ln708_fu_4120_p3;
@@ -412,10 +412,6 @@ wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_ui
 wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0;
 wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1;
 wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1;
-wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
@@ -428,6 +424,10 @@ wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_ui
 wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0;
 wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1;
 wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1;
+wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0;
 wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0;
 wire    grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0;
@@ -447,10 +447,6 @@ wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_v
 wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0;
 wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1;
 wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1;
-wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
-wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
@@ -463,6 +459,10 @@ wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_v
 wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0;
 wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1;
 wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1;
+wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
+wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0;
 wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0;
 wire    grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0;
@@ -487,10 +487,6 @@ wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_vo
 wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0;
 wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1;
 wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1;
-wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
-wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
@@ -503,6 +499,10 @@ wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_vo
 wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0;
 wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1;
 wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1;
+wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
+wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0;
 wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0;
 wire    grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0;
@@ -520,10 +520,6 @@ wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile
 wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0;
 wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1;
 wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1;
-wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
-wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
@@ -536,30 +532,30 @@ wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile
 wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0;
 wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1;
 wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1;
+wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+wire   [4:0] grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
+wire    grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_ap_start;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_ap_done;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_ap_idle;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_ap_ready;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_163_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_163_out_ap_vld;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_131_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_131_out_ap_vld;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_99_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_99_out_ap_vld;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_67_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_67_out_ap_vld;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_35_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_35_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_161_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_161_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_129_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_129_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_97_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_97_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_65_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_65_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_33_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_33_out_ap_vld;
 wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_out;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_out_ap_vld;
 wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address0;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce0;
 wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1;
-wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
-wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
 wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
@@ -572,6 +568,10 @@ wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transforme
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce0;
 wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1;
+wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0;
+wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_665_1_fu_1599_ap_start;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_665_1_fu_1599_ap_done;
 wire    grp_compute_controller_Pipeline_VITIS_LOOP_665_1_fu_1599_ap_idle;
@@ -666,7 +666,7 @@ reg   [0:0] ap_phi_mux_write_flag18_2_phi_fu_1395_p4;
 reg   [0:0] write_flag18_2_reg_1391;
 reg   [0:0] ap_phi_mux_error_2_phi_fu_1407_p4;
 reg   [0:0] error_2_reg_1403;
-reg   [0:0] next_state_9_reg_1461;
+reg   [0:0] next_state_7_reg_1461;
 reg    grp_FFN_ACT_Silu_TO_BUF_fu_1474_ap_start_reg;
 wire    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0_out;
 wire    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2_we0_out;
@@ -678,11 +678,11 @@ reg    grp_read_i32_fu_1537_ap_start_reg;
 wire    ap_CS_fsm_state12;
 reg    grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_ap_start_reg;
 wire    ap_CS_fsm_state23;
-reg   [31:0] acc_163_loc_fu_338;
-reg   [31:0] acc_131_loc_fu_334;
-reg   [31:0] acc_99_loc_fu_330;
-reg   [31:0] acc_67_loc_fu_326;
-reg   [31:0] acc_35_loc_fu_322;
+reg   [31:0] acc_161_loc_fu_338;
+reg   [31:0] acc_129_loc_fu_334;
+reg   [31:0] acc_97_loc_fu_330;
+reg   [31:0] acc_65_loc_fu_326;
+reg   [31:0] acc_33_loc_fu_322;
 reg   [31:0] acc_loc_fu_318;
 reg    grp_compute_controller_Pipeline_VITIS_LOOP_665_1_fu_1599_ap_start_reg;
 wire   [63:0] zext_ln745_fu_1894_p1;
@@ -762,7 +762,7 @@ reg   [30:0] grp_fu_1619_p0;
 reg  signed [31:0] grp_fu_1619_p1;
 wire  signed [62:0] sext_ln330_7_fu_2621_p1;
 wire  signed [62:0] sext_ln330_3_fu_3419_p1;
-wire   [2:0] tmp_417_fu_1870_p4;
+wire   [2:0] tmp_367_fu_1870_p4;
 wire   [0:0] icmp_ln738_fu_1880_p2;
 wire   [4:0] trunc_ln737_1_fu_1866_p1;
 wire   [4:0] layer_4_fu_1886_p3;
@@ -794,20 +794,20 @@ wire   [0:0] xor_ln719_fu_2112_p2;
 wire   [0:0] or_ln83_fu_2130_p2;
 wire   [0:0] xor_ln86_fu_2158_p2;
 wire   [6:0] zext_ln127_2_fu_2241_p1;
-wire   [1:0] tmp_419_fu_2282_p4;
-wire   [2:0] tmp_418_fu_2324_p4;
+wire   [1:0] tmp_369_fu_2282_p4;
+wire   [2:0] tmp_368_fu_2324_p4;
 wire   [0:0] icmp_ln128_fu_2333_p2;
 wire   [4:0] trunc_ln128_fu_2321_p1;
 wire   [4:0] layer_6_fu_2339_p3;
 wire  signed [31:0] prod_fu_2373_p1;
 wire   [45:0] prod_fu_2373_p3;
-wire  signed [31:0] tmp_425_fu_2385_p1;
-wire   [0:0] tmp_425_fu_2385_p3;
+wire  signed [31:0] tmp_375_fu_2385_p1;
+wire   [0:0] tmp_375_fu_2385_p3;
 wire   [46:0] select_ln192_fu_2393_p3;
 wire  signed [46:0] sext_ln188_fu_2381_p1;
-wire   [46:0] rounded_1_fu_2401_p2;
-wire   [16:0] tmp_426_fu_2417_p4;
-wire   [31:0] scaled_4_fu_2407_p4;
+wire   [46:0] rounded_2_fu_2401_p2;
+wire   [16:0] tmp_376_fu_2417_p4;
+wire   [31:0] scaled_11_fu_2407_p4;
 wire   [0:0] icmp_ln194_fu_2427_p2;
 wire   [0:0] icmp_ln195_fu_2433_p2;
 wire   [0:0] or_ln196_fu_2457_p2;
@@ -816,13 +816,13 @@ wire   [15:0] trunc_ln16_fu_2439_p4;
 wire   [15:0] v_fu_2463_p3;
 wire  signed [31:0] prod_1_fu_2487_p1;
 wire   [45:0] prod_1_fu_2487_p3;
-wire  signed [31:0] tmp_427_fu_2499_p1;
-wire   [0:0] tmp_427_fu_2499_p3;
+wire  signed [31:0] tmp_377_fu_2499_p1;
+wire   [0:0] tmp_377_fu_2499_p3;
 wire   [46:0] select_ln192_4_fu_2507_p3;
 wire  signed [46:0] sext_ln188_1_fu_2495_p1;
-wire   [46:0] rounded_2_fu_2515_p2;
-wire   [16:0] tmp_428_fu_2531_p4;
-wire   [31:0] scaled_5_fu_2521_p4;
+wire   [46:0] rounded_3_fu_2515_p2;
+wire   [16:0] tmp_378_fu_2531_p4;
+wire   [31:0] scaled_12_fu_2521_p4;
 wire   [0:0] icmp_ln194_1_fu_2541_p2;
 wire   [0:0] icmp_ln195_1_fu_2547_p2;
 wire   [0:0] or_ln196_1_fu_2571_p2;
@@ -835,12 +835,12 @@ wire  signed [31:0] sext_ln330_6_fu_2617_p0;
 wire  signed [31:0] sext_ln330_7_fu_2621_p0;
 wire   [5:0] grp_fu_1639_p2;
 wire   [34:0] zext_ln331_2_fu_2625_p1;
-wire   [34:0] rounded_5_fu_2629_p2;
+wire   [34:0] rounded_6_fu_2629_p2;
 wire   [62:0] zext_ln331_3_fu_2635_p1;
 wire   [62:0] add_ln332_4_fu_2639_p2;
 wire   [62:0] zext_ln332_1_fu_2645_p1;
-wire   [62:0] scaled_8_fu_2649_p2;
-wire   [23:0] tmp_433_fu_2659_p4;
+wire   [62:0] scaled_15_fu_2649_p2;
+wire   [23:0] tmp_383_fu_2659_p4;
 wire   [30:0] trunc_ln332_4_fu_2655_p1;
 wire   [0:0] icmp_ln333_4_fu_2669_p2;
 wire   [0:0] icmp_ln334_4_fu_2675_p2;
@@ -848,8 +848,8 @@ wire   [0:0] or_ln333_4_fu_2693_p2;
 wire   [7:0] select_ln333_8_fu_2685_p3;
 wire   [7:0] trunc_ln335_4_fu_2681_p1;
 wire   [62:0] add_ln332_5_fu_2708_p2;
-wire   [62:0] scaled_9_fu_2713_p2;
-wire   [23:0] tmp_434_fu_2723_p4;
+wire   [62:0] scaled_16_fu_2713_p2;
+wire   [23:0] tmp_384_fu_2723_p4;
 wire   [30:0] trunc_ln332_5_fu_2719_p1;
 wire   [0:0] icmp_ln333_5_fu_2733_p2;
 wire   [0:0] icmp_ln334_5_fu_2739_p2;
@@ -857,8 +857,8 @@ wire   [0:0] or_ln333_5_fu_2757_p2;
 wire   [7:0] select_ln333_10_fu_2749_p3;
 wire   [7:0] trunc_ln335_5_fu_2745_p1;
 wire   [62:0] add_ln332_6_fu_2772_p2;
-wire   [62:0] scaled_10_fu_2777_p2;
-wire   [23:0] tmp_435_fu_2787_p4;
+wire   [62:0] scaled_17_fu_2777_p2;
+wire   [23:0] tmp_385_fu_2787_p4;
 wire   [30:0] trunc_ln332_6_fu_2783_p1;
 wire   [0:0] icmp_ln333_6_fu_2797_p2;
 wire   [0:0] icmp_ln334_6_fu_2803_p2;
@@ -866,8 +866,8 @@ wire   [0:0] or_ln333_6_fu_2821_p2;
 wire   [7:0] select_ln333_12_fu_2813_p3;
 wire   [7:0] trunc_ln335_6_fu_2809_p1;
 wire   [62:0] add_ln332_7_fu_2836_p2;
-wire   [62:0] scaled_11_fu_2841_p2;
-wire   [23:0] tmp_436_fu_2851_p4;
+wire   [62:0] scaled_18_fu_2841_p2;
+wire   [23:0] tmp_386_fu_2851_p4;
 wire   [30:0] trunc_ln332_7_fu_2847_p1;
 wire   [0:0] icmp_ln333_7_fu_2861_p2;
 wire   [0:0] icmp_ln334_7_fu_2867_p2;
@@ -881,7 +881,7 @@ wire   [62:0] zext_ln331_1_fu_2910_p1;
 wire   [62:0] add_ln332_fu_2914_p2;
 wire   [62:0] zext_ln332_fu_2920_p1;
 wire   [62:0] scaled_fu_2924_p2;
-wire   [23:0] tmp_421_fu_2934_p4;
+wire   [23:0] tmp_371_fu_2934_p4;
 wire   [30:0] trunc_ln332_fu_2930_p1;
 wire   [0:0] icmp_ln333_fu_2944_p2;
 wire   [0:0] icmp_ln334_fu_2950_p2;
@@ -889,8 +889,8 @@ wire   [0:0] or_ln333_fu_2968_p2;
 wire   [7:0] select_ln333_fu_2960_p3;
 wire   [7:0] trunc_ln335_fu_2956_p1;
 wire   [62:0] add_ln332_1_fu_2983_p2;
-wire   [62:0] scaled_1_fu_2988_p2;
-wire   [23:0] tmp_422_fu_2998_p4;
+wire   [62:0] scaled_8_fu_2988_p2;
+wire   [23:0] tmp_372_fu_2998_p4;
 wire   [30:0] trunc_ln332_1_fu_2994_p1;
 wire   [0:0] icmp_ln333_1_fu_3008_p2;
 wire   [0:0] icmp_ln334_1_fu_3014_p2;
@@ -898,8 +898,8 @@ wire   [0:0] or_ln333_1_fu_3032_p2;
 wire   [7:0] select_ln333_2_fu_3024_p3;
 wire   [7:0] trunc_ln335_1_fu_3020_p1;
 wire   [62:0] add_ln332_2_fu_3047_p2;
-wire   [62:0] scaled_2_fu_3052_p2;
-wire   [23:0] tmp_423_fu_3062_p4;
+wire   [62:0] scaled_9_fu_3052_p2;
+wire   [23:0] tmp_373_fu_3062_p4;
 wire   [30:0] trunc_ln332_2_fu_3058_p1;
 wire   [0:0] icmp_ln333_2_fu_3072_p2;
 wire   [0:0] icmp_ln334_2_fu_3078_p2;
@@ -907,8 +907,8 @@ wire   [0:0] or_ln333_2_fu_3096_p2;
 wire   [7:0] select_ln333_4_fu_3088_p3;
 wire   [7:0] trunc_ln335_2_fu_3084_p1;
 wire   [62:0] add_ln332_3_fu_3111_p2;
-wire   [62:0] scaled_3_fu_3116_p2;
-wire   [23:0] tmp_424_fu_3126_p4;
+wire   [62:0] scaled_10_fu_3116_p2;
+wire   [23:0] tmp_374_fu_3126_p4;
 wire   [30:0] trunc_ln332_3_fu_3122_p1;
 wire   [0:0] icmp_ln333_3_fu_3136_p2;
 wire   [0:0] icmp_ln334_3_fu_3142_p2;
@@ -917,13 +917,13 @@ wire   [7:0] select_ln333_6_fu_3152_p3;
 wire   [7:0] trunc_ln335_3_fu_3148_p1;
 wire  signed [31:0] prod_2_fu_3175_p1;
 wire   [45:0] prod_2_fu_3175_p3;
-wire  signed [31:0] tmp_429_fu_3186_p1;
-wire   [0:0] tmp_429_fu_3186_p3;
+wire  signed [31:0] tmp_379_fu_3186_p1;
+wire   [0:0] tmp_379_fu_3186_p3;
 wire   [46:0] select_ln192_5_fu_3193_p3;
 wire  signed [46:0] sext_ln188_2_fu_3182_p1;
-wire   [46:0] rounded_3_fu_3201_p2;
-wire   [16:0] tmp_430_fu_3217_p4;
-wire   [31:0] scaled_6_fu_3207_p4;
+wire   [46:0] rounded_4_fu_3201_p2;
+wire   [16:0] tmp_380_fu_3217_p4;
+wire   [31:0] scaled_13_fu_3207_p4;
 wire   [0:0] icmp_ln194_2_fu_3227_p2;
 wire   [0:0] icmp_ln195_2_fu_3233_p2;
 wire   [0:0] or_ln196_2_fu_3257_p2;
@@ -932,13 +932,13 @@ wire   [15:0] trunc_ln196_2_fu_3239_p4;
 wire   [15:0] v_11_fu_3263_p3;
 wire  signed [31:0] prod_3_fu_3287_p1;
 wire   [45:0] prod_3_fu_3287_p3;
-wire  signed [31:0] tmp_431_fu_3298_p1;
-wire   [0:0] tmp_431_fu_3298_p3;
+wire  signed [31:0] tmp_381_fu_3298_p1;
+wire   [0:0] tmp_381_fu_3298_p3;
 wire   [46:0] select_ln192_6_fu_3305_p3;
 wire  signed [46:0] sext_ln188_3_fu_3294_p1;
-wire   [46:0] rounded_4_fu_3313_p2;
-wire   [16:0] tmp_432_fu_3329_p4;
-wire   [31:0] scaled_7_fu_3319_p4;
+wire   [46:0] rounded_5_fu_3313_p2;
+wire   [16:0] tmp_382_fu_3329_p4;
+wire   [31:0] scaled_14_fu_3319_p4;
 wire   [0:0] icmp_ln194_3_fu_3339_p2;
 wire   [0:0] icmp_ln195_3_fu_3345_p2;
 wire   [0:0] or_ln196_3_fu_3369_p2;
@@ -951,12 +951,12 @@ wire  signed [31:0] sext_ln330_2_fu_3415_p0;
 wire  signed [31:0] sext_ln330_3_fu_3419_p0;
 wire  signed [31:0] sext_ln330_9_fu_3423_p0;
 wire   [34:0] zext_ln331_6_fu_3432_p1;
-wire   [34:0] rounded_8_fu_3436_p2;
+wire   [34:0] rounded_9_fu_3436_p2;
 wire   [62:0] zext_ln331_7_fu_3442_p1;
 wire   [62:0] add_ln332_9_fu_3446_p2;
 wire   [62:0] zext_ln332_3_fu_3452_p1;
-wire   [62:0] scaled_14_fu_3456_p2;
-wire   [23:0] tmp_440_fu_3466_p4;
+wire   [62:0] scaled_21_fu_3456_p2;
+wire   [23:0] tmp_390_fu_3466_p4;
 wire   [30:0] trunc_ln332_9_fu_3462_p1;
 wire   [0:0] icmp_ln333_9_fu_3476_p2;
 wire   [0:0] icmp_ln334_9_fu_3482_p2;
@@ -964,12 +964,12 @@ wire   [0:0] or_ln333_9_fu_3500_p2;
 wire   [7:0] select_ln333_18_fu_3492_p3;
 wire   [7:0] trunc_ln335_9_fu_3488_p1;
 wire   [36:0] zext_ln331_4_fu_3515_p1;
-wire   [36:0] rounded_6_fu_3519_p2;
+wire   [36:0] rounded_7_fu_3519_p2;
 wire   [62:0] zext_ln331_5_fu_3525_p1;
 wire   [62:0] add_ln332_8_fu_3529_p2;
 wire   [62:0] zext_ln332_2_fu_3535_p1;
-wire   [62:0] scaled_12_fu_3539_p2;
-wire   [23:0] tmp_437_fu_3549_p4;
+wire   [62:0] scaled_19_fu_3539_p2;
+wire   [23:0] tmp_387_fu_3549_p4;
 wire   [30:0] trunc_ln332_8_fu_3545_p1;
 wire   [0:0] icmp_ln333_8_fu_3559_p2;
 wire   [0:0] icmp_ln334_8_fu_3565_p2;
@@ -978,13 +978,13 @@ wire   [7:0] select_ln333_16_fu_3575_p3;
 wire   [7:0] trunc_ln335_8_fu_3571_p1;
 wire  signed [31:0] prod_5_fu_3598_p1;
 wire   [45:0] prod_5_fu_3598_p3;
-wire  signed [31:0] tmp_442_fu_3609_p1;
-wire   [0:0] tmp_442_fu_3609_p3;
+wire  signed [31:0] tmp_392_fu_3609_p1;
+wire   [0:0] tmp_392_fu_3609_p3;
 wire   [46:0] select_ln192_8_fu_3616_p3;
 wire  signed [46:0] sext_ln188_5_fu_3605_p1;
-wire   [46:0] rounded_10_fu_3624_p2;
-wire   [16:0] tmp_443_fu_3640_p4;
-wire   [31:0] scaled_16_fu_3630_p4;
+wire   [46:0] rounded_11_fu_3624_p2;
+wire   [16:0] tmp_393_fu_3640_p4;
+wire   [31:0] scaled_23_fu_3630_p4;
 wire   [0:0] icmp_ln194_5_fu_3650_p2;
 wire   [0:0] icmp_ln195_5_fu_3656_p2;
 wire   [0:0] or_ln196_5_fu_3680_p2;
@@ -993,13 +993,13 @@ wire   [15:0] trunc_ln196_5_fu_3662_p4;
 wire   [15:0] v_14_fu_3686_p3;
 wire  signed [31:0] prod_4_fu_3710_p1;
 wire   [45:0] prod_4_fu_3710_p3;
-wire  signed [31:0] tmp_438_fu_3721_p1;
-wire   [0:0] tmp_438_fu_3721_p3;
+wire  signed [31:0] tmp_388_fu_3721_p1;
+wire   [0:0] tmp_388_fu_3721_p3;
 wire   [46:0] select_ln192_7_fu_3728_p3;
 wire  signed [46:0] sext_ln188_4_fu_3717_p1;
-wire   [46:0] rounded_7_fu_3736_p2;
-wire   [16:0] tmp_439_fu_3752_p4;
-wire   [31:0] scaled_13_fu_3742_p4;
+wire   [46:0] rounded_8_fu_3736_p2;
+wire   [16:0] tmp_389_fu_3752_p4;
+wire   [31:0] scaled_20_fu_3742_p4;
 wire   [0:0] icmp_ln194_4_fu_3762_p2;
 wire   [0:0] icmp_ln195_4_fu_3768_p2;
 wire   [0:0] or_ln196_4_fu_3792_p2;
@@ -1009,12 +1009,12 @@ wire   [15:0] v_13_fu_3798_p3;
 wire  signed [31:0] sext_ln330_8_fu_3822_p0;
 wire  signed [31:0] sext_ln330_11_fu_3831_p0;
 wire   [34:0] zext_ln331_10_fu_3840_p1;
-wire   [34:0] rounded_11_fu_3844_p2;
+wire   [34:0] rounded_12_fu_3844_p2;
 wire   [62:0] zext_ln331_11_fu_3850_p1;
 wire   [62:0] add_ln332_11_fu_3854_p2;
 wire   [62:0] zext_ln332_5_fu_3860_p1;
-wire   [62:0] scaled_17_fu_3864_p2;
-wire   [23:0] tmp_444_fu_3874_p4;
+wire   [62:0] scaled_24_fu_3864_p2;
+wire   [23:0] tmp_394_fu_3874_p4;
 wire   [30:0] trunc_ln332_11_fu_3870_p1;
 wire   [0:0] icmp_ln333_11_fu_3884_p2;
 wire   [0:0] icmp_ln334_11_fu_3890_p2;
@@ -1022,12 +1022,12 @@ wire   [0:0] or_ln333_11_fu_3908_p2;
 wire   [7:0] select_ln333_22_fu_3900_p3;
 wire   [7:0] trunc_ln335_11_fu_3896_p1;
 wire   [36:0] zext_ln331_8_fu_3923_p1;
-wire   [36:0] rounded_9_fu_3927_p2;
+wire   [36:0] rounded_10_fu_3927_p2;
 wire   [62:0] zext_ln331_9_fu_3933_p1;
 wire   [62:0] add_ln332_10_fu_3937_p2;
 wire   [62:0] zext_ln332_4_fu_3943_p1;
-wire   [62:0] scaled_15_fu_3947_p2;
-wire   [23:0] tmp_441_fu_3957_p4;
+wire   [62:0] scaled_22_fu_3947_p2;
+wire   [23:0] tmp_391_fu_3957_p4;
 wire   [30:0] trunc_ln332_10_fu_3953_p1;
 wire   [0:0] icmp_ln333_10_fu_3967_p2;
 wire   [0:0] icmp_ln334_10_fu_3973_p2;
@@ -1235,12 +1235,6 @@ transformer_top_FFN_ACT_Silu_TO_BUF grp_FFN_ACT_Silu_TO_BUF_fu_1474(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
@@ -1259,6 +1253,12 @@ transformer_top_FFN_ACT_Silu_TO_BUF grp_FFN_ACT_Silu_TO_BUF_fu_1474(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0(grp_FFN_ACT_Silu_TO_BUF_fu_1474_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0),
@@ -1285,12 +1285,6 @@ transformer_top_RMS_NORM_TO_BUF grp_RMS_NORM_TO_BUF_fu_1494(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
@@ -1309,6 +1303,12 @@ transformer_top_RMS_NORM_TO_BUF grp_RMS_NORM_TO_BUF_fu_1494(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0(grp_RMS_NORM_TO_BUF_fu_1494_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0),
@@ -1340,12 +1340,6 @@ transformer_top_RES_ADD_TO_BUF grp_RES_ADD_TO_BUF_fu_1519(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
@@ -1364,6 +1358,12 @@ transformer_top_RES_ADD_TO_BUF grp_RES_ADD_TO_BUF_fu_1519(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0(grp_RES_ADD_TO_BUF_fu_1519_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0),
@@ -1388,12 +1388,6 @@ transformer_top_read_i32 grp_read_i32_fu_1537(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
@@ -1412,6 +1406,12 @@ transformer_top_read_i32 grp_read_i32_fu_1537(
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_read_i32_fu_1537_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .ap_return(grp_read_i32_fu_1537_ap_return)
 );
 
@@ -1424,13 +1424,13 @@ transformer_top_compute_controller_Pipeline_VITIS_LOOP_145_3 grp_compute_control
     .ap_ready(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_ap_ready),
     .storemerge199(storemerge199_reg_710),
     .storemerge198179(storemerge198179_reg_627),
-    .tmp_91(tmp_91_reg_4523),
-    .tmp_90(tmp_90_reg_4513),
-    .tmp_89(tmp_89_reg_4503),
-    .tmp_88(tmp_88_reg_4493),
+    .tmp_83(tmp_83_reg_4523),
+    .tmp_82(tmp_82_reg_4513),
+    .tmp_81(tmp_81_reg_4503),
+    .tmp_80(tmp_80_reg_4493),
     .vec_count_0_i_ph167169(vec_count_0_i_ph167169_reg_693),
     .out_count_0_i_ph166171(out_count_0_i_ph166171_reg_676),
-    .empty_229(empty_reg_4542),
+    .empty_156(empty_reg_4542),
     .zext_ln127(weight_nibble_base_0_i_ph165173_reg_659),
     .p_cast67(shl_ln_reg_4528),
     .tmp_55(tmp_55_reg_4556),
@@ -1438,17 +1438,17 @@ transformer_top_compute_controller_Pipeline_VITIS_LOOP_145_3 grp_compute_control
     .act_is_i16_0_i_ph163177(act_is_i16_0_i_ph163177_reg_642),
     .zext_ln169_16(tmp_56_reg_4561),
     .p_cast101(p_shl_reg_4537),
-    .empty(tmp_420_reg_4551),
-    .acc_163_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_163_out),
-    .acc_163_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_163_out_ap_vld),
-    .acc_131_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_131_out),
-    .acc_131_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_131_out_ap_vld),
-    .acc_99_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_99_out),
-    .acc_99_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_99_out_ap_vld),
-    .acc_67_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_67_out),
-    .acc_67_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_67_out_ap_vld),
-    .acc_35_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_35_out),
-    .acc_35_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_35_out_ap_vld),
+    .empty(tmp_370_reg_4551),
+    .acc_161_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_161_out),
+    .acc_161_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_161_out_ap_vld),
+    .acc_129_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_129_out),
+    .acc_129_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_129_out_ap_vld),
+    .acc_97_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_97_out),
+    .acc_97_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_97_out_ap_vld),
+    .acc_65_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_65_out),
+    .acc_65_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_65_out_ap_vld),
+    .acc_33_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_33_out),
+    .acc_33_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_33_out_ap_vld),
     .acc_out(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_out),
     .acc_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_out_ap_vld),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address0(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address0),
@@ -1457,12 +1457,6 @@ transformer_top_compute_controller_Pipeline_VITIS_LOOP_145_3 grp_compute_control
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
@@ -1480,7 +1474,13 @@ transformer_top_compute_controller_Pipeline_VITIS_LOOP_145_3 grp_compute_control
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_address1),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1)
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1(grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1)
 );
 
 transformer_top_compute_controller_Pipeline_VITIS_LOOP_665_1 grp_compute_controller_Pipeline_VITIS_LOOP_665_1_fu_1599(
@@ -2075,6 +2075,14 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
+    if (((ap_start == 1'b1) & (next_state_load_fu_1686_p1 == 8'd0) & (ctrl_mem_control_read_read_fu_360_p2 == 1'd1) & (compute_start_read_read_fu_354_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        next_state_7_reg_1461 <= 1'd0;
+    end else if ((1'b1 == ap_CS_fsm_state38)) begin
+        next_state_7_reg_1461 <= 1'd1;
+    end
+end
+
+always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state40_on_subcall_done) & (1'b1 == ap_CS_fsm_state40))) begin
         next_state_8_reg_1191 <= zext_ln648_reg_4664;
     end else if (((next_state_reg_4292 == 8'd3) & (ctrl_mem_control_read_read_fu_360_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state34))) begin
@@ -2093,14 +2101,6 @@ always @ (posedge ap_clk) begin
         next_state_8_reg_1191 <= 8'd0;
     end else if ((~(next_state_load_fu_1686_p1 == 8'd5) & ~(next_state_load_fu_1686_p1 == 8'd4) & ~(next_state_load_fu_1686_p1 == 8'd2) & ~(next_state_load_fu_1686_p1 == 8'd1) & ~(next_state_load_fu_1686_p1 == 8'd0) & ~(next_state_load_fu_1686_p1 == 8'd3) & (ap_start == 1'b1) & (ctrl_mem_control_read_read_fu_360_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
         next_state_8_reg_1191 <= state;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (next_state_load_fu_1686_p1 == 8'd0) & (ctrl_mem_control_read_read_fu_360_p2 == 1'd1) & (compute_start_read_read_fu_354_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        next_state_9_reg_1461 <= 1'd0;
-    end else if ((1'b1 == ap_CS_fsm_state38)) begin
-        next_state_9_reg_1461 <= 1'd1;
     end
 end
 
@@ -2289,32 +2289,32 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_131_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
-        acc_131_loc_fu_334 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_131_out;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_129_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
+        acc_129_loc_fu_334 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_129_out;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_163_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
-        acc_163_loc_fu_338 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_163_out;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_161_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
+        acc_161_loc_fu_338 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_161_out;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_35_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
-        acc_35_loc_fu_322 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_35_out;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_33_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
+        acc_33_loc_fu_322 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_33_out;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_67_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
-        acc_67_loc_fu_326 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_67_out;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_65_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
+        acc_65_loc_fu_326 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_65_out;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_99_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
-        acc_99_loc_fu_330 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_99_out;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_97_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state23))) begin
+        acc_97_loc_fu_330 <= grp_compute_controller_Pipeline_VITIS_LOOP_145_3_fu_1555_acc_97_out;
     end
 end
 
@@ -2339,8 +2339,8 @@ always @ (posedge ap_clk) begin
         empty_reg_4542[6 : 3] <= empty_fu_2269_p2[6 : 3];
         p_shl_reg_4537[5] <= p_shl_fu_2260_p3[5];
         shl_ln_reg_4528[4] <= shl_ln_fu_2245_p3[4];
-        tmp_420_reg_4551[3] <= tmp_420_fu_2292_p3[3];
-tmp_420_reg_4551[5] <= tmp_420_fu_2292_p3[5];
+        tmp_370_reg_4551[3] <= tmp_370_fu_2292_p3[3];
+tmp_370_reg_4551[5] <= tmp_370_fu_2292_p3[5];
         tmp_55_reg_4556 <= {{weight_nibble_base_0_i_ph165173_reg_659[6:5]}};
         tmp_56_reg_4561[3] <= tmp_56_fu_2312_p3[3];
 tmp_56_reg_4561[6] <= tmp_56_fu_2312_p3[6];
@@ -2403,17 +2403,17 @@ end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state28)) begin
-        product_1_reg_4619 <= grp_fu_1611_p2;
-        product_2_reg_4624 <= grp_fu_1615_p2;
-        product_3_reg_4629 <= grp_fu_1619_p2;
+        product_10_reg_4629 <= grp_fu_1619_p2;
+        product_8_reg_4619 <= grp_fu_1611_p2;
+        product_9_reg_4624 <= grp_fu_1615_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state25)) begin
-        product_5_reg_4604 <= grp_fu_1611_p2;
-        product_6_reg_4609 <= grp_fu_1615_p2;
-        product_7_reg_4614 <= grp_fu_1619_p2;
+        product_12_reg_4604 <= grp_fu_1611_p2;
+        product_13_reg_4609 <= grp_fu_1615_p2;
+        product_14_reg_4614 <= grp_fu_1619_p2;
     end
 end
 
@@ -2440,32 +2440,32 @@ end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state14)) begin
-        tmp_188_reg_4482 <= {{bias_byte_base_0_i_ph164176_reg_609[6:3]}};
-        tmp_189_reg_4487 <= {{bias_byte_base_0_i_ph164176_reg_609[6:4]}};
+        tmp_187_reg_4482 <= {{bias_byte_base_0_i_ph164176_reg_609[6:3]}};
+        tmp_188_reg_4487 <= {{bias_byte_base_0_i_ph164176_reg_609[6:4]}};
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state15)) begin
-        tmp_88_reg_4493 <= grp_read_i32_fu_1537_ap_return;
+        tmp_80_reg_4493 <= grp_read_i32_fu_1537_ap_return;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state17)) begin
-        tmp_89_reg_4503 <= grp_read_i32_fu_1537_ap_return;
+        tmp_81_reg_4503 <= grp_read_i32_fu_1537_ap_return;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state19)) begin
-        tmp_90_reg_4513 <= grp_read_i32_fu_1537_ap_return;
+        tmp_82_reg_4513 <= grp_read_i32_fu_1537_ap_return;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state21)) begin
-        tmp_91_reg_4523 <= grp_read_i32_fu_1537_ap_return;
+        tmp_83_reg_4523 <= grp_read_i32_fu_1537_ap_return;
     end
 end
 
@@ -4154,19 +4154,19 @@ assign add_ln332_10_fu_3937_p2 = (zext_ln331_9_fu_3933_p1 + reg_1682);
 
 assign add_ln332_11_fu_3854_p2 = (zext_ln331_11_fu_3850_p1 + reg_1678);
 
-assign add_ln332_1_fu_2983_p2 = (zext_ln331_1_fu_2910_p1 + product_1_reg_4619);
+assign add_ln332_1_fu_2983_p2 = (zext_ln331_1_fu_2910_p1 + product_8_reg_4619);
 
-assign add_ln332_2_fu_3047_p2 = (zext_ln331_1_fu_2910_p1 + product_2_reg_4624);
+assign add_ln332_2_fu_3047_p2 = (zext_ln331_1_fu_2910_p1 + product_9_reg_4624);
 
-assign add_ln332_3_fu_3111_p2 = (zext_ln331_1_fu_2910_p1 + product_3_reg_4629);
+assign add_ln332_3_fu_3111_p2 = (zext_ln331_1_fu_2910_p1 + product_10_reg_4629);
 
 assign add_ln332_4_fu_2639_p2 = (zext_ln331_3_fu_2635_p1 + reg_1678);
 
-assign add_ln332_5_fu_2708_p2 = (zext_ln331_3_fu_2635_p1 + product_5_reg_4604);
+assign add_ln332_5_fu_2708_p2 = (zext_ln331_3_fu_2635_p1 + product_12_reg_4604);
 
-assign add_ln332_6_fu_2772_p2 = (zext_ln331_3_fu_2635_p1 + product_6_reg_4609);
+assign add_ln332_6_fu_2772_p2 = (zext_ln331_3_fu_2635_p1 + product_13_reg_4609);
 
-assign add_ln332_7_fu_2836_p2 = (zext_ln331_3_fu_2635_p1 + product_7_reg_4614);
+assign add_ln332_7_fu_2836_p2 = (zext_ln331_3_fu_2635_p1 + product_14_reg_4614);
 
 assign add_ln332_8_fu_3529_p2 = (zext_ln331_5_fu_3525_p1 + reg_1682);
 
@@ -4306,55 +4306,55 @@ assign grp_fu_1645_p2 = ($signed(requant_params_REQUANT2_N_L_q0) + $signed(6'd63
 
 assign grp_read_i32_fu_1537_ap_start = grp_read_i32_fu_1537_ap_start_reg;
 
-assign icmp_ln128_fu_2333_p2 = ((tmp_418_fu_2324_p4 != 3'd0) ? 1'b1 : 1'b0);
+assign icmp_ln128_fu_2333_p2 = ((tmp_368_fu_2324_p4 != 3'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln194_1_fu_2541_p2 = (($signed(tmp_428_fu_2531_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln194_1_fu_2541_p2 = (($signed(tmp_378_fu_2531_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln194_2_fu_3227_p2 = (($signed(tmp_430_fu_3217_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln194_2_fu_3227_p2 = (($signed(tmp_380_fu_3217_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln194_3_fu_3339_p2 = (($signed(tmp_432_fu_3329_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln194_3_fu_3339_p2 = (($signed(tmp_382_fu_3329_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln194_4_fu_3762_p2 = (($signed(tmp_439_fu_3752_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln194_4_fu_3762_p2 = (($signed(tmp_389_fu_3752_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln194_5_fu_3650_p2 = (($signed(tmp_443_fu_3640_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln194_5_fu_3650_p2 = (($signed(tmp_393_fu_3640_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln194_fu_2427_p2 = (($signed(tmp_426_fu_2417_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln194_fu_2427_p2 = (($signed(tmp_376_fu_2417_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln195_1_fu_2547_p2 = (($signed(scaled_5_fu_2521_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln195_1_fu_2547_p2 = (($signed(scaled_12_fu_2521_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln195_2_fu_3233_p2 = (($signed(scaled_6_fu_3207_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln195_2_fu_3233_p2 = (($signed(scaled_13_fu_3207_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln195_3_fu_3345_p2 = (($signed(scaled_7_fu_3319_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln195_3_fu_3345_p2 = (($signed(scaled_14_fu_3319_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln195_4_fu_3768_p2 = (($signed(scaled_13_fu_3742_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln195_4_fu_3768_p2 = (($signed(scaled_20_fu_3742_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln195_5_fu_3656_p2 = (($signed(scaled_16_fu_3630_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln195_5_fu_3656_p2 = (($signed(scaled_23_fu_3630_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln195_fu_2433_p2 = (($signed(scaled_4_fu_2407_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln195_fu_2433_p2 = (($signed(scaled_11_fu_2407_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_10_fu_3967_p2 = (($signed(tmp_441_fu_3957_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_10_fu_3967_p2 = (($signed(tmp_391_fu_3957_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_11_fu_3884_p2 = (($signed(tmp_444_fu_3874_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_11_fu_3884_p2 = (($signed(tmp_394_fu_3874_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_1_fu_3008_p2 = (($signed(tmp_422_fu_2998_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_1_fu_3008_p2 = (($signed(tmp_372_fu_2998_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_2_fu_3072_p2 = (($signed(tmp_423_fu_3062_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_2_fu_3072_p2 = (($signed(tmp_373_fu_3062_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_3_fu_3136_p2 = (($signed(tmp_424_fu_3126_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_3_fu_3136_p2 = (($signed(tmp_374_fu_3126_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_4_fu_2669_p2 = (($signed(tmp_433_fu_2659_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_4_fu_2669_p2 = (($signed(tmp_383_fu_2659_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_5_fu_2733_p2 = (($signed(tmp_434_fu_2723_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_5_fu_2733_p2 = (($signed(tmp_384_fu_2723_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_6_fu_2797_p2 = (($signed(tmp_435_fu_2787_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_6_fu_2797_p2 = (($signed(tmp_385_fu_2787_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_7_fu_2861_p2 = (($signed(tmp_436_fu_2851_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_7_fu_2861_p2 = (($signed(tmp_386_fu_2851_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_8_fu_3559_p2 = (($signed(tmp_437_fu_3549_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_8_fu_3559_p2 = (($signed(tmp_387_fu_3549_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_9_fu_3476_p2 = (($signed(tmp_440_fu_3466_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_9_fu_3476_p2 = (($signed(tmp_390_fu_3466_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln333_fu_2944_p2 = (($signed(tmp_421_fu_2934_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln333_fu_2944_p2 = (($signed(tmp_371_fu_2934_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln334_10_fu_3973_p2 = (($signed(trunc_ln332_10_fu_3953_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
@@ -4404,7 +4404,7 @@ assign icmp_ln610_fu_1696_p2 = ((state == 8'd5) ? 1'b1 : 1'b0);
 
 assign icmp_ln674_fu_1906_p2 = ((req_instruction == compute_instruction) ? 1'b1 : 1'b0);
 
-assign icmp_ln738_fu_1880_p2 = ((tmp_417_fu_1870_p4 != 3'd0) ? 1'b1 : 1'b0);
+assign icmp_ln738_fu_1880_p2 = ((tmp_367_fu_1870_p4 != 3'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln743_1_fu_2057_p2 = ((req_op_load_reg_4321 == 8'd1) ? 1'b1 : 1'b0);
 
@@ -4434,9 +4434,9 @@ assign n_9_fu_2091_p7 = 'bx;
 
 assign next_state_load_fu_1686_p1 = state;
 
-assign or_ln139_1_fu_2225_p3 = {{tmp_189_reg_4487}, {4'd8}};
+assign or_ln139_1_fu_2225_p3 = {{tmp_188_reg_4487}, {4'd8}};
 
-assign or_ln139_2_fu_2233_p3 = {{tmp_189_reg_4487}, {4'd12}};
+assign or_ln139_2_fu_2233_p3 = {{tmp_188_reg_4487}, {4'd12}};
 
 assign or_ln196_1_fu_2571_p2 = (icmp_ln195_1_fu_2547_p2 | icmp_ln194_1_fu_2541_p2);
 
@@ -4496,27 +4496,27 @@ assign or_ln674_fu_1912_p2 = (icmp_ln674_fu_1906_p2 | capture_pending);
 
 assign or_ln83_fu_2130_p2 = (mac_start_3_reg_553 | busy);
 
-assign or_ln_fu_2217_p3 = {{tmp_188_reg_4482}, {3'd4}};
+assign or_ln_fu_2217_p3 = {{tmp_187_reg_4482}, {3'd4}};
 
 assign p_shl_fu_2260_p3 = {{vec_count_0_i_ph167169_reg_693}, {2'd0}};
 
-assign prod_1_fu_2487_p1 = acc_35_loc_fu_322;
+assign prod_1_fu_2487_p1 = acc_33_loc_fu_322;
 
 assign prod_1_fu_2487_p3 = {{prod_1_fu_2487_p1}, {14'd0}};
 
-assign prod_2_fu_3175_p1 = acc_67_loc_fu_326;
+assign prod_2_fu_3175_p1 = acc_65_loc_fu_326;
 
 assign prod_2_fu_3175_p3 = {{prod_2_fu_3175_p1}, {14'd0}};
 
-assign prod_3_fu_3287_p1 = acc_99_loc_fu_330;
+assign prod_3_fu_3287_p1 = acc_97_loc_fu_330;
 
 assign prod_3_fu_3287_p3 = {{prod_3_fu_3287_p1}, {14'd0}};
 
-assign prod_4_fu_3710_p1 = acc_131_loc_fu_334;
+assign prod_4_fu_3710_p1 = acc_129_loc_fu_334;
 
 assign prod_4_fu_3710_p3 = {{prod_4_fu_3710_p1}, {14'd0}};
 
-assign prod_5_fu_3598_p1 = acc_163_loc_fu_338;
+assign prod_5_fu_3598_p1 = acc_161_loc_fu_338;
 
 assign prod_5_fu_3598_p3 = {{prod_5_fu_3598_p1}, {14'd0}};
 
@@ -4534,79 +4534,79 @@ assign requant_params_REQUANT3_M_L_address0 = zext_ln745_fu_1894_p1;
 
 assign requant_params_REQUANT3_N_L_address0 = zext_ln745_fu_1894_p1;
 
-assign rounded_10_fu_3624_p2 = ($signed(select_ln192_8_fu_3616_p3) + $signed(sext_ln188_5_fu_3605_p1));
+assign rounded_10_fu_3927_p2 = 37'd1 << zext_ln331_8_fu_3923_p1;
 
-assign rounded_11_fu_3844_p2 = 35'd1 << zext_ln331_10_fu_3840_p1;
+assign rounded_11_fu_3624_p2 = ($signed(select_ln192_8_fu_3616_p3) + $signed(sext_ln188_5_fu_3605_p1));
 
-assign rounded_1_fu_2401_p2 = ($signed(select_ln192_fu_2393_p3) + $signed(sext_ln188_fu_2381_p1));
+assign rounded_12_fu_3844_p2 = 35'd1 << zext_ln331_10_fu_3840_p1;
 
-assign rounded_2_fu_2515_p2 = ($signed(select_ln192_4_fu_2507_p3) + $signed(sext_ln188_1_fu_2495_p1));
+assign rounded_2_fu_2401_p2 = ($signed(select_ln192_fu_2393_p3) + $signed(sext_ln188_fu_2381_p1));
 
-assign rounded_3_fu_3201_p2 = ($signed(select_ln192_5_fu_3193_p3) + $signed(sext_ln188_2_fu_3182_p1));
+assign rounded_3_fu_2515_p2 = ($signed(select_ln192_4_fu_2507_p3) + $signed(sext_ln188_1_fu_2495_p1));
 
-assign rounded_4_fu_3313_p2 = ($signed(select_ln192_6_fu_3305_p3) + $signed(sext_ln188_3_fu_3294_p1));
+assign rounded_4_fu_3201_p2 = ($signed(select_ln192_5_fu_3193_p3) + $signed(sext_ln188_2_fu_3182_p1));
 
-assign rounded_5_fu_2629_p2 = 35'd1 << zext_ln331_2_fu_2625_p1;
+assign rounded_5_fu_3313_p2 = ($signed(select_ln192_6_fu_3305_p3) + $signed(sext_ln188_3_fu_3294_p1));
 
-assign rounded_6_fu_3519_p2 = 37'd1 << zext_ln331_4_fu_3515_p1;
+assign rounded_6_fu_2629_p2 = 35'd1 << zext_ln331_2_fu_2625_p1;
 
-assign rounded_7_fu_3736_p2 = ($signed(select_ln192_7_fu_3728_p3) + $signed(sext_ln188_4_fu_3717_p1));
+assign rounded_7_fu_3519_p2 = 37'd1 << zext_ln331_4_fu_3515_p1;
 
-assign rounded_8_fu_3436_p2 = 35'd1 << zext_ln331_6_fu_3432_p1;
+assign rounded_8_fu_3736_p2 = ($signed(select_ln192_7_fu_3728_p3) + $signed(sext_ln188_4_fu_3717_p1));
 
-assign rounded_9_fu_3927_p2 = 37'd1 << zext_ln331_8_fu_3923_p1;
+assign rounded_9_fu_3436_p2 = 35'd1 << zext_ln331_6_fu_3432_p1;
 
 assign rounded_fu_2904_p2 = 37'd1 << zext_ln331_fu_2900_p1;
 
-assign scaled_10_fu_2777_p2 = $signed(add_ln332_6_fu_2772_p2) >>> zext_ln332_1_fu_2645_p1;
+assign scaled_10_fu_3116_p2 = $signed(add_ln332_3_fu_3111_p2) >>> zext_ln332_fu_2920_p1;
 
-assign scaled_11_fu_2841_p2 = $signed(add_ln332_7_fu_2836_p2) >>> zext_ln332_1_fu_2645_p1;
+assign scaled_11_fu_2407_p4 = {{rounded_2_fu_2401_p2[46:15]}};
 
-assign scaled_12_fu_3539_p2 = $signed(add_ln332_8_fu_3529_p2) >>> zext_ln332_2_fu_3535_p1;
+assign scaled_12_fu_2521_p4 = {{rounded_3_fu_2515_p2[46:15]}};
 
-assign scaled_13_fu_3742_p4 = {{rounded_7_fu_3736_p2[46:15]}};
+assign scaled_13_fu_3207_p4 = {{rounded_4_fu_3201_p2[46:15]}};
 
-assign scaled_14_fu_3456_p2 = $signed(add_ln332_9_fu_3446_p2) >>> zext_ln332_3_fu_3452_p1;
+assign scaled_14_fu_3319_p4 = {{rounded_5_fu_3313_p2[46:15]}};
 
-assign scaled_15_fu_3947_p2 = $signed(add_ln332_10_fu_3937_p2) >>> zext_ln332_4_fu_3943_p1;
+assign scaled_15_fu_2649_p2 = $signed(add_ln332_4_fu_2639_p2) >>> zext_ln332_1_fu_2645_p1;
 
-assign scaled_16_fu_3630_p4 = {{rounded_10_fu_3624_p2[46:15]}};
+assign scaled_16_fu_2713_p2 = $signed(add_ln332_5_fu_2708_p2) >>> zext_ln332_1_fu_2645_p1;
 
-assign scaled_17_fu_3864_p2 = $signed(add_ln332_11_fu_3854_p2) >>> zext_ln332_5_fu_3860_p1;
+assign scaled_17_fu_2777_p2 = $signed(add_ln332_6_fu_2772_p2) >>> zext_ln332_1_fu_2645_p1;
 
-assign scaled_1_fu_2988_p2 = $signed(add_ln332_1_fu_2983_p2) >>> zext_ln332_fu_2920_p1;
+assign scaled_18_fu_2841_p2 = $signed(add_ln332_7_fu_2836_p2) >>> zext_ln332_1_fu_2645_p1;
 
-assign scaled_2_fu_3052_p2 = $signed(add_ln332_2_fu_3047_p2) >>> zext_ln332_fu_2920_p1;
+assign scaled_19_fu_3539_p2 = $signed(add_ln332_8_fu_3529_p2) >>> zext_ln332_2_fu_3535_p1;
 
-assign scaled_3_fu_3116_p2 = $signed(add_ln332_3_fu_3111_p2) >>> zext_ln332_fu_2920_p1;
+assign scaled_20_fu_3742_p4 = {{rounded_8_fu_3736_p2[46:15]}};
 
-assign scaled_4_fu_2407_p4 = {{rounded_1_fu_2401_p2[46:15]}};
+assign scaled_21_fu_3456_p2 = $signed(add_ln332_9_fu_3446_p2) >>> zext_ln332_3_fu_3452_p1;
 
-assign scaled_5_fu_2521_p4 = {{rounded_2_fu_2515_p2[46:15]}};
+assign scaled_22_fu_3947_p2 = $signed(add_ln332_10_fu_3937_p2) >>> zext_ln332_4_fu_3943_p1;
 
-assign scaled_6_fu_3207_p4 = {{rounded_3_fu_3201_p2[46:15]}};
+assign scaled_23_fu_3630_p4 = {{rounded_11_fu_3624_p2[46:15]}};
 
-assign scaled_7_fu_3319_p4 = {{rounded_4_fu_3313_p2[46:15]}};
+assign scaled_24_fu_3864_p2 = $signed(add_ln332_11_fu_3854_p2) >>> zext_ln332_5_fu_3860_p1;
 
-assign scaled_8_fu_2649_p2 = $signed(add_ln332_4_fu_2639_p2) >>> zext_ln332_1_fu_2645_p1;
+assign scaled_8_fu_2988_p2 = $signed(add_ln332_1_fu_2983_p2) >>> zext_ln332_fu_2920_p1;
 
-assign scaled_9_fu_2713_p2 = $signed(add_ln332_5_fu_2708_p2) >>> zext_ln332_1_fu_2645_p1;
+assign scaled_9_fu_3052_p2 = $signed(add_ln332_2_fu_3047_p2) >>> zext_ln332_fu_2920_p1;
 
 assign scaled_fu_2924_p2 = $signed(add_ln332_fu_2914_p2) >>> zext_ln332_fu_2920_p1;
 
 assign sel_tmp2_fu_2062_p3 = {{icmp_ln743_fu_2052_p2}, {icmp_ln743_1_fu_2057_p2}};
 
-assign select_ln192_4_fu_2507_p3 = ((tmp_427_fu_2499_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln192_4_fu_2507_p3 = ((tmp_377_fu_2499_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign select_ln192_5_fu_3193_p3 = ((tmp_429_fu_3186_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln192_5_fu_3193_p3 = ((tmp_379_fu_3186_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign select_ln192_6_fu_3305_p3 = ((tmp_431_fu_3298_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln192_6_fu_3305_p3 = ((tmp_381_fu_3298_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign select_ln192_7_fu_3728_p3 = ((tmp_438_fu_3721_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln192_7_fu_3728_p3 = ((tmp_388_fu_3721_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign select_ln192_8_fu_3616_p3 = ((tmp_442_fu_3609_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln192_8_fu_3616_p3 = ((tmp_392_fu_3609_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign select_ln192_fu_2393_p3 = ((tmp_425_fu_2385_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln192_fu_2393_p3 = ((tmp_375_fu_2385_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
 assign select_ln196_10_fu_3672_p3 = ((icmp_ln194_5_fu_3650_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
 
@@ -4682,23 +4682,23 @@ assign sext_ln188_5_fu_3605_p1 = $signed(prod_5_fu_3598_p3);
 
 assign sext_ln188_fu_2381_p1 = $signed(prod_fu_2373_p3);
 
-assign sext_ln330_10_fu_4106_p0 = acc_163_loc_fu_338;
+assign sext_ln330_10_fu_4106_p0 = acc_161_loc_fu_338;
 
 assign sext_ln330_10_fu_4106_p1 = sext_ln330_10_fu_4106_p0;
 
-assign sext_ln330_11_fu_3831_p0 = acc_163_loc_fu_338;
+assign sext_ln330_11_fu_3831_p0 = acc_161_loc_fu_338;
 
 assign sext_ln330_11_fu_3831_p1 = sext_ln330_11_fu_3831_p0;
 
-assign sext_ln330_1_fu_3411_p0 = acc_35_loc_fu_322;
+assign sext_ln330_1_fu_3411_p0 = acc_33_loc_fu_322;
 
 assign sext_ln330_1_fu_3411_p1 = sext_ln330_1_fu_3411_p0;
 
-assign sext_ln330_2_fu_3415_p0 = acc_67_loc_fu_326;
+assign sext_ln330_2_fu_3415_p0 = acc_65_loc_fu_326;
 
 assign sext_ln330_2_fu_3415_p1 = sext_ln330_2_fu_3415_p0;
 
-assign sext_ln330_3_fu_3419_p0 = acc_99_loc_fu_330;
+assign sext_ln330_3_fu_3419_p0 = acc_97_loc_fu_330;
 
 assign sext_ln330_3_fu_3419_p1 = sext_ln330_3_fu_3419_p0;
 
@@ -4706,23 +4706,23 @@ assign sext_ln330_4_fu_2601_p0 = acc_loc_fu_318;
 
 assign sext_ln330_4_fu_2601_p1 = sext_ln330_4_fu_2601_p0;
 
-assign sext_ln330_5_fu_2613_p0 = acc_35_loc_fu_322;
+assign sext_ln330_5_fu_2613_p0 = acc_33_loc_fu_322;
 
 assign sext_ln330_5_fu_2613_p1 = sext_ln330_5_fu_2613_p0;
 
-assign sext_ln330_6_fu_2617_p0 = acc_67_loc_fu_326;
+assign sext_ln330_6_fu_2617_p0 = acc_65_loc_fu_326;
 
 assign sext_ln330_6_fu_2617_p1 = sext_ln330_6_fu_2617_p0;
 
-assign sext_ln330_7_fu_2621_p0 = acc_99_loc_fu_330;
+assign sext_ln330_7_fu_2621_p0 = acc_97_loc_fu_330;
 
 assign sext_ln330_7_fu_2621_p1 = sext_ln330_7_fu_2621_p0;
 
-assign sext_ln330_8_fu_3822_p0 = acc_131_loc_fu_334;
+assign sext_ln330_8_fu_3822_p0 = acc_129_loc_fu_334;
 
 assign sext_ln330_8_fu_3822_p1 = sext_ln330_8_fu_3822_p0;
 
-assign sext_ln330_9_fu_3423_p0 = acc_131_loc_fu_334;
+assign sext_ln330_9_fu_3423_p0 = acc_129_loc_fu_334;
 
 assign sext_ln330_9_fu_3423_p1 = sext_ln330_9_fu_3423_p0;
 
@@ -4732,73 +4732,73 @@ assign sext_ln330_fu_3399_p1 = sext_ln330_fu_3399_p0;
 
 assign shl_ln_fu_2245_p3 = {{vec_count_0_i_ph167169_reg_693}, {1'd0}};
 
-assign tmp_417_fu_1870_p4 = {{req_layer_idx[7:5]}};
+assign tmp_367_fu_1870_p4 = {{req_layer_idx[7:5]}};
 
-assign tmp_418_fu_2324_p4 = {{layer_reg_4341[7:5]}};
+assign tmp_368_fu_2324_p4 = {{layer_reg_4341[7:5]}};
 
-assign tmp_419_fu_2282_p4 = {{vec_count_0_i_ph167169_reg_693[4:3]}};
+assign tmp_369_fu_2282_p4 = {{vec_count_0_i_ph167169_reg_693[4:3]}};
 
-assign tmp_420_fu_2292_p3 = {{tmp_419_fu_2282_p4}, {vec_count_0_i_ph167169_reg_693}};
+assign tmp_370_fu_2292_p3 = {{tmp_369_fu_2282_p4}, {vec_count_0_i_ph167169_reg_693}};
 
-assign tmp_421_fu_2934_p4 = {{scaled_fu_2924_p2[30:7]}};
+assign tmp_371_fu_2934_p4 = {{scaled_fu_2924_p2[30:7]}};
 
-assign tmp_422_fu_2998_p4 = {{scaled_1_fu_2988_p2[30:7]}};
+assign tmp_372_fu_2998_p4 = {{scaled_8_fu_2988_p2[30:7]}};
 
-assign tmp_423_fu_3062_p4 = {{scaled_2_fu_3052_p2[30:7]}};
+assign tmp_373_fu_3062_p4 = {{scaled_9_fu_3052_p2[30:7]}};
 
-assign tmp_424_fu_3126_p4 = {{scaled_3_fu_3116_p2[30:7]}};
+assign tmp_374_fu_3126_p4 = {{scaled_10_fu_3116_p2[30:7]}};
 
-assign tmp_425_fu_2385_p1 = acc_loc_fu_318;
+assign tmp_375_fu_2385_p1 = acc_loc_fu_318;
 
-assign tmp_425_fu_2385_p3 = tmp_425_fu_2385_p1[32'd31];
+assign tmp_375_fu_2385_p3 = tmp_375_fu_2385_p1[32'd31];
 
-assign tmp_426_fu_2417_p4 = {{rounded_1_fu_2401_p2[46:30]}};
+assign tmp_376_fu_2417_p4 = {{rounded_2_fu_2401_p2[46:30]}};
 
-assign tmp_427_fu_2499_p1 = acc_35_loc_fu_322;
+assign tmp_377_fu_2499_p1 = acc_33_loc_fu_322;
 
-assign tmp_427_fu_2499_p3 = tmp_427_fu_2499_p1[32'd31];
+assign tmp_377_fu_2499_p3 = tmp_377_fu_2499_p1[32'd31];
 
-assign tmp_428_fu_2531_p4 = {{rounded_2_fu_2515_p2[46:30]}};
+assign tmp_378_fu_2531_p4 = {{rounded_3_fu_2515_p2[46:30]}};
 
-assign tmp_429_fu_3186_p1 = acc_67_loc_fu_326;
+assign tmp_379_fu_3186_p1 = acc_65_loc_fu_326;
 
-assign tmp_429_fu_3186_p3 = tmp_429_fu_3186_p1[32'd31];
+assign tmp_379_fu_3186_p3 = tmp_379_fu_3186_p1[32'd31];
 
-assign tmp_430_fu_3217_p4 = {{rounded_3_fu_3201_p2[46:30]}};
+assign tmp_380_fu_3217_p4 = {{rounded_4_fu_3201_p2[46:30]}};
 
-assign tmp_431_fu_3298_p1 = acc_99_loc_fu_330;
+assign tmp_381_fu_3298_p1 = acc_97_loc_fu_330;
 
-assign tmp_431_fu_3298_p3 = tmp_431_fu_3298_p1[32'd31];
+assign tmp_381_fu_3298_p3 = tmp_381_fu_3298_p1[32'd31];
 
-assign tmp_432_fu_3329_p4 = {{rounded_4_fu_3313_p2[46:30]}};
+assign tmp_382_fu_3329_p4 = {{rounded_5_fu_3313_p2[46:30]}};
 
-assign tmp_433_fu_2659_p4 = {{scaled_8_fu_2649_p2[30:7]}};
+assign tmp_383_fu_2659_p4 = {{scaled_15_fu_2649_p2[30:7]}};
 
-assign tmp_434_fu_2723_p4 = {{scaled_9_fu_2713_p2[30:7]}};
+assign tmp_384_fu_2723_p4 = {{scaled_16_fu_2713_p2[30:7]}};
 
-assign tmp_435_fu_2787_p4 = {{scaled_10_fu_2777_p2[30:7]}};
+assign tmp_385_fu_2787_p4 = {{scaled_17_fu_2777_p2[30:7]}};
 
-assign tmp_436_fu_2851_p4 = {{scaled_11_fu_2841_p2[30:7]}};
+assign tmp_386_fu_2851_p4 = {{scaled_18_fu_2841_p2[30:7]}};
 
-assign tmp_437_fu_3549_p4 = {{scaled_12_fu_3539_p2[30:7]}};
+assign tmp_387_fu_3549_p4 = {{scaled_19_fu_3539_p2[30:7]}};
 
-assign tmp_438_fu_3721_p1 = acc_131_loc_fu_334;
+assign tmp_388_fu_3721_p1 = acc_129_loc_fu_334;
 
-assign tmp_438_fu_3721_p3 = tmp_438_fu_3721_p1[32'd31];
+assign tmp_388_fu_3721_p3 = tmp_388_fu_3721_p1[32'd31];
 
-assign tmp_439_fu_3752_p4 = {{rounded_7_fu_3736_p2[46:30]}};
+assign tmp_389_fu_3752_p4 = {{rounded_8_fu_3736_p2[46:30]}};
 
-assign tmp_440_fu_3466_p4 = {{scaled_14_fu_3456_p2[30:7]}};
+assign tmp_390_fu_3466_p4 = {{scaled_21_fu_3456_p2[30:7]}};
 
-assign tmp_441_fu_3957_p4 = {{scaled_15_fu_3947_p2[30:7]}};
+assign tmp_391_fu_3957_p4 = {{scaled_22_fu_3947_p2[30:7]}};
 
-assign tmp_442_fu_3609_p1 = acc_163_loc_fu_338;
+assign tmp_392_fu_3609_p1 = acc_161_loc_fu_338;
 
-assign tmp_442_fu_3609_p3 = tmp_442_fu_3609_p1[32'd31];
+assign tmp_392_fu_3609_p3 = tmp_392_fu_3609_p1[32'd31];
 
-assign tmp_443_fu_3640_p4 = {{rounded_10_fu_3624_p2[46:30]}};
+assign tmp_393_fu_3640_p4 = {{rounded_11_fu_3624_p2[46:30]}};
 
-assign tmp_444_fu_3874_p4 = {{scaled_17_fu_3864_p2[30:7]}};
+assign tmp_394_fu_3874_p4 = {{scaled_24_fu_3864_p2[30:7]}};
 
 assign tmp_55_fu_2301_p4 = {{weight_nibble_base_0_i_ph165173_reg_659[6:5]}};
 
@@ -4814,63 +4814,63 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign trunc_ln128_fu_2321_p1 = layer_reg_4341[4:0];
 
-assign trunc_ln16_fu_2439_p4 = {{rounded_1_fu_2401_p2[30:15]}};
+assign trunc_ln16_fu_2439_p4 = {{rounded_2_fu_2401_p2[30:15]}};
 
-assign trunc_ln196_1_fu_2553_p4 = {{rounded_2_fu_2515_p2[30:15]}};
+assign trunc_ln196_1_fu_2553_p4 = {{rounded_3_fu_2515_p2[30:15]}};
 
-assign trunc_ln196_2_fu_3239_p4 = {{rounded_3_fu_3201_p2[30:15]}};
+assign trunc_ln196_2_fu_3239_p4 = {{rounded_4_fu_3201_p2[30:15]}};
 
-assign trunc_ln196_3_fu_3351_p4 = {{rounded_4_fu_3313_p2[30:15]}};
+assign trunc_ln196_3_fu_3351_p4 = {{rounded_5_fu_3313_p2[30:15]}};
 
-assign trunc_ln196_4_fu_3774_p4 = {{rounded_7_fu_3736_p2[30:15]}};
+assign trunc_ln196_4_fu_3774_p4 = {{rounded_8_fu_3736_p2[30:15]}};
 
-assign trunc_ln196_5_fu_3662_p4 = {{rounded_10_fu_3624_p2[30:15]}};
+assign trunc_ln196_5_fu_3662_p4 = {{rounded_11_fu_3624_p2[30:15]}};
 
-assign trunc_ln332_10_fu_3953_p1 = scaled_15_fu_3947_p2[30:0];
+assign trunc_ln332_10_fu_3953_p1 = scaled_22_fu_3947_p2[30:0];
 
-assign trunc_ln332_11_fu_3870_p1 = scaled_17_fu_3864_p2[30:0];
+assign trunc_ln332_11_fu_3870_p1 = scaled_24_fu_3864_p2[30:0];
 
-assign trunc_ln332_1_fu_2994_p1 = scaled_1_fu_2988_p2[30:0];
+assign trunc_ln332_1_fu_2994_p1 = scaled_8_fu_2988_p2[30:0];
 
-assign trunc_ln332_2_fu_3058_p1 = scaled_2_fu_3052_p2[30:0];
+assign trunc_ln332_2_fu_3058_p1 = scaled_9_fu_3052_p2[30:0];
 
-assign trunc_ln332_3_fu_3122_p1 = scaled_3_fu_3116_p2[30:0];
+assign trunc_ln332_3_fu_3122_p1 = scaled_10_fu_3116_p2[30:0];
 
-assign trunc_ln332_4_fu_2655_p1 = scaled_8_fu_2649_p2[30:0];
+assign trunc_ln332_4_fu_2655_p1 = scaled_15_fu_2649_p2[30:0];
 
-assign trunc_ln332_5_fu_2719_p1 = scaled_9_fu_2713_p2[30:0];
+assign trunc_ln332_5_fu_2719_p1 = scaled_16_fu_2713_p2[30:0];
 
-assign trunc_ln332_6_fu_2783_p1 = scaled_10_fu_2777_p2[30:0];
+assign trunc_ln332_6_fu_2783_p1 = scaled_17_fu_2777_p2[30:0];
 
-assign trunc_ln332_7_fu_2847_p1 = scaled_11_fu_2841_p2[30:0];
+assign trunc_ln332_7_fu_2847_p1 = scaled_18_fu_2841_p2[30:0];
 
-assign trunc_ln332_8_fu_3545_p1 = scaled_12_fu_3539_p2[30:0];
+assign trunc_ln332_8_fu_3545_p1 = scaled_19_fu_3539_p2[30:0];
 
-assign trunc_ln332_9_fu_3462_p1 = scaled_14_fu_3456_p2[30:0];
+assign trunc_ln332_9_fu_3462_p1 = scaled_21_fu_3456_p2[30:0];
 
 assign trunc_ln332_fu_2930_p1 = scaled_fu_2924_p2[30:0];
 
-assign trunc_ln335_10_fu_3979_p1 = scaled_15_fu_3947_p2[7:0];
+assign trunc_ln335_10_fu_3979_p1 = scaled_22_fu_3947_p2[7:0];
 
-assign trunc_ln335_11_fu_3896_p1 = scaled_17_fu_3864_p2[7:0];
+assign trunc_ln335_11_fu_3896_p1 = scaled_24_fu_3864_p2[7:0];
 
-assign trunc_ln335_1_fu_3020_p1 = scaled_1_fu_2988_p2[7:0];
+assign trunc_ln335_1_fu_3020_p1 = scaled_8_fu_2988_p2[7:0];
 
-assign trunc_ln335_2_fu_3084_p1 = scaled_2_fu_3052_p2[7:0];
+assign trunc_ln335_2_fu_3084_p1 = scaled_9_fu_3052_p2[7:0];
 
-assign trunc_ln335_3_fu_3148_p1 = scaled_3_fu_3116_p2[7:0];
+assign trunc_ln335_3_fu_3148_p1 = scaled_10_fu_3116_p2[7:0];
 
-assign trunc_ln335_4_fu_2681_p1 = scaled_8_fu_2649_p2[7:0];
+assign trunc_ln335_4_fu_2681_p1 = scaled_15_fu_2649_p2[7:0];
 
-assign trunc_ln335_5_fu_2745_p1 = scaled_9_fu_2713_p2[7:0];
+assign trunc_ln335_5_fu_2745_p1 = scaled_16_fu_2713_p2[7:0];
 
-assign trunc_ln335_6_fu_2809_p1 = scaled_10_fu_2777_p2[7:0];
+assign trunc_ln335_6_fu_2809_p1 = scaled_17_fu_2777_p2[7:0];
 
-assign trunc_ln335_7_fu_2873_p1 = scaled_11_fu_2841_p2[7:0];
+assign trunc_ln335_7_fu_2873_p1 = scaled_18_fu_2841_p2[7:0];
 
-assign trunc_ln335_8_fu_3571_p1 = scaled_12_fu_3539_p2[7:0];
+assign trunc_ln335_8_fu_3571_p1 = scaled_19_fu_3539_p2[7:0];
 
-assign trunc_ln335_9_fu_3488_p1 = scaled_14_fu_3456_p2[7:0];
+assign trunc_ln335_9_fu_3488_p1 = scaled_21_fu_3456_p2[7:0];
 
 assign trunc_ln335_fu_2956_p1 = scaled_fu_2924_p2[7:0];
 
@@ -4936,25 +4936,25 @@ assign zext_ln330_fu_3403_p1 = requant_params_REQUANT2_M_L_q0;
 
 assign zext_ln331_10_fu_3840_p1 = grp_fu_1639_p2;
 
-assign zext_ln331_11_fu_3850_p1 = rounded_11_fu_3844_p2;
+assign zext_ln331_11_fu_3850_p1 = rounded_12_fu_3844_p2;
 
 assign zext_ln331_1_fu_2910_p1 = rounded_fu_2904_p2;
 
 assign zext_ln331_2_fu_2625_p1 = grp_fu_1639_p2;
 
-assign zext_ln331_3_fu_2635_p1 = rounded_5_fu_2629_p2;
+assign zext_ln331_3_fu_2635_p1 = rounded_6_fu_2629_p2;
 
 assign zext_ln331_4_fu_3515_p1 = grp_fu_1645_p2;
 
-assign zext_ln331_5_fu_3525_p1 = rounded_6_fu_3519_p2;
+assign zext_ln331_5_fu_3525_p1 = rounded_7_fu_3519_p2;
 
 assign zext_ln331_6_fu_3432_p1 = grp_fu_1639_p2;
 
-assign zext_ln331_7_fu_3442_p1 = rounded_8_fu_3436_p2;
+assign zext_ln331_7_fu_3442_p1 = rounded_9_fu_3436_p2;
 
 assign zext_ln331_8_fu_3923_p1 = grp_fu_1645_p2;
 
-assign zext_ln331_9_fu_3933_p1 = rounded_9_fu_3927_p2;
+assign zext_ln331_9_fu_3933_p1 = rounded_10_fu_3927_p2;
 
 assign zext_ln331_fu_2900_p1 = grp_fu_1645_p2;
 
@@ -4972,7 +4972,7 @@ assign zext_ln332_fu_2920_p1 = requant_params_REQUANT2_N_L_q0;
 
 assign zext_ln648_1_fu_2122_p1 = next_state_6_reg_581;
 
-assign zext_ln648_fu_4203_p1 = next_state_9_reg_1461;
+assign zext_ln648_fu_4203_p1 = next_state_7_reg_1461;
 
 assign zext_ln745_fu_1894_p1 = layer_4_fu_1886_p3;
 
@@ -4986,9 +4986,9 @@ always @ (posedge ap_clk) begin
     p_shl_reg_4537[4:0] <= 5'b00000;
     p_shl_reg_4537[6] <= 1'b1;
     empty_reg_4542[2:0] <= 3'b000;
-    tmp_420_reg_4551[2:0] <= 3'b000;
-    tmp_420_reg_4551[4:4] <= 1'b1;
-    tmp_420_reg_4551[6] <= 1'b1;
+    tmp_370_reg_4551[2:0] <= 3'b000;
+    tmp_370_reg_4551[4:4] <= 1'b1;
+    tmp_370_reg_4551[6] <= 1'b1;
     tmp_56_reg_4561[2:0] <= 3'b000;
     tmp_56_reg_4561[5:4] <= 2'b11;
     zext_ln648_reg_4664[7:1] <= 7'b0000000;

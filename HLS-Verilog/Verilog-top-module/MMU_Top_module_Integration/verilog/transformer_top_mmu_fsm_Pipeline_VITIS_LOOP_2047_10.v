@@ -13,10 +13,10 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_2047_10 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1373,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1372,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1377,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1376,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1361,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1360,
         p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_i,
         p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_o,
         p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_o_ap_vld,
@@ -55,10 +55,10 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1373;
-input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1372;
-input  [31:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1377;
-input  [31:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1376;
+input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357;
+input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356;
+input  [31:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1361;
+input  [31:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1360;
 input  [0:0] p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_i;
 output  [0:0] p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_o;
 output   p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_o_ap_vld;
@@ -442,9 +442,9 @@ assign sel_fu_230_p1 = select_ln2055_fu_221_p3[7:0];
 
 assign select_ln2048_1_fu_189_p3 = ((icmp_ln2048_fu_167_p2[0:0] == 1'b1) ? p_ZN12_GLOBAL_N_116head_wl_acceptedE_1_i : p_ZN12_GLOBAL_N_116head_wl_acceptedE_0_i);
 
-assign select_ln2048_fu_173_p3 = ((icmp_ln2048_fu_167_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1373 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1372);
+assign select_ln2048_fu_173_p3 = ((icmp_ln2048_fu_167_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1357 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1356);
 
-assign select_ln2055_fu_221_p3 = ((icmp_ln2048_fu_167_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1377 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1376);
+assign select_ln2055_fu_221_p3 = ((icmp_ln2048_fu_167_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1361 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1360);
 
 assign tmp_fu_205_p4 = {{p_anonymous_namespace_dma_q_count_i[7:2]}};
 
