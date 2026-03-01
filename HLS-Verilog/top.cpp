@@ -124,13 +124,13 @@ void transformer_top(
     uint8_t  dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
     uint8_t  dbg_stream_in_buf[STREAM_IN_BUF_BYTES],
 
-    bool &dbg_error,
-    uint32_t &dbg_error_code,
-    bool &dbg_done,
-    bool &dbg_axis_is_empty,
-    bool &dbg_axis_in_ready_wire,
-    bool &dbg_axis_in_last_wire,
-    uint32_t &dbg_stream_in_counter
+    bool        &dbg_error,
+    uint32_t    &dbg_error_code,
+    bool        &dbg_done,
+    bool        &dbg_axis_is_empty,
+    bool        &dbg_axis_in_ready_wire,
+    bool        &dbg_axis_in_last_wire,
+    uint32_t    &dbg_stream_in_counter
 ) {
 #pragma HLS INLINE off   
 #pragma HLS INTERFACE axis port=s_axis_in

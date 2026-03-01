@@ -129,8 +129,7 @@ constexpr int MODEL_HIDDEN_SIZE = 3072;
 constexpr int MODEL_HEAD_DIMENSTION = 96;
 constexpr int MODEL_INTERMEDIATE_SIZE = 8192;
 constexpr int MODEL_CONTEXT_LENGTH = 2048;
-constexpr int16_t ATTN_SCALE_Q15 =
-    3344; // Q1.15: round((1/sqrt(96)) * 2^15) = 3344 (0x0D10)
+constexpr int16_t ATTN_SCALE_Q15 = 3344; // Q1.15: round((1/sqrt(96)) * 2^15) = 3344 (0x0D10)
 
 // ------------------------------------------------------------
 // Tunable architecture parameters::
@@ -154,14 +153,15 @@ constexpr int       STREAM_OUT_BUF_BYTES = D_MODEL * 4;             // Streamed 
 
 // AXI-Full DDR beat sizing (one m_axi_gmem data beat).
 // Keep this aligned with the top-level DDR port element type.
-constexpr int       AXI_GMEM_WORD_BYTES  = 4;
-constexpr int       AXI_GMEM_WORD_BITS   = AXI_GMEM_WORD_BYTES * 8;
-static_assert((AXI_GMEM_WORD_BITS % 8) == 0, "AXI_GMEM_WORD_BITS must be byte aligned");
-using axi_gmem_word_t = ap_uint<AXI_GMEM_WORD_BITS>;
 constexpr int       CONTEXT_LENGTH  = 16;                           // Context window length
 constexpr int       MAX_CYCLIC_SIZE = 16;                           // << for UNROLL parallelism in MAC units
 constexpr int       HEADS_PARALLEL  = 2;
 constexpr int       NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
+
+constexpr int       AXI_GMEM_WORD_BYTES  = 4;
+constexpr int       AXI_GMEM_WORD_BITS   = AXI_GMEM_WORD_BYTES * 8;
+static_assert((AXI_GMEM_WORD_BITS % 8) == 0, "AXI_GMEM_WORD_BITS must be byte aligned");
+using axi_gmem_word_t = ap_uint<AXI_GMEM_WORD_BITS>;
 
 // MMU LN parameter source selection:
 //   true  -> MMU hardcodes LN0 gamma/eps for bring-up
