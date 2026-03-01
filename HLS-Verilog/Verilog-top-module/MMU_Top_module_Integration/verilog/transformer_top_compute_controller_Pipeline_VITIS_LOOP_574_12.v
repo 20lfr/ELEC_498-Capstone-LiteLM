@@ -196,7 +196,7 @@ reg    ap_ready_int;
 reg   [4:0] i_fu_156;
 wire   [4:0] add_ln574_fu_366_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_78;
+reg   [4:0] ap_sig_allocacmp_i_79;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_25_we0_local;
 wire   [3:0] trunc_ln574_fu_372_p1;
 wire  signed [15:0] sext_ln577_fu_448_p1;
@@ -414,9 +414,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_78 = 5'd0;
+        ap_sig_allocacmp_i_79 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_78 = i_fu_156;
+        ap_sig_allocacmp_i_79 = i_fu_156;
     end
 end
 
@@ -687,7 +687,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln574_fu_366_p2 = (ap_sig_allocacmp_i_78 + 5'd1);
+assign add_ln574_fu_366_p2 = (ap_sig_allocacmp_i_79 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -781,7 +781,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0_local;
 
-assign icmp_ln574_fu_360_p2 = ((ap_sig_allocacmp_i_78 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln574_fu_360_p2 = ((ap_sig_allocacmp_i_79 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_address0 = 1'd0;
 
@@ -835,8 +835,8 @@ assign sext_ln577_fu_448_p1 = $signed(tmp_fu_376_p35);
 
 assign tmp_fu_376_p33 = 'bx;
 
-assign tmp_fu_376_p34 = ap_sig_allocacmp_i_78[3:0];
+assign tmp_fu_376_p34 = ap_sig_allocacmp_i_79[3:0];
 
-assign trunc_ln574_fu_372_p1 = ap_sig_allocacmp_i_78[3:0];
+assign trunc_ln574_fu_372_p1 = ap_sig_allocacmp_i_79[3:0];
 
 endmodule //transformer_top_compute_controller_Pipeline_VITIS_LOOP_574_12

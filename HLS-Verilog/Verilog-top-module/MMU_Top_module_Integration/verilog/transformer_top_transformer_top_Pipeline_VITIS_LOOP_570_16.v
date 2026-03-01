@@ -633,7 +633,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 7 ),
     .dout_WIDTH( 8 ))
-sparsemux_225_7_8_1_1_U5994(
+sparsemux_225_7_8_1_1_U6006(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_144),
     .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_145),
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_146),

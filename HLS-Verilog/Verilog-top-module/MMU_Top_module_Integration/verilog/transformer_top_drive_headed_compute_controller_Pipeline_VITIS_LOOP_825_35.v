@@ -94,7 +94,7 @@ wire   [1:0] trunc_ln825_fu_168_p1;
 wire   [2:0] shl_ln819_fu_196_p2;
 wire   [27:0] v_fu_172_p11;
 wire   [2:0] or_ln_fu_235_p3;
-wire   [3:0] trunc_ln3_fu_249_p4;
+wire   [3:0] trunc_ln4_fu_249_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -358,11 +358,11 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we1 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_we1_local;
 
-assign sext_ln824_fu_259_p1 = $signed(trunc_ln3_fu_249_p4);
+assign sext_ln824_fu_259_p1 = $signed(trunc_ln4_fu_249_p4);
 
 assign shl_ln819_fu_196_p2 = ap_sig_allocacmp_h_5 << 3'd1;
 
-assign trunc_ln3_fu_249_p4 = {{v_fu_172_p11[27:24]}};
+assign trunc_ln4_fu_249_p4 = {{v_fu_172_p11[27:24]}};
 
 assign trunc_ln821_fu_208_p1 = v_fu_172_p11[7:0];
 

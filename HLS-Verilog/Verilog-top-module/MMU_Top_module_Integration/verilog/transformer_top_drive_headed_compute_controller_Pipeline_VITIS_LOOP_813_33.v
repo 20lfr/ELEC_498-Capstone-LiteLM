@@ -333,7 +333,7 @@ reg    p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hR
 reg    p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_64_we0_local;
 reg    p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_64_ce0_local;
 wire   [1:0] trunc_ln819_fu_562_p1;
-wire   [5:0] shl_ln5_fu_566_p3;
+wire   [5:0] shl_ln4_fu_566_p3;
 wire   [6:0] zext_ln819_fu_574_p1;
 wire   [6:0] byte_addr_fu_578_p2;
 wire   [3:0] lshr_ln767_4_fu_584_p4;
@@ -1169,7 +1169,7 @@ assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hR
 
 assign p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_71_we0 = p_ZZ31drive_headed_compute_controllerRA2_14ComputeHeadCtxbtPA96_KhPA64_hRbE12head_71_we0_local;
 
-assign shl_ln5_fu_566_p3 = {{trunc_ln819_fu_562_p1}, {4'd0}};
+assign shl_ln4_fu_566_p3 = {{trunc_ln819_fu_562_p1}, {4'd0}};
 
 assign trunc_ln819_fu_562_p1 = ap_sig_allocacmp_h_7[1:0];
 
@@ -1207,6 +1207,6 @@ assign zext_ln767_fu_846_p1 = lshr_ln767_s_fu_836_p4;
 
 assign zext_ln813_fu_919_p1 = h_7_reg_945;
 
-assign zext_ln819_fu_574_p1 = shl_ln5_fu_566_p3;
+assign zext_ln819_fu_574_p1 = shl_ln4_fu_566_p3;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_813_33

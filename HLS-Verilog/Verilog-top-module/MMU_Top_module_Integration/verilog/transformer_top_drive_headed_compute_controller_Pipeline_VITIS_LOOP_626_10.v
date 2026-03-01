@@ -175,7 +175,7 @@ wire   [7:0] tmp_i_fu_321_p19;
 reg   [4:0] i_fu_126;
 wire   [4:0] add_ln626_fu_248_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_38;
+reg   [4:0] ap_sig_allocacmp_i_39;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_18_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_17_ce0_local;
@@ -354,9 +354,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_38 = 5'd0;
+        ap_sig_allocacmp_i_39 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_38 = i_fu_126;
+        ap_sig_allocacmp_i_39 = i_fu_126;
     end
 end
 
@@ -563,7 +563,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln626_fu_248_p2 = (ap_sig_allocacmp_i_38 + 5'd1);
+assign add_ln626_fu_248_p2 = (ap_sig_allocacmp_i_39 + 5'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -583,7 +583,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign byte_addr_fu_254_p1 = ap_sig_allocacmp_i_38[3:0];
+assign byte_addr_fu_254_p1 = ap_sig_allocacmp_i_39[3:0];
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_24 = tmp_i_fu_321_p19;
 
@@ -617,7 +617,7 @@ assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsi
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_39 = tmp_i_fu_321_p19;
 
-assign icmp_ln626_fu_242_p2 = ((ap_sig_allocacmp_i_38 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln626_fu_242_p2 = ((ap_sig_allocacmp_i_39 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address0 = zext_ln767_fu_270_p1;
 
@@ -651,11 +651,11 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_19_ce0_local;
 
-assign tmp_fu_262_p3 = ap_sig_allocacmp_i_38[32'd3];
+assign tmp_fu_262_p3 = ap_sig_allocacmp_i_39[32'd3];
 
 assign tmp_i_fu_321_p17 = 'bx;
 
-assign trunc_ln767_fu_258_p1 = ap_sig_allocacmp_i_38[2:0];
+assign trunc_ln767_fu_258_p1 = ap_sig_allocacmp_i_39[2:0];
 
 assign zext_ln767_fu_270_p1 = tmp_fu_262_p3;
 

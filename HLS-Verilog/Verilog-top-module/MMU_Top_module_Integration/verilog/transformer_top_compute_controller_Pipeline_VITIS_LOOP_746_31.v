@@ -71,14 +71,14 @@ wire   [7:0] trunc_ln815_fu_314_p1;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_ce0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2_we0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2_ce0_local;
-wire   [31:0] tmp_88_fu_178_p13;
-wire   [31:0] tmp_88_fu_178_p15;
+wire   [31:0] tmp_92_fu_178_p13;
+wire   [31:0] tmp_92_fu_178_p15;
 wire   [45:0] prod_fu_210_p3;
 wire   [0:0] tmp_fu_222_p3;
 wire   [46:0] select_ln750_fu_230_p3;
 wire  signed [46:0] sext_ln747_fu_218_p1;
 wire   [46:0] rounded_fu_238_p2;
-wire   [16:0] tmp_226_fu_254_p4;
+wire   [16:0] tmp_231_fu_254_p4;
 wire   [31:0] scaled_fu_244_p4;
 wire   [0:0] icmp_ln752_fu_264_p2;
 wire   [0:0] icmp_ln754_fu_270_p2;
@@ -94,12 +94,12 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [2:0] tmp_88_fu_178_p1;
-wire   [2:0] tmp_88_fu_178_p3;
-wire   [2:0] tmp_88_fu_178_p5;
-wire   [2:0] tmp_88_fu_178_p7;
-wire  signed [2:0] tmp_88_fu_178_p9;
-wire  signed [2:0] tmp_88_fu_178_p11;
+wire   [2:0] tmp_92_fu_178_p1;
+wire   [2:0] tmp_92_fu_178_p3;
+wire   [2:0] tmp_92_fu_178_p5;
+wire   [2:0] tmp_92_fu_178_p7;
+wire  signed [2:0] tmp_92_fu_178_p9;
+wire  signed [2:0] tmp_92_fu_178_p11;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -134,9 +134,9 @@ sparsemux_13_3_32_1_1_U942(
     .din3(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_125),
     .din4(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_180),
     .din5(compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_181),
-    .def(tmp_88_fu_178_p13),
+    .def(tmp_92_fu_178_p13),
     .sel(ap_sig_allocacmp_t_19),
-    .dout(tmp_88_fu_178_p15)
+    .dout(tmp_92_fu_178_p15)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -291,13 +291,13 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln746_fu_166_p2 = ((ap_sig_allocacmp_t_19 == 3'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln752_fu_264_p2 = (($signed(tmp_226_fu_254_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln752_fu_264_p2 = (($signed(tmp_231_fu_254_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln754_fu_270_p2 = (($signed(scaled_fu_244_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
 assign or_ln757_fu_294_p2 = (icmp_ln754_fu_270_p2 | icmp_ln752_fu_264_p2);
 
-assign prod_fu_210_p3 = {{tmp_88_fu_178_p15}, {14'd0}};
+assign prod_fu_210_p3 = {{tmp_92_fu_178_p15}, {14'd0}};
 
 assign rounded_fu_238_p2 = ($signed(select_ln750_fu_230_p3) + $signed(sext_ln747_fu_218_p1));
 
@@ -309,11 +309,11 @@ assign select_ln757_fu_286_p3 = ((icmp_ln752_fu_264_p2[0:0] == 1'b1) ? 16'd32767
 
 assign sext_ln747_fu_218_p1 = $signed(prod_fu_210_p3);
 
-assign tmp_226_fu_254_p4 = {{rounded_fu_238_p2[46:30]}};
+assign tmp_231_fu_254_p4 = {{rounded_fu_238_p2[46:30]}};
 
-assign tmp_88_fu_178_p13 = 'bx;
+assign tmp_92_fu_178_p13 = 'bx;
 
-assign tmp_fu_222_p3 = tmp_88_fu_178_p15[32'd31];
+assign tmp_fu_222_p3 = tmp_92_fu_178_p15[32'd31];
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2_address0 = zext_ln813_fu_308_p1;
 

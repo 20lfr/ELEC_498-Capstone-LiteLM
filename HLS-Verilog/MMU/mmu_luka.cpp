@@ -93,6 +93,8 @@ static int g_current_layer = -1;
 
 // Scratch buffer for region copy/construction
 static uint8_t scratch[DMA_BUF_BYTES];
+static uint32_t active_piece_bytes_done = 0;
+static uint32_t active_chunk_bytes = 0;
 
 // ---------------------------------------------------------------------------
 // Utility
@@ -946,6 +948,9 @@ static bool region_read_bytes(const Region &r, uint32_t src_offset, uint8_t *dst
     return (remaining == 0);
 }
 
+static bool region_write_segment(int idx, uint32_t dst_offset, const uint8_t *src, uint32_t bytes);
+static bool region_mark_part_complete(int idx, int part_idx);
+
 static bool region_write_part(int idx, int part_idx, const uint8_t *src, uint32_t bytes) {
 #pragma HLS INLINE
     if (idx < 0 || idx >= MAX_REGIONS) return false;
@@ -953,6 +958,23 @@ static bool region_write_part(int idx, int part_idx, const uint8_t *src, uint32_
     if (!r.valid) return false;
     const uint32_t off = static_cast<uint32_t>(part_idx) * r.part_bytes;
     if (!region_write_bytes(r, off, src, bytes)) return false;
+
+    return region_mark_part_complete(idx, part_idx);
+}
+
+static bool region_write_segment(int idx, uint32_t dst_offset, const uint8_t *src, uint32_t bytes) {
+#pragma HLS INLINE
+    if (idx < 0 || idx >= MAX_REGIONS) return false;
+    Region &r = regions[idx];
+    if (!r.valid) return false;
+    return region_write_bytes(r, dst_offset, src, bytes);
+}
+
+static bool region_mark_part_complete(int idx, int part_idx) {
+#pragma HLS INLINE
+    if (idx < 0 || idx >= MAX_REGIONS) return false;
+    Region &r = regions[idx];
+    if (!r.valid) return false;
 
     if (part_idx >= 0 && part_idx < 32) {
         const uint32_t bit = (1u << static_cast<uint32_t>(part_idx));
@@ -1876,6 +1898,8 @@ void mmu_fsm(
 
         active_dma_valid = false;
         active_dma_lane = -1;
+        active_piece_bytes_done = 0;
+        active_chunk_bytes = 0;
         active_compute_valid = false;
         active_compute_lane = -1;
         dma_q_head = dma_q_tail = dma_q_count = 0;
@@ -2223,22 +2247,26 @@ void mmu_fsm(
                 break;
             }
             active_piece_idx = 0;
+            active_piece_bytes_done = 0;
+            active_chunk_bytes = 0;
             g_state = State::DMA_ISSUE;
             break;
         }
         case State::DMA_ISSUE: {
             if (!dma_ready) break;
             const int piece_idx = static_cast<int>(active_piece_idx);
-            const uint32_t sz = active_piece_bytes[piece_idx];
-            uint64_t piece_addr = 0;
-            if (sz > DMA_BUF_BYTES) {
-                mmu_set_overflow(ERR_MMU_BAD_DMA_PLAN);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
+            const uint32_t piece_total = active_piece_bytes[piece_idx];
+            if (active_piece_bytes_done >= piece_total) {
+                active_piece_bytes_done = 0;
             }
+            const uint32_t remaining = piece_total - active_piece_bytes_done;
+            const uint32_t sz = (remaining < static_cast<uint32_t>(DMA_BUF_BYTES))
+                                    ? remaining
+                                    : static_cast<uint32_t>(DMA_BUF_BYTES);
+            uint64_t piece_addr = 0;
             if (!calc_dma_piece_addr(ctrl_mem, active_dma_sel, active_dma_layer, active_dma_head, active_dma_tile,
-                                     active_dma_addr_base, active_piece_idx, active_piece_addr_off[piece_idx],
+                                     active_dma_addr_base, active_piece_idx,
+                                     active_piece_addr_off[piece_idx] + active_piece_bytes_done,
                                      piece_addr)) {
                 mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
                 active_dma_valid = false;
@@ -2249,6 +2277,7 @@ void mmu_fsm(
             dma_is_write = false;
             dma_len = sz;
             dma_addr = piece_addr;
+            active_chunk_bytes = sz;
             g_state = State::DMA_WAIT;
             break;
         }
@@ -2259,7 +2288,8 @@ void mmu_fsm(
         }
         case State::DMA_STORE: {
             const int piece_idx = static_cast<int>(active_piece_idx);
-            const uint32_t sz = active_piece_bytes[piece_idx];
+            const uint32_t piece_total = active_piece_bytes[piece_idx];
+            const uint32_t chunk_bytes = active_chunk_bytes;
             const Tag tag = active_piece_tag[piece_idx];
             const int key_head = (tag == Tag::WQ_W || tag == Tag::WQ_B ||
                                   tag == Tag::WK_W || tag == Tag::WK_B ||
@@ -2272,7 +2302,7 @@ void mmu_fsm(
                                  ? active_dma_tile : -1;
 
             const int idx = get_or_create_region(tag, active_dma_layer, key_head, key_tile,
-                                                 sz, 1, sz, g_overflow);
+                                                 piece_total, 1, piece_total, g_overflow);
             if (idx < 0) {
                 mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_DMA_STORE);
                 active_dma_valid = false;
@@ -2280,29 +2310,42 @@ void mmu_fsm(
                 break;
             }
 
-            for (uint32_t i = 0; i < sz; ++i) {
+            for (uint32_t i = 0; i < chunk_bytes; ++i) {
 #pragma HLS PIPELINE II=1
                 scratch[i] = dma_word_get_byte(dma_rx_buf, i);
             }
 
-            if (!region_write_part(idx, 0, scratch, sz)) {
+            if (!region_write_segment(idx, active_piece_bytes_done, scratch, chunk_bytes)) {
                 mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 active_dma_valid = false;
                 g_state = State::IDLE;
                 break;
             }
 
-            active_piece_idx++;
-            if (active_piece_idx < active_piece_count) {
+            active_piece_bytes_done += chunk_bytes;
+            if (active_piece_bytes_done < piece_total) {
                 g_state = State::DMA_ISSUE;
             } else {
-                main_dma_done = true;
-                if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
-                    head_ctx[active_dma_lane].dma_done = true;
-                    arb_release(active_dma_lane);
+                if (!region_mark_part_complete(idx, 0)) {
+                    mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+                    active_dma_valid = false;
+                    g_state = State::IDLE;
+                    break;
                 }
-                active_dma_valid = false;
-                g_state = State::IDLE;
+                active_piece_bytes_done = 0;
+                active_chunk_bytes = 0;
+                active_piece_idx++;
+                if (active_piece_idx < active_piece_count) {
+                    g_state = State::DMA_ISSUE;
+                } else {
+                    main_dma_done = true;
+                    if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
+                        head_ctx[active_dma_lane].dma_done = true;
+                        arb_release(active_dma_lane);
+                    }
+                    active_dma_valid = false;
+                    g_state = State::IDLE;
+                }
             }
             break;
         }
@@ -2317,23 +2360,6 @@ void mmu_fsm(
                 break;
             }
             const uint32_t wb_len = static_cast<uint32_t>(D_HEADS);
-            if (wb_len > DMA_BUF_BYTES) {
-                mmu_set_overflow(ERR_MMU_BAD_DMA_PLAN);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-            if (!region_read_bytes(regions[src_idx], 0, scratch, wb_len)) {
-                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-            dma_word_clear_bytes(dma_tx_buf, wb_len);
-            for (uint32_t i = 0; i < wb_len; ++i) {
-#pragma HLS PIPELINE II=1
-                dma_word_set_byte(dma_tx_buf, i, scratch[i]);
-            }
             if (token_pos >= static_cast<uint16_t>(CONTEXT_LENGTH)) {
                 mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
                 active_dma_valid = false;
@@ -2345,32 +2371,66 @@ void mmu_fsm(
             active_piece_idx = 0;
             active_piece_count = 1;
             active_piece_bytes[0] = wb_len;
+            active_piece_bytes_done = 0;
+            active_chunk_bytes = 0;
             g_state = State::DMA_WRITEBACK_ISSUE;
             break;
         }
         case State::DMA_WRITEBACK_ISSUE: {
             if (!dma_ready) break;
+            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
+            const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
+            if (src_idx < 0 || !region_ready(regions[src_idx])) {
+                mmu_set_invalid(ERR_MMU_WRITEBACK_SRC);
+                active_dma_valid = false;
+                g_state = State::IDLE;
+                break;
+            }
+            const uint32_t piece_total = active_piece_bytes[0];
+            const uint32_t remaining = piece_total - active_piece_bytes_done;
+            const uint32_t chunk_bytes = (remaining < static_cast<uint32_t>(DMA_BUF_BYTES))
+                                             ? remaining
+                                             : static_cast<uint32_t>(DMA_BUF_BYTES);
+            if (!region_read_bytes(regions[src_idx], active_piece_bytes_done, scratch, chunk_bytes)) {
+                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+                active_dma_valid = false;
+                g_state = State::IDLE;
+                break;
+            }
+            dma_word_clear_bytes(dma_tx_buf, chunk_bytes);
+            for (uint32_t i = 0; i < chunk_bytes; ++i) {
+#pragma HLS PIPELINE II=1
+                dma_word_set_byte(dma_tx_buf, i, scratch[i]);
+            }
             dma_start = true;
             dma_is_write = true;
-            dma_addr = active_dma_addr_base;
-            dma_len = active_piece_bytes[0];
+            dma_addr = active_dma_addr_base + static_cast<uint64_t>(active_piece_bytes_done);
+            dma_len = chunk_bytes;
+            active_chunk_bytes = chunk_bytes;
             g_state = State::DMA_WRITEBACK_WAIT;
             break;
         }
         case State::DMA_WRITEBACK_WAIT: {
             if (!dma_done) break;
-            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
-            const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
-            if (src_idx >= 0 && should_consume(src_tag)) {
-                maybe_consume(src_idx);
+            active_piece_bytes_done += active_chunk_bytes;
+            if (active_piece_bytes_done < active_piece_bytes[0]) {
+                g_state = State::DMA_WRITEBACK_ISSUE;
+            } else {
+                const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
+                const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
+                if (src_idx >= 0 && should_consume(src_tag)) {
+                    maybe_consume(src_idx);
+                }
+                active_piece_bytes_done = 0;
+                active_chunk_bytes = 0;
+                main_dma_done = true;
+                if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
+                    head_ctx[active_dma_lane].dma_done = true;
+                    arb_release(active_dma_lane);
+                }
+                active_dma_valid = false;
+                g_state = State::IDLE;
             }
-            main_dma_done = true;
-            if (active_dma_headed && active_dma_lane >= 0 && active_dma_lane < HEADS_PARALLEL) {
-                head_ctx[active_dma_lane].dma_done = true;
-                arb_release(active_dma_lane);
-            }
-            active_dma_valid = false;
-            g_state = State::IDLE;
             break;
         }
         case State::COMPUTE_POP: {

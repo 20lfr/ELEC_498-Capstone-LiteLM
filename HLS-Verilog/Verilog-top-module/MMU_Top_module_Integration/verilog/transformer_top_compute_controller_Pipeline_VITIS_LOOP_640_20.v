@@ -85,7 +85,7 @@ wire   [63:0] zext_ln795_fu_340_p1;
 reg   [4:0] i_fu_102;
 wire   [4:0] add_ln640_fu_242_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_73;
+reg   [4:0] ap_sig_allocacmp_i_74;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0_local;
 wire   [0:0] trunc_ln795_fu_326_p1;
 wire   [7:0] value_assign_fu_252_p35;
@@ -275,9 +275,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_73 = 5'd0;
+        ap_sig_allocacmp_i_74 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_73 = i_fu_102;
+        ap_sig_allocacmp_i_74 = i_fu_102;
     end
 end
 
@@ -324,7 +324,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln640_fu_242_p2 = (ap_sig_allocacmp_i_73 + 5'd1);
+assign add_ln640_fu_242_p2 = (ap_sig_allocacmp_i_74 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -338,9 +338,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln640_fu_236_p2 = ((ap_sig_allocacmp_i_73 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln640_fu_236_p2 = ((ap_sig_allocacmp_i_74 == 5'd16) ? 1'b1 : 1'b0);
 
-assign lshr_ln_fu_330_p4 = {{ap_sig_allocacmp_i_73[3:1]}};
+assign lshr_ln_fu_330_p4 = {{ap_sig_allocacmp_i_74[3:1]}};
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2_address0 = zext_ln795_fu_340_p1;
 
@@ -358,11 +358,11 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_we0_local;
 
-assign trunc_ln795_fu_326_p1 = ap_sig_allocacmp_i_73[0:0];
+assign trunc_ln795_fu_326_p1 = ap_sig_allocacmp_i_74[0:0];
 
 assign value_assign_fu_252_p33 = 'bx;
 
-assign value_assign_fu_252_p34 = ap_sig_allocacmp_i_73[3:0];
+assign value_assign_fu_252_p34 = ap_sig_allocacmp_i_74[3:0];
 
 assign zext_ln795_fu_340_p1 = lshr_ln_fu_330_p4;
 

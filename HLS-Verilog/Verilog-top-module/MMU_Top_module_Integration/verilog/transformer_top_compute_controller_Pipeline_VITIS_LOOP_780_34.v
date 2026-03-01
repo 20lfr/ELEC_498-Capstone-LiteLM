@@ -261,7 +261,7 @@ wire   [63:0] zext_ln780_fu_770_p1;
 reg   [4:0] i_fu_238;
 wire   [4:0] add_ln780_fu_752_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_63;
+reg   [4:0] ap_sig_allocacmp_i_64;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_25_we0_local;
 wire   [3:0] trunc_ln780_fu_758_p1;
 wire   [15:0] v_fu_998_p3;
@@ -297,10 +297,10 @@ reg    compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_we0_local;
 reg    p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_ce0_local;
 wire   [0:0] tmp_fu_762_p3;
-wire   [7:0] tmp_82_fu_790_p49;
-wire   [7:0] tmp_83_fu_894_p49;
-wire   [7:0] tmp_83_fu_894_p51;
-wire   [7:0] tmp_82_fu_790_p51;
+wire   [7:0] tmp_86_fu_790_p49;
+wire   [7:0] tmp_87_fu_894_p49;
+wire   [7:0] tmp_87_fu_894_p51;
+wire   [7:0] tmp_86_fu_790_p51;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -309,54 +309,54 @@ reg    ap_ST_fsm_state1_blk;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [4:0] tmp_82_fu_790_p1;
-wire   [4:0] tmp_82_fu_790_p3;
-wire   [4:0] tmp_82_fu_790_p5;
-wire   [4:0] tmp_82_fu_790_p7;
-wire   [4:0] tmp_82_fu_790_p9;
-wire   [4:0] tmp_82_fu_790_p11;
-wire   [4:0] tmp_82_fu_790_p13;
-wire   [4:0] tmp_82_fu_790_p15;
-wire   [4:0] tmp_82_fu_790_p17;
-wire   [4:0] tmp_82_fu_790_p19;
-wire   [4:0] tmp_82_fu_790_p21;
-wire   [4:0] tmp_82_fu_790_p23;
-wire   [4:0] tmp_82_fu_790_p25;
-wire   [4:0] tmp_82_fu_790_p27;
-wire   [4:0] tmp_82_fu_790_p29;
-wire   [4:0] tmp_82_fu_790_p31;
-wire  signed [4:0] tmp_82_fu_790_p33;
-wire  signed [4:0] tmp_82_fu_790_p35;
-wire  signed [4:0] tmp_82_fu_790_p37;
-wire  signed [4:0] tmp_82_fu_790_p39;
-wire  signed [4:0] tmp_82_fu_790_p41;
-wire  signed [4:0] tmp_82_fu_790_p43;
-wire  signed [4:0] tmp_82_fu_790_p45;
-wire  signed [4:0] tmp_82_fu_790_p47;
-wire   [4:0] tmp_83_fu_894_p1;
-wire   [4:0] tmp_83_fu_894_p3;
-wire   [4:0] tmp_83_fu_894_p5;
-wire   [4:0] tmp_83_fu_894_p7;
-wire   [4:0] tmp_83_fu_894_p9;
-wire   [4:0] tmp_83_fu_894_p11;
-wire   [4:0] tmp_83_fu_894_p13;
-wire   [4:0] tmp_83_fu_894_p15;
-wire   [4:0] tmp_83_fu_894_p17;
-wire   [4:0] tmp_83_fu_894_p19;
-wire   [4:0] tmp_83_fu_894_p21;
-wire   [4:0] tmp_83_fu_894_p23;
-wire   [4:0] tmp_83_fu_894_p25;
-wire   [4:0] tmp_83_fu_894_p27;
-wire   [4:0] tmp_83_fu_894_p29;
-wire   [4:0] tmp_83_fu_894_p31;
-wire  signed [4:0] tmp_83_fu_894_p33;
-wire  signed [4:0] tmp_83_fu_894_p35;
-wire  signed [4:0] tmp_83_fu_894_p37;
-wire  signed [4:0] tmp_83_fu_894_p39;
-wire  signed [4:0] tmp_83_fu_894_p41;
-wire  signed [4:0] tmp_83_fu_894_p43;
-wire  signed [4:0] tmp_83_fu_894_p45;
-wire  signed [4:0] tmp_83_fu_894_p47;
+wire   [4:0] tmp_86_fu_790_p1;
+wire   [4:0] tmp_86_fu_790_p3;
+wire   [4:0] tmp_86_fu_790_p5;
+wire   [4:0] tmp_86_fu_790_p7;
+wire   [4:0] tmp_86_fu_790_p9;
+wire   [4:0] tmp_86_fu_790_p11;
+wire   [4:0] tmp_86_fu_790_p13;
+wire   [4:0] tmp_86_fu_790_p15;
+wire   [4:0] tmp_86_fu_790_p17;
+wire   [4:0] tmp_86_fu_790_p19;
+wire   [4:0] tmp_86_fu_790_p21;
+wire   [4:0] tmp_86_fu_790_p23;
+wire   [4:0] tmp_86_fu_790_p25;
+wire   [4:0] tmp_86_fu_790_p27;
+wire   [4:0] tmp_86_fu_790_p29;
+wire   [4:0] tmp_86_fu_790_p31;
+wire  signed [4:0] tmp_86_fu_790_p33;
+wire  signed [4:0] tmp_86_fu_790_p35;
+wire  signed [4:0] tmp_86_fu_790_p37;
+wire  signed [4:0] tmp_86_fu_790_p39;
+wire  signed [4:0] tmp_86_fu_790_p41;
+wire  signed [4:0] tmp_86_fu_790_p43;
+wire  signed [4:0] tmp_86_fu_790_p45;
+wire  signed [4:0] tmp_86_fu_790_p47;
+wire   [4:0] tmp_87_fu_894_p1;
+wire   [4:0] tmp_87_fu_894_p3;
+wire   [4:0] tmp_87_fu_894_p5;
+wire   [4:0] tmp_87_fu_894_p7;
+wire   [4:0] tmp_87_fu_894_p9;
+wire   [4:0] tmp_87_fu_894_p11;
+wire   [4:0] tmp_87_fu_894_p13;
+wire   [4:0] tmp_87_fu_894_p15;
+wire   [4:0] tmp_87_fu_894_p17;
+wire   [4:0] tmp_87_fu_894_p19;
+wire   [4:0] tmp_87_fu_894_p21;
+wire   [4:0] tmp_87_fu_894_p23;
+wire   [4:0] tmp_87_fu_894_p25;
+wire   [4:0] tmp_87_fu_894_p27;
+wire   [4:0] tmp_87_fu_894_p29;
+wire   [4:0] tmp_87_fu_894_p31;
+wire  signed [4:0] tmp_87_fu_894_p33;
+wire  signed [4:0] tmp_87_fu_894_p35;
+wire  signed [4:0] tmp_87_fu_894_p37;
+wire  signed [4:0] tmp_87_fu_894_p39;
+wire  signed [4:0] tmp_87_fu_894_p41;
+wire  signed [4:0] tmp_87_fu_894_p43;
+wire  signed [4:0] tmp_87_fu_894_p45;
+wire  signed [4:0] tmp_87_fu_894_p47;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -445,9 +445,9 @@ sparsemux_49_5_8_1_1_U243(
     .din21(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_632),
     .din22(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_634),
     .din23(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_636),
-    .def(tmp_82_fu_790_p49),
-    .sel(ap_sig_allocacmp_i_63),
-    .dout(tmp_82_fu_790_p51)
+    .def(tmp_86_fu_790_p49),
+    .sel(ap_sig_allocacmp_i_64),
+    .dout(tmp_86_fu_790_p51)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_49_5_8_1_1 #(
@@ -529,9 +529,9 @@ sparsemux_49_5_8_1_1_U244(
     .din21(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_633),
     .din22(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_635),
     .din23(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_637),
-    .def(tmp_83_fu_894_p49),
-    .sel(ap_sig_allocacmp_i_63),
-    .dout(tmp_83_fu_894_p51)
+    .def(tmp_87_fu_894_p49),
+    .sel(ap_sig_allocacmp_i_64),
+    .dout(tmp_87_fu_894_p51)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -621,9 +621,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_63 = 5'd0;
+        ap_sig_allocacmp_i_64 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_63 = i_fu_238;
+        ap_sig_allocacmp_i_64 = i_fu_238;
     end
 end
 
@@ -894,7 +894,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln780_fu_752_p2 = (ap_sig_allocacmp_i_63 + 5'd1);
+assign add_ln780_fu_752_p2 = (ap_sig_allocacmp_i_64 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -988,7 +988,7 @@ assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0 = compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_49_we0_local;
 
-assign icmp_ln780_fu_746_p2 = ((ap_sig_allocacmp_i_63 == 5'd24) ? 1'b1 : 1'b0);
+assign icmp_ln780_fu_746_p2 = ((ap_sig_allocacmp_i_64 == 5'd24) ? 1'b1 : 1'b0);
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_24_address0 = zext_ln780_fu_770_p1;
 
@@ -1038,15 +1038,15 @@ assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeS
 
 assign p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0 = p_ZZ18compute_controller15ControlMemSpacebjRbS0_bS0_S0_RjPKhPhR12ComputeStateS1_R_29_we0_local;
 
-assign tmp_82_fu_790_p49 = 'bx;
+assign tmp_86_fu_790_p49 = 'bx;
 
-assign tmp_83_fu_894_p49 = 'bx;
+assign tmp_87_fu_894_p49 = 'bx;
 
-assign tmp_fu_762_p3 = ap_sig_allocacmp_i_63[32'd4];
+assign tmp_fu_762_p3 = ap_sig_allocacmp_i_64[32'd4];
 
-assign trunc_ln780_fu_758_p1 = ap_sig_allocacmp_i_63[3:0];
+assign trunc_ln780_fu_758_p1 = ap_sig_allocacmp_i_64[3:0];
 
-assign v_fu_998_p3 = {{tmp_83_fu_894_p51}, {tmp_82_fu_790_p51}};
+assign v_fu_998_p3 = {{tmp_87_fu_894_p51}, {tmp_86_fu_790_p51}};
 
 assign zext_ln780_fu_770_p1 = tmp_fu_762_p3;
 

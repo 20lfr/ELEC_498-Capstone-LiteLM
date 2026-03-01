@@ -315,7 +315,7 @@ wire   [2:0] add_ln718_1_fu_882_p2;
 wire   [5:0] tmp_s_fu_917_p3;
 wire   [5:0] zext_ln719_1_fu_928_p1;
 wire   [5:0] add_ln727_fu_938_p2;
-wire   [6:0] shl_ln8_fu_952_p3;
+wire   [6:0] shl_ln7_fu_952_p3;
 wire   [7:0] zext_ln727_fu_948_p1;
 wire   [7:0] zext_ln727_1_fu_959_p1;
 wire   [7:0] add_ln727_1_fu_963_p2;
@@ -327,14 +327,14 @@ wire   [8:0] nibble_idx_fu_1009_p2;
 wire   [6:0] trunc_ln772_fu_1019_p1;
 wire   [6:0] sub_ln772_fu_1031_p2;
 wire   [5:0] trunc_ln772_6_fu_1037_p4;
-wire   [0:0] tmp_227_fu_1023_p3;
+wire   [0:0] tmp_232_fu_1023_p3;
 wire   [5:0] sub_ln772_1_fu_1047_p2;
 wire   [5:0] trunc_ln772_7_fu_1053_p4;
 wire   [7:0] byte_val_fu_1071_p97;
 wire   [5:0] byte_val_fu_1071_p98;
 wire   [7:0] byte_val_fu_1071_p99;
 wire   [0:0] trunc_ln771_fu_1015_p1;
-wire   [3:0] tmp_159_fu_1223_p4;
+wire   [3:0] tmp_163_fu_1223_p4;
 wire   [3:0] trunc_ln774_fu_1233_p1;
 wire   [0:0] tmp_fu_931_p3;
 wire   [3:0] nibble_fu_1237_p3;
@@ -1007,7 +1007,7 @@ assign ap_ready = ap_ready_sig;
 
 assign byte_val_fu_1071_p97 = 'bx;
 
-assign byte_val_fu_1071_p98 = ((tmp_227_fu_1023_p3[0:0] == 1'b1) ? sub_ln772_1_fu_1047_p2 : trunc_ln772_7_fu_1053_p4);
+assign byte_val_fu_1071_p98 = ((tmp_232_fu_1023_p3[0:0] == 1'b1) ? sub_ln772_1_fu_1047_p2 : trunc_ln772_7_fu_1053_p4);
 
 assign compute_controller_ControlMemSpace_bool_unsigned_int_bool_bool_bool_bool_66_address0 = zext_ln727_3_fu_983_p1;
 
@@ -1095,7 +1095,7 @@ assign icmp_ln719_fu_868_p2 = ((ap_sig_allocacmp_i_load == 5'd24) ? 1'b1 : 1'b0)
 
 assign lshr_ln_fu_973_p4 = {{add_ln727_1_fu_963_p2[7:4]}};
 
-assign nibble_fu_1237_p3 = ((trunc_ln771_fu_1015_p1[0:0] == 1'b1) ? tmp_159_fu_1223_p4 : trunc_ln774_fu_1233_p1);
+assign nibble_fu_1237_p3 = ((trunc_ln771_fu_1015_p1[0:0] == 1'b1) ? tmp_163_fu_1223_p4 : trunc_ln774_fu_1233_p1);
 
 assign nibble_idx_fu_1009_p2 = (sub_ln722_fu_1003_p2 + 9'd32);
 
@@ -1151,7 +1151,7 @@ assign select_ln718_1_fu_888_p3 = ((icmp_ln719_fu_868_p2[0:0] == 1'b1) ? add_ln7
 
 assign select_ln718_fu_874_p3 = ((icmp_ln719_fu_868_p2[0:0] == 1'b1) ? 5'd0 : ap_sig_allocacmp_i_load);
 
-assign shl_ln8_fu_952_p3 = {{select_ln718_1_reg_1573}, {4'd0}};
+assign shl_ln7_fu_952_p3 = {{select_ln718_1_reg_1573}, {4'd0}};
 
 assign storemerge348_fu_1245_p3 = ((tmp_fu_931_p3[0:0] == 1'b1) ? 4'd0 : nibble_fu_1237_p3);
 
@@ -1161,9 +1161,9 @@ assign sub_ln772_1_fu_1047_p2 = (6'd0 - trunc_ln772_6_fu_1037_p4);
 
 assign sub_ln772_fu_1031_p2 = (7'd0 - trunc_ln772_fu_1019_p1);
 
-assign tmp_159_fu_1223_p4 = {{byte_val_fu_1071_p99[7:4]}};
+assign tmp_163_fu_1223_p4 = {{byte_val_fu_1071_p99[7:4]}};
 
-assign tmp_227_fu_1023_p3 = nibble_idx_fu_1009_p2[32'd8];
+assign tmp_232_fu_1023_p3 = nibble_idx_fu_1009_p2[32'd8];
 
 assign tmp_fu_931_p3 = select_ln718_reg_1567[32'd4];
 
@@ -1185,7 +1185,7 @@ assign zext_ln719_1_fu_928_p1 = select_ln718_reg_1567;
 
 assign zext_ln719_fu_924_p1 = tmp_s_fu_917_p3;
 
-assign zext_ln727_1_fu_959_p1 = shl_ln8_fu_952_p3;
+assign zext_ln727_1_fu_959_p1 = shl_ln7_fu_952_p3;
 
 assign zext_ln727_2_fu_969_p1 = add_ln727_1_fu_963_p2;
 
