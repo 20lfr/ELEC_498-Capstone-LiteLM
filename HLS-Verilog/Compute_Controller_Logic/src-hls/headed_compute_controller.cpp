@@ -437,6 +437,128 @@ void REQUANT_D_HEADS_int32_to_int8(
     }   
 }
 
+static inline int8_t requant_scalar_to_i8(
+    int32_t x32,
+    int32_t M,
+    int32_t n
+) {
+#pragma HLS INLINE
+    int64_t product = static_cast<int64_t>(x32) * static_cast<int64_t>(M);
+    int64_t rounded = (n > 0) ? (1LL << (n - 1)) : 0;
+    int32_t scaled = (n > 0) ? static_cast<int32_t>((product + rounded) >> n)
+                             : static_cast<int32_t>(product);
+
+    if (scaled > 127) {
+        return 127;
+    }
+    if (scaled < -128) {
+        return -128;
+    }
+    return static_cast<int8_t>(scaled);
+}
+
+static void VALUE_SCALE_CLAMP_TO_BUF(
+    const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+    uint8_t out_buf[head_buf::OUT_BUF_BYTES]
+) {
+#pragma HLS INLINE
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+#pragma HLS PIPELINE II=1
+        int64_t prod = static_cast<int64_t>(
+                           compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4))) *
+                       static_cast<int64_t>(ATTN_SCALE_Q15);
+        int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
+        int32_t scaled = static_cast<int32_t>(rounded >> 15);
+        if (scaled > 32767) {
+            scaled = 32767;
+        } else if (scaled < -32768) {
+            scaled = -32768;
+        }
+        compute_buf::write_i16(out_buf, t * 2, static_cast<int16_t>(scaled));
+    }
+}
+
+static void SOFTMAX_TO_BUF(
+    const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+    uint8_t out_buf[head_buf::OUT_BUF_BYTES]
+) {
+#pragma HLS INLINE
+    const uint16_t MAX_Q15 = (1u << 15) - 1u;
+
+    int16_t max_val = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X);
+    for (int i = 1; i < CONTEXT_LENGTH; ++i) {
+#pragma HLS PIPELINE II=1
+        const int16_t x = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (i * 2));
+        if (x > max_val) {
+            max_val = x;
+        }
+    }
+
+    uint32_t sum_exp = 0;
+    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
+#pragma HLS PIPELINE II=1
+        const int16_t x = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (i * 2));
+        const int16_t diff = static_cast<int16_t>(x - max_val);
+        sum_exp += exp_approx_q15(diff);
+    }
+
+    uint32_t inv_sum_q15 = 0;
+    if (sum_exp > 0) {
+        const uint64_t num = (1ULL << 30);
+        inv_sum_q15 = static_cast<uint32_t>((num + (sum_exp / 2)) / sum_exp);
+    }
+
+    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
+#pragma HLS PIPELINE II=1
+        const int16_t x = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (i * 2));
+        const int16_t diff = static_cast<int16_t>(x - max_val);
+        uint64_t tmp = static_cast<uint64_t>(exp_approx_q15(diff)) * static_cast<uint64_t>(inv_sum_q15);
+        uint16_t prob_q15 = static_cast<uint16_t>(tmp >> 15);
+        if (prob_q15 > MAX_Q15) {
+            prob_q15 = MAX_Q15;
+        }
+        compute_buf::write_i16(out_buf, i * 2, static_cast<int16_t>(prob_q15));
+    }
+}
+
+static void ATT_VALUE_TO_BUF(
+    const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+    uint8_t out_buf[head_buf::OUT_BUF_BYTES]
+) {
+#pragma HLS INLINE
+    int32_t accum_tile[HEAD_MAC_OUT_UNROLL];
+#pragma HLS ARRAY_PARTITION variable=accum_tile complete dim=1
+
+    for (int out_base = 0; out_base < D_HEADS; out_base += HEAD_MAC_OUT_UNROLL) {
+        for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
+#pragma HLS UNROLL
+            accum_tile[lane] = 0;
+        }
+
+        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+#pragma HLS PIPELINE II=1
+            const int16_t weight = compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (t * 2));
+            for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
+#pragma HLS UNROLL
+                const int out_idx = out_base + lane;
+                if (out_idx < D_HEADS) {
+                    const int v_idx = (out_idx * CONTEXT_LENGTH) + t;
+                    const int8_t v = compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + v_idx);
+                    accum_tile[lane] += static_cast<int32_t>(weight) * static_cast<int32_t>(v);
+                }
+            }
+        }
+
+        for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
+#pragma HLS UNROLL
+            const int out_idx = out_base + lane;
+            if (out_idx < D_HEADS) {
+                compute_buf::write_i32(out_buf, out_idx * 4, accum_tile[lane]);
+            }
+        }
+    }
+}
+
 static void headed_compute_controller_lane(
     ComputeHeadCtx &ctx,
     bool        reset_n,
@@ -453,16 +575,7 @@ static void headed_compute_controller_lane(
     int8_t head_vec[HEAD_VECTOR_MAX],
     int8_t head_mat[HEAD_MATRIX_MAX],
     int32_t head_bias[HEAD_ACCUM_MAX],
-    int32_t head_out[HEAD_ACCUM_MAX],
-    int32_t head_x32[D_HEADS],
-    int8_t head_y8[D_HEADS],
-    int32_t val_in[CONTEXT_LENGTH],
-    int16_t val_scaled[CONTEXT_LENGTH],
-    int16_t soft_in[CONTEXT_LENGTH],
-    int16_t soft_out[CONTEXT_LENGTH],
-    int16_t head_vec_att[CONTEXT_LENGTH],
-    int8_t head_mat_att[D_HEADS * CONTEXT_LENGTH],
-    int32_t head_out_att[D_HEADS]
+    int32_t head_out[HEAD_ACCUM_MAX]
 ) {
 #pragma HLS INLINE
 
@@ -478,15 +591,6 @@ static void headed_compute_controller_lane(
 #pragma HLS ARRAY_PARTITION variable=head_mat cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=head_bias cyclic factor=HEAD_MAC_OUT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=head_out cyclic factor=HEAD_MAC_OUT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=head_x32 cyclic factor=D_HEADS dim=1
-#pragma HLS ARRAY_PARTITION variable=head_y8 cyclic factor=D_HEADS dim=1
-#pragma HLS ARRAY_PARTITION variable=val_in cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=val_scaled cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=soft_in cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=soft_out cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=head_vec_att cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=head_mat_att cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=head_out_att cyclic factor=D_HEADS dim=1
 
     if (!reset_n) {
         ctx.state = ComputeState::IDLE;
@@ -524,25 +628,6 @@ static void headed_compute_controller_lane(
 // #pragma HLS UNROLL
             head_bias[i] = 0;
             head_out[i] = 0;
-        }
-        for (int i = 0; i < D_HEADS; ++i) {
-// #pragma HLS UNROLL
-            head_x32[i] = 0;
-            head_y8[i] = 0;
-        }
-        for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-// #pragma HLS UNROLL
-            val_in[i] = 0;
-            val_scaled[i] = 0;
-            soft_in[i] = 0;
-            soft_out[i] = 0;
-            head_vec_att[i] = 0;
-        }
-        for (int i = 0; i < D_HEADS * CONTEXT_LENGTH; ++i) {
-            head_mat_att[i] = 0;
-        }
-        for (int i = 0; i < D_HEADS; ++i) {
-            head_out_att[i] = 0;
         }
         return;
     }
@@ -679,10 +764,9 @@ static void headed_compute_controller_lane(
                             default:
                                 break;  
                         }
-                        REQUANT_D_HEADS_int32_to_int8(head_out, M, n, head_y8);
                         for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                            compute_buf::write_i8(out_buf, h, head_y8[h]);
+                            compute_buf::write_i8(out_buf, h, requant_scalar_to_i8(head_out[h], M, n));
                         }
                         next_state = ComputeState::MEM_WRITEBACK;
                     } else {
@@ -691,10 +775,6 @@ static void headed_compute_controller_lane(
                     break;
                 }
                 case ComputeOp::CMP_HEAD_REQUANT:{  // Qacc   -> Q0.7    [After Attention Values]
-                    for (int h = 0; h < D_HEADS; ++h) {
-#pragma HLS PIPELINE II=1
-                        head_x32[h] = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4));
-                    }
                     int32_t M = 1;
                     int32_t n = 0;
                     int layer = static_cast<int>(ctx.req.layer_idx);
@@ -711,10 +791,10 @@ static void headed_compute_controller_lane(
                         default:
                             break;
                     }
-                    REQUANT_D_HEADS_int32_to_int8(head_x32, M, n, head_y8);
                     for (int h = 0; h < D_HEADS; ++h) {
 #pragma HLS PIPELINE II=1
-                        compute_buf::write_i8(out_buf, head_buf::INHeadRequantLayout::X + h, head_y8[h]);
+                        const int32_t x = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4));
+                        compute_buf::write_i8(out_buf, head_buf::INHeadRequantLayout::X + h, requant_scalar_to_i8(x, M, n));
                     }
                     break;
                 }
@@ -771,61 +851,15 @@ static void headed_compute_controller_lane(
                     break;
                 }
                 case ComputeOp::CMP_VALUE_SCALE: {  // Qacc   -> Q1.15
-                    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
-                        val_in[t] = compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4));
-                    }
-                    VALUE_SCALE_CLAMP(val_in, val_scaled);
-                    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
-                        compute_buf::write_i16(out_buf, t * 2, val_scaled[t]);
-                    }
+                    VALUE_SCALE_CLAMP_TO_BUF(in_buf, out_buf);
                     break;
                 }
                 case ComputeOp::CMP_SOFTMAX: {      // Q1.15  -> Q1.15
-                    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
-                        soft_in[t] = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (t * 2));
-                    }
-                    SOFTMAX(soft_in, soft_out);
-                    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
-                        compute_buf::write_i16(out_buf, t * 2, soft_out[t]);
-                    }
+                    SOFTMAX_TO_BUF(in_buf, out_buf);
                     break;
                 }
                 case ComputeOp::CMP_ATT_VALUE: {    // Q1.15  -> Qacc
-                    // INIT the Vector Buffer
-                    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
-                        head_vec_att[i] = 0;
-                    }
-                    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
-                        head_vec_att[t] = compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (t * 2));
-                    }
-
-                    // INIT V cache matrix buffer
-                    for (int i = 0; i < D_HEADS * CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
-                        head_mat_att[i] = 0;
-                    }
-                    for (int h = 0; h < D_HEADS; ++h) {
-#pragma HLS PIPELINE II=1
-                        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS UNROLL
-                            const int v_idx = (h * CONTEXT_LENGTH) + t;
-                            head_mat_att[h * CONTEXT_LENGTH + t] =
-                                compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + v_idx);
-                        }
-                    }
-
-                    // print_att_value_buffers("MAC_EXEC ATT_VALUE", head_vec_att, head_mat_att);
-                    MAC_HEAD_ATT_VALUE_DIRECT(head_vec_att, head_mat_att, head_out_att);
-                    for (int h = 0; h < D_HEADS; ++h) {
-#pragma HLS PIPELINE II=1
-                        compute_buf::write_i32(out_buf, h * 4, head_out_att[h]);
-                    }
+                    ATT_VALUE_TO_BUF(in_buf, out_buf);
                     break;
                 }      
                 default:
@@ -901,36 +935,12 @@ void drive_headed_compute_controller(
     static int32_t head_bias[HEADS_PARALLEL][HEAD_ACCUM_MAX];
     static int32_t head_out[HEADS_PARALLEL][HEAD_ACCUM_MAX];
 
-    static int32_t head_x32[HEADS_PARALLEL][D_HEADS];
-    static int8_t head_y8[HEADS_PARALLEL][D_HEADS];
-
-    static int32_t val_in[HEADS_PARALLEL][CONTEXT_LENGTH];
-    static int16_t val_scaled[HEADS_PARALLEL][CONTEXT_LENGTH];
-    static int16_t soft_in[HEADS_PARALLEL][CONTEXT_LENGTH];
-    static int16_t soft_out[HEADS_PARALLEL][CONTEXT_LENGTH];
-    static int16_t head_vec_att[HEADS_PARALLEL][CONTEXT_LENGTH];
-    static int8_t head_mat_att[HEADS_PARALLEL][D_HEADS * CONTEXT_LENGTH];
-    static int32_t head_out_att[HEADS_PARALLEL][D_HEADS];
-
 // Array Partitioning for each lane's buffers to allow parallel access across lanes.
 #pragma HLS ARRAY_PARTITION variable=head_vec complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_mat complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_bias complete dim=1
 
 #pragma HLS ARRAY_PARTITION variable=head_out complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_x32 complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_y8 complete dim=1
-
-#pragma HLS ARRAY_PARTITION variable=val_in complete dim=1
-#pragma HLS ARRAY_PARTITION variable=val_scaled complete dim=1
-
-#pragma HLS ARRAY_PARTITION variable=soft_in complete dim=1
-#pragma HLS ARRAY_PARTITION variable=soft_out complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_vec_att complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_mat_att complete dim=1
-#pragma HLS ARRAY_PARTITION variable=head_out_att complete dim=1
-
-
 
 // Array Partitioning each lane's buffers for parallel access within the lane's compute controller.
 #pragma HLS ARRAY_PARTITION variable=head_vec cyclic factor=HEAD_MAC_VEC_UNROLL dim=2
@@ -938,17 +948,6 @@ void drive_headed_compute_controller(
 #pragma HLS ARRAY_PARTITION variable=head_bias cyclic factor=HEAD_MAC_OUT_UNROLL dim=2
 
 #pragma HLS ARRAY_PARTITION variable=head_out cyclic factor=HEAD_MAC_OUT_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=head_x32 cyclic factor=D_HEADS dim=2
-#pragma HLS ARRAY_PARTITION variable=head_y8 cyclic factor=D_HEADS dim=2
-
-#pragma HLS ARRAY_PARTITION variable=val_in cyclic factor=CONTEXT_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=val_scaled cyclic factor=CONTEXT_UNROLL dim=2
-
-#pragma HLS ARRAY_PARTITION variable=soft_in cyclic factor=CONTEXT_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=soft_out cyclic factor=CONTEXT_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=head_vec_att cyclic factor=CONTEXT_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=head_mat_att cyclic factor=CONTEXT_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=head_out_att cyclic factor=D_HEADS dim=2
 
     error = false;
     
@@ -978,16 +977,7 @@ void drive_headed_compute_controller(
             head_vec[lane],
             head_mat[lane],
             head_bias[lane],
-            head_out[lane],
-            head_x32[lane],
-            head_y8[lane],
-            val_in[lane],
-            val_scaled[lane],
-            soft_in[lane],
-            soft_out[lane],
-            head_vec_att[lane],
-            head_mat_att[lane],
-            head_out_att[lane]);
+            head_out[lane]);
 
         if (lane_error) {
             error = true;
@@ -1022,17 +1012,6 @@ void headed_compute_controller(
     static int32_t head_bias[HEAD_ACCUM_MAX];
     static int32_t head_out[HEAD_ACCUM_MAX];
 
-    int32_t head_x32[D_HEADS];
-    int8_t head_y8[D_HEADS];
-
-    int32_t val_in[CONTEXT_LENGTH];
-    int16_t val_scaled[CONTEXT_LENGTH];
-    int16_t soft_in[CONTEXT_LENGTH];
-    int16_t soft_out[CONTEXT_LENGTH];
-    int16_t head_vec_att[CONTEXT_LENGTH];
-    int8_t head_mat_att[D_HEADS * CONTEXT_LENGTH];
-    int32_t head_out_att[D_HEADS];
-
     headed_compute_controller_lane(
         ctx,
         reset_n,
@@ -1049,14 +1028,5 @@ void headed_compute_controller(
         head_vec,
         head_mat,
         head_bias,
-        head_out,
-        head_x32,
-        head_y8,
-        val_in,
-        val_scaled,
-        soft_in,
-        soft_out,
-        head_vec_att,
-        head_mat_att,
-        head_out_att);
+        head_out);
 }

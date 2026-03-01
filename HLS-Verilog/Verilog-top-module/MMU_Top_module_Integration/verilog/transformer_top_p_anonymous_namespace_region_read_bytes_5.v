@@ -534,7 +534,7 @@ reg    ap_block_state4_on_subcall_done;
 reg   [2:0] c_fu_194;
 wire   [31:0] bytes_cast_fu_425_p1;
 wire   [0:0] icmp_ln915_fu_475_p2;
-wire   [0:0] tmp_297_fu_461_p3;
+wire   [0:0] tmp_505_fu_461_p3;
 wire   [0:0] xor_ln915_fu_480_p2;
 wire   [0:0] or_ln913_fu_486_p2;
 wire   [31:0] tmp_fu_511_p9;
@@ -766,7 +766,7 @@ transformer_top_p_anonymous_namespace_region_read_bytes_5_Pipeline_VITIS_LOOP_92
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U3972(
+sparsemux_9_2_32_1_1_U1863(
     .din0(r_chunks_size_read),
     .din1(r_chunks_size_read_22),
     .din2(r_chunks_size_read_23),
@@ -984,7 +984,7 @@ assign logical_22_fu_537_p2 = (logical_fu_190 - tmp_fu_511_p11);
 
 assign or_ln913_1_fu_492_p2 = (or_ln913_fu_486_p2 | icmp_ln913_fu_469_p2);
 
-assign or_ln913_fu_486_p2 = (xor_ln915_fu_480_p2 | tmp_297_fu_461_p3);
+assign or_ln913_fu_486_p2 = (xor_ln915_fu_480_p2 | tmp_505_fu_461_p3);
 
 assign p_ZN12_GLOBAL_N_110uram_banksE_0_address0 = grp_p_anonymous_namespace_region_read_bytes_5_Pipeline_VITIS_LOOP_923_2_fu_307_p_ZN12_GLOBAL_N_110uram_banksE_0_address0;
 
@@ -1182,7 +1182,7 @@ assign room_fu_551_p2 = (tmp_fu_511_p11 - logical_fu_190);
 
 assign take_fu_563_p3 = ((icmp_ln922_fu_557_p2[0:0] == 1'b1) ? remaining_fu_198 : room_fu_551_p2);
 
-assign tmp_297_fu_461_p3 = c_fu_194[32'd2];
+assign tmp_505_fu_461_p3 = c_fu_194[32'd2];
 
 assign tmp_fu_511_p10 = c_fu_194[1:0];
 

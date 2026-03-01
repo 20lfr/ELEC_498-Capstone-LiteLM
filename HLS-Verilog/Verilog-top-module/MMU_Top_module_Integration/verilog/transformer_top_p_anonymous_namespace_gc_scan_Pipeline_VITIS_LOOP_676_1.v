@@ -62,7 +62,7 @@ wire    ap_block_pp0_stage0;
 wire   [63:0] zext_ln676_fu_113_p1;
 reg   [4:0] i_fu_44;
 wire   [4:0] add_ln676_fu_107_p2;
-reg   [4:0] ap_sig_allocacmp_i_85;
+reg   [4:0] ap_sig_allocacmp_i_57;
 wire    ap_block_pp0_stage0_01001;
 reg    p_anonymous_namespace_regions_valid_ce0_local;
 reg    p_anonymous_namespace_regions_used_ce0_local;
@@ -209,9 +209,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_85 = 5'd0;
+        ap_sig_allocacmp_i_57 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_85 = i_fu_44;
+        ap_sig_allocacmp_i_57 = i_fu_44;
     end
 end
 
@@ -242,7 +242,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln676_fu_107_p2 = (ap_sig_allocacmp_i_85 + 5'd1);
+assign add_ln676_fu_107_p2 = (ap_sig_allocacmp_i_57 + 5'd1);
 
 assign any_live_1_fu_130_p2 = (or_ln677_fu_124_p2 | any_live_reg_81);
 
@@ -272,7 +272,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln676_fu_101_p2 = ((ap_sig_allocacmp_i_85 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln676_fu_101_p2 = ((ap_sig_allocacmp_i_57 == 5'd16) ? 1'b1 : 1'b0);
 
 assign or_ln677_fu_124_p2 = (p_anonymous_namespace_regions_valid_q0 & p_anonymous_namespace_regions_used_q0);
 
@@ -284,6 +284,6 @@ assign p_anonymous_namespace_regions_valid_address0 = zext_ln676_fu_113_p1;
 
 assign p_anonymous_namespace_regions_valid_ce0 = p_anonymous_namespace_regions_valid_ce0_local;
 
-assign zext_ln676_fu_113_p1 = ap_sig_allocacmp_i_85;
+assign zext_ln676_fu_113_p1 = ap_sig_allocacmp_i_57;
 
 endmodule //transformer_top_p_anonymous_namespace_gc_scan_Pipeline_VITIS_LOOP_676_1

@@ -52,7 +52,7 @@ wire   [2:0] retval_fu_122_p7;
     .def_WIDTH( 7 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 7 ))
-sparsemux_9_3_7_1_1_U4089(
+sparsemux_9_3_7_1_1_U1980(
     .din0(7'd16),
     .din1(7'd32),
     .din2(7'd4),

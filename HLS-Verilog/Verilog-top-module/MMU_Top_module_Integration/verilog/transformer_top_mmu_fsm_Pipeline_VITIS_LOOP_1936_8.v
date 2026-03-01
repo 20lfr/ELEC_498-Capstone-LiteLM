@@ -25,10 +25,10 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_1936_8 (
         p_anonymous_namespace_compute_q_headed_ce0,
         p_anonymous_namespace_compute_q_headed_we0,
         p_anonymous_namespace_compute_q_headed_d0,
-        p_anonymous_namespace_compute_q_head_56_address0,
-        p_anonymous_namespace_compute_q_head_56_ce0,
-        p_anonymous_namespace_compute_q_head_56_we0,
-        p_anonymous_namespace_compute_q_head_56_d0,
+        p_anonymous_namespace_compute_q_head_0_address0,
+        p_anonymous_namespace_compute_q_head_0_ce0,
+        p_anonymous_namespace_compute_q_head_0_we0,
+        p_anonymous_namespace_compute_q_head_0_d0,
         p_anonymous_namespace_compute_q_lane_address0,
         p_anonymous_namespace_compute_q_lane_ce0,
         p_anonymous_namespace_compute_q_lane_we0,
@@ -55,10 +55,10 @@ output  [1:0] p_anonymous_namespace_compute_q_headed_address0;
 output   p_anonymous_namespace_compute_q_headed_ce0;
 output   p_anonymous_namespace_compute_q_headed_we0;
 output  [0:0] p_anonymous_namespace_compute_q_headed_d0;
-output  [1:0] p_anonymous_namespace_compute_q_head_56_address0;
-output   p_anonymous_namespace_compute_q_head_56_ce0;
-output   p_anonymous_namespace_compute_q_head_56_we0;
-output  [1:0] p_anonymous_namespace_compute_q_head_56_d0;
+output  [1:0] p_anonymous_namespace_compute_q_head_0_address0;
+output   p_anonymous_namespace_compute_q_head_0_ce0;
+output   p_anonymous_namespace_compute_q_head_0_we0;
+output  [1:0] p_anonymous_namespace_compute_q_head_0_d0;
 output  [1:0] p_anonymous_namespace_compute_q_lane_address0;
 output   p_anonymous_namespace_compute_q_lane_ce0;
 output   p_anonymous_namespace_compute_q_lane_we0;
@@ -84,8 +84,8 @@ reg    p_anonymous_namespace_compute_q_type_we0_local;
 reg    p_anonymous_namespace_compute_q_type_ce0_local;
 reg    p_anonymous_namespace_compute_q_headed_we0_local;
 reg    p_anonymous_namespace_compute_q_headed_ce0_local;
-reg    p_anonymous_namespace_compute_q_head_56_we0_local;
-reg    p_anonymous_namespace_compute_q_head_56_ce0_local;
+reg    p_anonymous_namespace_compute_q_head_0_we0_local;
+reg    p_anonymous_namespace_compute_q_head_0_ce0_local;
 reg    p_anonymous_namespace_compute_q_lane_we0_local;
 reg    p_anonymous_namespace_compute_q_lane_ce0_local;
 reg    ap_done_reg;
@@ -200,17 +200,17 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        p_anonymous_namespace_compute_q_head_56_ce0_local = 1'b1;
+        p_anonymous_namespace_compute_q_head_0_ce0_local = 1'b1;
     end else begin
-        p_anonymous_namespace_compute_q_head_56_ce0_local = 1'b0;
+        p_anonymous_namespace_compute_q_head_0_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((icmp_ln1936_fu_132_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        p_anonymous_namespace_compute_q_head_56_we0_local = 1'b1;
+        p_anonymous_namespace_compute_q_head_0_we0_local = 1'b1;
     end else begin
-        p_anonymous_namespace_compute_q_head_56_we0_local = 1'b0;
+        p_anonymous_namespace_compute_q_head_0_we0_local = 1'b0;
     end
 end
 
@@ -305,13 +305,13 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln1936_fu_132_p2 = ((ap_sig_allocacmp_i == 3'd4) ? 1'b1 : 1'b0);
 
-assign p_anonymous_namespace_compute_q_head_56_address0 = zext_ln1936_fu_144_p1;
+assign p_anonymous_namespace_compute_q_head_0_address0 = zext_ln1936_fu_144_p1;
 
-assign p_anonymous_namespace_compute_q_head_56_ce0 = p_anonymous_namespace_compute_q_head_56_ce0_local;
+assign p_anonymous_namespace_compute_q_head_0_ce0 = p_anonymous_namespace_compute_q_head_0_ce0_local;
 
-assign p_anonymous_namespace_compute_q_head_56_d0 = 2'd0;
+assign p_anonymous_namespace_compute_q_head_0_d0 = 2'd0;
 
-assign p_anonymous_namespace_compute_q_head_56_we0 = p_anonymous_namespace_compute_q_head_56_we0_local;
+assign p_anonymous_namespace_compute_q_head_0_we0 = p_anonymous_namespace_compute_q_head_0_we0_local;
 
 assign p_anonymous_namespace_compute_q_headed_address0 = zext_ln1936_fu_144_p1;
 

@@ -977,14 +977,14 @@ wire   [14:0] trunc_ln877_3_fu_1348_p1;
 wire   [14:0] bank_byte_addr_fu_1371_p2;
 wire   [1:0] trunc_ln877_2_fu_1344_p1;
 wire   [1:0] or_ln881_fu_1381_p2;
-wire   [29:0] tmp_288_fu_1393_p4;
+wire   [29:0] tmp_492_fu_1393_p4;
 wire   [0:0] icmp_ln881_fu_1387_p2;
 wire   [0:0] icmp_ln883_fu_1403_p2;
-wire   [4:0] lshr_ln2_fu_1421_p4;
+wire   [4:0] lshr_ln1_fu_1421_p4;
 wire   [7:0] bank_assign_fu_1447_p9;
 wire   [5:0] trunc_ln877_1_fu_1325_p1;
 wire   [5:0] add_ln847_1_fu_1471_p2;
-wire   [4:0] lshr_ln3_fu_1477_p4;
+wire   [4:0] lshr_ln2_fu_1477_p4;
 wire   [5:0] add_ln847_2_fu_1492_p2;
 wire   [7:0] word_4_fu_1653_p3;
 wire   [4:0] bit_off_fu_1663_p3;
@@ -1095,7 +1095,7 @@ end
     .def_WIDTH( 15 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 15 ))
-sparsemux_9_2_15_1_1_U4168(
+sparsemux_9_2_15_1_1_U2059(
     .din0(r_chunks_offset_read),
     .din1(r_chunks_offset_read_16),
     .din2(r_chunks_offset_read_17),
@@ -1119,7 +1119,7 @@ sparsemux_9_2_15_1_1_U4168(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U4169(
+sparsemux_9_2_8_1_1_U2060(
     .din0(r_chunks_bank_read),
     .din1(r_chunks_bank_read_16),
     .din2(r_chunks_bank_read_17),
@@ -1231,7 +1231,7 @@ sparsemux_9_2_8_1_1_U4169(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 6 ),
     .dout_WIDTH( 32 ))
-sparsemux_97_6_32_1_1_U4170(
+sparsemux_97_6_32_1_1_U2061(
     .din0(p_ZN12_GLOBAL_N_110uram_banksE_0_q0),
     .din1(p_ZN12_GLOBAL_N_110uram_banksE_1_q0),
     .din2(p_ZN12_GLOBAL_N_110uram_banksE_2_q0),
@@ -3717,15 +3717,15 @@ assign icmp_ln878_fu_1319_p2 = ((take_1_fu_402 == 32'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln881_fu_1387_p2 = ((or_ln881_fu_1381_p2 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln883_fu_1403_p2 = ((tmp_288_fu_1393_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln883_fu_1403_p2 = ((tmp_492_fu_1393_p4 != 30'd0) ? 1'b1 : 1'b0);
 
 assign logical_3_fu_1622_p2 = (logical_2_reg_2105 + 32'd4);
 
 assign logical_4_fu_1568_p2 = (logical_2_reg_2105 + 32'd1);
 
-assign lshr_ln2_fu_1421_p4 = {{written_3_fu_1415_p2[5:1]}};
+assign lshr_ln1_fu_1421_p4 = {{written_3_fu_1415_p2[5:1]}};
 
-assign lshr_ln3_fu_1477_p4 = {{add_ln847_1_fu_1471_p2[5:1]}};
+assign lshr_ln2_fu_1477_p4 = {{add_ln847_1_fu_1471_p2[5:1]}};
 
 assign lshr_ln_fu_1329_p4 = {{written_9_fu_410[5:1]}};
 
@@ -4149,7 +4149,7 @@ assign take_3_fu_1627_p2 = ($signed(take_2_reg_2099) + $signed(32'd4294967292));
 
 assign take_4_fu_1573_p2 = ($signed(take_2_reg_2099) + $signed(32'd4294967295));
 
-assign tmp_288_fu_1393_p4 = {{take_1_fu_402[31:2]}};
+assign tmp_492_fu_1393_p4 = {{take_1_fu_402[31:2]}};
 
 assign tmp_s_fu_1352_p9 = 'bx;
 
@@ -4187,13 +4187,13 @@ assign zext_ln847_1_fu_1659_p1 = word_4_fu_1653_p3;
 
 assign zext_ln847_2_fu_1606_p1 = lshr_ln847_2_reg_2179;
 
-assign zext_ln847_fu_1487_p1 = lshr_ln3_fu_1477_p4;
+assign zext_ln847_fu_1487_p1 = lshr_ln2_fu_1477_p4;
 
 assign zext_ln877_fu_1339_p1 = lshr_ln_fu_1329_p4;
 
 assign zext_ln886_1_fu_1511_p1 = word_idx_reg_2145;
 
-assign zext_ln886_fu_1431_p1 = lshr_ln2_fu_1421_p4;
+assign zext_ln886_fu_1431_p1 = lshr_ln1_fu_1421_p4;
 
 always @ (posedge ap_clk) begin
     zext_ln877_reg_2121[63:5] <= 59'b00000000000000000000000000000000000000000000000000000000000;

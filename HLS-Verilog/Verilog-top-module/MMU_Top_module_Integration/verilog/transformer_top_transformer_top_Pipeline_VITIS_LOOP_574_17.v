@@ -70,7 +70,7 @@ reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 reg    dbg_out_buf_we0_local;
 wire   [7:0] select_ln576_fu_131_p3;
 reg    dbg_out_buf_ce0_local;
-wire   [4:0] lshr_ln5_fu_103_p4;
+wire   [4:0] lshr_ln4_fu_103_p4;
 wire   [0:0] trunc_ln574_fu_128_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -274,7 +274,7 @@ assign dbg_out_buf_we0 = dbg_out_buf_we0_local;
 
 assign icmp_ln574_fu_91_p2 = ((ap_sig_allocacmp_i_5 == 7'd64) ? 1'b1 : 1'b0);
 
-assign lshr_ln5_fu_103_p4 = {{ap_sig_allocacmp_i_5[5:1]}};
+assign lshr_ln4_fu_103_p4 = {{ap_sig_allocacmp_i_5[5:1]}};
 
 assign select_ln576_fu_131_p3 = ((trunc_ln574_fu_128_p1[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2_q0 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3_q0);
 
@@ -288,7 +288,7 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign trunc_ln574_fu_128_p1 = i_5_reg_147[0:0];
 
-assign zext_ln574_1_fu_113_p1 = lshr_ln5_fu_103_p4;
+assign zext_ln574_1_fu_113_p1 = lshr_ln4_fu_103_p4;
 
 assign zext_ln574_fu_124_p1 = i_5_reg_147;
 

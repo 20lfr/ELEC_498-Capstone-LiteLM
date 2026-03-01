@@ -13,18 +13,6 @@ module transformer_top_p_anonymous_namespace_build_head_in_buf_Pipeline_VITIS_LO
         ap_done,
         ap_idle,
         ap_ready,
-        lane_buf_7_address0,
-        lane_buf_7_ce0,
-        lane_buf_7_we0,
-        lane_buf_7_d0,
-        lane_buf_6_address0,
-        lane_buf_6_ce0,
-        lane_buf_6_we0,
-        lane_buf_6_d0,
-        lane_buf_5_address0,
-        lane_buf_5_ce0,
-        lane_buf_5_we0,
-        lane_buf_5_d0,
         lane_buf_4_address0,
         lane_buf_4_ce0,
         lane_buf_4_we0,
@@ -55,35 +43,23 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [3:0] lane_buf_7_address0;
-output   lane_buf_7_ce0;
-output   lane_buf_7_we0;
-output  [7:0] lane_buf_7_d0;
-output  [3:0] lane_buf_6_address0;
-output   lane_buf_6_ce0;
-output   lane_buf_6_we0;
-output  [7:0] lane_buf_6_d0;
-output  [3:0] lane_buf_5_address0;
-output   lane_buf_5_ce0;
-output   lane_buf_5_we0;
-output  [7:0] lane_buf_5_d0;
-output  [3:0] lane_buf_4_address0;
+output  [4:0] lane_buf_4_address0;
 output   lane_buf_4_ce0;
 output   lane_buf_4_we0;
 output  [7:0] lane_buf_4_d0;
-output  [3:0] lane_buf_3_address0;
+output  [4:0] lane_buf_3_address0;
 output   lane_buf_3_ce0;
 output   lane_buf_3_we0;
 output  [7:0] lane_buf_3_d0;
-output  [3:0] lane_buf_2_address0;
+output  [4:0] lane_buf_2_address0;
 output   lane_buf_2_ce0;
 output   lane_buf_2_we0;
 output  [7:0] lane_buf_2_d0;
-output  [3:0] lane_buf_1_address0;
+output  [4:0] lane_buf_1_address0;
 output   lane_buf_1_ce0;
 output   lane_buf_1_we0;
 output  [7:0] lane_buf_1_d0;
-output  [3:0] lane_buf_0_address0;
+output  [4:0] lane_buf_0_address0;
 output   lane_buf_0_ce0;
 output   lane_buf_0_we0;
 output  [7:0] lane_buf_0_d0;
@@ -93,23 +69,23 @@ reg ap_idle;
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg    ap_block_state1_pp0_stage0_iter0;
-wire   [0:0] icmp_ln1475_fu_186_p2;
+wire   [0:0] icmp_ln1475_fu_159_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln1475_fu_212_p1;
-reg   [6:0] i_fu_62;
-wire   [6:0] add_ln1475_fu_192_p2;
+wire   [63:0] zext_ln1475_fu_190_p1;
+reg   [6:0] phi_urem_fu_56;
+wire   [6:0] select_ln1475_fu_227_p3;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i_88;
-reg    lane_buf_6_we0_local;
-wire   [2:0] trunc_ln1475_fu_198_p1;
-reg    lane_buf_6_ce0_local;
-reg    lane_buf_5_we0_local;
-reg    lane_buf_5_ce0_local;
-reg    lane_buf_4_we0_local;
-reg    lane_buf_4_ce0_local;
+reg   [6:0] ap_sig_allocacmp_phi_urem_load;
+reg   [14:0] phi_mul_fu_60;
+wire   [14:0] add_ln1475_3_fu_174_p2;
+reg   [14:0] ap_sig_allocacmp_phi_mul_load;
+reg   [6:0] i_fu_64;
+wire   [6:0] add_ln1475_fu_165_p2;
+reg   [6:0] ap_sig_allocacmp_i_60;
 reg    lane_buf_3_we0_local;
+wire   [2:0] trunc_ln1475_fu_199_p1;
 reg    lane_buf_3_ce0_local;
 reg    lane_buf_2_we0_local;
 reg    lane_buf_2_ce0_local;
@@ -117,9 +93,11 @@ reg    lane_buf_1_we0_local;
 reg    lane_buf_1_ce0_local;
 reg    lane_buf_0_we0_local;
 reg    lane_buf_0_ce0_local;
-reg    lane_buf_7_we0_local;
-reg    lane_buf_7_ce0_local;
-wire   [3:0] lshr_ln_fu_202_p4;
+reg    lane_buf_4_we0_local;
+reg    lane_buf_4_ce0_local;
+wire   [4:0] tmp_fu_180_p4;
+wire   [0:0] icmp_ln1475_2_fu_221_p2;
+wire   [6:0] add_ln1475_4_fu_215_p2;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -133,7 +111,9 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_fu_62 = 7'd0;
+#0 phi_urem_fu_56 = 7'd0;
+#0 phi_mul_fu_60 = 15'd0;
+#0 i_fu_64 = 7'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -174,10 +154,30 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((icmp_ln1475_fu_186_p2 == 1'd0)) begin
-            i_fu_62 <= add_ln1475_fu_192_p2;
+        if ((icmp_ln1475_fu_159_p2 == 1'd0)) begin
+            i_fu_64 <= add_ln1475_fu_165_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_62 <= 7'd0;
+            i_fu_64 <= 7'd0;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+        if ((icmp_ln1475_fu_159_p2 == 1'd0)) begin
+            phi_mul_fu_60 <= add_ln1475_3_fu_174_p2;
+        end else if ((ap_loop_init == 1'b1)) begin
+            phi_mul_fu_60 <= 15'd0;
+        end
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+        if ((icmp_ln1475_fu_159_p2 == 1'd0)) begin
+            phi_urem_fu_56 <= select_ln1475_fu_227_p3;
+        end else if ((ap_loop_init == 1'b1)) begin
+            phi_urem_fu_56 <= 7'd0;
         end
     end
 end
@@ -191,7 +191,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((icmp_ln1475_fu_159_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -223,10 +223,26 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_88 = 7'd0;
+    if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
+        ap_sig_allocacmp_i_60 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_88 = i_fu_62;
+        ap_sig_allocacmp_i_60 = i_fu_64;
+    end
+end
+
+always @ (*) begin
+    if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
+        ap_sig_allocacmp_phi_mul_load = 15'd0;
+    end else begin
+        ap_sig_allocacmp_phi_mul_load = phi_mul_fu_60;
+    end
+end
+
+always @ (*) begin
+    if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
+        ap_sig_allocacmp_phi_urem_load = 7'd0;
+    end else begin
+        ap_sig_allocacmp_phi_urem_load = phi_urem_fu_56;
     end
 end
 
@@ -239,7 +255,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd0))) begin
+    if (((trunc_ln1475_fu_199_p1 == 3'd0) & (icmp_ln1475_fu_159_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         lane_buf_0_we0_local = 1'b1;
     end else begin
         lane_buf_0_we0_local = 1'b0;
@@ -255,7 +271,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd1))) begin
+    if (((trunc_ln1475_fu_199_p1 == 3'd1) & (icmp_ln1475_fu_159_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         lane_buf_1_we0_local = 1'b1;
     end else begin
         lane_buf_1_we0_local = 1'b0;
@@ -271,7 +287,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd2))) begin
+    if (((trunc_ln1475_fu_199_p1 == 3'd2) & (icmp_ln1475_fu_159_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         lane_buf_2_we0_local = 1'b1;
     end else begin
         lane_buf_2_we0_local = 1'b0;
@@ -287,7 +303,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd3))) begin
+    if (((trunc_ln1475_fu_199_p1 == 3'd3) & (icmp_ln1475_fu_159_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         lane_buf_3_we0_local = 1'b1;
     end else begin
         lane_buf_3_we0_local = 1'b0;
@@ -303,58 +319,10 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd4))) begin
+    if ((~(trunc_ln1475_fu_199_p1 == 3'd3) & ~(trunc_ln1475_fu_199_p1 == 3'd0) & ~(trunc_ln1475_fu_199_p1 == 3'd1) & ~(trunc_ln1475_fu_199_p1 == 3'd2) & (icmp_ln1475_fu_159_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         lane_buf_4_we0_local = 1'b1;
     end else begin
         lane_buf_4_we0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        lane_buf_5_ce0_local = 1'b1;
-    end else begin
-        lane_buf_5_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd5))) begin
-        lane_buf_5_we0_local = 1'b1;
-    end else begin
-        lane_buf_5_we0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        lane_buf_6_ce0_local = 1'b1;
-    end else begin
-        lane_buf_6_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd6))) begin
-        lane_buf_6_we0_local = 1'b1;
-    end else begin
-        lane_buf_6_we0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        lane_buf_7_ce0_local = 1'b1;
-    end else begin
-        lane_buf_7_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((icmp_ln1475_fu_186_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1) & (trunc_ln1475_fu_198_p1 == 3'd7))) begin
-        lane_buf_7_we0_local = 1'b1;
-    end else begin
-        lane_buf_7_we0_local = 1'b0;
     end
 end
 
@@ -369,7 +337,11 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln1475_fu_192_p2 = (ap_sig_allocacmp_i_88 + 7'd1);
+assign add_ln1475_3_fu_174_p2 = (ap_sig_allocacmp_phi_mul_load + 15'd205);
+
+assign add_ln1475_4_fu_215_p2 = (ap_sig_allocacmp_phi_urem_load + 7'd1);
+
+assign add_ln1475_fu_165_p2 = (ap_sig_allocacmp_i_60 + 7'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -383,9 +355,11 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln1475_fu_186_p2 = ((ap_sig_allocacmp_i_88 == 7'd96) ? 1'b1 : 1'b0);
+assign icmp_ln1475_2_fu_221_p2 = ((ap_sig_allocacmp_phi_urem_load == 7'd4) ? 1'b1 : 1'b0);
 
-assign lane_buf_0_address0 = zext_ln1475_fu_212_p1;
+assign icmp_ln1475_fu_159_p2 = ((ap_sig_allocacmp_i_60 == 7'd96) ? 1'b1 : 1'b0);
+
+assign lane_buf_0_address0 = zext_ln1475_fu_190_p1;
 
 assign lane_buf_0_ce0 = lane_buf_0_ce0_local;
 
@@ -393,7 +367,7 @@ assign lane_buf_0_d0 = 8'd0;
 
 assign lane_buf_0_we0 = lane_buf_0_we0_local;
 
-assign lane_buf_1_address0 = zext_ln1475_fu_212_p1;
+assign lane_buf_1_address0 = zext_ln1475_fu_190_p1;
 
 assign lane_buf_1_ce0 = lane_buf_1_ce0_local;
 
@@ -401,7 +375,7 @@ assign lane_buf_1_d0 = 8'd0;
 
 assign lane_buf_1_we0 = lane_buf_1_we0_local;
 
-assign lane_buf_2_address0 = zext_ln1475_fu_212_p1;
+assign lane_buf_2_address0 = zext_ln1475_fu_190_p1;
 
 assign lane_buf_2_ce0 = lane_buf_2_ce0_local;
 
@@ -409,7 +383,7 @@ assign lane_buf_2_d0 = 8'd0;
 
 assign lane_buf_2_we0 = lane_buf_2_we0_local;
 
-assign lane_buf_3_address0 = zext_ln1475_fu_212_p1;
+assign lane_buf_3_address0 = zext_ln1475_fu_190_p1;
 
 assign lane_buf_3_ce0 = lane_buf_3_ce0_local;
 
@@ -417,7 +391,7 @@ assign lane_buf_3_d0 = 8'd0;
 
 assign lane_buf_3_we0 = lane_buf_3_we0_local;
 
-assign lane_buf_4_address0 = zext_ln1475_fu_212_p1;
+assign lane_buf_4_address0 = zext_ln1475_fu_190_p1;
 
 assign lane_buf_4_ce0 = lane_buf_4_ce0_local;
 
@@ -425,34 +399,12 @@ assign lane_buf_4_d0 = 8'd0;
 
 assign lane_buf_4_we0 = lane_buf_4_we0_local;
 
-assign lane_buf_5_address0 = zext_ln1475_fu_212_p1;
+assign select_ln1475_fu_227_p3 = ((icmp_ln1475_2_fu_221_p2[0:0] == 1'b1) ? 7'd0 : add_ln1475_4_fu_215_p2);
 
-assign lane_buf_5_ce0 = lane_buf_5_ce0_local;
+assign tmp_fu_180_p4 = {{ap_sig_allocacmp_phi_mul_load[14:10]}};
 
-assign lane_buf_5_d0 = 8'd0;
+assign trunc_ln1475_fu_199_p1 = ap_sig_allocacmp_phi_urem_load[2:0];
 
-assign lane_buf_5_we0 = lane_buf_5_we0_local;
-
-assign lane_buf_6_address0 = zext_ln1475_fu_212_p1;
-
-assign lane_buf_6_ce0 = lane_buf_6_ce0_local;
-
-assign lane_buf_6_d0 = 8'd0;
-
-assign lane_buf_6_we0 = lane_buf_6_we0_local;
-
-assign lane_buf_7_address0 = zext_ln1475_fu_212_p1;
-
-assign lane_buf_7_ce0 = lane_buf_7_ce0_local;
-
-assign lane_buf_7_d0 = 8'd0;
-
-assign lane_buf_7_we0 = lane_buf_7_we0_local;
-
-assign lshr_ln_fu_202_p4 = {{ap_sig_allocacmp_i_88[6:3]}};
-
-assign trunc_ln1475_fu_198_p1 = ap_sig_allocacmp_i_88[2:0];
-
-assign zext_ln1475_fu_212_p1 = lshr_ln_fu_202_p4;
+assign zext_ln1475_fu_190_p1 = tmp_fu_180_p4;
 
 endmodule //transformer_top_p_anonymous_namespace_build_head_in_buf_Pipeline_VITIS_LOOP_1475_1

@@ -53,7 +53,7 @@ wire   [63:0] zext_ln688_fu_92_p1;
 reg   [4:0] i_fu_40;
 wire   [4:0] add_ln688_fu_86_p2;
 wire    ap_loop_init;
-reg   [4:0] ap_sig_allocacmp_i_84;
+reg   [4:0] ap_sig_allocacmp_i_56;
 reg    p_anonymous_namespace_regions_valid_we0_local;
 reg    p_anonymous_namespace_regions_valid_ce0_local;
 reg    p_anonymous_namespace_regions_used_we0_local;
@@ -162,9 +162,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_84 = 5'd0;
+        ap_sig_allocacmp_i_56 = 5'd0;
     end else begin
-        ap_sig_allocacmp_i_84 = i_fu_40;
+        ap_sig_allocacmp_i_56 = i_fu_40;
     end
 end
 
@@ -211,7 +211,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln688_fu_86_p2 = (ap_sig_allocacmp_i_84 + 5'd1);
+assign add_ln688_fu_86_p2 = (ap_sig_allocacmp_i_56 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -225,7 +225,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln688_fu_80_p2 = ((ap_sig_allocacmp_i_84 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln688_fu_80_p2 = ((ap_sig_allocacmp_i_56 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_anonymous_namespace_regions_used_address0 = zext_ln688_fu_92_p1;
 
@@ -243,6 +243,6 @@ assign p_anonymous_namespace_regions_valid_d0 = 1'd0;
 
 assign p_anonymous_namespace_regions_valid_we0 = p_anonymous_namespace_regions_valid_we0_local;
 
-assign zext_ln688_fu_92_p1 = ap_sig_allocacmp_i_84;
+assign zext_ln688_fu_92_p1 = ap_sig_allocacmp_i_56;
 
 endmodule //transformer_top_p_anonymous_namespace_gc_scan_Pipeline_VITIS_LOOP_688_3
