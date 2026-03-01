@@ -76,10 +76,10 @@ reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short
 reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter1_reg;
 reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter2_reg;
 reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter3_reg;
-reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525;
-reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter1_reg;
-reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter2_reg;
-reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter3_reg;
+reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525;
+reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter1_reg;
+reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter2_reg;
+reg   [3:0] drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter3_reg;
 reg   [9:0] c_k15_reg_531;
 reg   [9:0] c_k15_reg_531_pp0_iter2_reg;
 wire  signed [15:0] x0_q15_fu_175_p3;
@@ -119,26 +119,26 @@ wire   [31:0] select_ln167_fu_243_p3;
 (* use_dsp48 = "no" *) wire   [31:0] add_ln167_fu_251_p2;
 wire   [16:0] y0_q15_fu_256_p4;
 wire  signed [31:0] grp_fu_488_p3;
-wire   [0:0] tmp_149_fu_270_p3;
+wire   [0:0] tmp_165_fu_270_p3;
 wire   [31:0] select_ln168_fu_277_p3;
 (* use_dsp48 = "no" *) wire   [31:0] add_ln168_fu_285_p2;
 wire   [16:0] y1_q15_fu_290_p4;
-wire   [0:0] tmp_150_fu_304_p3;
+wire   [0:0] tmp_166_fu_304_p3;
 wire   [17:0] select_ln170_fu_312_p3;
 wire  signed [17:0] sext_ln167_fu_266_p1;
 wire   [17:0] add_ln170_fu_320_p2;
-wire   [0:0] tmp_151_fu_336_p3;
+wire   [0:0] tmp_167_fu_336_p3;
 wire   [17:0] select_ln171_fu_344_p3;
 wire  signed [17:0] sext_ln168_fu_300_p1;
 wire   [17:0] add_ln171_fu_352_p2;
-wire   [2:0] tmp_152_fu_368_p4;
+wire   [2:0] tmp_168_fu_368_p4;
 wire   [9:0] trunc_ln170_s_fu_326_p4;
 wire   [0:0] icmp_ln91_fu_378_p2;
 wire   [0:0] icmp_ln94_fu_384_p2;
 wire   [0:0] or_ln91_fu_408_p2;
 wire   [7:0] select_ln91_fu_400_p3;
 wire   [7:0] trunc_ln97_s_fu_390_p4;
-wire   [2:0] tmp_153_fu_423_p4;
+wire   [2:0] tmp_169_fu_423_p4;
 wire   [9:0] trunc_ln171_s_fu_358_p4;
 wire   [0:0] icmp_ln91_1_fu_433_p2;
 wire   [0:0] icmp_ln94_1_fu_439_p2;
@@ -201,7 +201,7 @@ transformer_top_mul_16s_15ns_31_1_1 #(
     .din0_WIDTH( 16 ),
     .din1_WIDTH( 15 ),
     .dout_WIDTH( 31 ))
-mul_16s_15ns_31_1_1_U3275(
+mul_16s_15ns_31_1_1_U3276(
     .din0(x0_q15_reg_536_pp0_iter2_reg),
     .din1(mul_ln162_fu_213_p1),
     .dout(mul_ln162_fu_213_p2)
@@ -213,7 +213,7 @@ transformer_top_mul_16s_15ns_31_1_1 #(
     .din0_WIDTH( 16 ),
     .din1_WIDTH( 15 ),
     .dout_WIDTH( 31 ))
-mul_16s_15ns_31_1_1_U3276(
+mul_16s_15ns_31_1_1_U3277(
     .din0(x1_q15_reg_541_pp0_iter2_reg),
     .din1(mul_ln165_fu_226_p1),
     .dout(mul_ln165_fu_226_p2)
@@ -226,7 +226,7 @@ transformer_top_mac_mulsub_16s_13ns_31s_32_4_1 #(
     .din1_WIDTH( 13 ),
     .din2_WIDTH( 31 ),
     .dout_WIDTH( 32 ))
-mac_mulsub_16s_13ns_31s_32_4_1_U3277(
+mac_mulsub_16s_13ns_31s_32_4_1_U3278(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(x1_q15_fu_183_p3),
@@ -243,7 +243,7 @@ transformer_top_mac_muladd_16s_13ns_31s_32_4_1 #(
     .din1_WIDTH( 13 ),
     .din2_WIDTH( 31 ),
     .dout_WIDTH( 32 ))
-mac_muladd_16s_13ns_31s_32_4_1_U3278(
+mac_muladd_16s_13ns_31s_32_4_1_U3279(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(x0_q15_fu_175_p3),
@@ -345,8 +345,8 @@ always @ (posedge ap_clk) begin
         ap_loop_exit_ready_pp0_iter1_reg <= ap_loop_exit_ready;
         ap_loop_exit_ready_pp0_iter2_reg <= ap_loop_exit_ready_pp0_iter1_reg;
         c_k15_reg_531 <= rope_lut_ROPE_PAIR1_COS_Q15_q0;
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525 <= zext_ln207_fu_154_p1;
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter1_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525;
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525 <= zext_ln207_fu_154_p1;
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter1_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525;
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519 <= zext_ln207_fu_154_p1;
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter1_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519;
         x0_q15_reg_536[15 : 8] <= x0_q15_fu_175_p3[15 : 8];
@@ -358,8 +358,8 @@ always @ (posedge ap_clk) begin
     if ((1'b0 == ap_block_pp0_stage0_11001)) begin
         ap_loop_exit_ready_pp0_iter3_reg <= ap_loop_exit_ready_pp0_iter2_reg;
         c_k15_reg_531_pp0_iter2_reg <= c_k15_reg_531;
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter2_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter1_reg;
-        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter3_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter2_reg;
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter2_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter1_reg;
+        drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter3_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter2_reg;
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter2_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter1_reg;
         drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter3_reg <= drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_reg_519_pp0_iter2_reg;
         x0_q15_reg_536_pp0_iter2_reg[15 : 8] <= x0_q15_reg_536[15 : 8];
@@ -516,7 +516,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_78_address0 = drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_919_reg_525_pp0_iter3_reg;
+assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_78_address0 = drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_37_915_reg_525_pp0_iter3_reg;
 
 assign drive_headed_compute_controller_ComputeHeadCtx_2_bool_unsigned_short_unsigned_char_const_96_unsigned_char_64_bool_head_78_address1 = zext_ln207_fu_154_p1;
 
@@ -546,9 +546,9 @@ assign grp_fu_488_p1 = zext_ln163_fu_199_p1;
 
 assign icmp_ln207_fu_142_p2 = ((ap_sig_allocacmp_t_12 == 5'd16) ? 1'b1 : 1'b0);
 
-assign icmp_ln91_1_fu_433_p2 = (($signed(tmp_153_fu_423_p4) > $signed(3'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln91_1_fu_433_p2 = (($signed(tmp_169_fu_423_p4) > $signed(3'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln91_fu_378_p2 = (($signed(tmp_152_fu_368_p4) > $signed(3'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln91_fu_378_p2 = (($signed(tmp_168_fu_368_p4) > $signed(3'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln94_1_fu_439_p2 = (($signed(trunc_ln171_s_fu_358_p4) < $signed(10'd896)) ? 1'b1 : 1'b0);
 
@@ -574,11 +574,11 @@ assign rope_lut_ROPE_PAIR1_SIN_Q15_address0 = zext_ln142_fu_164_p1;
 
 assign select_ln167_fu_243_p3 = ((tmp_fu_236_p3[0:0] == 1'b1) ? 32'd4294950912 : 32'd16384);
 
-assign select_ln168_fu_277_p3 = ((tmp_149_fu_270_p3[0:0] == 1'b1) ? 32'd4294950912 : 32'd16384);
+assign select_ln168_fu_277_p3 = ((tmp_165_fu_270_p3[0:0] == 1'b1) ? 32'd4294950912 : 32'd16384);
 
-assign select_ln170_fu_312_p3 = ((tmp_150_fu_304_p3[0:0] == 1'b1) ? 18'd262016 : 18'd128);
+assign select_ln170_fu_312_p3 = ((tmp_166_fu_304_p3[0:0] == 1'b1) ? 18'd262016 : 18'd128);
 
-assign select_ln171_fu_344_p3 = ((tmp_151_fu_336_p3[0:0] == 1'b1) ? 18'd262016 : 18'd128);
+assign select_ln171_fu_344_p3 = ((tmp_167_fu_336_p3[0:0] == 1'b1) ? 18'd262016 : 18'd128);
 
 assign select_ln91_2_fu_455_p3 = ((icmp_ln91_1_fu_433_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
@@ -592,15 +592,15 @@ assign sext_ln168_fu_300_p1 = $signed(y1_q15_fu_290_p4);
 
 assign t_13_fu_148_p2 = (ap_sig_allocacmp_t_12 + 5'd1);
 
-assign tmp_149_fu_270_p3 = grp_fu_488_p3[32'd31];
+assign tmp_165_fu_270_p3 = grp_fu_488_p3[32'd31];
 
-assign tmp_150_fu_304_p3 = add_ln167_fu_251_p2[32'd31];
+assign tmp_166_fu_304_p3 = add_ln167_fu_251_p2[32'd31];
 
-assign tmp_151_fu_336_p3 = add_ln168_fu_285_p2[32'd31];
+assign tmp_167_fu_336_p3 = add_ln168_fu_285_p2[32'd31];
 
-assign tmp_152_fu_368_p4 = {{add_ln170_fu_320_p2[17:15]}};
+assign tmp_168_fu_368_p4 = {{add_ln170_fu_320_p2[17:15]}};
 
-assign tmp_153_fu_423_p4 = {{add_ln171_fu_352_p2[17:15]}};
+assign tmp_169_fu_423_p4 = {{add_ln171_fu_352_p2[17:15]}};
 
 assign tmp_fu_236_p3 = grp_fu_478_p3[32'd31];
 

@@ -23,7 +23,7 @@ struct ComputeQueueEntry {
 // ---------------------------------------------------------------------------
 // Static memory resources
 // ---------------------------------------------------------------------------
-static uint8_t uram_banks[URAM_BANKS][URAM_BANK_BYTES];
+static axi_gmem_word_t uram_banks[URAM_BANKS][URAM_BANK_WORDS];
 
 static uint32_t bank_offsets[URAM_BANKS];
 
@@ -819,6 +819,43 @@ static int get_or_create_region(Tag tag, int layer, int head, int tile, uint32_t
                          part_bytes, default_retain(tag), overflow_flag);
 }
 
+static inline uint8_t uram_read_byte(uint8_t bank, uint32_t byte_addr) {
+#pragma HLS INLINE
+    const uint32_t word_idx = byte_addr / URAM_BANK_WORD_BYTES;
+    const uint32_t bit_off = (byte_addr % URAM_BANK_WORD_BYTES) * 8u;
+    const axi_gmem_word_t word = uram_banks[bank][word_idx];
+    return static_cast<uint8_t>((word >> bit_off) & axi_gmem_word_t(0xFFu));
+}
+
+static inline void uram_write_byte(uint8_t bank, uint32_t byte_addr, uint8_t value) {
+#pragma HLS INLINE
+    const uint32_t word_idx = byte_addr / URAM_BANK_WORD_BYTES;
+    const uint32_t bit_off = (byte_addr % URAM_BANK_WORD_BYTES) * 8u;
+    axi_gmem_word_t word = uram_banks[bank][word_idx];
+    const axi_gmem_word_t mask = axi_gmem_word_t(0xFFu) << bit_off;
+    word = (word & ~mask) | (axi_gmem_word_t(value) << bit_off);
+    uram_banks[bank][word_idx] = word;
+}
+
+static inline axi_gmem_word_t pack_uram_word(const uint8_t *src, uint32_t byte_offset) {
+#pragma HLS INLINE
+    axi_gmem_word_t word = 0;
+    for (uint32_t i = 0; i < URAM_BANK_WORD_BYTES; ++i) {
+#pragma HLS UNROLL
+        word |= (axi_gmem_word_t(src[byte_offset + i]) << (i * 8u));
+    }
+    return word;
+}
+
+static inline void unpack_uram_word(axi_gmem_word_t word, uint8_t *dst, uint32_t byte_offset) {
+#pragma HLS INLINE
+    for (uint32_t i = 0; i < URAM_BANK_WORD_BYTES; ++i) {
+#pragma HLS UNROLL
+        dst[byte_offset + i] =
+            static_cast<uint8_t>((word >> (i * 8u)) & axi_gmem_word_t(0xFFu));
+    }
+}
+
 static bool region_write_bytes(const Region &r, uint32_t dst_offset, const uint8_t *src, uint32_t bytes) {
 #pragma HLS INLINE off
     if (dst_offset + bytes > r.total_bytes) return false;
@@ -835,13 +872,30 @@ static bool region_write_bytes(const Region &r, uint32_t dst_offset, const uint8
             continue;
         }
         const uint32_t room = ck.size - logical;
-        const uint32_t take = (remaining < room) ? remaining : room;
-        for (uint32_t i = 0; i < take; ++i) {
+        uint32_t take = (remaining < room) ? remaining : room;
+        while (take > 0) {
+#pragma HLS LOOP_FLATTEN off
+            const uint32_t bank_byte_addr = ck.offset + logical;
+            const bool word_aligned = ((bank_byte_addr % URAM_BANK_WORD_BYTES) == 0u) &&
+                                      ((written % URAM_BANK_WORD_BYTES) == 0u) &&
+                                      (take >= URAM_BANK_WORD_BYTES);
+            if (word_aligned) {
 #pragma HLS PIPELINE II=1
-            uram_banks[ck.bank][ck.offset + logical + i] = src[written + i];
+                uram_banks[ck.bank][bank_byte_addr / URAM_BANK_WORD_BYTES] =
+                    pack_uram_word(src, written);
+                written += URAM_BANK_WORD_BYTES;
+                remaining -= URAM_BANK_WORD_BYTES;
+                logical += URAM_BANK_WORD_BYTES;
+                take -= URAM_BANK_WORD_BYTES;
+            } else {
+#pragma HLS PIPELINE II=1
+                uram_write_byte(ck.bank, bank_byte_addr, src[written]);
+                written += 1;
+                remaining -= 1;
+                logical += 1;
+                take -= 1;
+            }
         }
-        written += take;
-        remaining -= take;
         logical = 0;
     }
     return (remaining == 0);
@@ -863,13 +917,30 @@ static bool region_read_bytes(const Region &r, uint32_t src_offset, uint8_t *dst
             continue;
         }
         const uint32_t room = ck.size - logical;
-        const uint32_t take = (remaining < room) ? remaining : room;
-        for (uint32_t i = 0; i < take; ++i) {
+        uint32_t take = (remaining < room) ? remaining : room;
+        while (take > 0) {
+#pragma HLS LOOP_FLATTEN off
+            const uint32_t bank_byte_addr = ck.offset + logical;
+            const bool word_aligned = ((bank_byte_addr % URAM_BANK_WORD_BYTES) == 0u) &&
+                                      ((copied % URAM_BANK_WORD_BYTES) == 0u) &&
+                                      (take >= URAM_BANK_WORD_BYTES);
+            if (word_aligned) {
 #pragma HLS PIPELINE II=1
-            dst[copied + i] = uram_banks[ck.bank][ck.offset + logical + i];
+                unpack_uram_word(uram_banks[ck.bank][bank_byte_addr / URAM_BANK_WORD_BYTES],
+                                 dst, copied);
+                copied += URAM_BANK_WORD_BYTES;
+                remaining -= URAM_BANK_WORD_BYTES;
+                logical += URAM_BANK_WORD_BYTES;
+                take -= URAM_BANK_WORD_BYTES;
+            } else {
+#pragma HLS PIPELINE II=1
+                dst[copied] = uram_read_byte(ck.bank, bank_byte_addr);
+                copied += 1;
+                remaining -= 1;
+                logical += 1;
+                take -= 1;
+            }
         }
-        copied += take;
-        remaining -= take;
         logical = 0;
     }
     return (remaining == 0);
@@ -1759,6 +1830,7 @@ void mmu_fsm(
 #pragma HLS INLINE off
 #pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
 #pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
+#pragma HLS ARRAY_PARTITION variable=uram_banks complete dim=1
 
 #pragma HLS BIND_STORAGE variable=uram_banks type=ram_t2p impl=uram
 
