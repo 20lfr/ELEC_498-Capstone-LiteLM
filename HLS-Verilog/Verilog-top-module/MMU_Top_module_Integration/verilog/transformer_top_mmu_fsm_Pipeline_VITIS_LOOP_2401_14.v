@@ -98,7 +98,7 @@ reg    p_ZN12_GLOBAL_N_17scratchE_3_ce0_local;
 reg    dma_tx_buf_local_ce1_local;
 reg    dma_tx_buf_local_we0_local;
 reg    dma_tx_buf_local_ce0_local;
-wire   [10:0] lshr_ln_fu_188_p4;
+wire   [10:0] lshr_ln6_fu_188_p4;
 wire   [7:0] value_assign_fu_226_p9;
 wire   [4:0] shift_fu_249_p3;
 wire   [31:0] zext_ln116_fu_256_p1;
@@ -148,7 +148,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U5352(
+sparsemux_9_2_8_1_1_U2815(
     .din0(p_ZN12_GLOBAL_N_17scratchE_0_q0),
     .din1(p_ZN12_GLOBAL_N_17scratchE_1_q0),
     .din2(p_ZN12_GLOBAL_N_17scratchE_2_q0),
@@ -400,7 +400,7 @@ assign dma_tx_buf_local_we0 = dma_tx_buf_local_we0_local;
 
 assign icmp_ln2401_fu_173_p2 = ((i_34_fu_76 == select_ln2401) ? 1'b1 : 1'b0);
 
-assign lshr_ln_fu_188_p4 = {{i_34_fu_76[12:2]}};
+assign lshr_ln6_fu_188_p4 = {{i_34_fu_76[12:2]}};
 
 assign p_ZN12_GLOBAL_N_17scratchE_0_address0 = zext_ln2401_fu_198_p1;
 
@@ -438,6 +438,6 @@ assign zext_ln116_fu_256_p1 = shift_fu_249_p3;
 
 assign zext_ln119_fu_276_p1 = value_assign_fu_226_p11;
 
-assign zext_ln2401_fu_198_p1 = lshr_ln_fu_188_p4;
+assign zext_ln2401_fu_198_p1 = lshr_ln6_fu_188_p4;
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_2401_14

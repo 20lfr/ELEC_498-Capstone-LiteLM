@@ -99,7 +99,7 @@ reg    p_ZN12_GLOBAL_N_17scratchE_0_we0_local;
 reg    p_ZN12_GLOBAL_N_17scratchE_0_ce0_local;
 reg    p_ZN12_GLOBAL_N_17scratchE_3_we0_local;
 reg    p_ZN12_GLOBAL_N_17scratchE_3_ce0_local;
-wire   [10:0] lshr_ln_fu_155_p4;
+wire   [10:0] lshr_ln7_fu_155_p4;
 wire   [4:0] shift_fu_189_p3;
 wire   [31:0] zext_ln109_fu_196_p1;
 wire   [31:0] lshr_ln110_fu_200_p2;
@@ -347,7 +347,7 @@ assign icmp_ln2313_fu_139_p2 = ((ap_sig_allocacmp_i == chunk_bytes) ? 1'b1 : 1'b
 
 assign lshr_ln110_fu_200_p2 = dma_rx_buf_local_q0 >> zext_ln109_fu_196_p1;
 
-assign lshr_ln_fu_155_p4 = {{ap_sig_allocacmp_i[12:2]}};
+assign lshr_ln7_fu_155_p4 = {{ap_sig_allocacmp_i[12:2]}};
 
 assign p_ZN12_GLOBAL_N_17scratchE_0_address0 = p_ZN12_GLOBAL_N_17scratchE_0_addr_reg_234;
 
@@ -389,6 +389,6 @@ assign trunc_ln2313_fu_151_p1 = ap_sig_allocacmp_i[1:0];
 
 assign zext_ln109_fu_196_p1 = shift_fu_189_p3;
 
-assign zext_ln2313_fu_165_p1 = lshr_ln_fu_155_p4;
+assign zext_ln2313_fu_165_p1 = lshr_ln7_fu_155_p4;
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_2313_13

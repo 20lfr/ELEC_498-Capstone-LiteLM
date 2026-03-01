@@ -955,7 +955,7 @@ wire   [14:0] trunc_ln877_5_fu_1288_p1;
 wire   [14:0] bank_byte_addr_fu_1311_p2;
 wire   [1:0] trunc_ln877_4_fu_1284_p1;
 wire   [1:0] or_ln881_fu_1321_p2;
-wire   [29:0] tmp_289_fu_1333_p4;
+wire   [29:0] tmp_493_fu_1333_p4;
 wire   [0:0] icmp_ln881_fu_1327_p2;
 wire   [0:0] icmp_ln883_fu_1343_p2;
 wire   [7:0] bank_assign_fu_1371_p9;
@@ -1067,7 +1067,7 @@ end
     .def_WIDTH( 15 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 15 ))
-sparsemux_9_2_15_1_1_U3764(
+sparsemux_9_2_15_1_1_U1655(
     .din0(r_chunks_offset_read),
     .din1(r_chunks_offset_read_4),
     .din2(r_chunks_offset_read_5),
@@ -1091,7 +1091,7 @@ sparsemux_9_2_15_1_1_U3764(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U3765(
+sparsemux_9_2_8_1_1_U1656(
     .din0(r_chunks_bank_read),
     .din1(r_chunks_bank_read_4),
     .din2(r_chunks_bank_read_5),
@@ -1203,7 +1203,7 @@ sparsemux_9_2_8_1_1_U3765(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 6 ),
     .dout_WIDTH( 32 ))
-sparsemux_97_6_32_1_1_U3766(
+sparsemux_97_6_32_1_1_U1657(
     .din0(p_ZN12_GLOBAL_N_110uram_banksE_0_q0),
     .din1(p_ZN12_GLOBAL_N_110uram_banksE_1_q0),
     .din2(p_ZN12_GLOBAL_N_110uram_banksE_2_q0),
@@ -3649,7 +3649,7 @@ assign icmp_ln878_fu_1274_p2 = ((take_5_fu_398 == 32'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln881_fu_1327_p2 = ((or_ln881_fu_1321_p2 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln883_fu_1343_p2 = ((tmp_289_fu_1333_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln883_fu_1343_p2 = ((tmp_493_fu_1333_p4 != 30'd0) ? 1'b1 : 1'b0);
 
 assign logical_8_fu_1523_p2 = (logical_7_reg_1986 + 32'd4);
 
@@ -4061,7 +4061,7 @@ assign take_7_fu_1528_p2 = ($signed(take_6_reg_1980) + $signed(32'd4294967292));
 
 assign take_8_fu_1477_p2 = ($signed(take_6_reg_1980) + $signed(32'd4294967295));
 
-assign tmp_289_fu_1333_p4 = {{take_5_fu_398[31:2]}};
+assign tmp_493_fu_1333_p4 = {{take_5_fu_398[31:2]}};
 
 assign tmp_s_fu_1292_p9 = 'bx;
 

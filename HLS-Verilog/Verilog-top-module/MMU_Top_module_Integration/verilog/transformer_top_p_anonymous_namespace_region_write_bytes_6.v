@@ -786,9 +786,9 @@ reg   [31:0] logical_fu_194;
 wire   [31:0] logical_10_fu_539_p2;
 reg    ap_block_state4_on_subcall_done;
 reg   [2:0] c_fu_198;
-wire   [27:0] tmp_290_fu_421_p4;
+wire   [27:0] tmp_494_fu_421_p4;
 wire   [0:0] icmp_ln870_fu_477_p2;
-wire   [0:0] tmp_291_fu_463_p3;
+wire   [0:0] tmp_495_fu_463_p3;
 wire   [0:0] xor_ln870_fu_482_p2;
 wire   [0:0] or_ln868_fu_488_p2;
 wire   [31:0] tmp_fu_513_p9;
@@ -1106,7 +1106,7 @@ transformer_top_p_anonymous_namespace_region_write_bytes_6_Pipeline_VITIS_LOOP_8
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U3832(
+sparsemux_9_2_32_1_1_U1723(
     .din0(r_chunks_size_read),
     .din1(r_chunks_size_read_4),
     .din2(r_chunks_size_read_5),
@@ -1308,7 +1308,7 @@ end
 
 assign grp_p_anonymous_namespace_region_write_bytes_6_Pipeline_VITIS_LOOP_878_2_fu_305_ap_start = grp_p_anonymous_namespace_region_write_bytes_6_Pipeline_VITIS_LOOP_878_2_fu_305_ap_start_reg;
 
-assign icmp_ln863_fu_431_p2 = ((tmp_290_fu_421_p4 == 28'd0) ? 1'b1 : 1'b0);
+assign icmp_ln863_fu_431_p2 = ((tmp_494_fu_421_p4 == 28'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln868_fu_471_p2 = ((remaining_fu_202 == 32'd0) ? 1'b1 : 1'b0);
 
@@ -1322,7 +1322,7 @@ assign logical_10_fu_539_p2 = (logical_fu_194 - tmp_fu_513_p11);
 
 assign or_ln868_1_fu_494_p2 = (or_ln868_fu_488_p2 | icmp_ln868_fu_471_p2);
 
-assign or_ln868_fu_488_p2 = (xor_ln870_fu_482_p2 | tmp_291_fu_463_p3);
+assign or_ln868_fu_488_p2 = (xor_ln870_fu_482_p2 | tmp_495_fu_463_p3);
 
 assign p_ZN12_GLOBAL_N_110uram_banksE_0_address0 = grp_p_anonymous_namespace_region_write_bytes_6_Pipeline_VITIS_LOOP_878_2_fu_305_p_ZN12_GLOBAL_N_110uram_banksE_0_address0;
 
@@ -1720,9 +1720,9 @@ assign room_fu_553_p2 = (tmp_fu_513_p11 - logical_fu_194);
 
 assign take_fu_565_p3 = ((icmp_ln877_fu_559_p2[0:0] == 1'b1) ? remaining_fu_202 : room_fu_553_p2);
 
-assign tmp_290_fu_421_p4 = {{r_total_bytes_val[31:4]}};
+assign tmp_494_fu_421_p4 = {{r_total_bytes_val[31:4]}};
 
-assign tmp_291_fu_463_p3 = c_fu_198[32'd2];
+assign tmp_495_fu_463_p3 = c_fu_198[32'd2];
 
 assign tmp_fu_513_p10 = c_fu_198[1:0];
 
