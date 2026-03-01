@@ -12,7 +12,7 @@ module transformer_top_mmu_fsm_p_anonymous_namespace_regions_chunks_offset_0_RAM
      
     reset, clk);
 
-parameter DataWidth = 21;
+parameter DataWidth = 15;
 parameter AddressWidth = 4;
 parameter AddressRange = 16;
  

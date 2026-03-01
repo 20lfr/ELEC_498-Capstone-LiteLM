@@ -9,7 +9,15 @@ constexpr int URAM_BANKS_TOTAL = 64;
 #endif
 constexpr int URAM_BANKS = URAM_BANKS_TOTAL - MMU_RESERVED_URAM_BANKS;
 static_assert(URAM_BANKS > 0, "MMU must have at least one URAM bank");
-constexpr uint32_t URAM_BANK_BYTES = 36864; // 288Kb / 8
+// constexpr uint32_t URAM_BANK_BYTES = 36864; // 288Kb / 8
+
+constexpr uint32_t URAM_BANK_BYTES = 32768; // 288Kb / 8
+
+
+constexpr uint32_t URAM_BANK_WORD_BYTES = AXI_GMEM_WORD_BYTES;
+static_assert((URAM_BANK_BYTES % URAM_BANK_WORD_BYTES) == 0,
+              "URAM_BANK_BYTES must be word-aligned");
+constexpr uint32_t URAM_BANK_WORDS = URAM_BANK_BYTES / URAM_BANK_WORD_BYTES;
 
 // FAST_SYNTH profile:
 //   0 -> full-capacity MMU sizing (default)
