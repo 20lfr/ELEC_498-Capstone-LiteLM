@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.300000,HLS_SYN_LAT=-1,HLS_SYN_TPT=none,HLS_SYN_MEM=50,HLS_SYN_DSP=0,HLS_SYN_FF=97199,HLS_SYN_LUT=225792,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.300000,HLS_SYN_LAT=-1,HLS_SYN_TPT=none,HLS_SYN_MEM=50,HLS_SYN_DSP=0,HLS_SYN_FF=96751,HLS_SYN_LUT=225344,HLS_VERSION=2025_1}" *)
 
 module transformer_top (
         ap_clk,
@@ -332,7 +332,7 @@ output  [148:0] dbg_head_compute_ctx_0;
 output   dbg_head_compute_ctx_0_ap_vld;
 output  [148:0] dbg_head_compute_ctx_1;
 output   dbg_head_compute_ctx_1_ap_vld;
-output  [1791:0] dbg_ctrl_mem;
+output  [1567:0] dbg_ctrl_mem;
 output   dbg_ctrl_mem_ap_vld;
 output  [31:0] control_reg;
 output   control_reg_ap_vld;
@@ -538,7 +538,7 @@ reg    ap_idle;
 wire    ap_CS_fsm_state1;
 reg    ap_ready;
 wire   [63:0] ddr_mem;
-wire   [1791:0] ctrl_mem;
+wire   [1567:0] ctrl_mem;
 wire   [223:0] status_mem;
 reg    status_mem_ap_vld;
 reg   [3:0] token_pos_current;
@@ -880,7 +880,7 @@ reg   [7:0] ctrl_mem_interface_mmu_error_subcode;
 reg    s_axis_in_TDATA_blk_n;
 wire    ap_CS_fsm_state2;
 wire   [0:0] or_ln315_fu_5311_p2;
-reg   [1791:0] ctrl_mem_read_reg_7460;
+reg   [1567:0] ctrl_mem_read_reg_7460;
 reg   [63:0] ddr_mem_read_reg_7468;
 wire   [31:0] ctrl_mem_control_fu_3764_p1;
 reg   [31:0] ctrl_mem_control_reg_7473;

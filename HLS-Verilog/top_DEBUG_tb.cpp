@@ -216,13 +216,9 @@ static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
     tmp.ln1_eps_offset = read_u32(46);
     tmp.final_norm_eps_offset = read_u32(47);
     tmp.wlogit_offset = read_u32(48);
-    tmp.logit_scale_qv = read_u32(49);
-    tmp.scale_q = read_u32(50);
-    tmp.zero_point_q = read_u32(51);
-    tmp.scale_k = read_u32(52);
-    tmp.zero_point_k = read_u32(53);
-    tmp.scale_v = read_u32(54);
-    tmp.zero_point_v = read_u32(55);
+    // ctrl_mem.bin still carries legacy words at indices 49..55. The current
+    // ControlMemSpace no longer exposes those fields, so the debug TB ignores
+    // them while keeping the shared image format unchanged.
 
     ctrl_mem = tmp;
     return true;

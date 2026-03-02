@@ -516,8 +516,8 @@ reg   [32:0] add_ln869_6_reg_2105_pp0_iter9_reg;
 wire   [31:0] word_fu_1604_p99;
 reg   [31:0] word_reg_2351;
 reg   [7:0] trunc_ln870_s_reg_2363;
-reg   [7:0] trunc_ln870_3_reg_2372;
-reg   [7:0] trunc_ln870_4_reg_2381;
+reg   [7:0] trunc_ln870_1_reg_2372;
+reg   [7:0] trunc_ln870_2_reg_2381;
 wire    ap_block_pp0_stage0_subdone;
 wire   [63:0] zext_ln944_fu_1534_p1;
 wire    ap_block_pp0_stage1;
@@ -1384,8 +1384,8 @@ always @ (posedge ap_clk) begin
         icmp_ln936_reg_2069_pp0_iter7_reg <= icmp_ln936_reg_2069_pp0_iter6_reg;
         icmp_ln936_reg_2069_pp0_iter8_reg <= icmp_ln936_reg_2069_pp0_iter7_reg;
         take_16_reg_2052 <= take_15_fu_336;
-        trunc_ln870_3_reg_2372 <= {{word_reg_2351[23:16]}};
-        trunc_ln870_4_reg_2381 <= {{word_reg_2351[31:24]}};
+        trunc_ln870_1_reg_2372 <= {{word_reg_2351[23:16]}};
+        trunc_ln870_2_reg_2381 <= {{word_reg_2351[31:24]}};
         trunc_ln870_s_reg_2363 <= {{word_reg_2351[15:8]}};
     end
 end
@@ -1928,9 +1928,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_d0_local = trunc_ln870_4_reg_2381;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_d0_local = trunc_ln870_2_reg_2381;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_d0_local = trunc_ln870_3_reg_2372;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_d0_local = trunc_ln870_1_reg_2372;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_d0_local = trunc_ln870_s_reg_2363;
     end else if (((1'd1 == and_ln939_reg_2084_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1817_p1 == 3'd0))) begin
@@ -1974,9 +1974,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_d0_local = trunc_ln870_4_reg_2381;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_d0_local = trunc_ln870_2_reg_2381;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_d0_local = trunc_ln870_3_reg_2372;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_d0_local = trunc_ln870_1_reg_2372;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_d0_local = trunc_ln870_s_reg_2363;
     end else if (((1'd1 == and_ln939_reg_2084_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1817_p1 == 3'd2))) begin
@@ -2020,9 +2020,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_d0_local = trunc_ln870_4_reg_2381;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_d0_local = trunc_ln870_2_reg_2381;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_d0_local = trunc_ln870_3_reg_2372;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_d0_local = trunc_ln870_1_reg_2372;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_d0_local = trunc_ln870_s_reg_2363;
     end else if (((1'd1 == and_ln939_reg_2084_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1817_p1 == 3'd1))) begin
@@ -2066,9 +2066,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_d0_local = trunc_ln870_4_reg_2381;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_d0_local = trunc_ln870_2_reg_2381;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_d0_local = trunc_ln870_3_reg_2372;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_d0_local = trunc_ln870_1_reg_2372;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_d0_local = trunc_ln870_s_reg_2363;
     end else if ((~(trunc_ln869_fu_1817_p1 == 3'd0) & ~(trunc_ln869_fu_1817_p1 == 3'd1) & ~(trunc_ln869_fu_1817_p1 == 3'd2) & ~(trunc_ln869_fu_1817_p1 == 3'd3) & (1'd1 == and_ln939_reg_2084_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
@@ -2113,9 +2113,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_d0_local = trunc_ln870_4_reg_2381;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_d0_local = trunc_ln870_2_reg_2381;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_d0_local = trunc_ln870_3_reg_2372;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_d0_local = trunc_ln870_1_reg_2372;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_d0_local = trunc_ln870_s_reg_2363;
     end else if (((1'd1 == and_ln939_reg_2084_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1817_p1 == 3'd3))) begin

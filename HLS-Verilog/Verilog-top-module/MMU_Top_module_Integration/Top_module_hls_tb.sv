@@ -22,15 +22,20 @@ module top_module_hls_tb;
   localparam int TB_NUM_WO_TILES       = 4;
   localparam int TB_NUM_W1_TILES       = 8;
   localparam int TB_NUM_W2_TILES       = 4;
+  localparam int TB_NUM_LOGIT_TILES    = 2;
   localparam int TB_D_TILE_WO          = (TB_D_MODEL / TB_NUM_WO_TILES);
   localparam int TB_D_TILE_W1          = ((TB_D_FFN * 2) / TB_NUM_W1_TILES);
   localparam int TB_D_TILE_W2          = (TB_D_MODEL / TB_NUM_W2_TILES);
+  localparam int TB_D_VOCAB            = 32;
+  localparam int TB_D_TILE_LOGIT       = (TB_D_VOCAB / TB_NUM_LOGIT_TILES);
   localparam int TB_CONTEXT_LENGTH     = 16;
   localparam int TB_OUT_PROJ_W_BYTES   = ((TB_D_MODEL * TB_D_TILE_WO) + 1) / 2;
   localparam int TB_FFN_W1_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_W1) + 1) / 2;
   localparam int TB_FFN_W2_W_BYTES     = ((TB_D_FFN * TB_D_TILE_W2) + 1) / 2;
   localparam int TB_QKV_W_BYTES        = ((TB_D_MODEL * TB_D_HEADS) + 1) / 2;
-  localparam int DBG_MAIN_IN_BYTES     = 128;
+  localparam int TB_LOGITS_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_LOGIT) + 1) / 2;
+  // Current generated RTL exports main debug input bytes at addresses 0..192.
+  localparam int DBG_MAIN_IN_BYTES     = 193;
   localparam int DBG_MAIN_OUT_BYTES    = 64;
   localparam int DBG_HEAD_IN_BYTES     = 128;
   localparam int DBG_HEAD_OUT_BYTES    = 64;
@@ -54,6 +59,8 @@ module top_module_hls_tb;
   localparam int OP_CMP_RESID2      = 22;
   localparam int OP_CMP_LN1         = 23;
   localparam int OP_CMP_FINAL_NORM  = 25;
+  localparam int OP_CMP_LOGITS      = 26;
+  localparam int OP_CMP_ARGMAX      = 27;
   localparam logic [7:0] COMPUTE_STATE_WAIT_MEM = 8'd2;
   localparam logic [7:0] COMPUTE_STATE_EXECUTE  = 8'd3;
 
@@ -226,6 +233,29 @@ module top_module_hls_tb;
     instr_tile = instr[31:24];
   endfunction
 
+  function automatic int main_input_last_addr(input logic [7:0] op);
+    int last_addr;
+    begin
+      case (op)
+        OP_CMP_LN0,
+        OP_CMP_LN1,
+        OP_CMP_FINAL_NORM: last_addr = TB_D_MODEL + (TB_D_MODEL * 4) + 4 - 1;
+        OP_CMP_OUT_PROJ:   last_addr = TB_D_MODEL + TB_OUT_PROJ_W_BYTES + (TB_D_TILE_WO * 4) - 1;
+        OP_CMP_RESID1,
+        OP_CMP_RESID2:     last_addr = (TB_D_MODEL * 2) - 1;
+        OP_CMP_FFN_W1:     last_addr = TB_D_MODEL + TB_FFN_W1_W_BYTES + (TB_D_TILE_W1 * 4) - 1;
+        OP_CMP_FFN_ACT:    last_addr = (TB_D_FFN * 4) - 1;
+        OP_CMP_FFN_W2:     last_addr = (TB_D_FFN * 2) + TB_FFN_W2_W_BYTES + (TB_D_TILE_W2 * 4) - 1;
+        OP_CMP_LOGITS:     last_addr = (TB_D_MODEL * 4) + TB_LOGITS_W_BYTES - 1;
+        OP_CMP_ARGMAX:     last_addr = (TB_D_VOCAB * 4) - 1;
+        default:           last_addr = -1;
+      endcase
+      if (last_addr >= DBG_MAIN_IN_BYTES)
+        last_addr = DBG_MAIN_IN_BYTES - 1;
+      main_input_last_addr = last_addr;
+    end
+  endfunction
+
   typedef struct packed {
     logic [31:0] control;
     logic [31:0] irq_mask;
@@ -277,12 +307,6 @@ module top_module_hls_tb;
     logic [31:0] final_norm_eps_offset;
     logic [31:0] wlogit_offset;
     logic [31:0] logit_scale_qv;
-    logic [31:0] scale_q;
-    logic [31:0] zero_point_q;
-    logic [31:0] scale_k;
-    logic [31:0] zero_point_k;
-    logic [31:0] scale_v;
-    logic [31:0] zero_point_v;
   } dbg_control_mem_t;
 
   typedef struct packed {
@@ -492,7 +516,7 @@ module top_module_hls_tb;
   logic [148:0] dbg_head_compute_ctx_1;
   logic         dbg_head_compute_ctx_1_ap_vld;
 
-  wire [6:0] dbg_in_buf_address0;
+  wire [7:0] dbg_in_buf_address0;
   wire       dbg_in_buf_ce0;
   wire       dbg_in_buf_we0;
   wire [7:0] dbg_in_buf_d0;
@@ -553,11 +577,24 @@ module top_module_hls_tb;
   // consumes them through arrays so downstream logic scales with TB_HEADS_PARALLEL.
   head_ctx_t dbg_head_ctx_ref_struct [0:TB_HEADS_PARALLEL-1];
   ComputeHeadCtx_t dbg_head_compute_ctx_struct [0:TB_HEADS_PARALLEL-1];
-  logic [7:0] dbg_in_buf_mem [0:127];
+  logic [7:0] dbg_in_buf_mem [0:DBG_MAIN_IN_BYTES-1];
   logic [7:0] dbg_out_buf_mem [0:63];
   logic [7:0] dbg_stream_in_buf_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0] dbg_head_in_buf_mem [0:255];
   logic [7:0] dbg_head_out_buf_mem [0:127];
+
+  function automatic logic [7:0] main_dbg_in_byte(
+      input int unsigned idx,
+      input logic write_en,
+      input logic [7:0] write_addr,
+      input logic [7:0] write_data);
+    begin
+      if ((idx < DBG_MAIN_IN_BYTES) && write_en && (write_addr == idx[7:0]))
+        main_dbg_in_byte = write_data;
+      else
+        main_dbg_in_byte = dbg_in_buf_mem[idx];
+    end
+  endfunction
 
   // --------------------------------------------------------------------------
   // Debug buffer snapshots (for easier full-buffer validation in waveform)
@@ -671,11 +708,15 @@ module top_module_hls_tb;
   logic [7:0] ffn_w1_x_in [0:TB_D_MODEL-1];
   logic signed [3:0] ffn_w1_w_in [0:(TB_D_MODEL*TB_D_TILE_W1)-1];
   logic signed [31:0] ffn_w1_b_in [0:TB_D_TILE_W1-1];
+  logic signed [31:0] wlogit_act_in [0:TB_D_MODEL-1];
+  logic signed [3:0] wlogit_w_in [0:(TB_D_MODEL*TB_D_TILE_LOGIT)-1];
+  logic signed [31:0] wlogit_b_in [0:TB_D_TILE_LOGIT-1];
   logic signed [15:0] ffn_act_gate_in [0:TB_D_FFN-1];
   logic signed [15:0] ffn_act_up_in   [0:TB_D_FFN-1];
   logic signed [15:0] ffn_w2_x_in [0:TB_D_FFN-1];
   logic signed [3:0] ffn_w2_w_in [0:(TB_D_FFN*TB_D_TILE_W2)-1];
   logic signed [31:0] ffn_w2_b_in [0:TB_D_TILE_W2-1];
+  logic signed [31:0] argmax_in [0:TB_D_VOCAB-1];
   logic signed [7:0] q_act_in [0:TB_NUM_HEADS-1][0:TB_D_MODEL-1];
   logic signed [3:0] q_w_in [0:TB_NUM_HEADS-1][0:(TB_D_MODEL*TB_D_HEADS)-1];
   logic signed [31:0] q_b_in [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
@@ -701,7 +742,10 @@ module top_module_hls_tb;
   logic [7:0] out_proj_out_by_tile [0:TB_NUM_WO_TILES-1][0:TB_D_TILE_WO-1];
   logic signed [15:0] ffn_w1_out_by_tile [0:TB_NUM_W1_TILES-1][0:TB_D_TILE_W1-1];
   logic [7:0] ffn_w2_out_by_tile [0:TB_NUM_W2_TILES-1][0:TB_D_TILE_W2-1];
+  logic signed [31:0] wlogit_out [0:TB_D_VOCAB-1];
+  logic signed [31:0] wlogit_out_by_tile [0:TB_NUM_LOGIT_TILES-1][0:TB_D_TILE_LOGIT-1];
   logic signed [31:0] final_norm_out [0:TB_D_MODEL-1];
+  logic signed [31:0] argmax_out;
   logic signed [15:0] ffn_w1_out [0:TB_D_FFN-1];
   logic signed [15:0] ffn_act_out[0:TB_D_FFN-1];
   logic signed [7:0] q_out        [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
@@ -744,6 +788,7 @@ module top_module_hls_tb;
   logic [31:0] ctrl_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] ctrl_init_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] dbg_ctrl_words [0:DBG_CTRL_MEM_WORDS-1];
+  logic        dbg_main_in_decode_pulse;
   dbg_control_mem_t dbg_ctrl_mem_shadow;
   byte unsigned ctrl_mem_file_bytes [0:(CTRL_MEM_WORDS*4)-1];
   byte unsigned ddr_image_bytes [0:('h43000)-1];
@@ -1341,12 +1386,8 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[47];
     dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[48];
     dbg_ctrl_mem_shadow.logit_scale_qv          = dbg_ctrl_words[49];
-    dbg_ctrl_mem_shadow.scale_q                 = dbg_ctrl_words[50];
-    dbg_ctrl_mem_shadow.zero_point_q            = dbg_ctrl_words[51];
-    dbg_ctrl_mem_shadow.scale_k                 = dbg_ctrl_words[52];
-    dbg_ctrl_mem_shadow.zero_point_k            = dbg_ctrl_words[53];
-    dbg_ctrl_mem_shadow.scale_v                 = dbg_ctrl_words[54];
-    dbg_ctrl_mem_shadow.zero_point_v            = dbg_ctrl_words[55];
+    // Legacy debug control words 50..55 are still present in the backing
+    // image, but the current design no longer models them.
   end
 
   // dbg_in_buf/dbg_out_buf are write-only in this RTL.
@@ -1355,7 +1396,7 @@ module top_module_hls_tb;
 
   // Debug memory model writes for all dual-port debug interfaces.
   always_ff @(posedge ap_clk) begin : p_dbg_mem_writes
-    if (dbg_in_buf_ce0 && dbg_in_buf_we0) begin
+    if (dbg_in_buf_ce0 && dbg_in_buf_we0 && (dbg_in_buf_address0 < DBG_MAIN_IN_BYTES)) begin
       dbg_in_buf_mem[dbg_in_buf_address0] <= dbg_in_buf_d0;
     end
     if (dbg_out_buf_ce0 && dbg_out_buf_we0) begin
@@ -1404,6 +1445,7 @@ module top_module_hls_tb;
       main_out_capture_pending <= 1'b0;
       main_in_quiet_ctr        <= '0;
       main_out_quiet_ctr       <= '0;
+      dbg_main_in_decode_pulse <= 1'b0;
       dbg_compute_start_d      <= 1'b0;
       dbg_compute_done_d       <= 1'b0;
       dbg_compute_state_d      <= 8'd0;
@@ -1445,6 +1487,7 @@ module top_module_hls_tb;
         resid2_x_in[elem_idx]    <= 8'd0;
         resid2_r_in[elem_idx]    <= 8'd0;
         ffn_w1_x_in[elem_idx]    <= 8'd0;
+        wlogit_act_in[elem_idx]  <= 32'sd0;
         out_proj_out[elem_idx]   <= 8'd0;
         resid1_out[elem_idx]     <= 8'd0;
         resid2_out[elem_idx]     <= 8'd0;
@@ -1472,8 +1515,14 @@ module top_module_hls_tb;
       for (elem_idx = 0; elem_idx < (TB_D_MODEL * TB_D_TILE_W1); elem_idx = elem_idx + 1) begin
         ffn_w1_w_in[elem_idx] <= 4'sd0;
       end
+      for (elem_idx = 0; elem_idx < (TB_D_MODEL * TB_D_TILE_LOGIT); elem_idx = elem_idx + 1) begin
+        wlogit_w_in[elem_idx] <= 4'sd0;
+      end
       for (elem_idx = 0; elem_idx < TB_D_TILE_W1; elem_idx = elem_idx + 1) begin
         ffn_w1_b_in[elem_idx] <= 32'sd0;
+      end
+      for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+        wlogit_b_in[elem_idx] <= 32'sd0;
       end
       for (elem_idx = 0; elem_idx < (TB_D_FFN * TB_D_TILE_W2); elem_idx = elem_idx + 1) begin
         ffn_w2_w_in[elem_idx] <= 4'sd0;
@@ -1496,6 +1545,16 @@ module top_module_hls_tb;
           ffn_w2_out_by_tile[op_idx][elem_idx] <= 8'd0;
         end
       end
+      for (op_idx = 0; op_idx < TB_NUM_LOGIT_TILES; op_idx = op_idx + 1) begin
+        for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+          wlogit_out_by_tile[op_idx][elem_idx] <= 32'sd0;
+        end
+      end
+      for (elem_idx = 0; elem_idx < TB_D_VOCAB; elem_idx = elem_idx + 1) begin
+        argmax_in[elem_idx] <= 32'sd0;
+        wlogit_out[elem_idx] <= 32'sd0;
+      end
+      argmax_out <= 32'sd0;
       for (head_idx = 0; head_idx < TB_NUM_HEADS; head_idx = head_idx + 1) begin
         for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
           q_act_in[head_idx][elem_idx] <= 8'sd0;
@@ -1574,10 +1633,12 @@ module top_module_hls_tb;
       // -------------------------
       // Main path snapshots
       // -------------------------
+      dbg_main_in_decode_pulse <= 1'b0;
       main_wait_to_exec = (dbg_compute_state_d == COMPUTE_STATE_WAIT_MEM) &&
-                          (dbg_compute_state    == COMPUTE_STATE_EXECUTE);
+                          (dbg_compute_state == COMPUTE_STATE_EXECUTE);
       // Latch current main compute instruction whenever a new tile/instruction appears.
-      if (dbg_compute_instruction_ap_vld && dbg_compute_start[0] && (dbg_compute_instruction != 32'd0) &&
+      if (!main_in_capture_pending &&
+          dbg_compute_instruction_ap_vld && dbg_compute_start[0] && (dbg_compute_instruction != 32'd0) &&
           (dbg_compute_instruction != main_last_seen_instr)) begin
         main_last_seen_instr     <= dbg_compute_instruction;
         main_in_capture_pending  <= 1'b1;
@@ -1606,6 +1667,7 @@ module top_module_hls_tb;
       if (main_in_capture_pending) begin
         // Inputs are semantically valid when the main compute FSM leaves WAIT_MEM and enters EXECUTE.
         if (main_wait_to_exec) begin
+          dbg_main_in_decode_pulse <= 1'b1;
           for (b = 0; b < DBG_MAIN_IN_BYTES; b = b + 1) begin
             main_in_snap[main_in_snap_wr_idx][b] <= dbg_in_buf_mem[b];
           end
@@ -1693,16 +1755,42 @@ module top_module_hls_tb;
                                                   dbg_in_buf_mem[TB_D_MODEL + TB_FFN_W1_W_BYTES + (4*elem_idx) + 0]});
               end
             end
+            OP_CMP_LOGITS: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                wlogit_act_in[elem_idx] <= $signed({dbg_in_buf_mem[(4*elem_idx) + 3],
+                                                    dbg_in_buf_mem[(4*elem_idx) + 2],
+                                                    dbg_in_buf_mem[(4*elem_idx) + 1],
+                                                    dbg_in_buf_mem[(4*elem_idx) + 0]});
+              end
+              for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_TILE_LOGIT); flat_idx = flat_idx + 1) begin
+                wlogit_w_in[flat_idx] <= $signed(flat_idx[0] ?
+                  dbg_in_buf_mem[(TB_D_MODEL*4) + (flat_idx >> 1)][7:4] :
+                  dbg_in_buf_mem[(TB_D_MODEL*4) + (flat_idx >> 1)][3:0]);
+              end
+              for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+                wlogit_b_in[elem_idx] <= 32'sd0;
+              end
+            end
+            OP_CMP_ARGMAX: begin
+              for (elem_idx = 0; elem_idx < TB_D_VOCAB; elem_idx = elem_idx + 1) begin
+                argmax_in[elem_idx] <= $signed({dbg_in_buf_mem[(4*elem_idx) + 3],
+                                                dbg_in_buf_mem[(4*elem_idx) + 2],
+                                                dbg_in_buf_mem[(4*elem_idx) + 1],
+                                                dbg_in_buf_mem[(4*elem_idx) + 0]});
+              end
+            end
             OP_CMP_FFN_ACT: begin
               for (elem_idx = 0; elem_idx < TB_D_FFN; elem_idx = elem_idx + 1) begin
-                ffn_act_gate_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1], dbg_in_buf_mem[(2*elem_idx)+0]});
+                ffn_act_gate_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1],
+                                                      dbg_in_buf_mem[(2*elem_idx)+0]});
                 ffn_act_up_in[elem_idx] <= $signed({dbg_in_buf_mem[(TB_D_FFN*2) + (2*elem_idx)+1],
                                                     dbg_in_buf_mem[(TB_D_FFN*2) + (2*elem_idx)+0]});
               end
             end
             OP_CMP_FFN_W2: begin
               for (elem_idx = 0; elem_idx < TB_D_FFN; elem_idx = elem_idx + 1) begin
-                ffn_w2_x_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1], dbg_in_buf_mem[(2*elem_idx)+0]});
+                ffn_w2_x_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1],
+                                                  dbg_in_buf_mem[(2*elem_idx)+0]});
               end
               for (flat_idx = 0; flat_idx < (TB_D_FFN * TB_D_TILE_W2); flat_idx = flat_idx + 1) begin
                 ffn_w2_w_in[flat_idx] <= $signed(flat_idx[0] ?
@@ -1803,6 +1891,25 @@ module top_module_hls_tb;
             for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
               final_norm_out[elem_idx] <= {dbg_out_buf_mem[(4*elem_idx)+3], dbg_out_buf_mem[(4*elem_idx)+2], dbg_out_buf_mem[(4*elem_idx)+1], dbg_out_buf_mem[(4*elem_idx)+0]};
             end
+          end
+          OP_CMP_LOGITS: begin
+            if (main_out_pending_tile < TB_NUM_LOGIT_TILES) begin
+              for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+                wlogit_out_by_tile[main_out_pending_tile][elem_idx] <=
+                  $signed({dbg_out_buf_mem[(4*elem_idx)+3],
+                           dbg_out_buf_mem[(4*elem_idx)+2],
+                           dbg_out_buf_mem[(4*elem_idx)+1],
+                           dbg_out_buf_mem[(4*elem_idx)+0]});
+                wlogit_out[(main_out_pending_tile * TB_D_TILE_LOGIT) + elem_idx] <=
+                  $signed({dbg_out_buf_mem[(4*elem_idx)+3],
+                           dbg_out_buf_mem[(4*elem_idx)+2],
+                           dbg_out_buf_mem[(4*elem_idx)+1],
+                           dbg_out_buf_mem[(4*elem_idx)+0]});
+              end
+            end
+          end
+          OP_CMP_ARGMAX: begin
+            argmax_out <= $signed({dbg_out_buf_mem[3], dbg_out_buf_mem[2], dbg_out_buf_mem[1], dbg_out_buf_mem[0]});
           end
           default: begin
           end

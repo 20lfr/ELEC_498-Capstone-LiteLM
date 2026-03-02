@@ -509,7 +509,7 @@ wire   [12:0] trunc_ln935_3_fu_1476_p1;
 wire   [12:0] add_ln869_1_fu_1763_p2;
 wire   [10:0] lshr_ln4_fu_1769_p4;
 wire   [12:0] add_ln869_2_fu_1801_p2;
-wire   [10:0] lshr_ln869_1_fu_1807_p4;
+wire   [10:0] lshr_ln869_2_fu_1807_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -1632,7 +1632,7 @@ assign lshr_ln4_fu_1769_p4 = {{add_ln869_1_fu_1763_p2[12:2]}};
 
 assign lshr_ln842_fu_1713_p2 = word_fu_1503_p99 >> zext_ln840_fu_1709_p1;
 
-assign lshr_ln869_1_fu_1807_p4 = {{add_ln869_2_fu_1801_p2[12:2]}};
+assign lshr_ln869_2_fu_1807_p4 = {{add_ln869_2_fu_1801_p2[12:2]}};
 
 assign lshr_ln_fu_1479_p4 = {{copied_9_reg_1901[12:2]}};
 
@@ -1892,7 +1892,7 @@ assign word_idx_fu_1295_p4 = {{bank_byte_addr_fu_1251_p2[14:2]}};
 
 assign zext_ln840_fu_1709_p1 = bit_off_fu_1702_p3;
 
-assign zext_ln869_1_fu_1817_p1 = lshr_ln869_1_fu_1807_p4;
+assign zext_ln869_1_fu_1817_p1 = lshr_ln869_2_fu_1807_p4;
 
 assign zext_ln869_fu_1779_p1 = lshr_ln4_fu_1769_p4;
 

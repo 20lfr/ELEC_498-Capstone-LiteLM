@@ -37,12 +37,12 @@ output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMe
 output  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0;
 input   ap_rst;
 
-wire   [63:0] zext_ln867_fu_96_p1;
-wire   [63:0] zext_ln870_fu_136_p1;
+wire   [63:0] zext_ln859_fu_96_p1;
+wire   [63:0] zext_ln862_fu_136_p1;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local;
-wire   [0:0] trunc_ln867_fu_82_p1;
+wire   [0:0] trunc_ln859_fu_82_p1;
 reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local;
-wire   [7:0] trunc_ln869_fu_102_p1;
+wire   [7:0] trunc_ln861_fu_102_p1;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
 reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local;
@@ -50,22 +50,22 @@ reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_Statu
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
 reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local;
 wire   [3:0] lshr_ln_fu_86_p4;
-wire   [4:0] add_ln870_fu_120_p2;
-wire   [3:0] lshr_ln870_4_fu_126_p4;
+wire   [4:0] add_ln862_fu_120_p2;
+wire   [3:0] lshr_ln862_4_fu_126_p4;
 wire    ap_ce_reg;
 
 always @ (*) begin
-    if ((trunc_ln867_fu_82_p1 == 1'd1)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln867_fu_96_p1;
-    end else if ((trunc_ln867_fu_82_p1 == 1'd0)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln870_fu_136_p1;
+    if ((trunc_ln859_fu_82_p1 == 1'd1)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln859_fu_96_p1;
+    end else if ((trunc_ln859_fu_82_p1 == 1'd0)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln862_fu_136_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln867_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln867_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln859_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln859_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b0;
@@ -73,9 +73,9 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln867_fu_82_p1 == 1'd1)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local = trunc_ln869_fu_102_p1;
-    end else if ((trunc_ln867_fu_82_p1 == 1'd0)) begin
+    if ((trunc_ln859_fu_82_p1 == 1'd1)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local = trunc_ln861_fu_102_p1;
+    end else if ((trunc_ln859_fu_82_p1 == 1'd0)) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local = {{value_r[15:8]}};
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local = 'bx;
@@ -83,7 +83,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((trunc_ln867_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln867_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln859_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln859_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local = 1'b0;
@@ -91,17 +91,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln867_fu_82_p1 == 1'd1)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln870_fu_136_p1;
-    end else if ((trunc_ln867_fu_82_p1 == 1'd0)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln867_fu_96_p1;
+    if ((trunc_ln859_fu_82_p1 == 1'd1)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln862_fu_136_p1;
+    end else if ((trunc_ln859_fu_82_p1 == 1'd0)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln859_fu_96_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln867_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln867_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln859_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln859_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b0;
@@ -109,28 +109,28 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((trunc_ln867_fu_82_p1 == 1'd1)) begin
+    if ((trunc_ln859_fu_82_p1 == 1'd1)) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local = {{value_r[15:8]}};
-    end else if ((trunc_ln867_fu_82_p1 == 1'd0)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local = trunc_ln869_fu_102_p1;
+    end else if ((trunc_ln859_fu_82_p1 == 1'd0)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local = trunc_ln861_fu_102_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln867_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln867_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
+    if ((((trunc_ln859_fu_82_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln859_fu_82_p1 == 1'd0) & (ap_start == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local = 1'b0;
     end
 end
 
-assign add_ln870_fu_120_p2 = (byte_addr + 5'd1);
+assign add_ln862_fu_120_p2 = (byte_addr + 5'd1);
 
 assign ap_ready = ap_start;
 
-assign lshr_ln870_4_fu_126_p4 = {{add_ln870_fu_120_p2[4:1]}};
+assign lshr_ln862_4_fu_126_p4 = {{add_ln862_fu_120_p2[4:1]}};
 
 assign lshr_ln_fu_86_p4 = {{byte_addr[4:1]}};
 
@@ -150,12 +150,12 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local;
 
-assign trunc_ln867_fu_82_p1 = byte_addr[0:0];
+assign trunc_ln859_fu_82_p1 = byte_addr[0:0];
 
-assign trunc_ln869_fu_102_p1 = value_r[7:0];
+assign trunc_ln861_fu_102_p1 = value_r[7:0];
 
-assign zext_ln867_fu_96_p1 = lshr_ln_fu_86_p4;
+assign zext_ln859_fu_96_p1 = lshr_ln_fu_86_p4;
 
-assign zext_ln870_fu_136_p1 = lshr_ln870_4_fu_126_p4;
+assign zext_ln862_fu_136_p1 = lshr_ln862_4_fu_126_p4;
 
 endmodule //transformer_top_write_i16
