@@ -145,7 +145,7 @@ wire   [4:0] add_ln465_fu_151_p2;
 wire    ap_loop_init;
 reg   [4:0] ap_sig_allocacmp_t_5;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_we0_local;
-wire   [7:0] trunc_ln869_fu_335_p1;
+wire   [7:0] trunc_ln861_fu_335_p1;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_we0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_ce0_local;
@@ -600,7 +600,7 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_ce0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_d0 = trunc_ln869_fu_335_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_d0 = trunc_ln861_fu_335_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_we0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_we0_local;
 
@@ -670,7 +670,7 @@ assign trunc_ln471_1_fu_271_p4 = {{rounded_fu_265_p2[43:15]}};
 
 assign trunc_ln477_1_fu_303_p4 = {{rounded_fu_265_p2[30:15]}};
 
-assign trunc_ln869_fu_335_p1 = v_fu_327_p3[7:0];
+assign trunc_ln861_fu_335_p1 = v_fu_327_p3[7:0];
 
 assign v_fu_327_p3 = ((or_ln477_fu_321_p2[0:0] == 1'b1) ? select_ln477_fu_313_p3 : trunc_ln477_1_fu_303_p4);
 

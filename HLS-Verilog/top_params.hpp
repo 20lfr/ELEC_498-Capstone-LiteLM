@@ -129,6 +129,7 @@ constexpr int MODEL_HIDDEN_SIZE = 3072;
 constexpr int MODEL_HEAD_DIMENSTION = 96;
 constexpr int MODEL_INTERMEDIATE_SIZE = 8192;
 constexpr int MODEL_CONTEXT_LENGTH = 2048;
+constexpr int MODEL_VOCAB_SIZE = 50257;
 constexpr int16_t ATTN_SCALE_Q15 = 3344; // Q1.15: round((1/sqrt(96)) * 2^15) = 3344 (0x0D10)
 
 // ------------------------------------------------------------
@@ -546,14 +547,6 @@ struct ControlMemSpace {
     uint32_t ln1_eps_offset = 0;
     uint32_t final_norm_eps_offset = 0;
     uint32_t wlogit_offset = 0;
-
-    uint32_t logit_scale_qv = 0;
-    uint32_t scale_q = 0;
-    uint32_t zero_point_q = 0;
-    uint32_t scale_k = 0;
-    uint32_t zero_point_k = 0;
-    uint32_t scale_v = 0;
-    uint32_t zero_point_v = 0;
 };
 
 // Status (PS Reads <- PL Writes)

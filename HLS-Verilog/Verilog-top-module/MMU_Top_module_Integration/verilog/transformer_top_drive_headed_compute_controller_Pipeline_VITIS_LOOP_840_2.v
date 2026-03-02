@@ -155,7 +155,7 @@ reg    grp_read_i32_1_fu_100_ap_start_reg;
 wire    ap_block_pp0_stage0_ignoreCallOp42;
 wire    ap_block_pp0_stage0_ignoreCallOp43;
 wire    ap_block_pp0_stage0_ignoreCallOp31;
-wire   [63:0] zext_ln840_1_fu_246_p1;
+wire   [63:0] zext_ln840_fu_246_p1;
 wire    ap_block_pp0_stage0;
 reg   [2:0] h_fu_70;
 wire   [2:0] add_ln840_fu_134_p2;
@@ -655,7 +655,7 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce0 = grp_read_i32_1_fu_100_buf_0_ce0;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln840_1_fu_246_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln840_fu_246_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0_local;
 
@@ -663,7 +663,7 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_we0_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_address0 = zext_ln840_1_fu_246_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_address0 = zext_ln840_fu_246_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0_local;
 
@@ -693,6 +693,6 @@ assign trunc_ln840_fu_145_p1 = h_4_reg_258[0:0];
 
 assign trunc_ln842_fu_155_p1 = h_4_reg_258[1:0];
 
-assign zext_ln840_1_fu_246_p1 = tmp_reg_273_pp0_iter12_reg;
+assign zext_ln840_fu_246_p1 = tmp_reg_273_pp0_iter12_reg;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_840_2

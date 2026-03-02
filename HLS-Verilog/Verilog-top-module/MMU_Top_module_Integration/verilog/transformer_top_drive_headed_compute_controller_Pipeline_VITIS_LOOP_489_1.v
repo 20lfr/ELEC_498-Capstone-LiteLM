@@ -125,9 +125,9 @@ reg   [0:0] icmp_ln489_reg_442_pp0_iter3_reg;
 reg   [0:0] icmp_ln489_reg_442_pp0_iter4_reg;
 reg   [0:0] icmp_ln489_reg_442_pp0_iter5_reg;
 reg   [0:0] icmp_ln489_reg_442_pp0_iter6_reg;
-wire   [63:0] zext_ln834_1_fu_280_p1;
+wire   [63:0] zext_ln826_fu_280_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln835_fu_317_p1;
+wire   [63:0] zext_ln827_fu_317_p1;
 reg   [15:0] max_val_1_fu_70;
 wire   [15:0] max_val_fu_403_p3;
 wire    ap_loop_init;
@@ -154,19 +154,19 @@ reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0_local;
 wire   [3:0] grp_fu_235_p1;
 wire   [4:0] shl_ln491_fu_255_p2;
-wire   [4:0] mul_ln834_fu_264_p0;
-wire   [6:0] mul_ln834_fu_264_p1;
-wire   [10:0] mul_ln834_fu_264_p2;
+wire   [4:0] mul_ln826_fu_264_p0;
+wire   [6:0] mul_ln826_fu_264_p1;
+wire   [10:0] mul_ln826_fu_264_p2;
 wire   [2:0] tmp_fu_270_p4;
 wire   [3:0] trunc_ln491_fu_252_p1;
 wire   [4:0] or_ln_fu_289_p3;
-wire   [4:0] mul_ln835_fu_301_p0;
-wire   [6:0] mul_ln835_fu_301_p1;
-wire   [10:0] mul_ln835_fu_301_p2;
+wire   [4:0] mul_ln827_fu_301_p0;
+wire   [6:0] mul_ln827_fu_301_p1;
+wire   [10:0] mul_ln827_fu_301_p2;
 wire   [2:0] tmp_217_fu_307_p4;
 wire   [2:0] grp_fu_235_p2;
 wire   [7:0] tmp_59_fu_333_p11;
-wire   [2:0] trunc_ln834_fu_329_p1;
+wire   [2:0] trunc_ln826_fu_329_p1;
 wire   [7:0] tmp_60_fu_361_p11;
 wire   [7:0] tmp_60_fu_361_p13;
 wire   [7:0] tmp_59_fu_333_p13;
@@ -180,8 +180,8 @@ wire    ap_enable_pp0;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-wire   [10:0] mul_ln834_fu_264_p00;
-wire   [10:0] mul_ln835_fu_301_p00;
+wire   [10:0] mul_ln826_fu_264_p00;
+wire   [10:0] mul_ln827_fu_301_p00;
 wire   [2:0] tmp_59_fu_333_p1;
 wire   [2:0] tmp_59_fu_333_p3;
 wire   [2:0] tmp_59_fu_333_p5;
@@ -232,9 +232,9 @@ transformer_top_mul_5ns_7ns_11_1_1 #(
     .din1_WIDTH( 7 ),
     .dout_WIDTH( 11 ))
 mul_5ns_7ns_11_1_1_U711(
-    .din0(mul_ln834_fu_264_p0),
-    .din1(mul_ln834_fu_264_p1),
-    .dout(mul_ln834_fu_264_p2)
+    .din0(mul_ln826_fu_264_p0),
+    .din1(mul_ln826_fu_264_p1),
+    .dout(mul_ln826_fu_264_p2)
 );
 
 transformer_top_mul_5ns_7ns_11_1_1 #(
@@ -244,9 +244,9 @@ transformer_top_mul_5ns_7ns_11_1_1 #(
     .din1_WIDTH( 7 ),
     .dout_WIDTH( 11 ))
 mul_5ns_7ns_11_1_1_U712(
-    .din0(mul_ln835_fu_301_p0),
-    .din1(mul_ln835_fu_301_p1),
-    .dout(mul_ln835_fu_301_p2)
+    .din0(mul_ln827_fu_301_p0),
+    .din1(mul_ln827_fu_301_p1),
+    .dout(mul_ln827_fu_301_p2)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_11_3_8_1_1 #(
@@ -272,7 +272,7 @@ sparsemux_11_3_8_1_1_U713(
     .din3(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q1),
     .din4(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q1),
     .def(tmp_59_fu_333_p11),
-    .sel(trunc_ln834_fu_329_p1),
+    .sel(trunc_ln826_fu_329_p1),
     .dout(tmp_59_fu_333_p13)
 );
 
@@ -299,7 +299,7 @@ sparsemux_11_3_8_1_1_U714(
     .din3(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_q0),
     .din4(p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_q0),
     .def(tmp_60_fu_361_p11),
-    .sel(trunc_ln834_fu_329_p1),
+    .sel(trunc_ln826_fu_329_p1),
     .dout(tmp_60_fu_361_p13)
 );
 
@@ -650,55 +650,55 @@ assign max_val_1_out = max_val_1_fu_70;
 
 assign max_val_fu_403_p3 = ((icmp_ln492_fu_397_p2[0:0] == 1'b1) ? v_fu_389_p3 : max_val_1_fu_70);
 
-assign mul_ln834_fu_264_p0 = mul_ln834_fu_264_p00;
+assign mul_ln826_fu_264_p0 = mul_ln826_fu_264_p00;
 
-assign mul_ln834_fu_264_p00 = shl_ln491_fu_255_p2;
+assign mul_ln826_fu_264_p00 = shl_ln491_fu_255_p2;
 
-assign mul_ln834_fu_264_p1 = 11'd52;
+assign mul_ln826_fu_264_p1 = 11'd52;
 
-assign mul_ln835_fu_301_p0 = mul_ln835_fu_301_p00;
+assign mul_ln827_fu_301_p0 = mul_ln827_fu_301_p00;
 
-assign mul_ln835_fu_301_p00 = or_ln_fu_289_p3;
+assign mul_ln827_fu_301_p00 = or_ln_fu_289_p3;
 
-assign mul_ln835_fu_301_p1 = 11'd52;
+assign mul_ln827_fu_301_p1 = 11'd52;
 
 assign or_ln_fu_289_p3 = {{trunc_ln491_fu_252_p1}, {1'd1}};
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0 = zext_ln835_fu_317_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address0 = zext_ln827_fu_317_p1;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address1 = zext_ln834_1_fu_280_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_address1 = zext_ln826_fu_280_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce0_local;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce1 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_10_ce1_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0 = zext_ln835_fu_317_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address0 = zext_ln827_fu_317_p1;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address1 = zext_ln834_1_fu_280_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_address1 = zext_ln826_fu_280_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce0_local;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce1 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_11_ce1_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address0 = zext_ln835_fu_317_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address0 = zext_ln827_fu_317_p1;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address1 = zext_ln834_1_fu_280_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_address1 = zext_ln826_fu_280_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce0_local;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce1 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_12_ce1_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_address0 = zext_ln835_fu_317_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_address0 = zext_ln827_fu_317_p1;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_address1 = zext_ln834_1_fu_280_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_address1 = zext_ln826_fu_280_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce0_local;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce1 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_13_ce1_local;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0 = zext_ln835_fu_317_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address0 = zext_ln827_fu_317_p1;
 
-assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address1 = zext_ln834_1_fu_280_p1;
+assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_address1 = zext_ln826_fu_280_p1;
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0 = p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_9_ce0_local;
 
@@ -706,22 +706,22 @@ assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh5
 
 assign shl_ln491_fu_255_p2 = i_35_reg_435_pp0_iter6_reg << 5'd1;
 
-assign tmp_217_fu_307_p4 = {{mul_ln835_fu_301_p2[10:8]}};
+assign tmp_217_fu_307_p4 = {{mul_ln827_fu_301_p2[10:8]}};
 
 assign tmp_59_fu_333_p11 = 'bx;
 
 assign tmp_60_fu_361_p11 = 'bx;
 
-assign tmp_fu_270_p4 = {{mul_ln834_fu_264_p2[10:8]}};
+assign tmp_fu_270_p4 = {{mul_ln826_fu_264_p2[10:8]}};
 
 assign trunc_ln491_fu_252_p1 = i_35_reg_435_pp0_iter6_reg[3:0];
 
-assign trunc_ln834_fu_329_p1 = grp_fu_235_p2[2:0];
+assign trunc_ln826_fu_329_p1 = grp_fu_235_p2[2:0];
 
 assign v_fu_389_p3 = {{tmp_60_fu_361_p13}, {tmp_59_fu_333_p13}};
 
-assign zext_ln834_1_fu_280_p1 = tmp_fu_270_p4;
+assign zext_ln826_fu_280_p1 = tmp_fu_270_p4;
 
-assign zext_ln835_fu_317_p1 = tmp_217_fu_307_p4;
+assign zext_ln827_fu_317_p1 = tmp_217_fu_307_p4;
 
 endmodule //transformer_top_drive_headed_compute_controller_Pipeline_VITIS_LOOP_489_1

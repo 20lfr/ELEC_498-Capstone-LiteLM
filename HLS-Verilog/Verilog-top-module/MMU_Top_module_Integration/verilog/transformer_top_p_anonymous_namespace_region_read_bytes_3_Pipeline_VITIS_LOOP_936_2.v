@@ -515,9 +515,9 @@ reg   [32:0] add_ln869_8_reg_2103_pp0_iter8_reg;
 reg   [32:0] add_ln869_8_reg_2103_pp0_iter9_reg;
 wire   [31:0] word_fu_1602_p99;
 reg   [31:0] word_reg_2349;
-reg   [7:0] trunc_ln870_s_reg_2361;
-reg   [7:0] trunc_ln870_1_reg_2370;
-reg   [7:0] trunc_ln870_2_reg_2379;
+reg   [7:0] trunc_ln870_7_reg_2361;
+reg   [7:0] trunc_ln870_8_reg_2370;
+reg   [7:0] trunc_ln870_9_reg_2379;
 wire    ap_block_pp0_stage0_subdone;
 wire   [63:0] zext_ln944_fu_1532_p1;
 wire    ap_block_pp0_stage1;
@@ -1384,9 +1384,9 @@ always @ (posedge ap_clk) begin
         icmp_ln936_reg_2067_pp0_iter7_reg <= icmp_ln936_reg_2067_pp0_iter6_reg;
         icmp_ln936_reg_2067_pp0_iter8_reg <= icmp_ln936_reg_2067_pp0_iter7_reg;
         take_25_reg_2050 <= take_21_fu_334;
-        trunc_ln870_1_reg_2370 <= {{word_reg_2349[23:16]}};
-        trunc_ln870_2_reg_2379 <= {{word_reg_2349[31:24]}};
-        trunc_ln870_s_reg_2361 <= {{word_reg_2349[15:8]}};
+        trunc_ln870_7_reg_2361 <= {{word_reg_2349[15:8]}};
+        trunc_ln870_8_reg_2370 <= {{word_reg_2349[23:16]}};
+        trunc_ln870_9_reg_2379 <= {{word_reg_2349[31:24]}};
     end
 end
 
@@ -1508,11 +1508,11 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        dst_0_d0_local = trunc_ln870_2_reg_2379;
+        dst_0_d0_local = trunc_ln870_9_reg_2379;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        dst_0_d0_local = trunc_ln870_1_reg_2370;
+        dst_0_d0_local = trunc_ln870_8_reg_2370;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
-        dst_0_d0_local = trunc_ln870_s_reg_2361;
+        dst_0_d0_local = trunc_ln870_7_reg_2361;
     end else if (((1'd1 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd0))) begin
         dst_0_d0_local = trunc_ln870_fu_1845_p1;
     end else if (((1'd0 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd0))) begin
@@ -1554,11 +1554,11 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        dst_1_d0_local = trunc_ln870_2_reg_2379;
+        dst_1_d0_local = trunc_ln870_9_reg_2379;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        dst_1_d0_local = trunc_ln870_1_reg_2370;
+        dst_1_d0_local = trunc_ln870_8_reg_2370;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
-        dst_1_d0_local = trunc_ln870_s_reg_2361;
+        dst_1_d0_local = trunc_ln870_7_reg_2361;
     end else if (((1'd1 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd1))) begin
         dst_1_d0_local = trunc_ln870_fu_1845_p1;
     end else if (((1'd0 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd1))) begin
@@ -1600,11 +1600,11 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        dst_2_d0_local = trunc_ln870_2_reg_2379;
+        dst_2_d0_local = trunc_ln870_9_reg_2379;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        dst_2_d0_local = trunc_ln870_1_reg_2370;
+        dst_2_d0_local = trunc_ln870_8_reg_2370;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
-        dst_2_d0_local = trunc_ln870_s_reg_2361;
+        dst_2_d0_local = trunc_ln870_7_reg_2361;
     end else if (((1'd1 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd2))) begin
         dst_2_d0_local = trunc_ln870_fu_1845_p1;
     end else if (((1'd0 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd2))) begin
@@ -1646,11 +1646,11 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        dst_3_d0_local = trunc_ln870_2_reg_2379;
+        dst_3_d0_local = trunc_ln870_9_reg_2379;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        dst_3_d0_local = trunc_ln870_1_reg_2370;
+        dst_3_d0_local = trunc_ln870_8_reg_2370;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
-        dst_3_d0_local = trunc_ln870_s_reg_2361;
+        dst_3_d0_local = trunc_ln870_7_reg_2361;
     end else if (((1'd1 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd3))) begin
         dst_3_d0_local = trunc_ln870_fu_1845_p1;
     end else if (((1'd0 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (trunc_ln869_fu_1815_p1 == 3'd3))) begin
@@ -1692,11 +1692,11 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter10 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        dst_4_d0_local = trunc_ln870_2_reg_2379;
+        dst_4_d0_local = trunc_ln870_9_reg_2379;
     end else if (((1'b0 == ap_block_pp0_stage3) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage3))) begin
-        dst_4_d0_local = trunc_ln870_1_reg_2370;
+        dst_4_d0_local = trunc_ln870_8_reg_2370;
     end else if (((1'b0 == ap_block_pp0_stage2) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage2))) begin
-        dst_4_d0_local = trunc_ln870_s_reg_2361;
+        dst_4_d0_local = trunc_ln870_7_reg_2361;
     end else if ((~(trunc_ln869_fu_1815_p1 == 3'd0) & ~(trunc_ln869_fu_1815_p1 == 3'd1) & ~(trunc_ln869_fu_1815_p1 == 3'd2) & ~(trunc_ln869_fu_1815_p1 == 3'd3) & (1'd1 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         dst_4_d0_local = trunc_ln870_fu_1845_p1;
     end else if ((~(trunc_ln869_fu_1815_p1 == 3'd0) & ~(trunc_ln869_fu_1815_p1 == 3'd1) & ~(trunc_ln869_fu_1815_p1 == 3'd2) & ~(trunc_ln869_fu_1815_p1 == 3'd3) & (1'd0 == and_ln939_reg_2082_pp0_iter8_reg) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter9 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
