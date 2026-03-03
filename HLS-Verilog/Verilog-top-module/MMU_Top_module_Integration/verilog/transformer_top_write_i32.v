@@ -7,285 +7,252 @@
 `timescale 1 ns / 1 ps 
 
 module transformer_top_write_i32 (
+        ap_clk,
+        ap_rst,
         ap_start,
+        ap_done,
+        ap_idle,
         ap_ready,
-        buf_0_address0,
-        buf_0_ce0,
-        buf_0_we0,
-        buf_0_d0,
-        buf_0_address1,
-        buf_0_ce1,
-        buf_0_we1,
-        buf_0_d1,
-        buf_1_address0,
-        buf_1_ce0,
-        buf_1_we0,
-        buf_1_d0,
-        buf_1_address1,
-        buf_1_ce1,
-        buf_1_we1,
-        buf_1_d1,
         byte_addr,
         value_r,
-        ap_rst
+        mmu_out_buf_address0,
+        mmu_out_buf_ce0,
+        mmu_out_buf_we0,
+        mmu_out_buf_d0,
+        mmu_out_buf_address1,
+        mmu_out_buf_ce1,
+        mmu_out_buf_we1,
+        mmu_out_buf_d1
 );
 
+parameter    ap_ST_fsm_state1 = 2'd1;
+parameter    ap_ST_fsm_state2 = 2'd2;
 
+input   ap_clk;
+input   ap_rst;
 input   ap_start;
+output   ap_done;
+output   ap_idle;
 output   ap_ready;
-output  [4:0] buf_0_address0;
-output   buf_0_ce0;
-output   buf_0_we0;
-output  [7:0] buf_0_d0;
-output  [4:0] buf_0_address1;
-output   buf_0_ce1;
-output   buf_0_we1;
-output  [7:0] buf_0_d1;
-output  [4:0] buf_1_address0;
-output   buf_1_ce0;
-output   buf_1_we0;
-output  [7:0] buf_1_d0;
-output  [4:0] buf_1_address1;
-output   buf_1_ce1;
-output   buf_1_we1;
-output  [7:0] buf_1_d1;
 input  [5:0] byte_addr;
 input  [31:0] value_r;
-input   ap_rst;
+output  [5:0] mmu_out_buf_address0;
+output   mmu_out_buf_ce0;
+output   mmu_out_buf_we0;
+output  [7:0] mmu_out_buf_d0;
+output  [5:0] mmu_out_buf_address1;
+output   mmu_out_buf_ce1;
+output   mmu_out_buf_we1;
+output  [7:0] mmu_out_buf_d1;
 
-wire   [63:0] zext_ln865_fu_148_p1;
-wire   [63:0] zext_ln868_fu_188_p1;
-wire   [63:0] zext_ln869_fu_222_p1;
-wire   [63:0] zext_ln870_fu_256_p1;
-reg    buf_0_we1_local;
-wire   [0:0] trunc_ln865_fu_134_p1;
-reg   [7:0] buf_0_d1_local;
-wire   [7:0] trunc_ln867_fu_154_p1;
-reg    buf_0_ce1_local;
-reg   [4:0] buf_0_address1_local;
-reg    buf_0_we0_local;
-reg   [7:0] buf_0_d0_local;
-reg    buf_0_ce0_local;
-reg   [4:0] buf_0_address0_local;
-reg    buf_1_we1_local;
-reg   [7:0] buf_1_d1_local;
-reg    buf_1_ce1_local;
-reg   [4:0] buf_1_address1_local;
-reg    buf_1_we0_local;
-reg   [7:0] buf_1_d0_local;
-reg    buf_1_ce0_local;
-reg   [4:0] buf_1_address0_local;
-wire   [4:0] lshr_ln_fu_138_p4;
-wire   [5:0] add_ln868_fu_172_p2;
-wire   [4:0] lshr_ln868_1_fu_178_p4;
-wire   [5:0] add_ln869_fu_206_p2;
-wire   [4:0] lshr_ln869_1_fu_212_p4;
-wire   [5:0] add_ln870_fu_240_p2;
-wire   [4:0] lshr_ln870_1_fu_246_p4;
+reg ap_done;
+reg ap_idle;
+reg ap_ready;
+
+(* fsm_encoding = "none" *) reg   [1:0] ap_CS_fsm;
+wire    ap_CS_fsm_state1;
+reg   [7:0] trunc_ln2_reg_163;
+reg   [7:0] trunc_ln3_reg_168;
+wire   [63:0] zext_ln884_fu_90_p1;
+wire   [63:0] zext_ln885_fu_112_p1;
+wire   [63:0] zext_ln886_fu_142_p1;
+wire    ap_CS_fsm_state2;
+wire   [63:0] zext_ln887_fu_152_p1;
+reg    mmu_out_buf_we1_local;
+reg   [7:0] mmu_out_buf_d1_local;
+wire   [7:0] trunc_ln884_fu_85_p1;
+reg    mmu_out_buf_ce1_local;
+reg   [5:0] mmu_out_buf_address1_local;
+reg    mmu_out_buf_we0_local;
+reg   [7:0] mmu_out_buf_d0_local;
+reg    mmu_out_buf_ce0_local;
+reg   [5:0] mmu_out_buf_address0_local;
+wire   [5:0] add_ln885_fu_106_p2;
+wire   [5:0] add_ln886_fu_137_p2;
+wire   [5:0] add_ln887_fu_147_p2;
+reg   [1:0] ap_NS_fsm;
+reg    ap_ST_fsm_state1_blk;
+wire    ap_ST_fsm_state2_blk;
 wire    ap_ce_reg;
 
-always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_0_address0_local = zext_ln870_fu_256_p1;
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_0_address0_local = zext_ln869_fu_222_p1;
+// power-on initialization
+initial begin
+#0 ap_CS_fsm = 2'd1;
+end
+
+always @ (posedge ap_clk) begin
+    if (ap_rst == 1'b1) begin
+        ap_CS_fsm <= ap_ST_fsm_state1;
     end else begin
-        buf_0_address0_local = 'bx;
+        ap_CS_fsm <= ap_NS_fsm;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state1)) begin
+        trunc_ln2_reg_163 <= {{value_r[23:16]}};
+        trunc_ln3_reg_168 <= {{value_r[31:24]}};
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_0_address1_local = zext_ln868_fu_188_p1;
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_0_address1_local = zext_ln865_fu_148_p1;
+    if ((ap_start == 1'b0)) begin
+        ap_ST_fsm_state1_blk = 1'b1;
     end else begin
-        buf_0_address1_local = 'bx;
+        ap_ST_fsm_state1_blk = 1'b0;
+    end
+end
+
+assign ap_ST_fsm_state2_blk = 1'b0;
+
+always @ (*) begin
+    if (((1'b1 == ap_CS_fsm_state2) | ((ap_start == 1'b0) & (1'b1 == ap_CS_fsm_state1)))) begin
+        ap_done = 1'b1;
+    end else begin
+        ap_done = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_0_ce0_local = 1'b1;
+    if (((ap_start == 1'b0) & (1'b1 == ap_CS_fsm_state1))) begin
+        ap_idle = 1'b1;
     end else begin
-        buf_0_ce0_local = 1'b0;
+        ap_idle = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_0_ce1_local = 1'b1;
+    if ((1'b1 == ap_CS_fsm_state2)) begin
+        ap_ready = 1'b1;
     end else begin
-        buf_0_ce1_local = 1'b0;
+        ap_ready = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_0_d0_local = {{value_r[31:24]}};
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_0_d0_local = {{value_r[23:16]}};
+    if ((1'b1 == ap_CS_fsm_state2)) begin
+        mmu_out_buf_address0_local = zext_ln887_fu_152_p1;
+    end else if ((1'b1 == ap_CS_fsm_state1)) begin
+        mmu_out_buf_address0_local = zext_ln885_fu_112_p1;
     end else begin
-        buf_0_d0_local = 'bx;
+        mmu_out_buf_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_0_d1_local = {{value_r[15:8]}};
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_0_d1_local = trunc_ln867_fu_154_p1;
+    if ((1'b1 == ap_CS_fsm_state2)) begin
+        mmu_out_buf_address1_local = zext_ln886_fu_142_p1;
+    end else if ((1'b1 == ap_CS_fsm_state1)) begin
+        mmu_out_buf_address1_local = zext_ln884_fu_90_p1;
     end else begin
-        buf_0_d1_local = 'bx;
+        mmu_out_buf_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_0_we0_local = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state2) | ((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        mmu_out_buf_ce0_local = 1'b1;
     end else begin
-        buf_0_we0_local = 1'b0;
+        mmu_out_buf_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_0_we1_local = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state2) | ((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        mmu_out_buf_ce1_local = 1'b1;
     end else begin
-        buf_0_we1_local = 1'b0;
+        mmu_out_buf_ce1_local = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_1_address0_local = zext_ln869_fu_222_p1;
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_1_address0_local = zext_ln870_fu_256_p1;
+    if ((1'b1 == ap_CS_fsm_state2)) begin
+        mmu_out_buf_d0_local = trunc_ln3_reg_168;
+    end else if ((1'b1 == ap_CS_fsm_state1)) begin
+        mmu_out_buf_d0_local = {{value_r[15:8]}};
     end else begin
-        buf_1_address0_local = 'bx;
+        mmu_out_buf_d0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_1_address1_local = zext_ln865_fu_148_p1;
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_1_address1_local = zext_ln868_fu_188_p1;
+    if ((1'b1 == ap_CS_fsm_state2)) begin
+        mmu_out_buf_d1_local = trunc_ln2_reg_163;
+    end else if ((1'b1 == ap_CS_fsm_state1)) begin
+        mmu_out_buf_d1_local = trunc_ln884_fu_85_p1;
     end else begin
-        buf_1_address1_local = 'bx;
+        mmu_out_buf_d1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_1_ce0_local = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state2) | ((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        mmu_out_buf_we0_local = 1'b1;
     end else begin
-        buf_1_ce0_local = 1'b0;
+        mmu_out_buf_we0_local = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_1_ce1_local = 1'b1;
+    if (((1'b1 == ap_CS_fsm_state2) | ((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        mmu_out_buf_we1_local = 1'b1;
     end else begin
-        buf_1_ce1_local = 1'b0;
+        mmu_out_buf_we1_local = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_1_d0_local = {{value_r[23:16]}};
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_1_d0_local = {{value_r[31:24]}};
-    end else begin
-        buf_1_d0_local = 'bx;
-    end
+    case (ap_CS_fsm)
+        ap_ST_fsm_state1 : begin
+            if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state2;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state1;
+            end
+        end
+        ap_ST_fsm_state2 : begin
+            ap_NS_fsm = ap_ST_fsm_state1;
+        end
+        default : begin
+            ap_NS_fsm = 'bx;
+        end
+    endcase
 end
 
-always @ (*) begin
-    if ((trunc_ln865_fu_134_p1 == 1'd1)) begin
-        buf_1_d1_local = trunc_ln867_fu_154_p1;
-    end else if ((trunc_ln865_fu_134_p1 == 1'd0)) begin
-        buf_1_d1_local = {{value_r[15:8]}};
-    end else begin
-        buf_1_d1_local = 'bx;
-    end
-end
+assign add_ln885_fu_106_p2 = (byte_addr + 6'd1);
 
-always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_1_we0_local = 1'b1;
-    end else begin
-        buf_1_we0_local = 1'b0;
-    end
-end
+assign add_ln886_fu_137_p2 = (byte_addr + 6'd2);
 
-always @ (*) begin
-    if ((((trunc_ln865_fu_134_p1 == 1'd1) & (ap_start == 1'b1)) | ((trunc_ln865_fu_134_p1 == 1'd0) & (ap_start == 1'b1)))) begin
-        buf_1_we1_local = 1'b1;
-    end else begin
-        buf_1_we1_local = 1'b0;
-    end
-end
+assign add_ln887_fu_147_p2 = (byte_addr + 6'd3);
 
-assign add_ln868_fu_172_p2 = (byte_addr + 6'd1);
+assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
-assign add_ln869_fu_206_p2 = (byte_addr + 6'd2);
+assign ap_CS_fsm_state2 = ap_CS_fsm[32'd1];
 
-assign add_ln870_fu_240_p2 = (byte_addr + 6'd3);
+assign mmu_out_buf_address0 = mmu_out_buf_address0_local;
 
-assign ap_ready = ap_start;
+assign mmu_out_buf_address1 = mmu_out_buf_address1_local;
 
-assign buf_0_address0 = buf_0_address0_local;
+assign mmu_out_buf_ce0 = mmu_out_buf_ce0_local;
 
-assign buf_0_address1 = buf_0_address1_local;
+assign mmu_out_buf_ce1 = mmu_out_buf_ce1_local;
 
-assign buf_0_ce0 = buf_0_ce0_local;
+assign mmu_out_buf_d0 = mmu_out_buf_d0_local;
 
-assign buf_0_ce1 = buf_0_ce1_local;
+assign mmu_out_buf_d1 = mmu_out_buf_d1_local;
 
-assign buf_0_d0 = buf_0_d0_local;
+assign mmu_out_buf_we0 = mmu_out_buf_we0_local;
 
-assign buf_0_d1 = buf_0_d1_local;
+assign mmu_out_buf_we1 = mmu_out_buf_we1_local;
 
-assign buf_0_we0 = buf_0_we0_local;
+assign trunc_ln884_fu_85_p1 = value_r[7:0];
 
-assign buf_0_we1 = buf_0_we1_local;
+assign zext_ln884_fu_90_p1 = byte_addr;
 
-assign buf_1_address0 = buf_1_address0_local;
+assign zext_ln885_fu_112_p1 = add_ln885_fu_106_p2;
 
-assign buf_1_address1 = buf_1_address1_local;
+assign zext_ln886_fu_142_p1 = add_ln886_fu_137_p2;
 
-assign buf_1_ce0 = buf_1_ce0_local;
-
-assign buf_1_ce1 = buf_1_ce1_local;
-
-assign buf_1_d0 = buf_1_d0_local;
-
-assign buf_1_d1 = buf_1_d1_local;
-
-assign buf_1_we0 = buf_1_we0_local;
-
-assign buf_1_we1 = buf_1_we1_local;
-
-assign lshr_ln868_1_fu_178_p4 = {{add_ln868_fu_172_p2[5:1]}};
-
-assign lshr_ln869_1_fu_212_p4 = {{add_ln869_fu_206_p2[5:1]}};
-
-assign lshr_ln870_1_fu_246_p4 = {{add_ln870_fu_240_p2[5:1]}};
-
-assign lshr_ln_fu_138_p4 = {{byte_addr[5:1]}};
-
-assign trunc_ln865_fu_134_p1 = byte_addr[0:0];
-
-assign trunc_ln867_fu_154_p1 = value_r[7:0];
-
-assign zext_ln865_fu_148_p1 = lshr_ln_fu_138_p4;
-
-assign zext_ln868_fu_188_p1 = lshr_ln868_1_fu_178_p4;
-
-assign zext_ln869_fu_222_p1 = lshr_ln869_1_fu_212_p4;
-
-assign zext_ln870_fu_256_p1 = lshr_ln870_1_fu_246_p4;
+assign zext_ln887_fu_152_p1 = add_ln887_fu_147_p2;
 
 endmodule //transformer_top_write_i32

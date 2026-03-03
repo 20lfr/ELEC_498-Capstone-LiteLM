@@ -13,7 +13,7 @@ module transformer_top_transformer_top_Pipeline_VITIS_LOOP_471_13 (
         ap_done,
         ap_idle,
         ap_ready,
-        trunc_ln11,
+        trunc_ln8,
         dma_rx_buf_local_address0,
         dma_rx_buf_local_ce0,
         dma_rx_buf_local_we0,
@@ -28,7 +28,7 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [12:0] trunc_ln11;
+input  [12:0] trunc_ln8;
 output  [10:0] dma_rx_buf_local_address0;
 output   dma_rx_buf_local_ce0;
 output   dma_rx_buf_local_we0;
@@ -210,7 +210,7 @@ assign dma_rx_buf_local_d0 = 32'd0;
 
 assign dma_rx_buf_local_we0 = dma_rx_buf_local_we0_local;
 
-assign icmp_ln471_fu_64_p2 = ((zext_ln471_1_fu_60_p1 == trunc_ln11) ? 1'b1 : 1'b0);
+assign icmp_ln471_fu_64_p2 = ((zext_ln471_1_fu_60_p1 == trunc_ln8) ? 1'b1 : 1'b0);
 
 assign zext_ln471_1_fu_60_p1 = ap_sig_allocacmp_i_9;
 

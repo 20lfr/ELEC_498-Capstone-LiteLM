@@ -7,404 +7,145 @@
 `timescale 1 ns / 1 ps 
 
 module transformer_top_read_i4_2 (
-        ap_clk,
-        ap_rst,
-        ap_start,
-        ap_done,
-        ap_idle,
         ap_ready,
-        buf_0_address0,
-        buf_0_ce0,
-        buf_0_q0,
-        buf_1_address0,
-        buf_1_ce0,
-        buf_1_q0,
-        buf_2_address0,
-        buf_2_ce0,
-        buf_2_q0,
-        buf_3_address0,
-        buf_3_ce0,
-        buf_3_q0,
-        buf_4_address0,
-        buf_4_ce0,
-        buf_4_q0,
+        buf_read,
+        buf_read_16,
+        buf_read_17,
+        buf_read_18,
+        buf_read_19,
+        buf_read_20,
+        buf_read_21,
+        buf_read_22,
+        buf_read_23,
+        buf_read_24,
+        buf_read_25,
+        buf_read_26,
+        buf_read_27,
+        buf_read_28,
+        buf_read_29,
+        buf_read_30,
         nibble_idx,
-        ap_return
+        ap_return,
+        ap_rst
 );
 
-parameter    ap_ST_fsm_state1 = 10'd1;
-parameter    ap_ST_fsm_state2 = 10'd2;
-parameter    ap_ST_fsm_state3 = 10'd4;
-parameter    ap_ST_fsm_state4 = 10'd8;
-parameter    ap_ST_fsm_state5 = 10'd16;
-parameter    ap_ST_fsm_state6 = 10'd32;
-parameter    ap_ST_fsm_state7 = 10'd64;
-parameter    ap_ST_fsm_state8 = 10'd128;
-parameter    ap_ST_fsm_state9 = 10'd256;
-parameter    ap_ST_fsm_state10 = 10'd512;
 
-input   ap_clk;
-input   ap_rst;
-input   ap_start;
-output   ap_done;
-output   ap_idle;
 output   ap_ready;
-output  [4:0] buf_0_address0;
-output   buf_0_ce0;
-input  [7:0] buf_0_q0;
-output  [4:0] buf_1_address0;
-output   buf_1_ce0;
-input  [7:0] buf_1_q0;
-output  [4:0] buf_2_address0;
-output   buf_2_ce0;
-input  [7:0] buf_2_q0;
-output  [4:0] buf_3_address0;
-output   buf_3_ce0;
-input  [7:0] buf_3_q0;
-output  [4:0] buf_4_address0;
-output   buf_4_ce0;
-input  [7:0] buf_4_q0;
-input  [6:0] nibble_idx;
+input  [7:0] buf_read;
+input  [7:0] buf_read_16;
+input  [7:0] buf_read_17;
+input  [7:0] buf_read_18;
+input  [7:0] buf_read_19;
+input  [7:0] buf_read_20;
+input  [7:0] buf_read_21;
+input  [7:0] buf_read_22;
+input  [7:0] buf_read_23;
+input  [7:0] buf_read_24;
+input  [7:0] buf_read_25;
+input  [7:0] buf_read_26;
+input  [7:0] buf_read_27;
+input  [7:0] buf_read_28;
+input  [7:0] buf_read_29;
+input  [7:0] buf_read_30;
+input  [5:0] nibble_idx;
 output  [3:0] ap_return;
+input   ap_rst;
 
-reg ap_done;
-reg ap_idle;
-reg ap_ready;
-reg[3:0] ap_return;
+wire   [7:0] byte_val_fu_202_p33;
+wire   [4:0] byte_val_fu_202_p34;
+wire   [7:0] byte_val_fu_202_p35;
+wire   [0:0] trunc_ln834_fu_188_p1;
+wire   [3:0] tmp_fu_274_p4;
+wire   [3:0] trunc_ln837_fu_284_p1;
+wire  signed [4:0] byte_val_fu_202_p1;
+wire  signed [4:0] byte_val_fu_202_p3;
+wire  signed [4:0] byte_val_fu_202_p5;
+wire  signed [4:0] byte_val_fu_202_p7;
+wire  signed [4:0] byte_val_fu_202_p9;
+wire  signed [4:0] byte_val_fu_202_p11;
+wire  signed [4:0] byte_val_fu_202_p13;
+wire  signed [4:0] byte_val_fu_202_p15;
+wire  signed [4:0] byte_val_fu_202_p17;
+wire  signed [4:0] byte_val_fu_202_p19;
+wire  signed [4:0] byte_val_fu_202_p21;
+wire  signed [4:0] byte_val_fu_202_p23;
+wire  signed [4:0] byte_val_fu_202_p25;
+wire  signed [4:0] byte_val_fu_202_p27;
+wire  signed [4:0] byte_val_fu_202_p29;
+wire  signed [4:0] byte_val_fu_202_p31;
 
-(* fsm_encoding = "none" *) reg   [9:0] ap_CS_fsm;
-wire    ap_CS_fsm_state1;
-wire   [0:0] trunc_ln817_fu_123_p1;
-reg   [0:0] trunc_ln817_reg_224;
-wire   [5:0] trunc_ln_fu_127_p4;
-reg   [3:0] tmp_70_reg_234;
-wire    ap_CS_fsm_state9;
-wire   [63:0] zext_ln818_fu_163_p1;
-reg    buf_0_ce0_local;
-reg    buf_1_ce0_local;
-reg    buf_2_ce0_local;
-reg    buf_3_ce0_local;
-reg    buf_4_ce0_local;
-wire   [5:0] mul_ln818_fu_141_p0;
-wire   [7:0] mul_ln818_fu_141_p1;
-wire   [12:0] mul_ln818_fu_141_p2;
-wire   [5:0] grp_fu_157_p0;
-wire   [3:0] grp_fu_157_p1;
-wire   [2:0] grp_fu_157_p2;
-wire    ap_CS_fsm_state10;
-wire   [7:0] byte_val_fu_175_p11;
-wire   [2:0] byte_val_fu_175_p12;
-wire   [7:0] byte_val_fu_175_p13;
-wire   [3:0] tmp_fu_203_p4;
-wire   [3:0] trunc_ln820_fu_213_p1;
-reg    grp_fu_157_ap_start;
-wire    grp_fu_157_ap_done;
-wire   [3:0] nibble_fu_217_p3;
-reg   [3:0] ap_return_preg;
-reg   [9:0] ap_NS_fsm;
-reg    ap_ST_fsm_state1_blk;
-wire    ap_ST_fsm_state2_blk;
-wire    ap_ST_fsm_state3_blk;
-wire    ap_ST_fsm_state4_blk;
-wire    ap_ST_fsm_state5_blk;
-wire    ap_ST_fsm_state6_blk;
-wire    ap_ST_fsm_state7_blk;
-wire    ap_ST_fsm_state8_blk;
-wire    ap_ST_fsm_state9_blk;
-wire    ap_ST_fsm_state10_blk;
-wire   [12:0] mul_ln818_fu_141_p00;
-wire   [2:0] byte_val_fu_175_p1;
-wire   [2:0] byte_val_fu_175_p3;
-wire   [2:0] byte_val_fu_175_p5;
-wire   [2:0] byte_val_fu_175_p7;
-wire  signed [2:0] byte_val_fu_175_p9;
-wire    ap_ce_reg;
-
-// power-on initialization
-initial begin
-#0 ap_CS_fsm = 10'd1;
-#0 ap_return_preg = 4'd0;
-end
-
-transformer_top_mul_6ns_8ns_13_1_1 #(
+(* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_33_5_8_1_1 #(
     .ID( 1 ),
     .NUM_STAGE( 1 ),
-    .din0_WIDTH( 6 ),
-    .din1_WIDTH( 8 ),
-    .dout_WIDTH( 13 ))
-mul_6ns_8ns_13_1_1_U839(
-    .din0(mul_ln818_fu_141_p0),
-    .din1(mul_ln818_fu_141_p1),
-    .dout(mul_ln818_fu_141_p2)
-);
-
-transformer_top_urem_6ns_4ns_3_10_seq_1 #(
-    .ID( 1 ),
-    .NUM_STAGE( 10 ),
-    .din0_WIDTH( 6 ),
-    .din1_WIDTH( 4 ),
-    .dout_WIDTH( 3 ))
-urem_6ns_4ns_3_10_seq_1_U840(
-    .clk(ap_clk),
-    .reset(ap_rst),
-    .start(grp_fu_157_ap_start),
-    .done(grp_fu_157_ap_done),
-    .din0(grp_fu_157_p0),
-    .din1(grp_fu_157_p1),
-    .ce(1'b1),
-    .dout(grp_fu_157_p2)
-);
-
-(* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_11_3_8_1_1 #(
-    .ID( 1 ),
-    .NUM_STAGE( 1 ),
-    .CASE0( 3'h0 ),
+    .CASE0( 5'h10 ),
     .din0_WIDTH( 8 ),
-    .CASE1( 3'h1 ),
+    .CASE1( 5'h11 ),
     .din1_WIDTH( 8 ),
-    .CASE2( 3'h2 ),
+    .CASE2( 5'h12 ),
     .din2_WIDTH( 8 ),
-    .CASE3( 3'h3 ),
+    .CASE3( 5'h13 ),
     .din3_WIDTH( 8 ),
-    .CASE4( 3'h4 ),
+    .CASE4( 5'h14 ),
     .din4_WIDTH( 8 ),
+    .CASE5( 5'h15 ),
+    .din5_WIDTH( 8 ),
+    .CASE6( 5'h16 ),
+    .din6_WIDTH( 8 ),
+    .CASE7( 5'h17 ),
+    .din7_WIDTH( 8 ),
+    .CASE8( 5'h18 ),
+    .din8_WIDTH( 8 ),
+    .CASE9( 5'h19 ),
+    .din9_WIDTH( 8 ),
+    .CASE10( 5'h1A ),
+    .din10_WIDTH( 8 ),
+    .CASE11( 5'h1B ),
+    .din11_WIDTH( 8 ),
+    .CASE12( 5'h1C ),
+    .din12_WIDTH( 8 ),
+    .CASE13( 5'h1D ),
+    .din13_WIDTH( 8 ),
+    .CASE14( 5'h1E ),
+    .din14_WIDTH( 8 ),
+    .CASE15( 5'h1F ),
+    .din15_WIDTH( 8 ),
     .def_WIDTH( 8 ),
-    .sel_WIDTH( 3 ),
+    .sel_WIDTH( 5 ),
     .dout_WIDTH( 8 ))
-sparsemux_11_3_8_1_1_U841(
-    .din0(buf_0_q0),
-    .din1(buf_1_q0),
-    .din2(buf_2_q0),
-    .din3(buf_3_q0),
-    .din4(buf_4_q0),
-    .def(byte_val_fu_175_p11),
-    .sel(byte_val_fu_175_p12),
-    .dout(byte_val_fu_175_p13)
+sparsemux_33_5_8_1_1_U1156(
+    .din0(buf_read),
+    .din1(buf_read_16),
+    .din2(buf_read_17),
+    .din3(buf_read_18),
+    .din4(buf_read_19),
+    .din5(buf_read_20),
+    .din6(buf_read_21),
+    .din7(buf_read_22),
+    .din8(buf_read_23),
+    .din9(buf_read_24),
+    .din10(buf_read_25),
+    .din11(buf_read_26),
+    .din12(buf_read_27),
+    .din13(buf_read_28),
+    .din14(buf_read_29),
+    .din15(buf_read_30),
+    .def(byte_val_fu_202_p33),
+    .sel(byte_val_fu_202_p34),
+    .dout(byte_val_fu_202_p35)
 );
 
-always @ (posedge ap_clk) begin
-    if (ap_rst == 1'b1) begin
-        ap_CS_fsm <= ap_ST_fsm_state1;
-    end else begin
-        ap_CS_fsm <= ap_NS_fsm;
-    end
-end
+assign ap_ready = 1'b1;
 
-always @ (posedge ap_clk) begin
-    if (ap_rst == 1'b1) begin
-        ap_return_preg <= 4'd0;
-    end else begin
-        if ((1'b1 == ap_CS_fsm_state10)) begin
-            ap_return_preg <= nibble_fu_217_p3;
-        end
-    end
-end
+assign tmp_fu_274_p4 = {{byte_val_fu_202_p35[7:4]}};
 
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state1)) begin
-        tmp_70_reg_234 <= {{mul_ln818_fu_141_p2[12:9]}};
-        trunc_ln817_reg_224 <= trunc_ln817_fu_123_p1;
-    end
-end
+assign trunc_ln834_fu_188_p1 = nibble_idx[0:0];
 
-assign ap_ST_fsm_state10_blk = 1'b0;
+assign trunc_ln837_fu_284_p1 = byte_val_fu_202_p35[3:0];
 
-always @ (*) begin
-    if ((ap_start == 1'b0)) begin
-        ap_ST_fsm_state1_blk = 1'b1;
-    end else begin
-        ap_ST_fsm_state1_blk = 1'b0;
-    end
-end
+assign ap_return = ((trunc_ln834_fu_188_p1[0:0] == 1'b1) ? tmp_fu_274_p4 : trunc_ln837_fu_284_p1);
 
-assign ap_ST_fsm_state2_blk = 1'b0;
+assign byte_val_fu_202_p33 = 'bx;
 
-assign ap_ST_fsm_state3_blk = 1'b0;
-
-assign ap_ST_fsm_state4_blk = 1'b0;
-
-assign ap_ST_fsm_state5_blk = 1'b0;
-
-assign ap_ST_fsm_state6_blk = 1'b0;
-
-assign ap_ST_fsm_state7_blk = 1'b0;
-
-assign ap_ST_fsm_state8_blk = 1'b0;
-
-assign ap_ST_fsm_state9_blk = 1'b0;
-
-always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state10) | ((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b0)))) begin
-        ap_done = 1'b1;
-    end else begin
-        ap_done = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b0))) begin
-        ap_idle = 1'b1;
-    end else begin
-        ap_idle = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state10)) begin
-        ap_ready = 1'b1;
-    end else begin
-        ap_ready = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state10)) begin
-        ap_return = nibble_fu_217_p3;
-    end else begin
-        ap_return = ap_return_preg;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state9)) begin
-        buf_0_ce0_local = 1'b1;
-    end else begin
-        buf_0_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state9)) begin
-        buf_1_ce0_local = 1'b1;
-    end else begin
-        buf_1_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state9)) begin
-        buf_2_ce0_local = 1'b1;
-    end else begin
-        buf_2_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state9)) begin
-        buf_3_ce0_local = 1'b1;
-    end else begin
-        buf_3_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state9)) begin
-        buf_4_ce0_local = 1'b1;
-    end else begin
-        buf_4_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-        grp_fu_157_ap_start = 1'b1;
-    end else begin
-        grp_fu_157_ap_start = 1'b0;
-    end
-end
-
-always @ (*) begin
-    case (ap_CS_fsm)
-        ap_ST_fsm_state1 : begin
-            if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-                ap_NS_fsm = ap_ST_fsm_state2;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state1;
-            end
-        end
-        ap_ST_fsm_state2 : begin
-            ap_NS_fsm = ap_ST_fsm_state3;
-        end
-        ap_ST_fsm_state3 : begin
-            ap_NS_fsm = ap_ST_fsm_state4;
-        end
-        ap_ST_fsm_state4 : begin
-            ap_NS_fsm = ap_ST_fsm_state5;
-        end
-        ap_ST_fsm_state5 : begin
-            ap_NS_fsm = ap_ST_fsm_state6;
-        end
-        ap_ST_fsm_state6 : begin
-            ap_NS_fsm = ap_ST_fsm_state7;
-        end
-        ap_ST_fsm_state7 : begin
-            ap_NS_fsm = ap_ST_fsm_state8;
-        end
-        ap_ST_fsm_state8 : begin
-            ap_NS_fsm = ap_ST_fsm_state9;
-        end
-        ap_ST_fsm_state9 : begin
-            ap_NS_fsm = ap_ST_fsm_state10;
-        end
-        ap_ST_fsm_state10 : begin
-            ap_NS_fsm = ap_ST_fsm_state1;
-        end
-        default : begin
-            ap_NS_fsm = 'bx;
-        end
-    endcase
-end
-
-assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
-
-assign ap_CS_fsm_state10 = ap_CS_fsm[32'd9];
-
-assign ap_CS_fsm_state9 = ap_CS_fsm[32'd8];
-
-assign buf_0_address0 = zext_ln818_fu_163_p1;
-
-assign buf_0_ce0 = buf_0_ce0_local;
-
-assign buf_1_address0 = zext_ln818_fu_163_p1;
-
-assign buf_1_ce0 = buf_1_ce0_local;
-
-assign buf_2_address0 = zext_ln818_fu_163_p1;
-
-assign buf_2_ce0 = buf_2_ce0_local;
-
-assign buf_3_address0 = zext_ln818_fu_163_p1;
-
-assign buf_3_ce0 = buf_3_ce0_local;
-
-assign buf_4_address0 = zext_ln818_fu_163_p1;
-
-assign buf_4_ce0 = buf_4_ce0_local;
-
-assign byte_val_fu_175_p11 = 'bx;
-
-assign byte_val_fu_175_p12 = grp_fu_157_p2[2:0];
-
-assign grp_fu_157_p0 = {{nibble_idx[6:1]}};
-
-assign grp_fu_157_p1 = 6'd5;
-
-assign mul_ln818_fu_141_p0 = mul_ln818_fu_141_p00;
-
-assign mul_ln818_fu_141_p00 = trunc_ln_fu_127_p4;
-
-assign mul_ln818_fu_141_p1 = 13'd103;
-
-assign nibble_fu_217_p3 = ((trunc_ln817_reg_224[0:0] == 1'b1) ? tmp_fu_203_p4 : trunc_ln820_fu_213_p1);
-
-assign tmp_fu_203_p4 = {{byte_val_fu_175_p13[7:4]}};
-
-assign trunc_ln817_fu_123_p1 = nibble_idx[0:0];
-
-assign trunc_ln820_fu_213_p1 = byte_val_fu_175_p13[3:0];
-
-assign trunc_ln_fu_127_p4 = {{nibble_idx[6:1]}};
-
-assign zext_ln818_fu_163_p1 = tmp_70_reg_234;
+assign byte_val_fu_202_p34 = {{nibble_idx[5:1]}};
 
 endmodule //transformer_top_read_i4_2

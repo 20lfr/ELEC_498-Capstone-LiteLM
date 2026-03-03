@@ -31,11 +31,11 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [4:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_address0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_address0;
 output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_ce0;
 output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_we0;
 output  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_d0;
-output  [4:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_address0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_address0;
 output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_ce0;
 output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_we0;
 output  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_d0;
@@ -50,16 +50,16 @@ reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire   [63:0] zext_ln287_fu_102_p1;
-reg   [6:0] i_5_fu_36;
-wire   [6:0] add_ln287_fu_82_p2;
+reg   [5:0] i_5_fu_36;
+wire   [5:0] add_ln287_fu_82_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i;
+reg   [5:0] ap_sig_allocacmp_i;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_we0_local;
 wire   [0:0] trunc_ln287_fu_88_p1;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_we0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_ce0_local;
-wire   [4:0] lshr_ln287_1_fu_92_p4;
+wire   [3:0] lshr_ln287_1_fu_92_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -73,7 +73,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_5_fu_36 = 7'd0;
+#0 i_5_fu_36 = 6'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -117,7 +117,7 @@ always @ (posedge ap_clk) begin
         if ((icmp_ln287_fu_76_p2 == 1'd0)) begin
             i_5_fu_36 <= add_ln287_fu_82_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_5_fu_36 <= 7'd0;
+            i_5_fu_36 <= 6'd0;
         end
     end
 end
@@ -164,7 +164,7 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i = 7'd0;
+        ap_sig_allocacmp_i = 6'd0;
     end else begin
         ap_sig_allocacmp_i = i_5_fu_36;
     end
@@ -213,7 +213,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln287_fu_82_p2 = (ap_sig_allocacmp_i + 7'd1);
+assign add_ln287_fu_82_p2 = (ap_sig_allocacmp_i + 6'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -227,9 +227,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln287_fu_76_p2 = ((ap_sig_allocacmp_i == 7'd64) ? 1'b1 : 1'b0);
+assign icmp_ln287_fu_76_p2 = ((ap_sig_allocacmp_i == 6'd32) ? 1'b1 : 1'b0);
 
-assign lshr_ln287_1_fu_92_p4 = {{ap_sig_allocacmp_i[5:1]}};
+assign lshr_ln287_1_fu_92_p4 = {{ap_sig_allocacmp_i[4:1]}};
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_1_address0 = zext_ln287_fu_102_p1;
 

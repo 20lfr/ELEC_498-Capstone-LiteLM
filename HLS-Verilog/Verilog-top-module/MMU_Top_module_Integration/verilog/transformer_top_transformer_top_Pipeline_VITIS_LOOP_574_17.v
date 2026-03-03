@@ -17,12 +17,9 @@ module transformer_top_transformer_top_Pipeline_VITIS_LOOP_574_17 (
         dbg_out_buf_ce0,
         dbg_out_buf_we0,
         dbg_out_buf_d0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0
+        mmu_out_buf_address0,
+        mmu_out_buf_ce0,
+        mmu_out_buf_q0
 );
 
 parameter    ap_ST_fsm_pp0_stage0 = 1'd1;
@@ -37,12 +34,9 @@ output  [5:0] dbg_out_buf_address0;
 output   dbg_out_buf_ce0;
 output   dbg_out_buf_we0;
 output  [7:0] dbg_out_buf_d0;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0;
+output  [5:0] mmu_out_buf_address0;
+output   mmu_out_buf_ce0;
+input  [7:0] mmu_out_buf_q0;
 
 reg ap_idle;
 
@@ -52,26 +46,21 @@ wire    ap_enable_reg_pp0_iter0;
 reg    ap_enable_reg_pp0_iter1;
 reg    ap_idle_pp0;
 wire    ap_block_pp0_stage0_subdone;
-wire   [0:0] icmp_ln574_fu_91_p2;
+wire   [0:0] icmp_ln574_fu_73_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-reg   [6:0] i_5_reg_147;
+wire   [63:0] zext_ln574_fu_85_p1;
+reg   [63:0] zext_ln574_reg_105;
 wire    ap_block_pp0_stage0_11001;
-wire   [63:0] zext_ln574_1_fu_113_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln574_fu_124_p1;
-reg   [6:0] i_fu_40;
-wire   [6:0] add_ln574_fu_97_p2;
+reg   [6:0] i_fu_34;
+wire   [6:0] add_ln574_fu_79_p2;
 wire    ap_loop_init;
 reg   [6:0] ap_sig_allocacmp_i_5;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
+reg    mmu_out_buf_ce0_local;
 reg    dbg_out_buf_we0_local;
-wire   [7:0] select_ln576_fu_131_p3;
 reg    dbg_out_buf_ce0_local;
-wire   [4:0] lshr_ln2_fu_103_p4;
-wire   [0:0] trunc_ln574_fu_128_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -86,7 +75,7 @@ wire    ap_ce_reg;
 initial begin
 #0 ap_CS_fsm = 1'd1;
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
-#0 i_fu_40 = 7'd0;
+#0 i_fu_34 = 7'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -139,22 +128,22 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        if (((icmp_ln574_fu_91_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_fu_40 <= add_ln574_fu_97_p2;
+        if (((icmp_ln574_fu_73_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
+            i_fu_34 <= add_ln574_fu_79_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_40 <= 7'd0;
+            i_fu_34 <= 7'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        i_5_reg_147 <= ap_sig_allocacmp_i_5;
+        zext_ln574_reg_105[6 : 0] <= zext_ln574_fu_85_p1[6 : 0];
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln574_fu_91_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+    if (((icmp_ln574_fu_73_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0_subdone) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -197,7 +186,7 @@ always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         ap_sig_allocacmp_i_5 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_5 = i_fu_40;
+        ap_sig_allocacmp_i_5 = i_fu_34;
     end
 end
 
@@ -219,17 +208,9 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b1;
+        mmu_out_buf_ce0_local = 1'b1;
     end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter0 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b0;
+        mmu_out_buf_ce0_local = 1'b0;
     end
 end
 
@@ -244,7 +225,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln574_fu_97_p2 = (ap_sig_allocacmp_i_5 + 7'd1);
+assign add_ln574_fu_79_p2 = (ap_sig_allocacmp_i_5 + 7'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -264,32 +245,24 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign dbg_out_buf_address0 = zext_ln574_fu_124_p1;
+assign dbg_out_buf_address0 = zext_ln574_reg_105;
 
 assign dbg_out_buf_ce0 = dbg_out_buf_ce0_local;
 
-assign dbg_out_buf_d0 = select_ln576_fu_131_p3;
+assign dbg_out_buf_d0 = mmu_out_buf_q0;
 
 assign dbg_out_buf_we0 = dbg_out_buf_we0_local;
 
-assign icmp_ln574_fu_91_p2 = ((ap_sig_allocacmp_i_5 == 7'd64) ? 1'b1 : 1'b0);
+assign icmp_ln574_fu_73_p2 = ((ap_sig_allocacmp_i_5 == 7'd64) ? 1'b1 : 1'b0);
 
-assign lshr_ln2_fu_103_p4 = {{ap_sig_allocacmp_i_5[5:1]}};
+assign mmu_out_buf_address0 = zext_ln574_fu_85_p1;
 
-assign select_ln576_fu_131_p3 = ((trunc_ln574_fu_128_p1[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0);
+assign mmu_out_buf_ce0 = mmu_out_buf_ce0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0 = zext_ln574_1_fu_113_p1;
+assign zext_ln574_fu_85_p1 = ap_sig_allocacmp_i_5;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
-
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0 = zext_ln574_1_fu_113_p1;
-
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
-
-assign trunc_ln574_fu_128_p1 = i_5_reg_147[0:0];
-
-assign zext_ln574_1_fu_113_p1 = lshr_ln2_fu_103_p4;
-
-assign zext_ln574_fu_124_p1 = i_5_reg_147;
+always @ (posedge ap_clk) begin
+    zext_ln574_reg_105[63:7] <= 57'b000000000000000000000000000000000000000000000000000000000;
+end
 
 endmodule //transformer_top_transformer_top_Pipeline_VITIS_LOOP_574_17

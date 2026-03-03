@@ -33,6 +33,17 @@ IMG_BASE_LN1_EPS = 0x42C40
 IMG_BASE_FINAL_NORM_EPS = 0x42C80
 
 DDR_IMAGE_BYTES = 0x43000
+LAYER_STRIDE_BYTES = 0x1000
+
+QKV_SPAN_BYTES = 0x4000
+MAIN_SPAN_BYTES = 0x4000
+FFN_SPAN_BYTES = 0x6000
+WVOCAB_SPAN_BYTES = 0x1000
+LN_GAMMA_SPAN_BYTES = 0x0400
+
+
+def clamp_i4(value: int) -> int:
+    return max(-8, min(7, value))
 
 def write_word_le(image: bytearray, addr: int, value: int) -> None:
     if addr < 0 or (addr + 4) > len(image):
@@ -43,6 +54,71 @@ def write_word_le(image: bytearray, addr: int, value: int) -> None:
 def fill_pattern_region(image: bytearray, base: int, span_bytes: int, seed: int) -> None:
     for off in range(0, span_bytes, 4):
         write_word_le(image, base + off, seed + (off // 4))
+
+
+def write_i4_packed_word(image: bytearray, addr: int, values: list[int]) -> None:
+    if len(values) != 8:
+        raise ValueError("expected 8 int4 values per packed word")
+    packed = 0
+    for nibble_idx, value in enumerate(values):
+        packed |= (clamp_i4(value) & 0xF) << (nibble_idx * 4)
+    write_word_le(image, addr, packed)
+
+
+def fill_weight_region_soft(
+    image: bytearray,
+    base: int,
+    span_bytes: int,
+    *,
+    phase_seed: int,
+    base_mag: int,
+) -> None:
+    for off in range(0, span_bytes, 4):
+        layer = min(off // LAYER_STRIDE_BYTES, max(NUM_LAYERS - 1, 0))
+        layer_mag = max(1, base_mag - layer)
+        word_idx = off // 4
+        packed_vals = []
+        for nibble_idx in range(8):
+            phase = phase_seed + word_idx + nibble_idx + (layer * 3)
+            raw = (phase % (2 * layer_mag + 1)) - layer_mag
+            if raw == 0 and ((phase + layer) & 1):
+                raw = 1
+            packed_vals.append(raw)
+        write_i4_packed_word(image, base + off, packed_vals)
+
+
+def fill_i32_region_soft(
+    image: bytearray,
+    base: int,
+    span_bytes: int,
+    *,
+    base_mag: int,
+    phase_seed: int,
+) -> None:
+    for off in range(0, span_bytes, 4):
+        layer = min(off // LAYER_STRIDE_BYTES, max(NUM_LAYERS - 1, 0))
+        layer_mag = max(1, base_mag >> layer)
+        word_idx = off // 4
+        phase = phase_seed + word_idx + (layer * 5)
+        value = (phase % (2 * layer_mag + 1)) - layer_mag
+        write_word_le(image, base + off, value)
+
+
+def fill_gamma_region_soft(
+    image: bytearray,
+    base: int,
+    span_bytes: int,
+    *,
+    unity_q: int,
+    taper_q: int,
+) -> None:
+    words_per_layer = LAYER_STRIDE_BYTES // 4
+    for off in range(0, span_bytes, 4):
+        layer = min(off // LAYER_STRIDE_BYTES, max(NUM_LAYERS - 1, 0))
+        idx_in_layer = (off // 4) % words_per_layer
+        ripple = (idx_in_layer % 8) - 3
+        gamma = max(0x00000100, unity_q - (layer * taper_q) + (ripple * 0x10))
+        write_word_le(image, base + off, gamma)
 
 
 def build_ctrl_words() -> list[int]:
@@ -96,19 +172,20 @@ def build_ctrl_words() -> list[int]:
     words[46] = IMG_BASE_LN1_EPS
     words[47] = IMG_BASE_FINAL_NORM_EPS
     words[48] = IMG_BASE_WVOCAB  # wlogit offset
-    words[49] = 0x00000D10  # logit_scale_qv (legacy test value)
-    words[50] = 0x00002000  # scale_q
+    words[49] = 0x00000600  # lower attention/logit scale to reduce downstream saturation
+    words[50] = 0x00000800  # scale_q
     words[51] = 0x00000000  # zero_point_q
-    words[52] = 0x00002000  # scale_k
+    words[52] = 0x00000800  # scale_k
     words[53] = 0x00000000  # zero_point_k
-    words[54] = 0x00002000  # scale_v
+    words[54] = 0x00000800  # scale_v
     words[55] = 0x00000000  # zero_point_v
     return words
 
 
 def build_stream_bytes() -> bytes:
-    # One token payload, matching the restored SV testbench.
-    return bytes(((0x10 + i) & 0xFF) for i in range(STREAM_IN_BUF_BYTES))
+    # Keep the token deterministic but start from a much smaller activation range.
+    pattern = (-3, -2, -1, 0, 1, 2, 3, 1)
+    return bytes((pattern[i % len(pattern)] & 0xFF) for i in range(STREAM_IN_BUF_BYTES))
 
 
 def build_generated_mem_map_svh() -> str:
@@ -161,31 +238,34 @@ def build_generated_mem_map_svh() -> str:
 def main() -> None:
     image = bytearray(DDR_IMAGE_BYTES)
 
-    # Match the old SV TB region patterns.
-    fill_pattern_region(image, IMG_BASE_WQ, 0x4000, 0xA1000000)
-    fill_pattern_region(image, IMG_BASE_WK, 0x4000, 0xA2000000)
-    fill_pattern_region(image, IMG_BASE_WV, 0x4000, 0xA3000000)
-    fill_pattern_region(image, IMG_BASE_WO, 0x4000, 0xA4000000)
-    fill_pattern_region(image, IMG_BASE_W1, 0x6000, 0xA5000000)
-    fill_pattern_region(image, IMG_BASE_W2, 0x6000, 0xA6000000)
-    fill_pattern_region(image, IMG_BASE_WVOCAB, 0x1000, 0xA7000000)
+    # Use small bounded weights instead of huge monotonic ramps. Later layer
+    # chunks are tapered further to keep the residual path from exploding.
+    fill_weight_region_soft(image, IMG_BASE_WQ, QKV_SPAN_BYTES, phase_seed=1, base_mag=2)
+    fill_weight_region_soft(image, IMG_BASE_WK, QKV_SPAN_BYTES, phase_seed=5, base_mag=2)
+    fill_weight_region_soft(image, IMG_BASE_WV, QKV_SPAN_BYTES, phase_seed=9, base_mag=2)
+    fill_weight_region_soft(image, IMG_BASE_WO, MAIN_SPAN_BYTES, phase_seed=13, base_mag=2)
+    fill_weight_region_soft(image, IMG_BASE_W1, FFN_SPAN_BYTES, phase_seed=17, base_mag=1)
+    fill_weight_region_soft(image, IMG_BASE_W2, FFN_SPAN_BYTES, phase_seed=21, base_mag=1)
+    fill_weight_region_soft(image, IMG_BASE_WVOCAB, WVOCAB_SPAN_BYTES, phase_seed=25, base_mag=1)
 
-    fill_pattern_region(image, IMG_BASE_WQ_BIAS, 0x4000, 0x00000100)
-    fill_pattern_region(image, IMG_BASE_WK_BIAS, 0x4000, 0x00000200)
-    fill_pattern_region(image, IMG_BASE_WV_BIAS, 0x4000, 0x00000300)
-    fill_pattern_region(image, IMG_BASE_WO_BIAS, 0x4000, 0x00000400)
-    fill_pattern_region(image, IMG_BASE_W1_BIAS, 0x6000, 0x00000500)
-    fill_pattern_region(image, IMG_BASE_W2_BIAS, 0x6000, 0x00000600)
-    fill_pattern_region(image, IMG_BASE_WVOCAB_BIAS, 0x1000, 0x00000700)
+    # Keep biases near zero so deeper layers do not accumulate a large DC offset.
+    fill_i32_region_soft(image, IMG_BASE_WQ_BIAS, QKV_SPAN_BYTES, phase_seed=3, base_mag=8)
+    fill_i32_region_soft(image, IMG_BASE_WK_BIAS, QKV_SPAN_BYTES, phase_seed=7, base_mag=8)
+    fill_i32_region_soft(image, IMG_BASE_WV_BIAS, QKV_SPAN_BYTES, phase_seed=11, base_mag=8)
+    fill_i32_region_soft(image, IMG_BASE_WO_BIAS, MAIN_SPAN_BYTES, phase_seed=15, base_mag=6)
+    fill_i32_region_soft(image, IMG_BASE_W1_BIAS, FFN_SPAN_BYTES, phase_seed=19, base_mag=4)
+    fill_i32_region_soft(image, IMG_BASE_W2_BIAS, FFN_SPAN_BYTES, phase_seed=23, base_mag=4)
+    fill_i32_region_soft(image, IMG_BASE_WVOCAB_BIAS, WVOCAB_SPAN_BYTES, phase_seed=27, base_mag=3)
 
-    fill_pattern_region(image, IMG_BASE_LN0_GAMMA, 0x0400, 0x00002000)
-    fill_pattern_region(image, IMG_BASE_LN1_GAMMA, 0x0400, 0x00002100)
-    fill_pattern_region(image, IMG_BASE_FINAL_NORM_GAMMA, 0x0400, 0x00002200)
+    # Keep norm gains closer to a soft unity and taper them by layer.
+    fill_gamma_region_soft(image, IMG_BASE_LN0_GAMMA, LN_GAMMA_SPAN_BYTES, unity_q=0x00000800, taper_q=0x00000100)
+    fill_gamma_region_soft(image, IMG_BASE_LN1_GAMMA, LN_GAMMA_SPAN_BYTES, unity_q=0x00000780, taper_q=0x00000100)
+    fill_gamma_region_soft(image, IMG_BASE_FINAL_NORM_GAMMA, LN_GAMMA_SPAN_BYTES, unity_q=0x00000700, taper_q=0x00000080)
 
     for layer in range(NUM_LAYERS):
-        write_word_le(image, IMG_BASE_LN0_EPS + layer * 4, 0x00000001)
-        write_word_le(image, IMG_BASE_LN1_EPS + layer * 4, 0x00000001)
-        write_word_le(image, IMG_BASE_FINAL_NORM_EPS + layer * 4, 0x00000001)
+        write_word_le(image, IMG_BASE_LN0_EPS + layer * 4, 0x00000004)
+        write_word_le(image, IMG_BASE_LN1_EPS + layer * 4, 0x00000004)
+        write_word_le(image, IMG_BASE_FINAL_NORM_EPS + layer * 4, 0x00000004)
 
     out_dir = os.path.dirname(__file__)
 
