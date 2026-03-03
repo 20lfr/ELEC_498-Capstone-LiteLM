@@ -380,9 +380,9 @@ int main() {
     ControlMemSpace ctrl{};
     ctrl.layer_stride = 0x00100000;
 
-    ctrl.wq_head_stride = head_buf::INQkvLayout::W_BYTES + head_buf::INQkvLayout::B_BYTES;
-    ctrl.wk_head_stride = head_buf::INQkvLayout::W_BYTES + head_buf::INQkvLayout::B_BYTES;
-    ctrl.wv_head_stride = head_buf::INQkvLayout::W_BYTES + head_buf::INQkvLayout::B_BYTES;
+    ctrl.wq_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
+    ctrl.wk_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
+    ctrl.wv_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
 
     ctrl.wo_tile_stride = compute_buf::INOutProjLayout::W_BYTES + compute_buf::INOutProjLayout::B_BYTES;
     ctrl.w1_tile_stride = compute_buf::INFfnW1Layout::W_BYTES + compute_buf::INFfnW1Layout::B_BYTES;

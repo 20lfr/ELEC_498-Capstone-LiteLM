@@ -1044,6 +1044,63 @@ static bool load_region_partial_to_buf(Tag tag, int layer, int head, int tile,
     return true;
 }
 
+static bool load_region_segment_to_buf(Tag tag, int layer, int head, int tile,
+                                       uint32_t src_off,
+                                       uint8_t *dst, int dst_off, uint32_t bytes,
+                                       bool consume, bool &invalid_flag) {
+#pragma HLS INLINE
+    const int idx = find_region(tag, layer, head, tile);
+    if (idx < 0 || !region_ready(regions[idx])) {
+        mmu_set_invalid(ERR_MMU_MISSING_REGION_PARTIAL_READ, mmu_missing_subcode_from_tag(tag));
+        invalid_flag = true;
+        return false;
+    }
+    if (!region_read_bytes(regions[idx], src_off, &dst[dst_off], bytes)) {
+        mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+        invalid_flag = true;
+        return false;
+    }
+    if (consume && should_consume(tag)) {
+        maybe_consume(idx);
+    }
+    return true;
+}
+
+static bool load_ctx_v_tile_to_buf(int layer, int head, int tile,
+                                   uint8_t *dst, int dst_off,
+                                   bool consume, bool &invalid_flag) {
+#pragma HLS INLINE off
+    const int idx = find_region(Tag::CTX_V, layer, head, -1);
+    if (idx < 0 || !region_ready(regions[idx])) {
+        mmu_set_invalid(ERR_MMU_MISSING_REGION_PARTIAL_READ, mmu_missing_subcode_from_tag(Tag::CTX_V));
+        invalid_flag = true;
+        return false;
+    }
+
+    const uint32_t src_head_off = static_cast<uint32_t>(tile) * static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE);
+    uint8_t row[D_HEAD_TILE_ATT_VALUE];
+#pragma HLS ARRAY_PARTITION variable=row complete dim=1
+
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+        const uint32_t src_off =
+            static_cast<uint32_t>(t) * static_cast<uint32_t>(D_HEADS) + src_head_off;
+        if (!region_read_bytes(regions[idx], src_off, row, D_HEAD_TILE_ATT_VALUE)) {
+            mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+            invalid_flag = true;
+            return false;
+        }
+        for (int h = 0; h < D_HEAD_TILE_ATT_VALUE; ++h) {
+#pragma HLS UNROLL
+            dst[dst_off + (h * CONTEXT_LENGTH) + t] = row[h];
+        }
+    }
+
+    if (consume && should_consume(Tag::CTX_V)) {
+        maybe_consume(idx);
+    }
+    return true;
+}
+
 // ---------------------------------------------------------------------------
 // Tag mapping for compute writes (includes tiled/contiguous aggregation rules)
 // ---------------------------------------------------------------------------
@@ -1068,18 +1125,30 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
         switch (op) {
             case CMP_Q: {
                 s.tag = Tag::Q_OUT;
+                s.expected_parts = NUM_QKV_HEAD_TILES;
+                s.part_idx = (tile >= 0) ? tile : 0;
+                s.total_bytes = head_buf::QKV_OUT_FULL_BYTES;
                 break;
             }
             case CMP_K: {
                 s.tag = Tag::K_OUT;
+                s.expected_parts = NUM_QKV_HEAD_TILES;
+                s.part_idx = (tile >= 0) ? tile : 0;
+                s.total_bytes = head_buf::QKV_OUT_FULL_BYTES;
                 break;
             }
             case CMP_V: {
                 s.tag = Tag::V_OUT;
+                s.expected_parts = NUM_QKV_HEAD_TILES;
+                s.part_idx = (tile >= 0) ? tile : 0;
+                s.total_bytes = head_buf::QKV_OUT_FULL_BYTES;
                 break;
             }
             case CMP_ATT_SCORES: {
                 s.tag = Tag::ATT_SCORES_OUT;
+                s.expected_parts = NUM_ATT_CTX_BLOCKS;
+                s.part_idx = (tile >= 0) ? tile : 0;
+                s.total_bytes = head_buf::ATT_SCORES_OUT_FULL_BYTES;
                 break;
             }
             case CMP_VALUE_SCALE: {
@@ -1092,6 +1161,9 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
             }
             case CMP_ATT_VALUE: {
                 s.tag = Tag::ATT_VALUE_OUT;
+                s.expected_parts = NUM_ATT_VALUE_HEAD_TILES;
+                s.part_idx = (tile >= 0) ? tile : 0;
+                s.total_bytes = head_buf::ATT_VALUE_OUT_FULL_BYTES;
                 break;
             }
             case CMP_HEAD_REQUANT: {
@@ -1215,8 +1287,8 @@ static bool build_dma_piece_plan(DmaSel sel,
     switch (sel) {
         case DMASEL_WQ: {
             piece_count = 2;
-            piece_bytes[0] = head_buf::INQkvLayout::W_BYTES;
-            piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
+            piece_bytes[0] = head_buf::QKV_W_FULL_BYTES;
+            piece_bytes[1] = head_buf::QKV_B_FULL_BYTES;
             piece_addr_off[0] = 0;
             piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WQ_W;
@@ -1225,8 +1297,8 @@ static bool build_dma_piece_plan(DmaSel sel,
         }
         case DMASEL_WK: {
             piece_count = 2;
-            piece_bytes[0] = head_buf::INQkvLayout::W_BYTES;
-            piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
+            piece_bytes[0] = head_buf::QKV_W_FULL_BYTES;
+            piece_bytes[1] = head_buf::QKV_B_FULL_BYTES;
             piece_addr_off[0] = 0;
             piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WK_W;
@@ -1235,8 +1307,8 @@ static bool build_dma_piece_plan(DmaSel sel,
         }
         case DMASEL_WV: {
             piece_count = 2;
-            piece_bytes[0] = head_buf::INQkvLayout::W_BYTES;
-            piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
+            piece_bytes[0] = head_buf::QKV_W_FULL_BYTES;
+            piece_bytes[1] = head_buf::QKV_B_FULL_BYTES;
             piece_addr_off[0] = 0;
             piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WV_W;
@@ -1275,13 +1347,13 @@ static bool build_dma_piece_plan(DmaSel sel,
         }
         case DMASEL_CTX_K: {
             piece_count = 1;
-            piece_bytes[0] = head_buf::INAttScoresLayout::K_CACHE_BYTES;
+            piece_bytes[0] = head_buf::ATT_SCORES_K_CACHE_FULL_BYTES;
             piece_tag[0] = Tag::CTX_K;
             return true;
         }
         case DMASEL_CTX_V: {
             piece_count = 1;
-            piece_bytes[0] = head_buf::INAttValueLayout::V_CACHE_BYTES;
+            piece_bytes[0] = head_buf::ATT_VALUE_V_CACHE_FULL_BYTES;
             piece_tag[0] = Tag::CTX_V;
             return true;
         }
@@ -1516,58 +1588,73 @@ static void zero_buf(uint8_t *buf, int n) {
     }
 }
 
-static bool build_head_in_buf(ComputeOp op, int layer, int head,
+static bool build_head_in_buf(ComputeOp op, int layer, int head, int tile,
                               uint8_t lane_buf[head_buf::IN_BUF_BYTES], bool &invalid_flag) {
 #pragma HLS INLINE off
     zero_buf(lane_buf, head_buf::IN_BUF_BYTES);
     switch (op) {
         case CMP_Q: {
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            const bool consume_params = (tile < 0) || (tile_idx >= (NUM_QKV_HEAD_TILES - 1));
+            const uint32_t w_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::W_BYTES;
+            const uint32_t b_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::B_BYTES;
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            ok = load_region_to_buf(Tag::WQ_W, layer, head, -1,
-                                    lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                    true, invalid_flag);
+            ok = load_region_segment_to_buf(Tag::WQ_W, layer, head, -1, w_off,
+                                            lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+                                            consume_params, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::WQ_B, layer, head, -1,
-                                      lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
-                                      true, invalid_flag);
+            return load_region_segment_to_buf(Tag::WQ_B, layer, head, -1, b_off,
+                                              lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
+                                              consume_params, invalid_flag);
         }
         case CMP_K: {
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            const bool consume_params = (tile < 0) || (tile_idx >= (NUM_QKV_HEAD_TILES - 1));
+            const uint32_t w_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::W_BYTES;
+            const uint32_t b_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::B_BYTES;
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            ok = load_region_to_buf(Tag::WK_W, layer, head, -1,
-                                    lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                    true, invalid_flag);
+            ok = load_region_segment_to_buf(Tag::WK_W, layer, head, -1, w_off,
+                                            lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+                                            consume_params, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::WK_B, layer, head, -1,
-                                      lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
-                                      true, invalid_flag);
+            return load_region_segment_to_buf(Tag::WK_B, layer, head, -1, b_off,
+                                              lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
+                                              consume_params, invalid_flag);
         }
         case CMP_V: {
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            const bool consume_params = (tile < 0) || (tile_idx >= (NUM_QKV_HEAD_TILES - 1));
+            const uint32_t w_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::W_BYTES;
+            const uint32_t b_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::B_BYTES;
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            ok = load_region_to_buf(Tag::WV_W, layer, head, -1,
-                                    lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                    true, invalid_flag);
+            ok = load_region_segment_to_buf(Tag::WV_W, layer, head, -1, w_off,
+                                            lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+                                            consume_params, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::WV_B, layer, head, -1,
-                                      lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
-                                      true, invalid_flag);
+            return load_region_segment_to_buf(Tag::WV_B, layer, head, -1, b_off,
+                                              lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
+                                              consume_params, invalid_flag);
         }
         case CMP_ATT_SCORES: {
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            const bool consume_inputs = (tile < 0) || (tile_idx >= (NUM_ATT_CTX_BLOCKS - 1));
+            const uint32_t k_off = static_cast<uint32_t>(tile_idx) * head_buf::INAttScoresLayout::K_CACHE_BYTES;
             bool ok = load_region_to_buf(Tag::Q_OUT, layer, head, -1,
                                          lane_buf, head_buf::INAttScoresLayout::Q, head_buf::INAttScoresLayout::Q_BYTES,
-                                         true, invalid_flag);
+                                         consume_inputs, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::CTX_K, layer, head, -1,
-                                      lane_buf, head_buf::INAttScoresLayout::K_CACHE, head_buf::INAttScoresLayout::K_CACHE_BYTES,
-                                      true, invalid_flag);
+            return load_region_segment_to_buf(Tag::CTX_K, layer, head, -1, k_off,
+                                              lane_buf, head_buf::INAttScoresLayout::K_CACHE, head_buf::INAttScoresLayout::K_CACHE_BYTES,
+                                              consume_inputs, invalid_flag);
         }
         case CMP_VALUE_SCALE: {
             return load_region_to_buf(Tag::ATT_SCORES_OUT, layer, head, -1,
@@ -1580,13 +1667,15 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head,
                                       true, invalid_flag);
         }
         case CMP_ATT_VALUE: {
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            const bool consume_inputs = (tile < 0) || (tile_idx >= (NUM_ATT_VALUE_HEAD_TILES - 1));
             bool ok = load_region_to_buf(Tag::SOFTMAX_OUT, layer, head, -1,
                                          lane_buf, head_buf::INAttValueLayout::WEIGHTS, head_buf::INAttValueLayout::WEIGHTS_BYTES,
-                                         true, invalid_flag);
+                                         consume_inputs, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::CTX_V, layer, head, -1,
-                                      lane_buf, head_buf::INAttValueLayout::V_CACHE, head_buf::INAttValueLayout::V_CACHE_BYTES,
-                                      true, invalid_flag);
+            return load_ctx_v_tile_to_buf(layer, head, tile_idx,
+                                          lane_buf, head_buf::INAttValueLayout::V_CACHE,
+                                          consume_inputs, invalid_flag);
         }
         case CMP_HEAD_REQUANT: {
             return load_region_to_buf(Tag::ATT_VALUE_OUT, layer, head, -1,
@@ -2554,7 +2643,7 @@ void mmu_fsm(
                 lane = head_to_lane(active_compute_head);
             }
             if (active_compute_headed) {
-                ok = build_head_in_buf(active_compute_op, active_compute_layer, active_compute_head,
+                ok = build_head_in_buf(active_compute_op, active_compute_layer, active_compute_head, active_compute_tile,
                                        head_in_buf[lane], g_invalid);
             } else {
                 ok = build_main_in_buf(active_compute_op, active_compute_layer, active_compute_tile,

@@ -139,6 +139,9 @@ constexpr int NUM_WO_TILES = 4;
 constexpr int NUM_W1_TILES = 8;
 constexpr int NUM_W2_TILES = 4;
 constexpr int NUM_LOGIT_TILES = 2;
+constexpr int NUM_QKV_HEAD_TILES = 2;
+constexpr int ATT_CTX_BLOCK = 8;
+constexpr int NUM_ATT_VALUE_HEAD_TILES = 2;
 
 // Params used in architecture
 constexpr int       NUM_HEADS       = 4;
@@ -147,6 +150,8 @@ constexpr int       D_MODEL         = 16;                           // Number of
 constexpr int       D_FFN           = 24;                           // Feed-Forward hidden layer size
 constexpr int       D_VOCAB         = 32;                           // Vocab projection output size
 constexpr int       D_HEADS         = D_MODEL / NUM_HEADS;          // Number of heads processed in parallel
+static_assert((D_HEADS % NUM_QKV_HEAD_TILES) == 0, "D_HEADS must divide NUM_QKV_HEAD_TILES");
+constexpr int       D_HEAD_TILE_QKV = D_HEADS / NUM_QKV_HEAD_TILES;
 constexpr int       D_TILE_WO       = D_MODEL / NUM_WO_TILES;       // Tile size for WO
 constexpr int       D_TILE_W1       = D_FFN * 2 / NUM_W1_TILES;     // Tile size for W1
 constexpr int       D_TILE_W2       = D_MODEL   / NUM_W2_TILES;
@@ -158,9 +163,14 @@ constexpr int       STREAM_OUT_BUF_BYTES = 4;                       // Streamed 
 // AXI-Full DDR beat sizing (one m_axi_gmem data beat).
 // Keep this aligned with the top-level DDR port element type.
 constexpr int       CONTEXT_LENGTH  = 16;                           // Context window length
+static_assert((CONTEXT_LENGTH % ATT_CTX_BLOCK) == 0, "CONTEXT_LENGTH must divide ATT_CTX_BLOCK");
+constexpr int       NUM_ATT_CTX_BLOCKS = CONTEXT_LENGTH / ATT_CTX_BLOCK;
+static_assert((D_HEADS % NUM_ATT_VALUE_HEAD_TILES) == 0, "D_HEADS must divide NUM_ATT_VALUE_HEAD_TILES");
+constexpr int       D_HEAD_TILE_ATT_VALUE = D_HEADS / NUM_ATT_VALUE_HEAD_TILES;
 constexpr int       MAX_CYCLIC_SIZE = 16;                           // << for UNROLL parallelism in MAC units
 constexpr int       HEADS_PARALLEL  = 2;
 constexpr int       NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
+static_assert((D_MODEL % 2) == 0, "Head tiling expects D_MODEL to be nibble-aligned");
 
 constexpr int       AXI_GMEM_WORD_BYTES  = 4;
 constexpr int       AXI_GMEM_WORD_BITS   = AXI_GMEM_WORD_BYTES * 8;
@@ -336,6 +346,12 @@ struct HeadCtx {
     bool v_writeback_dma_done = false;
     bool att_scores_dma_done = false;
     bool att_value_dma_done = false;
+
+    int qkv_tile_idx = 0;
+    int att_ctx_block_idx = 0;
+    int att_value_tile_idx = 0;
+    int active_tile_target = 1;
+    bool in_multi_tile_phase = false;
 };
 
 // ------------------------------------------------------------
@@ -917,17 +933,26 @@ namespace head_buf {
 
     using OutDType = BufDType;
 
-constexpr int QKV_W_NIBBLES = D_MODEL * D_HEADS;
-constexpr int QKV_W_BYTES = compute_buf::div_ceil(QKV_W_NIBBLES, 2);
-constexpr int QKV_B_BYTES = D_HEADS * 4;
-constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_BYTES + QKV_B_BYTES;
-constexpr int QKV_OUT_BYTES = D_HEADS;
+constexpr int QKV_W_FULL_NIBBLES = D_MODEL * D_HEADS;
+constexpr int QKV_W_FULL_BYTES = compute_buf::div_ceil(QKV_W_FULL_NIBBLES, 2);
+constexpr int QKV_B_FULL_BYTES = D_HEADS * 4;
+constexpr int QKV_OUT_FULL_BYTES = D_HEADS;
+
+constexpr int QKV_W_TILE_NIBBLES = D_MODEL * D_HEAD_TILE_QKV;
+static_assert((QKV_W_TILE_NIBBLES % 2) == 0, "QKV tile size must be byte aligned");
+constexpr int QKV_W_TILE_BYTES = compute_buf::div_ceil(QKV_W_TILE_NIBBLES, 2);
+constexpr int QKV_B_TILE_BYTES = D_HEAD_TILE_QKV * 4;
+constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_TILE_BYTES + QKV_B_TILE_BYTES;
+constexpr int QKV_OUT_BYTES = D_HEAD_TILE_QKV;
 
     constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4);
     constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
 
-    constexpr int ATT_SCORES_IN_BYTES = D_HEADS + (CONTEXT_LENGTH * D_HEADS);
-    constexpr int ATT_SCORES_OUT_BYTES = CONTEXT_LENGTH * 4;
+    constexpr int ATT_SCORES_K_CACHE_FULL_BYTES = CONTEXT_LENGTH * D_HEADS;
+    constexpr int ATT_SCORES_K_CACHE_TILE_BYTES = ATT_CTX_BLOCK * D_HEADS;
+    constexpr int ATT_SCORES_IN_BYTES = D_HEADS + ATT_SCORES_K_CACHE_TILE_BYTES;
+    constexpr int ATT_SCORES_OUT_FULL_BYTES = CONTEXT_LENGTH * 4;
+    constexpr int ATT_SCORES_OUT_BYTES = ATT_CTX_BLOCK * 4;
 
     constexpr int VALUE_SCALE_IN_BYTES = (CONTEXT_LENGTH * 4);
     constexpr int VALUE_SCALE_OUT_BYTES = CONTEXT_LENGTH * 2;
@@ -935,9 +960,11 @@ constexpr int QKV_OUT_BYTES = D_HEADS;
     constexpr int SOFTMAX_IN_BYTES = CONTEXT_LENGTH * 2;
     constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
 
-    constexpr int ATT_VALUE_IN_BYTES =
-        (CONTEXT_LENGTH * 2) + (CONTEXT_LENGTH * D_HEADS);
-    constexpr int ATT_VALUE_OUT_BYTES = D_HEADS * 4;
+    constexpr int ATT_VALUE_V_CACHE_FULL_BYTES = CONTEXT_LENGTH * D_HEADS;
+    constexpr int ATT_VALUE_V_CACHE_TILE_BYTES = CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE;
+    constexpr int ATT_VALUE_IN_BYTES = (CONTEXT_LENGTH * 2) + ATT_VALUE_V_CACHE_TILE_BYTES;
+    constexpr int ATT_VALUE_OUT_FULL_BYTES = D_HEADS * 4;
+    constexpr int ATT_VALUE_OUT_BYTES = D_HEAD_TILE_ATT_VALUE * 4;
 
     constexpr int IN_BUF_BYTES = compute_buf::max2(
         QKV_IN_BYTES,
@@ -961,8 +988,8 @@ constexpr int QKV_OUT_BYTES = D_HEADS;
 
     struct INQkvLayout {
         static constexpr int ACT_BYTES = D_MODEL;
-        static constexpr int W_BYTES = QKV_W_BYTES;
-        static constexpr int B_BYTES = QKV_B_BYTES;
+        static constexpr int W_BYTES = QKV_W_TILE_BYTES;
+        static constexpr int B_BYTES = QKV_B_TILE_BYTES;
         static constexpr int TOTAL_BYTES = QKV_IN_BYTES;
         static constexpr int ACT = 0;
         static constexpr int W = ACT + ACT_BYTES;
@@ -977,7 +1004,7 @@ constexpr int QKV_OUT_BYTES = D_HEADS;
 
     struct INAttScoresLayout {
         static constexpr int Q_BYTES = D_HEADS;
-        static constexpr int K_CACHE_BYTES = CONTEXT_LENGTH * D_HEADS;
+        static constexpr int K_CACHE_BYTES = ATT_SCORES_K_CACHE_TILE_BYTES;
         static constexpr int TOTAL_BYTES = ATT_SCORES_IN_BYTES;
         static constexpr int Q = 0;
         static constexpr int K_CACHE = Q + Q_BYTES;
@@ -997,7 +1024,7 @@ constexpr int QKV_OUT_BYTES = D_HEADS;
 
     struct INAttValueLayout {
         static constexpr int WEIGHTS_BYTES = CONTEXT_LENGTH * 2;
-        static constexpr int V_CACHE_BYTES = CONTEXT_LENGTH * D_HEADS;
+        static constexpr int V_CACHE_BYTES = ATT_VALUE_V_CACHE_TILE_BYTES;
         static constexpr int TOTAL_BYTES = ATT_VALUE_IN_BYTES;
         static constexpr int WEIGHTS = 0;
         static constexpr int V_CACHE = WEIGHTS + WEIGHTS_BYTES;
@@ -1007,7 +1034,7 @@ constexpr int QKV_OUT_BYTES = D_HEADS;
     // Per-op output layouts (byte offsets)
     // -------------------------------
     struct OUTQkvLayout {
-        static constexpr int NUM_ELEMS = D_HEADS;
+        static constexpr int NUM_ELEMS = D_HEAD_TILE_QKV;
         static constexpr OutDType TYPE = OutDType::I8;
         static constexpr int TOTAL_BYTES = QKV_OUT_BYTES;
         static constexpr int Y = 0;
@@ -1021,7 +1048,7 @@ constexpr int QKV_OUT_BYTES = D_HEADS;
     };
 
     struct OUTAttScoresLayout {
-        static constexpr int NUM_ELEMS = CONTEXT_LENGTH;
+        static constexpr int NUM_ELEMS = ATT_CTX_BLOCK;
         static constexpr OutDType TYPE = OutDType::I32;
         static constexpr int TOTAL_BYTES = ATT_SCORES_OUT_BYTES;
         static constexpr int X = 0;
@@ -1042,7 +1069,7 @@ constexpr int QKV_OUT_BYTES = D_HEADS;
     };
 
     struct OUTAttValueLayout {
-        static constexpr int NUM_ELEMS = D_HEADS;
+        static constexpr int NUM_ELEMS = D_HEAD_TILE_ATT_VALUE;
         static constexpr OutDType TYPE = OutDType::I32;
         static constexpr int TOTAL_BYTES = ATT_VALUE_OUT_BYTES;
         static constexpr int Y = 0;
