@@ -879,16 +879,16 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
     case ComputeOp::CMP_Q:
     case ComputeOp::CMP_K:
     case ComputeOp::CMP_V: {
-        std::printf("HEAD QKV in_buf (decoded):\n  ACT:");
+        std::printf("HEAD QKV in_buf (decoded, tile-local):\n  ACT:");
         for (int i = 0; i < D_MODEL; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INQkvLayout::ACT + i)));
         }
         std::printf("\n  W:");
-        for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
+        for (int i = 0; i < D_MODEL * D_HEAD_TILE_QKV; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::W * 2) + i)));
         }
         std::printf("\n  B:");
-        for (int i = 0; i < D_HEADS; ++i) {
+        for (int i = 0; i < D_HEAD_TILE_QKV; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (i * 4))));
         }
         std::printf("\n");
@@ -928,12 +928,12 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         break;
     }
     case ComputeOp::CMP_ATT_SCORES: {
-        std::printf("ATT_SCORES in_buf (decoded):\n  Q:");
+        std::printf("ATT_SCORES in_buf (decoded, block-local):\n  Q:");
         for (int i = 0; i < D_HEADS; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + i)));
         }
         std::printf("\n  K_CACHE:");
-        for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
+        for (int i = 0; i < ATT_CTX_BLOCK * D_HEADS; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::K_CACHE + i)));
         }
         std::printf("\n");
@@ -956,12 +956,12 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         break;
     }
     case ComputeOp::CMP_ATT_VALUE: {
-        std::printf("ATT_VALUE in_buf (decoded):\n  W:");
+        std::printf("ATT_VALUE in_buf (decoded, tile-local):\n  W:");
         for (int i = 0; i < CONTEXT_LENGTH; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (i * 2))));
         }
         std::printf("\n  V_CACHE:");
-        for (int i = 0; i < CONTEXT_LENGTH * D_HEADS; ++i) {
+        for (int i = 0; i < CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + i)));
         }
         std::printf("\n");
@@ -977,16 +977,16 @@ static void print_head_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
     case ComputeOp::CMP_Q:
     case ComputeOp::CMP_K:
     case ComputeOp::CMP_V: {
-        std::printf("HEAD_Q out_buf (decoded):\n  Y:");
-        for (int i = 0; i < D_HEADS; ++i) {
+        std::printf("HEAD_Q out_buf (decoded, tile-local):\n  Y:");
+        for (int i = 0; i < D_HEAD_TILE_QKV; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, i)));
         }
         std::printf("\n");
         break;
     }
     case ComputeOp::CMP_ATT_VALUE: {
-        std::printf("HEAD out_buf (decoded):\n  Y:");
-        for (int i = 0; i < D_HEADS; ++i) {
+        std::printf("HEAD out_buf (decoded, tile-local):\n  Y:");
+        for (int i = 0; i < D_HEAD_TILE_ATT_VALUE; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
         }
         std::printf("\n");
@@ -1004,8 +1004,8 @@ static void print_head_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
         break;
     }
     case ComputeOp::CMP_ATT_SCORES: {
-        std::printf("ATT_SCORES out_buf (decoded):\n  Y:");
-        for (int i = 0; i < CONTEXT_LENGTH; ++i) {
+        std::printf("ATT_SCORES out_buf (decoded, block-local):\n  Y:");
+        for (int i = 0; i < ATT_CTX_BLOCK; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
         }
         std::printf("\n");
@@ -1568,7 +1568,7 @@ int main() {
         return 1;
     }
 
-    const int MAX_CYCLES = 5500;
+    const int MAX_CYCLES = 10000;
     const int AXIS_BEATS = STREAM_IN_BUF_BYTES;
 
 

@@ -52,11 +52,11 @@ static void fill_qkv_buf(uint8_t *in_buf) {
     for (int i = 0; i < D_MODEL; ++i) {
         compute_buf::write_i8(in_buf, head_buf::INQkvLayout::ACT + i, static_cast<int8_t>((i % 13) - 6));
     }
-    for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
+    for (int i = 0; i < D_MODEL * D_HEAD_TILE_QKV; ++i) {
         compute_buf::write_i4(in_buf, (head_buf::INQkvLayout::W * 2) + i, static_cast<int8_t>((i % 5) - 2));
     }
-    for (int i = 0; i < D_HEADS; ++i) {
-        compute_buf::write_i4(in_buf, (head_buf::INQkvLayout::B * 2) + i, static_cast<int8_t>((i % 3) - 1));
+    for (int i = 0; i < D_HEAD_TILE_QKV; ++i) {
+        compute_buf::write_i32(in_buf, head_buf::INQkvLayout::B + (i * 4), static_cast<int32_t>((i % 3) - 1));
     }
 }
 
@@ -65,7 +65,7 @@ static void fill_att_scores_buf(uint8_t *in_buf) {
     for (int h = 0; h < D_HEADS; ++h) {
         compute_buf::write_i8(in_buf, head_buf::INAttScoresLayout::Q + h, static_cast<int8_t>((h % 7) - 3));
     }
-    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
         for (int h = 0; h < D_HEADS; ++h) {
             const int idx = t * D_HEADS + h;
             compute_buf::write_i8(in_buf, head_buf::INAttScoresLayout::K_CACHE + idx,
@@ -81,8 +81,8 @@ static void fill_att_value_buf(uint8_t *in_buf) {
                                static_cast<int16_t>((t % 31) - 15));
     }
     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-        for (int h = 0; h < D_HEADS; ++h) {
-            const int idx = t * D_HEADS + h;
+        for (int h = 0; h < D_HEAD_TILE_ATT_VALUE; ++h) {
+            const int idx = (h * CONTEXT_LENGTH) + t;
             compute_buf::write_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + idx,
                                   static_cast<int8_t>(((t * 2 + h) % 19) - 9));
         }
@@ -120,15 +120,20 @@ static void fill_inputs_for_step(uint8_t *in_buf, ComputeOp op) {
 static void print_lane_out_sample(const uint8_t *out_buf, ComputeOp op) {
     std::printf("  out sample: ");
     switch (op) {
-        case CMP_ATT_SCORES:
+        case CMP_ATT_SCORES: {
+            for (int i = 0; i < head_buf::OUTAttScoresLayout::NUM_ELEMS; ++i) {
+                std::printf("%d ", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
+            }
+            break;
+        }
         case CMP_ATT_VALUE: {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < head_buf::OUTAttValueLayout::NUM_ELEMS; ++i) {
                 std::printf("%d ", static_cast<int>(compute_buf::read_i32(out_buf, i * 4)));
             }
             break;
         }
         default: {
-            for (int i = 0; i < 8; ++i) {
+            for (int i = 0; i < head_buf::OUTQkvLayout::NUM_ELEMS; ++i) {
                 std::printf("%d ", static_cast<int>(compute_buf::read_i8(out_buf, i)));
             }
             break;
@@ -174,10 +179,10 @@ int main() {
         return 1;
     }
     constexpr HeadStep steps[] = {
-        {0, CMP_Q,            0, 0, -1, "LANE0_Q"},
-        {1, CMP_K,            0, 1, -1, "LANE1_K"},
-        {0, CMP_ATT_SCORES,   0, 0, -1, "LANE0_ATT_SCORES"},
-        {1, CMP_ATT_VALUE,    0, 1, -1, "LANE1_ATT_VALUE"},
+        {0, CMP_Q,            0, 0, 0, "LANE0_Q"},
+        {1, CMP_K,            0, 1, 0, "LANE1_K"},
+        {0, CMP_ATT_SCORES,   0, 0, 0, "LANE0_ATT_SCORES"},
+        {1, CMP_ATT_VALUE,    0, 1, 0, "LANE1_ATT_VALUE"},
         {0, CMP_HEAD_REQUANT, 0, 0, -1, "LANE0_HEAD_REQUANT"}
     };
 

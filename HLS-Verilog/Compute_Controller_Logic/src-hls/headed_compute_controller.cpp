@@ -529,7 +529,7 @@ static void ATT_VALUE_TO_BUF(
     int32_t accum_tile[HEAD_MAC_OUT_UNROLL];
 #pragma HLS ARRAY_PARTITION variable=accum_tile complete dim=1
 
-    for (int out_base = 0; out_base < D_HEADS; out_base += HEAD_MAC_OUT_UNROLL) {
+    for (int out_base = 0; out_base < D_HEAD_TILE_ATT_VALUE; out_base += HEAD_MAC_OUT_UNROLL) {
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL
             accum_tile[lane] = 0;
@@ -541,7 +541,7 @@ static void ATT_VALUE_TO_BUF(
             for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL
                 const int out_idx = out_base + lane;
-                if (out_idx < D_HEADS) {
+                if (out_idx < D_HEAD_TILE_ATT_VALUE) {
                     const int v_idx = (out_idx * CONTEXT_LENGTH) + t;
                     const int8_t v = compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + v_idx);
                     accum_tile[lane] += static_cast<int32_t>(weight) * static_cast<int32_t>(v);
@@ -552,7 +552,7 @@ static void ATT_VALUE_TO_BUF(
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL
             const int out_idx = out_base + lane;
-            if (out_idx < D_HEADS) {
+            if (out_idx < D_HEAD_TILE_ATT_VALUE) {
                 compute_buf::write_i32(out_buf, out_idx * 4, accum_tile[lane]);
             }
         }
@@ -604,11 +604,11 @@ static void QKV_TO_BUF(
     int32_t n = 0;
     get_qkv_requant_params(op, layer_idx, M, n);
 
-    for (int out_base = 0; out_base < D_HEADS; out_base += HEAD_MAC_OUT_UNROLL) {
+    for (int out_base = 0; out_base < D_HEAD_TILE_QKV; out_base += HEAD_MAC_OUT_UNROLL) {
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL
             const int out_idx = out_base + lane;
-            accum_tile[lane] = (out_idx < D_HEADS)
+            accum_tile[lane] = (out_idx < D_HEAD_TILE_QKV)
                                ? compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (out_idx * 4))
                                : 0;
         }
@@ -617,7 +617,7 @@ static void QKV_TO_BUF(
             for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL
                 const int out_idx = out_base + lane;
-                if (out_idx < D_HEADS) {
+                if (out_idx < D_HEAD_TILE_QKV) {
                     for (int k = 0; k < HEAD_MAC_VEC_UNROLL; ++k) {
 #pragma HLS UNROLL
                         const int in_idx = in_base + k;
@@ -636,7 +636,7 @@ static void QKV_TO_BUF(
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL
             const int out_idx = out_base + lane;
-            if (out_idx < D_HEADS) {
+            if (out_idx < D_HEAD_TILE_QKV) {
                 compute_buf::write_i8(out_buf, out_idx, requant_scalar_to_i8(accum_tile[lane], M, n));
             }
         }
@@ -653,7 +653,7 @@ static void ATT_SCORES_TO_BUF(
                            ? token_pos
                            : static_cast<uint16_t>(CONTEXT_LENGTH - 1);
 
-    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
 #pragma HLS PIPELINE II=1
         int32_t acc = 0;
         for (int d = 0; d + 1 < D_HEADS; d += 2) {
