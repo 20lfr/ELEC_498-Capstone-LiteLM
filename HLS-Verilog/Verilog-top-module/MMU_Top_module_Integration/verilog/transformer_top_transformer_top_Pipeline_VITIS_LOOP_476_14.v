@@ -244,10 +244,10 @@ wire    ap_block_pp0_stage10_grp0;
 reg    dma_tx_buf_local_ce0_local;
 wire   [63:0] zext_ln476_fu_197_p1;
 wire   [63:0] byte_addr_fu_201_p2;
-wire   [61:0] tmp_2_fu_207_p4;
+wire   [61:0] tmp_1_fu_207_p4;
 wire   [63:0] and_ln_fu_217_p3;
 wire   [63:0] add_ln489_fu_225_p2;
-wire   [61:0] trunc_ln_fu_231_p4;
+wire   [61:0] trunc_ln9_fu_231_p4;
 wire   [10:0] word_idx_fu_251_p4;
 wire   [1:0] trunc_ln14_fu_267_p1;
 wire   [4:0] shift_fu_271_p3;
@@ -300,7 +300,7 @@ transformer_top_partselect_8ns_32ns_5ns_8_1_1 #(
     .DATAWIDTH( 32 ),
     .ADDRWIDTH( 5 ),
     .DATA1WIDTH( 8 ))
-partselect_8ns_32ns_5ns_8_1_1_U3047(
+partselect_8ns_32ns_5ns_8_1_1_U4369(
     .din(beat_reg_431),
     .sel(lo_fu_317_p3),
     .dout(value_assign_fu_324_p3)
@@ -310,7 +310,7 @@ transformer_top_partset_32ns_32ns_8ns_5ns_32_1_1 #(
     .DATAWIDTH( 32 ),
     .DATA1WIDTH( 8 ),
     .ADDRWIDTH( 5 ))
-partset_32ns_32ns_8ns_5ns_32_1_1_U3048(
+partset_32ns_32ns_8ns_5ns_32_1_1_U4370(
     .din(32'd0),
     .value(value_reg_426),
     .sel(lo_fu_317_p3),
@@ -756,7 +756,7 @@ assign add_ln489_fu_225_p2 = (and_ln_fu_217_p3 + ddr_mem);
 
 assign and_ln17_fu_345_p2 = (xor_ln17_fu_340_p2 & word_1_reg_421);
 
-assign and_ln_fu_217_p3 = {{tmp_2_fu_207_p4}, {2'd0}};
+assign and_ln_fu_217_p3 = {{tmp_1_fu_207_p4}, {2'd0}};
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -974,7 +974,7 @@ assign m_axi_gmem_0_WSTRB = shl_ln32_reg_416;
 
 assign m_axi_gmem_0_WUSER = 1'd0;
 
-assign sext_ln489_fu_241_p1 = $signed(trunc_ln_fu_231_p4);
+assign sext_ln489_fu_241_p1 = $signed(trunc_ln9_fu_231_p4);
 
 assign shift_fu_271_p3 = {{trunc_ln14_fu_267_p1}, {3'd0}};
 
@@ -984,13 +984,13 @@ assign shl_ln17_fu_335_p2 = zext_ln17_fu_331_p1 << zext_ln24_reg_390;
 
 assign shl_ln32_fu_297_p2 = 4'd1 << zext_ln32_fu_293_p1;
 
-assign tmp_2_fu_207_p4 = {{byte_addr_fu_201_p2[63:2]}};
+assign tmp_1_fu_207_p4 = {{byte_addr_fu_201_p2[63:2]}};
 
 assign trunc_ln14_fu_267_p1 = ap_sig_allocacmp_i_8[1:0];
 
 assign trunc_ln24_fu_283_p1 = byte_addr_fu_201_p2[1:0];
 
-assign trunc_ln_fu_231_p4 = {{add_ln489_fu_225_p2[63:2]}};
+assign trunc_ln9_fu_231_p4 = {{add_ln489_fu_225_p2[63:2]}};
 
 assign value_fu_313_p1 = lshr_ln8_fu_308_p2[7:0];
 

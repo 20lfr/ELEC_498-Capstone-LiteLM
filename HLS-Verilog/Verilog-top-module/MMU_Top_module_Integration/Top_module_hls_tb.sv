@@ -23,22 +23,31 @@ module top_module_hls_tb;
   localparam int TB_NUM_W1_TILES       = 8;
   localparam int TB_NUM_W2_TILES       = 4;
   localparam int TB_NUM_LOGIT_TILES    = 2;
+  localparam int TB_NUM_QKV_HEAD_TILES = 2;
+  localparam int TB_ATT_CTX_BLOCK      = 8;
+  localparam int TB_NUM_ATT_VALUE_HEAD_TILES = 2;
   localparam int TB_D_TILE_WO          = (TB_D_MODEL / TB_NUM_WO_TILES);
   localparam int TB_D_TILE_W1          = ((TB_D_FFN * 2) / TB_NUM_W1_TILES);
   localparam int TB_D_TILE_W2          = (TB_D_MODEL / TB_NUM_W2_TILES);
   localparam int TB_D_VOCAB            = 32;
   localparam int TB_D_TILE_LOGIT       = (TB_D_VOCAB / TB_NUM_LOGIT_TILES);
   localparam int TB_CONTEXT_LENGTH     = 16;
+  localparam int TB_D_HEAD_TILE_QKV    = (TB_D_HEADS / TB_NUM_QKV_HEAD_TILES);
+  localparam int TB_NUM_ATT_CTX_BLOCKS = (TB_CONTEXT_LENGTH / TB_ATT_CTX_BLOCK);
+  localparam int TB_D_HEAD_TILE_ATT_VALUE = (TB_D_HEADS / TB_NUM_ATT_VALUE_HEAD_TILES);
   localparam int TB_OUT_PROJ_W_BYTES   = ((TB_D_MODEL * TB_D_TILE_WO) + 1) / 2;
   localparam int TB_FFN_W1_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_W1) + 1) / 2;
   localparam int TB_FFN_W2_W_BYTES     = ((TB_D_FFN * TB_D_TILE_W2) + 1) / 2;
   localparam int TB_QKV_W_BYTES        = ((TB_D_MODEL * TB_D_HEADS) + 1) / 2;
+  localparam int TB_QKV_W_TILE_BYTES   = ((TB_D_MODEL * TB_D_HEAD_TILE_QKV) + 1) / 2;
   localparam int TB_LOGITS_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_LOGIT) + 1) / 2;
+  localparam int TB_ATT_SCORES_K_TILE_BYTES = (TB_ATT_CTX_BLOCK * TB_D_HEADS);
+  localparam int TB_ATT_VALUE_V_TILE_BYTES  = (TB_CONTEXT_LENGTH * TB_D_HEAD_TILE_ATT_VALUE);
   // Current generated RTL exports main debug input bytes at addresses 0..192.
   localparam int DBG_MAIN_IN_BYTES     = 193;
   localparam int DBG_MAIN_OUT_BYTES    = 64;
-  localparam int DBG_HEAD_IN_BYTES     = 128;
-  localparam int DBG_HEAD_OUT_BYTES    = 64;
+  localparam int DBG_HEAD_IN_BYTES     = 64;
+  localparam int DBG_HEAD_OUT_BYTES    = 32;
   localparam int DBG_SNAP_DEPTH        = 64;
   localparam int DBG_SNAP_QUIET_CYCLES = 2;
 
@@ -75,6 +84,11 @@ module top_module_hls_tb;
 
   // Reverse order of HeadCtx so LSBs align with C layout.
   typedef struct packed {
+    logic        in_multi_tile_phase;
+    logic [31:0] active_tile_target;
+    logic [31:0] att_value_tile_idx;
+    logic [31:0] att_ctx_block_idx;
+    logic [31:0] qkv_tile_idx;
     logic        att_value_dma_done;
     logic        att_scores_dma_done;
     logic        v_writeback_dma_done;
@@ -142,7 +156,7 @@ module top_module_hls_tb;
   } ComputeHeadCtx_t;
 
   // Unpack raw HLS debug buses using explicit bit positions from C-struct field order.
-  function automatic head_ctx_t unpack_head_ctx(input logic [208:0] raw);
+  function automatic head_ctx_t unpack_head_ctx(input logic [337:0] raw);
     head_ctx_t s;
     begin
       s.layer_stamp               = raw[31:0];
@@ -185,6 +199,11 @@ module top_module_hls_tb;
       s.v_writeback_dma_done      = raw[206];
       s.att_scores_dma_done       = raw[207];
       s.att_value_dma_done        = raw[208];
+      s.qkv_tile_idx              = raw[240:209];
+      s.att_ctx_block_idx         = raw[272:241];
+      s.att_value_tile_idx        = raw[304:273];
+      s.active_tile_target        = raw[336:305];
+      s.in_multi_tile_phase       = raw[337];
       unpack_head_ctx = s;
     end
   endfunction
@@ -507,9 +526,9 @@ module top_module_hls_tb;
   logic [31:0] dbg_stream_in_counter;
   logic       dbg_stream_in_counter_ap_vld;
 
-  logic [208:0] dbg_head_ctx_ref_0;
+  logic [337:0] dbg_head_ctx_ref_0;
   logic         dbg_head_ctx_ref_0_ap_vld;
-  logic [208:0] dbg_head_ctx_ref_1;
+  logic [337:0] dbg_head_ctx_ref_1;
   logic         dbg_head_ctx_ref_1_ap_vld;
   logic [148:0] dbg_head_compute_ctx_0;
   logic         dbg_head_compute_ctx_0_ap_vld;
@@ -526,20 +545,20 @@ module top_module_hls_tb;
   wire       dbg_out_buf_we0;
   wire [7:0] dbg_out_buf_d0;
 
-  wire [6:0] dbg_head_in_buf_0_address0;
+  wire [5:0] dbg_head_in_buf_0_address0;
   wire       dbg_head_in_buf_0_ce0;
   wire       dbg_head_in_buf_0_we0;
   wire [7:0] dbg_head_in_buf_0_d0;
-  wire [6:0] dbg_head_in_buf_1_address0;
+  wire [5:0] dbg_head_in_buf_1_address0;
   wire       dbg_head_in_buf_1_ce0;
   wire       dbg_head_in_buf_1_we0;
   wire [7:0] dbg_head_in_buf_1_d0;
 
-  wire [5:0] dbg_head_out_buf_0_address0;
+  wire [4:0] dbg_head_out_buf_0_address0;
   wire       dbg_head_out_buf_0_ce0;
   wire       dbg_head_out_buf_0_we0;
   wire [7:0] dbg_head_out_buf_0_d0;
-  wire [5:0] dbg_head_out_buf_1_address0;
+  wire [4:0] dbg_head_out_buf_1_address0;
   wire       dbg_head_out_buf_1_ce0;
   wire       dbg_head_out_buf_1_we0;
   wire [7:0] dbg_head_out_buf_1_d0;
@@ -580,8 +599,8 @@ module top_module_hls_tb;
   logic [7:0] dbg_in_buf_mem [0:DBG_MAIN_IN_BYTES-1];
   logic [7:0] dbg_out_buf_mem [0:63];
   logic [7:0] dbg_stream_in_buf_mem [0:STREAM_IN_BUF_BYTES-1];
-  logic [7:0] dbg_head_in_buf_mem [0:255];
-  logic [7:0] dbg_head_out_buf_mem [0:127];
+  logic [7:0] dbg_head_in_buf_mem [0:(TB_HEADS_PARALLEL*DBG_HEAD_IN_BYTES)-1];
+  logic [7:0] dbg_head_out_buf_mem [0:(TB_HEADS_PARALLEL*DBG_HEAD_OUT_BYTES)-1];
 
   function automatic logic [7:0] main_dbg_in_byte(
       input int unsigned idx,
@@ -2017,48 +2036,48 @@ module top_module_hls_tb;
                   for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
                     q_act_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    q_w_in[head_in_pending_head[lane]][flat_idx] <= $signed(flat_idx[0] ?
+                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEAD_TILE_QKV); flat_idx = flat_idx + 1) begin
+                    q_w_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * (TB_D_MODEL * TB_D_HEAD_TILE_QKV)) + flat_idx] <= $signed(flat_idx[0] ?
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][7:4] :
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
-                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                    q_b_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 3],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 2],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 1],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 0]});
+                  for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                    q_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
                   end
                 end
                 OP_CMP_K: begin
                   for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
                     k_act_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    k_w_in[head_in_pending_head[lane]][flat_idx] <= $signed(flat_idx[0] ?
+                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEAD_TILE_QKV); flat_idx = flat_idx + 1) begin
+                    k_w_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * (TB_D_MODEL * TB_D_HEAD_TILE_QKV)) + flat_idx] <= $signed(flat_idx[0] ?
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][7:4] :
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
-                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                    k_b_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 3],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 2],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 1],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 0]});
+                  for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                    k_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
                   end
                 end
                 OP_CMP_V: begin
                   for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
                     v_act_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    v_w_in[head_in_pending_head[lane]][flat_idx] <= $signed(flat_idx[0] ?
+                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEAD_TILE_QKV); flat_idx = flat_idx + 1) begin
+                    v_w_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * (TB_D_MODEL * TB_D_HEAD_TILE_QKV)) + flat_idx] <= $signed(flat_idx[0] ?
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][7:4] :
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
-                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                    v_b_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 3],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 2],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 1],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 0]});
+                  for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                    v_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
+                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
                   end
                 end
                 OP_CMP_HEAD_REQUANT: begin
@@ -2073,8 +2092,8 @@ module top_module_hls_tb;
                   for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
                     att_scores_q_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_CONTEXT_LENGTH * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    att_scores_k_cache_in[head_in_pending_head[lane]][flat_idx] <=
+                  for (flat_idx = 0; flat_idx < TB_ATT_SCORES_K_TILE_BYTES; flat_idx = flat_idx + 1) begin
+                    att_scores_k_cache_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_ATT_SCORES_K_TILE_BYTES) + flat_idx] <=
                       $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_HEADS + flat_idx]);
                   end
                 end
@@ -2097,8 +2116,11 @@ module top_module_hls_tb;
                     att_value_weights_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + (2*elem_idx) + 1],
                                                                                            dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + (2*elem_idx) + 0]});
                   end
-                  for (flat_idx = 0; flat_idx < (TB_CONTEXT_LENGTH * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    att_value_v_cache_in[head_in_pending_head[lane]][flat_idx] <=
+                  for (flat_idx = 0; flat_idx < TB_ATT_VALUE_V_TILE_BYTES; flat_idx = flat_idx + 1) begin
+                    att_value_v_cache_in[head_in_pending_head[lane]]
+                                        [((flat_idx / TB_D_HEAD_TILE_ATT_VALUE) * TB_D_HEADS) +
+                                         (head_in_pending_tile[lane] * TB_D_HEAD_TILE_ATT_VALUE) +
+                                         (flat_idx % TB_D_HEAD_TILE_ATT_VALUE)] <=
                       $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + (TB_CONTEXT_LENGTH * 2) + flat_idx]);
                   end
                 end
@@ -2130,18 +2152,21 @@ module top_module_hls_tb;
 
             case (head_out_pending_op[lane])
               OP_CMP_Q: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  q_out[head_out_pending_head[lane]][elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                  q_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <=
+                    $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
                 end
               end
               OP_CMP_K: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  k_out[head_out_pending_head[lane]][elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                  k_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <=
+                    $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
                 end
               end
               OP_CMP_V: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  v_out[head_out_pending_head[lane]][elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                  v_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <=
+                    $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
                 end
               end
               OP_CMP_HEAD_REQUANT: begin
@@ -2150,8 +2175,8 @@ module top_module_hls_tb;
                 end
               end
               OP_CMP_ATT_SCORES: begin
-                for (elem_idx = 0; elem_idx < TB_CONTEXT_LENGTH; elem_idx = elem_idx + 1) begin
-                  att_scores_out[head_out_pending_head[lane]][elem_idx] <=
+                for (elem_idx = 0; elem_idx < TB_ATT_CTX_BLOCK; elem_idx = elem_idx + 1) begin
+                  att_scores_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_ATT_CTX_BLOCK) + elem_idx] <=
                     {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 3],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 2],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 1],
@@ -2173,8 +2198,8 @@ module top_module_hls_tb;
                 end
               end
               OP_CMP_ATT_VALUE: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  att_value_out[head_out_pending_head[lane]][elem_idx] <=
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_ATT_VALUE; elem_idx = elem_idx + 1) begin
+                  att_value_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_ATT_VALUE) + elem_idx] <=
                     {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 3],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 2],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 1],
@@ -2836,14 +2861,16 @@ module top_module_hls_tb;
     for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
       dbg_stream_in_buf_mem[i] = 8'h00;
     end
-    for (i = 0; i < 128; i = i + 1) begin
+    for (i = 0; i < DBG_MAIN_IN_BYTES; i = i + 1) begin
       dbg_in_buf_mem[i] = 8'h00;
+    end
+    for (i = 0; i < (TB_HEADS_PARALLEL * DBG_HEAD_OUT_BYTES); i = i + 1) begin
       dbg_head_out_buf_mem[i] = 8'h00;
     end
-    for (i = 0; i < 64; i = i + 1) begin
+    for (i = 0; i < DBG_MAIN_OUT_BYTES; i = i + 1) begin
       dbg_out_buf_mem[i] = 8'h00;
     end
-    for (i = 0; i < 256; i = i + 1) begin
+    for (i = 0; i < (TB_HEADS_PARALLEL * DBG_HEAD_IN_BYTES); i = i + 1) begin
       dbg_head_in_buf_mem[i] = 8'h00;
     end
 

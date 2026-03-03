@@ -33,14 +33,14 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [5:0] dbg_head_out_buf_0_address0;
+output  [4:0] dbg_head_out_buf_0_address0;
 output   dbg_head_out_buf_0_ce0;
 output   dbg_head_out_buf_0_we0;
 output  [7:0] dbg_head_out_buf_0_d0;
-output  [4:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_address0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_address0;
 output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_q0;
-output  [4:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0;
+output  [3:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0;
 output   p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0;
 input  [7:0] p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_q0;
 
@@ -56,21 +56,21 @@ wire   [0:0] icmp_ln586_fu_91_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-reg   [6:0] i_2_reg_147;
+reg   [5:0] i_2_reg_147;
 wire    ap_block_pp0_stage0_11001;
 wire   [63:0] zext_ln586_1_fu_113_p1;
 wire    ap_block_pp0_stage0;
 wire   [63:0] zext_ln586_fu_124_p1;
-reg   [6:0] i_fu_40;
-wire   [6:0] add_ln586_fu_97_p2;
+reg   [5:0] i_fu_40;
+wire   [5:0] add_ln586_fu_97_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i_2;
+reg   [5:0] ap_sig_allocacmp_i_2;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_3_ce0_local;
 reg    p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_ce0_local;
 reg    dbg_head_out_buf_0_we0_local;
 wire   [7:0] select_ln588_fu_131_p3;
 reg    dbg_head_out_buf_0_ce0_local;
-wire   [4:0] lshr_ln3_fu_103_p4;
+wire   [3:0] lshr_ln1_fu_103_p4;
 wire   [0:0] trunc_ln586_fu_128_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -86,7 +86,7 @@ wire    ap_ce_reg;
 initial begin
 #0 ap_CS_fsm = 1'd1;
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
-#0 i_fu_40 = 7'd0;
+#0 i_fu_40 = 6'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -142,7 +142,7 @@ always @ (posedge ap_clk) begin
         if (((icmp_ln586_fu_91_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
             i_fu_40 <= add_ln586_fu_97_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_40 <= 7'd0;
+            i_fu_40 <= 6'd0;
         end
     end
 end
@@ -195,7 +195,7 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_i_2 = 7'd0;
+        ap_sig_allocacmp_i_2 = 6'd0;
     end else begin
         ap_sig_allocacmp_i_2 = i_fu_40;
     end
@@ -244,7 +244,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln586_fu_97_p2 = (ap_sig_allocacmp_i_2 + 7'd1);
+assign add_ln586_fu_97_p2 = (ap_sig_allocacmp_i_2 + 6'd1);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -272,9 +272,9 @@ assign dbg_head_out_buf_0_d0 = select_ln588_fu_131_p3;
 
 assign dbg_head_out_buf_0_we0 = dbg_head_out_buf_0_we0_local;
 
-assign icmp_ln586_fu_91_p2 = ((ap_sig_allocacmp_i_2 == 7'd64) ? 1'b1 : 1'b0);
+assign icmp_ln586_fu_91_p2 = ((ap_sig_allocacmp_i_2 == 6'd32) ? 1'b1 : 1'b0);
 
-assign lshr_ln3_fu_103_p4 = {{ap_sig_allocacmp_i_2[5:1]}};
+assign lshr_ln1_fu_103_p4 = {{ap_sig_allocacmp_i_2[4:1]}};
 
 assign p_ZZ15transformer_topRN3hls6streamINS_4axisI7ap_uintILi8EELm0ELm0ELm0ELh56ELb0EEE_2_address0 = zext_ln586_1_fu_113_p1;
 
@@ -288,7 +288,7 @@ assign select_ln588_fu_131_p3 = ((trunc_ln586_fu_128_p1[0:0] == 1'b1) ? p_ZZ15tr
 
 assign trunc_ln586_fu_128_p1 = i_2_reg_147[0:0];
 
-assign zext_ln586_1_fu_113_p1 = lshr_ln3_fu_103_p4;
+assign zext_ln586_1_fu_113_p1 = lshr_ln1_fu_103_p4;
 
 assign zext_ln586_fu_124_p1 = i_2_reg_147;
 
