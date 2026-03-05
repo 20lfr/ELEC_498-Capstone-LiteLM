@@ -181,7 +181,7 @@ static inline void apply_rope_q_vector(
 #pragma HLS INLINE
 #pragma HLS ARRAY_PARTITION variable=head_vec cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
     for (int d = 0; d + 1 < D_HEADS; d += 2) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
         const int pair_idx = d >> 1;
         int16_t c_q15 = 32767;
         int16_t s_q15 = 0;
@@ -202,7 +202,7 @@ static inline void apply_rope_k_matrix(
 #pragma HLS INLINE
 #pragma HLS ARRAY_PARTITION variable=head_mat cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
     for (int d = 0; d + 1 < D_HEADS; d += 2) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
         const int pair_idx = d >> 1;
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
@@ -251,7 +251,7 @@ void MAC_HEAD_ARCHITECTURE(
 #pragma HLS PIPELINE II=1
         int32_t acc = static_cast<int32_t>(bias[out]);
         for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
             const int8_t w = matrixB[out * HEAD_VECTOR_MAX + i];
             acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
         }
@@ -279,7 +279,7 @@ void MAC_HEAD_ATT_VALUE_DIRECT(
 #pragma HLS PIPELINE II=1
         int32_t acc = 0;
         for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=CONTEXT_UNROLL
             const int8_t w = matrixB[out * CONTEXT_LENGTH + i];
             acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
         }
@@ -531,7 +531,7 @@ static void ATT_VALUE_TO_BUF(
 
     for (int out_base = 0; out_base < D_HEAD_TILE_ATT_VALUE; out_base += HEAD_MAC_OUT_UNROLL) {
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             accum_tile[lane] = 0;
         }
 
@@ -539,7 +539,7 @@ static void ATT_VALUE_TO_BUF(
 #pragma HLS PIPELINE II=1
             const int16_t weight = compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (t * 2));
             for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
                 const int out_idx = out_base + lane;
                 if (out_idx < D_HEAD_TILE_ATT_VALUE) {
                     const int v_idx = (out_idx * CONTEXT_LENGTH) + t;
@@ -550,7 +550,7 @@ static void ATT_VALUE_TO_BUF(
         }
 
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
             if (out_idx < D_HEAD_TILE_ATT_VALUE) {
                 compute_buf::write_i32(out_buf, out_idx * 4, accum_tile[lane]);
@@ -606,7 +606,7 @@ static void QKV_TO_BUF(
 
     for (int out_base = 0; out_base < D_HEAD_TILE_QKV; out_base += HEAD_MAC_OUT_UNROLL) {
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
             accum_tile[lane] = (out_idx < D_HEAD_TILE_QKV)
                                ? compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (out_idx * 4))
@@ -615,11 +615,11 @@ static void QKV_TO_BUF(
 
         for (int in_base = 0; in_base < D_MODEL; in_base += HEAD_MAC_VEC_UNROLL) {
             for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
                 const int out_idx = out_base + lane;
                 if (out_idx < D_HEAD_TILE_QKV) {
                     for (int k = 0; k < HEAD_MAC_VEC_UNROLL; ++k) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
                         const int in_idx = in_base + k;
                         if (in_idx < D_MODEL) {
                             const int8_t x = compute_buf::read_i8(in_buf, head_buf::INQkvLayout::ACT + in_idx);
@@ -634,7 +634,7 @@ static void QKV_TO_BUF(
         }
 
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
             if (out_idx < D_HEAD_TILE_QKV) {
                 compute_buf::write_i8(out_buf, out_idx, requant_scalar_to_i8(accum_tile[lane], M, n));
