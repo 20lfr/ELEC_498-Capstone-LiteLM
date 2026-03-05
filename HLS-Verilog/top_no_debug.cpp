@@ -1,4 +1,4 @@
-#include "top.hpp"
+#include "top_no_debug.hpp"
 #include "MMU/mmu_luka.hpp"
 
 // C-sim helper: access the local testbench DMA staging buffer as byte-addressable storage.
@@ -41,98 +41,28 @@ static inline uint64_t map_csim_ddr_addr(uint64_t byte_addr, const ControlMemSpa
 }
 #endif
 
-// Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
+// Production top-level wrapper with reduced debug ports.
 void transformer_top(
-    // ------------------------------------------------------------
     // AXI4-STREAM INPUT/OUTPUT
-    // ------------------------------------------------------------
     hls::stream<axis8_t> &s_axis_in,
     hls::stream<axis8_t> &m_axis_out,
     volatile axi_gmem_word_t *ddr_mem,
 
-    // ------------------------------------------------------------
     // AXI4-LITE INTERFACING (PL <-> PS)
-    // ------------------------------------------------------------
-    ControlMemSpace ctrl_mem,           // [INPUT]   Control memory interface
-    StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
+    ControlMemSpace ctrl_mem,
+    StatusMemSpace &status_mem,
 
-    // ------------------------------------------------------------
-    // INTERUPT INTERFACING (PL → PS)
-    // ------------------------------------------------------------
+    // INTERRUPT INTERFACING (PL -> PS)
     bool            &irq_ps,
 
-
-    /*
-        TEMPORARY INPUT/OUPUTS BELOW FOR DEBUGGING PURPOSES!!!!!!!!!!!!!
-    */
-
-    // ------------------------------------------------------------
-    // DEBUG MIRRORS
-    // ------------------------------------------------------------
+    // Reduced debug mirrors
     SchedState      &dbg_state,
-    HeadCtx         (&dbg_head_ctx_ref)[HEADS_PARALLEL],
-    ComputeHeadCtx  (&dbg_head_compute_ctx)[HEADS_PARALLEL],
-    // ------------------------------------------------------------
-    // DEBUG OUTPUTS
-    // ------------------------------------------------------------
     ControlMemSpace &dbg_ctrl_mem,
-    uint32_t &control_reg,
-    uint32_t &irq_status_reg,
-    uint32_t &irq_mask_reg,
-    uint32_t &irq_clear_reg,
-    uint32_t &wq_base_addr,
-    uint32_t &wk_base_addr,
-    uint32_t &wv_base_addr,
-    uint32_t &wo_base_addr,
-    uint32_t &w1_base_addr,
-    uint32_t &w2_base_addr,
-    uint32_t &wq_head_stride,
-    uint32_t &wk_head_stride,
-    uint32_t &wv_head_stride,
-    uint32_t &wo_tile_stride,
-    uint32_t &w1_tile_stride,
-    uint32_t &w2_tile_stride,
-
-    // Debug (compute controller)
-    bool     &dbg_compute_start,
-    uint32_t &dbg_compute_instruction,
-    bool     &dbg_compute_ready,
-    bool     &dbg_compute_done,
-    ComputeState &dbg_compute_state,
-    uint32_t &dbg_req_instruction,
-    uint8_t  &dbg_req_op,
-    uint8_t  &dbg_req_layer,
-    uint8_t  &dbg_req_head,
-    uint8_t  &dbg_req_tile,
-    bool     &dbg_mac_start,
-    bool     &dbg_mac_ready,
-    bool     &dbg_mac_complete,
-    bool     &dbg_ctrl_reset_asserted,
-    int      &dbg_head_group_idx,
-    bool     &dbg_wl_ready,
-    uint32_t &dbg_wl_instruction,
-    bool     &dbg_wl_start,
-    bool     &dbg_wl_accept,
-    bool     &dbg_dma_done,
-    bool     &dbg_mem_transfer_done,
-    bool     &dbg_mem_read_request,
-    bool     &dbg_mem_write_request,
-    uint32_t &dbg_mem_op,
-    uint8_t  dbg_in_buf[compute_buf::IN_BUF_BYTES],
-    uint8_t  dbg_out_buf[compute_buf::OUT_BUF_BYTES],
-    uint8_t  dbg_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES],
-    uint8_t  dbg_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES],
-    uint8_t  dbg_stream_in_buf[STREAM_IN_BUF_BYTES],
-
-    bool        &dbg_error,
-    uint32_t    &dbg_error_code,
-    bool        &dbg_done,
-    bool        &dbg_axis_is_empty,
-    bool        &dbg_axis_in_ready_wire,
-    bool        &dbg_axis_in_last_wire,
-    uint32_t    &dbg_stream_in_counter
+    uint32_t        &control_reg,
+    bool            &dbg_error,
+    uint32_t        &dbg_error_code
 ) {
-#pragma HLS INLINE off   
+#pragma HLS INLINE off
 #pragma HLS INTERFACE axis port=s_axis_in
 #pragma HLS INTERFACE axis port=m_axis_out
 #pragma HLS INTERFACE m_axi port=ddr_mem offset=slave bundle=gmem depth=TOP_DMA_BUF_WORDS
@@ -141,10 +71,6 @@ void transformer_top(
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 #pragma HLS INTERFACE ap_none port=irq_ps
-#pragma HLS ARRAY_PARTITION variable=dbg_head_ctx_ref complete dim=1
-#pragma HLS ARRAY_PARTITION variable=dbg_head_compute_ctx complete dim=1
-#pragma HLS ARRAY_PARTITION variable=dbg_head_in_buf complete dim=1
-#pragma HLS ARRAY_PARTITION variable=dbg_head_out_buf complete dim=1
 
     bool done                   = false;    // Scheduler done flag
     bool scheduler_error        = false;
@@ -164,7 +90,7 @@ void transformer_top(
     static ComputeHeadCtx   head_compute_ctx_local[HEADS_PARALLEL];
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx_local complete dim=1
 
-    // Headed compute controller lanes (parallel heads) 
+    // Headed compute controller lanes (parallel heads)
     static int              head_group_idx;
 
     // MMU-owned compute buffers (main + headed lanes)
@@ -271,21 +197,17 @@ void transformer_top(
             head_compute_ctx_local[lane] = ComputeHeadCtx();
         }
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
             mmu_in_buf[i] = 0;
         }
         for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
             mmu_out_buf[i] = 0;
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
             for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
                 mmu_head_in_buf[lane][i] = 0;
             }
             for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
                 mmu_head_out_buf[lane][i] = 0;
             }
         }
@@ -331,7 +253,7 @@ void transformer_top(
     stream_done_local = stream_done_pulse_local;
     stream_done_pulse_local = false;
 
-    // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
+    // SCHEDULER FSM
     scheduler_hls(
         ctrl_mem,
         active_status_mem,
@@ -365,10 +287,22 @@ void transformer_top(
         }
     }
 
+    // Local throwaway variables for compute_controller debug ports.
+    // HLS will optimize these away since they are never read externally.
+    ComputeState cc_dbg_state;
+    uint32_t     cc_dbg_req_instruction;
+    uint8_t      cc_dbg_req_op;
+    uint8_t      cc_dbg_req_layer;
+    uint8_t      cc_dbg_req_head;
+    uint8_t      cc_dbg_req_tile;
+    bool         cc_dbg_mac_start;
+    bool         cc_dbg_mac_ready;
+    bool         cc_dbg_mac_complete;
+
     compute_controller(
-        ctrl_mem,               
-        compute_start,       
-        compute_instruction,      
+        ctrl_mem,
+        compute_start,
+        compute_instruction,
         compute_ready,
         compute_done,
 
@@ -379,26 +313,26 @@ void transformer_top(
         mmu_in_buf,
         mmu_out_buf,
 
-        //DEBUG VISIBILITY
-        dbg_compute_state,
-        dbg_req_instruction,
-        dbg_req_op,
-        dbg_req_layer,
-        dbg_req_head,
-        dbg_req_tile,
-        dbg_mac_start,
-        dbg_mac_ready,
-        dbg_mac_complete,
-        compute_error               
+        // Throwaway debug outputs (optimized away by HLS)
+        cc_dbg_state,
+        cc_dbg_req_instruction,
+        cc_dbg_req_op,
+        cc_dbg_req_layer,
+        cc_dbg_req_head,
+        cc_dbg_req_tile,
+        cc_dbg_mac_start,
+        cc_dbg_mac_ready,
+        cc_dbg_mac_complete,
+        compute_error
     );
 
-    // Mirror headed compute contexts for debug visibility and MMU handshake (head scheduler only looks at head_ctx fields, so this is safe to do in-place).
+    // Mirror headed compute contexts for MMU handshake.
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
         head_compute_ctx_local[lane].compute_start = head_ctx_local[lane].compute_start;
         head_compute_ctx_local[lane].compute_instruction = head_ctx_local[lane].compute_op;
     }
-    
+
     bool head_error_any = false;
     drive_headed_compute_controller(
         head_compute_ctx_local,
@@ -409,7 +343,7 @@ void transformer_top(
         head_error_any
     );
 
-    // Mirror headed compute contexts back to main scheduler context for debug visibility (main scheduler has full view of all heads, so it takes priority in this mirror).
+    // Mirror headed compute contexts back to main scheduler context.
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 #pragma HLS UNROLL
         head_ctx_local[lane].compute_ready = head_compute_ctx_local[lane].compute_ready;
@@ -536,88 +470,16 @@ void transformer_top(
     status_mem = active_status_mem;
     status_mem.dbg_state = static_cast<uint32_t>(state_local);
 
-    // Debug outputs
-    {
-        wl_ready_local = mmu_req_ready_wire;
-        wl_start_local = scheduler_wl_start;
-        wl_accept_local = scheduler_wl_accept;
-        wl_instruction_local = scheduler_wl_instruction;
-        mem_transfer_done_local = mmu_main_mem_transfer_done_wire;
-        mem_read_request_local = main_mem_read_request;
-        mem_write_request_local = main_mem_write_request;
-        mem_op_local = main_mem_op;
-
-        dbg_done = done;
-        dbg_compute_start = compute_start;
-        dbg_compute_instruction = compute_instruction;
-        dbg_compute_ready = compute_ready;
-        dbg_compute_done = compute_done;
-        dbg_state = state_local;
-        dbg_ctrl_mem = ctrl_mem;
-        dbg_ctrl_reset_asserted = reset;
-        dbg_head_group_idx = head_group_idx;
-        dbg_wl_ready = wl_ready_local;
-        dbg_wl_instruction = wl_instruction_local;
-        dbg_wl_start = wl_start_local;
-        dbg_wl_accept = wl_accept_local;
-        dbg_dma_done = mmu_main_dma_done_wire;
-        dbg_mem_transfer_done = mem_transfer_done_local;
-        dbg_mem_read_request = mem_read_request_local;
-        dbg_mem_write_request = mem_write_request_local;
-        dbg_mem_op = mem_op_local;
-        for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
-            dbg_stream_in_buf[i] = stream_in_buf_local[i];
-        }
-        for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
-    // #pragma HLS PIPELINE II=1
-            dbg_in_buf[i] = mmu_in_buf[i];
-        }
-        for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
-    // #pragma HLS PIPELINE II=1
-            dbg_out_buf[i] = mmu_out_buf[i];
-        }
-        for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-    #pragma HLS UNROLL
-            dbg_head_compute_ctx[lane] = head_compute_ctx_local[lane];
-            dbg_head_ctx_ref[lane] = head_ctx_local[lane];
-            for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
-    // #pragma HLS PIPELINE II=1
-                dbg_head_in_buf[lane][i] = mmu_head_in_buf[lane][i];
-            }
-            for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
-    // #pragma HLS PIPELINE II=1
-                dbg_head_out_buf[lane][i] = mmu_head_out_buf[lane][i];
-            }
-        }
-        control_reg   = ctrl_mem.control;
-        irq_mask_reg   = ctrl_mem.irq_mask;
-        irq_clear_reg  = ctrl_mem.irq_clear;
-        irq_status_reg = active_status_mem.irq_status;
-        wq_base_addr   = ctrl_mem.wq_offset;
-        wk_base_addr   = ctrl_mem.wk_offset;
-        wv_base_addr   = ctrl_mem.wv_offset;
-        wo_base_addr   = ctrl_mem.wo_offset;
-        w1_base_addr   = ctrl_mem.w1_offset;
-        w2_base_addr   = ctrl_mem.w2_offset;
-        wq_head_stride   = ctrl_mem.wq_head_stride;
-        wk_head_stride   = ctrl_mem.wk_head_stride;
-        wv_head_stride   = ctrl_mem.wv_head_stride;
-        wo_tile_stride   = ctrl_mem.wo_tile_stride;
-        w1_tile_stride   = ctrl_mem.w1_tile_stride;
-        w2_tile_stride   = ctrl_mem.w2_tile_stride;
-        dbg_error_code = active_status_mem.error_code | mmu_status.error_code;
-        dbg_error =
-            scheduler_error ||
-            compute_error ||
-            mmu_status.invalid ||
-            mmu_status.overflow ||
-            ((active_status_mem.status & STATUS_ERROR) != 0u) ||
-            (active_status_mem.error_code != ERR_NONE);
-        dbg_axis_is_empty = s_axis_in.empty();
-        dbg_axis_in_ready_wire = axis_in_ready_wire;
-        dbg_axis_in_last_wire = axis_in_last;
-        dbg_stream_in_counter = stream_in_counter;
-    }
-
-
+    // Reduced debug outputs
+    dbg_state = state_local;
+    dbg_ctrl_mem = ctrl_mem;
+    control_reg = ctrl_mem.control;
+    dbg_error_code = active_status_mem.error_code | mmu_status.error_code;
+    dbg_error =
+        scheduler_error ||
+        compute_error ||
+        mmu_status.invalid ||
+        mmu_status.overflow ||
+        ((active_status_mem.status & STATUS_ERROR) != 0u) ||
+        (active_status_mem.error_code != ERR_NONE);
 }

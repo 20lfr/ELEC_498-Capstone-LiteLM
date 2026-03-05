@@ -41,10 +41,10 @@ void MAC_ARCHITECTURE(
         
         // Perform the actual computation
         for (int out = 0; out < ACCUM_MAX; ++out) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
             int32_t acc = bias[out];
             for (int i = 0; i < VECTOR_MAX; ++i) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=MAC_VEC_UNROLL
                 const int4_t w = matrixB[out * VECTOR_MAX + i];
                 acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
             }
@@ -144,7 +144,7 @@ static void MAC_OP_TO_BUF(
                     ((out_base + MAC_OUT_UNROLL) < out_count) ? MAC_OUT_UNROLL : (out_count - out_base);
 
                 for (int o = 0; o < MAC_OUT_UNROLL; ++o) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
                     if (o < tile_out_count) {
                         accum_tile[o] = use_bias
                                             ? compute_buf::read_i32(in_buf, bias_byte_base + ((out_base + o) * 4))
@@ -159,7 +159,7 @@ static void MAC_OP_TO_BUF(
                     const int tile_k_count =
                         ((k_base + MAC_VEC_UNROLL) < vec_count) ? MAC_VEC_UNROLL : (vec_count - k_base);
                     for (int k = 0; k < MAC_VEC_UNROLL; ++k) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=MAC_VEC_UNROLL
                         if (k < tile_k_count) {
                             vec_tile[k] = act_is_i32
                                               ? compute_buf::read_i32(in_buf, act_byte_base + ((k_base + k) * 4))
@@ -174,11 +174,11 @@ static void MAC_OP_TO_BUF(
                     }
 
                     for (int o = 0; o < MAC_OUT_UNROLL; ++o) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
                         if (o >= tile_out_count) continue;
                         int32_t acc = accum_tile[o];
                         for (int k = 0; k < MAC_VEC_UNROLL; ++k) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=MAC_VEC_UNROLL
                             if (k >= tile_k_count) continue;
                             const int w_idx = ((out_base + o) * vec_count) + (k_base + k);
                             const int4_t w = compute_buf::read_i4(in_buf, weight_nibble_base + w_idx);
@@ -189,7 +189,7 @@ static void MAC_OP_TO_BUF(
                 }
 
                 for (int o = 0; o < MAC_OUT_UNROLL; ++o) {
-#pragma HLS UNROLL
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
                     if (o >= tile_out_count) continue;
                     const int dst_idx = out_base + o;
                     switch (op) {

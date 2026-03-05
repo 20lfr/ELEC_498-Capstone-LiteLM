@@ -576,6 +576,7 @@ struct StatusMemSpace {
     // Testing registers
     uint32_t head_index = 0;
     uint32_t token_index = 0;
+    uint32_t dbg_state = 0;
 };
 
 // ---------------------------------------------------------------------------

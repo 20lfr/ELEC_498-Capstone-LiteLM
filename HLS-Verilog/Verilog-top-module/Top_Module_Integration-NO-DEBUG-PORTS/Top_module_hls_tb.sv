@@ -4,7 +4,7 @@ module top_module_hls_tb;
   localparam int CLK_PERIOD_NS        = 10;
   localparam int MAX_CYCLES           = 5000000;
   localparam int CTRL_MEM_WORDS       = 56;
-  localparam int DBG_CTRL_MEM_WORDS   = 56;
+  localparam int DBG_CTRL_MEM_WORDS   = 49;
   localparam int STREAM_IN_BUF_BYTES  = 16;
   localparam int STREAM_OUT_BUF_BYTES = 64;
   localparam int TOP_DMA_BUF_WORDS    = 16384;
@@ -43,14 +43,6 @@ module top_module_hls_tb;
   localparam int TB_LOGITS_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_LOGIT) + 1) / 2;
   localparam int TB_ATT_SCORES_K_TILE_BYTES = (TB_ATT_CTX_BLOCK * TB_D_HEADS);
   localparam int TB_ATT_VALUE_V_TILE_BYTES  = (TB_CONTEXT_LENGTH * TB_D_HEAD_TILE_ATT_VALUE);
-  // Current generated RTL exports main debug input bytes at addresses 0..192.
-  localparam int DBG_MAIN_IN_BYTES     = 193;
-  localparam int DBG_MAIN_OUT_BYTES    = 64;
-  localparam int DBG_HEAD_IN_BYTES     = 64;
-  localparam int DBG_HEAD_OUT_BYTES    = 32;
-  localparam int DBG_SNAP_DEPTH        = 64;
-  localparam int DBG_SNAP_QUIET_CYCLES = 2;
-
   localparam int OP_CMP_LN0         = 1;
   localparam int OP_CMP_Q           = 3;
   localparam int OP_CMP_K           = 4;
@@ -86,199 +78,6 @@ module top_module_hls_tb;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
-
-  // Reverse order of HeadCtx so LSBs align with C layout.
-  typedef struct packed {
-    logic        in_multi_tile_phase;
-    logic [31:0] active_tile_target;
-    logic [31:0] att_value_tile_idx;
-    logic [31:0] att_ctx_block_idx;
-    logic [31:0] qkv_tile_idx;
-    logic        att_value_dma_done;
-    logic        att_scores_dma_done;
-    logic        v_writeback_dma_done;
-    logic        v_dma_done;
-    logic        k_writeback_dma_done;
-    logic        k_dma_done;
-    logic        q_dma_done;
-    logic        head_requant_compute_done;
-    logic        att_value_compute_done;
-    logic        softmax_compute_done;
-    logic        val_scale_compute_done;
-    logic        att_scores_compute_done;
-    logic        v_compute_done;
-    logic        k_compute_done;
-    logic        q_compute_done;
-    logic        head_requant_started;
-    logic        att_value_started;
-    logic        softmax_started;
-    logic        val_scale_started;
-    logic        att_scores_started;
-    logic        v_writeback_started;
-    logic        v_started;
-    logic        k_writeback_started;
-    logic        k_started;
-    logic        q_started;
-    logic        start_head;
-    logic        dma_done;
-    logic [31:0] wl_instruction;
-    logic        wl_start;
-    logic        wl_ready;
-    logic        wl_accept;
-    logic [7:0]  last_wl_addr;
-    logic [31:0] last_compute_op;
-    logic [31:0] compute_op;
-    logic        compute_start;
-    logic        compute_done;
-    logic        compute_ready;
-    logic [7:0]  phase;
-    logic [31:0] head_idx;
-    logic [31:0] layer_stamp;
-  } head_ctx_t;
-
-  typedef struct packed {
-    logic [31:0] mem_op;
-    logic        mem_write_request;
-    logic        mem_read_request;
-    logic        mem_transfer_done;
-    logic        compute_done;
-    logic        compute_ready;
-    logic [31:0] compute_instruction;
-    logic        compute_start;
-    logic        error_latched;
-    logic        mac_start;
-    logic        capture_pending;
-    logic        clear_pending;
-    logic        mac_complete;
-    logic        mac_ready;
-    logic        mac_busy;
-    logic [7:0]  req_tile;
-    logic [7:0]  req_head;
-    logic [7:0]  req_layer;
-    logic [7:0]  req_op;
-    logic [31:0] req_instruction;
-    logic [7:0]  state;
-  } ComputeHeadCtx_t;
-
-  // Unpack raw HLS debug buses using explicit bit positions from C-struct field order.
-  function automatic head_ctx_t unpack_head_ctx(input logic [337:0] raw);
-    head_ctx_t s;
-    begin
-      s.layer_stamp               = raw[31:0];
-      s.head_idx                  = raw[63:32];
-      s.phase                     = raw[71:64];
-      s.compute_ready             = raw[72];
-      s.compute_done              = raw[73];
-      s.compute_start             = raw[74];
-      s.compute_op                = raw[106:75];
-      s.last_compute_op           = raw[138:107];
-      s.last_wl_addr              = raw[146:139];
-      s.wl_ready                  = raw[147];
-      s.wl_accept                 = raw[148];
-      s.wl_start                  = raw[149];
-      s.wl_instruction            = raw[181:150];
-      s.dma_done                  = raw[182];
-      s.start_head                = raw[183];
-      s.q_started                 = raw[184];
-      s.k_started                 = raw[185];
-      s.k_writeback_started       = raw[186];
-      s.v_started                 = raw[187];
-      s.v_writeback_started       = raw[188];
-      s.att_scores_started        = raw[189];
-      s.val_scale_started         = raw[190];
-      s.softmax_started           = raw[191];
-      s.att_value_started         = raw[192];
-      s.head_requant_started      = raw[193];
-      s.q_compute_done            = raw[194];
-      s.k_compute_done            = raw[195];
-      s.v_compute_done            = raw[196];
-      s.att_scores_compute_done   = raw[197];
-      s.val_scale_compute_done    = raw[198];
-      s.softmax_compute_done      = raw[199];
-      s.att_value_compute_done    = raw[200];
-      s.head_requant_compute_done = raw[201];
-      s.q_dma_done                = raw[202];
-      s.k_dma_done                = raw[203];
-      s.k_writeback_dma_done      = raw[204];
-      s.v_dma_done                = raw[205];
-      s.v_writeback_dma_done      = raw[206];
-      s.att_scores_dma_done       = raw[207];
-      s.att_value_dma_done        = raw[208];
-      s.qkv_tile_idx              = raw[240:209];
-      s.att_ctx_block_idx         = raw[272:241];
-      s.att_value_tile_idx        = raw[304:273];
-      s.active_tile_target        = raw[336:305];
-      s.in_multi_tile_phase       = raw[337];
-      unpack_head_ctx = s;
-    end
-  endfunction
-
-  function automatic ComputeHeadCtx_t unpack_compute_head_ctx(input logic [148:0] raw);
-    ComputeHeadCtx_t s;
-    begin
-      s.state            = raw[7:0];
-      s.req_instruction  = raw[39:8];
-      s.req_op           = raw[47:40];
-      s.req_layer        = raw[55:48];
-      s.req_head         = raw[63:56];
-      s.req_tile         = raw[71:64];
-      s.mac_busy         = raw[72];
-      s.mac_ready        = raw[73];
-      s.mac_complete     = raw[74];
-      s.clear_pending    = raw[75];
-      s.capture_pending  = raw[76];
-      s.mac_start        = raw[77];
-      s.error_latched    = raw[78];
-      s.compute_start    = raw[79];
-      s.compute_instruction = raw[111:80];
-      s.compute_ready    = raw[112];
-      s.compute_done     = raw[113];
-      s.mem_transfer_done= raw[114];
-      s.mem_read_request = raw[115];
-      s.mem_write_request= raw[116];
-      s.mem_op           = raw[148:117];
-      unpack_compute_head_ctx = s;
-    end
-  endfunction
-
-  function automatic logic [7:0] instr_op(input logic [31:0] instr);
-    instr_op = instr[7:0];
-  endfunction
-
-  function automatic logic [7:0] instr_layer(input logic [31:0] instr);
-    instr_layer = instr[15:8];
-  endfunction
-
-  function automatic logic [7:0] instr_head(input logic [31:0] instr);
-    instr_head = instr[23:16];
-  endfunction
-
-  function automatic logic [7:0] instr_tile(input logic [31:0] instr);
-    instr_tile = instr[31:24];
-  endfunction
-
-  function automatic int main_input_last_addr(input logic [7:0] op);
-    int last_addr;
-    begin
-      case (op)
-        OP_CMP_LN0,
-        OP_CMP_LN1,
-        OP_CMP_FINAL_NORM: last_addr = TB_D_MODEL + (TB_D_MODEL * 4) + 4 - 1;
-        OP_CMP_OUT_PROJ:   last_addr = TB_D_MODEL + TB_OUT_PROJ_W_BYTES + (TB_D_TILE_WO * 4) - 1;
-        OP_CMP_RESID1,
-        OP_CMP_RESID2:     last_addr = (TB_D_MODEL * 2) - 1;
-        OP_CMP_FFN_W1:     last_addr = TB_D_MODEL + TB_FFN_W1_W_BYTES + (TB_D_TILE_W1 * 4) - 1;
-        OP_CMP_FFN_ACT:    last_addr = (TB_D_FFN * 4) - 1;
-        OP_CMP_FFN_W2:     last_addr = (TB_D_FFN * 2) + TB_FFN_W2_W_BYTES + (TB_D_TILE_W2 * 4) - 1;
-        OP_CMP_LOGITS:     last_addr = (TB_D_MODEL * 4) + TB_LOGITS_W_BYTES - 1;
-        OP_CMP_ARGMAX:     last_addr = (TB_D_VOCAB * 4) - 1;
-        default:           last_addr = -1;
-      endcase
-      if (last_addr >= DBG_MAIN_IN_BYTES)
-        last_addr = DBG_MAIN_IN_BYTES - 1;
-      main_input_last_addr = last_addr;
-    end
-  endfunction
 
   typedef struct packed {
     logic [31:0] control;
@@ -330,7 +129,6 @@ module top_module_hls_tb;
     logic [31:0] ln1_eps_offset;
     logic [31:0] final_norm_eps_offset;
     logic [31:0] wlogit_offset;
-    logic [31:0] logit_scale_qv;
   } dbg_control_mem_t;
 
   typedef struct packed {
@@ -341,8 +139,8 @@ module top_module_hls_tb;
     logic [31:0] layer_index;
     logic [31:0] head_index;
     logic [31:0] token_index;
-    logic [31:0] dbg_state;
-  } dbg_status_mem_t;
+    logic [31:0] state;
+  } status_mem_shadow_t;
 
   logic ap_clk;
   logic ap_rst_n;
@@ -432,147 +230,19 @@ module top_module_hls_tb;
   logic         s_axi_control_BVALID;
   logic [1:0]   s_axi_control_BRESP;
 
+  // Re-added reduced debug outputs from top_no_debug.cpp
+  logic [31:0]  dbg_state;
+  logic         dbg_state_ap_vld;
+  logic [1567:0] dbg_ctrl_mem;
+  logic         dbg_ctrl_mem_ap_vld;
+  logic [31:0]  control_reg;
+  logic         control_reg_ap_vld;
+  logic [0:0]   dbg_error;
+  logic         dbg_error_ap_vld;
+  logic [31:0]  dbg_error_code;
+  logic         dbg_error_code_ap_vld;
+
   logic [0:0] irq_ps;
-  logic [31:0] dbg_state;
-  logic       dbg_state_ap_vld;
-  logic [1727:0] dbg_ctrl_mem;
-  logic       dbg_ctrl_mem_ap_vld;
-  logic [31:0] control_reg;
-  logic       control_reg_ap_vld;
-  logic [31:0] irq_status_reg;
-  logic       irq_status_reg_ap_vld;
-  logic [31:0] irq_mask_reg;
-  logic       irq_mask_reg_ap_vld;
-  logic [31:0] irq_clear_reg;
-  logic       irq_clear_reg_ap_vld;
-  logic [31:0] wq_base_addr;
-  logic       wq_base_addr_ap_vld;
-  logic [31:0] wk_base_addr;
-  logic       wk_base_addr_ap_vld;
-  logic [31:0] wv_base_addr;
-  logic       wv_base_addr_ap_vld;
-  logic [31:0] wo_base_addr;
-  logic       wo_base_addr_ap_vld;
-  logic [31:0] w1_base_addr;
-  logic       w1_base_addr_ap_vld;
-  logic [31:0] w2_base_addr;
-  logic       w2_base_addr_ap_vld;
-  logic [31:0] wq_head_stride;
-  logic       wq_head_stride_ap_vld;
-  logic [31:0] wk_head_stride;
-  logic       wk_head_stride_ap_vld;
-  logic [31:0] wv_head_stride;
-  logic       wv_head_stride_ap_vld;
-  logic [31:0] wo_tile_stride;
-  logic       wo_tile_stride_ap_vld;
-  logic [31:0] w1_tile_stride;
-  logic       w1_tile_stride_ap_vld;
-  logic [31:0] w2_tile_stride;
-  logic       w2_tile_stride_ap_vld;
-  logic [0:0] dbg_wl_ready;
-  logic       dbg_wl_ready_ap_vld;
-  logic [31:0] dbg_wl_instruction;
-  logic       dbg_wl_instruction_ap_vld;
-  logic [0:0] dbg_wl_start;
-  logic       dbg_wl_start_ap_vld;
-  logic [0:0] dbg_wl_accept;
-  logic       dbg_wl_accept_ap_vld;
-  logic [0:0] dbg_dma_done;
-  logic       dbg_dma_done_ap_vld;
-  logic [0:0] dbg_mem_transfer_done;
-  logic       dbg_mem_transfer_done_ap_vld;
-  logic [0:0] dbg_mem_read_request;
-  logic       dbg_mem_read_request_ap_vld;
-  logic [0:0] dbg_mem_write_request;
-  logic       dbg_mem_write_request_ap_vld;
-  logic [31:0] dbg_mem_op;
-  logic       dbg_mem_op_ap_vld;
-  logic [0:0] dbg_compute_start;
-  logic       dbg_compute_start_ap_vld;
-  logic [31:0] dbg_compute_instruction;
-  logic       dbg_compute_instruction_ap_vld;
-  logic [0:0] dbg_compute_ready;
-  logic       dbg_compute_ready_ap_vld;
-  logic [0:0] dbg_compute_done;
-  logic       dbg_compute_done_ap_vld;
-  logic [7:0] dbg_compute_state;
-  logic       dbg_compute_state_ap_vld;
-  logic [31:0] dbg_req_instruction;
-  logic       dbg_req_instruction_ap_vld;
-  logic [7:0] dbg_req_op;
-  logic       dbg_req_op_ap_vld;
-  logic [7:0] dbg_req_layer;
-  logic       dbg_req_layer_ap_vld;
-  logic [7:0] dbg_req_head;
-  logic       dbg_req_head_ap_vld;
-  logic [7:0] dbg_req_tile;
-  logic       dbg_req_tile_ap_vld;
-  logic [0:0] dbg_mac_start;
-  logic       dbg_mac_start_ap_vld;
-  logic [0:0] dbg_mac_ready;
-  logic       dbg_mac_ready_ap_vld;
-  logic [0:0] dbg_mac_complete;
-  logic       dbg_mac_complete_ap_vld;
-  logic [0:0] dbg_ctrl_reset_asserted;
-  logic       dbg_ctrl_reset_asserted_ap_vld;
-  logic [31:0] dbg_head_group_idx;
-  logic       dbg_head_group_idx_ap_vld;
-  logic [0:0] dbg_error;
-  logic       dbg_error_ap_vld;
-  logic [31:0] dbg_error_code;
-  logic       dbg_error_code_ap_vld;
-  logic [0:0] dbg_done;
-  logic       dbg_done_ap_vld;
-  logic [0:0] dbg_axis_is_empty;
-  logic       dbg_axis_is_empty_ap_vld;
-  logic [0:0] dbg_axis_in_ready_wire;
-  logic       dbg_axis_in_ready_wire_ap_vld;
-  logic [0:0] dbg_axis_in_last_wire;
-  logic       dbg_axis_in_last_wire_ap_vld;
-  logic [31:0] dbg_stream_in_counter;
-  logic       dbg_stream_in_counter_ap_vld;
-
-  logic [337:0] dbg_head_ctx_ref_0;
-  logic         dbg_head_ctx_ref_0_ap_vld;
-  logic [337:0] dbg_head_ctx_ref_1;
-  logic         dbg_head_ctx_ref_1_ap_vld;
-  logic [148:0] dbg_head_compute_ctx_0;
-  logic         dbg_head_compute_ctx_0_ap_vld;
-  logic [148:0] dbg_head_compute_ctx_1;
-  logic         dbg_head_compute_ctx_1_ap_vld;
-
-  wire [7:0] dbg_in_buf_address0;
-  wire       dbg_in_buf_ce0;
-  wire       dbg_in_buf_we0;
-  wire [7:0] dbg_in_buf_d0;
-
-  wire [5:0] dbg_out_buf_address0;
-  wire       dbg_out_buf_ce0;
-  wire       dbg_out_buf_we0;
-  wire [7:0] dbg_out_buf_d0;
-
-  wire [5:0] dbg_head_in_buf_0_address0;
-  wire       dbg_head_in_buf_0_ce0;
-  wire       dbg_head_in_buf_0_we0;
-  wire [7:0] dbg_head_in_buf_0_d0;
-  wire [5:0] dbg_head_in_buf_1_address0;
-  wire       dbg_head_in_buf_1_ce0;
-  wire       dbg_head_in_buf_1_we0;
-  wire [7:0] dbg_head_in_buf_1_d0;
-
-  wire [4:0] dbg_head_out_buf_0_address0;
-  wire       dbg_head_out_buf_0_ce0;
-  wire       dbg_head_out_buf_0_we0;
-  wire [7:0] dbg_head_out_buf_0_d0;
-  wire [4:0] dbg_head_out_buf_1_address0;
-  wire       dbg_head_out_buf_1_ce0;
-  wire       dbg_head_out_buf_1_we0;
-  wire [7:0] dbg_head_out_buf_1_d0;
-  wire [3:0] dbg_stream_in_buf_address0;
-  wire       dbg_stream_in_buf_ce0;
-  wire       dbg_stream_in_buf_we0;
-  wire [7:0] dbg_stream_in_buf_d0;
-
   logic [7:0]  stream_in_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0]  stream_out_mem[0:STREAM_OUT_BUF_BYTES-1];
   logic [31:0] dma_rx_mem    [0:TOP_DMA_BUF_WORDS-1];
@@ -598,191 +268,8 @@ module top_module_hls_tb;
   logic [31:0] final_norm_eps_ram [0:RAM_REGION_WORDS-1];
   logic [31:0] k_cache_store [0:KV_STORE_WORDS-1];
   logic [31:0] v_cache_store [0:KV_STORE_WORDS-1];
-  // Per-lane struct mirrors. The raw DUT ports are still lane-specific, but the TB
-  // consumes them through arrays so downstream logic scales with TB_HEADS_PARALLEL.
-  head_ctx_t dbg_head_ctx_ref_struct [0:TB_HEADS_PARALLEL-1];
-  ComputeHeadCtx_t dbg_head_compute_ctx_struct [0:TB_HEADS_PARALLEL-1];
-  logic [7:0] dbg_in_buf_mem [0:DBG_MAIN_IN_BYTES-1];
-  logic [7:0] dbg_out_buf_mem [0:63];
-  logic [7:0] dbg_stream_in_buf_mem [0:STREAM_IN_BUF_BYTES-1];
-  logic [7:0] dbg_head_in_buf_mem [0:(TB_HEADS_PARALLEL*DBG_HEAD_IN_BYTES)-1];
-  logic [7:0] dbg_head_out_buf_mem [0:(TB_HEADS_PARALLEL*DBG_HEAD_OUT_BYTES)-1];
-
-  function automatic logic [7:0] main_dbg_in_byte(
-      input int unsigned idx,
-      input logic write_en,
-      input logic [7:0] write_addr,
-      input logic [7:0] write_data);
-    begin
-      if ((idx < DBG_MAIN_IN_BYTES) && write_en && (write_addr == idx[7:0]))
-        main_dbg_in_byte = write_data;
-      else
-        main_dbg_in_byte = dbg_in_buf_mem[idx];
-    end
-  endfunction
-
-  // --------------------------------------------------------------------------
-  // Debug buffer snapshots (for easier full-buffer validation in waveform)
-  // --------------------------------------------------------------------------
-  logic [7:0] main_in_snap  [0:DBG_SNAP_DEPTH-1][0:DBG_MAIN_IN_BYTES-1];
-  logic [7:0] main_out_snap [0:DBG_SNAP_DEPTH-1][0:DBG_MAIN_OUT_BYTES-1];
-  logic       main_in_snap_valid  [0:DBG_SNAP_DEPTH-1];
-  logic       main_out_snap_valid [0:DBG_SNAP_DEPTH-1];
-  logic [31:0] main_in_snap_cycle [0:DBG_SNAP_DEPTH-1];
-  logic [31:0] main_out_snap_cycle[0:DBG_SNAP_DEPTH-1];
-  logic [31:0] main_in_snap_instr [0:DBG_SNAP_DEPTH-1];
-  logic [31:0] main_out_snap_instr[0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_in_snap_op    [0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_out_snap_op   [0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_in_snap_layer [0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_out_snap_layer[0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_in_snap_head  [0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_out_snap_head [0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_in_snap_tile  [0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  main_out_snap_tile [0:DBG_SNAP_DEPTH-1];
-  logic [$clog2(DBG_SNAP_DEPTH)-1:0] main_in_snap_wr_idx;
-  logic [$clog2(DBG_SNAP_DEPTH)-1:0] main_out_snap_wr_idx;
-  logic main_in_capture_pending;
-  logic main_out_capture_pending;
-  logic [3:0] main_in_quiet_ctr;
-  logic [3:0] main_out_quiet_ctr;
-  logic [31:0] main_in_pending_instr;
-  logic [31:0] main_out_pending_instr;
-  logic [31:0] main_active_instr;
-  logic [7:0]  main_in_pending_op;
-  logic [7:0]  main_out_pending_op;
-  logic [7:0]  main_active_op;
-  logic [7:0]  main_in_pending_layer;
-  logic [7:0]  main_out_pending_layer;
-  logic [7:0]  main_active_layer;
-  logic [7:0]  main_in_pending_head;
-  logic [7:0]  main_out_pending_head;
-  logic [7:0]  main_active_head;
-  logic [7:0]  main_in_pending_tile;
-  logic [7:0]  main_out_pending_tile;
-  logic [7:0]  main_active_tile;
-  logic [31:0] main_last_seen_instr;
-  logic dbg_compute_start_d;
-  logic dbg_compute_done_d;
-  logic [7:0] dbg_compute_state_d;
-
-  logic [7:0] head_in_snap  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1][0:DBG_HEAD_IN_BYTES-1];
-  logic [7:0] head_out_snap [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1][0:DBG_HEAD_OUT_BYTES-1];
-  logic       head_in_snap_valid  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic       head_out_snap_valid [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [31:0] head_in_snap_cycle [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [31:0] head_out_snap_cycle[0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [31:0] head_in_snap_instr [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [31:0] head_out_snap_instr[0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_in_snap_op    [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_out_snap_op   [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_in_snap_layer [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_out_snap_layer[0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_in_snap_head  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_out_snap_head [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_in_snap_tile  [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [7:0]  head_out_snap_tile [0:TB_HEADS_PARALLEL-1][0:DBG_SNAP_DEPTH-1];
-  logic [$clog2(DBG_SNAP_DEPTH)-1:0] head_in_snap_wr_idx  [0:TB_HEADS_PARALLEL-1];
-  logic [$clog2(DBG_SNAP_DEPTH)-1:0] head_out_snap_wr_idx [0:TB_HEADS_PARALLEL-1];
-  logic head_in_capture_pending [0:TB_HEADS_PARALLEL-1];
-  logic head_out_capture_pending[0:TB_HEADS_PARALLEL-1];
-  logic [3:0] head_in_quiet_ctr  [0:TB_HEADS_PARALLEL-1];
-  logic [3:0] head_out_quiet_ctr [0:TB_HEADS_PARALLEL-1];
-  logic [31:0] head_in_pending_instr [0:TB_HEADS_PARALLEL-1];
-  logic [31:0] head_out_pending_instr[0:TB_HEADS_PARALLEL-1];
-  logic [31:0] head_active_instr     [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_in_pending_op    [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_out_pending_op   [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_active_op        [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_in_pending_layer [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_out_pending_layer[0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_active_layer     [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_in_pending_head  [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_out_pending_head [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_active_head      [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_in_pending_tile  [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_out_pending_tile [0:TB_HEADS_PARALLEL-1];
-  logic [7:0]  head_active_tile      [0:TB_HEADS_PARALLEL-1];
-  logic        head_exec_valid       [0:TB_HEADS_PARALLEL-1];
-  logic head_compute_start_d [0:TB_HEADS_PARALLEL-1];
-  logic head_compute_done_d  [0:TB_HEADS_PARALLEL-1];
-  logic [7:0] head_compute_state_d [0:TB_HEADS_PARALLEL-1];
-
-  // Operation-indexed banks for easier debug (inputs/outputs separated by op).
-  logic [7:0] main_out_by_op  [0:31][0:DBG_MAIN_OUT_BYTES-1];
-  logic [7:0] head_out_by_op  [0:TB_NUM_HEADS-1][0:31][0:DBG_HEAD_OUT_BYTES-1];
-
-  // Decoded per-op input banks.
-  // Decoded per-op output banks (same debug style as legacy TB).
-  logic [7:0] ln0_in       [0:TB_D_MODEL-1];
-  logic signed [31:0] ln0_gamma_in [0:TB_D_MODEL-1];
-  logic signed [31:0] ln0_eps_in;
-  logic [7:0] ln1_in       [0:TB_D_MODEL-1];
-  logic signed [31:0] ln1_gamma_in [0:TB_D_MODEL-1];
-  logic signed [31:0] ln1_eps_in;
-  logic [7:0] final_norm_in [0:TB_D_MODEL-1];
-  logic signed [31:0] final_norm_gamma_in [0:TB_D_MODEL-1];
-  logic signed [31:0] final_norm_eps_in;
-  logic [7:0] out_proj_act_in [0:TB_D_MODEL-1];
-  logic signed [3:0] out_proj_w_in [0:(TB_D_MODEL*TB_D_TILE_WO)-1];
-  logic signed [31:0] out_proj_b_in [0:TB_D_TILE_WO-1];
-  logic [7:0] resid1_x_in [0:TB_D_MODEL-1];
-  logic [7:0] resid1_r_in [0:TB_D_MODEL-1];
-  logic [7:0] resid2_x_in [0:TB_D_MODEL-1];
-  logic [7:0] resid2_r_in [0:TB_D_MODEL-1];
-  logic [7:0] ffn_w1_x_in [0:TB_D_MODEL-1];
-  logic signed [3:0] ffn_w1_w_in [0:(TB_D_MODEL*TB_D_TILE_W1)-1];
-  logic signed [31:0] ffn_w1_b_in [0:TB_D_TILE_W1-1];
-  logic signed [31:0] wlogit_act_in [0:TB_D_MODEL-1];
-  logic signed [3:0] wlogit_w_in [0:(TB_D_MODEL*TB_D_TILE_LOGIT)-1];
-  logic signed [31:0] wlogit_b_in [0:TB_D_TILE_LOGIT-1];
-  logic signed [15:0] ffn_act_gate_in [0:TB_D_FFN-1];
-  logic signed [15:0] ffn_act_up_in   [0:TB_D_FFN-1];
-  logic signed [15:0] ffn_w2_x_in [0:TB_D_FFN-1];
-  logic signed [3:0] ffn_w2_w_in [0:(TB_D_FFN*TB_D_TILE_W2)-1];
-  logic signed [31:0] ffn_w2_b_in [0:TB_D_TILE_W2-1];
-  logic signed [31:0] argmax_in [0:TB_D_VOCAB-1];
-  logic signed [7:0] q_act_in [0:TB_NUM_HEADS-1][0:TB_D_MODEL-1];
-  logic signed [3:0] q_w_in [0:TB_NUM_HEADS-1][0:(TB_D_MODEL*TB_D_HEADS)-1];
-  logic signed [31:0] q_b_in [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [7:0] k_act_in [0:TB_NUM_HEADS-1][0:TB_D_MODEL-1];
-  logic signed [3:0] k_w_in [0:TB_NUM_HEADS-1][0:(TB_D_MODEL*TB_D_HEADS)-1];
-  logic signed [31:0] k_b_in [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [7:0] v_act_in [0:TB_NUM_HEADS-1][0:TB_D_MODEL-1];
-  logic signed [3:0] v_w_in [0:TB_NUM_HEADS-1][0:(TB_D_MODEL*TB_D_HEADS)-1];
-  logic signed [31:0] v_b_in [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [31:0] head_rq_in [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [7:0] att_scores_q_in [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [7:0] att_scores_k_cache_in [0:TB_NUM_HEADS-1][0:(TB_CONTEXT_LENGTH*TB_D_HEADS)-1];
-  logic signed [31:0] val_scale_in [0:TB_NUM_HEADS-1][0:TB_CONTEXT_LENGTH-1];
-  logic signed [15:0] softmax_in [0:TB_NUM_HEADS-1][0:TB_CONTEXT_LENGTH-1];
-  logic signed [15:0] att_value_weights_in [0:TB_NUM_HEADS-1][0:TB_CONTEXT_LENGTH-1];
-  logic signed [7:0] att_value_v_cache_in [0:TB_NUM_HEADS-1][0:(TB_CONTEXT_LENGTH*TB_D_HEADS)-1];
-  logic [7:0] out_proj_out [0:TB_D_MODEL-1];
-  logic [7:0] resid1_out   [0:TB_D_MODEL-1];
-  logic [7:0] resid2_out   [0:TB_D_MODEL-1];
-  logic [7:0] ln0_out      [0:TB_D_MODEL-1];
-  logic [7:0] ln1_out      [0:TB_D_MODEL-1];
-  logic [7:0] ffn_w2_out   [0:TB_D_MODEL-1];
-  logic [7:0] out_proj_out_by_tile [0:TB_NUM_WO_TILES-1][0:TB_D_TILE_WO-1];
-  logic signed [15:0] ffn_w1_out_by_tile [0:TB_NUM_W1_TILES-1][0:TB_D_TILE_W1-1];
-  logic [7:0] ffn_w2_out_by_tile [0:TB_NUM_W2_TILES-1][0:TB_D_TILE_W2-1];
-  logic signed [31:0] wlogit_out [0:TB_D_VOCAB-1];
-  logic signed [31:0] wlogit_out_by_tile [0:TB_NUM_LOGIT_TILES-1][0:TB_D_TILE_LOGIT-1];
-  logic signed [31:0] final_norm_out [0:TB_D_MODEL-1];
-  logic signed [31:0] argmax_out;
   logic signed [31:0] stream_out_token;
   logic signed [3:0]  selected_embedding [0:TB_D_MODEL-1];
-  logic signed [15:0] ffn_w1_out [0:TB_D_FFN-1];
-  logic signed [15:0] ffn_act_out[0:TB_D_FFN-1];
-  logic signed [7:0] q_out        [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [7:0] k_out        [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [7:0] v_out        [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [7:0] head_rq_out  [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
-  logic signed [31:0] att_scores_out [0:TB_NUM_HEADS-1][0:TB_CONTEXT_LENGTH-1];
-  logic signed [15:0] val_scale_out  [0:TB_NUM_HEADS-1][0:TB_CONTEXT_LENGTH-1];
-  logic signed [15:0] softmax_out    [0:TB_NUM_HEADS-1][0:TB_CONTEXT_LENGTH-1];
-  logic signed [31:0] att_value_out  [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
 
   integer cycle_count;
   integer i;
@@ -815,7 +302,6 @@ module top_module_hls_tb;
   logic [31:0] ctrl_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] ctrl_init_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] dbg_ctrl_words [0:DBG_CTRL_MEM_WORDS-1];
-  logic        dbg_main_in_decode_pulse;
   dbg_control_mem_t dbg_ctrl_mem_shadow;
   byte unsigned ctrl_mem_file_bytes [0:(CTRL_MEM_WORDS*4)-1];
   byte unsigned ddr_image_bytes [0:('h43000)-1];
@@ -972,7 +458,7 @@ module top_module_hls_tb;
   logic        axi_w_seen;
   logic        axi_b_seen;
   logic [31:0] error_code_lat;
-  dbg_status_mem_t dbg_status_mem_shadow;
+  status_mem_shadow_t status_mem_shadow;
   logic        irq_pending;
   logic        irq_seen_done;
   logic        irq_seen_error;
@@ -1001,6 +487,64 @@ module top_module_hls_tb;
   assign irq_req_fire   = ctrl_can_issue && irq_req_valid;
   assign done_req_fire  = ctrl_can_issue && !irq_req_valid && done_req_valid;
   assign error_req_fire = ctrl_can_issue && !irq_req_valid && !done_req_valid && error_req_valid;
+
+  // Decode packed dbg_ctrl_mem bus into named fields for waveform readability.
+  always_comb begin : p_dbg_ctrl_mem_shadow_unpack_active
+    int w;
+    for (w = 0; w < DBG_CTRL_MEM_WORDS; w = w + 1) begin
+      dbg_ctrl_words[w] = dbg_ctrl_mem[w*32 +: 32];
+    end
+
+    dbg_ctrl_mem_shadow.control                 = dbg_ctrl_words[0];
+    dbg_ctrl_mem_shadow.irq_mask                = dbg_ctrl_words[1];
+    dbg_ctrl_mem_shadow.irq_clear               = dbg_ctrl_words[2];
+    dbg_ctrl_mem_shadow.dma_layer_len           = dbg_ctrl_words[3];
+    dbg_ctrl_mem_shadow.dma_head_len            = dbg_ctrl_words[4];
+    dbg_ctrl_mem_shadow.dma_tile_len            = dbg_ctrl_words[5];
+    dbg_ctrl_mem_shadow.layer_stride            = dbg_ctrl_words[6];
+    dbg_ctrl_mem_shadow.wq_head_stride          = dbg_ctrl_words[7];
+    dbg_ctrl_mem_shadow.wk_head_stride          = dbg_ctrl_words[8];
+    dbg_ctrl_mem_shadow.wv_head_stride          = dbg_ctrl_words[9];
+    dbg_ctrl_mem_shadow.k_cache_stride          = dbg_ctrl_words[10];
+    dbg_ctrl_mem_shadow.v_cache_stride          = dbg_ctrl_words[11];
+    dbg_ctrl_mem_shadow.wo_tile_stride          = dbg_ctrl_words[12];
+    dbg_ctrl_mem_shadow.w1_tile_stride          = dbg_ctrl_words[13];
+    dbg_ctrl_mem_shadow.w2_tile_stride          = dbg_ctrl_words[14];
+    dbg_ctrl_mem_shadow.wq_bias_head_stride     = dbg_ctrl_words[15];
+    dbg_ctrl_mem_shadow.wk_bias_head_stride     = dbg_ctrl_words[16];
+    dbg_ctrl_mem_shadow.wv_bias_head_stride     = dbg_ctrl_words[17];
+    dbg_ctrl_mem_shadow.wo_bias_tile_stride     = dbg_ctrl_words[18];
+    dbg_ctrl_mem_shadow.w1_bias_tile_stride     = dbg_ctrl_words[19];
+    dbg_ctrl_mem_shadow.w2_bias_tile_stride     = dbg_ctrl_words[20];
+    dbg_ctrl_mem_shadow.wlogit_tile_stride      = dbg_ctrl_words[21];
+    dbg_ctrl_mem_shadow.ln0_gamma_stride        = dbg_ctrl_words[22];
+    dbg_ctrl_mem_shadow.ln1_gamma_stride        = dbg_ctrl_words[23];
+    dbg_ctrl_mem_shadow.final_norm_gamma_stride = dbg_ctrl_words[24];
+    dbg_ctrl_mem_shadow.ln0_eps_stride          = dbg_ctrl_words[25];
+    dbg_ctrl_mem_shadow.ln1_eps_stride          = dbg_ctrl_words[26];
+    dbg_ctrl_mem_shadow.final_norm_eps_stride   = dbg_ctrl_words[27];
+    dbg_ctrl_mem_shadow.wq_offset               = dbg_ctrl_words[28];
+    dbg_ctrl_mem_shadow.wk_offset               = dbg_ctrl_words[29];
+    dbg_ctrl_mem_shadow.wv_offset               = dbg_ctrl_words[30];
+    dbg_ctrl_mem_shadow.wo_offset               = dbg_ctrl_words[31];
+    dbg_ctrl_mem_shadow.w1_offset               = dbg_ctrl_words[32];
+    dbg_ctrl_mem_shadow.w2_offset               = dbg_ctrl_words[33];
+    dbg_ctrl_mem_shadow.k_cache_offset          = dbg_ctrl_words[34];
+    dbg_ctrl_mem_shadow.v_cache_offset          = dbg_ctrl_words[35];
+    dbg_ctrl_mem_shadow.wq_bias_offset          = dbg_ctrl_words[36];
+    dbg_ctrl_mem_shadow.wk_bias_offset          = dbg_ctrl_words[37];
+    dbg_ctrl_mem_shadow.wv_bias_offset          = dbg_ctrl_words[38];
+    dbg_ctrl_mem_shadow.wo_bias_offset          = dbg_ctrl_words[39];
+    dbg_ctrl_mem_shadow.w1_bias_offset          = dbg_ctrl_words[40];
+    dbg_ctrl_mem_shadow.w2_bias_offset          = dbg_ctrl_words[41];
+    dbg_ctrl_mem_shadow.ln0_gamma_offset        = dbg_ctrl_words[42];
+    dbg_ctrl_mem_shadow.ln1_gamma_offset        = dbg_ctrl_words[43];
+    dbg_ctrl_mem_shadow.final_norm_gamma_offset = dbg_ctrl_words[44];
+    dbg_ctrl_mem_shadow.ln0_eps_offset          = dbg_ctrl_words[45];
+    dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[46];
+    dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[47];
+    dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[48];
+  end
 
   function automatic [31:0] dma_pattern_word(
     input [63:0] base_addr,
@@ -1357,6 +901,7 @@ module top_module_hls_tb;
     end
   end
 
+  /*
   // Decode packed dbg_ctrl_mem bus into named fields for waveform/debug readability.
   always_comb begin : p_dbg_ctrl_mem_shadow_unpack
     int w;
@@ -2270,6 +1815,7 @@ module top_module_hls_tb;
     end
   end
 
+  */
   // AXI stream constants.
   assign s_axis_in_TKEEP = 1'b1;
   assign s_axis_in_TSTRB = 1'b1;
@@ -2296,7 +1842,7 @@ module top_module_hls_tb;
 
       // Start ingress only once DUT is in STREAM_IN and ready.
       if (!axis_packet_sent && !stream_fill_active &&
-          ((dbg_status_mem_shadow.dbg_state == 32'd1) || (dbg_state == 32'd1)) &&
+          ((status_mem_shadow.state == 32'd1) || (dbg_state == 32'd1)) &&
           s_axis_in_TREADY) begin
         stream_fill_active <= 1'b1;
         stream_fill_idx    <= '0;
@@ -2464,7 +2010,7 @@ module top_module_hls_tb;
       irq_seen_done_clr <= 1'b0;
       irq_seen_error_clr <= 1'b0;
       error_code_lat <= 32'd0;
-      dbg_status_mem_shadow <= '0;
+      status_mem_shadow <= '0;
     end else begin
       irq_seen_done_clr <= 1'b0;
       irq_seen_error_clr <= 1'b0;
@@ -2473,14 +2019,14 @@ module top_module_hls_tb;
       end
       if (axi_read_valid) begin
         case (axi_addr)
-          ADDR_STATUS_MEM_DATA_0: dbg_status_mem_shadow.status <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_1: dbg_status_mem_shadow.irq_status <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_2: dbg_status_mem_shadow.error_code <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_3: dbg_status_mem_shadow.mmu_error_subcode <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_4: dbg_status_mem_shadow.layer_index <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_5: dbg_status_mem_shadow.head_index <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_6: dbg_status_mem_shadow.token_index <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_7: dbg_status_mem_shadow.dbg_state <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_0: status_mem_shadow.status <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_1: status_mem_shadow.irq_status <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_2: status_mem_shadow.error_code <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_3: status_mem_shadow.mmu_error_subcode <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_4: status_mem_shadow.layer_index <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_5: status_mem_shadow.head_index <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_6: status_mem_shadow.token_index <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_7: status_mem_shadow.state <= axi_rdata;
           default: begin end
         endcase
       end
@@ -2813,7 +2359,7 @@ module top_module_hls_tb;
     irq_seen_error     = 1'b0;
     irq_seen_done_clr  = 1'b0;
     irq_seen_error_clr = 1'b0;
-    dbg_status_mem_shadow = '0;
+    status_mem_shadow = '0;
     irq_req_valid      = 1'b0;
     done_req_valid     = 1'b0;
     error_req_valid    = 1'b0;
@@ -2835,9 +2381,6 @@ module top_module_hls_tb;
     end
     for (i = 0; i < (CTRL_MEM_WORDS*4); i = i + 1) begin
       ctrl_mem_file_bytes[i] = 8'h00;
-    end
-    for (i = 0; i < DBG_CTRL_MEM_WORDS; i = i + 1) begin
-      dbg_ctrl_words[i] = 32'h0000_0000;
     end
     for (i = 0; i < STREAM_OUT_BUF_BYTES; i = i + 1) begin
       stream_out_mem[i] = 8'h00;
@@ -2913,30 +2456,473 @@ module top_module_hls_tb;
       k_cache_store[i] = 32'h0000_0000;
       v_cache_store[i] = 32'h0000_0000;
     end
-    for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
-      dbg_stream_in_buf_mem[i] = 8'h00;
-    end
-    for (i = 0; i < DBG_MAIN_IN_BYTES; i = i + 1) begin
-      dbg_in_buf_mem[i] = 8'h00;
-    end
-    for (i = 0; i < (TB_HEADS_PARALLEL * DBG_HEAD_OUT_BYTES); i = i + 1) begin
-      dbg_head_out_buf_mem[i] = 8'h00;
-    end
-    for (i = 0; i < DBG_MAIN_OUT_BYTES; i = i + 1) begin
-      dbg_out_buf_mem[i] = 8'h00;
-    end
-    for (i = 0; i < (TB_HEADS_PARALLEL * DBG_HEAD_IN_BYTES); i = i + 1) begin
-      dbg_head_in_buf_mem[i] = 8'h00;
-    end
-
     repeat (8) @(posedge ap_clk);
     ap_rst_n = 1'b1;
   end
 
+  /* generate
+    if (HAS_DEBUG_PORTS) begin : g_dut_with_debug
+      transformer_top dut (
+        .ap_clk(ap_clk),
+        .ap_rst_n(ap_rst_n),
+
+        .m_axi_gmem_AWVALID(m_axi_gmem_AWVALID),
+        .m_axi_gmem_AWREADY(m_axi_gmem_AWREADY),
+        .m_axi_gmem_AWADDR(m_axi_gmem_AWADDR),
+        .m_axi_gmem_AWID(m_axi_gmem_AWID),
+        .m_axi_gmem_AWLEN(m_axi_gmem_AWLEN),
+        .m_axi_gmem_AWSIZE(m_axi_gmem_AWSIZE),
+        .m_axi_gmem_AWBURST(m_axi_gmem_AWBURST),
+        .m_axi_gmem_AWLOCK(m_axi_gmem_AWLOCK),
+        .m_axi_gmem_AWCACHE(m_axi_gmem_AWCACHE),
+        .m_axi_gmem_AWPROT(m_axi_gmem_AWPROT),
+        .m_axi_gmem_AWQOS(m_axi_gmem_AWQOS),
+        .m_axi_gmem_AWREGION(m_axi_gmem_AWREGION),
+        .m_axi_gmem_AWUSER(m_axi_gmem_AWUSER),
+        .m_axi_gmem_WVALID(m_axi_gmem_WVALID),
+        .m_axi_gmem_WREADY(m_axi_gmem_WREADY),
+        .m_axi_gmem_WDATA(m_axi_gmem_WDATA),
+        .m_axi_gmem_WSTRB(m_axi_gmem_WSTRB),
+        .m_axi_gmem_WLAST(m_axi_gmem_WLAST),
+        .m_axi_gmem_WID(m_axi_gmem_WID),
+        .m_axi_gmem_WUSER(m_axi_gmem_WUSER),
+        .m_axi_gmem_ARVALID(m_axi_gmem_ARVALID),
+        .m_axi_gmem_ARREADY(m_axi_gmem_ARREADY),
+        .m_axi_gmem_ARADDR(m_axi_gmem_ARADDR),
+        .m_axi_gmem_ARID(m_axi_gmem_ARID),
+        .m_axi_gmem_ARLEN(m_axi_gmem_ARLEN),
+        .m_axi_gmem_ARSIZE(m_axi_gmem_ARSIZE),
+        .m_axi_gmem_ARBURST(m_axi_gmem_ARBURST),
+        .m_axi_gmem_ARLOCK(m_axi_gmem_ARLOCK),
+        .m_axi_gmem_ARCACHE(m_axi_gmem_ARCACHE),
+        .m_axi_gmem_ARPROT(m_axi_gmem_ARPROT),
+        .m_axi_gmem_ARQOS(m_axi_gmem_ARQOS),
+        .m_axi_gmem_ARREGION(m_axi_gmem_ARREGION),
+        .m_axi_gmem_ARUSER(m_axi_gmem_ARUSER),
+        .m_axi_gmem_RVALID(m_axi_gmem_RVALID),
+        .m_axi_gmem_RREADY(m_axi_gmem_RREADY),
+        .m_axi_gmem_RDATA(m_axi_gmem_RDATA),
+        .m_axi_gmem_RLAST(m_axi_gmem_RLAST),
+        .m_axi_gmem_RID(m_axi_gmem_RID),
+        .m_axi_gmem_RUSER(m_axi_gmem_RUSER),
+        .m_axi_gmem_RRESP(m_axi_gmem_RRESP),
+        .m_axi_gmem_BVALID(m_axi_gmem_BVALID),
+        .m_axi_gmem_BREADY(m_axi_gmem_BREADY),
+        .m_axi_gmem_BRESP(m_axi_gmem_BRESP),
+        .m_axi_gmem_BID(m_axi_gmem_BID),
+        .m_axi_gmem_BUSER(m_axi_gmem_BUSER),
+
+        .s_axis_in_TDATA(s_axis_in_TDATA),
+        .s_axis_in_TVALID(s_axis_in_TVALID),
+        .s_axis_in_TREADY(s_axis_in_TREADY),
+        .s_axis_in_TKEEP(s_axis_in_TKEEP),
+        .s_axis_in_TSTRB(s_axis_in_TSTRB),
+        .s_axis_in_TLAST(s_axis_in_TLAST),
+
+        .m_axis_out_TDATA(m_axis_out_TDATA),
+        .m_axis_out_TVALID(m_axis_out_TVALID),
+        .m_axis_out_TREADY(m_axis_out_TREADY),
+        .m_axis_out_TKEEP(m_axis_out_TKEEP),
+        .m_axis_out_TSTRB(m_axis_out_TSTRB),
+        .m_axis_out_TLAST(m_axis_out_TLAST),
+
+        .irq_ps(irq_ps),
+
+        .dbg_state(dbg_state),
+        .dbg_state_ap_vld(dbg_state_ap_vld),
+        .dbg_head_ctx_ref_0(dbg_head_ctx_ref_0),
+        .dbg_head_ctx_ref_0_ap_vld(dbg_head_ctx_ref_0_ap_vld),
+        .dbg_head_ctx_ref_1(dbg_head_ctx_ref_1),
+        .dbg_head_ctx_ref_1_ap_vld(dbg_head_ctx_ref_1_ap_vld),
+        .dbg_head_compute_ctx_0(dbg_head_compute_ctx_0),
+        .dbg_head_compute_ctx_0_ap_vld(dbg_head_compute_ctx_0_ap_vld),
+        .dbg_head_compute_ctx_1(dbg_head_compute_ctx_1),
+        .dbg_head_compute_ctx_1_ap_vld(dbg_head_compute_ctx_1_ap_vld),
+
+        .dbg_ctrl_mem(dbg_ctrl_mem),
+        .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
+        .control_reg(control_reg),
+        .control_reg_ap_vld(control_reg_ap_vld),
+        .irq_status_reg(irq_status_reg),
+        .irq_status_reg_ap_vld(irq_status_reg_ap_vld),
+        .irq_mask_reg(irq_mask_reg),
+        .irq_mask_reg_ap_vld(irq_mask_reg_ap_vld),
+        .irq_clear_reg(irq_clear_reg),
+        .irq_clear_reg_ap_vld(irq_clear_reg_ap_vld),
+        .wq_base_addr(wq_base_addr),
+        .wq_base_addr_ap_vld(wq_base_addr_ap_vld),
+        .wk_base_addr(wk_base_addr),
+        .wk_base_addr_ap_vld(wk_base_addr_ap_vld),
+        .wv_base_addr(wv_base_addr),
+        .wv_base_addr_ap_vld(wv_base_addr_ap_vld),
+        .wo_base_addr(wo_base_addr),
+        .wo_base_addr_ap_vld(wo_base_addr_ap_vld),
+        .w1_base_addr(w1_base_addr),
+        .w1_base_addr_ap_vld(w1_base_addr_ap_vld),
+        .w2_base_addr(w2_base_addr),
+        .w2_base_addr_ap_vld(w2_base_addr_ap_vld),
+        .wq_head_stride(wq_head_stride),
+        .wq_head_stride_ap_vld(wq_head_stride_ap_vld),
+        .wk_head_stride(wk_head_stride),
+        .wk_head_stride_ap_vld(wk_head_stride_ap_vld),
+        .wv_head_stride(wv_head_stride),
+        .wv_head_stride_ap_vld(wv_head_stride_ap_vld),
+        .wo_tile_stride(wo_tile_stride),
+        .wo_tile_stride_ap_vld(wo_tile_stride_ap_vld),
+        .w1_tile_stride(w1_tile_stride),
+        .w1_tile_stride_ap_vld(w1_tile_stride_ap_vld),
+        .w2_tile_stride(w2_tile_stride),
+        .w2_tile_stride_ap_vld(w2_tile_stride_ap_vld),
+
+        .dbg_compute_start(dbg_compute_start),
+        .dbg_compute_start_ap_vld(dbg_compute_start_ap_vld),
+        .dbg_compute_instruction(dbg_compute_instruction),
+        .dbg_compute_instruction_ap_vld(dbg_compute_instruction_ap_vld),
+        .dbg_compute_ready(dbg_compute_ready),
+        .dbg_compute_ready_ap_vld(dbg_compute_ready_ap_vld),
+        .dbg_compute_done(dbg_compute_done),
+        .dbg_compute_done_ap_vld(dbg_compute_done_ap_vld),
+        .dbg_compute_state(dbg_compute_state),
+        .dbg_compute_state_ap_vld(dbg_compute_state_ap_vld),
+        .dbg_req_instruction(dbg_req_instruction),
+        .dbg_req_instruction_ap_vld(dbg_req_instruction_ap_vld),
+        .dbg_req_op(dbg_req_op),
+        .dbg_req_op_ap_vld(dbg_req_op_ap_vld),
+        .dbg_req_layer(dbg_req_layer),
+        .dbg_req_layer_ap_vld(dbg_req_layer_ap_vld),
+        .dbg_req_head(dbg_req_head),
+        .dbg_req_head_ap_vld(dbg_req_head_ap_vld),
+        .dbg_req_tile(dbg_req_tile),
+        .dbg_req_tile_ap_vld(dbg_req_tile_ap_vld),
+        .dbg_mac_start(dbg_mac_start),
+        .dbg_mac_start_ap_vld(dbg_mac_start_ap_vld),
+        .dbg_mac_ready(dbg_mac_ready),
+        .dbg_mac_ready_ap_vld(dbg_mac_ready_ap_vld),
+        .dbg_mac_complete(dbg_mac_complete),
+        .dbg_mac_complete_ap_vld(dbg_mac_complete_ap_vld),
+        .dbg_ctrl_reset_asserted(dbg_ctrl_reset_asserted),
+        .dbg_ctrl_reset_asserted_ap_vld(dbg_ctrl_reset_asserted_ap_vld),
+        .dbg_head_group_idx(dbg_head_group_idx),
+        .dbg_head_group_idx_ap_vld(dbg_head_group_idx_ap_vld),
+
+        .dbg_wl_ready(dbg_wl_ready),
+        .dbg_wl_ready_ap_vld(dbg_wl_ready_ap_vld),
+        .dbg_wl_instruction(dbg_wl_instruction),
+        .dbg_wl_instruction_ap_vld(dbg_wl_instruction_ap_vld),
+        .dbg_wl_start(dbg_wl_start),
+        .dbg_wl_start_ap_vld(dbg_wl_start_ap_vld),
+        .dbg_wl_accept(dbg_wl_accept),
+        .dbg_wl_accept_ap_vld(dbg_wl_accept_ap_vld),
+        .dbg_dma_done(dbg_dma_done),
+        .dbg_dma_done_ap_vld(dbg_dma_done_ap_vld),
+        .dbg_mem_transfer_done(dbg_mem_transfer_done),
+        .dbg_mem_transfer_done_ap_vld(dbg_mem_transfer_done_ap_vld),
+        .dbg_mem_read_request(dbg_mem_read_request),
+        .dbg_mem_read_request_ap_vld(dbg_mem_read_request_ap_vld),
+        .dbg_mem_write_request(dbg_mem_write_request),
+        .dbg_mem_write_request_ap_vld(dbg_mem_write_request_ap_vld),
+        .dbg_mem_op(dbg_mem_op),
+        .dbg_mem_op_ap_vld(dbg_mem_op_ap_vld),
+
+        .dbg_in_buf_address0(dbg_in_buf_address0),
+        .dbg_in_buf_ce0(dbg_in_buf_ce0),
+        .dbg_in_buf_we0(dbg_in_buf_we0),
+        .dbg_in_buf_d0(dbg_in_buf_d0),
+
+        .dbg_out_buf_address0(dbg_out_buf_address0),
+        .dbg_out_buf_ce0(dbg_out_buf_ce0),
+        .dbg_out_buf_we0(dbg_out_buf_we0),
+        .dbg_out_buf_d0(dbg_out_buf_d0),
+
+        .dbg_head_in_buf_0_address0(dbg_head_in_buf_0_address0),
+        .dbg_head_in_buf_0_ce0(dbg_head_in_buf_0_ce0),
+        .dbg_head_in_buf_0_we0(dbg_head_in_buf_0_we0),
+        .dbg_head_in_buf_0_d0(dbg_head_in_buf_0_d0),
+        .dbg_head_in_buf_1_address0(dbg_head_in_buf_1_address0),
+        .dbg_head_in_buf_1_ce0(dbg_head_in_buf_1_ce0),
+        .dbg_head_in_buf_1_we0(dbg_head_in_buf_1_we0),
+        .dbg_head_in_buf_1_d0(dbg_head_in_buf_1_d0),
+
+        .dbg_head_out_buf_0_address0(dbg_head_out_buf_0_address0),
+        .dbg_head_out_buf_0_ce0(dbg_head_out_buf_0_ce0),
+        .dbg_head_out_buf_0_we0(dbg_head_out_buf_0_we0),
+        .dbg_head_out_buf_0_d0(dbg_head_out_buf_0_d0),
+        .dbg_head_out_buf_1_address0(dbg_head_out_buf_1_address0),
+        .dbg_head_out_buf_1_ce0(dbg_head_out_buf_1_ce0),
+        .dbg_head_out_buf_1_we0(dbg_head_out_buf_1_we0),
+        .dbg_head_out_buf_1_d0(dbg_head_out_buf_1_d0),
+        .dbg_stream_in_buf_address0(dbg_stream_in_buf_address0),
+        .dbg_stream_in_buf_ce0(dbg_stream_in_buf_ce0),
+        .dbg_stream_in_buf_we0(dbg_stream_in_buf_we0),
+        .dbg_stream_in_buf_d0(dbg_stream_in_buf_d0),
+
+        .dbg_error(dbg_error),
+        .dbg_error_ap_vld(dbg_error_ap_vld),
+        .dbg_error_code(dbg_error_code),
+        .dbg_error_code_ap_vld(dbg_error_code_ap_vld),
+        .dbg_done(dbg_done),
+        .dbg_done_ap_vld(dbg_done_ap_vld),
+        .dbg_axis_is_empty(dbg_axis_is_empty),
+        .dbg_axis_is_empty_ap_vld(dbg_axis_is_empty_ap_vld),
+        .dbg_axis_in_ready_wire(dbg_axis_in_ready_wire),
+        .dbg_axis_in_ready_wire_ap_vld(dbg_axis_in_ready_wire_ap_vld),
+        .dbg_axis_in_last_wire(dbg_axis_in_last_wire),
+        .dbg_axis_in_last_wire_ap_vld(dbg_axis_in_last_wire_ap_vld),
+        .dbg_stream_in_counter(dbg_stream_in_counter),
+        .dbg_stream_in_counter_ap_vld(dbg_stream_in_counter_ap_vld),
+
+        .s_axi_control_AWVALID(s_axi_control_AWVALID),
+        .s_axi_control_AWREADY(s_axi_control_AWREADY),
+        .s_axi_control_AWADDR(s_axi_control_AWADDR),
+        .s_axi_control_WVALID(s_axi_control_WVALID),
+        .s_axi_control_WREADY(s_axi_control_WREADY),
+        .s_axi_control_WDATA(s_axi_control_WDATA),
+        .s_axi_control_WSTRB(s_axi_control_WSTRB),
+        .s_axi_control_ARVALID(s_axi_control_ARVALID),
+        .s_axi_control_ARREADY(s_axi_control_ARREADY),
+        .s_axi_control_ARADDR(s_axi_control_ARADDR),
+        .s_axi_control_RVALID(s_axi_control_RVALID),
+        .s_axi_control_RREADY(s_axi_control_RREADY),
+        .s_axi_control_RDATA(s_axi_control_RDATA),
+        .s_axi_control_RRESP(s_axi_control_RRESP),
+        .s_axi_control_BVALID(s_axi_control_BVALID),
+        .s_axi_control_BREADY(s_axi_control_BREADY),
+        .s_axi_control_BRESP(s_axi_control_BRESP),
+        .interrupt()
+      );
+    end else begin : g_dut_no_debug
+      transformer_top dut (
+        .ap_clk(ap_clk),
+        .ap_rst_n(ap_rst_n),
+
+        .m_axi_gmem_AWVALID(m_axi_gmem_AWVALID),
+        .m_axi_gmem_AWREADY(m_axi_gmem_AWREADY),
+        .m_axi_gmem_AWADDR(m_axi_gmem_AWADDR),
+        .m_axi_gmem_AWID(m_axi_gmem_AWID),
+        .m_axi_gmem_AWLEN(m_axi_gmem_AWLEN),
+        .m_axi_gmem_AWSIZE(m_axi_gmem_AWSIZE),
+        .m_axi_gmem_AWBURST(m_axi_gmem_AWBURST),
+        .m_axi_gmem_AWLOCK(m_axi_gmem_AWLOCK),
+        .m_axi_gmem_AWCACHE(m_axi_gmem_AWCACHE),
+        .m_axi_gmem_AWPROT(m_axi_gmem_AWPROT),
+        .m_axi_gmem_AWQOS(m_axi_gmem_AWQOS),
+        .m_axi_gmem_AWREGION(m_axi_gmem_AWREGION),
+        .m_axi_gmem_AWUSER(m_axi_gmem_AWUSER),
+        .m_axi_gmem_WVALID(m_axi_gmem_WVALID),
+        .m_axi_gmem_WREADY(m_axi_gmem_WREADY),
+        .m_axi_gmem_WDATA(m_axi_gmem_WDATA),
+        .m_axi_gmem_WSTRB(m_axi_gmem_WSTRB),
+        .m_axi_gmem_WLAST(m_axi_gmem_WLAST),
+        .m_axi_gmem_WID(m_axi_gmem_WID),
+        .m_axi_gmem_WUSER(m_axi_gmem_WUSER),
+        .m_axi_gmem_ARVALID(m_axi_gmem_ARVALID),
+        .m_axi_gmem_ARREADY(m_axi_gmem_ARREADY),
+        .m_axi_gmem_ARADDR(m_axi_gmem_ARADDR),
+        .m_axi_gmem_ARID(m_axi_gmem_ARID),
+        .m_axi_gmem_ARLEN(m_axi_gmem_ARLEN),
+        .m_axi_gmem_ARSIZE(m_axi_gmem_ARSIZE),
+        .m_axi_gmem_ARBURST(m_axi_gmem_ARBURST),
+        .m_axi_gmem_ARLOCK(m_axi_gmem_ARLOCK),
+        .m_axi_gmem_ARCACHE(m_axi_gmem_ARCACHE),
+        .m_axi_gmem_ARPROT(m_axi_gmem_ARPROT),
+        .m_axi_gmem_ARQOS(m_axi_gmem_ARQOS),
+        .m_axi_gmem_ARREGION(m_axi_gmem_ARREGION),
+        .m_axi_gmem_ARUSER(m_axi_gmem_ARUSER),
+        .m_axi_gmem_RVALID(m_axi_gmem_RVALID),
+        .m_axi_gmem_RREADY(m_axi_gmem_RREADY),
+        .m_axi_gmem_RDATA(m_axi_gmem_RDATA),
+        .m_axi_gmem_RLAST(m_axi_gmem_RLAST),
+        .m_axi_gmem_RID(m_axi_gmem_RID),
+        .m_axi_gmem_RUSER(m_axi_gmem_RUSER),
+        .m_axi_gmem_RRESP(m_axi_gmem_RRESP),
+        .m_axi_gmem_BVALID(m_axi_gmem_BVALID),
+        .m_axi_gmem_BREADY(m_axi_gmem_BREADY),
+        .m_axi_gmem_BRESP(m_axi_gmem_BRESP),
+        .m_axi_gmem_BID(m_axi_gmem_BID),
+        .m_axi_gmem_BUSER(m_axi_gmem_BUSER),
+
+        .s_axis_in_TDATA(s_axis_in_TDATA),
+        .s_axis_in_TVALID(s_axis_in_TVALID),
+        .s_axis_in_TREADY(s_axis_in_TREADY),
+        .s_axis_in_TKEEP(s_axis_in_TKEEP),
+        .s_axis_in_TSTRB(s_axis_in_TSTRB),
+        .s_axis_in_TLAST(s_axis_in_TLAST),
+
+        .m_axis_out_TDATA(m_axis_out_TDATA),
+        .m_axis_out_TVALID(m_axis_out_TVALID),
+        .m_axis_out_TREADY(m_axis_out_TREADY),
+        .m_axis_out_TKEEP(m_axis_out_TKEEP),
+        .m_axis_out_TSTRB(m_axis_out_TSTRB),
+        .m_axis_out_TLAST(m_axis_out_TLAST),
+
+        .irq_ps(irq_ps),
+
+        .s_axi_control_AWVALID(s_axi_control_AWVALID),
+        .s_axi_control_AWREADY(s_axi_control_AWREADY),
+        .s_axi_control_AWADDR(s_axi_control_AWADDR),
+        .s_axi_control_WVALID(s_axi_control_WVALID),
+        .s_axi_control_WREADY(s_axi_control_WREADY),
+        .s_axi_control_WDATA(s_axi_control_WDATA),
+        .s_axi_control_WSTRB(s_axi_control_WSTRB),
+        .s_axi_control_ARVALID(s_axi_control_ARVALID),
+        .s_axi_control_ARREADY(s_axi_control_ARREADY),
+        .s_axi_control_ARADDR(s_axi_control_ARADDR),
+        .s_axi_control_RVALID(s_axi_control_RVALID),
+        .s_axi_control_RREADY(s_axi_control_RREADY),
+        .s_axi_control_RDATA(s_axi_control_RDATA),
+        .s_axi_control_RRESP(s_axi_control_RRESP),
+        .s_axi_control_BVALID(s_axi_control_BVALID),
+        .s_axi_control_BREADY(s_axi_control_BREADY),
+        .s_axi_control_BRESP(s_axi_control_BRESP),
+        .interrupt()
+      );
+
+      always_comb begin
+        dbg_state                     = 32'd0;
+        dbg_state_ap_vld              = 1'b0;
+        dbg_ctrl_mem                  = '0;
+        dbg_ctrl_mem_ap_vld           = 1'b0;
+        control_reg                   = 32'd0;
+        control_reg_ap_vld            = 1'b0;
+        irq_status_reg                = 32'd0;
+        irq_status_reg_ap_vld         = 1'b0;
+        irq_mask_reg                  = 32'd0;
+        irq_mask_reg_ap_vld           = 1'b0;
+        irq_clear_reg                 = 32'd0;
+        irq_clear_reg_ap_vld          = 1'b0;
+        wq_base_addr                  = 32'd0;
+        wq_base_addr_ap_vld           = 1'b0;
+        wk_base_addr                  = 32'd0;
+        wk_base_addr_ap_vld           = 1'b0;
+        wv_base_addr                  = 32'd0;
+        wv_base_addr_ap_vld           = 1'b0;
+        wo_base_addr                  = 32'd0;
+        wo_base_addr_ap_vld           = 1'b0;
+        w1_base_addr                  = 32'd0;
+        w1_base_addr_ap_vld           = 1'b0;
+        w2_base_addr                  = 32'd0;
+        w2_base_addr_ap_vld           = 1'b0;
+        wq_head_stride                = 32'd0;
+        wq_head_stride_ap_vld         = 1'b0;
+        wk_head_stride                = 32'd0;
+        wk_head_stride_ap_vld         = 1'b0;
+        wv_head_stride                = 32'd0;
+        wv_head_stride_ap_vld         = 1'b0;
+        wo_tile_stride                = 32'd0;
+        wo_tile_stride_ap_vld         = 1'b0;
+        w1_tile_stride                = 32'd0;
+        w1_tile_stride_ap_vld         = 1'b0;
+        w2_tile_stride                = 32'd0;
+        w2_tile_stride_ap_vld         = 1'b0;
+
+        dbg_wl_ready                  = 1'b0;
+        dbg_wl_ready_ap_vld           = 1'b0;
+        dbg_wl_instruction            = 32'd0;
+        dbg_wl_instruction_ap_vld     = 1'b0;
+        dbg_wl_start                  = 1'b0;
+        dbg_wl_start_ap_vld           = 1'b0;
+        dbg_wl_accept                 = 1'b0;
+        dbg_wl_accept_ap_vld          = 1'b0;
+        dbg_dma_done                  = 1'b0;
+        dbg_dma_done_ap_vld           = 1'b0;
+        dbg_mem_transfer_done         = 1'b0;
+        dbg_mem_transfer_done_ap_vld  = 1'b0;
+        dbg_mem_read_request          = 1'b0;
+        dbg_mem_read_request_ap_vld   = 1'b0;
+        dbg_mem_write_request         = 1'b0;
+        dbg_mem_write_request_ap_vld  = 1'b0;
+        dbg_mem_op                    = 32'd0;
+        dbg_mem_op_ap_vld             = 1'b0;
+
+        dbg_compute_start             = 1'b0;
+        dbg_compute_start_ap_vld      = 1'b0;
+        dbg_compute_instruction       = 32'd0;
+        dbg_compute_instruction_ap_vld = 1'b0;
+        dbg_compute_ready             = 1'b0;
+        dbg_compute_ready_ap_vld      = 1'b0;
+        dbg_compute_done              = 1'b0;
+        dbg_compute_done_ap_vld       = 1'b0;
+        dbg_compute_state             = 8'd0;
+        dbg_compute_state_ap_vld      = 1'b0;
+        dbg_req_instruction          = 32'd0;
+        dbg_req_instruction_ap_vld   = 1'b0;
+        dbg_req_op                   = 8'd0;
+        dbg_req_op_ap_vld            = 1'b0;
+        dbg_req_layer                = 8'd0;
+        dbg_req_layer_ap_vld         = 1'b0;
+        dbg_req_head                 = 8'd0;
+        dbg_req_head_ap_vld          = 1'b0;
+        dbg_req_tile                 = 8'd0;
+        dbg_req_tile_ap_vld          = 1'b0;
+        dbg_mac_start                = 1'b0;
+        dbg_mac_start_ap_vld         = 1'b0;
+        dbg_mac_ready                = 1'b0;
+        dbg_mac_ready_ap_vld         = 1'b0;
+        dbg_mac_complete             = 1'b0;
+        dbg_mac_complete_ap_vld      = 1'b0;
+        dbg_ctrl_reset_asserted      = 1'b0;
+        dbg_ctrl_reset_asserted_ap_vld = 1'b0;
+        dbg_head_group_idx           = 32'd0;
+        dbg_head_group_idx_ap_vld    = 1'b0;
+        dbg_error                    = 1'b0;
+        dbg_error_ap_vld             = 1'b0;
+        dbg_error_code               = 32'd0;
+        dbg_error_code_ap_vld        = 1'b0;
+        dbg_done                     = 1'b0;
+        dbg_done_ap_vld              = 1'b0;
+        dbg_axis_is_empty            = 1'b0;
+        dbg_axis_is_empty_ap_vld     = 1'b0;
+        dbg_axis_in_ready_wire       = 1'b0;
+        dbg_axis_in_ready_wire_ap_vld = 1'b0;
+        dbg_axis_in_last_wire        = 1'b0;
+        dbg_axis_in_last_wire_ap_vld = 1'b0;
+        dbg_stream_in_counter        = 32'd0;
+        dbg_stream_in_counter_ap_vld = 1'b0;
+
+        dbg_head_ctx_ref_0           = '0;
+        dbg_head_ctx_ref_0_ap_vld    = 1'b0;
+        dbg_head_ctx_ref_1           = '0;
+        dbg_head_ctx_ref_1_ap_vld    = 1'b0;
+        dbg_head_compute_ctx_0       = '0;
+        dbg_head_compute_ctx_0_ap_vld = 1'b0;
+        dbg_head_compute_ctx_1       = '0;
+        dbg_head_compute_ctx_1_ap_vld = 1'b0;
+
+        dbg_in_buf_address0          = 8'd0;
+        dbg_in_buf_ce0               = 1'b0;
+        dbg_in_buf_we0               = 1'b0;
+        dbg_in_buf_d0                = 8'd0;
+        dbg_out_buf_address0         = 6'd0;
+        dbg_out_buf_ce0              = 1'b0;
+        dbg_out_buf_we0              = 1'b0;
+        dbg_out_buf_d0               = 8'd0;
+        dbg_head_in_buf_0_address0   = 6'd0;
+        dbg_head_in_buf_0_ce0        = 1'b0;
+        dbg_head_in_buf_0_we0        = 1'b0;
+        dbg_head_in_buf_0_d0         = 8'd0;
+        dbg_head_in_buf_1_address0   = 6'd0;
+        dbg_head_in_buf_1_ce0        = 1'b0;
+        dbg_head_in_buf_1_we0        = 1'b0;
+        dbg_head_in_buf_1_d0         = 8'd0;
+        dbg_head_out_buf_0_address0  = 5'd0;
+        dbg_head_out_buf_0_ce0       = 1'b0;
+        dbg_head_out_buf_0_we0       = 1'b0;
+        dbg_head_out_buf_0_d0        = 8'd0;
+        dbg_head_out_buf_1_address0  = 5'd0;
+        dbg_head_out_buf_1_ce0       = 1'b0;
+        dbg_head_out_buf_1_we0       = 1'b0;
+        dbg_head_out_buf_1_d0        = 8'd0;
+        dbg_stream_in_buf_address0    = 4'd0;
+        dbg_stream_in_buf_ce0         = 1'b0;
+        dbg_stream_in_buf_we0         = 1'b0;
+        dbg_stream_in_buf_d0          = 8'd0;
+      end
+    end
+  endgenerate */
+
   transformer_top dut (
     .ap_clk(ap_clk),
     .ap_rst_n(ap_rst_n),
-
     .m_axi_gmem_AWVALID(m_axi_gmem_AWVALID),
     .m_axi_gmem_AWREADY(m_axi_gmem_AWREADY),
     .m_axi_gmem_AWADDR(m_axi_gmem_AWADDR),
@@ -2982,166 +2968,29 @@ module top_module_hls_tb;
     .m_axi_gmem_BRESP(m_axi_gmem_BRESP),
     .m_axi_gmem_BID(m_axi_gmem_BID),
     .m_axi_gmem_BUSER(m_axi_gmem_BUSER),
-
     .s_axis_in_TDATA(s_axis_in_TDATA),
     .s_axis_in_TVALID(s_axis_in_TVALID),
     .s_axis_in_TREADY(s_axis_in_TREADY),
     .s_axis_in_TKEEP(s_axis_in_TKEEP),
     .s_axis_in_TSTRB(s_axis_in_TSTRB),
     .s_axis_in_TLAST(s_axis_in_TLAST),
-
     .m_axis_out_TDATA(m_axis_out_TDATA),
     .m_axis_out_TVALID(m_axis_out_TVALID),
     .m_axis_out_TREADY(m_axis_out_TREADY),
     .m_axis_out_TKEEP(m_axis_out_TKEEP),
     .m_axis_out_TSTRB(m_axis_out_TSTRB),
     .m_axis_out_TLAST(m_axis_out_TLAST),
-
     .irq_ps(irq_ps),
-
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
-    .dbg_head_ctx_ref_0(dbg_head_ctx_ref_0),
-    .dbg_head_ctx_ref_0_ap_vld(dbg_head_ctx_ref_0_ap_vld),
-    .dbg_head_ctx_ref_1(dbg_head_ctx_ref_1),
-    .dbg_head_ctx_ref_1_ap_vld(dbg_head_ctx_ref_1_ap_vld),
-    .dbg_head_compute_ctx_0(dbg_head_compute_ctx_0),
-    .dbg_head_compute_ctx_0_ap_vld(dbg_head_compute_ctx_0_ap_vld),
-    .dbg_head_compute_ctx_1(dbg_head_compute_ctx_1),
-    .dbg_head_compute_ctx_1_ap_vld(dbg_head_compute_ctx_1_ap_vld),
-
     .dbg_ctrl_mem(dbg_ctrl_mem),
     .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
     .control_reg(control_reg),
     .control_reg_ap_vld(control_reg_ap_vld),
-    .irq_status_reg(irq_status_reg),
-    .irq_status_reg_ap_vld(irq_status_reg_ap_vld),
-    .irq_mask_reg(irq_mask_reg),
-    .irq_mask_reg_ap_vld(irq_mask_reg_ap_vld),
-    .irq_clear_reg(irq_clear_reg),
-    .irq_clear_reg_ap_vld(irq_clear_reg_ap_vld),
-    .wq_base_addr(wq_base_addr),
-    .wq_base_addr_ap_vld(wq_base_addr_ap_vld),
-    .wk_base_addr(wk_base_addr),
-    .wk_base_addr_ap_vld(wk_base_addr_ap_vld),
-    .wv_base_addr(wv_base_addr),
-    .wv_base_addr_ap_vld(wv_base_addr_ap_vld),
-    .wo_base_addr(wo_base_addr),
-    .wo_base_addr_ap_vld(wo_base_addr_ap_vld),
-    .w1_base_addr(w1_base_addr),
-    .w1_base_addr_ap_vld(w1_base_addr_ap_vld),
-    .w2_base_addr(w2_base_addr),
-    .w2_base_addr_ap_vld(w2_base_addr_ap_vld),
-    .wq_head_stride(wq_head_stride),
-    .wq_head_stride_ap_vld(wq_head_stride_ap_vld),
-    .wk_head_stride(wk_head_stride),
-    .wk_head_stride_ap_vld(wk_head_stride_ap_vld),
-    .wv_head_stride(wv_head_stride),
-    .wv_head_stride_ap_vld(wv_head_stride_ap_vld),
-    .wo_tile_stride(wo_tile_stride),
-    .wo_tile_stride_ap_vld(wo_tile_stride_ap_vld),
-    .w1_tile_stride(w1_tile_stride),
-    .w1_tile_stride_ap_vld(w1_tile_stride_ap_vld),
-    .w2_tile_stride(w2_tile_stride),
-    .w2_tile_stride_ap_vld(w2_tile_stride_ap_vld),
-
-    .dbg_compute_start(dbg_compute_start),
-    .dbg_compute_start_ap_vld(dbg_compute_start_ap_vld),
-    .dbg_compute_instruction(dbg_compute_instruction),
-    .dbg_compute_instruction_ap_vld(dbg_compute_instruction_ap_vld),
-    .dbg_compute_ready(dbg_compute_ready),
-    .dbg_compute_ready_ap_vld(dbg_compute_ready_ap_vld),
-    .dbg_compute_done(dbg_compute_done),
-    .dbg_compute_done_ap_vld(dbg_compute_done_ap_vld),
-    .dbg_compute_state(dbg_compute_state),
-    .dbg_compute_state_ap_vld(dbg_compute_state_ap_vld),
-    .dbg_req_instruction(dbg_req_instruction),
-    .dbg_req_instruction_ap_vld(dbg_req_instruction_ap_vld),
-    .dbg_req_op(dbg_req_op),
-    .dbg_req_op_ap_vld(dbg_req_op_ap_vld),
-    .dbg_req_layer(dbg_req_layer),
-    .dbg_req_layer_ap_vld(dbg_req_layer_ap_vld),
-    .dbg_req_head(dbg_req_head),
-    .dbg_req_head_ap_vld(dbg_req_head_ap_vld),
-    .dbg_req_tile(dbg_req_tile),
-    .dbg_req_tile_ap_vld(dbg_req_tile_ap_vld),
-    .dbg_mac_start(dbg_mac_start),
-    .dbg_mac_start_ap_vld(dbg_mac_start_ap_vld),
-    .dbg_mac_ready(dbg_mac_ready),
-    .dbg_mac_ready_ap_vld(dbg_mac_ready_ap_vld),
-    .dbg_mac_complete(dbg_mac_complete),
-    .dbg_mac_complete_ap_vld(dbg_mac_complete_ap_vld),
-    .dbg_ctrl_reset_asserted(dbg_ctrl_reset_asserted),
-    .dbg_ctrl_reset_asserted_ap_vld(dbg_ctrl_reset_asserted_ap_vld),
-    .dbg_head_group_idx(dbg_head_group_idx),
-    .dbg_head_group_idx_ap_vld(dbg_head_group_idx_ap_vld),
-
-    .dbg_wl_ready(dbg_wl_ready),
-    .dbg_wl_ready_ap_vld(dbg_wl_ready_ap_vld),
-    .dbg_wl_instruction(dbg_wl_instruction),
-    .dbg_wl_instruction_ap_vld(dbg_wl_instruction_ap_vld),
-    .dbg_wl_start(dbg_wl_start),
-    .dbg_wl_start_ap_vld(dbg_wl_start_ap_vld),
-    .dbg_wl_accept(dbg_wl_accept),
-    .dbg_wl_accept_ap_vld(dbg_wl_accept_ap_vld),
-    .dbg_dma_done(dbg_dma_done),
-    .dbg_dma_done_ap_vld(dbg_dma_done_ap_vld),
-    .dbg_mem_transfer_done(dbg_mem_transfer_done),
-    .dbg_mem_transfer_done_ap_vld(dbg_mem_transfer_done_ap_vld),
-    .dbg_mem_read_request(dbg_mem_read_request),
-    .dbg_mem_read_request_ap_vld(dbg_mem_read_request_ap_vld),
-    .dbg_mem_write_request(dbg_mem_write_request),
-    .dbg_mem_write_request_ap_vld(dbg_mem_write_request_ap_vld),
-    .dbg_mem_op(dbg_mem_op),
-    .dbg_mem_op_ap_vld(dbg_mem_op_ap_vld),
-
-    .dbg_in_buf_address0(dbg_in_buf_address0),
-    .dbg_in_buf_ce0(dbg_in_buf_ce0),
-    .dbg_in_buf_we0(dbg_in_buf_we0),
-    .dbg_in_buf_d0(dbg_in_buf_d0),
-
-    .dbg_out_buf_address0(dbg_out_buf_address0),
-    .dbg_out_buf_ce0(dbg_out_buf_ce0),
-    .dbg_out_buf_we0(dbg_out_buf_we0),
-    .dbg_out_buf_d0(dbg_out_buf_d0),
-
-    .dbg_head_in_buf_0_address0(dbg_head_in_buf_0_address0),
-    .dbg_head_in_buf_0_ce0(dbg_head_in_buf_0_ce0),
-    .dbg_head_in_buf_0_we0(dbg_head_in_buf_0_we0),
-    .dbg_head_in_buf_0_d0(dbg_head_in_buf_0_d0),
-    .dbg_head_in_buf_1_address0(dbg_head_in_buf_1_address0),
-    .dbg_head_in_buf_1_ce0(dbg_head_in_buf_1_ce0),
-    .dbg_head_in_buf_1_we0(dbg_head_in_buf_1_we0),
-    .dbg_head_in_buf_1_d0(dbg_head_in_buf_1_d0),
-
-    .dbg_head_out_buf_0_address0(dbg_head_out_buf_0_address0),
-    .dbg_head_out_buf_0_ce0(dbg_head_out_buf_0_ce0),
-    .dbg_head_out_buf_0_we0(dbg_head_out_buf_0_we0),
-    .dbg_head_out_buf_0_d0(dbg_head_out_buf_0_d0),
-    .dbg_head_out_buf_1_address0(dbg_head_out_buf_1_address0),
-    .dbg_head_out_buf_1_ce0(dbg_head_out_buf_1_ce0),
-    .dbg_head_out_buf_1_we0(dbg_head_out_buf_1_we0),
-    .dbg_head_out_buf_1_d0(dbg_head_out_buf_1_d0),
-    .dbg_stream_in_buf_address0(dbg_stream_in_buf_address0),
-    .dbg_stream_in_buf_ce0(dbg_stream_in_buf_ce0),
-    .dbg_stream_in_buf_we0(dbg_stream_in_buf_we0),
-    .dbg_stream_in_buf_d0(dbg_stream_in_buf_d0),
-
     .dbg_error(dbg_error),
     .dbg_error_ap_vld(dbg_error_ap_vld),
     .dbg_error_code(dbg_error_code),
     .dbg_error_code_ap_vld(dbg_error_code_ap_vld),
-    .dbg_done(dbg_done),
-    .dbg_done_ap_vld(dbg_done_ap_vld),
-    .dbg_axis_is_empty(dbg_axis_is_empty),
-    .dbg_axis_is_empty_ap_vld(dbg_axis_is_empty_ap_vld),
-    .dbg_axis_in_ready_wire(dbg_axis_in_ready_wire),
-    .dbg_axis_in_ready_wire_ap_vld(dbg_axis_in_ready_wire_ap_vld),
-    .dbg_axis_in_last_wire(dbg_axis_in_last_wire),
-    .dbg_axis_in_last_wire_ap_vld(dbg_axis_in_last_wire_ap_vld),
-    .dbg_stream_in_counter(dbg_stream_in_counter),
-    .dbg_stream_in_counter_ap_vld(dbg_stream_in_counter_ap_vld),
-
     .s_axi_control_AWVALID(s_axi_control_AWVALID),
     .s_axi_control_AWREADY(s_axi_control_AWREADY),
     .s_axi_control_AWADDR(s_axi_control_AWADDR),
