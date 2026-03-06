@@ -125,47 +125,18 @@ constexpr uint32_t STRIDE_KV_TOKEN = D_HEAD;
 // Control register bits (bit0 = reset_n, bit1 = start, bit2+ = FSM commands)
 constexpr uint32_t CTRL_RESETN_BIT = 1u << 0;
 constexpr uint32_t CTRL_START_BIT = 1u << 1;
-constexpr uint32_t CTRL_WEIGHTS_GET_BIT = 1u << 2;
-constexpr uint32_t CTRL_KCACHE_SEND_BIT = 1u << 3;
-constexpr uint32_t CTRL_KCACHE_GET_BIT = 1u << 4;
-constexpr uint32_t CTRL_VCACHE_SEND_BIT = 1u << 5;
-constexpr uint32_t CTRL_VCACHE_GET_BIT = 1u << 6;
-constexpr uint32_t CTRL_STREAM_IN_BIT = 1u << 7;
-constexpr uint32_t CTRL_STREAM_OUT_BIT = 1u << 8;
-constexpr uint32_t CTRL_INCR_HEAD_BIT = 1u << 9;
-constexpr uint32_t CTRL_INCR_LAYER_BIT = 1u << 10;
-constexpr uint32_t CTRL_INCR_MATRIX_BIT = 1u << 11;
-constexpr uint32_t CTRL_INCR_TOKEN_BIT = 1u << 12;
-constexpr uint32_t CTRL_COMPUTE_BIT = 1u << 13;
 
 // IRQ bits
 constexpr uint32_t IRQ_ERROR_BIT = 1u << 1;
 constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
-constexpr uint32_t IRQ_AXI_DONE_BIT = 1u << 3;
 
 // Status bits
 constexpr uint32_t STATUS_IDLE = 1u << 0;
 constexpr uint32_t STATUS_BUSY = 1u << 2;
-constexpr uint32_t STATUS_BUSY_BIT = STATUS_BUSY;
 
 // Status FSM state bits
 constexpr uint32_t STAT_IDLE_BIT = STATUS_IDLE;
 constexpr uint32_t STAT_BUSY_BIT = STATUS_BUSY;
-constexpr uint32_t STAT_WEIGHTS_GET_BIT = 1u << 3;
-constexpr uint32_t STAT_KCACHE_GET_BIT = 1u << 4;
-constexpr uint32_t STAT_KCACHE_SEND_BIT = 1u << 5;
-constexpr uint32_t STAT_VCACHE_GET_BIT = 1u << 6;
-constexpr uint32_t STAT_VCACHE_SEND_BIT = 1u << 7;
-constexpr uint32_t STAT_STREAM_IN_BIT = 1u << 8;
-constexpr uint32_t STAT_STREAM_OUT_BIT = 1u << 9;
-constexpr uint32_t STAT_INCR_HEAD_BIT = 1u << 10;
-constexpr uint32_t STAT_INCR_LAYER_BIT = 1u << 11;
-constexpr uint32_t STAT_INCR_MATRIX_BIT = 1u << 12;
-constexpr uint32_t STAT_INCR_TOKEN_BIT = 1u << 13;
-constexpr uint32_t STAT_COMPUTE_BIT = 1u << 14;
-
-// Legacy alias
-constexpr uint32_t ERR_NONE_BIT = 0;
 
 // Error codes (bitmask)
 constexpr uint32_t ERR_NONE = 0;

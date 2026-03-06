@@ -67,8 +67,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
                 g_pl->clearIRQ();
                 break;
             }
-            if (irq &
-                (IRQ_AXI_DONE_BIT | IRQ_INFER_DONE_BIT)) {
+            if (irq & IRQ_INFER_DONE_BIT) {
                 printf("  [%s] OK  (IRQ=0x%02X)\n", name, irq);
                 g_pl->clearIRQ();
                 result = true;
@@ -93,8 +92,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
 
     // Cleanup: clear command bits so the IP returns to IDLE on next
     // auto-restart.
-    g_pl->writeReg(PLReg::CONTROL,
-                   CTRL_RESETN_BIT | CTRL_START_BIT);
+    g_pl->writeReg(PLReg::CONTROL, CTRL_RESETN_BIT | CTRL_START_BIT);
 
     return result;
 }
@@ -190,9 +188,9 @@ static bool cmd_weights() {
     delete[] pat;
     printf("  DDR weights seeded (%u bytes at offset 0x%X)\n", sz,
            cfg.memory.wq_offset);
-
-    return send_cmd(CTRL_WEIGHTS_GET_BIT, "WEIGHTS_GET",
-                    STAT_WEIGHTS_GET_BIT);
+    return false;
+    //    return send_cmd(CTRL_WEIGHTS_GET_BIT, "WEIGHTS_GET",
+    //    STAT_WEIGHTS_GET_BIT);
 }
 
 static bool cmd_kcache_read() {
@@ -204,8 +202,9 @@ static bool cmd_kcache_read() {
     delete[] pat;
     printf("  DDR K-cache seeded (0xBB x %u bytes)\n", sz);
 
-    return send_cmd(CTRL_KCACHE_GET_BIT, "KCACHE_GET",
-                    STAT_KCACHE_GET_BIT);
+    return false;
+    //    return send_cmd(CTRL_KCACHE_GET_BIT, "KCACHE_GET",
+    //    STAT_KCACHE_GET_BIT);
 }
 
 static bool cmd_vcache_read() {
@@ -217,18 +216,20 @@ static bool cmd_vcache_read() {
     delete[] pat;
     printf("  DDR V-cache seeded (0xCC x %u bytes)\n", sz);
 
-    return send_cmd(CTRL_VCACHE_GET_BIT, "VCACHE_GET",
-                    STAT_VCACHE_GET_BIT);
+    return false;
+    //    return send_cmd(CTRL_VCACHE_GET_BIT, "VCACHE_GET",
+    //    STAT_VCACHE_GET_BIT);
 }
 
 static bool cmd_kcache_write() {
-    bool ok = send_cmd(CTRL_KCACHE_SEND_BIT, "KCACHE_SEND",
-                       STAT_KCACHE_SEND_BIT);
+    bool ok = false;
+    //    bool ok =
+    //        send_cmd(CTRL_KCACHE_SEND_BIT, "KCACHE_SEND",
+    //        STAT_KCACHE_SEND_BIT);
     if (ok) {
         // Read back a few words to verify
         uint32_t peek[4] = {0};
-        g_pl->readDDR(cfg.memory.k_cache_offset, peek,
-                      sizeof(peek));
+        g_pl->readDDR(cfg.memory.k_cache_offset, peek, sizeof(peek));
         printf("  DDR K-cache[0..3]: 0x%08X 0x%08X 0x%08X 0x%08X\n", peek[0],
                peek[1], peek[2], peek[3]);
     }
@@ -236,12 +237,13 @@ static bool cmd_kcache_write() {
 }
 
 static bool cmd_vcache_write() {
-    bool ok = send_cmd(CTRL_VCACHE_SEND_BIT, "VCACHE_SEND",
-                       STAT_VCACHE_SEND_BIT);
+    bool ok = false;
+    //    bool ok =
+    //       send_cmd(CTRL_VCACHE_SEND_BIT, "VCACHE_SEND",
+    //       STAT_VCACHE_SEND_BIT);
     if (ok) {
         uint32_t peek[4] = {0};
-        g_pl->readDDR(cfg.memory.v_cache_offset, peek,
-                      sizeof(peek));
+        g_pl->readDDR(cfg.memory.v_cache_offset, peek, sizeof(peek));
         printf("  DDR V-cache[0..3]: 0x%08X 0x%08X 0x%08X 0x%08X\n", peek[0],
                peek[1], peek[2], peek[3]);
     }
@@ -257,14 +259,12 @@ static bool cmd_stream_in() {
         g_send_data[i] = (int8_t)(i & 0x7F);
 
     // Kick MM2S DMA first, then issue STREAM_IN command
-    if (!g_pl->streamInitSend(cfg.memory.input_offset, g_send_data,
-                              D_MODEL)) {
+    if (!g_pl->streamInitSend(cfg.memory.input_offset, g_send_data, D_MODEL)) {
         printf("  streamInitSend failed\n");
         return false;
     }
-
-    bool ok = send_cmd(CTRL_STREAM_IN_BIT, "STREAM_IN",
-                       STAT_STREAM_IN_BIT);
+    bool ok = false;
+    // bool ok = send_cmd(CTRL_STREAM_IN_BIT, "STREAM_IN", STAT_STREAM_IN_BIT);
 
     if (!g_pl->streamWaitSend(5000))
         printf("  Stream send DMA timeout: %s\n",
@@ -274,8 +274,8 @@ static bool cmd_stream_in() {
 }
 
 static bool cmd_compute() {
-    return send_cmd(CTRL_COMPUTE_BIT, "COMPUTE",
-                    STAT_COMPUTE_BIT);
+    //    return send_cmd(CTRL_COMPUTE_BIT, "COMPUTE",
+    //                    STAT_COMPUTE_BIT);
 }
 
 static bool cmd_stream_out() {
@@ -287,11 +287,12 @@ static bool cmd_stream_out() {
         return false;
     }
 
-    bool ok = send_cmd(CTRL_STREAM_OUT_BIT, "STREAM_OUT",
-                       STAT_STREAM_OUT_BIT);
+    bool ok = false;
+    //    bool ok = send_cmd(CTRL_STREAM_OUT_BIT, "STREAM_OUT",
+    //    STAT_STREAM_OUT_BIT);
 
-    if (!g_pl->streamWaitRecv(cfg.memory.output_offset, g_recv_data,
-                              D_MODEL, 5000)) {
+    if (!g_pl->streamWaitRecv(cfg.memory.output_offset, g_recv_data, D_MODEL,
+                              5000)) {
         printf("  Stream recv DMA timeout: %s\n",
                g_pl->streamStatusString().c_str());
         return false;

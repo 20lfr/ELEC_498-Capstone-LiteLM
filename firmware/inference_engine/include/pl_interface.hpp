@@ -212,22 +212,15 @@ public:
     bool reset();
     bool start();
     bool waitDone(uint32_t timeout_ms);
-    bool isBusy() {
-        return testRegBits(PLReg::STATUS, STATUS_BUSY_BIT);
-    }
-    bool isError() {
-        return testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT);
-    }
+    bool isBusy() { return testRegBits(PLReg::STATUS, STATUS_BUSY); }
+    bool isError() { return testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT); }
     void beginConfig();
     void endConfig();
 
     // Memory
-    bool writeDDR(uint32_t dma_offset, const void *data,
-                  size_t size);
-    bool readDDR( uint32_t dma_offset, void *data, size_t size);
-    uint64_t getDDRBaseAddr() const {
-        return _dma_buf.phys();
-    }
+    bool writeDDR(uint32_t dma_offset, const void *data, size_t size);
+    bool readDDR(uint32_t dma_offset, void *data, size_t size);
+    uint64_t getDDRBaseAddr() const { return _dma_buf.phys(); }
 
     // DMA Stream (non-blocking kick/wait)
     bool streamInitSend(uint32_t dma_offset, const void *data, size_t size);
@@ -242,17 +235,12 @@ public:
     // IRQ
     bool clearIRQ();
     bool waitIRQ(uint32_t timeout_ms);
-    uint32_t getErrorCode() {
-        return readReg(PLReg::ERROR_CODE); }
-    std::string
-    getErrorCodeString(const uint32_t error_mask = 0xFFFFFFFF);
-    uint32_t getIRQStatus() {
-        return readReg(PLReg::IRQ_STATUS); }
+    uint32_t getErrorCode() { return readReg(PLReg::ERROR_CODE); }
+    std::string getErrorCodeString(const uint32_t error_mask = 0xFFFFFFFF);
+    uint32_t getIRQStatus() { return readReg(PLReg::IRQ_STATUS); }
 
-    bool isInitialized() const {
-        return _initialized; }
-    bool isMockMode() const {
-        return _mock_mode; }
+    bool isInitialized() const { return _initialized; }
+    bool isMockMode() const { return _mock_mode; }
 
 private:
     volatile uint32_t *busPtr(RegBus bus) const;
