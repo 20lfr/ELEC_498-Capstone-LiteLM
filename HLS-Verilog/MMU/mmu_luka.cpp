@@ -125,7 +125,7 @@ static inline void dma_word_clear_bytes(uint32_t *buf, uint32_t bytes) {
         (bytes + static_cast<uint32_t>(AXI_GMEM_WORD_BYTES - 1))
         / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
     for (uint32_t i = 0; i < words; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         buf[i] = 0;
     }
 }
@@ -638,7 +638,7 @@ static bool allocate_chunks(uint32_t total_bytes, Chunk chunks[MAX_CHUNKS], uint
 static void commit_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks) {
 #pragma HLS INLINE
     for (int c = 0; c < MAX_CHUNKS; ++c) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         if (c < num_chunks) {
             const uint8_t b = chunks[c].bank;
             const int bank_i = static_cast<int>(b);
@@ -802,7 +802,7 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
     r.retain_count = retain_count;
     r.num_chunks = num_chunks;
     for (int i = 0; i < MAX_CHUNKS; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         if (i < num_chunks) {
             r.chunks[i] = chunks[i];
         } else {
@@ -856,7 +856,7 @@ static inline axi_gmem_word_t pack_uram_word(const uint8_t *src, uint32_t byte_o
 #pragma HLS INLINE
     axi_gmem_word_t word = 0;
     for (uint32_t i = 0; i < URAM_BANK_WORD_BYTES; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         word |= (axi_gmem_word_t(src[byte_offset + i]) << (i * 8u));
     }
     return word;
@@ -865,7 +865,7 @@ static inline axi_gmem_word_t pack_uram_word(const uint8_t *src, uint32_t byte_o
 static inline void unpack_uram_word(axi_gmem_word_t word, uint8_t *dst, uint32_t byte_offset) {
 #pragma HLS INLINE
     for (uint32_t i = 0; i < URAM_BANK_WORD_BYTES; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         dst[byte_offset + i] =
             static_cast<uint8_t>((word >> (i * 8u)) & axi_gmem_word_t(0xFFu));
     }
@@ -895,7 +895,7 @@ static bool region_write_bytes(const Region &r, uint32_t dst_offset, const uint8
                                       ((written % URAM_BANK_WORD_BYTES) == 0u) &&
                                       (take >= URAM_BANK_WORD_BYTES);
             if (word_aligned) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 uram_banks[ck.bank][bank_byte_addr / URAM_BANK_WORD_BYTES] =
                     pack_uram_word(src, written);
                 written += URAM_BANK_WORD_BYTES;
@@ -903,7 +903,7 @@ static bool region_write_bytes(const Region &r, uint32_t dst_offset, const uint8
                 logical += URAM_BANK_WORD_BYTES;
                 take -= URAM_BANK_WORD_BYTES;
             } else {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 uram_write_byte(ck.bank, bank_byte_addr, src[written]);
                 written += 1;
                 remaining -= 1;
@@ -940,7 +940,7 @@ static bool region_read_bytes(const Region &r, uint32_t src_offset, uint8_t *dst
                                       ((copied % URAM_BANK_WORD_BYTES) == 0u) &&
                                       (take >= URAM_BANK_WORD_BYTES);
             if (word_aligned) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 unpack_uram_word(uram_banks[ck.bank][bank_byte_addr / URAM_BANK_WORD_BYTES],
                                  dst, copied);
                 copied += URAM_BANK_WORD_BYTES;
@@ -948,7 +948,7 @@ static bool region_read_bytes(const Region &r, uint32_t src_offset, uint8_t *dst
                 logical += URAM_BANK_WORD_BYTES;
                 take -= URAM_BANK_WORD_BYTES;
             } else {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 dst[copied] = uram_read_byte(ck.bank, bank_byte_addr);
                 copied += 1;
                 remaining -= 1;
@@ -1079,7 +1079,8 @@ static bool load_ctx_v_tile_to_buf(int layer, int head, int tile,
 
     const uint32_t src_head_off = static_cast<uint32_t>(tile) * static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE);
     uint8_t row[D_HEAD_TILE_ATT_VALUE];
-#pragma HLS ARRAY_PARTITION variable=row complete dim=1
+// #pragma HLS ARRAY_PARTITION variable=row complete dim=1
+#pragma HLS BIND_STORAGE variable=row type=ram_t2p impl=bram
 
     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
         const uint32_t src_off =
@@ -1090,7 +1091,7 @@ static bool load_ctx_v_tile_to_buf(int layer, int head, int tile,
             return false;
         }
         for (int h = 0; h < D_HEAD_TILE_ATT_VALUE; ++h) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
             dst[dst_off + (h * CONTEXT_LENGTH) + t] = row[h];
         }
     }
@@ -1278,7 +1279,7 @@ static bool build_dma_piece_plan(DmaSel sel,
 #pragma HLS INLINE off
     piece_count = 0;
     for (int i = 0; i < MAX_DMA_PIECES; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         piece_bytes[i] = 0;
         piece_addr_off[i] = 0;
         piece_tag[i] = Tag::NONE;
@@ -1583,7 +1584,7 @@ static uint64_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int lay
 // ---------------------------------------------------------------------------
 static void zero_buf(uint8_t *buf, int n) {
     for (int i = 0; i < n; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         buf[i] = 0;
     }
 }
@@ -1713,7 +1714,7 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             if (MMU_USE_HARDCODED_LN_PARAMS) {
                 // Default gamma=1.0 (Q19.13) and epsilon=1 for bring-up.
                 for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                     compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
                 }
                 compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
@@ -1770,7 +1771,7 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             if (!ok) return false;
             if (MMU_USE_HARDCODED_LN_PARAMS) {
                 for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                     compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
                 }
                 compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
@@ -1834,7 +1835,7 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             if (!ok) return false;
             if (MMU_USE_HARDCODED_LN_PARAMS) {
                 for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                     compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
                 }
                 compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
@@ -1992,9 +1993,11 @@ void mmu_fsm(
 ) {
 #pragma HLS INLINE off
 #pragma HLS ARRAY_PARTITION variable=head_in_buf complete dim=1
+#pragma HLS BIND_STORAGE variable=head_in_buf type=ram_t2p impl=bram
 #pragma HLS ARRAY_PARTITION variable=head_out_buf complete dim=1
-#pragma HLS ARRAY_PARTITION variable=uram_banks complete dim=1
+#pragma HLS BIND_STORAGE variable=head_out_buf type=ram_t2p impl=bram
 
+// #pragma HLS ARRAY_PARTITION variable=uram_banks complete dim=1
 #pragma HLS BIND_STORAGE variable=uram_banks type=ram_t2p impl=uram
 
 #pragma HLS BIND_STORAGE variable=bank_offsets type=ram_1p impl=bram
@@ -2064,7 +2067,7 @@ void mmu_fsm(
         stream_in_capturing = false;
         stream_in_write_idx = 0;
         for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
             stream_in_capture_buf[i] = 0;
         }
         prev_stream_start = false;
@@ -2453,7 +2456,7 @@ void mmu_fsm(
             }
 
             for (uint32_t i = 0; i < chunk_bytes; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 scratch[i] = dma_word_get_byte(dma_rx_buf, i);
             }
 
@@ -2541,7 +2544,7 @@ void mmu_fsm(
             }
             dma_word_clear_bytes(dma_tx_buf, chunk_bytes);
             for (uint32_t i = 0; i < chunk_bytes; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 dma_word_set_byte(dma_tx_buf, i, scratch[i]);
             }
             dma_start = true;

@@ -5,9 +5,11 @@
 
 constexpr int URAM_BANKS_TOTAL = 64;
 #ifndef MMU_RESERVED_URAM_BANKS
-#define MMU_RESERVED_URAM_BANKS 16
+#define MMU_RESERVED_URAM_BANKS 40
 #endif
 constexpr int URAM_BANKS = URAM_BANKS_TOTAL - MMU_RESERVED_URAM_BANKS;
+static_assert(MMU_RESERVED_URAM_BANKS >= 0 && MMU_RESERVED_URAM_BANKS < URAM_BANKS_TOTAL,
+              "MMU_RESERVED_URAM_BANKS must be in [0, URAM_BANKS_TOTAL)");
 static_assert(URAM_BANKS > 0, "MMU must have at least one URAM bank");
 // constexpr uint32_t URAM_BANK_BYTES = 36864; // 288Kb / 8
 

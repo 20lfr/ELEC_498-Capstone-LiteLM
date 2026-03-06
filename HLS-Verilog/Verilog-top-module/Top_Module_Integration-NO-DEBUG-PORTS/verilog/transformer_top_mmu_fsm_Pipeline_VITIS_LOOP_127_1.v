@@ -13,7 +13,7 @@ module transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_127_1 (
         ap_done,
         ap_idle,
         ap_ready,
-        trunc_ln51,
+        trunc_ln52,
         dma_tx_buf_local_address0,
         dma_tx_buf_local_ce0,
         dma_tx_buf_local_we0,
@@ -28,7 +28,7 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [11:0] trunc_ln51;
+input  [11:0] trunc_ln52;
 output  [10:0] dma_tx_buf_local_address0;
 output   dma_tx_buf_local_ce0;
 output   dma_tx_buf_local_we0;
@@ -39,15 +39,15 @@ reg ap_idle;
 (* fsm_encoding = "none" *) reg   [0:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg    ap_block_state1_pp0_stage0_iter0;
-wire   [0:0] icmp_ln127_fu_60_p2;
+wire   [0:0] icmp_ln127_fu_70_p2;
 reg    ap_condition_exit_pp0_iter0_stage0;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
-wire   [63:0] zext_ln127_fu_72_p1;
-reg   [11:0] i_fu_28;
-wire   [11:0] add_ln127_fu_66_p2;
+wire   [63:0] zext_ln127_fu_82_p1;
+reg   [11:0] i_24_fu_38;
+wire   [11:0] add_ln127_fu_76_p2;
 wire    ap_loop_init;
-reg   [11:0] ap_sig_allocacmp_i_22;
+reg   [11:0] ap_sig_allocacmp_i;
 reg    dma_tx_buf_local_we0_local;
 reg    dma_tx_buf_local_ce0_local;
 reg    ap_done_reg;
@@ -63,7 +63,7 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 1'd1;
-#0 i_fu_28 = 12'd0;
+#0 i_24_fu_38 = 12'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -104,10 +104,10 @@ end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((icmp_ln127_fu_60_p2 == 1'd0)) begin
-            i_fu_28 <= add_ln127_fu_66_p2;
+        if ((icmp_ln127_fu_70_p2 == 1'd0)) begin
+            i_24_fu_38 <= add_ln127_fu_76_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_fu_28 <= 12'd0;
+            i_24_fu_38 <= 12'd0;
         end
     end
 end
@@ -121,7 +121,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln127_fu_60_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((icmp_ln127_fu_70_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage0 = 1'b0;
@@ -154,9 +154,9 @@ end
 
 always @ (*) begin
     if (((ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        ap_sig_allocacmp_i_22 = 12'd0;
+        ap_sig_allocacmp_i = 12'd0;
     end else begin
-        ap_sig_allocacmp_i_22 = i_fu_28;
+        ap_sig_allocacmp_i = i_24_fu_38;
     end
 end
 
@@ -169,7 +169,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln127_fu_60_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((icmp_ln127_fu_70_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
         dma_tx_buf_local_we0_local = 1'b1;
     end else begin
         dma_tx_buf_local_we0_local = 1'b0;
@@ -187,7 +187,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln127_fu_66_p2 = (ap_sig_allocacmp_i_22 + 12'd1);
+assign add_ln127_fu_76_p2 = (ap_sig_allocacmp_i + 12'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -201,7 +201,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign dma_tx_buf_local_address0 = zext_ln127_fu_72_p1;
+assign dma_tx_buf_local_address0 = zext_ln127_fu_82_p1;
 
 assign dma_tx_buf_local_ce0 = dma_tx_buf_local_ce0_local;
 
@@ -209,8 +209,8 @@ assign dma_tx_buf_local_d0 = 32'd0;
 
 assign dma_tx_buf_local_we0 = dma_tx_buf_local_we0_local;
 
-assign icmp_ln127_fu_60_p2 = ((ap_sig_allocacmp_i_22 == trunc_ln51) ? 1'b1 : 1'b0);
+assign icmp_ln127_fu_70_p2 = ((ap_sig_allocacmp_i == trunc_ln52) ? 1'b1 : 1'b0);
 
-assign zext_ln127_fu_72_p1 = ap_sig_allocacmp_i_22;
+assign zext_ln127_fu_82_p1 = ap_sig_allocacmp_i;
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_127_1

@@ -194,12 +194,13 @@ bool drive_group_head_phase(
     int         layer_idx,                      // [INPUT]: Current Layer ID
     bool        start                           // [INPUT]: Start the driving phase
 ){
-#pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
+// #pragma HLS ARRAY_PARTITION variable=head_ctx_ref complete dim=1
+#pragma HLS BIND_STORAGE variable=head_ctx_ref type=ram_t2p impl=bram
 
     bool group_finished = true; // assume finished unless any head is still active
 
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         HeadCtx &ctx = head_ctx_ref[lane]; // Current head in this group
 
         if (ctx.phase != HeadPhase::DONE) {

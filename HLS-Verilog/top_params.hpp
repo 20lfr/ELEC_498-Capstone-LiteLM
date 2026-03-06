@@ -132,9 +132,13 @@ constexpr int MODEL_CONTEXT_LENGTH = 2048;
 constexpr int MODEL_VOCAB_SIZE = 50257;
 constexpr int16_t ATTN_SCALE_Q15 = 3344; // Q1.15: round((1/sqrt(96)) * 2^15) = 3344 (0x0D10)
 
+constexpr int max2_constexpr(int a, int b) { return (a > b) ? a : b; }
+constexpr int min2_constexpr(int a, int b) { return (a < b) ? a : b; }
+
 // ------------------------------------------------------------
 // Tunable architecture parameters::
 // ------------------------------------------------------------
+// Tiling controls
 constexpr int NUM_WO_TILES = 4;
 constexpr int NUM_W1_TILES = 8;
 constexpr int NUM_W2_TILES = 4;
@@ -142,6 +146,20 @@ constexpr int NUM_LOGIT_TILES = 2;
 constexpr int NUM_QKV_HEAD_TILES = 2;
 constexpr int ATT_CTX_BLOCK = 8;
 constexpr int NUM_ATT_VALUE_HEAD_TILES = 2;
+
+// Parallelism controls
+constexpr int MAIN_MAC_VEC_UNROLL_TARGET = 8;
+constexpr int MAIN_MAC_OUT_UNROLL_TARGET = 4;
+constexpr int HEAD_MAC_VEC_UNROLL_TARGET = 8;
+constexpr int HEAD_MAC_OUT_UNROLL_TARGET = 2;
+constexpr int CONTEXT_UNROLL_TARGET = 4;
+
+// Non-MAC cyclic tile used by scalar/vector helper loops (legacy MAX_CYCLIC_SIZE use).
+constexpr int NORM_TILE_SIZE = 16;
+constexpr int MAX_CYCLIC_SIZE = NORM_TILE_SIZE;
+
+// Top-level lane parallelism
+constexpr int HEADS_PARALLEL  = 2;
 
 // Params used in architecture
 constexpr int       NUM_HEADS       = 4;
@@ -167,8 +185,6 @@ static_assert((CONTEXT_LENGTH % ATT_CTX_BLOCK) == 0, "CONTEXT_LENGTH must divide
 constexpr int       NUM_ATT_CTX_BLOCKS = CONTEXT_LENGTH / ATT_CTX_BLOCK;
 static_assert((D_HEADS % NUM_ATT_VALUE_HEAD_TILES) == 0, "D_HEADS must divide NUM_ATT_VALUE_HEAD_TILES");
 constexpr int       D_HEAD_TILE_ATT_VALUE = D_HEADS / NUM_ATT_VALUE_HEAD_TILES;
-constexpr int       MAX_CYCLIC_SIZE = 16;                           // << for UNROLL parallelism in MAC units
-constexpr int       HEADS_PARALLEL  = 2;
 constexpr int       NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
 static_assert((D_MODEL % 2) == 0, "Head tiling expects D_MODEL to be nibble-aligned");
 
@@ -582,9 +598,6 @@ struct StatusMemSpace {
 // ---------------------------------------------------------------------------
 // Compute buffer layout (moved from compute_buffer_layout.hpp)
 // ---------------------------------------------------------------------------
-constexpr int max2_constexpr(int a, int b) { return (a > b) ? a : b; }
-constexpr int min2_constexpr(int a, int b) { return (a < b) ? a : b; }
-
 enum class BufDType : uint8_t {
     NONE,
     I4,
@@ -600,9 +613,9 @@ constexpr int ACCUM_MAX =
 constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
 
 constexpr int MAC_VEC_UNROLL = min2_constexpr(
-    VECTOR_MAX, MAX_CYCLIC_SIZE); // UNROLLING by vector dimension (Columns)
+    VECTOR_MAX, MAIN_MAC_VEC_UNROLL_TARGET); // UNROLLING by vector dimension (Columns)
 constexpr int MAC_OUT_UNROLL = min2_constexpr(
-    ACCUM_MAX, MAX_CYCLIC_SIZE); // UNROLLING by accumulation dimension (Rows)
+    ACCUM_MAX, MAIN_MAC_OUT_UNROLL_TARGET); // UNROLLING by accumulation dimension (Rows)
 
 namespace compute_buf {
 
@@ -899,10 +912,10 @@ constexpr int HEAD_ACCUM_MAX = compute_buf::max2(D_HEADS, CONTEXT_LENGTH);
 constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
 
 constexpr int HEAD_MAC_VEC_UNROLL =
-    min2_constexpr(HEAD_VECTOR_MAX, MAX_CYCLIC_SIZE);
+    min2_constexpr(HEAD_VECTOR_MAX, HEAD_MAC_VEC_UNROLL_TARGET);
 constexpr int HEAD_MAC_OUT_UNROLL =
-    min2_constexpr(HEAD_ACCUM_MAX, MAX_CYCLIC_SIZE);
-constexpr int CONTEXT_UNROLL = min2_constexpr(CONTEXT_LENGTH, MAX_CYCLIC_SIZE);
+    min2_constexpr(HEAD_ACCUM_MAX, HEAD_MAC_OUT_UNROLL_TARGET);
+constexpr int CONTEXT_UNROLL = min2_constexpr(CONTEXT_LENGTH, CONTEXT_UNROLL_TARGET);
 
 struct ComputeHeadCtx {
     ComputeState state = ComputeState::IDLE;

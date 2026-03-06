@@ -181,7 +181,7 @@ static inline void apply_rope_q_vector(
 #pragma HLS INLINE
 #pragma HLS ARRAY_PARTITION variable=head_vec cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
     for (int d = 0; d + 1 < D_HEADS; d += 2) {
-#pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
+// #pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
         const int pair_idx = d >> 1;
         int16_t c_q15 = 32767;
         int16_t s_q15 = 0;
@@ -202,10 +202,10 @@ static inline void apply_rope_k_matrix(
 #pragma HLS INLINE
 #pragma HLS ARRAY_PARTITION variable=head_mat cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
     for (int d = 0; d + 1 < D_HEADS; d += 2) {
-#pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
+// #pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
         const int pair_idx = d >> 1;
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
             const uint16_t k_pos = static_cast<uint16_t>(k_pos_base + static_cast<uint16_t>(t));
             int16_t c_k15 = 32767;
             int16_t s_k15 = 0;
@@ -248,7 +248,7 @@ void MAC_HEAD_ARCHITECTURE(
         complete = false;
 
     for (int out = 0; out < HEAD_ACCUM_MAX; ++out) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         int32_t acc = static_cast<int32_t>(bias[out]);
         for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
 #pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
@@ -276,7 +276,7 @@ void MAC_HEAD_ATT_VALUE_DIRECT(
 #pragma HLS ARRAY_PARTITION variable=accum_out cyclic factor=D_HEADS dim=1
 
     for (int out = 0; out < D_HEADS; ++out) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         int32_t acc = 0;
         for (int i = 0; i < CONTEXT_LENGTH; ++i) {
 #pragma HLS UNROLL factor=CONTEXT_UNROLL
@@ -295,7 +295,7 @@ void VALUE_SCALE_CLAMP(
 #pragma HLS ARRAY_PARTITION variable=input cyclic factor=CONTEXT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=output cyclic factor=CONTEXT_UNROLL dim=1
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         int64_t prod = static_cast<int64_t>(input[i]) * static_cast<int64_t>(ATTN_SCALE_Q15); // Q2.30
         int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
         int32_t scaled = static_cast<int32_t>(rounded >> 15); // back to Q1.15
@@ -370,7 +370,7 @@ void SOFTMAX(
     // 1) Find max
     int16_t max_val = input[0];
     for (int i = 1; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         if (input[i] > max_val) {
             max_val = input[i];
         }
@@ -382,7 +382,7 @@ void SOFTMAX(
 
     uint32_t sum_exp = 0;
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         int16_t diff = static_cast<int16_t>(input[i] - max_val);
 #ifndef __SYNTHESIS__
         printf("diff[%d] = %d\n", i, static_cast<int>(diff));
@@ -404,7 +404,7 @@ void SOFTMAX(
 
     // 4) Final probabilities
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         uint64_t tmp = static_cast<uint64_t>(exp_buf[i]) * static_cast<uint64_t>(inv_sum_q15); // Q1.15 * Q1.15 = Q2.30
         uint16_t prob_q15 = static_cast<uint16_t>(tmp >> 15);                   // -> Q1.15
 
@@ -422,7 +422,7 @@ void REQUANT_D_HEADS_int32_to_int8(
 #pragma HLS INLINE
 
     for (int t = 0; t < D_HEADS; ++t) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
         int64_t rounded = 1LL << (n - 1);
         int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
@@ -463,7 +463,7 @@ static void VALUE_SCALE_CLAMP_TO_BUF(
 ) {
 #pragma HLS INLINE
     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         int64_t prod = static_cast<int64_t>(
                            compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4))) *
                        static_cast<int64_t>(ATTN_SCALE_Q15);
@@ -487,7 +487,7 @@ static void SOFTMAX_TO_BUF(
 
     int16_t max_val = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X);
     for (int i = 1; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int16_t x = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (i * 2));
         if (x > max_val) {
             max_val = x;
@@ -496,7 +496,7 @@ static void SOFTMAX_TO_BUF(
 
     uint32_t sum_exp = 0;
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int16_t x = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (i * 2));
         const int16_t diff = static_cast<int16_t>(x - max_val);
         sum_exp += exp_approx_q15(diff);
@@ -509,7 +509,7 @@ static void SOFTMAX_TO_BUF(
     }
 
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int16_t x = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (i * 2));
         const int16_t diff = static_cast<int16_t>(x - max_val);
         uint64_t tmp = static_cast<uint64_t>(exp_approx_q15(diff)) * static_cast<uint64_t>(inv_sum_q15);
@@ -536,7 +536,7 @@ static void ATT_VALUE_TO_BUF(
         }
 
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
             const int16_t weight = compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (t * 2));
             for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
@@ -654,10 +654,10 @@ static void ATT_SCORES_TO_BUF(
                            : static_cast<uint16_t>(CONTEXT_LENGTH - 1);
 
     for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         int32_t acc = 0;
         for (int d = 0; d + 1 < D_HEADS; d += 2) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
             const int pair_idx = d >> 1;
             int16_t q_c_q15 = 32767;
             int16_t q_s_q15 = 0;
@@ -763,7 +763,7 @@ static void headed_compute_controller_lane(
             // look to clear while idling
             if (ctx.clear_pending && !ctx.compute_start) {
                 for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                     out_buf[i] = 0;
                 }
                 ctx.clear_pending = false;
@@ -838,7 +838,7 @@ static void headed_compute_controller_lane(
                             break;
                     }
                     for (int h = 0; h < D_HEADS; ++h) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                         const int32_t x = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4));
                         compute_buf::write_i8(out_buf, head_buf::INHeadRequantLayout::X + h, requant_scalar_to_i8(x, M, n));
                     }
@@ -918,7 +918,7 @@ void drive_headed_compute_controller(
     error = false;
     
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         ComputeState dbg_state;
         uint32_t dbg_req_instruction;
         uint8_t dbg_req_op;

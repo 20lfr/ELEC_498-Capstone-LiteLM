@@ -36,13 +36,13 @@ public:
 
         bool saw_last = false;
         for (int w = 0; w < NUM_WORDS_PER_STREAM; w++) {
-#pragma HLS PIPELINE II = 1
+// #pragma HLS PIPELINE II = 1
             axis_pkt_t pkt = input_stream.read();
             ap_int<NUM_BITS_PER_STREAM> data = pkt.data;
 
             uint32_t base = w * NUM_BYTES_PER_STREAM;
             for (int b = 0; b < NUM_BYTES_PER_STREAM; b++) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
                 token_buf[base + b] = data.range(b * 8 + 7, b * 8);
             }
 
@@ -61,12 +61,12 @@ public:
 #pragma HLS INLINE
 
         for (int w = 0; w < NUM_WORDS_PER_STREAM; w++) {
-#pragma HLS PIPELINE II = 1
+// #pragma HLS PIPELINE II = 1
 
             uint32_t base = w * NUM_BYTES_PER_STREAM;
             ap_int<NUM_BITS_PER_STREAM> data;
             for (int b = 0; b < NUM_BYTES_PER_STREAM; b++) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
                 data.range(b * 8 + 7, b * 8) = logit_buf[base + b];
             }
 

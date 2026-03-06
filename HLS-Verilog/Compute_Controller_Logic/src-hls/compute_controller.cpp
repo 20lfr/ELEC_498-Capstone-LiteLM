@@ -271,7 +271,7 @@ void REQUANT_D_MODEL_int32_to_int8(
           y[t] = saturate_to_int8( (x[t] * M + 2^(n-1)) >> n )
     */
     for (int t = 0; t < D_MODEL; ++t) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
         int64_t rounded = 1LL << (n - 1);
         int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
@@ -294,7 +294,7 @@ void REQUANT_D_TILE_int32_to_int8(
     int8_t y8[ACCUM_MAX]
 ) {
     for (int t = 0; t < ACCUM_MAX; ++t) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         if (t >= count) {
             continue;
         }
@@ -334,7 +334,7 @@ void RMS_NORM(
     ap_fixed<32, 19> v = mean_square + (ap_fixed<32, 19>(epsilon) / q19_13_scale);
     ap_fixed<32, 19> inv_rms = ap_fixed<32, 19>(1) / hls::sqrt(v); //  NEED TO FIX THIS!!!
     for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS UNROLL          
+// #pragma HLS UNROLL
         ap_fixed<32, 19> normalized = ap_fixed<32, 19>(x[i]) * inv_rms;
         ap_fixed<32, 19> gamma_fx = ap_fixed<32, 19>(gamma[i]) / q19_13_scale;
         ap_fixed<32, 19> scaled = normalized * gamma_fx;
@@ -358,7 +358,7 @@ static void RES_ADD_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                            uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
     for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int16_t sum =
             static_cast<int16_t>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i)) +
             static_cast<int16_t>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::R + i));
@@ -373,7 +373,7 @@ static void FFN_ACT_Silu_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                                 uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
     for (int i = 0; i < D_FFN; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int16_t gate = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2));
         const int16_t up = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::UP + (i * 2));
         const int16_t sig = sigmoid_q15(gate);
@@ -398,7 +398,7 @@ static void ARGMAX_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     int32_t best_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X);
     int32_t best_idx = 0;
     for (int i = 1; i < D_VOCAB; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int32_t x = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + (i * 4));
         if (x > best_val) {
             best_val = x;
@@ -417,7 +417,7 @@ static void RMS_NORM_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     const ap_fixed<32, 19> q19_13_scale = ap_fixed<32, 19>(8192);
     int32_t square = 0;
     for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int8_t x = compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + i);
         square += static_cast<int32_t>(x) * static_cast<int32_t>(x);
     }
@@ -439,7 +439,7 @@ static void RMS_NORM_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
 #pragma HLS ARRAY_PARTITION variable=x_tile complete dim=1
 #pragma HLS ARRAY_PARTITION variable=gamma_tile complete dim=1
         for (int i = 0; i < MAX_CYCLIC_SIZE; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
             if (i < tile_elems) {
                 x_tile[i] = compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + base + i);
                 gamma_tile[i] =
@@ -450,7 +450,7 @@ static void RMS_NORM_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
             }
         }
         for (int i = 0; i < MAX_CYCLIC_SIZE; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
             if (i >= tile_elems) {
                 continue;
             }
@@ -541,7 +541,7 @@ void FFN_ACT_Silu(
 ) {
     int16_t sig_raw[D_FFN];
     for (int i = 0; i < D_FFN; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
         const int16_t sig = sigmoid_q15(input_gate[i]);
         const int32_t prod = static_cast<int32_t>(input_up[i]) * static_cast<int32_t>(sig);
         int32_t scaled = prod >> 15;
@@ -583,7 +583,7 @@ void RES_ADD(
     int8_t output[D_MODEL]
 ) { 
     for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         const int16_t sum = static_cast<int16_t>(input[i]) + static_cast<int16_t>(residual[i]);
         int16_t sat = sum;
         if (sat > 127) {
@@ -698,7 +698,7 @@ void compute_controller(
             // Clear output buffer when idling
             if (clear_pending && !compute_start) {
                 for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                     out_buf[i] = 0;
                 }
                 clear_pending = false;

@@ -255,7 +255,7 @@ void scheduler_hls(
 
     start_head_group = false;
     for (int i = 0; i < HEADS_PARALLEL; ++i){
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         init_head_ctx(head_ctx_ref[i], -1, i);
     }
     
@@ -446,7 +446,7 @@ void scheduler_hls(
         group_idx = 0;
         start_head_group = true;
         for (int i = 0; i < HEADS_PARALLEL; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
           init_head_ctx(head_ctx_ref[i], layer_idx, i);
         }
         break;
@@ -684,7 +684,7 @@ void scheduler_hls(
 
       start_head_group = true;
       for (int i = 0; i < HEADS_PARALLEL; ++i){
-  #pragma HLS UNROLL
+  // #pragma HLS UNROLL
           init_head_ctx(head_ctx_ref[i], layer_idx, i);
       }
 
@@ -782,7 +782,7 @@ void scheduler_hls(
 
       if (start_head_group) {
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
           const int abs_head = group_base + lane;
           if (abs_head < NUM_HEADS) {
             init_head_ctx(head_ctx_ref[lane], layer_idx, abs_head);

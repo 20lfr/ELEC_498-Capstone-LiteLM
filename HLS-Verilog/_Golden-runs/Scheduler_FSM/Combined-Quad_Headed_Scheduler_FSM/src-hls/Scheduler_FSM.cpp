@@ -173,7 +173,7 @@ void scheduler_hls(
 
     start_head_group = false;
     for (int i = 0; i < NUM_HEADS; ++i){
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         init_head_ctx(head_ctx_ref[i], -1);
     }
     
@@ -352,7 +352,7 @@ void scheduler_hls(
 
     start_head_group = true;
     for (int i = 0; i < NUM_HEADS; ++i){
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         init_head_ctx(head_ctx_ref[i], layer_idx);
     }
 
@@ -402,11 +402,12 @@ void scheduler_hls(
 
     const int group_base = group_idx * HEADS_PARALLEL;
     HeadCtx head_group[HEADS_PARALLEL];
-#pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
+// #pragma HLS ARRAY_PARTITION variable = head_group complete dim = 1
+#pragma HLS BIND_STORAGE variable=head_group type=ram_t2p impl=bram
 
     // Slice the active group from the full context
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
       const int h = group_base + lane;
       if (h < NUM_HEADS) {
         head_group[lane] = head_ctx_ref[h];
@@ -422,7 +423,7 @@ void scheduler_hls(
 
     // Copy results back into the full context
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         const int h = group_base + lane;
         if (h < NUM_HEADS) {
           head_ctx_ref[h] = head_group[lane];
