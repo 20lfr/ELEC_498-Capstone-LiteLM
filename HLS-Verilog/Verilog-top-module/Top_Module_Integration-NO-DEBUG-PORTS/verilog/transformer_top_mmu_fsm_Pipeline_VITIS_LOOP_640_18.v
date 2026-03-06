@@ -126,8 +126,8 @@ wire   [7:0] b_fu_223_p9;
 wire   [1:0] trunc_ln640_fu_213_p1;
 wire   [7:0] b_fu_223_p11;
 wire   [31:0] tmp_s_fu_251_p9;
-wire   [31:0] tmp_54_fu_275_p9;
-wire   [31:0] tmp_54_fu_275_p11;
+wire   [31:0] tmp_52_fu_275_p9;
+wire   [31:0] tmp_52_fu_275_p11;
 wire   [31:0] tmp_s_fu_251_p11;
 wire   [16:0] tmp_fu_311_p4;
 wire   [8:0] zext_ln644_fu_247_p1;
@@ -161,10 +161,10 @@ wire   [1:0] tmp_s_fu_251_p1;
 wire   [1:0] tmp_s_fu_251_p3;
 wire  signed [1:0] tmp_s_fu_251_p5;
 wire  signed [1:0] tmp_s_fu_251_p7;
-wire   [1:0] tmp_54_fu_275_p1;
-wire   [1:0] tmp_54_fu_275_p3;
-wire  signed [1:0] tmp_54_fu_275_p5;
-wire  signed [1:0] tmp_54_fu_275_p7;
+wire   [1:0] tmp_52_fu_275_p1;
+wire   [1:0] tmp_52_fu_275_p3;
+wire  signed [1:0] tmp_52_fu_275_p5;
+wire  signed [1:0] tmp_52_fu_275_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -253,9 +253,9 @@ sparsemux_9_2_32_1_1_U3519(
     .din1(chunks_size_92),
     .din2(chunks_size_93),
     .din3(chunks_size_94),
-    .def(tmp_54_fu_275_p9),
+    .def(tmp_52_fu_275_p9),
     .sel(trunc_ln640_fu_213_p1),
-    .dout(tmp_54_fu_275_p11)
+    .dout(tmp_52_fu_275_p11)
 );
 
 transformer_top_urem_9ns_6ns_5_13_1 #(
@@ -570,7 +570,7 @@ end
 
 assign add_ln640_fu_207_p2 = (ap_sig_allocacmp_c_1 + 3'd1);
 
-assign add_ln645_fu_299_p2 = (tmp_54_fu_275_p11 + tmp_s_fu_251_p11);
+assign add_ln645_fu_299_p2 = (tmp_52_fu_275_p11 + tmp_s_fu_251_p11);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -612,7 +612,7 @@ assign p_anonymous_namespace_bank_offsets_we0 = p_anonymous_namespace_bank_offse
 
 assign p_anonymous_namespace_g_active_bank = grp_fu_333_p2[4:0];
 
-assign tmp_54_fu_275_p9 = 'bx;
+assign tmp_52_fu_275_p9 = 'bx;
 
 assign tmp_fu_311_p4 = {{add_ln645_fu_299_p2[31:15]}};
 

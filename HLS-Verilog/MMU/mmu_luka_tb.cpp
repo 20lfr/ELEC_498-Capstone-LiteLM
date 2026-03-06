@@ -82,6 +82,9 @@ static const char *dma_name(DmaSel sel) {
         case DMASEL_W2: return "DMASEL_W2";
         case DMASEL_WLOGIT: return "DMASEL_WLOGIT";
         case DMASEL_CONCAT: return "DMASEL_CONCAT";
+        case DMASEL_LN0: return "DMASEL_LN0";
+        case DMASEL_LN1: return "DMASEL_LN1";
+        case DMASEL_FINAL_NORM: return "DMASEL_FINAL_NORM";
         default: return "DMASEL?";
     }
 }

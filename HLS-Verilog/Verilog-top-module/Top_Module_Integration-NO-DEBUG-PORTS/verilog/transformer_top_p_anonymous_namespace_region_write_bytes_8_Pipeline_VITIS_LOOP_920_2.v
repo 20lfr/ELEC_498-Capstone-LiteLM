@@ -169,7 +169,7 @@ wire   [19:0] trunc_ln919_5_fu_354_p1;
 wire   [19:0] bank_byte_addr_fu_377_p2;
 wire   [1:0] trunc_ln919_4_fu_350_p1;
 wire   [1:0] or_ln923_fu_387_p2;
-wire   [29:0] tmp_552_fu_399_p4;
+wire   [29:0] tmp_586_fu_399_p4;
 wire   [0:0] icmp_ln923_fu_393_p2;
 wire   [0:0] icmp_ln925_fu_409_p2;
 wire   [4:0] bank_assign_fu_437_p9;
@@ -189,8 +189,8 @@ wire   [31:0] mask_fu_652_p2;
 wire   [31:0] xor_ln855_fu_664_p2;
 wire   [31:0] and_ln855_fu_670_p2;
 wire   [31:0] shl_ln855_fu_658_p2;
-wire   [7:0] select_ln864_23_fu_689_p3;
-wire   [7:0] select_ln864_22_fu_683_p3;
+wire   [7:0] select_ln864_2_fu_689_p3;
+wire   [7:0] select_ln864_1_fu_683_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -663,7 +663,7 @@ assign icmp_ln920_fu_325_p2 = ((take_5_fu_122 == 32'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln923_fu_393_p2 = ((or_ln923_fu_387_p2 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln925_fu_409_p2 = ((tmp_552_fu_399_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln925_fu_409_p2 = ((tmp_586_fu_399_p4 != 30'd0) ? 1'b1 : 1'b0);
 
 assign logical_8_fu_578_p2 = (logical_1_fu_126 + 32'd4);
 
@@ -691,9 +691,9 @@ assign remaining_24_fu_474_p2 = ($signed(remaining_1_out_i) + $signed(32'd429496
 
 assign remaining_fu_572_p2 = ($signed(remaining_1_out_i) + $signed(32'd4294967292));
 
-assign select_ln864_22_fu_683_p3 = ((trunc_ln919_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_991_reg_874);
+assign select_ln864_1_fu_683_p3 = ((trunc_ln919_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_991_reg_874);
 
-assign select_ln864_23_fu_689_p3 = ((trunc_ln919_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0);
+assign select_ln864_2_fu_689_p3 = ((trunc_ln919_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0);
 
 assign select_ln864_fu_618_p3 = ((trunc_ln919_fu_611_p1[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0);
 
@@ -705,7 +705,7 @@ assign take_8_fu_486_p2 = ($signed(take_5_fu_122) + $signed(32'd4294967295));
 
 assign tmp_126_fu_456_p3 = {{bank_assign_fu_437_p11}, {13'd0}};
 
-assign tmp_552_fu_399_p4 = {{take_5_fu_122[31:2]}};
+assign tmp_586_fu_399_p4 = {{take_5_fu_122[31:2]}};
 
 assign tmp_s_fu_358_p9 = 'bx;
 
@@ -735,7 +735,7 @@ assign trunc_ln919_fu_611_p1 = written_6_reg_784[0:0];
 
 assign trunc_ln922_fu_383_p1 = bank_byte_addr_fu_377_p2[1:0];
 
-assign word_6_fu_696_p5 = {{{{select_ln864_23_fu_689_p3}, {select_ln864_22_fu_683_p3}}, {select_ln864_reg_864}}, {word_8_fu_631_p3}};
+assign word_6_fu_696_p5 = {{{{select_ln864_2_fu_689_p3}, {select_ln864_1_fu_683_p3}}, {select_ln864_reg_864}}, {word_8_fu_631_p3}};
 
 assign word_8_fu_631_p3 = ((trunc_ln919_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1000_reg_854 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1);
 

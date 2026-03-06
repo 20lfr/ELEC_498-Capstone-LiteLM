@@ -7,9 +7,7 @@ private:
 
     // Maskable bits for IRQ generation
     static constexpr uint32_t kMaskableBits = IRQ_ERROR_BIT |
-                                              IRQ_INFER_DONE_BIT |
-                                              IRQ_AXI_DONE_BIT;
-
+                                              IRQ_INFER_DONE_BIT;
 public:
     ControlMemInterface() = default;
 
@@ -38,7 +36,12 @@ public:
             ctrl_mem.wk_head_stride == 0 || ctrl_mem.wv_head_stride == 0 ||
             ctrl_mem.k_cache_stride == 0 || ctrl_mem.v_cache_stride == 0 ||
             ctrl_mem.wo_tile_stride == 0 || ctrl_mem.w1_tile_stride == 0 ||
-            ctrl_mem.w2_tile_stride == 0) {
+            ctrl_mem.w2_tile_stride == 0 || ctrl_mem.wq_bias_head_stride == 0 ||
+            ctrl_mem.wk_bias_head_stride == 0 || ctrl_mem.wv_bias_head_stride == 0 ||
+            ctrl_mem.wo_bias_tile_stride == 0 || ctrl_mem.w1_bias_tile_stride == 0 ||
+            ctrl_mem.w2_bias_tile_stride == 0 || ctrl_mem.wlogit_tile_stride == 0 ||
+            ctrl_mem.ln0_gamma_stride == 0 || ctrl_mem.ln1_gamma_stride == 0 ||
+            ctrl_mem.ln0_eps_stride == 0 || ctrl_mem.ln1_eps_stride == 0) {
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
                 local_status.error_code |= ERR_DMA_ZERO_STRIDE;
@@ -61,6 +64,7 @@ public:
             (ctrl_mem.wo_bias_offset & 0x3F) != 0 ||
             (ctrl_mem.w1_bias_offset & 0x3F) != 0 ||
             (ctrl_mem.w2_bias_offset & 0x3F) != 0 ||
+            (ctrl_mem.wlogit_offset & 0x3F) != 0 ||
             (ctrl_mem.ln0_gamma_offset & 0x3F) != 0 ||
             (ctrl_mem.ln1_gamma_offset & 0x3F) != 0 ||
             (ctrl_mem.final_norm_gamma_offset & 0x3F) != 0 ||
@@ -110,18 +114,9 @@ public:
     
     }
     // 2. Check Control and Generate Status (PL -> PS)
-    inline void check_control(const ControlMemSpace &ctrl_mem, bool infer_done) {
-#pragma HLS INLINE
-        check_control(ctrl_mem, infer_done, false);
-    }
-
-    void check_control(const ControlMemSpace &ctrl_mem, bool infer_done,
-                       bool axi_done) {
+    void check_control(const ControlMemSpace &ctrl_mem, bool infer_done) {
         if (infer_done) {
             local_status.irq_status |= IRQ_INFER_DONE_BIT;
-        }
-        if (axi_done) {
-            local_status.irq_status |= IRQ_AXI_DONE_BIT;
         }
         // Handle "Write-1-to-Clear" logic here (runs last so PS can clear
         // errors)

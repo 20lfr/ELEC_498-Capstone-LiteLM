@@ -151,7 +151,7 @@ reg   [2:0] c_fu_108;
 wire   [31:0] bytes_cast_fu_255_p1;
 wire   [31:0] add_ln905_fu_259_p2;
 wire   [0:0] icmp_ln912_fu_311_p2;
-wire   [0:0] tmp_558_fu_297_p3;
+wire   [0:0] tmp_592_fu_297_p3;
 wire   [0:0] xor_ln912_fu_316_p2;
 wire   [0:0] or_ln910_fu_322_p2;
 wire   [31:0] tmp_fu_347_p9;
@@ -462,7 +462,7 @@ assign logical_18_fu_373_p2 = (logical_fu_104 - tmp_fu_347_p11);
 
 assign or_ln910_3_fu_328_p2 = (or_ln910_fu_322_p2 | icmp_ln910_fu_305_p2);
 
-assign or_ln910_fu_322_p2 = (xor_ln912_fu_316_p2 | tmp_558_fu_297_p3);
+assign or_ln910_fu_322_p2 = (xor_ln912_fu_316_p2 | tmp_592_fu_297_p3);
 
 assign p_ZN12_GLOBAL_N_17scratchE_0_address0 = grp_p_anonymous_namespace_region_write_bytes_4_Pipeline_VITIS_LOOP_920_2_fu_227_p_ZN12_GLOBAL_N_17scratchE_0_address0;
 
@@ -492,7 +492,7 @@ assign room_fu_387_p2 = (tmp_fu_347_p11 - logical_fu_104);
 
 assign take_fu_399_p3 = ((icmp_ln919_fu_393_p2[0:0] == 1'b1) ? remaining_fu_112 : room_fu_387_p2);
 
-assign tmp_558_fu_297_p3 = c_fu_108[32'd2];
+assign tmp_592_fu_297_p3 = c_fu_108[32'd2];
 
 assign tmp_fu_347_p10 = c_fu_108[1:0];
 

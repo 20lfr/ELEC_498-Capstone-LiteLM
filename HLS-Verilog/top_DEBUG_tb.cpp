@@ -358,6 +358,7 @@ static const char *dma_name(DmaSel sel) {
     case DMASEL_CONCAT: return "CONCAT";
     case DMASEL_LN0:    return "LN0";
     case DMASEL_LN1:    return "LN1";
+    case DMASEL_FINAL_NORM: return "FINAL_NORM";
     default:            return "UNK";
     }
 }
@@ -1267,6 +1268,8 @@ static uint64_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) 
         return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
     case DMASEL_LN1:
         return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
+    case DMASEL_FINAL_NORM:
+        return static_cast<uint64_t>(ctrl.final_norm_gamma_offset);
     case DMASEL_CONCAT:
         return 0;
     default:
@@ -1326,6 +1329,8 @@ static uint64_t compute_wl_address(
         return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
     case DMASEL_LN1:
         return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
+    case DMASEL_FINAL_NORM:
+        return static_cast<uint64_t>(ctrl.final_norm_gamma_offset);
     default:
         return 0;
     }
@@ -1449,6 +1454,8 @@ static const char *mmu_subcode_name(uint32_t subcode) {
         case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
         case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
         case MMU_ERR_SUBCODE_MISSING_LN1_EPS: return "MISSING_LN1_EPS";
+        case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_GAMMA: return "MISSING_FINAL_NORM_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_EPS: return "MISSING_FINAL_NORM_EPS";
         default: return "UNKNOWN_SUBCODE";
     }
 }
@@ -1549,6 +1556,18 @@ static inline void dma_word_set_byte(axi_gmem_word_t *buf, uint64_t byte_idx, ui
     const uint32_t lo = lane * 8u;
     word.range(hi, lo) = static_cast<ap_uint<8> >(value);
     buf[word_idx] = word;
+}
+
+static inline uint8_t dma_word_get_byte(const axi_gmem_word_t *buf, uint64_t byte_idx) {
+    if (byte_idx >= TB_DDR_IMAGE_BYTES) {
+        return 0;
+    }
+    const uint64_t word_idx = byte_idx / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t lane = static_cast<uint32_t>(byte_idx % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
+    const axi_gmem_word_t word = buf[word_idx];
+    const uint32_t hi = ((lane + 1u) * 8u) - 1u;
+    const uint32_t lo = lane * 8u;
+    return static_cast<uint8_t>(word.range(hi, lo).to_uint());
 }
 
 static void seed_ln_params_ddr(const ControlMemSpace &ctrl,
@@ -2154,6 +2173,34 @@ int main() {
                                 dbg_req_instruction);
                     print_buffer("in_buf", in_buf, compute_buf::IN_BUF_BYTES);
                     print_in_buf_decoded(req_op, in_buf);
+                    if (req_op == ComputeOp::CMP_FINAL_NORM) {
+                        uint8_t final_norm_gamma_src[compute_buf::INLayerNormLayout::GAMMA_BYTES] = {};
+                        uint8_t final_norm_eps_src[compute_buf::INLayerNormLayout::EPS_BYTES] = {};
+                        const uint64_t gamma_addr = static_cast<uint64_t>(ctrl_mem.final_norm_gamma_offset);
+                        const uint64_t eps_addr = static_cast<uint64_t>(ctrl_mem.final_norm_eps_offset);
+                        for (int i = 0; i < compute_buf::INLayerNormLayout::GAMMA_BYTES; ++i) {
+                            final_norm_gamma_src[i] = dma_word_get_byte(ddr_mem, gamma_addr + static_cast<uint64_t>(i));
+                        }
+                        for (int i = 0; i < compute_buf::INLayerNormLayout::EPS_BYTES; ++i) {
+                            final_norm_eps_src[i] = dma_word_get_byte(ddr_mem, eps_addr + static_cast<uint64_t>(i));
+                        }
+                        std::printf("final_norm preload source:\n");
+                        std::printf("  gamma_addr=0x%08llX eps_addr=0x%08llX\n",
+                                    static_cast<unsigned long long>(gamma_addr),
+                                    static_cast<unsigned long long>(eps_addr));
+                        print_buffer("final_norm_gamma_src", final_norm_gamma_src,
+                                     compute_buf::INLayerNormLayout::GAMMA_BYTES);
+                        print_buffer("final_norm_eps_src", final_norm_eps_src,
+                                     compute_buf::INLayerNormLayout::EPS_BYTES);
+                        std::printf("final_norm source decoded int32:\n");
+                        std::printf("  GAMMA:");
+                        for (int i = 0; i < D_MODEL; ++i) {
+                            std::printf(" %d",
+                                        compute_buf::read_i32(final_norm_gamma_src, i * 4));
+                        }
+                        std::printf("\n  EPS: %d\n",
+                                    compute_buf::read_i32(final_norm_eps_src, 0));
+                    }
                 }
                 copy_buffer(prev_dbg_in_buf, in_buf, compute_buf::IN_BUF_BYTES);
             }

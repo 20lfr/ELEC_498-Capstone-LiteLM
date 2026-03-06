@@ -63,7 +63,7 @@ wire   [6:0] trunc_ln1160_1_fu_577_p1;
 wire   [7:0] s_total_bytes_6_fu_644_p3;
 wire   [8:0] s_total_bytes_5_fu_657_p3;
 wire   [8:0] s_total_bytes_3_fu_679_p3;
-wire   [0:0] tmp_584_fu_738_p3;
+wire   [0:0] tmp_618_fu_738_p3;
 wire   [6:0] trunc_ln1160_fu_573_p1;
 wire   [7:0] s_total_bytes_2_fu_755_p3;
 wire   [7:0] zext_ln1162_2_fu_776_p1;
@@ -215,7 +215,7 @@ assign ap_ready = 1'b1;
 
 assign grp_fu_558_p3 = ((tmp_fu_588_p3[0:0] == 1'b1) ? 7'd0 : trunc_ln1160_1_fu_577_p1);
 
-assign s_part_idx_5_fu_746_p3 = ((tmp_584_fu_738_p3[0:0] == 1'b1) ? 7'd0 : trunc_ln1160_fu_573_p1);
+assign s_part_idx_5_fu_746_p3 = ((tmp_618_fu_738_p3[0:0] == 1'b1) ? 7'd0 : trunc_ln1160_fu_573_p1);
 
 assign s_total_bytes_2_fu_755_p3 = {{s_total_bytes_p_anonymous_namespace_head_op_out_bytes_fu_553_ap_return}, {2'd0}};
 
@@ -229,7 +229,7 @@ assign s_total_bytes_6_fu_644_p3 = {{s_total_bytes_1_p_anonymous_namespace_main_
 
 assign sext_ln1162_fu_784_p1 = $signed(ap_phi_mux_this_key_head_write_assign_phi_fu_232_p44);
 
-assign tmp_584_fu_738_p3 = head[32'd7];
+assign tmp_618_fu_738_p3 = head[32'd7];
 
 assign tmp_fu_588_p3 = tile[32'd7];
 

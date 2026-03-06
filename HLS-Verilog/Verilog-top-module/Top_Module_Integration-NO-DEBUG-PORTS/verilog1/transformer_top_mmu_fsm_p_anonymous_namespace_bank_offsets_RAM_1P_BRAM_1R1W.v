@@ -14,7 +14,7 @@ module transformer_top_mmu_fsm_p_anonymous_namespace_bank_offsets_RAM_1P_BRAM_1R
 
 parameter DataWidth = 32;
 parameter AddressWidth = 5;
-parameter AddressRange = 32;
+parameter AddressRange = 24;
  
 input[AddressWidth-1:0] address0;
 input ce0;

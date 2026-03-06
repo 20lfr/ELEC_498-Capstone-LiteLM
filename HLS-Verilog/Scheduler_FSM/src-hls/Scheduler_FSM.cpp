@@ -175,6 +175,10 @@ void scheduler_hls(
 #pragma HLS reset variable = ln1_comp_busy
   static bool final_norm_started;
 #pragma HLS reset variable = final_norm_started
+  static bool final_norm_dma_busy;
+#pragma HLS reset variable = final_norm_dma_busy
+  static bool final_norm_comp_busy;
+#pragma HLS reset variable = final_norm_comp_busy
   static bool logits_started;
 #pragma HLS reset variable = logits_started
   static bool argmax_started;
@@ -221,6 +225,8 @@ void scheduler_hls(
 #pragma HLS reset variable = logits_dma_done
   static bool stream_done_seen;
 #pragma HLS reset variable = stream_done_seen
+  static bool final_norm_dma_done;
+#pragma HLS reset variable = final_norm_dma_done
   static bool final_norm_compute_done;
 #pragma HLS reset variable = final_norm_compute_done
 // POST-HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -296,6 +302,9 @@ void scheduler_hls(
     ln1_comp_busy = false;
     ln1_compute_done = false;
     final_norm_started = false;
+    final_norm_dma_busy = false;
+    final_norm_comp_busy = false;
+    final_norm_dma_done = false;
     final_norm_compute_done = false;
     logits_started = false;
     logits_compute_done = false;
@@ -405,6 +414,9 @@ void scheduler_hls(
         ln1_comp_busy = false;
         ln1_compute_done = false;
         final_norm_started = false;
+        final_norm_dma_busy = false;
+        final_norm_comp_busy = false;
+        final_norm_dma_done = false;
         final_norm_compute_done = false;
         logits_started = false;
         logits_compute_done = false;
@@ -547,6 +559,7 @@ void scheduler_hls(
     if (st == S_OUT_PROJECTION && outproj_started && wo_dma_busy) wo_dma_done = true;
     if (st == S_LAYER_NORM_0 && ln0_started && ln0_dma_busy) ln0_dma_done = true;
     if (st == S_LAYER_NORM_1 && ln1_started && ln1_dma_busy) ln1_dma_done = true;
+    if (st == S_FINAL_NORM && final_norm_started && final_norm_dma_busy) final_norm_dma_done = true;
     if (st == S_LOGITS && logits_started && logits_dma_busy) logits_dma_done = true;
     if (st == S_FFN && ffn_started) {
       if (ffn_stage == FfnStage::W1 && w1_dma_busy)      w1_dma_done = true;
@@ -557,6 +570,7 @@ void scheduler_hls(
     if (outproj_started && !wo_dma_busy) wo_dma_done = false;
     if (ln0_started && !ln0_dma_busy) ln0_dma_done = false;
     if (ln1_started && !ln1_dma_busy) ln1_dma_done = false;
+    if (final_norm_started && !final_norm_dma_busy) final_norm_dma_done = false;
     if (logits_started && !logits_dma_busy) logits_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
@@ -722,6 +736,9 @@ void scheduler_hls(
       ln1_comp_busy = false;
       ln1_compute_done = false;
       final_norm_started = false;
+      final_norm_dma_busy = false;
+      final_norm_comp_busy = false;
+      final_norm_dma_done = false;
       final_norm_compute_done = false;
       logits_started = false;
       logits_compute_done = false;
@@ -1000,6 +1017,9 @@ void scheduler_hls(
         st = S_LAYER_COUNT;
       } else {
         final_norm_started = false;
+        final_norm_dma_busy = false;
+        final_norm_comp_busy = false;
+        final_norm_dma_done = false;
         final_norm_compute_done = false;
         st = S_FINAL_NORM;
         stream_started = false;
@@ -1007,14 +1027,26 @@ void scheduler_hls(
       break;
     }
     case S_FINAL_NORM: {
-      if (!final_norm_started && compute_ready) {
+      if (!final_norm_started && wl_ready) {
+        final_norm_compute_done = false;
+        final_norm_dma_done = false;
+        wl_start = 1;
+        wl_instruction = pack_dma_op(DmaSel::DMASEL_FINAL_NORM, layer_idx, -1, -1);
+        final_norm_started = true;
+        final_norm_dma_busy = true;
+      } else if (final_norm_started && final_norm_dma_busy && final_norm_dma_done) {
+        final_norm_dma_busy = false;
+        final_norm_dma_done = false;
+        final_norm_comp_busy = true;
+      } else if (final_norm_started && final_norm_comp_busy && compute_ready) {
         final_norm_compute_done = false;
         compute_start = 1;
-        // Reuse LN1 opcode for the terminal norm.
         compute_instruction= pack_compute_instruction(CMP_FINAL_NORM, layer_idx, -1, -1);
-        final_norm_started = true;
-      } else if (final_norm_started && final_norm_compute_done) {
+        final_norm_comp_busy = false;
+      } else if (final_norm_started && !final_norm_dma_busy && !final_norm_comp_busy &&
+                 final_norm_compute_done) {
         final_norm_started = false;
+        final_norm_dma_done = false;
         final_norm_compute_done = false;
         st = S_LOGITS;
       }

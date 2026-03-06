@@ -14,7 +14,7 @@ module transformer_top_mmu_fsm_p_anonymous_namespace_uram_banks_RAM_T2P_URAM_1R1
 
 parameter DataWidth = 32;
 parameter AddressWidth = 18;
-parameter AddressRange = 262144;
+parameter AddressRange = 196608;
  
 input[AddressWidth-1:0] address0;
 input ce0;

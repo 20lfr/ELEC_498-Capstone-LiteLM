@@ -198,6 +198,8 @@ static inline uint32_t mmu_missing_subcode_from_tag(Tag tag) {
         case Tag::LN0_EPS: return MMU_ERR_SUBCODE_MISSING_LN0_EPS;
         case Tag::LN1_GAMMA: return MMU_ERR_SUBCODE_MISSING_LN1_GAMMA;
         case Tag::LN1_EPS: return MMU_ERR_SUBCODE_MISSING_LN1_EPS;
+        case Tag::FINAL_NORM_GAMMA: return MMU_ERR_SUBCODE_MISSING_FINAL_NORM_GAMMA;
+        case Tag::FINAL_NORM_EPS: return MMU_ERR_SUBCODE_MISSING_FINAL_NORM_EPS;
         default: return MMU_ERR_SUBCODE_NONE;
     }
 }
@@ -408,9 +410,13 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::LN1_EPS: {
             return 1; // single-use DMA payloads
         }
+        case Tag::FINAL_NORM_GAMMA:
+        case Tag::FINAL_NORM_EPS: {
+            return 1; // single-use terminal norm params
+        }
         case Tag::LN0_GAMMA:
         case Tag::LN0_EPS: {
-            return 1; // consumed on FINAL_NORM after LN0 use
+            return 1; // single-use LN0 params
         }
         case Tag::STREAM_IN_TOKEN: {
             return 0xFF; // keep indefinitely unless explicitly reset
@@ -465,6 +471,8 @@ static inline bool should_consume(Tag tag) {
         case Tag::LN0_EPS:
         case Tag::LN1_GAMMA:
         case Tag::LN1_EPS:
+        case Tag::FINAL_NORM_GAMMA:
+        case Tag::FINAL_NORM_EPS:
         case Tag::HEAD_REQUANT_PACKED:
         case Tag::CONCAT_OUT:
         case Tag::OUT_PROJ_PACKED:
@@ -1419,6 +1427,16 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_tag[1] = Tag::LN1_EPS;
             return true;
         }
+        case DMASEL_FINAL_NORM: {
+            piece_count = 2;
+            piece_bytes[0] = compute_buf::INLayerNormLayout::GAMMA_BYTES;
+            piece_bytes[1] = compute_buf::INLayerNormLayout::EPS_BYTES;
+            piece_addr_off[0] = 0;
+            piece_addr_off[1] = 0;
+            piece_tag[0] = Tag::FINAL_NORM_GAMMA;
+            piece_tag[1] = Tag::FINAL_NORM_EPS;
+            return true;
+        }
         case DMASEL_WLOGIT: {
             piece_count = 1;
             piece_bytes[0] = compute_buf::INLogitsLayout::W_BYTES;
@@ -1512,6 +1530,10 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
                      + static_cast<uint32_t>(layer) * ctrl_mem.ln1_gamma_stride;
             return true;
         }
+        case DmaSel::DMASEL_FINAL_NORM: {
+            addr_out = static_cast<uint64_t>(ctrl_mem.final_norm_gamma_offset);
+            return true;
+        }
         case DmaSel::DMASEL_CONCAT: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wlogit_offset)
@@ -1600,6 +1622,10 @@ static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer,
         case DMASEL_LN1: {
             addr_out = static_cast<uint64_t>(ctrl_mem.ln1_eps_offset)
                      + static_cast<uint32_t>(layer) * ctrl_mem.ln1_eps_stride;
+            return true;
+        }
+        case DMASEL_FINAL_NORM: {
+            addr_out = static_cast<uint64_t>(ctrl_mem.final_norm_eps_offset);
             return true;
         }
         default: {
@@ -1890,11 +1916,11 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                 compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
                 return true;
             } else {
-                ok = load_region_to_buf(Tag::LN0_GAMMA, layer, -1, -1,
+                ok = load_region_to_buf(Tag::FINAL_NORM_GAMMA, layer, -1, -1,
                                         buf, compute_buf::INLayerNormLayout::GAMMA,
                                         compute_buf::INLayerNormLayout::GAMMA_BYTES, true, invalid_flag);
                 if (!ok) return false;
-                return load_region_to_buf(Tag::LN0_EPS, layer, -1, -1,
+                return load_region_to_buf(Tag::FINAL_NORM_EPS, layer, -1, -1,
                                           buf, compute_buf::INLayerNormLayout::EPS,
                                           compute_buf::INLayerNormLayout::EPS_BYTES, true, invalid_flag);
             }

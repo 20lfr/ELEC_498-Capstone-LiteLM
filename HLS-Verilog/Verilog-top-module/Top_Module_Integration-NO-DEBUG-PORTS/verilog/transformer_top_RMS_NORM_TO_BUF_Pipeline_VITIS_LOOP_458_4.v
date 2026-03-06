@@ -176,8 +176,8 @@ reg   [7:0] trunc_ln17_reg_1084;
 reg   [7:0] trunc_ln18_reg_1089;
 wire   [63:0] zext_ln467_fu_900_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln896_fu_985_p1;
-wire   [63:0] zext_ln900_fu_998_p1;
+wire   [63:0] zext_ln605_fu_985_p1;
+wire   [63:0] zext_ln609_fu_998_p1;
 reg   [4:0] i_fu_236;
 wire   [4:0] add_ln458_fu_583_p2;
 wire    ap_loop_init;
@@ -207,7 +207,7 @@ wire   [44:0] shl_ln464_1_fu_760_p3;
 wire   [44:0] sub_ln464_fu_776_p2;
 wire   [18:0] tmp_s_fu_782_p4;
 wire   [19:0] zext_ln464_fu_792_p1;
-wire   [0:0] tmp_525_fu_768_p3;
+wire   [0:0] tmp_559_fu_768_p3;
 wire   [19:0] sub_ln464_1_fu_800_p2;
 wire   [19:0] zext_ln464_1_fu_796_p1;
 wire   [50:0] mul_ln465_fu_538_p2;
@@ -217,13 +217,13 @@ wire  signed [63:0] sext_ln356_fu_909_p1;
 wire   [63:0] ashr_ln356_fu_913_p2;
 wire   [31:0] trunc_ln356_fu_918_p1;
 wire   [31:0] scaled_fu_922_p3;
-wire   [24:0] tmp_527_fu_932_p4;
+wire   [24:0] tmp_561_fu_932_p4;
 wire   [0:0] icmp_ln358_fu_942_p2;
 wire   [0:0] icmp_ln359_fu_948_p2;
 wire   [0:0] or_ln358_fu_962_p2;
 wire   [7:0] select_ln358_fu_954_p3;
 wire   [7:0] trunc_ln360_fu_928_p1;
-wire   [4:0] tmp_526_fu_978_p3;
+wire   [4:0] tmp_560_fu_978_p3;
 wire   [4:0] or_ln_fu_991_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -576,7 +576,7 @@ end
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter2 == 1'b1))) begin
         if ((final_norm_read_reg_1011 == 1'd1)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln900_fu_998_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln609_fu_998_p1;
         end else if (((trunc_ln467_reg_1055_pp0_iter1_reg == 1'd1) & (final_norm_read_reg_1011 == 1'd0))) begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln467_fu_900_p1;
         end else begin
@@ -636,7 +636,7 @@ end
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter2 == 1'b1))) begin
         if ((final_norm_read_reg_1011 == 1'd1)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln900_fu_998_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln609_fu_998_p1;
         end else if (((trunc_ln467_reg_1055_pp0_iter1_reg == 1'd0) & (final_norm_read_reg_1011 == 1'd0))) begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln467_fu_900_p1;
         end else begin
@@ -732,9 +732,9 @@ assign do_shift19_fu_563_p2 = ((requant_n != 6'd0) ? 1'b1 : 1'b0);
 
 assign final_norm_read_reg_1011 = final_norm;
 
-assign gamma_fx_fu_806_p3 = ((tmp_525_fu_768_p3[0:0] == 1'b1) ? sub_ln464_1_fu_800_p2 : zext_ln464_1_fu_796_p1);
+assign gamma_fx_fu_806_p3 = ((tmp_559_fu_768_p3[0:0] == 1'b1) ? sub_ln464_1_fu_800_p2 : zext_ln464_1_fu_796_p1);
 
-assign icmp_ln358_fu_942_p2 = (($signed(tmp_527_fu_932_p4) > $signed(25'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln358_fu_942_p2 = (($signed(tmp_561_fu_932_p4) > $signed(25'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln359_fu_948_p2 = (($signed(scaled_fu_922_p3) < $signed(32'd4294967168)) ? 1'b1 : 1'b0);
 
@@ -770,11 +770,11 @@ assign sub_ln464_1_fu_800_p2 = (20'd0 - zext_ln464_fu_792_p1);
 
 assign sub_ln464_fu_776_p2 = (45'd0 - shl_ln464_1_fu_760_p3);
 
-assign tmp_525_fu_768_p3 = trunc_ln464_2_fu_688_p35[32'd18];
+assign tmp_559_fu_768_p3 = trunc_ln464_2_fu_688_p35[32'd18];
 
-assign tmp_526_fu_978_p3 = {{trunc_ln458_reg_1039_pp0_iter1_reg}, {1'd0}};
+assign tmp_560_fu_978_p3 = {{trunc_ln458_reg_1039_pp0_iter1_reg}, {1'd0}};
 
-assign tmp_527_fu_932_p4 = {{scaled_fu_922_p3[31:7]}};
+assign tmp_561_fu_932_p4 = {{scaled_fu_922_p3[31:7]}};
 
 assign tmp_fu_593_p33 = 'bx;
 
@@ -782,7 +782,7 @@ assign tmp_s_fu_782_p4 = {{sub_ln464_fu_776_p2[44:26]}};
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1 = zext_ln896_fu_985_p1;
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1 = zext_ln605_fu_985_p1;
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
 
@@ -798,7 +798,7 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1 = zext_ln896_fu_985_p1;
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1 = zext_ln605_fu_985_p1;
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
 
@@ -834,9 +834,9 @@ assign zext_ln464_fu_792_p1 = tmp_s_fu_782_p4;
 
 assign zext_ln467_fu_900_p1 = lshr_ln_reg_1059_pp0_iter1_reg;
 
-assign zext_ln896_fu_985_p1 = tmp_526_fu_978_p3;
+assign zext_ln605_fu_985_p1 = tmp_560_fu_978_p3;
 
-assign zext_ln900_fu_998_p1 = or_ln_fu_991_p3;
+assign zext_ln609_fu_998_p1 = or_ln_fu_991_p3;
 
 always @ (posedge ap_clk) begin
     sh_prom4_i_cast_reg_1015[63:6] <= 58'b0000000000000000000000000000000000000000000000000000000000;

@@ -405,6 +405,8 @@ static const char *mmu_subcode_name(uint32_t subcode) {
         case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
         case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
         case MMU_ERR_SUBCODE_MISSING_LN1_EPS: return "MISSING_LN1_EPS";
+        case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_GAMMA: return "MISSING_FINAL_NORM_GAMMA";
+        case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_EPS: return "MISSING_FINAL_NORM_EPS";
         default: return "UNKNOWN_SUBCODE";
     }
 }

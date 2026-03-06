@@ -88,7 +88,7 @@ wire   [0:0] icmp_ln880_fu_204_p2;
 wire    ap_CS_fsm_state3;
 reg   [2:0] c_fu_82;
 wire   [2:0] add_ln880_fu_209_p2;
-wire   [0:0] tmp_550_fu_180_p3;
+wire   [0:0] tmp_584_fu_180_p3;
 wire   [31:0] tmp_fu_220_p9;
 wire   [1:0] tmp_fu_220_p10;
 reg   [2:0] ap_NS_fsm;
@@ -288,9 +288,9 @@ assign p_anonymous_namespace_uram_banks_d0 = grp_p_anonymous_namespace_zero_regi
 
 assign p_anonymous_namespace_uram_banks_we0 = grp_p_anonymous_namespace_zero_region_chunks_Pipeline_VITIS_LOOP_885_2_fu_164_p_anonymous_namespace_uram_banks_we0;
 
-assign select_ln880_fu_188_p3 = ((tmp_550_fu_180_p3[0:0] == 1'b1) ? 3'd4 : num_chunks);
+assign select_ln880_fu_188_p3 = ((tmp_584_fu_180_p3[0:0] == 1'b1) ? 3'd4 : num_chunks);
 
-assign tmp_550_fu_180_p3 = num_chunks[32'd2];
+assign tmp_584_fu_180_p3 = num_chunks[32'd2];
 
 assign tmp_fu_220_p10 = c_fu_82[1:0];
 

@@ -86,6 +86,8 @@ enum class Tag : uint8_t {
     LN0_EPS,
     LN1_GAMMA,
     LN1_EPS,
+    FINAL_NORM_GAMMA,
+    FINAL_NORM_EPS,
 
     // Main compute outputs
     STREAM_IN_TOKEN,
