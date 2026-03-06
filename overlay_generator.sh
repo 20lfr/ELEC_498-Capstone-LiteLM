@@ -5,17 +5,17 @@
 
 # Project & tool paths
 ROOT_DIR="$(pwd)"
-XILINX_SETTINGS="/media/tristan/external-drive/tools/Xilinx/2025.1/Vitis/settings64.sh"
+XILINX_SETTINGS="/tools/Xilinx/2025.1/Vitis/settings64.sh"
 TARGET_DIR="$ROOT_DIR/hardware_overlay"
 DTG_BRANCH="xlnx_rel_v2025.1"
-VIVADO_DIR="$ROOT_DIR/vivado_simulations/AxiTop"
-HW_WRAPPER="axi_top_bd_01_wrapper"
+VIVADO_DIR="$ROOT_DIR/../vivado_simulations/edge_gpt"
+HW_WRAPPER="design_1_wrapper"
 
 XSA_FILE="$VIVADO_DIR/$HW_WRAPPER.xsa"
 
 # RTL CONFIGURATION
-APP_NAME="axi_top_0"
-COMPAT_ID="xlnx,axi-top-1.0" # Found in dtsi file
+APP_NAME="transformer_top_0"
+COMPAT_ID="xlnx,transformer-top-1.0" # Found in dtsi file
 # Replace this with your actual DMA register base address
 DMA_REG_BASE_ADDR="a0000000"
 

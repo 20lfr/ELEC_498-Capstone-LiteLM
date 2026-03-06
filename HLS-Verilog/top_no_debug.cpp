@@ -54,19 +54,12 @@ void transformer_top(
 
     // INTERRUPT INTERFACING (PL -> PS)
     bool            &irq_ps,
-
-    // Reduced debug mirrors
-    SchedState      &dbg_state,
-    ControlMemSpace &dbg_ctrl_mem,
-    uint32_t        &control_reg,
-    bool            &dbg_error,
-    uint32_t        &dbg_error_code
+    SchedState      &dbg_state
 ) {
 #pragma HLS INLINE off
 #pragma HLS INTERFACE axis port=s_axis_in
 #pragma HLS INTERFACE axis port=m_axis_out
 #pragma HLS INTERFACE m_axi port=ddr_mem offset=slave bundle=gmem depth=TOP_DMA_BUF_WORDS
-#pragma HLS INTERFACE s_axilite port=ddr_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
@@ -478,20 +471,8 @@ void transformer_top(
     ctrl_mem_interface.check_control(ctrl_mem, done);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
-    // Update status memory
+    // Scheduler_FSM now owns status_mem.status directly as the scheduler-state
+    // channel. top_no_debug no longer mirrors state into dbg_state.
     status_mem = active_status_mem;
-    status_mem.dbg_state = static_cast<uint32_t>(state_local);
-
-    // Reduced debug outputs
     dbg_state = state_local;
-    dbg_ctrl_mem = ctrl_mem;
-    control_reg = ctrl_mem.control;
-    dbg_error_code = active_status_mem.error_code | mmu_status.error_code;
-    dbg_error =
-        scheduler_error ||
-        compute_error ||
-        mmu_status.invalid ||
-        mmu_status.overflow ||
-        ((active_status_mem.status & STATUS_ERROR) != 0u) ||
-        (active_status_mem.error_code != ERR_NONE);
 }

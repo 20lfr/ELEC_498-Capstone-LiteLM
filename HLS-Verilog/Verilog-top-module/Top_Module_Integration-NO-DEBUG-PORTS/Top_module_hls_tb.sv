@@ -1840,9 +1840,10 @@ module top_module_hls_tb;
         stream_gap_countdown <= stream_gap_countdown - 1'b1;
       end
 
-      // Start ingress only once DUT is in STREAM_IN and ready.
+      // Start ingress only once the scheduler state reported in status memory
+      // reaches S_STREAM_IN.
       if (!axis_packet_sent && !stream_fill_active &&
-          ((status_mem_shadow.state == 32'd1) || (dbg_state == 32'd1)) &&
+          (status_mem_shadow.status == 32'd1) &&
           s_axis_in_TREADY) begin
         stream_fill_active <= 1'b1;
         stream_fill_idx    <= '0;
@@ -2983,14 +2984,6 @@ module top_module_hls_tb;
     .irq_ps(irq_ps),
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
-    .dbg_ctrl_mem(dbg_ctrl_mem),
-    .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
-    .control_reg(control_reg),
-    .control_reg_ap_vld(control_reg_ap_vld),
-    .dbg_error(dbg_error),
-    .dbg_error_ap_vld(dbg_error_ap_vld),
-    .dbg_error_code(dbg_error_code),
-    .dbg_error_code_ap_vld(dbg_error_code_ap_vld),
     .s_axi_control_AWVALID(s_axi_control_AWVALID),
     .s_axi_control_AWREADY(s_axi_control_AWREADY),
     .s_axi_control_AWADDR(s_axi_control_AWADDR),

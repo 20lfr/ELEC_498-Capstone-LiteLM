@@ -238,12 +238,11 @@ void scheduler_hls(
   const bool reset = !cntrl_reset_n;
   const bool busy = (st != S_IDLE);
   // Mirror busy into status bit 2 without clobbering other bits
-  status_mem.status = (status_mem.status & ~STATUS_BUSY_BIT) | (busy ? STATUS_BUSY_BIT : 0);
+  
   // Expose a start bit that auto-clears once we leave IDLE
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
   const bool ctrl_error =
       ((status_mem.irq_status & IRQ_ERROR_BIT) != 0) ||
-      ((status_mem.status & STATUS_ERROR) != 0) ||
       (status_mem.error_code != ERR_NONE);
 
   // FSM Reset
@@ -357,7 +356,9 @@ void scheduler_hls(
   if (reset) {
     head_group_idx = 0;
     STATE = st;
+    status_mem.status = static_cast<uint32_t>(st);
     return;
+
   }
 
   // Stall FSM whenever a ControlMemInterface error is latched.
@@ -1112,4 +1113,5 @@ void scheduler_hls(
   }
     head_group_idx = head_group_idx_out;
     STATE = st;
+    status_mem.status = static_cast<uint32_t>(st);
 }

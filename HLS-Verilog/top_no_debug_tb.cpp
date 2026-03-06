@@ -250,10 +250,42 @@ static bool load_shared_stream_in(uint8_t *stream_in_buf, size_t num_bytes, size
 }
 
 static const char *status_name(uint32_t status) {
-    if (status & STATUS_ERROR)    return "ERROR";
-    if (status & STATUS_BUSY_BIT) return "BUSY";
-    if (status & STATUS_IDLE)     return "IDLE";
-    return "-";
+    switch (static_cast<SchedState>(status)) {
+    case S_IDLE:
+        return "S_IDLE";
+    case S_STREAM_IN:
+        return "S_STREAM_IN";
+    case S_LAYER_COUNT:
+        return "S_LAYER_COUNT";
+    case S_LAYER_NORM_0:
+        return "S_LAYER_NORM_0";
+    case S_ATTENTION_HEADS:
+        return "S_ATTENTION_HEADS";
+    case S_HEAD_CONCAT:
+        return "S_HEAD_CONCAT";
+    case S_OUT_PROJECTION:
+        return "S_OUT_PROJECTION";
+    case S_RES_ADD_1:
+        return "S_RES_ADD_1";
+    case S_LAYER_NORM_1:
+        return "S_LAYER_NORM_1";
+    case S_FFN:
+        return "S_FFN";
+    case S_RES_ADD_2:
+        return "S_RES_ADD_2";
+    case S_LOOP_CHECK:
+        return "S_LOOP_CHECK";
+    case S_FINAL_NORM:
+        return "S_FINAL_NORM";
+    case S_LOGITS:
+        return "S_LOGITS";
+    case S_ARGMAX:
+        return "S_ARGMAX";
+    case S_STREAM_OUT:
+        return "S_STREAM_OUT";
+    default:
+        return "UNKNOWN";
+    }
 }
 
 static const char *sched_state_name(uint32_t state) {
@@ -573,29 +605,21 @@ int main() {
     ControlMemSpace ctrl_mem{};
     StatusMemSpace status_mem{};
     SchedState dbg_state = S_IDLE;
-    ControlMemSpace dbg_ctrl_mem{};
-    uint32_t control_reg = 0;
-    bool dbg_error = false;
-    uint32_t dbg_error_code = 0;
-
     // Tracking previous status for change-based logging
     uint32_t prev_status = 0;
     uint32_t prev_irq_status = 0;
     uint32_t prev_error_code = 0;
     uint32_t prev_layer_index = 0;
-    uint32_t prev_dbg_state = 0;
-
-    std::printf("%8s | %12s | %8s | %10s | %8s | %8s | %12s | %6s | %6s\n",
+    std::printf("%8s | %12s | %8s | %10s | %8s | %8s | %6s | %6s\n",
                 "cycle",
                 "status",
                 "irq_stat",
                 "error_code",
                 "layer",
                 "head",
-                "dbg_state",
                 "irq_ps",
                 "ax_fed");
-    std::printf("-----------------------------------------------------------------------------------------------\n");
+    std::printf("--------------------------------------------------------------------------------------------------\n");
 
     for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
         // Space out control transactions to model multi-cycle AXI-lite access
@@ -807,11 +831,7 @@ int main() {
             ctrl_mem,
             status_mem,
             irq_ps,
-            dbg_state,
-            dbg_ctrl_mem,
-            control_reg,
-            dbg_error,
-            dbg_error_code
+            dbg_state
         );
 
         // Drain AXI stream output
@@ -842,24 +862,21 @@ int main() {
         const bool status_changed = (status_mem.status != prev_status) ||
                                     (status_mem.irq_status != prev_irq_status) ||
                                     (status_mem.error_code != prev_error_code) ||
-                                    (status_mem.layer_index != prev_layer_index) ||
-                                    (status_mem.dbg_state != prev_dbg_state);
+                                    (status_mem.layer_index != prev_layer_index);
         if (status_changed || (cycle % 100 == 0)) {
-            std::printf("%8d | %12s | %8s | 0x%08X | %8u | %8u | %12s | %6d | %6d\n",
+            std::printf("%8d | %12s | %8s | 0x%08X | %8u | %8u | %6d | %6d\n",
                         cycle,
                         status_name(status_mem.status),
                         irq_name(status_mem.irq_status),
                         status_mem.error_code,
                         status_mem.layer_index,
                         status_mem.head_index,
-                        sched_state_name(status_mem.dbg_state),
                         irq_ps ? 1 : 0,
                         axis_feed_done ? 1 : 0);
             prev_status = status_mem.status;
             prev_irq_status = status_mem.irq_status;
             prev_error_code = status_mem.error_code;
             prev_layer_index = status_mem.layer_index;
-            prev_dbg_state = status_mem.dbg_state;
         }
 
         // Error detection via status_mem
@@ -875,13 +892,13 @@ int main() {
         }
 
         // Track done via IRQ
-        if (status_mem.status & STATUS_BUSY_BIT) {
+        if (status_mem.status != static_cast<uint32_t>(S_IDLE)) {
             seen_stream_out = false; // reset until we see idle again
         }
         if ((status_mem.irq_status & IRQ_INFER_DONE_BIT) && !seen_done) {
             seen_stream_out = true;
         }
-        if (seen_stream_out && (status_mem.status & STATUS_IDLE)) {
+        if (seen_stream_out && (status_mem.status == static_cast<uint32_t>(S_IDLE))) {
             idle_after_stream++;
         } else if (seen_stream_out) {
             idle_after_stream = 0;

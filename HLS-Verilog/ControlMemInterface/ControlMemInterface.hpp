@@ -130,7 +130,6 @@ public:
         // Handle reset
         if ((ctrl_mem.control & CTRL_RESETN_BIT) == 0) {
             local_status.irq_status = 0;
-            local_status.status = STATUS_IDLE;
             local_status.error_code = ERR_NONE;
             local_status.mmu_error_subcode = MMU_ERR_SUBCODE_NONE;
         }

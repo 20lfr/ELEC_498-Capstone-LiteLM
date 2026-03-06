@@ -294,7 +294,7 @@ struct ControlMemSpace {
 // Status (PS Reads <- PL Writes)
 // Passed by reference
 struct StatusMemSpace {
-    uint32_t status = STATUS_IDLE;
+    uint32_t status = static_cast<uint32_t>(S_IDLE);
     uint32_t irq_status = 0;
     uint32_t error_code = ERR_NONE;
     uint32_t mmu_error_subcode = MMU_ERR_SUBCODE_NONE;

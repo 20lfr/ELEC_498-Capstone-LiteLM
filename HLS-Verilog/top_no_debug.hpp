@@ -24,9 +24,5 @@ void transformer_top(
     ControlMemSpace ctrl_mem,           // [INPUT]  Control memory interface
     StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
     bool &irq_ps,                       // [OUTPUT] Interrupt signal
-    SchedState &dbg_state,              // [OUTPUT] Scheduler state mirror
-    ControlMemSpace &dbg_ctrl_mem,      // [OUTPUT] Control mem mirror
-    uint32_t &control_reg,              // [OUTPUT] Control register mirror
-    bool &dbg_error,                    // [OUTPUT] Sticky error summary
-    uint32_t &dbg_error_code            // [OUTPUT] Error code summary
+    SchedState &dbg_state               // [OUTPUT] Scheduler state mirror
 );
