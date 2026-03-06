@@ -14,7 +14,7 @@ module transformer_top_scheduler_hls_Pipeline_VITIS_LOOP_427_1 (
         ap_idle,
         ap_ready,
         start_assign,
-        empty_96,
+        empty_80,
         layer_assign,
         empty,
         group_finished_out,
@@ -287,7 +287,7 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [0:0] start_assign;
-input  [30:0] empty_96;
+input  [30:0] empty_80;
 input  [31:0] layer_assign;
 input  [7:0] empty;
 output  [0:0] group_finished_out;
@@ -865,7 +865,7 @@ wire   [31:0] or_ln12_7_fu_3042_p5;
 wire   [31:0] or_ln12_6_fu_3526_p5;
 wire   [31:0] or_ln12_5_fu_4010_p5;
 wire   [31:0] or_ln12_4_fu_4347_p5;
-wire   [7:0] empty_239_fu_936_p1;
+wire   [7:0] empty_223_fu_936_p1;
 reg   [7:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_254;
 wire   [0:0] select_ln133_1_fu_1727_p3;
 reg   [2:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_224;
@@ -1005,7 +1005,7 @@ reg   [0:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_Cont
 reg   [0:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_297;
 reg   [0:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_275;
 reg   [0:0] grp_load_fu_374_p1;
-wire   [7:0] empty_240_fu_680_p1;
+wire   [7:0] empty_224_fu_680_p1;
 reg   [7:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_255;
 reg   [2:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_225;
 reg   [2:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_227;
@@ -2138,7 +2138,7 @@ end
 
 always @ (*) begin
     if (((icmp_ln107_fu_675_p2 == 1'd0) & (icmp_ln444_fu_654_p2 == 1'd0) & (icmp_ln436_fu_609_p2 == 1'd1) & (icmp_ln435_fu_603_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_254 = empty_239_fu_936_p1;
+        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_254 = empty_223_fu_936_p1;
     end else begin
         ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_254 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_52_i;
     end
@@ -2146,7 +2146,7 @@ end
 
 always @ (*) begin
     if (((icmp_ln107_fu_675_p2 == 1'd0) & (icmp_ln444_fu_654_p2 == 1'd0) & (icmp_ln436_fu_609_p2 == 1'd0) & (icmp_ln435_fu_603_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_255 = empty_240_fu_680_p1;
+        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_255 = empty_224_fu_680_p1;
     end else begin
         ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_255 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_51_i;
     end
@@ -5605,7 +5605,7 @@ always @ (*) begin
         end else if ((1'b1 == ap_condition_2672)) begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_51_o = 8'd13;
         end else if ((1'b1 == ap_condition_1019)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_51_o = empty_240_fu_680_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_51_o = empty_224_fu_680_p1;
         end else begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_51_o = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_51_i;
         end
@@ -5647,7 +5647,7 @@ always @ (*) begin
         end else if ((1'b1 == ap_condition_1500)) begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_52_o = 8'd13;
         end else if ((1'b1 == ap_condition_389)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_52_o = empty_239_fu_936_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_52_o = empty_223_fu_936_p1;
         end else begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_52_o = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_52_i;
         end
@@ -6881,7 +6881,7 @@ assign add_ln379_fu_2480_p2 = (select_ln379_fu_2473_p3 + 32'd1);
 
 assign add_ln427_fu_534_p2 = (ap_sig_allocacmp_lane + 2'd1);
 
-assign add_ln_fu_577_p3 = {{empty_96}, {trunc_ln432_fu_574_p1}};
+assign add_ln_fu_577_p3 = {{empty_80}, {trunc_ln432_fu_574_p1}};
 
 assign and_ln135_fu_1770_p2 = (select_ln135_fu_1757_p3 & icmp_ln135_fu_1764_p2);
 
@@ -7645,9 +7645,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign empty_239_fu_936_p1 = grp_init_head_ctx_fu_37134_p_dout0_3[7:0];
+assign empty_223_fu_936_p1 = grp_init_head_ctx_fu_37134_p_dout0_3[7:0];
 
-assign empty_240_fu_680_p1 = grp_init_head_ctx_fu_37134_p_dout0_3[7:0];
+assign empty_224_fu_680_p1 = grp_init_head_ctx_fu_37134_p_dout0_3[7:0];
 
 assign group_finished_1_fu_5008_p2 = (head_done_fu_5002_p2 & group_finished_fu_308);
 

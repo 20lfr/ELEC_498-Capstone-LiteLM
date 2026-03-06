@@ -202,7 +202,7 @@ reg    ap_ready_int;
 reg   [1:0] h_fu_172;
 wire   [1:0] add_ln1093_fu_432_p2;
 wire    ap_loop_init;
-reg   [1:0] ap_sig_allocacmp_h_5;
+reg   [1:0] ap_sig_allocacmp_h_4;
 wire   [7:0] select_ln1095_fu_444_p3;
 wire   [4:0] add_ln_fu_488_p3;
 wire   [0:0] icmp_ln1095_1_fu_438_p2;
@@ -311,9 +311,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_h_5 = 2'd0;
+        ap_sig_allocacmp_h_4 = 2'd0;
     end else begin
-        ap_sig_allocacmp_h_5 = h_fu_172;
+        ap_sig_allocacmp_h_4 = h_fu_172;
     end
 end
 
@@ -584,7 +584,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln1093_fu_432_p2 = (ap_sig_allocacmp_h_5 + 2'd1);
+assign add_ln1093_fu_432_p2 = (ap_sig_allocacmp_h_4 + 2'd1);
 
 assign add_ln_fu_488_p3 = {{trunc_ln1095_fu_484_p1}, {t}};
 
@@ -664,12 +664,12 @@ assign dst_62 = select_ln1095_fu_444_p3;
 
 assign dst_63 = select_ln1095_fu_444_p3;
 
-assign icmp_ln1093_fu_426_p2 = ((ap_sig_allocacmp_h_5 == 2'd2) ? 1'b1 : 1'b0);
+assign icmp_ln1093_fu_426_p2 = ((ap_sig_allocacmp_h_4 == 2'd2) ? 1'b1 : 1'b0);
 
-assign icmp_ln1095_1_fu_438_p2 = ((ap_sig_allocacmp_h_5 == 2'd1) ? 1'b1 : 1'b0);
+assign icmp_ln1095_1_fu_438_p2 = ((ap_sig_allocacmp_h_4 == 2'd1) ? 1'b1 : 1'b0);
 
 assign select_ln1095_fu_444_p3 = ((icmp_ln1095_1_fu_438_p2[0:0] == 1'b1) ? row_1_load : row_load);
 
-assign trunc_ln1095_fu_484_p1 = ap_sig_allocacmp_h_5[0:0];
+assign trunc_ln1095_fu_484_p1 = ap_sig_allocacmp_h_4[0:0];
 
 endmodule //transformer_top_p_anonymous_namespace_load_ctx_v_tile_to_buf_Pipeline_VITIS_LOOP_1093_2

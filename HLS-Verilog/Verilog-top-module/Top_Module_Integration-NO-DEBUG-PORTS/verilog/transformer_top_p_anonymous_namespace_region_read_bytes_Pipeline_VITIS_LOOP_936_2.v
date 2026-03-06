@@ -122,12 +122,12 @@ wire   [19:0] trunc_ln935_1_fu_275_p1;
 wire   [19:0] bank_byte_addr_fu_298_p2;
 wire   [1:0] trunc_ln935_fu_271_p1;
 wire   [1:0] or_ln939_fu_308_p2;
-wire   [29:0] tmp_286_fu_320_p4;
+wire   [29:0] tmp_556_fu_320_p4;
 wire   [0:0] icmp_ln939_fu_314_p2;
 wire   [0:0] icmp_ln941_fu_330_p2;
 wire   [4:0] bank_assign_fu_352_p9;
 wire   [4:0] bank_assign_fu_352_p11;
-wire   [17:0] tmp_152_fu_371_p3;
+wire   [17:0] tmp_129_fu_371_p3;
 wire   [17:0] word_idx_fu_342_p4;
 wire   [17:0] add_ln944_fu_379_p2;
 wire   [4:0] bit_off_fu_490_p3;
@@ -179,7 +179,7 @@ end
     .def_WIDTH( 20 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 20 ))
-sparsemux_9_2_20_1_1_U3602(
+sparsemux_9_2_20_1_1_U2879(
     .din0(r_chunks_offset_read),
     .din1(r_chunks_offset_read_52),
     .din2(r_chunks_offset_read_53),
@@ -203,7 +203,7 @@ sparsemux_9_2_20_1_1_U3602(
     .def_WIDTH( 5 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 5 ))
-sparsemux_9_2_5_1_1_U3603(
+sparsemux_9_2_5_1_1_U2880(
     .din0(r_chunks_bank_read),
     .din1(r_chunks_bank_read_52),
     .din2(r_chunks_bank_read_53),
@@ -466,7 +466,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln944_fu_379_p2 = (tmp_152_fu_371_p3 + word_idx_fu_342_p4);
+assign add_ln944_fu_379_p2 = (tmp_129_fu_371_p3 + word_idx_fu_342_p4);
 
 assign and_ln939_fu_336_p2 = (icmp_ln941_fu_330_p2 & icmp_ln939_fu_314_p2);
 
@@ -518,7 +518,7 @@ assign icmp_ln936_fu_265_p2 = ((take_18_fu_126 == 32'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln939_fu_314_p2 = ((or_ln939_fu_308_p2 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln941_fu_330_p2 = ((tmp_286_fu_320_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln941_fu_330_p2 = ((tmp_556_fu_320_p4 != 30'd0) ? 1'b1 : 1'b0);
 
 assign logical_21_fu_402_p2 = (logical_1_fu_130 + 32'd1);
 
@@ -540,9 +540,9 @@ assign take_20_fu_408_p2 = (take_18_fu_126 + 32'd4294967295);
 
 assign take_21_fu_463_p2 = ($signed(take_18_fu_126) + $signed(32'd4294967292));
 
-assign tmp_152_fu_371_p3 = {{bank_assign_fu_352_p11}, {13'd0}};
+assign tmp_129_fu_371_p3 = {{bank_assign_fu_352_p11}, {13'd0}};
 
-assign tmp_286_fu_320_p4 = {{take_18_fu_126[31:2]}};
+assign tmp_556_fu_320_p4 = {{take_18_fu_126[31:2]}};
 
 assign tmp_s_fu_279_p9 = 'bx;
 
