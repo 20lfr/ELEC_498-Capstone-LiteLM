@@ -1,23 +1,23 @@
 // inference_engine.cpp - Corrected for HLS interface
-#include "pl_interface.hpp"
-#include "types.hpp"
-#include "queue.hpp"
-#include "logger.hpp"
-#include "tokenizer.hpp"
-#include "performance_monitor.hpp"
-#include "error_handler.hpp"
 #include "config.hpp"
+#include "error_handler.hpp"
+#include "logger.hpp"
+#include "performance_monitor.hpp"
+#include "pl_interface.hpp"
+#include "queue.hpp"
+#include "tokenizer.hpp"
+#include "types.hpp"
 
-#include <iostream>
-#include <thread>
 #include <atomic>
 #include <chrono>
-#include <vector>
-#include <mutex>
 #include <fstream>
+#include <iostream>
 #include <memory>
+#include <mutex>
+#include <thread>
+#include <vector>
 
-Logger* g_logger = nullptr;
+Logger *g_logger = nullptr;
 std::atomic<EngineStatus> g_engine_status(EngineStatus::IDLE);
 std::mutex g_console_mutex;
 Queue<Task, 100> g_task_queue;
@@ -27,16 +27,17 @@ Queue<Command, 10> g_command_queue;
 // WeightLoader - Corrected register configuration
 // =============================================================================
 class WeightLoader {
-    PLInterface* pl;
-    Logger* logger;
-    ErrorHandler* err;
+    PLInterface *pl;
+    Logger *logger;
+    ErrorHandler *err;
     std::string weights_file;
 
 public:
-    WeightLoader(PLInterface* p, Logger* l, ErrorHandler* e) : pl(p), logger(l), err(e) {}
-    void setWeightsFile(const std::string& f) { weights_file = f; }
+    WeightLoader(PLInterface *p, Logger *l, ErrorHandler *e)
+        : pl(p), logger(l), err(e) {}
+    void setWeightsFile(const std::string &f) { weights_file = f; }
 
-    bool loadAllWeights(const ModelConfig& cfg) {
+    bool loadAllWeights(const ModelConfig &cfg) {
         LOG_INFO("Loading weights from " + weights_file);
         std::ifstream f(weights_file, std::ios::binary);
         if (!f) {
@@ -47,26 +48,23 @@ public:
         size_t sz = f.tellg();
         f.seekg(0);
         std::vector<uint8_t> data(sz);
-        f.read(reinterpret_cast<char*>(data.data()), sz);
+        f.read(reinterpret_cast<char *>(data.data()), sz);
         return pl->writeDDR(0, data.data(), data.size());
     }
 
-    bool configureAddresses(const ModelConfig& cfg, const MemoryLayout& mem) {
+    bool configureAddresses(const ModelConfig &cfg, const MemoryLayout &mem) {
         if (!cfg.validate()) {
-            err->setError(ErrorCode::CONFIG_ERROR, "Invalid config (zero DMA/stride)");
+            err->setError(ErrorCode::CONFIG_ERROR,
+                          "Invalid config (zero DMA/stride)");
             return false;
         }
         if (!mem.isAligned()) {
-            err->setError(ErrorCode::CONFIG_ERROR, "Addresses not 64-byte aligned");
+            err->setError(ErrorCode::CONFIG_ERROR,
+                          "Addresses not 64-byte aligned");
             return false;
         }
 
         pl->beginConfig();
-
-        // DMA lengths (required non-zero)
-        pl->writeReg(PLReg::DMA_LAYER_LEN, cfg.dma_layer_len);
-        pl->writeReg(PLReg::DMA_HEAD_LEN, cfg.dma_head_len);
-        pl->writeReg(PLReg::DMA_TILE_LEN, cfg.dma_tile_len);
 
         // Strides (required non-zero)
         pl->writeReg(PLReg::LAYER_STRIDE, cfg.layer_stride);
@@ -80,23 +78,32 @@ public:
         pl->writeReg(PLReg::W2_TILE_STRIDE, cfg.w2_tile_stride);
 
         // 64-bit base addresses
-        pl->writeReg64(PLReg::WQ_BASE_LO, mem.wq_offset);
-        pl->writeReg64(PLReg::WK_BASE_LO, mem.wk_offset);
-        pl->writeReg64(PLReg::WV_BASE_LO, mem.wv_offset);
-        pl->writeReg64(PLReg::WO_BASE_LO, mem.wo_offset);
-        pl->writeReg64(PLReg::W1_BASE_LO, mem.w1_offset);
-        pl->writeReg64(PLReg::W2_BASE_LO, mem.w2_offset);
-        pl->writeReg64(PLReg::K_CACHE_LO, mem.k_cache_offset);
-        pl->writeReg64(PLReg::V_CACHE_LO, mem.v_cache_offset);
+        pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
+                       pl->getDDRBaseAddr());
+
+        pl->writeReg(PLReg::WQ_OFFSET, mem.wq_offset);
+        pl->writeReg(PLReg::WK_OFFSET, mem.wk_offset);
+        pl->writeReg(PLReg::WV_OFFSET, mem.wv_offset);
+        pl->writeReg(PLReg::WO_OFFSET, mem.wo_offset);
+        pl->writeReg(PLReg::W1_OFFSET, mem.w1_offset);
+        pl->writeReg(PLReg::W2_OFFSET, mem.w2_offset);
+        pl->writeReg(PLReg::K_CACHE_OFFSET, mem.k_cache_offset);
+        pl->writeReg(PLReg::V_CACHE_OFFSET, mem.v_cache_offset);
 
         // Quantization
         pl->writeReg(PLReg::LOGIT_SCALE_QV, cfg.logit_scale_qv);
-        pl->writeReg(PLReg::SCALE_Q, *reinterpret_cast<const uint32_t*>(&cfg.scale_q));
-        pl->writeReg(PLReg::ZERO_POINT_Q, static_cast<uint32_t>(cfg.zero_point_q));
-        pl->writeReg(PLReg::SCALE_K, *reinterpret_cast<const uint32_t*>(&cfg.scale_k));
-        pl->writeReg(PLReg::ZERO_POINT_K, static_cast<uint32_t>(cfg.zero_point_k));
-        pl->writeReg(PLReg::SCALE_V, *reinterpret_cast<const uint32_t*>(&cfg.scale_v));
-        pl->writeReg(PLReg::ZERO_POINT_V, static_cast<uint32_t>(cfg.zero_point_v));
+        pl->writeReg(PLReg::SCALE_Q,
+                     *reinterpret_cast<const uint32_t *>(&cfg.scale_q));
+        pl->writeReg(PLReg::ZERO_POINT_Q,
+                     static_cast<uint32_t>(cfg.zero_point_q));
+        pl->writeReg(PLReg::SCALE_K,
+                     *reinterpret_cast<const uint32_t *>(&cfg.scale_k));
+        pl->writeReg(PLReg::ZERO_POINT_K,
+                     static_cast<uint32_t>(cfg.zero_point_k));
+        pl->writeReg(PLReg::SCALE_V,
+                     *reinterpret_cast<const uint32_t *>(&cfg.scale_v));
+        pl->writeReg(PLReg::ZERO_POINT_V,
+                     static_cast<uint32_t>(cfg.zero_point_v));
 
         pl->endConfig();
         return !err->hasError();
@@ -107,17 +114,19 @@ public:
 // InferenceExecutor
 // =============================================================================
 class InferenceExecutor {
-    PLInterface* pl;
-    Tokenizer* tok;
-    PerformanceMonitor* perf;
-    Logger* logger;
-    ErrorHandler* err;
+    PLInterface *pl;
+    Tokenizer *tok;
+    PerformanceMonitor *perf;
+    Logger *logger;
+    ErrorHandler *err;
 
 public:
-    InferenceExecutor(PLInterface* p, Tokenizer* t, PerformanceMonitor* pf, Logger* l, ErrorHandler* e)
+    InferenceExecutor(PLInterface *p, Tokenizer *t, PerformanceMonitor *pf,
+                      Logger *l, ErrorHandler *e)
         : pl(p), tok(t), perf(pf), logger(l), err(e) {}
 
-    bool executeToken(const std::vector<uint32_t>& in, std::vector<uint32_t>& out, const GenerationConfig& cfg) {
+    bool executeToken(const std::vector<uint32_t> &in,
+                      std::vector<uint32_t> &out, const GenerationConfig &cfg) {
         perf->startGeneration();
 
         // Write input
@@ -128,7 +137,8 @@ public:
             return false;
         }
 
-        if (!pl->waitDone(cfg.max_tokens * 100)) return false;
+        if (!pl->waitDone(cfg.max_tokens * 100))
+            return false;
 
         // Read output
         uint32_t token;
@@ -163,34 +173,42 @@ class InferenceEngine {
         uint32_t tokens = 0;
         uint32_t maxTokens = 512;
         float temp = 0.7f;
-        void reset() { status = EngineStatus::IDLE; taskId = -1; cancel = false; tokens = 0; }
+        void reset() {
+            status = EngineStatus::IDLE;
+            taskId = -1;
+            cancel = false;
+            tokens = 0;
+        }
     } state;
 
 public:
     ~InferenceEngine() { shutdown(); }
 
-    bool initialize(const std::string& cfg_file) {
+    bool initialize(const std::string &cfg_file) {
         config.loadFromFile(cfg_file);
         if (!config.validate()) {
             LOG_ERROR("Invalid configuration");
             return false;
         }
 
-        pl = std::make_unique<PLInterface>(g_logger, &err);
-        if (!pl->init(config.hardware.uio_device, config.hardware.base_address,
-                      0x10000, config.hardware.mock_mode)) {
+        pl = std::unique_ptr<PLInterface>(
+            new PLInterface(g_logger, &err, config.hardware.mock_mode));
+        if (!pl->init(config.hardware.uio_device,
+                      config.hardware.dmabuf_size)) {
             LOG_FATAL("PL init failed");
             return false;
         }
 
-        if (!pl->initDDR(config.hardware.ddr_base_address, config.hardware.ddr_size)) {
+        if (!pl->initDMA(config.hardware.dmabuf_name,
+                         config.hardware.dmabuf_size)) {
             LOG_FATAL("DDR init failed");
             return false;
         }
 
-        tokenizer = std::make_unique<Tokenizer>();
-        perf = std::make_unique<PerformanceMonitor>();
-        loader = std::make_unique<WeightLoader>(pl.get(), g_logger, &err);
+        tokenizer = std::unique_ptr<Tokenizer>(new Tokenizer);
+        perf = std::unique_ptr<PerformanceMonitor>(new PerformanceMonitor);
+        loader = std::unique_ptr<WeightLoader>(
+            new WeightLoader(pl.get(), g_logger, &err));
         loader->setWeightsFile(config.model.weights_file);
 
         if (!loader->loadAllWeights(config.model)) {
@@ -203,7 +221,8 @@ public:
             return false;
         }
 
-        exec = std::make_unique<InferenceExecutor>(pl.get(), tokenizer.get(), perf.get(), g_logger, &err);
+        exec = std::unique_ptr<InferenceExecutor>(new InferenceExecutor(
+            pl.get(), tokenizer.get(), perf.get(), g_logger, &err));
         LOG_INFO("Initialized");
         return true;
     }
@@ -217,12 +236,13 @@ public:
         if (running) {
             running = false;
             g_command_queue.push(Command(CommandType::SHUTDOWN));
-            if (thread.joinable()) thread.join();
+            if (thread.joinable())
+                thread.join();
         }
     }
 
-    bool submitTask(const Task& t) { return g_task_queue.push(t); }
-    bool submitCommand(const Command& c) { return g_command_queue.push(c); }
+    bool submitTask(const Task &t) { return g_task_queue.push(t); }
+    bool submitCommand(const Command &c) { return g_command_queue.push(c); }
     std::string getStats() const { return perf->getDetailedStats(); }
 
 private:
@@ -230,21 +250,30 @@ private:
         while (running) {
             Command cmd;
             if (g_command_queue.pop(cmd)) {
-                if (cmd.type == CommandType::SHUTDOWN) { running = false; break; }
-                if (cmd.type == CommandType::STOP_CURRENT) state.cancel = true;
-                if (cmd.type == CommandType::RESET) { pl->reset(); state.reset(); }
+                if (cmd.type == CommandType::SHUTDOWN) {
+                    running = false;
+                    break;
+                }
+                if (cmd.type == CommandType::STOP_CURRENT)
+                    state.cancel = true;
+                if (cmd.type == CommandType::RESET) {
+                    pl->reset();
+                    state.reset();
+                }
                 continue;
             }
 
             if (state.status == EngineStatus::IDLE) {
                 Task task;
-                if (g_task_queue.pop(task)) processTask(task);
-                else std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                if (g_task_queue.pop(task))
+                    processTask(task);
+                else
+                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
         }
     }
 
-    void processTask(const Task& task) {
+    void processTask(const Task &task) {
         state.status = EngineStatus::GENERATING;
         state.taskId = task.id;
         state.cancel = false;
@@ -254,10 +283,13 @@ private:
         std::vector<uint32_t> out;
 
         for (uint32_t i = 0; i < state.maxTokens && !state.cancel; i++) {
-            if (!exec->executeToken(tokens, out, config.generation)) break;
-            if (out.empty()) break;
+            if (!exec->executeToken(tokens, out, config.generation))
+                break;
+            if (out.empty())
+                break;
             uint32_t tok = out.back();
-            if (tok == tokenizer->getEOSTokenId()) break;
+            if (tok == tokenizer->getEOSTokenId())
+                break;
             tokens.push_back(tok);
         }
 
@@ -265,7 +297,7 @@ private:
         g_engine_status = EngineStatus::IDLE;
     }
 
-    void print(const std::string& s) {
+    void print(const std::string &s) {
         std::lock_guard<std::mutex> lk(g_console_mutex);
         std::cout << s << std::flush;
     }
@@ -274,15 +306,18 @@ private:
 // =============================================================================
 // Main
 // =============================================================================
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     std::cout << "FPGA Transformer Inference Engine\n";
 
-    LogLevel lvl = (argc > 1 && std::string(argv[1]) == "--debug") ? LogLevel::DEBUG : LogLevel::INFO;
+    LogLevel lvl = (argc > 1 && std::string(argv[1]) == "--debug")
+                       ? LogLevel::DEBUG
+                       : LogLevel::INFO;
     g_logger = new Logger(lvl, "inference.log");
 
     std::string cfg = "config.yaml";
     for (int i = 1; i < argc - 1; i++)
-        if (std::string(argv[i]) == "--config") cfg = argv[i + 1];
+        if (std::string(argv[i]) == "--config")
+            cfg = argv[i + 1];
 
     InferenceEngine engine;
     if (!engine.initialize(cfg)) {
@@ -297,12 +332,23 @@ int main(int argc, char* argv[]) {
     int taskId = 1;
     std::string input;
     while (std::getline(std::cin, input)) {
-        if (input.empty()) { std::cout << "> "; continue; }
-        if (input == "/quit") { engine.submitCommand(Command(CommandType::SHUTDOWN)); break; }
-        if (input == "/stop") { engine.submitCommand(Command(CommandType::STOP_CURRENT)); }
-        else if (input == "/reset") { engine.submitCommand(Command(CommandType::RESET)); }
-        else if (input == "/stats") { std::cout << engine.getStats() << "\n"; }
-        else { engine.submitTask(Task(taskId++, TaskType::GENERATE, input)); }
+        if (input.empty()) {
+            std::cout << "> ";
+            continue;
+        }
+        if (input == "/quit") {
+            engine.submitCommand(Command(CommandType::SHUTDOWN));
+            break;
+        }
+        if (input == "/stop") {
+            engine.submitCommand(Command(CommandType::STOP_CURRENT));
+        } else if (input == "/reset") {
+            engine.submitCommand(Command(CommandType::RESET));
+        } else if (input == "/stats") {
+            std::cout << engine.getStats() << "\n";
+        } else {
+            engine.submitTask(Task(taskId++, TaskType::GENERATE, input));
+        }
         std::cout << "> ";
     }
 

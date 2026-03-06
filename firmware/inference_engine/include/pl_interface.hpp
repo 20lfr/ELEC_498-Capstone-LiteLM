@@ -22,7 +22,6 @@ class Logger;
 class ErrorHandler;
 enum class ErrorCode;
 
-enum class DmaBufType : uint8_t { WEIGHTS, KV_CACHE, IO_STREAM };
 // mmap'd register bus selector
 enum class RegBus : uint8_t {
     CTRL,  // ctrl_mem + status_mem
@@ -38,6 +37,13 @@ namespace PLReg {
     constexpr uint32_t AXIL_GIE = XAXI_TOP_CONTROL_ADDR_GIE;
     constexpr uint32_t AXIL_IER = XAXI_TOP_CONTROL_ADDR_IER;
     constexpr uint32_t AXIL_ISR = XAXI_TOP_CONTROL_ADDR_ISR;
+
+    // AXI-Lite Control Register Bits (From Vitis HLS UG1399)
+    constexpr uint32_t AP_START_BIT = (1u << 0);
+    constexpr uint32_t AP_DONE_BIT = (1u << 1);
+    constexpr uint32_t AP_IDLE_BIT = (1u << 2);
+    constexpr uint32_t AP_READY_BIT = (1u << 3);
+    constexpr uint32_t AP_AUTO_RESTART_BIT = (1u << 7);
 
     constexpr uint32_t CTRL_BASE = XAXI_TOP_CONTROL_ADDR_CTRL_MEM_DATA;
 
@@ -153,10 +159,8 @@ private:
     volatile uint32_t *_addr_regs;
     size_t _addr_size;
 
-    // DDR buffer for weights transfers
-    DmaBuffer _dma_buf0;
-    // DDR buffer for I/O streams & KV cache transfers
-    DmaBuffer _dma_buf1;
+    // DDR buffer for all data transfers
+    DmaBuffer _dma_buf;
 
     // AXI DMA IP registers (/dev/mem mapped)
     volatile uint32_t *_stream_regs;
@@ -172,8 +176,7 @@ public:
     ~PLInterface();
 
     bool init(const std::string &device_name, uint64_t stream_reg_base_addr);
-    bool initDMA(const std::string &dmabuf0_name, size_t dmabuf0_size,
-                 const std::string &dmabuf1_name, size_t dmabuf1_size);
+    bool initDMA(const std::string &dmabuf_name, size_t dmabuf_size);
     void cleanup();
 
     // Default overloads use RegBus::CTRL
@@ -210,23 +213,20 @@ public:
     bool start();
     bool waitDone(uint32_t timeout_ms);
     bool isBusy() {
-        return testRegBits(PLReg::STATUS, PLRegBits::STAT_BUSY_BIT);
+        return testRegBits(PLReg::STATUS, STATUS_BUSY_BIT);
     }
     bool isError() {
-        return testRegBits(PLReg::IRQ_STATUS, PLRegBits::IRQ_ERROR_BIT);
+        return testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT);
     }
     void beginConfig();
     void endConfig();
 
     // Memory
-    bool writeDDR(DmaBufType type, uint32_t dma_offset, const void *data,
+    bool writeDDR(uint32_t dma_offset, const void *data,
                   size_t size);
-    bool readDDR(DmaBufType type, uint32_t dma_offset, void *data, size_t size);
-    uint64_t getDDRBaseAddr(DmaBufType type) const {
-        if (type == DmaBufType::WEIGHTS)
-            return _dma_buf0.phys();
-        else
-            return _dma_buf1.phys();
+    bool readDDR( uint32_t dma_offset, void *data, size_t size);
+    uint64_t getDDRBaseAddr() const {
+        return _dma_buf.phys();
     }
 
     // DMA Stream (non-blocking kick/wait)
@@ -242,13 +242,17 @@ public:
     // IRQ
     bool clearIRQ();
     bool waitIRQ(uint32_t timeout_ms);
-    uint32_t getErrorCode() { return readReg(PLReg::ERROR_CODE); }
+    uint32_t getErrorCode() {
+        return readReg(PLReg::ERROR_CODE); }
     std::string
-    getErrorCodeString(const uint32_t error_mask = PLRegBits::ERR_ALL_BITS);
-    uint32_t getIRQStatus() { return readReg(PLReg::IRQ_STATUS); }
+    getErrorCodeString(const uint32_t error_mask = 0xFFFFFFFF);
+    uint32_t getIRQStatus() {
+        return readReg(PLReg::IRQ_STATUS); }
 
-    bool isInitialized() const { return _initialized; }
-    bool isMockMode() const { return _mock_mode; }
+    bool isInitialized() const {
+        return _initialized; }
+    bool isMockMode() const {
+        return _mock_mode; }
 
 private:
     volatile uint32_t *busPtr(RegBus bus) const;

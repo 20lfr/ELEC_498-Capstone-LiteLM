@@ -1,4 +1,4 @@
-// config.hpp - Configured for Phi-3-mini-4k-instruct
+// config.hpp - LiteLM inference engine configuration
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
@@ -8,10 +8,9 @@
 
 struct HardwareConfig {
     uint64_t stream_reg_base_addr = 0xa0000000;
-    std::string dmabuf0_name = "udmabuf0";
-    size_t dmabuf0_size = 0x7a000000; // 2GB
-    std::string dmabuf1_name = "udmabuf1";
-    size_t dmabuf1_size = 0x20000000; // 512MB
+    std::string uio_device = "axi_top";
+    std::string dmabuf_name = "udmabuf";
+    size_t dmabuf_size = 0x7fffffff; // 2GB
     uint32_t timeout_ms = 30000;
     bool mock_mode = false;
 };
@@ -21,20 +20,20 @@ struct ModelConfig {
     std::string quant_params_file = "quantization.bin";
     std::string tokenizer_vocab = "tokenizer.model";
 
-    uint32_t vocab_size = Phi3Mini4K::vocab_size;
-    uint32_t logit_scale_qv = Phi3Mini4K::logit_scale_qv;
+    uint32_t vocab_size = MODEL_VOCAB_SIZE;
+    uint32_t logit_scale_qv = LOGIT_SCALE_QV;
 
-    struct Strides {
-        uint32_t layer = Phi3Mini4K::strides::wq_layer;
-        uint32_t wq_head = Phi3Mini4K::strides::qkv_head;
-        uint32_t wk_head = Phi3Mini4K::strides::qkv_head;
-        uint32_t wv_head = Phi3Mini4K::strides::qkv_head;
-        uint32_t k_cache = Phi3Mini4K::strides::kv_head;
-        uint32_t v_cache = Phi3Mini4K::strides::kv_head;
-        uint32_t wo_tile = Phi3Mini4K::strides::wo_tile;
-        uint32_t w1_tile = Phi3Mini4K::strides::w1_tile;
-        uint32_t w2_tile = Phi3Mini4K::strides::w2_tile;
-    } strides;
+    uint32_t layer_stride = STRIDE_WQ_LAYER;
+    uint32_t wq_head_stride = STRIDE_QKV_HEAD;
+    uint32_t wk_head_stride = STRIDE_QKV_HEAD;
+    uint32_t wv_head_stride = STRIDE_QKV_HEAD;
+
+    uint32_t k_cache_stride = STRIDE_KV_HEAD;
+    uint32_t v_cache_stride = STRIDE_KV_HEAD;
+
+    uint32_t wo_tile_stride = STRIDE_WO_TILE;
+    uint32_t w1_tile_stride = STRIDE_W1_TILE;
+    uint32_t w2_tile_stride = STRIDE_W2_TILE;
 
     // Quantization defaults
     float scale_q = 0.005f;
@@ -45,33 +44,29 @@ struct ModelConfig {
     int32_t zero_point_v = 0;
 
     bool validate() const {
-        return strides.layer && strides.wq_head && strides.wk_head &&
-               strides.wv_head && strides.k_cache && strides.v_cache &&
-               strides.wo_tile && strides.w1_tile && strides.w2_tile;
+        return layer_stride && wq_head_stride && wk_head_stride &&
+               wv_head_stride && k_cache_stride && v_cache_stride &&
+               wo_tile_stride && w1_tile_stride && w2_tile_stride;
     }
 };
 
 struct MemoryLayout {
+    static constexpr uint32_t align64(uint32_t v) { return (v + 63) & ~63; }
 
-    // relative to dmabuf0
-    uint32_t wq_offset = Phi3Mini4K::weight_offsets::wq;
-    uint32_t wk_offset = Phi3Mini4K::weight_offsets::wk;
-    uint32_t wv_offset = Phi3Mini4K::weight_offsets::wv;
-    uint32_t wo_offset = Phi3Mini4K::weight_offsets::wo;
-    uint32_t w1_offset = Phi3Mini4K::weight_offsets::w1_gate;
-    uint32_t w2_offset = Phi3Mini4K::weight_offsets::w2;
+    // relative to dmabuf
+    uint32_t wq_offset = WOFF_WQ;
+    uint32_t wk_offset = WOFF_WK;
+    uint32_t wv_offset = WOFF_WV;
+    uint32_t wo_offset = WOFF_WO;
+    uint32_t w1_offset = WOFF_W1_GATE;
+    uint32_t w2_offset = WOFF_W2;
+    uint32_t k_cache_offset = COFF_K_CACHE;
+    uint32_t v_cache_offset = COFF_V_CACHE;
+    uint32_t input_offset = COFF_INPUT;
+    uint32_t output_offset = COFF_OUTPUT;
 
-    // Added your 1024 padding here
-    uint64_t dmabuf0_size = Phi3Mini4K::weight_offsets::total + 1024;
-
-    // relative to dmabuf1
-    uint32_t k_cache_offset = Phi3Mini4K::cache_offsets::k_cache;
-    uint32_t v_cache_offset = Phi3Mini4K::cache_offsets::v_cache;
-    uint32_t input_offset = Phi3Mini4K::cache_offsets::input;
-    uint32_t output_offset = Phi3Mini4K::cache_offsets::output;
-
-    // Added your 1024 padding here
-    uint64_t dmabuf1_size = Phi3Mini4K::cache_offsets::total + 1024;
+    // Added 1024 padding
+    uint64_t dmabuf_size = COFF_TOTAL + 1024;
 
     bool isAligned() const {
         return !((wq_offset | wk_offset | wv_offset | wo_offset | w1_offset |
@@ -95,8 +90,7 @@ struct SystemConfig {
     GenerationConfig generation;
 
     bool validate() const {
-        return (memory.dmabuf1_size < hardware.dmabuf1_size) &&
-               (memory.dmabuf0_size < hardware.dmabuf0_size) &&
+        return (memory.dmabuf_size <= hardware.dmabuf_size) &&
                model.validate() && memory.isAligned();
     }
     bool loadFromFile(const std::string &) { return true; }

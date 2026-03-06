@@ -49,19 +49,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
     }
 
     // Issue command
-    g_pl->writeReg(PLReg::CONTROL, PLRegBits::CTRL_RESETN_BIT |
-                                       PLRegBits::CTRL_START_BIT | cmd_bit);
-
-    // Verify the IP entered the expected FSM state
-    usleep(500);
-    uint32_t st = g_pl->readReg(PLReg::STATUS);
-    uint32_t expect = PLRegBits::STAT_BUSY_BIT | expected_status;
-    if ((st & expect) == expect) {
-        printf("  [%s] state OK (status=0x%04X)\n", name, st);
-    } else {
-        printf("  [%s] state MISMATCH: got 0x%04X, expected 0x%04X\n", name, st,
-               expect);
-    }
+    g_pl->writeReg(PLReg::CONTROL, CTRL_RESETN_BIT | CTRL_START_BIT | cmd_bit);
 
     bool result = false;
 
@@ -72,7 +60,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
         // Poll for completion
         for (uint32_t t = 0; t < timeout_ms; t += 5) {
             uint32_t irq = g_pl->readReg(PLReg::IRQ_STATUS);
-            if (irq & PLRegBits::IRQ_ERROR_BIT) {
+            if (irq & IRQ_ERROR_BIT) {
                 printf("  [%s] ERROR: 0x%08X  %s\n", name,
                        g_pl->readReg(PLReg::ERROR_CODE),
                        g_pl->getErrorCodeString().c_str());
@@ -80,7 +68,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
                 break;
             }
             if (irq &
-                (PLRegBits::IRQ_AXI_DONE_BIT | PLRegBits::IRQ_INFER_DONE_BIT)) {
+                (IRQ_AXI_DONE_BIT | IRQ_INFER_DONE_BIT)) {
                 printf("  [%s] OK  (IRQ=0x%02X)\n", name, irq);
                 g_pl->clearIRQ();
                 result = true;
@@ -92,10 +80,21 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
             printf("  [%s] TIMEOUT\n", name);
     }
 
+    // Verify the IP entered the expected FSM state
+    usleep(500);
+    uint32_t st = g_pl->readReg(PLReg::STATUS);
+    uint32_t expect = STATUS_BUSY | expected_status;
+    if ((st & expect) == expect) {
+        printf("  [%s] state OK (status=0x%04X)\n", name, st);
+    } else {
+        printf("  [%s] state MISMATCH: got 0x%04X, expected 0x%04X\n", name, st,
+               expect);
+    }
+
     // Cleanup: clear command bits so the IP returns to IDLE on next
     // auto-restart.
     g_pl->writeReg(PLReg::CONTROL,
-                   PLRegBits::CTRL_RESETN_BIT | PLRegBits::CTRL_START_BIT);
+                   CTRL_RESETN_BIT | CTRL_START_BIT);
 
     return result;
 }
@@ -113,32 +112,29 @@ static bool cmd_init(bool mock) {
         printf("  Init failed: %s\n", g_err->getLastErrorMessage().c_str());
         return false;
     }
-    if (!g_pl->initDMA(cfg.hardware.dmabuf0_name, cfg.hardware.dmabuf0_size,
-                       cfg.hardware.dmabuf1_name, cfg.hardware.dmabuf1_size)) {
+    if (!g_pl->initDMA(cfg.hardware.dmabuf_name, cfg.hardware.dmabuf_size)) {
         printf("  DMA init failed: %s\n", g_err->getLastErrorMessage().c_str());
         return false;
     }
 
     // Configure all registers (same as axi_test.cpp)
     g_pl->beginConfig();
-    g_pl->writeReg(PLReg::CONTROL, PLRegBits::CTRL_RESETN_BIT);
+    g_pl->writeReg(PLReg::CONTROL, CTRL_RESETN_BIT);
 
     // Strides
-    g_pl->writeReg(PLReg::LAYER_STRIDE, cfg.model.strides.layer);
-    g_pl->writeReg(PLReg::WQ_HEAD_STRIDE, cfg.model.strides.wq_head);
-    g_pl->writeReg(PLReg::WK_HEAD_STRIDE, cfg.model.strides.wk_head);
-    g_pl->writeReg(PLReg::WV_HEAD_STRIDE, cfg.model.strides.wv_head);
-    g_pl->writeReg(PLReg::K_CACHE_STRIDE, cfg.model.strides.k_cache);
-    g_pl->writeReg(PLReg::V_CACHE_STRIDE, cfg.model.strides.v_cache);
-    g_pl->writeReg(PLReg::WO_TILE_STRIDE, cfg.model.strides.wo_tile);
-    g_pl->writeReg(PLReg::W1_TILE_STRIDE, cfg.model.strides.w1_tile);
-    g_pl->writeReg(PLReg::W2_TILE_STRIDE, cfg.model.strides.w2_tile);
+    g_pl->writeReg(PLReg::LAYER_STRIDE, cfg.model.layer_stride);
+    g_pl->writeReg(PLReg::WQ_HEAD_STRIDE, cfg.model.wq_head_stride);
+    g_pl->writeReg(PLReg::WK_HEAD_STRIDE, cfg.model.wk_head_stride);
+    g_pl->writeReg(PLReg::WV_HEAD_STRIDE, cfg.model.wv_head_stride);
+    g_pl->writeReg(PLReg::K_CACHE_STRIDE, cfg.model.k_cache_stride);
+    g_pl->writeReg(PLReg::V_CACHE_STRIDE, cfg.model.v_cache_stride);
+    g_pl->writeReg(PLReg::WO_TILE_STRIDE, cfg.model.wo_tile_stride);
+    g_pl->writeReg(PLReg::W1_TILE_STRIDE, cfg.model.w1_tile_stride);
+    g_pl->writeReg(PLReg::W2_TILE_STRIDE, cfg.model.w2_tile_stride);
 
     // DDR base addresses
     g_pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
-                     g_pl->getDDRBaseAddr(DmaBufType::WEIGHTS));
-    g_pl->writeReg64(RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO,
-                     g_pl->getDDRBaseAddr(DmaBufType::KV_CACHE));
+                     g_pl->getDDRBaseAddr());
 
     // Offsets
     g_pl->writeReg(PLReg::WQ_OFFSET, cfg.memory.wq_offset);
@@ -186,52 +182,52 @@ static bool cmd_reset() {
 
 static bool cmd_weights() {
     // Seed DDR weights region with test pattern
-    const uint32_t sz = Phi3Mini4K::dma_sizes::qkv_head;
+    const uint32_t sz = STRIDE_QKV_HEAD;
     uint8_t *pat = new uint8_t[sz];
     for (uint32_t i = 0; i < sz; i++)
         pat[i] = (uint8_t)(i & 0xFF);
-    g_pl->writeDDR(DmaBufType::WEIGHTS, cfg.memory.wq_offset, pat, sz);
+    g_pl->writeDDR(cfg.memory.wq_offset, pat, sz);
     delete[] pat;
     printf("  DDR weights seeded (%u bytes at offset 0x%X)\n", sz,
            cfg.memory.wq_offset);
 
-    return send_cmd(PLRegBits::CTRL_WEIGHTS_GET_BIT, "WEIGHTS_GET",
-                    PLRegBits::STAT_WEIGHTS_GET_BIT);
+    return send_cmd(CTRL_WEIGHTS_GET_BIT, "WEIGHTS_GET",
+                    STAT_WEIGHTS_GET_BIT);
 }
 
 static bool cmd_kcache_read() {
-    const uint32_t sz = Phi3Mini4K::kv_cache_head_bytes;
+    const uint32_t sz = KV_CACHE_HEAD_BYTES;
     uint8_t *pat = new uint8_t[sz];
     for (uint32_t i = 0; i < sz; i++)
         pat[i] = 0xBB;
-    g_pl->writeDDR(DmaBufType::KV_CACHE, cfg.memory.k_cache_offset, pat, sz);
+    g_pl->writeDDR(cfg.memory.k_cache_offset, pat, sz);
     delete[] pat;
     printf("  DDR K-cache seeded (0xBB x %u bytes)\n", sz);
 
-    return send_cmd(PLRegBits::CTRL_KCACHE_GET_BIT, "KCACHE_GET",
-                    PLRegBits::STAT_KCACHE_GET_BIT);
+    return send_cmd(CTRL_KCACHE_GET_BIT, "KCACHE_GET",
+                    STAT_KCACHE_GET_BIT);
 }
 
 static bool cmd_vcache_read() {
-    const uint32_t sz = Phi3Mini4K::kv_cache_head_bytes;
+    const uint32_t sz = KV_CACHE_HEAD_BYTES;
     uint8_t *pat = new uint8_t[sz];
     for (uint32_t i = 0; i < sz; i++)
         pat[i] = 0xCC;
-    g_pl->writeDDR(DmaBufType::KV_CACHE, cfg.memory.v_cache_offset, pat, sz);
+    g_pl->writeDDR(cfg.memory.v_cache_offset, pat, sz);
     delete[] pat;
     printf("  DDR V-cache seeded (0xCC x %u bytes)\n", sz);
 
-    return send_cmd(PLRegBits::CTRL_VCACHE_GET_BIT, "VCACHE_GET",
-                    PLRegBits::STAT_VCACHE_GET_BIT);
+    return send_cmd(CTRL_VCACHE_GET_BIT, "VCACHE_GET",
+                    STAT_VCACHE_GET_BIT);
 }
 
 static bool cmd_kcache_write() {
-    bool ok = send_cmd(PLRegBits::CTRL_KCACHE_SEND_BIT, "KCACHE_SEND",
-                       PLRegBits::STAT_KCACHE_SEND_BIT);
+    bool ok = send_cmd(CTRL_KCACHE_SEND_BIT, "KCACHE_SEND",
+                       STAT_KCACHE_SEND_BIT);
     if (ok) {
         // Read back a few words to verify
         uint32_t peek[4] = {0};
-        g_pl->readDDR(DmaBufType::KV_CACHE, cfg.memory.k_cache_offset, peek,
+        g_pl->readDDR(cfg.memory.k_cache_offset, peek,
                       sizeof(peek));
         printf("  DDR K-cache[0..3]: 0x%08X 0x%08X 0x%08X 0x%08X\n", peek[0],
                peek[1], peek[2], peek[3]);
@@ -240,11 +236,11 @@ static bool cmd_kcache_write() {
 }
 
 static bool cmd_vcache_write() {
-    bool ok = send_cmd(PLRegBits::CTRL_VCACHE_SEND_BIT, "VCACHE_SEND",
-                       PLRegBits::STAT_VCACHE_SEND_BIT);
+    bool ok = send_cmd(CTRL_VCACHE_SEND_BIT, "VCACHE_SEND",
+                       STAT_VCACHE_SEND_BIT);
     if (ok) {
         uint32_t peek[4] = {0};
-        g_pl->readDDR(DmaBufType::KV_CACHE, cfg.memory.v_cache_offset, peek,
+        g_pl->readDDR(cfg.memory.v_cache_offset, peek,
                       sizeof(peek));
         printf("  DDR V-cache[0..3]: 0x%08X 0x%08X 0x%08X 0x%08X\n", peek[0],
                peek[1], peek[2], peek[3]);
@@ -252,23 +248,23 @@ static bool cmd_vcache_write() {
     return ok;
 }
 
-static int8_t g_send_data[Phi3Mini4K::d_model];
-static int8_t g_recv_data[Phi3Mini4K::d_model];
+static int8_t g_send_data[D_MODEL];
+static int8_t g_recv_data[D_MODEL];
 
 static bool cmd_stream_in() {
     // Fill test token
-    for (int i = 0; i < Phi3Mini4K::d_model; i++)
+    for (int i = 0; i < D_MODEL; i++)
         g_send_data[i] = (int8_t)(i & 0x7F);
 
     // Kick MM2S DMA first, then issue STREAM_IN command
     if (!g_pl->streamInitSend(cfg.memory.input_offset, g_send_data,
-                              Phi3Mini4K::d_model)) {
+                              D_MODEL)) {
         printf("  streamInitSend failed\n");
         return false;
     }
 
-    bool ok = send_cmd(PLRegBits::CTRL_STREAM_IN_BIT, "STREAM_IN",
-                       PLRegBits::STAT_STREAM_IN_BIT);
+    bool ok = send_cmd(CTRL_STREAM_IN_BIT, "STREAM_IN",
+                       STAT_STREAM_IN_BIT);
 
     if (!g_pl->streamWaitSend(5000))
         printf("  Stream send DMA timeout: %s\n",
@@ -278,24 +274,24 @@ static bool cmd_stream_in() {
 }
 
 static bool cmd_compute() {
-    return send_cmd(PLRegBits::CTRL_COMPUTE_BIT, "COMPUTE",
-                    PLRegBits::STAT_COMPUTE_BIT);
+    return send_cmd(CTRL_COMPUTE_BIT, "COMPUTE",
+                    STAT_COMPUTE_BIT);
 }
 
 static bool cmd_stream_out() {
     memset(g_recv_data, 0, sizeof(g_recv_data));
 
     // Arm S2MM recv before issuing command
-    if (!g_pl->streamInitRecv(cfg.memory.output_offset, Phi3Mini4K::d_model)) {
+    if (!g_pl->streamInitRecv(cfg.memory.output_offset, D_MODEL)) {
         printf("  streamInitRecv failed\n");
         return false;
     }
 
-    bool ok = send_cmd(PLRegBits::CTRL_STREAM_OUT_BIT, "STREAM_OUT",
-                       PLRegBits::STAT_STREAM_OUT_BIT);
+    bool ok = send_cmd(CTRL_STREAM_OUT_BIT, "STREAM_OUT",
+                       STAT_STREAM_OUT_BIT);
 
     if (!g_pl->streamWaitRecv(cfg.memory.output_offset, g_recv_data,
-                              Phi3Mini4K::d_model, 5000)) {
+                              D_MODEL, 5000)) {
         printf("  Stream recv DMA timeout: %s\n",
                g_pl->streamStatusString().c_str());
         return false;
@@ -303,7 +299,7 @@ static bool cmd_stream_out() {
 
     // Print first 16 bytes
     printf("  Logit[0..15]: ");
-    for (int i = 0; i < 16 && i < Phi3Mini4K::d_model; i++)
+    for (int i = 0; i < 16 && i < D_MODEL; i++)
         printf("%3d ", g_recv_data[i]);
     printf("...\n");
 
@@ -362,10 +358,6 @@ static void print_help() {
     printf("  │  kcache_write  KCACHE_SEND + verify DDR        │\n");
     printf("  │  vcache_read   Seed DDR + VCACHE_GET           │\n");
     printf("  │  vcache_write  VCACHE_SEND + verify DDR        │\n");
-    printf("  │                                                │\n");
-    printf("  │  incr_layer    Increment layer index           │\n");
-    printf("  │  incr_head     Increment head index            │\n");
-    printf("  │  incr_matrix   Increment matrix selector       │\n");
     printf("  │                                                │\n");
     printf("  │  run           Full Phase 1 + Phase 2 auto     │\n");
     printf("  │  help          This message                    │\n");
@@ -441,15 +433,6 @@ int main(int argc, char *argv[]) {
             cmd_compute();
         else if (cmd == "stream_out")
             cmd_stream_out();
-        else if (cmd == "incr_layer")
-            cmd_incr("INCR_LAYER", PLRegBits::CTRL_INCR_LAYER_BIT,
-                     PLRegBits::STAT_INCR_LAYER_BIT);
-        else if (cmd == "incr_head")
-            cmd_incr("INCR_HEAD", PLRegBits::CTRL_INCR_HEAD_BIT,
-                     PLRegBits::STAT_INCR_HEAD_BIT);
-        else if (cmd == "incr_matrix")
-            cmd_incr("INCR_MATRIX", PLRegBits::CTRL_INCR_MATRIX_BIT,
-                     PLRegBits::STAT_INCR_MATRIX_BIT);
         else if (cmd == "run")
             cmd_run();
         else if (cmd == "help")

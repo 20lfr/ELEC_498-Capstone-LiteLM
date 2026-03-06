@@ -22,8 +22,8 @@ bool PLInterface::init(const std::string &device_name,
 
     if (_mock_mode) {
         LOG_INFO("PLInterface: Mock mode");
-        _mock_regs[PLReg::CONTROL / 4] = PLRegBits::CTRL_RESETN_BIT;
-        _mock_regs[PLReg::STATUS / 4] = PLRegBits::STAT_IDLE_BIT;
+        _mock_regs[PLReg::CONTROL / 4] = CTRL_RESETN_BIT;
+        _mock_regs[PLReg::STATUS / 4] = STATUS_IDLE;
         _initialized = true;
         return true;
     }
@@ -35,7 +35,7 @@ bool PLInterface::init(const std::string &device_name,
 
     // Enable auto_restart so HLS loops; PS controls via ctrl_mem (UG1399)
     writeReg(PLReg::AXIL_AP_CTRL,
-             PLRegBits::AP_AUTO_RESTART_BIT | PLRegBits::AP_START_BIT);
+             PLReg::AP_AUTO_RESTART_BIT | PLReg::AP_START_BIT);
     // Reset (Ctrl and Stream)
     reset();
 
@@ -45,13 +45,9 @@ bool PLInterface::init(const std::string &device_name,
 }
 
 // Unified DMA init
-bool PLInterface::initDMA(const std::string &dmabuf0_name, size_t dmabuf0_size,
-                          const std::string &dmabuf1_name,
-                          size_t dmabuf1_size) {
+bool PLInterface::initDMA(const std::string &dmabuf_name, size_t dmabuf_size) {
     if (_mock_mode) {
-        if (!_dma_buf0.allocate(dmabuf0_name, dmabuf0_size, true))
-            return false;
-        if (!_dma_buf1.allocate(dmabuf1_name, dmabuf1_size, true))
+        if (!_dma_buf.allocate(dmabuf_name, dmabuf_size, true))
             return false;
         // Mock registers for DMA
         _stream_regs =
@@ -59,26 +55,17 @@ bool PLInterface::initDMA(const std::string &dmabuf0_name, size_t dmabuf0_size,
         return true;
     }
 
-    if (!_dma_buf0.allocate(dmabuf0_name, dmabuf0_size)) {
-        _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
-        return false;
-    }
-    if (!_dma_buf1.allocate(dmabuf1_name, dmabuf1_size)) {
+    if (!_dma_buf.allocate(dmabuf_name, dmabuf_size)) {
         _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
         return false;
     }
 
     // Clear buffer
-    memset(_dma_buf0.virt(), 0, dmabuf0_size);
-    memset(_dma_buf1.virt(), 0, dmabuf1_size);
+    memset(_dma_buf.virt(), 0, dmabuf_size);
 
-    std::string phys0_str = std::to_string(_dma_buf0.phys());
-    std::string phys1_str = std::to_string(_dma_buf1.phys());
-    std::string size0_str = std::to_string(dmabuf0_size / 1024 / 1024);
-    std::string size1_str = std::to_string(dmabuf1_size / 1024 / 1024);
-    _logger->info("DMA initialized: buf=0x" + phys0_str + " (" + size0_str +
-                  " MB)");
-    _logger->info("DMA initialized: buf=0x" + phys1_str + " (" + size1_str +
+    std::string phys_str = std::to_string(_dma_buf.phys());
+    std::string size_str = std::to_string(dmabuf_size / 1024 / 1024);
+    _logger->info("DMA initialized: buf=0x" + phys_str + " (" + size_str +
                   " MB)");
     return true;
 }
@@ -88,8 +75,7 @@ void PLInterface::cleanup() {
         close(_ctrl_fd);
         _ctrl_fd = -1;
     }
-    _dma_buf0.release();
-    _dma_buf1.release();
+    _dma_buf.release();
     unmapAll();
     _initialized = false;
 }
@@ -279,12 +265,11 @@ void PLInterface::writeReg64(RegBus bus, uint32_t offset_lo, uint64_t value) {
 bool PLInterface::reset() {
     writeReg(PLReg::CONTROL, 0); // Assert reset
     usleep(1000);
-    writeReg(PLReg::CONTROL, PLRegBits::CTRL_RESETN_BIT); // Release reset
+    writeReg(PLReg::CONTROL, CTRL_RESETN_BIT); // Release reset
 
     // irq_clear = !irq_enable_mask: disable IRQs, set clear high
     writeReg(PLReg::IRQ_MASK, 0);
-    writeReg(PLReg::IRQ_CLEAR,
-             PLRegBits::IRQ_ERROR_BIT | PLRegBits::IRQ_INFER_DONE_BIT);
+    writeReg(PLReg::IRQ_CLEAR, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);
     usleep(1000);
 
     // Reset (Stream DMA IP)
@@ -297,8 +282,7 @@ void PLInterface::beginConfig() {
     // Disable interrupts AND set clear high for defense-in-depth
     writeReg(PLReg::IRQ_MASK, 0); // Disable IRQs
     writeReg(PLReg::IRQ_CLEAR,
-             PLRegBits::IRQ_ERROR_BIT |
-                 PLRegBits::IRQ_INFER_DONE_BIT); // Set clear high
+             IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT); // Set clear high
 }
 
 void PLInterface::endConfig() {
@@ -307,14 +291,12 @@ void PLInterface::endConfig() {
     writeReg(PLReg::IRQ_CLEAR, 0); // Clear low
     usleep(100);
     writeReg(PLReg::IRQ_MASK,
-             PLRegBits::IRQ_ERROR_BIT |
-                 PLRegBits::IRQ_INFER_DONE_BIT); // Enable IRQs
+             IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT); // Enable IRQs
     usleep(100);
 
-    if (testRegBits(PLReg::IRQ_STATUS, PLRegBits::IRQ_ERROR_BIT)) {
+    if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
         std::string msg =
-            getErrorCodeString(PLRegBits::ERR_DMA_ALIGNMENT_BIT |
-                               PLRegBits::ERR_DMA_ZERO_STRIDE_BIT);
+            getErrorCodeString(ERR_DMA_ALIGNMENT | ERR_DMA_ZERO_STRIDE);
         LOG_ERROR("Config error: " + msg);
         _err->setError(ErrorCode::CONFIG_ERROR, msg);
     }
@@ -323,21 +305,21 @@ void PLInterface::endConfig() {
 bool PLInterface::start() {
     if (!_initialized || isError())
         return false;
-    setRegBits(PLReg::CONTROL, PLRegBits::CTRL_START_BIT);
+    setRegBits(PLReg::CONTROL, CTRL_START_BIT);
     return true;
 }
 
 bool PLInterface::waitDone(uint32_t timeout_ms) {
     if (_mock_mode) {
         usleep(100000);
-        _mock_regs[PLReg::IRQ_STATUS / 4] |= PLRegBits::IRQ_INFER_DONE_BIT;
+        _mock_regs[PLReg::IRQ_STATUS / 4] |= IRQ_INFER_DONE_BIT;
         return true;
     }
 
     for (uint32_t t = 0; t < timeout_ms; t += 10) {
-        if (testRegBits(PLReg::IRQ_STATUS, PLRegBits::IRQ_INFER_DONE_BIT))
+        if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
             return true;
-        if (testRegBits(PLReg::IRQ_STATUS, PLRegBits::IRQ_ERROR_BIT)) {
+        if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
             LOG_ERROR("Inference error: " + getErrorCodeString());
             _err->setError(ErrorCode::HARDWARE_FAULT, "HW error");
             return false;
@@ -349,23 +331,19 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
 }
 
 // DDR access
-bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
-                           size_t size) {
-    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
-    if (!buf->isAllocated() || offset + size > buf->size())
+bool PLInterface::writeDDR(uint32_t offset, const void *data, size_t size) {
+    if (!_dma_buf.isAllocated() || offset + size > _dma_buf.size())
         return false;
-    memcpy((uint8_t *)buf->virt() + offset, data, size);
-    buf->sync_pl();
+    memcpy((uint8_t *)_dma_buf.virt() + offset, data, size);
+    _dma_buf.sync_pl();
     return true;
 }
 
-bool PLInterface::readDDR(DmaBufType type, uint32_t offset, void *data,
-                          size_t size) {
-    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
-    if (!buf->isAllocated() || offset + size > buf->size())
+bool PLInterface::readDDR(uint32_t offset, void *data, size_t size) {
+    if (!_dma_buf.isAllocated() || offset + size > _dma_buf.size())
         return false;
-    buf->sync_cpu();
-    memcpy(data, (uint8_t *)buf->virt() + offset, size);
+    _dma_buf.sync_cpu();
+    memcpy(data, (uint8_t *)_dma_buf.virt() + offset, size);
     return true;
 }
 
@@ -434,24 +412,24 @@ bool PLInterface::resetStream() {
 
 bool PLInterface::streamInitSend(uint32_t dma_offset, const void *data,
                                  size_t size) {
-    if (!_stream_regs || !_dma_buf1.isAllocated())
+    if (!_stream_regs || !_dma_buf.isAllocated())
         return false;
-    writeDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
+    writeDDR(dma_offset, data, size);
     return streamTransfer(StreamReg::MM2S_CR, StreamReg::MM2S_SR,
                           StreamReg::MM2S_SA, StreamReg::MM2S_SA_MSB,
-                          StreamReg::MM2S_LEN, _dma_buf1.phys() + dma_offset,
+                          StreamReg::MM2S_LEN, _dma_buf.phys() + dma_offset,
                           size);
 }
 
 bool PLInterface::streamInitRecv(uint32_t dma_offset, size_t size) {
-    if (!_stream_regs || !_dma_buf1.isAllocated())
+    if (!_stream_regs || !_dma_buf.isAllocated())
         return false;
-    if (dma_offset + size > _dma_buf1.size())
+    if (dma_offset + size > _dma_buf.size())
         return false; // Bounds check
 
     return streamTransfer(StreamReg::S2MM_CR, StreamReg::S2MM_SR,
                           StreamReg::S2MM_DA, StreamReg::S2MM_DA_MSB,
-                          StreamReg::S2MM_LEN, _dma_buf1.phys() + dma_offset,
+                          StreamReg::S2MM_LEN, _dma_buf.phys() + dma_offset,
                           size);
 }
 
@@ -463,7 +441,7 @@ bool PLInterface::streamWaitRecv(uint32_t dma_offset, void *data, size_t size,
                                  uint32_t timeout_ms) {
     if (!streamWait(StreamReg::S2MM_SR, timeout_ms))
         return false;
-    readDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
+    readDDR(dma_offset, data, size);
     return true;
 }
 
@@ -487,8 +465,7 @@ std::string PLInterface::streamStatusString() const {
 }
 
 bool PLInterface::clearIRQ() {
-    writeReg(PLReg::IRQ_CLEAR,
-             PLRegBits::IRQ_ERROR_BIT | PLRegBits::IRQ_INFER_DONE_BIT);
+    writeReg(PLReg::IRQ_CLEAR, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);
     usleep(10);
     writeReg(PLReg::IRQ_CLEAR, 0);
     return true;
@@ -512,25 +489,14 @@ bool PLInterface::waitIRQ(uint32_t timeout_ms) {
 std::string PLInterface::getErrorCodeString(const uint32_t error_mask) {
     uint32_t code = getErrorCode() & error_mask;
     std::string msg;
-    if (code & PLRegBits::ERR_DMA_ALIGNMENT_BIT)
+    if (code & ERR_DMA_ALIGNMENT)
         msg += "DMA alignment error ";
-    if (code & PLRegBits::ERR_DMA_ZERO_STRIDE_BIT)
+    if (code & ERR_DMA_ZERO_STRIDE)
         msg += "DMA/stride zero error ";
-    if (code & PLRegBits::ERR_SCHEDULER_ERROR_BIT)
+    if (code & ERR_SCHEDULER_ERROR)
         msg += "Scheduler error ";
-    if (code & PLRegBits::ERR_COMPUTE_ERROR_BIT)
+    if (code & ERR_COMPUTE_ERROR)
         msg += "Compute error ";
-    if (code & PLRegBits::ERR_INPUT_STREAM_BIT)
-        msg += "Input stream error ";
-    if (code & PLRegBits::ERR_WEIGHTS_GET_BIT)
-        msg += "Weights get error ";
-    if (code & PLRegBits::ERR_KCACHE_GET_BIT)
-        msg += "Kcache get error ";
-    if (code & PLRegBits::ERR_KCACHE_SEND_BIT)
-        msg += "Kcache send error ";
-    if (code & PLRegBits::ERR_VCACHE_GET_BIT)
-        msg += "Vcache get error ";
-    if (code & PLRegBits::ERR_VCACHE_SEND_BIT)
-        msg += "Vcache send error ";
+    // TODO: all other error codes
     return msg;
 }

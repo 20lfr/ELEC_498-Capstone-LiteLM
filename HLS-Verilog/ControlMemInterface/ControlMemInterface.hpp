@@ -6,9 +6,9 @@ private:
     StatusMemSpace local_status{};
 
     // Maskable bits for IRQ generation
-    static constexpr uint32_t kMaskableBits = PLRegBits::IRQ_ERROR_BIT |
-                                              PLRegBits::IRQ_INFER_DONE_BIT |
-                                              PLRegBits::IRQ_AXI_DONE_BIT;
+    static constexpr uint32_t kMaskableBits = IRQ_ERROR_BIT |
+                                              IRQ_INFER_DONE_BIT |
+                                              IRQ_AXI_DONE_BIT;
 
 public:
     ControlMemInterface() = default;
@@ -33,15 +33,6 @@ public:
 
         const bool irq_error_en = (((ctrl_mem.irq_mask & 2u) >> 1) & 0x1u) != 0;
 
-        // Check programmed DMA transfer lengths are non-zero.
-        if (ctrl_mem.dma_layer_len == 0 || ctrl_mem.dma_head_len == 0 ||
-            ctrl_mem.dma_tile_len == 0) {
-            if (irq_error_en) {
-                local_status.irq_status |= PLRegBits::IRQ_ERROR_BIT;
-                local_status.error_code |= ERR_DMA_ZERO_LEN;
-            }
-        }
-
         // Check strides are non-zero (zero stride causes DMA issues)
         if (ctrl_mem.layer_stride == 0 || ctrl_mem.wq_head_stride == 0 ||
             ctrl_mem.wk_head_stride == 0 || ctrl_mem.wv_head_stride == 0 ||
@@ -49,8 +40,8 @@ public:
             ctrl_mem.wo_tile_stride == 0 || ctrl_mem.w1_tile_stride == 0 ||
             ctrl_mem.w2_tile_stride == 0) {
             if (irq_error_en) {
-                local_status.irq_status |= PLRegBits::IRQ_ERROR_BIT;
-                local_status.error_code |= PLRegBits::ERR_DMA_ZERO_STRIDE_BIT;
+                local_status.irq_status |= IRQ_ERROR_BIT;
+                local_status.error_code |= ERR_DMA_ZERO_STRIDE;
             }
         }
 
@@ -78,7 +69,6 @@ public:
             (ctrl_mem.final_norm_eps_offset & 0x3F) != 0) {
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
-                local_status.status = STATUS_ERROR;
                 local_status.error_code |= ERR_DMA_ALIGNMENT;
             }
         }
@@ -86,35 +76,30 @@ public:
         if(scheduler_error){
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
-                local_status.status = STATUS_ERROR;
                 local_status.error_code |= ERR_SCHEDULER_ERROR;
             }
         }
         if(compute_error){
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
-                local_status.status = STATUS_ERROR;
                 local_status.error_code |= ERR_COMPUTE_ERROR;
             }
         }
         if(mmu_invalid){
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
-                local_status.status = STATUS_ERROR;
                 local_status.error_code |= ERR_MMU_INVALID;
             }
         }
         if(mmu_overflow){
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
-                local_status.status = STATUS_ERROR;
                 local_status.error_code |= ERR_MMU_OVERFLOW;
             }
         }
         if (mmu_error_code != ERR_NONE) {
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
-                local_status.status = STATUS_ERROR;
                 local_status.error_code |= mmu_error_code;
                 if (local_status.mmu_error_subcode == MMU_ERR_SUBCODE_NONE) {
                     local_status.mmu_error_subcode = mmu_error_subcode;
@@ -133,25 +118,23 @@ public:
     void check_control(const ControlMemSpace &ctrl_mem, bool infer_done,
                        bool axi_done) {
         if (infer_done) {
-            local_status.irq_status |= PLRegBits::IRQ_INFER_DONE_BIT;
+            local_status.irq_status |= IRQ_INFER_DONE_BIT;
         }
         if (axi_done) {
-            local_status.irq_status |= PLRegBits::IRQ_AXI_DONE_BIT;
+            local_status.irq_status |= IRQ_AXI_DONE_BIT;
         }
         // Handle "Write-1-to-Clear" logic here (runs last so PS can clear
         // errors)
         if (ctrl_mem.irq_clear != 0) {
             local_status.irq_status &= ~ctrl_mem.irq_clear; // Clear by request
             // clear error code if error flag is cleared
-            if (ctrl_mem.irq_clear & PLRegBits::IRQ_ERROR_BIT) {
-                local_status.error_code = PLRegBits::ERR_NONE_BIT;
+            if (ctrl_mem.irq_clear & IRQ_ERROR_BIT) {
+                local_status.error_code = ERR_NONE;
             }
         }
         // Handle reset
-        if ((ctrl_mem.control & PLRegBits::CTRL_RESETN_BIT) == 0) {
+        if ((ctrl_mem.control & CTRL_RESETN_BIT) == 0) {
             local_status.irq_status = 0;
-            local_status.status = PLRegBits::STAT_IDLE_BIT;
-            local_status.error_code = PLRegBits::ERR_NONE_BIT;
             local_status.status = STATUS_IDLE;
             local_status.error_code = ERR_NONE;
             local_status.mmu_error_subcode = MMU_ERR_SUBCODE_NONE;
