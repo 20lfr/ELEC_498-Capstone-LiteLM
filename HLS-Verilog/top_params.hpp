@@ -168,29 +168,34 @@ constexpr int       D_MODEL         = 16;                           // Number of
 constexpr int       D_FFN           = 24;                           // Feed-Forward hidden layer size
 constexpr int       D_VOCAB         = 32;                           // Vocab projection output size
 constexpr int       D_HEADS         = D_MODEL / NUM_HEADS;          // Number of heads processed in parallel
-static_assert((D_HEADS % NUM_QKV_HEAD_TILES) == 0, "D_HEADS must divide NUM_QKV_HEAD_TILES");
+constexpr int       CONTEXT_LENGTH  = 16;                           // Context window length
 constexpr int       D_HEAD_TILE_QKV = D_HEADS / NUM_QKV_HEAD_TILES;
 constexpr int       D_TILE_WO       = D_MODEL / NUM_WO_TILES;       // Tile size for WO
 constexpr int       D_TILE_W1       = D_FFN * 2 / NUM_W1_TILES;     // Tile size for W1
 constexpr int       D_TILE_W2       = D_MODEL   / NUM_W2_TILES;
-static_assert((D_VOCAB % NUM_LOGIT_TILES) == 0, "D_VOCAB must divide NUM_LOGIT_TILES");
 constexpr int       D_TILE_LOGIT    = D_VOCAB / NUM_LOGIT_TILES;    // Tile size for vocab projection
 constexpr int       STREAM_IN_BUF_BYTES  = D_MODEL;                 // Token ingress payload (int8 activations)
 constexpr int       STREAM_OUT_BUF_BYTES = 4;                       // Streamed egress payload (argmax token id)
 
+static_assert((D_HEADS % NUM_QKV_HEAD_TILES) == 0, "D_HEADS must divide NUM_QKV_HEAD_TILES");
+static_assert((D_VOCAB % NUM_LOGIT_TILES) == 0, "D_VOCAB must divide NUM_LOGIT_TILES");
+
 // AXI-Full DDR beat sizing (one m_axi_gmem data beat).
 // Keep this aligned with the top-level DDR port element type.
-constexpr int       CONTEXT_LENGTH  = 16;                           // Context window length
-static_assert((CONTEXT_LENGTH % ATT_CTX_BLOCK) == 0, "CONTEXT_LENGTH must divide ATT_CTX_BLOCK");
 constexpr int       NUM_ATT_CTX_BLOCKS = CONTEXT_LENGTH / ATT_CTX_BLOCK;
-static_assert((D_HEADS % NUM_ATT_VALUE_HEAD_TILES) == 0, "D_HEADS must divide NUM_ATT_VALUE_HEAD_TILES");
 constexpr int       D_HEAD_TILE_ATT_VALUE = D_HEADS / NUM_ATT_VALUE_HEAD_TILES;
 constexpr int       NUM_HEAD_GROUPS = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
-static_assert((D_MODEL % 2) == 0, "Head tiling expects D_MODEL to be nibble-aligned");
-
 constexpr int       AXI_GMEM_WORD_BYTES  = 4;
 constexpr int       AXI_GMEM_WORD_BITS   = AXI_GMEM_WORD_BYTES * 8;
+
+
+
+static_assert((CONTEXT_LENGTH % ATT_CTX_BLOCK) == 0, "CONTEXT_LENGTH must divide ATT_CTX_BLOCK");
+static_assert((D_HEADS % NUM_ATT_VALUE_HEAD_TILES) == 0, "D_HEADS must divide NUM_ATT_VALUE_HEAD_TILES");
+static_assert((D_MODEL % 2) == 0, "Head tiling expects D_MODEL to be nibble-aligned");
 static_assert((AXI_GMEM_WORD_BITS % 8) == 0, "AXI_GMEM_WORD_BITS must be byte aligned");
+
+
 using axi_gmem_word_t = ap_uint<AXI_GMEM_WORD_BITS>;
 
 // MMU LN parameter source selection:
