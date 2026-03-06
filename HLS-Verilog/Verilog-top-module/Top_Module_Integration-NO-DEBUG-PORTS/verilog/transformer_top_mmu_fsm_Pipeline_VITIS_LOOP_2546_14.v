@@ -148,7 +148,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U3891(
+sparsemux_9_2_8_1_1_U3168(
     .din0(p_ZN12_GLOBAL_N_17scratchE_0_q0),
     .din1(p_ZN12_GLOBAL_N_17scratchE_1_q0),
     .din2(p_ZN12_GLOBAL_N_17scratchE_2_q0),

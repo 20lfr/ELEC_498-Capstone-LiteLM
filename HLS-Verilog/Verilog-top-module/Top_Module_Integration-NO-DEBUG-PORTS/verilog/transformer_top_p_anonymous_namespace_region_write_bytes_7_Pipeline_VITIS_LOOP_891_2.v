@@ -17,31 +17,25 @@ module transformer_top_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS
         logical,
         take,
         r_chunks_offset_read,
-        r_chunks_offset_read_4,
-        r_chunks_offset_read_5,
-        r_chunks_offset_read_6,
+        r_chunks_offset_read_10,
+        r_chunks_offset_read_11,
+        r_chunks_offset_read_12,
         empty,
         r_chunks_bank_read,
-        r_chunks_bank_read_4,
-        r_chunks_bank_read_5,
-        r_chunks_bank_read_6,
-        written_1_out,
-        written_1_out_ap_vld,
+        r_chunks_bank_read_10,
+        r_chunks_bank_read_11,
+        r_chunks_bank_read_12,
+        written_6_out,
+        written_6_out_ap_vld,
         remaining_1_out_i,
         remaining_1_out_o,
         remaining_1_out_o_ap_vld,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1,
+        p_anonymous_namespace_stream_in_capture_buf_address0,
+        p_anonymous_namespace_stream_in_capture_buf_ce0,
+        p_anonymous_namespace_stream_in_capture_buf_q0,
+        p_anonymous_namespace_stream_in_capture_buf_address1,
+        p_anonymous_namespace_stream_in_capture_buf_ce1,
+        p_anonymous_namespace_stream_in_capture_buf_q1,
         p_anonymous_namespace_uram_banks_address0,
         p_anonymous_namespace_uram_banks_ce0,
         p_anonymous_namespace_uram_banks_we0,
@@ -62,31 +56,25 @@ input  [31:0] written;
 input  [31:0] logical;
 input  [31:0] take;
 input  [19:0] r_chunks_offset_read;
-input  [19:0] r_chunks_offset_read_4;
-input  [19:0] r_chunks_offset_read_5;
-input  [19:0] r_chunks_offset_read_6;
+input  [19:0] r_chunks_offset_read_10;
+input  [19:0] r_chunks_offset_read_11;
+input  [19:0] r_chunks_offset_read_12;
 input  [1:0] empty;
 input  [4:0] r_chunks_bank_read;
-input  [4:0] r_chunks_bank_read_4;
-input  [4:0] r_chunks_bank_read_5;
-input  [4:0] r_chunks_bank_read_6;
-output  [31:0] written_1_out;
-output   written_1_out_ap_vld;
+input  [4:0] r_chunks_bank_read_10;
+input  [4:0] r_chunks_bank_read_11;
+input  [4:0] r_chunks_bank_read_12;
+output  [31:0] written_6_out;
+output   written_6_out_ap_vld;
 input  [31:0] remaining_1_out_i;
 output  [31:0] remaining_1_out_o;
 output   remaining_1_out_o_ap_vld;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1;
-input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1;
+output  [3:0] p_anonymous_namespace_stream_in_capture_buf_address0;
+output   p_anonymous_namespace_stream_in_capture_buf_ce0;
+input  [7:0] p_anonymous_namespace_stream_in_capture_buf_q0;
+output  [3:0] p_anonymous_namespace_stream_in_capture_buf_address1;
+output   p_anonymous_namespace_stream_in_capture_buf_ce1;
+input  [7:0] p_anonymous_namespace_stream_in_capture_buf_q1;
 output  [17:0] p_anonymous_namespace_uram_banks_address0;
 output   p_anonymous_namespace_uram_banks_ce0;
 output   p_anonymous_namespace_uram_banks_we0;
@@ -94,7 +82,7 @@ output  [31:0] p_anonymous_namespace_uram_banks_d0;
 input  [31:0] p_anonymous_namespace_uram_banks_q0;
 
 reg ap_idle;
-reg written_1_out_ap_vld;
+reg written_6_out_ap_vld;
 reg[31:0] remaining_1_out_o;
 reg remaining_1_out_o_ap_vld;
 
@@ -106,91 +94,75 @@ reg    ap_idle_pp0;
 wire    ap_CS_fsm_pp0_stage1;
 wire    ap_block_pp0_stage1_subdone;
 reg    ap_enable_reg_pp0_iter0_reg;
-wire   [0:0] icmp_ln891_fu_325_p2;
+wire   [0:0] icmp_ln891_fu_274_p2;
 reg    ap_condition_exit_pp0_iter0_stage1;
 wire    ap_loop_exit_ready;
 reg    ap_ready_int;
 wire    ap_block_pp0_stage0_11001;
-reg   [31:0] written_6_reg_784;
+reg   [31:0] written_9_reg_659;
 wire    ap_block_pp0_stage1_11001;
-wire   [63:0] zext_ln890_fu_345_p1;
-reg   [63:0] zext_ln890_reg_793;
-wire   [1:0] trunc_ln893_fu_383_p1;
-reg   [1:0] trunc_ln893_reg_798;
-wire   [0:0] and_ln894_fu_415_p2;
-reg   [0:0] and_ln894_reg_803;
-wire   [17:0] add_ln899_fu_464_p2;
-reg   [17:0] add_ln899_reg_812;
-wire   [63:0] zext_ln860_2_fu_545_p1;
-reg   [63:0] zext_ln860_2_reg_827;
-reg   [4:0] lshr_ln860_2_reg_837;
-wire   [0:0] trunc_ln890_fu_611_p1;
-reg   [0:0] trunc_ln890_reg_842;
-reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_952_reg_854;
-reg   [17:0] p_anonymous_namespace_uram_banks_addr_reg_859;
-wire   [7:0] select_ln860_fu_618_p3;
-reg   [7:0] select_ln860_reg_864;
-reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_943_reg_874;
+wire   [3:0] trunc_ln890_fu_280_p1;
+reg   [3:0] trunc_ln890_reg_668;
+wire   [1:0] trunc_ln893_fu_317_p1;
+reg   [1:0] trunc_ln893_reg_673;
+wire   [0:0] and_ln894_fu_349_p2;
+reg   [0:0] and_ln894_reg_678;
+wire   [17:0] add_ln899_fu_398_p2;
+reg   [17:0] add_ln899_reg_682;
+reg   [17:0] p_anonymous_namespace_uram_banks_addr_reg_702;
+reg   [7:0] p_anonymous_namespace_stream_in_capture_buf_load_reg_707;
+reg   [7:0] p_anonymous_namespace_stream_in_capture_buf_load_1_reg_712;
+wire   [63:0] zext_ln860_5_fu_447_p1;
 wire    ap_block_pp0_stage1;
-wire   [63:0] zext_ln860_fu_523_p1;
+wire   [63:0] zext_ln860_6_fu_458_p1;
+wire   [63:0] zext_ln860_fu_508_p1;
 wire    ap_block_pp0_stage0;
-wire   [63:0] zext_ln899_fu_614_p1;
-wire   [63:0] zext_ln860_3_fu_626_p1;
-wire   [31:0] remaining_24_fu_474_p2;
-wire   [31:0] remaining_fu_572_p2;
-reg   [31:0] take_5_fu_122;
-wire   [31:0] take_8_fu_486_p2;
-wire   [31:0] take_7_fu_584_p2;
+wire   [63:0] zext_ln899_fu_512_p1;
+wire   [63:0] zext_ln860_7_fu_521_p1;
+wire   [31:0] remaining_26_fu_408_p2;
+wire   [31:0] remaining_fu_469_p2;
+reg   [31:0] take_9_fu_112;
+wire   [31:0] take_14_fu_420_p2;
+wire   [31:0] take_13_fu_481_p2;
 wire    ap_loop_init;
-reg   [31:0] logical_1_fu_126;
-wire   [31:0] logical_9_fu_480_p2;
-wire   [31:0] logical_8_fu_578_p2;
-reg   [31:0] written_1_fu_130;
-wire   [31:0] written_8_fu_421_p2;
-wire   [31:0] written_7_fu_566_p2;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1_local;
-reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1_local;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
-reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1_local;
-reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1_local;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
-reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local;
+reg   [31:0] logical_1_fu_116;
+wire   [31:0] logical_13_fu_414_p2;
+wire   [31:0] logical_12_fu_475_p2;
+reg   [31:0] written_6_fu_120;
+wire   [31:0] written_11_fu_355_p2;
+wire   [31:0] written_10_fu_463_p2;
+reg    p_anonymous_namespace_stream_in_capture_buf_ce1_local;
+reg   [3:0] p_anonymous_namespace_stream_in_capture_buf_address1_local;
+reg    p_anonymous_namespace_stream_in_capture_buf_ce0_local;
+reg   [3:0] p_anonymous_namespace_stream_in_capture_buf_address0_local;
 reg    p_anonymous_namespace_uram_banks_ce0_local;
 reg   [17:0] p_anonymous_namespace_uram_banks_address0_local;
 reg    p_anonymous_namespace_uram_banks_we0_local;
 reg   [31:0] p_anonymous_namespace_uram_banks_d0_local;
-wire   [31:0] word_8_fu_676_p2;
-wire   [31:0] word_5_fu_696_p5;
-wire   [4:0] lshr_ln_fu_335_p4;
-wire   [19:0] tmp_s_fu_358_p9;
-wire   [19:0] tmp_s_fu_358_p11;
-wire   [19:0] trunc_ln890_5_fu_354_p1;
-wire   [19:0] bank_byte_addr_fu_377_p2;
-wire   [1:0] trunc_ln890_4_fu_350_p1;
-wire   [1:0] or_ln894_fu_387_p2;
-wire   [29:0] tmp_278_fu_399_p4;
-wire   [0:0] icmp_ln894_fu_393_p2;
-wire   [0:0] icmp_ln896_fu_409_p2;
-wire   [4:0] bank_assign_fu_437_p9;
-wire   [4:0] bank_assign_fu_437_p11;
-wire   [17:0] tmp_149_fu_456_p3;
-wire   [17:0] word_idx_fu_427_p4;
-wire   [4:0] lshr_ln4_fu_513_p4;
-wire   [5:0] trunc_ln890_3_fu_331_p1;
-wire   [5:0] add_ln860_1_fu_529_p2;
-wire   [4:0] lshr_ln860_1_fu_535_p4;
-wire   [5:0] add_ln860_2_fu_550_p2;
-wire   [7:0] word_7_fu_631_p3;
-wire   [4:0] bit_off_fu_641_p3;
-wire   [31:0] zext_ln848_fu_648_p1;
-wire   [31:0] zext_ln860_1_fu_637_p1;
-wire   [31:0] mask_fu_652_p2;
-wire   [31:0] xor_ln851_fu_664_p2;
-wire   [31:0] and_ln851_fu_670_p2;
-wire   [31:0] shl_ln851_fu_658_p2;
-wire   [7:0] select_ln860_2_fu_689_p3;
-wire   [7:0] select_ln860_1_fu_683_p3;
+wire   [31:0] word_10_fu_565_p2;
+wire   [31:0] word_8_fu_572_p5;
+wire   [19:0] tmp_s_fu_292_p9;
+wire   [19:0] tmp_s_fu_292_p11;
+wire   [19:0] trunc_ln890_7_fu_288_p1;
+wire   [19:0] bank_byte_addr_fu_311_p2;
+wire   [1:0] trunc_ln890_6_fu_284_p1;
+wire   [1:0] or_ln894_fu_321_p2;
+wire   [29:0] tmp_550_fu_333_p4;
+wire   [0:0] icmp_ln894_fu_327_p2;
+wire   [0:0] icmp_ln896_fu_343_p2;
+wire   [4:0] bank_assign_fu_371_p9;
+wire   [4:0] bank_assign_fu_371_p11;
+wire   [17:0] tmp_127_fu_390_p3;
+wire   [17:0] word_idx_fu_361_p4;
+wire   [3:0] add_ln860_3_fu_452_p2;
+wire   [3:0] add_ln860_4_fu_516_p2;
+wire   [4:0] bit_off_fu_530_p3;
+wire   [31:0] zext_ln848_fu_537_p1;
+wire   [31:0] zext_ln860_4_fu_526_p1;
+wire   [31:0] mask_fu_541_p2;
+wire   [31:0] xor_ln851_fu_553_p2;
+wire   [31:0] and_ln851_fu_559_p2;
+wire   [31:0] shl_ln851_fu_547_p2;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -201,16 +173,16 @@ wire    ap_enable_pp0;
 wire    ap_start_int;
 wire    ap_ready_sig;
 wire    ap_done_sig;
-reg    ap_condition_266;
-reg    ap_condition_172;
-wire   [1:0] tmp_s_fu_358_p1;
-wire   [1:0] tmp_s_fu_358_p3;
-wire  signed [1:0] tmp_s_fu_358_p5;
-wire  signed [1:0] tmp_s_fu_358_p7;
-wire   [1:0] bank_assign_fu_437_p1;
-wire   [1:0] bank_assign_fu_437_p3;
-wire  signed [1:0] bank_assign_fu_437_p5;
-wire  signed [1:0] bank_assign_fu_437_p7;
+reg    ap_condition_231;
+reg    ap_condition_181;
+wire   [1:0] tmp_s_fu_292_p1;
+wire   [1:0] tmp_s_fu_292_p3;
+wire  signed [1:0] tmp_s_fu_292_p5;
+wire  signed [1:0] tmp_s_fu_292_p7;
+wire   [1:0] bank_assign_fu_371_p1;
+wire   [1:0] bank_assign_fu_371_p3;
+wire  signed [1:0] bank_assign_fu_371_p5;
+wire  signed [1:0] bank_assign_fu_371_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -218,9 +190,9 @@ initial begin
 #0 ap_CS_fsm = 2'd1;
 #0 ap_enable_reg_pp0_iter1 = 1'b0;
 #0 ap_enable_reg_pp0_iter0_reg = 1'b0;
-#0 take_5_fu_122 = 32'd0;
-#0 logical_1_fu_126 = 32'd0;
-#0 written_1_fu_130 = 32'd0;
+#0 take_9_fu_112 = 32'd0;
+#0 logical_1_fu_116 = 32'd0;
+#0 written_6_fu_120 = 32'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -238,14 +210,14 @@ end
     .def_WIDTH( 20 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 20 ))
-sparsemux_9_2_20_1_1_U3133(
+sparsemux_9_2_20_1_1_U2145(
     .din0(r_chunks_offset_read),
-    .din1(r_chunks_offset_read_4),
-    .din2(r_chunks_offset_read_5),
-    .din3(r_chunks_offset_read_6),
-    .def(tmp_s_fu_358_p9),
+    .din1(r_chunks_offset_read_10),
+    .din2(r_chunks_offset_read_11),
+    .din3(r_chunks_offset_read_12),
+    .def(tmp_s_fu_292_p9),
     .sel(empty),
-    .dout(tmp_s_fu_358_p11)
+    .dout(tmp_s_fu_292_p11)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_9_2_5_1_1 #(
@@ -262,14 +234,14 @@ sparsemux_9_2_20_1_1_U3133(
     .def_WIDTH( 5 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 5 ))
-sparsemux_9_2_5_1_1_U3134(
+sparsemux_9_2_5_1_1_U2146(
     .din0(r_chunks_bank_read),
-    .din1(r_chunks_bank_read_4),
-    .din2(r_chunks_bank_read_5),
-    .din3(r_chunks_bank_read_6),
-    .def(bank_assign_fu_437_p9),
+    .din1(r_chunks_bank_read_10),
+    .din2(r_chunks_bank_read_11),
+    .din3(r_chunks_bank_read_12),
+    .def(bank_assign_fu_371_p9),
     .sel(empty),
-    .dout(bank_assign_fu_437_p11)
+    .dout(bank_assign_fu_371_p11)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -330,69 +302,65 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        logical_1_fu_126 <= logical;
-    end else if (((1'd1 == and_ln894_fu_415_p2) & (icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        logical_1_fu_126 <= logical_8_fu_578_p2;
-    end else if (((icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_415_p2))) begin
-        logical_1_fu_126 <= logical_9_fu_480_p2;
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
+        logical_1_fu_116 <= logical;
+    end else if (((1'd1 == and_ln894_fu_349_p2) & (icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+        logical_1_fu_116 <= logical_12_fu_475_p2;
+    end else if (((icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_349_p2))) begin
+        logical_1_fu_116 <= logical_13_fu_414_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        take_5_fu_122 <= take;
-    end else if (((1'd1 == and_ln894_fu_415_p2) & (icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        take_5_fu_122 <= take_7_fu_584_p2;
-    end else if (((icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_415_p2))) begin
-        take_5_fu_122 <= take_8_fu_486_p2;
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
+        take_9_fu_112 <= take;
+    end else if (((1'd1 == and_ln894_fu_349_p2) & (icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+        take_9_fu_112 <= take_13_fu_481_p2;
+    end else if (((icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_349_p2))) begin
+        take_9_fu_112 <= take_14_fu_420_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_loop_init == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        written_1_fu_130 <= written;
-    end else if (((1'd1 == and_ln894_fu_415_p2) & (icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        written_1_fu_130 <= written_7_fu_566_p2;
-    end else if (((icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_415_p2))) begin
-        written_1_fu_130 <= written_8_fu_421_p2;
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
+        written_6_fu_120 <= written;
+    end else if (((1'd1 == and_ln894_fu_349_p2) & (icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+        written_6_fu_120 <= written_10_fu_463_p2;
+    end else if (((icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_349_p2))) begin
+        written_6_fu_120 <= written_11_fu_355_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        add_ln899_reg_812 <= add_ln899_fu_464_p2;
-        and_ln894_reg_803 <= and_ln894_fu_415_p2;
-        lshr_ln860_2_reg_837 <= {{add_ln860_2_fu_550_p2[5:1]}};
-        trunc_ln893_reg_798 <= trunc_ln893_fu_383_p1;
-        zext_ln860_2_reg_827[4 : 0] <= zext_ln860_2_fu_545_p1[4 : 0];
-        zext_ln890_reg_793[4 : 0] <= zext_ln890_fu_345_p1[4 : 0];
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_anonymous_namespace_uram_banks_addr_reg_859 <= zext_ln899_fu_614_p1;
-        select_ln860_reg_864 <= select_ln860_fu_618_p3;
-        trunc_ln890_reg_842 <= trunc_ln890_fu_611_p1;
+        add_ln899_reg_682 <= add_ln899_fu_398_p2;
+        and_ln894_reg_678 <= and_ln894_fu_349_p2;
+        trunc_ln890_reg_668 <= trunc_ln890_fu_280_p1;
+        trunc_ln893_reg_673 <= trunc_ln893_fu_317_p1;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_943_reg_874 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0;
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_952_reg_854 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1;
+        p_anonymous_namespace_stream_in_capture_buf_load_1_reg_712 <= p_anonymous_namespace_stream_in_capture_buf_q0;
+        p_anonymous_namespace_stream_in_capture_buf_load_reg_707 <= p_anonymous_namespace_stream_in_capture_buf_q1;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_anonymous_namespace_uram_banks_addr_reg_702 <= zext_ln899_fu_512_p1;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        written_6_reg_784 <= written_1_fu_130;
+        written_9_reg_659 <= written_6_fu_120;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln891_fu_325_p2 == 1'd1) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_subdone) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+    if (((icmp_ln891_fu_274_p2 == 1'd1) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_subdone) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
         ap_condition_exit_pp0_iter0_stage1 = 1'b1;
     end else begin
         ap_condition_exit_pp0_iter0_stage1 = 1'b0;
@@ -448,17 +416,53 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'd1 == and_ln894_reg_803) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_reg_803)))) begin
-        p_anonymous_namespace_uram_banks_address0_local = p_anonymous_namespace_uram_banks_addr_reg_859;
+    if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_anonymous_namespace_stream_in_capture_buf_address0_local = zext_ln860_7_fu_521_p1;
+    end else if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+        p_anonymous_namespace_stream_in_capture_buf_address0_local = zext_ln860_6_fu_458_p1;
+    end else begin
+        p_anonymous_namespace_stream_in_capture_buf_address0_local = 'bx;
+    end
+end
+
+always @ (*) begin
+    if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+        p_anonymous_namespace_stream_in_capture_buf_address1_local = zext_ln860_fu_508_p1;
+    end else if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+        p_anonymous_namespace_stream_in_capture_buf_address1_local = zext_ln860_5_fu_447_p1;
+    end else begin
+        p_anonymous_namespace_stream_in_capture_buf_address1_local = 'bx;
+    end
+end
+
+always @ (*) begin
+    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
+        p_anonymous_namespace_stream_in_capture_buf_ce0_local = 1'b1;
+    end else begin
+        p_anonymous_namespace_stream_in_capture_buf_ce0_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
+        p_anonymous_namespace_stream_in_capture_buf_ce1_local = 1'b1;
+    end else begin
+        p_anonymous_namespace_stream_in_capture_buf_ce1_local = 1'b0;
+    end
+end
+
+always @ (*) begin
+    if ((((1'd1 == and_ln894_reg_678) & (1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_reg_678)))) begin
+        p_anonymous_namespace_uram_banks_address0_local = p_anonymous_namespace_uram_banks_addr_reg_702;
     end else if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        p_anonymous_namespace_uram_banks_address0_local = zext_ln899_fu_614_p1;
+        p_anonymous_namespace_uram_banks_address0_local = zext_ln899_fu_512_p1;
     end else begin
         p_anonymous_namespace_uram_banks_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((1'd1 == and_ln894_reg_803) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_reg_803)))) begin
+    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((1'd1 == and_ln894_reg_678) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_reg_678)))) begin
         p_anonymous_namespace_uram_banks_ce0_local = 1'b1;
     end else begin
         p_anonymous_namespace_uram_banks_ce0_local = 1'b0;
@@ -466,11 +470,11 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_condition_266)) begin
-        if ((1'd1 == and_ln894_reg_803)) begin
-            p_anonymous_namespace_uram_banks_d0_local = word_5_fu_696_p5;
-        end else if ((1'd0 == and_ln894_reg_803)) begin
-            p_anonymous_namespace_uram_banks_d0_local = word_8_fu_676_p2;
+    if ((1'b1 == ap_condition_231)) begin
+        if ((1'd1 == and_ln894_reg_678)) begin
+            p_anonymous_namespace_uram_banks_d0_local = word_8_fu_572_p5;
+        end else if ((1'd0 == and_ln894_reg_678)) begin
+            p_anonymous_namespace_uram_banks_d0_local = word_10_fu_565_p2;
         end else begin
             p_anonymous_namespace_uram_banks_d0_local = 'bx;
         end
@@ -480,7 +484,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'd1 == and_ln894_reg_803) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_reg_803)))) begin
+    if ((((1'd1 == and_ln894_reg_678) & (1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((1'b0 == ap_block_pp0_stage1_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_reg_678)))) begin
         p_anonymous_namespace_uram_banks_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_uram_banks_we0_local = 1'b0;
@@ -488,11 +492,11 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_condition_172)) begin
-        if ((1'd1 == and_ln894_fu_415_p2)) begin
-            remaining_1_out_o = remaining_fu_572_p2;
-        end else if ((1'd0 == and_ln894_fu_415_p2)) begin
-            remaining_1_out_o = remaining_24_fu_474_p2;
+    if ((1'b1 == ap_condition_181)) begin
+        if ((1'd1 == and_ln894_fu_349_p2)) begin
+            remaining_1_out_o = remaining_fu_469_p2;
+        end else if ((1'd0 == and_ln894_fu_349_p2)) begin
+            remaining_1_out_o = remaining_26_fu_408_p2;
         end else begin
             remaining_1_out_o = remaining_1_out_i;
         end
@@ -502,7 +506,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'd1 == and_ln894_fu_415_p2) & (icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_415_p2)))) begin
+    if ((((1'd1 == and_ln894_fu_349_p2) & (icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)) | ((icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1) & (1'd0 == and_ln894_fu_349_p2)))) begin
         remaining_1_out_o_ap_vld = 1'b1;
     end else begin
         remaining_1_out_o_ap_vld = 1'b0;
@@ -510,82 +514,10 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln860_3_fu_626_p1;
-    end else if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = zext_ln860_fu_523_p1;
+    if (((ap_loop_exit_ready == 1'b1) & (icmp_ln891_fu_274_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
+        written_6_out_ap_vld = 1'b1;
     end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local = 'bx;
-    end
-end
-
-always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1_local = zext_ln860_2_reg_827;
-    end else if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1_local = zext_ln890_fu_345_p1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1_local = 'bx;
-    end
-end
-
-always @ (*) begin
-    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1_local = 1'b1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln860_3_fu_626_p1;
-    end else if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = zext_ln860_2_fu_545_p1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local = 'bx;
-    end
-end
-
-always @ (*) begin
-    if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1_local = zext_ln890_reg_793;
-    end else if (((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1_local = zext_ln860_fu_523_p1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1_local = 'bx;
-    end
-end
-
-always @ (*) begin
-    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if ((((1'b0 == ap_block_pp0_stage0_11001) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0)) | ((ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1_local = 1'b1;
-    end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1_local = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((ap_loop_exit_ready == 1'b1) & (icmp_ln891_fu_325_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage1_11001) & (1'b1 == ap_CS_fsm_pp0_stage1))) begin
-        written_1_out_ap_vld = 1'b1;
-    end else begin
-        written_1_out_ap_vld = 1'b0;
+        written_6_out_ap_vld = 1'b0;
     end
 end
 
@@ -611,15 +543,15 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln860_1_fu_529_p2 = (trunc_ln890_3_fu_331_p1 + 6'd2);
+assign add_ln860_3_fu_452_p2 = (trunc_ln890_fu_280_p1 + 4'd2);
 
-assign add_ln860_2_fu_550_p2 = (trunc_ln890_3_fu_331_p1 + 6'd3);
+assign add_ln860_4_fu_516_p2 = (trunc_ln890_reg_668 + 4'd3);
 
-assign add_ln899_fu_464_p2 = (tmp_149_fu_456_p3 + word_idx_fu_427_p4);
+assign add_ln899_fu_398_p2 = (tmp_127_fu_390_p3 + word_idx_fu_361_p4);
 
-assign and_ln851_fu_670_p2 = (xor_ln851_fu_664_p2 & p_anonymous_namespace_uram_banks_q0);
+assign and_ln851_fu_559_p2 = (xor_ln851_fu_553_p2 & p_anonymous_namespace_uram_banks_q0);
 
-assign and_ln894_fu_415_p2 = (icmp_ln896_fu_409_p2 & icmp_ln894_fu_393_p2);
+assign and_ln894_fu_349_p2 = (icmp_ln896_fu_343_p2 & icmp_ln894_fu_327_p2);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -638,11 +570,11 @@ assign ap_block_pp0_stage1_11001 = ~(1'b1 == 1'b1);
 assign ap_block_pp0_stage1_subdone = ~(1'b1 == 1'b1);
 
 always @ (*) begin
-    ap_condition_172 = ((icmp_ln891_fu_325_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1));
+    ap_condition_181 = ((icmp_ln891_fu_274_p2 == 1'd0) & (ap_enable_reg_pp0_iter0_reg == 1'b1) & (1'b0 == ap_block_pp0_stage1) & (1'b1 == ap_CS_fsm_pp0_stage1));
 end
 
 always @ (*) begin
-    ap_condition_266 = ((1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1));
+    ap_condition_231 = ((1'b0 == ap_block_pp0_stage1) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage1));
 end
 
 assign ap_done = ap_done_sig;
@@ -653,31 +585,33 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage1;
 
 assign ap_ready = ap_ready_sig;
 
-assign bank_assign_fu_437_p9 = 'bx;
+assign bank_assign_fu_371_p9 = 'bx;
 
-assign bank_byte_addr_fu_377_p2 = (tmp_s_fu_358_p11 + trunc_ln890_5_fu_354_p1);
+assign bank_byte_addr_fu_311_p2 = (tmp_s_fu_292_p11 + trunc_ln890_7_fu_288_p1);
 
-assign bit_off_fu_641_p3 = {{trunc_ln893_reg_798}, {3'd0}};
+assign bit_off_fu_530_p3 = {{trunc_ln893_reg_673}, {3'd0}};
 
-assign icmp_ln891_fu_325_p2 = ((take_5_fu_122 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln891_fu_274_p2 = ((take_9_fu_112 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln894_fu_393_p2 = ((or_ln894_fu_387_p2 == 2'd0) ? 1'b1 : 1'b0);
+assign icmp_ln894_fu_327_p2 = ((or_ln894_fu_321_p2 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln896_fu_409_p2 = ((tmp_278_fu_399_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln896_fu_343_p2 = ((tmp_550_fu_333_p4 != 30'd0) ? 1'b1 : 1'b0);
 
-assign logical_8_fu_578_p2 = (logical_1_fu_126 + 32'd4);
+assign logical_12_fu_475_p2 = (logical_1_fu_116 + 32'd4);
 
-assign logical_9_fu_480_p2 = (logical_1_fu_126 + 32'd1);
+assign logical_13_fu_414_p2 = (logical_1_fu_116 + 32'd1);
 
-assign lshr_ln4_fu_513_p4 = {{written_8_fu_421_p2[5:1]}};
+assign mask_fu_541_p2 = 32'd255 << zext_ln848_fu_537_p1;
 
-assign lshr_ln860_1_fu_535_p4 = {{add_ln860_1_fu_529_p2[5:1]}};
+assign or_ln894_fu_321_p2 = (trunc_ln893_fu_317_p1 | trunc_ln890_6_fu_284_p1);
 
-assign lshr_ln_fu_335_p4 = {{written_1_fu_130[5:1]}};
+assign p_anonymous_namespace_stream_in_capture_buf_address0 = p_anonymous_namespace_stream_in_capture_buf_address0_local;
 
-assign mask_fu_652_p2 = 32'd255 << zext_ln848_fu_648_p1;
+assign p_anonymous_namespace_stream_in_capture_buf_address1 = p_anonymous_namespace_stream_in_capture_buf_address1_local;
 
-assign or_ln894_fu_387_p2 = (trunc_ln893_fu_383_p1 | trunc_ln890_4_fu_350_p1);
+assign p_anonymous_namespace_stream_in_capture_buf_ce0 = p_anonymous_namespace_stream_in_capture_buf_ce0_local;
+
+assign p_anonymous_namespace_stream_in_capture_buf_ce1 = p_anonymous_namespace_stream_in_capture_buf_ce1_local;
 
 assign p_anonymous_namespace_uram_banks_address0 = p_anonymous_namespace_uram_banks_address0_local;
 
@@ -687,87 +621,56 @@ assign p_anonymous_namespace_uram_banks_d0 = p_anonymous_namespace_uram_banks_d0
 
 assign p_anonymous_namespace_uram_banks_we0 = p_anonymous_namespace_uram_banks_we0_local;
 
-assign remaining_24_fu_474_p2 = ($signed(remaining_1_out_i) + $signed(32'd4294967295));
+assign remaining_26_fu_408_p2 = ($signed(remaining_1_out_i) + $signed(32'd4294967295));
 
-assign remaining_fu_572_p2 = ($signed(remaining_1_out_i) + $signed(32'd4294967292));
+assign remaining_fu_469_p2 = ($signed(remaining_1_out_i) + $signed(32'd4294967292));
 
-assign select_ln860_1_fu_683_p3 = ((trunc_ln890_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_943_reg_874);
+assign shl_ln851_fu_547_p2 = zext_ln860_4_fu_526_p1 << zext_ln848_fu_537_p1;
 
-assign select_ln860_2_fu_689_p3 = ((trunc_ln890_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0);
+assign take_13_fu_481_p2 = ($signed(take_9_fu_112) + $signed(32'd4294967292));
 
-assign select_ln860_fu_618_p3 = ((trunc_ln890_fu_611_p1[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0);
+assign take_14_fu_420_p2 = ($signed(take_9_fu_112) + $signed(32'd4294967295));
 
-assign shl_ln851_fu_658_p2 = zext_ln860_1_fu_637_p1 << zext_ln848_fu_648_p1;
+assign tmp_127_fu_390_p3 = {{bank_assign_fu_371_p11}, {13'd0}};
 
-assign take_7_fu_584_p2 = ($signed(take_5_fu_122) + $signed(32'd4294967292));
+assign tmp_550_fu_333_p4 = {{take_9_fu_112[31:2]}};
 
-assign take_8_fu_486_p2 = ($signed(take_5_fu_122) + $signed(32'd4294967295));
+assign tmp_s_fu_292_p9 = 'bx;
 
-assign tmp_149_fu_456_p3 = {{bank_assign_fu_437_p11}, {13'd0}};
+assign trunc_ln890_6_fu_284_p1 = written_6_fu_120[1:0];
 
-assign tmp_278_fu_399_p4 = {{take_5_fu_122[31:2]}};
+assign trunc_ln890_7_fu_288_p1 = logical_1_fu_116[19:0];
 
-assign tmp_s_fu_358_p9 = 'bx;
+assign trunc_ln890_fu_280_p1 = written_6_fu_120[3:0];
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0_local;
+assign trunc_ln893_fu_317_p1 = bank_byte_addr_fu_311_p2[1:0];
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1_local;
+assign word_10_fu_565_p2 = (shl_ln851_fu_547_p2 | and_ln851_fu_559_p2);
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
+assign word_8_fu_572_p5 = {{{{p_anonymous_namespace_stream_in_capture_buf_q0}, {p_anonymous_namespace_stream_in_capture_buf_load_1_reg_712}}, {p_anonymous_namespace_stream_in_capture_buf_load_reg_707}}, {p_anonymous_namespace_stream_in_capture_buf_q1}};
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1_local;
+assign word_idx_fu_361_p4 = {{bank_byte_addr_fu_311_p2[19:2]}};
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0_local;
+assign written_10_fu_463_p2 = (written_6_fu_120 + 32'd4);
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1_local;
+assign written_11_fu_355_p2 = (written_6_fu_120 + 32'd1);
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
+assign written_6_out = written_6_fu_120;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1_local;
+assign xor_ln851_fu_553_p2 = (mask_fu_541_p2 ^ 32'd4294967295);
 
-assign trunc_ln890_3_fu_331_p1 = written_1_fu_130[5:0];
+assign zext_ln848_fu_537_p1 = bit_off_fu_530_p3;
 
-assign trunc_ln890_4_fu_350_p1 = written_1_fu_130[1:0];
+assign zext_ln860_4_fu_526_p1 = p_anonymous_namespace_stream_in_capture_buf_q1;
 
-assign trunc_ln890_5_fu_354_p1 = logical_1_fu_126[19:0];
+assign zext_ln860_5_fu_447_p1 = written_11_fu_355_p2;
 
-assign trunc_ln890_fu_611_p1 = written_6_reg_784[0:0];
+assign zext_ln860_6_fu_458_p1 = add_ln860_3_fu_452_p2;
 
-assign trunc_ln893_fu_383_p1 = bank_byte_addr_fu_377_p2[1:0];
+assign zext_ln860_7_fu_521_p1 = add_ln860_4_fu_516_p2;
 
-assign word_5_fu_696_p5 = {{{{select_ln860_2_fu_689_p3}, {select_ln860_1_fu_683_p3}}, {select_ln860_reg_864}}, {word_7_fu_631_p3}};
+assign zext_ln860_fu_508_p1 = written_9_reg_659;
 
-assign word_7_fu_631_p3 = ((trunc_ln890_reg_842[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_952_reg_854 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1);
-
-assign word_8_fu_676_p2 = (shl_ln851_fu_658_p2 | and_ln851_fu_670_p2);
-
-assign word_idx_fu_427_p4 = {{bank_byte_addr_fu_377_p2[19:2]}};
-
-assign written_1_out = written_1_fu_130;
-
-assign written_7_fu_566_p2 = (written_1_fu_130 + 32'd4);
-
-assign written_8_fu_421_p2 = (written_1_fu_130 + 32'd1);
-
-assign xor_ln851_fu_664_p2 = (mask_fu_652_p2 ^ 32'd4294967295);
-
-assign zext_ln848_fu_648_p1 = bit_off_fu_641_p3;
-
-assign zext_ln860_1_fu_637_p1 = word_7_fu_631_p3;
-
-assign zext_ln860_2_fu_545_p1 = lshr_ln860_1_fu_535_p4;
-
-assign zext_ln860_3_fu_626_p1 = lshr_ln860_2_reg_837;
-
-assign zext_ln860_fu_523_p1 = lshr_ln4_fu_513_p4;
-
-assign zext_ln890_fu_345_p1 = lshr_ln_fu_335_p4;
-
-assign zext_ln899_fu_614_p1 = add_ln899_reg_812;
-
-always @ (posedge ap_clk) begin
-    zext_ln890_reg_793[63:5] <= 59'b00000000000000000000000000000000000000000000000000000000000;
-    zext_ln860_2_reg_827[63:5] <= 59'b00000000000000000000000000000000000000000000000000000000000;
-end
+assign zext_ln899_fu_512_p1 = add_ln899_reg_682;
 
 endmodule //transformer_top_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_891_2

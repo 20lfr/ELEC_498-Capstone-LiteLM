@@ -356,7 +356,7 @@ reg    ap_ready_int;
 reg   [6:0] i_fu_290;
 wire   [6:0] add_ln1586_fu_820_p2;
 wire    ap_loop_init;
-reg   [6:0] ap_sig_allocacmp_i_41;
+reg   [6:0] ap_sig_allocacmp_i_37;
 wire   [5:0] trunc_ln1586_fu_826_p1;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -462,9 +462,9 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_loop_init == 1'b1))) begin
-        ap_sig_allocacmp_i_41 = 7'd0;
+        ap_sig_allocacmp_i_37 = 7'd0;
     end else begin
-        ap_sig_allocacmp_i_41 = i_fu_290;
+        ap_sig_allocacmp_i_37 = i_fu_290;
     end
 end
 
@@ -991,7 +991,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln1586_fu_820_p2 = (ap_sig_allocacmp_i_41 + 7'd1);
+assign add_ln1586_fu_820_p2 = (ap_sig_allocacmp_i_37 + 7'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -1005,7 +1005,7 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign icmp_ln1586_fu_814_p2 = ((ap_sig_allocacmp_i_41 == 7'd64) ? 1'b1 : 1'b0);
+assign icmp_ln1586_fu_814_p2 = ((ap_sig_allocacmp_i_37 == 7'd64) ? 1'b1 : 1'b0);
 
 assign lane_buf_0 = 8'd0;
 
@@ -1135,6 +1135,6 @@ assign lane_buf_8 = 8'd0;
 
 assign lane_buf_9 = 8'd0;
 
-assign trunc_ln1586_fu_826_p1 = ap_sig_allocacmp_i_41[5:0];
+assign trunc_ln1586_fu_826_p1 = ap_sig_allocacmp_i_37[5:0];
 
 endmodule //transformer_top_p_anonymous_namespace_build_head_in_buf_Pipeline_VITIS_LOOP_1586_1

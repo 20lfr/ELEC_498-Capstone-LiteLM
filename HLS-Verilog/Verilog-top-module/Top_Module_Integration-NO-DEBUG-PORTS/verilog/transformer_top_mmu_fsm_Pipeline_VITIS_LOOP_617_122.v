@@ -226,7 +226,7 @@ wire   [5:0] add_ln623_fu_512_p2;
 wire   [0:0] icmp_ln623_fu_518_p2;
 wire   [4:0] trunc_ln626_fu_530_p1;
 wire   [4:0] add_ln626_fu_524_p2;
-wire   [16:0] tmp_102_fu_583_p4;
+wire   [16:0] tmp_107_fu_583_p4;
 wire   [31:0] space_fu_599_p2;
 wire   [0:0] icmp_ln627_fu_605_p2;
 wire   [0:0] icmp_ln628_fu_617_p2;
@@ -1183,7 +1183,7 @@ assign chunks_size_52_fu_610_p3 = ((icmp_ln627_fu_605_p2[0:0] == 1'b1) ? remaini
 
 assign icmp_ln617_fu_482_p2 = ((ap_sig_allocacmp_remaining == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln622_fu_593_p2 = ((tmp_102_fu_583_p4 != 17'd0) ? 1'b1 : 1'b0);
+assign icmp_ln622_fu_593_p2 = ((tmp_107_fu_583_p4 != 17'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln623_fu_518_p2 = ((add_ln623_fu_512_p2 < 6'd24) ? 1'b1 : 1'b0);
 
@@ -1217,7 +1217,7 @@ assign space_fu_599_p2 = (32'd32768 - p_anonymous_namespace_bank_offsets_q0);
 
 assign spec_total_bytes_cast_fu_396_p1 = spec_total_bytes;
 
-assign tmp_102_fu_583_p4 = {{p_anonymous_namespace_bank_offsets_q0[31:15]}};
+assign tmp_107_fu_583_p4 = {{p_anonymous_namespace_bank_offsets_q0[31:15]}};
 
 assign tmp_fu_495_p3 = ap_sig_allocacmp_num_chunks[32'd2];
 

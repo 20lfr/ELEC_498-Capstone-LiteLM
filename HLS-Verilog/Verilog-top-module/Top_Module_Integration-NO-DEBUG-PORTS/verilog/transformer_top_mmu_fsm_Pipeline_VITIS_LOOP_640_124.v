@@ -200,7 +200,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U3085(
+sparsemux_9_2_8_1_1_U2362(
     .din0(chunks_bank_83),
     .din1(chunks_bank_84),
     .din2(chunks_bank_85),
@@ -224,7 +224,7 @@ sparsemux_9_2_8_1_1_U3085(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U3086(
+sparsemux_9_2_32_1_1_U2363(
     .din0(chunks_offset_83),
     .din1(chunks_offset_84),
     .din2(chunks_offset_85),
@@ -248,7 +248,7 @@ sparsemux_9_2_32_1_1_U3086(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U3087(
+sparsemux_9_2_32_1_1_U2364(
     .din0(chunks_size_82),
     .din1(chunks_size_83),
     .din2(chunks_size_84),
@@ -264,7 +264,7 @@ transformer_top_urem_9ns_6ns_5_13_1 #(
     .din0_WIDTH( 9 ),
     .din1_WIDTH( 6 ),
     .dout_WIDTH( 5 ))
-urem_9ns_6ns_5_13_1_U3088(
+urem_9ns_6ns_5_13_1_U2365(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_333_p0),
