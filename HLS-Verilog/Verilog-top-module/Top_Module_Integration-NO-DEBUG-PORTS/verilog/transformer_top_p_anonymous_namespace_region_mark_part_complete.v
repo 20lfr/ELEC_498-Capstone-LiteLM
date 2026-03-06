@@ -47,7 +47,7 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [3:0] idx;
-input  [31:0] part_idx;
+input  [15:0] part_idx;
 output  [3:0] p_anonymous_namespace_regions_valid_address0;
 output   p_anonymous_namespace_regions_valid_ce0;
 input  [0:0] p_anonymous_namespace_regions_valid_q0;
@@ -73,20 +73,22 @@ reg[0:0] ap_return;
 
 (* fsm_encoding = "none" *) reg   [4:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
-wire   [63:0] zext_ln989_fu_135_p1;
-reg   [63:0] zext_ln989_reg_186;
+wire   [63:0] zext_ln1018_fu_135_p1;
+reg   [63:0] zext_ln1018_reg_190;
+wire   [31:0] part_idx_cast_fu_140_p1;
+reg   [31:0] part_idx_cast_reg_203;
 wire    ap_CS_fsm_state2;
 wire   [0:0] p_anonymous_namespace_regions_valid_q0_local;
-reg   [0:0] p_anonymous_namespace_regions_valid_load_reg_204;
-wire   [0:0] icmp_ln992_fu_150_p2;
-reg   [0:0] icmp_ln992_reg_208;
-reg   [3:0] p_anonymous_namespace_regions_written_parts_addr_reg_212;
-reg   [3:0] p_anonymous_namespace_regions_part_mask_addr_reg_222;
-wire   [0:0] icmp_ln994_fu_173_p2;
-reg   [0:0] icmp_ln994_reg_230;
+reg   [0:0] p_anonymous_namespace_regions_valid_load_reg_208;
+wire   [0:0] icmp_ln1021_fu_154_p2;
+reg   [0:0] icmp_ln1021_reg_212;
+reg   [3:0] p_anonymous_namespace_regions_written_parts_addr_reg_216;
+reg   [3:0] p_anonymous_namespace_regions_part_mask_addr_reg_226;
+wire   [0:0] icmp_ln1023_fu_177_p2;
+reg   [0:0] icmp_ln1023_reg_234;
 wire    ap_CS_fsm_state4;
 wire   [3:0] p_anonymous_namespace_regions_written_parts_addr_9_gep_fu_108_p3;
-reg   [3:0] p_anonymous_namespace_regions_written_parts_addr_9_reg_234;
+reg   [3:0] p_anonymous_namespace_regions_written_parts_addr_9_reg_238;
 reg   [0:0] ap_phi_mux_retval_1_phi_fu_120_p4;
 reg   [0:0] retval_1_reg_116;
 wire    ap_CS_fsm_state5;
@@ -95,16 +97,16 @@ reg    p_anonymous_namespace_regions_written_parts_ce0_local;
 reg   [3:0] p_anonymous_namespace_regions_written_parts_address0_local;
 reg    p_anonymous_namespace_regions_written_parts_we0_local;
 wire    ap_CS_fsm_state3;
-wire   [0:0] icmp_ln998_fu_156_p2;
+wire   [0:0] icmp_ln1027_fu_160_p2;
 wire   [15:0] grp_fu_128_p2;
 reg    p_anonymous_namespace_regions_expected_parts_ce0_local;
 reg    p_anonymous_namespace_regions_part_mask_ce0_local;
 reg   [3:0] p_anonymous_namespace_regions_part_mask_address0_local;
 reg    p_anonymous_namespace_regions_part_mask_we0_local;
-wire   [31:0] or_ln995_fu_179_p2;
-wire   [26:0] tmp_fu_140_p4;
-wire   [31:0] bit_fu_162_p2;
-wire   [31:0] and_ln994_fu_167_p2;
+wire   [31:0] or_ln1024_fu_183_p2;
+wire   [10:0] tmp_fu_144_p4;
+wire   [31:0] bit_fu_166_p2;
+wire   [31:0] and_ln1023_fu_171_p2;
 reg   [0:0] ap_return_preg;
 reg   [4:0] ap_NS_fsm;
 reg    ap_ST_fsm_state1_blk;
@@ -141,30 +143,31 @@ end
 always @ (posedge ap_clk) begin
     if (((p_anonymous_namespace_regions_valid_q0_local == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
         retval_1_reg_116 <= 1'd0;
-    end else if (((p_anonymous_namespace_regions_valid_load_reg_204 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
+    end else if (((p_anonymous_namespace_regions_valid_load_reg_208 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
         retval_1_reg_116 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        icmp_ln992_reg_208 <= icmp_ln992_fu_150_p2;
-        p_anonymous_namespace_regions_part_mask_addr_reg_222 <= zext_ln989_reg_186;
-        p_anonymous_namespace_regions_valid_load_reg_204 <= p_anonymous_namespace_regions_valid_q0;
-        p_anonymous_namespace_regions_written_parts_addr_reg_212 <= zext_ln989_reg_186;
+        icmp_ln1021_reg_212 <= icmp_ln1021_fu_154_p2;
+        p_anonymous_namespace_regions_part_mask_addr_reg_226 <= zext_ln1018_reg_190;
+        p_anonymous_namespace_regions_valid_load_reg_208 <= p_anonymous_namespace_regions_valid_q0;
+        p_anonymous_namespace_regions_written_parts_addr_reg_216 <= zext_ln1018_reg_190;
+        part_idx_cast_reg_203[15 : 0] <= part_idx_cast_fu_140_p1[15 : 0];
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state4)) begin
-        icmp_ln994_reg_230 <= icmp_ln994_fu_173_p2;
-        p_anonymous_namespace_regions_written_parts_addr_9_reg_234 <= zext_ln989_reg_186;
+        icmp_ln1023_reg_234 <= icmp_ln1023_fu_177_p2;
+        p_anonymous_namespace_regions_written_parts_addr_9_reg_238 <= zext_ln1018_reg_190;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state1)) begin
-        zext_ln989_reg_186[3 : 0] <= zext_ln989_fu_135_p1[3 : 0];
+        zext_ln1018_reg_190[3 : 0] <= zext_ln1018_fu_135_p1[3 : 0];
     end
 end
 
@@ -201,7 +204,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((p_anonymous_namespace_regions_valid_load_reg_204 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
+    if (((p_anonymous_namespace_regions_valid_load_reg_208 == 1'd1) & (1'b1 == ap_CS_fsm_state5))) begin
         ap_phi_mux_retval_1_phi_fu_120_p4 = 1'd1;
     end else begin
         ap_phi_mux_retval_1_phi_fu_120_p4 = retval_1_reg_116;
@@ -234,9 +237,9 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state4)) begin
-        p_anonymous_namespace_regions_part_mask_address0_local = p_anonymous_namespace_regions_part_mask_addr_reg_222;
+        p_anonymous_namespace_regions_part_mask_address0_local = p_anonymous_namespace_regions_part_mask_addr_reg_226;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        p_anonymous_namespace_regions_part_mask_address0_local = zext_ln989_reg_186;
+        p_anonymous_namespace_regions_part_mask_address0_local = zext_ln1018_reg_190;
     end else begin
         p_anonymous_namespace_regions_part_mask_address0_local = 'bx;
     end
@@ -251,7 +254,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln994_fu_173_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln1023_fu_177_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_regions_part_mask_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_regions_part_mask_we0_local = 1'b0;
@@ -268,13 +271,13 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state5)) begin
-        p_anonymous_namespace_regions_written_parts_address0_local = p_anonymous_namespace_regions_written_parts_addr_9_reg_234;
+        p_anonymous_namespace_regions_written_parts_address0_local = p_anonymous_namespace_regions_written_parts_addr_9_reg_238;
     end else if ((1'b1 == ap_CS_fsm_state4)) begin
         p_anonymous_namespace_regions_written_parts_address0_local = p_anonymous_namespace_regions_written_parts_addr_9_gep_fu_108_p3;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        p_anonymous_namespace_regions_written_parts_address0_local = p_anonymous_namespace_regions_written_parts_addr_reg_212;
+        p_anonymous_namespace_regions_written_parts_address0_local = p_anonymous_namespace_regions_written_parts_addr_reg_216;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        p_anonymous_namespace_regions_written_parts_address0_local = zext_ln989_reg_186;
+        p_anonymous_namespace_regions_written_parts_address0_local = zext_ln1018_reg_190;
     end else begin
         p_anonymous_namespace_regions_written_parts_address0_local = 'bx;
     end
@@ -289,7 +292,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((icmp_ln994_reg_230 == 1'd1) & (icmp_ln992_reg_208 == 1'd1) & (p_anonymous_namespace_regions_valid_load_reg_204 == 1'd1) & (1'b1 == ap_CS_fsm_state5)) | ((1'b1 == ap_CS_fsm_state3) & (icmp_ln998_fu_156_p2 == 1'd1)))) begin
+    if ((((icmp_ln1023_reg_234 == 1'd1) & (icmp_ln1021_reg_212 == 1'd1) & (p_anonymous_namespace_regions_valid_load_reg_208 == 1'd1) & (1'b1 == ap_CS_fsm_state5)) | ((1'b1 == ap_CS_fsm_state3) & (icmp_ln1027_fu_160_p2 == 1'd1)))) begin
         p_anonymous_namespace_regions_written_parts_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_regions_written_parts_we0_local = 1'b0;
@@ -306,9 +309,9 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((icmp_ln992_fu_150_p2 == 1'd1) & (p_anonymous_namespace_regions_valid_q0_local == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+            if (((icmp_ln1021_fu_154_p2 == 1'd1) & (p_anonymous_namespace_regions_valid_q0_local == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state4;
-            end else if (((icmp_ln992_fu_150_p2 == 1'd0) & (p_anonymous_namespace_regions_valid_q0_local == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+            end else if (((icmp_ln1021_fu_154_p2 == 1'd0) & (p_anonymous_namespace_regions_valid_q0_local == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state5;
@@ -329,7 +332,7 @@ always @ (*) begin
     endcase
 end
 
-assign and_ln994_fu_167_p2 = (p_anonymous_namespace_regions_part_mask_q0 & bit_fu_162_p2);
+assign and_ln1023_fu_171_p2 = (p_anonymous_namespace_regions_part_mask_q0 & bit_fu_166_p2);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -341,19 +344,19 @@ assign ap_CS_fsm_state4 = ap_CS_fsm[32'd3];
 
 assign ap_CS_fsm_state5 = ap_CS_fsm[32'd4];
 
-assign bit_fu_162_p2 = 32'd1 << part_idx;
+assign bit_fu_166_p2 = 32'd1 << part_idx_cast_reg_203;
 
 assign grp_fu_128_p2 = (p_anonymous_namespace_regions_written_parts_q0 + 16'd1);
 
-assign icmp_ln992_fu_150_p2 = ((tmp_fu_140_p4 == 27'd0) ? 1'b1 : 1'b0);
+assign icmp_ln1021_fu_154_p2 = ((tmp_fu_144_p4 == 11'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln994_fu_173_p2 = ((and_ln994_fu_167_p2 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln1023_fu_177_p2 = ((and_ln1023_fu_171_p2 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln998_fu_156_p2 = ((p_anonymous_namespace_regions_written_parts_q0 < p_anonymous_namespace_regions_expected_parts_q0) ? 1'b1 : 1'b0);
+assign icmp_ln1027_fu_160_p2 = ((p_anonymous_namespace_regions_written_parts_q0 < p_anonymous_namespace_regions_expected_parts_q0) ? 1'b1 : 1'b0);
 
-assign or_ln995_fu_179_p2 = (p_anonymous_namespace_regions_part_mask_q0 | bit_fu_162_p2);
+assign or_ln1024_fu_183_p2 = (p_anonymous_namespace_regions_part_mask_q0 | bit_fu_166_p2);
 
-assign p_anonymous_namespace_regions_expected_parts_address0 = zext_ln989_reg_186;
+assign p_anonymous_namespace_regions_expected_parts_address0 = zext_ln1018_reg_190;
 
 assign p_anonymous_namespace_regions_expected_parts_ce0 = p_anonymous_namespace_regions_expected_parts_ce0_local;
 
@@ -361,17 +364,17 @@ assign p_anonymous_namespace_regions_part_mask_address0 = p_anonymous_namespace_
 
 assign p_anonymous_namespace_regions_part_mask_ce0 = p_anonymous_namespace_regions_part_mask_ce0_local;
 
-assign p_anonymous_namespace_regions_part_mask_d0 = or_ln995_fu_179_p2;
+assign p_anonymous_namespace_regions_part_mask_d0 = or_ln1024_fu_183_p2;
 
 assign p_anonymous_namespace_regions_part_mask_we0 = p_anonymous_namespace_regions_part_mask_we0_local;
 
-assign p_anonymous_namespace_regions_valid_address0 = zext_ln989_fu_135_p1;
+assign p_anonymous_namespace_regions_valid_address0 = zext_ln1018_fu_135_p1;
 
 assign p_anonymous_namespace_regions_valid_ce0 = p_anonymous_namespace_regions_valid_ce0_local;
 
 assign p_anonymous_namespace_regions_valid_q0_local = p_anonymous_namespace_regions_valid_q0;
 
-assign p_anonymous_namespace_regions_written_parts_addr_9_gep_fu_108_p3 = zext_ln989_reg_186;
+assign p_anonymous_namespace_regions_written_parts_addr_9_gep_fu_108_p3 = zext_ln1018_reg_190;
 
 assign p_anonymous_namespace_regions_written_parts_address0 = p_anonymous_namespace_regions_written_parts_address0_local;
 
@@ -381,12 +384,15 @@ assign p_anonymous_namespace_regions_written_parts_d0 = grp_fu_128_p2;
 
 assign p_anonymous_namespace_regions_written_parts_we0 = p_anonymous_namespace_regions_written_parts_we0_local;
 
-assign tmp_fu_140_p4 = {{part_idx[31:5]}};
+assign part_idx_cast_fu_140_p1 = part_idx;
 
-assign zext_ln989_fu_135_p1 = idx;
+assign tmp_fu_144_p4 = {{part_idx[15:5]}};
+
+assign zext_ln1018_fu_135_p1 = idx;
 
 always @ (posedge ap_clk) begin
-    zext_ln989_reg_186[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
+    zext_ln1018_reg_190[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
+    part_idx_cast_reg_203[31:16] <= 16'b0000000000000000;
 end
 
 endmodule //transformer_top_p_anonymous_namespace_region_mark_part_complete

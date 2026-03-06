@@ -154,8 +154,8 @@ reg    ap_ready_int;
 wire    ap_block_pp0_stage0_11001;
 reg   [31:0] remaining_reg_1139;
 reg   [2:0] num_chunks_reg_1147;
-wire   [7:0] zext_ln777_fu_479_p1;
-reg   [7:0] zext_ln777_reg_1160;
+wire   [7:0] zext_ln779_fu_479_p1;
+reg   [7:0] zext_ln779_reg_1160;
 reg   [0:0] ap_phi_mux_UnifiedRetVal_phi_fu_380_p4;
 wire    ap_block_pp0_stage0;
 wire   [63:0] zext_ln621_fu_495_p1;
@@ -513,7 +513,7 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         remaining_reg_1139 <= ap_sig_allocacmp_remaining;
-        zext_ln777_reg_1160[4 : 0] <= zext_ln777_fu_479_p1[4 : 0];
+        zext_ln779_reg_1160[4 : 0] <= zext_ln779_fu_479_p1[4 : 0];
     end
 end
 
@@ -1128,13 +1128,13 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter1_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign chunks_bank_26_fu_685_p3 = ((or_ln628_3_fu_650_p2[0:0] == 1'b1) ? chunks_bank_12_fu_146 : zext_ln777_reg_1160);
+assign chunks_bank_26_fu_685_p3 = ((or_ln628_3_fu_650_p2[0:0] == 1'b1) ? chunks_bank_12_fu_146 : zext_ln779_reg_1160);
 
-assign chunks_bank_27_fu_678_p3 = ((icmp_ln628_5_fu_631_p2[0:0] == 1'b1) ? zext_ln777_reg_1160 : chunks_bank_13_fu_150);
+assign chunks_bank_27_fu_678_p3 = ((icmp_ln628_5_fu_631_p2[0:0] == 1'b1) ? zext_ln779_reg_1160 : chunks_bank_13_fu_150);
 
-assign chunks_bank_28_fu_671_p3 = ((icmp_ln628_4_fu_618_p2[0:0] == 1'b1) ? zext_ln777_reg_1160 : chunks_bank_14_fu_154);
+assign chunks_bank_28_fu_671_p3 = ((icmp_ln628_4_fu_618_p2[0:0] == 1'b1) ? zext_ln779_reg_1160 : chunks_bank_14_fu_154);
 
-assign chunks_bank_29_fu_664_p3 = ((icmp_ln628_3_fu_605_p2[0:0] == 1'b1) ? zext_ln777_reg_1160 : chunks_bank_15_fu_158);
+assign chunks_bank_29_fu_664_p3 = ((icmp_ln628_3_fu_605_p2[0:0] == 1'b1) ? zext_ln779_reg_1160 : chunks_bank_15_fu_158);
 
 assign chunks_bank_34_fu_822_p3 = ((icmp_ln622_fu_581_p2[0:0] == 1'b1) ? chunks_bank_12_fu_146 : chunks_bank_26_fu_685_p3);
 
@@ -1222,10 +1222,10 @@ assign zext_ln620_fu_491_p1 = chunks_bank_fu_134;
 
 assign zext_ln621_fu_495_p1 = chunks_bank_fu_134;
 
-assign zext_ln777_fu_479_p1 = chunks_bank_fu_134;
+assign zext_ln779_fu_479_p1 = chunks_bank_fu_134;
 
 always @ (posedge ap_clk) begin
-    zext_ln777_reg_1160[7:5] <= 3'b000;
+    zext_ln779_reg_1160[7:5] <= 3'b000;
 end
 
 endmodule //transformer_top_mmu_fsm_Pipeline_VITIS_LOOP_617_11
