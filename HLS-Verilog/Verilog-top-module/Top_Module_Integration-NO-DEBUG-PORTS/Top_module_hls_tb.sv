@@ -65,16 +65,16 @@ module top_module_hls_tb;
   localparam logic [7:0] COMPUTE_STATE_WAIT_MEM = 8'd2;
   localparam logic [7:0] COMPUTE_STATE_EXECUTE  = 8'd3;
 
-  localparam logic [8:0] ADDR_AP_CTRL         = 9'h000;
-  localparam logic [8:0] ADDR_CTRL_MEM_DATA_0 = 9'h01c;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_0 = 9'h130;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_1 = 9'h134;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_2 = 9'h138;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_3 = 9'h13c;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_4 = 9'h140;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_5 = 9'h144;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_6 = 9'h148;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_7 = 9'h14c;
+  localparam logic [7:0] ADDR_AP_CTRL           = 8'h00;
+  localparam logic [7:0] ADDR_CTRL_MEM_DATA_0   = 8'h10;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_0 = 8'hD8;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_1 = 8'hDC;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_2 = 8'hE0;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_3 = 8'hE4;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_4 = 8'hE8;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_5 = 8'hEC;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_6 = 8'hF0;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_7 = 8'hF4;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
@@ -211,12 +211,12 @@ module top_module_hls_tb;
   logic [0:0] m_axis_out_TSTRB;
   logic [0:0] m_axis_out_TLAST;
 
-  logic [8:0]  s_axi_control_AWADDR;
+  logic [7:0]  s_axi_control_AWADDR;
   logic        s_axi_control_AWVALID;
   logic        s_axi_control_WVALID;
   logic [31:0] s_axi_control_WDATA;
   logic [3:0]  s_axi_control_WSTRB;
-  logic [8:0]  s_axi_control_ARADDR;
+  logic [7:0]  s_axi_control_ARADDR;
   logic        s_axi_control_ARVALID;
   logic        s_axi_control_RREADY;
   logic        s_axi_control_BREADY;
@@ -229,6 +229,25 @@ module top_module_hls_tb;
   logic [1:0]   s_axi_control_RRESP;
   logic         s_axi_control_BVALID;
   logic [1:0]   s_axi_control_BRESP;
+
+  logic [4:0]   s_axi_control_r_AWADDR;
+  logic         s_axi_control_r_AWVALID;
+  logic         s_axi_control_r_WVALID;
+  logic [31:0]  s_axi_control_r_WDATA;
+  logic [3:0]   s_axi_control_r_WSTRB;
+  logic [4:0]   s_axi_control_r_ARADDR;
+  logic         s_axi_control_r_ARVALID;
+  logic         s_axi_control_r_RREADY;
+  logic         s_axi_control_r_BREADY;
+
+  logic         s_axi_control_r_AWREADY;
+  logic         s_axi_control_r_WREADY;
+  logic         s_axi_control_r_ARREADY;
+  logic         s_axi_control_r_RVALID;
+  logic [31:0]  s_axi_control_r_RDATA;
+  logic [1:0]   s_axi_control_r_RRESP;
+  logic         s_axi_control_r_BVALID;
+  logic [1:0]   s_axi_control_r_BRESP;
 
   // Re-added reduced debug outputs from top_no_debug.cpp
   logic [31:0]  dbg_state;
@@ -442,7 +461,7 @@ module top_module_hls_tb;
   } err_phase_t;
   err_phase_t err_phase;
 
-  logic [8:0]  ctrl_addr;
+  logic [7:0]  ctrl_addr;
   logic [31:0] ctrl_data_in;
   logic        ctrl_read_en;
   logic        ctrl_write_en;
@@ -452,7 +471,7 @@ module top_module_hls_tb;
   integer      base_assign_step;
   logic [31:0] axi_rdata;
   logic        axi_read_valid;
-  logic [8:0]  axi_addr;
+  logic [7:0]  axi_addr;
   logic        axi_is_write;
   logic        axi_aw_seen;
   logic        axi_w_seen;
@@ -466,15 +485,15 @@ module top_module_hls_tb;
   logic        irq_seen_error_clr;
   logic        irq_req_valid;
   logic        irq_req_read;
-  logic [8:0]  irq_req_addr;
+  logic [7:0]  irq_req_addr;
   logic        done_req_valid;
   logic        done_req_write;
-  logic [8:0]  done_req_addr;
+  logic [7:0]  done_req_addr;
   logic [31:0] done_req_wdata;
   logic        error_req_valid;
   logic        error_req_write;
   logic        error_req_read;
-  logic [8:0]  error_req_addr;
+  logic [7:0]  error_req_addr;
   logic [31:0] error_req_wdata;
   wire         irq_req_fire;
   wire         done_req_fire;
@@ -553,7 +572,7 @@ module top_module_hls_tb;
     dma_pattern_word = base_addr[31:0] ^ (32'h1357_0000 + word_idx);
   endfunction
 
-  function automatic [8:0] ctrl_mem_addr(input int word_idx);
+  function automatic [7:0] ctrl_mem_addr(input int word_idx);
     ctrl_mem_addr = ADDR_CTRL_MEM_DATA_0 + (word_idx * 4);
   endfunction
 
@@ -1820,6 +1839,15 @@ module top_module_hls_tb;
   assign s_axis_in_TKEEP = 1'b1;
   assign s_axis_in_TSTRB = 1'b1;
   assign m_axis_out_TREADY = 1'b1;
+  assign s_axi_control_r_AWVALID = 1'b0;
+  assign s_axi_control_r_WVALID  = 1'b0;
+  assign s_axi_control_r_WDATA   = 32'd0;
+  assign s_axi_control_r_WSTRB   = 4'h0;
+  assign s_axi_control_r_ARVALID = 1'b0;
+  assign s_axi_control_r_RREADY  = 1'b1;
+  assign s_axi_control_r_BREADY  = 1'b1;
+  assign s_axi_control_r_AWADDR  = 5'd0;
+  assign s_axi_control_r_ARADDR  = 5'd0;
 
   // Build/drive AXI-stream input packet.
   always_comb begin : p_axis_ingress_outputs
@@ -1840,10 +1868,9 @@ module top_module_hls_tb;
         stream_gap_countdown <= stream_gap_countdown - 1'b1;
       end
 
-      // Start ingress only once the scheduler state reported in status memory
-      // reaches S_STREAM_IN.
+      // Start ingress only once dbg_state reaches S_STREAM_IN.
       if (!axis_packet_sent && !stream_fill_active &&
-          (status_mem_shadow.status == 32'd1) &&
+          (dbg_state == 32'd1) &&
           s_axis_in_TREADY) begin
         stream_fill_active <= 1'b1;
         stream_fill_idx    <= '0;
@@ -3001,7 +3028,24 @@ module top_module_hls_tb;
     .s_axi_control_BVALID(s_axi_control_BVALID),
     .s_axi_control_BREADY(s_axi_control_BREADY),
     .s_axi_control_BRESP(s_axi_control_BRESP),
-    .interrupt()
+    .interrupt(),
+    .s_axi_control_r_AWVALID(s_axi_control_r_AWVALID),
+    .s_axi_control_r_AWREADY(s_axi_control_r_AWREADY),
+    .s_axi_control_r_AWADDR(s_axi_control_r_AWADDR),
+    .s_axi_control_r_WVALID(s_axi_control_r_WVALID),
+    .s_axi_control_r_WREADY(s_axi_control_r_WREADY),
+    .s_axi_control_r_WDATA(s_axi_control_r_WDATA),
+    .s_axi_control_r_WSTRB(s_axi_control_r_WSTRB),
+    .s_axi_control_r_ARVALID(s_axi_control_r_ARVALID),
+    .s_axi_control_r_ARREADY(s_axi_control_r_ARREADY),
+    .s_axi_control_r_ARADDR(s_axi_control_r_ARADDR),
+    .s_axi_control_r_RVALID(s_axi_control_r_RVALID),
+    .s_axi_control_r_RREADY(s_axi_control_r_RREADY),
+    .s_axi_control_r_RDATA(s_axi_control_r_RDATA),
+    .s_axi_control_r_RRESP(s_axi_control_r_RRESP),
+    .s_axi_control_r_BVALID(s_axi_control_r_BVALID),
+    .s_axi_control_r_BREADY(s_axi_control_r_BREADY),
+    .s_axi_control_r_BRESP(s_axi_control_r_BRESP)
   );
 
 endmodule
