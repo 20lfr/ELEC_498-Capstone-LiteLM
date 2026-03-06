@@ -9,8 +9,8 @@
 struct HardwareConfig {
     uint64_t stream_reg_base_addr = 0xa0000000;
     std::string uio_device = "axi_top";
-    std::string dmabuf_name = "udmabuf";
-    size_t dmabuf_size = 0x7fffffff; // 2GB
+    std::string dmabuf_name = "udmabuf0";
+    size_t dmabuf_size = 0x7a000000; // 2GB
     uint32_t timeout_ms = 30000;
     bool mock_mode = false;
 };

@@ -106,7 +106,8 @@ static bool cmd_init(bool mock) {
     }
 
     g_pl = new PLInterface(g_logger, g_err, mock);
-    if (!g_pl->init("axi_top", cfg.hardware.stream_reg_base_addr)) {
+    if (!g_pl->init(cfg.hardware.uio_device,
+                    cfg.hardware.stream_reg_base_addr)) {
         printf("  Init failed: %s\n", g_err->getLastErrorMessage().c_str());
         return false;
     }

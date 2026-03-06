@@ -104,10 +104,6 @@ namespace AddrReg {
         XAXI_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA;
     constexpr uint32_t WEIGHTS_BASE_HI =
         XAXI_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA + 4;
-    constexpr uint32_t KV_CACHE_BASE_LO =
-        XAXI_TOP_CONTROL_R_ADDR_DDR_KVCACHE_DATA;
-    constexpr uint32_t KV_CACHE_BASE_HI =
-        XAXI_TOP_CONTROL_R_ADDR_DDR_KVCACHE_DATA + 4;
 } // namespace AddrReg
 
 // AXI DMA Register Offsets (PG021 Direct Register Mode)

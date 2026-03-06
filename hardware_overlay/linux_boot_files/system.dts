@@ -789,7 +789,7 @@
 		};
 	};
 
-    udmabuf_big {
+    udmabuf_high {
         compatible = "ikwzm,u-dma-buf";
         device-name = "udmabuf0";
         memory-region = <&cma_high>;
