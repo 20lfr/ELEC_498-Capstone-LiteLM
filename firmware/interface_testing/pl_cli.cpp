@@ -82,7 +82,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
     // Verify the IP entered the expected FSM state
     usleep(500);
     uint32_t st = g_pl->readReg(PLReg::STATUS);
-    uint32_t expect = STATUS_BUSY | expected_status;
+    uint32_t expect = STATUS_BUSY_BIT | expected_status;
     if ((st & expect) == expect) {
         printf("  [%s] state OK (status=0x%04X)\n", name, st);
     } else {
@@ -106,7 +106,8 @@ static bool cmd_init(bool mock) {
     }
 
     g_pl = new PLInterface(g_logger, g_err, mock);
-    if (!g_pl->init("axi_top", cfg.hardware.stream_reg_base_addr)) {
+    if (!g_pl->init(cfg.hardware.uio_device,
+                    cfg.hardware.stream_reg_base_addr)) {
         printf("  Init failed: %s\n", g_err->getLastErrorMessage().c_str());
         return false;
     }
