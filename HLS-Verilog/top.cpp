@@ -143,8 +143,10 @@ void transformer_top(
 #pragma HLS INTERFACE ap_none port=irq_ps
 #pragma HLS ARRAY_PARTITION variable=dbg_head_ctx_ref complete dim=1
 #pragma HLS ARRAY_PARTITION variable=dbg_head_compute_ctx complete dim=1
-#pragma HLS ARRAY_PARTITION variable=dbg_head_in_buf complete dim=1
-#pragma HLS ARRAY_PARTITION variable=dbg_head_out_buf complete dim=1
+// #pragma HLS ARRAY_PARTITION variable=dbg_head_in_buf complete dim=1
+#pragma HLS BIND_STORAGE variable=dbg_head_in_buf type=ram_t2p impl=bram
+// #pragma HLS ARRAY_PARTITION variable=dbg_head_out_buf complete dim=1
+#pragma HLS BIND_STORAGE variable=dbg_head_out_buf type=ram_t2p impl=bram
 
     bool done                   = false;    // Scheduler done flag
     bool scheduler_error        = false;
@@ -161,8 +163,10 @@ void transformer_top(
     static SchedState       state_local                    = S_IDLE;
     static HeadCtx          head_ctx_local[HEADS_PARALLEL];
 #pragma HLS ARRAY_PARTITION variable=head_ctx_local complete dim=1
+#pragma HLS BIND_STORAGE variable=head_ctx_local type=ram_t2p impl=bram
     static ComputeHeadCtx   head_compute_ctx_local[HEADS_PARALLEL];
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx_local complete dim=1
+#pragma HLS BIND_STORAGE variable=head_compute_ctx_local type=ram_t2p impl=bram
 
     // Headed compute controller lanes (parallel heads) 
     static int              head_group_idx;
@@ -171,7 +175,11 @@ void transformer_top(
     static uint8_t          mmu_in_buf[compute_buf::IN_BUF_BYTES];
     static uint8_t          mmu_out_buf[compute_buf::OUT_BUF_BYTES];
     static uint8_t          mmu_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES];
+#pragma HLS ARRAY_PARTITION variable=mmu_head_in_buf complete dim=1
+#pragma HLS BIND_STORAGE variable=mmu_head_in_buf type=ram_t2p impl=bram
     static uint8_t          mmu_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES];
+#pragma HLS ARRAY_PARTITION variable=mmu_head_out_buf complete dim=1
+#pragma HLS BIND_STORAGE variable=mmu_head_out_buf type=ram_t2p impl=bram
     static uint8_t          stream_in_buf_local[STREAM_IN_BUF_BYTES];
     static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
     static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
@@ -263,11 +271,11 @@ void transformer_top(
         token_complete_local = false;
 
         for (int i = 0; i < HEADS_PARALLEL; ++i) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
             head_ctx_local[i] = HeadCtx();
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
             head_compute_ctx_local[lane] = ComputeHeadCtx();
         }
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
@@ -279,7 +287,7 @@ void transformer_top(
             mmu_out_buf[i] = 0;
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
             for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
 // #pragma HLS PIPELINE II=1
                 mmu_head_in_buf[lane][i] = 0;
@@ -394,7 +402,7 @@ void transformer_top(
 
     // Mirror headed compute contexts for debug visibility and MMU handshake (head scheduler only looks at head_ctx fields, so this is safe to do in-place).
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         head_compute_ctx_local[lane].compute_start = head_ctx_local[lane].compute_start;
         head_compute_ctx_local[lane].compute_instruction = head_ctx_local[lane].compute_op;
     }
@@ -411,7 +419,7 @@ void transformer_top(
 
     // Mirror headed compute contexts back to main scheduler context for debug visibility (main scheduler has full view of all heads, so it takes priority in this mirror).
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         head_ctx_local[lane].compute_ready = head_compute_ctx_local[lane].compute_ready;
         head_ctx_local[lane].compute_done  = head_compute_ctx_local[lane].compute_done;
     }
@@ -469,12 +477,12 @@ void transformer_top(
             if (!dma_is_write_latched_local) {
                 const uint32_t rx_words = (bytes + 3u) >> 2;
                 for (uint32_t i = 0; i < rx_words; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                     dma_rx_buf_local[i] = 0;
                 }
             }
             for (uint32_t i = 0; i < bytes; ++i) {
-#pragma HLS PIPELINE II=1
+// #pragma HLS PIPELINE II=1
                 const uint64_t byte_addr = dma_addr_latched_local + static_cast<uint64_t>(i);
 #ifndef __SYNTHESIS__
                 const uint64_t sim_byte_addr = map_csim_ddr_addr(byte_addr, ctrl_mem);
@@ -577,7 +585,7 @@ void transformer_top(
             dbg_out_buf[i] = mmu_out_buf[i];
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-    #pragma HLS UNROLL
+    // #pragma HLS UNROLL
             dbg_head_compute_ctx[lane] = head_compute_ctx_local[lane];
             dbg_head_ctx_ref[lane] = head_ctx_local[lane];
             for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {

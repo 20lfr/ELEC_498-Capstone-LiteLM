@@ -425,7 +425,7 @@ bool drive_group_head_phase(
     bool group_finished = true; // assume finished unless any head is still active
 
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-#pragma HLS UNROLL
+// #pragma HLS UNROLL
         HeadCtx &ctx = head_ctx_ref[lane];
 
         int abs_head = ctx.head_idx;

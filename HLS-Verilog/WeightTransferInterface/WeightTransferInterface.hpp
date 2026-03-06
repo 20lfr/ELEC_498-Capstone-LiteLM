@@ -26,7 +26,7 @@ public:
 
         read_loop:
             for (int i = 0; i < burst_len; i++) {
-#pragma HLS PIPELINE II = 1
+// #pragma HLS PIPELINE II = 1
                 local_buf[current_offset + i] =
                     src[offset + current_offset + i];
             }
@@ -51,7 +51,7 @@ public:
 
         write_loop:
             for (int i = 0; i < burst_len; i++) {
-#pragma HLS PIPELINE II = 1
+// #pragma HLS PIPELINE II = 1
                 dst[offset + current_offset + i] =
                     local_buf[current_offset + i];
             }

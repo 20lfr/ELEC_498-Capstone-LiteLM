@@ -464,6 +464,7 @@ int main() {
     const int MAX_CYCLES = 10000;
     const int STREAM_TOKEN_BYTES = STREAM_IN_BUF_BYTES;
     const int AXIS_BEATS = STREAM_TOKEN_BYTES;
+    const size_t selected_stream_token = 0;
 
     axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
 
@@ -475,6 +476,7 @@ int main() {
     int  axis_sent       = 0;
     bool axis_feed_done  = false;
     bool axis_drive      = false;
+    int  axis_gap_countdown = 0;
     uint8_t axis_in_data = 0;
     size_t stream_in_bytes_read = 0;
 
@@ -522,6 +524,11 @@ int main() {
     }
     const size_t total_stream_tokens = stream_in_bytes_read / static_cast<size_t>(STREAM_TOKEN_BYTES);
     std::printf("[TEST] stream_in.bin contains %zu token(s), sending token 0 only.\n", total_stream_tokens);
+    if (selected_stream_token >= total_stream_tokens) {
+        std::fprintf(stderr, "ERROR: selected stream token %zu out of range (total=%zu)\n",
+                     selected_stream_token, total_stream_tokens);
+        return 1;
+    }
 
     enum class CtrlInitStage {
         TestCtrlInit,
@@ -730,52 +737,63 @@ int main() {
         axis_in_valid = false;
         axis_in_last = false;
         axis_in_data = 0;
-        if (!axis_feed_done && (axis_drive || (((ctrl_shadow_control & CTRL_RESETN_BIT) != 0) && start_pulsed))) {
+        if (!axis_feed_done && !axis_drive && (dbg_state == S_STREAM_IN)) {
             axis_drive = true;
+            axis_gap_countdown = 0;
+        }
+        if (!axis_feed_done && axis_drive) {
+            if (axis_gap_countdown > 0) {
+                axis_gap_countdown--;
+            }
             if (axis_sent < AXIS_BEATS) {
-                axis8_t beat{};
-                const size_t token_byte_offset = static_cast<size_t>(stream_in_token_index) * static_cast<size_t>(STREAM_TOKEN_BYTES);
-                beat.data = stream_in_buf[token_byte_offset + static_cast<size_t>(axis_sent)];
-                beat.keep = 1;
-                beat.strb = 1;
-                beat.last = (axis_sent == AXIS_BEATS - 1) ? 1 : 0;
-                if (s_axis_in.write_nb(beat)) {
-                    axis_in_valid = true;
-                    axis_in_last = (beat.last != 0);
-                    axis_in_data = static_cast<uint8_t>(beat.data);
-                    stream_in_token_accum |= (static_cast<uint32_t>(axis_in_data) << (8 * stream_in_token_byte_idx));
-                    std::printf("[CYCLE %d] Stream in beat: byte_idx=%d token_byte_idx=%d data=0x%02X last=%d\n",
-                                cycle,
-                                axis_sent,
-                                stream_in_token_byte_idx,
-                                static_cast<unsigned>(axis_in_data),
-                                axis_in_last ? 1 : 0);
-                    stream_in_token_byte_idx++;
-                    if (stream_in_token_byte_idx == 4) {
-                        const int32_t token_id = static_cast<int32_t>(stream_in_token_accum);
-                        std::printf("[CYCLE %d] Stream in token %d = %d (0x%08X)\n",
+                if (axis_gap_countdown == 0) {
+                    axis8_t beat{};
+                    const size_t token_byte_offset = selected_stream_token * static_cast<size_t>(STREAM_TOKEN_BYTES);
+                    beat.data = stream_in_buf[token_byte_offset + static_cast<size_t>(axis_sent)];
+                    beat.keep = 1;
+                    beat.strb = 1;
+                    beat.last = (axis_sent == AXIS_BEATS - 1) ? 1 : 0;
+                    if (s_axis_in.write_nb(beat)) {
+                        axis_in_valid = true;
+                        axis_in_last = (beat.last != 0);
+                        axis_in_data = static_cast<uint8_t>(beat.data);
+                        stream_in_token_accum |= (static_cast<uint32_t>(axis_in_data) << (8 * stream_in_token_byte_idx));
+                        std::printf("[CYCLE %d] Stream in beat: byte_idx=%d token_byte_idx=%d data=0x%02X last=%d\n",
                                     cycle,
-                                    stream_in_token_index,
-                                    token_id,
-                                    static_cast<unsigned>(stream_in_token_accum));
-                        stream_in_token_index++;
-                        stream_in_token_byte_idx = 0;
-                        stream_in_token_accum = 0;
-                    }
-                    axis_sent++;
-                    if (axis_in_last) {
-                        if (stream_in_token_byte_idx != 0) {
+                                    axis_sent,
+                                    stream_in_token_byte_idx,
+                                    static_cast<unsigned>(axis_in_data),
+                                    axis_in_last ? 1 : 0);
+                        stream_in_token_byte_idx++;
+                        if (stream_in_token_byte_idx == 4) {
                             const int32_t token_id = static_cast<int32_t>(stream_in_token_accum);
-                            std::printf("[CYCLE %d] Stream in partial token %d = %d (0x%08X, bytes=%d)\n",
+                            std::printf("[CYCLE %d] Stream in token %d = %d (0x%08X)\n",
                                         cycle,
                                         stream_in_token_index,
                                         token_id,
-                                        static_cast<unsigned>(stream_in_token_accum),
-                                        stream_in_token_byte_idx);
+                                        static_cast<unsigned>(stream_in_token_accum));
                             stream_in_token_index++;
+                            stream_in_token_byte_idx = 0;
+                            stream_in_token_accum = 0;
                         }
-                        axis_feed_done = true;
-                        axis_drive = false;
+                        axis_sent++;
+                        if (axis_in_last) {
+                            if (stream_in_token_byte_idx != 0) {
+                                const int32_t token_id = static_cast<int32_t>(stream_in_token_accum);
+                                std::printf("[CYCLE %d] Stream in partial token %d = %d (0x%08X, bytes=%d)\n",
+                                            cycle,
+                                            stream_in_token_index,
+                                            token_id,
+                                            static_cast<unsigned>(stream_in_token_accum),
+                                            stream_in_token_byte_idx);
+                                stream_in_token_index++;
+                            }
+                            axis_feed_done = true;
+                            axis_drive = false;
+                            axis_gap_countdown = 0;
+                        } else {
+                            axis_gap_countdown = 5;
+                        }
                     }
                 }
             }

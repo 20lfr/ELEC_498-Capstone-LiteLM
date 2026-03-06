@@ -94,18 +94,14 @@ void axi_top(
     // Buffers — small token/logit stay on BRAM
     static int8_t token_buf[Phi3Mini4K::d_model / sizeof(int8_t)];
 #pragma HLS BIND_STORAGE variable = token_buf type = ram_2p impl = bram
-#pragma HLS ARRAY_PARTITION variable = token_buf cyclic factor =               \
-    NUM_BYTES_PER_STREAM
     static int8_t logit_buf[Phi3Mini4K::d_model / sizeof(int8_t)];
 #pragma HLS BIND_STORAGE variable = logit_buf type = ram_2p impl = bram
-#pragma HLS ARRAY_PARTITION variable = logit_buf cyclic factor =               \
-    NUM_BYTES_PER_STREAM
 
     // Single shared scratch buffer on URAM — sized to largest consumer
     static constexpr uint32_t SCRATCH_BUF_WORDS =
         Phi3Mini4K::dma_sizes::w2_tile / sizeof(int32_t);
     static int32_t scratch_buf[SCRATCH_BUF_WORDS];
-#pragma HLS BIND_STORAGE variable = scratch_buf type = ram_2p impl = uram
+#pragma HLS BIND_STORAGE variable = scratch_buf type = ram_2p impl = bram
 
     static ControlMemInterface ctrl_iface;
     static LogitStreamInterface logit_iface;
@@ -330,7 +326,7 @@ void axi_top(
             PLRegBits::STAT_BUSY_BIT | PLRegBits::STAT_COMPUTE_BIT;
         // Compute placeholder
         for (int i = 0; i < Phi3Mini4K::d_model / sizeof(int8_t); i++) {
-#pragma HLS UNROLL factor = 4
+// #pragma HLS UNROLL factor = 4
             logit_buf[i] = token_buf[i] +
                            static_cast<int8_t>(scratch_buf[i % wt_len] & 0xFF);
         }
@@ -366,7 +362,7 @@ void axi_top(
         kv_len = mmu_calc_dma_size(DmaSel::DMASEL_K_WRITE) / sizeof(int32_t);
 
         for (int i = 0; i < kv_len; i++) {
-#pragma HLS PIPELINE II = 1
+// #pragma HLS PIPELINE II = 1
             int32_t packed = 0;
             for (int j = 0; j < sizeof(int32_t); j++) {
                 packed |=
@@ -402,7 +398,7 @@ void axi_top(
         kv_len = mmu_calc_dma_size(DmaSel::DMASEL_V_WRITE) / sizeof(int32_t);
 
         for (int i = 0; i < kv_len; i++) {
-#pragma HLS PIPELINE II = 1
+// #pragma HLS PIPELINE II = 1
             int32_t packed = 0;
             for (int j = 0; j < sizeof(int32_t); j++) {
                 packed |=
