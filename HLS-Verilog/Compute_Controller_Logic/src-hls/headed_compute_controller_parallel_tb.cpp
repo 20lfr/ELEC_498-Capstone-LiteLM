@@ -107,8 +107,9 @@ void requant_heads_expected(
 ) {
     for (int h = 0; h < D_HEADS; ++h) {
         int64_t product = static_cast<int64_t>(x32[h]) * static_cast<int64_t>(M);
-        int64_t rounded = 1LL << (n - 1);
-        int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+        int64_t rounded = (n > 0) ? (1LL << (n - 1)) : 0;
+        int32_t scaled = (n > 0) ? static_cast<int32_t>((product + rounded) >> n)
+                                 : static_cast<int32_t>(product);
 
         if (scaled > 127) {
             y8[h] = 127;

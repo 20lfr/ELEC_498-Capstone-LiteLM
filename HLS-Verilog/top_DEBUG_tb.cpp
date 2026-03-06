@@ -8,6 +8,7 @@
 #include <fstream>
 #include <limits>
 #include <string>
+#include <ctime>
 #include <sys/stat.h>
 
 #include "top.hpp"
@@ -46,8 +47,19 @@ static bool init_tb_logs() {
 
     char stdout_path[512];
     char stderr_path[512];
-    std::snprintf(stdout_path, sizeof(stdout_path), "%s/top_DEBUG_tb_stdout.log", log_dir);
-    std::snprintf(stderr_path, sizeof(stderr_path), "%s/top_DEBUG_tb_stderr.log", log_dir);
+    char timestamp[32];
+    {
+        const std::time_t now = std::time(nullptr);
+        std::tm tm_now{};
+#if defined(_WIN32)
+        localtime_s(&tm_now, &now);
+#else
+        localtime_r(&now, &tm_now);
+#endif
+        std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", &tm_now);
+    }
+    std::snprintf(stdout_path, sizeof(stdout_path), "%s/top_DEBUG_tb_stdout_%s.log", log_dir, timestamp);
+    std::snprintf(stderr_path, sizeof(stderr_path), "%s/top_DEBUG_tb_stderr_%s.log", log_dir, timestamp);
 
     if (std::freopen(stdout_path, "w", stdout) == nullptr) {
         std::fprintf(stderr, "ERROR: Failed to open stdout log '%s': %s\n",
@@ -224,7 +236,7 @@ static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
     return true;
 }
 
-static bool load_shared_stream_in(uint8_t *stream_in_buf, size_t num_bytes) {
+static bool load_shared_stream_in(uint8_t *stream_in_buf, size_t num_bytes, size_t &bytes_read) {
     const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
     std::ifstream in(stream_path.c_str(), std::ios::binary);
     if (!in) {
@@ -235,6 +247,7 @@ static bool load_shared_stream_in(uint8_t *stream_in_buf, size_t num_bytes) {
     std::memset(stream_in_buf, 0, num_bytes);
     in.read(reinterpret_cast<char *>(stream_in_buf), static_cast<std::streamsize>(num_bytes));
     const std::streamsize got = in.gcount();
+    bytes_read = static_cast<size_t>(got);
     if (got <= 0) {
         std::fprintf(stderr, "ERROR: Failed to read shared stream image '%s'\n", stream_path.c_str());
         return false;
@@ -1248,7 +1261,7 @@ static uint64_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) 
                static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
     case DMASEL_WLOGIT:
         if (f.tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wlogit_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wlogit_offset) +
                static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.wlogit_tile_stride);
     case DMASEL_LN0:
         return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
@@ -1307,7 +1320,7 @@ static uint64_t compute_wl_address(
                static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
     case DMASEL_WLOGIT:
         if (tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wlogit_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
+        return static_cast<uint64_t>(ctrl.wlogit_offset) +
                static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.wlogit_tile_stride);
     case DMASEL_LN0:
         return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
@@ -1462,16 +1475,16 @@ ControlMemSpace ctrl_mem_init(bool init) {
         ctrl_mem.v_cache_stride  = 0x00000100;
         ctrl_mem.wo_tile_stride  = 0x00000020;
         ctrl_mem.w1_tile_stride  = 0x00000040;
-        ctrl_mem.w2_tile_stride  = 0x00000020;
+        ctrl_mem.w2_tile_stride  = 0x00000040;
         ctrl_mem.wq_bias_head_stride = 0x00000100;
         ctrl_mem.wk_bias_head_stride = 0x00000100;
         ctrl_mem.wv_bias_head_stride = 0x00000100;
         ctrl_mem.wo_bias_tile_stride = 0x00000020;
         ctrl_mem.w1_bias_tile_stride = 0x00000040;
         ctrl_mem.w2_bias_tile_stride = 0x00000020;
-        ctrl_mem.ln0_gamma_stride = 0x00000004;
-        ctrl_mem.ln1_gamma_stride = 0x00000004;
-        ctrl_mem.final_norm_gamma_stride = 0x00000004;
+        ctrl_mem.ln0_gamma_stride = 0x00000040;
+        ctrl_mem.ln1_gamma_stride = 0x00000040;
+        ctrl_mem.final_norm_gamma_stride = 0x00000040;
         ctrl_mem.ln0_eps_stride = 0x00000004;
         ctrl_mem.ln1_eps_stride = 0x00000004;
         ctrl_mem.final_norm_eps_stride = 0x00000004;
@@ -1514,9 +1527,11 @@ static inline void write_i4(uint8_t *buf, int nibble_idx, int8_t value) {
 }
 
 static inline uint8_t dma_word_get_byte(const axi_gmem_word_t *buf, uint64_t byte_idx) {
-    const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
-    const uint32_t word_idx = (wrapped_byte / AXI_GMEM_WORD_BYTES) % static_cast<uint32_t>(TOP_DMA_BUF_WORDS);
-    const uint32_t lane = wrapped_byte % AXI_GMEM_WORD_BYTES;
+    if (byte_idx >= TB_DDR_IMAGE_BYTES) {
+        return 0;
+    }
+    const uint64_t word_idx = byte_idx / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t lane = static_cast<uint32_t>(byte_idx % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
     const axi_gmem_word_t word = buf[word_idx];
     const uint32_t hi = ((lane + 1u) * 8u) - 1u;
     const uint32_t lo = lane * 8u;
@@ -1524,9 +1539,11 @@ static inline uint8_t dma_word_get_byte(const axi_gmem_word_t *buf, uint64_t byt
 }
 
 static inline void dma_word_set_byte(axi_gmem_word_t *buf, uint64_t byte_idx, uint8_t value) {
-    const uint32_t wrapped_byte = static_cast<uint32_t>(byte_idx & static_cast<uint64_t>(TOP_DMA_BUF_BYTES - 1));
-    const uint32_t word_idx = (wrapped_byte / AXI_GMEM_WORD_BYTES) % static_cast<uint32_t>(TOP_DMA_BUF_WORDS);
-    const uint32_t lane = wrapped_byte % AXI_GMEM_WORD_BYTES;
+    if (byte_idx >= TB_DDR_IMAGE_BYTES) {
+        return;
+    }
+    const uint64_t word_idx = byte_idx / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t lane = static_cast<uint32_t>(byte_idx % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
     axi_gmem_word_t word = buf[word_idx];
     const uint32_t hi = ((lane + 1u) * 8u) - 1u;
     const uint32_t lo = lane * 8u;
@@ -1569,7 +1586,9 @@ int main() {
     }
 
     const int MAX_CYCLES = 10000;
+    const int STREAM_TOKEN_BYTES = STREAM_IN_BUF_BYTES;
     const int AXIS_BEATS = STREAM_IN_BUF_BYTES;
+    const size_t selected_stream_token = 0;
 
 
     bool wl_ready        = false;
@@ -1596,6 +1615,7 @@ int main() {
     uint8_t axis_in_data = 0;
     uint8_t axis_in_keep = 0;
     uint8_t axis_in_strb = 0;
+    size_t stream_in_bytes_read = 0;
 
     bool mem_transfer_done = false;
     bool mem_read_request  = false;
@@ -1617,7 +1637,11 @@ int main() {
 
     uint8_t stream_in_buf[STREAM_IN_BUF_BYTES] = {};
     uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES] = {};
+    int stream_in_token_index = 0;
+    uint8_t stream_in_token_bytes[STREAM_TOKEN_BYTES] = {};
+    int stream_in_token_count = 0;
     int stream_out_count = 0;
+    int stream_out_token_index = 0;
 
     SchedState dbg_state     = S_IDLE;
     bool irq_ps              = false;
@@ -1645,7 +1669,23 @@ int main() {
     if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS)) {
         return 1;
     }
-    if (!load_shared_stream_in(stream_in_buf, STREAM_IN_BUF_BYTES)) {
+    if (!load_shared_stream_in(stream_in_buf, STREAM_IN_BUF_BYTES, stream_in_bytes_read)) {
+        return 1;
+    }
+    if (stream_in_bytes_read < static_cast<size_t>(STREAM_TOKEN_BYTES)) {
+        std::fprintf(stderr, "ERROR: stream_in.bin must contain at least %d bytes (one token)\n", STREAM_TOKEN_BYTES);
+        return 1;
+    }
+    if (stream_in_bytes_read % STREAM_TOKEN_BYTES != 0) {
+        std::printf("WARN: stream_in.bin size is not token aligned (%zu bytes). Trailing bytes will be truncated.\n",
+                    stream_in_bytes_read);
+        stream_in_bytes_read -= (stream_in_bytes_read % STREAM_TOKEN_BYTES);
+    }
+    const size_t total_stream_tokens = stream_in_bytes_read / static_cast<size_t>(STREAM_TOKEN_BYTES);
+    std::printf("[TEST] stream_in.bin contains %zu token(s), sending token 0 only.\n", total_stream_tokens);
+    if (selected_stream_token >= total_stream_tokens) {
+        std::fprintf(stderr, "ERROR: selected stream token %zu out of range (total=%zu)\n",
+                     selected_stream_token, total_stream_tokens);
         return 1;
     }
     enum class CtrlInitStage { 
@@ -1948,7 +1988,8 @@ int main() {
             axis_drive = true;
             if (axis_sent < AXIS_BEATS) {
                 axis8_t beat{};
-                beat.data = stream_in_buf[axis_sent];
+                const size_t token_byte_offset = selected_stream_token * static_cast<size_t>(STREAM_TOKEN_BYTES);
+                beat.data = stream_in_buf[token_byte_offset + static_cast<size_t>(axis_sent)];
                 beat.keep = 1;
                 beat.strb = 1;
                 beat.last = (axis_sent == AXIS_BEATS - 1) ? 1 : 0;
@@ -1959,8 +2000,35 @@ int main() {
                     axis_in_data = static_cast<uint8_t>(beat.data);
                     axis_in_keep = static_cast<uint8_t>(beat.keep);
                     axis_in_strb = static_cast<uint8_t>(beat.strb);
+                    if (stream_in_token_count < STREAM_TOKEN_BYTES) {
+                        stream_in_token_bytes[stream_in_token_count] = axis_in_data;
+                        stream_in_token_count++;
+                    }
+                    std::printf("[CYCLE %d] Stream in beat: byte_idx=%d token_byte_idx=%d data=0x%02X last=%d\n",
+                                cycle,
+                                axis_sent,
+                                (stream_in_token_count > 0) ? (stream_in_token_count - 1) : 0,
+                                static_cast<unsigned>(axis_in_data),
+                                axis_in_last ? 1 : 0);
                     axis_sent++;
                     if (axis_in_last) {
+                        uint32_t token_word = 0;
+                        if (stream_in_token_count >= 4) {
+                            token_word =
+                                static_cast<uint32_t>(stream_in_token_bytes[0]) |
+                                (static_cast<uint32_t>(stream_in_token_bytes[1]) << 8) |
+                                (static_cast<uint32_t>(stream_in_token_bytes[2]) << 16) |
+                                (static_cast<uint32_t>(stream_in_token_bytes[3]) << 24);
+                        }
+                        const int32_t token_id = static_cast<int32_t>(token_word);
+                        std::printf("[CYCLE %d] Stream in token %d complete: bytes=%d first_word=%d (0x%08X)\n",
+                                    cycle,
+                                    stream_in_token_index,
+                                    stream_in_token_count,
+                                    token_id,
+                                    static_cast<unsigned>(token_word));
+                        stream_in_token_index++;
+                        stream_in_token_count = 0;
                         axis_feed_done = true;
                         axis_drive = false;
                     }
@@ -2047,7 +2115,18 @@ int main() {
                 stream_out_count++;
             }
             if (axis_out_beat.last != 0) {
+                std::printf("[CYCLE %d] Stream out token %d: ", cycle, stream_out_token_index);
+                for (int i = 0; i < STREAM_OUT_BUF_BYTES; ++i) {
+                    std::printf("%02X ", static_cast<unsigned>(stream_out_buf[i]));
+                }
+                const int32_t token_id = static_cast<int32_t>(
+                    static_cast<uint32_t>(stream_out_buf[0]) |
+                    (static_cast<uint32_t>(stream_out_buf[1]) << 8) |
+                    (static_cast<uint32_t>(stream_out_buf[2]) << 16) |
+                    (static_cast<uint32_t>(stream_out_buf[3]) << 24));
+                std::printf("(index=%d)\n", token_id);
                 stream_out_count = 0;
+                stream_out_token_index++;
             }
         }
 

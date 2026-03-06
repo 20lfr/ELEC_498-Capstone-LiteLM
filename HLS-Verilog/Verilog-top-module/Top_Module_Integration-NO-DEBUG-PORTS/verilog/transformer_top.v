@@ -6,7 +6,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.300000,HLS_SYN_LAT=-1,HLS_SYN_TPT=none,HLS_SYN_MEM=65,HLS_SYN_DSP=0,HLS_SYN_FF=70333,HLS_SYN_LUT=180934,HLS_VERSION=2025_1}" *)
+(* CORE_GENERATION_INFO="transformer_top_transformer_top,hls_ip_2025_1,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xck26-sfvc784-2LV-c,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=7.300000,HLS_SYN_LAT=-1,HLS_SYN_TPT=none,HLS_SYN_MEM=65,HLS_SYN_DSP=0,HLS_SYN_FF=70551,HLS_SYN_LUT=182379,HLS_VERSION=2025_1}" *)
 
 module transformer_top (
         ap_clk,
@@ -4239,8 +4239,8 @@ transformer_top_compute_controller grp_compute_controller_fu_3205(
     .ap_idle(grp_compute_controller_fu_3205_ap_idle),
     .ap_ready(grp_compute_controller_fu_3205_ap_ready),
     .ctrl_mem_0(reset_n_reg_6895),
-    .empty_200(compute_start),
-    .empty_201(compute_instruction),
+    .empty_202(compute_start),
+    .empty_203(compute_instruction),
     .empty(mmu_main_mem_transfer_done_wire),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0(grp_compute_controller_fu_3205_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0),
     .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0(grp_compute_controller_fu_3205_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0),
@@ -5384,7 +5384,7 @@ gmem_m_axi_U(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U3880(
+sparsemux_9_2_8_1_1_U3911(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_3),
     .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_2),
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_1),

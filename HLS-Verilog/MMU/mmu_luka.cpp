@@ -650,6 +650,8 @@ static void commit_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks) {
     }
 }
 
+static void zero_region_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks);
+
 static int find_region(Tag tag, int layer, int head, int tile) {
 #pragma HLS INLINE off
     for (int i = 0; i < MAX_REGIONS; ++i) {
@@ -809,6 +811,8 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
             r.chunks[i] = Chunk{};
         }
     }
+    // Ensure newly allocated region bytes start deterministic.
+    zero_region_chunks(r.chunks, r.num_chunks);
     region_count++;
     return free_idx;
 }
@@ -868,6 +872,31 @@ static inline void unpack_uram_word(axi_gmem_word_t word, uint8_t *dst, uint32_t
 // #pragma HLS UNROLL
         dst[byte_offset + i] =
             static_cast<uint8_t>((word >> (i * 8u)) & axi_gmem_word_t(0xFFu));
+    }
+}
+
+static void zero_region_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks) {
+#pragma HLS INLINE off
+    for (int c = 0; c < MAX_CHUNKS; ++c) {
+#pragma HLS LOOP_FLATTEN off
+        if (c >= num_chunks) break;
+        const Chunk &ck = chunks[c];
+        uint32_t local = 0;
+        while (local < ck.size) {
+#pragma HLS LOOP_FLATTEN off
+            const uint32_t bank_byte_addr = ck.offset + local;
+            const bool word_aligned = ((bank_byte_addr % URAM_BANK_WORD_BYTES) == 0u) &&
+                                      ((ck.size - local) >= URAM_BANK_WORD_BYTES);
+            if (word_aligned) {
+// #pragma HLS PIPELINE II=1
+                uram_banks[ck.bank][bank_byte_addr / URAM_BANK_WORD_BYTES] = 0;
+                local += URAM_BANK_WORD_BYTES;
+            } else {
+// #pragma HLS PIPELINE II=1
+                uram_write_byte(ck.bank, bank_byte_addr, 0);
+                local += 1;
+            }
+        }
     }
 }
 
@@ -1114,6 +1143,18 @@ struct WriteSpec {
     uint32_t part_bytes = 0;
     uint32_t total_bytes = 0;
 };
+
+static bool validate_write_spec(const WriteSpec &s) {
+#pragma HLS INLINE
+    if (s.tag == Tag::NONE) return false;
+    if (s.expected_parts == 0 || s.expected_parts > 32) return false;
+    if (s.part_idx < 0 || s.part_idx >= static_cast<int>(s.expected_parts)) return false;
+    if (s.part_bytes == 0 || s.total_bytes == 0) return false;
+
+    const uint64_t packed_total =
+        static_cast<uint64_t>(s.part_bytes) * static_cast<uint64_t>(s.expected_parts);
+    return packed_total == static_cast<uint64_t>(s.total_bytes);
+}
 
 static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile) {
 #pragma HLS INLINE off
@@ -1471,11 +1512,19 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
                      + static_cast<uint32_t>(layer) * ctrl_mem.ln1_gamma_stride;
             return true;
         }
-        case DmaSel::DMASEL_CONCAT:
-        case DmaSel::DMASEL_WLOGIT: {
+        case DmaSel::DMASEL_CONCAT: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wlogit_offset)
                      + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
+                     + static_cast<uint32_t>(tile) * ctrl_mem.wlogit_tile_stride;
+            return true;
+        }
+        case DmaSel::DMASEL_WLOGIT: {
+            if (tile < 0) return false;
+            // Logits projection weights are shared across layers in this design.
+            // Do not apply layer_stride here, otherwise layer>0 reads can go out-of-range
+            // of the compact DDR image and become nondeterministic in C-sim.
+            addr_out = static_cast<uint64_t>(ctrl_mem.wlogit_offset)
                      + static_cast<uint32_t>(tile) * ctrl_mem.wlogit_tile_stride;
             return true;
         }
@@ -2074,6 +2123,15 @@ void mmu_fsm(
         for (int i = 0; i < URAM_BANKS; ++i) {
             bank_offsets[i] = 0;
         }
+#ifndef __SYNTHESIS__
+        // C-sim determinism: clear URAM model contents on reset.
+        // This avoids cross-run/static-state residue affecting software simulation results.
+        for (int b = 0; b < URAM_BANKS; ++b) {
+            for (uint32_t w = 0; w < URAM_BANK_WORDS; ++w) {
+                uram_banks[b][w] = 0;
+            }
+        }
+#endif
         for (int i = 0; i < DMA_QUEUE_DEPTH; ++i) {
             dma_q[i] = DmaQueueEntry{};
         }
@@ -2682,6 +2740,17 @@ void mmu_fsm(
         case State::COMPUTE_WRITE_PREP: {
             const bool headed = active_compute_headed;
             const WriteSpec spec = build_write_spec(active_compute_op, headed, active_compute_head, active_compute_tile);
+            if (!validate_write_spec(spec)) {
+                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+                active_compute_valid = false;
+                if (active_compute_headed) {
+                    int lane = active_compute_lane;
+                    if (lane < 0 || lane >= HEADS_PARALLEL) lane = head_to_lane(active_compute_head);
+                    if (lane >= 0 && lane < HEADS_PARALLEL) arb_release(lane);
+                }
+                g_state = State::IDLE;
+                break;
+            }
 
             const int idx = get_or_create_region(
                 spec.tag, active_compute_layer, spec.key_head, spec.key_tile,

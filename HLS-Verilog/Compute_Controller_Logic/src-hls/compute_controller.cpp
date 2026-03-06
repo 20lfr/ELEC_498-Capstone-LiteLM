@@ -273,8 +273,10 @@ void REQUANT_D_MODEL_int32_to_int8(
     for (int t = 0; t < D_MODEL; ++t) {
 // #pragma HLS UNROLL
         int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
-        int64_t rounded = 1LL << (n - 1);
-        int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+        const bool do_shift = (n > 0) && (n < 63);
+        int64_t rounded = do_shift ? (1LL << (n - 1)) : 0;
+        int32_t scaled = do_shift ? static_cast<int32_t>((product + rounded) >> n)
+                                 : static_cast<int32_t>(product);
 
         if (scaled > 127) {
             y8[t] = 127;
@@ -299,8 +301,10 @@ void REQUANT_D_TILE_int32_to_int8(
             continue;
         }
         const int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
-        const int64_t rounded = 1LL << (n - 1);
-        const int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+        const bool do_shift = (n > 0) && (n < 63);
+        const int64_t rounded = do_shift ? (1LL << (n - 1)) : 0;
+        const int32_t scaled = do_shift ? static_cast<int32_t>((product + rounded) >> n)
+                                       : static_cast<int32_t>(product);
         if (scaled > 127) {
             y8[t] = 127;
         } else if (scaled < -128) {
@@ -347,8 +351,10 @@ void RMS_NORM(
 static inline int8_t requant_scalar_to_i8(const int32_t x32, const int32_t M, const int32_t n) {
 #pragma HLS INLINE
     const int64_t product = static_cast<int64_t>(x32) * static_cast<int64_t>(M);
-    const int64_t rounded = 1LL << (n - 1);
-    const int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+    const bool do_shift = (n > 0) && (n < 63);
+    const int64_t rounded = do_shift ? (1LL << (n - 1)) : 0;
+    const int32_t scaled = do_shift ? static_cast<int32_t>((product + rounded) >> n)
+                                   : static_cast<int32_t>(product);
     if (scaled > 127) return 127;
     if (scaled < -128) return -128;
     return static_cast<int8_t>(scaled);

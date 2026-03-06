@@ -137,7 +137,7 @@ def build_ctrl_words() -> list[int]:
     words[11] = 0x0000_0100  # v cache stride
     words[12] = 0x0000_0020  # wo tile stride
     words[13] = 0x0000_0040  # w1 tile stride
-    words[14] = 0x0000_0020  # w2 tile stride
+    words[14] = 0x0000_0040  # w2 tile stride (>= W2 weight tile payload to avoid overlap)
     words[15] = 0x0000_0100  # wq bias head stride
     words[16] = 0x0000_0100  # wk bias head stride
     words[17] = 0x0000_0100  # wv bias head stride
@@ -145,9 +145,9 @@ def build_ctrl_words() -> list[int]:
     words[19] = 0x0000_0040  # w1 bias tile stride
     words[20] = 0x0000_0020  # w2 bias tile stride
     words[21] = 0x0000_0080  # wlogit tile stride
-    words[22] = 0x0000_0004  # ln0 gamma stride
-    words[23] = 0x0000_0004  # ln1 gamma stride
-    words[24] = 0x0000_0004  # final norm gamma stride
+    words[22] = 0x0000_0040  # ln0 gamma stride (per-layer full gamma vector)
+    words[23] = 0x0000_0040  # ln1 gamma stride (per-layer full gamma vector)
+    words[24] = 0x0000_0040  # final norm gamma stride (per-layer full gamma vector)
     words[25] = 0x0000_0004  # ln0 eps stride
     words[26] = 0x0000_0004  # ln1 eps stride
     words[27] = 0x0000_0004  # final norm eps stride

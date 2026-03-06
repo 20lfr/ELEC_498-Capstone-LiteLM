@@ -424,8 +424,10 @@ void REQUANT_D_HEADS_int32_to_int8(
     for (int t = 0; t < D_HEADS; ++t) {
 // #pragma HLS UNROLL
         int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
-        int64_t rounded = 1LL << (n - 1);
-        int32_t scaled = static_cast<int32_t>((product + rounded) >> n);
+        const bool do_shift = (n > 0) && (n < 63);
+        int64_t rounded = do_shift ? (1LL << (n - 1)) : 0;
+        int32_t scaled = do_shift ? static_cast<int32_t>((product + rounded) >> n)
+                                 : static_cast<int32_t>(product);
 
         if (scaled > 127) {
             y8[t] = 127;
@@ -444,8 +446,9 @@ static inline int8_t requant_scalar_to_i8(
 ) {
 #pragma HLS INLINE
     int64_t product = static_cast<int64_t>(x32) * static_cast<int64_t>(M);
-    int64_t rounded = (n > 0) ? (1LL << (n - 1)) : 0;
-    int32_t scaled = (n > 0) ? static_cast<int32_t>((product + rounded) >> n)
+    const bool do_shift = (n > 0) && (n < 63);
+    int64_t rounded = do_shift ? (1LL << (n - 1)) : 0;
+    int32_t scaled = do_shift ? static_cast<int32_t>((product + rounded) >> n)
                              : static_cast<int32_t>(product);
 
     if (scaled > 127) {

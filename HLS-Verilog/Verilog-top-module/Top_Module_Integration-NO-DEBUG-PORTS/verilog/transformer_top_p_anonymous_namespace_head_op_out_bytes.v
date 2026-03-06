@@ -48,7 +48,7 @@ wire   [2:0] retval_fu_94_p7;
     .def_WIDTH( 6 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 6 ))
-sparsemux_9_3_6_1_1_x_U2283(
+sparsemux_9_3_6_1_1_x_U2312(
     .din0(6'd4),
     .din1(6'd8),
     .din2(6'd2),
