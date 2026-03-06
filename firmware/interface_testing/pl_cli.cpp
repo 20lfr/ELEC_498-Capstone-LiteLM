@@ -82,7 +82,7 @@ static bool send_cmd(uint32_t cmd_bit, const char *name,
     // Verify the IP entered the expected FSM state
     usleep(500);
     uint32_t st = g_pl->readReg(PLReg::STATUS);
-    uint32_t expect = STATUS_BUSY | expected_status;
+    uint32_t expect = STATUS_BUSY_BIT | expected_status;
     if ((st & expect) == expect) {
         printf("  [%s] state OK (status=0x%04X)\n", name, st);
     } else {

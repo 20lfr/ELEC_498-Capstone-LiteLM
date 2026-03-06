@@ -208,7 +208,7 @@ public:
     bool reset();
     bool start();
     bool waitDone(uint32_t timeout_ms);
-    bool isBusy() { return testRegBits(PLReg::STATUS, STATUS_BUSY); }
+    bool isBusy() { return testRegBits(PLReg::STATUS, STATUS_BUSY_BIT); }
     bool isError() { return testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT); }
     void beginConfig();
     void endConfig();

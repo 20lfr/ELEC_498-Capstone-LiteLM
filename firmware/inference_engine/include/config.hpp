@@ -21,7 +21,7 @@ struct ModelConfig {
     std::string tokenizer_vocab = "tokenizer.model";
 
     uint32_t vocab_size = MODEL_VOCAB_SIZE;
-    uint32_t logit_scale_qv = LOGIT_SCALE_QV;
+    uint32_t logit_scale_qv = ATTN_SCALE_Q15;
 
     uint32_t layer_stride = STRIDE_WQ_LAYER;
     uint32_t wq_head_stride = STRIDE_QKV_HEAD;
