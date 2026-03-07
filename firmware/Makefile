@@ -15,7 +15,7 @@ SYSROOT        ?= $(FIRMWARE_DIR)/dependencies/iot-limerick-kria-classic-desktop
 UDMABUF_DIR    ?= $(FIRMWARE_DIR)/udmabuf
 
 # Flags
-CXXFLAGS = -std=c++11 -Wall -O2 -g
+CXXFLAGS = -std=c++11 -Wall -O2
 LDFLAGS  = -lpthread -lrt
 
 ifdef SYSROOT
