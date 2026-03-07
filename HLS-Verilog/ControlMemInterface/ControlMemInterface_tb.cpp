@@ -32,8 +32,9 @@ int main() {
     // Run with 'done' trigger
     ControlTest_Top(cfg, stat, true, false);
 
-    if ((stat.irq_status & IRQ_INFER_DONE_BIT) && !(stat.status & STATUS_BUSY_BIT)) {
-        std::cout << "[PASS] Execution Done & Busy Cleared" << std::endl;
+    if ((stat.irq_status & IRQ_INFER_DONE_BIT) &&
+        stat.status == static_cast<uint32_t>(S_IDLE)) {
+        std::cout << "[PASS] Execution Done & Status Returned To S_IDLE" << std::endl;
     } else {
         std::cout << "[FAIL] Done logic incorrect" << std::endl;
         return 1;

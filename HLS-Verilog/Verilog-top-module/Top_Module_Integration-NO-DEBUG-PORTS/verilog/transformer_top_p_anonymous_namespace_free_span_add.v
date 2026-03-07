@@ -685,7 +685,7 @@ wire    p_anonymous_namespace_free_spans_size_14_we0_out;
 wire    p_anonymous_namespace_free_spans_size_15_we0_out;
 wire    p_anonymous_namespace_free_spans_offset_0_we0_out;
 wire    p_anonymous_namespace_free_spans_size_0_we0_out;
-wire   [3:0] trunc_ln583_35_fu_703_p1;
+wire   [3:0] trunc_ln583_1_fu_703_p1;
 reg    p_anonymous_namespace_free_span_count_ce0_local;
 reg   [4:0] p_anonymous_namespace_free_span_count_address0_local;
 reg    p_anonymous_namespace_free_span_count_we0_local;
@@ -1157,7 +1157,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd0) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd0) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_0_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_0_we0_local = 1'b0;
@@ -1205,7 +1205,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd10) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd10) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_10_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_10_we0_local = 1'b0;
@@ -1253,7 +1253,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd11) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd11) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_11_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_11_we0_local = 1'b0;
@@ -1301,7 +1301,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd12) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd12) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_12_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_12_we0_local = 1'b0;
@@ -1349,7 +1349,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd13) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd13) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_13_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_13_we0_local = 1'b0;
@@ -1397,7 +1397,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd14) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd14) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_14_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_14_we0_local = 1'b0;
@@ -1445,7 +1445,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd15) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd15) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_15_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_15_we0_local = 1'b0;
@@ -1493,7 +1493,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd1) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd1) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_1_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_1_we0_local = 1'b0;
@@ -1541,7 +1541,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd2) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd2) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_2_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_2_we0_local = 1'b0;
@@ -1589,7 +1589,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd3) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd3) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_3_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_3_we0_local = 1'b0;
@@ -1637,7 +1637,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd4) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd4) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_4_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_4_we0_local = 1'b0;
@@ -1685,7 +1685,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd5) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd5) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_5_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_5_we0_local = 1'b0;
@@ -1733,7 +1733,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd6) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd6) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_6_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_6_we0_local = 1'b0;
@@ -1781,7 +1781,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd7) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd7) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_7_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_7_we0_local = 1'b0;
@@ -1829,7 +1829,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd8) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd8) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_8_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_8_we0_local = 1'b0;
@@ -1877,7 +1877,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd9) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd9) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_9_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_9_we0_local = 1'b0;
@@ -1925,7 +1925,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd0) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd0) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_0_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_0_we0_local = 1'b0;
@@ -1973,7 +1973,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd10) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd10) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_10_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_10_we0_local = 1'b0;
@@ -2021,7 +2021,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd11) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd11) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_11_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_11_we0_local = 1'b0;
@@ -2069,7 +2069,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd12) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd12) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_12_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_12_we0_local = 1'b0;
@@ -2117,7 +2117,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd13) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd13) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_13_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_13_we0_local = 1'b0;
@@ -2165,7 +2165,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd14) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd14) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_14_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_14_we0_local = 1'b0;
@@ -2213,7 +2213,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd15) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd15) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_15_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_15_we0_local = 1'b0;
@@ -2261,7 +2261,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd1) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd1) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_1_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_1_we0_local = 1'b0;
@@ -2309,7 +2309,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd2) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd2) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_2_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_2_we0_local = 1'b0;
@@ -2357,7 +2357,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd3) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd3) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_3_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_3_we0_local = 1'b0;
@@ -2405,7 +2405,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd4) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd4) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_4_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_4_we0_local = 1'b0;
@@ -2453,7 +2453,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd5) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd5) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_5_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_5_we0_local = 1'b0;
@@ -2501,7 +2501,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd6) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd6) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_6_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_6_we0_local = 1'b0;
@@ -2549,7 +2549,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd7) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd7) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_7_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_7_we0_local = 1'b0;
@@ -2597,7 +2597,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd8) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd8) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_8_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_8_we0_local = 1'b0;
@@ -2645,7 +2645,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((trunc_ln583_35_fu_703_p1 == 4'd9) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((trunc_ln583_1_fu_703_p1 == 4'd9) & (icmp_ln583_fu_717_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_9_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_9_we0_local = 1'b0;
@@ -2770,7 +2770,7 @@ assign p_anonymous_namespace_free_spans_size_9_we0_out = p_anonymous_namespace_f
 
 assign tmp_fu_707_p4 = {{p_anonymous_namespace_free_span_count_q0[15:4]}};
 
-assign trunc_ln583_35_fu_703_p1 = p_anonymous_namespace_free_span_count_q0[3:0];
+assign trunc_ln583_1_fu_703_p1 = p_anonymous_namespace_free_span_count_q0[3:0];
 
 assign trunc_ln583_fu_699_p1 = p_anonymous_namespace_free_span_count_q0[4:0];
 

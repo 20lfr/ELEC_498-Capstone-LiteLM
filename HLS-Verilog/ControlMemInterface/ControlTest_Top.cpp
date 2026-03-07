@@ -26,12 +26,12 @@ void ControlTest_Top(
 
     if (sim_trigger_error) {
       active_status.irq_status |= IRQ_ERROR_BIT;
-      active_status.status = STATUS_ERROR;
+      active_status.status = static_cast<uint32_t>(S_IDLE);
       active_status.error_code = ERR_DMA_ALIGNMENT;
     }
     if (sim_trigger_done) {
       active_status.irq_status |= IRQ_INFER_DONE_BIT;
-      active_status.status &= ~STATUS_BUSY_BIT;
+      active_status.status = static_cast<uint32_t>(S_IDLE);
     }
 
     // Write to PS

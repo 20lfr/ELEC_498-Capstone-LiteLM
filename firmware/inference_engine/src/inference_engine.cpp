@@ -145,7 +145,7 @@ public:
         pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
                        pl->getDDRBaseAddr());
 
-        // Weight / KV-cache offsets
+        // Weight / KV-cache / parameter offsets
         pl->writeReg(PLReg::WQ_OFFSET, mem.wq_offset);
         pl->writeReg(PLReg::WK_OFFSET, mem.wk_offset);
         pl->writeReg(PLReg::WV_OFFSET, mem.wv_offset);
@@ -154,6 +154,18 @@ public:
         pl->writeReg(PLReg::W2_OFFSET, mem.w2_offset);
         pl->writeReg(PLReg::K_CACHE_OFFSET, mem.k_cache_offset);
         pl->writeReg(PLReg::V_CACHE_OFFSET, mem.v_cache_offset);
+        pl->writeReg(PLReg::WO_BIAS_OFFSET, mem.wo_bias_offset);
+        pl->writeReg(PLReg::W1_BIAS_OFFSET, mem.w1_bias_offset);
+        pl->writeReg(PLReg::W2_BIAS_OFFSET, mem.w2_bias_offset);
+        pl->writeReg(PLReg::LN0_GAMMA_OFFSET, mem.ln0_gamma_offset);
+        pl->writeReg(PLReg::LN1_GAMMA_OFFSET, mem.ln1_gamma_offset);
+        pl->writeReg(PLReg::FINAL_NORM_GAMMA_OFFSET,
+                     mem.final_norm_gamma_offset);
+        pl->writeReg(PLReg::LN0_EPS_OFFSET, mem.ln0_eps_offset);
+        pl->writeReg(PLReg::LN1_EPS_OFFSET, mem.ln1_eps_offset);
+        pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET,
+                     mem.final_norm_eps_offset);
+        pl->writeReg(PLReg::WLOGIT_OFFSET, mem.wlogit_offset);
 
         // endConfig: clears IRQ clear, enables IRQs, checks for config errors
         pl->endConfig();
@@ -231,6 +243,27 @@ public:
                      mem.k_cache_offset);
             dump_reg("V_CACHE_OFFSET", PLReg::V_CACHE_OFFSET,
                      mem.v_cache_offset);
+            dump_reg("WO_BIAS_OFFSET", PLReg::WO_BIAS_OFFSET,
+                     mem.wo_bias_offset);
+            dump_reg("W1_BIAS_OFFSET", PLReg::W1_BIAS_OFFSET,
+                     mem.w1_bias_offset);
+            dump_reg("W2_BIAS_OFFSET", PLReg::W2_BIAS_OFFSET,
+                     mem.w2_bias_offset);
+            dump_reg("LN0_GAMMA_OFFSET", PLReg::LN0_GAMMA_OFFSET,
+                     mem.ln0_gamma_offset);
+            dump_reg("LN1_GAMMA_OFFSET", PLReg::LN1_GAMMA_OFFSET,
+                     mem.ln1_gamma_offset);
+            dump_reg("FINAL_NORM_GAMMA_OFFSET",
+                     PLReg::FINAL_NORM_GAMMA_OFFSET,
+                     mem.final_norm_gamma_offset);
+            dump_reg("LN0_EPS_OFFSET", PLReg::LN0_EPS_OFFSET,
+                     mem.ln0_eps_offset);
+            dump_reg("LN1_EPS_OFFSET", PLReg::LN1_EPS_OFFSET,
+                     mem.ln1_eps_offset);
+            dump_reg("FINAL_NORM_EPS_OFFSET", PLReg::FINAL_NORM_EPS_OFFSET,
+                     mem.final_norm_eps_offset);
+            dump_reg("WLOGIT_OFFSET", PLReg::WLOGIT_OFFSET,
+                     mem.wlogit_offset);
         }
         return !err->hasError();
     }

@@ -111,7 +111,7 @@ constexpr uint64_t TB_BASE_LN1_EPS          = 0x42C40ull;
 constexpr uint64_t TB_BASE_FINAL_NORM_EPS   = 0x42C80ull;
 constexpr uint64_t TB_DDR_IMAGE_BYTES       = 0x43000ull;
 constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
-constexpr size_t   TB_CTRL_MEM_WORDS        = 56u;
+constexpr size_t   TB_CTRL_MEM_WORDS        = 40u;
 constexpr size_t   TB_CTRL_MEM_BYTES        = TB_CTRL_MEM_WORDS * sizeof(uint32_t);
 
 static ControlMemSpace g_loaded_ctrl_mem{};
@@ -1478,7 +1478,6 @@ static void print_error_code_bits(uint32_t err) {
         first = false;
     };
     if (err & ERR_DMA_ALIGNMENT)   emit("ERR_DMA_ALIGNMENT");
-    if (err & ERR_DMA_ZERO_LEN)    emit("ERR_DMA_ZERO_LEN");
     if (err & ERR_DMA_ZERO_STRIDE) emit("ERR_DMA_ZERO_STRIDE");
     if (err & ERR_SCHEDULER_ERROR) emit("ERR_SCHEDULER_ERROR");
     if (err & ERR_COMPUTE_ERROR)   emit("ERR_COMPUTE_ERROR");
@@ -1911,11 +1910,12 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
         } else if (ctrl_stage == CtrlInitStage::TestZeroStride) {
             ctrl_mem = ctrl_mem_init(true);  // Start fresh
             ctrl_mem.layer_stride = 0;       // Inject error: zero stride
-            std::printf("[TEST 2] Injecting layer_stride=0 (expect ERR_DMA_ZERO_LEN)\n");
+            std::printf("[TEST 2] Injecting layer_stride=0 (expect ERR_DMA_ZERO_STRIDE)\n");
             ctrl_stage = CtrlInitStage::TestZeroStrideCheck;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::TestZeroStrideCheck) {
-            if ((status_mem.irq_status & IRQ_ERROR_BIT) && status_mem.error_code == ERR_DMA_ZERO_LEN) {
+            if ((status_mem.irq_status & IRQ_ERROR_BIT) &&
+                status_mem.error_code == ERR_DMA_ZERO_STRIDE) {
                 std::printf("[TEST 2] PASS: Zero stride error detected (irq=0x%X, err=0x%X)\n",
                             status_mem.irq_status, status_mem.error_code);
                 test_errors_passed++;
