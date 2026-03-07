@@ -104,11 +104,11 @@ reg transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpac
 
 (* fsm_encoding = "none" *) reg   [4:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
-reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_985_reg_180;
+reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_991_reg_180;
 wire    ap_CS_fsm_state2;
-reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_986_reg_185;
-reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_987_reg_190;
-reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_988_reg_195;
+reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_992_reg_185;
+reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_993_reg_190;
+reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_994_reg_195;
 wire   [31:0] v_fu_124_p5;
 reg   [31:0] v_reg_200;
 wire    ap_CS_fsm_state3;
@@ -207,10 +207,10 @@ end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_985_reg_180 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_q0;
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_986_reg_185 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0;
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_987_reg_190 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0;
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_988_reg_195 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_q0;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_991_reg_180 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_q0;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_992_reg_185 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_993_reg_190 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0;
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_994_reg_195 <= transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_q0;
     end
 end
 
@@ -507,6 +507,6 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign trunc_ln589_fu_136_p1 = grp_ARGMAX_TO_BUF_Pipeline_VITIS_LOOP_406_1_fu_108_best_idx_out[7:0];
 
-assign v_fu_124_p5 = {{{{transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_988_reg_195}, {transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_987_reg_190}}, {transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_986_reg_185}}, {transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_985_reg_180}};
+assign v_fu_124_p5 = {{{{transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_994_reg_195}, {transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_993_reg_190}}, {transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_992_reg_185}}, {transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_991_reg_180}};
 
 endmodule //transformer_top_ARGMAX_TO_BUF

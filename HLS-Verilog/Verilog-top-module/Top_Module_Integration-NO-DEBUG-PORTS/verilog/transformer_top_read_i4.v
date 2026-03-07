@@ -161,7 +161,7 @@ transformer_top_mul_9ns_11ns_19_1_1 #(
     .din0_WIDTH( 9 ),
     .din1_WIDTH( 11 ),
     .dout_WIDTH( 19 ))
-mul_9ns_11ns_19_1_1_U1063(
+mul_9ns_11ns_19_1_1_U1065(
     .din0(mul_ln540_fu_149_p0),
     .din1(mul_ln540_fu_149_p1),
     .dout(mul_ln540_fu_149_p2)
@@ -173,7 +173,7 @@ transformer_top_urem_9ns_4ns_3_13_1 #(
     .din0_WIDTH( 9 ),
     .din1_WIDTH( 4 ),
     .dout_WIDTH( 3 ))
-urem_9ns_4ns_3_13_1_U1064(
+urem_9ns_4ns_3_13_1_U1066(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_165_p0),
@@ -198,7 +198,7 @@ urem_9ns_4ns_3_13_1_U1064(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 8 ))
-sparsemux_11_3_8_1_1_U1065(
+sparsemux_11_3_8_1_1_U1067(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_q0),
     .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0),
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),

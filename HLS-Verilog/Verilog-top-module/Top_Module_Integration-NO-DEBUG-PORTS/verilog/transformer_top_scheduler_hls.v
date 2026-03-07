@@ -3961,7 +3961,7 @@ transformer_top_scheduler_hls_Pipeline_VITIS_LOOP_427_1 grp_scheduler_hls_Pipeli
     .ap_idle(grp_scheduler_hls_Pipeline_VITIS_LOOP_427_1_fu_35090_ap_idle),
     .ap_ready(grp_scheduler_hls_Pipeline_VITIS_LOOP_427_1_fu_35090_ap_ready),
     .start_assign(start_assign_reg_1448),
-    .empty_98(trunc_ln799_reg_39161),
+    .empty_99(trunc_ln799_reg_39161),
     .layer_assign(layer_assign_reg_546),
     .empty(trunc_ln42_reg_38775),
     .group_finished_out(grp_scheduler_hls_Pipeline_VITIS_LOOP_427_1_fu_35090_group_finished_out),

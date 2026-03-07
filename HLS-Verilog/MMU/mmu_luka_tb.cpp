@@ -198,9 +198,6 @@ static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
     std::printf("  wo_tile_stride=%u\n", static_cast<unsigned>(ctrl.wo_tile_stride));
     std::printf("  w1_tile_stride=%u\n", static_cast<unsigned>(ctrl.w1_tile_stride));
     std::printf("  w2_tile_stride=%u\n", static_cast<unsigned>(ctrl.w2_tile_stride));
-    std::printf("  wq_bias_head_stride=%u\n", static_cast<unsigned>(ctrl.wq_bias_head_stride));
-    std::printf("  wk_bias_head_stride=%u\n", static_cast<unsigned>(ctrl.wk_bias_head_stride));
-    std::printf("  wv_bias_head_stride=%u\n", static_cast<unsigned>(ctrl.wv_bias_head_stride));
     std::printf("  wo_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.wo_bias_tile_stride));
     std::printf("  w1_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.w1_bias_tile_stride));
     std::printf("  w2_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.w2_bias_tile_stride));
@@ -220,9 +217,6 @@ static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
     std::printf("  w2_offset=0x%x\n", static_cast<unsigned>(ctrl.w2_offset));
     std::printf("  k_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.k_cache_offset));
     std::printf("  v_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.v_cache_offset));
-    std::printf("  wq_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wq_bias_offset));
-    std::printf("  wk_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wk_bias_offset));
-    std::printf("  wv_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wv_bias_offset));
     std::printf("  wo_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wo_bias_offset));
     std::printf("  w1_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.w1_bias_offset));
     std::printf("  w2_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.w2_bias_offset));

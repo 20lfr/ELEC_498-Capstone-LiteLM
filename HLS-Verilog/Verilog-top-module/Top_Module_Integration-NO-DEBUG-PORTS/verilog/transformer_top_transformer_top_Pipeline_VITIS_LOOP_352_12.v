@@ -13,10 +13,10 @@ module transformer_top_transformer_top_Pipeline_VITIS_LOOP_352_12 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_133,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_132,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_135,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_134,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_137,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_136,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_74,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_74_ap_vld,
         transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_78,
@@ -35,10 +35,10 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_133;
-input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_132;
 input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_135;
 input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_134;
+input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_137;
+input  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_136;
 output  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_74;
 output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_74_ap_vld;
 output  [0:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_78;
@@ -242,9 +242,9 @@ assign icmp_ln354_1_fu_90_p2 = ((ap_sig_allocacmp_lane_1 == 2'd1) ? 1'b1 : 1'b0)
 
 assign icmp_ln354_fu_104_p2 = ((ap_sig_allocacmp_lane_1 == 2'd0) ? 1'b1 : 1'b0);
 
-assign select_ln354_fu_96_p3 = ((icmp_ln354_1_fu_90_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_133 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_132);
+assign select_ln354_fu_96_p3 = ((icmp_ln354_1_fu_90_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_135 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_134);
 
-assign select_ln355_fu_110_p3 = ((icmp_ln354_1_fu_90_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_135 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_134);
+assign select_ln355_fu_110_p3 = ((icmp_ln354_1_fu_90_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_137 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_136);
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_73 = select_ln354_fu_96_p3;
 

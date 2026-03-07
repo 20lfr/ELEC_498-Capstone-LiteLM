@@ -31,7 +31,6 @@ module transformer_top_RMS_NORM_TO_BUF_Pipeline_VITIS_LOOP_458_4 (
         x_tile_14_reload,
         x_tile_15_reload,
         zext_ln463,
-        empty_201,
         empty_202,
         empty_203,
         empty_204,
@@ -46,6 +45,7 @@ module transformer_top_RMS_NORM_TO_BUF_Pipeline_VITIS_LOOP_458_4 (
         empty_213,
         empty_214,
         empty_215,
+        empty_216,
         empty,
         final_norm,
         requant_M_cast,
@@ -95,7 +95,6 @@ input  [7:0] x_tile_13_reload;
 input  [7:0] x_tile_14_reload;
 input  [7:0] x_tile_15_reload;
 input  [26:0] zext_ln463;
-input  [18:0] empty_201;
 input  [18:0] empty_202;
 input  [18:0] empty_203;
 input  [18:0] empty_204;
@@ -110,6 +109,7 @@ input  [18:0] empty_212;
 input  [18:0] empty_213;
 input  [18:0] empty_214;
 input  [18:0] empty_215;
+input  [18:0] empty_216;
 input  [18:0] empty;
 input  [0:0] final_norm;
 input  [30:0] requant_M_cast;
@@ -171,9 +171,9 @@ reg   [62:0] product_reg_1064;
 wire   [31:0] trunc_ln353_fu_856_p1;
 reg   [31:0] trunc_ln353_reg_1069;
 reg   [7:0] trunc_ln_reg_1074;
-reg   [7:0] trunc_ln16_reg_1079;
-reg   [7:0] trunc_ln17_reg_1084;
-reg   [7:0] trunc_ln18_reg_1089;
+reg   [7:0] trunc_ln18_reg_1079;
+reg   [7:0] trunc_ln19_reg_1084;
+reg   [7:0] trunc_ln20_reg_1089;
 wire   [63:0] zext_ln467_fu_900_p1;
 wire    ap_block_pp0_stage0;
 wire   [63:0] zext_ln587_fu_985_p1;
@@ -207,7 +207,7 @@ wire   [44:0] shl_ln464_1_fu_760_p3;
 wire   [44:0] sub_ln464_fu_776_p2;
 wire   [18:0] tmp_s_fu_782_p4;
 wire   [19:0] zext_ln464_fu_792_p1;
-wire   [0:0] tmp_533_fu_768_p3;
+wire   [0:0] tmp_522_fu_768_p3;
 wire   [19:0] sub_ln464_1_fu_800_p2;
 wire   [19:0] zext_ln464_1_fu_796_p1;
 wire   [50:0] mul_ln465_fu_538_p2;
@@ -217,13 +217,13 @@ wire  signed [63:0] sext_ln356_fu_909_p1;
 wire   [63:0] ashr_ln356_fu_913_p2;
 wire   [31:0] trunc_ln356_fu_918_p1;
 wire   [31:0] scaled_fu_922_p3;
-wire   [24:0] tmp_535_fu_932_p4;
+wire   [24:0] tmp_524_fu_932_p4;
 wire   [0:0] icmp_ln358_fu_942_p2;
 wire   [0:0] icmp_ln359_fu_948_p2;
 wire   [0:0] or_ln358_fu_962_p2;
 wire   [7:0] select_ln358_fu_954_p3;
 wire   [7:0] trunc_ln360_fu_928_p1;
-wire   [4:0] tmp_534_fu_978_p3;
+wire   [4:0] tmp_523_fu_978_p3;
 wire   [4:0] or_ln_fu_991_p3;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -284,7 +284,7 @@ transformer_top_mul_21s_27ns_45_1_1 #(
     .din0_WIDTH( 21 ),
     .din1_WIDTH( 27 ),
     .dout_WIDTH( 45 ))
-mul_21s_27ns_45_1_1_U972(
+mul_21s_27ns_45_1_1_U974(
     .din0(shl_ln4_fu_665_p3),
     .din1(mul_ln463_fu_534_p1),
     .dout(mul_ln463_fu_534_p2)
@@ -296,7 +296,7 @@ transformer_top_mul_32s_20s_51_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 20 ),
     .dout_WIDTH( 51 ))
-mul_32s_20s_51_1_1_U973(
+mul_32s_20s_51_1_1_U975(
     .din0(normalized_reg_1045),
     .din1(gamma_fx_reg_1050),
     .dout(mul_ln465_fu_538_p2)
@@ -308,7 +308,7 @@ transformer_top_mul_32s_31ns_63_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 63 ))
-mul_32s_31ns_63_1_1_U974(
+mul_32s_31ns_63_1_1_U976(
     .din0(v_fu_841_p4),
     .din1(product_fu_542_p1),
     .dout(product_fu_542_p2)
@@ -352,7 +352,7 @@ mul_32s_31ns_63_1_1_U974(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 8 ))
-sparsemux_33_4_8_1_1_U975(
+sparsemux_33_4_8_1_1_U977(
     .din0(x_tile_reload),
     .din1(x_tile_1_reload),
     .din2(x_tile_2_reload),
@@ -412,22 +412,22 @@ sparsemux_33_4_8_1_1_U975(
     .def_WIDTH( 19 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 19 ))
-sparsemux_33_4_19_1_1_U976(
-    .din0(empty_201),
-    .din1(empty_202),
-    .din2(empty_203),
-    .din3(empty_204),
-    .din4(empty_205),
-    .din5(empty_206),
-    .din6(empty_207),
-    .din7(empty_208),
-    .din8(empty_209),
-    .din9(empty_210),
-    .din10(empty_211),
-    .din11(empty_212),
-    .din12(empty_213),
-    .din13(empty_214),
-    .din14(empty_215),
+sparsemux_33_4_19_1_1_U978(
+    .din0(empty_202),
+    .din1(empty_203),
+    .din2(empty_204),
+    .din3(empty_205),
+    .din4(empty_206),
+    .din5(empty_207),
+    .din6(empty_208),
+    .din7(empty_209),
+    .din8(empty_210),
+    .din9(empty_211),
+    .din10(empty_212),
+    .din11(empty_213),
+    .din12(empty_214),
+    .din13(empty_215),
+    .din14(empty_216),
     .din15(empty),
     .def(trunc_ln464_2_fu_688_p33),
     .sel(trunc_ln458_fu_589_p1),
@@ -512,9 +512,9 @@ always @ (posedge ap_clk) begin
         product_reg_1064 <= product_fu_542_p2;
         requant_M_cast_cast_reg_1025[30 : 0] <= requant_M_cast_cast_fu_554_p1[30 : 0];
         sh_prom4_i_cast_reg_1015[5 : 0] <= sh_prom4_i_cast_fu_546_p1[5 : 0];
-        trunc_ln16_reg_1079 <= {{mul_ln465_fu_538_p2[28:21]}};
-        trunc_ln17_reg_1084 <= {{mul_ln465_fu_538_p2[36:29]}};
-        trunc_ln18_reg_1089 <= {{mul_ln465_fu_538_p2[44:37]}};
+        trunc_ln18_reg_1079 <= {{mul_ln465_fu_538_p2[28:21]}};
+        trunc_ln19_reg_1084 <= {{mul_ln465_fu_538_p2[36:29]}};
+        trunc_ln20_reg_1089 <= {{mul_ln465_fu_538_p2[44:37]}};
         trunc_ln353_reg_1069 <= trunc_ln353_fu_856_p1;
         trunc_ln458_reg_1039 <= trunc_ln458_fu_589_p1;
         trunc_ln458_reg_1039_pp0_iter1_reg <= trunc_ln458_reg_1039;
@@ -606,7 +606,7 @@ end
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter2 == 1'b1))) begin
         if ((final_norm_read_reg_1011 == 1'd1)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local = trunc_ln18_reg_1089;
+            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local = trunc_ln20_reg_1089;
         end else if (((trunc_ln467_reg_1055_pp0_iter1_reg == 1'd1) & (final_norm_read_reg_1011 == 1'd0))) begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local = select_ln358_16_fu_968_p3;
         end else begin
@@ -666,7 +666,7 @@ end
 always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter2 == 1'b1))) begin
         if ((final_norm_read_reg_1011 == 1'd1)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local = trunc_ln17_reg_1084;
+            transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local = trunc_ln19_reg_1084;
         end else if (((trunc_ln467_reg_1055_pp0_iter1_reg == 1'd0) & (final_norm_read_reg_1011 == 1'd0))) begin
             transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0_local = select_ln358_16_fu_968_p3;
         end else begin
@@ -732,9 +732,9 @@ assign do_shift19_fu_563_p2 = ((requant_n != 6'd0) ? 1'b1 : 1'b0);
 
 assign final_norm_read_reg_1011 = final_norm;
 
-assign gamma_fx_fu_806_p3 = ((tmp_533_fu_768_p3[0:0] == 1'b1) ? sub_ln464_1_fu_800_p2 : zext_ln464_1_fu_796_p1);
+assign gamma_fx_fu_806_p3 = ((tmp_522_fu_768_p3[0:0] == 1'b1) ? sub_ln464_1_fu_800_p2 : zext_ln464_1_fu_796_p1);
 
-assign icmp_ln358_fu_942_p2 = (($signed(tmp_535_fu_932_p4) > $signed(25'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln358_fu_942_p2 = (($signed(tmp_524_fu_932_p4) > $signed(25'd0)) ? 1'b1 : 1'b0);
 
 assign icmp_ln359_fu_948_p2 = (($signed(scaled_fu_922_p3) < $signed(32'd4294967168)) ? 1'b1 : 1'b0);
 
@@ -770,11 +770,11 @@ assign sub_ln464_1_fu_800_p2 = (20'd0 - zext_ln464_fu_792_p1);
 
 assign sub_ln464_fu_776_p2 = (45'd0 - shl_ln464_1_fu_760_p3);
 
-assign tmp_533_fu_768_p3 = trunc_ln464_2_fu_688_p35[32'd18];
+assign tmp_522_fu_768_p3 = trunc_ln464_2_fu_688_p35[32'd18];
 
-assign tmp_534_fu_978_p3 = {{trunc_ln458_reg_1039_pp0_iter1_reg}, {1'd0}};
+assign tmp_523_fu_978_p3 = {{trunc_ln458_reg_1039_pp0_iter1_reg}, {1'd0}};
 
-assign tmp_535_fu_932_p4 = {{scaled_fu_922_p3[31:7]}};
+assign tmp_524_fu_932_p4 = {{scaled_fu_922_p3[31:7]}};
 
 assign tmp_fu_593_p33 = 'bx;
 
@@ -790,7 +790,7 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d1 = trunc_ln16_reg_1079;
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d1 = trunc_ln18_reg_1079;
 
 assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local;
 
@@ -834,7 +834,7 @@ assign zext_ln464_fu_792_p1 = tmp_s_fu_782_p4;
 
 assign zext_ln467_fu_900_p1 = lshr_ln_reg_1059_pp0_iter1_reg;
 
-assign zext_ln587_fu_985_p1 = tmp_534_fu_978_p3;
+assign zext_ln587_fu_985_p1 = tmp_523_fu_978_p3;
 
 assign zext_ln591_fu_998_p1 = or_ln_fu_991_p3;
 

@@ -540,6 +540,7 @@ void transformer_top(
                                     mmu_status.error_code,
                                     mmu_status.error_subcode);
     ctrl_mem_interface.check_control(ctrl_mem, done);
+    active_status_mem.token_index = static_cast<uint32_t>(token_pos_current);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
     // Scheduler_FSM now owns status_mem.status directly as the scheduler-state

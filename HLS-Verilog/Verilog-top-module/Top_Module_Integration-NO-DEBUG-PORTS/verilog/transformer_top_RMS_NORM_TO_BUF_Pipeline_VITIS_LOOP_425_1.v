@@ -147,7 +147,7 @@ transformer_top_mul_4ns_6ns_9_1_1 #(
     .din0_WIDTH( 4 ),
     .din1_WIDTH( 6 ),
     .dout_WIDTH( 9 ))
-mul_4ns_6ns_9_1_1_U909(
+mul_4ns_6ns_9_1_1_U911(
     .din0(mul_ln424_fu_196_p0),
     .din1(mul_ln424_fu_196_p1),
     .dout(mul_ln424_fu_196_p2)
@@ -169,7 +169,7 @@ mul_4ns_6ns_9_1_1_U909(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 8 ))
-sparsemux_11_3_8_1_1_U910(
+sparsemux_11_3_8_1_1_U912(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_q0),
     .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0),
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
@@ -187,7 +187,7 @@ transformer_top_mac_muladd_8s_8s_20s_20_4_1 #(
     .din1_WIDTH( 8 ),
     .din2_WIDTH( 20 ),
     .dout_WIDTH( 20 ))
-mac_muladd_8s_8s_20s_20_4_1_U911(
+mac_muladd_8s_8s_20s_20_4_1_U913(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_302_p0),

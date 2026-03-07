@@ -1609,9 +1609,6 @@ ControlMemSpace ctrl_mem_init(bool init) {
         ctrl_mem.wo_tile_stride  = 0x00000020;
         ctrl_mem.w1_tile_stride  = 0x00000040;
         ctrl_mem.w2_tile_stride  = 0x00000040;
-        ctrl_mem.wq_bias_head_stride = 0x00000100;
-        ctrl_mem.wk_bias_head_stride = 0x00000100;
-        ctrl_mem.wv_bias_head_stride = 0x00000100;
         ctrl_mem.wo_bias_tile_stride = 0x00000020;
         ctrl_mem.w1_bias_tile_stride = 0x00000040;
         ctrl_mem.w2_bias_tile_stride = 0x00000020;
@@ -1631,9 +1628,6 @@ ControlMemSpace ctrl_mem_init(bool init) {
         ctrl_mem.w2_offset = static_cast<uint32_t>(TB_BASE_W2);
         ctrl_mem.k_cache_offset = static_cast<uint32_t>(TB_BASE_K_CACHE);
         ctrl_mem.v_cache_offset = static_cast<uint32_t>(TB_BASE_V_CACHE);
-        ctrl_mem.wq_bias_offset = static_cast<uint32_t>(TB_BASE_WQ_BIAS);
-        ctrl_mem.wk_bias_offset = static_cast<uint32_t>(TB_BASE_WK_BIAS);
-        ctrl_mem.wv_bias_offset = static_cast<uint32_t>(TB_BASE_WV_BIAS);
         ctrl_mem.wo_bias_offset = static_cast<uint32_t>(TB_BASE_WO_BIAS);
         ctrl_mem.w1_bias_offset = static_cast<uint32_t>(TB_BASE_W1_BIAS);
         ctrl_mem.w2_bias_offset = static_cast<uint32_t>(TB_BASE_W2_BIAS);
