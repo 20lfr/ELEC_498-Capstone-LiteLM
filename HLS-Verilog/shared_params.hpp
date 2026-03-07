@@ -142,28 +142,6 @@ constexpr uint32_t MEM_BIAS =
 constexpr uint32_t MEM_K_CACHE = KV_CACHE_TOTAL_BYTES;
 constexpr uint32_t MEM_V_CACHE = KV_CACHE_TOTAL_BYTES;
 
-// DDR weight buffer offsets (64-byte aligned)
-constexpr uint32_t ALIGN64(uint32_t v) { return (v + 63) & ~63; }
-
-constexpr uint32_t WOFF_WQ = 0;
-constexpr uint32_t WOFF_WK = ALIGN64(WOFF_WQ + MEM_WQ);
-constexpr uint32_t WOFF_WV = ALIGN64(WOFF_WK + MEM_WK);
-constexpr uint32_t WOFF_WO = ALIGN64(WOFF_WV + MEM_WV);
-constexpr uint32_t WOFF_W1_GATE = ALIGN64(WOFF_WO + MEM_WO);
-constexpr uint32_t WOFF_W1_UP = ALIGN64(WOFF_W1_GATE + MEM_W1_GATE);
-constexpr uint32_t WOFF_W2 = ALIGN64(WOFF_W1_UP + MEM_W1_UP);
-constexpr uint32_t WOFF_EMBED = ALIGN64(WOFF_W2 + MEM_W2);
-constexpr uint32_t WOFF_GAMMA = ALIGN64(WOFF_EMBED + MEM_EMBED);
-constexpr uint32_t WOFF_BIAS = ALIGN64(WOFF_GAMMA + MEM_GAMMA);
-constexpr uint32_t WOFF_TOTAL = ALIGN64(WOFF_BIAS + MEM_BIAS);
-
-// DDR KV cache / stream offsets (same dmabuf, after weights)
-constexpr uint32_t COFF_K_CACHE = WOFF_TOTAL;
-constexpr uint32_t COFF_V_CACHE = ALIGN64(COFF_K_CACHE + MEM_K_CACHE);
-constexpr uint32_t COFF_INPUT = ALIGN64(COFF_V_CACHE + MEM_V_CACHE);
-constexpr uint32_t COFF_OUTPUT = ALIGN64(COFF_INPUT + D_MODEL);
-constexpr uint32_t COFF_TOTAL = ALIGN64(COFF_OUTPUT + D_MODEL);
-
 // Strides (bytes): addr = base + layer * layer_stride + head/tile * sub_stride
 constexpr uint32_t STRIDE_WQ_LAYER = D_MODEL * D_MODEL / 2;
 constexpr uint32_t STRIDE_WK_LAYER = STRIDE_WQ_LAYER;

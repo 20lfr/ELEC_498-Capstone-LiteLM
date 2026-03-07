@@ -91,19 +91,16 @@ namespace PLReg {
     constexpr uint32_t W2_OFFSET = CTRL_BASE + 0x84;
     constexpr uint32_t K_CACHE_OFFSET = CTRL_BASE + 0x88;
     constexpr uint32_t V_CACHE_OFFSET = CTRL_BASE + 0x8C;
-    constexpr uint32_t WQ_BIAS_OFFSET = CTRL_BASE + 0x90;
-    constexpr uint32_t WK_BIAS_OFFSET = CTRL_BASE + 0x94;
-    constexpr uint32_t WV_BIAS_OFFSET = CTRL_BASE + 0x98;
-    constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x9C;
-    constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0xA0;
-    constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0xA4;
-    constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0xA8;
-    constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0xAC;
-    constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0xB0;
-    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0xB4;
-    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0xB8;
-    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0xBC;
-    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0xC0;
+    constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x90;
+    constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0x94;
+    constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0x98;
+    constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0x9C;
+    constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0xA0;
+    constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0xA4;
+    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0xA8;
+    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0xAC;
+    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0xB0;
+    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0xB4;
 
     // StatusMemSpace (PL->PS reads)
     constexpr uint32_t STATUS_BASE =
@@ -232,9 +229,9 @@ public:
     bool start();
     bool waitDone(uint32_t timeout_ms);
     bool isError() { return testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT); }
+    std::string getRegStats(bool compact = false);
     void beginConfig();
     void endConfig();
-    std::string getRegStats();
 
     // Memory
     bool writeDDR(uint32_t dma_offset, const void *data, size_t size);

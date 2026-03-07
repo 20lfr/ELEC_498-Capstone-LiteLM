@@ -320,7 +320,6 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
     }
 
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
-        LOG_ERROR("Inference error: " + getErrorCodeString());
         _err->setError(ErrorCode::HARDWARE_FAULT, "HW error");
         return false;
     }
@@ -331,22 +330,36 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
     return false;
 }
 
-std::string PLInterface::getRegStats() {
-    char buf[640];
-    snprintf(buf, sizeof(buf),
-             "  AP_CTRL:    0x%08X\n"
-             "  Status:     0x%08X\n"
-             "  IRQ Status: 0x%08X\n"
-             "  Error Code: 0x%08X  %s\n"
-             "  MMU Sub:    0x%08X\n"
-             "  Layer:      %u\n"
-             "  Token:      %u\n"
-             "  Stream:     %s\n",
-             readReg(PLReg::AXIL_AP_CTRL), readReg(PLReg::STATUS),
-             readReg(PLReg::IRQ_STATUS), readReg(PLReg::ERROR_CODE),
-             getErrorCodeString().c_str(), readReg(PLReg::MMU_ERROR_SUBCODE),
-             readReg(PLReg::LAYER_INDEX), readReg(PLReg::TOKEN_INDEX),
-             streamStatusString().c_str());
+std::string PLInterface::getRegStats(bool compact) {
+    uint32_t status = readReg(PLReg::STATUS);
+    uint32_t irq_status = readReg(PLReg::IRQ_STATUS);
+    uint32_t error_code = readReg(PLReg::ERROR_CODE);
+    uint32_t layer_idx = readReg(PLReg::LAYER_INDEX);
+    uint32_t head_idx = readReg(PLReg::HEAD_INDEX);
+    uint32_t token_idx = readReg(PLReg::TOKEN_INDEX);
+
+    char buf[512];
+    if (compact) {
+        snprintf(buf, sizeof(buf),
+                 "status=0x%08X irq=0x%08X error=0x%08X "
+                 "layer=%u head=%u token=%u | %s | stream: %s",
+                 status, irq_status, error_code, layer_idx, head_idx,
+                 token_idx, getErrorCodeString(error_code).c_str(),
+                 streamStatusString().c_str());
+    } else {
+        snprintf(buf, sizeof(buf),
+                 "  Status:     0x%08X\n"
+                 "  IRQ Status: 0x%08X\n"
+                 "  Error Code: 0x%08X  %s\n"
+                 "  Layer:      %u\n"
+                 "  Head:       %u\n"
+                 "  Token:      %u\n"
+                 "  Stream:     %s",
+                 status, irq_status, error_code,
+                 getErrorCodeString(error_code).c_str(),
+                 layer_idx, head_idx, token_idx,
+                 streamStatusString().c_str());
+    }
     return std::string(buf);
 }
 
