@@ -33,7 +33,7 @@ module transformer_top_control_s_axi
     input  wire                          RREADY,
     output wire                          interrupt,
     output wire [1567:0]                 ctrl_mem,
-    input  wire [255:0]                  status_mem,
+    input  wire [223:0]                  status_mem,
     input  wire                          status_mem_ap_vld,
     output wire                          ap_start,
     input  wire                          ap_done,
@@ -175,9 +175,7 @@ module transformer_top_control_s_axi
 //        bit 31~0 - status_mem[191:160] (Read)
 // 0xf0 : Data signal of status_mem
 //        bit 31~0 - status_mem[223:192] (Read)
-// 0xf4 : Data signal of status_mem
-//        bit 31~0 - status_mem[255:224] (Read)
-// 0xf8 : Control signal of status_mem
+// 0xf4 : Control signal of status_mem
 //        bit 0  - status_mem_ap_vld (Read/COR)
 //        others - reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
@@ -245,8 +243,7 @@ localparam
     ADDR_STATUS_MEM_DATA_4 = 8'he8,
     ADDR_STATUS_MEM_DATA_5 = 8'hec,
     ADDR_STATUS_MEM_DATA_6 = 8'hf0,
-    ADDR_STATUS_MEM_DATA_7 = 8'hf4,
-    ADDR_STATUS_MEM_CTRL   = 8'hf8,
+    ADDR_STATUS_MEM_CTRL   = 8'hf4,
     WRIDLE                 = 2'd0,
     WRDATA                 = 2'd1,
     WRRESP                 = 2'd2,
@@ -285,7 +282,7 @@ localparam
     reg  [1:0]                    int_isr = 2'b0;
     reg  [1567:0]                 int_ctrl_mem = 'b0;
     reg                           int_status_mem_ap_vld;
-    reg  [255:0]                  int_status_mem = 'b0;
+    reg  [223:0]                  int_status_mem = 'b0;
 
 //------------------------Instantiation------------------
 
@@ -562,9 +559,6 @@ always @(posedge ACLK) begin
                 end
                 ADDR_STATUS_MEM_DATA_6: begin
                     rdata <= int_status_mem[223:192];
-                end
-                ADDR_STATUS_MEM_DATA_7: begin
-                    rdata <= int_status_mem[255:224];
                 end
                 ADDR_STATUS_MEM_CTRL: begin
                     rdata[0] <= int_status_mem_ap_vld;

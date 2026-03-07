@@ -55,9 +55,6 @@ static void fill_qkv_buf(uint8_t *in_buf) {
     for (int i = 0; i < D_MODEL * D_HEAD_TILE_QKV; ++i) {
         compute_buf::write_i4(in_buf, (head_buf::INQkvLayout::W * 2) + i, static_cast<int8_t>((i % 5) - 2));
     }
-    for (int i = 0; i < D_HEAD_TILE_QKV; ++i) {
-        compute_buf::write_i32(in_buf, head_buf::INQkvLayout::B + (i * 4), static_cast<int32_t>((i % 3) - 1));
-    }
 }
 
 static void fill_att_scores_buf(uint8_t *in_buf) {

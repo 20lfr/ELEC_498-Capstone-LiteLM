@@ -198,9 +198,6 @@ static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
     std::printf("  wo_tile_stride=%u\n", static_cast<unsigned>(ctrl.wo_tile_stride));
     std::printf("  w1_tile_stride=%u\n", static_cast<unsigned>(ctrl.w1_tile_stride));
     std::printf("  w2_tile_stride=%u\n", static_cast<unsigned>(ctrl.w2_tile_stride));
-    std::printf("  wq_bias_head_stride=%u\n", static_cast<unsigned>(ctrl.wq_bias_head_stride));
-    std::printf("  wk_bias_head_stride=%u\n", static_cast<unsigned>(ctrl.wk_bias_head_stride));
-    std::printf("  wv_bias_head_stride=%u\n", static_cast<unsigned>(ctrl.wv_bias_head_stride));
     std::printf("  wo_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.wo_bias_tile_stride));
     std::printf("  w1_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.w1_bias_tile_stride));
     std::printf("  w2_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.w2_bias_tile_stride));
@@ -220,9 +217,6 @@ static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
     std::printf("  w2_offset=0x%x\n", static_cast<unsigned>(ctrl.w2_offset));
     std::printf("  k_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.k_cache_offset));
     std::printf("  v_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.v_cache_offset));
-    std::printf("  wq_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wq_bias_offset));
-    std::printf("  wk_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wk_bias_offset));
-    std::printf("  wv_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wv_bias_offset));
     std::printf("  wo_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wo_bias_offset));
     std::printf("  w1_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.w1_bias_offset));
     std::printf("  w2_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.w2_bias_offset));
@@ -323,7 +317,7 @@ static const char *mmu_subcode_name(uint32_t subcode) {
         case MMU_ERR_SUBCODE_MISSING_WO_W: return "MISSING_WO_W";
         case MMU_ERR_SUBCODE_MISSING_WO_B: return "MISSING_WO_B";
         case MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED: return "MISSING_OUT_PROJ_PACKED";
-        case MMU_ERR_SUBCODE_MISSING_RESID0_OUT: return "MISSING_RESID0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
         case MMU_ERR_SUBCODE_MISSING_LN1_OUT: return "MISSING_LN1_OUT";
         case MMU_ERR_SUBCODE_MISSING_W1_W: return "MISSING_W1_W";
         case MMU_ERR_SUBCODE_MISSING_W1_B: return "MISSING_W1_B";
@@ -332,7 +326,7 @@ static const char *mmu_subcode_name(uint32_t subcode) {
         case MMU_ERR_SUBCODE_MISSING_W2_W: return "MISSING_W2_W";
         case MMU_ERR_SUBCODE_MISSING_W2_B: return "MISSING_W2_B";
         case MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED: return "MISSING_FFN_W2_PACKED";
-        case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_RESID2_OUT: return "MISSING_RESID2_OUT";
         case MMU_ERR_SUBCODE_MISSING_LN0_GAMMA: return "MISSING_LN0_GAMMA";
         case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
         case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
@@ -383,9 +377,9 @@ int main() {
     ControlMemSpace ctrl{};
     ctrl.layer_stride = 0x00100000;
 
-    ctrl.wq_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
-    ctrl.wk_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
-    ctrl.wv_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
+    ctrl.wq_head_stride = head_buf::QKV_W_FULL_BYTES;
+    ctrl.wk_head_stride = head_buf::QKV_W_FULL_BYTES;
+    ctrl.wv_head_stride = head_buf::QKV_W_FULL_BYTES;
 
     ctrl.wo_tile_stride = compute_buf::INOutProjLayout::W_BYTES + compute_buf::INOutProjLayout::B_BYTES;
     ctrl.w1_tile_stride = compute_buf::INFfnW1Layout::W_BYTES + compute_buf::INFfnW1Layout::B_BYTES;
@@ -521,7 +515,7 @@ int main() {
     for (int t = 0; t < NUM_WO_TILES; ++t) {
         add_cmp(CMP_OUT_PROJ, ComputeReqType::WRITE, 0, -1, t, "Single: write OUT_PROJ tile");
     }
-    add_cmp(CMP_RESID1, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID0_OUT");
+    add_cmp(CMP_RESID1, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID1_OUT");
     add_cmp(CMP_LN1, ComputeReqType::WRITE, 0, -1, -1, "Single: write LN1_OUT");
     add_cmp(CMP_FFN_W1, ComputeReqType::READ, 0, -1, 0, "Consume W1/B1 via CMP_FFN_W1 READ tile0");
 
@@ -535,16 +529,16 @@ int main() {
     for (int t = 0; t < NUM_W2_TILES; ++t) {
         add_cmp(CMP_FFN_W2, ComputeReqType::WRITE, 0, -1, t, "Single: write FFN_W2 tile");
     }
-    add_cmp(CMP_RESID2, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID1_OUT");
+    add_cmp(CMP_RESID2, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID2_OUT");
     add_cmp(CMP_FINAL_NORM, ComputeReqType::WRITE, 0, -1, -1, "Single: write FINAL_NORM_OUT");
 
     // 3) Headed DMA preloads.
     add_dma(DMASEL_WQ, 0, 0, -1, "Headed preload WQ+BQ for head0");
-    add_cmp(CMP_Q, ComputeReqType::READ, 0, 0, -1, "Consume WQ/BQ via CMP_Q READ (head0)");
+    add_cmp(CMP_Q, ComputeReqType::READ, 0, 0, -1, "Consume WQ via CMP_Q READ (head0)");
     add_dma(DMASEL_WK, 0, 1, -1, "Headed preload WK+BK for head1");
-    add_cmp(CMP_K, ComputeReqType::READ, 0, 1, -1, "Consume WK/BK via CMP_K READ (head1)");
+    add_cmp(CMP_K, ComputeReqType::READ, 0, 1, -1, "Consume WK via CMP_K READ (head1)");
     add_dma(DMASEL_WV, 0, 0, -1, "Headed preload WV+BV for head0");
-    add_cmp(CMP_V, ComputeReqType::READ, 0, 0, -1, "Consume WV/BV via CMP_V READ (head0)");
+    add_cmp(CMP_V, ComputeReqType::READ, 0, 0, -1, "Consume WV via CMP_V READ (head0)");
     add_dma(DMASEL_CTX_K, 0, 0, -1, "Headed preload K cache for head0");
     add_cmp(CMP_Q, ComputeReqType::WRITE, 0, 0, -1, "Seed Q_OUT for ATT_SCORES consume path (head0)");
     add_cmp(CMP_ATT_SCORES, ComputeReqType::READ, 0, 0, -1, "Consume CTX_K via CMP_ATT_SCORES READ (head0)");
@@ -567,7 +561,7 @@ int main() {
     add_cmp(CMP_ATT_SCORES, ComputeReqType::READ, 0, 0, -1, "Consume CTX_K(h0)+Q_OUT(h0) after parallel");
     add_cmp(CMP_SOFTMAX, ComputeReqType::WRITE, 0, 1, -1, "Seed SOFTMAX_OUT(h1) for CTX_V consume after parallel");
     add_cmp(CMP_ATT_VALUE, ComputeReqType::READ, 0, 1, -1, "Consume CTX_V(h1)+SOFTMAX_OUT(h1) after parallel");
-    add_cmp(CMP_Q, ComputeReqType::READ, 0, 1, -1, "Consume WQ/BQ(h1) after parallel");
+    add_cmp(CMP_Q, ComputeReqType::READ, 0, 1, -1, "Consume WQ(h1) after parallel");
     add_dma(DMASEL_V_WRITE, 0, 1, -1, "Consume V_OUT(h1) via V_WRITE after parallel");
 
     for (int h = 0; h < NUM_HEADS; ++h) {

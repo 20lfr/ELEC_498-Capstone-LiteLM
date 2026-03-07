@@ -3,7 +3,7 @@
 module top_module_hls_tb;
   localparam int CLK_PERIOD_NS        = 10;
   localparam int MAX_CYCLES           = 5000000;
-  localparam int CTRL_MEM_WORDS       = 56;
+  localparam int CTRL_MEM_WORDS       = 49;
   localparam int DBG_CTRL_MEM_WORDS   = 49;
   localparam int STREAM_IN_BUF_BYTES  = 16;
   localparam int STREAM_OUT_BUF_BYTES = 64;
@@ -94,9 +94,9 @@ module top_module_hls_tb;
     logic [31:0] wo_tile_stride;
     logic [31:0] w1_tile_stride;
     logic [31:0] w2_tile_stride;
-    logic [31:0] wq_bias_head_stride;
-    logic [31:0] wk_bias_head_stride;
-    logic [31:0] wv_bias_head_stride;
+    logic [31:0] reserved_qkv_bias_head_stride_0;
+    logic [31:0] reserved_qkv_bias_head_stride_1;
+    logic [31:0] reserved_qkv_bias_head_stride_2;
     logic [31:0] wo_bias_tile_stride;
     logic [31:0] w1_bias_tile_stride;
     logic [31:0] w2_bias_tile_stride;
@@ -115,9 +115,9 @@ module top_module_hls_tb;
     logic [31:0] w2_offset;
     logic [31:0] k_cache_offset;
     logic [31:0] v_cache_offset;
-    logic [31:0] wq_bias_offset;
-    logic [31:0] wk_bias_offset;
-    logic [31:0] wv_bias_offset;
+    logic [31:0] reserved_qkv_bias_offset_0;
+    logic [31:0] reserved_qkv_bias_offset_1;
+    logic [31:0] reserved_qkv_bias_offset_2;
     logic [31:0] wo_bias_offset;
     logic [31:0] w1_bias_offset;
     logic [31:0] w2_bias_offset;
@@ -271,9 +271,6 @@ module top_module_hls_tb;
   logic [31:0] w1_ram        [0:RAM_REGION_WORDS-1];
   logic [31:0] w2_ram        [0:RAM_REGION_WORDS-1];
   logic [31:0] wlogit_ram    [0:RAM_REGION_WORDS-1];
-  logic [31:0] wq_bias_ram   [0:RAM_REGION_WORDS-1];
-  logic [31:0] wk_bias_ram   [0:RAM_REGION_WORDS-1];
-  logic [31:0] wv_bias_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] wo_bias_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] w1_bias_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] w2_bias_ram   [0:RAM_REGION_WORDS-1];
@@ -340,9 +337,9 @@ module top_module_hls_tb;
   localparam int CTRLW_WO_TILE_STRIDE     = 12;
   localparam int CTRLW_W1_TILE_STRIDE     = 13;
   localparam int CTRLW_W2_TILE_STRIDE     = 14;
-  localparam int CTRLW_WQ_BIAS_HEAD_STRIDE = 15;
-  localparam int CTRLW_WK_BIAS_HEAD_STRIDE = 16;
-  localparam int CTRLW_WV_BIAS_HEAD_STRIDE = 17;
+  localparam int CTRLW_RESERVED_QKV_BIAS_HEAD_STRIDE_0 = 15;
+  localparam int CTRLW_RESERVED_QKV_BIAS_HEAD_STRIDE_1 = 16;
+  localparam int CTRLW_RESERVED_QKV_BIAS_HEAD_STRIDE_2 = 17;
   localparam int CTRLW_WO_BIAS_TILE_STRIDE = 18;
   localparam int CTRLW_W1_BIAS_TILE_STRIDE = 19;
   localparam int CTRLW_W2_BIAS_TILE_STRIDE = 20;
@@ -369,12 +366,9 @@ module top_module_hls_tb;
   localparam int CTRLW_K_CACHE_HI         = 34;
   localparam int CTRLW_V_CACHE_LO         = 35;
   localparam int CTRLW_V_CACHE_HI         = 35;
-  localparam int CTRLW_WQ_BIAS_BASE_LO    = 36;
-  localparam int CTRLW_WQ_BIAS_BASE_HI    = 36;
-  localparam int CTRLW_WK_BIAS_BASE_LO    = 37;
-  localparam int CTRLW_WK_BIAS_BASE_HI    = 37;
-  localparam int CTRLW_WV_BIAS_BASE_LO    = 38;
-  localparam int CTRLW_WV_BIAS_BASE_HI    = 38;
+  localparam int CTRLW_RESERVED_QKV_BIAS_BASE_0 = 36;
+  localparam int CTRLW_RESERVED_QKV_BIAS_BASE_1 = 37;
+  localparam int CTRLW_RESERVED_QKV_BIAS_BASE_2 = 38;
   localparam int CTRLW_WO_BIAS_BASE_LO    = 39;
   localparam int CTRLW_WO_BIAS_BASE_HI    = 39;
   localparam int CTRLW_W1_BIAS_BASE_LO    = 40;
@@ -395,14 +389,6 @@ module top_module_hls_tb;
   localparam int CTRLW_FINAL_NORM_EPS_BASE_HI = 47;
   localparam int CTRLW_WLOGIT_BASE_LO     = 48;
   localparam int CTRLW_WLOGIT_BASE_HI     = 48;
-  localparam int CTRLW_LOGIT_SCALE_QV     = 49;
-  localparam int CTRLW_SCALE_Q            = 50;
-  localparam int CTRLW_ZERO_POINT_Q       = 51;
-  localparam int CTRLW_SCALE_K            = 52;
-  localparam int CTRLW_ZERO_POINT_K       = 53;
-  localparam int CTRLW_SCALE_V            = 54;
-  localparam int CTRLW_ZERO_POINT_V       = 55;
-
   // 64-bit DDR base map for control memory programming.
   localparam logic [63:0] BASE_WQ               = 64'h0000_0001_6000_0000;
   localparam logic [63:0] BASE_WK               = 64'h0000_0001_6100_0000;
@@ -412,9 +398,6 @@ module top_module_hls_tb;
   localparam logic [63:0] BASE_W2               = 64'h0000_0001_6500_0000;
   localparam logic [63:0] BASE_K_CACHE          = 64'h0000_0001_6600_0000;
   localparam logic [63:0] BASE_V_CACHE          = 64'h0000_0001_6700_0000;
-  localparam logic [63:0] BASE_WQ_BIAS          = 64'h0000_0001_6008_0000;
-  localparam logic [63:0] BASE_WK_BIAS          = 64'h0000_0001_6108_0000;
-  localparam logic [63:0] BASE_WV_BIAS          = 64'h0000_0001_6208_0000;
   localparam logic [63:0] BASE_WO_BIAS          = 64'h0000_0001_6308_0000;
   localparam logic [63:0] BASE_W1_BIAS          = 64'h0000_0001_6408_0000;
   localparam logic [63:0] BASE_W2_BIAS          = 64'h0000_0001_6508_0000;
@@ -493,6 +476,7 @@ module top_module_hls_tb;
   logic        error_req_read;
   logic [7:0]  error_req_addr;
   logic [31:0] error_req_wdata;
+  logic [2:0]  status_poll_idx;
   wire         irq_req_fire;
   wire         done_req_fire;
   wire         error_req_fire;
@@ -527,9 +511,9 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.wo_tile_stride          = dbg_ctrl_words[12];
     dbg_ctrl_mem_shadow.w1_tile_stride          = dbg_ctrl_words[13];
     dbg_ctrl_mem_shadow.w2_tile_stride          = dbg_ctrl_words[14];
-    dbg_ctrl_mem_shadow.wq_bias_head_stride     = dbg_ctrl_words[15];
-    dbg_ctrl_mem_shadow.wk_bias_head_stride     = dbg_ctrl_words[16];
-    dbg_ctrl_mem_shadow.wv_bias_head_stride     = dbg_ctrl_words[17];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_head_stride_0 = dbg_ctrl_words[15];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_head_stride_1 = dbg_ctrl_words[16];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_head_stride_2 = dbg_ctrl_words[17];
     dbg_ctrl_mem_shadow.wo_bias_tile_stride     = dbg_ctrl_words[18];
     dbg_ctrl_mem_shadow.w1_bias_tile_stride     = dbg_ctrl_words[19];
     dbg_ctrl_mem_shadow.w2_bias_tile_stride     = dbg_ctrl_words[20];
@@ -548,9 +532,9 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.w2_offset               = dbg_ctrl_words[33];
     dbg_ctrl_mem_shadow.k_cache_offset          = dbg_ctrl_words[34];
     dbg_ctrl_mem_shadow.v_cache_offset          = dbg_ctrl_words[35];
-    dbg_ctrl_mem_shadow.wq_bias_offset          = dbg_ctrl_words[36];
-    dbg_ctrl_mem_shadow.wk_bias_offset          = dbg_ctrl_words[37];
-    dbg_ctrl_mem_shadow.wv_bias_offset          = dbg_ctrl_words[38];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_offset_0 = dbg_ctrl_words[36];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_offset_1 = dbg_ctrl_words[37];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_offset_2 = dbg_ctrl_words[38];
     dbg_ctrl_mem_shadow.wo_bias_offset          = dbg_ctrl_words[39];
     dbg_ctrl_mem_shadow.w1_bias_offset          = dbg_ctrl_words[40];
     dbg_ctrl_mem_shadow.w2_bias_offset          = dbg_ctrl_words[41];
@@ -572,6 +556,18 @@ module top_module_hls_tb;
 
   function automatic [7:0] ctrl_mem_addr(input int word_idx);
     ctrl_mem_addr = ADDR_CTRL_MEM_DATA_0 + (word_idx * 4);
+  endfunction
+
+  function automatic [7:0] status_mem_addr(input logic [2:0] idx);
+    case (idx)
+      3'd0: status_mem_addr = ADDR_STATUS_MEM_DATA_0;
+      3'd1: status_mem_addr = ADDR_STATUS_MEM_DATA_1;
+      3'd2: status_mem_addr = ADDR_STATUS_MEM_DATA_2;
+      3'd3: status_mem_addr = ADDR_STATUS_MEM_DATA_3;
+      3'd4: status_mem_addr = ADDR_STATUS_MEM_DATA_4;
+      3'd5: status_mem_addr = ADDR_STATUS_MEM_DATA_5;
+      default: status_mem_addr = ADDR_STATUS_MEM_DATA_6;
+    endcase
   endfunction
 
   function automatic [63:0] ctrl_base_addr64(input int lo_idx, input int hi_idx);
@@ -648,18 +644,6 @@ module top_module_hls_tb;
 
   function automatic bit is_wlogit_addr(input [63:0] addr);
     is_wlogit_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WLOGIT_BASE_LO, CTRLW_WLOGIT_BASE_HI), IMG_SPAN_WVOCAB);
-  endfunction
-
-  function automatic bit is_wq_bias_addr(input [63:0] addr);
-    is_wq_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WQ_BIAS_BASE_LO, CTRLW_WQ_BIAS_BASE_HI), IMG_SPAN_WQ_BIAS);
-  endfunction
-
-  function automatic bit is_wk_bias_addr(input [63:0] addr);
-    is_wk_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WK_BIAS_BASE_LO, CTRLW_WK_BIAS_BASE_HI), IMG_SPAN_WK_BIAS);
-  endfunction
-
-  function automatic bit is_wv_bias_addr(input [63:0] addr);
-    is_wv_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WV_BIAS_BASE_LO, CTRLW_WV_BIAS_BASE_HI), IMG_SPAN_WV_BIAS);
   endfunction
 
   function automatic bit is_wo_bias_addr(input [63:0] addr);
@@ -745,12 +729,6 @@ module top_module_hls_tb;
         mem_read_word = w2_ram[region_index(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI))];
       end else if (is_wlogit_addr(addr)) begin
         mem_read_word = wlogit_ram[region_index(addr, ctrl_base_addr64(CTRLW_WLOGIT_BASE_LO, CTRLW_WLOGIT_BASE_HI))];
-      end else if (is_wq_bias_addr(addr)) begin
-        mem_read_word = wq_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WQ_BIAS_BASE_LO, CTRLW_WQ_BIAS_BASE_HI))];
-      end else if (is_wk_bias_addr(addr)) begin
-        mem_read_word = wk_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WK_BIAS_BASE_LO, CTRLW_WK_BIAS_BASE_HI))];
-      end else if (is_wv_bias_addr(addr)) begin
-        mem_read_word = wv_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WV_BIAS_BASE_LO, CTRLW_WV_BIAS_BASE_HI))];
       end else if (is_wo_bias_addr(addr)) begin
         mem_read_word = wo_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WO_BIAS_BASE_LO, CTRLW_WO_BIAS_BASE_HI))];
       end else if (is_w1_bias_addr(addr)) begin
@@ -941,9 +919,9 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.wo_tile_stride          = dbg_ctrl_words[12];
     dbg_ctrl_mem_shadow.w1_tile_stride          = dbg_ctrl_words[13];
     dbg_ctrl_mem_shadow.w2_tile_stride          = dbg_ctrl_words[14];
-    dbg_ctrl_mem_shadow.wq_bias_head_stride     = dbg_ctrl_words[15];
-    dbg_ctrl_mem_shadow.wk_bias_head_stride     = dbg_ctrl_words[16];
-    dbg_ctrl_mem_shadow.wv_bias_head_stride     = dbg_ctrl_words[17];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_head_stride_0 = dbg_ctrl_words[15];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_head_stride_1 = dbg_ctrl_words[16];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_head_stride_2 = dbg_ctrl_words[17];
     dbg_ctrl_mem_shadow.wo_bias_tile_stride     = dbg_ctrl_words[18];
     dbg_ctrl_mem_shadow.w1_bias_tile_stride     = dbg_ctrl_words[19];
     dbg_ctrl_mem_shadow.w2_bias_tile_stride     = dbg_ctrl_words[20];
@@ -962,9 +940,9 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.w2_offset               = dbg_ctrl_words[33];
     dbg_ctrl_mem_shadow.k_cache_offset          = dbg_ctrl_words[34];
     dbg_ctrl_mem_shadow.v_cache_offset          = dbg_ctrl_words[35];
-    dbg_ctrl_mem_shadow.wq_bias_offset          = dbg_ctrl_words[36];
-    dbg_ctrl_mem_shadow.wk_bias_offset          = dbg_ctrl_words[37];
-    dbg_ctrl_mem_shadow.wv_bias_offset          = dbg_ctrl_words[38];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_offset_0 = dbg_ctrl_words[36];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_offset_1 = dbg_ctrl_words[37];
+    dbg_ctrl_mem_shadow.reserved_qkv_bias_offset_2 = dbg_ctrl_words[38];
     dbg_ctrl_mem_shadow.wo_bias_offset          = dbg_ctrl_words[39];
     dbg_ctrl_mem_shadow.w1_bias_offset          = dbg_ctrl_words[40];
     dbg_ctrl_mem_shadow.w2_bias_offset          = dbg_ctrl_words[41];
@@ -1613,10 +1591,7 @@ module top_module_hls_tb;
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
                   for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
-                    q_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
+                    q_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_K: begin
@@ -1629,10 +1604,7 @@ module top_module_hls_tb;
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
                   for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
-                    k_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
+                    k_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_V: begin
@@ -1645,10 +1617,7 @@ module top_module_hls_tb;
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
                   for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
-                    v_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
+                    v_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_HEAD_REQUANT: begin
@@ -2286,11 +2255,12 @@ module top_module_hls_tb;
           ctrl_gap_cycles <= 1;
         end
         CTRL_DONE: begin
-          // Continuously poll status_mem.status whenever the AXI-Lite control
-          // bus is otherwise idle.
-          ctrl_addr <= ADDR_STATUS_MEM_DATA_0;
+          // Cycle through the full status_mem shadow so each field refreshes
+          // in waveforms while the control bus is otherwise idle.
+          ctrl_addr <= status_mem_addr(status_poll_idx);
           ctrl_read_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
+          status_poll_idx <= (status_poll_idx == 3'd6) ? 3'd0 : (status_poll_idx + 3'd1);
           ctrl_gap_cycles <= 1;
         end
         default: begin end
@@ -2389,6 +2359,7 @@ module top_module_hls_tb;
     error_req_valid    = 1'b0;
     irq_read_phase     = IRQ_RD_STATUS;
     err_phase          = ERR_PHASE_READ;
+    status_poll_idx    = 3'd0;
     ctrl_addr          = '0;
     ctrl_data_in       = '0;
     ctrl_read_en       = 1'b0;
@@ -2463,9 +2434,6 @@ module top_module_hls_tb;
       w1_ram[i] = load_image_word(IMG_BASE_W1 + (i * 4));
       w2_ram[i] = load_image_word(IMG_BASE_W2 + (i * 4));
       wlogit_ram[i] = load_image_word(IMG_BASE_WVOCAB + (i * 4));
-      wq_bias_ram[i] = load_image_word(IMG_BASE_WQ_BIAS + (i * 4));
-      wk_bias_ram[i] = load_image_word(IMG_BASE_WK_BIAS + (i * 4));
-      wv_bias_ram[i] = load_image_word(IMG_BASE_WV_BIAS + (i * 4));
       wo_bias_ram[i] = load_image_word(IMG_BASE_WO_BIAS + (i * 4));
       w1_bias_ram[i] = load_image_word(IMG_BASE_W1_BIAS + (i * 4));
       w2_bias_ram[i] = load_image_word(IMG_BASE_W2_BIAS + (i * 4));

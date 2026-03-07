@@ -36,8 +36,7 @@ public:
             ctrl_mem.wk_head_stride == 0 || ctrl_mem.wv_head_stride == 0 ||
             ctrl_mem.k_cache_stride == 0 || ctrl_mem.v_cache_stride == 0 ||
             ctrl_mem.wo_tile_stride == 0 || ctrl_mem.w1_tile_stride == 0 ||
-            ctrl_mem.w2_tile_stride == 0 || ctrl_mem.wq_bias_head_stride == 0 ||
-            ctrl_mem.wk_bias_head_stride == 0 || ctrl_mem.wv_bias_head_stride == 0 ||
+            ctrl_mem.w2_tile_stride == 0 ||
             ctrl_mem.wo_bias_tile_stride == 0 || ctrl_mem.w1_bias_tile_stride == 0 ||
             ctrl_mem.w2_bias_tile_stride == 0 || ctrl_mem.wlogit_tile_stride == 0 ||
             ctrl_mem.ln0_gamma_stride == 0 || ctrl_mem.ln1_gamma_stride == 0 ||
@@ -58,9 +57,6 @@ public:
             (ctrl_mem.w2_offset & 0x3F) != 0 ||
             (ctrl_mem.k_cache_offset & 0x3F) != 0 ||
             (ctrl_mem.v_cache_offset & 0x3F) != 0 ||
-            (ctrl_mem.wq_bias_offset & 0x3F) != 0 ||
-            (ctrl_mem.wk_bias_offset & 0x3F) != 0 ||
-            (ctrl_mem.wv_bias_offset & 0x3F) != 0 ||
             (ctrl_mem.wo_bias_offset & 0x3F) != 0 ||
             (ctrl_mem.w1_bias_offset & 0x3F) != 0 ||
             (ctrl_mem.w2_bias_offset & 0x3F) != 0 ||

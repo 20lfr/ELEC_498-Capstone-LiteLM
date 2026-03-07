@@ -41,7 +41,7 @@ static inline uint64_t map_csim_ddr_addr(uint64_t byte_addr, const ControlMemSpa
 }
 #endif
 
-// Temporary top-level wrapper that calls only the mem interface and scheduler (so no inputs rn)
+// Top-level wrapper with debug mirrors enabled.
 void transformer_top(
     // ------------------------------------------------------------
     // AXI4-STREAM INPUT/OUTPUT
@@ -132,7 +132,7 @@ void transformer_top(
     bool        &dbg_axis_in_last_wire,
     uint32_t    &dbg_stream_in_counter
 ) {
-#pragma HLS INLINE off   
+#pragma HLS INLINE off
 #pragma HLS INTERFACE axis port=s_axis_in
 #pragma HLS INTERFACE axis port=m_axis_out
 #pragma HLS INTERFACE m_axi port=ddr_mem offset=slave bundle=gmem depth=TOP_DMA_BUF_WORDS
@@ -168,22 +168,28 @@ void transformer_top(
 #pragma HLS ARRAY_PARTITION variable=head_compute_ctx_local complete dim=1
 #pragma HLS BIND_STORAGE variable=head_compute_ctx_local type=ram_t2p impl=bram
 
-    // Headed compute controller lanes (parallel heads) 
+    // Headed compute controller lanes (parallel heads)
     static int              head_group_idx;
 
     // MMU-owned compute buffers (main + headed lanes)
     static uint8_t          mmu_in_buf[compute_buf::IN_BUF_BYTES];
+    #pragma HLS BIND_STORAGE variable=mmu_in_buf type=ram_t2p impl=bram
     static uint8_t          mmu_out_buf[compute_buf::OUT_BUF_BYTES];
+    #pragma HLS BIND_STORAGE variable=mmu_out_buf type=ram_t2p impl=bram
     static uint8_t          mmu_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES];
-#pragma HLS ARRAY_PARTITION variable=mmu_head_in_buf complete dim=1
-#pragma HLS BIND_STORAGE variable=mmu_head_in_buf type=ram_t2p impl=bram
+    #pragma HLS ARRAY_PARTITION variable=mmu_head_in_buf complete dim=1
+    #pragma HLS BIND_STORAGE variable=mmu_head_in_buf type=ram_t2p impl=bram
     static uint8_t          mmu_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES];
-#pragma HLS ARRAY_PARTITION variable=mmu_head_out_buf complete dim=1
-#pragma HLS BIND_STORAGE variable=mmu_head_out_buf type=ram_t2p impl=bram
+    #pragma HLS ARRAY_PARTITION variable=mmu_head_out_buf complete dim=1
+    #pragma HLS BIND_STORAGE variable=mmu_head_out_buf type=ram_t2p impl=bram
     static uint8_t          stream_in_buf_local[STREAM_IN_BUF_BYTES];
+    #pragma HLS BIND_STORAGE variable=stream_in_buf_local type=ram_t2p impl=bram
     static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
+    #pragma HLS BIND_STORAGE variable=stream_out_buf_local type=ram_t2p impl=bram
     static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
+    #pragma HLS BIND_STORAGE variable=dma_rx_buf_local type=ram_t2p impl=bram
     static uint32_t         dma_tx_buf_local[TOP_DMA_BUF_WORDS];
+    #pragma HLS BIND_STORAGE variable=dma_tx_buf_local type=ram_t2p impl=bram
     static bool             dma_ready_local                = true;
     static bool             dma_done_local                 = false;
     static bool             dma_busy_local                 = false;
@@ -279,21 +285,17 @@ void transformer_top(
             head_compute_ctx_local[lane] = ComputeHeadCtx();
         }
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
             mmu_in_buf[i] = 0;
         }
         for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
             mmu_out_buf[i] = 0;
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 // #pragma HLS UNROLL
             for (int i = 0; i < head_buf::IN_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
                 mmu_head_in_buf[lane][i] = 0;
             }
             for (int i = 0; i < head_buf::OUT_BUF_BYTES; ++i) {
-// #pragma HLS PIPELINE II=1
                 mmu_head_out_buf[lane][i] = 0;
             }
         }
@@ -339,7 +341,7 @@ void transformer_top(
     stream_done_local = stream_done_pulse_local;
     stream_done_pulse_local = false;
 
-    // SCHEDULER FSM~~~~~~~~~~~~~~~~~~~~~~~
+    // SCHEDULER FSM
     scheduler_hls(
         ctrl_mem,
         active_status_mem,
@@ -374,9 +376,9 @@ void transformer_top(
     }
 
     compute_controller(
-        ctrl_mem,               
-        compute_start,       
-        compute_instruction,      
+        ctrl_mem,
+        compute_start,
+        compute_instruction,
         compute_ready,
         compute_done,
 
@@ -397,16 +399,16 @@ void transformer_top(
         dbg_mac_start,
         dbg_mac_ready,
         dbg_mac_complete,
-        compute_error               
+        compute_error
     );
 
-    // Mirror headed compute contexts for debug visibility and MMU handshake (head scheduler only looks at head_ctx fields, so this is safe to do in-place).
+    // Mirror headed compute contexts for debug visibility and MMU handshake.
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 // #pragma HLS UNROLL
         head_compute_ctx_local[lane].compute_start = head_ctx_local[lane].compute_start;
         head_compute_ctx_local[lane].compute_instruction = head_ctx_local[lane].compute_op;
     }
-    
+
     bool head_error_any = false;
     drive_headed_compute_controller(
         head_compute_ctx_local,
@@ -417,7 +419,7 @@ void transformer_top(
         head_error_any
     );
 
-    // Mirror headed compute contexts back to main scheduler context for debug visibility (main scheduler has full view of all heads, so it takes priority in this mirror).
+    // Mirror headed compute contexts back to main scheduler context.
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 // #pragma HLS UNROLL
         head_ctx_local[lane].compute_ready = head_compute_ctx_local[lane].compute_ready;
@@ -538,9 +540,11 @@ void transformer_top(
                                     mmu_status.error_code,
                                     mmu_status.error_subcode);
     ctrl_mem_interface.check_control(ctrl_mem, done);
+    active_status_mem.token_index = static_cast<uint32_t>(token_pos_current);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
-    // Update status memory
+    // Scheduler_FSM now owns status_mem.status directly as the scheduler-state
+    // channel. top keeps the debug mirror separately.
     status_mem = active_status_mem;
 
     // Debug outputs
@@ -618,7 +622,6 @@ void transformer_top(
             compute_error ||
             mmu_status.invalid ||
             mmu_status.overflow ||
-            ((active_status_mem.status & STATUS_ERROR) != 0u) ||
             (active_status_mem.error_code != ERR_NONE);
         dbg_axis_is_empty = s_axis_in.empty();
         dbg_axis_in_ready_wire = axis_in_ready_wire;
