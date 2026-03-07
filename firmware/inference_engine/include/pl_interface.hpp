@@ -16,7 +16,7 @@
 #include "shared_params.hpp"
 
 // TODO: Replace with final HLS-generated header
-#include "xaxi_top_hw.h"
+#include "xtransformer_top_hw.h"
 
 class Logger;
 class ErrorHandler;
@@ -33,10 +33,10 @@ enum class RegBus : uint8_t {
 // Get actual values from: hardware_overlay/drivers/<top>/src/x<top>_hw.h
 namespace PLReg {
     // AXI-Lite control interface registers
-    constexpr uint32_t AXIL_AP_CTRL = XAXI_TOP_CONTROL_ADDR_AP_CTRL;
-    constexpr uint32_t AXIL_GIE = XAXI_TOP_CONTROL_ADDR_GIE;
-    constexpr uint32_t AXIL_IER = XAXI_TOP_CONTROL_ADDR_IER;
-    constexpr uint32_t AXIL_ISR = XAXI_TOP_CONTROL_ADDR_ISR;
+    constexpr uint32_t AXIL_AP_CTRL = XTRANSFORMER_TOP_CONTROL_ADDR_AP_CTRL;
+    constexpr uint32_t AXIL_GIE = XTRANSFORMER_TOP_CONTROL_ADDR_GIE;
+    constexpr uint32_t AXIL_IER = XTRANSFORMER_TOP_CONTROL_ADDR_IER;
+    constexpr uint32_t AXIL_ISR = XTRANSFORMER_TOP_CONTROL_ADDR_ISR;
 
     // AXI-Lite Control Register Bits (From Vitis HLS UG1399)
     constexpr uint32_t AP_START_BIT = (1u << 0);
@@ -45,7 +45,7 @@ namespace PLReg {
     constexpr uint32_t AP_READY_BIT = (1u << 3);
     constexpr uint32_t AP_AUTO_RESTART_BIT = (1u << 7);
 
-    constexpr uint32_t CTRL_BASE = XAXI_TOP_CONTROL_ADDR_CTRL_MEM_DATA;
+    constexpr uint32_t CTRL_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA;
 
     // ControlMemSpace (PS->PL writes) - 864 bits total (27 x 32-bit registers)
     constexpr uint32_t CONTROL = CTRL_BASE + 0x00;
@@ -86,7 +86,7 @@ namespace PLReg {
     constexpr uint32_t ZERO_POINT_V = CTRL_BASE + 0x68;
 
     // StatusMemSpace (PL->PS reads) - 192 bits total (6 x 32-bit registers)
-    constexpr uint32_t STATUS_BASE = XAXI_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
+    constexpr uint32_t STATUS_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
     constexpr uint32_t STATUS = STATUS_BASE + 0x00;
     constexpr uint32_t IRQ_STATUS = STATUS_BASE + 0x04;
     constexpr uint32_t ERROR_CODE = STATUS_BASE + 0x08;
@@ -94,16 +94,16 @@ namespace PLReg {
     constexpr uint32_t HEAD_INDEX = STATUS_BASE + 0x10;
     constexpr uint32_t TOKEN_INDEX = STATUS_BASE + 0x14;
 
-    constexpr uint32_t STATUS_CTRL = XAXI_TOP_CONTROL_ADDR_STATUS_MEM_CTRL;
+    constexpr uint32_t STATUS_CTRL = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL;
 } // namespace PLReg
 
 // m_axi Base Address Registers (on s_axi_control_r bundle)
 // These live on a SEPARATE AXI-Lite interface from PLReg — use RegBus::ADDR
 namespace AddrReg {
     constexpr uint32_t WEIGHTS_BASE_LO =
-        XAXI_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA;
+        XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA;
     constexpr uint32_t WEIGHTS_BASE_HI =
-        XAXI_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA + 4;
+        XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA + 4;
 } // namespace AddrReg
 
 // AXI DMA Register Offsets (PG021 Direct Register Mode)
