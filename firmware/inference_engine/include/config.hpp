@@ -16,10 +16,10 @@ struct HardwareConfig {
 };
 
 struct ModelConfig {
-    std::string weights_file = "phi3_weights_int4.bin";
-    std::string quant_params_file = "quantization.bin";
-    std::string tokenizer_vocab = "tokenizer.model";
-    std::string embeddings_file = "embeddings.bin";
+    std::string weights_file = "model/phi3_weights_int4.bin";
+    std::string quant_params_file = "model/quantization.bin";
+    std::string tokenizer_vocab = "model/tokenizer.model";
+    std::string embeddings_file = "model/embeddings.bin";
 
     uint32_t vocab_size = MODEL_VOCAB_SIZE;
     uint32_t logit_scale_qv = ATTN_SCALE_Q15;
@@ -35,9 +35,6 @@ struct ModelConfig {
     uint32_t wo_tile_stride = STRIDE_WO_TILE;
     uint32_t w1_tile_stride = STRIDE_W1_TILE;
     uint32_t w2_tile_stride = STRIDE_W2_TILE;
-    uint32_t wq_bias_head_stride = STRIDE_QKV_HEAD;
-    uint32_t wk_bias_head_stride = STRIDE_QKV_HEAD;
-    uint32_t wv_bias_head_stride = STRIDE_QKV_HEAD;
     uint32_t wo_bias_tile_stride = D_TILE_WO * sizeof(int32_t);
     uint32_t w1_bias_tile_stride = D_TILE_W1 * sizeof(int32_t);
     uint32_t w2_bias_tile_stride = D_TILE_W2 * sizeof(int32_t);
@@ -53,38 +50,60 @@ struct ModelConfig {
         return layer_stride && wq_head_stride && wk_head_stride &&
                wv_head_stride && k_cache_stride && v_cache_stride &&
                wo_tile_stride && w1_tile_stride && w2_tile_stride &&
-               wq_bias_head_stride && wk_bias_head_stride &&
-               wv_bias_head_stride && wo_bias_tile_stride &&
-               w1_bias_tile_stride && w2_bias_tile_stride &&
-               wlogit_tile_stride && ln0_gamma_stride &&
-               ln1_gamma_stride && final_norm_gamma_stride &&
-               ln0_eps_stride && ln1_eps_stride &&
-               final_norm_eps_stride;
+               wo_bias_tile_stride && w1_bias_tile_stride &&
+               w2_bias_tile_stride && wlogit_tile_stride && ln0_gamma_stride &&
+               ln1_gamma_stride && final_norm_gamma_stride && ln0_eps_stride &&
+               ln1_eps_stride && final_norm_eps_stride;
     }
 };
 
+constexpr uint32_t align64(uint32_t v) { return (v + 63) & ~63; }
+
 struct MemoryLayout {
-    static constexpr uint32_t align64(uint32_t v) { return (v + 63) & ~63; }
+    // Weight offsets (relative to dmabuf base)
+    static constexpr uint32_t wq_off     = 0;
+    static constexpr uint32_t wk_off     = align64(wq_off + MEM_WQ);
+    static constexpr uint32_t wv_off     = align64(wk_off + MEM_WK);
+    static constexpr uint32_t wo_off     = align64(wv_off + MEM_WV);
+    static constexpr uint32_t w1_off     = align64(wo_off + MEM_WO);
+    static constexpr uint32_t w1_up_off  = align64(w1_off + MEM_W1_GATE);
+    static constexpr uint32_t w2_off     = align64(w1_up_off + MEM_W1_UP);
+    static constexpr uint32_t embed_off  = align64(w2_off + MEM_W2);
+    static constexpr uint32_t gamma_off  = align64(embed_off + MEM_EMBED);
+    static constexpr uint32_t bias_off   = align64(gamma_off + MEM_GAMMA);
+    static constexpr uint32_t wlogit_off = align64(bias_off + MEM_BIAS);
+    static constexpr uint32_t w_total    = align64(wlogit_off);
 
-    // relative to dmabuf
-    uint32_t wq_offset = WOFF_WQ;
-    uint32_t wk_offset = WOFF_WK;
-    uint32_t wv_offset = WOFF_WV;
-    uint32_t wo_offset = WOFF_WO;
-    uint32_t w1_offset = WOFF_W1_GATE;
-    uint32_t w2_offset = WOFF_W2;
-    uint32_t k_cache_offset = COFF_K_CACHE;
-    uint32_t v_cache_offset = COFF_V_CACHE;
-    uint32_t input_offset = COFF_INPUT;
-    uint32_t output_offset = COFF_OUTPUT;
+    // KV cache / stream offsets (after weights)
+    static constexpr uint32_t k_cache_off = w_total;
+    static constexpr uint32_t v_cache_off = align64(k_cache_off + MEM_K_CACHE);
+    static constexpr uint32_t input_off   = align64(v_cache_off + MEM_V_CACHE);
+    static constexpr uint32_t output_off  = align64(input_off + D_MODEL);
+    static constexpr uint32_t total_size  = align64(output_off + D_MODEL);
 
-    // Added 1024 padding
-    uint64_t dmabuf_size = COFF_TOTAL + 1024;
+    // Runtime-overridable fields (default to computed values)
+    uint32_t wq_offset      = wq_off;
+    uint32_t wk_offset      = wk_off;
+    uint32_t wv_offset      = wv_off;
+    uint32_t wo_offset      = wo_off;
+    uint32_t w1_offset      = w1_off;
+    uint32_t w2_offset      = w2_off;
+    uint32_t embed_offset   = embed_off;
+    uint32_t gamma_offset   = gamma_off;
+    uint32_t bias_offset    = bias_off;
+    uint32_t wlogit_offset  = wlogit_off;
+    uint32_t k_cache_offset = k_cache_off;
+    uint32_t v_cache_offset = v_cache_off;
+    uint32_t input_offset   = input_off;
+    uint32_t output_offset  = output_off;
+
+    uint64_t dmabuf_size = total_size + 1024;
 
     bool isAligned() const {
         return !((wq_offset | wk_offset | wv_offset | wo_offset | w1_offset |
                   w2_offset | k_cache_offset | v_cache_offset | input_offset |
-                  output_offset) &
+                  output_offset | embed_offset | gamma_offset | bias_offset |
+                  wlogit_offset) &
                  0x3F);
     }
 };

@@ -268,9 +268,7 @@ bool PLInterface::reset() {
     writeReg(PLReg::CONTROL, CTRL_RESETN_BIT); // Release reset
 
     // irq_clear = !irq_enable_mask: disable IRQs, set clear high
-    writeReg(PLReg::IRQ_MASK, 0);
-    writeReg(PLReg::IRQ_CLEAR, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);
-    usleep(1000);
+    clearIRQ();
 
     // Reset (Stream DMA IP)
     resetStream();
@@ -316,36 +314,52 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
         return true;
     }
 
-    for (uint32_t t = 0; t < timeout_ms; t += 10) {
-        if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
-            return true;
-        if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
-            LOG_ERROR("Inference error: " + getErrorCodeString());
-            _err->setError(ErrorCode::HARDWARE_FAULT, "HW error");
-            return false;
-        }
-        usleep(10000);
+    if (!waitIRQ(timeout_ms)) {
+        _err->setError(ErrorCode::HARDWARE_TIMEOUT, "waitDone: IRQ timeout");
+        return false;
     }
-    _err->setError(ErrorCode::HARDWARE_TIMEOUT, "Timeout");
+
+    if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
+        _err->setError(ErrorCode::HARDWARE_FAULT, "HW error");
+        return false;
+    }
+    if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
+        return true;
+
+    LOG_WARN("waitDone: spurious IRQ wakeup");
     return false;
 }
 
-std::string PLInterface::getRegStats() {
-    char buf[640];
-    snprintf(buf, sizeof(buf),
-             "  AP_CTRL:    0x%08X\n"
-             "  Status:     0x%08X\n"
-             "  IRQ Status: 0x%08X\n"
-             "  Error Code: 0x%08X  %s\n"
-             "  MMU Sub:    0x%08X\n"
-             "  Layer:      %u\n"
-             "  Token:      %u\n"
-             "  Stream:     %s\n",
-             readReg(PLReg::AXIL_AP_CTRL), readReg(PLReg::STATUS),
-             readReg(PLReg::IRQ_STATUS), readReg(PLReg::ERROR_CODE),
-             getErrorCodeString().c_str(), readReg(PLReg::MMU_ERROR_SUBCODE),
-             readReg(PLReg::LAYER_INDEX), readReg(PLReg::TOKEN_INDEX),
-             streamStatusString().c_str());
+std::string PLInterface::getRegStats(bool compact) {
+    uint32_t status = readReg(PLReg::STATUS);
+    uint32_t irq_status = readReg(PLReg::IRQ_STATUS);
+    uint32_t error_code = readReg(PLReg::ERROR_CODE);
+    uint32_t layer_idx = readReg(PLReg::LAYER_INDEX);
+    uint32_t head_idx = readReg(PLReg::HEAD_INDEX);
+    uint32_t token_idx = readReg(PLReg::TOKEN_INDEX);
+
+    char buf[512];
+    if (compact) {
+        snprintf(buf, sizeof(buf),
+                 "status=0x%08X irq=0x%08X error=0x%08X "
+                 "layer=%u head=%u token=%u | %s | stream: %s",
+                 status, irq_status, error_code, layer_idx, head_idx,
+                 token_idx, getErrorCodeString(error_code).c_str(),
+                 streamStatusString().c_str());
+    } else {
+        snprintf(buf, sizeof(buf),
+                 "  Status:     0x%08X\n"
+                 "  IRQ Status: 0x%08X\n"
+                 "  Error Code: 0x%08X  %s\n"
+                 "  Layer:      %u\n"
+                 "  Head:       %u\n"
+                 "  Token:      %u\n"
+                 "  Stream:     %s",
+                 status, irq_status, error_code,
+                 getErrorCodeString(error_code).c_str(),
+                 layer_idx, head_idx, token_idx,
+                 streamStatusString().c_str());
+    }
     return std::string(buf);
 }
 
@@ -490,18 +504,26 @@ bool PLInterface::clearIRQ() {
     return true;
 }
 
-// IRQ
+// UIO interrupt wait: unmask -> poll -> acknowledge
 bool PLInterface::waitIRQ(uint32_t timeout_ms) {
     if (_mock_mode) {
         usleep(100000);
         return true;
     }
+
+    // Unmask UIO interrupt (required before each wait)
+    uint32_t unmask = 1;
+    if (write(_ctrl_fd, &unmask, sizeof(unmask)) != sizeof(unmask))
+        return false;
+
     struct pollfd pfd = {_ctrl_fd, POLLIN, 0};
     int r = poll(&pfd, 1, timeout_ms);
     if (r <= 0)
         return false;
-    uint32_t info = 1;
-    read(_ctrl_fd, &info, sizeof(info));
+
+    // Acknowledge interrupt
+    uint32_t irq_count = 0;
+    read(_ctrl_fd, &irq_count, sizeof(irq_count));
     return true;
 }
 

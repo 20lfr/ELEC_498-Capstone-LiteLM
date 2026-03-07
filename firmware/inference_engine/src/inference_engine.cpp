@@ -77,9 +77,6 @@ public:
         pl->writeReg(PLReg::WO_TILE_STRIDE, cfg.wo_tile_stride);
         pl->writeReg(PLReg::W1_TILE_STRIDE, cfg.w1_tile_stride);
         pl->writeReg(PLReg::W2_TILE_STRIDE, cfg.w2_tile_stride);
-        pl->writeReg(PLReg::WQ_BIAS_HEAD_STRIDE, cfg.wq_bias_head_stride);
-        pl->writeReg(PLReg::WK_BIAS_HEAD_STRIDE, cfg.wk_bias_head_stride);
-        pl->writeReg(PLReg::WV_BIAS_HEAD_STRIDE, cfg.wv_bias_head_stride);
         pl->writeReg(PLReg::WO_BIAS_TILE_STRIDE, cfg.wo_bias_tile_stride);
         pl->writeReg(PLReg::W1_BIAS_TILE_STRIDE, cfg.w1_bias_tile_stride);
         pl->writeReg(PLReg::W2_BIAS_TILE_STRIDE, cfg.w2_bias_tile_stride);
@@ -266,20 +263,10 @@ private:
 
     /** Dump all PL status registers to the log for diagnostics. */
     void logPLStatus(const char *context) {
-        uint32_t status = pl->readReg(PLReg::STATUS);
-        uint32_t irq_status = pl->readReg(PLReg::IRQ_STATUS);
-        uint32_t error_code = pl->readReg(PLReg::ERROR_CODE);
-        uint32_t layer_idx = pl->readReg(PLReg::LAYER_INDEX);
-        uint32_t head_idx = pl->readReg(PLReg::HEAD_INDEX);
-        uint32_t token_idx = pl->readReg(PLReg::TOKEN_INDEX);
-
         char buf[512];
-        snprintf(buf, sizeof(buf),
-                 "[%s] status=0x%08X irq=0x%08X error=0x%08X "
-                 "layer=%u head=%u token=%u | %s | stream: %s",
-                 context, status, irq_status, error_code, layer_idx, head_idx,
-                 token_idx, pl->getErrorCodeString(error_code).c_str(),
-                 pl->streamStatusString().c_str());
+        snprintf(buf, sizeof(buf), "[%s] %s %s", context,
+                 pl->getRegStats(true).c_str(),
+                 err->getLastErrorMessage().c_str());
         LOG_ERROR(std::string(buf));
     }
 };
@@ -488,7 +475,7 @@ int main(int argc, char *argv[]) {
     }
 
     engine.start();
-    std::cout << "Commands: /quit /stop /reset /stats\n> ";
+    std::cout << "Commands: /quit /stop /reset /stats_perf /stats_reg\n> ";
 
     int taskId = 1;
     std::string input;
