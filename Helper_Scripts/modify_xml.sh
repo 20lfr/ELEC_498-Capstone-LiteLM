@@ -1,6 +1,6 @@
 #!/bin/bash
 # Converts the irq_ps busInterface from data to interrupt bus type.
-# Usage: ./fix_irq_bus.sh <input_xml> [output_xml]
+# Usage: ./modify_xml.sh <input_xml> [output_xml]
 
 # /home/luka/Scripting/vitis_simulations/Top_Module_No_Debug/Top_Module_No_Debug/hls/impl/ip/xgui
 
@@ -19,14 +19,30 @@ if [ ! -f "$INPUT" ]; then
     exit 1
 fi
 
-TMPFILE=$(mktemp)
+OUTPUT_DIR=$(dirname "$OUTPUT")
+
+if [ ! -d "$OUTPUT_DIR" ]; then
+    echo "ERROR: Output directory not found: $OUTPUT_DIR" >&2
+    exit 1
+fi
+
+# Write beside the target so replacing the output also works when editing in place.
+TMPFILE=$(mktemp "$OUTPUT_DIR/modify_xml.XXXXXX")
+
+cleanup() {
+    if [ -n "${TMPFILE:-}" ] && [ -f "$TMPFILE" ]; then
+        rm -f "$TMPFILE"
+    fi
+}
+
+trap cleanup EXIT
+
 cp "$INPUT" "$TMPFILE"
 
 BLOCK_START=$(grep -n '<spirit:name>irq_ps</spirit:name>' "$TMPFILE" | head -1 | cut -d: -f1)
 
 if [ -z "$BLOCK_START" ]; then
     echo "WARNING: Could not find irq_ps busInterface block." >&2
-    rm "$TMPFILE"
     exit 1
 fi
 
@@ -47,7 +63,7 @@ SENSITIVITY_BLOCK="\
 
 sed -i "${BLOCK_END}i\\${SENSITIVITY_BLOCK}" "$TMPFILE"
 
-cp "$TMPFILE" "$OUTPUT"
-rm "$TMPFILE"
+mv "$TMPFILE" "$OUTPUT"
+trap - EXIT
 
 echo "Done. Output written to: $OUTPUT"

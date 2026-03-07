@@ -74,7 +74,6 @@ module top_module_hls_tb;
   localparam logic [7:0] ADDR_STATUS_MEM_DATA_4 = 8'hE8;
   localparam logic [7:0] ADDR_STATUS_MEM_DATA_5 = 8'hEC;
   localparam logic [7:0] ADDR_STATUS_MEM_DATA_6 = 8'hF0;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_7 = 8'hF4;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
@@ -139,7 +138,6 @@ module top_module_hls_tb;
     logic [31:0] layer_index;
     logic [31:0] head_index;
     logic [31:0] token_index;
-    logic [31:0] state;
   } status_mem_shadow_t;
 
   logic ap_clk;
@@ -2054,7 +2052,6 @@ module top_module_hls_tb;
           ADDR_STATUS_MEM_DATA_4: status_mem_shadow.layer_index <= axi_rdata;
           ADDR_STATUS_MEM_DATA_5: status_mem_shadow.head_index <= axi_rdata;
           ADDR_STATUS_MEM_DATA_6: status_mem_shadow.token_index <= axi_rdata;
-          ADDR_STATUS_MEM_DATA_7: status_mem_shadow.state <= axi_rdata;
           default: begin end
         endcase
       end
@@ -2289,13 +2286,12 @@ module top_module_hls_tb;
           ctrl_gap_cycles <= 1;
         end
         CTRL_DONE: begin
-          // Poll scheduler state from status memory once initialization is done.
-          if (!axis_packet_sent && !stream_fill_active) begin
-            ctrl_addr <= ADDR_STATUS_MEM_DATA_7;
-            ctrl_read_en <= 1'b1;
-            ctrl_chip_en <= 1'b1;
-            ctrl_gap_cycles <= 1;
-          end
+          // Continuously poll status_mem.status whenever the AXI-Lite control
+          // bus is otherwise idle.
+          ctrl_addr <= ADDR_STATUS_MEM_DATA_0;
+          ctrl_read_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          ctrl_gap_cycles <= 1;
         end
         default: begin end
       endcase

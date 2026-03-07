@@ -542,7 +542,6 @@ void transformer_top(
 
     // Update status memory
     status_mem = active_status_mem;
-    status_mem.dbg_state = static_cast<uint32_t>(state_local);
 
     // Debug outputs
     {

@@ -228,11 +228,6 @@ struct ControlMemSpace {
     uint32_t irq_mask = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
 
-    // DMA sizing fields used by the current control/test harness.
-    uint32_t dma_layer_len = 0;
-    uint32_t dma_head_len = 0;
-    uint32_t dma_tile_len = 0;
-
     uint32_t layer_stride = 0;
     uint32_t wq_head_stride = 0;
     uint32_t wk_head_stride = 0;
@@ -302,7 +297,6 @@ struct StatusMemSpace {
     // Testing registers
     uint32_t head_index = 0;
     uint32_t token_index = 0;
-    uint32_t dbg_state = 0;
 };
 
 // ---------------------------------------------------------------------------
