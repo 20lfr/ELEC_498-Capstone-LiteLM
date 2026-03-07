@@ -37,10 +37,16 @@ public:
             ctrl_mem.k_cache_stride == 0 || ctrl_mem.v_cache_stride == 0 ||
             ctrl_mem.wo_tile_stride == 0 || ctrl_mem.w1_tile_stride == 0 ||
             ctrl_mem.w2_tile_stride == 0 ||
-            ctrl_mem.wo_bias_tile_stride == 0 || ctrl_mem.w1_bias_tile_stride == 0 ||
-            ctrl_mem.w2_bias_tile_stride == 0 || ctrl_mem.wlogit_tile_stride == 0 ||
-            ctrl_mem.ln0_gamma_stride == 0 || ctrl_mem.ln1_gamma_stride == 0 ||
-            ctrl_mem.ln0_eps_stride == 0 || ctrl_mem.ln1_eps_stride == 0) {
+            ctrl_mem.wo_bias_tile_stride == 0 ||
+            ctrl_mem.w1_bias_tile_stride == 0 ||
+            ctrl_mem.w2_bias_tile_stride == 0 ||
+            ctrl_mem.wlogit_tile_stride == 0 ||
+            ctrl_mem.ln0_gamma_stride == 0 ||
+            ctrl_mem.ln1_gamma_stride == 0 ||
+            ctrl_mem.final_norm_gamma_stride == 0 ||
+            ctrl_mem.ln0_eps_stride == 0 ||
+            ctrl_mem.ln1_eps_stride == 0 ||
+            ctrl_mem.final_norm_eps_stride == 0) {
             if (irq_error_en) {
                 local_status.irq_status |= IRQ_ERROR_BIT;
                 local_status.error_code |= ERR_DMA_ZERO_STRIDE;

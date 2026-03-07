@@ -189,52 +189,43 @@ static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
     tmp.control = read_u32(0);
     tmp.irq_mask = read_u32(1);
     tmp.irq_clear = read_u32(2);
-    tmp.dma_layer_len = read_u32(3);
-    tmp.dma_head_len = read_u32(4);
-    tmp.dma_tile_len = read_u32(5);
-    tmp.layer_stride = read_u32(6);
-    tmp.wq_head_stride = read_u32(7);
-    tmp.wk_head_stride = read_u32(8);
-    tmp.wv_head_stride = read_u32(9);
-    tmp.k_cache_stride = read_u32(10);
-    tmp.v_cache_stride = read_u32(11);
-    tmp.wo_tile_stride = read_u32(12);
-    tmp.w1_tile_stride = read_u32(13);
-    tmp.w2_tile_stride = read_u32(14);
-    tmp.wq_bias_head_stride = read_u32(15);
-    tmp.wk_bias_head_stride = read_u32(16);
-    tmp.wv_bias_head_stride = read_u32(17);
-    tmp.wo_bias_tile_stride = read_u32(18);
-    tmp.w1_bias_tile_stride = read_u32(19);
-    tmp.w2_bias_tile_stride = read_u32(20);
-    tmp.wlogit_tile_stride = read_u32(21);
-    tmp.ln0_gamma_stride = read_u32(22);
-    tmp.ln1_gamma_stride = read_u32(23);
-    tmp.final_norm_gamma_stride = read_u32(24);
-    tmp.ln0_eps_stride = read_u32(25);
-    tmp.ln1_eps_stride = read_u32(26);
-    tmp.final_norm_eps_stride = read_u32(27);
-    tmp.wq_offset = read_u32(28);
-    tmp.wk_offset = read_u32(29);
-    tmp.wv_offset = read_u32(30);
-    tmp.wo_offset = read_u32(31);
-    tmp.w1_offset = read_u32(32);
-    tmp.w2_offset = read_u32(33);
-    tmp.k_cache_offset = read_u32(34);
-    tmp.v_cache_offset = read_u32(35);
-    tmp.wq_bias_offset = read_u32(36);
-    tmp.wk_bias_offset = read_u32(37);
-    tmp.wv_bias_offset = read_u32(38);
-    tmp.wo_bias_offset = read_u32(39);
-    tmp.w1_bias_offset = read_u32(40);
-    tmp.w2_bias_offset = read_u32(41);
-    tmp.ln0_gamma_offset = read_u32(42);
-    tmp.ln1_gamma_offset = read_u32(43);
-    tmp.final_norm_gamma_offset = read_u32(44);
-    tmp.ln0_eps_offset = read_u32(45);
-    tmp.ln1_eps_offset = read_u32(46);
-    tmp.final_norm_eps_offset = read_u32(47);
-    tmp.wlogit_offset = read_u32(48);
+    tmp.layer_stride = read_u32(3);
+    tmp.wq_head_stride = read_u32(4);
+    tmp.wk_head_stride = read_u32(5);
+    tmp.wv_head_stride = read_u32(6);
+    tmp.k_cache_stride = read_u32(7);
+    tmp.v_cache_stride = read_u32(8);
+    tmp.wo_tile_stride = read_u32(9);
+    tmp.w1_tile_stride = read_u32(10);
+    tmp.w2_tile_stride = read_u32(11);
+    tmp.wo_bias_tile_stride = read_u32(12);
+    tmp.w1_bias_tile_stride = read_u32(13);
+    tmp.w2_bias_tile_stride = read_u32(14);
+    tmp.wlogit_tile_stride = read_u32(15);
+    tmp.ln0_gamma_stride = read_u32(16);
+    tmp.ln1_gamma_stride = read_u32(17);
+    tmp.final_norm_gamma_stride = read_u32(18);
+    tmp.ln0_eps_stride = read_u32(19);
+    tmp.ln1_eps_stride = read_u32(20);
+    tmp.final_norm_eps_stride = read_u32(21);
+    tmp.wq_offset = read_u32(22);
+    tmp.wk_offset = read_u32(23);
+    tmp.wv_offset = read_u32(24);
+    tmp.wo_offset = read_u32(25);
+    tmp.w1_offset = read_u32(26);
+    tmp.w2_offset = read_u32(27);
+    tmp.k_cache_offset = read_u32(28);
+    tmp.v_cache_offset = read_u32(29);
+    tmp.wo_bias_offset = read_u32(30);
+    tmp.w1_bias_offset = read_u32(31);
+    tmp.w2_bias_offset = read_u32(32);
+    tmp.ln0_gamma_offset = read_u32(33);
+    tmp.ln1_gamma_offset = read_u32(34);
+    tmp.final_norm_gamma_offset = read_u32(35);
+    tmp.ln0_eps_offset = read_u32(36);
+    tmp.ln1_eps_offset = read_u32(37);
+    tmp.final_norm_eps_offset = read_u32(38);
+    tmp.wlogit_offset = read_u32(39);
 
     ctrl_mem = tmp;
     return true;
@@ -515,9 +506,6 @@ ControlMemSpace ctrl_mem_init(bool init) {
         ctrl_mem.control = CTRL_RESETN_BIT;
         ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
         ctrl_mem.irq_clear = 0;
-        ctrl_mem.dma_layer_len = 0x00000100;
-        ctrl_mem.dma_head_len  = 0x00000040;
-        ctrl_mem.dma_tile_len  = 0x00000020;
         ctrl_mem.layer_stride    = 0x00001000;
         ctrl_mem.wq_head_stride  = 0x00000100;
         ctrl_mem.wk_head_stride  = 0x00000100;
@@ -620,9 +608,6 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
 
     enum class CtrlInitStage {
         TestCtrlInit,
-        TestDmaZeroLen,
-        TestDmaZeroLenCheck,
-        TestDmaZeroLenClear,
         TestZeroStride,
         TestZeroStrideCheck,
         TestZeroStrideClear,
@@ -673,33 +658,8 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             ctrl_mem.control = CTRL_RESETN_BIT;
             ctrl_shadow_control = CTRL_RESETN_BIT;
             std::printf("[TEST] Starting ControlMemInterface error tests...\n");
-            ctrl_stage = CtrlInitStage::TestDmaZeroLen;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlInitStage::TestDmaZeroLen) {
-            ctrl_mem = ctrl_mem_init(true);
-            ctrl_mem.dma_layer_len = 0;
-            std::printf("[TEST 1] Injecting dma_layer_len=0 (expect ERR_DMA_ZERO_LEN)\n");
-            ctrl_stage = CtrlInitStage::TestDmaZeroLenCheck;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlInitStage::TestDmaZeroLenCheck) {
-            if ((status_mem.irq_status & IRQ_ERROR_BIT) && status_mem.error_code == ERR_DMA_ZERO_LEN) {
-                std::printf("[TEST 1] PASS: ERR_DMA_ZERO_LEN detected (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_passed++;
-            } else {
-                std::printf("[TEST 1] FAIL: Expected ERR_DMA_ZERO_LEN (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_failed++;
-            }
-            ctrl_mem.irq_clear = IRQ_ERROR_BIT;
-            ctrl_stage = CtrlInitStage::TestDmaZeroLenClear;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlInitStage::TestDmaZeroLenClear) {
-            ctrl_mem.irq_clear = 0;
-            ctrl_mem = ctrl_mem_init(true);
             ctrl_stage = CtrlInitStage::TestZeroStride;
             ctrl_gap_cycles = 1;
-
         } else if (ctrl_stage == CtrlInitStage::TestZeroStride) {
             ctrl_mem = ctrl_mem_init(true);
             ctrl_mem.layer_stride = 0;
