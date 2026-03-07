@@ -183,12 +183,7 @@ struct Step {
 };
 
 static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
-    std::printf("\n[CTRL_MEM] lengths:\n");
-    std::printf("  dma_layer_len=%u\n", static_cast<unsigned>(ctrl.dma_layer_len));
-    std::printf("  dma_head_len=%u\n", static_cast<unsigned>(ctrl.dma_head_len));
-    std::printf("  dma_tile_len=%u\n", static_cast<unsigned>(ctrl.dma_tile_len));
-
-    std::printf("[CTRL_MEM] strides:\n");
+    std::printf("\n[CTRL_MEM] strides:\n");
     std::printf("  layer_stride=%u\n", static_cast<unsigned>(ctrl.layer_stride));
     std::printf("  wq_head_stride=%u\n", static_cast<unsigned>(ctrl.wq_head_stride));
     std::printf("  wk_head_stride=%u\n", static_cast<unsigned>(ctrl.wk_head_stride));

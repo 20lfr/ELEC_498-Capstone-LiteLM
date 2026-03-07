@@ -207,11 +207,6 @@ struct ControlMemSpace {
         0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
 
-    // DMA sizing fields used by the current control/test harness.
-    uint32_t dma_layer_len = 0;
-    uint32_t dma_head_len = 0;
-    uint32_t dma_tile_len = 0;
-
     uint32_t layer_stride = 0;
     uint32_t wq_head_stride = 0;
     uint32_t wk_head_stride = 0;
@@ -224,11 +219,6 @@ struct ControlMemSpace {
     uint32_t w1_tile_stride = 0;
     uint32_t w2_tile_stride = 0;
 
-    // Optional dedicated bias strides (if biases are not packed right after
-    // weights).
-    uint32_t wq_bias_head_stride = 0;
-    uint32_t wk_bias_head_stride = 0;
-    uint32_t wv_bias_head_stride = 0;
     uint32_t wo_bias_tile_stride = 0;
     uint32_t w1_bias_tile_stride = 0;
     uint32_t w2_bias_tile_stride = 0;
@@ -254,9 +244,6 @@ struct ControlMemSpace {
     uint32_t v_cache_offset = 0;
 
     // Dedicated offset tables for bias and norm parameters.
-    uint32_t wq_bias_offset = 0;
-    uint32_t wk_bias_offset = 0;
-    uint32_t wv_bias_offset = 0;
     uint32_t wo_bias_offset = 0;
     uint32_t w1_bias_offset = 0;
     uint32_t w2_bias_offset = 0;

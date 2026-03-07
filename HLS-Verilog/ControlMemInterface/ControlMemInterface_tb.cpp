@@ -12,7 +12,6 @@ int main() {
 
     // TEST 1: Alignment Check
     cfg.wq_offset = 0x00000003; // Misaligned
-    cfg.dma_layer_len = 100;       // Valid
     
     ControlTest_Top(cfg, stat, false, false);
 
