@@ -29,6 +29,16 @@ else
     exit 1
 fi
 
+if command -v xsct >/dev/null 2>&1; then
+    HSI_LAUNCHER="xsct"
+elif command -v xsdb >/dev/null 2>&1; then
+    # Vitis/Vivado 2025.1 exposes HSI through xsdb instead of an xsct wrapper.
+    HSI_LAUNCHER="xsdb"
+else
+    echo "ERROR: Neither xsct nor xsdb is available after sourcing $XILINX_SETTINGS"
+    exit 1
+fi
+
 mkdir -p "$TARGET_DIR"
 cd "$TARGET_DIR"
 
@@ -42,25 +52,25 @@ else
     echo "    Repo already exists, skipping clone."
 fi
 
-echo ">>> Step 2: Generating Device Tree Source (DTSI) via XSCT..."
+echo ">>> Step 2: Generating Device Tree Source (DTSI) via HSI launcher..."
 
 # Copy XSA locally so HSI extracts artifacts here, not in the original location
 LOCAL_XSA="$TARGET_DIR/$(basename "$XSA_FILE")"
 cp "$XSA_FILE" "$LOCAL_XSA"
 
 cat <<EOT >generate_dts.tcl
-setws .
-hsi open_hw_design "$LOCAL_XSA"
-hsi set_repo_path ./device-tree-xlnx
-hsi create_sw_design device-tree -os device_tree -proc psu_cortexa53_0
-hsi set_property CONFIG.dt_overlay true [hsi::get_os]
-hsi set_property CONFIG.dt_zocl true [hsi::get_os]
-hsi generate_target -dir ./dts_output
-hsi close_hw_design [hsi current_hw_design]
+cd [file dirname [file normalize [info script]]]
+hsi::open_hw_design "$LOCAL_XSA"
+hsi::set_repo_path ./device-tree-xlnx
+hsi::create_sw_design device-tree -os device_tree -proc psu_cortexa53_0
+hsi::set_property CONFIG.dt_overlay true [hsi::get_os]
+hsi::set_property CONFIG.dt_zocl true [hsi::get_os]
+hsi::generate_target -dir ./dts_output
+hsi::close_hw_design [hsi::current_hw_design]
 exit
 EOT
 
-xsct generate_dts.tcl
+TERM=dumb "$HSI_LAUNCHER" generate_dts.tcl
 
 if [ ! -f "$HW_WRAPPER.bit" ]; then
     echo "ERROR: No .bit file found inside the XSA!"

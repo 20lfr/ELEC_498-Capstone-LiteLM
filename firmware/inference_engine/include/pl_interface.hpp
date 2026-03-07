@@ -101,9 +101,9 @@ namespace PLReg {
 // These live on a SEPARATE AXI-Lite interface from PLReg — use RegBus::ADDR
 namespace AddrReg {
     constexpr uint32_t WEIGHTS_BASE_LO =
-        XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA;
+        XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA;
     constexpr uint32_t WEIGHTS_BASE_HI =
-        XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_WEIGHTS_DATA + 4;
+        XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA + 4;
 } // namespace AddrReg
 
 // AXI DMA Register Offsets (PG021 Direct Register Mode)

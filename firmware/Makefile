@@ -30,7 +30,7 @@ INCLUDES += -I$(SYSROOT)/usr/include \
 endif
 
 # Sources & Includes
-DRIVER_DIR     = $(FIRMWARE_DIR)/../hardware_overlay/drivers/axi_top_v1_0/src
+DRIVER_DIR     = $(FIRMWARE_DIR)/../hardware_overlay/drivers/transformer_top_v1_0/src
 HLS_DIR        = $(FIRMWARE_DIR)/../HLS-Verilog
 TESTING_DIR = $(FIRMWARE_DIR)/interface_testing
 INFERENCE_DIR = $(FIRMWARE_DIR)/inference_engine
