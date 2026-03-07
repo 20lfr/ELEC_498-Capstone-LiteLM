@@ -268,9 +268,7 @@ bool PLInterface::reset() {
     writeReg(PLReg::CONTROL, CTRL_RESETN_BIT); // Release reset
 
     // irq_clear = !irq_enable_mask: disable IRQs, set clear high
-    writeReg(PLReg::IRQ_MASK, 0);
-    writeReg(PLReg::IRQ_CLEAR, IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT);
-    usleep(1000);
+    clearIRQ();
 
     // Reset (Stream DMA IP)
     resetStream();
@@ -316,17 +314,20 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
         return true;
     }
 
-    for (uint32_t t = 0; t < timeout_ms; t += 10) {
-        if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
-            return true;
-        if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
-            LOG_ERROR("Inference error: " + getErrorCodeString());
-            _err->setError(ErrorCode::HARDWARE_FAULT, "HW error");
-            return false;
-        }
-        usleep(10000);
+    if (!waitIRQ(timeout_ms)) {
+        _err->setError(ErrorCode::HARDWARE_TIMEOUT, "waitDone: IRQ timeout");
+        return false;
     }
-    _err->setError(ErrorCode::HARDWARE_TIMEOUT, "Timeout");
+
+    if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
+        LOG_ERROR("Inference error: " + getErrorCodeString());
+        _err->setError(ErrorCode::HARDWARE_FAULT, "HW error");
+        return false;
+    }
+    if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
+        return true;
+
+    LOG_WARN("waitDone: spurious IRQ wakeup");
     return false;
 }
 
@@ -490,18 +491,26 @@ bool PLInterface::clearIRQ() {
     return true;
 }
 
-// IRQ
+// UIO interrupt wait: unmask -> poll -> acknowledge
 bool PLInterface::waitIRQ(uint32_t timeout_ms) {
     if (_mock_mode) {
         usleep(100000);
         return true;
     }
+
+    // Unmask UIO interrupt (required before each wait)
+    uint32_t unmask = 1;
+    if (write(_ctrl_fd, &unmask, sizeof(unmask)) != sizeof(unmask))
+        return false;
+
     struct pollfd pfd = {_ctrl_fd, POLLIN, 0};
     int r = poll(&pfd, 1, timeout_ms);
     if (r <= 0)
         return false;
-    uint32_t info = 1;
-    read(_ctrl_fd, &info, sizeof(info));
+
+    // Acknowledge interrupt
+    uint32_t irq_count = 0;
+    read(_ctrl_fd, &irq_count, sizeof(irq_count));
     return true;
 }
 

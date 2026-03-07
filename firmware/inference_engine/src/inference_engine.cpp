@@ -488,7 +488,7 @@ int main(int argc, char *argv[]) {
     }
 
     engine.start();
-    std::cout << "Commands: /quit /stop /reset /stats\n> ";
+    std::cout << "Commands: /quit /stop /reset /stats_perf /stats_reg\n> ";
 
     int taskId = 1;
     std::string input;
