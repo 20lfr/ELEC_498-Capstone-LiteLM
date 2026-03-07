@@ -11,7 +11,9 @@
 #include <chrono>
 #include <cstring>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <memory>
 #include <mutex>
 #include <thread>
@@ -31,6 +33,7 @@ class WeightLoader {
     Logger *logger;
     ErrorHandler *err;
     std::string weights_file;
+    static constexpr size_t kWeightLoadChunkBytes = 64 * 1024 * 1024;
 
 public:
     WeightLoader(PLInterface *p, Logger *l, ErrorHandler *e)
@@ -45,11 +48,60 @@ public:
             return false;
         }
         f.seekg(0, std::ios::end);
-        size_t sz = f.tellg();
-        f.seekg(0);
-        std::vector<uint8_t> data(sz);
-        f.read(reinterpret_cast<char *>(data.data()), sz);
-        return pl->writeDDR(0, data.data(), data.size());
+        const std::streamoff file_size_off = f.tellg();
+        if (file_size_off < 0) {
+            err->setError(ErrorCode::FILE_NOT_FOUND,
+                          "Failed to determine weight file size");
+            return false;
+        }
+        const size_t file_size = static_cast<size_t>(file_size_off);
+        f.seekg(0, std::ios::beg);
+
+        std::vector<uint8_t> chunk(kWeightLoadChunkBytes);
+        size_t ddr_offset = 0;
+
+        while (f) {
+            f.read(reinterpret_cast<char *>(chunk.data()),
+                   static_cast<std::streamsize>(chunk.size()));
+            const std::streamsize bytes_read = f.gcount();
+
+            if (bytes_read < 0) {
+                err->setError(ErrorCode::FILE_NOT_FOUND,
+                              "Error while reading weights file");
+                return false;
+            }
+            if (bytes_read == 0) {
+                break;
+            }
+
+            if (!pl->writeDDR(ddr_offset, chunk.data(),
+                              static_cast<size_t>(bytes_read), false)) {
+                err->setError(
+                    ErrorCode::HARDWARE_FAULT,
+                    "Staged DDR write failed at offset " +
+                        std::to_string(ddr_offset));
+                return false;
+            }
+
+            ddr_offset += static_cast<size_t>(bytes_read);
+        }
+
+        if (!f.eof() && f.fail()) {
+            err->setError(ErrorCode::FILE_NOT_FOUND,
+                          "Failed before finishing staged weights read");
+            return false;
+        }
+        if (ddr_offset != file_size) {
+            err->setError(ErrorCode::FILE_NOT_FOUND,
+                          "Staged weights load size mismatch");
+            return false;
+        }
+
+        pl->syncDDRToPL();
+
+        LOG_INFO("Loaded " + std::to_string(ddr_offset) +
+                 " bytes of weights via staged DDR writes");
+        return true;
     }
 
     bool configureAddresses(const ModelConfig &cfg, const MemoryLayout &mem) {
@@ -105,6 +157,81 @@ public:
 
         // endConfig: clears IRQ clear, enables IRQs, checks for config errors
         pl->endConfig();
+        if (err->hasError()) {
+            auto dump_reg = [&](const char *name, uint32_t offset,
+                                uint32_t expected) {
+                std::ostringstream oss;
+                const uint32_t observed = pl->readReg(offset);
+                oss << "Config dump " << name << " @0x" << std::hex
+                    << std::uppercase << offset << " expected=0x"
+                    << std::setw(8) << std::setfill('0') << expected
+                    << " observed=0x" << std::setw(8) << observed;
+                LOG_ERROR(oss.str());
+            };
+            auto dump_reg64 = [&](const char *name, RegBus bus,
+                                  uint32_t offset_lo, uint64_t expected) {
+                std::ostringstream oss;
+                const uint64_t observed = pl->readReg64(bus, offset_lo);
+                oss << "Config dump " << name << " @0x" << std::hex
+                    << std::uppercase << offset_lo << " expected=0x"
+                    << std::setw(16) << std::setfill('0') << expected
+                    << " observed=0x" << std::setw(16) << observed;
+                LOG_ERROR(oss.str());
+            };
+
+            dump_reg("LAYER_STRIDE", PLReg::LAYER_STRIDE, cfg.layer_stride);
+            dump_reg("WQ_HEAD_STRIDE", PLReg::WQ_HEAD_STRIDE,
+                     cfg.wq_head_stride);
+            dump_reg("WK_HEAD_STRIDE", PLReg::WK_HEAD_STRIDE,
+                     cfg.wk_head_stride);
+            dump_reg("WV_HEAD_STRIDE", PLReg::WV_HEAD_STRIDE,
+                     cfg.wv_head_stride);
+            dump_reg("K_CACHE_STRIDE", PLReg::K_CACHE_STRIDE,
+                     cfg.k_cache_stride);
+            dump_reg("V_CACHE_STRIDE", PLReg::V_CACHE_STRIDE,
+                     cfg.v_cache_stride);
+            dump_reg("WO_TILE_STRIDE", PLReg::WO_TILE_STRIDE,
+                     cfg.wo_tile_stride);
+            dump_reg("W1_TILE_STRIDE", PLReg::W1_TILE_STRIDE,
+                     cfg.w1_tile_stride);
+            dump_reg("W2_TILE_STRIDE", PLReg::W2_TILE_STRIDE,
+                     cfg.w2_tile_stride);
+            dump_reg("WO_BIAS_TILE_STRIDE", PLReg::WO_BIAS_TILE_STRIDE,
+                     cfg.wo_bias_tile_stride);
+            dump_reg("W1_BIAS_TILE_STRIDE", PLReg::W1_BIAS_TILE_STRIDE,
+                     cfg.w1_bias_tile_stride);
+            dump_reg("W2_BIAS_TILE_STRIDE", PLReg::W2_BIAS_TILE_STRIDE,
+                     cfg.w2_bias_tile_stride);
+            dump_reg("WLOGIT_TILE_STRIDE", PLReg::WLOGIT_TILE_STRIDE,
+                     cfg.wlogit_tile_stride);
+            dump_reg("LN0_GAMMA_STRIDE", PLReg::LN0_GAMMA_STRIDE,
+                     cfg.ln0_gamma_stride);
+            dump_reg("LN1_GAMMA_STRIDE", PLReg::LN1_GAMMA_STRIDE,
+                     cfg.ln1_gamma_stride);
+            dump_reg("FINAL_NORM_GAMMA_STRIDE",
+                     PLReg::FINAL_NORM_GAMMA_STRIDE,
+                     cfg.final_norm_gamma_stride);
+            dump_reg("LN0_EPS_STRIDE", PLReg::LN0_EPS_STRIDE,
+                     cfg.ln0_eps_stride);
+            dump_reg("LN1_EPS_STRIDE", PLReg::LN1_EPS_STRIDE,
+                     cfg.ln1_eps_stride);
+            dump_reg("FINAL_NORM_EPS_STRIDE", PLReg::FINAL_NORM_EPS_STRIDE,
+                     cfg.final_norm_eps_stride);
+
+            dump_reg64("DDR_MEM_BASE", RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
+                       pl->getDDRBaseAddr());
+
+            dump_reg("WQ_OFFSET", PLReg::WQ_OFFSET, mem.wq_offset);
+            dump_reg("WK_OFFSET", PLReg::WK_OFFSET, mem.wk_offset);
+            dump_reg("WV_OFFSET", PLReg::WV_OFFSET, mem.wv_offset);
+            dump_reg("WO_OFFSET", PLReg::WO_OFFSET, mem.wo_offset);
+            dump_reg("W1_OFFSET", PLReg::W1_OFFSET, mem.w1_offset);
+            dump_reg("W2_OFFSET", PLReg::W2_OFFSET, mem.w2_offset);
+            dump_reg("K_CACHE_OFFSET", PLReg::K_CACHE_OFFSET,
+                     mem.k_cache_offset);
+            dump_reg("V_CACHE_OFFSET", PLReg::V_CACHE_OFFSET,
+                     mem.v_cache_offset);
+        }
         return !err->hasError();
     }
 };
@@ -338,14 +465,14 @@ public:
             new WeightLoader(pl.get(), g_logger, &err));
         loader->setWeightsFile(config.model.weights_file);
 
-        // Load binary weights into DDR via writeDDR
-        if (!loader->loadAllWeights(config.model)) {
-            LOG_FATAL("Weight load failed");
+        if (!loader->configureAddresses(config.model, config.memory)) {
+            LOG_FATAL("Config failed");
             return false;
         }
 
-        if (!loader->configureAddresses(config.model, config.memory)) {
-            LOG_FATAL("Config failed");
+        // Load binary weights into DDR via writeDDR
+        if (!loader->loadAllWeights(config.model)) {
+            LOG_FATAL("Weight load failed");
             return false;
         }
 
