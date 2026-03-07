@@ -19,13 +19,13 @@ input  [4:0] op;
 output  [5:0] ap_return;
 input   ap_rst;
 
-wire   [0:0] icmp_ln362_3_fu_60_p2;
-wire   [0:0] icmp_ln362_4_fu_66_p2;
-wire   [0:0] or_ln362_fu_72_p2;
-wire   [0:0] icmp_ln362_2_fu_54_p2;
-wire   [0:0] icmp_ln362_fu_42_p2;
-wire   [0:0] icmp_ln362_1_fu_48_p2;
-wire   [0:0] or_ln362_1_fu_78_p2;
+wire   [0:0] icmp_ln375_3_fu_60_p2;
+wire   [0:0] icmp_ln375_4_fu_66_p2;
+wire   [0:0] or_ln375_fu_72_p2;
+wire   [0:0] icmp_ln375_2_fu_54_p2;
+wire   [0:0] icmp_ln375_fu_42_p2;
+wire   [0:0] icmp_ln375_1_fu_48_p2;
+wire   [0:0] or_ln375_1_fu_78_p2;
 wire   [5:0] retval_fu_94_p9;
 wire   [2:0] retval_fu_94_p10;
 wire   [5:0] retval_fu_94_p11;
@@ -48,7 +48,7 @@ wire   [2:0] retval_fu_94_p7;
     .def_WIDTH( 6 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 6 ))
-sparsemux_9_3_6_1_1_x_U2312(
+sparsemux_9_3_6_1_1_x_U2147(
     .din0(6'd4),
     .din1(6'd8),
     .din2(6'd2),
@@ -60,23 +60,23 @@ sparsemux_9_3_6_1_1_x_U2312(
 
 assign ap_ready = 1'b1;
 
-assign or_ln362_1_fu_78_p2 = (or_ln362_fu_72_p2 | icmp_ln362_2_fu_54_p2);
+assign or_ln375_1_fu_78_p2 = (or_ln375_fu_72_p2 | icmp_ln375_2_fu_54_p2);
 
-assign or_ln362_fu_72_p2 = (icmp_ln362_4_fu_66_p2 | icmp_ln362_3_fu_60_p2);
+assign or_ln375_fu_72_p2 = (icmp_ln375_4_fu_66_p2 | icmp_ln375_3_fu_60_p2);
 
 assign ap_return = retval_fu_94_p11;
 
-assign icmp_ln362_1_fu_48_p2 = ((op == 5'd12) ? 1'b1 : 1'b0);
+assign icmp_ln375_1_fu_48_p2 = ((op == 5'd12) ? 1'b1 : 1'b0);
 
-assign icmp_ln362_2_fu_54_p2 = ((op == 5'd3) ? 1'b1 : 1'b0);
+assign icmp_ln375_2_fu_54_p2 = ((op == 5'd3) ? 1'b1 : 1'b0);
 
-assign icmp_ln362_3_fu_60_p2 = ((op == 5'd4) ? 1'b1 : 1'b0);
+assign icmp_ln375_3_fu_60_p2 = ((op == 5'd4) ? 1'b1 : 1'b0);
 
-assign icmp_ln362_4_fu_66_p2 = ((op == 5'd6) ? 1'b1 : 1'b0);
+assign icmp_ln375_4_fu_66_p2 = ((op == 5'd6) ? 1'b1 : 1'b0);
 
-assign icmp_ln362_fu_42_p2 = ((op == 5'd13) ? 1'b1 : 1'b0);
+assign icmp_ln375_fu_42_p2 = ((op == 5'd13) ? 1'b1 : 1'b0);
 
-assign retval_fu_94_p10 = {{{icmp_ln362_fu_42_p2}, {icmp_ln362_1_fu_48_p2}}, {or_ln362_1_fu_78_p2}};
+assign retval_fu_94_p10 = {{{icmp_ln375_fu_42_p2}, {icmp_ln375_1_fu_48_p2}}, {or_ln375_1_fu_78_p2}};
 
 assign retval_fu_94_p9 = 'bx;
 

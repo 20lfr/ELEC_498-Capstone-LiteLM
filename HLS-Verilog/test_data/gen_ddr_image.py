@@ -5,6 +5,7 @@ import struct
 
 CTRL_MEM_WORDS = 56
 STREAM_IN_BUF_BYTES = 16
+NUM_STREAM_TOKENS = 4
 
 NUM_LAYERS = 4
 
@@ -121,6 +122,49 @@ def fill_gamma_region_soft(
         write_word_le(image, base + off, gamma)
 
 
+def fill_vocab_weight_region(
+    image: bytearray,
+    base: int,
+    span_bytes: int,
+) -> None:
+    # Use a mixed row/column hash so vocab rows do not repeat on a short period.
+    for off in range(0, span_bytes, 4):
+        base_elem = (off // 4) * 8
+        packed_vals = []
+        for nibble_idx in range(8):
+            elem_idx = base_elem + nibble_idx
+            vocab_row = (elem_idx // STREAM_IN_BUF_BYTES) % 32
+            model_col = elem_idx % STREAM_IN_BUF_BYTES
+            seed = (
+                (vocab_row * 97)
+                + (model_col * 53)
+                + ((vocab_row ^ (model_col * 7)) * 11)
+                + (vocab_row * model_col * 3)
+                + 19
+            )
+            mixed = seed ^ (seed >> 2) ^ (seed >> 5)
+            raw = (mixed & 0xF) - 8
+            if raw == 0:
+                raw = 3 if ((vocab_row + model_col) & 1) else -3
+            packed_vals.append(raw)
+        write_i4_packed_word(image, base + off, packed_vals)
+
+
+def fill_vocab_bias_region(
+    image: bytearray,
+    base: int,
+    span_bytes: int,
+) -> None:
+    for off in range(0, span_bytes, 4):
+        vocab_row = (off // 4) % 32
+        seed = (vocab_row * 131) + (vocab_row * vocab_row * 7) + 29
+        mixed = seed ^ (seed >> 3) ^ (seed >> 6)
+        value = (mixed % 29) - 14
+        if value == 0:
+            value = 5 if (vocab_row & 1) else -5
+        write_word_le(image, base + off, value)
+
+
 def build_ctrl_words() -> list[int]:
     words = [0] * CTRL_MEM_WORDS
     words[0] = 0x0000_0001  # CTRL_RESETN_BIT
@@ -183,9 +227,20 @@ def build_ctrl_words() -> list[int]:
 
 
 def build_stream_bytes() -> bytes:
-    # Keep the token deterministic but start from a much smaller activation range.
-    pattern = (-3, -2, -1, 0, 1, 2, 3, 1)
-    return bytes((pattern[i % len(pattern)] & 0xFF) for i in range(STREAM_IN_BUF_BYTES))
+    # Emit multiple deterministic token vectors for multi-token testbenches.
+    token_patterns = [
+        (-3, -2, -1, 0, 1, 2, 3, 1),
+        (2, 1, 0, -1, -2, -3, 0, 3),
+        (-4, -1, 2, 4, 1, -2, -3, 0),
+        (1, 3, 2, 0, -1, -3, -2, 4),
+    ]
+
+    stream_bytes = bytearray()
+    for token_idx in range(NUM_STREAM_TOKENS):
+        pattern = token_patterns[token_idx % len(token_patterns)]
+        token = bytes((pattern[i % len(pattern)] & 0xFF) for i in range(STREAM_IN_BUF_BYTES))
+        stream_bytes.extend(token)
+    return bytes(stream_bytes)
 
 
 def build_generated_mem_map_svh() -> str:
@@ -246,7 +301,7 @@ def main() -> None:
     fill_weight_region_soft(image, IMG_BASE_WO, MAIN_SPAN_BYTES, phase_seed=13, base_mag=2)
     fill_weight_region_soft(image, IMG_BASE_W1, FFN_SPAN_BYTES, phase_seed=17, base_mag=1)
     fill_weight_region_soft(image, IMG_BASE_W2, FFN_SPAN_BYTES, phase_seed=21, base_mag=1)
-    fill_weight_region_soft(image, IMG_BASE_WVOCAB, WVOCAB_SPAN_BYTES, phase_seed=25, base_mag=1)
+    fill_vocab_weight_region(image, IMG_BASE_WVOCAB, WVOCAB_SPAN_BYTES)
 
     # Keep biases near zero so deeper layers do not accumulate a large DC offset.
     fill_i32_region_soft(image, IMG_BASE_WQ_BIAS, QKV_SPAN_BYTES, phase_seed=3, base_mag=8)
@@ -255,7 +310,7 @@ def main() -> None:
     fill_i32_region_soft(image, IMG_BASE_WO_BIAS, MAIN_SPAN_BYTES, phase_seed=15, base_mag=6)
     fill_i32_region_soft(image, IMG_BASE_W1_BIAS, FFN_SPAN_BYTES, phase_seed=19, base_mag=4)
     fill_i32_region_soft(image, IMG_BASE_W2_BIAS, FFN_SPAN_BYTES, phase_seed=23, base_mag=4)
-    fill_i32_region_soft(image, IMG_BASE_WVOCAB_BIAS, WVOCAB_SPAN_BYTES, phase_seed=27, base_mag=3)
+    fill_vocab_bias_region(image, IMG_BASE_WVOCAB_BIAS, WVOCAB_SPAN_BYTES)
 
     # Keep norm gains closer to a soft unity and taper them by layer.
     fill_gamma_region_soft(image, IMG_BASE_LN0_GAMMA, LN_GAMMA_SPAN_BYTES, unity_q=0x00000800, taper_q=0x00000100)

@@ -323,7 +323,7 @@ static const char *mmu_subcode_name(uint32_t subcode) {
         case MMU_ERR_SUBCODE_MISSING_WO_W: return "MISSING_WO_W";
         case MMU_ERR_SUBCODE_MISSING_WO_B: return "MISSING_WO_B";
         case MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED: return "MISSING_OUT_PROJ_PACKED";
-        case MMU_ERR_SUBCODE_MISSING_RESID0_OUT: return "MISSING_RESID0_OUT";
+        case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
         case MMU_ERR_SUBCODE_MISSING_LN1_OUT: return "MISSING_LN1_OUT";
         case MMU_ERR_SUBCODE_MISSING_W1_W: return "MISSING_W1_W";
         case MMU_ERR_SUBCODE_MISSING_W1_B: return "MISSING_W1_B";
@@ -332,7 +332,7 @@ static const char *mmu_subcode_name(uint32_t subcode) {
         case MMU_ERR_SUBCODE_MISSING_W2_W: return "MISSING_W2_W";
         case MMU_ERR_SUBCODE_MISSING_W2_B: return "MISSING_W2_B";
         case MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED: return "MISSING_FFN_W2_PACKED";
-        case MMU_ERR_SUBCODE_MISSING_RESID1_OUT: return "MISSING_RESID1_OUT";
+        case MMU_ERR_SUBCODE_MISSING_RESID2_OUT: return "MISSING_RESID2_OUT";
         case MMU_ERR_SUBCODE_MISSING_LN0_GAMMA: return "MISSING_LN0_GAMMA";
         case MMU_ERR_SUBCODE_MISSING_LN0_EPS: return "MISSING_LN0_EPS";
         case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA: return "MISSING_LN1_GAMMA";
@@ -521,7 +521,7 @@ int main() {
     for (int t = 0; t < NUM_WO_TILES; ++t) {
         add_cmp(CMP_OUT_PROJ, ComputeReqType::WRITE, 0, -1, t, "Single: write OUT_PROJ tile");
     }
-    add_cmp(CMP_RESID1, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID0_OUT");
+    add_cmp(CMP_RESID1, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID1_OUT");
     add_cmp(CMP_LN1, ComputeReqType::WRITE, 0, -1, -1, "Single: write LN1_OUT");
     add_cmp(CMP_FFN_W1, ComputeReqType::READ, 0, -1, 0, "Consume W1/B1 via CMP_FFN_W1 READ tile0");
 
@@ -535,7 +535,7 @@ int main() {
     for (int t = 0; t < NUM_W2_TILES; ++t) {
         add_cmp(CMP_FFN_W2, ComputeReqType::WRITE, 0, -1, t, "Single: write FFN_W2 tile");
     }
-    add_cmp(CMP_RESID2, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID1_OUT");
+    add_cmp(CMP_RESID2, ComputeReqType::WRITE, 0, -1, -1, "Single: write RESID2_OUT");
     add_cmp(CMP_FINAL_NORM, ComputeReqType::WRITE, 0, -1, -1, "Single: write FINAL_NORM_OUT");
 
     // 3) Headed DMA preloads.

@@ -20,12 +20,23 @@ struct ComputeQueueEntry {
     int8_t lane = -1;
 };
 
+constexpr int MAX_FREE_SPANS_PER_BANK = MAX_REGIONS;
+
+struct FreeSpan {
+    uint32_t offset = 0;
+    uint32_t size = 0;
+};
+
 // ---------------------------------------------------------------------------
 // Static memory resources
 // ---------------------------------------------------------------------------
 static axi_gmem_word_t uram_banks[URAM_BANKS][URAM_BANK_WORDS];
 
 static uint32_t bank_offsets[URAM_BANKS];
+static FreeSpan free_spans[URAM_BANKS][MAX_FREE_SPANS_PER_BANK];
+static uint16_t free_span_count[URAM_BANKS];
+static uint8_t main_x_slot[D_MODEL];
+static bool main_x_slot_valid = false;
 
 static DmaQueueEntry dma_q[DMA_QUEUE_DEPTH];
 static uint8_t dma_q_head = 0;
@@ -89,6 +100,7 @@ static bool stream_in_capturing = false;
 static uint16_t stream_in_write_idx = 0;
 static uint8_t stream_in_capture_buf[STREAM_IN_BUF_BYTES];
 static bool prev_stream_start = false;
+static bool prev_ctrl_start = false;
 static int g_current_layer = -1;
 
 // Scratch buffer for region copy/construction
@@ -181,7 +193,7 @@ static inline uint32_t mmu_missing_subcode_from_tag(Tag tag) {
         case Tag::WO_W: return MMU_ERR_SUBCODE_MISSING_WO_W;
         case Tag::WO_B: return MMU_ERR_SUBCODE_MISSING_WO_B;
         case Tag::OUT_PROJ_PACKED: return MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED;
-        case Tag::RESID0_OUT: return MMU_ERR_SUBCODE_MISSING_RESID0_OUT;
+        case Tag::RESID1_OUT: return MMU_ERR_SUBCODE_MISSING_RESID1_OUT;
         case Tag::LN1_OUT: return MMU_ERR_SUBCODE_MISSING_LN1_OUT;
         case Tag::W1_W: return MMU_ERR_SUBCODE_MISSING_W1_W;
         case Tag::W1_B: return MMU_ERR_SUBCODE_MISSING_W1_B;
@@ -190,7 +202,7 @@ static inline uint32_t mmu_missing_subcode_from_tag(Tag tag) {
         case Tag::W2_W: return MMU_ERR_SUBCODE_MISSING_W2_W;
         case Tag::W2_B: return MMU_ERR_SUBCODE_MISSING_W2_B;
         case Tag::FFN_W2_PACKED: return MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED;
-        case Tag::RESID1_OUT: return MMU_ERR_SUBCODE_MISSING_RESID1_OUT;
+        case Tag::RESID2_OUT: return MMU_ERR_SUBCODE_MISSING_RESID2_OUT;
         case Tag::LOGITS_W: return MMU_ERR_SUBCODE_MISSING_LOGITS_W;
         case Tag::LOGITS_PACKED: return MMU_ERR_SUBCODE_MISSING_LOGITS_PACKED;
         case Tag::ARGMAX_OUT: return MMU_ERR_SUBCODE_MISSING_ARGMAX_OUT;
@@ -418,13 +430,11 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::LN0_EPS: {
             return 1; // single-use LN0 params
         }
-        case Tag::STREAM_IN_TOKEN: {
-            return 0xFF; // keep indefinitely unless explicitly reset
+        case Tag::STREAM_IN_TOKEN:
+        case Tag::RESID2_OUT: {
+            return 1; // fixed-slot artifacts are not expected to persist as dynamic regions
         }
-        case Tag::RESID1_OUT: {
-            return 0xFF; // cross-layer carry
-        }
-        case Tag::RESID0_OUT:
+        case Tag::RESID1_OUT:
         case Tag::LN0_OUT:
         case Tag::LN1_OUT:
         case Tag::OUT_PROJ_PACKED:
@@ -498,9 +508,6 @@ static inline bool should_consume(Tag tag) {
 static inline bool is_cross_layer_carry_tag(Tag tag) {
 #pragma HLS INLINE
     switch (tag) {
-        case Tag::RESID1_OUT: {
-            return true;
-        }
         default: {
             return false;
         }
@@ -516,6 +523,237 @@ static inline bool keep_region_on_layer_purge(const Region &r, int new_layer) {
         return true;
     }
     return false;
+}
+
+static inline void clear_chunk(Chunk &ck) {
+#pragma HLS INLINE
+    ck.bank = 0;
+    ck.offset = 0;
+    ck.size = 0;
+}
+
+static void free_span_remove(uint8_t bank, int idx) {
+#pragma HLS INLINE
+    const int bank_i = static_cast<int>(bank);
+    if (idx < 0 || idx >= free_span_count[bank_i]) return;
+    for (int i = idx; i < (free_span_count[bank_i] - 1); ++i) {
+        free_spans[bank_i][i] = free_spans[bank_i][i + 1];
+    }
+    free_spans[bank_i][free_span_count[bank_i] - 1] = FreeSpan{};
+    free_span_count[bank_i]--;
+}
+
+static void free_span_compact_and_coalesce(uint8_t bank) {
+#pragma HLS INLINE off
+    const int bank_i = static_cast<int>(bank);
+    const int count = free_span_count[bank_i];
+    if (count <= 1) return;
+
+    for (int i = 1; i < count; ++i) {
+        const FreeSpan cur = free_spans[bank_i][i];
+        int j = i - 1;
+        while (j >= 0 && free_spans[bank_i][j].offset > cur.offset) {
+            free_spans[bank_i][j + 1] = free_spans[bank_i][j];
+            --j;
+        }
+        free_spans[bank_i][j + 1] = cur;
+    }
+
+    int write_idx = 0;
+    for (int i = 0; i < count; ++i) {
+        const FreeSpan cur = free_spans[bank_i][i];
+        if (cur.size == 0) continue;
+        if (write_idx == 0) {
+            free_spans[bank_i][write_idx++] = cur;
+            continue;
+        }
+        FreeSpan &prev = free_spans[bank_i][write_idx - 1];
+        const uint32_t prev_end = prev.offset + prev.size;
+        const uint32_t cur_end = cur.offset + cur.size;
+        if (cur.offset <= prev_end) {
+            if (cur_end > prev_end) {
+                prev.size = cur_end - prev.offset;
+            }
+        } else {
+            free_spans[bank_i][write_idx++] = cur;
+        }
+    }
+
+    for (int i = write_idx; i < count; ++i) {
+        free_spans[bank_i][i] = FreeSpan{};
+    }
+    free_span_count[bank_i] = static_cast<uint16_t>(write_idx);
+}
+
+static bool free_span_add(uint8_t bank, uint32_t offset, uint32_t size) {
+#pragma HLS INLINE off
+    if (size == 0) return true;
+    const int bank_i = static_cast<int>(bank);
+    if (free_span_count[bank_i] >= MAX_FREE_SPANS_PER_BANK) {
+        return false;
+    }
+    free_spans[bank_i][free_span_count[bank_i]].offset = offset;
+    free_spans[bank_i][free_span_count[bank_i]].size = size;
+    free_span_count[bank_i]++;
+    free_span_compact_and_coalesce(bank);
+    return true;
+}
+
+static bool reclaim_chunk(const Chunk &ck) {
+#pragma HLS INLINE
+    if (ck.size == 0) return true;
+    return free_span_add(ck.bank, ck.offset, ck.size);
+}
+
+static bool reclaim_region_chunks(Region &r) {
+#pragma HLS INLINE off
+    for (int i = 0; i < MAX_CHUNKS; ++i) {
+        if (i >= r.num_chunks) break;
+        if (!reclaim_chunk(r.chunks[i])) {
+            return false;
+        }
+        clear_chunk(r.chunks[i]);
+    }
+    r.num_chunks = 0;
+    return true;
+}
+
+static int free_span_find_first_fit(uint8_t bank, uint32_t need_bytes) {
+#pragma HLS INLINE
+    const int bank_i = static_cast<int>(bank);
+    for (int i = 0; i < free_span_count[bank_i]; ++i) {
+        if (free_spans[bank_i][i].size >= need_bytes) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+static bool allocate_from_free_span(uint8_t bank, int span_idx, uint32_t bytes, Chunk &chunk) {
+#pragma HLS INLINE
+    const int bank_i = static_cast<int>(bank);
+    if (span_idx < 0 || span_idx >= free_span_count[bank_i]) return false;
+    if (bytes == 0 || free_spans[bank_i][span_idx].size < bytes) return false;
+    chunk.bank = bank;
+    chunk.offset = free_spans[bank_i][span_idx].offset;
+    chunk.size = bytes;
+    free_spans[bank_i][span_idx].offset += bytes;
+    free_spans[bank_i][span_idx].size -= bytes;
+    if (free_spans[bank_i][span_idx].size == 0) {
+        free_span_remove(bank, span_idx);
+    }
+    return true;
+}
+
+static bool allocate_from_bank_tail(uint8_t bank, uint32_t bytes, Chunk &chunk) {
+#pragma HLS INLINE
+    const int bank_i = static_cast<int>(bank);
+    const uint32_t off = bank_offsets[bank_i];
+    if (bytes == 0 || off >= URAM_BANK_BYTES) return false;
+    const uint32_t space = URAM_BANK_BYTES - off;
+    if (space < bytes) return false;
+    chunk.bank = bank;
+    chunk.offset = off;
+    chunk.size = bytes;
+    bank_offsets[bank_i] = off + bytes;
+    return true;
+}
+
+static bool allocate_chunk_first_fit(uint32_t remaining, Chunk &chunk) {
+#pragma HLS INLINE off
+    if (remaining == 0) return false;
+
+    for (int pass = 0; pass < 2; ++pass) {
+        for (int i = 0; i < URAM_BANKS; ++i) {
+            const uint8_t bank = static_cast<uint8_t>((g_active_bank + i) % URAM_BANKS);
+            const int bank_i = static_cast<int>(bank);
+            const int fit_idx = free_span_find_first_fit(bank, remaining);
+            if (fit_idx >= 0) {
+                if (allocate_from_free_span(bank, fit_idx, remaining, chunk)) {
+                    g_active_bank = static_cast<uint8_t>((bank + 1) % URAM_BANKS);
+                    return true;
+                }
+            }
+
+            if (bank_offsets[bank_i] < URAM_BANK_BYTES) {
+                const uint32_t tail_space = URAM_BANK_BYTES - bank_offsets[bank_i];
+                if (tail_space >= remaining && allocate_from_bank_tail(bank, remaining, chunk)) {
+                    g_active_bank = static_cast<uint8_t>((bank + 1) % URAM_BANKS);
+                    return true;
+                }
+            }
+        }
+
+        if (pass == 0) {
+            for (int i = 0; i < URAM_BANKS; ++i) {
+                const uint8_t bank = static_cast<uint8_t>((g_active_bank + i) % URAM_BANKS);
+                const int bank_i = static_cast<int>(bank);
+                if (free_span_count[bank_i] > 0) {
+                    const uint32_t take = (remaining < free_spans[bank_i][0].size)
+                                            ? remaining
+                                            : free_spans[bank_i][0].size;
+                    if (take > 0 && allocate_from_free_span(bank, 0, take, chunk)) {
+                        g_active_bank = static_cast<uint8_t>((bank + 1) % URAM_BANKS);
+                        return true;
+                    }
+                }
+                if (bank_offsets[bank_i] < URAM_BANK_BYTES) {
+                    const uint32_t tail_space = URAM_BANK_BYTES - bank_offsets[bank_i];
+                    const uint32_t take = (remaining < tail_space) ? remaining : tail_space;
+                    if (take > 0 && allocate_from_bank_tail(bank, take, chunk)) {
+                        g_active_bank = static_cast<uint8_t>((bank + 1) % URAM_BANKS);
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+static void release_allocated_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks) {
+#pragma HLS INLINE off
+    for (int i = 0; i < MAX_CHUNKS; ++i) {
+        if (i >= num_chunks) break;
+        reclaim_chunk(chunks[i]);
+    }
+}
+
+static bool load_main_x_slot_to_buf(
+    uint8_t *dst,
+    int dst_off,
+    uint32_t bytes,
+    Tag missing_tag,
+    bool &invalid_flag
+) {
+#pragma HLS INLINE
+    if (!main_x_slot_valid) {
+        mmu_set_invalid(ERR_MMU_MISSING_REGION_FULL_READ, mmu_missing_subcode_from_tag(missing_tag));
+        invalid_flag = true;
+        return false;
+    }
+    if (bytes != static_cast<uint32_t>(D_MODEL)) {
+        mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+        invalid_flag = true;
+        return false;
+    }
+    for (uint32_t i = 0; i < bytes; ++i) {
+        dst[dst_off + static_cast<int>(i)] = main_x_slot[i];
+    }
+    return true;
+}
+
+static bool write_main_x_slot_from_buf(const uint8_t *src, uint32_t bytes) {
+#pragma HLS INLINE
+    if (bytes != static_cast<uint32_t>(D_MODEL)) {
+        return false;
+    }
+    for (uint32_t i = 0; i < bytes; ++i) {
+        main_x_slot[i] = src[i];
+    }
+    main_x_slot_valid = true;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -614,48 +852,68 @@ static inline bool compute_q_pop(ComputeQueueEntry &out) {
     return true;
 }
 
+static void clear_token_regions_and_slots() {
+#pragma HLS INLINE off
+    region_count = 0;
+    g_active_bank = 0;
+    g_current_layer = -1;
+    main_x_slot_valid = false;
+
+    for (int b = 0; b < URAM_BANKS; ++b) {
+        bank_offsets[b] = 0;
+        free_span_count[b] = 0;
+        for (int s = 0; s < MAX_FREE_SPANS_PER_BANK; ++s) {
+            free_spans[b][s] = FreeSpan{};
+        }
+    }
+
+    for (int i = 0; i < MAX_REGIONS; ++i) {
+        regions[i] = Region{};
+    }
+
+    for (int i = 0; i < D_MODEL; ++i) {
+        main_x_slot[i] = 0;
+    }
+}
+
+static void begin_new_token_cleanup() {
+#pragma HLS INLINE off
+    clear_token_regions_and_slots();
+    stream_in_capturing = false;
+    stream_in_write_idx = 0;
+    g_overflow = false;
+    g_invalid = false;
+    g_error_code = ERR_NONE;
+    g_error_subcode = MMU_ERR_SUBCODE_NONE;
+
+    for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+        stream_in_capture_buf[i] = 0;
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Region/URAM management
 // ---------------------------------------------------------------------------
 static bool allocate_chunks(uint32_t total_bytes, Chunk chunks[MAX_CHUNKS], uint8_t &num_chunks) {
 #pragma HLS INLINE
     uint32_t remaining = total_bytes;
-    uint8_t bank = g_active_bank;
     num_chunks = 0;
     while (remaining > 0) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=8
-        if (num_chunks >= MAX_CHUNKS) return false;
-        const int bank_i = static_cast<int>(bank);
-        const uint32_t off = bank_offsets[bank_i];
-        if (off >= URAM_BANK_BYTES) {
-            bank = static_cast<uint8_t>((bank + 1) % URAM_BANKS);
-            continue;
+        if (num_chunks >= MAX_CHUNKS) {
+            release_allocated_chunks(chunks, num_chunks);
+            num_chunks = 0;
+            return false;
         }
-        const uint32_t space = URAM_BANK_BYTES - off;
-        const uint32_t take = (remaining < space) ? remaining : space;
-        chunks[num_chunks].bank = bank;
-        chunks[num_chunks].offset = off;
-        chunks[num_chunks].size = take;
-        remaining -= take;
+        if (!allocate_chunk_first_fit(remaining, chunks[num_chunks])) {
+            release_allocated_chunks(chunks, num_chunks);
+            num_chunks = 0;
+            return false;
+        }
+        remaining -= chunks[num_chunks].size;
         num_chunks++;
-        bank = static_cast<uint8_t>((bank + 1) % URAM_BANKS);
     }
     return true;
-}
-
-static void commit_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks) {
-#pragma HLS INLINE
-    for (int c = 0; c < MAX_CHUNKS; ++c) {
-// #pragma HLS UNROLL
-        if (c < num_chunks) {
-            const uint8_t b = chunks[c].bank;
-            const int bank_i = static_cast<int>(b);
-            bank_offsets[bank_i] = chunks[c].offset + chunks[c].size;
-            if (bank_offsets[bank_i] >= URAM_BANK_BYTES) {
-                g_active_bank = static_cast<uint8_t>((b + 1) % URAM_BANKS);
-            }
-        }
-    }
 }
 
 static void zero_region_chunks(const Chunk chunks[MAX_CHUNKS], uint8_t num_chunks);
@@ -707,16 +965,24 @@ static void gc_scan() {
         g_active_bank = 0;
         for (int b = 0; b < URAM_BANKS; ++b) {
             bank_offsets[b] = 0;
+            free_span_count[b] = 0;
+            for (int s = 0; s < MAX_FREE_SPANS_PER_BANK; ++s) {
+                free_spans[b][s] = FreeSpan{};
+            }
         }
         for (int i = 0; i < MAX_REGIONS; ++i) {
             regions[i].valid = false;
             regions[i].used = false;
+            regions[i].num_chunks = 0;
         }
         return;
     }
 
     for (int i = 0; i < MAX_REGIONS; ++i) {
         if (regions[i].valid && !regions[i].used) {
+            if (!reclaim_region_chunks(regions[i])) {
+                mmu_set_overflow(ERR_MMU_REGION_OVERFLOW, MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC);
+            }
             regions[i].valid = false;
             if (region_count > 0) region_count--;
         }
@@ -795,8 +1061,6 @@ static int create_region(Tag tag, int layer, int head, int tile, uint32_t total_
         }
     }
 
-    commit_chunks(chunks, num_chunks);
-
     Region &r = regions[free_idx];
     r.valid = true;
     r.used = true;
@@ -834,6 +1098,11 @@ static int get_or_create_region(Tag tag, int layer, int head, int tile, uint32_t
         // If a matching entry exists but has already been consumed (used=0),
         // treat it as dead and recreate it so retain/written bookkeeping resets.
         if (!regions[idx].used) {
+            if (!reclaim_region_chunks(regions[idx])) {
+                overflow_flag = true;
+                mmu_set_overflow(ERR_MMU_REGION_OVERFLOW, MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC);
+                return -1;
+            }
             regions[idx].valid = false;
             if (region_count > 0) {
                 region_count--;
@@ -1250,7 +1519,7 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
             break;
         }
         case CMP_RESID1: {
-            s.tag = Tag::RESID0_OUT;
+            s.tag = Tag::RESID1_OUT;
             s.key_tile = -1;
             break;
         }
@@ -1283,7 +1552,7 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
             break;
         }
         case CMP_RESID2: {
-            s.tag = Tag::RESID1_OUT;
+            s.tag = Tag::RESID2_OUT;
             s.key_tile = -1;
             break;
         }
@@ -1772,19 +2041,13 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
     zero_buf(buf, compute_buf::IN_BUF_BYTES);
     switch (op) {
         case CMP_LN0: {
-            // Layer input:
-            //  - layer 0: original streamed token
-            //  - layer n>0: previous layer residual output
-            Tag x_tag = Tag::STREAM_IN_TOKEN;
-            int x_layer = 0;
-            if (layer > 0) {
-                x_tag = Tag::RESID1_OUT;
-                x_layer = layer - 1;
-            }
-
-            bool ok = load_region_to_buf(x_tag, x_layer, -1, -1,
-                                         buf, compute_buf::INLayerNormLayout::X,
-                                         compute_buf::INLayerNormLayout::X_BYTES, false, invalid_flag);
+            const Tag missing_tag = (layer > 0) ? Tag::RESID2_OUT : Tag::STREAM_IN_TOKEN;
+            bool ok = load_main_x_slot_to_buf(
+                buf,
+                compute_buf::INLayerNormLayout::X,
+                compute_buf::INLayerNormLayout::X_BYTES,
+                missing_tag,
+                invalid_flag);
             if (!ok) return false;
             if (MMU_USE_HARDCODED_LN_PARAMS) {
                 // Default gamma=1.0 (Q19.13) and epsilon=1 for bring-up.
@@ -1824,23 +2087,20 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                                       compute_buf::INOutProjLayout::B_BYTES, true, invalid_flag);
         }
         case CMP_RESID1: {
-            Tag x_tag = Tag::STREAM_IN_TOKEN;
-            int x_layer = 0;
-            if (layer > 0) {
-                x_tag = Tag::RESID1_OUT;
-                x_layer = layer - 1;
-            }
-
-            bool ok = load_region_to_buf(x_tag, x_layer, -1, -1,
-                                         buf, compute_buf::INResidLayout::X,
-                                         compute_buf::INResidLayout::X_BYTES, false, invalid_flag);
+            const Tag missing_tag = (layer > 0) ? Tag::RESID2_OUT : Tag::STREAM_IN_TOKEN;
+            bool ok = load_main_x_slot_to_buf(
+                buf,
+                compute_buf::INResidLayout::X,
+                compute_buf::INResidLayout::X_BYTES,
+                missing_tag,
+                invalid_flag);
             if (!ok) return false;
             return load_region_to_buf(Tag::OUT_PROJ_PACKED, layer, -1, -1,
                                       buf, compute_buf::INResidLayout::R,
                                       compute_buf::INResidLayout::R_BYTES, true, invalid_flag);
         }
         case CMP_LN1: {
-            bool ok = load_region_to_buf(Tag::RESID0_OUT, layer, -1, -1,
+            bool ok = load_region_to_buf(Tag::RESID1_OUT, layer, -1, -1,
                                          buf, compute_buf::INLayerNormLayout::X,
                                          compute_buf::INLayerNormLayout::X_BYTES, false, invalid_flag);
             if (!ok) return false;
@@ -1895,7 +2155,7 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                                       compute_buf::INFfnW2Layout::B_BYTES, true, invalid_flag);
         }
         case CMP_RESID2: {
-            bool ok = load_region_to_buf(Tag::RESID0_OUT, layer, -1, -1,
+            bool ok = load_region_to_buf(Tag::RESID1_OUT, layer, -1, -1,
                                          buf, compute_buf::INResidLayout::X,
                                          compute_buf::INResidLayout::X_BYTES, true, invalid_flag);
             if (!ok) return false;
@@ -1904,9 +2164,12 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
                                       compute_buf::INResidLayout::R_BYTES, true, invalid_flag);
         }
         case CMP_FINAL_NORM: {
-            bool ok = load_region_to_buf(Tag::RESID1_OUT, layer, -1, -1,
-                                         buf, compute_buf::INLayerNormLayout::X,
-                                         compute_buf::INLayerNormLayout::X_BYTES, false, invalid_flag);
+            bool ok = load_main_x_slot_to_buf(
+                buf,
+                compute_buf::INLayerNormLayout::X,
+                compute_buf::INLayerNormLayout::X_BYTES,
+                Tag::RESID2_OUT,
+                invalid_flag);
             if (!ok) return false;
             if (MMU_USE_HARDCODED_LN_PARAMS) {
                 for (int i = 0; i < D_MODEL; ++i) {
@@ -2076,9 +2339,11 @@ void mmu_fsm(
 #pragma HLS BIND_STORAGE variable=uram_banks type=ram_t2p impl=uram
 
 #pragma HLS BIND_STORAGE variable=bank_offsets type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=free_spans type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=dma_q type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=compute_q type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=regions type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=main_x_slot type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=scratch type=ram_1p impl=bram
 
     // Default outputs
@@ -2141,13 +2406,23 @@ void mmu_fsm(
         }
         stream_in_capturing = false;
         stream_in_write_idx = 0;
+        main_x_slot_valid = false;
         for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
 // #pragma HLS PIPELINE II=1
             stream_in_capture_buf[i] = 0;
         }
+        for (int i = 0; i < D_MODEL; ++i) {
+// #pragma HLS PIPELINE II=1
+            main_x_slot[i] = 0;
+        }
         prev_stream_start = false;
+        prev_ctrl_start = false;
         for (int i = 0; i < URAM_BANKS; ++i) {
             bank_offsets[i] = 0;
+            free_span_count[i] = 0;
+            for (int s = 0; s < MAX_FREE_SPANS_PER_BANK; ++s) {
+                free_spans[i][s] = FreeSpan{};
+            }
         }
 #ifndef __SYNTHESIS__
         // C-sim determinism: clear URAM model contents on reset.
@@ -2177,6 +2452,13 @@ void mmu_fsm(
         return;
     }
 
+    const bool ctrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0u;
+    const bool ctrl_start_edge = reset_n && ctrl_start && !prev_ctrl_start;
+    if (ctrl_start_edge) {
+        begin_new_token_cleanup();
+    }
+    prev_ctrl_start = ctrl_start;
+
     const bool axis_in_handshake = reset_n && axis_in_ready && axis_in_valid;
     if (axis_in_handshake) {
         if (!stream_in_capturing) {
@@ -2195,19 +2477,9 @@ void mmu_fsm(
 
         if (axis_in_last) {
             if (stream_in_write_idx == STREAM_IN_BUF_BYTES) {
-                const int idx = get_or_create_region(
-                    Tag::STREAM_IN_TOKEN, 0, -1, -1,
-                    static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
-                    1,
-                    static_cast<uint32_t>(STREAM_IN_BUF_BYTES),
-                    g_overflow);
-                if (idx < 0) {
-                    mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_STREAM_IN);
-                } else if (!region_write_part(
-                               idx,
-                               0,
-                               stream_in_capture_buf,
-                               static_cast<uint32_t>(STREAM_IN_BUF_BYTES))) {
+                if (!write_main_x_slot_from_buf(
+                        stream_in_capture_buf,
+                        static_cast<uint32_t>(STREAM_IN_BUF_BYTES))) {
                     mmu_set_invalid(ERR_MMU_REGION_ACCESS);
                 }
             } else {
@@ -2765,6 +3037,16 @@ void mmu_fsm(
         }
         case State::COMPUTE_WRITE_PREP: {
             const bool headed = active_compute_headed;
+            if (!headed && active_compute_op == CMP_RESID2) {
+                if (!write_main_x_slot_from_buf(out_buf, main_op_out_bytes(active_compute_op))) {
+                    mmu_set_invalid(ERR_MMU_REGION_ACCESS);
+                    active_compute_valid = false;
+                    g_state = State::IDLE;
+                    break;
+                }
+                g_state = State::COMPUTE_WRITE_DONE;
+                break;
+            }
             const WriteSpec spec = build_write_spec(active_compute_op, headed, active_compute_head, active_compute_tile);
             if (!validate_write_spec(spec)) {
                 mmu_set_invalid(ERR_MMU_REGION_ACCESS);

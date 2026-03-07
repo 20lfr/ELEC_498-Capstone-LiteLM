@@ -16,23 +16,31 @@ module transformer_top_p_anonymous_namespace_region_write_bytes_7 (
         r_total_bytes_val,
         r_num_chunks_read,
         r_chunks_bank_read,
-        r_chunks_bank_read_10,
-        r_chunks_bank_read_11,
-        r_chunks_bank_read_12,
+        r_chunks_bank_read_4,
+        r_chunks_bank_read_5,
+        r_chunks_bank_read_6,
         r_chunks_offset_read,
-        r_chunks_offset_read_10,
-        r_chunks_offset_read_11,
-        r_chunks_offset_read_12,
+        r_chunks_offset_read_4,
+        r_chunks_offset_read_5,
+        r_chunks_offset_read_6,
         r_chunks_size_read,
-        r_chunks_size_read_10,
-        r_chunks_size_read_11,
-        r_chunks_size_read_12,
-        p_anonymous_namespace_stream_in_capture_buf_address0,
-        p_anonymous_namespace_stream_in_capture_buf_ce0,
-        p_anonymous_namespace_stream_in_capture_buf_q0,
-        p_anonymous_namespace_stream_in_capture_buf_address1,
-        p_anonymous_namespace_stream_in_capture_buf_ce1,
-        p_anonymous_namespace_stream_in_capture_buf_q1,
+        r_chunks_size_read_4,
+        r_chunks_size_read_5,
+        r_chunks_size_read_6,
+        dst_offset,
+        bytes,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1,
+        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1,
         p_anonymous_namespace_uram_banks_address0,
         p_anonymous_namespace_uram_banks_ce0,
         p_anonymous_namespace_uram_banks_we0,
@@ -54,25 +62,33 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [31:0] r_total_bytes_val;
-input  [2:0] r_num_chunks_read;
+input  [7:0] r_num_chunks_read;
 input  [4:0] r_chunks_bank_read;
-input  [4:0] r_chunks_bank_read_10;
-input  [4:0] r_chunks_bank_read_11;
-input  [4:0] r_chunks_bank_read_12;
+input  [4:0] r_chunks_bank_read_4;
+input  [4:0] r_chunks_bank_read_5;
+input  [4:0] r_chunks_bank_read_6;
 input  [19:0] r_chunks_offset_read;
-input  [19:0] r_chunks_offset_read_10;
-input  [19:0] r_chunks_offset_read_11;
-input  [19:0] r_chunks_offset_read_12;
+input  [19:0] r_chunks_offset_read_4;
+input  [19:0] r_chunks_offset_read_5;
+input  [19:0] r_chunks_offset_read_6;
 input  [31:0] r_chunks_size_read;
-input  [31:0] r_chunks_size_read_10;
-input  [31:0] r_chunks_size_read_11;
-input  [31:0] r_chunks_size_read_12;
-output  [3:0] p_anonymous_namespace_stream_in_capture_buf_address0;
-output   p_anonymous_namespace_stream_in_capture_buf_ce0;
-input  [7:0] p_anonymous_namespace_stream_in_capture_buf_q0;
-output  [3:0] p_anonymous_namespace_stream_in_capture_buf_address1;
-output   p_anonymous_namespace_stream_in_capture_buf_ce1;
-input  [7:0] p_anonymous_namespace_stream_in_capture_buf_q1;
+input  [31:0] r_chunks_size_read_4;
+input  [31:0] r_chunks_size_read_5;
+input  [31:0] r_chunks_size_read_6;
+input  [31:0] dst_offset;
+input  [31:0] bytes;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
+output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
+output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0;
+output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1;
+output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1;
+input  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1;
 output  [17:0] p_anonymous_namespace_uram_banks_address0;
 output   p_anonymous_namespace_uram_banks_ce0;
 output   p_anonymous_namespace_uram_banks_we0;
@@ -87,57 +103,62 @@ reg[0:0] ap_return;
 
 (* fsm_encoding = "none" *) reg   [4:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
-wire   [0:0] icmp_ln918_fu_283_p2;
+wire   [0:0] icmp_ln1187_fu_295_p2;
 wire    ap_CS_fsm_state2;
-wire   [2:0] add_ln918_fu_312_p2;
-reg   [2:0] add_ln918_reg_499;
-reg   [31:0] logical_load_reg_504;
-wire   [1:0] trunc_ln918_fu_321_p1;
-reg   [1:0] trunc_ln918_reg_509;
-wire   [0:0] icmp_ln922_fu_345_p2;
-reg   [0:0] icmp_ln922_reg_514;
-reg   [31:0] written_load_reg_518;
-wire   [31:0] take_fu_377_p3;
-reg   [31:0] take_reg_523;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_done;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_idle;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_ready;
-wire   [31:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_written_6_out;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_written_6_out_ap_vld;
-wire   [31:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_remaining_1_out_o;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_remaining_1_out_o_ap_vld;
-wire   [3:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_address0;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_ce0;
-wire   [3:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_address1;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_ce1;
-wire   [17:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_address0;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_ce0;
-wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_we0;
-wire   [31:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_d0;
-reg   [0:0] retval_0_reg_200;
-wire   [0:0] icmp_ln913_fu_243_p2;
-wire   [0:0] or_ln918_2_fu_306_p2;
-reg    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start_reg;
+wire   [2:0] add_ln1187_fu_324_p2;
+reg   [2:0] add_ln1187_reg_511;
+reg   [31:0] logical_load_reg_516;
+wire   [1:0] trunc_ln1187_fu_333_p1;
+reg   [1:0] trunc_ln1187_reg_521;
+wire   [0:0] icmp_ln1191_fu_357_p2;
+reg   [0:0] icmp_ln1191_reg_526;
+reg   [31:0] written_load_reg_530;
+wire   [31:0] take_fu_389_p3;
+reg   [31:0] take_reg_535;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_done;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_idle;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_ready;
+wire   [31:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_written_1_out;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_written_1_out_ap_vld;
+wire   [31:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_remaining_1_out_o;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_remaining_1_out_o_ap_vld;
+wire   [4:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
+wire   [4:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1;
+wire   [4:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0;
+wire   [4:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1;
+wire   [17:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_address0;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_ce0;
+wire    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_we0;
+wire   [31:0] grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_d0;
+reg   [0:0] retval_0_reg_210;
+wire   [0:0] icmp_ln1182_fu_251_p2;
+wire   [0:0] or_ln1187_1_fu_318_p2;
+reg    grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start_reg;
 reg   [4:0] ap_NS_fsm;
 wire    ap_NS_fsm_state3;
 wire    ap_CS_fsm_state4;
-reg   [31:0] written_fu_112;
-reg   [31:0] remaining_fu_108;
-reg   [31:0] logical_fu_100;
-wire   [31:0] logical_14_fu_351_p2;
+reg   [31:0] written_fu_110;
+reg   [31:0] remaining_fu_106;
+reg   [31:0] logical_fu_98;
+wire   [31:0] logical_10_fu_363_p2;
 reg    ap_block_state4_on_subcall_done;
-reg   [2:0] c_fu_104;
-wire   [27:0] tmp_588_fu_233_p4;
-wire   [0:0] icmp_ln920_fu_289_p2;
-wire   [0:0] tmp_589_fu_275_p3;
-wire   [0:0] xor_ln920_fu_294_p2;
-wire   [0:0] or_ln918_fu_300_p2;
-wire   [31:0] tmp_fu_325_p9;
-wire   [1:0] tmp_fu_325_p10;
-wire   [31:0] tmp_fu_325_p11;
-wire   [31:0] room_fu_365_p2;
-wire   [0:0] icmp_ln927_fu_371_p2;
+reg   [2:0] c_fu_102;
+wire   [31:0] add_ln1182_fu_245_p2;
+wire   [7:0] zext_ln1187_fu_283_p1;
+wire   [0:0] icmp_ln1189_fu_301_p2;
+wire   [0:0] tmp_562_fu_287_p3;
+wire   [0:0] xor_ln1189_fu_306_p2;
+wire   [0:0] or_ln1187_fu_312_p2;
+wire   [31:0] tmp_fu_337_p9;
+wire   [1:0] tmp_fu_337_p10;
+wire   [31:0] tmp_fu_337_p11;
+wire   [31:0] room_fu_377_p2;
+wire   [0:0] icmp_ln1196_fu_383_p2;
 reg   [0:0] ap_return_preg;
 wire    ap_CS_fsm_state5;
 reg    ap_ST_fsm_state1_blk;
@@ -145,57 +166,63 @@ wire    ap_ST_fsm_state2_blk;
 wire    ap_ST_fsm_state3_blk;
 reg    ap_ST_fsm_state4_blk;
 wire    ap_ST_fsm_state5_blk;
-wire   [1:0] tmp_fu_325_p1;
-wire   [1:0] tmp_fu_325_p3;
-wire  signed [1:0] tmp_fu_325_p5;
-wire  signed [1:0] tmp_fu_325_p7;
+wire   [1:0] tmp_fu_337_p1;
+wire   [1:0] tmp_fu_337_p3;
+wire  signed [1:0] tmp_fu_337_p5;
+wire  signed [1:0] tmp_fu_337_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 5'd1;
-#0 grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start_reg = 1'b0;
-#0 written_fu_112 = 32'd0;
-#0 remaining_fu_108 = 32'd0;
-#0 logical_fu_100 = 32'd0;
-#0 c_fu_104 = 3'd0;
+#0 grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start_reg = 1'b0;
+#0 written_fu_110 = 32'd0;
+#0 remaining_fu_106 = 32'd0;
+#0 logical_fu_98 = 32'd0;
+#0 c_fu_102 = 3'd0;
 #0 ap_return_preg = 1'd0;
 end
 
-transformer_top_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2 grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211(
+transformer_top_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2 grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start),
-    .ap_done(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_done),
-    .ap_idle(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_idle),
-    .ap_ready(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_ready),
-    .written(written_load_reg_518),
-    .logical(logical_load_reg_504),
-    .take(take_reg_523),
+    .ap_start(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start),
+    .ap_done(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_done),
+    .ap_idle(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_idle),
+    .ap_ready(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_ready),
+    .written(written_load_reg_530),
+    .logical(logical_load_reg_516),
+    .take(take_reg_535),
     .r_chunks_offset_read(r_chunks_offset_read),
-    .r_chunks_offset_read_10(r_chunks_offset_read_10),
-    .r_chunks_offset_read_11(r_chunks_offset_read_11),
-    .r_chunks_offset_read_12(r_chunks_offset_read_12),
-    .empty(trunc_ln918_reg_509),
+    .r_chunks_offset_read_4(r_chunks_offset_read_4),
+    .r_chunks_offset_read_5(r_chunks_offset_read_5),
+    .r_chunks_offset_read_6(r_chunks_offset_read_6),
+    .empty(trunc_ln1187_reg_521),
     .r_chunks_bank_read(r_chunks_bank_read),
-    .r_chunks_bank_read_10(r_chunks_bank_read_10),
-    .r_chunks_bank_read_11(r_chunks_bank_read_11),
-    .r_chunks_bank_read_12(r_chunks_bank_read_12),
-    .written_6_out(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_written_6_out),
-    .written_6_out_ap_vld(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_written_6_out_ap_vld),
-    .remaining_1_out_i(remaining_fu_108),
-    .remaining_1_out_o(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_remaining_1_out_o),
-    .remaining_1_out_o_ap_vld(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_remaining_1_out_o_ap_vld),
-    .p_anonymous_namespace_stream_in_capture_buf_address0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_address0),
-    .p_anonymous_namespace_stream_in_capture_buf_ce0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_ce0),
-    .p_anonymous_namespace_stream_in_capture_buf_q0(p_anonymous_namespace_stream_in_capture_buf_q0),
-    .p_anonymous_namespace_stream_in_capture_buf_address1(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_address1),
-    .p_anonymous_namespace_stream_in_capture_buf_ce1(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_ce1),
-    .p_anonymous_namespace_stream_in_capture_buf_q1(p_anonymous_namespace_stream_in_capture_buf_q1),
-    .p_anonymous_namespace_uram_banks_address0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_address0),
-    .p_anonymous_namespace_uram_banks_ce0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_ce0),
-    .p_anonymous_namespace_uram_banks_we0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_we0),
-    .p_anonymous_namespace_uram_banks_d0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_d0),
+    .r_chunks_bank_read_4(r_chunks_bank_read_4),
+    .r_chunks_bank_read_5(r_chunks_bank_read_5),
+    .r_chunks_bank_read_6(r_chunks_bank_read_6),
+    .written_1_out(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_written_1_out),
+    .written_1_out_ap_vld(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_written_1_out_ap_vld),
+    .remaining_1_out_i(remaining_fu_106),
+    .remaining_1_out_o(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_remaining_1_out_o),
+    .remaining_1_out_o_ap_vld(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_remaining_1_out_o_ap_vld),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_q1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q0),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_q1),
+    .p_anonymous_namespace_uram_banks_address0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_address0),
+    .p_anonymous_namespace_uram_banks_ce0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_ce0),
+    .p_anonymous_namespace_uram_banks_we0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_we0),
+    .p_anonymous_namespace_uram_banks_d0(grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_d0),
     .p_anonymous_namespace_uram_banks_q0(p_anonymous_namespace_uram_banks_q0)
 );
 
@@ -213,14 +240,14 @@ transformer_top_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_9
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U2192(
+sparsemux_9_2_32_1_1_U2987(
     .din0(r_chunks_size_read),
-    .din1(r_chunks_size_read_10),
-    .din2(r_chunks_size_read_11),
-    .din3(r_chunks_size_read_12),
-    .def(tmp_fu_325_p9),
-    .sel(tmp_fu_325_p10),
-    .dout(tmp_fu_325_p11)
+    .din1(r_chunks_size_read_4),
+    .din2(r_chunks_size_read_5),
+    .din3(r_chunks_size_read_6),
+    .def(tmp_fu_337_p9),
+    .sel(tmp_fu_337_p10),
+    .dout(tmp_fu_337_p11)
 );
 
 always @ (posedge ap_clk) begin
@@ -236,71 +263,73 @@ always @ (posedge ap_clk) begin
         ap_return_preg <= 1'd0;
     end else begin
         if ((1'b1 == ap_CS_fsm_state5)) begin
-            ap_return_preg <= retval_0_reg_200;
+            ap_return_preg <= retval_0_reg_210;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start_reg <= 1'b0;
+        grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start_reg <= 1'b0;
     end else begin
         if (((1'b1 == ap_CS_fsm_state2) & (1'b1 == ap_NS_fsm_state3))) begin
-            grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start_reg <= 1'b1;
-        end else if ((grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_ready == 1'b1)) begin
-            grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start_reg <= 1'b0;
+            grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start_reg <= 1'b1;
+        end else if ((grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_ready == 1'b1)) begin
+            grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln913_fu_243_p2 == 1'd0) & (ap_start == 1'b1))) begin
-        c_fu_104 <= 3'd0;
-    end else if (((1'b1 == ap_CS_fsm_state4) & (1'b0 == ap_block_state4_on_subcall_done))) begin
-        c_fu_104 <= add_ln918_reg_499;
+    if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln1182_fu_251_p2 == 1'd0) & (ap_start == 1'b1))) begin
+        c_fu_102 <= 3'd0;
+    end else if (((1'b0 == ap_block_state4_on_subcall_done) & (1'b1 == ap_CS_fsm_state4))) begin
+        c_fu_102 <= add_ln1187_reg_511;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln922_fu_345_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2) & (or_ln918_2_fu_306_p2 == 1'd0))) begin
-        logical_fu_100 <= logical_14_fu_351_p2;
-    end else if ((((1'b1 == ap_CS_fsm_state1) & (icmp_ln913_fu_243_p2 == 1'd0) & (ap_start == 1'b1)) | ((icmp_ln922_reg_514 == 1'd1) & (1'b1 == ap_CS_fsm_state4) & (1'b0 == ap_block_state4_on_subcall_done)))) begin
-        logical_fu_100 <= 32'd0;
+    if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln1182_fu_251_p2 == 1'd0) & (ap_start == 1'b1))) begin
+        logical_fu_98 <= dst_offset;
+    end else if (((1'b1 == ap_CS_fsm_state2) & (or_ln1187_1_fu_318_p2 == 1'd0) & (icmp_ln1191_fu_357_p2 == 1'd0))) begin
+        logical_fu_98 <= logical_10_fu_363_p2;
+    end else if (((1'b0 == ap_block_state4_on_subcall_done) & (1'b1 == ap_CS_fsm_state4) & (icmp_ln1191_reg_526 == 1'd1))) begin
+        logical_fu_98 <= 32'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln913_fu_243_p2 == 1'd0) & (ap_start == 1'b1))) begin
-        remaining_fu_108 <= 32'd16;
-    end else if (((icmp_ln922_reg_514 == 1'd1) & (1'b1 == ap_CS_fsm_state4) & (grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_remaining_1_out_o_ap_vld == 1'b1))) begin
-        remaining_fu_108 <= grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_remaining_1_out_o;
+    if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln1182_fu_251_p2 == 1'd0) & (ap_start == 1'b1))) begin
+        remaining_fu_106 <= bytes;
+    end else if (((1'b1 == ap_CS_fsm_state4) & (grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_remaining_1_out_o_ap_vld == 1'b1) & (icmp_ln1191_reg_526 == 1'd1))) begin
+        remaining_fu_106 <= grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_remaining_1_out_o;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state2) & (or_ln918_2_fu_306_p2 == 1'd1))) begin
-        retval_0_reg_200 <= icmp_ln918_fu_283_p2;
-    end else if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln913_fu_243_p2 == 1'd1) & (ap_start == 1'b1))) begin
-        retval_0_reg_200 <= 1'd0;
+    if (((1'b1 == ap_CS_fsm_state2) & (or_ln1187_1_fu_318_p2 == 1'd1))) begin
+        retval_0_reg_210 <= icmp_ln1187_fu_295_p2;
+    end else if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln1182_fu_251_p2 == 1'd1) & (ap_start == 1'b1))) begin
+        retval_0_reg_210 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln913_fu_243_p2 == 1'd0) & (ap_start == 1'b1))) begin
-        written_fu_112 <= 32'd0;
-    end else if (((icmp_ln922_reg_514 == 1'd1) & (1'b1 == ap_CS_fsm_state4) & (grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_written_6_out_ap_vld == 1'b1))) begin
-        written_fu_112 <= grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_written_6_out;
+    if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln1182_fu_251_p2 == 1'd0) & (ap_start == 1'b1))) begin
+        written_fu_110 <= 32'd0;
+    end else if (((1'b1 == ap_CS_fsm_state4) & (grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_written_1_out_ap_vld == 1'b1) & (icmp_ln1191_reg_526 == 1'd1))) begin
+        written_fu_110 <= grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_written_1_out;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        add_ln918_reg_499 <= add_ln918_fu_312_p2;
-        icmp_ln922_reg_514 <= icmp_ln922_fu_345_p2;
-        logical_load_reg_504 <= logical_fu_100;
-        take_reg_523 <= take_fu_377_p3;
-        trunc_ln918_reg_509 <= trunc_ln918_fu_321_p1;
-        written_load_reg_518 <= written_fu_112;
+        add_ln1187_reg_511 <= add_ln1187_fu_324_p2;
+        icmp_ln1191_reg_526 <= icmp_ln1191_fu_357_p2;
+        logical_load_reg_516 <= logical_fu_98;
+        take_reg_535 <= take_fu_389_p3;
+        trunc_ln1187_reg_521 <= trunc_ln1187_fu_333_p1;
+        written_load_reg_530 <= written_fu_110;
     end
 end
 
@@ -352,7 +381,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state5)) begin
-        ap_return = retval_0_reg_200;
+        ap_return = retval_0_reg_210;
     end else begin
         ap_return = ap_return_preg;
     end
@@ -361,18 +390,18 @@ end
 always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_state1 : begin
-            if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln913_fu_243_p2 == 1'd0) & (ap_start == 1'b1))) begin
+            if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln1182_fu_251_p2 == 1'd0) & (ap_start == 1'b1))) begin
                 ap_NS_fsm = ap_ST_fsm_state2;
-            end else if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln913_fu_243_p2 == 1'd1) & (ap_start == 1'b1))) begin
+            end else if (((1'b1 == ap_CS_fsm_state1) & (icmp_ln1182_fu_251_p2 == 1'd1) & (ap_start == 1'b1))) begin
                 ap_NS_fsm = ap_ST_fsm_state5;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state1;
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((1'b1 == ap_CS_fsm_state2) & (or_ln918_2_fu_306_p2 == 1'd1))) begin
+            if (((1'b1 == ap_CS_fsm_state2) & (or_ln1187_1_fu_318_p2 == 1'd1))) begin
                 ap_NS_fsm = ap_ST_fsm_state5;
-            end else if (((icmp_ln922_fu_345_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2) & (or_ln918_2_fu_306_p2 == 1'd0))) begin
+            end else if (((1'b1 == ap_CS_fsm_state2) & (or_ln1187_1_fu_318_p2 == 1'd0) & (icmp_ln1191_fu_357_p2 == 1'd0))) begin
                 ap_NS_fsm = ap_ST_fsm_state4;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state3;
@@ -382,7 +411,7 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state4;
         end
         ap_ST_fsm_state4 : begin
-            if (((1'b1 == ap_CS_fsm_state4) & (1'b0 == ap_block_state4_on_subcall_done))) begin
+            if (((1'b0 == ap_block_state4_on_subcall_done) & (1'b1 == ap_CS_fsm_state4))) begin
                 ap_NS_fsm = ap_ST_fsm_state2;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state4;
@@ -397,7 +426,9 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln918_fu_312_p2 = (c_fu_104 + 3'd1);
+assign add_ln1182_fu_245_p2 = (bytes + dst_offset);
+
+assign add_ln1187_fu_324_p2 = (c_fu_102 + 3'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -410,57 +441,65 @@ assign ap_CS_fsm_state5 = ap_CS_fsm[32'd4];
 assign ap_NS_fsm_state3 = ap_NS_fsm[32'd2];
 
 always @ (*) begin
-    ap_block_state4_on_subcall_done = ((icmp_ln922_reg_514 == 1'd1) & (grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_done == 1'b0));
+    ap_block_state4_on_subcall_done = ((grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_done == 1'b0) & (icmp_ln1191_reg_526 == 1'd1));
 end
 
-assign grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_ap_start_reg;
+assign grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_ap_start_reg;
 
-assign icmp_ln913_fu_243_p2 = ((tmp_588_fu_233_p4 == 28'd0) ? 1'b1 : 1'b0);
+assign icmp_ln1182_fu_251_p2 = ((add_ln1182_fu_245_p2 > r_total_bytes_val) ? 1'b1 : 1'b0);
 
-assign icmp_ln918_fu_283_p2 = ((remaining_fu_108 == 32'd0) ? 1'b1 : 1'b0);
+assign icmp_ln1187_fu_295_p2 = ((remaining_fu_106 == 32'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln920_fu_289_p2 = ((c_fu_104 < r_num_chunks_read) ? 1'b1 : 1'b0);
+assign icmp_ln1189_fu_301_p2 = ((zext_ln1187_fu_283_p1 < r_num_chunks_read) ? 1'b1 : 1'b0);
 
-assign icmp_ln922_fu_345_p2 = ((logical_fu_100 < tmp_fu_325_p11) ? 1'b1 : 1'b0);
+assign icmp_ln1191_fu_357_p2 = ((logical_fu_98 < tmp_fu_337_p11) ? 1'b1 : 1'b0);
 
-assign icmp_ln927_fu_371_p2 = ((remaining_fu_108 < room_fu_365_p2) ? 1'b1 : 1'b0);
+assign icmp_ln1196_fu_383_p2 = ((remaining_fu_106 < room_fu_377_p2) ? 1'b1 : 1'b0);
 
-assign logical_14_fu_351_p2 = (logical_fu_100 - tmp_fu_325_p11);
+assign logical_10_fu_363_p2 = (logical_fu_98 - tmp_fu_337_p11);
 
-assign or_ln918_2_fu_306_p2 = (or_ln918_fu_300_p2 | icmp_ln918_fu_283_p2);
+assign or_ln1187_1_fu_318_p2 = (or_ln1187_fu_312_p2 | icmp_ln1187_fu_295_p2);
 
-assign or_ln918_fu_300_p2 = (xor_ln920_fu_294_p2 | tmp_589_fu_275_p3);
+assign or_ln1187_fu_312_p2 = (xor_ln1189_fu_306_p2 | tmp_562_fu_287_p3);
 
-assign p_anonymous_namespace_stream_in_capture_buf_address0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_address0;
+assign p_anonymous_namespace_uram_banks_address0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_address0;
 
-assign p_anonymous_namespace_stream_in_capture_buf_address1 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_address1;
+assign p_anonymous_namespace_uram_banks_ce0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_ce0;
 
-assign p_anonymous_namespace_stream_in_capture_buf_ce0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_ce0;
+assign p_anonymous_namespace_uram_banks_d0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_d0;
 
-assign p_anonymous_namespace_stream_in_capture_buf_ce1 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_stream_in_capture_buf_ce1;
+assign p_anonymous_namespace_uram_banks_we0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_p_anonymous_namespace_uram_banks_we0;
 
-assign p_anonymous_namespace_uram_banks_address0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_address0;
+assign room_fu_377_p2 = (tmp_fu_337_p11 - logical_fu_98);
 
-assign p_anonymous_namespace_uram_banks_ce0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_ce0;
+assign take_fu_389_p3 = ((icmp_ln1196_fu_383_p2[0:0] == 1'b1) ? remaining_fu_106 : room_fu_377_p2);
 
-assign p_anonymous_namespace_uram_banks_d0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_d0;
+assign tmp_562_fu_287_p3 = c_fu_102[32'd2];
 
-assign p_anonymous_namespace_uram_banks_we0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_928_2_fu_211_p_anonymous_namespace_uram_banks_we0;
+assign tmp_fu_337_p10 = c_fu_102[1:0];
 
-assign room_fu_365_p2 = (tmp_fu_325_p11 - logical_fu_100);
+assign tmp_fu_337_p9 = 'bx;
 
-assign take_fu_377_p3 = ((icmp_ln927_fu_371_p2[0:0] == 1'b1) ? remaining_fu_108 : room_fu_365_p2);
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0;
 
-assign tmp_588_fu_233_p4 = {{r_total_bytes_val[31:4]}};
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address1;
 
-assign tmp_589_fu_275_p3 = c_fu_104[32'd2];
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0;
 
-assign tmp_fu_325_p10 = c_fu_104[1:0];
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce1;
 
-assign tmp_fu_325_p9 = 'bx;
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
 
-assign trunc_ln918_fu_321_p1 = c_fu_104[1:0];
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address1;
 
-assign xor_ln920_fu_294_p2 = (icmp_ln920_fu_289_p2 ^ 1'd1);
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
+
+assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1 = grp_p_anonymous_namespace_region_write_bytes_7_Pipeline_VITIS_LOOP_1197_2_fu_221_transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce1;
+
+assign trunc_ln1187_fu_333_p1 = c_fu_102[1:0];
+
+assign xor_ln1189_fu_306_p2 = (icmp_ln1189_fu_301_p2 ^ 1'd1);
+
+assign zext_ln1187_fu_283_p1 = c_fu_102;
 
 endmodule //transformer_top_p_anonymous_namespace_region_write_bytes_7

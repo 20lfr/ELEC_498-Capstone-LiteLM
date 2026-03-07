@@ -8,7 +8,7 @@
 `timescale 1ns/1ps
 module transformer_top_control_s_axi
 #(parameter
-    C_S_AXI_ADDR_WIDTH = 9,
+    C_S_AXI_ADDR_WIDTH = 8,
     C_S_AXI_DATA_WIDTH = 32
 )(
     input  wire                          ACLK,
@@ -32,7 +32,6 @@ module transformer_top_control_s_axi
     output wire                          RVALID,
     input  wire                          RREADY,
     output wire                          interrupt,
-    output wire [63:0]                   ddr_mem,
     output wire [1567:0]                 ctrl_mem,
     input  wire [255:0]                  status_mem,
     input  wire                          status_mem_ap_vld,
@@ -44,218 +43,210 @@ module transformer_top_control_s_axi
 //------------------------Address Info-------------------
 // Protocol Used: ap_ctrl_hs
 //
-// 0x000 : Control signals
-//         bit 0  - ap_start (Read/Write/COH)
-//         bit 1  - ap_done (Read/COR)
-//         bit 2  - ap_idle (Read)
-//         bit 3  - ap_ready (Read/COR)
-//         bit 7  - auto_restart (Read/Write)
-//         bit 9  - interrupt (Read)
-//         others - reserved
-// 0x004 : Global Interrupt Enable Register
-//         bit 0  - Global Interrupt Enable (Read/Write)
-//         others - reserved
-// 0x008 : IP Interrupt Enable Register (Read/Write)
-//         bit 0 - enable ap_done interrupt (Read/Write)
-//         bit 1 - enable ap_ready interrupt (Read/Write)
-//         others - reserved
-// 0x00c : IP Interrupt Status Register (Read/TOW)
-//         bit 0 - ap_done (Read/TOW)
-//         bit 1 - ap_ready (Read/TOW)
-//         others - reserved
-// 0x010 : Data signal of ddr_mem
-//         bit 31~0 - ddr_mem[31:0] (Read/Write)
-// 0x014 : Data signal of ddr_mem
-//         bit 31~0 - ddr_mem[63:32] (Read/Write)
-// 0x018 : reserved
-// 0x01c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[31:0] (Read/Write)
-// 0x020 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[63:32] (Read/Write)
-// 0x024 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[95:64] (Read/Write)
-// 0x028 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[127:96] (Read/Write)
-// 0x02c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[159:128] (Read/Write)
-// 0x030 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[191:160] (Read/Write)
-// 0x034 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[223:192] (Read/Write)
-// 0x038 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[255:224] (Read/Write)
-// 0x03c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[287:256] (Read/Write)
-// 0x040 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[319:288] (Read/Write)
-// 0x044 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[351:320] (Read/Write)
-// 0x048 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[383:352] (Read/Write)
-// 0x04c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[415:384] (Read/Write)
-// 0x050 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[447:416] (Read/Write)
-// 0x054 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[479:448] (Read/Write)
-// 0x058 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[511:480] (Read/Write)
-// 0x05c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[543:512] (Read/Write)
-// 0x060 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[575:544] (Read/Write)
-// 0x064 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[607:576] (Read/Write)
-// 0x068 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[639:608] (Read/Write)
-// 0x06c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[671:640] (Read/Write)
-// 0x070 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[703:672] (Read/Write)
-// 0x074 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[735:704] (Read/Write)
-// 0x078 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[767:736] (Read/Write)
-// 0x07c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[799:768] (Read/Write)
-// 0x080 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[831:800] (Read/Write)
-// 0x084 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[863:832] (Read/Write)
-// 0x088 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[895:864] (Read/Write)
-// 0x08c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[927:896] (Read/Write)
-// 0x090 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[959:928] (Read/Write)
-// 0x094 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[991:960] (Read/Write)
-// 0x098 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1023:992] (Read/Write)
-// 0x09c : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1055:1024] (Read/Write)
-// 0x0a0 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1087:1056] (Read/Write)
-// 0x0a4 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1119:1088] (Read/Write)
-// 0x0a8 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1151:1120] (Read/Write)
-// 0x0ac : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1183:1152] (Read/Write)
-// 0x0b0 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1215:1184] (Read/Write)
-// 0x0b4 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1247:1216] (Read/Write)
-// 0x0b8 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1279:1248] (Read/Write)
-// 0x0bc : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1311:1280] (Read/Write)
-// 0x0c0 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1343:1312] (Read/Write)
-// 0x0c4 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1375:1344] (Read/Write)
-// 0x0c8 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1407:1376] (Read/Write)
-// 0x0cc : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1439:1408] (Read/Write)
-// 0x0d0 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1471:1440] (Read/Write)
-// 0x0d4 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1503:1472] (Read/Write)
-// 0x0d8 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1535:1504] (Read/Write)
-// 0x0dc : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[1567:1536] (Read/Write)
-// 0x0e0 : reserved
-// 0x0e4 : Data signal of status_mem
-//         bit 31~0 - status_mem[31:0] (Read)
-// 0x0e8 : Data signal of status_mem
-//         bit 31~0 - status_mem[63:32] (Read)
-// 0x0ec : Data signal of status_mem
-//         bit 31~0 - status_mem[95:64] (Read)
-// 0x0f0 : Data signal of status_mem
-//         bit 31~0 - status_mem[127:96] (Read)
-// 0x0f4 : Data signal of status_mem
-//         bit 31~0 - status_mem[159:128] (Read)
-// 0x0f8 : Data signal of status_mem
-//         bit 31~0 - status_mem[191:160] (Read)
-// 0x0fc : Data signal of status_mem
-//         bit 31~0 - status_mem[223:192] (Read)
-// 0x100 : Data signal of status_mem
-//         bit 31~0 - status_mem[255:224] (Read)
-// 0x104 : Control signal of status_mem
-//         bit 0  - status_mem_ap_vld (Read/COR)
-//         others - reserved
+// 0x00 : Control signals
+//        bit 0  - ap_start (Read/Write/COH)
+//        bit 1  - ap_done (Read/COR)
+//        bit 2  - ap_idle (Read)
+//        bit 3  - ap_ready (Read/COR)
+//        bit 7  - auto_restart (Read/Write)
+//        bit 9  - interrupt (Read)
+//        others - reserved
+// 0x04 : Global Interrupt Enable Register
+//        bit 0  - Global Interrupt Enable (Read/Write)
+//        others - reserved
+// 0x08 : IP Interrupt Enable Register (Read/Write)
+//        bit 0 - enable ap_done interrupt (Read/Write)
+//        bit 1 - enable ap_ready interrupt (Read/Write)
+//        others - reserved
+// 0x0c : IP Interrupt Status Register (Read/TOW)
+//        bit 0 - ap_done (Read/TOW)
+//        bit 1 - ap_ready (Read/TOW)
+//        others - reserved
+// 0x10 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[31:0] (Read/Write)
+// 0x14 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[63:32] (Read/Write)
+// 0x18 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[95:64] (Read/Write)
+// 0x1c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[127:96] (Read/Write)
+// 0x20 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[159:128] (Read/Write)
+// 0x24 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[191:160] (Read/Write)
+// 0x28 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[223:192] (Read/Write)
+// 0x2c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[255:224] (Read/Write)
+// 0x30 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[287:256] (Read/Write)
+// 0x34 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[319:288] (Read/Write)
+// 0x38 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[351:320] (Read/Write)
+// 0x3c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[383:352] (Read/Write)
+// 0x40 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[415:384] (Read/Write)
+// 0x44 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[447:416] (Read/Write)
+// 0x48 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[479:448] (Read/Write)
+// 0x4c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[511:480] (Read/Write)
+// 0x50 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[543:512] (Read/Write)
+// 0x54 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[575:544] (Read/Write)
+// 0x58 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[607:576] (Read/Write)
+// 0x5c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[639:608] (Read/Write)
+// 0x60 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[671:640] (Read/Write)
+// 0x64 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[703:672] (Read/Write)
+// 0x68 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[735:704] (Read/Write)
+// 0x6c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[767:736] (Read/Write)
+// 0x70 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[799:768] (Read/Write)
+// 0x74 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[831:800] (Read/Write)
+// 0x78 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[863:832] (Read/Write)
+// 0x7c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[895:864] (Read/Write)
+// 0x80 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[927:896] (Read/Write)
+// 0x84 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[959:928] (Read/Write)
+// 0x88 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[991:960] (Read/Write)
+// 0x8c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1023:992] (Read/Write)
+// 0x90 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1055:1024] (Read/Write)
+// 0x94 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1087:1056] (Read/Write)
+// 0x98 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1119:1088] (Read/Write)
+// 0x9c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1151:1120] (Read/Write)
+// 0xa0 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1183:1152] (Read/Write)
+// 0xa4 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1215:1184] (Read/Write)
+// 0xa8 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1247:1216] (Read/Write)
+// 0xac : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1279:1248] (Read/Write)
+// 0xb0 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1311:1280] (Read/Write)
+// 0xb4 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1343:1312] (Read/Write)
+// 0xb8 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1375:1344] (Read/Write)
+// 0xbc : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1407:1376] (Read/Write)
+// 0xc0 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1439:1408] (Read/Write)
+// 0xc4 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1471:1440] (Read/Write)
+// 0xc8 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1503:1472] (Read/Write)
+// 0xcc : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1535:1504] (Read/Write)
+// 0xd0 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1567:1536] (Read/Write)
+// 0xd4 : reserved
+// 0xd8 : Data signal of status_mem
+//        bit 31~0 - status_mem[31:0] (Read)
+// 0xdc : Data signal of status_mem
+//        bit 31~0 - status_mem[63:32] (Read)
+// 0xe0 : Data signal of status_mem
+//        bit 31~0 - status_mem[95:64] (Read)
+// 0xe4 : Data signal of status_mem
+//        bit 31~0 - status_mem[127:96] (Read)
+// 0xe8 : Data signal of status_mem
+//        bit 31~0 - status_mem[159:128] (Read)
+// 0xec : Data signal of status_mem
+//        bit 31~0 - status_mem[191:160] (Read)
+// 0xf0 : Data signal of status_mem
+//        bit 31~0 - status_mem[223:192] (Read)
+// 0xf4 : Data signal of status_mem
+//        bit 31~0 - status_mem[255:224] (Read)
+// 0xf8 : Control signal of status_mem
+//        bit 0  - status_mem_ap_vld (Read/COR)
+//        others - reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
 localparam
-    ADDR_AP_CTRL           = 9'h000,
-    ADDR_GIE               = 9'h004,
-    ADDR_IER               = 9'h008,
-    ADDR_ISR               = 9'h00c,
-    ADDR_DDR_MEM_DATA_0    = 9'h010,
-    ADDR_DDR_MEM_DATA_1    = 9'h014,
-    ADDR_DDR_MEM_CTRL      = 9'h018,
-    ADDR_CTRL_MEM_DATA_0   = 9'h01c,
-    ADDR_CTRL_MEM_DATA_1   = 9'h020,
-    ADDR_CTRL_MEM_DATA_2   = 9'h024,
-    ADDR_CTRL_MEM_DATA_3   = 9'h028,
-    ADDR_CTRL_MEM_DATA_4   = 9'h02c,
-    ADDR_CTRL_MEM_DATA_5   = 9'h030,
-    ADDR_CTRL_MEM_DATA_6   = 9'h034,
-    ADDR_CTRL_MEM_DATA_7   = 9'h038,
-    ADDR_CTRL_MEM_DATA_8   = 9'h03c,
-    ADDR_CTRL_MEM_DATA_9   = 9'h040,
-    ADDR_CTRL_MEM_DATA_10  = 9'h044,
-    ADDR_CTRL_MEM_DATA_11  = 9'h048,
-    ADDR_CTRL_MEM_DATA_12  = 9'h04c,
-    ADDR_CTRL_MEM_DATA_13  = 9'h050,
-    ADDR_CTRL_MEM_DATA_14  = 9'h054,
-    ADDR_CTRL_MEM_DATA_15  = 9'h058,
-    ADDR_CTRL_MEM_DATA_16  = 9'h05c,
-    ADDR_CTRL_MEM_DATA_17  = 9'h060,
-    ADDR_CTRL_MEM_DATA_18  = 9'h064,
-    ADDR_CTRL_MEM_DATA_19  = 9'h068,
-    ADDR_CTRL_MEM_DATA_20  = 9'h06c,
-    ADDR_CTRL_MEM_DATA_21  = 9'h070,
-    ADDR_CTRL_MEM_DATA_22  = 9'h074,
-    ADDR_CTRL_MEM_DATA_23  = 9'h078,
-    ADDR_CTRL_MEM_DATA_24  = 9'h07c,
-    ADDR_CTRL_MEM_DATA_25  = 9'h080,
-    ADDR_CTRL_MEM_DATA_26  = 9'h084,
-    ADDR_CTRL_MEM_DATA_27  = 9'h088,
-    ADDR_CTRL_MEM_DATA_28  = 9'h08c,
-    ADDR_CTRL_MEM_DATA_29  = 9'h090,
-    ADDR_CTRL_MEM_DATA_30  = 9'h094,
-    ADDR_CTRL_MEM_DATA_31  = 9'h098,
-    ADDR_CTRL_MEM_DATA_32  = 9'h09c,
-    ADDR_CTRL_MEM_DATA_33  = 9'h0a0,
-    ADDR_CTRL_MEM_DATA_34  = 9'h0a4,
-    ADDR_CTRL_MEM_DATA_35  = 9'h0a8,
-    ADDR_CTRL_MEM_DATA_36  = 9'h0ac,
-    ADDR_CTRL_MEM_DATA_37  = 9'h0b0,
-    ADDR_CTRL_MEM_DATA_38  = 9'h0b4,
-    ADDR_CTRL_MEM_DATA_39  = 9'h0b8,
-    ADDR_CTRL_MEM_DATA_40  = 9'h0bc,
-    ADDR_CTRL_MEM_DATA_41  = 9'h0c0,
-    ADDR_CTRL_MEM_DATA_42  = 9'h0c4,
-    ADDR_CTRL_MEM_DATA_43  = 9'h0c8,
-    ADDR_CTRL_MEM_DATA_44  = 9'h0cc,
-    ADDR_CTRL_MEM_DATA_45  = 9'h0d0,
-    ADDR_CTRL_MEM_DATA_46  = 9'h0d4,
-    ADDR_CTRL_MEM_DATA_47  = 9'h0d8,
-    ADDR_CTRL_MEM_DATA_48  = 9'h0dc,
-    ADDR_CTRL_MEM_CTRL     = 9'h0e0,
-    ADDR_STATUS_MEM_DATA_0 = 9'h0e4,
-    ADDR_STATUS_MEM_DATA_1 = 9'h0e8,
-    ADDR_STATUS_MEM_DATA_2 = 9'h0ec,
-    ADDR_STATUS_MEM_DATA_3 = 9'h0f0,
-    ADDR_STATUS_MEM_DATA_4 = 9'h0f4,
-    ADDR_STATUS_MEM_DATA_5 = 9'h0f8,
-    ADDR_STATUS_MEM_DATA_6 = 9'h0fc,
-    ADDR_STATUS_MEM_DATA_7 = 9'h100,
-    ADDR_STATUS_MEM_CTRL   = 9'h104,
+    ADDR_AP_CTRL           = 8'h00,
+    ADDR_GIE               = 8'h04,
+    ADDR_IER               = 8'h08,
+    ADDR_ISR               = 8'h0c,
+    ADDR_CTRL_MEM_DATA_0   = 8'h10,
+    ADDR_CTRL_MEM_DATA_1   = 8'h14,
+    ADDR_CTRL_MEM_DATA_2   = 8'h18,
+    ADDR_CTRL_MEM_DATA_3   = 8'h1c,
+    ADDR_CTRL_MEM_DATA_4   = 8'h20,
+    ADDR_CTRL_MEM_DATA_5   = 8'h24,
+    ADDR_CTRL_MEM_DATA_6   = 8'h28,
+    ADDR_CTRL_MEM_DATA_7   = 8'h2c,
+    ADDR_CTRL_MEM_DATA_8   = 8'h30,
+    ADDR_CTRL_MEM_DATA_9   = 8'h34,
+    ADDR_CTRL_MEM_DATA_10  = 8'h38,
+    ADDR_CTRL_MEM_DATA_11  = 8'h3c,
+    ADDR_CTRL_MEM_DATA_12  = 8'h40,
+    ADDR_CTRL_MEM_DATA_13  = 8'h44,
+    ADDR_CTRL_MEM_DATA_14  = 8'h48,
+    ADDR_CTRL_MEM_DATA_15  = 8'h4c,
+    ADDR_CTRL_MEM_DATA_16  = 8'h50,
+    ADDR_CTRL_MEM_DATA_17  = 8'h54,
+    ADDR_CTRL_MEM_DATA_18  = 8'h58,
+    ADDR_CTRL_MEM_DATA_19  = 8'h5c,
+    ADDR_CTRL_MEM_DATA_20  = 8'h60,
+    ADDR_CTRL_MEM_DATA_21  = 8'h64,
+    ADDR_CTRL_MEM_DATA_22  = 8'h68,
+    ADDR_CTRL_MEM_DATA_23  = 8'h6c,
+    ADDR_CTRL_MEM_DATA_24  = 8'h70,
+    ADDR_CTRL_MEM_DATA_25  = 8'h74,
+    ADDR_CTRL_MEM_DATA_26  = 8'h78,
+    ADDR_CTRL_MEM_DATA_27  = 8'h7c,
+    ADDR_CTRL_MEM_DATA_28  = 8'h80,
+    ADDR_CTRL_MEM_DATA_29  = 8'h84,
+    ADDR_CTRL_MEM_DATA_30  = 8'h88,
+    ADDR_CTRL_MEM_DATA_31  = 8'h8c,
+    ADDR_CTRL_MEM_DATA_32  = 8'h90,
+    ADDR_CTRL_MEM_DATA_33  = 8'h94,
+    ADDR_CTRL_MEM_DATA_34  = 8'h98,
+    ADDR_CTRL_MEM_DATA_35  = 8'h9c,
+    ADDR_CTRL_MEM_DATA_36  = 8'ha0,
+    ADDR_CTRL_MEM_DATA_37  = 8'ha4,
+    ADDR_CTRL_MEM_DATA_38  = 8'ha8,
+    ADDR_CTRL_MEM_DATA_39  = 8'hac,
+    ADDR_CTRL_MEM_DATA_40  = 8'hb0,
+    ADDR_CTRL_MEM_DATA_41  = 8'hb4,
+    ADDR_CTRL_MEM_DATA_42  = 8'hb8,
+    ADDR_CTRL_MEM_DATA_43  = 8'hbc,
+    ADDR_CTRL_MEM_DATA_44  = 8'hc0,
+    ADDR_CTRL_MEM_DATA_45  = 8'hc4,
+    ADDR_CTRL_MEM_DATA_46  = 8'hc8,
+    ADDR_CTRL_MEM_DATA_47  = 8'hcc,
+    ADDR_CTRL_MEM_DATA_48  = 8'hd0,
+    ADDR_CTRL_MEM_CTRL     = 8'hd4,
+    ADDR_STATUS_MEM_DATA_0 = 8'hd8,
+    ADDR_STATUS_MEM_DATA_1 = 8'hdc,
+    ADDR_STATUS_MEM_DATA_2 = 8'he0,
+    ADDR_STATUS_MEM_DATA_3 = 8'he4,
+    ADDR_STATUS_MEM_DATA_4 = 8'he8,
+    ADDR_STATUS_MEM_DATA_5 = 8'hec,
+    ADDR_STATUS_MEM_DATA_6 = 8'hf0,
+    ADDR_STATUS_MEM_DATA_7 = 8'hf4,
+    ADDR_STATUS_MEM_CTRL   = 8'hf8,
     WRIDLE                 = 2'd0,
     WRDATA                 = 2'd1,
     WRRESP                 = 2'd2,
@@ -263,7 +254,7 @@ localparam
     RDIDLE                 = 2'd0,
     RDDATA                 = 2'd1,
     RDRESET                = 2'd2,
-    ADDR_BITS                = 9;
+    ADDR_BITS                = 8;
 
 //------------------------Local signal-------------------
     reg  [1:0]                    wstate = WRRESET;
@@ -292,7 +283,6 @@ localparam
     reg                           int_gie = 1'b0;
     reg  [1:0]                    int_ier = 2'b0;
     reg  [1:0]                    int_isr = 2'b0;
-    reg  [63:0]                   int_ddr_mem = 'b0;
     reg  [1567:0]                 int_ctrl_mem = 'b0;
     reg                           int_status_mem_ap_vld;
     reg  [255:0]                  int_status_mem = 'b0;
@@ -404,12 +394,6 @@ always @(posedge ACLK) begin
                 end
                 ADDR_ISR: begin
                     rdata <= int_isr;
-                end
-                ADDR_DDR_MEM_DATA_0: begin
-                    rdata <= int_ddr_mem[31:0];
-                end
-                ADDR_DDR_MEM_DATA_1: begin
-                    rdata <= int_ddr_mem[63:32];
                 end
                 ADDR_CTRL_MEM_DATA_0: begin
                     rdata <= int_ctrl_mem[31:0];
@@ -597,7 +581,6 @@ assign ap_start          = int_ap_start;
 assign task_ap_done      = (ap_done && !auto_restart_status) || auto_restart_done;
 assign task_ap_ready     = ap_ready && !int_auto_restart;
 assign auto_restart_done = auto_restart_status && (ap_idle && !int_ap_idle);
-assign ddr_mem           = int_ddr_mem;
 assign ctrl_mem          = int_ctrl_mem;
 // int_interrupt
 always @(posedge ACLK) begin
@@ -728,26 +711,6 @@ always @(posedge ACLK) begin
             int_isr[1] <= 1'b1;
         else if (w_hs && waddr == ADDR_ISR && WSTRB[0])
             int_isr[1] <= int_isr[1] ^ WDATA[1]; // toggle on write
-    end
-end
-
-// int_ddr_mem[31:0]
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_ddr_mem[31:0] <= 0;
-    else if (ACLK_EN) begin
-        if (w_hs && waddr == ADDR_DDR_MEM_DATA_0)
-            int_ddr_mem[31:0] <= (WDATA[31:0] & wmask) | (int_ddr_mem[31:0] & ~wmask);
-    end
-end
-
-// int_ddr_mem[63:32]
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_ddr_mem[63:32] <= 0;
-    else if (ACLK_EN) begin
-        if (w_hs && waddr == ADDR_DDR_MEM_DATA_1)
-            int_ddr_mem[63:32] <= (WDATA[31:0] & wmask) | (int_ddr_mem[63:32] & ~wmask);
     end
 end
 
