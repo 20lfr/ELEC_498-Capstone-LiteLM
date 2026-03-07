@@ -642,7 +642,6 @@ namespace head_buf {
     constexpr int QKV_W_FULL_NIBBLES = D_MODEL * D_HEADS;
     constexpr int QKV_W_FULL_BYTES =
         compute_buf::div_ceil(QKV_W_FULL_NIBBLES, 2);
-    constexpr int QKV_B_FULL_BYTES = D_HEADS * 4;
     constexpr int QKV_OUT_FULL_BYTES = D_HEADS;
 
     constexpr int QKV_W_TILE_NIBBLES = D_MODEL * D_HEAD_TILE_QKV;
@@ -650,8 +649,7 @@ namespace head_buf {
                   "QKV tile size must be byte aligned");
     constexpr int QKV_W_TILE_BYTES =
         compute_buf::div_ceil(QKV_W_TILE_NIBBLES, 2);
-    constexpr int QKV_B_TILE_BYTES = D_HEAD_TILE_QKV * 4;
-    constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_TILE_BYTES + QKV_B_TILE_BYTES;
+    constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_TILE_BYTES;
     constexpr int QKV_OUT_BYTES = D_HEAD_TILE_QKV;
 
     constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4);
@@ -700,11 +698,9 @@ namespace head_buf {
     struct INQkvLayout {
         static constexpr int ACT_BYTES = D_MODEL;
         static constexpr int W_BYTES = QKV_W_TILE_BYTES;
-        static constexpr int B_BYTES = QKV_B_TILE_BYTES;
         static constexpr int TOTAL_BYTES = QKV_IN_BYTES;
         static constexpr int ACT = 0;
         static constexpr int W = ACT + ACT_BYTES;
-        static constexpr int B = W + W_BYTES;
     };
 
     struct INHeadRequantLayout {

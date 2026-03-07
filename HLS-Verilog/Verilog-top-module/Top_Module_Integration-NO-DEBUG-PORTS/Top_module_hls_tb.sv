@@ -1613,10 +1613,7 @@ module top_module_hls_tb;
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
                   for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
-                    q_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
+                    q_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_K: begin
@@ -1629,10 +1626,7 @@ module top_module_hls_tb;
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
                   for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
-                    k_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
+                    k_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_V: begin
@@ -1645,10 +1639,7 @@ module top_module_hls_tb;
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
                   for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
-                    v_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 3],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 2],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 1],
-                                                                                                                                dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_TILE_BYTES + (4*elem_idx) + 0]});
+                    v_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_HEAD_REQUANT: begin

@@ -383,9 +383,9 @@ int main() {
     ControlMemSpace ctrl{};
     ctrl.layer_stride = 0x00100000;
 
-    ctrl.wq_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
-    ctrl.wk_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
-    ctrl.wv_head_stride = head_buf::QKV_W_FULL_BYTES + head_buf::QKV_B_FULL_BYTES;
+    ctrl.wq_head_stride = head_buf::QKV_W_FULL_BYTES;
+    ctrl.wk_head_stride = head_buf::QKV_W_FULL_BYTES;
+    ctrl.wv_head_stride = head_buf::QKV_W_FULL_BYTES;
 
     ctrl.wo_tile_stride = compute_buf::INOutProjLayout::W_BYTES + compute_buf::INOutProjLayout::B_BYTES;
     ctrl.w1_tile_stride = compute_buf::INFfnW1Layout::W_BYTES + compute_buf::INFfnW1Layout::B_BYTES;
@@ -540,11 +540,11 @@ int main() {
 
     // 3) Headed DMA preloads.
     add_dma(DMASEL_WQ, 0, 0, -1, "Headed preload WQ+BQ for head0");
-    add_cmp(CMP_Q, ComputeReqType::READ, 0, 0, -1, "Consume WQ/BQ via CMP_Q READ (head0)");
+    add_cmp(CMP_Q, ComputeReqType::READ, 0, 0, -1, "Consume WQ via CMP_Q READ (head0)");
     add_dma(DMASEL_WK, 0, 1, -1, "Headed preload WK+BK for head1");
-    add_cmp(CMP_K, ComputeReqType::READ, 0, 1, -1, "Consume WK/BK via CMP_K READ (head1)");
+    add_cmp(CMP_K, ComputeReqType::READ, 0, 1, -1, "Consume WK via CMP_K READ (head1)");
     add_dma(DMASEL_WV, 0, 0, -1, "Headed preload WV+BV for head0");
-    add_cmp(CMP_V, ComputeReqType::READ, 0, 0, -1, "Consume WV/BV via CMP_V READ (head0)");
+    add_cmp(CMP_V, ComputeReqType::READ, 0, 0, -1, "Consume WV via CMP_V READ (head0)");
     add_dma(DMASEL_CTX_K, 0, 0, -1, "Headed preload K cache for head0");
     add_cmp(CMP_Q, ComputeReqType::WRITE, 0, 0, -1, "Seed Q_OUT for ATT_SCORES consume path (head0)");
     add_cmp(CMP_ATT_SCORES, ComputeReqType::READ, 0, 0, -1, "Consume CTX_K via CMP_ATT_SCORES READ (head0)");
@@ -567,7 +567,7 @@ int main() {
     add_cmp(CMP_ATT_SCORES, ComputeReqType::READ, 0, 0, -1, "Consume CTX_K(h0)+Q_OUT(h0) after parallel");
     add_cmp(CMP_SOFTMAX, ComputeReqType::WRITE, 0, 1, -1, "Seed SOFTMAX_OUT(h1) for CTX_V consume after parallel");
     add_cmp(CMP_ATT_VALUE, ComputeReqType::READ, 0, 1, -1, "Consume CTX_V(h1)+SOFTMAX_OUT(h1) after parallel");
-    add_cmp(CMP_Q, ComputeReqType::READ, 0, 1, -1, "Consume WQ/BQ(h1) after parallel");
+    add_cmp(CMP_Q, ComputeReqType::READ, 0, 1, -1, "Consume WQ(h1) after parallel");
     add_dma(DMASEL_V_WRITE, 0, 1, -1, "Consume V_OUT(h1) via V_WRITE after parallel");
 
     for (int h = 0; h < NUM_HEADS; ++h) {

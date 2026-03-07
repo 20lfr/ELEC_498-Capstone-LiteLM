@@ -557,13 +557,9 @@ int main() {
                             case ComputeOp::CMP_Q:
                             case ComputeOp::CMP_K:
                             case ComputeOp::CMP_V: {
-                                const int bias_base = head_buf::INQkvLayout::B;
                                 const int8_t *act = (mem_op_code == ComputeOp::CMP_Q) ? q_act[lane]
                                                   : (mem_op_code == ComputeOp::CMP_K) ? k_act[lane]
                                                   : v_act[lane];
-                                const int4_t *bias = (mem_op_code == ComputeOp::CMP_Q) ? q_bias[lane]
-                                                    : (mem_op_code == ComputeOp::CMP_K) ? k_bias[lane]
-                                                    : v_bias[lane];
                                 for (int i = 0; i < D_MODEL; ++i) {
                                     compute_buf::write_i8(in_buf[lane], head_buf::INQkvLayout::ACT + i, act[i]);
                                 }
@@ -572,9 +568,6 @@ int main() {
                                                   : wv[lane];
                                 for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
                                     compute_buf::write_i4(in_buf[lane], (head_buf::INQkvLayout::W * 2) + i, src[i]);
-                                }
-                                for (int h = 0; h < D_HEADS; ++h) {
-                                    compute_buf::write_i4(in_buf[lane], (bias_base * 2) + h, bias[h]);
                                 }
                                 break;
                             }

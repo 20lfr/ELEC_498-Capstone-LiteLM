@@ -176,11 +176,8 @@ static inline uint32_t mmu_missing_subcode_from_tag(Tag tag) {
         case Tag::STREAM_IN_TOKEN: return MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN;
         case Tag::LN0_OUT: return MMU_ERR_SUBCODE_MISSING_LN0_OUT;
         case Tag::WQ_W: return MMU_ERR_SUBCODE_MISSING_WQ_W;
-        case Tag::WQ_B: return MMU_ERR_SUBCODE_MISSING_WQ_B;
         case Tag::WK_W: return MMU_ERR_SUBCODE_MISSING_WK_W;
-        case Tag::WK_B: return MMU_ERR_SUBCODE_MISSING_WK_B;
         case Tag::WV_W: return MMU_ERR_SUBCODE_MISSING_WV_W;
-        case Tag::WV_B: return MMU_ERR_SUBCODE_MISSING_WV_B;
         case Tag::Q_OUT: return MMU_ERR_SUBCODE_MISSING_Q_OUT;
         case Tag::CTX_K: return MMU_ERR_SUBCODE_MISSING_CTX_K;
         case Tag::ATT_SCORES_OUT: return MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT;
@@ -404,11 +401,8 @@ static inline uint8_t default_retain(Tag tag) {
 #pragma HLS INLINE off
     switch (tag) {
         case Tag::WQ_W:
-        case Tag::WQ_B:
         case Tag::WK_W:
-        case Tag::WK_B:
         case Tag::WV_W:
-        case Tag::WV_B:
         case Tag::WO_W:
         case Tag::WO_B:
         case Tag::W1_W:
@@ -463,11 +457,8 @@ static inline bool should_consume(Tag tag) {
 #pragma HLS INLINE off
     switch (tag) {
         case Tag::WQ_W:
-        case Tag::WQ_B:
         case Tag::WK_W:
-        case Tag::WK_B:
         case Tag::WV_W:
-        case Tag::WV_B:
         case Tag::WO_W:
         case Tag::WO_B:
         case Tag::W1_W:
@@ -1605,33 +1596,24 @@ static bool build_dma_piece_plan(DmaSel sel,
 
     switch (sel) {
         case DMASEL_WQ: {
-            piece_count = 2;
+            piece_count = 1;
             piece_bytes[0] = head_buf::QKV_W_FULL_BYTES;
-            piece_bytes[1] = head_buf::QKV_B_FULL_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WQ_W;
-            piece_tag[1] = Tag::WQ_B;
             return true;
         }
         case DMASEL_WK: {
-            piece_count = 2;
+            piece_count = 1;
             piece_bytes[0] = head_buf::QKV_W_FULL_BYTES;
-            piece_bytes[1] = head_buf::QKV_B_FULL_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WK_W;
-            piece_tag[1] = Tag::WK_B;
             return true;
         }
         case DMASEL_WV: {
-            piece_count = 2;
+            piece_count = 1;
             piece_bytes[0] = head_buf::QKV_W_FULL_BYTES;
-            piece_bytes[1] = head_buf::QKV_B_FULL_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WV_W;
-            piece_tag[1] = Tag::WV_B;
             return true;
         }
         case DMASEL_WO: {
@@ -1841,27 +1823,6 @@ static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer,
     }
 
     switch (sel) {
-        case DMASEL_WQ: {
-            if (head < 0) return false;
-            addr_out = static_cast<uint64_t>(ctrl_mem.wq_bias_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.wq_bias_head_stride;
-            return true;
-        }
-        case DMASEL_WK: {
-            if (head < 0) return false;
-            addr_out = static_cast<uint64_t>(ctrl_mem.wk_bias_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.wk_bias_head_stride;
-            return true;
-        }
-        case DMASEL_WV: {
-            if (head < 0) return false;
-            addr_out = static_cast<uint64_t>(ctrl_mem.wv_bias_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.wv_bias_head_stride;
-            return true;
-        }
         case DMASEL_WO: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wo_bias_offset)
@@ -1942,51 +1903,36 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head, int tile,
             const int tile_idx = (tile < 0) ? 0 : tile;
             const bool consume_params = (tile < 0) || (tile_idx >= (NUM_QKV_HEAD_TILES - 1));
             const uint32_t w_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::W_BYTES;
-            const uint32_t b_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::B_BYTES;
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            ok = load_region_segment_to_buf(Tag::WQ_W, layer, head, -1, w_off,
-                                            lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                            consume_params, invalid_flag);
-            if (!ok) return false;
-            return load_region_segment_to_buf(Tag::WQ_B, layer, head, -1, b_off,
-                                              lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
+            return load_region_segment_to_buf(Tag::WQ_W, layer, head, -1, w_off,
+                                              lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
                                               consume_params, invalid_flag);
         }
         case CMP_K: {
             const int tile_idx = (tile < 0) ? 0 : tile;
             const bool consume_params = (tile < 0) || (tile_idx >= (NUM_QKV_HEAD_TILES - 1));
             const uint32_t w_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::W_BYTES;
-            const uint32_t b_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::B_BYTES;
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            ok = load_region_segment_to_buf(Tag::WK_W, layer, head, -1, w_off,
-                                            lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                            consume_params, invalid_flag);
-            if (!ok) return false;
-            return load_region_segment_to_buf(Tag::WK_B, layer, head, -1, b_off,
-                                              lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
+            return load_region_segment_to_buf(Tag::WK_W, layer, head, -1, w_off,
+                                              lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
                                               consume_params, invalid_flag);
         }
         case CMP_V: {
             const int tile_idx = (tile < 0) ? 0 : tile;
             const bool consume_params = (tile < 0) || (tile_idx >= (NUM_QKV_HEAD_TILES - 1));
             const uint32_t w_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::W_BYTES;
-            const uint32_t b_off = static_cast<uint32_t>(tile_idx) * head_buf::INQkvLayout::B_BYTES;
             bool ok = load_region_to_buf(Tag::LN0_OUT, layer, -1, -1,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            ok = load_region_segment_to_buf(Tag::WV_W, layer, head, -1, w_off,
-                                            lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
-                                            consume_params, invalid_flag);
-            if (!ok) return false;
-            return load_region_segment_to_buf(Tag::WV_B, layer, head, -1, b_off,
-                                              lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
+            return load_region_segment_to_buf(Tag::WV_W, layer, head, -1, w_off,
+                                              lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
                                               consume_params, invalid_flag);
         }
         case CMP_ATT_SCORES: {
@@ -2791,9 +2737,9 @@ void mmu_fsm(
             const uint32_t piece_total = active_piece_bytes[piece_idx];
             const uint32_t chunk_bytes = active_chunk_bytes;
             const Tag tag = active_piece_tag[piece_idx];
-            const int key_head = (tag == Tag::WQ_W || tag == Tag::WQ_B ||
-                                  tag == Tag::WK_W || tag == Tag::WK_B ||
-                                  tag == Tag::WV_W || tag == Tag::WV_B ||
+            const int key_head = (tag == Tag::WQ_W ||
+                                  tag == Tag::WK_W ||
+                                  tag == Tag::WV_W ||
                                   tag == Tag::CTX_K || tag == Tag::CTX_V)
                                  ? active_dma_head : -1;
             const int key_tile = (tag == Tag::WO_W || tag == Tag::WO_B ||

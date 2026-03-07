@@ -611,9 +611,7 @@ static void QKV_TO_BUF(
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
-            accum_tile[lane] = (out_idx < D_HEAD_TILE_QKV)
-                               ? compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (out_idx * 4))
-                               : 0;
+            accum_tile[lane] = 0;
         }
 
         for (int in_base = 0; in_base < D_MODEL; in_base += HEAD_MAC_VEC_UNROLL) {
@@ -648,6 +646,7 @@ static void QKV_TO_BUF(
 
 static void ATT_SCORES_TO_BUF(
     uint16_t token_pos,
+    uint8_t tile_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -655,6 +654,7 @@ static void ATT_SCORES_TO_BUF(
     const uint16_t q_pos = (token_pos < CONTEXT_LENGTH)
                            ? token_pos
                            : static_cast<uint16_t>(CONTEXT_LENGTH - 1);
+    const uint16_t ctx_base = static_cast<uint16_t>(tile_idx) * static_cast<uint16_t>(ATT_CTX_BLOCK);
 
     for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
 // #pragma HLS PIPELINE II=1
@@ -662,12 +662,13 @@ static void ATT_SCORES_TO_BUF(
         for (int d = 0; d + 1 < D_HEADS; d += 2) {
 // #pragma HLS UNROLL
             const int pair_idx = d >> 1;
+            const uint16_t k_pos = static_cast<uint16_t>(ctx_base + static_cast<uint16_t>(t));
             int16_t q_c_q15 = 32767;
             int16_t q_s_q15 = 0;
             int16_t k_c_q15 = 32767;
             int16_t k_s_q15 = 0;
             rope_lut::lookup_sincos_q15(q_pos, pair_idx, q_c_q15, q_s_q15);
-            rope_lut::lookup_sincos_q15(static_cast<uint16_t>(t), pair_idx, k_c_q15, k_s_q15);
+            rope_lut::lookup_sincos_q15(k_pos, pair_idx, k_c_q15, k_s_q15);
 
             const int8_t q0 = compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + d);
             const int8_t q1 = compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + d + 1);
@@ -848,7 +849,7 @@ static void headed_compute_controller_lane(
                     break;
                 }
                 case ComputeOp::CMP_ATT_SCORES: {   // Q0.7   -> Qacc
-                    ATT_SCORES_TO_BUF(token_pos, in_buf, out_buf);
+                    ATT_SCORES_TO_BUF(token_pos, ctx.req.tile_idx, in_buf, out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }

@@ -1005,10 +1005,6 @@ static void print_head_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         for (int i = 0; i < D_MODEL * D_HEAD_TILE_QKV; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::W * 2) + i)));
         }
-        std::printf("\n  B:");
-        for (int i = 0; i < D_HEAD_TILE_QKV; ++i) {
-            std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (i * 4))));
-        }
         std::printf("\n");
         break;
     }
@@ -1247,17 +1243,11 @@ static void build_head_in_buf(int lane, int layer, ComputeOp op, uint8_t head_in
         const int4_t *w = (op == ComputeOp::CMP_Q) ? g_wq[lane]
                           : (op == ComputeOp::CMP_K) ? g_wk[lane]
                           : g_wv[lane];
-        const int32_t *b = (op == ComputeOp::CMP_Q) ? g_bq[lane]
-                           : (op == ComputeOp::CMP_K) ? g_bk[lane]
-                           : g_bv[lane];
         for (int i = 0; i < D_MODEL; ++i) {
             compute_buf::write_i8(buf, head_buf::INQkvLayout::ACT + i, act[i]);
         }
         for (int i = 0; i < D_MODEL * D_HEADS; ++i) {
             compute_buf::write_i4(buf, (head_buf::INQkvLayout::W * 2) + i, w[i]);
-        }
-        for (int h = 0; h < D_HEADS; ++h) {
-            compute_buf::write_i32(buf, head_buf::INQkvLayout::B + (h * 4), b[h]);
         }
         break;
     }
