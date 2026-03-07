@@ -488,15 +488,75 @@ bool PLInterface::waitIRQ(uint32_t timeout_ms) {
 
 std::string PLInterface::getErrorCodeString(const uint32_t error_mask) {
     uint32_t code = getErrorCode() & error_mask;
+    if (code == ERR_NONE)
+        return "No error";
+
     std::string msg;
+    auto append = [&msg](const char *text) {
+        if (!msg.empty())
+            msg += " | ";
+        msg += text;
+    };
+
     if (code & ERR_DMA_ALIGNMENT)
-        msg += "DMA alignment error ";
+        append("DMA alignment error");
+    if (code & ERR_DMA_ZERO_LEN)
+        append("DMA zero-length transfer");
     if (code & ERR_DMA_ZERO_STRIDE)
-        msg += "DMA/stride zero error ";
+        append("DMA zero stride");
     if (code & ERR_SCHEDULER_ERROR)
-        msg += "Scheduler error ";
+        append("Scheduler error");
     if (code & ERR_COMPUTE_ERROR)
-        msg += "Compute error ";
-    // TODO: all other error codes
+        append("Compute error");
+    if (code & ERR_MMU_INVALID)
+        append("MMU invalid state");
+    if (code & ERR_MMU_OVERFLOW)
+        append("MMU overflow");
+    if (code & ERR_MMU_UNSUPPORTED_REQ_DMA)
+        append("MMU unsupported DMA request");
+    if (code & ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED)
+        append("MMU unsupported headed compute request");
+    if (code & ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED)
+        append("MMU unsupported non-headed compute request");
+    if (code & ERR_MMU_BAD_DMA_PLAN)
+        append("MMU bad DMA plan");
+    if (code & ERR_MMU_BAD_DMA_ADDR)
+        append("MMU bad DMA address");
+    if (code & ERR_MMU_REGION_ACCESS)
+        append("MMU invalid region access");
+    if (code & ERR_MMU_CONCAT_SOURCE)
+        append("MMU invalid concat source");
+    if (code & ERR_MMU_WRITEBACK_SRC)
+        append("MMU invalid writeback source");
+    if (code & ERR_MMU_QUEUE_OVERFLOW)
+        append("MMU queue overflow");
+    if (code & ERR_MMU_REGION_OVERFLOW)
+        append("MMU region overflow");
+    if (code & ERR_MMU_STREAM_OUTPUT_MISSING)
+        append("MMU missing stream output region");
+    if (code & ERR_MMU_MISSING_REGION_FULL_READ)
+        append("MMU missing full-read region");
+    if (code & ERR_MMU_MISSING_REGION_PARTIAL_READ)
+        append("MMU missing partial-read region");
+    if (code & ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP)
+        append("MMU missing compute read-prep region");
+    if (code & ERR_MMU_REGION_OVERFLOW_STREAM_IN)
+        append("MMU stream-in region overflow");
+    if (code & ERR_MMU_REGION_OVERFLOW_DMA_CONCAT)
+        append("MMU DMA concat region overflow");
+    if (code & ERR_MMU_REGION_OVERFLOW_DMA_STORE)
+        append("MMU DMA store region overflow");
+    if (code & ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE)
+        append("MMU compute write region overflow");
+    if (code & ERR_MMU_REGION_TABLE_FULL)
+        append("MMU region table full");
+    if (code & ERR_MMU_URAM_CHUNK_ALLOC_FAIL)
+        append("MMU URAM chunk allocation failure");
+    if (code & ERR_MMU_REGION_TOO_LARGE)
+        append("MMU region too large");
+
+    if (msg.empty())
+        append("Unknown error code");
+
     return msg;
 }

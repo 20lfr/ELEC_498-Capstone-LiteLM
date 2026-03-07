@@ -47,7 +47,7 @@ namespace PLReg {
 
     constexpr uint32_t CTRL_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA;
 
-    // ControlMemSpace (PS->PL writes) - 864 bits total (27 x 32-bit registers)
+    // ControlMemSpace (PS->PL writes)
     constexpr uint32_t CONTROL = CTRL_BASE + 0x00;
     // IRQ enable mask - write (IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT) to enable, 0
     // to disable Maps to: ctrl_mem.irq_enable_mask
@@ -56,43 +56,64 @@ namespace PLReg {
     // Rule: irq_clear = !irq_enable_mask during config (both for
     // defense-in-depth) Maps to: ctrl_mem.irq_clear
     constexpr uint32_t IRQ_CLEAR = CTRL_BASE + 0x08;
-    constexpr uint32_t LAYER_STRIDE = CTRL_BASE + 0x0C;
-    constexpr uint32_t WQ_HEAD_STRIDE = CTRL_BASE + 0x10;
-    constexpr uint32_t WK_HEAD_STRIDE = CTRL_BASE + 0x14;
-    constexpr uint32_t WV_HEAD_STRIDE = CTRL_BASE + 0x18;
-    constexpr uint32_t K_CACHE_STRIDE = CTRL_BASE + 0x1C;
-    constexpr uint32_t V_CACHE_STRIDE = CTRL_BASE + 0x20;
-    constexpr uint32_t WO_TILE_STRIDE = CTRL_BASE + 0x24;
-    constexpr uint32_t W1_TILE_STRIDE = CTRL_BASE + 0x28;
-    constexpr uint32_t W2_TILE_STRIDE = CTRL_BASE + 0x2C;
+    constexpr uint32_t DMA_LAYER_LEN = CTRL_BASE + 0x0C;
+    constexpr uint32_t DMA_HEAD_LEN = CTRL_BASE + 0x10;
+    constexpr uint32_t DMA_TILE_LEN = CTRL_BASE + 0x14;
+    constexpr uint32_t LAYER_STRIDE = CTRL_BASE + 0x18;
+    constexpr uint32_t WQ_HEAD_STRIDE = CTRL_BASE + 0x1C;
+    constexpr uint32_t WK_HEAD_STRIDE = CTRL_BASE + 0x20;
+    constexpr uint32_t WV_HEAD_STRIDE = CTRL_BASE + 0x24;
+    constexpr uint32_t K_CACHE_STRIDE = CTRL_BASE + 0x28;
+    constexpr uint32_t V_CACHE_STRIDE = CTRL_BASE + 0x2C;
+    constexpr uint32_t WO_TILE_STRIDE = CTRL_BASE + 0x30;
+    constexpr uint32_t W1_TILE_STRIDE = CTRL_BASE + 0x34;
+    constexpr uint32_t W2_TILE_STRIDE = CTRL_BASE + 0x38;
+    constexpr uint32_t WQ_BIAS_HEAD_STRIDE = CTRL_BASE + 0x3C;
+    constexpr uint32_t WK_BIAS_HEAD_STRIDE = CTRL_BASE + 0x40;
+    constexpr uint32_t WV_BIAS_HEAD_STRIDE = CTRL_BASE + 0x44;
+    constexpr uint32_t WO_BIAS_TILE_STRIDE = CTRL_BASE + 0x48;
+    constexpr uint32_t W1_BIAS_TILE_STRIDE = CTRL_BASE + 0x4C;
+    constexpr uint32_t W2_BIAS_TILE_STRIDE = CTRL_BASE + 0x50;
+    constexpr uint32_t WLOGIT_TILE_STRIDE = CTRL_BASE + 0x54;
+    constexpr uint32_t LN0_GAMMA_STRIDE = CTRL_BASE + 0x58;
+    constexpr uint32_t LN1_GAMMA_STRIDE = CTRL_BASE + 0x5C;
+    constexpr uint32_t FINAL_NORM_GAMMA_STRIDE = CTRL_BASE + 0x60;
+    constexpr uint32_t LN0_EPS_STRIDE = CTRL_BASE + 0x64;
+    constexpr uint32_t LN1_EPS_STRIDE = CTRL_BASE + 0x68;
+    constexpr uint32_t FINAL_NORM_EPS_STRIDE = CTRL_BASE + 0x6C;
 
-    // Weight/KV-cache word offsets
-    constexpr uint32_t WQ_OFFSET = CTRL_BASE + 0x30;
-    constexpr uint32_t WK_OFFSET = CTRL_BASE + 0x34;
-    constexpr uint32_t WV_OFFSET = CTRL_BASE + 0x38;
-    constexpr uint32_t WO_OFFSET = CTRL_BASE + 0x3C;
-    constexpr uint32_t W1_OFFSET = CTRL_BASE + 0x40;
-    constexpr uint32_t W2_OFFSET = CTRL_BASE + 0x44;
-    constexpr uint32_t K_CACHE_OFFSET = CTRL_BASE + 0x48;
-    constexpr uint32_t V_CACHE_OFFSET = CTRL_BASE + 0x4C;
+    // Word offsets relative to AXI full base
+    constexpr uint32_t WQ_OFFSET = CTRL_BASE + 0x70;
+    constexpr uint32_t WK_OFFSET = CTRL_BASE + 0x74;
+    constexpr uint32_t WV_OFFSET = CTRL_BASE + 0x78;
+    constexpr uint32_t WO_OFFSET = CTRL_BASE + 0x7C;
+    constexpr uint32_t W1_OFFSET = CTRL_BASE + 0x80;
+    constexpr uint32_t W2_OFFSET = CTRL_BASE + 0x84;
+    constexpr uint32_t K_CACHE_OFFSET = CTRL_BASE + 0x88;
+    constexpr uint32_t V_CACHE_OFFSET = CTRL_BASE + 0x8C;
+    constexpr uint32_t WQ_BIAS_OFFSET = CTRL_BASE + 0x90;
+    constexpr uint32_t WK_BIAS_OFFSET = CTRL_BASE + 0x94;
+    constexpr uint32_t WV_BIAS_OFFSET = CTRL_BASE + 0x98;
+    constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x9C;
+    constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0xA0;
+    constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0xA4;
+    constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0xA8;
+    constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0xAC;
+    constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0xB0;
+    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0xB4;
+    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0xB8;
+    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0xBC;
+    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0xC0;
 
-    // Quantization parameters
-    constexpr uint32_t LOGIT_SCALE_QV = CTRL_BASE + 0x50;
-    constexpr uint32_t SCALE_Q = CTRL_BASE + 0x54;
-    constexpr uint32_t ZERO_POINT_Q = CTRL_BASE + 0x58;
-    constexpr uint32_t SCALE_K = CTRL_BASE + 0x5C;
-    constexpr uint32_t ZERO_POINT_K = CTRL_BASE + 0x60;
-    constexpr uint32_t SCALE_V = CTRL_BASE + 0x64;
-    constexpr uint32_t ZERO_POINT_V = CTRL_BASE + 0x68;
-
-    // StatusMemSpace (PL->PS reads) - 192 bits total (6 x 32-bit registers)
+    // StatusMemSpace (PL->PS reads)
     constexpr uint32_t STATUS_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
     constexpr uint32_t STATUS = STATUS_BASE + 0x00;
     constexpr uint32_t IRQ_STATUS = STATUS_BASE + 0x04;
     constexpr uint32_t ERROR_CODE = STATUS_BASE + 0x08;
-    constexpr uint32_t LAYER_INDEX = STATUS_BASE + 0x0C;
-    constexpr uint32_t HEAD_INDEX = STATUS_BASE + 0x10;
-    constexpr uint32_t TOKEN_INDEX = STATUS_BASE + 0x14;
+    constexpr uint32_t MMU_ERROR_SUBCODE = STATUS_BASE + 0x0C;
+    constexpr uint32_t LAYER_INDEX = STATUS_BASE + 0x10;
+    constexpr uint32_t HEAD_INDEX = STATUS_BASE + 0x14;
+    constexpr uint32_t TOKEN_INDEX = STATUS_BASE + 0x18;
 
     constexpr uint32_t STATUS_CTRL = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL;
 } // namespace PLReg

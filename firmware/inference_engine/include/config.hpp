@@ -8,7 +8,7 @@
 
 struct HardwareConfig {
     uint64_t stream_reg_base_addr = 0xa0000000;
-    std::string uio_device = "axi_top";
+    std::string uio_device = "transformer_top";
     std::string dmabuf_name = "udmabuf0";
     size_t dmabuf_size = 0x7a000000; // 2GB
     uint32_t timeout_ms = 30000;
@@ -34,19 +34,31 @@ struct ModelConfig {
     uint32_t wo_tile_stride = STRIDE_WO_TILE;
     uint32_t w1_tile_stride = STRIDE_W1_TILE;
     uint32_t w2_tile_stride = STRIDE_W2_TILE;
-
-    // Quantization defaults
-    float scale_q = 0.005f;
-    int32_t zero_point_q = 0;
-    float scale_k = 0.005f;
-    int32_t zero_point_k = 0;
-    float scale_v = 0.005f;
-    int32_t zero_point_v = 0;
+    uint32_t wq_bias_head_stride = STRIDE_QKV_HEAD;
+    uint32_t wk_bias_head_stride = STRIDE_QKV_HEAD;
+    uint32_t wv_bias_head_stride = STRIDE_QKV_HEAD;
+    uint32_t wo_bias_tile_stride = D_TILE_WO * sizeof(int32_t);
+    uint32_t w1_bias_tile_stride = D_TILE_W1 * sizeof(int32_t);
+    uint32_t w2_bias_tile_stride = D_TILE_W2 * sizeof(int32_t);
+    uint32_t wlogit_tile_stride = D_TILE_LOGIT * sizeof(int32_t);
+    uint32_t ln0_gamma_stride = D_MODEL * sizeof(int32_t);
+    uint32_t ln1_gamma_stride = D_MODEL * sizeof(int32_t);
+    uint32_t final_norm_gamma_stride = D_MODEL * sizeof(int32_t);
+    uint32_t ln0_eps_stride = sizeof(uint32_t);
+    uint32_t ln1_eps_stride = sizeof(uint32_t);
+    uint32_t final_norm_eps_stride = sizeof(uint32_t);
 
     bool validate() const {
         return layer_stride && wq_head_stride && wk_head_stride &&
                wv_head_stride && k_cache_stride && v_cache_stride &&
-               wo_tile_stride && w1_tile_stride && w2_tile_stride;
+               wo_tile_stride && w1_tile_stride && w2_tile_stride &&
+               wq_bias_head_stride && wk_bias_head_stride &&
+               wv_bias_head_stride && wo_bias_tile_stride &&
+               w1_bias_tile_stride && w2_bias_tile_stride &&
+               wlogit_tile_stride && ln0_gamma_stride &&
+               ln1_gamma_stride && final_norm_gamma_stride &&
+               ln0_eps_stride && ln1_eps_stride &&
+               final_norm_eps_stride;
     }
 };
 

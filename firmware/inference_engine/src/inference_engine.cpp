@@ -76,6 +76,21 @@ public:
         pl->writeReg(PLReg::WO_TILE_STRIDE, cfg.wo_tile_stride);
         pl->writeReg(PLReg::W1_TILE_STRIDE, cfg.w1_tile_stride);
         pl->writeReg(PLReg::W2_TILE_STRIDE, cfg.w2_tile_stride);
+        pl->writeReg(PLReg::WQ_BIAS_HEAD_STRIDE, cfg.wq_bias_head_stride);
+        pl->writeReg(PLReg::WK_BIAS_HEAD_STRIDE, cfg.wk_bias_head_stride);
+        pl->writeReg(PLReg::WV_BIAS_HEAD_STRIDE, cfg.wv_bias_head_stride);
+        pl->writeReg(PLReg::WO_BIAS_TILE_STRIDE, cfg.wo_bias_tile_stride);
+        pl->writeReg(PLReg::W1_BIAS_TILE_STRIDE, cfg.w1_bias_tile_stride);
+        pl->writeReg(PLReg::W2_BIAS_TILE_STRIDE, cfg.w2_bias_tile_stride);
+        pl->writeReg(PLReg::WLOGIT_TILE_STRIDE, cfg.wlogit_tile_stride);
+        pl->writeReg(PLReg::LN0_GAMMA_STRIDE, cfg.ln0_gamma_stride);
+        pl->writeReg(PLReg::LN1_GAMMA_STRIDE, cfg.ln1_gamma_stride);
+        pl->writeReg(PLReg::FINAL_NORM_GAMMA_STRIDE,
+                     cfg.final_norm_gamma_stride);
+        pl->writeReg(PLReg::LN0_EPS_STRIDE, cfg.ln0_eps_stride);
+        pl->writeReg(PLReg::LN1_EPS_STRIDE, cfg.ln1_eps_stride);
+        pl->writeReg(PLReg::FINAL_NORM_EPS_STRIDE,
+                     cfg.final_norm_eps_stride);
 
         // 64-bit base addresses
         pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
@@ -89,21 +104,6 @@ public:
         pl->writeReg(PLReg::W2_OFFSET, mem.w2_offset);
         pl->writeReg(PLReg::K_CACHE_OFFSET, mem.k_cache_offset);
         pl->writeReg(PLReg::V_CACHE_OFFSET, mem.v_cache_offset);
-
-        // Quantization
-        pl->writeReg(PLReg::LOGIT_SCALE_QV, cfg.logit_scale_qv);
-        pl->writeReg(PLReg::SCALE_Q,
-                     *reinterpret_cast<const uint32_t *>(&cfg.scale_q));
-        pl->writeReg(PLReg::ZERO_POINT_Q,
-                     static_cast<uint32_t>(cfg.zero_point_q));
-        pl->writeReg(PLReg::SCALE_K,
-                     *reinterpret_cast<const uint32_t *>(&cfg.scale_k));
-        pl->writeReg(PLReg::ZERO_POINT_K,
-                     static_cast<uint32_t>(cfg.zero_point_k));
-        pl->writeReg(PLReg::SCALE_V,
-                     *reinterpret_cast<const uint32_t *>(&cfg.scale_v));
-        pl->writeReg(PLReg::ZERO_POINT_V,
-                     static_cast<uint32_t>(cfg.zero_point_v));
 
         pl->endConfig();
         return !err->hasError();
