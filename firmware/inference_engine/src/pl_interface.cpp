@@ -364,20 +364,38 @@ std::string PLInterface::getRegStats(bool compact) {
 }
 
 // DDR access
-bool PLInterface::writeDDR(uint32_t offset, const void *data, size_t size) {
+bool PLInterface::writeDDR(uint32_t offset, const void *data, size_t size,
+                           bool sync_to_pl) {
     if (!_dma_buf.isAllocated() || offset + size > _dma_buf.size())
         return false;
     memcpy((uint8_t *)_dma_buf.virt() + offset, data, size);
-    _dma_buf.sync_pl();
+    if (sync_to_pl) {
+        _dma_buf.sync_pl();
+    }
     return true;
 }
 
-bool PLInterface::readDDR(uint32_t offset, void *data, size_t size) {
+bool PLInterface::readDDR(uint32_t offset, void *data, size_t size,
+                          bool sync_from_pl) {
     if (!_dma_buf.isAllocated() || offset + size > _dma_buf.size())
         return false;
-    _dma_buf.sync_cpu();
+    if (sync_from_pl) {
+        _dma_buf.sync_cpu();
+    }
     memcpy(data, (uint8_t *)_dma_buf.virt() + offset, size);
     return true;
+}
+
+void PLInterface::syncDDRToPL() {
+    if (_dma_buf.isAllocated()) {
+        _dma_buf.sync_pl();
+    }
+}
+
+void PLInterface::syncDDRToCPU() {
+    if (_dma_buf.isAllocated()) {
+        _dma_buf.sync_cpu();
+    }
 }
 
 // Stream API

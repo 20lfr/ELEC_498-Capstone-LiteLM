@@ -18,7 +18,7 @@ struct HardwareConfig {
 struct ModelConfig {
     std::string weights_file = "model/phi3_weights_int4.bin";
     std::string quant_params_file = "model/quantization.bin";
-    std::string tokenizer_vocab = "model/tokenizer.model";
+    std::string tokenizer_vocab = "model/vocab.txt";
     std::string embeddings_file = "model/embeddings.bin";
 
     uint32_t vocab_size = MODEL_VOCAB_SIZE;
