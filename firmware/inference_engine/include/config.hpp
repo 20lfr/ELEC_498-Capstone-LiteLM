@@ -19,6 +19,7 @@ struct ModelConfig {
     std::string weights_file = "phi3_weights_int4.bin";
     std::string quant_params_file = "quantization.bin";
     std::string tokenizer_vocab = "tokenizer.model";
+    std::string embeddings_file = "embeddings.bin";
 
     uint32_t vocab_size = MODEL_VOCAB_SIZE;
     uint32_t logit_scale_qv = ATTN_SCALE_Q15;

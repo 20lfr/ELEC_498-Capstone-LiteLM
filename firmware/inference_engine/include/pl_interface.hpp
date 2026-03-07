@@ -106,7 +106,8 @@ namespace PLReg {
     constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0xC0;
 
     // StatusMemSpace (PL->PS reads)
-    constexpr uint32_t STATUS_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
+    constexpr uint32_t STATUS_BASE =
+        XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
     constexpr uint32_t STATUS = STATUS_BASE + 0x00;
     constexpr uint32_t IRQ_STATUS = STATUS_BASE + 0x04;
     constexpr uint32_t ERROR_CODE = STATUS_BASE + 0x08;
@@ -115,7 +116,8 @@ namespace PLReg {
     constexpr uint32_t HEAD_INDEX = STATUS_BASE + 0x14;
     constexpr uint32_t TOKEN_INDEX = STATUS_BASE + 0x18;
 
-    constexpr uint32_t STATUS_CTRL = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL;
+    constexpr uint32_t STATUS_CTRL =
+        XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL;
 } // namespace PLReg
 
 // m_axi Base Address Registers (on s_axi_control_r bundle)
@@ -229,10 +231,10 @@ public:
     bool reset();
     bool start();
     bool waitDone(uint32_t timeout_ms);
-    bool isBusy() { return testRegBits(PLReg::STATUS, STATUS_BUSY_BIT); }
     bool isError() { return testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT); }
     void beginConfig();
     void endConfig();
+    std::string getRegStats();
 
     // Memory
     bool writeDDR(uint32_t dma_offset, const void *data, size_t size);

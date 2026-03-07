@@ -23,7 +23,7 @@ bool PLInterface::init(const std::string &device_name,
     if (_mock_mode) {
         LOG_INFO("PLInterface: Mock mode");
         _mock_regs[PLReg::CONTROL / 4] = CTRL_RESETN_BIT;
-        _mock_regs[PLReg::STATUS / 4] = STATUS_IDLE;
+        // _mock_regs[PLReg::STATUS / 4] = STATUS_IDLE;
         _initialized = true;
         return true;
     }
@@ -328,6 +328,25 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
     }
     _err->setError(ErrorCode::HARDWARE_TIMEOUT, "Timeout");
     return false;
+}
+
+std::string PLInterface::getRegStats() {
+    char buf[640];
+    snprintf(buf, sizeof(buf),
+             "  AP_CTRL:    0x%08X\n"
+             "  Status:     0x%08X\n"
+             "  IRQ Status: 0x%08X\n"
+             "  Error Code: 0x%08X  %s\n"
+             "  MMU Sub:    0x%08X\n"
+             "  Layer:      %u\n"
+             "  Token:      %u\n"
+             "  Stream:     %s\n",
+             readReg(PLReg::AXIL_AP_CTRL), readReg(PLReg::STATUS),
+             readReg(PLReg::IRQ_STATUS), readReg(PLReg::ERROR_CODE),
+             getErrorCodeString().c_str(), readReg(PLReg::MMU_ERROR_SUBCODE),
+             readReg(PLReg::LAYER_INDEX), readReg(PLReg::TOKEN_INDEX),
+             streamStatusString().c_str());
+    return std::string(buf);
 }
 
 // DDR access

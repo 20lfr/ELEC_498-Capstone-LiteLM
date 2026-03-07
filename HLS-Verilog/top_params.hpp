@@ -1,7 +1,7 @@
 #pragma once
+#include "shared_params.hpp"
 #include <ap_int.h>
 #include <cstdint>
-#include "shared_params.hpp"
 
 using int4_t = ap_int<4>;
 
@@ -39,27 +39,6 @@ constexpr bool MMU_USE_HARDCODED_LN_PARAMS = false;
 #error "Invalid REQUANT_SCALES_VER. Use 0, 1, or 2."
 #endif
 // ------------------------------------------------------------
-// Scheduler state + helper enums
-// ------------------------------------------------------------
-enum SchedState {
-    S_IDLE,            // 0
-    S_STREAM_IN,       // 1
-    S_LAYER_COUNT,     // 2
-    S_LAYER_NORM_0,    // 3
-    S_ATTENTION_HEADS, // 4
-    S_HEAD_CONCAT,     // 5
-    S_OUT_PROJECTION,  // 6
-    S_RES_ADD_1,       // 7
-    S_LAYER_NORM_1,    // 8
-    S_FFN,             // 9
-    S_RES_ADD_2,       // 10
-    S_LOOP_CHECK,      // 11
-    S_FINAL_NORM,      // 12
-    S_LOGITS,          // 13
-    S_ARGMAX,          // 14
-    S_STREAM_OUT       // 15
-};
-// ------------------------------------------------------------
 // Headed Attention and FSM enums
 // ------------------------------------------------------------
 enum class HeadPhase : uint8_t {
@@ -96,41 +75,41 @@ enum ComputeOp : uint8_t {
     CMP_ATT_VALUE = 12,   // 10
 
     // Scheduler-level ops
-    CMP_HEAD_REQUANT = 13, 
-    CMP_CONCAT       = 14, // 13
-    CMP_OUT_PROJ     = 15, // 14
-    CMP_RESID1       = 16, // 16
-    CMP_REQUANT2     = 17, // 18
-    CMP_FFN_W1       = 18, // 19
-    CMP_FFN_ACT      = 19, // 20
-    CMP_FFN_W2       = 20, // 21
-    CMP_REQUANT3     = 21, // 22
-    CMP_RESID2       = 22, // 23
-    CMP_LN1          = 23, // 24
-    CMP_REQUANT4     = 24, // 25
-    CMP_FINAL_NORM   = 25, // 26
-    CMP_LOGITS       = 26, // 27
-    CMP_ARGMAX       = 27, // 28
+    CMP_HEAD_REQUANT = 13,
+    CMP_CONCAT = 14,     // 13
+    CMP_OUT_PROJ = 15,   // 14
+    CMP_RESID1 = 16,     // 16
+    CMP_REQUANT2 = 17,   // 18
+    CMP_FFN_W1 = 18,     // 19
+    CMP_FFN_ACT = 19,    // 20
+    CMP_FFN_W2 = 20,     // 21
+    CMP_REQUANT3 = 21,   // 22
+    CMP_RESID2 = 22,     // 23
+    CMP_LN1 = 23,        // 24
+    CMP_REQUANT4 = 24,   // 25
+    CMP_FINAL_NORM = 25, // 26
+    CMP_LOGITS = 26,     // 27
+    CMP_ARGMAX = 27,     // 28
 };
 
 enum DmaSel : uint8_t {
-    DMASEL_NONE = 0,    // 0
-    DMASEL_WQ,          // 1
-    DMASEL_WK,          // 2
-    DMASEL_K_WRITE,     // 3
-    DMASEL_WV,          // 4
-    DMASEL_V_WRITE,     // 5
-    DMASEL_CTX_K,       // 6
-    DMASEL_CTX_V,       // 7
-    DMASEL_WO,          // 8
-    DMASEL_W1,          // 9
-    DMASEL_W2,          // 10
-    DMASEL_LOGITS,      // 11
+    DMASEL_NONE = 0, // 0
+    DMASEL_WQ,       // 1
+    DMASEL_WK,       // 2
+    DMASEL_K_WRITE,  // 3
+    DMASEL_WV,       // 4
+    DMASEL_V_WRITE,  // 5
+    DMASEL_CTX_K,    // 6
+    DMASEL_CTX_V,    // 7
+    DMASEL_WO,       // 8
+    DMASEL_W1,       // 9
+    DMASEL_W2,       // 10
+    DMASEL_LOGITS,   // 11
     DMASEL_WLOGIT = DMASEL_LOGITS,
-    DMASEL_CONCAT,      // 12
-    DMASEL_LN0,         // 13
-    DMASEL_LN1,         // 14
-    DMASEL_FINAL_NORM   // 15
+    DMASEL_CONCAT,    // 12
+    DMASEL_LN0,       // 13
+    DMASEL_LN1,       // 14
+    DMASEL_FINAL_NORM // 15
 };
 
 enum class ComputeErrorCodes { IncorrectRequest, InvalidComputationForamt };
@@ -147,19 +126,19 @@ struct HeadCtx {
     DmaSel last_wl_addr = DmaSel::DMASEL_NONE; // Tracks last issued WL request
                                                // for dma_done attribution
 
-    bool    wl_ready    = false;                  // INPUT FROM WL/MMU
-    bool    wl_accept   = false;                  // INPUT FROM MMU: request captured
-    bool    wl_start    = false;                  // OUTPUT signal for head
-    uint32_t wl_instruction = 0;                  // OUTPUT packed DMA op|layer|head|tile
-    bool    dma_done    = false;                  // INPUT FROM AXI-FULL/MMU
+    bool wl_ready = false;       // INPUT FROM WL/MMU
+    bool wl_accept = false;      // INPUT FROM MMU: request captured
+    bool wl_start = false;       // OUTPUT signal for head
+    uint32_t wl_instruction = 0; // OUTPUT packed DMA op|layer|head|tile
+    bool dma_done = false;       // INPUT FROM AXI-FULL/MMU
 
     bool start_head = false;
 
     // Per-head bookkeeping for started phases
-    bool q_started          = false;
-    bool k_started          = false;
+    bool q_started = false;
+    bool k_started = false;
     bool k_writeback_started = false;
-    bool v_started          = false;
+    bool v_started = false;
     bool v_writeback_started = false;
     bool att_scores_started = false;
     bool val_scale_started = false;
@@ -167,9 +146,9 @@ struct HeadCtx {
     bool att_value_started = false;
     bool head_requant_started = false;
 
-    bool q_compute_done          = false;
-    bool k_compute_done          = false;
-    bool v_compute_done          = false;
+    bool q_compute_done = false;
+    bool k_compute_done = false;
+    bool v_compute_done = false;
     bool att_scores_compute_done = false;
     bool val_scale_compute_done = false;
     bool softmax_compute_done = false;
@@ -214,7 +193,6 @@ struct PendingRequest {
     uint8_t tile_idx = 0;
 };
 
-
 // Register Addr mapping is auto generated in a HLS project
 // `mask_allowed/hel/impl/ip/drivers/<top_function>/src/x<top_function>_hw.h`
 
@@ -225,7 +203,8 @@ struct PendingRequest {
 //       sizeof(int32_t).
 struct ControlMemSpace {
     uint32_t control = CTRL_RESETN_BIT; // cntrl_reset | cntrl_start
-    uint32_t irq_mask = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
+    uint32_t irq_mask =
+        0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
 
     // DMA sizing fields used by the current control/test harness.
@@ -262,7 +241,6 @@ struct ControlMemSpace {
     uint32_t ln0_eps_stride = 0;
     uint32_t ln1_eps_stride = 0;
     uint32_t final_norm_eps_stride = 0;
-    
 
     // Word offsets relative to AXI Full base (set by PS)
     // wq=0, wk=size(wq), wv=size(wq)+size(wk), ...
@@ -317,14 +295,17 @@ enum class BufDType : uint8_t {
 
 // For MAIN MAC unit input and output buffer sizing
 constexpr int VECTOR_MAX = max2_constexpr(D_MODEL, D_FFN);
-constexpr int ACCUM_MAX =
-    max2_constexpr(D_TILE_WO, max2_constexpr(D_TILE_W1, max2_constexpr(D_TILE_W2, D_TILE_LOGIT)));
+constexpr int ACCUM_MAX = max2_constexpr(
+    D_TILE_WO,
+    max2_constexpr(D_TILE_W1, max2_constexpr(D_TILE_W2, D_TILE_LOGIT)));
 constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
 
 constexpr int MAC_VEC_UNROLL = min2_constexpr(
-    VECTOR_MAX, MAIN_MAC_VEC_UNROLL_TARGET); // UNROLLING by vector dimension (Columns)
+    VECTOR_MAX,
+    MAIN_MAC_VEC_UNROLL_TARGET); // UNROLLING by vector dimension (Columns)
 constexpr int MAC_OUT_UNROLL = min2_constexpr(
-    ACCUM_MAX, MAIN_MAC_OUT_UNROLL_TARGET); // UNROLLING by accumulation dimension (Rows)
+    ACCUM_MAX,
+    MAIN_MAC_OUT_UNROLL_TARGET); // UNROLLING by accumulation dimension (Rows)
 
 namespace compute_buf {
 
@@ -365,15 +346,15 @@ namespace compute_buf {
     constexpr int LOGITS_IN_BYTES = LOGITS_X_BYTES + LOGITS_W_BYTES;
     constexpr int ARGMAX_IN_BYTES = D_VOCAB * 4;
 
-    constexpr int IN_BUF_BYTES =
-        max2(OUT_PROJ_IN_BYTES,
-             max2(REQUANT_IN_BYTES,
-                  max2(RESID_IN_BYTES,
-                       max2(LN_IN_BYTES,
-                            max2(FFN_W1_IN_BYTES,
-                                 max2(FFN_ACT_IN_BYTES,
-                                      max2(FFN_W2_IN_BYTES,
-                                           max2(LOGITS_IN_BYTES, ARGMAX_IN_BYTES))))))));
+    constexpr int IN_BUF_BYTES = max2(
+        OUT_PROJ_IN_BYTES,
+        max2(REQUANT_IN_BYTES,
+             max2(RESID_IN_BYTES,
+                  max2(LN_IN_BYTES, max2(FFN_W1_IN_BYTES,
+                                         max2(FFN_ACT_IN_BYTES,
+                                              max2(FFN_W2_IN_BYTES,
+                                                   max2(LOGITS_IN_BYTES,
+                                                        ARGMAX_IN_BYTES))))))));
 
     // -------------------------------
     // Output buffer size calculations
@@ -396,7 +377,8 @@ namespace compute_buf {
                             max2(FFN_W1_OUT_BYTES,
                                  max2(FFN_ACT_OUT_BYTES,
                                       max2(FFN_W2_OUT_BYTES,
-                                           max2(LOGITS_OUT_BYTES, ARGMAX_OUT_BYTES))))))));
+                                           max2(LOGITS_OUT_BYTES,
+                                                ARGMAX_OUT_BYTES))))))));
 
     // -------------------------------
     // Per-op layouts (byte offsets)
@@ -624,7 +606,8 @@ constexpr int HEAD_MAC_VEC_UNROLL =
     min2_constexpr(HEAD_VECTOR_MAX, HEAD_MAC_VEC_UNROLL_TARGET);
 constexpr int HEAD_MAC_OUT_UNROLL =
     min2_constexpr(HEAD_ACCUM_MAX, HEAD_MAC_OUT_UNROLL_TARGET);
-constexpr int CONTEXT_UNROLL = min2_constexpr(CONTEXT_LENGTH, CONTEXT_UNROLL_TARGET);
+constexpr int CONTEXT_UNROLL =
+    min2_constexpr(CONTEXT_LENGTH, CONTEXT_UNROLL_TARGET);
 
 struct ComputeHeadCtx {
     ComputeState state = ComputeState::IDLE;
@@ -656,17 +639,20 @@ namespace head_buf {
 
     using OutDType = BufDType;
 
-constexpr int QKV_W_FULL_NIBBLES = D_MODEL * D_HEADS;
-constexpr int QKV_W_FULL_BYTES = compute_buf::div_ceil(QKV_W_FULL_NIBBLES, 2);
-constexpr int QKV_B_FULL_BYTES = D_HEADS * 4;
-constexpr int QKV_OUT_FULL_BYTES = D_HEADS;
+    constexpr int QKV_W_FULL_NIBBLES = D_MODEL * D_HEADS;
+    constexpr int QKV_W_FULL_BYTES =
+        compute_buf::div_ceil(QKV_W_FULL_NIBBLES, 2);
+    constexpr int QKV_B_FULL_BYTES = D_HEADS * 4;
+    constexpr int QKV_OUT_FULL_BYTES = D_HEADS;
 
-constexpr int QKV_W_TILE_NIBBLES = D_MODEL * D_HEAD_TILE_QKV;
-static_assert((QKV_W_TILE_NIBBLES % 2) == 0, "QKV tile size must be byte aligned");
-constexpr int QKV_W_TILE_BYTES = compute_buf::div_ceil(QKV_W_TILE_NIBBLES, 2);
-constexpr int QKV_B_TILE_BYTES = D_HEAD_TILE_QKV * 4;
-constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_TILE_BYTES + QKV_B_TILE_BYTES;
-constexpr int QKV_OUT_BYTES = D_HEAD_TILE_QKV;
+    constexpr int QKV_W_TILE_NIBBLES = D_MODEL * D_HEAD_TILE_QKV;
+    static_assert((QKV_W_TILE_NIBBLES % 2) == 0,
+                  "QKV tile size must be byte aligned");
+    constexpr int QKV_W_TILE_BYTES =
+        compute_buf::div_ceil(QKV_W_TILE_NIBBLES, 2);
+    constexpr int QKV_B_TILE_BYTES = D_HEAD_TILE_QKV * 4;
+    constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_TILE_BYTES + QKV_B_TILE_BYTES;
+    constexpr int QKV_OUT_BYTES = D_HEAD_TILE_QKV;
 
     constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4);
     constexpr int HEAD_REQUANT_OUT_BYTES = D_HEADS;
@@ -684,8 +670,10 @@ constexpr int QKV_OUT_BYTES = D_HEAD_TILE_QKV;
     constexpr int SOFTMAX_OUT_BYTES = CONTEXT_LENGTH * 2;
 
     constexpr int ATT_VALUE_V_CACHE_FULL_BYTES = CONTEXT_LENGTH * D_HEADS;
-    constexpr int ATT_VALUE_V_CACHE_TILE_BYTES = CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE;
-    constexpr int ATT_VALUE_IN_BYTES = (CONTEXT_LENGTH * 2) + ATT_VALUE_V_CACHE_TILE_BYTES;
+    constexpr int ATT_VALUE_V_CACHE_TILE_BYTES =
+        CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE;
+    constexpr int ATT_VALUE_IN_BYTES =
+        (CONTEXT_LENGTH * 2) + ATT_VALUE_V_CACHE_TILE_BYTES;
     constexpr int ATT_VALUE_OUT_FULL_BYTES = D_HEADS * 4;
     constexpr int ATT_VALUE_OUT_BYTES = D_HEAD_TILE_ATT_VALUE * 4;
 
