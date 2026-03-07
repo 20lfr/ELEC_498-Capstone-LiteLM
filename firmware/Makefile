@@ -44,19 +44,13 @@ INCLUDES = -I$(DRIVER_DIR) \
 # Sources
 INTERFACE_SRC = $(INFERENCE_DIR)/src/pl_interface.cpp 
 INFERENCE_SRCS = $(INTERFACE_SRC) $(INFERENCE_DIR)/src/inference_engine.cpp
-PL_CLI_SRCS = $(TESTING_DIR)/pl_cli.cpp
-DRIVER_LEGACY_SRC = $(DRIVER_DIR)/xaxi_top.c $(DRIVER_DIR)/xaxi_top_linux.c
 
 # Targets
-TARGETS = $(BUILD_DIR)/pl_cli $(BUILD_DIR)/inference_engine
+TARGETS = $(BUILD_DIR)/inference_engine
 
 .PHONY: all clean package help
 
 all: $(TARGETS)
-
-$(BUILD_DIR)/pl_cli: $(PL_CLI_SRCS) $(INTERFACE_SRC)
-	@mkdir -p $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^ $(LDFLAGS)
 
 $(BUILD_DIR)/inference_engine: $(INFERENCE_SRCS)
 	@mkdir -p $(BUILD_DIR)
