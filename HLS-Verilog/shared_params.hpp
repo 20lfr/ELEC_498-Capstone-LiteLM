@@ -96,9 +96,6 @@ static_assert((AXI_GMEM_WORD_BITS % 8) == 0,
 // Precision
 constexpr uint32_t INT4_BITS = 4;
 constexpr uint32_t INT8_BITS = 8;
-constexpr uint32_t INT16_BITS = 16;
-constexpr uint32_t INT32_BITS = 32;
-constexpr uint32_t FP16_BITS = 16;
 
 // Resource estimation (uses tunable params)
 constexpr uint32_t RESIDUAL_BITS = D_MODEL * INT8_BITS;
@@ -136,9 +133,19 @@ constexpr uint32_t MEM_W1_GATE = NUM_LAYERS * D_FFN * D_MODEL / 2;
 constexpr uint32_t MEM_W1_UP = MEM_W1_GATE;
 constexpr uint32_t MEM_W2 = NUM_LAYERS * D_MODEL * D_FFN / 2;
 constexpr uint32_t MEM_EMBED = MODEL_VOCAB_SIZE * D_MODEL * 2;
-constexpr uint32_t MEM_GAMMA = (2 * NUM_LAYERS + 1) * D_MODEL * 2;
-constexpr uint32_t MEM_BIAS =
-    NUM_LAYERS * (D_MODEL * 4 + D_FFN * 2 + D_MODEL) * 4;
+constexpr uint32_t MEM_WO_BIAS = NUM_LAYERS * D_MODEL * sizeof(int32_t);
+constexpr uint32_t MEM_W1_BIAS = NUM_LAYERS * (2 * D_FFN) * sizeof(int32_t);
+constexpr uint32_t MEM_W2_BIAS = NUM_LAYERS * D_MODEL * sizeof(int32_t);
+constexpr uint32_t MEM_LN0_GAMMA = NUM_LAYERS * D_MODEL * sizeof(int32_t);
+constexpr uint32_t MEM_LN1_GAMMA = NUM_LAYERS * D_MODEL * sizeof(int32_t);
+constexpr uint32_t MEM_FINAL_NORM_GAMMA = D_MODEL * sizeof(int32_t);
+constexpr uint32_t MEM_LN0_EPS = NUM_LAYERS * sizeof(uint32_t);
+constexpr uint32_t MEM_LN1_EPS = NUM_LAYERS * sizeof(uint32_t);
+constexpr uint32_t MEM_FINAL_NORM_EPS = sizeof(uint32_t);
+constexpr uint32_t MEM_WLOGIT = D_VOCAB * D_MODEL / 2;
+constexpr uint32_t MEM_GAMMA =
+    MEM_LN0_GAMMA + MEM_LN1_GAMMA + MEM_FINAL_NORM_GAMMA;
+constexpr uint32_t MEM_BIAS = MEM_WO_BIAS + MEM_W1_BIAS + MEM_W2_BIAS;
 constexpr uint32_t MEM_K_CACHE = KV_CACHE_TOTAL_BYTES;
 constexpr uint32_t MEM_V_CACHE = KV_CACHE_TOTAL_BYTES;
 

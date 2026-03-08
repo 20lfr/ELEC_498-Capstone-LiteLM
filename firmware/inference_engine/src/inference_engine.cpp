@@ -33,7 +33,7 @@ class WeightLoader {
     Logger *logger;
     ErrorHandler *err;
     std::string weights_file;
-    static constexpr size_t kWeightLoadChunkBytes = 64 * 1024 * 1024;
+    static constexpr size_t kWeightLoadChunkBytes = 1024 * 1024 * 1024;
 
 public:
     WeightLoader(PLInterface *p, Logger *l, ErrorHandler *e)
@@ -496,7 +496,6 @@ public:
 
         loader = std::unique_ptr<WeightLoader>(
             new WeightLoader(pl.get(), g_logger, &err));
-        loader->setWeightsFile(config.model.weights_file);
 
         if (!loader->configureAddresses(config.model, config.memory)) {
             LOG_FATAL("Config failed");
@@ -504,6 +503,7 @@ public:
         }
 
         // Load binary weights into DDR via writeDDR
+        loader->setWeightsFile(config.model.weights_file);
         if (!loader->loadAllWeights(config.model)) {
             LOG_FATAL("Weight load failed");
             return false;
@@ -591,8 +591,11 @@ private:
 
             // Stream decoded token to console as it's produced
             std::string decoded = tokenizer->decodeToken(out_token);
-            if (!decoded.empty())
-                print(decoded);
+            char buf[512];
+            if (!decoded.empty()) {
+                sprintf(buf, "[%d] decoded: %s | out_token: %d\n", i, decoded.c_str(), out_token);
+                print(buf);
+            }
 
             if (out_token == tokenizer->getEOSTokenId())
                 break;

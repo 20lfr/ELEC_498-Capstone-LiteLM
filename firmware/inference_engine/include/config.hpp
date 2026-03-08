@@ -61,18 +61,32 @@ constexpr uint32_t align64(uint32_t v) { return (v + 63) & ~63; }
 
 struct MemoryLayout {
     // Weight offsets (relative to dmabuf base)
-    static constexpr uint32_t wq_off     = 0;
-    static constexpr uint32_t wk_off     = align64(wq_off + MEM_WQ);
-    static constexpr uint32_t wv_off     = align64(wk_off + MEM_WK);
-    static constexpr uint32_t wo_off     = align64(wv_off + MEM_WV);
-    static constexpr uint32_t w1_off     = align64(wo_off + MEM_WO);
-    static constexpr uint32_t w1_up_off  = align64(w1_off + MEM_W1_GATE);
-    static constexpr uint32_t w2_off     = align64(w1_up_off + MEM_W1_UP);
-    static constexpr uint32_t embed_off  = align64(w2_off + MEM_W2);
-    static constexpr uint32_t gamma_off  = align64(embed_off + MEM_EMBED);
-    static constexpr uint32_t bias_off   = align64(gamma_off + MEM_GAMMA);
-    static constexpr uint32_t wlogit_off = align64(bias_off + MEM_BIAS);
-    static constexpr uint32_t w_total    = align64(wlogit_off);
+    static constexpr uint32_t wq_off = 0;
+    static constexpr uint32_t wk_off = align64(wq_off + MEM_WQ);
+    static constexpr uint32_t wv_off = align64(wk_off + MEM_WK);
+    static constexpr uint32_t wo_off = align64(wv_off + MEM_WV);
+    static constexpr uint32_t w1_off = align64(wo_off + MEM_WO);
+    static constexpr uint32_t w1_up_off = align64(w1_off + MEM_W1_GATE);
+    static constexpr uint32_t w2_off = align64(w1_up_off + MEM_W1_UP);
+    static constexpr uint32_t embed_off = align64(w2_off + MEM_W2);
+    static constexpr uint32_t wo_bias_off = align64(embed_off + MEM_EMBED);
+    static constexpr uint32_t w1_bias_off = align64(wo_bias_off + MEM_WO_BIAS);
+    static constexpr uint32_t w2_bias_off = align64(w1_bias_off + MEM_W1_BIAS);
+    static constexpr uint32_t ln0_gamma_off =
+        align64(w2_bias_off + MEM_W2_BIAS);
+    static constexpr uint32_t ln1_gamma_off =
+        align64(ln0_gamma_off + MEM_LN0_GAMMA);
+    static constexpr uint32_t final_norm_gamma_off =
+        align64(ln1_gamma_off + MEM_LN1_GAMMA);
+    static constexpr uint32_t ln0_eps_off =
+        align64(final_norm_gamma_off + MEM_FINAL_NORM_GAMMA);
+    static constexpr uint32_t ln1_eps_off =
+        align64(ln0_eps_off + MEM_LN0_EPS);
+    static constexpr uint32_t final_norm_eps_off =
+        align64(ln1_eps_off + MEM_LN1_EPS);
+    static constexpr uint32_t wlogit_off =
+        align64(final_norm_eps_off + MEM_FINAL_NORM_EPS);
+    static constexpr uint32_t w_total = align64(wlogit_off + MEM_WLOGIT);
 
     // KV cache / stream offsets (after weights)
     static constexpr uint32_t k_cache_off = w_total;
@@ -89,8 +103,15 @@ struct MemoryLayout {
     uint32_t w1_offset      = w1_off;
     uint32_t w2_offset      = w2_off;
     uint32_t embed_offset   = embed_off;
-    uint32_t gamma_offset   = gamma_off;
-    uint32_t bias_offset    = bias_off;
+    uint32_t wo_bias_offset = wo_bias_off;
+    uint32_t w1_bias_offset = w1_bias_off;
+    uint32_t w2_bias_offset = w2_bias_off;
+    uint32_t ln0_gamma_offset = ln0_gamma_off;
+    uint32_t ln1_gamma_offset = ln1_gamma_off;
+    uint32_t final_norm_gamma_offset = final_norm_gamma_off;
+    uint32_t ln0_eps_offset = ln0_eps_off;
+    uint32_t ln1_eps_offset = ln1_eps_off;
+    uint32_t final_norm_eps_offset = final_norm_eps_off;
     uint32_t wlogit_offset  = wlogit_off;
     uint32_t k_cache_offset = k_cache_off;
     uint32_t v_cache_offset = v_cache_off;
@@ -102,8 +123,10 @@ struct MemoryLayout {
     bool isAligned() const {
         return !((wq_offset | wk_offset | wv_offset | wo_offset | w1_offset |
                   w2_offset | k_cache_offset | v_cache_offset | input_offset |
-                  output_offset | embed_offset | gamma_offset | bias_offset |
-                  wlogit_offset) &
+                  output_offset | embed_offset | wo_bias_offset |
+                  w1_bias_offset | w2_bias_offset | ln0_gamma_offset |
+                  ln1_gamma_offset | final_norm_gamma_offset | ln0_eps_offset |
+                  ln1_eps_offset | final_norm_eps_offset | wlogit_offset) &
                  0x3F);
     }
 };
