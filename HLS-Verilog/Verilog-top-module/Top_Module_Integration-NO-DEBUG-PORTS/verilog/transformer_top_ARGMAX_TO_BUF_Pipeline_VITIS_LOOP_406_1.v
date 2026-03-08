@@ -149,28 +149,28 @@ wire   [6:0] shl_ln_fu_345_p3;
 wire   [6:0] mul_ln541_fu_356_p0;
 wire   [8:0] mul_ln541_fu_356_p1;
 wire   [14:0] mul_ln541_fu_356_p2;
-wire   [4:0] tmp_541_fu_362_p4;
+wire   [4:0] tmp_531_fu_362_p4;
 wire   [6:0] or_ln_fu_381_p3;
 wire   [6:0] mul_ln543_fu_392_p0;
 wire   [8:0] mul_ln543_fu_392_p1;
 wire   [14:0] mul_ln543_fu_392_p2;
-wire   [4:0] tmp_542_fu_398_p4;
-wire   [6:0] or_ln24_fu_417_p3;
+wire   [4:0] tmp_532_fu_398_p4;
+wire   [6:0] or_ln12_fu_417_p3;
 wire   [6:0] mul_ln544_fu_428_p0;
 wire   [8:0] mul_ln544_fu_428_p1;
 wire   [14:0] mul_ln544_fu_428_p2;
-wire   [4:0] tmp_543_fu_434_p4;
-wire   [6:0] or_ln25_fu_453_p3;
+wire   [4:0] tmp_533_fu_434_p4;
+wire   [6:0] or_ln13_fu_453_p3;
 wire   [6:0] mul_ln545_fu_464_p0;
 wire   [8:0] mul_ln545_fu_464_p1;
 wire   [14:0] mul_ln545_fu_464_p2;
-wire   [4:0] tmp_544_fu_470_p4;
+wire   [4:0] tmp_534_fu_470_p4;
 wire   [7:0] tmp_fu_495_p11;
 wire   [7:0] tmp_s_fu_522_p11;
-wire   [7:0] tmp_137_fu_549_p11;
-wire   [7:0] tmp_138_fu_576_p11;
-wire   [7:0] tmp_138_fu_576_p13;
-wire   [7:0] tmp_137_fu_549_p13;
+wire   [7:0] tmp_127_fu_549_p11;
+wire   [7:0] tmp_128_fu_576_p11;
+wire   [7:0] tmp_128_fu_576_p13;
+wire   [7:0] tmp_127_fu_549_p13;
 wire   [7:0] tmp_s_fu_522_p13;
 wire   [7:0] tmp_fu_495_p13;
 wire   [31:0] v_149_fu_603_p5;
@@ -198,16 +198,16 @@ wire   [2:0] tmp_s_fu_522_p3;
 wire  signed [2:0] tmp_s_fu_522_p5;
 wire   [2:0] tmp_s_fu_522_p7;
 wire   [2:0] tmp_s_fu_522_p9;
-wire   [2:0] tmp_137_fu_549_p1;
-wire   [2:0] tmp_137_fu_549_p3;
-wire   [2:0] tmp_137_fu_549_p5;
-wire  signed [2:0] tmp_137_fu_549_p7;
-wire   [2:0] tmp_137_fu_549_p9;
-wire   [2:0] tmp_138_fu_576_p1;
-wire   [2:0] tmp_138_fu_576_p3;
-wire   [2:0] tmp_138_fu_576_p5;
-wire   [2:0] tmp_138_fu_576_p7;
-wire  signed [2:0] tmp_138_fu_576_p9;
+wire   [2:0] tmp_127_fu_549_p1;
+wire   [2:0] tmp_127_fu_549_p3;
+wire   [2:0] tmp_127_fu_549_p5;
+wire  signed [2:0] tmp_127_fu_549_p7;
+wire   [2:0] tmp_127_fu_549_p9;
+wire   [2:0] tmp_128_fu_576_p1;
+wire   [2:0] tmp_128_fu_576_p3;
+wire   [2:0] tmp_128_fu_576_p5;
+wire   [2:0] tmp_128_fu_576_p7;
+wire  signed [2:0] tmp_128_fu_576_p9;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -369,9 +369,9 @@ sparsemux_11_3_8_1_1_U896(
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
     .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_q0),
     .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q0),
-    .def(tmp_137_fu_549_p11),
+    .def(tmp_127_fu_549_p11),
     .sel(trunc_ln542_reg_694_pp0_iter10_reg),
-    .dout(tmp_137_fu_549_p13)
+    .dout(tmp_127_fu_549_p13)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_11_3_8_1_1 #(
@@ -396,9 +396,9 @@ sparsemux_11_3_8_1_1_U897(
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
     .din3(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_9_q0),
     .din4(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_8_q0),
-    .def(tmp_138_fu_576_p11),
+    .def(tmp_128_fu_576_p11),
     .sel(trunc_ln542_reg_694_pp0_iter10_reg),
-    .dout(tmp_138_fu_576_p13)
+    .dout(tmp_128_fu_576_p13)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -866,35 +866,35 @@ assign mul_ln543_fu_392_p1 = 15'd205;
 
 assign mul_ln544_fu_428_p0 = mul_ln544_fu_428_p00;
 
-assign mul_ln544_fu_428_p00 = or_ln24_fu_417_p3;
+assign mul_ln544_fu_428_p00 = or_ln12_fu_417_p3;
 
 assign mul_ln544_fu_428_p1 = 15'd205;
 
 assign mul_ln545_fu_464_p0 = mul_ln545_fu_464_p00;
 
-assign mul_ln545_fu_464_p00 = or_ln25_fu_453_p3;
+assign mul_ln545_fu_464_p00 = or_ln13_fu_453_p3;
 
 assign mul_ln545_fu_464_p1 = 15'd205;
 
-assign or_ln24_fu_417_p3 = {{trunc_ln408_reg_685_pp0_iter9_reg}, {2'd2}};
+assign or_ln12_fu_417_p3 = {{trunc_ln408_reg_685_pp0_iter9_reg}, {2'd2}};
 
-assign or_ln25_fu_453_p3 = {{trunc_ln408_reg_685_pp0_iter9_reg}, {2'd3}};
+assign or_ln13_fu_453_p3 = {{trunc_ln408_reg_685_pp0_iter9_reg}, {2'd3}};
 
 assign or_ln_fu_381_p3 = {{trunc_ln408_reg_685_pp0_iter9_reg}, {2'd1}};
 
 assign shl_ln_fu_345_p3 = {{trunc_ln408_reg_685_pp0_iter9_reg}, {2'd0}};
 
-assign tmp_137_fu_549_p11 = 'bx;
+assign tmp_127_fu_549_p11 = 'bx;
 
-assign tmp_138_fu_576_p11 = 'bx;
+assign tmp_128_fu_576_p11 = 'bx;
 
-assign tmp_541_fu_362_p4 = {{mul_ln541_fu_356_p2[14:10]}};
+assign tmp_531_fu_362_p4 = {{mul_ln541_fu_356_p2[14:10]}};
 
-assign tmp_542_fu_398_p4 = {{mul_ln543_fu_392_p2[14:10]}};
+assign tmp_532_fu_398_p4 = {{mul_ln543_fu_392_p2[14:10]}};
 
-assign tmp_543_fu_434_p4 = {{mul_ln544_fu_428_p2[14:10]}};
+assign tmp_533_fu_434_p4 = {{mul_ln544_fu_428_p2[14:10]}};
 
-assign tmp_544_fu_470_p4 = {{mul_ln545_fu_464_p2[14:10]}};
+assign tmp_534_fu_470_p4 = {{mul_ln545_fu_464_p2[14:10]}};
 
 assign tmp_fu_495_p11 = 'bx;
 
@@ -924,16 +924,16 @@ assign trunc_ln408_fu_320_p1 = ap_sig_allocacmp_i_33[4:0];
 
 assign trunc_ln542_fu_341_p1 = grp_fu_324_p2[2:0];
 
-assign v_149_fu_603_p5 = {{{{tmp_138_fu_576_p13}, {tmp_137_fu_549_p13}}, {tmp_s_fu_522_p13}}, {tmp_fu_495_p13}};
+assign v_149_fu_603_p5 = {{{{tmp_128_fu_576_p13}, {tmp_127_fu_549_p13}}, {tmp_s_fu_522_p13}}, {tmp_fu_495_p13}};
 
 assign zext_ln409_fu_629_p1 = trunc_ln408_reg_685_pp0_iter10_reg;
 
-assign zext_ln541_fu_372_p1 = tmp_541_fu_362_p4;
+assign zext_ln541_fu_372_p1 = tmp_531_fu_362_p4;
 
-assign zext_ln543_fu_408_p1 = tmp_542_fu_398_p4;
+assign zext_ln543_fu_408_p1 = tmp_532_fu_398_p4;
 
-assign zext_ln544_fu_444_p1 = tmp_543_fu_434_p4;
+assign zext_ln544_fu_444_p1 = tmp_533_fu_434_p4;
 
-assign zext_ln545_fu_480_p1 = tmp_544_fu_470_p4;
+assign zext_ln545_fu_480_p1 = tmp_534_fu_470_p4;
 
 endmodule //transformer_top_ARGMAX_TO_BUF_Pipeline_VITIS_LOOP_406_1

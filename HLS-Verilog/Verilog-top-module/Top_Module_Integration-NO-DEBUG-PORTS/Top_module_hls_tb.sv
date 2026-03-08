@@ -423,6 +423,7 @@ module top_module_hls_tb;
     CTRL_ASSERT_DEBUG_MODE,
     CTRL_ASSERT_START,
     CTRL_ASSERT_AP_START,
+    CTRL_HOLD_START,
     CTRL_CLEAR_START,
     CTRL_DONE
   } ctrl_init_stage_t;
@@ -2301,7 +2302,7 @@ module top_module_hls_tb;
           ctrl_chip_en <= 1'b1;
           ctrl_shadow_control <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
           ctrl_words[0] <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
-          ctrl_stage <= CTRL_ASSERT_AP_START;
+          ctrl_stage <= (current_stream_token == 0) ? CTRL_ASSERT_AP_START : CTRL_HOLD_START;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
         CTRL_ASSERT_AP_START: begin
@@ -2311,6 +2312,14 @@ module top_module_hls_tb;
           ctrl_data_in <= 32'h0000_0081;
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
+          ctrl_stage <= CTRL_HOLD_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_HOLD_START: begin
+          $display("[CTRL] cycle=%0d token=%0d hold control(start)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token,
+                   CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
+                   dbg_state, status_mem_shadow.status);
           ctrl_stage <= CTRL_CLEAR_START;
           ctrl_gap_cycles <= CTRL_START_HOLD_CYCLES;
         end

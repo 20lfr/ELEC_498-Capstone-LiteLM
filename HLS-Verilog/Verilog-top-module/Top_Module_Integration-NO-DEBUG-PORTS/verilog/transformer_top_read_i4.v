@@ -96,17 +96,17 @@ reg   [0:0] empty_reg_232_pp0_iter9_reg;
 reg   [0:0] empty_reg_232_pp0_iter10_reg;
 reg   [0:0] empty_reg_232_pp0_iter11_reg;
 wire   [8:0] byte_addr_fu_135_p4;
-reg   [6:0] tmp_86_reg_242;
-reg   [6:0] tmp_86_reg_242_pp0_iter1_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter2_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter3_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter4_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter5_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter6_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter7_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter8_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter9_reg;
-reg   [6:0] tmp_86_reg_242_pp0_iter10_reg;
+reg   [6:0] tmp_66_reg_242;
+reg   [6:0] tmp_66_reg_242_pp0_iter1_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter2_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter3_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter4_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter5_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter6_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter7_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter8_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter9_reg;
+reg   [6:0] tmp_66_reg_242_pp0_iter10_reg;
 wire   [63:0] zext_ln527_fu_171_p1;
 wire    ap_block_pp0_stage0;
 reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_ce0_local;
@@ -341,8 +341,8 @@ always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_ce) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         empty_reg_232 <= empty_fu_131_p1;
         empty_reg_232_pp0_iter1_reg <= empty_reg_232;
-        tmp_86_reg_242 <= {{mul_ln527_fu_149_p2[18:12]}};
-        tmp_86_reg_242_pp0_iter1_reg <= tmp_86_reg_242;
+        tmp_66_reg_242 <= {{mul_ln527_fu_149_p2[18:12]}};
+        tmp_66_reg_242_pp0_iter1_reg <= tmp_66_reg_242;
     end
 end
 
@@ -358,15 +358,15 @@ always @ (posedge ap_clk) begin
         empty_reg_232_pp0_iter7_reg <= empty_reg_232_pp0_iter6_reg;
         empty_reg_232_pp0_iter8_reg <= empty_reg_232_pp0_iter7_reg;
         empty_reg_232_pp0_iter9_reg <= empty_reg_232_pp0_iter8_reg;
-        tmp_86_reg_242_pp0_iter10_reg <= tmp_86_reg_242_pp0_iter9_reg;
-        tmp_86_reg_242_pp0_iter2_reg <= tmp_86_reg_242_pp0_iter1_reg;
-        tmp_86_reg_242_pp0_iter3_reg <= tmp_86_reg_242_pp0_iter2_reg;
-        tmp_86_reg_242_pp0_iter4_reg <= tmp_86_reg_242_pp0_iter3_reg;
-        tmp_86_reg_242_pp0_iter5_reg <= tmp_86_reg_242_pp0_iter4_reg;
-        tmp_86_reg_242_pp0_iter6_reg <= tmp_86_reg_242_pp0_iter5_reg;
-        tmp_86_reg_242_pp0_iter7_reg <= tmp_86_reg_242_pp0_iter6_reg;
-        tmp_86_reg_242_pp0_iter8_reg <= tmp_86_reg_242_pp0_iter7_reg;
-        tmp_86_reg_242_pp0_iter9_reg <= tmp_86_reg_242_pp0_iter8_reg;
+        tmp_66_reg_242_pp0_iter10_reg <= tmp_66_reg_242_pp0_iter9_reg;
+        tmp_66_reg_242_pp0_iter2_reg <= tmp_66_reg_242_pp0_iter1_reg;
+        tmp_66_reg_242_pp0_iter3_reg <= tmp_66_reg_242_pp0_iter2_reg;
+        tmp_66_reg_242_pp0_iter4_reg <= tmp_66_reg_242_pp0_iter3_reg;
+        tmp_66_reg_242_pp0_iter5_reg <= tmp_66_reg_242_pp0_iter4_reg;
+        tmp_66_reg_242_pp0_iter6_reg <= tmp_66_reg_242_pp0_iter5_reg;
+        tmp_66_reg_242_pp0_iter7_reg <= tmp_66_reg_242_pp0_iter6_reg;
+        tmp_66_reg_242_pp0_iter8_reg <= tmp_66_reg_242_pp0_iter7_reg;
+        tmp_66_reg_242_pp0_iter9_reg <= tmp_66_reg_242_pp0_iter8_reg;
     end
 end
 
@@ -535,6 +535,6 @@ assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemS
 
 assign trunc_ln529_fu_221_p1 = byte_val_fu_183_p13[3:0];
 
-assign zext_ln527_fu_171_p1 = tmp_86_reg_242_pp0_iter10_reg;
+assign zext_ln527_fu_171_p1 = tmp_66_reg_242_pp0_iter10_reg;
 
 endmodule //transformer_top_read_i4

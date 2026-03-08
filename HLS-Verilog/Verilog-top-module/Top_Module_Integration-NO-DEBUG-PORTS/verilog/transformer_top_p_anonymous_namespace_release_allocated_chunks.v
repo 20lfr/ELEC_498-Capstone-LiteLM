@@ -399,8 +399,8 @@ wire   [0:0] icmp_ln595_fu_357_p2;
 reg   [0:0] icmp_ln595_reg_494;
 wire   [4:0] tmp_s_fu_363_p11;
 reg   [4:0] tmp_s_reg_498;
-wire   [31:0] tmp_139_fu_384_p11;
-reg   [31:0] tmp_139_reg_503;
+wire   [31:0] tmp_129_fu_384_p11;
+reg   [31:0] tmp_129_reg_503;
 wire    grp_p_anonymous_namespace_free_span_add_fu_224_ap_start;
 wire    grp_p_anonymous_namespace_free_span_add_fu_224_ap_done;
 wire    grp_p_anonymous_namespace_free_span_add_fu_224_ap_idle;
@@ -543,11 +543,11 @@ wire   [0:0] icmp_ln708_fu_321_p2;
 wire    ap_CS_fsm_state3;
 reg   [2:0] i_fu_142;
 reg    ap_block_state3_on_subcall_done;
-wire   [0:0] tmp_548_fu_297_p3;
+wire   [0:0] tmp_538_fu_297_p3;
 wire   [31:0] tmp_fu_336_p9;
 wire   [1:0] trunc_ln708_fu_332_p1;
 wire   [4:0] tmp_s_fu_363_p9;
-wire   [31:0] tmp_139_fu_384_p9;
+wire   [31:0] tmp_129_fu_384_p9;
 reg   [2:0] ap_NS_fsm;
 reg    ap_ST_fsm_state1_blk;
 wire    ap_ST_fsm_state2_blk;
@@ -560,10 +560,10 @@ wire   [1:0] tmp_s_fu_363_p1;
 wire   [1:0] tmp_s_fu_363_p3;
 wire  signed [1:0] tmp_s_fu_363_p5;
 wire  signed [1:0] tmp_s_fu_363_p7;
-wire   [1:0] tmp_139_fu_384_p1;
-wire   [1:0] tmp_139_fu_384_p3;
-wire  signed [1:0] tmp_139_fu_384_p5;
-wire  signed [1:0] tmp_139_fu_384_p7;
+wire   [1:0] tmp_129_fu_384_p1;
+wire   [1:0] tmp_129_fu_384_p3;
+wire  signed [1:0] tmp_129_fu_384_p5;
+wire  signed [1:0] tmp_129_fu_384_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -581,7 +581,7 @@ transformer_top_p_anonymous_namespace_free_span_add grp_p_anonymous_namespace_fr
     .ap_idle(grp_p_anonymous_namespace_free_span_add_fu_224_ap_idle),
     .ap_ready(grp_p_anonymous_namespace_free_span_add_fu_224_ap_ready),
     .bank(tmp_s_reg_498),
-    .offset(tmp_139_reg_503),
+    .offset(tmp_129_reg_503),
     .size(tmp_reg_489),
     .p_anonymous_namespace_free_span_count_address0(grp_p_anonymous_namespace_free_span_add_fu_224_p_anonymous_namespace_free_span_count_address0),
     .p_anonymous_namespace_free_span_count_ce0(grp_p_anonymous_namespace_free_span_add_fu_224_p_anonymous_namespace_free_span_count_ce0),
@@ -818,9 +818,9 @@ sparsemux_9_2_32_1_1_U2868(
     .din1(chunks_offset_read_10),
     .din2(chunks_offset_read_11),
     .din3(chunks_offset_read_12),
-    .def(tmp_139_fu_384_p9),
+    .def(tmp_129_fu_384_p9),
     .sel(trunc_ln708_fu_332_p1),
-    .dout(tmp_139_fu_384_p11)
+    .dout(tmp_129_fu_384_p11)
 );
 
 always @ (posedge ap_clk) begin
@@ -855,7 +855,7 @@ always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
         add_ln708_reg_484 <= add_ln708_fu_326_p2;
         icmp_ln595_reg_494 <= icmp_ln595_fu_357_p2;
-        tmp_139_reg_503 <= tmp_139_fu_384_p11;
+        tmp_129_reg_503 <= tmp_129_fu_384_p11;
         tmp_reg_489 <= tmp_fu_336_p11;
         tmp_s_reg_498 <= tmp_s_fu_363_p11;
     end
@@ -1220,11 +1220,11 @@ assign p_anonymous_namespace_free_spans_size_9_d0 = grp_p_anonymous_namespace_fr
 
 assign p_anonymous_namespace_free_spans_size_9_we0 = grp_p_anonymous_namespace_free_span_add_fu_224_p_anonymous_namespace_free_spans_size_9_we0;
 
-assign select_ln708_fu_305_p3 = ((tmp_548_fu_297_p3[0:0] == 1'b1) ? 3'd4 : num_chunks);
+assign select_ln708_fu_305_p3 = ((tmp_538_fu_297_p3[0:0] == 1'b1) ? 3'd4 : num_chunks);
 
-assign tmp_139_fu_384_p9 = 'bx;
+assign tmp_129_fu_384_p9 = 'bx;
 
-assign tmp_548_fu_297_p3 = num_chunks[32'd2];
+assign tmp_538_fu_297_p3 = num_chunks[32'd2];
 
 assign tmp_fu_336_p9 = 'bx;
 

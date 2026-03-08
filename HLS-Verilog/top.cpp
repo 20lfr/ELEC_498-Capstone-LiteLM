@@ -233,14 +233,21 @@ void transformer_top(
     static uint16_t         token_pos_next                = 0;
     static bool             debug_sum_done_local          = false;
     static int32_t          debug_sum_value_local         = 0;
+    static bool             prev_start                    = false;
+    static uint32_t         scheduler_layer_index_local   = 0;
 
     // Active-low reset derived from control register.
     const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
     const bool reset = !reset_n;
+    const bool start_en = (ctrl_mem.control & CTRL_START_BIT) != 0u;
+    const bool start_edge = start_en && !prev_start;
     const bool debug_mode_en = (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0u;
+    const bool ctrl_error =
+        ((active_status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
+        (active_status_mem.error_code != ERR_NONE);
 
-    // Clear all internal state when reset is asserted.
-    if (reset) {
+    // Reset once at boot, then re-arm run-local state on each new start pulse.
+    if (reset || start_edge) {
         compute_ready = true;
         compute_done = false;
         compute_start = false;
@@ -259,8 +266,6 @@ void transformer_top(
         main_mem_read_request = false;
         main_mem_write_request = false;
         main_mem_op = 0;
-        token_pos_current = 0;
-        token_pos_next = 0;
         debug_sum_done_local = false;
         debug_sum_value_local = 0;
         dma_done_local = false;
@@ -280,6 +285,12 @@ void transformer_top(
         stream_tx_index_local = 0;
         stream_in_counter = 0;
         token_complete_local = false;
+
+        if (reset) {
+            token_pos_current = 0;
+            token_pos_next = 0;
+            prev_start = false;
+        }
 
         for (int i = 0; i < HEADS_PARALLEL; ++i) {
 // #pragma HLS UNROLL
@@ -315,12 +326,10 @@ void transformer_top(
             dma_tx_buf_local[i] = 0;
         }
     }
-
-    if (state_local == S_IDLE) {
-        token_complete_local = false;
-        stream_in_counter = 0;
-        debug_sum_done_local = false;
-        debug_sum_value_local = 0;
+    if (reset) {
+        prev_start = false;
+    } else {
+        prev_start = start_en;
     }
 
     const bool axis_buf_full = (stream_in_counter >= static_cast<uint32_t>(STREAM_IN_BUF_BYTES));
@@ -350,8 +359,10 @@ void transformer_top(
 
     // SCHEDULER FSM
     scheduler_hls(
-        ctrl_mem,
-        active_status_mem,
+        reset_n,
+        start_en,
+        debug_mode_en,
+        ctrl_error,
         token_complete_local,
         mmu_main_dma_done_wire,
         mmu_req_ready_wire,
@@ -370,8 +381,15 @@ void transformer_top(
         stream_done_local,
         done,
         scheduler_error,
+        scheduler_layer_index_local,
         state_local
     );
+
+    // AXIS token completion is a per-token ingress latch. Once the scheduler
+    // has advanced beyond STREAM_IN, clear it so the next token can be accepted.
+    if (token_complete_local && (state_local != S_STREAM_IN)) {
+        token_complete_local = false;
+    }
 
     if (axis_in_valid && axis_in_last && axis_in_ready_wire) {
         const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
@@ -574,11 +592,11 @@ void transformer_top(
                                     mmu_status.error_code,
                                     mmu_status.error_subcode);
     ctrl_mem_interface.check_control(ctrl_mem, done);
+    active_status_mem.status = static_cast<uint32_t>(state_local);
+    active_status_mem.layer_index = scheduler_layer_index_local;
     active_status_mem.token_index = static_cast<uint32_t>(token_pos_current);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
-    // Scheduler_FSM now owns status_mem.status directly as the scheduler-state
-    // channel. top keeps the debug mirror separately.
     status_mem = active_status_mem;
 
     // Debug outputs
