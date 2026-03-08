@@ -958,7 +958,7 @@ transformer_top_p_anonymous_namespace_free_span_add grp_p_anonymous_namespace_fr
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U2537(
+sparsemux_9_2_32_1_1_U2540(
     .din0(r_chunks_size_0_q0),
     .din1(r_chunks_size_1_q0),
     .din2(r_chunks_size_2_q0),
@@ -982,7 +982,7 @@ sparsemux_9_2_32_1_1_U2537(
     .def_WIDTH( 5 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 5 ))
-sparsemux_9_2_5_1_1_U2538(
+sparsemux_9_2_5_1_1_U2541(
     .din0(r_chunks_bank_0_q0),
     .din1(r_chunks_bank_1_q0),
     .din2(r_chunks_bank_2_q0),
@@ -1006,7 +1006,7 @@ sparsemux_9_2_5_1_1_U2538(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U2539(
+sparsemux_9_2_32_1_1_U2542(
     .din0(r_chunks_offset_0_q0),
     .din1(r_chunks_offset_1_q0),
     .din2(r_chunks_offset_2_q0),

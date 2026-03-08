@@ -1629,7 +1629,7 @@ transformer_top_p_anonymous_namespace_free_span_compact_and_coalesce_Pipeline_VI
     .def_WIDTH( 32 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 32 ))
-sparsemux_31_4_32_1_1_U2464(
+sparsemux_31_4_32_1_1_U2467(
     .din0(p_anonymous_namespace_free_spans_offset_1_q0),
     .din1(p_anonymous_namespace_free_spans_offset_2_q0),
     .din2(p_anonymous_namespace_free_spans_offset_3_q0),
@@ -1686,7 +1686,7 @@ sparsemux_31_4_32_1_1_U2464(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 32 ))
-sparsemux_31_4_32_1_1_U2465(
+sparsemux_31_4_32_1_1_U2468(
     .din0(p_anonymous_namespace_free_spans_size_1_q0),
     .din1(p_anonymous_namespace_free_spans_size_2_q0),
     .din2(p_anonymous_namespace_free_spans_size_3_q0),

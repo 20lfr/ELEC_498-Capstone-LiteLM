@@ -719,7 +719,7 @@ end
     .def_WIDTH( 20 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 20 ))
-sparsemux_9_2_20_1_1_U3302(
+sparsemux_9_2_20_1_1_U3305(
     .din0(r_chunks_offset_read),
     .din1(r_chunks_offset_read_34),
     .din2(r_chunks_offset_read_35),
@@ -743,7 +743,7 @@ sparsemux_9_2_20_1_1_U3302(
     .def_WIDTH( 5 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 5 ))
-sparsemux_9_2_5_1_1_U3303(
+sparsemux_9_2_5_1_1_U3306(
     .din0(r_chunks_bank_read),
     .din1(r_chunks_bank_read_34),
     .din2(r_chunks_bank_read_35),

@@ -112,7 +112,7 @@ wire  signed [4:0] byte_val_fu_210_p31;
     .def_WIDTH( 8 ),
     .sel_WIDTH( 5 ),
     .dout_WIDTH( 8 ))
-sparsemux_33_5_8_1_1_U1210(
+sparsemux_33_5_8_1_1_U1213(
     .din0(buf_16),
     .din1(buf_17),
     .din2(buf_18),

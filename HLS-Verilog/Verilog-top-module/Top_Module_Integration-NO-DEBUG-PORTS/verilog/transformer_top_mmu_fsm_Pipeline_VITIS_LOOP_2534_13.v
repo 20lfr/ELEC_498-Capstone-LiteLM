@@ -182,7 +182,7 @@ wire   [0:0] or_ln279_3_fu_502_p2;
 wire   [0:0] or_ln279_5_fu_514_p2;
 wire   [0:0] or_ln279_2_fu_496_p2;
 wire   [0:0] req_head_fu_527_p1;
-wire   [5:0] tmp_89_fu_536_p4;
+wire   [5:0] tmp_91_fu_536_p4;
 wire   [0:0] icmp_ln2552_fu_546_p2;
 wire   [1:0] trunc_ln277_1_fu_426_p4;
 wire   [2:0] trunc_ln2542_fu_337_p1;
@@ -486,7 +486,7 @@ assign icmp_ln2535_fu_275_p2 = ((ap_sig_allocacmp_lane == 2'd1) ? 1'b1 : 1'b0);
 
 assign icmp_ln2542_fu_351_p2 = ((tmp_fu_341_p4 == 6'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln2552_fu_546_p2 = ((tmp_89_fu_536_p4 == 6'd0) ? 1'b1 : 1'b0);
+assign icmp_ln2552_fu_546_p2 = ((tmp_91_fu_536_p4 == 6'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln279_1_fu_442_p2 = ((op_fu_422_p1 == 8'd4) ? 1'b1 : 1'b0);
 
@@ -586,7 +586,7 @@ assign select_ln2540_fu_303_p3 = ((icmp_ln2535_fu_275_p2[0:0] == 1'b1) ? p_ZN12_
 
 assign select_ln2549_fu_413_p3 = ((icmp_ln2535_fu_275_p2[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_451 : transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_450);
 
-assign tmp_89_fu_536_p4 = {{select_ln2549_fu_413_p3[23:18]}};
+assign tmp_91_fu_536_p4 = {{select_ln2549_fu_413_p3[23:18]}};
 
 assign tmp_fu_341_p4 = {{p_anonymous_namespace_compute_q_count_i[7:2]}};
 

@@ -602,7 +602,7 @@ end
     .def_WIDTH( 32 ),
     .sel_WIDTH( 5 ),
     .dout_WIDTH( 32 ))
-sparsemux_33_5_32_1_1_x_U2730(
+sparsemux_33_5_32_1_1_x_U2733(
     .din0(p_anonymous_namespace_free_spans_offset_0_q0),
     .din1(p_anonymous_namespace_free_spans_offset_1_q0),
     .din2(p_anonymous_namespace_free_spans_offset_2_q0),
@@ -662,7 +662,7 @@ sparsemux_33_5_32_1_1_x_U2730(
     .def_WIDTH( 32 ),
     .sel_WIDTH( 5 ),
     .dout_WIDTH( 32 ))
-sparsemux_33_5_32_1_1_x_U2731(
+sparsemux_33_5_32_1_1_x_U2734(
     .din0(p_anonymous_namespace_free_spans_size_0_q0),
     .din1(p_anonymous_namespace_free_spans_size_1_q0),
     .din2(p_anonymous_namespace_free_spans_size_2_q0),

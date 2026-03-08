@@ -159,7 +159,7 @@ end
     .def_WIDTH( 32 ),
     .sel_WIDTH( 4 ),
     .dout_WIDTH( 32 ))
-sparsemux_33_4_32_1_1_U2710(
+sparsemux_33_4_32_1_1_U2713(
     .din0(p_anonymous_namespace_free_spans_size_0_load),
     .din1(p_anonymous_namespace_free_spans_size_1_load),
     .din2(p_anonymous_namespace_free_spans_size_2_load),

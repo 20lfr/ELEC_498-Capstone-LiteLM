@@ -204,7 +204,7 @@ transformer_top_mul_4ns_6ns_9_1_1 #(
     .din0_WIDTH( 4 ),
     .din1_WIDTH( 6 ),
     .dout_WIDTH( 9 ))
-mul_4ns_6ns_9_1_1_U1036(
+mul_4ns_6ns_9_1_1_U1039(
     .din0(mul_ln366_fu_300_p0),
     .din1(mul_ln366_fu_300_p1),
     .dout(mul_ln366_fu_300_p2)
@@ -216,7 +216,7 @@ transformer_top_mul_5ns_7ns_11_1_1 #(
     .din0_WIDTH( 5 ),
     .din1_WIDTH( 7 ),
     .dout_WIDTH( 11 ))
-mul_5ns_7ns_11_1_1_U1037(
+mul_5ns_7ns_11_1_1_U1040(
     .din0(mul_ln522_fu_337_p0),
     .din1(mul_ln522_fu_337_p1),
     .dout(mul_ln522_fu_337_p2)
@@ -238,7 +238,7 @@ mul_5ns_7ns_11_1_1_U1037(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 8 ))
-sparsemux_11_3_8_1_1_U1038(
+sparsemux_11_3_8_1_1_U1041(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_q1),
     .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q1),
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q1),
@@ -265,7 +265,7 @@ sparsemux_11_3_8_1_1_U1038(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 8 ))
-sparsemux_11_3_8_1_1_x_U1039(
+sparsemux_11_3_8_1_1_x_U1042(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_q0),
     .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0),
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),

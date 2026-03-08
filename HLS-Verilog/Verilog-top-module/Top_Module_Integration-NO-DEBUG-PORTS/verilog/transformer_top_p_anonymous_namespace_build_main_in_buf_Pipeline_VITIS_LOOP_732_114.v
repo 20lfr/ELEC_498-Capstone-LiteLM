@@ -139,7 +139,7 @@ transformer_top_mul_4ns_6ns_9_1_1 #(
     .din0_WIDTH( 4 ),
     .din1_WIDTH( 6 ),
     .dout_WIDTH( 9 ))
-mul_4ns_6ns_9_1_1_U3187(
+mul_4ns_6ns_9_1_1_U3190(
     .din0(mul_ln732_fu_198_p0),
     .din1(mul_ln732_fu_198_p1),
     .dout(mul_ln732_fu_198_p2)

@@ -174,7 +174,7 @@ transformer_top_urem_6ns_6ns_6_10_1 #(
     .din0_WIDTH( 6 ),
     .din1_WIDTH( 6 ),
     .dout_WIDTH( 6 ))
-urem_6ns_6ns_6_10_1_U2768(
+urem_6ns_6ns_6_10_1_U2771(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_232_p0),

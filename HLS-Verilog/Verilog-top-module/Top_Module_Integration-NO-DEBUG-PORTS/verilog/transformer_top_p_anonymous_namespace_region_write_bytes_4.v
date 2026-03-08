@@ -241,7 +241,7 @@ transformer_top_p_anonymous_namespace_region_write_bytes_4_Pipeline_VITIS_LOOP_1
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U3841(
+sparsemux_9_2_32_1_1_U3844(
     .din0(r_chunks_size_read),
     .din1(r_chunks_size_read_10),
     .din2(r_chunks_size_read_11),

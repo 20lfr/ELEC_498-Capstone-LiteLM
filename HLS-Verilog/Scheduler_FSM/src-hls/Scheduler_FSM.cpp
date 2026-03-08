@@ -74,6 +74,7 @@ void scheduler_hls(
     int   &head_group_idx,        // [OUTPUT]  Current head group index (0 to NUM_HEADS/HEADS_PARALLEL-1) 
     bool &compute_start, // [OUTPUT] Trigger compute engine
     uint32_t &compute_instruction,     // [OUTPUT] Packed op|layer|head|tile for compute
+    bool debug_done, // [INPUT]  Debug-mode reduction/result is ready
     // ------------------------------------------------------------
     // AXI4-STREAM OUTPUT (EGRESS: PL → PS)
     // ------------------------------------------------------------
@@ -241,6 +242,7 @@ void scheduler_hls(
   
   // Expose a start bit that auto-clears once we leave IDLE
   const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
+  const bool debug_mode_en = (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0;
   const bool ctrl_error =
       ((status_mem.irq_status & IRQ_ERROR_BIT) != 0) ||
       (status_mem.error_code != ERR_NONE);
@@ -381,6 +383,9 @@ void scheduler_hls(
   if (error_latched) {
     switch (st) {
       case S_STREAM_IN: {
+        break;
+      }
+      case S_DEBUG: {
         break;
       }
       case S_LAYER_COUNT: {
@@ -684,7 +689,15 @@ void scheduler_hls(
     case S_STREAM_IN: {
       // Top-level handles AXIS beat handshake; scheduler waits for full token completion.
       if (axis_token_complete) {
-        st = S_LAYER_COUNT;
+        st = debug_mode_en ? S_DEBUG : S_LAYER_COUNT;
+      }
+      break;
+    }
+    case S_DEBUG: {
+      if (debug_done) {
+        stream_started = false;
+        stream_done_seen = false;
+        st = S_STREAM_OUT;
       }
       break;
     }

@@ -202,7 +202,7 @@ struct PendingRequest {
 //       burst_read/write call sites convert to word index via /
 //       sizeof(int32_t).
 struct ControlMemSpace {
-    uint32_t control = CTRL_RESETN_BIT; // cntrl_reset | cntrl_start
+    uint32_t control = CTRL_RESETN_BIT; // bit0=reset_n, bit1=start, bit3=debug_mode
     uint32_t irq_mask =
         0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;

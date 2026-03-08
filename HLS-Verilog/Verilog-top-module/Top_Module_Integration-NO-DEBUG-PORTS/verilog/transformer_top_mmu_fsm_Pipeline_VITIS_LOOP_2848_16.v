@@ -89,7 +89,7 @@ reg   [63:0] reuse_addr_reg_fu_70;
 wire    ap_loop_init;
 reg   [31:0] reuse_reg_fu_74;
 wire   [31:0] word_3_fu_300_p2;
-reg   [31:0] i_26_fu_78;
+reg   [31:0] i_27_fu_78;
 wire   [31:0] add_ln2848_fu_180_p2;
 reg    p_ZN12_GLOBAL_N_17scratchE_0_ce0_local;
 reg    p_ZN12_GLOBAL_N_17scratchE_1_ce0_local;
@@ -130,7 +130,7 @@ initial begin
 #0 ap_enable_reg_pp0_iter2 = 1'b0;
 #0 reuse_addr_reg_fu_70 = 64'd0;
 #0 reuse_reg_fu_74 = 32'd0;
-#0 i_26_fu_78 = 32'd0;
+#0 i_27_fu_78 = 32'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -148,7 +148,7 @@ end
     .def_WIDTH( 8 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 8 ))
-sparsemux_9_2_8_1_1_U3754(
+sparsemux_9_2_8_1_1_U3757(
     .din0(p_ZN12_GLOBAL_N_17scratchE_0_q0),
     .din1(p_ZN12_GLOBAL_N_17scratchE_1_q0),
     .din2(p_ZN12_GLOBAL_N_17scratchE_2_q0),
@@ -220,9 +220,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         if ((ap_loop_init == 1'b1)) begin
-            i_26_fu_78 <= 32'd0;
+            i_27_fu_78 <= 32'd0;
         end else if (((icmp_ln2848_fu_175_p2 == 1'd0) & (ap_enable_reg_pp0_iter1 == 1'b1))) begin
-            i_26_fu_78 <= add_ln2848_fu_180_p2;
+            i_27_fu_78 <= add_ln2848_fu_180_p2;
         end
     end
 end
@@ -362,7 +362,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln2848_fu_180_p2 = (i_26_fu_78 + 32'd1);
+assign add_ln2848_fu_180_p2 = (i_27_fu_78 + 32'd1);
 
 assign addr_cmp_fu_212_p2 = ((reuse_addr_reg_fu_70 == zext_ln2848_fu_200_p1) ? 1'b1 : 1'b0);
 
@@ -398,9 +398,9 @@ assign dma_tx_buf_local_d0 = word_3_fu_300_p2;
 
 assign dma_tx_buf_local_we0 = dma_tx_buf_local_we0_local;
 
-assign icmp_ln2848_fu_175_p2 = ((i_26_fu_78 == select_ln2848) ? 1'b1 : 1'b0);
+assign icmp_ln2848_fu_175_p2 = ((i_27_fu_78 == select_ln2848) ? 1'b1 : 1'b0);
 
-assign lshr_ln1_fu_190_p4 = {{i_26_fu_78[12:2]}};
+assign lshr_ln1_fu_190_p4 = {{i_27_fu_78[12:2]}};
 
 assign p_ZN12_GLOBAL_N_17scratchE_0_address0 = zext_ln2848_fu_200_p1;
 
@@ -424,7 +424,7 @@ assign shl_ln130_fu_272_p2 = 32'd255 << zext_ln128_fu_258_p1;
 
 assign shl_ln131_fu_282_p2 = zext_ln131_fu_278_p1 << zext_ln128_fu_258_p1;
 
-assign trunc_ln2848_fu_186_p1 = i_26_fu_78[1:0];
+assign trunc_ln2848_fu_186_p1 = i_27_fu_78[1:0];
 
 assign value_assign_fu_228_p9 = 'bx;
 

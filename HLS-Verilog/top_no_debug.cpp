@@ -148,10 +148,13 @@ void transformer_top(
     static uint32_t         main_mem_op                   = 0;
     static uint16_t         token_pos_current             = 0;
     static uint16_t         token_pos_next                = 0;
+    static bool             debug_sum_done_local          = false;
+    static int32_t          debug_sum_value_local         = 0;
 
     // Active-low reset derived from control register.
     const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
     const bool reset = !reset_n;
+    const bool debug_mode_en = (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0u;
 
     // Clear all internal state when reset is asserted.
     if (reset) {
@@ -175,6 +178,8 @@ void transformer_top(
         main_mem_op = 0;
         token_pos_current = 0;
         token_pos_next = 0;
+        debug_sum_done_local = false;
+        debug_sum_value_local = 0;
         dma_done_local = false;
         dma_busy_local = false;
         dma_countdown_local = 0;
@@ -231,6 +236,8 @@ void transformer_top(
     if (state_local == S_IDLE) {
         token_complete_local = false;
         stream_in_counter = 0;
+        debug_sum_done_local = false;
+        debug_sum_value_local = 0;
     }
 
     const bool axis_buf_full = (stream_in_counter >= static_cast<uint32_t>(STREAM_IN_BUF_BYTES));
@@ -274,6 +281,7 @@ void transformer_top(
         head_group_idx,
         compute_start,
         compute_instruction,
+        debug_sum_done_local,
         stream_ready_local,
         stream_start_local,
         stream_done_local,
@@ -290,6 +298,32 @@ void transformer_top(
         } else {
             token_pos_next = token_pos_max;
         }
+    }
+
+    if (state_local == S_DEBUG) {
+        if (!debug_sum_done_local) {
+            int32_t debug_sum = 0;
+            for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+                debug_sum += static_cast<int32_t>(static_cast<int8_t>(stream_in_buf_local[i]));
+            }
+            debug_sum_value_local = debug_sum;
+            for (int i = 0; i < STREAM_OUT_BUF_BYTES; ++i) {
+                stream_out_buf_local[i] = 0;
+            }
+            stream_out_buf_local[0] = static_cast<uint8_t>(debug_sum & 0xFF);
+            if (STREAM_OUT_BUF_BYTES > 1) {
+                stream_out_buf_local[1] = static_cast<uint8_t>((debug_sum >> 8) & 0xFF);
+            }
+            if (STREAM_OUT_BUF_BYTES > 2) {
+                stream_out_buf_local[2] = static_cast<uint8_t>((debug_sum >> 16) & 0xFF);
+            }
+            if (STREAM_OUT_BUF_BYTES > 3) {
+                stream_out_buf_local[3] = static_cast<uint8_t>((debug_sum >> 24) & 0xFF);
+            }
+            debug_sum_done_local = true;
+        }
+    } else if (!stream_tx_active_local) {
+        debug_sum_done_local = false;
     }
 
     // Local throwaway variables for compute_controller debug ports.
@@ -373,7 +407,7 @@ void transformer_top(
         axis_in_valid,
         axis_in_last,
         axis_in_ready_wire,
-        stream_start_local,
+        stream_start_local && !debug_mode_en,
         stream_in_buf_local,
         stream_out_buf_local,
         scheduler_wl_start,

@@ -59,10 +59,8 @@ constexpr int D_TILE_W1 = D_FFN * 2 / NUM_W1_TILES; // Tile size for W1
 constexpr int D_TILE_W2 = D_MODEL / NUM_W2_TILES;
 constexpr int D_TILE_LOGIT =
     D_VOCAB / NUM_LOGIT_TILES; // Tile size for vocab projection
-constexpr int STREAM_IN_BUF_BYTES =
-    D_MODEL; // Token ingress payload (int8 activations)
-constexpr int STREAM_OUT_BUF_BYTES =
-    4; // Streamed egress payload (argmax token id)
+constexpr int STREAM_IN_BUF_BYTES = D_MODEL; // Token ingress payload (int8 activations)
+constexpr int STREAM_OUT_BUF_BYTES = 4; // Streamed egress payload (argmax token id)
 
 static_assert((D_HEADS % NUM_QKV_HEAD_TILES) == 0,
               "D_HEADS must divide NUM_QKV_HEAD_TILES");
@@ -171,6 +169,7 @@ constexpr uint32_t STRIDE_KV_TOKEN = D_HEADS;
 // Bit positions: bit0 = reset_n, bit1 = start
 constexpr uint32_t CTRL_RESETN_BIT = 1u << 0;
 constexpr uint32_t CTRL_START_BIT = 1u << 1;
+constexpr uint32_t CTRL_DEBUG_MODE_BIT = 1u << 3;
 
 // IRQ Bits
 constexpr uint32_t IRQ_ERROR_BIT = 1u << 1;
@@ -195,7 +194,8 @@ enum SchedState {
     S_FINAL_NORM,      // 12
     S_LOGITS,          // 13
     S_ARGMAX,          // 14
-    S_STREAM_OUT       // 15
+    S_STREAM_OUT,      // 15
+    S_DEBUG            // 16
 };
 
 // Error Codes

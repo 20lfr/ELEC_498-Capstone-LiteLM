@@ -11,6 +11,7 @@ module top_module_hls_tb;
   localparam int KV_STORE_WORDS       = 131072;
   localparam int DMA_LATENCY_CYCLES   = 4;
   localparam int STREAM_LATENCY_CYCLES = 6;
+  localparam int TB_DEBUG_MODE         = 1; // <----- DEBUG MODE FLAG
   localparam int CTRL_START_HOLD_CYCLES = 24;
   localparam int RAM_REGION_WORDS      = 65536;
   `include "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/generated_mem_map.svh"
@@ -77,6 +78,7 @@ module top_module_hls_tb;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
+  localparam logic [31:0] CTRL_DEBUG_MODE_BIT = 32'h0000_0008;
 
   typedef struct packed {
     logic [31:0] control;
@@ -399,13 +401,14 @@ module top_module_hls_tb;
   } axi_state_t;
   axi_state_t axi_state;
 
-  typedef enum logic [2:0] {
+  typedef enum logic [3:0] {
     CTRL_RESET_MEM,
     CTRL_ASSERT_RESET,
     CTRL_DEASSERT_RESET,
     CTRL_PROGRAM_BASES,
-    CTRL_ASSERT_AP_START,
+    CTRL_ASSERT_DEBUG_MODE,
     CTRL_ASSERT_START,
+    CTRL_ASSERT_AP_START,
     CTRL_CLEAR_START,
     CTRL_DONE
   } ctrl_init_stage_t;
@@ -541,6 +544,10 @@ module top_module_hls_tb;
       3'd5: status_mem_addr = ADDR_STATUS_MEM_DATA_5;
       default: status_mem_addr = ADDR_STATUS_MEM_DATA_6;
     endcase
+  endfunction
+
+  function automatic [31:0] ctrl_debug_bits();
+    ctrl_debug_bits = TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 32'd0;
   endfunction
 
   function automatic [63:0] ctrl_base_addr64(input int lo_idx, input int hi_idx);
@@ -2181,21 +2188,29 @@ module top_module_hls_tb;
           ctrl_data_in <= ctrl_init_words[prog_word_idx];
           ctrl_words[prog_word_idx] <= ctrl_init_words[prog_word_idx];
           if (base_assign_step >= (CTRL_MEM_WORDS - 2)) begin
-            // IMPORTANT: program ctrl_mem.control START before ap_start so HLS kernel
-            // snapshots control args with START already high.
-            ctrl_stage <= CTRL_ASSERT_START;
+            ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_START;
           end else begin
             base_assign_step <= base_assign_step + 1;
           end
           ctrl_gap_cycles <= 2;
         end
-        CTRL_ASSERT_START: begin
+        CTRL_ASSERT_DEBUG_MODE: begin
           ctrl_addr <= ctrl_mem_addr(0);
-          ctrl_data_in <= 32'h0000_0003;
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
-          ctrl_shadow_control <= 32'h0000_0003;
-          ctrl_words[0] <= 32'h0000_0003;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_stage <= CTRL_ASSERT_START;
+          ctrl_gap_cycles <= 4;
+        end
+        CTRL_ASSERT_START: begin
+          ctrl_addr <= ctrl_mem_addr(0);
+          ctrl_data_in <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
+          ctrl_write_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
           ctrl_stage <= CTRL_ASSERT_AP_START;
           ctrl_gap_cycles <= 4;
         end
@@ -2209,11 +2224,11 @@ module top_module_hls_tb;
         end
         CTRL_CLEAR_START: begin
           ctrl_addr <= ctrl_mem_addr(0);
-          ctrl_data_in <= 32'h0000_0001;
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
-          ctrl_shadow_control <= 32'h0000_0001;
-          ctrl_words[0] <= 32'h0000_0001;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_stage <= CTRL_DONE;
           ctrl_gap_cycles <= 1;
         end
