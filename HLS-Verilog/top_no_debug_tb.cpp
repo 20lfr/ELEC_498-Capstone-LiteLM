@@ -22,6 +22,8 @@
 #define TOP_NO_DEBUG_TB_LOG_SUBDIR "top_no_debug"
 #endif
 
+constexpr bool TB_DEBUG_MODE = true;
+
 static bool ensure_dir_recursive(const char *dir) {
     char path[512];
     std::snprintf(path, sizeof(path), "%s", dir);
@@ -337,6 +339,8 @@ static const char *status_name(uint32_t status) {
         return "S_ARGMAX";
     case S_STREAM_OUT:
         return "S_STREAM_OUT";
+    case S_DEBUG:
+        return "S_DEBUG";
     default:
         return "UNKNOWN";
     }
@@ -376,6 +380,8 @@ static const char *sched_state_name(uint32_t state) {
         return "S_ARGMAX";
     case S_STREAM_OUT:
         return "S_STREAM_OUT";
+    case S_DEBUG:
+        return "S_DEBUG";
     default:
         return "S_UNKNOWN";
     }
@@ -584,6 +590,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     int  post_done_cycles= 0;
     bool seen_idle_after = false;
     bool aborted_on_error = false;
+    bool debug_output_match = false;
     int  base_assign_step = 0;
 
     if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
@@ -603,6 +610,15 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     {
         print_token_vector(selected_stream_token, stream_in_buf,
                            static_cast<size_t>(STREAM_TOKEN_BYTES));
+    }
+    int32_t expected_debug_sum = 0;
+    if (TB_DEBUG_MODE) {
+        for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+            expected_debug_sum += static_cast<int32_t>(static_cast<int8_t>(stream_in_buf[i]));
+        }
+        std::printf("[TEST] debug sum expected=%d (0x%08X)\n",
+                    expected_debug_sum,
+                    static_cast<unsigned>(static_cast<uint32_t>(expected_debug_sum)));
     }
 
     enum class CtrlInitStage {
@@ -625,13 +641,18 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     int  test_errors_passed = 0;
     int  test_errors_failed = 0;
 
-    uint32_t ctrl_shadow_control = 0;
-    int ctrl_gap_cycles = 0;
-    bool seen_irq_done = false;
-
     ControlMemSpace ctrl_mem{};
     StatusMemSpace status_mem{};
     SchedState dbg_state = S_IDLE;
+    uint32_t control_reg = 0;
+    uint32_t ctrl_shadow_control = 0;
+    int ctrl_gap_cycles = 0;
+    bool seen_irq_done = false;
+    auto set_control = [&](uint32_t value) {
+        const uint32_t control = value | (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 0u);
+        ctrl_mem.control = control;
+        ctrl_shadow_control = control;
+    };
     // Tracking previous status for change-based logging
     uint32_t prev_status = 0;
     uint32_t prev_irq_status = 0;
@@ -654,8 +675,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             ctrl_gap_cycles--;
         } else if (ctrl_stage == CtrlInitStage::TestCtrlInit) {
             ctrl_mem = ctrl_mem_init(true);
-            ctrl_mem.control = CTRL_RESETN_BIT;
-            ctrl_shadow_control = CTRL_RESETN_BIT;
+            set_control(CTRL_RESETN_BIT);
             std::printf("[TEST] Starting ControlMemInterface error tests...\n");
             ctrl_stage = CtrlInitStage::TestZeroStride;
             ctrl_gap_cycles = 1;
@@ -714,13 +734,11 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
 
         } else if (ctrl_stage == CtrlInitStage::AssertReset) {
             ctrl_mem = ctrl_mem_init(false);
-            ctrl_mem.control = 0x00000000;
-            ctrl_shadow_control = 0x00000000;
+            set_control(0x00000000);
             ctrl_stage = CtrlInitStage::DeassertReset;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::DeassertReset) {
-            ctrl_mem.control = CTRL_RESETN_BIT;
-            ctrl_shadow_control = CTRL_RESETN_BIT;
+            set_control(CTRL_RESETN_BIT);
             ctrl_stage = CtrlInitStage::ProgramBases;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::ProgramBases) {
@@ -749,16 +767,14 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             }
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::AssertStart) {
-            ctrl_mem.control = CTRL_RESETN_BIT | CTRL_START_BIT;
-            ctrl_shadow_control = CTRL_RESETN_BIT | CTRL_START_BIT;
+            set_control(CTRL_RESETN_BIT | CTRL_START_BIT);
             reset_released = true;
             start_pulsed   = true;
             pending_start_clear = true;
             ctrl_stage = CtrlInitStage::ClearStart;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::ClearStart) {
-            ctrl_mem.control = CTRL_RESETN_BIT;
-            ctrl_shadow_control = CTRL_RESETN_BIT;
+            set_control(CTRL_RESETN_BIT);
             pending_start_clear = false;
             ctrl_stage = CtrlInitStage::Done;
             ctrl_gap_cycles = 1;
@@ -833,7 +849,8 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             ctrl_mem,
             status_mem,
             irq_ps,
-            dbg_state
+            dbg_state,
+            control_reg
         );
 
         // Drain AXI stream output
@@ -855,6 +872,16 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
                     (static_cast<uint32_t>(stream_out_buf[2]) << 16) |
                     (static_cast<uint32_t>(stream_out_buf[3]) << 24));
                 std::printf("(index=%d)\n", token_id);
+                if (TB_DEBUG_MODE) {
+                    if (token_id != expected_debug_sum) {
+                        std::fprintf(stderr,
+                                     "ERROR: Debug sum mismatch for token %zu: expected=%d observed=%d\n",
+                                     selected_stream_token, expected_debug_sum, token_id);
+                        debug_output_match = false;
+                    } else {
+                        debug_output_match = true;
+                    }
+                }
                 stream_out_count = 0;
                 stream_out_token_index++;
             }
@@ -926,11 +953,13 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
         }
     }
 
-    bool ok = !aborted_on_error && seen_stream_out && (idle_after_stream >= 4);
+    bool ok = !aborted_on_error && seen_stream_out && (idle_after_stream >= 4) &&
+              (!TB_DEBUG_MODE || debug_output_match);
 
     if (!ok) {
         if (!seen_stream_out) std::fprintf(stderr, "ERROR: Inference done never reached\n");
         if (idle_after_stream < 4) std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after done\n");
+        if (!debug_output_match) std::fprintf(stderr, "ERROR: Debug output mismatch detected\n");
         return 1;
     }
 

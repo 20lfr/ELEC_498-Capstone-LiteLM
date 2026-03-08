@@ -146,7 +146,7 @@ transformer_top_p_anonymous_namespace_zero_region_chunks_Pipeline_VITIS_LOOP_115
     .def_WIDTH( 32 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 32 ))
-sparsemux_9_2_32_1_1_U2954(
+sparsemux_9_2_32_1_1_U2957(
     .din0(chunks_size_read),
     .din1(chunks_size_read_4),
     .din2(chunks_size_read_5),

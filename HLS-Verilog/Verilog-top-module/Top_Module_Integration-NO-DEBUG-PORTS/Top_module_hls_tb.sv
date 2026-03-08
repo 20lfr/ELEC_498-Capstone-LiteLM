@@ -6,12 +6,16 @@ module top_module_hls_tb;
   localparam int CTRL_MEM_WORDS       = 40;
   localparam int DBG_CTRL_MEM_WORDS   = 40;
   localparam int STREAM_IN_BUF_BYTES  = 16;
+  localparam int MAX_STREAM_TOKENS    = 256;
+  localparam int STREAM_IN_FILE_BYTES_MAX = STREAM_IN_BUF_BYTES * MAX_STREAM_TOKENS;
   localparam int STREAM_OUT_BUF_BYTES = 64;
   localparam int TOP_DMA_BUF_WORDS    = 16384;
   localparam int KV_STORE_WORDS       = 131072;
   localparam int DMA_LATENCY_CYCLES   = 4;
   localparam int STREAM_LATENCY_CYCLES = 6;
-  localparam int CTRL_START_HOLD_CYCLES = 24;
+  localparam int TB_DEBUG_MODE         = 1; // <----- DEBUG MODE FLAG
+  localparam int CTRL_START_HOLD_CYCLES = 48;
+  localparam int CTRL_CTRL_GAP_CYCLES   = 8;
   localparam int RAM_REGION_WORDS      = 65536;
   `include "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/generated_mem_map.svh"
   localparam int TB_HEADS_PARALLEL     = 2;
@@ -77,6 +81,9 @@ module top_module_hls_tb;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
+  localparam logic [31:0] CTRL_DEBUG_MODE_BIT = 32'h0000_0008;
+  localparam logic [31:0] IRQ_ERROR_BIT = 32'h0000_0002;
+  localparam logic [31:0] IRQ_INFER_DONE_BIT = 32'h0000_0004;
 
   typedef struct packed {
     logic [31:0] control;
@@ -251,6 +258,10 @@ module top_module_hls_tb;
   logic         dbg_error_code_ap_vld;
 
   logic [0:0] irq_ps;
+  logic [0:0] irq_ps_shadow;
+  logic [0:0] irq_ps_prev;
+  logic [31:0] dbg_state_prev;
+  logic [31:0] control_reg_prev;
   logic [7:0]  stream_in_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0]  stream_out_mem[0:STREAM_OUT_BUF_BYTES-1];
   logic [31:0] dma_rx_mem    [0:TOP_DMA_BUF_WORDS-1];
@@ -310,7 +321,11 @@ module top_module_hls_tb;
   dbg_control_mem_t dbg_ctrl_mem_shadow;
   byte unsigned ctrl_mem_file_bytes [0:(CTRL_MEM_WORDS*4)-1];
   byte unsigned ddr_image_bytes [0:('h43000)-1];
-  byte unsigned stream_in_file_bytes [0:STREAM_IN_BUF_BYTES-1];
+  byte unsigned stream_in_file_bytes [0:STREAM_IN_FILE_BYTES_MAX-1];
+  integer total_stream_tokens;
+  integer current_stream_token;
+  logic next_token_pending;
+  logic launch_next_token;
 
   // AXI ctrl_mem word map for the current 40-word ControlMemSpace.
   localparam int CTRLW_CONTROL            = 0;
@@ -399,13 +414,15 @@ module top_module_hls_tb;
   } axi_state_t;
   axi_state_t axi_state;
 
-  typedef enum logic [2:0] {
+  typedef enum logic [3:0] {
     CTRL_RESET_MEM,
     CTRL_ASSERT_RESET,
     CTRL_DEASSERT_RESET,
     CTRL_PROGRAM_BASES,
-    CTRL_ASSERT_AP_START,
+    CTRL_RELAUNCH_PREP,
+    CTRL_ASSERT_DEBUG_MODE,
     CTRL_ASSERT_START,
+    CTRL_ASSERT_AP_START,
     CTRL_CLEAR_START,
     CTRL_DONE
   } ctrl_init_stage_t;
@@ -444,8 +461,6 @@ module top_module_hls_tb;
   logic        irq_pending;
   logic        irq_seen_done;
   logic        irq_seen_error;
-  logic        irq_seen_done_clr;
-  logic        irq_seen_error_clr;
   logic        irq_req_valid;
   logic        irq_req_read;
   logic [7:0]  irq_req_addr;
@@ -542,6 +557,21 @@ module top_module_hls_tb;
       default: status_mem_addr = ADDR_STATUS_MEM_DATA_6;
     endcase
   endfunction
+
+  function automatic [31:0] ctrl_debug_bits();
+    ctrl_debug_bits = TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 32'd0;
+  endfunction
+
+  task automatic load_stream_token(input int token_idx);
+    int base_idx;
+    int j;
+    begin
+      base_idx = token_idx * STREAM_IN_BUF_BYTES;
+      for (j = 0; j < STREAM_IN_BUF_BYTES; j = j + 1) begin
+        stream_in_mem[j] = stream_in_file_bytes[base_idx + j];
+      end
+    end
+  endtask
 
   function automatic [63:0] ctrl_base_addr64(input int lo_idx, input int hi_idx);
     if (lo_idx == hi_idx) begin
@@ -1794,6 +1824,12 @@ module top_module_hls_tb;
       stream_fill_idx    <= '0;
       stream_gap_countdown <= '0;
     end else begin
+      if (launch_next_token) begin
+        axis_packet_sent   <= 1'b0;
+        stream_fill_active <= 1'b0;
+        stream_fill_idx    <= '0;
+        stream_gap_countdown <= '0;
+      end
       if (stream_fill_active && (stream_gap_countdown != 0)) begin
         stream_gap_countdown <= stream_gap_countdown - 1'b1;
       end
@@ -1828,6 +1864,11 @@ module top_module_hls_tb;
       stream_out_last_seen <= 1'b0;
       stream_out_token     <= 32'sd0;
     end else begin
+      if (launch_next_token) begin
+        stream_out_count     <= 0;
+        stream_out_last_seen <= 1'b0;
+        stream_out_token     <= 32'sd0;
+      end
       if (m_axis_out_TVALID && m_axis_out_TREADY) begin
         if (stream_out_count < STREAM_OUT_BUF_BYTES) begin
           stream_out_mem[stream_out_count] <= m_axis_out_TDATA;
@@ -1960,19 +2001,29 @@ module top_module_hls_tb;
   end
 
   // Track IRQ status and decoded done/error flags.
+  always_ff @(posedge ap_clk) begin : IRQ_SHADOW_TRACKER
+    if (!ap_rst_n) begin
+      irq_ps_shadow <= 1'b0;
+      irq_ps_prev   <= 1'b0;
+    end else begin
+      if ((irq_ps[0] === 1'b0) || (irq_ps[0] === 1'b1)) begin
+        if (irq_ps !== irq_ps_prev) begin
+          irq_ps_shadow <= irq_ps;
+          irq_ps_prev   <= irq_ps;
+        end
+      end
+    end
+  end
+
   always_ff @(posedge ap_clk) begin : IRQ_TRACKER
     if (!ap_rst_n) begin
       irq_pending <= 1'b0;
       irq_seen_done <= 1'b0;
       irq_seen_error <= 1'b0;
-      irq_seen_done_clr <= 1'b0;
-      irq_seen_error_clr <= 1'b0;
       error_code_lat <= 32'd0;
       status_mem_shadow <= '0;
     end else begin
-      irq_seen_done_clr <= 1'b0;
-      irq_seen_error_clr <= 1'b0;
-      if (irq_ps[0]) begin
+      if (irq_ps_shadow[0]) begin
         irq_pending <= 1'b1;
       end
       if (axi_read_valid) begin
@@ -1988,16 +2039,16 @@ module top_module_hls_tb;
         endcase
       end
       if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_1)) begin
-        if (axi_rdata[0]) irq_seen_done <= 1'b1;
+        if (axi_rdata[2]) irq_seen_done <= 1'b1;
         if (axi_rdata[1]) irq_seen_error <= 1'b1;
       end
       if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_2)) begin
         error_code_lat <= axi_rdata;
       end
-      if (irq_seen_done_clr) begin
+      if (done_req_fire) begin
         irq_seen_done <= 1'b0;
       end
-      if (irq_seen_error_clr) begin
+      if (error_req_fire && error_req_write) begin
         irq_seen_error <= 1'b0;
       end
       if (!irq_seen_done && !irq_seen_error && (irq_read_phase == IRQ_RD_DONE)) begin
@@ -2059,10 +2110,31 @@ module top_module_hls_tb;
         done_req_valid <= 1'b1;
         done_req_write <= 1'b1;
         done_req_addr  <= ctrl_mem_addr(2); // irq_clear
-        done_req_wdata <= 32'h0000_0001;
-        if (done_req_fire) begin
-          irq_seen_done_clr <= 1'b1;
-        end
+        done_req_wdata <= IRQ_INFER_DONE_BIT;
+      end
+    end
+  end
+
+  always_ff @(posedge ap_clk) begin : TOKEN_MANAGER
+    if (!ap_rst_n) begin
+      current_stream_token <= 0;
+      next_token_pending   <= 1'b0;
+      launch_next_token    <= 1'b0;
+    end else begin
+      launch_next_token <= 1'b0;
+      if (irq_seen_done && !next_token_pending && ((current_stream_token + 1) < total_stream_tokens)) begin
+        next_token_pending <= 1'b1;
+      end
+      if (next_token_pending &&
+          !irq_ps_shadow[0] && !irq_pending && !irq_seen_done && !irq_seen_error &&
+          (ctrl_stage == CTRL_DONE) && (axi_state == AXI_IDLE) && (ctrl_gap_cycles == 0)) begin
+        $display("[TOKEN-MANAGER] cycle=%0d launching next token: current=%0d next=%0d dbg_state=%0d status=0x%08h irq_ps_shadow=%0b irq_pending=%0b",
+                 cycle_count, current_stream_token, current_stream_token + 1, dbg_state,
+                 status_mem_shadow.status, irq_ps_shadow[0], irq_pending);
+        current_stream_token <= current_stream_token + 1;
+        load_stream_token(current_stream_token + 1);
+        next_token_pending <= 1'b0;
+        launch_next_token <= 1'b1;
       end
     end
   end
@@ -2097,9 +2169,8 @@ module top_module_hls_tb;
           error_req_valid <= 1'b1;
           error_req_write <= 1'b1;
           error_req_addr  <= ctrl_mem_addr(2); // irq_clear
-          error_req_wdata <= 32'h0000_0002;
+          error_req_wdata <= IRQ_ERROR_BIT;
           if (error_req_fire) begin
-            irq_seen_error_clr <= 1'b1;
             err_phase <= ERR_PHASE_READ;
           end
         end
@@ -2142,6 +2213,13 @@ module top_module_hls_tb;
       ctrl_write_en <= error_req_write;
       ctrl_chip_en  <= 1'b1;
       ctrl_gap_cycles <= 1;
+    end else if (launch_next_token) begin
+      $display("[START-FSM] cycle=%0d relaunch token=%0d -> ctrl_stage=%s dbg_state=%0d status=0x%08h",
+               cycle_count, current_stream_token + 1,
+               "CTRL_RELAUNCH_PREP",
+               dbg_state, status_mem_shadow.status);
+      ctrl_stage <= CTRL_RELAUNCH_PREP;
+      ctrl_gap_cycles <= 1;
     end else if (ctrl_gap_cycles > 0) begin
       ctrl_gap_cycles <= ctrl_gap_cycles - 1;
     end else if (axi_state != AXI_IDLE) begin
@@ -2181,25 +2259,54 @@ module top_module_hls_tb;
           ctrl_data_in <= ctrl_init_words[prog_word_idx];
           ctrl_words[prog_word_idx] <= ctrl_init_words[prog_word_idx];
           if (base_assign_step >= (CTRL_MEM_WORDS - 2)) begin
-            // IMPORTANT: program ctrl_mem.control START before ap_start so HLS kernel
-            // snapshots control args with START already high.
-            ctrl_stage <= CTRL_ASSERT_START;
+            ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_START;
           end else begin
             base_assign_step <= base_assign_step + 1;
           end
           ctrl_gap_cycles <= 2;
         end
-        CTRL_ASSERT_START: begin
+        CTRL_RELAUNCH_PREP: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(relaunch-prep)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
+                   dbg_state, status_mem_shadow.status);
           ctrl_addr <= ctrl_mem_addr(0);
-          ctrl_data_in <= 32'h0000_0003;
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
-          ctrl_shadow_control <= 32'h0000_0003;
-          ctrl_words[0] <= 32'h0000_0003;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_ASSERT_DEBUG_MODE: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(debug)=0x%08h",
+                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits());
+          ctrl_addr <= ctrl_mem_addr(0);
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_write_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_stage <= CTRL_ASSERT_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_ASSERT_START: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(start)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token,
+                   CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
+                   dbg_state, status_mem_shadow.status);
+          ctrl_addr <= ctrl_mem_addr(0);
+          ctrl_data_in <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
+          ctrl_write_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
           ctrl_stage <= CTRL_ASSERT_AP_START;
-          ctrl_gap_cycles <= 4;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
         CTRL_ASSERT_AP_START: begin
+          $display("[CTRL] cycle=%0d token=%0d write ap_start=0x00000081 dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token, dbg_state, status_mem_shadow.status);
           ctrl_addr <= ADDR_AP_CTRL;
           ctrl_data_in <= 32'h0000_0081;
           ctrl_write_en <= 1'b1;
@@ -2208,18 +2315,19 @@ module top_module_hls_tb;
           ctrl_gap_cycles <= CTRL_START_HOLD_CYCLES;
         end
         CTRL_CLEAR_START: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(clear-start)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
+                   dbg_state, status_mem_shadow.status);
           ctrl_addr <= ctrl_mem_addr(0);
-          ctrl_data_in <= 32'h0000_0001;
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
-          ctrl_shadow_control <= 32'h0000_0001;
-          ctrl_words[0] <= 32'h0000_0001;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_stage <= CTRL_DONE;
-          ctrl_gap_cycles <= 1;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
         CTRL_DONE: begin
-          // Cycle through the full status_mem shadow so each field refreshes
-          // in waveforms while the control bus is otherwise idle.
           ctrl_addr <= status_mem_addr(status_poll_idx);
           ctrl_read_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
@@ -2238,7 +2346,7 @@ module top_module_hls_tb;
     if (dbg_error[0]) begin
       $finish;
     end
-    if (irq_seen_done) begin
+    if (irq_seen_done && ((current_stream_token + 1) >= total_stream_tokens)) begin
       $finish;
     end
 
@@ -2251,7 +2359,20 @@ module top_module_hls_tb;
   // Print debug mirror updates when DUT marks outputs valid.
   always_ff @(posedge ap_clk) begin : p_debug_vld_monitor
     if (!ap_rst_n) begin
-      // no-op
+      dbg_state_prev <= 32'd0;
+      control_reg_prev <= 32'd0;
+    end else begin
+      if (dbg_state != dbg_state_prev) begin
+        $display("[DBG-STATE] cycle=%0d token=%0d dbg_state %0d -> %0d status=0x%08h irq=0x%08h error=0x%08h",
+                 cycle_count, current_stream_token, dbg_state_prev, dbg_state,
+                 status_mem_shadow.status, status_mem_shadow.irq_status, status_mem_shadow.error_code);
+        dbg_state_prev <= dbg_state;
+      end
+      if (control_reg_ap_vld && (control_reg != control_reg_prev)) begin
+        $display("[CONTROL-REG] cycle=%0d token=%0d control_reg 0x%08h -> 0x%08h",
+                 cycle_count, current_stream_token, control_reg_prev, control_reg);
+        control_reg_prev <= control_reg;
+      end
     end
   end
 
@@ -2274,64 +2395,11 @@ module top_module_hls_tb;
     m_axi_gmem_BRESP  = 2'b00;
     m_axi_gmem_BID    = 1'b0;
 
-    s_axi_control_AWADDR  = '0;
-    s_axi_control_AWVALID = 1'b0;
-    s_axi_control_WVALID  = 1'b0;
-    s_axi_control_WDATA   = '0;
-    s_axi_control_WSTRB   = 4'h0;
-    s_axi_control_ARADDR  = '0;
-    s_axi_control_ARVALID = 1'b0;
-    s_axi_control_RREADY  = 1'b0;
-    s_axi_control_BREADY  = 1'b0;
-
-    cycle_count       = 0;
-    axis_packet_sent  = 1'b0;
-    stream_fill_active = 1'b0;
-    stream_fill_idx    = '0;
-    stream_gap_countdown = '0;
-    stream_out_count   = 0;
-    stream_out_last_seen = 1'b0;
-    stream_out_token   = 32'sd0;
-
-    axi_aw_active       = 1'b0;
-    axi_aw_addr_latched = 64'd0;
-    axi_aw_len_latched  = 8'd0;
-    axi_aw_size_latched = 3'd2;
-    axi_w_beats_seen    = 8'd0;
-    axi_bid_latched     = 1'b0;
-    axi_bresp_latched   = 2'b00;
-    axi_ar_active       = 1'b0;
-    axi_ar_addr_latched = 64'd0;
-    axi_ar_len_latched  = 8'd0;
-    axi_ar_size_latched = 3'd2;
-    axi_r_beats_sent    = 8'd0;
-    axi_rid_latched     = 1'b0;
-    ctrl_stage         = CTRL_RESET_MEM;
-    ctrl_gap_cycles    = 0;
-    base_assign_step   = 0;
-    ctrl_shadow_control = 32'd0;
-    axi_state          = AXI_IDLE;
-    irq_pending        = 1'b0;
-    irq_seen_done      = 1'b0;
-    irq_seen_error     = 1'b0;
-    irq_seen_done_clr  = 1'b0;
-    irq_seen_error_clr = 1'b0;
-    status_mem_shadow = '0;
-    irq_req_valid      = 1'b0;
-    done_req_valid     = 1'b0;
-    error_req_valid    = 1'b0;
-    irq_read_phase     = IRQ_RD_STATUS;
-    err_phase          = ERR_PHASE_READ;
-    status_poll_idx    = 3'd0;
-    ctrl_addr          = '0;
-    ctrl_data_in       = '0;
-    ctrl_read_en       = 1'b0;
-    ctrl_write_en      = 1'b0;
-    ctrl_chip_en       = 1'b0;
-
+    for (i = 0; i < STREAM_IN_FILE_BYTES_MAX; i = i + 1) begin
+      stream_in_file_bytes[i] = 8'h00;
+    end
     for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
       stream_in_mem[i] = 8'h00;
-      stream_in_file_bytes[i] = 8'h00;
     end
     for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
       ctrl_words[i] = 32'h0000_0000;
@@ -2376,9 +2444,17 @@ module top_module_hls_tb;
     if (bytes_read <= 0) begin
       $fatal(1, "Failed to read stream_in.bin");
     end
-    for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
-      stream_in_mem[i] = stream_in_file_bytes[i];
+    if (bytes_read > STREAM_IN_FILE_BYTES_MAX) begin
+      $fatal(1, "stream_in.bin too large for testbench buffer");
     end
+    if ((bytes_read % STREAM_IN_BUF_BYTES) != 0) begin
+      $fatal(1, "stream_in.bin size is not a whole number of tokens");
+    end
+    total_stream_tokens = bytes_read / STREAM_IN_BUF_BYTES;
+    if (total_stream_tokens <= 0) begin
+      $fatal(1, "stream_in.bin contains zero tokens");
+    end
+    load_stream_token(0);
 
     file_fd = $fopen("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/ddr_image.bin", "rb");
     if (file_fd == 0) begin
@@ -2414,466 +2490,6 @@ module top_module_hls_tb;
     repeat (8) @(posedge ap_clk);
     ap_rst_n = 1'b1;
   end
-
-  /* generate
-    if (HAS_DEBUG_PORTS) begin : g_dut_with_debug
-      transformer_top dut (
-        .ap_clk(ap_clk),
-        .ap_rst_n(ap_rst_n),
-
-        .m_axi_gmem_AWVALID(m_axi_gmem_AWVALID),
-        .m_axi_gmem_AWREADY(m_axi_gmem_AWREADY),
-        .m_axi_gmem_AWADDR(m_axi_gmem_AWADDR),
-        .m_axi_gmem_AWID(m_axi_gmem_AWID),
-        .m_axi_gmem_AWLEN(m_axi_gmem_AWLEN),
-        .m_axi_gmem_AWSIZE(m_axi_gmem_AWSIZE),
-        .m_axi_gmem_AWBURST(m_axi_gmem_AWBURST),
-        .m_axi_gmem_AWLOCK(m_axi_gmem_AWLOCK),
-        .m_axi_gmem_AWCACHE(m_axi_gmem_AWCACHE),
-        .m_axi_gmem_AWPROT(m_axi_gmem_AWPROT),
-        .m_axi_gmem_AWQOS(m_axi_gmem_AWQOS),
-        .m_axi_gmem_AWREGION(m_axi_gmem_AWREGION),
-        .m_axi_gmem_AWUSER(m_axi_gmem_AWUSER),
-        .m_axi_gmem_WVALID(m_axi_gmem_WVALID),
-        .m_axi_gmem_WREADY(m_axi_gmem_WREADY),
-        .m_axi_gmem_WDATA(m_axi_gmem_WDATA),
-        .m_axi_gmem_WSTRB(m_axi_gmem_WSTRB),
-        .m_axi_gmem_WLAST(m_axi_gmem_WLAST),
-        .m_axi_gmem_WID(m_axi_gmem_WID),
-        .m_axi_gmem_WUSER(m_axi_gmem_WUSER),
-        .m_axi_gmem_ARVALID(m_axi_gmem_ARVALID),
-        .m_axi_gmem_ARREADY(m_axi_gmem_ARREADY),
-        .m_axi_gmem_ARADDR(m_axi_gmem_ARADDR),
-        .m_axi_gmem_ARID(m_axi_gmem_ARID),
-        .m_axi_gmem_ARLEN(m_axi_gmem_ARLEN),
-        .m_axi_gmem_ARSIZE(m_axi_gmem_ARSIZE),
-        .m_axi_gmem_ARBURST(m_axi_gmem_ARBURST),
-        .m_axi_gmem_ARLOCK(m_axi_gmem_ARLOCK),
-        .m_axi_gmem_ARCACHE(m_axi_gmem_ARCACHE),
-        .m_axi_gmem_ARPROT(m_axi_gmem_ARPROT),
-        .m_axi_gmem_ARQOS(m_axi_gmem_ARQOS),
-        .m_axi_gmem_ARREGION(m_axi_gmem_ARREGION),
-        .m_axi_gmem_ARUSER(m_axi_gmem_ARUSER),
-        .m_axi_gmem_RVALID(m_axi_gmem_RVALID),
-        .m_axi_gmem_RREADY(m_axi_gmem_RREADY),
-        .m_axi_gmem_RDATA(m_axi_gmem_RDATA),
-        .m_axi_gmem_RLAST(m_axi_gmem_RLAST),
-        .m_axi_gmem_RID(m_axi_gmem_RID),
-        .m_axi_gmem_RUSER(m_axi_gmem_RUSER),
-        .m_axi_gmem_RRESP(m_axi_gmem_RRESP),
-        .m_axi_gmem_BVALID(m_axi_gmem_BVALID),
-        .m_axi_gmem_BREADY(m_axi_gmem_BREADY),
-        .m_axi_gmem_BRESP(m_axi_gmem_BRESP),
-        .m_axi_gmem_BID(m_axi_gmem_BID),
-        .m_axi_gmem_BUSER(m_axi_gmem_BUSER),
-
-        .s_axis_in_TDATA(s_axis_in_TDATA),
-        .s_axis_in_TVALID(s_axis_in_TVALID),
-        .s_axis_in_TREADY(s_axis_in_TREADY),
-        .s_axis_in_TKEEP(s_axis_in_TKEEP),
-        .s_axis_in_TSTRB(s_axis_in_TSTRB),
-        .s_axis_in_TLAST(s_axis_in_TLAST),
-
-        .m_axis_out_TDATA(m_axis_out_TDATA),
-        .m_axis_out_TVALID(m_axis_out_TVALID),
-        .m_axis_out_TREADY(m_axis_out_TREADY),
-        .m_axis_out_TKEEP(m_axis_out_TKEEP),
-        .m_axis_out_TSTRB(m_axis_out_TSTRB),
-        .m_axis_out_TLAST(m_axis_out_TLAST),
-
-        .irq_ps(irq_ps),
-
-        .dbg_state(dbg_state),
-        .dbg_state_ap_vld(dbg_state_ap_vld),
-        .dbg_head_ctx_ref_0(dbg_head_ctx_ref_0),
-        .dbg_head_ctx_ref_0_ap_vld(dbg_head_ctx_ref_0_ap_vld),
-        .dbg_head_ctx_ref_1(dbg_head_ctx_ref_1),
-        .dbg_head_ctx_ref_1_ap_vld(dbg_head_ctx_ref_1_ap_vld),
-        .dbg_head_compute_ctx_0(dbg_head_compute_ctx_0),
-        .dbg_head_compute_ctx_0_ap_vld(dbg_head_compute_ctx_0_ap_vld),
-        .dbg_head_compute_ctx_1(dbg_head_compute_ctx_1),
-        .dbg_head_compute_ctx_1_ap_vld(dbg_head_compute_ctx_1_ap_vld),
-
-        .dbg_ctrl_mem(dbg_ctrl_mem),
-        .dbg_ctrl_mem_ap_vld(dbg_ctrl_mem_ap_vld),
-        .control_reg(control_reg),
-        .control_reg_ap_vld(control_reg_ap_vld),
-        .irq_status_reg(irq_status_reg),
-        .irq_status_reg_ap_vld(irq_status_reg_ap_vld),
-        .irq_mask_reg(irq_mask_reg),
-        .irq_mask_reg_ap_vld(irq_mask_reg_ap_vld),
-        .irq_clear_reg(irq_clear_reg),
-        .irq_clear_reg_ap_vld(irq_clear_reg_ap_vld),
-        .wq_base_addr(wq_base_addr),
-        .wq_base_addr_ap_vld(wq_base_addr_ap_vld),
-        .wk_base_addr(wk_base_addr),
-        .wk_base_addr_ap_vld(wk_base_addr_ap_vld),
-        .wv_base_addr(wv_base_addr),
-        .wv_base_addr_ap_vld(wv_base_addr_ap_vld),
-        .wo_base_addr(wo_base_addr),
-        .wo_base_addr_ap_vld(wo_base_addr_ap_vld),
-        .w1_base_addr(w1_base_addr),
-        .w1_base_addr_ap_vld(w1_base_addr_ap_vld),
-        .w2_base_addr(w2_base_addr),
-        .w2_base_addr_ap_vld(w2_base_addr_ap_vld),
-        .wq_head_stride(wq_head_stride),
-        .wq_head_stride_ap_vld(wq_head_stride_ap_vld),
-        .wk_head_stride(wk_head_stride),
-        .wk_head_stride_ap_vld(wk_head_stride_ap_vld),
-        .wv_head_stride(wv_head_stride),
-        .wv_head_stride_ap_vld(wv_head_stride_ap_vld),
-        .wo_tile_stride(wo_tile_stride),
-        .wo_tile_stride_ap_vld(wo_tile_stride_ap_vld),
-        .w1_tile_stride(w1_tile_stride),
-        .w1_tile_stride_ap_vld(w1_tile_stride_ap_vld),
-        .w2_tile_stride(w2_tile_stride),
-        .w2_tile_stride_ap_vld(w2_tile_stride_ap_vld),
-
-        .dbg_compute_start(dbg_compute_start),
-        .dbg_compute_start_ap_vld(dbg_compute_start_ap_vld),
-        .dbg_compute_instruction(dbg_compute_instruction),
-        .dbg_compute_instruction_ap_vld(dbg_compute_instruction_ap_vld),
-        .dbg_compute_ready(dbg_compute_ready),
-        .dbg_compute_ready_ap_vld(dbg_compute_ready_ap_vld),
-        .dbg_compute_done(dbg_compute_done),
-        .dbg_compute_done_ap_vld(dbg_compute_done_ap_vld),
-        .dbg_compute_state(dbg_compute_state),
-        .dbg_compute_state_ap_vld(dbg_compute_state_ap_vld),
-        .dbg_req_instruction(dbg_req_instruction),
-        .dbg_req_instruction_ap_vld(dbg_req_instruction_ap_vld),
-        .dbg_req_op(dbg_req_op),
-        .dbg_req_op_ap_vld(dbg_req_op_ap_vld),
-        .dbg_req_layer(dbg_req_layer),
-        .dbg_req_layer_ap_vld(dbg_req_layer_ap_vld),
-        .dbg_req_head(dbg_req_head),
-        .dbg_req_head_ap_vld(dbg_req_head_ap_vld),
-        .dbg_req_tile(dbg_req_tile),
-        .dbg_req_tile_ap_vld(dbg_req_tile_ap_vld),
-        .dbg_mac_start(dbg_mac_start),
-        .dbg_mac_start_ap_vld(dbg_mac_start_ap_vld),
-        .dbg_mac_ready(dbg_mac_ready),
-        .dbg_mac_ready_ap_vld(dbg_mac_ready_ap_vld),
-        .dbg_mac_complete(dbg_mac_complete),
-        .dbg_mac_complete_ap_vld(dbg_mac_complete_ap_vld),
-        .dbg_ctrl_reset_asserted(dbg_ctrl_reset_asserted),
-        .dbg_ctrl_reset_asserted_ap_vld(dbg_ctrl_reset_asserted_ap_vld),
-        .dbg_head_group_idx(dbg_head_group_idx),
-        .dbg_head_group_idx_ap_vld(dbg_head_group_idx_ap_vld),
-
-        .dbg_wl_ready(dbg_wl_ready),
-        .dbg_wl_ready_ap_vld(dbg_wl_ready_ap_vld),
-        .dbg_wl_instruction(dbg_wl_instruction),
-        .dbg_wl_instruction_ap_vld(dbg_wl_instruction_ap_vld),
-        .dbg_wl_start(dbg_wl_start),
-        .dbg_wl_start_ap_vld(dbg_wl_start_ap_vld),
-        .dbg_wl_accept(dbg_wl_accept),
-        .dbg_wl_accept_ap_vld(dbg_wl_accept_ap_vld),
-        .dbg_dma_done(dbg_dma_done),
-        .dbg_dma_done_ap_vld(dbg_dma_done_ap_vld),
-        .dbg_mem_transfer_done(dbg_mem_transfer_done),
-        .dbg_mem_transfer_done_ap_vld(dbg_mem_transfer_done_ap_vld),
-        .dbg_mem_read_request(dbg_mem_read_request),
-        .dbg_mem_read_request_ap_vld(dbg_mem_read_request_ap_vld),
-        .dbg_mem_write_request(dbg_mem_write_request),
-        .dbg_mem_write_request_ap_vld(dbg_mem_write_request_ap_vld),
-        .dbg_mem_op(dbg_mem_op),
-        .dbg_mem_op_ap_vld(dbg_mem_op_ap_vld),
-
-        .dbg_in_buf_address0(dbg_in_buf_address0),
-        .dbg_in_buf_ce0(dbg_in_buf_ce0),
-        .dbg_in_buf_we0(dbg_in_buf_we0),
-        .dbg_in_buf_d0(dbg_in_buf_d0),
-
-        .dbg_out_buf_address0(dbg_out_buf_address0),
-        .dbg_out_buf_ce0(dbg_out_buf_ce0),
-        .dbg_out_buf_we0(dbg_out_buf_we0),
-        .dbg_out_buf_d0(dbg_out_buf_d0),
-
-        .dbg_head_in_buf_0_address0(dbg_head_in_buf_0_address0),
-        .dbg_head_in_buf_0_ce0(dbg_head_in_buf_0_ce0),
-        .dbg_head_in_buf_0_we0(dbg_head_in_buf_0_we0),
-        .dbg_head_in_buf_0_d0(dbg_head_in_buf_0_d0),
-        .dbg_head_in_buf_1_address0(dbg_head_in_buf_1_address0),
-        .dbg_head_in_buf_1_ce0(dbg_head_in_buf_1_ce0),
-        .dbg_head_in_buf_1_we0(dbg_head_in_buf_1_we0),
-        .dbg_head_in_buf_1_d0(dbg_head_in_buf_1_d0),
-
-        .dbg_head_out_buf_0_address0(dbg_head_out_buf_0_address0),
-        .dbg_head_out_buf_0_ce0(dbg_head_out_buf_0_ce0),
-        .dbg_head_out_buf_0_we0(dbg_head_out_buf_0_we0),
-        .dbg_head_out_buf_0_d0(dbg_head_out_buf_0_d0),
-        .dbg_head_out_buf_1_address0(dbg_head_out_buf_1_address0),
-        .dbg_head_out_buf_1_ce0(dbg_head_out_buf_1_ce0),
-        .dbg_head_out_buf_1_we0(dbg_head_out_buf_1_we0),
-        .dbg_head_out_buf_1_d0(dbg_head_out_buf_1_d0),
-        .dbg_stream_in_buf_address0(dbg_stream_in_buf_address0),
-        .dbg_stream_in_buf_ce0(dbg_stream_in_buf_ce0),
-        .dbg_stream_in_buf_we0(dbg_stream_in_buf_we0),
-        .dbg_stream_in_buf_d0(dbg_stream_in_buf_d0),
-
-        .dbg_error(dbg_error),
-        .dbg_error_ap_vld(dbg_error_ap_vld),
-        .dbg_error_code(dbg_error_code),
-        .dbg_error_code_ap_vld(dbg_error_code_ap_vld),
-        .dbg_done(dbg_done),
-        .dbg_done_ap_vld(dbg_done_ap_vld),
-        .dbg_axis_is_empty(dbg_axis_is_empty),
-        .dbg_axis_is_empty_ap_vld(dbg_axis_is_empty_ap_vld),
-        .dbg_axis_in_ready_wire(dbg_axis_in_ready_wire),
-        .dbg_axis_in_ready_wire_ap_vld(dbg_axis_in_ready_wire_ap_vld),
-        .dbg_axis_in_last_wire(dbg_axis_in_last_wire),
-        .dbg_axis_in_last_wire_ap_vld(dbg_axis_in_last_wire_ap_vld),
-        .dbg_stream_in_counter(dbg_stream_in_counter),
-        .dbg_stream_in_counter_ap_vld(dbg_stream_in_counter_ap_vld),
-
-        .s_axi_control_AWVALID(s_axi_control_AWVALID),
-        .s_axi_control_AWREADY(s_axi_control_AWREADY),
-        .s_axi_control_AWADDR(s_axi_control_AWADDR),
-        .s_axi_control_WVALID(s_axi_control_WVALID),
-        .s_axi_control_WREADY(s_axi_control_WREADY),
-        .s_axi_control_WDATA(s_axi_control_WDATA),
-        .s_axi_control_WSTRB(s_axi_control_WSTRB),
-        .s_axi_control_ARVALID(s_axi_control_ARVALID),
-        .s_axi_control_ARREADY(s_axi_control_ARREADY),
-        .s_axi_control_ARADDR(s_axi_control_ARADDR),
-        .s_axi_control_RVALID(s_axi_control_RVALID),
-        .s_axi_control_RREADY(s_axi_control_RREADY),
-        .s_axi_control_RDATA(s_axi_control_RDATA),
-        .s_axi_control_RRESP(s_axi_control_RRESP),
-        .s_axi_control_BVALID(s_axi_control_BVALID),
-        .s_axi_control_BREADY(s_axi_control_BREADY),
-        .s_axi_control_BRESP(s_axi_control_BRESP),
-        .interrupt()
-      );
-    end else begin : g_dut_no_debug
-      transformer_top dut (
-        .ap_clk(ap_clk),
-        .ap_rst_n(ap_rst_n),
-
-        .m_axi_gmem_AWVALID(m_axi_gmem_AWVALID),
-        .m_axi_gmem_AWREADY(m_axi_gmem_AWREADY),
-        .m_axi_gmem_AWADDR(m_axi_gmem_AWADDR),
-        .m_axi_gmem_AWID(m_axi_gmem_AWID),
-        .m_axi_gmem_AWLEN(m_axi_gmem_AWLEN),
-        .m_axi_gmem_AWSIZE(m_axi_gmem_AWSIZE),
-        .m_axi_gmem_AWBURST(m_axi_gmem_AWBURST),
-        .m_axi_gmem_AWLOCK(m_axi_gmem_AWLOCK),
-        .m_axi_gmem_AWCACHE(m_axi_gmem_AWCACHE),
-        .m_axi_gmem_AWPROT(m_axi_gmem_AWPROT),
-        .m_axi_gmem_AWQOS(m_axi_gmem_AWQOS),
-        .m_axi_gmem_AWREGION(m_axi_gmem_AWREGION),
-        .m_axi_gmem_AWUSER(m_axi_gmem_AWUSER),
-        .m_axi_gmem_WVALID(m_axi_gmem_WVALID),
-        .m_axi_gmem_WREADY(m_axi_gmem_WREADY),
-        .m_axi_gmem_WDATA(m_axi_gmem_WDATA),
-        .m_axi_gmem_WSTRB(m_axi_gmem_WSTRB),
-        .m_axi_gmem_WLAST(m_axi_gmem_WLAST),
-        .m_axi_gmem_WID(m_axi_gmem_WID),
-        .m_axi_gmem_WUSER(m_axi_gmem_WUSER),
-        .m_axi_gmem_ARVALID(m_axi_gmem_ARVALID),
-        .m_axi_gmem_ARREADY(m_axi_gmem_ARREADY),
-        .m_axi_gmem_ARADDR(m_axi_gmem_ARADDR),
-        .m_axi_gmem_ARID(m_axi_gmem_ARID),
-        .m_axi_gmem_ARLEN(m_axi_gmem_ARLEN),
-        .m_axi_gmem_ARSIZE(m_axi_gmem_ARSIZE),
-        .m_axi_gmem_ARBURST(m_axi_gmem_ARBURST),
-        .m_axi_gmem_ARLOCK(m_axi_gmem_ARLOCK),
-        .m_axi_gmem_ARCACHE(m_axi_gmem_ARCACHE),
-        .m_axi_gmem_ARPROT(m_axi_gmem_ARPROT),
-        .m_axi_gmem_ARQOS(m_axi_gmem_ARQOS),
-        .m_axi_gmem_ARREGION(m_axi_gmem_ARREGION),
-        .m_axi_gmem_ARUSER(m_axi_gmem_ARUSER),
-        .m_axi_gmem_RVALID(m_axi_gmem_RVALID),
-        .m_axi_gmem_RREADY(m_axi_gmem_RREADY),
-        .m_axi_gmem_RDATA(m_axi_gmem_RDATA),
-        .m_axi_gmem_RLAST(m_axi_gmem_RLAST),
-        .m_axi_gmem_RID(m_axi_gmem_RID),
-        .m_axi_gmem_RUSER(m_axi_gmem_RUSER),
-        .m_axi_gmem_RRESP(m_axi_gmem_RRESP),
-        .m_axi_gmem_BVALID(m_axi_gmem_BVALID),
-        .m_axi_gmem_BREADY(m_axi_gmem_BREADY),
-        .m_axi_gmem_BRESP(m_axi_gmem_BRESP),
-        .m_axi_gmem_BID(m_axi_gmem_BID),
-        .m_axi_gmem_BUSER(m_axi_gmem_BUSER),
-
-        .s_axis_in_TDATA(s_axis_in_TDATA),
-        .s_axis_in_TVALID(s_axis_in_TVALID),
-        .s_axis_in_TREADY(s_axis_in_TREADY),
-        .s_axis_in_TKEEP(s_axis_in_TKEEP),
-        .s_axis_in_TSTRB(s_axis_in_TSTRB),
-        .s_axis_in_TLAST(s_axis_in_TLAST),
-
-        .m_axis_out_TDATA(m_axis_out_TDATA),
-        .m_axis_out_TVALID(m_axis_out_TVALID),
-        .m_axis_out_TREADY(m_axis_out_TREADY),
-        .m_axis_out_TKEEP(m_axis_out_TKEEP),
-        .m_axis_out_TSTRB(m_axis_out_TSTRB),
-        .m_axis_out_TLAST(m_axis_out_TLAST),
-
-        .irq_ps(irq_ps),
-
-        .s_axi_control_AWVALID(s_axi_control_AWVALID),
-        .s_axi_control_AWREADY(s_axi_control_AWREADY),
-        .s_axi_control_AWADDR(s_axi_control_AWADDR),
-        .s_axi_control_WVALID(s_axi_control_WVALID),
-        .s_axi_control_WREADY(s_axi_control_WREADY),
-        .s_axi_control_WDATA(s_axi_control_WDATA),
-        .s_axi_control_WSTRB(s_axi_control_WSTRB),
-        .s_axi_control_ARVALID(s_axi_control_ARVALID),
-        .s_axi_control_ARREADY(s_axi_control_ARREADY),
-        .s_axi_control_ARADDR(s_axi_control_ARADDR),
-        .s_axi_control_RVALID(s_axi_control_RVALID),
-        .s_axi_control_RREADY(s_axi_control_RREADY),
-        .s_axi_control_RDATA(s_axi_control_RDATA),
-        .s_axi_control_RRESP(s_axi_control_RRESP),
-        .s_axi_control_BVALID(s_axi_control_BVALID),
-        .s_axi_control_BREADY(s_axi_control_BREADY),
-        .s_axi_control_BRESP(s_axi_control_BRESP),
-        .interrupt()
-      );
-
-      always_comb begin
-        dbg_state                     = 32'd0;
-        dbg_state_ap_vld              = 1'b0;
-        dbg_ctrl_mem                  = '0;
-        dbg_ctrl_mem_ap_vld           = 1'b0;
-        control_reg                   = 32'd0;
-        control_reg_ap_vld            = 1'b0;
-        irq_status_reg                = 32'd0;
-        irq_status_reg_ap_vld         = 1'b0;
-        irq_mask_reg                  = 32'd0;
-        irq_mask_reg_ap_vld           = 1'b0;
-        irq_clear_reg                 = 32'd0;
-        irq_clear_reg_ap_vld          = 1'b0;
-        wq_base_addr                  = 32'd0;
-        wq_base_addr_ap_vld           = 1'b0;
-        wk_base_addr                  = 32'd0;
-        wk_base_addr_ap_vld           = 1'b0;
-        wv_base_addr                  = 32'd0;
-        wv_base_addr_ap_vld           = 1'b0;
-        wo_base_addr                  = 32'd0;
-        wo_base_addr_ap_vld           = 1'b0;
-        w1_base_addr                  = 32'd0;
-        w1_base_addr_ap_vld           = 1'b0;
-        w2_base_addr                  = 32'd0;
-        w2_base_addr_ap_vld           = 1'b0;
-        wq_head_stride                = 32'd0;
-        wq_head_stride_ap_vld         = 1'b0;
-        wk_head_stride                = 32'd0;
-        wk_head_stride_ap_vld         = 1'b0;
-        wv_head_stride                = 32'd0;
-        wv_head_stride_ap_vld         = 1'b0;
-        wo_tile_stride                = 32'd0;
-        wo_tile_stride_ap_vld         = 1'b0;
-        w1_tile_stride                = 32'd0;
-        w1_tile_stride_ap_vld         = 1'b0;
-        w2_tile_stride                = 32'd0;
-        w2_tile_stride_ap_vld         = 1'b0;
-
-        dbg_wl_ready                  = 1'b0;
-        dbg_wl_ready_ap_vld           = 1'b0;
-        dbg_wl_instruction            = 32'd0;
-        dbg_wl_instruction_ap_vld     = 1'b0;
-        dbg_wl_start                  = 1'b0;
-        dbg_wl_start_ap_vld           = 1'b0;
-        dbg_wl_accept                 = 1'b0;
-        dbg_wl_accept_ap_vld          = 1'b0;
-        dbg_dma_done                  = 1'b0;
-        dbg_dma_done_ap_vld           = 1'b0;
-        dbg_mem_transfer_done         = 1'b0;
-        dbg_mem_transfer_done_ap_vld  = 1'b0;
-        dbg_mem_read_request          = 1'b0;
-        dbg_mem_read_request_ap_vld   = 1'b0;
-        dbg_mem_write_request         = 1'b0;
-        dbg_mem_write_request_ap_vld  = 1'b0;
-        dbg_mem_op                    = 32'd0;
-        dbg_mem_op_ap_vld             = 1'b0;
-
-        dbg_compute_start             = 1'b0;
-        dbg_compute_start_ap_vld      = 1'b0;
-        dbg_compute_instruction       = 32'd0;
-        dbg_compute_instruction_ap_vld = 1'b0;
-        dbg_compute_ready             = 1'b0;
-        dbg_compute_ready_ap_vld      = 1'b0;
-        dbg_compute_done              = 1'b0;
-        dbg_compute_done_ap_vld       = 1'b0;
-        dbg_compute_state             = 8'd0;
-        dbg_compute_state_ap_vld      = 1'b0;
-        dbg_req_instruction          = 32'd0;
-        dbg_req_instruction_ap_vld   = 1'b0;
-        dbg_req_op                   = 8'd0;
-        dbg_req_op_ap_vld            = 1'b0;
-        dbg_req_layer                = 8'd0;
-        dbg_req_layer_ap_vld         = 1'b0;
-        dbg_req_head                 = 8'd0;
-        dbg_req_head_ap_vld          = 1'b0;
-        dbg_req_tile                 = 8'd0;
-        dbg_req_tile_ap_vld          = 1'b0;
-        dbg_mac_start                = 1'b0;
-        dbg_mac_start_ap_vld         = 1'b0;
-        dbg_mac_ready                = 1'b0;
-        dbg_mac_ready_ap_vld         = 1'b0;
-        dbg_mac_complete             = 1'b0;
-        dbg_mac_complete_ap_vld      = 1'b0;
-        dbg_ctrl_reset_asserted      = 1'b0;
-        dbg_ctrl_reset_asserted_ap_vld = 1'b0;
-        dbg_head_group_idx           = 32'd0;
-        dbg_head_group_idx_ap_vld    = 1'b0;
-        dbg_error                    = 1'b0;
-        dbg_error_ap_vld             = 1'b0;
-        dbg_error_code               = 32'd0;
-        dbg_error_code_ap_vld        = 1'b0;
-        dbg_done                     = 1'b0;
-        dbg_done_ap_vld              = 1'b0;
-        dbg_axis_is_empty            = 1'b0;
-        dbg_axis_is_empty_ap_vld     = 1'b0;
-        dbg_axis_in_ready_wire       = 1'b0;
-        dbg_axis_in_ready_wire_ap_vld = 1'b0;
-        dbg_axis_in_last_wire        = 1'b0;
-        dbg_axis_in_last_wire_ap_vld = 1'b0;
-        dbg_stream_in_counter        = 32'd0;
-        dbg_stream_in_counter_ap_vld = 1'b0;
-
-        dbg_head_ctx_ref_0           = '0;
-        dbg_head_ctx_ref_0_ap_vld    = 1'b0;
-        dbg_head_ctx_ref_1           = '0;
-        dbg_head_ctx_ref_1_ap_vld    = 1'b0;
-        dbg_head_compute_ctx_0       = '0;
-        dbg_head_compute_ctx_0_ap_vld = 1'b0;
-        dbg_head_compute_ctx_1       = '0;
-        dbg_head_compute_ctx_1_ap_vld = 1'b0;
-
-        dbg_in_buf_address0          = 8'd0;
-        dbg_in_buf_ce0               = 1'b0;
-        dbg_in_buf_we0               = 1'b0;
-        dbg_in_buf_d0                = 8'd0;
-        dbg_out_buf_address0         = 6'd0;
-        dbg_out_buf_ce0              = 1'b0;
-        dbg_out_buf_we0              = 1'b0;
-        dbg_out_buf_d0               = 8'd0;
-        dbg_head_in_buf_0_address0   = 6'd0;
-        dbg_head_in_buf_0_ce0        = 1'b0;
-        dbg_head_in_buf_0_we0        = 1'b0;
-        dbg_head_in_buf_0_d0         = 8'd0;
-        dbg_head_in_buf_1_address0   = 6'd0;
-        dbg_head_in_buf_1_ce0        = 1'b0;
-        dbg_head_in_buf_1_we0        = 1'b0;
-        dbg_head_in_buf_1_d0         = 8'd0;
-        dbg_head_out_buf_0_address0  = 5'd0;
-        dbg_head_out_buf_0_ce0       = 1'b0;
-        dbg_head_out_buf_0_we0       = 1'b0;
-        dbg_head_out_buf_0_d0        = 8'd0;
-        dbg_head_out_buf_1_address0  = 5'd0;
-        dbg_head_out_buf_1_ce0       = 1'b0;
-        dbg_head_out_buf_1_we0       = 1'b0;
-        dbg_head_out_buf_1_d0        = 8'd0;
-        dbg_stream_in_buf_address0    = 4'd0;
-        dbg_stream_in_buf_ce0         = 1'b0;
-        dbg_stream_in_buf_we0         = 1'b0;
-        dbg_stream_in_buf_d0          = 8'd0;
-      end
-    end
-  endgenerate */
 
   transformer_top dut (
     .ap_clk(ap_clk),
@@ -2938,6 +2554,8 @@ module top_module_hls_tb;
     .irq_ps(irq_ps),
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
+    .control_reg(control_reg),
+    .control_reg_ap_vld(control_reg_ap_vld),
     .s_axi_control_AWVALID(s_axi_control_AWVALID),
     .s_axi_control_AWREADY(s_axi_control_AWREADY),
     .s_axi_control_AWADDR(s_axi_control_AWADDR),

@@ -34,7 +34,8 @@ int main() {
         return 1;
     }
 
-    std::printf("[TEST] Multi-token run across %zu token(s)\n", total_stream_tokens);
+    std::printf("[TEST] Multi-token run across %zu token(s) (debug_mode=%s)\n",
+                total_stream_tokens, TB_DEBUG_MODE ? "on" : "off");
     for (size_t token_idx = 0; token_idx < total_stream_tokens; ++token_idx) {
         std::printf("\n[TEST] ===== Begin token %zu =====\n", token_idx);
         const int rc = run_top_no_debug_tb_single_token(token_idx);

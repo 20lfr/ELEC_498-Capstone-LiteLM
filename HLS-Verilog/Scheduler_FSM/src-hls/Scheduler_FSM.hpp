@@ -23,6 +23,7 @@ void scheduler_hls(
     int         &head_group_idx,
     bool        &compute_start,
     uint32_t   &compute_instruction,
+    bool        debug_done,
     bool        stream_ready,
     bool        &stream_start,
     bool        stream_done,
