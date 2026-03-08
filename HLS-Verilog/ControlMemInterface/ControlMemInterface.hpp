@@ -123,7 +123,7 @@ public:
         // Handle "Write-1-to-Clear" logic here (runs last so PS can clear
         // errors)
         if (ctrl_mem.irq_clear != 0) {
-            local_status.irq_status &= ~ctrl_mem.irq_clear; // Clear by request
+            local_status.irq_status = 0; // Clear by request
             // clear error code if error flag is cleared
             if (ctrl_mem.irq_clear & IRQ_ERROR_BIT) {
                 local_status.error_code = ERR_NONE;

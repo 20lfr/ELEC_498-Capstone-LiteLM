@@ -88,7 +88,7 @@ wire    ap_loop_init;
 reg   [19:0] square_fu_78;
 wire  signed [19:0] grp_fu_302_p3;
 reg  signed [19:0] ap_sig_allocacmp_square_2;
-reg   [4:0] i_41_fu_82;
+reg   [4:0] i_42_fu_82;
 wire   [4:0] add_ln425_fu_182_p2;
 reg   [4:0] ap_sig_allocacmp_i;
 reg    ap_loop_exit_ready_pp0_iter1_reg;
@@ -137,7 +137,7 @@ initial begin
 #0 ap_enable_reg_pp0_iter4 = 1'b0;
 #0 phi_urem_fu_74 = 5'd0;
 #0 square_fu_78 = 20'd0;
-#0 i_41_fu_82 = 5'd0;
+#0 i_42_fu_82 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -147,7 +147,7 @@ transformer_top_mul_4ns_6ns_9_1_1 #(
     .din0_WIDTH( 4 ),
     .din1_WIDTH( 6 ),
     .dout_WIDTH( 9 ))
-mul_4ns_6ns_9_1_1_U909(
+mul_4ns_6ns_9_1_1_U914(
     .din0(mul_ln424_fu_196_p0),
     .din1(mul_ln424_fu_196_p1),
     .dout(mul_ln424_fu_196_p2)
@@ -169,7 +169,7 @@ mul_4ns_6ns_9_1_1_U909(
     .def_WIDTH( 8 ),
     .sel_WIDTH( 3 ),
     .dout_WIDTH( 8 ))
-sparsemux_11_3_8_1_1_U910(
+sparsemux_11_3_8_1_1_U915(
     .din0(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_10_q0),
     .din1(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_7_q0),
     .din2(transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0),
@@ -187,7 +187,7 @@ transformer_top_mac_muladd_8s_8s_20s_20_4_1 #(
     .din1_WIDTH( 8 ),
     .din2_WIDTH( 20 ),
     .dout_WIDTH( 20 ))
-mac_muladd_8s_8s_20s_20_4_1_U911(
+mac_muladd_8s_8s_20s_20_4_1_U916(
     .clk(ap_clk),
     .reset(ap_rst),
     .din0(grp_fu_302_p0),
@@ -277,9 +277,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         if (((icmp_ln425_fu_176_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_41_fu_82 <= add_ln425_fu_182_p2;
+            i_42_fu_82 <= add_ln425_fu_182_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_41_fu_82 <= 5'd0;
+            i_42_fu_82 <= 5'd0;
         end
     end
 end
@@ -372,7 +372,7 @@ always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
         ap_sig_allocacmp_i = 5'd0;
     end else begin
-        ap_sig_allocacmp_i = i_41_fu_82;
+        ap_sig_allocacmp_i = i_42_fu_82;
     end
 end
 

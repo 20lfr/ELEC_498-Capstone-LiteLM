@@ -644,6 +644,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     ControlMemSpace ctrl_mem{};
     StatusMemSpace status_mem{};
     SchedState dbg_state = S_IDLE;
+    uint32_t control_reg = 0;
     uint32_t ctrl_shadow_control = 0;
     int ctrl_gap_cycles = 0;
     bool seen_irq_done = false;
@@ -848,7 +849,8 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             ctrl_mem,
             status_mem,
             irq_ps,
-            dbg_state
+            dbg_state,
+            control_reg
         );
 
         // Drain AXI stream output

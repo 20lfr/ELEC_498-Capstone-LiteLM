@@ -54,7 +54,8 @@ void transformer_top(
 
     // INTERRUPT INTERFACING (PL -> PS)
     bool            &irq_ps,
-    SchedState      &dbg_state
+    SchedState      &dbg_state,
+    uint32_t        &control_reg
 ) {
 #pragma HLS INLINE off
 #pragma HLS INTERFACE axis port=s_axis_in
@@ -510,4 +511,5 @@ void transformer_top(
     // channel. top_no_debug no longer mirrors state into dbg_state.
     status_mem = active_status_mem;
     dbg_state = state_local;
+    control_reg = ctrl_mem.control;
 }
