@@ -230,25 +230,8 @@ public:
 
     // Memory
     bool writeDDR(DmaBufType type, uint32_t dma_offset, const void *data,
-                  size_t size, bool sync_to_pl = true);
-    bool readDDR(DmaBufType type, uint32_t dma_offset, void *data, size_t size,
-                 bool sync_from_pl = true);
-    void syncDDRToPL(DmaBufType type) {
-        if (_dma_buf0.isAllocated() && _dma_buf1.isAllocated()) {
-            if (type == DmaBufType::WEIGHTS)
-                _dma_buf0.sync_pl();
-            else
-                _dma_buf1.sync_pl();
-        }
-    }
-    void syncDDRToCPU(DmaBufType type) {
-        if (_dma_buf0.isAllocated() && _dma_buf1.isAllocated()) {
-            if (type == DmaBufType::WEIGHTS)
-                _dma_buf0.sync_cpu();
-            else
-                _dma_buf1.sync_cpu();
-        }
-    }
+                  size_t size);
+    bool readDDR(DmaBufType type, uint32_t dma_offset, void *data, size_t size);
     uint64_t getDDRBaseAddr(DmaBufType type) const {
         if (type == DmaBufType::WEIGHTS)
             return _dma_buf0.phys();

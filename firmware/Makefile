@@ -31,11 +31,13 @@ endif
 
 # Sources & Includes
 DRIVER_DIR     = $(FIRMWARE_DIR)/../hardware_overlay/drivers/transformer_top_v1_0/src
+UDMABUF_DIR    = $(FIRMWARE_DIR)/udmabuf
 HLS_DIR        = $(FIRMWARE_DIR)/../HLS-Verilog
 TESTING_DIR = $(FIRMWARE_DIR)/interface_testing
 INFERENCE_DIR = $(FIRMWARE_DIR)/inference_engine
 
 INCLUDES = -I$(DRIVER_DIR) \
+           -I$(UDMABUF_DIR) \
            -I$(HLS_DIR) \
            -I$(INFERENCE_DIR)/include \
            -I$(SYSROOT)/usr/include \

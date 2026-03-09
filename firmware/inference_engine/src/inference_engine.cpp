@@ -85,7 +85,7 @@ public:
             }
 
             if (!pl->writeDDR(DmaBufType::WEIGHTS, ddr_offset, chunk.data(),
-                              static_cast<size_t>(bytes_read), false)) {
+                              static_cast<size_t>(bytes_read))) {
                 err->setError(ErrorCode::HARDWARE_FAULT,
                               "Staged DDR write failed at offset " +
                                   std::to_string(ddr_offset));
@@ -100,8 +100,6 @@ public:
                           "Failed before finishing staged weights read");
             return false;
         }
-
-        pl->syncDDRToPL(DmaBufType::WEIGHTS);
 
         LOG_INFO("Loaded " + std::to_string(ddr_offset) +
                  " bytes of weights via staged DDR writes");
@@ -307,7 +305,6 @@ public:
         perf->endGeneration();
         return true;
     }
-
 
     /** Get raw embedding data for a token ID into caller buffer. */
     bool getEmbedding(uint32_t token_id, uint8_t *out) {
@@ -525,8 +522,8 @@ private:
         if (exec->getEmbedding(input_token, embed_buf)) {
             for (int i = 0; i < STREAM_IN_BUF_BYTES; i++)
                 expected_sum += static_cast<int8_t>(embed_buf[i]);
-            print("CPU embedding sum (int8): " +
-                  std::to_string(expected_sum) + "\n");
+            print("CPU embedding sum (int8): " + std::to_string(expected_sum) +
+                  "\n");
         } else {
             print("WARNING: could not look up embedding\n");
         }
@@ -541,8 +538,12 @@ private:
             print("executeToken FAILED: " + err.getLastErrorMessage() + "\n");
         } else {
             int32_t hw_sum = static_cast<int32_t>(out_token);
-            print("HW returned: " + std::to_string(hw_sum) +
-                  " (0x" + ([&]{ char b[16]; snprintf(b, sizeof(b), "%08X", out_token); return std::string(b); })() + ")\n");
+            print("HW returned: " + std::to_string(hw_sum) + " (0x" + ([&] {
+                      char b[16];
+                      snprintf(b, sizeof(b), "%08X", out_token);
+                      return std::string(b);
+                  })() +
+                  ")\n");
             if (hw_sum == expected_sum) {
                 print("PASS: HW sum matches CPU sum\n");
             } else {

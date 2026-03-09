@@ -60,11 +60,11 @@ bool PLInterface::initDMA(const std::string &dmabuf0_name, size_t dmabuf0_size,
     }
 
     if (!_dma_buf0.allocate(dmabuf0_name, dmabuf0_size)) {
-        _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
+        _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer 0 alloc failed");
         return false;
     }
     if (!_dma_buf1.allocate(dmabuf1_name, dmabuf1_size)) {
-        _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
+        _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer 1 alloc failed");
         return false;
     }
 
@@ -72,14 +72,14 @@ bool PLInterface::initDMA(const std::string &dmabuf0_name, size_t dmabuf0_size,
     memset(_dma_buf0.virt(), 0, dmabuf0_size);
     memset(_dma_buf1.virt(), 0, dmabuf1_size);
 
-    std::string phys0_str = std::to_string(_dma_buf0.phys());
-    std::string phys1_str = std::to_string(_dma_buf1.phys());
-    std::string size0_str = std::to_string(dmabuf0_size / 1024 / 1024);
-    std::string size1_str = std::to_string(dmabuf1_size / 1024 / 1024);
-    _logger->info("DMA initialized: buf=0x" + phys0_str + " (" + size0_str +
-                  " MB)");
-    _logger->info("DMA initialized: buf=0x" + phys1_str + " (" + size1_str +
-                  " MB)");
+    char buf0[128], buf1[128];
+    snprintf(buf0, sizeof(buf0), "DMA initialized: buf=0x%lx (%zu MB)",
+             _dma_buf0.phys(), dmabuf0_size / 1024 / 1024);
+    snprintf(buf1, sizeof(buf1), "DMA initialized: buf=0x%lx (%zu MB)",
+             _dma_buf1.phys(), dmabuf1_size / 1024 / 1024);
+
+    _logger->info(buf0);
+    _logger->info(buf1);
     return true;
 }
 
@@ -342,23 +342,21 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
 
 // DDR access
 bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
-                           size_t size, bool sync_to_pl) {
+                           size_t size) {
     DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
     if (!buf->isAllocated() || offset + size > buf->size())
         return false;
     memcpy((uint8_t *)buf->virt() + offset, data, size);
-    if (sync_to_pl)
-        buf->sync_pl();
+    buf->sync_for_device(offset, size);
     return true;
 }
 
 bool PLInterface::readDDR(DmaBufType type, uint32_t offset, void *data,
-                          size_t size, bool sync_from_pl) {
+                          size_t size) {
     DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
     if (!buf->isAllocated() || offset + size > buf->size())
         return false;
-    if (sync_from_pl)
-        buf->sync_cpu();
+    buf->sync_for_cpu(offset, size);
     memcpy(data, (uint8_t *)buf->virt() + offset, size);
     return true;
 }

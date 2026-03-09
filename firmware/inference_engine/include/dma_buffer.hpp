@@ -8,8 +8,10 @@
 #ifndef DMA_BUFFER_HPP
 #define DMA_BUFFER_HPP
 
+#include "u-dma-buf-ioctl.h"
+#include <cstdio>
 #include <fcntl.h>
-#include <linux/dma-buf.h>
+#include <stdint.h>
 #include <string>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -97,25 +99,30 @@ public:
     bool isAllocated() const { return _virt != nullptr; }
     void *virt() const { return _virt; }
     uint64_t phys() const { return _phys; }
-    void sync_pl() {
+    void sync_for_device(uint64_t offset = 0, uint64_t size = 0) {
         if (_mock || _fd < 0)
             return;
-        struct dma_buf_sync sync_args;
-        sync_args.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_START;
-        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args);
-
-        sync_args.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_END;
-        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args);
+        u_dma_buf_ioctl_sync_args args = {};
+        args.size = (size == 0) ? _size : size;
+        args.offset = offset;
+        SET_U_DMA_BUF_IOCTL_FLAGS_SYNC_CMD(
+            &args, U_DMA_BUF_IOCTL_FLAGS_SYNC_CMD_FOR_DEVICE);
+        SET_U_DMA_BUF_IOCTL_FLAGS_SYNC_DIR(&args, 3); // bidirectional
+        if (ioctl(_fd, U_DMA_BUF_IOCTL_SET_SYNC, &args) < 0)
+            perror("DmaBuffer: sync_for_device failed");
     }
-    void sync_cpu() {
+
+    void sync_for_cpu(uint64_t offset = 0, uint64_t size = 0) {
         if (_mock || _fd < 0)
             return;
-        struct dma_buf_sync sync_args;
-        sync_args.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
-        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args);
-
-        sync_args.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
-        ioctl(_fd, DMA_BUF_IOCTL_SYNC, &sync_args);
+        u_dma_buf_ioctl_sync_args args = {};
+        args.size = (size == 0) ? _size : size;
+        args.offset = offset;
+        SET_U_DMA_BUF_IOCTL_FLAGS_SYNC_CMD(
+            &args, U_DMA_BUF_IOCTL_FLAGS_SYNC_CMD_FOR_CPU);
+        SET_U_DMA_BUF_IOCTL_FLAGS_SYNC_DIR(&args, 3); // bidirectional
+        if (ioctl(_fd, U_DMA_BUF_IOCTL_SET_SYNC, &args) < 0)
+            perror("DmaBuffer: sync_for_cpu failed");
     }
 
     ~DmaBuffer() { release(); }
