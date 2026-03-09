@@ -226,8 +226,11 @@ int main() {
         }
 
         scheduler_hls(
-            ctrl_mem,
-            status_mem,
+            reset_n,
+            (ctrl_mem.control & CTRL_START_BIT) != 0u,
+            (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0u,
+            ((status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
+                (status_mem.error_code != ERR_NONE),
             axis_token_complete,
             dma_done,
             wl_ready,
@@ -245,6 +248,7 @@ int main() {
             stream_done,
             done,
             error,
+            status_mem.layer_index,
             state
         );
 

@@ -49,6 +49,7 @@ void transformer_top(
     hls::stream<axis8_t> &s_axis_in,
     hls::stream<axis8_t> &m_axis_out,
     volatile axi_gmem_word_t *ddr_mem,
+    volatile axi_gmem_word_t *kv_cache,
 
     // ------------------------------------------------------------
     // AXI4-LITE INTERFACING (PL <-> PS)
@@ -136,7 +137,9 @@ void transformer_top(
 #pragma HLS INTERFACE axis port=s_axis_in
 #pragma HLS INTERFACE axis port=m_axis_out
 #pragma HLS INTERFACE m_axi port=ddr_mem offset=slave bundle=gmem depth=TOP_DMA_BUF_WORDS
+#pragma HLS INTERFACE m_axi port=kv_cache offset=slave bundle=kv_gmem depth=TOP_DMA_BUF_WORDS
 #pragma HLS INTERFACE s_axilite port=ddr_mem bundle=control
+#pragma HLS INTERFACE s_axilite port=kv_cache bundle=control
 #pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
@@ -197,10 +200,12 @@ void transformer_top(
     static uint64_t         dma_addr_latched_local         = 0;
     static uint32_t         dma_len_latched_local          = 0;
     static bool             dma_is_write_latched_local     = false;
+    static bool             dma_use_kv_cache_latched_local = false;
     static bool             dma_start_local                = false;
     static uint64_t         dma_addr_local                 = 0;
     static uint32_t         dma_len_local                  = 0;
     static bool             dma_is_write_local             = false;
+    static bool             dma_use_kv_cache_local         = false;
     static bool             stream_start_local             = false;
     static bool             stream_done_local              = false;
     static bool             stream_done_pulse_local        = false;
@@ -233,14 +238,21 @@ void transformer_top(
     static uint16_t         token_pos_next                = 0;
     static bool             debug_sum_done_local          = false;
     static int32_t          debug_sum_value_local         = 0;
+    static bool             prev_start                    = false;
+    static uint32_t         scheduler_layer_index_local   = 0;
 
     // Active-low reset derived from control register.
     const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
     const bool reset = !reset_n;
+    const bool start_en = (ctrl_mem.control & CTRL_START_BIT) != 0u;
+    const bool start_edge = start_en && !prev_start;
     const bool debug_mode_en = (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0u;
+    const bool ctrl_error =
+        ((active_status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
+        (active_status_mem.error_code != ERR_NONE);
 
-    // Clear all internal state when reset is asserted.
-    if (reset) {
+    // Reset once at boot, then re-arm run-local state on each new start pulse.
+    if (reset || start_edge) {
         compute_ready = true;
         compute_done = false;
         compute_start = false;
@@ -252,27 +264,36 @@ void transformer_top(
         mmu_main_mem_transfer_done_wire = false;
         mmu_dma_instruction = 0;
         mmu_status = Status();
+        dma_ready_local = true;
+        wl_ready_local = false;
+        wl_instruction_local = 0;
+        wl_start_local = false;
         wl_accept_local = false;
+        mem_transfer_done_local = false;
+        mem_read_request_local = false;
+        mem_write_request_local = false;
+        mem_op_local = 0;
         scheduler_wl_start = false;
         scheduler_wl_accept = false;
         scheduler_wl_instruction = 0;
         main_mem_read_request = false;
         main_mem_write_request = false;
         main_mem_op = 0;
-        token_pos_current = 0;
-        token_pos_next = 0;
         debug_sum_done_local = false;
         debug_sum_value_local = 0;
+        scheduler_layer_index_local = 0;
         dma_done_local = false;
         dma_busy_local = false;
         dma_countdown_local = 0;
         dma_addr_latched_local = 0;
         dma_len_latched_local = 0;
         dma_is_write_latched_local = false;
+        dma_use_kv_cache_latched_local = false;
         dma_start_local = false;
         dma_addr_local = 0;
         dma_len_local = 0;
         dma_is_write_local = false;
+        dma_use_kv_cache_local = false;
         stream_start_local = false;
         stream_done_local = false;
         stream_done_pulse_local = false;
@@ -280,6 +301,12 @@ void transformer_top(
         stream_tx_index_local = 0;
         stream_in_counter = 0;
         token_complete_local = false;
+
+        if (reset) {
+            token_pos_current = 0;
+            token_pos_next = 0;
+            prev_start = false;
+        }
 
         for (int i = 0; i < HEADS_PARALLEL; ++i) {
 // #pragma HLS UNROLL
@@ -315,12 +342,10 @@ void transformer_top(
             dma_tx_buf_local[i] = 0;
         }
     }
-
-    if (state_local == S_IDLE) {
-        token_complete_local = false;
-        stream_in_counter = 0;
-        debug_sum_done_local = false;
-        debug_sum_value_local = 0;
+    if (reset) {
+        prev_start = false;
+    } else {
+        prev_start = start_en;
     }
 
     const bool axis_buf_full = (stream_in_counter >= static_cast<uint32_t>(STREAM_IN_BUF_BYTES));
@@ -350,8 +375,10 @@ void transformer_top(
 
     // SCHEDULER FSM
     scheduler_hls(
-        ctrl_mem,
-        active_status_mem,
+        reset_n,
+        start_en,
+        debug_mode_en,
+        ctrl_error,
         token_complete_local,
         mmu_main_dma_done_wire,
         mmu_req_ready_wire,
@@ -370,8 +397,15 @@ void transformer_top(
         stream_done_local,
         done,
         scheduler_error,
+        scheduler_layer_index_local,
         state_local
     );
+
+    // AXIS token completion is a per-token ingress latch. Once the scheduler
+    // has advanced beyond STREAM_IN, clear it so the next token can be accepted.
+    if (token_complete_local && (state_local != S_STREAM_IN)) {
+        token_complete_local = false;
+    }
 
     if (axis_in_valid && axis_in_last && axis_in_ready_wire) {
         const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
@@ -410,7 +444,7 @@ void transformer_top(
     }
 
     compute_controller(
-        ctrl_mem,
+        reset_n && !start_edge,
         compute_start,
         compute_instruction,
         compute_ready,
@@ -475,6 +509,7 @@ void transformer_top(
         dma_addr_local,
         dma_len_local,
         dma_is_write_local,
+        dma_use_kv_cache_local,
         axis_in_valid,
         axis_in_last,
         axis_in_ready_wire,
@@ -505,6 +540,7 @@ void transformer_top(
         dma_addr_latched_local = dma_addr_local;
         dma_len_latched_local = dma_len_local;
         dma_is_write_latched_local = dma_is_write_local;
+        dma_use_kv_cache_latched_local = dma_use_kv_cache_local;
     } else if (dma_busy_local) {
         if (dma_countdown_local > 0) {
             dma_countdown_local--;
@@ -530,12 +566,22 @@ void transformer_top(
                 const uint32_t lane =
                     static_cast<uint32_t>(sim_byte_addr % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
                 const uint64_t idx = word_idx_raw;
-                axi_gmem_word_t beat = ddr_mem[idx];
-                if (dma_is_write_latched_local) {
-                    gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, i));
-                    ddr_mem[idx] = beat;
+                if (dma_use_kv_cache_latched_local) {
+                    axi_gmem_word_t beat = kv_cache[idx];
+                    if (dma_is_write_latched_local) {
+                        gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, i));
+                        kv_cache[idx] = beat;
+                    } else {
+                        dma_buf_set_byte_u32(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
+                    }
                 } else {
-                    dma_buf_set_byte_u32(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
+                    axi_gmem_word_t beat = ddr_mem[idx];
+                    if (dma_is_write_latched_local) {
+                        gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, i));
+                        ddr_mem[idx] = beat;
+                    } else {
+                        dma_buf_set_byte_u32(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
+                    }
                 }
             }
             dma_busy_local = false;
@@ -574,11 +620,11 @@ void transformer_top(
                                     mmu_status.error_code,
                                     mmu_status.error_subcode);
     ctrl_mem_interface.check_control(ctrl_mem, done);
+    active_status_mem.status = static_cast<uint32_t>(state_local);
+    active_status_mem.layer_index = scheduler_layer_index_local;
     active_status_mem.token_index = static_cast<uint32_t>(token_pos_current);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
-    // Scheduler_FSM now owns status_mem.status directly as the scheduler-state
-    // channel. top keeps the debug mirror separately.
     status_mem = active_status_mem;
 
     // Debug outputs

@@ -305,6 +305,14 @@ static inline bool is_disabled_compute_op(ComputeOp op) {
     }
 }
 
+static inline bool dma_uses_kv_cache(DmaSel sel) {
+#pragma HLS INLINE
+    return (sel == DMASEL_CTX_K) ||
+           (sel == DMASEL_CTX_V) ||
+           (sel == DMASEL_K_WRITE) ||
+           (sel == DMASEL_V_WRITE);
+}
+
 static inline int head_to_lane(int head) {
 #pragma HLS INLINE
     if (head < 0) return 0;
@@ -2239,6 +2247,7 @@ void mmu_fsm(
     uint64_t        &dma_addr,                      // [OUTPUT] DMA address
     uint32_t        &dma_len,                       // [OUTPUT] DMA transfer length
     bool            &dma_is_write,                  // [OUTPUT] DMA direction (1=MMU->DDR)
+    bool            &dma_use_kv_cache,              // [OUTPUT] Select KV-cache AXI interface
 
     // Stream ingress/egress interfaces
     bool            axis_in_valid,                  // [INPUT] AXIS ingress valid
@@ -2297,6 +2306,7 @@ void mmu_fsm(
     dma_addr = 0;
     dma_len = 0;
     dma_is_write = false;
+    dma_use_kv_cache = false;
     main_dma_done = false;
     mem_transfer_done = false;
     mmu_req_ready = (dma_q_count < DMA_QUEUE_DEPTH);
@@ -2721,6 +2731,7 @@ void mmu_fsm(
             }
             dma_start = true;
             dma_is_write = false;
+            dma_use_kv_cache = dma_uses_kv_cache(active_dma_sel);
             dma_len = sz;
             dma_addr = piece_addr;
             active_chunk_bytes = sz;
@@ -2851,6 +2862,7 @@ void mmu_fsm(
             }
             dma_start = true;
             dma_is_write = true;
+            dma_use_kv_cache = dma_uses_kv_cache(active_dma_sel);
             dma_addr = active_dma_addr_base + static_cast<uint64_t>(active_piece_bytes_done);
             dma_len = chunk_bytes;
             active_chunk_bytes = chunk_bytes;

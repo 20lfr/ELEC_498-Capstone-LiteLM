@@ -48,8 +48,10 @@ void scheduler_hls(
     // ------------------------------------------------------------
     // AXI4-Lite CONTROL INTERFACE (PS → PL)
     // ------------------------------------------------------------
-    ControlMemSpace ctrl_mem,
-    StatusMemSpace &status_mem,
+    bool cntrl_reset_n,
+    bool cntrl_start,
+    bool debug_mode_en,
+    bool ctrl_error,
 
     // ------------------------------------------------------------
     // AXI4-STREAM INPUT (INGRESS: PS → PL)
@@ -87,6 +89,7 @@ void scheduler_hls(
     // ------------------------------------------------------------
     bool &done, // [OUTPUT] Inference pipeline fully complete
     bool &error, // [OUTPUT] Error flag (not used in this minimal FSM)
+    uint32_t &layer_index_out, // [OUTPUT] Current layer index for status mirroring
     SchedState &STATE // [OUTPUT] Current scheduler state
 
     // ------------------------------------------------------------
@@ -234,18 +237,7 @@ void scheduler_hls(
 
 
 
-  // Control Memory Local Logic
-  const bool cntrl_reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
   const bool reset = !cntrl_reset_n;
-  const bool busy = (st != S_IDLE);
-  // Mirror busy into status bit 2 without clobbering other bits
-  
-  // Expose a start bit that auto-clears once we leave IDLE
-  const bool cntrl_start = (ctrl_mem.control & CTRL_START_BIT) != 0;
-  const bool debug_mode_en = (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0;
-  const bool ctrl_error =
-      ((status_mem.irq_status & IRQ_ERROR_BIT) != 0) ||
-      (status_mem.error_code != ERR_NONE);
 
   // FSM Reset
   if (reset) {
@@ -342,7 +334,7 @@ void scheduler_hls(
   }
 
   // Default outputs
-  status_mem.layer_index = layer_idx;
+  layer_index_out = static_cast<uint32_t>(layer_idx);
   if (wl_accept && wl_start){
         wl_start = false;
         wl_instruction = pack_dma_op(DmaSel::DMASEL_NONE, layer_idx, -1, -1);
@@ -358,7 +350,6 @@ void scheduler_hls(
   if (reset) {
     head_group_idx = 0;
     STATE = st;
-    status_mem.status = static_cast<uint32_t>(st);
     return;
 
   }
@@ -605,6 +596,7 @@ void scheduler_hls(
     case S_IDLE: {
       if (cntrl_start) {
         st = S_STREAM_IN;
+        layer_idx = 0;
 
         // Attention
         attn_started = false;
@@ -622,8 +614,11 @@ void scheduler_hls(
         // Output projection
         outproj_started = false;
         outproj_compute_done = false;
+        wo_dma_done = false;
         ln0_dma_done = false;
         ln1_dma_done = false;
+        w1_dma_done = false;
+        w2_dma_done = false;
 
         // Residual + LN (1st)
         resid0_started = false;
@@ -634,6 +629,7 @@ void scheduler_hls(
         ln0_compute_done = false;
 
         // FFN
+        ffn_stage = FfnStage::W1;
         ffn_started = false;
         ffn_w1_compute_done = false;
         ffn_act_compute_done = false;
@@ -647,6 +643,9 @@ void scheduler_hls(
         ln1_comp_busy = false;
         ln1_compute_done = false;
         final_norm_started = false;
+        final_norm_dma_busy = false;
+        final_norm_comp_busy = false;
+        final_norm_dma_done = false;
         final_norm_compute_done = false;
         logits_started = false;
         logits_compute_done = false;
@@ -668,6 +667,7 @@ void scheduler_hls(
         logit_tile = 0;
         logits_dma_busy = false;
         logits_comp_busy = false;
+        stream_done_seen = false;
 
         // Weight Stager and Loader params
         wl_start = false;
@@ -683,6 +683,7 @@ void scheduler_hls(
 
         done = false;
         error = false;
+        error_latched = false;
       }
       break;
     }
@@ -1125,6 +1126,6 @@ void scheduler_hls(
     }
   }
     head_group_idx = head_group_idx_out;
+    layer_index_out = static_cast<uint32_t>(layer_idx);
     STATE = st;
-    status_mem.status = static_cast<uint32_t>(st);
 }

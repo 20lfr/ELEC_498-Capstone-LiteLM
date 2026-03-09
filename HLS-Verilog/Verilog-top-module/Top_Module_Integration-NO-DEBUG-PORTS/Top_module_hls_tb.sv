@@ -13,9 +13,9 @@ module top_module_hls_tb;
   localparam int KV_STORE_WORDS       = 131072;
   localparam int DMA_LATENCY_CYCLES   = 4;
   localparam int STREAM_LATENCY_CYCLES = 6;
-  localparam int TB_DEBUG_MODE         = 1; // <----- DEBUG MODE FLAG
-  localparam int CTRL_START_HOLD_CYCLES = 48;
-  localparam int CTRL_CTRL_GAP_CYCLES   = 8;
+  localparam int TB_DEBUG_MODE         = 0; // <----- DEBUG MODE FLAG
+  localparam int CTRL_START_HOLD_CYCLES = 128;
+  localparam int CTRL_CTRL_GAP_CYCLES   = 24;
   localparam int RAM_REGION_WORDS      = 65536;
   `include "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/generated_mem_map.svh"
   localparam int TB_HEADS_PARALLEL     = 2;
@@ -192,6 +192,57 @@ module top_module_hls_tb;
   logic [0:0]   m_axi_gmem_BID;
   logic [0:0]   m_axi_gmem_BUSER;
 
+  // AXI4-Full (KV cache model) interface
+  logic         m_axi_kv_gmem_AWVALID;
+  logic         m_axi_kv_gmem_AWREADY;
+  logic [63:0]  m_axi_kv_gmem_AWADDR;
+  logic [0:0]   m_axi_kv_gmem_AWID;
+  logic [7:0]   m_axi_kv_gmem_AWLEN;
+  logic [2:0]   m_axi_kv_gmem_AWSIZE;
+  logic [1:0]   m_axi_kv_gmem_AWBURST;
+  logic [1:0]   m_axi_kv_gmem_AWLOCK;
+  logic [3:0]   m_axi_kv_gmem_AWCACHE;
+  logic [2:0]   m_axi_kv_gmem_AWPROT;
+  logic [3:0]   m_axi_kv_gmem_AWQOS;
+  logic [3:0]   m_axi_kv_gmem_AWREGION;
+  logic [0:0]   m_axi_kv_gmem_AWUSER;
+
+  logic         m_axi_kv_gmem_WVALID;
+  logic         m_axi_kv_gmem_WREADY;
+  logic [31:0]  m_axi_kv_gmem_WDATA;
+  logic [3:0]   m_axi_kv_gmem_WSTRB;
+  logic         m_axi_kv_gmem_WLAST;
+  logic [0:0]   m_axi_kv_gmem_WID;
+  logic [0:0]   m_axi_kv_gmem_WUSER;
+
+  logic         m_axi_kv_gmem_ARVALID;
+  logic         m_axi_kv_gmem_ARREADY;
+  logic [63:0]  m_axi_kv_gmem_ARADDR;
+  logic [0:0]   m_axi_kv_gmem_ARID;
+  logic [7:0]   m_axi_kv_gmem_ARLEN;
+  logic [2:0]   m_axi_kv_gmem_ARSIZE;
+  logic [1:0]   m_axi_kv_gmem_ARBURST;
+  logic [1:0]   m_axi_kv_gmem_ARLOCK;
+  logic [3:0]   m_axi_kv_gmem_ARCACHE;
+  logic [2:0]   m_axi_kv_gmem_ARPROT;
+  logic [3:0]   m_axi_kv_gmem_ARQOS;
+  logic [3:0]   m_axi_kv_gmem_ARREGION;
+  logic [0:0]   m_axi_kv_gmem_ARUSER;
+
+  logic         m_axi_kv_gmem_RVALID;
+  logic         m_axi_kv_gmem_RREADY;
+  logic [31:0]  m_axi_kv_gmem_RDATA;
+  logic         m_axi_kv_gmem_RLAST;
+  logic [0:0]   m_axi_kv_gmem_RID;
+  logic [0:0]   m_axi_kv_gmem_RUSER;
+  logic [1:0]   m_axi_kv_gmem_RRESP;
+
+  logic         m_axi_kv_gmem_BVALID;
+  logic         m_axi_kv_gmem_BREADY;
+  logic [1:0]   m_axi_kv_gmem_BRESP;
+  logic [0:0]   m_axi_kv_gmem_BID;
+  logic [0:0]   m_axi_kv_gmem_BUSER;
+
   // AXI4-Stream ingress/egress
   logic [7:0] s_axis_in_TDATA;
   logic       s_axis_in_TVALID;
@@ -226,12 +277,12 @@ module top_module_hls_tb;
   logic         s_axi_control_BVALID;
   logic [1:0]   s_axi_control_BRESP;
 
-  logic [4:0]   s_axi_control_r_AWADDR;
+  logic [5:0]   s_axi_control_r_AWADDR;
   logic         s_axi_control_r_AWVALID;
   logic         s_axi_control_r_WVALID;
   logic [31:0]  s_axi_control_r_WDATA;
   logic [3:0]   s_axi_control_r_WSTRB;
-  logic [4:0]   s_axi_control_r_ARADDR;
+  logic [5:0]   s_axi_control_r_ARADDR;
   logic         s_axi_control_r_ARVALID;
   logic         s_axi_control_r_RREADY;
   logic         s_axi_control_r_BREADY;
@@ -314,6 +365,21 @@ module top_module_hls_tb;
   logic [2:0]  axi_ar_size_latched;
   logic [7:0]  axi_r_beats_sent;
   logic [0:0]  axi_rid_latched;
+
+  logic        kv_axi_aw_active;
+  logic [63:0] kv_axi_aw_addr_latched;
+  logic [7:0]  kv_axi_aw_len_latched;
+  logic [2:0]  kv_axi_aw_size_latched;
+  logic [7:0]  kv_axi_w_beats_seen;
+  logic [0:0]  kv_axi_bid_latched;
+  logic [1:0]  kv_axi_bresp_latched;
+
+  logic        kv_axi_ar_active;
+  logic [63:0] kv_axi_ar_addr_latched;
+  logic [7:0]  kv_axi_ar_len_latched;
+  logic [2:0]  kv_axi_ar_size_latched;
+  logic [7:0]  kv_axi_r_beats_sent;
+  logic [0:0]  kv_axi_rid_latched;
 
   logic [31:0] ctrl_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] ctrl_init_words [0:CTRL_MEM_WORDS-1];
@@ -423,6 +489,7 @@ module top_module_hls_tb;
     CTRL_ASSERT_DEBUG_MODE,
     CTRL_ASSERT_START,
     CTRL_ASSERT_AP_START,
+    CTRL_HOLD_START,
     CTRL_CLEAR_START,
     CTRL_DONE
   } ctrl_init_stage_t;
@@ -468,11 +535,13 @@ module top_module_hls_tb;
   logic        done_req_write;
   logic [7:0]  done_req_addr;
   logic [31:0] done_req_wdata;
+  logic        done_clear_release_pending;
   logic        error_req_valid;
   logic        error_req_write;
   logic        error_req_read;
   logic [7:0]  error_req_addr;
   logic [31:0] error_req_wdata;
+  logic        error_clear_release_pending;
   logic [2:0]  status_poll_idx;
   wire         irq_req_fire;
   wire         done_req_fire;
@@ -1806,8 +1875,8 @@ module top_module_hls_tb;
   assign s_axi_control_r_ARVALID = 1'b0;
   assign s_axi_control_r_RREADY  = 1'b1;
   assign s_axi_control_r_BREADY  = 1'b1;
-  assign s_axi_control_r_AWADDR  = 5'd0;
-  assign s_axi_control_r_ARADDR  = 5'd0;
+  assign s_axi_control_r_AWADDR  = 6'd0;
+  assign s_axi_control_r_ARADDR  = 6'd0;
 
   // Build/drive AXI-stream input packet.
   always_comb begin : p_axis_ingress_outputs
@@ -1906,6 +1975,11 @@ module top_module_hls_tb;
   assign m_axi_gmem_ARREADY = !axi_ar_active && !m_axi_gmem_RVALID;
   assign m_axi_gmem_RUSER   = 1'b0;
   assign m_axi_gmem_BUSER   = 1'b0;
+  assign m_axi_kv_gmem_AWREADY = !kv_axi_aw_active;
+  assign m_axi_kv_gmem_WREADY  = kv_axi_aw_active;
+  assign m_axi_kv_gmem_ARREADY = !kv_axi_ar_active && !m_axi_kv_gmem_RVALID;
+  assign m_axi_kv_gmem_RUSER   = 1'b0;
+  assign m_axi_kv_gmem_BUSER   = 1'b0;
 
   // AXI4-Full memory model (single outstanding read and write burst).
   always_ff @(posedge ap_clk) begin : m_axi_full_model
@@ -1995,6 +2069,96 @@ module top_module_hls_tb;
         end else begin
           m_axi_gmem_RVALID   <= 1'b0;
           axi_r_beats_sent    <= axi_r_beats_sent + 1'b1;
+        end
+      end
+    end
+  end
+
+  // AXI4-Full KV-cache memory model (single outstanding read and write burst).
+  always_ff @(posedge ap_clk) begin : m_axi_kv_full_model
+    logic [63:0] waddr_cur;
+    logic [63:0] raddr_cur;
+    logic [31:0] rdata_cur;
+    if (!ap_rst_n) begin
+      kv_axi_aw_active        <= 1'b0;
+      kv_axi_aw_addr_latched  <= 64'd0;
+      kv_axi_aw_len_latched   <= 8'd0;
+      kv_axi_aw_size_latched  <= 3'd2;
+      kv_axi_w_beats_seen     <= 8'd0;
+      kv_axi_bid_latched      <= 1'b0;
+      kv_axi_bresp_latched    <= 2'b00;
+
+      kv_axi_ar_active        <= 1'b0;
+      kv_axi_ar_addr_latched  <= 64'd0;
+      kv_axi_ar_len_latched   <= 8'd0;
+      kv_axi_ar_size_latched  <= 3'd2;
+      kv_axi_r_beats_sent     <= 8'd0;
+      kv_axi_rid_latched      <= 1'b0;
+
+      m_axi_kv_gmem_RVALID    <= 1'b0;
+      m_axi_kv_gmem_RDATA     <= 32'd0;
+      m_axi_kv_gmem_RLAST     <= 1'b0;
+      m_axi_kv_gmem_RID       <= 1'b0;
+      m_axi_kv_gmem_RRESP     <= 2'b00;
+      m_axi_kv_gmem_BVALID    <= 1'b0;
+      m_axi_kv_gmem_BRESP     <= 2'b00;
+      m_axi_kv_gmem_BID       <= 1'b0;
+    end else begin
+      if (m_axi_kv_gmem_AWVALID && m_axi_kv_gmem_AWREADY && !kv_axi_aw_active) begin
+        kv_axi_aw_active       <= 1'b1;
+        kv_axi_aw_addr_latched <= m_axi_kv_gmem_AWADDR;
+        kv_axi_aw_len_latched  <= m_axi_kv_gmem_AWLEN;
+        kv_axi_aw_size_latched <= m_axi_kv_gmem_AWSIZE;
+        kv_axi_w_beats_seen    <= 8'd0;
+        kv_axi_bid_latched     <= m_axi_kv_gmem_AWID;
+      end
+
+      if (kv_axi_aw_active && m_axi_kv_gmem_WVALID && m_axi_kv_gmem_WREADY) begin
+        waddr_cur = kv_axi_aw_addr_latched + ({{56{1'b0}}, kv_axi_w_beats_seen} << kv_axi_aw_size_latched);
+        mem_write_word(waddr_cur, m_axi_kv_gmem_WDATA, m_axi_kv_gmem_WSTRB);
+        if (m_axi_kv_gmem_WLAST || (kv_axi_w_beats_seen == kv_axi_aw_len_latched)) begin
+          kv_axi_aw_active        <= 1'b0;
+          m_axi_kv_gmem_BVALID    <= 1'b1;
+          m_axi_kv_gmem_BRESP     <= kv_axi_bresp_latched;
+          m_axi_kv_gmem_BID       <= kv_axi_bid_latched;
+        end else begin
+          kv_axi_w_beats_seen <= kv_axi_w_beats_seen + 1'b1;
+        end
+      end
+
+      if (m_axi_kv_gmem_BVALID && m_axi_kv_gmem_BREADY) begin
+        m_axi_kv_gmem_BVALID <= 1'b0;
+      end
+
+      if (m_axi_kv_gmem_ARVALID && m_axi_kv_gmem_ARREADY && !kv_axi_ar_active && !m_axi_kv_gmem_RVALID) begin
+        kv_axi_ar_active       <= 1'b1;
+        kv_axi_ar_addr_latched <= m_axi_kv_gmem_ARADDR;
+        kv_axi_ar_len_latched  <= m_axi_kv_gmem_ARLEN;
+        kv_axi_ar_size_latched <= m_axi_kv_gmem_ARSIZE;
+        kv_axi_r_beats_sent    <= 8'd0;
+        kv_axi_rid_latched     <= m_axi_kv_gmem_ARID;
+      end
+
+      if (kv_axi_ar_active && !m_axi_kv_gmem_RVALID) begin
+        raddr_cur = kv_axi_ar_addr_latched + ({{56{1'b0}}, kv_axi_r_beats_sent} << kv_axi_ar_size_latched);
+        rdata_cur            = mem_read_word(raddr_cur);
+        m_axi_kv_gmem_RDATA  <= rdata_cur;
+        m_axi_kv_gmem_RID    <= kv_axi_rid_latched;
+        m_axi_kv_gmem_RRESP  <= 2'b00;
+        m_axi_kv_gmem_RLAST  <= (kv_axi_r_beats_sent == kv_axi_ar_len_latched);
+        m_axi_kv_gmem_RVALID <= 1'b1;
+        $display("[AXI-KV-RD] cycle=%0d araddr=0x%016h rdata=0x%08h beat=%0d last=%0b",
+                 cycle_count, raddr_cur, rdata_cur, kv_axi_r_beats_sent,
+                 (kv_axi_r_beats_sent == kv_axi_ar_len_latched));
+      end else if (m_axi_kv_gmem_RVALID && m_axi_kv_gmem_RREADY) begin
+        if (m_axi_kv_gmem_RLAST) begin
+          m_axi_kv_gmem_RVALID <= 1'b0;
+          m_axi_kv_gmem_RLAST  <= 1'b0;
+          kv_axi_ar_active     <= 1'b0;
+          kv_axi_r_beats_sent  <= 8'd0;
+        end else begin
+          m_axi_kv_gmem_RVALID <= 1'b0;
+          kv_axi_r_beats_sent  <= kv_axi_r_beats_sent + 1'b1;
         end
       end
     end
@@ -2101,16 +2265,28 @@ module top_module_hls_tb;
       done_req_write <= 1'b0;
       done_req_addr  <= ctrl_mem_addr(2);
       done_req_wdata <= 32'd0;
+      done_clear_release_pending <= 1'b0;
     end else begin
       done_req_valid <= 1'b0;
       done_req_write <= 1'b0;
       done_req_addr  <= ctrl_mem_addr(2);
       done_req_wdata <= 32'd0;
-      if (irq_seen_done) begin
+      if (done_clear_release_pending) begin
+        done_req_valid <= 1'b1;
+        done_req_write <= 1'b1;
+        done_req_addr  <= ctrl_mem_addr(2); // irq_clear
+        done_req_wdata <= 32'd0;
+        if (done_req_fire) begin
+          done_clear_release_pending <= 1'b0;
+        end
+      end else if (irq_seen_done) begin
         done_req_valid <= 1'b1;
         done_req_write <= 1'b1;
         done_req_addr  <= ctrl_mem_addr(2); // irq_clear
         done_req_wdata <= IRQ_INFER_DONE_BIT;
+        if (done_req_fire) begin
+          done_clear_release_pending <= 1'b1;
+        end
       end
     end
   end
@@ -2148,6 +2324,7 @@ module top_module_hls_tb;
       error_req_addr  <= ADDR_STATUS_MEM_DATA_2;
       error_req_wdata <= 32'd0;
       err_phase       <= ERR_PHASE_READ;
+      error_clear_release_pending <= 1'b0;
     end else begin
       error_req_valid <= 1'b0;
       error_req_write <= 1'b0;
@@ -2169,9 +2346,14 @@ module top_module_hls_tb;
           error_req_valid <= 1'b1;
           error_req_write <= 1'b1;
           error_req_addr  <= ctrl_mem_addr(2); // irq_clear
-          error_req_wdata <= IRQ_ERROR_BIT;
+          error_req_wdata <= error_clear_release_pending ? 32'd0 : IRQ_ERROR_BIT;
           if (error_req_fire) begin
-            err_phase <= ERR_PHASE_READ;
+            if (error_clear_release_pending) begin
+              error_clear_release_pending <= 1'b0;
+              err_phase <= ERR_PHASE_READ;
+            end else begin
+              error_clear_release_pending <= 1'b1;
+            end
           end
         end
         default: err_phase <= ERR_PHASE_READ;
@@ -2301,7 +2483,7 @@ module top_module_hls_tb;
           ctrl_chip_en <= 1'b1;
           ctrl_shadow_control <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
           ctrl_words[0] <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
-          ctrl_stage <= CTRL_ASSERT_AP_START;
+          ctrl_stage <= (current_stream_token == 0) ? CTRL_ASSERT_AP_START : CTRL_HOLD_START;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
         CTRL_ASSERT_AP_START: begin
@@ -2311,6 +2493,14 @@ module top_module_hls_tb;
           ctrl_data_in <= 32'h0000_0081;
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
+          ctrl_stage <= CTRL_HOLD_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_HOLD_START: begin
+          $display("[CTRL] cycle=%0d token=%0d hold control(start)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token,
+                   CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
+                   dbg_state, status_mem_shadow.status);
           ctrl_stage <= CTRL_CLEAR_START;
           ctrl_gap_cycles <= CTRL_START_HOLD_CYCLES;
         end
@@ -2539,6 +2729,51 @@ module top_module_hls_tb;
     .m_axi_gmem_BRESP(m_axi_gmem_BRESP),
     .m_axi_gmem_BID(m_axi_gmem_BID),
     .m_axi_gmem_BUSER(m_axi_gmem_BUSER),
+    .m_axi_kv_gmem_AWVALID(m_axi_kv_gmem_AWVALID),
+    .m_axi_kv_gmem_AWREADY(m_axi_kv_gmem_AWREADY),
+    .m_axi_kv_gmem_AWADDR(m_axi_kv_gmem_AWADDR),
+    .m_axi_kv_gmem_AWID(m_axi_kv_gmem_AWID),
+    .m_axi_kv_gmem_AWLEN(m_axi_kv_gmem_AWLEN),
+    .m_axi_kv_gmem_AWSIZE(m_axi_kv_gmem_AWSIZE),
+    .m_axi_kv_gmem_AWBURST(m_axi_kv_gmem_AWBURST),
+    .m_axi_kv_gmem_AWLOCK(m_axi_kv_gmem_AWLOCK),
+    .m_axi_kv_gmem_AWCACHE(m_axi_kv_gmem_AWCACHE),
+    .m_axi_kv_gmem_AWPROT(m_axi_kv_gmem_AWPROT),
+    .m_axi_kv_gmem_AWQOS(m_axi_kv_gmem_AWQOS),
+    .m_axi_kv_gmem_AWREGION(m_axi_kv_gmem_AWREGION),
+    .m_axi_kv_gmem_AWUSER(m_axi_kv_gmem_AWUSER),
+    .m_axi_kv_gmem_WVALID(m_axi_kv_gmem_WVALID),
+    .m_axi_kv_gmem_WREADY(m_axi_kv_gmem_WREADY),
+    .m_axi_kv_gmem_WDATA(m_axi_kv_gmem_WDATA),
+    .m_axi_kv_gmem_WSTRB(m_axi_kv_gmem_WSTRB),
+    .m_axi_kv_gmem_WLAST(m_axi_kv_gmem_WLAST),
+    .m_axi_kv_gmem_WID(m_axi_kv_gmem_WID),
+    .m_axi_kv_gmem_WUSER(m_axi_kv_gmem_WUSER),
+    .m_axi_kv_gmem_ARVALID(m_axi_kv_gmem_ARVALID),
+    .m_axi_kv_gmem_ARREADY(m_axi_kv_gmem_ARREADY),
+    .m_axi_kv_gmem_ARADDR(m_axi_kv_gmem_ARADDR),
+    .m_axi_kv_gmem_ARID(m_axi_kv_gmem_ARID),
+    .m_axi_kv_gmem_ARLEN(m_axi_kv_gmem_ARLEN),
+    .m_axi_kv_gmem_ARSIZE(m_axi_kv_gmem_ARSIZE),
+    .m_axi_kv_gmem_ARBURST(m_axi_kv_gmem_ARBURST),
+    .m_axi_kv_gmem_ARLOCK(m_axi_kv_gmem_ARLOCK),
+    .m_axi_kv_gmem_ARCACHE(m_axi_kv_gmem_ARCACHE),
+    .m_axi_kv_gmem_ARPROT(m_axi_kv_gmem_ARPROT),
+    .m_axi_kv_gmem_ARQOS(m_axi_kv_gmem_ARQOS),
+    .m_axi_kv_gmem_ARREGION(m_axi_kv_gmem_ARREGION),
+    .m_axi_kv_gmem_ARUSER(m_axi_kv_gmem_ARUSER),
+    .m_axi_kv_gmem_RVALID(m_axi_kv_gmem_RVALID),
+    .m_axi_kv_gmem_RREADY(m_axi_kv_gmem_RREADY),
+    .m_axi_kv_gmem_RDATA(m_axi_kv_gmem_RDATA),
+    .m_axi_kv_gmem_RLAST(m_axi_kv_gmem_RLAST),
+    .m_axi_kv_gmem_RID(m_axi_kv_gmem_RID),
+    .m_axi_kv_gmem_RUSER(m_axi_kv_gmem_RUSER),
+    .m_axi_kv_gmem_RRESP(m_axi_kv_gmem_RRESP),
+    .m_axi_kv_gmem_BVALID(m_axi_kv_gmem_BVALID),
+    .m_axi_kv_gmem_BREADY(m_axi_kv_gmem_BREADY),
+    .m_axi_kv_gmem_BRESP(m_axi_kv_gmem_BRESP),
+    .m_axi_kv_gmem_BID(m_axi_kv_gmem_BID),
+    .m_axi_kv_gmem_BUSER(m_axi_kv_gmem_BUSER),
     .s_axis_in_TDATA(s_axis_in_TDATA),
     .s_axis_in_TVALID(s_axis_in_TVALID),
     .s_axis_in_TREADY(s_axis_in_TREADY),

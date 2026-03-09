@@ -256,7 +256,7 @@ int main() {
             }
 
             compute_controller(
-                ctrl_mem,
+                (ctrl_mem.control & CTRL_RESETN_BIT) != 0u,
                 compute_start,
                 compute_instruction,
                 compute_ready,

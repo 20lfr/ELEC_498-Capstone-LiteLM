@@ -21,6 +21,7 @@ void transformer_top(
     hls::stream<axis8_t> &s_axis_in,    // [INPUT]  AXI4-Stream ingress
     hls::stream<axis8_t> &m_axis_out,   // [OUTPUT] AXI4-Stream egress
     volatile axi_gmem_word_t *ddr_mem,  // [BOTH]   AXI4-Full external memory
+    volatile axi_gmem_word_t *kv_cache, // [BOTH]   AXI4-Full KV cache memory
     ControlMemSpace ctrl_mem,           // [INPUT]  Control memory interface
     StatusMemSpace &status_mem,         // [OUTPUT] Status memory interface
     bool &irq_ps,                       // [OUTPUT] Interrupt signal
