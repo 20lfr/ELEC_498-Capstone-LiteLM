@@ -45,9 +45,13 @@ bool PLInterface::init(const std::string &device_name,
 }
 
 // Unified DMA init
-bool PLInterface::initDMA(const std::string &dmabuf_name, size_t dmabuf_size) {
+bool PLInterface::initDMA(const std::string &dmabuf0_name, size_t dmabuf0_size,
+                          const std::string &dmabuf1_name,
+                          size_t dmabuf1_size) {
     if (_mock_mode) {
-        if (!_dma_buf.allocate(dmabuf_name, dmabuf_size, true))
+        if (!_dma_buf0.allocate(dmabuf0_name, dmabuf0_size, true))
+            return false;
+        if (!_dma_buf1.allocate(dmabuf1_name, dmabuf1_size, true))
             return false;
         // Mock registers for DMA
         _stream_regs =
@@ -55,17 +59,26 @@ bool PLInterface::initDMA(const std::string &dmabuf_name, size_t dmabuf_size) {
         return true;
     }
 
-    if (!_dma_buf.allocate(dmabuf_name, dmabuf_size)) {
+    if (!_dma_buf0.allocate(dmabuf0_name, dmabuf0_size)) {
+        _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
+        return false;
+    }
+    if (!_dma_buf1.allocate(dmabuf1_name, dmabuf1_size)) {
         _err->setError(ErrorCode::MMAP_FAILED, "DMA buffer alloc failed");
         return false;
     }
 
     // Clear buffer
-    memset(_dma_buf.virt(), 0, dmabuf_size);
+    memset(_dma_buf0.virt(), 0, dmabuf0_size);
+    memset(_dma_buf1.virt(), 0, dmabuf1_size);
 
-    std::string phys_str = std::to_string(_dma_buf.phys());
-    std::string size_str = std::to_string(dmabuf_size / 1024 / 1024);
-    _logger->info("DMA initialized: buf=0x" + phys_str + " (" + size_str +
+    std::string phys0_str = std::to_string(_dma_buf0.phys());
+    std::string phys1_str = std::to_string(_dma_buf1.phys());
+    std::string size0_str = std::to_string(dmabuf0_size / 1024 / 1024);
+    std::string size1_str = std::to_string(dmabuf1_size / 1024 / 1024);
+    _logger->info("DMA initialized: buf=0x" + phys0_str + " (" + size0_str +
+                  " MB)");
+    _logger->info("DMA initialized: buf=0x" + phys1_str + " (" + size1_str +
                   " MB)");
     return true;
 }
@@ -75,7 +88,8 @@ void PLInterface::cleanup() {
         close(_ctrl_fd);
         _ctrl_fd = -1;
     }
-    _dma_buf.release();
+    _dma_buf0.release();
+    _dma_buf1.release();
     unmapAll();
     _initialized = false;
 }
@@ -343,8 +357,8 @@ std::string PLInterface::getRegStats(bool compact) {
         snprintf(buf, sizeof(buf),
                  "status=0x%08X irq=0x%08X error=0x%08X "
                  "layer=%u head=%u token=%u | %s | stream: %s",
-                 status, irq_status, error_code, layer_idx, head_idx,
-                 token_idx, getErrorCodeString(error_code).c_str(),
+                 status, irq_status, error_code, layer_idx, head_idx, token_idx,
+                 getErrorCodeString(error_code).c_str(),
                  streamStatusString().c_str());
     } else {
         snprintf(buf, sizeof(buf),
@@ -356,46 +370,33 @@ std::string PLInterface::getRegStats(bool compact) {
                  "  Token:      %u\n"
                  "  Stream:     %s",
                  status, irq_status, error_code,
-                 getErrorCodeString(error_code).c_str(),
-                 layer_idx, head_idx, token_idx,
-                 streamStatusString().c_str());
+                 getErrorCodeString(error_code).c_str(), layer_idx, head_idx,
+                 token_idx, streamStatusString().c_str());
     }
     return std::string(buf);
 }
 
 // DDR access
-bool PLInterface::writeDDR(uint32_t offset, const void *data, size_t size,
-                           bool sync_to_pl) {
-    if (!_dma_buf.isAllocated() || offset + size > _dma_buf.size())
+bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
+                           size_t size, bool sync_to_pl) {
+    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    if (!buf->isAllocated() || offset + size > buf->size())
         return false;
-    memcpy((uint8_t *)_dma_buf.virt() + offset, data, size);
-    if (sync_to_pl) {
-        _dma_buf.sync_pl();
-    }
+    memcpy((uint8_t *)buf->virt() + offset, data, size);
+    if (sync_to_pl)
+        buf->sync_pl();
     return true;
 }
 
-bool PLInterface::readDDR(uint32_t offset, void *data, size_t size,
-                          bool sync_from_pl) {
-    if (!_dma_buf.isAllocated() || offset + size > _dma_buf.size())
+bool PLInterface::readDDR(DmaBufType type, uint32_t offset, void *data,
+                          size_t size, bool sync_from_pl) {
+    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    if (!buf->isAllocated() || offset + size > buf->size())
         return false;
-    if (sync_from_pl) {
-        _dma_buf.sync_cpu();
-    }
-    memcpy(data, (uint8_t *)_dma_buf.virt() + offset, size);
+    if (sync_from_pl)
+        buf->sync_cpu();
+    memcpy(data, (uint8_t *)buf->virt() + offset, size);
     return true;
-}
-
-void PLInterface::syncDDRToPL() {
-    if (_dma_buf.isAllocated()) {
-        _dma_buf.sync_pl();
-    }
-}
-
-void PLInterface::syncDDRToCPU() {
-    if (_dma_buf.isAllocated()) {
-        _dma_buf.sync_cpu();
-    }
 }
 
 // Stream API
@@ -463,24 +464,24 @@ bool PLInterface::resetStream() {
 
 bool PLInterface::streamInitSend(uint32_t dma_offset, const void *data,
                                  size_t size) {
-    if (!_stream_regs || !_dma_buf.isAllocated())
+    if (!_stream_regs || !_dma_buf1.isAllocated())
         return false;
-    writeDDR(dma_offset, data, size);
+    writeDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
     return streamTransfer(StreamReg::MM2S_CR, StreamReg::MM2S_SR,
                           StreamReg::MM2S_SA, StreamReg::MM2S_SA_MSB,
-                          StreamReg::MM2S_LEN, _dma_buf.phys() + dma_offset,
+                          StreamReg::MM2S_LEN, _dma_buf1.phys() + dma_offset,
                           size);
 }
 
 bool PLInterface::streamInitRecv(uint32_t dma_offset, size_t size) {
-    if (!_stream_regs || !_dma_buf.isAllocated())
+    if (!_stream_regs || !_dma_buf1.isAllocated())
         return false;
-    if (dma_offset + size > _dma_buf.size())
+    if (dma_offset + size > _dma_buf1.size())
         return false; // Bounds check
 
     return streamTransfer(StreamReg::S2MM_CR, StreamReg::S2MM_SR,
                           StreamReg::S2MM_DA, StreamReg::S2MM_DA_MSB,
-                          StreamReg::S2MM_LEN, _dma_buf.phys() + dma_offset,
+                          StreamReg::S2MM_LEN, _dma_buf1.phys() + dma_offset,
                           size);
 }
 
@@ -492,7 +493,7 @@ bool PLInterface::streamWaitRecv(uint32_t dma_offset, void *data, size_t size,
                                  uint32_t timeout_ms) {
     if (!streamWait(StreamReg::S2MM_SR, timeout_ms))
         return false;
-    readDDR(dma_offset, data, size);
+    readDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
     return true;
 }
 

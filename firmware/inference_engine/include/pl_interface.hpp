@@ -22,6 +22,8 @@ class Logger;
 class ErrorHandler;
 enum class ErrorCode;
 
+enum class DmaBufType : uint8_t { WEIGHTS, KV_CACHE, IO_STREAM };
+
 // mmap'd register bus selector
 enum class RegBus : uint8_t {
     CTRL,  // ctrl_mem + status_mem
@@ -118,6 +120,10 @@ namespace AddrReg {
         XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA;
     constexpr uint32_t WEIGHTS_BASE_HI =
         XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA + 4;
+    constexpr uint32_t KV_CACHE_BASE_LO =
+        XTRANSFORMER_TOP_CONTROL_R_ADDR_KV_CACHE_DATA;
+    constexpr uint32_t KV_CACHE_BASE_HI =
+        XTRANSFORMER_TOP_CONTROL_R_ADDR_KV_CACHE_DATA + 4;
 } // namespace AddrReg
 
 // AXI DMA Register Offsets (PG021 Direct Register Mode)
@@ -170,7 +176,8 @@ private:
     size_t _addr_size;
 
     // DDR buffer for all data transfers
-    DmaBuffer _dma_buf;
+    DmaBuffer _dma_buf0;
+    DmaBuffer _dma_buf1;
 
     // AXI DMA IP registers (/dev/mem mapped)
     volatile uint32_t *_stream_regs;
@@ -186,7 +193,8 @@ public:
     ~PLInterface();
 
     bool init(const std::string &device_name, uint64_t stream_reg_base_addr);
-    bool initDMA(const std::string &dmabuf_name, size_t dmabuf_size);
+    bool initDMA(const std::string &dmabuf0_name, size_t dmabuf0_size,
+                 const std::string &dmabuf1_name, size_t dmabuf1_size);
     void cleanup();
 
     // Default overloads use RegBus::CTRL
@@ -228,13 +236,32 @@ public:
     void endConfig();
 
     // Memory
-    bool writeDDR(uint32_t dma_offset, const void *data, size_t size,
-                  bool sync_to_pl = true);
-    bool readDDR(uint32_t dma_offset, void *data, size_t size,
+    bool writeDDR(DmaBufType type, uint32_t dma_offset, const void *data,
+                  size_t size, bool sync_to_pl = true);
+    bool readDDR(DmaBufType type, uint32_t dma_offset, void *data, size_t size,
                  bool sync_from_pl = true);
-    void syncDDRToPL();
-    void syncDDRToCPU();
-    uint64_t getDDRBaseAddr() const { return _dma_buf.phys(); }
+    void syncDDRToPL(DmaBufType type) {
+        if (_dma_buf0.isAllocated() && _dma_buf1.isAllocated()) {
+            if (type == DmaBufType::WEIGHTS)
+                _dma_buf0.sync_pl();
+            else
+                _dma_buf1.sync_pl();
+        }
+    }
+    void syncDDRToCPU(DmaBufType type) {
+        if (_dma_buf0.isAllocated() && _dma_buf1.isAllocated()) {
+            if (type == DmaBufType::WEIGHTS)
+                _dma_buf0.sync_cpu();
+            else
+                _dma_buf1.sync_cpu();
+        }
+    }
+    uint64_t getDDRBaseAddr(DmaBufType type) const {
+        if (type == DmaBufType::WEIGHTS)
+            return _dma_buf0.phys();
+        else
+            return _dma_buf1.phys();
+    }
 
     // DMA Stream (non-blocking kick/wait)
     bool streamInitSend(uint32_t dma_offset, const void *data, size_t size);

@@ -718,6 +718,7 @@
 		pinctrl_uart1_default = "/firmware/zynqmp-firmware/pinctrl/uart1-default";
 		i2c0 = "/axi/i2c@ff020000";
 		pmu_region = "/reserved-memory/pmu@7ff00000";
+		cma_low = "/reserved-memory/buffer@40000000";
 		cma_high = "/reserved-memory/buffer@800000000";
 		ttc2 = "/axi/timer@ff130000";
 		soc_revision = "/firmware/zynqmp-firmware/nvmem-firmware/soc-revision@0";
@@ -780,12 +781,18 @@
 			phandle = <0x7a>;
 			no-map;
 		};
+		/* cma_high Region 2: Bank 1 (1952 MB) */
+		cma_high: buffer@40000000 {
+		    compatible = "shared-dma-pool";
+		    reusable;
+		    reg = <0x0 0x40000000 0x0 0x10000000>; // 1952 MB
+		};
 
 		/* cma_high Region 2: Bank 1 (1952 MB) */
 		cma_high: buffer@800000000 {
 		    compatible = "shared-dma-pool";
 		    reusable;
-		    reg = <0x8 0x00000000 0x0 0x7a000000>; // 1952 MB
+		    reg = <0x8 0x00000000 0x0 0x70000000>; // 1952 MB
 		};
 	};
 
@@ -793,7 +800,15 @@
         compatible = "ikwzm,u-dma-buf";
         device-name = "udmabuf0";
         memory-region = <&cma_high>;
-        size = <0x0 0x7a000000>; 
+        size = <0x0 0x70000000>; 
+        dma-mask = <64>;
+    };
+
+    udmabuf_low {
+        compatible = "ikwzm,u-dma-buf";
+        device-name = "udmabuf1";
+        memory-region = <&cma_low>;
+        size = <0x0 0x10000000>; 
         dma-mask = <64>;
     };
 

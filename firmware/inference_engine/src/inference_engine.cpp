@@ -13,9 +13,9 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 #include <memory>
 #include <mutex>
+#include <sstream>
 #include <thread>
 #include <vector>
 
@@ -33,14 +33,14 @@ class WeightLoader {
     Logger *logger;
     ErrorHandler *err;
     std::string weights_file;
-    static constexpr size_t kWeightLoadChunkBytes = 1024 * 1024 * 1024;
+    static constexpr size_t kWeightLoadChunkBytes = 32 * 1024 * 1024;
 
 public:
     WeightLoader(PLInterface *p, Logger *l, ErrorHandler *e)
         : pl(p), logger(l), err(e) {}
     void setWeightsFile(const std::string &f) { weights_file = f; }
 
-    bool loadAllWeights(const ModelConfig &cfg) {
+    bool loadAllWeights(const ModelConfig &cfg, size_t max_bytes = 0) {
         LOG_INFO("Loading weights from " + weights_file);
         std::ifstream f(weights_file, std::ios::binary);
         if (!f) {
@@ -57,12 +57,24 @@ public:
         const size_t file_size = static_cast<size_t>(file_size_off);
         f.seekg(0, std::ios::beg);
 
+        // Only load what the FPGA will actually read
+        size_t load_size = file_size;
+        if (max_bytes > 0 && max_bytes < load_size)
+            load_size = max_bytes;
+
+        LOG_INFO("Loading " + std::to_string(load_size / 1024) + " KB of " +
+                 std::to_string(file_size / 1024 / 1024) + " MB total");
+
         std::vector<uint8_t> chunk(kWeightLoadChunkBytes);
         size_t ddr_offset = 0;
 
-        while (f) {
+        while (f && ddr_offset < load_size) {
+            size_t remaining = load_size - ddr_offset;
+            size_t to_read =
+                (remaining < chunk.size()) ? remaining : chunk.size();
+
             f.read(reinterpret_cast<char *>(chunk.data()),
-                   static_cast<std::streamsize>(chunk.size()));
+                   static_cast<std::streamsize>(to_read));
             const std::streamsize bytes_read = f.gcount();
 
             if (bytes_read < 0) {
@@ -74,30 +86,24 @@ public:
                 break;
             }
 
-            if (!pl->writeDDR(ddr_offset, chunk.data(),
+            if (!pl->writeDDR(DmaBufType::WEIGHTS, ddr_offset, chunk.data(),
                               static_cast<size_t>(bytes_read), false)) {
-                err->setError(
-                    ErrorCode::HARDWARE_FAULT,
-                    "Staged DDR write failed at offset " +
-                        std::to_string(ddr_offset));
+                err->setError(ErrorCode::HARDWARE_FAULT,
+                              "Staged DDR write failed at offset " +
+                                  std::to_string(ddr_offset));
                 return false;
             }
 
             ddr_offset += static_cast<size_t>(bytes_read);
         }
 
-        if (!f.eof() && f.fail()) {
+        if (ddr_offset < load_size && !f.eof() && f.fail()) {
             err->setError(ErrorCode::FILE_NOT_FOUND,
                           "Failed before finishing staged weights read");
             return false;
         }
-        if (ddr_offset != file_size) {
-            err->setError(ErrorCode::FILE_NOT_FOUND,
-                          "Staged weights load size mismatch");
-            return false;
-        }
 
-        pl->syncDDRToPL();
+        pl->syncDDRToPL(DmaBufType::WEIGHTS);
 
         LOG_INFO("Loaded " + std::to_string(ddr_offset) +
                  " bytes of weights via staged DDR writes");
@@ -143,7 +149,9 @@ public:
 
         // 64-bit DDR base addresses (on control_r bus)
         pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
-                       pl->getDDRBaseAddr());
+                       pl->getDDRBaseAddr(DmaBufType::WEIGHTS));
+        pl->writeReg64(RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO,
+                       pl->getDDRBaseAddr(DmaBufType::KV_CACHE));
 
         // Weight / KV-cache / parameter offsets
         pl->writeReg(PLReg::WQ_OFFSET, mem.wq_offset);
@@ -163,8 +171,7 @@ public:
                      mem.final_norm_gamma_offset);
         pl->writeReg(PLReg::LN0_EPS_OFFSET, mem.ln0_eps_offset);
         pl->writeReg(PLReg::LN1_EPS_OFFSET, mem.ln1_eps_offset);
-        pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET,
-                     mem.final_norm_eps_offset);
+        pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET, mem.final_norm_eps_offset);
         pl->writeReg(PLReg::WLOGIT_OFFSET, mem.wlogit_offset);
 
         // endConfig: clears IRQ clear, enables IRQs, checks for config errors
@@ -220,8 +227,7 @@ public:
                      cfg.ln0_gamma_stride);
             dump_reg("LN1_GAMMA_STRIDE", PLReg::LN1_GAMMA_STRIDE,
                      cfg.ln1_gamma_stride);
-            dump_reg("FINAL_NORM_GAMMA_STRIDE",
-                     PLReg::FINAL_NORM_GAMMA_STRIDE,
+            dump_reg("FINAL_NORM_GAMMA_STRIDE", PLReg::FINAL_NORM_GAMMA_STRIDE,
                      cfg.final_norm_gamma_stride);
             dump_reg("LN0_EPS_STRIDE", PLReg::LN0_EPS_STRIDE,
                      cfg.ln0_eps_stride);
@@ -231,7 +237,9 @@ public:
                      cfg.final_norm_eps_stride);
 
             dump_reg64("DDR_MEM_BASE", RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
-                       pl->getDDRBaseAddr());
+                       pl->getDDRBaseAddr(DmaBufType::WEIGHTS));
+            dump_reg64("DDR_MEM_BASE", RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO,
+                       pl->getDDRBaseAddr(DmaBufType::KV_CACHE));
 
             dump_reg("WQ_OFFSET", PLReg::WQ_OFFSET, mem.wq_offset);
             dump_reg("WK_OFFSET", PLReg::WK_OFFSET, mem.wk_offset);
@@ -253,8 +261,7 @@ public:
                      mem.ln0_gamma_offset);
             dump_reg("LN1_GAMMA_OFFSET", PLReg::LN1_GAMMA_OFFSET,
                      mem.ln1_gamma_offset);
-            dump_reg("FINAL_NORM_GAMMA_OFFSET",
-                     PLReg::FINAL_NORM_GAMMA_OFFSET,
+            dump_reg("FINAL_NORM_GAMMA_OFFSET", PLReg::FINAL_NORM_GAMMA_OFFSET,
                      mem.final_norm_gamma_offset);
             dump_reg("LN0_EPS_OFFSET", PLReg::LN0_EPS_OFFSET,
                      mem.ln0_eps_offset);
@@ -262,8 +269,7 @@ public:
                      mem.ln1_eps_offset);
             dump_reg("FINAL_NORM_EPS_OFFSET", PLReg::FINAL_NORM_EPS_OFFSET,
                      mem.final_norm_eps_offset);
-            dump_reg("WLOGIT_OFFSET", PLReg::WLOGIT_OFFSET,
-                     mem.wlogit_offset);
+            dump_reg("WLOGIT_OFFSET", PLReg::WLOGIT_OFFSET, mem.wlogit_offset);
         }
         return !err->hasError();
     }
@@ -285,6 +291,7 @@ class InferenceExecutor {
     uint32_t input_offset;  // DMA buffer offset for stream in staging
     uint32_t output_offset; // DMA buffer offset for stream out staging
     uint32_t timeout_ms;
+    bool debug_mode;
 
     // Embedding table: vocab_size x STREAM_IN_BUF_BYTES, held in process memory
     std::vector<uint8_t> embedding_table;
@@ -292,9 +299,11 @@ class InferenceExecutor {
 public:
     InferenceExecutor(PLInterface *p, Tokenizer *t, PerformanceMonitor *pf,
                       Logger *l, ErrorHandler *e, uint32_t vocab_sz,
-                      uint32_t in_off, uint32_t out_off, uint32_t tmo_ms)
+                      uint32_t in_off, uint32_t out_off, uint32_t tmo_ms,
+                      bool debug = false)
         : pl(p), tok(t), perf(pf), logger(l), err(e), vocab_size(vocab_sz),
-          input_offset(in_off), output_offset(out_off), timeout_ms(tmo_ms) {}
+          input_offset(in_off), output_offset(out_off), timeout_ms(tmo_ms),
+          debug_mode(debug) {}
 
     /** Load embedding table from file into process memory. */
     bool loadEmbeddingTable(const std::string &path) {
@@ -352,7 +361,11 @@ public:
             return false;
         }
 
-        pl->writeReg(PLReg::CONTROL, CTRL_START_BIT | CTRL_RESETN_BIT);
+        // Build CONTROL word: RESETN | START, optionally | DEBUG_MODE
+        uint32_t ctrl_bits = CTRL_RESETN_BIT | CTRL_START_BIT;
+        if (debug_mode)
+            ctrl_bits |= CTRL_DEBUG_MODE_BIT;
+        pl->writeReg(PLReg::CONTROL, ctrl_bits);
 
         usleep(10);
         pl->clearRegBits(PLReg::CONTROL, CTRL_START_BIT);
@@ -462,8 +475,11 @@ class InferenceEngine {
 public:
     ~InferenceEngine() { shutdown(); }
 
-    bool initialize(const std::string &cfg_file) {
+    bool initialize(const std::string &cfg_file,
+                    bool debug_hw_override = false) {
         config.loadFromFile(cfg_file);
+        if (debug_hw_override)
+            config.hardware.debug_mode = true;
         if (!config.validate()) {
             LOG_ERROR("Invalid configuration");
             return false;
@@ -480,8 +496,9 @@ public:
         }
 
         // initDMA() allocates the contiguous DMA buffer via u-dma-buf.
-        if (!pl->initDMA(config.hardware.dmabuf_name,
-                         config.hardware.dmabuf_size)) {
+        if (!pl->initDMA(
+                config.hardware.dmabuf0_name, config.hardware.dmabuf0_size,
+                config.hardware.dmabuf0_name, config.hardware.dmabuf0_size)) {
             LOG_FATAL("DDR init failed");
             return false;
         }
@@ -502,9 +519,9 @@ public:
             return false;
         }
 
-        // Load binary weights into DDR via writeDDR
+        // Load binary weights into DDR — cap at what the FPGA actually needs
         loader->setWeightsFile(config.model.weights_file);
-        if (!loader->loadAllWeights(config.model)) {
+        if (!loader->loadAllWeights(config.model, MemoryLayout::w_size)) {
             LOG_FATAL("Weight load failed");
             return false;
         }
@@ -512,7 +529,8 @@ public:
         exec = std::unique_ptr<InferenceExecutor>(new InferenceExecutor(
             pl.get(), tokenizer.get(), perf.get(), g_logger, &err,
             config.model.vocab_size, config.memory.input_offset,
-            config.memory.output_offset, config.hardware.timeout_ms));
+            config.memory.output_offset, config.hardware.timeout_ms,
+            config.hardware.debug_mode));
 
         // Load embedding table from file into process memory
         if (!config.model.embeddings_file.empty()) {
@@ -523,7 +541,9 @@ public:
             LOG_WARN("No embeddings_file configured, using test patterns");
         }
 
-        LOG_INFO("Initialized");
+        LOG_INFO("Initialized" + std::string(config.hardware.debug_mode
+                                                 ? " [HW DEBUG MODE]"
+                                                 : ""));
         return true;
     }
 
@@ -582,25 +602,48 @@ private:
 
         auto tokens = tokenizer->encode(task.prompt);
 
+        if (tokens.empty()) {
+            print("[empty prompt]\n");
+            state.status = EngineStatus::IDLE;
+            g_engine_status = EngineStatus::IDLE;
+            return;
+        }
+
+        // ── Prefill: feed prompt tokens to populate KV cache ──
+        for (size_t i = 0; i + 1 < tokens.size() && !state.cancel; i++) {
+            uint32_t discard = 0;
+            if (!exec->executeToken(tokens[i], discard)) {
+                LOG_ERROR("Prefill failed at token " + std::to_string(i));
+                break;
+            }
+            LOG_DEBUG("Prefill [" + std::to_string(i) + "/" +
+                      std::to_string(tokens.size()) +
+                      "] token=" + std::to_string(tokens[i]));
+        }
+
+        if (state.cancel) {
+            state.status = EngineStatus::IDLE;
+            g_engine_status = EngineStatus::IDLE;
+            return;
+        }
+
+        // ── Decode: generate from the last prompt token onward ──
+        uint32_t next_input = tokens.back();
+
         for (uint32_t i = 0; i < state.maxTokens && !state.cancel; i++) {
-            uint32_t input_token = tokens.back();
             uint32_t out_token = 0;
 
-            if (!exec->executeToken(input_token, out_token))
+            if (!exec->executeToken(next_input, out_token))
                 break;
 
-            // Stream decoded token to console as it's produced
             std::string decoded = tokenizer->decodeToken(out_token);
-            char buf[512];
-            if (!decoded.empty()) {
-                sprintf(buf, "[%d] decoded: %s | out_token: %d\n", i, decoded.c_str(), out_token);
-                print(buf);
-            }
+            if (!decoded.empty())
+                print(decoded);
 
             if (out_token == tokenizer->getEOSTokenId())
                 break;
 
-            tokens.push_back(out_token);
+            next_input = out_token;
         }
 
         print("\n");
@@ -620,9 +663,17 @@ private:
 int main(int argc, char *argv[]) {
     std::cout << "FPGA Transformer Inference Engine\n";
 
-    LogLevel lvl = (argc > 1 && std::string(argv[1]) == "--debug")
-                       ? LogLevel::DEBUG
-                       : LogLevel::INFO;
+    LogLevel lvl = LogLevel::INFO;
+    bool debug_hw = false;
+
+    for (int i = 1; i < argc; i++) {
+        std::string arg(argv[i]);
+        if (arg == "--debug")
+            lvl = LogLevel::DEBUG;
+        if (arg == "--debug-hw")
+            debug_hw = true;
+    }
+
     g_logger = new Logger(lvl, "inference.log");
 
     std::string cfg = "config.yaml";
@@ -631,7 +682,12 @@ int main(int argc, char *argv[]) {
             cfg = argv[i + 1];
 
     InferenceEngine engine;
-    if (!engine.initialize(cfg)) {
+
+    if (debug_hw) {
+        LOG_INFO("Hardware debug mode enabled via --debug-hw");
+    }
+
+    if (!engine.initialize(cfg, debug_hw)) {
         LOG_FATAL("Init failed");
         delete g_logger;
         return 1;
