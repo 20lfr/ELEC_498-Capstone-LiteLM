@@ -308,6 +308,12 @@ public:
         return true;
     }
 
+
+    /** Get raw embedding data for a token ID into caller buffer. */
+    bool getEmbedding(uint32_t token_id, uint8_t *out) {
+        return lookupEmbedding(token_id, out);
+    }
+
 private:
     bool lookupEmbedding(uint32_t token_id, uint8_t *out) {
         if (embedding_table.empty()) {
@@ -512,6 +518,19 @@ private:
         print("=== DEBUG: single-token inference ===\n");
         print("Input token: " + std::to_string(input_token) + " text=\"" +
               tokenizer->decodeToken(input_token) + "\"\n");
+
+        // Compute expected sum of int8 embedding on CPU side
+        uint8_t embed_buf[STREAM_IN_BUF_BYTES];
+        int32_t expected_sum = 0;
+        if (exec->getEmbedding(input_token, embed_buf)) {
+            for (int i = 0; i < STREAM_IN_BUF_BYTES; i++)
+                expected_sum += static_cast<int8_t>(embed_buf[i]);
+            print("CPU embedding sum (int8): " +
+                  std::to_string(expected_sum) + "\n");
+        } else {
+            print("WARNING: could not look up embedding\n");
+        }
+
         print("Registers BEFORE:\n" + pl->getRegStats() + "\n");
 
         bool ok = exec->executeToken(input_token, out_token);
@@ -521,9 +540,15 @@ private:
         if (!ok) {
             print("executeToken FAILED: " + err.getLastErrorMessage() + "\n");
         } else {
-            std::string decoded = tokenizer->decodeToken(out_token);
-            print("Output token: " + std::to_string(out_token) + " text=\"" +
-                  decoded + "\"\n");
+            int32_t hw_sum = static_cast<int32_t>(out_token);
+            print("HW returned: " + std::to_string(hw_sum) +
+                  " (0x" + ([&]{ char b[16]; snprintf(b, sizeof(b), "%08X", out_token); return std::string(b); })() + ")\n");
+            if (hw_sum == expected_sum) {
+                print("PASS: HW sum matches CPU sum\n");
+            } else {
+                print("FAIL: expected " + std::to_string(expected_sum) +
+                      " got " + std::to_string(hw_sum) + "\n");
+            }
         }
 
         print("=== DEBUG END ===\n");
