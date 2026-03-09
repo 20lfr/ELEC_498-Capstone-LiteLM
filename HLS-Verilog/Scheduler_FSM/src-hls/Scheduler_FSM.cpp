@@ -596,6 +596,7 @@ void scheduler_hls(
     case S_IDLE: {
       if (cntrl_start) {
         st = S_STREAM_IN;
+        layer_idx = 0;
 
         // Attention
         attn_started = false;
@@ -613,8 +614,11 @@ void scheduler_hls(
         // Output projection
         outproj_started = false;
         outproj_compute_done = false;
+        wo_dma_done = false;
         ln0_dma_done = false;
         ln1_dma_done = false;
+        w1_dma_done = false;
+        w2_dma_done = false;
 
         // Residual + LN (1st)
         resid0_started = false;
@@ -625,6 +629,7 @@ void scheduler_hls(
         ln0_compute_done = false;
 
         // FFN
+        ffn_stage = FfnStage::W1;
         ffn_started = false;
         ffn_w1_compute_done = false;
         ffn_act_compute_done = false;
@@ -638,6 +643,9 @@ void scheduler_hls(
         ln1_comp_busy = false;
         ln1_compute_done = false;
         final_norm_started = false;
+        final_norm_dma_busy = false;
+        final_norm_comp_busy = false;
+        final_norm_dma_done = false;
         final_norm_compute_done = false;
         logits_started = false;
         logits_compute_done = false;
@@ -659,6 +667,7 @@ void scheduler_hls(
         logit_tile = 0;
         logits_dma_busy = false;
         logits_comp_busy = false;
+        stream_done_seen = false;
 
         // Weight Stager and Loader params
         wl_start = false;
@@ -674,6 +683,7 @@ void scheduler_hls(
 
         done = false;
         error = false;
+        error_latched = false;
       }
       break;
     }

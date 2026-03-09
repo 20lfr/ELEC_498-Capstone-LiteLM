@@ -13,14 +13,14 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_706_1 (
         ap_done,
         ap_idle,
         ap_ready,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0,
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0,
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0,
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0,
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0,
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0,
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0,
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0,
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0
 );
 
 parameter    ap_ST_fsm_state1 = 1'd1;
@@ -31,14 +31,14 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0;
-output  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0;
-output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0;
-output   transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0;
-output  [7:0] transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+output   transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+output   transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+output  [7:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+output   transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+output   transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+output  [7:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
 
 reg ap_idle;
 
@@ -54,11 +54,11 @@ reg   [6:0] i_fu_44;
 wire   [6:0] add_ln706_fu_90_p2;
 wire    ap_loop_init;
 reg   [6:0] ap_sig_allocacmp_i_28;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local;
+reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_local;
 wire   [0:0] trunc_ln706_fu_96_p1;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local;
-reg    transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
+reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local;
+reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local;
+reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local;
 wire   [4:0] lshr_ln_fu_100_p4;
 reg    ap_done_reg;
 wire    ap_continue_int;
@@ -172,33 +172,33 @@ end
 
 always @ (*) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local = 1'b1;
     end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local = 1'b0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((trunc_ln706_fu_96_p1 == 1'd1) & (icmp_ln706_fu_84_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local = 1'b1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local = 1'b1;
     end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local = 1'b0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local = 1'b1;
     end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local = 1'b0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local = 1'b0;
     end
 end
 
 always @ (*) begin
     if (((trunc_ln706_fu_96_p1 == 1'd0) & (icmp_ln706_fu_84_p2 == 1'd0) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local = 1'b1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_local = 1'b1;
     end else begin
-        transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local = 1'b0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_local = 1'b0;
     end
 end
 
@@ -231,21 +231,21 @@ assign icmp_ln706_fu_84_p2 = ((ap_sig_allocacmp_i_28 == 7'd64) ? 1'b1 : 1'b0);
 
 assign lshr_ln_fu_100_p4 = {{ap_sig_allocacmp_i_28[5:1]}};
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_address0 = zext_ln706_fu_110_p1;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = zext_ln706_fu_110_p1;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_ce0_local;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_d0 = 8'd0;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = 8'd0;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_4_we0_local;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_address0 = zext_ln706_fu_110_p1;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = zext_ln706_fu_110_p1;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_ce0_local;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_d0 = 8'd0;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = 8'd0;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_5_we0_local;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_local;
 
 assign trunc_ln706_fu_96_p1 = ap_sig_allocacmp_i_28[0:0];
 

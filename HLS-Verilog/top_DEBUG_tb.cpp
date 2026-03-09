@@ -1707,6 +1707,7 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
     uint32_t dma_rx_word = 0;
     uint32_t dma_tx_word = 0;
     axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
+    axi_gmem_word_t kv_cache[TB_DDR_IMAGE_WORDS] = {};
 
     hls::stream<axis8_t> s_axis_in("s_axis_in");
     hls::stream<axis8_t> m_axis_out("m_axis_out");
@@ -1769,7 +1770,8 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
         return 1;
     }
     g_loaded_ctrl_mem_valid = true;
-    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS)) {
+    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS) ||
+        !load_shared_ddr_image(kv_cache, TB_DDR_IMAGE_WORDS)) {
         return 1;
     }
     size_t total_stream_tokens = 0;
@@ -2110,6 +2112,7 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
             s_axis_in,
             m_axis_out,
             ddr_mem,
+            kv_cache,
             ctrl_mem,
             status_mem,
             irq_ps,

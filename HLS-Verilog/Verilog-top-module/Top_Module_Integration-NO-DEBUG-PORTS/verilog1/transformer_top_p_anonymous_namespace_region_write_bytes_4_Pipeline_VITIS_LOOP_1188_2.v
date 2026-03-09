@@ -161,12 +161,12 @@ wire   [19:0] tmp_s_fu_413_p11;
 wire   [19:0] trunc_ln1187_7_fu_409_p1;
 wire   [19:0] bank_byte_addr_fu_432_p2;
 wire   [1:0] or_ln1191_fu_442_p2;
-wire   [29:0] tmp_552_fu_454_p4;
+wire   [29:0] tmp_542_fu_454_p4;
 wire   [0:0] icmp_ln1191_fu_448_p2;
 wire   [0:0] icmp_ln1193_fu_464_p2;
 wire   [4:0] bank_assign_fu_486_p9;
 wire   [4:0] bank_assign_fu_486_p11;
-wire   [17:0] tmp_245_fu_505_p3;
+wire   [17:0] tmp_241_fu_505_p3;
 wire   [17:0] word_idx_fu_476_p4;
 wire   [10:0] lshr_ln_fu_605_p4;
 wire   [10:0] lshr_ln6_fu_636_p4;
@@ -184,12 +184,12 @@ wire   [31:0] mask_fu_740_p2;
 wire   [31:0] xor_ln1123_fu_752_p2;
 wire   [31:0] and_ln1123_fu_758_p2;
 wire   [31:0] shl_ln1123_fu_746_p2;
-wire   [7:0] tmp_140_fu_771_p9;
-wire   [7:0] tmp_141_fu_794_p9;
-wire   [7:0] tmp_142_fu_817_p9;
-wire   [7:0] tmp_142_fu_817_p11;
-wire   [7:0] tmp_141_fu_794_p11;
-wire   [7:0] tmp_140_fu_771_p11;
+wire   [7:0] tmp_130_fu_771_p9;
+wire   [7:0] tmp_131_fu_794_p9;
+wire   [7:0] tmp_132_fu_817_p9;
+wire   [7:0] tmp_132_fu_817_p11;
+wire   [7:0] tmp_131_fu_794_p11;
+wire   [7:0] tmp_130_fu_771_p11;
 reg    ap_done_reg;
 wire    ap_continue_int;
 reg    ap_done_int;
@@ -215,18 +215,18 @@ wire   [1:0] word_10_fu_702_p1;
 wire   [1:0] word_10_fu_702_p3;
 wire  signed [1:0] word_10_fu_702_p5;
 wire  signed [1:0] word_10_fu_702_p7;
-wire  signed [1:0] tmp_140_fu_771_p1;
-wire   [1:0] tmp_140_fu_771_p3;
-wire   [1:0] tmp_140_fu_771_p5;
-wire  signed [1:0] tmp_140_fu_771_p7;
-wire  signed [1:0] tmp_141_fu_794_p1;
-wire  signed [1:0] tmp_141_fu_794_p3;
-wire   [1:0] tmp_141_fu_794_p5;
-wire   [1:0] tmp_141_fu_794_p7;
-wire   [1:0] tmp_142_fu_817_p1;
-wire  signed [1:0] tmp_142_fu_817_p3;
-wire  signed [1:0] tmp_142_fu_817_p5;
-wire   [1:0] tmp_142_fu_817_p7;
+wire  signed [1:0] tmp_130_fu_771_p1;
+wire   [1:0] tmp_130_fu_771_p3;
+wire   [1:0] tmp_130_fu_771_p5;
+wire  signed [1:0] tmp_130_fu_771_p7;
+wire  signed [1:0] tmp_131_fu_794_p1;
+wire  signed [1:0] tmp_131_fu_794_p3;
+wire   [1:0] tmp_131_fu_794_p5;
+wire   [1:0] tmp_131_fu_794_p7;
+wire   [1:0] tmp_132_fu_817_p1;
+wire  signed [1:0] tmp_132_fu_817_p3;
+wire  signed [1:0] tmp_132_fu_817_p5;
+wire   [1:0] tmp_132_fu_817_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -331,9 +331,9 @@ sparsemux_9_2_8_1_1_x_U3819(
     .din1(p_ZN12_GLOBAL_N_17scratchE_1_q0),
     .din2(p_ZN12_GLOBAL_N_17scratchE_2_q0),
     .din3(p_ZN12_GLOBAL_N_17scratchE_3_q0),
-    .def(tmp_140_fu_771_p9),
+    .def(tmp_130_fu_771_p9),
     .sel(trunc_ln1187_reg_940),
-    .dout(tmp_140_fu_771_p11)
+    .dout(tmp_130_fu_771_p11)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_9_2_8_1_1_x #(
@@ -355,9 +355,9 @@ sparsemux_9_2_8_1_1_x_U3820(
     .din1(p_ZN12_GLOBAL_N_17scratchE_1_q0),
     .din2(p_ZN12_GLOBAL_N_17scratchE_2_q0),
     .din3(p_ZN12_GLOBAL_N_17scratchE_3_q0),
-    .def(tmp_141_fu_794_p9),
+    .def(tmp_131_fu_794_p9),
     .sel(trunc_ln1187_reg_940),
-    .dout(tmp_141_fu_794_p11)
+    .dout(tmp_131_fu_794_p11)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_9_2_8_1_1_x #(
@@ -379,9 +379,9 @@ sparsemux_9_2_8_1_1_x_U3821(
     .din1(p_ZN12_GLOBAL_N_17scratchE_1_q0),
     .din2(p_ZN12_GLOBAL_N_17scratchE_2_q0),
     .din3(p_ZN12_GLOBAL_N_17scratchE_3_q0),
-    .def(tmp_142_fu_817_p9),
+    .def(tmp_132_fu_817_p9),
     .sel(trunc_ln1187_reg_940),
-    .dout(tmp_142_fu_817_p11)
+    .dout(tmp_132_fu_817_p11)
 );
 
 transformer_top_flow_control_loop_pipe_sequential_init flow_control_loop_pipe_sequential_init_U(
@@ -749,7 +749,7 @@ assign add_ln1132_3_fu_654_p2 = (trunc_ln1187_6_fu_602_p1 + 13'd2);
 
 assign add_ln1132_4_fu_678_p2 = (trunc_ln1187_6_fu_602_p1 + 13'd3);
 
-assign add_ln1196_fu_513_p2 = (tmp_245_fu_505_p3 + word_idx_fu_476_p4);
+assign add_ln1196_fu_513_p2 = (tmp_241_fu_505_p3 + word_idx_fu_476_p4);
 
 assign and_ln1123_fu_758_p2 = (xor_ln1123_fu_752_p2 & p_anonymous_namespace_uram_banks_q0);
 
@@ -801,7 +801,7 @@ assign icmp_ln1188_fu_399_p2 = ((take_5_fu_130 == 32'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln1191_fu_448_p2 = ((or_ln1191_fu_442_p2 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln1193_fu_464_p2 = ((tmp_552_fu_454_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln1193_fu_464_p2 = ((tmp_542_fu_454_p4 != 30'd0) ? 1'b1 : 1'b0);
 
 assign logical_12_fu_569_p2 = (logical_1_fu_134 + 32'd4);
 
@@ -853,15 +853,15 @@ assign take_10_fu_535_p2 = ($signed(take_5_fu_130) + $signed(32'd4294967295));
 
 assign take_9_fu_575_p2 = ($signed(take_5_fu_130) + $signed(32'd4294967292));
 
-assign tmp_140_fu_771_p9 = 'bx;
+assign tmp_130_fu_771_p9 = 'bx;
 
-assign tmp_141_fu_794_p9 = 'bx;
+assign tmp_131_fu_794_p9 = 'bx;
 
-assign tmp_142_fu_817_p9 = 'bx;
+assign tmp_132_fu_817_p9 = 'bx;
 
-assign tmp_245_fu_505_p3 = {{bank_assign_fu_486_p11}, {13'd0}};
+assign tmp_241_fu_505_p3 = {{bank_assign_fu_486_p11}, {13'd0}};
 
-assign tmp_552_fu_454_p4 = {{take_5_fu_130[31:2]}};
+assign tmp_542_fu_454_p4 = {{take_5_fu_130[31:2]}};
 
 assign tmp_s_fu_413_p9 = 'bx;
 
@@ -877,7 +877,7 @@ assign word_10_fu_702_p9 = 'bx;
 
 assign word_11_fu_764_p2 = (shl_ln1123_fu_746_p2 | and_ln1123_fu_758_p2);
 
-assign word_9_fu_840_p5 = {{{{tmp_142_fu_817_p11}, {tmp_141_fu_794_p11}}, {tmp_140_fu_771_p11}}, {word_10_fu_702_p11}};
+assign word_9_fu_840_p5 = {{{{tmp_132_fu_817_p11}, {tmp_131_fu_794_p11}}, {tmp_130_fu_771_p11}}, {word_10_fu_702_p11}};
 
 assign word_idx_fu_476_p4 = {{bank_byte_addr_fu_432_p2[19:2]}};
 

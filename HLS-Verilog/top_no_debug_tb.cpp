@@ -22,7 +22,7 @@
 #define TOP_NO_DEBUG_TB_LOG_SUBDIR "top_no_debug"
 #endif
 
-constexpr bool TB_DEBUG_MODE = true;
+constexpr bool TB_DEBUG_MODE = false;
 
 static bool ensure_dir_recursive(const char *dir) {
     char path[512];
@@ -558,6 +558,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     const int AXIS_BEATS = STREAM_TOKEN_BYTES;
 
     axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
+    axi_gmem_word_t kv_cache[TB_DDR_IMAGE_WORDS] = {};
 
     hls::stream<axis8_t> s_axis_in("s_axis_in");
     hls::stream<axis8_t> m_axis_out("m_axis_out");
@@ -597,7 +598,8 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
         return 1;
     }
     g_loaded_ctrl_mem_valid = true;
-    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS)) {
+    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS) ||
+        !load_shared_ddr_image(kv_cache, TB_DDR_IMAGE_WORDS)) {
         return 1;
     }
     size_t total_stream_tokens = 0;
@@ -846,6 +848,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             s_axis_in,
             m_axis_out,
             ddr_mem,
+            kv_cache,
             ctrl_mem,
             status_mem,
             irq_ps,

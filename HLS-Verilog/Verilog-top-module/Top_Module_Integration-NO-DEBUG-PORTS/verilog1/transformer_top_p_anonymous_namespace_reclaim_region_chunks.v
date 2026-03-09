@@ -547,8 +547,8 @@ reg   [0:0] icmp_ln595_reg_818;
 wire   [4:0] tmp_s_fu_642_p11;
 reg   [4:0] tmp_s_reg_822;
 wire    ap_CS_fsm_state4;
-wire   [31:0] tmp_146_fu_666_p11;
-reg   [31:0] tmp_146_reg_827;
+wire   [31:0] tmp_136_fu_666_p11;
+reg   [31:0] tmp_136_reg_827;
 wire    grp_p_anonymous_namespace_free_span_add_fu_447_ap_start;
 wire    grp_p_anonymous_namespace_free_span_add_fu_447_ap_done;
 wire    grp_p_anonymous_namespace_free_span_add_fu_447_ap_idle;
@@ -734,7 +734,7 @@ reg    r_chunks_offset_3_we0_local;
 wire   [7:0] zext_ln601_fu_600_p1;
 wire   [31:0] tmp_fu_613_p9;
 wire   [4:0] tmp_s_fu_642_p9;
-wire   [31:0] tmp_146_fu_666_p9;
+wire   [31:0] tmp_136_fu_666_p9;
 reg   [0:0] ap_return_0_preg;
 reg   [7:0] ap_return_1_preg;
 reg   [4:0] ap_NS_fsm;
@@ -751,10 +751,10 @@ wire   [1:0] tmp_s_fu_642_p1;
 wire   [1:0] tmp_s_fu_642_p3;
 wire  signed [1:0] tmp_s_fu_642_p5;
 wire  signed [1:0] tmp_s_fu_642_p7;
-wire   [1:0] tmp_146_fu_666_p1;
-wire   [1:0] tmp_146_fu_666_p3;
-wire  signed [1:0] tmp_146_fu_666_p5;
-wire  signed [1:0] tmp_146_fu_666_p7;
+wire   [1:0] tmp_136_fu_666_p1;
+wire   [1:0] tmp_136_fu_666_p3;
+wire  signed [1:0] tmp_136_fu_666_p5;
+wire  signed [1:0] tmp_136_fu_666_p7;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -774,7 +774,7 @@ transformer_top_p_anonymous_namespace_free_span_add grp_p_anonymous_namespace_fr
     .ap_idle(grp_p_anonymous_namespace_free_span_add_fu_447_ap_idle),
     .ap_ready(grp_p_anonymous_namespace_free_span_add_fu_447_ap_ready),
     .bank(tmp_s_reg_822),
-    .offset(tmp_146_reg_827),
+    .offset(tmp_136_reg_827),
     .size(tmp_reg_813),
     .p_anonymous_namespace_free_span_count_address0(grp_p_anonymous_namespace_free_span_add_fu_447_p_anonymous_namespace_free_span_count_address0),
     .p_anonymous_namespace_free_span_count_ce0(grp_p_anonymous_namespace_free_span_add_fu_447_p_anonymous_namespace_free_span_count_ce0),
@@ -1011,9 +1011,9 @@ sparsemux_9_2_32_1_1_U2542(
     .din1(r_chunks_offset_1_q0),
     .din2(r_chunks_offset_2_q0),
     .din3(r_chunks_offset_3_q0),
-    .def(tmp_146_fu_666_p9),
+    .def(tmp_136_fu_666_p9),
     .sel(trunc_ln601_reg_801),
-    .dout(tmp_146_fu_666_p11)
+    .dout(tmp_136_fu_666_p11)
 );
 
 always @ (posedge ap_clk) begin
@@ -1115,7 +1115,7 @@ end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state4)) begin
-        tmp_146_reg_827 <= tmp_146_fu_666_p11;
+        tmp_136_reg_827 <= tmp_136_fu_666_p11;
         tmp_s_reg_822 <= tmp_s_fu_642_p11;
     end
 end
@@ -1843,7 +1843,7 @@ assign r_chunks_size_3_offset_cast25_fu_520_p1 = r_chunks_size_3_offset;
 
 assign r_chunks_size_3_we0 = r_chunks_size_3_we0_local;
 
-assign tmp_146_fu_666_p9 = 'bx;
+assign tmp_136_fu_666_p9 = 'bx;
 
 assign tmp_fu_613_p9 = 'bx;
 

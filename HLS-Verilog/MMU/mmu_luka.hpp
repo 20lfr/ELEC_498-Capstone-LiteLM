@@ -172,6 +172,7 @@ void mmu_fsm(
     uint64_t &dma_addr,                 // [OUTPUT] DMA address
     uint32_t &dma_len,                  // [OUTPUT] DMA length in bytes
     bool &dma_is_write,                 // [OUTPUT] DMA direction (1 = write to DDR)
+    bool &dma_use_kv_cache,             // [OUTPUT] Select KV-cache AXI interface
 
     // ------------------------------------------------------------
     // Stream ingress/egress buffers (beat capture on AXIS valid/ready)

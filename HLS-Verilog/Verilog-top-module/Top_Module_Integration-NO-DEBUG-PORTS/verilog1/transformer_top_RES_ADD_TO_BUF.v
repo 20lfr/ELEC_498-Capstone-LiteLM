@@ -145,12 +145,12 @@ wire   [3:0] trunc_ln366_2_fu_292_p1;
 wire   [3:0] mul_ln366_fu_300_p0;
 wire   [5:0] mul_ln366_fu_300_p1;
 wire   [8:0] mul_ln366_fu_300_p2;
-wire   [1:0] tmp_530_fu_306_p4;
+wire   [1:0] tmp_520_fu_306_p4;
 wire   [4:0] zext_ln522_cast_fu_325_p3;
 wire   [4:0] mul_ln522_fu_337_p0;
 wire   [6:0] mul_ln522_fu_337_p1;
 wire   [10:0] mul_ln522_fu_337_p2;
-wire   [2:0] tmp_531_fu_343_p4;
+wire   [2:0] tmp_521_fu_343_p4;
 wire   [7:0] tmp_fu_379_p11;
 wire   [2:0] trunc_ln366_3_fu_375_p1;
 wire  signed [7:0] tmp_fu_379_p13;
@@ -159,7 +159,7 @@ wire  signed [7:0] tmp_s_fu_411_p13;
 wire  signed [8:0] sext_ln369_fu_439_p1;
 wire  signed [8:0] sext_ln370_fu_407_p1;
 wire   [8:0] sum_fu_449_p2;
-wire   [1:0] tmp_532_fu_455_p4;
+wire   [1:0] tmp_522_fu_455_p4;
 wire   [0:0] icmp_ln372_fu_465_p2;
 wire   [0:0] icmp_ln373_fu_471_p2;
 wire   [0:0] or_ln374_fu_485_p2;
@@ -549,7 +549,7 @@ assign icmp_ln366_1_fu_510_p2 = ((phi_urem_fu_94 == 5'd4) ? 1'b1 : 1'b0);
 
 assign icmp_ln366_fu_266_p2 = ((ap_sig_allocacmp_i_31 == 5'd16) ? 1'b1 : 1'b0);
 
-assign icmp_ln372_fu_465_p2 = ((tmp_532_fu_455_p4 == 2'd1) ? 1'b1 : 1'b0);
+assign icmp_ln372_fu_465_p2 = ((tmp_522_fu_455_p4 == 2'd1) ? 1'b1 : 1'b0);
 
 assign icmp_ln373_fu_471_p2 = (($signed(sum_fu_449_p2) < $signed(9'd384)) ? 1'b1 : 1'b0);
 
@@ -579,11 +579,11 @@ assign sext_ln370_fu_407_p1 = tmp_fu_379_p13;
 
 assign sum_fu_449_p2 = ($signed(sext_ln369_fu_439_p1) + $signed(sext_ln370_fu_407_p1));
 
-assign tmp_530_fu_306_p4 = {{mul_ln366_fu_300_p2[8:7]}};
+assign tmp_520_fu_306_p4 = {{mul_ln366_fu_300_p2[8:7]}};
 
-assign tmp_531_fu_343_p4 = {{mul_ln522_fu_337_p2[10:8]}};
+assign tmp_521_fu_343_p4 = {{mul_ln522_fu_337_p2[10:8]}};
 
-assign tmp_532_fu_455_p4 = {{sum_fu_449_p2[8:7]}};
+assign tmp_522_fu_455_p4 = {{sum_fu_449_p2[8:7]}};
 
 assign tmp_fu_379_p11 = 'bx;
 
@@ -651,12 +651,12 @@ assign trunc_ln366_3_fu_375_p1 = phi_urem_fu_94[2:0];
 
 assign trunc_ln366_fu_278_p1 = ap_sig_allocacmp_i_31[0:0];
 
-assign zext_ln366_1_fu_316_p1 = tmp_530_fu_306_p4;
+assign zext_ln366_1_fu_316_p1 = tmp_520_fu_306_p4;
 
 assign zext_ln366_fu_370_p1 = lshr_ln_reg_551;
 
 assign zext_ln522_cast_fu_325_p3 = {{1'd1}, {trunc_ln366_2_fu_292_p1}};
 
-assign zext_ln523_fu_353_p1 = tmp_531_fu_343_p4;
+assign zext_ln523_fu_353_p1 = tmp_521_fu_343_p4;
 
 endmodule //transformer_top_RES_ADD_TO_BUF

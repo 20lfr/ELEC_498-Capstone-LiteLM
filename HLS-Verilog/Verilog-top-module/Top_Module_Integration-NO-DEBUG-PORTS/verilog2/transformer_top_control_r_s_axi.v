@@ -8,7 +8,7 @@
 `timescale 1ns/1ps
 module transformer_top_control_r_s_axi
 #(parameter
-    C_S_AXI_ADDR_WIDTH = 5,
+    C_S_AXI_ADDR_WIDTH = 6,
     C_S_AXI_DATA_WIDTH = 32
 )(
     input  wire                          ACLK,
@@ -31,7 +31,8 @@ module transformer_top_control_r_s_axi
     output wire [1:0]                    RRESP,
     output wire                          RVALID,
     input  wire                          RREADY,
-    output wire [63:0]                   ddr_mem
+    output wire [63:0]                   ddr_mem,
+    output wire [63:0]                   kv_cache
 );
 //------------------------Address Info-------------------
 // Protocol Used: ap_ctrl_none
@@ -45,21 +46,29 @@ module transformer_top_control_r_s_axi
 // 0x14 : Data signal of ddr_mem
 //        bit 31~0 - ddr_mem[63:32] (Read/Write)
 // 0x18 : reserved
+// 0x1c : Data signal of kv_cache
+//        bit 31~0 - kv_cache[31:0] (Read/Write)
+// 0x20 : Data signal of kv_cache
+//        bit 31~0 - kv_cache[63:32] (Read/Write)
+// 0x24 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
 localparam
-    ADDR_DDR_MEM_DATA_0 = 5'h10,
-    ADDR_DDR_MEM_DATA_1 = 5'h14,
-    ADDR_DDR_MEM_CTRL   = 5'h18,
-    WRIDLE              = 2'd0,
-    WRDATA              = 2'd1,
-    WRRESP              = 2'd2,
-    WRRESET             = 2'd3,
-    RDIDLE              = 2'd0,
-    RDDATA              = 2'd1,
-    RDRESET             = 2'd2,
-    ADDR_BITS                = 5;
+    ADDR_DDR_MEM_DATA_0  = 6'h10,
+    ADDR_DDR_MEM_DATA_1  = 6'h14,
+    ADDR_DDR_MEM_CTRL    = 6'h18,
+    ADDR_KV_CACHE_DATA_0 = 6'h1c,
+    ADDR_KV_CACHE_DATA_1 = 6'h20,
+    ADDR_KV_CACHE_CTRL   = 6'h24,
+    WRIDLE               = 2'd0,
+    WRDATA               = 2'd1,
+    WRRESP               = 2'd2,
+    WRRESET              = 2'd3,
+    RDIDLE               = 2'd0,
+    RDDATA               = 2'd1,
+    RDRESET              = 2'd2,
+    ADDR_BITS                = 6;
 
 //------------------------Local signal-------------------
     reg  [1:0]                    wstate = WRRESET;
@@ -75,6 +84,7 @@ localparam
     wire [ADDR_BITS-1:0]          raddr;
     // internal registers
     reg  [63:0]                   int_ddr_mem = 'b0;
+    reg  [63:0]                   int_kv_cache = 'b0;
 
 //------------------------Instantiation------------------
 
@@ -173,6 +183,12 @@ always @(posedge ACLK) begin
                 ADDR_DDR_MEM_DATA_1: begin
                     rdata <= int_ddr_mem[63:32];
                 end
+                ADDR_KV_CACHE_DATA_0: begin
+                    rdata <= int_kv_cache[31:0];
+                end
+                ADDR_KV_CACHE_DATA_1: begin
+                    rdata <= int_kv_cache[63:32];
+                end
             endcase
         end
     end
@@ -180,7 +196,8 @@ end
 
 
 //------------------------Register logic-----------------
-assign ddr_mem = int_ddr_mem;
+assign ddr_mem  = int_ddr_mem;
+assign kv_cache = int_kv_cache;
 // int_ddr_mem[31:0]
 always @(posedge ACLK) begin
     if (ARESET)
@@ -198,6 +215,26 @@ always @(posedge ACLK) begin
     else if (ACLK_EN) begin
         if (w_hs && waddr == ADDR_DDR_MEM_DATA_1)
             int_ddr_mem[63:32] <= (WDATA[31:0] & wmask) | (int_ddr_mem[63:32] & ~wmask);
+    end
+end
+
+// int_kv_cache[31:0]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_kv_cache[31:0] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_KV_CACHE_DATA_0)
+            int_kv_cache[31:0] <= (WDATA[31:0] & wmask) | (int_kv_cache[31:0] & ~wmask);
+    end
+end
+
+// int_kv_cache[63:32]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_kv_cache[63:32] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_KV_CACHE_DATA_1)
+            int_kv_cache[63:32] <= (WDATA[31:0] & wmask) | (int_kv_cache[63:32] & ~wmask);
     end
 end
 

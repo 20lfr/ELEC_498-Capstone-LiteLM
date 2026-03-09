@@ -606,7 +606,7 @@ void RES_ADD(
 // Top-level compute controller
 // ---------------------------------------------------------------------------
 void compute_controller(
-    ControlMemSpace ctrl_mem,          // [INPUT] Control memory snapshot
+    bool        cntrl_reset_n,         // [INPUT] Control reset bit
 
     // FSM communication signals
     bool        compute_start,       // [INPUT] Start signal for compute
@@ -639,8 +639,6 @@ void compute_controller(
 ) {
 #pragma HLS INLINE off
 
-    const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0;
-
     static ComputeState state = ComputeState::IDLE;
 #pragma HLS reset variable = state
     static PendingRequest req;
@@ -661,7 +659,7 @@ void compute_controller(
     } 
     
 
-    if (!reset_n) {
+    if (!cntrl_reset_n) {
         state = ComputeState::IDLE;
         req = PendingRequest{};
         error = false;

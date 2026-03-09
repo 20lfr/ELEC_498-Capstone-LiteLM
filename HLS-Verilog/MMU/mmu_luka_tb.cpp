@@ -419,6 +419,7 @@ int main() {
     uint64_t dma_addr = 0;
     uint32_t dma_len = 0;
     bool dma_is_write = false;
+    bool dma_use_kv_cache = false;
 
     bool mmu_dma_req_start = false;
     uint32_t mmu_dma_instruction = 0;
@@ -720,6 +721,7 @@ int main() {
             dma_addr,
             dma_len,
             dma_is_write,
+            dma_use_kv_cache,
             axis_in_valid,
             axis_in_last,
             axis_in_ready,

@@ -355,7 +355,7 @@ wire   [44:0] shl_ln437_1_fu_425_p5;
 wire   [44:0] sub_ln437_fu_445_p2;
 wire   [18:0] tmp_s_fu_451_p4;
 wire   [19:0] zext_ln437_1_fu_461_p1;
-wire   [0:0] tmp_529_fu_437_p3;
+wire   [0:0] tmp_519_fu_437_p3;
 wire   [19:0] sub_ln437_1_fu_465_p2;
 wire   [19:0] zext_ln437_fu_421_p1;
 wire   [19:0] select_ln437_fu_471_p3;
@@ -1312,7 +1312,7 @@ assign requant_n_cast_fu_499_p1 = requant_n;
 
 assign rounded_fu_661_p3 = ((do_shift_fu_645_p2[0:0] == 1'b1) ? empty_fu_657_p1 : 41'd0);
 
-assign select_ln437_fu_471_p3 = ((tmp_529_fu_437_p3[0:0] == 1'b1) ? sub_ln437_1_fu_465_p2 : zext_ln437_fu_421_p1);
+assign select_ln437_fu_471_p3 = ((tmp_519_fu_437_p3[0:0] == 1'b1) ? sub_ln437_1_fu_465_p2 : zext_ln437_fu_421_p1);
 
 assign sext_ln437_fu_479_p1 = $signed(select_ln437_fu_471_p3);
 
@@ -1332,7 +1332,7 @@ assign sub_ln437_1_fu_465_p2 = (20'd0 - zext_ln437_1_fu_461_p1);
 
 assign sub_ln437_fu_445_p2 = (45'd0 - shl_ln437_1_fu_425_p5);
 
-assign tmp_529_fu_437_p3 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0[32'd2];
+assign tmp_519_fu_437_p3 = transformer_top_stream_stream_ap_uint_volatile_ControlMemSpace_StatusMemSpace_6_q0[32'd2];
 
 assign tmp_fu_387_p3 = square_loc_fu_216[32'd18];
 

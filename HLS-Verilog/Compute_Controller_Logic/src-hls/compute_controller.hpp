@@ -6,7 +6,7 @@
 using int4_t = ap_int<4>;
 
 void compute_controller(
-    ControlMemSpace ctrl_mem,        // [INPUT] Control memory snapshot
+    bool cntrl_reset_n,              // [INPUT] Control reset bit
 
     // FSM communication signals
     bool        compute_start,       // [INPUT] Start signal for compute
