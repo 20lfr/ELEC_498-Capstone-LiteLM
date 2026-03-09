@@ -147,8 +147,15 @@
 // 0x14 : Data signal of ddr_mem
 //        bit 31~0 - ddr_mem[63:32] (Read/Write)
 // 0x18 : reserved
+// 0x1c : Data signal of kv_cache
+//        bit 31~0 - kv_cache[31:0] (Read/Write)
+// 0x20 : Data signal of kv_cache
+//        bit 31~0 - kv_cache[63:32] (Read/Write)
+// 0x24 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
-#define XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA 0x10
-#define XTRANSFORMER_TOP_CONTROL_R_BITS_DDR_MEM_DATA 64
+#define XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA  0x10
+#define XTRANSFORMER_TOP_CONTROL_R_BITS_DDR_MEM_DATA  64
+#define XTRANSFORMER_TOP_CONTROL_R_ADDR_KV_CACHE_DATA 0x1c
+#define XTRANSFORMER_TOP_CONTROL_R_BITS_KV_CACHE_DATA 64
 
