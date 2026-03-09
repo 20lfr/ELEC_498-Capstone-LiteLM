@@ -356,11 +356,6 @@ public:
             return false;
         }
 
-        if (!pl->start()) {
-            err->setError(ErrorCode::HARDWARE_FAULT, "Start failed");
-            return false;
-        }
-
         // Build CONTROL word: RESETN | START, optionally | DEBUG_MODE
         uint32_t ctrl_bits = CTRL_RESETN_BIT | CTRL_START_BIT;
         if (debug_mode)
@@ -498,7 +493,7 @@ public:
         // initDMA() allocates the contiguous DMA buffer via u-dma-buf.
         if (!pl->initDMA(
                 config.hardware.dmabuf0_name, config.hardware.dmabuf0_size,
-                config.hardware.dmabuf0_name, config.hardware.dmabuf0_size)) {
+                config.hardware.dmabuf1_name, config.hardware.dmabuf1_size)) {
             LOG_FATAL("DDR init failed");
             return false;
         }
@@ -612,10 +607,15 @@ private:
         // ── Prefill: feed prompt tokens to populate KV cache ──
         for (size_t i = 0; i + 1 < tokens.size() && !state.cancel; i++) {
             uint32_t discard = 0;
+            const std::string decoded_in = tokenizer->decodeToken(tokens[i]);
+            print("Prefill[" + std::to_string(i) + "/" +
+                  std::to_string(tokens.size() - 1) + "]: token=" +
+                  std::to_string(tokens[i]) + " text=\"" + decoded_in + "\"\n");
             if (!exec->executeToken(tokens[i], discard)) {
                 LOG_ERROR("Prefill failed at token " + std::to_string(i));
                 break;
             }
+            print("Prefill result: token=" + std::to_string(discard) + "\n");
             LOG_DEBUG("Prefill [" + std::to_string(i) + "/" +
                       std::to_string(tokens.size()) +
                       "] token=" + std::to_string(tokens[i]));
@@ -632,13 +632,18 @@ private:
 
         for (uint32_t i = 0; i < state.maxTokens && !state.cancel; i++) {
             uint32_t out_token = 0;
-
+            const std::string decoded_in = tokenizer->decodeToken(next_input);
+            print("Decode[" + std::to_string(i) + "/" +
+                  std::to_string(state.maxTokens) + "]: input_token=" +
+                  std::to_string(next_input) + " text=\"" + decoded_in + "\"\n");
             if (!exec->executeToken(next_input, out_token))
                 break;
+            print("Generated: token=" + std::to_string(out_token));
 
             std::string decoded = tokenizer->decodeToken(out_token);
             if (!decoded.empty())
-                print(decoded);
+                print(" text=\"" + decoded + "\"");
+            print("\n");
 
             if (out_token == tokenizer->getEOSTokenId())
                 break;

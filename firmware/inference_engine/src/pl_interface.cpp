@@ -314,13 +314,6 @@ void PLInterface::endConfig() {
     }
 }
 
-bool PLInterface::start() {
-    if (!_initialized || isError())
-        return false;
-    setRegBits(PLReg::CONTROL, CTRL_START_BIT);
-    return true;
-}
-
 bool PLInterface::waitDone(uint32_t timeout_ms) {
     if (_mock_mode) {
         usleep(100000);
@@ -348,16 +341,19 @@ std::string PLInterface::getRegStats(bool compact) {
     uint32_t status = readReg(PLReg::STATUS);
     uint32_t irq_status = readReg(PLReg::IRQ_STATUS);
     uint32_t error_code = readReg(PLReg::ERROR_CODE);
+    uint32_t mmu_subcode = readReg(PLReg::MMU_ERROR_SUBCODE);
     uint32_t layer_idx = readReg(PLReg::LAYER_INDEX);
     uint32_t head_idx = readReg(PLReg::HEAD_INDEX);
     uint32_t token_idx = readReg(PLReg::TOKEN_INDEX);
 
-    char buf[512];
+    char buf[768];
     if (compact) {
         snprintf(buf, sizeof(buf),
-                 "status=0x%08X irq=0x%08X error=0x%08X "
+                 "status=0x%08X irq=0x%08X error=0x%08X mmu_sub=0x%08X(%s) "
                  "layer=%u head=%u token=%u | %s | stream: %s",
-                 status, irq_status, error_code, layer_idx, head_idx, token_idx,
+                 status, irq_status, error_code, mmu_subcode, layer_idx,
+                 getMMUErrorSubcodeString(mmu_subcode).c_str(), head_idx,
+                 token_idx,
                  getErrorCodeString(error_code).c_str(),
                  streamStatusString().c_str());
     } else {
@@ -365,13 +361,15 @@ std::string PLInterface::getRegStats(bool compact) {
                  "  Status:     0x%08X\n"
                  "  IRQ Status: 0x%08X\n"
                  "  Error Code: 0x%08X  %s\n"
+                 "  MMU Sub:    0x%08X  %s\n"
                  "  Layer:      %u\n"
                  "  Head:       %u\n"
                  "  Token:      %u\n"
                  "  Stream:     %s",
                  status, irq_status, error_code,
-                 getErrorCodeString(error_code).c_str(), layer_idx, head_idx,
-                 token_idx, streamStatusString().c_str());
+                 getErrorCodeString(error_code).c_str(), mmu_subcode,
+                 getMMUErrorSubcodeString(mmu_subcode).c_str(), layer_idx,
+                 head_idx, token_idx, streamStatusString().c_str());
     }
     return std::string(buf);
 }
@@ -619,4 +617,133 @@ std::string PLInterface::getErrorCodeString(const uint32_t error_mask) {
         append("Unknown error code");
 
     return msg;
+}
+
+std::string PLInterface::getMMUErrorSubcodeString(uint32_t subcode) {
+    switch (subcode) {
+    case MMU_ERR_SUBCODE_NONE:
+        return "NONE";
+    case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_DMA:
+        return "UNSUPPORTED_REQ_DMA";
+    case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_HEADED:
+        return "UNSUPPORTED_REQ_COMPUTE_HEADED";
+    case MMU_ERR_SUBCODE_UNSUPPORTED_REQ_COMPUTE_NONHEADED:
+        return "UNSUPPORTED_REQ_COMPUTE_NONHEADED";
+    case MMU_ERR_SUBCODE_BAD_DMA_PLAN:
+        return "BAD_DMA_PLAN";
+    case MMU_ERR_SUBCODE_BAD_DMA_ADDR:
+        return "BAD_DMA_ADDR";
+    case MMU_ERR_SUBCODE_REGION_ACCESS:
+        return "REGION_ACCESS";
+    case MMU_ERR_SUBCODE_CONCAT_SOURCE:
+        return "CONCAT_SOURCE";
+    case MMU_ERR_SUBCODE_WRITEBACK_SRC:
+        return "WRITEBACK_SRC";
+    case MMU_ERR_SUBCODE_QUEUE_OVERFLOW:
+        return "QUEUE_OVERFLOW";
+    case MMU_ERR_SUBCODE_STREAM_OUTPUT_MISSING:
+        return "STREAM_OUTPUT_MISSING";
+    case MMU_ERR_SUBCODE_MISSING_REGION_FULL_READ:
+        return "MISSING_REGION_FULL_READ";
+    case MMU_ERR_SUBCODE_MISSING_REGION_PARTIAL_READ:
+        return "MISSING_REGION_PARTIAL_READ";
+    case MMU_ERR_SUBCODE_MISSING_REGION_COMPUTE_READ_PREP:
+        return "MISSING_REGION_COMPUTE_READ_PREP";
+    case MMU_ERR_SUBCODE_REGION_OVERFLOW_STREAM_IN:
+        return "REGION_OVERFLOW_STREAM_IN";
+    case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_CONCAT:
+        return "REGION_OVERFLOW_DMA_CONCAT";
+    case MMU_ERR_SUBCODE_REGION_OVERFLOW_DMA_STORE:
+        return "REGION_OVERFLOW_DMA_STORE";
+    case MMU_ERR_SUBCODE_REGION_OVERFLOW_COMPUTE_WRITE:
+        return "REGION_OVERFLOW_COMPUTE_WRITE";
+    case MMU_ERR_SUBCODE_REGION_TABLE_FULL:
+        return "REGION_TABLE_FULL";
+    case MMU_ERR_SUBCODE_URAM_CHUNK_ALLOC_FAIL:
+        return "URAM_CHUNK_ALLOC_FAIL";
+    case MMU_ERR_SUBCODE_REGION_TOO_LARGE:
+        return "REGION_TOO_LARGE";
+    case MMU_ERR_SUBCODE_REGION_OVERFLOW_GENERIC:
+        return "REGION_OVERFLOW_GENERIC";
+    case MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN:
+        return "MISSING_STREAM_IN_TOKEN";
+    case MMU_ERR_SUBCODE_MISSING_LN0_OUT:
+        return "MISSING_LN0_OUT";
+    case MMU_ERR_SUBCODE_MISSING_WQ_W:
+        return "MISSING_WQ_W";
+    case MMU_ERR_SUBCODE_MISSING_WQ_B:
+        return "MISSING_WQ_B";
+    case MMU_ERR_SUBCODE_MISSING_WK_W:
+        return "MISSING_WK_W";
+    case MMU_ERR_SUBCODE_MISSING_WK_B:
+        return "MISSING_WK_B";
+    case MMU_ERR_SUBCODE_MISSING_WV_W:
+        return "MISSING_WV_W";
+    case MMU_ERR_SUBCODE_MISSING_WV_B:
+        return "MISSING_WV_B";
+    case MMU_ERR_SUBCODE_MISSING_Q_OUT:
+        return "MISSING_Q_OUT";
+    case MMU_ERR_SUBCODE_MISSING_CTX_K:
+        return "MISSING_CTX_K";
+    case MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT:
+        return "MISSING_ATT_SCORES_OUT";
+    case MMU_ERR_SUBCODE_MISSING_VALUE_SCALE_OUT:
+        return "MISSING_VALUE_SCALE_OUT";
+    case MMU_ERR_SUBCODE_MISSING_SOFTMAX_OUT:
+        return "MISSING_SOFTMAX_OUT";
+    case MMU_ERR_SUBCODE_MISSING_CTX_V:
+        return "MISSING_CTX_V";
+    case MMU_ERR_SUBCODE_MISSING_ATT_VALUE_OUT:
+        return "MISSING_ATT_VALUE_OUT";
+    case MMU_ERR_SUBCODE_MISSING_HEAD_REQUANT_PACKED:
+        return "MISSING_HEAD_REQUANT_PACKED";
+    case MMU_ERR_SUBCODE_MISSING_CONCAT_OUT:
+        return "MISSING_CONCAT_OUT";
+    case MMU_ERR_SUBCODE_MISSING_WO_W:
+        return "MISSING_WO_W";
+    case MMU_ERR_SUBCODE_MISSING_WO_B:
+        return "MISSING_WO_B";
+    case MMU_ERR_SUBCODE_MISSING_OUT_PROJ_PACKED:
+        return "MISSING_OUT_PROJ_PACKED";
+    case MMU_ERR_SUBCODE_MISSING_RESID1_OUT:
+        return "MISSING_RESID1_OUT";
+    case MMU_ERR_SUBCODE_MISSING_LN1_OUT:
+        return "MISSING_LN1_OUT";
+    case MMU_ERR_SUBCODE_MISSING_W1_W:
+        return "MISSING_W1_W";
+    case MMU_ERR_SUBCODE_MISSING_W1_B:
+        return "MISSING_W1_B";
+    case MMU_ERR_SUBCODE_MISSING_FFN_W1_PACKED:
+        return "MISSING_FFN_W1_PACKED";
+    case MMU_ERR_SUBCODE_MISSING_FFN_ACT_OUT:
+        return "MISSING_FFN_ACT_OUT";
+    case MMU_ERR_SUBCODE_MISSING_W2_W:
+        return "MISSING_W2_W";
+    case MMU_ERR_SUBCODE_MISSING_W2_B:
+        return "MISSING_W2_B";
+    case MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED:
+        return "MISSING_FFN_W2_PACKED";
+    case MMU_ERR_SUBCODE_MISSING_RESID2_OUT:
+        return "MISSING_RESID2_OUT";
+    case MMU_ERR_SUBCODE_MISSING_LN0_GAMMA:
+        return "MISSING_LN0_GAMMA";
+    case MMU_ERR_SUBCODE_MISSING_LN0_EPS:
+        return "MISSING_LN0_EPS";
+    case MMU_ERR_SUBCODE_MISSING_LN1_GAMMA:
+        return "MISSING_LN1_GAMMA";
+    case MMU_ERR_SUBCODE_MISSING_LN1_EPS:
+        return "MISSING_LN1_EPS";
+    case MMU_ERR_SUBCODE_MISSING_LOGITS_W:
+        return "MISSING_LOGITS_W";
+    case MMU_ERR_SUBCODE_MISSING_LOGITS_PACKED:
+        return "MISSING_LOGITS_PACKED";
+    case MMU_ERR_SUBCODE_MISSING_ARGMAX_OUT:
+        return "MISSING_ARGMAX_OUT";
+    case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_GAMMA:
+        return "MISSING_FINAL_NORM_GAMMA";
+    case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_EPS:
+        return "MISSING_FINAL_NORM_EPS";
+    default:
+        return "UNKNOWN_MMU_SUBCODE";
+    }
 }

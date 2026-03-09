@@ -13,7 +13,7 @@ module top_module_hls_tb;
   localparam int KV_STORE_WORDS       = 131072;
   localparam int DMA_LATENCY_CYCLES   = 4;
   localparam int STREAM_LATENCY_CYCLES = 6;
-  localparam int TB_DEBUG_MODE         = 0; // <----- DEBUG MODE FLAG
+  localparam int TB_DEBUG_MODE         = 1; // <----- DEBUG MODE FLAG
   localparam int CTRL_START_HOLD_CYCLES = 128;
   localparam int CTRL_CTRL_GAP_CYCLES   = 24;
   localparam int RAM_REGION_WORDS      = 65536;
@@ -301,8 +301,6 @@ module top_module_hls_tb;
   logic         dbg_state_ap_vld;
   logic [1279:0] dbg_ctrl_mem;
   logic         dbg_ctrl_mem_ap_vld;
-  logic [31:0]  control_reg;
-  logic         control_reg_ap_vld;
   logic [0:0]   dbg_error;
   logic         dbg_error_ap_vld;
   logic [31:0]  dbg_error_code;
@@ -312,7 +310,6 @@ module top_module_hls_tb;
   logic [0:0] irq_ps_shadow;
   logic [0:0] irq_ps_prev;
   logic [31:0] dbg_state_prev;
-  logic [31:0] control_reg_prev;
   logic [7:0]  stream_in_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0]  stream_out_mem[0:STREAM_OUT_BUF_BYTES-1];
   logic [31:0] dma_rx_mem    [0:TOP_DMA_BUF_WORDS-1];
@@ -2550,18 +2547,12 @@ module top_module_hls_tb;
   always_ff @(posedge ap_clk) begin : p_debug_vld_monitor
     if (!ap_rst_n) begin
       dbg_state_prev <= 32'd0;
-      control_reg_prev <= 32'd0;
     end else begin
       if (dbg_state != dbg_state_prev) begin
         $display("[DBG-STATE] cycle=%0d token=%0d dbg_state %0d -> %0d status=0x%08h irq=0x%08h error=0x%08h",
                  cycle_count, current_stream_token, dbg_state_prev, dbg_state,
                  status_mem_shadow.status, status_mem_shadow.irq_status, status_mem_shadow.error_code);
         dbg_state_prev <= dbg_state;
-      end
-      if (control_reg_ap_vld && (control_reg != control_reg_prev)) begin
-        $display("[CONTROL-REG] cycle=%0d token=%0d control_reg 0x%08h -> 0x%08h",
-                 cycle_count, current_stream_token, control_reg_prev, control_reg);
-        control_reg_prev <= control_reg;
       end
     end
   end
@@ -2789,8 +2780,6 @@ module top_module_hls_tb;
     .irq_ps(irq_ps),
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
-    .control_reg(control_reg),
-    .control_reg_ap_vld(control_reg_ap_vld),
     .s_axi_control_AWVALID(s_axi_control_AWVALID),
     .s_axi_control_AWREADY(s_axi_control_AWREADY),
     .s_axi_control_AWADDR(s_axi_control_AWADDR),
