@@ -216,12 +216,6 @@ public:
         return readReg64(RegBus::CTRL, offset_lo);
     }
 
-    void setRegBits(uint32_t offset, uint32_t mask) {
-        writeReg(offset, readReg(offset) | mask);
-    }
-    void clearRegBits(uint32_t offset, uint32_t mask) {
-        writeReg(offset, readReg(offset) & ~mask);
-    }
     bool testRegBits(uint32_t offset, uint32_t mask) {
         return (readReg(offset) & mask) != 0;
     }
@@ -229,8 +223,8 @@ public:
     // Control
     bool reset();
     bool waitDone(uint32_t timeout_ms);
-    bool isError() { return testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT); }
     std::string getRegStats(bool compact = false);
+    std::string dumpCtrlMem();
     void beginConfig();
     void endConfig();
 
@@ -275,11 +269,8 @@ public:
     // IRQ
     bool clearIRQ();
     bool waitIRQ(uint32_t timeout_ms);
-    uint32_t getErrorCode() { return readReg(PLReg::ERROR_CODE); }
     std::string getErrorCodeString(const uint32_t error_mask = 0xFFFFFFFF);
-    uint32_t getMMUErrorSubcode() { return readReg(PLReg::MMU_ERROR_SUBCODE); }
-    std::string getMMUErrorSubcodeString(uint32_t subcode);
-    uint32_t getIRQStatus() { return readReg(PLReg::IRQ_STATUS); }
+    std::string getMMUErrorSubcodeString();
 
     bool isInitialized() const { return _initialized; }
     bool isMockMode() const { return _mock_mode; }

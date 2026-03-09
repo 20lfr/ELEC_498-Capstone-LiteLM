@@ -11,11 +11,9 @@
 #include <chrono>
 #include <cstring>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <sstream>
 #include <thread>
 #include <vector>
 
@@ -177,99 +175,7 @@ public:
         // endConfig: clears IRQ clear, enables IRQs, checks for config errors
         pl->endConfig();
         if (err->hasError()) {
-            auto dump_reg = [&](const char *name, uint32_t offset,
-                                uint32_t expected) {
-                std::ostringstream oss;
-                const uint32_t observed = pl->readReg(offset);
-                oss << "Config dump " << name << " @0x" << std::hex
-                    << std::uppercase << offset << " expected=0x"
-                    << std::setw(8) << std::setfill('0') << expected
-                    << " observed=0x" << std::setw(8) << observed;
-                LOG_ERROR(oss.str());
-            };
-            auto dump_reg64 = [&](const char *name, RegBus bus,
-                                  uint32_t offset_lo, uint64_t expected) {
-                std::ostringstream oss;
-                const uint64_t observed = pl->readReg64(bus, offset_lo);
-                oss << "Config dump " << name << " @0x" << std::hex
-                    << std::uppercase << offset_lo << " expected=0x"
-                    << std::setw(16) << std::setfill('0') << expected
-                    << " observed=0x" << std::setw(16) << observed;
-                LOG_ERROR(oss.str());
-            };
-
-            dump_reg("LAYER_STRIDE", PLReg::LAYER_STRIDE, cfg.layer_stride);
-            dump_reg("WQ_HEAD_STRIDE", PLReg::WQ_HEAD_STRIDE,
-                     cfg.wq_head_stride);
-            dump_reg("WK_HEAD_STRIDE", PLReg::WK_HEAD_STRIDE,
-                     cfg.wk_head_stride);
-            dump_reg("WV_HEAD_STRIDE", PLReg::WV_HEAD_STRIDE,
-                     cfg.wv_head_stride);
-            dump_reg("K_CACHE_STRIDE", PLReg::K_CACHE_STRIDE,
-                     cfg.k_cache_stride);
-            dump_reg("V_CACHE_STRIDE", PLReg::V_CACHE_STRIDE,
-                     cfg.v_cache_stride);
-            dump_reg("WO_TILE_STRIDE", PLReg::WO_TILE_STRIDE,
-                     cfg.wo_tile_stride);
-            dump_reg("W1_TILE_STRIDE", PLReg::W1_TILE_STRIDE,
-                     cfg.w1_tile_stride);
-            dump_reg("W2_TILE_STRIDE", PLReg::W2_TILE_STRIDE,
-                     cfg.w2_tile_stride);
-            dump_reg("WO_BIAS_TILE_STRIDE", PLReg::WO_BIAS_TILE_STRIDE,
-                     cfg.wo_bias_tile_stride);
-            dump_reg("W1_BIAS_TILE_STRIDE", PLReg::W1_BIAS_TILE_STRIDE,
-                     cfg.w1_bias_tile_stride);
-            dump_reg("W2_BIAS_TILE_STRIDE", PLReg::W2_BIAS_TILE_STRIDE,
-                     cfg.w2_bias_tile_stride);
-            dump_reg("WLOGIT_TILE_STRIDE", PLReg::WLOGIT_TILE_STRIDE,
-                     cfg.wlogit_tile_stride);
-            dump_reg("LN0_GAMMA_STRIDE", PLReg::LN0_GAMMA_STRIDE,
-                     cfg.ln0_gamma_stride);
-            dump_reg("LN1_GAMMA_STRIDE", PLReg::LN1_GAMMA_STRIDE,
-                     cfg.ln1_gamma_stride);
-            dump_reg("FINAL_NORM_GAMMA_STRIDE", PLReg::FINAL_NORM_GAMMA_STRIDE,
-                     cfg.final_norm_gamma_stride);
-            dump_reg("LN0_EPS_STRIDE", PLReg::LN0_EPS_STRIDE,
-                     cfg.ln0_eps_stride);
-            dump_reg("LN1_EPS_STRIDE", PLReg::LN1_EPS_STRIDE,
-                     cfg.ln1_eps_stride);
-            dump_reg("FINAL_NORM_EPS_STRIDE", PLReg::FINAL_NORM_EPS_STRIDE,
-                     cfg.final_norm_eps_stride);
-
-            dump_reg64("DDR_MEM_BASE", RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
-                       pl->getDDRBaseAddr(DmaBufType::WEIGHTS));
-            dump_reg64("DDR_MEM_BASE", RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO,
-                       pl->getDDRBaseAddr(DmaBufType::KV_CACHE));
-
-            dump_reg("WQ_OFFSET", PLReg::WQ_OFFSET, mem.wq_offset);
-            dump_reg("WK_OFFSET", PLReg::WK_OFFSET, mem.wk_offset);
-            dump_reg("WV_OFFSET", PLReg::WV_OFFSET, mem.wv_offset);
-            dump_reg("WO_OFFSET", PLReg::WO_OFFSET, mem.wo_offset);
-            dump_reg("W1_OFFSET", PLReg::W1_OFFSET, mem.w1_offset);
-            dump_reg("W2_OFFSET", PLReg::W2_OFFSET, mem.w2_offset);
-            dump_reg("K_CACHE_OFFSET", PLReg::K_CACHE_OFFSET,
-                     mem.k_cache_offset);
-            dump_reg("V_CACHE_OFFSET", PLReg::V_CACHE_OFFSET,
-                     mem.v_cache_offset);
-            dump_reg("WO_BIAS_OFFSET", PLReg::WO_BIAS_OFFSET,
-                     mem.wo_bias_offset);
-            dump_reg("W1_BIAS_OFFSET", PLReg::W1_BIAS_OFFSET,
-                     mem.w1_bias_offset);
-            dump_reg("W2_BIAS_OFFSET", PLReg::W2_BIAS_OFFSET,
-                     mem.w2_bias_offset);
-            dump_reg("LN0_GAMMA_OFFSET", PLReg::LN0_GAMMA_OFFSET,
-                     mem.ln0_gamma_offset);
-            dump_reg("LN1_GAMMA_OFFSET", PLReg::LN1_GAMMA_OFFSET,
-                     mem.ln1_gamma_offset);
-            dump_reg("FINAL_NORM_GAMMA_OFFSET", PLReg::FINAL_NORM_GAMMA_OFFSET,
-                     mem.final_norm_gamma_offset);
-            dump_reg("LN0_EPS_OFFSET", PLReg::LN0_EPS_OFFSET,
-                     mem.ln0_eps_offset);
-            dump_reg("LN1_EPS_OFFSET", PLReg::LN1_EPS_OFFSET,
-                     mem.ln1_eps_offset);
-            dump_reg("FINAL_NORM_EPS_OFFSET", PLReg::FINAL_NORM_EPS_OFFSET,
-                     mem.final_norm_eps_offset);
-            dump_reg("WLOGIT_OFFSET", PLReg::WLOGIT_OFFSET, mem.wlogit_offset);
+            LOG_ERROR("Config error, register dump:\n" + pl->dumpCtrlMem());
         }
         return !err->hasError();
     }
@@ -277,7 +183,7 @@ public:
 
 // =============================================================================
 // InferenceExecutor — single start pulse, autonomous PL, stream argmax readback
-// Uses only: start(), clearRegBits(), waitDone(), clearIRQ(),
+// Uses only: readReg(), writeReg(), waitDone(), clearIRQ(),
 //            streamInitSend/Recv(), streamWaitSend/Recv(), readDDR()
 // =============================================================================
 class InferenceExecutor {
@@ -347,12 +253,12 @@ public:
             return false;
 
         if (!pl->streamInitRecv(output_offset, STREAM_OUT_BUF_BYTES)) {
-            err->setError(ErrorCode::HARDWARE_FAULT, "streamInitRecv failed");
+            logPLStatus("streamInitRecv failed");
             return false;
         }
 
         if (!pl->streamInitSend(input_offset, send_buf, STREAM_IN_BUF_BYTES)) {
-            err->setError(ErrorCode::HARDWARE_FAULT, "streamInitSend failed");
+            logPLStatus("streamInitSend failed");
             return false;
         }
 
@@ -363,24 +269,18 @@ public:
         pl->writeReg(PLReg::CONTROL, ctrl_bits);
 
         usleep(10);
-        pl->clearRegBits(PLReg::CONTROL, CTRL_START_BIT);
+        // Clear START bit
+        pl->writeReg(PLReg::CONTROL,
+                     pl->readReg(PLReg::CONTROL) & ~CTRL_START_BIT);
 
         if (!pl->streamWaitSend(timeout_ms)) {
-            LOG_ERROR("Stream send timeout: " + pl->streamStatusString());
-            err->setError(ErrorCode::HARDWARE_TIMEOUT, "Stream in DMA timeout");
+            logPLStatus("streamWaitSend failed");
+            pl->clearIRQ();
             return false;
         }
 
         if (!pl->waitDone(timeout_ms)) {
             logPLStatus("waitDone failed");
-            return false;
-        }
-
-        // Check for PL error after completion
-        if (pl->isError()) {
-            logPLStatus("PL error after INFER_DONE");
-            err->setError(ErrorCode::HARDWARE_FAULT,
-                          "PL error: " + pl->getErrorCodeString());
             pl->clearIRQ();
             return false;
         }
@@ -388,9 +288,8 @@ public:
         uint8_t recv_buf[STREAM_OUT_BUF_BYTES] = {};
         if (!pl->streamWaitRecv(output_offset, recv_buf, STREAM_OUT_BUF_BYTES,
                                 timeout_ms)) {
-            LOG_ERROR("Stream recv timeout: " + pl->streamStatusString());
-            err->setError(ErrorCode::HARDWARE_TIMEOUT,
-                          "Stream out DMA timeout");
+            logPLStatus("streamWaitRecv failed");
+            pl->clearIRQ();
             return false;
         }
 
@@ -429,13 +328,11 @@ private:
         return true;
     }
 
-    /** Dump all PL status registers to the log for diagnostics. */
+    /** Log error context + raw register dump for diagnostics. */
     void logPLStatus(const char *context) {
-        char buf[512];
-        snprintf(buf, sizeof(buf), "[%s] %s %s", context,
-                 pl->getRegStats(true).c_str(),
-                 err->getLastErrorMessage().c_str());
-        LOG_ERROR(std::string(buf));
+        LOG_ERROR("[" + std::string(context) + "] " +
+                  err->getLastErrorMessage() +
+                  " | regs: " + pl->getRegStats(true));
     }
 };
 
@@ -486,7 +383,7 @@ public:
             new PLInterface(g_logger, &err, config.hardware.mock_mode));
         if (!pl->init(config.hardware.uio_device,
                       config.hardware.stream_reg_base_addr)) {
-            LOG_FATAL("PL init failed");
+            LOG_FATAL("PL init failed " + err.getLastErrorMessage());
             return false;
         }
 
@@ -494,13 +391,14 @@ public:
         if (!pl->initDMA(
                 config.hardware.dmabuf0_name, config.hardware.dmabuf0_size,
                 config.hardware.dmabuf1_name, config.hardware.dmabuf1_size)) {
-            LOG_FATAL("DDR init failed");
+            LOG_FATAL("DDR init failed" + err.getLastErrorMessage());
             return false;
         }
 
         tokenizer = std::unique_ptr<Tokenizer>(new Tokenizer);
         if (!tokenizer->loadVocabulary(config.model.tokenizer_vocab)) {
-            LOG_FATAL("Tokenizer vocab load failed");
+            LOG_FATAL("Tokenizer vocab load failed " +
+                      err.getLastErrorMessage());
             return false;
         }
 
@@ -510,14 +408,14 @@ public:
             new WeightLoader(pl.get(), g_logger, &err));
 
         if (!loader->configureAddresses(config.model, config.memory)) {
-            LOG_FATAL("Config failed");
+            LOG_FATAL("Config failed " + err.getLastErrorMessage());
             return false;
         }
 
         // Load binary weights into DDR — cap at what the FPGA actually needs
         loader->setWeightsFile(config.model.weights_file);
         if (!loader->loadAllWeights(config.model, MemoryLayout::w_size)) {
-            LOG_FATAL("Weight load failed");
+            LOG_FATAL("Weight load failed " + err.getLastErrorMessage());
             return false;
         }
 
@@ -581,12 +479,56 @@ private:
 
             if (state.status == EngineStatus::IDLE) {
                 Task task;
-                if (g_task_queue.pop(task))
-                    processTask(task);
-                else
+                if (g_task_queue.pop(task)) {
+                    if (config.hardware.debug_mode)
+                        processTaskDebug(task);
+                    else
+                        processTask(task);
+                } else {
                     std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                }
             }
         }
+    }
+
+    void processTaskDebug(const Task &task) {
+        state.status = EngineStatus::GENERATING;
+        state.taskId = task.id;
+        state.cancel = false;
+        g_engine_status = EngineStatus::GENERATING;
+
+        auto tokens = tokenizer->encode(task.prompt);
+        if (tokens.empty()) {
+            print("[empty prompt]\n");
+            state.status = EngineStatus::IDLE;
+            g_engine_status = EngineStatus::IDLE;
+            return;
+        }
+
+        // Debug mode: single token in → single token out
+        uint32_t input_token = tokens[0];
+        uint32_t out_token = 0;
+
+        print("=== DEBUG: single-token inference ===\n");
+        print("Input token: " + std::to_string(input_token) + " text=\"" +
+              tokenizer->decodeToken(input_token) + "\"\n");
+        print("Registers BEFORE:\n" + pl->getRegStats() + "\n");
+
+        bool ok = exec->executeToken(input_token, out_token);
+
+        print("Registers AFTER:\n" + pl->getRegStats() + "\n");
+
+        if (!ok) {
+            print("executeToken FAILED: " + err.getLastErrorMessage() + "\n");
+        } else {
+            std::string decoded = tokenizer->decodeToken(out_token);
+            print("Output token: " + std::to_string(out_token) + " text=\"" +
+                  decoded + "\"\n");
+        }
+
+        print("=== DEBUG END ===\n");
+        state.status = EngineStatus::IDLE;
+        g_engine_status = EngineStatus::IDLE;
     }
 
     void processTask(const Task &task) {
@@ -607,15 +549,10 @@ private:
         // ── Prefill: feed prompt tokens to populate KV cache ──
         for (size_t i = 0; i + 1 < tokens.size() && !state.cancel; i++) {
             uint32_t discard = 0;
-            const std::string decoded_in = tokenizer->decodeToken(tokens[i]);
-            print("Prefill[" + std::to_string(i) + "/" +
-                  std::to_string(tokens.size() - 1) + "]: token=" +
-                  std::to_string(tokens[i]) + " text=\"" + decoded_in + "\"\n");
             if (!exec->executeToken(tokens[i], discard)) {
                 LOG_ERROR("Prefill failed at token " + std::to_string(i));
                 break;
             }
-            print("Prefill result: token=" + std::to_string(discard) + "\n");
             LOG_DEBUG("Prefill [" + std::to_string(i) + "/" +
                       std::to_string(tokens.size()) +
                       "] token=" + std::to_string(tokens[i]));
@@ -632,18 +569,12 @@ private:
 
         for (uint32_t i = 0; i < state.maxTokens && !state.cancel; i++) {
             uint32_t out_token = 0;
-            const std::string decoded_in = tokenizer->decodeToken(next_input);
-            print("Decode[" + std::to_string(i) + "/" +
-                  std::to_string(state.maxTokens) + "]: input_token=" +
-                  std::to_string(next_input) + " text=\"" + decoded_in + "\"\n");
             if (!exec->executeToken(next_input, out_token))
                 break;
-            print("Generated: token=" + std::to_string(out_token));
 
             std::string decoded = tokenizer->decodeToken(out_token);
             if (!decoded.empty())
-                print(" text=\"" + decoded + "\"");
-            print("\n");
+                print(decoded);
 
             if (out_token == tokenizer->getEOSTokenId())
                 break;

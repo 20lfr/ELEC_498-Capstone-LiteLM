@@ -127,10 +127,10 @@ struct MemoryLayout {
     bool isAligned() const {
         return !((wq_offset | wk_offset | wv_offset | wo_offset | w1_offset |
                   w2_offset | k_cache_offset | v_cache_offset | input_offset |
-                  output_offset | wo_bias_offset |
-                  w1_bias_offset | w2_bias_offset | ln0_gamma_offset |
-                  ln1_gamma_offset | final_norm_gamma_offset | ln0_eps_offset |
-                  ln1_eps_offset | final_norm_eps_offset | wlogit_offset) &
+                  output_offset | wo_bias_offset | w1_bias_offset |
+                  w2_bias_offset | ln0_gamma_offset | ln1_gamma_offset |
+                  final_norm_gamma_offset | ln0_eps_offset | ln1_eps_offset |
+                  final_norm_eps_offset | wlogit_offset) &
                  0x3F);
     }
 };

@@ -309,7 +309,6 @@ void PLInterface::endConfig() {
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
         std::string msg =
             getErrorCodeString(ERR_DMA_ALIGNMENT | ERR_DMA_ZERO_STRIDE);
-        LOG_ERROR("Config error: " + msg);
         _err->setError(ErrorCode::CONFIG_ERROR, msg);
     }
 }
@@ -320,14 +319,18 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
         _mock_regs[PLReg::IRQ_STATUS / 4] |= IRQ_INFER_DONE_BIT;
         return true;
     }
-
     if (!waitIRQ(timeout_ms)) {
-        _err->setError(ErrorCode::HARDWARE_TIMEOUT, "waitDone: IRQ timeout");
+        _err->setError(
+            ErrorCode::HARDWARE_TIMEOUT,
+            "waitDone: IRQ timeout | HW error: " + getErrorCodeString() +
+                " | MMU error: " + getMMUErrorSubcodeString());
         return false;
     }
 
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_ERROR_BIT)) {
-        _err->setError(ErrorCode::HARDWARE_FAULT, "HW error");
+        _err->setError(ErrorCode::HARDWARE_FAULT,
+                       "HW error: " + getErrorCodeString() +
+                           " | MMU error: " + getMMUErrorSubcodeString());
         return false;
     }
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
@@ -335,43 +338,6 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
 
     LOG_WARN("waitDone: spurious IRQ wakeup");
     return false;
-}
-
-std::string PLInterface::getRegStats(bool compact) {
-    uint32_t status = readReg(PLReg::STATUS);
-    uint32_t irq_status = readReg(PLReg::IRQ_STATUS);
-    uint32_t error_code = readReg(PLReg::ERROR_CODE);
-    uint32_t mmu_subcode = readReg(PLReg::MMU_ERROR_SUBCODE);
-    uint32_t layer_idx = readReg(PLReg::LAYER_INDEX);
-    uint32_t head_idx = readReg(PLReg::HEAD_INDEX);
-    uint32_t token_idx = readReg(PLReg::TOKEN_INDEX);
-
-    char buf[768];
-    if (compact) {
-        snprintf(buf, sizeof(buf),
-                 "status=0x%08X irq=0x%08X error=0x%08X mmu_sub=0x%08X(%s) "
-                 "layer=%u head=%u token=%u | %s | stream: %s",
-                 status, irq_status, error_code, mmu_subcode, layer_idx,
-                 getMMUErrorSubcodeString(mmu_subcode).c_str(), head_idx,
-                 token_idx,
-                 getErrorCodeString(error_code).c_str(),
-                 streamStatusString().c_str());
-    } else {
-        snprintf(buf, sizeof(buf),
-                 "  Status:     0x%08X\n"
-                 "  IRQ Status: 0x%08X\n"
-                 "  Error Code: 0x%08X  %s\n"
-                 "  MMU Sub:    0x%08X  %s\n"
-                 "  Layer:      %u\n"
-                 "  Head:       %u\n"
-                 "  Token:      %u\n"
-                 "  Stream:     %s",
-                 status, irq_status, error_code,
-                 getErrorCodeString(error_code).c_str(), mmu_subcode,
-                 getMMUErrorSubcodeString(mmu_subcode).c_str(), layer_idx,
-                 head_idx, token_idx, streamStatusString().c_str());
-    }
-    return std::string(buf);
 }
 
 // DDR access
@@ -433,13 +399,17 @@ bool PLInterface::streamWait(uint32_t sr_off, uint32_t timeout_ms) {
             return true;
         }
         if (sr & StreamReg::SR_ALL_ERR_BITS) {
-            LOG_ERROR("DMA error: " + streamStatusString());
+            _err->setError(ErrorCode::HARDWARE_FAULT,
+                           "Stream error | HW error: " + getErrorCodeString() +
+                               " | MMU error: " + getMMUErrorSubcodeString());
             writeReg(RegBus::STREAM, sr_off, StreamReg::SR_ALL_IRQ_BITS);
             return false;
         }
         usleep(1000);
     }
-    LOG_ERROR("DMA timeout: " + streamStatusString());
+    _err->setError(ErrorCode::HARDWARE_TIMEOUT,
+                   "Stream timeout | HW error: " + getErrorCodeString() +
+                       " | MMU error: " + getMMUErrorSubcodeString());
     return false;
 }
 
@@ -544,8 +514,142 @@ bool PLInterface::waitIRQ(uint32_t timeout_ms) {
     return true;
 }
 
+std::string PLInterface::getRegStats(bool compact) {
+    uint32_t status = readReg(PLReg::STATUS);
+    uint32_t irq_status = readReg(PLReg::IRQ_STATUS);
+    uint32_t error_code = readReg(PLReg::ERROR_CODE);
+    uint32_t mmu_subcode = readReg(PLReg::MMU_ERROR_SUBCODE);
+    uint32_t layer_idx = readReg(PLReg::LAYER_INDEX);
+    uint32_t head_idx = readReg(PLReg::HEAD_INDEX);
+    uint32_t token_idx = readReg(PLReg::TOKEN_INDEX);
+
+    char buf[768];
+    if (compact) {
+        snprintf(buf, sizeof(buf),
+                 "status=0x%08X irq=0x%08X error=0x%08X mmu_sub=0x%08X "
+                 "layer=%u head=%u token=%u | stream: %s",
+                 status, irq_status, error_code, mmu_subcode, layer_idx,
+                 head_idx, token_idx, streamStatusString().c_str());
+    } else {
+        snprintf(buf, sizeof(buf),
+                 "  Status:     0x%08X\n"
+                 "  IRQ Status: 0x%08X\n"
+                 "  Error Code: 0x%08X  %s\n"
+                 "  MMU Sub:    0x%08X  %s\n"
+                 "  Layer:      %u\n"
+                 "  Head:       %u\n"
+                 "  Token:      %u\n"
+                 "  Stream:     %s",
+                 status, irq_status, error_code,
+                 getErrorCodeString(error_code).c_str(), mmu_subcode,
+                 getMMUErrorSubcodeString().c_str(), layer_idx, head_idx,
+                 token_idx, streamStatusString().c_str());
+    }
+    return std::string(buf);
+}
+
+std::string PLInterface::dumpCtrlMem() {
+    struct Reg32 {
+        const char *name;
+        uint32_t offset;
+    };
+    struct Reg64 {
+        const char *name;
+        RegBus bus;
+        uint32_t offset_lo;
+    };
+
+    // ctrl_mem — writable config registers (HLS packed struct at 0x10)
+    static const Reg32 ctrl_regs[] = {
+        {"CONTROL", PLReg::CONTROL},
+        {"IRQ_MASK", PLReg::IRQ_MASK},
+        {"IRQ_CLEAR", PLReg::IRQ_CLEAR},
+        {"LAYER_STRIDE", PLReg::LAYER_STRIDE},
+        {"WQ_HEAD_STRIDE", PLReg::WQ_HEAD_STRIDE},
+        {"WK_HEAD_STRIDE", PLReg::WK_HEAD_STRIDE},
+        {"WV_HEAD_STRIDE", PLReg::WV_HEAD_STRIDE},
+        {"K_CACHE_STRIDE", PLReg::K_CACHE_STRIDE},
+        {"V_CACHE_STRIDE", PLReg::V_CACHE_STRIDE},
+        {"WO_TILE_STRIDE", PLReg::WO_TILE_STRIDE},
+        {"W1_TILE_STRIDE", PLReg::W1_TILE_STRIDE},
+        {"W2_TILE_STRIDE", PLReg::W2_TILE_STRIDE},
+        {"WO_BIAS_TILE_STRIDE", PLReg::WO_BIAS_TILE_STRIDE},
+        {"W1_BIAS_TILE_STRIDE", PLReg::W1_BIAS_TILE_STRIDE},
+        {"W2_BIAS_TILE_STRIDE", PLReg::W2_BIAS_TILE_STRIDE},
+        {"WLOGIT_TILE_STRIDE", PLReg::WLOGIT_TILE_STRIDE},
+        {"LN0_GAMMA_STRIDE", PLReg::LN0_GAMMA_STRIDE},
+        {"LN1_GAMMA_STRIDE", PLReg::LN1_GAMMA_STRIDE},
+        {"FINAL_NORM_GAMMA_STRIDE", PLReg::FINAL_NORM_GAMMA_STRIDE},
+        {"LN0_EPS_STRIDE", PLReg::LN0_EPS_STRIDE},
+        {"LN1_EPS_STRIDE", PLReg::LN1_EPS_STRIDE},
+        {"FINAL_NORM_EPS_STRIDE", PLReg::FINAL_NORM_EPS_STRIDE},
+        {"WQ_OFFSET", PLReg::WQ_OFFSET},
+        {"WK_OFFSET", PLReg::WK_OFFSET},
+        {"WV_OFFSET", PLReg::WV_OFFSET},
+        {"WO_OFFSET", PLReg::WO_OFFSET},
+        {"W1_OFFSET", PLReg::W1_OFFSET},
+        {"W2_OFFSET", PLReg::W2_OFFSET},
+        {"K_CACHE_OFFSET", PLReg::K_CACHE_OFFSET},
+        {"V_CACHE_OFFSET", PLReg::V_CACHE_OFFSET},
+        {"WO_BIAS_OFFSET", PLReg::WO_BIAS_OFFSET},
+        {"W1_BIAS_OFFSET", PLReg::W1_BIAS_OFFSET},
+        {"W2_BIAS_OFFSET", PLReg::W2_BIAS_OFFSET},
+        {"LN0_GAMMA_OFFSET", PLReg::LN0_GAMMA_OFFSET},
+        {"LN1_GAMMA_OFFSET", PLReg::LN1_GAMMA_OFFSET},
+        {"FINAL_NORM_GAMMA_OFFSET", PLReg::FINAL_NORM_GAMMA_OFFSET},
+        {"LN0_EPS_OFFSET", PLReg::LN0_EPS_OFFSET},
+        {"LN1_EPS_OFFSET", PLReg::LN1_EPS_OFFSET},
+        {"FINAL_NORM_EPS_OFFSET", PLReg::FINAL_NORM_EPS_OFFSET},
+        {"WLOGIT_OFFSET", PLReg::WLOGIT_OFFSET},
+    };
+
+    // status_mem — read-only PL status registers
+    static const Reg32 status_regs[] = {
+        {"STATUS", PLReg::STATUS},
+        {"IRQ_STATUS", PLReg::IRQ_STATUS},
+        {"ERROR_CODE", PLReg::ERROR_CODE},
+        {"MMU_ERROR_SUBCODE", PLReg::MMU_ERROR_SUBCODE},
+        {"LAYER_INDEX", PLReg::LAYER_INDEX},
+        {"HEAD_INDEX", PLReg::HEAD_INDEX},
+        {"TOKEN_INDEX", PLReg::TOKEN_INDEX},
+    };
+
+    // m_axi base addresses (separate AXI-Lite bus)
+    static const Reg64 addr_regs[] = {
+        {"WEIGHTS_BASE", RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO},
+        {"KV_CACHE_BASE", RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO},
+    };
+
+    std::string out;
+    char line[80];
+
+    out += "=== ctrl_mem (config) ===\n";
+    for (const auto &r : ctrl_regs) {
+        snprintf(line, sizeof(line), "  %-28s @0x%02X = 0x%08X\n", r.name,
+                 r.offset, readReg(r.offset));
+        out += line;
+    }
+
+    out += "=== status_mem (read-only) ===\n";
+    for (const auto &r : status_regs) {
+        snprintf(line, sizeof(line), "  %-28s @0x%02X = 0x%08X\n", r.name,
+                 r.offset, readReg(r.offset));
+        out += line;
+    }
+
+    out += "=== m_axi base addresses ===\n";
+    for (const auto &r : addr_regs) {
+        snprintf(line, sizeof(line), "  %-28s @0x%02X = 0x%016llX\n", r.name,
+                 r.offset_lo,
+                 (unsigned long long)readReg64(r.bus, r.offset_lo));
+        out += line;
+    }
+
+    return out;
+}
+
 std::string PLInterface::getErrorCodeString(const uint32_t error_mask) {
-    uint32_t code = getErrorCode() & error_mask;
+    uint32_t code = readReg(PLReg::ERROR_CODE) & error_mask;
     if (code == ERR_NONE)
         return "No error";
 
@@ -619,7 +723,9 @@ std::string PLInterface::getErrorCodeString(const uint32_t error_mask) {
     return msg;
 }
 
-std::string PLInterface::getMMUErrorSubcodeString(uint32_t subcode) {
+std::string PLInterface::getMMUErrorSubcodeString() {
+    uint32_t subcode = readReg(PLReg::MMU_ERROR_SUBCODE);
+
     switch (subcode) {
     case MMU_ERR_SUBCODE_NONE:
         return "NONE";
