@@ -198,7 +198,7 @@ class InferenceExecutor {
     bool debug_mode;
 
     // Embedding table: vocab_size x STREAM_IN_BUF_BYTES, held in process memory
-    std::vector<uint8_t> embedding_table;
+    std::vector<int8_t> embedding_table;
 
 public:
     InferenceExecutor(PLInterface *p, Tokenizer *t, PerformanceMonitor *pf,
@@ -246,9 +246,18 @@ public:
     bool executeToken(uint32_t token_id, uint32_t &out_token) {
         perf->startGeneration();
 
-        uint8_t send_buf[STREAM_IN_BUF_BYTES];
+        int8_t send_buf[STREAM_IN_BUF_BYTES];
         if (!lookupEmbedding(token_id, send_buf))
             return false;
+
+        {
+            std::string buf_str = "send_buf {";
+            for (int i = 0; i < (int)STREAM_IN_BUF_BYTES; i++) {
+                buf_str += std::to_string(send_buf[i]) + (i < (int)STREAM_IN_BUF_BYTES - 1 ? ", " : "");
+            }
+            buf_str += "}";
+            LOG_DEBUG(buf_str);
+        }
 
         if (!pl->streamInitRecv(output_offset, STREAM_OUT_BUF_BYTES)) {
             logPLStatus("streamInitRecv failed");
@@ -307,17 +316,17 @@ public:
     }
 
     /** Get raw embedding data for a token ID into caller buffer. */
-    bool getEmbedding(uint32_t token_id, uint8_t *out) {
+    bool getEmbedding(uint32_t token_id, int8_t *out) {
         return lookupEmbedding(token_id, out);
     }
 
 private:
-    bool lookupEmbedding(uint32_t token_id, uint8_t *out) {
+    bool lookupEmbedding(uint32_t token_id, int8_t *out) {
         if (embedding_table.empty()) {
             // Fallback: test pattern matching testbench stream_in behavior
             LOG_WARN("No embedding table loaded, using test pattern");
             for (int i = 0; i < STREAM_IN_BUF_BYTES; i++)
-                out[i] = static_cast<uint8_t>(i & 0xFF);
+                out[i] = static_cast<int8_t>(i & 0xFF);
             return true;
         }
         if (token_id >= vocab_size) {
@@ -500,7 +509,14 @@ private:
         state.cancel = false;
         g_engine_status = EngineStatus::GENERATING;
 
-        auto tokens = tokenizer->encode(task.prompt);
+        std::vector<uint32_t> tokens;
+        if (task.prompt.size() > 4 &&
+            task.prompt.substr(task.prompt.size() - 4) == ".bin") {
+            tokens = loadPreTokenized(task.prompt);
+        } else {
+            tokens = tokenizer->encode(task.prompt);
+        }
+
         if (tokens.empty()) {
             print("[empty prompt]\n");
             state.status = EngineStatus::IDLE;
@@ -517,11 +533,11 @@ private:
               tokenizer->decodeToken(input_token) + "\"\n");
 
         // Compute expected sum of int8 embedding on CPU side
-        uint8_t embed_buf[STREAM_IN_BUF_BYTES];
+        int8_t embed_buf[STREAM_IN_BUF_BYTES];
         int32_t expected_sum = 0;
         if (exec->getEmbedding(input_token, embed_buf)) {
             for (int i = 0; i < STREAM_IN_BUF_BYTES; i++)
-                expected_sum += static_cast<int8_t>(embed_buf[i]);
+                expected_sum += static_cast<int32_t>(embed_buf[i]);
             print("CPU embedding sum (int8): " + std::to_string(expected_sum) +
                   "\n");
         } else {
@@ -563,7 +579,13 @@ private:
         state.cancel = false;
         g_engine_status = EngineStatus::GENERATING;
 
-        auto tokens = tokenizer->encode(task.prompt);
+        std::vector<uint32_t> tokens;
+        if (task.prompt.size() > 4 &&
+            task.prompt.substr(task.prompt.size() - 4) == ".bin") {
+            tokens = loadPreTokenized(task.prompt);
+        } else {
+            tokens = tokenizer->encode(task.prompt);
+        }
 
         if (tokens.empty()) {
             print("[empty prompt]\n");
@@ -581,7 +603,8 @@ private:
             }
             LOG_DEBUG("Prefill [" + std::to_string(i) + "/" +
                       std::to_string(tokens.size()) +
-                      "] token=" + std::to_string(tokens[i]));
+                      "] token=" + std::to_string(tokens[i]) +
+                      " discard_token_idx=" + std::to_string(discard));
         }
 
         if (state.cancel) {
@@ -598,6 +621,11 @@ private:
             if (!exec->executeToken(next_input, out_token))
                 break;
 
+            LOG_DEBUG("Decode [" + std::to_string(i) + "/" +
+                      std::to_string(state.maxTokens) +
+                      "] next_input=" + std::to_string(next_input) +
+                      " out_token=" + std::to_string(out_token));
+
             std::string decoded = tokenizer->decodeToken(out_token);
             if (!decoded.empty())
                 print(decoded);
@@ -611,6 +639,21 @@ private:
         print("\n");
         state.status = EngineStatus::IDLE;
         g_engine_status = EngineStatus::IDLE;
+    }
+
+    std::vector<uint32_t> loadPreTokenized(const std::string &path) {
+        std::vector<uint32_t> ids;
+        std::ifstream f(path, std::ios::binary);
+        if (!f) {
+            LOG_ERROR("Cannot open token file: " + path);
+            return ids;
+        }
+        uint32_t count = 0;
+        f.read(reinterpret_cast<char *>(&count), sizeof(count));
+        ids.resize(count);
+        f.read(reinterpret_cast<char *>(ids.data()), count * sizeof(uint32_t));
+        LOG_INFO("Loaded " + std::to_string(count) + " tokens from " + path);
+        return ids;
     }
 
     void print(const std::string &s) {

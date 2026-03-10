@@ -19,10 +19,9 @@ struct HardwareConfig {
 };
 
 struct ModelConfig {
-    std::string weights_file = "model/phi3_weights_int4.bin";
-    std::string quant_params_file = "model/quantization.bin";
-    std::string tokenizer_vocab = "model/vocab.txt";
-    std::string embeddings_file = "model/embeddings.bin";
+    std::string weights_file = "model_test/ddr_image.bin";
+    std::string tokenizer_vocab = "model_test/vocab.txt";
+    std::string embeddings_file = "model_test/embed_tokens.bin";
 
     uint32_t vocab_size = MODEL_VOCAB_SIZE;
     uint32_t logit_scale_qv = ATTN_SCALE_Q15;
