@@ -228,7 +228,7 @@ int main() {
         scheduler_hls(
             reset_n,
             (ctrl_mem.control & CTRL_START_BIT) != 0u,
-            (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0u,
+            decode_debug_mode_sel(ctrl_mem.control),
             ((status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
                 (status_mem.error_code != ERR_NONE),
             axis_token_complete,
@@ -243,6 +243,7 @@ int main() {
             head_group_idx,
             compute_start,
             compute_instruction,
+            false,
             stream_ready,
             stream_start,
             stream_done,

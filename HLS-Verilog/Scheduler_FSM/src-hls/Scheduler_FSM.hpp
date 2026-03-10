@@ -11,7 +11,7 @@
 void scheduler_hls(
     bool cntrl_reset_n,
     bool cntrl_start,
-    bool debug_mode_en,
+    uint8_t debug_mode_sel,
     bool ctrl_error,
     bool axis_token_complete,
     bool      dma_done,

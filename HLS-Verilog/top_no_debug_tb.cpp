@@ -22,7 +22,19 @@
 #define TOP_NO_DEBUG_TB_LOG_SUBDIR "top_no_debug"
 #endif
 
-constexpr bool TB_DEBUG_MODE = false;
+constexpr uint8_t TB_DEBUG_MODE_SEL = DEBUG_MODE_AXI_SIGNATURE; // could be DEBUG_MODE_AXI_SIGNATURE, DEBUG_MODE_STREAM_SUM or DEBUG_MODE_NONE
+constexpr bool TB_DEBUG_MODE = (TB_DEBUG_MODE_SEL != DEBUG_MODE_NONE);
+constexpr bool TB_STREAM_DEBUG_MODE = (TB_DEBUG_MODE_SEL == DEBUG_MODE_STREAM_SUM);
+constexpr bool TB_AXI_DEBUG_MODE = (TB_DEBUG_MODE_SEL == DEBUG_MODE_AXI_SIGNATURE);
+
+static const char *tb_debug_mode_name() {
+    switch (TB_DEBUG_MODE_SEL) {
+    case DEBUG_MODE_NONE: return "normal";
+    case DEBUG_MODE_STREAM_SUM: return "stream_sum";
+    case DEBUG_MODE_AXI_SIGNATURE: return "axi_signature";
+    default: return "unknown";
+    }
+}
 
 static bool ensure_dir_recursive(const char *dir) {
     char path[512];
@@ -160,6 +172,93 @@ static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count)
     }
 
     return true;
+}
+
+static uint8_t tb_gmem_get_byte(const axi_gmem_word_t &word, uint32_t lane) {
+    return static_cast<uint8_t>(word.range(((lane + 1u) * 8u) - 1u, lane * 8u));
+}
+
+static uint8_t tb_read_ddr_byte(const axi_gmem_word_t *mem, uint64_t byte_addr) {
+    const uint64_t word_idx = byte_addr / AXI_GMEM_WORD_BYTES;
+    const uint32_t lane = static_cast<uint32_t>(byte_addr % AXI_GMEM_WORD_BYTES);
+    return tb_gmem_get_byte(mem[word_idx], lane);
+}
+
+static uint32_t tb_debug_axi_req_bytes(uint8_t req_idx) {
+    switch (req_idx) {
+        case 0:
+        case 1:
+        case 2:
+            return head_buf::QKV_W_FULL_BYTES;
+        case 3:
+            return compute_buf::INOutProjLayout::W_BYTES + compute_buf::INOutProjLayout::B_BYTES;
+        case 4:
+            return compute_buf::INFfnW1Layout::W_BYTES + compute_buf::INFfnW1Layout::B_BYTES;
+        case 5:
+            return compute_buf::INFfnW2Layout::W_BYTES + compute_buf::INFfnW2Layout::B_BYTES;
+        case 6:
+            return compute_buf::INLogitsLayout::W_BYTES;
+        default:
+            return 0;
+    }
+}
+
+static uint64_t tb_debug_axi_req_base(const ControlMemSpace &ctrl_mem, uint8_t req_idx) {
+    switch (req_idx) {
+        case 0: return ctrl_mem.wq_offset;
+        case 1: return ctrl_mem.wk_offset;
+        case 2: return ctrl_mem.wv_offset;
+        case 3: return ctrl_mem.wo_offset;
+        case 4: return ctrl_mem.w1_offset;
+        case 5: return ctrl_mem.w2_offset;
+        case 6: return ctrl_mem.wlogit_offset;
+        default: return 0;
+    }
+}
+
+static uint32_t tb_expected_axi_signature_for_req(const axi_gmem_word_t *ddr_mem,
+                                                  const ControlMemSpace &ctrl_mem,
+                                                  uint8_t req_idx) {
+    uint32_t sum = 0;
+    if (req_idx <= 2 || req_idx == 6) {
+        const uint64_t base = tb_debug_axi_req_base(ctrl_mem, req_idx);
+        const uint32_t bytes = tb_debug_axi_req_bytes(req_idx);
+        for (uint32_t i = 0; i < bytes; ++i) {
+            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, base + i));
+        }
+        return sum % DEBUG_AXI_SIG_MODULUS;
+    }
+
+    if (req_idx == 3) {
+        for (uint32_t i = 0; i < compute_buf::INOutProjLayout::W_BYTES; ++i) {
+            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.wo_offset + i));
+        }
+        for (uint32_t i = 0; i < compute_buf::INOutProjLayout::B_BYTES; ++i) {
+            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.wo_bias_offset + i));
+        }
+        return sum % DEBUG_AXI_SIG_MODULUS;
+    }
+
+    if (req_idx == 4) {
+        for (uint32_t i = 0; i < compute_buf::INFfnW1Layout::W_BYTES; ++i) {
+            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w1_offset + i));
+        }
+        for (uint32_t i = 0; i < compute_buf::INFfnW1Layout::B_BYTES; ++i) {
+            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w1_bias_offset + i));
+        }
+        return sum % DEBUG_AXI_SIG_MODULUS;
+    }
+
+    if (req_idx == 5) {
+        for (uint32_t i = 0; i < compute_buf::INFfnW2Layout::W_BYTES; ++i) {
+            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w2_offset + i));
+        }
+        for (uint32_t i = 0; i < compute_buf::INFfnW2Layout::B_BYTES; ++i) {
+            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w2_bias_offset + i));
+        }
+        return sum % DEBUG_AXI_SIG_MODULUS;
+    }
+    return sum % DEBUG_AXI_SIG_MODULUS;
 }
 
 static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
@@ -341,6 +440,8 @@ static const char *status_name(uint32_t status) {
         return "S_STREAM_OUT";
     case S_DEBUG:
         return "S_DEBUG";
+    case S_DEBUG_AXI:
+        return "S_DEBUG_AXI";
     default:
         return "UNKNOWN";
     }
@@ -382,6 +483,8 @@ static const char *sched_state_name(uint32_t state) {
         return "S_STREAM_OUT";
     case S_DEBUG:
         return "S_DEBUG";
+    case S_DEBUG_AXI:
+        return "S_DEBUG_AXI";
     default:
         return "S_UNKNOWN";
     }
@@ -566,7 +669,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     bool axis_in_valid   = false;
     bool axis_in_last    = false;
     int  axis_sent       = 0;
-    bool axis_feed_done  = false;
+    bool axis_feed_done  = TB_AXI_DEBUG_MODE;
     bool axis_drive      = false;
     uint8_t axis_in_data = 0;
     uint8_t stream_in_buf[STREAM_IN_BUF_BYTES] = {};
@@ -593,6 +696,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     bool aborted_on_error = false;
     bool debug_output_match = false;
     int  base_assign_step = 0;
+    uint32_t observed_axi_signatures[DEBUG_AXI_REQ_COUNT] = {};
 
     if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
         return 1;
@@ -614,7 +718,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
                            static_cast<size_t>(STREAM_TOKEN_BYTES));
     }
     int32_t expected_debug_sum = 0;
-    if (TB_DEBUG_MODE) {
+    if (TB_STREAM_DEBUG_MODE) {
         for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
             expected_debug_sum += static_cast<int32_t>(static_cast<int8_t>(stream_in_buf[i]));
         }
@@ -650,7 +754,10 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     int ctrl_gap_cycles = 0;
     bool seen_irq_done = false;
     auto set_control = [&](uint32_t value) {
-        const uint32_t control = value | (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 0u);
+        const uint32_t control =
+            value |
+            (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 0u) |
+            (static_cast<uint32_t>(TB_DEBUG_MODE_SEL) << CTRL_DEBUG_MODE_SEL_SHIFT);
         ctrl_mem.control = control;
         ctrl_shadow_control = control;
     };
@@ -873,7 +980,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
                     (static_cast<uint32_t>(stream_out_buf[2]) << 16) |
                     (static_cast<uint32_t>(stream_out_buf[3]) << 24));
                 std::printf("(index=%d)\n", token_id);
-                if (TB_DEBUG_MODE) {
+                if (TB_STREAM_DEBUG_MODE) {
                     if (token_id != expected_debug_sum) {
                         std::fprintf(stderr,
                                      "ERROR: Debug sum mismatch for token %zu: expected=%d observed=%d\n",
@@ -949,23 +1056,73 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
         }
 
         const bool cntrl_start = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
-        if (!cntrl_start && seen_done && seen_idle_after && seen_stream_out && idle_after_stream >= 4) {
+        if (!cntrl_start && seen_done && seen_idle_after &&
+            (TB_AXI_DEBUG_MODE || (seen_stream_out && idle_after_stream >= 4))) {
             break;
         }
     }
 
-    bool ok = !aborted_on_error && seen_stream_out && (idle_after_stream >= 4) &&
-              (!TB_DEBUG_MODE || debug_output_match);
+    bool ok = !aborted_on_error &&
+              seen_done &&
+              seen_idle_after &&
+              (TB_AXI_DEBUG_MODE || (seen_stream_out && idle_after_stream >= 4)) &&
+              (!TB_STREAM_DEBUG_MODE || debug_output_match);
 
     if (!ok) {
-        if (!seen_stream_out) std::fprintf(stderr, "ERROR: Inference done never reached\n");
-        if (idle_after_stream < 4) std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after done\n");
-        if (!debug_output_match) std::fprintf(stderr, "ERROR: Debug output mismatch detected\n");
+        if (!TB_AXI_DEBUG_MODE && !seen_stream_out) {
+            std::fprintf(stderr, "ERROR: Inference done never reached\n");
+        }
+        if (!TB_AXI_DEBUG_MODE && idle_after_stream < 4) {
+            std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after done\n");
+        }
+        if (TB_STREAM_DEBUG_MODE && !debug_output_match) {
+            std::fprintf(stderr, "ERROR: Debug output mismatch detected\n");
+        }
         return 1;
     }
 
-    std::printf("PASS: Token %zu inference complete, FSM stayed IDLE for %d cycles after.\n",
-                selected_stream_token, idle_after_stream);
+    if (TB_AXI_DEBUG_MODE) {
+        bool axi_debug_match = true;
+        for (uint32_t req_idx = 0; req_idx < DEBUG_AXI_REQ_COUNT; ++req_idx) {
+            uint32_t observed = 0;
+            const uint64_t scratch_byte_addr =
+                static_cast<uint64_t>(ctrl_mem.k_cache_offset) +
+                static_cast<uint64_t>(req_idx) * DEBUG_AXI_SCRATCH_STRIDE;
+            for (uint32_t i = 0; i < DEBUG_AXI_SCRATCH_STRIDE; ++i) {
+                const uint64_t byte_addr = scratch_byte_addr + static_cast<uint64_t>(i);
+                const uint64_t word_idx = byte_addr / AXI_GMEM_WORD_BYTES;
+                const uint32_t lane = static_cast<uint32_t>(byte_addr % AXI_GMEM_WORD_BYTES);
+                const axi_gmem_word_t word = kv_cache[word_idx];
+                const uint8_t byte = tb_gmem_get_byte(word, lane);
+                observed |= (static_cast<uint32_t>(byte) << (i * 8u));
+            }
+            observed_axi_signatures[req_idx] = observed;
+            const uint32_t expected =
+                tb_expected_axi_signature_for_req(ddr_mem, ctrl_mem, static_cast<uint8_t>(req_idx));
+            if (observed != expected) {
+                axi_debug_match = false;
+                std::fprintf(stderr,
+                             "ERROR: AXI debug signature mismatch req=%u observed=0x%08X expected=0x%08X\n",
+                             req_idx,
+                             static_cast<unsigned>(observed),
+                             static_cast<unsigned>(expected));
+            }
+        }
+        if (!axi_debug_match) {
+            return 1;
+        }
+        std::printf("PASS: Token %zu AXI debug complete, signatures:",
+                    selected_stream_token);
+        for (uint32_t req_idx = 0; req_idx < DEBUG_AXI_REQ_COUNT; ++req_idx) {
+            std::printf(" [%u]=0x%08X",
+                        req_idx,
+                        static_cast<unsigned>(observed_axi_signatures[req_idx]));
+        }
+        std::printf("\n");
+    } else {
+        std::printf("PASS: Token %zu inference complete, FSM stayed IDLE for %d cycles after.\n",
+                    selected_stream_token, idle_after_stream);
+    }
     return 0;
 }
 

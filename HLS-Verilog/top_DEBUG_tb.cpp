@@ -1453,6 +1453,10 @@ static const char *status_name(uint32_t status) {
         return "S_ARGMAX";
     case S_STREAM_OUT:
         return "S_STREAM_OUT";
+    case S_DEBUG:
+        return "S_DEBUG";
+    case S_DEBUG_AXI:
+        return "S_DEBUG_AXI";
     default:
         return "UNKNOWN";
     }

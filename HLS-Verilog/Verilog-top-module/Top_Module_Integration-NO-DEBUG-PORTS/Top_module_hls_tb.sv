@@ -10,10 +10,13 @@ module top_module_hls_tb;
   localparam int STREAM_IN_FILE_BYTES_MAX = STREAM_IN_BUF_BYTES * MAX_STREAM_TOKENS;
   localparam int STREAM_OUT_BUF_BYTES = 64;
   localparam int TOP_DMA_BUF_WORDS    = 16384;
-  localparam int KV_STORE_WORDS       = 131072;
+  localparam int KV_STORE_WORDS       = 256;
   localparam int DMA_LATENCY_CYCLES   = 4;
   localparam int STREAM_LATENCY_CYCLES = 6;
-  localparam int TB_DEBUG_MODE         = 1; // <----- DEBUG MODE FLAG
+  localparam int TB_DEBUG_MODE_SEL      = 2; // 0=normal, 1=stream_sum, 2=axi_signature
+  localparam bit TB_DEBUG_MODE          = (TB_DEBUG_MODE_SEL != 0);
+  localparam bit TB_STREAM_DEBUG_MODE   = (TB_DEBUG_MODE_SEL == 1);
+  localparam bit TB_AXI_DEBUG_MODE      = (TB_DEBUG_MODE_SEL == 2);
   localparam int CTRL_START_HOLD_CYCLES = 128;
   localparam int CTRL_CTRL_GAP_CYCLES   = 24;
   localparam int RAM_REGION_WORDS      = 65536;
@@ -34,6 +37,7 @@ module top_module_hls_tb;
   localparam int TB_D_TILE_W1          = ((TB_D_FFN * 2) / TB_NUM_W1_TILES);
   localparam int TB_D_TILE_W2          = (TB_D_MODEL / TB_NUM_W2_TILES);
   localparam int TB_D_VOCAB            = 32;
+  localparam int TB_NUM_LAYERS         = 4;
   localparam int TB_D_TILE_LOGIT       = (TB_D_VOCAB / TB_NUM_LOGIT_TILES);
   localparam int TB_CONTEXT_LENGTH     = 16;
   localparam int TB_D_HEAD_TILE_QKV    = (TB_D_HEADS / TB_NUM_QKV_HEAD_TILES);
@@ -45,8 +49,16 @@ module top_module_hls_tb;
   localparam int TB_QKV_W_BYTES        = ((TB_D_MODEL * TB_D_HEADS) + 1) / 2;
   localparam int TB_QKV_W_TILE_BYTES   = ((TB_D_MODEL * TB_D_HEAD_TILE_QKV) + 1) / 2;
   localparam int TB_LOGITS_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_LOGIT) + 1) / 2;
+  localparam int TB_WO_BIAS_BYTES      = TB_D_TILE_WO * 4;
+  localparam int TB_W1_BIAS_BYTES      = TB_D_TILE_W1 * 4;
+  localparam int TB_W2_BIAS_BYTES      = TB_D_TILE_W2 * 4;
   localparam int TB_ATT_SCORES_K_TILE_BYTES = (TB_ATT_CTX_BLOCK * TB_D_HEADS);
   localparam int TB_ATT_VALUE_V_TILE_BYTES  = (TB_CONTEXT_LENGTH * TB_D_HEAD_TILE_ATT_VALUE);
+  localparam int TB_MEM_K_CACHE_BYTES  = TB_NUM_LAYERS * TB_NUM_HEADS * TB_CONTEXT_LENGTH * TB_D_HEADS;
+  localparam int TB_MEM_V_CACHE_BYTES  = TB_MEM_K_CACHE_BYTES;
+  localparam int DEBUG_AXI_SIG_MODULUS = 65521;
+  localparam int DEBUG_AXI_REQ_COUNT = 7;
+  localparam int DEBUG_AXI_SCRATCH_STRIDE = 4;
   localparam int OP_CMP_LN0         = 1;
   localparam int OP_CMP_Q           = 3;
   localparam int OP_CMP_K           = 4;
@@ -82,6 +94,7 @@ module top_module_hls_tb;
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
   localparam logic [31:0] CTRL_DEBUG_MODE_BIT = 32'h0000_0008;
+  localparam int CTRL_DEBUG_MODE_SEL_SHIFT = 4;
   localparam logic [31:0] IRQ_ERROR_BIT = 32'h0000_0002;
   localparam logic [31:0] IRQ_INFER_DONE_BIT = 32'h0000_0004;
 
@@ -389,6 +402,7 @@ module top_module_hls_tb;
   integer current_stream_token;
   logic next_token_pending;
   logic launch_next_token;
+  logic axi_debug_sig_checked;
 
   // AXI ctrl_mem word map for the current 40-word ControlMemSpace.
   localparam int CTRLW_CONTROL            = 0;
@@ -625,7 +639,9 @@ module top_module_hls_tb;
   endfunction
 
   function automatic [31:0] ctrl_debug_bits();
-    ctrl_debug_bits = TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 32'd0;
+    ctrl_debug_bits =
+      (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 32'd0) |
+      (32'(TB_DEBUG_MODE_SEL) << CTRL_DEBUG_MODE_SEL_SHIFT);
   endfunction
 
   task automatic load_stream_token(input int token_idx);
@@ -819,6 +835,63 @@ module top_module_hls_tb;
       end else begin
         mem_read_word = dma_pattern_word(addr, 0);
       end
+    end
+  endfunction
+
+  function automatic [7:0] mem_read_byte(input [63:0] addr64);
+    logic [31:0] word;
+    logic [1:0] lane;
+    begin
+      word = mem_read_word({addr64[63:2], 2'b00});
+      lane = addr64[1:0];
+      mem_read_byte = word[(lane * 8) +: 8];
+    end
+  endfunction
+
+  function automatic [31:0] expected_axi_debug_signature(input int req_idx);
+    int unsigned sum;
+    int unsigned i;
+    logic [63:0] base;
+    begin
+      sum = 0;
+      case (req_idx)
+        0: begin
+          base = ctrl_base_addr64(CTRLW_WQ_BASE_LO, CTRLW_WQ_BASE_HI);
+          for (i = 0; i < TB_QKV_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        1: begin
+          base = ctrl_base_addr64(CTRLW_WK_BASE_LO, CTRLW_WK_BASE_HI);
+          for (i = 0; i < TB_QKV_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        2: begin
+          base = ctrl_base_addr64(CTRLW_WV_BASE_LO, CTRLW_WV_BASE_HI);
+          for (i = 0; i < TB_QKV_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        3: begin
+          base = ctrl_base_addr64(CTRLW_WO_BASE_LO, CTRLW_WO_BASE_HI);
+          for (i = 0; i < TB_OUT_PROJ_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+          base = ctrl_base_addr64(CTRLW_WO_BIAS_BASE_LO, CTRLW_WO_BIAS_BASE_HI);
+          for (i = 0; i < TB_WO_BIAS_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        4: begin
+          base = ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI);
+          for (i = 0; i < TB_FFN_W1_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+          base = ctrl_base_addr64(CTRLW_W1_BIAS_BASE_LO, CTRLW_W1_BIAS_BASE_HI);
+          for (i = 0; i < TB_W1_BIAS_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        5: begin
+          base = ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI);
+          for (i = 0; i < TB_FFN_W2_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+          base = ctrl_base_addr64(CTRLW_W2_BIAS_BASE_LO, CTRLW_W2_BIAS_BASE_HI);
+          for (i = 0; i < TB_W2_BIAS_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        default: begin
+          base = ctrl_base_addr64(CTRLW_WLOGIT_BASE_LO, CTRLW_WLOGIT_BASE_HI);
+          for (i = 0; i < TB_LOGITS_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+      endcase
+
+      expected_axi_debug_signature = sum % DEBUG_AXI_SIG_MODULUS;
     end
   endfunction
 
@@ -1885,13 +1958,13 @@ module top_module_hls_tb;
   // Build/drive stream-in beat traffic only when DUT requests ingress.
   always_ff @(posedge ap_clk) begin : axis_driver
     if (!ap_rst_n) begin
-      axis_packet_sent   <= 1'b0;
+      axis_packet_sent   <= TB_AXI_DEBUG_MODE ? 1'b1 : 1'b0;
       stream_fill_active <= 1'b0;
       stream_fill_idx    <= '0;
       stream_gap_countdown <= '0;
     end else begin
       if (launch_next_token) begin
-        axis_packet_sent   <= 1'b0;
+        axis_packet_sent   <= TB_AXI_DEBUG_MODE ? 1'b1 : 1'b0;
         stream_fill_active <= 1'b0;
         stream_fill_idx    <= '0;
         stream_gap_countdown <= '0;
@@ -1902,6 +1975,7 @@ module top_module_hls_tb;
 
       // Start ingress only once dbg_state reaches S_STREAM_IN.
       if (!axis_packet_sent && !stream_fill_active &&
+          !TB_AXI_DEBUG_MODE &&
           (dbg_state == 32'd1) &&
           s_axis_in_TREADY) begin
         stream_fill_active <= 1'b1;
@@ -2293,8 +2367,28 @@ module top_module_hls_tb;
       current_stream_token <= 0;
       next_token_pending   <= 1'b0;
       launch_next_token    <= 1'b0;
+      axi_debug_sig_checked <= 1'b0;
     end else begin
       launch_next_token <= 1'b0;
+      if (TB_AXI_DEBUG_MODE && irq_seen_done && !axi_debug_sig_checked) begin
+        logic [31:0] observed_sig;
+        logic [31:0] expected_sig;
+        int req_idx;
+        for (req_idx = 0; req_idx < DEBUG_AXI_REQ_COUNT; req_idx = req_idx + 1) begin
+          observed_sig = mem_read_word(
+              ctrl_base_addr64(CTRLW_K_CACHE_LO, CTRLW_K_CACHE_HI) +
+              (req_idx * DEBUG_AXI_SCRATCH_STRIDE));
+          expected_sig = expected_axi_debug_signature(req_idx);
+          if (observed_sig !== expected_sig) begin
+            $error("[AXI-DEBUG] cycle=%0d token=%0d req=%0d signature mismatch observed=0x%08h expected=0x%08h",
+                   cycle_count, current_stream_token, req_idx, observed_sig, expected_sig);
+          end else begin
+            $display("[AXI-DEBUG] cycle=%0d token=%0d req=%0d signature OK observed=0x%08h expected=0x%08h",
+                     cycle_count, current_stream_token, req_idx, observed_sig, expected_sig);
+          end
+        end
+        axi_debug_sig_checked <= 1'b1;
+      end
       if (irq_seen_done && !next_token_pending && ((current_stream_token + 1) < total_stream_tokens)) begin
         next_token_pending <= 1'b1;
       end
@@ -2308,6 +2402,7 @@ module top_module_hls_tb;
         load_stream_token(current_stream_token + 1);
         next_token_pending <= 1'b0;
         launch_next_token <= 1'b1;
+        axi_debug_sig_checked <= 1'b0;
       end
     end
   end

@@ -235,6 +235,45 @@ static void MAC_OP_TO_BUF(
     }
 }
 
+static inline uint32_t debug_axi_sig_req_bytes(uint8_t req_idx) {
+#pragma HLS INLINE
+    switch (req_idx) {
+        case 0:
+        case 1:
+        case 2:
+            return head_buf::QKV_W_FULL_BYTES;
+        case 3:
+            return compute_buf::INOutProjLayout::W_BYTES + compute_buf::INOutProjLayout::B_BYTES;
+        case 4:
+            return compute_buf::INFfnW1Layout::W_BYTES + compute_buf::INFfnW1Layout::B_BYTES;
+        case 5:
+            return compute_buf::INFfnW2Layout::W_BYTES + compute_buf::INFfnW2Layout::B_BYTES;
+        case 6:
+            return compute_buf::INLogitsLayout::W_BYTES;
+        default:
+            return 0;
+    }
+}
+
+static void DEBUG_AXI_SIG_TO_BUF(uint8_t req_idx,
+                                 const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+                                 uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
+#pragma HLS INLINE
+    (void)req_idx;
+    uint32_t debug_axi_sig_accum = 0;
+    const uint32_t bytes = debug_axi_sig_req_bytes(req_idx);
+    for (uint32_t i = 0; i < bytes; ++i) {
+#pragma HLS PIPELINE II=1
+        debug_axi_sig_accum += static_cast<uint32_t>(in_buf[i]);
+    }
+
+    const uint32_t signature = debug_axi_sig_accum % DEBUG_AXI_SIG_MODULUS;
+    out_buf[0] = static_cast<uint8_t>(signature & 0xFFu);
+    out_buf[1] = static_cast<uint8_t>((signature >> 8) & 0xFFu);
+    out_buf[2] = static_cast<uint8_t>((signature >> 16) & 0xFFu);
+    out_buf[3] = static_cast<uint8_t>((signature >> 24) & 0xFFu);
+}
+
 // ---------------------------------------------------------------------------
 // Compute kernels
 // ---------------------------------------------------------------------------
@@ -733,7 +772,8 @@ void compute_controller(
                 req.op == ComputeOp::CMP_LN1 || 
                 req.op == ComputeOp::CMP_FINAL_NORM ||
                 req.op == ComputeOp::CMP_LOGITS ||
-                req.op == ComputeOp::CMP_ARGMAX) {
+                req.op == ComputeOp::CMP_ARGMAX ||
+                req.op == ComputeOp::CMP_DEBUG_AXI_SIG) {
                 
                 error = false; // Clear stale errors on a new request.
                 next_state = ComputeState::WAIT_MEM;
@@ -817,6 +857,11 @@ void compute_controller(
                 }
                 case ComputeOp::CMP_ARGMAX: {       // logits packed -> token id
                     ARGMAX_TO_BUF(in_buf, out_buf);
+                    next_state = ComputeState::MEM_WRITEBACK;
+                    break;
+                }
+                case ComputeOp::CMP_DEBUG_AXI_SIG: {
+                    DEBUG_AXI_SIG_TO_BUF(req.tile_idx, in_buf, out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
