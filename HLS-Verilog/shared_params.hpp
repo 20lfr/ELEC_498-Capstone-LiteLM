@@ -184,12 +184,11 @@ constexpr uint32_t DEBUG_AXI_SCRATCH_STRIDE = 4u;
 constexpr uint32_t DEBUG_AXI_RESULT_BYTES = DEBUG_AXI_SCRATCH_STRIDE;
 
 constexpr uint8_t decode_debug_mode_sel(uint32_t control) {
-    if ((control & CTRL_DEBUG_MODE_BIT) == 0u) {
-        return DEBUG_MODE_NONE;
-    }
-    const uint8_t raw = static_cast<uint8_t>(
-        (control & CTRL_DEBUG_MODE_SEL_MASK) >> CTRL_DEBUG_MODE_SEL_SHIFT);
-    return (raw == DEBUG_MODE_NONE) ? DEBUG_MODE_STREAM_SUM : raw;
+    return ((control & CTRL_DEBUG_MODE_BIT) == 0u)
+        ? DEBUG_MODE_NONE
+        : ((((control & CTRL_DEBUG_MODE_SEL_MASK) >> CTRL_DEBUG_MODE_SEL_SHIFT) == DEBUG_MODE_NONE)
+            ? DEBUG_MODE_STREAM_SUM
+            : static_cast<uint8_t>((control & CTRL_DEBUG_MODE_SEL_MASK) >> CTRL_DEBUG_MODE_SEL_SHIFT));
 }
 
 // IRQ Bits
