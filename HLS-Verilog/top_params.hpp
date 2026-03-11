@@ -90,7 +90,6 @@ enum ComputeOp : uint8_t {
     CMP_FINAL_NORM = 25, // 26
     CMP_LOGITS = 26,     // 27
     CMP_ARGMAX = 27,     // 28
-    CMP_DEBUG_AXI_SIG = 28,
 };
 
 enum DmaSel : uint8_t {
@@ -110,8 +109,7 @@ enum DmaSel : uint8_t {
     DMASEL_CONCAT,    // 12
     DMASEL_LN0,       // 13
     DMASEL_LN1,       // 14
-    DMASEL_FINAL_NORM, // 15
-    DMASEL_DEBUG_AXI_WRITE
+    DMASEL_FINAL_NORM // 15
 };
 
 enum class ComputeErrorCodes { IncorrectRequest, InvalidComputationForamt };
@@ -204,7 +202,7 @@ struct PendingRequest {
 //       burst_read/write call sites convert to word index via /
 //       sizeof(int32_t).
 struct ControlMemSpace {
-    uint32_t control = CTRL_RESETN_BIT; // bit0=reset_n, bit1=start, bit3=debug_en, bit[7:4]=debug_sel
+    uint32_t control = CTRL_RESETN_BIT; // bit0=reset_n, bit1=start, bit3=debug_mode
     uint32_t irq_mask =
         0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;

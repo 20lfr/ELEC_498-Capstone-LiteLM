@@ -56,7 +56,7 @@ wire   [4:0] byte_val_fu_210_p34;
 wire   [7:0] byte_val_fu_210_p35;
 wire   [0:0] empty_fu_196_p1;
 wire   [3:0] tmp_fu_282_p4;
-wire   [3:0] trunc_ln531_fu_292_p1;
+wire   [3:0] trunc_ln529_fu_292_p1;
 wire  signed [4:0] byte_val_fu_210_p1;
 wire  signed [4:0] byte_val_fu_210_p3;
 wire  signed [4:0] byte_val_fu_210_p5;
@@ -112,7 +112,7 @@ wire  signed [4:0] byte_val_fu_210_p31;
     .def_WIDTH( 8 ),
     .sel_WIDTH( 5 ),
     .dout_WIDTH( 8 ))
-sparsemux_33_5_8_1_1_U1224(
+sparsemux_33_5_8_1_1_U1213(
     .din0(buf_16),
     .din1(buf_17),
     .din2(buf_18),
@@ -140,9 +140,9 @@ assign empty_fu_196_p1 = nibble_idx[0:0];
 
 assign tmp_fu_282_p4 = {{byte_val_fu_210_p35[7:4]}};
 
-assign trunc_ln531_fu_292_p1 = byte_val_fu_210_p35[3:0];
+assign trunc_ln529_fu_292_p1 = byte_val_fu_210_p35[3:0];
 
-assign ap_return = ((empty_fu_196_p1[0:0] == 1'b1) ? tmp_fu_282_p4 : trunc_ln531_fu_292_p1);
+assign ap_return = ((empty_fu_196_p1[0:0] == 1'b1) ? tmp_fu_282_p4 : trunc_ln529_fu_292_p1);
 
 assign byte_val_fu_210_p33 = 'bx;
 

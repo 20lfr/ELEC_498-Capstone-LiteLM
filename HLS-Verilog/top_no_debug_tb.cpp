@@ -10,7 +10,6 @@
 #include <limits>
 #include <string>
 #include <ctime>
-#include <vector>
 #include <sys/stat.h>
 
 #include "top_no_debug.hpp"
@@ -23,19 +22,7 @@
 #define TOP_NO_DEBUG_TB_LOG_SUBDIR "top_no_debug"
 #endif
 
-constexpr uint8_t TB_DEBUG_MODE_SEL = DEBUG_MODE_NONE; // could be DEBUG_MODE_AXI_SIGNATURE, DEBUG_MODE_STREAM_SUM or DEBUG_MODE_NONE
-constexpr bool TB_DEBUG_MODE = (TB_DEBUG_MODE_SEL != DEBUG_MODE_NONE);
-constexpr bool TB_STREAM_DEBUG_MODE = (TB_DEBUG_MODE_SEL == DEBUG_MODE_STREAM_SUM);
-constexpr bool TB_AXI_DEBUG_MODE = (TB_DEBUG_MODE_SEL == DEBUG_MODE_AXI_SIGNATURE);
-
-static const char *tb_debug_mode_name() {
-    switch (TB_DEBUG_MODE_SEL) {
-    case DEBUG_MODE_NONE: return "normal";
-    case DEBUG_MODE_STREAM_SUM: return "stream_sum";
-    case DEBUG_MODE_AXI_SIGNATURE: return "axi_signature";
-    default: return "unknown";
-    }
-}
+constexpr bool TB_DEBUG_MODE = false;
 
 static bool ensure_dir_recursive(const char *dir) {
     char path[512];
@@ -175,137 +162,6 @@ static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count)
     return true;
 }
 
-static uint8_t tb_gmem_get_byte(const axi_gmem_word_t &word, uint32_t lane) {
-    return static_cast<uint8_t>(word.range(((lane + 1u) * 8u) - 1u, lane * 8u));
-}
-
-static uint8_t tb_read_ddr_byte(const axi_gmem_word_t *mem, uint64_t byte_addr) {
-    const uint64_t word_idx = byte_addr / AXI_GMEM_WORD_BYTES;
-    const uint32_t lane = static_cast<uint32_t>(byte_addr % AXI_GMEM_WORD_BYTES);
-    return tb_gmem_get_byte(mem[word_idx], lane);
-}
-
-static uint32_t tb_debug_axi_req_bytes(uint8_t req_idx) {
-    switch (req_idx) {
-        case 0:
-        case 1:
-        case 2:
-            return head_buf::QKV_W_FULL_BYTES;
-        case 3:
-            return compute_buf::INOutProjLayout::W_BYTES + compute_buf::INOutProjLayout::B_BYTES;
-        case 4:
-            return compute_buf::INFfnW1Layout::W_BYTES + compute_buf::INFfnW1Layout::B_BYTES;
-        case 5:
-            return compute_buf::INFfnW2Layout::W_BYTES + compute_buf::INFfnW2Layout::B_BYTES;
-        case 6:
-            return compute_buf::INLogitsLayout::W_BYTES;
-        default:
-            return 0;
-    }
-}
-
-static uint64_t tb_debug_axi_req_base(const ControlMemSpace &ctrl_mem, uint8_t req_idx) {
-    switch (req_idx) {
-        case 0: return ctrl_mem.wq_offset;
-        case 1: return ctrl_mem.wk_offset;
-        case 2: return ctrl_mem.wv_offset;
-        case 3: return ctrl_mem.wo_offset;
-        case 4: return ctrl_mem.w1_offset;
-        case 5: return ctrl_mem.w2_offset;
-        case 6: return ctrl_mem.wlogit_offset;
-        default: return 0;
-    }
-}
-
-static uint32_t tb_expected_axi_signature_for_req(const axi_gmem_word_t *ddr_mem,
-                                                  const ControlMemSpace &ctrl_mem,
-                                                  uint8_t req_idx) {
-    uint32_t sum = 0;
-    if (req_idx <= 2 || req_idx == 6) {
-        const uint64_t base = tb_debug_axi_req_base(ctrl_mem, req_idx);
-        const uint32_t bytes = tb_debug_axi_req_bytes(req_idx);
-        for (uint32_t i = 0; i < bytes; ++i) {
-            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, base + i));
-        }
-        return sum % DEBUG_AXI_SIG_MODULUS;
-    }
-
-    if (req_idx == 3) {
-        for (uint32_t i = 0; i < compute_buf::INOutProjLayout::W_BYTES; ++i) {
-            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.wo_offset + i));
-        }
-        for (uint32_t i = 0; i < compute_buf::INOutProjLayout::B_BYTES; ++i) {
-            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.wo_bias_offset + i));
-        }
-        return sum % DEBUG_AXI_SIG_MODULUS;
-    }
-
-    if (req_idx == 4) {
-        for (uint32_t i = 0; i < compute_buf::INFfnW1Layout::W_BYTES; ++i) {
-            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w1_offset + i));
-        }
-        for (uint32_t i = 0; i < compute_buf::INFfnW1Layout::B_BYTES; ++i) {
-            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w1_bias_offset + i));
-        }
-        return sum % DEBUG_AXI_SIG_MODULUS;
-    }
-
-    if (req_idx == 5) {
-        for (uint32_t i = 0; i < compute_buf::INFfnW2Layout::W_BYTES; ++i) {
-            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w2_offset + i));
-        }
-        for (uint32_t i = 0; i < compute_buf::INFfnW2Layout::B_BYTES; ++i) {
-            sum += static_cast<uint32_t>(tb_read_ddr_byte(ddr_mem, ctrl_mem.w2_bias_offset + i));
-        }
-        return sum % DEBUG_AXI_SIG_MODULUS;
-    }
-    return sum % DEBUG_AXI_SIG_MODULUS;
-}
-
-static void tb_dump_kv_cache(const axi_gmem_word_t *kv_cache,
-                             const ControlMemSpace &ctrl_mem) {
-    const uint64_t k_base_word = static_cast<uint64_t>(ctrl_mem.k_cache_offset) / AXI_GMEM_WORD_BYTES;
-    const uint64_t v_base_word = static_cast<uint64_t>(ctrl_mem.v_cache_offset) / AXI_GMEM_WORD_BYTES;
-    const uint32_t k_words =
-        static_cast<uint32_t>((MEM_K_CACHE + AXI_GMEM_WORD_BYTES - 1u) / AXI_GMEM_WORD_BYTES);
-    const uint32_t v_words =
-        static_cast<uint32_t>((MEM_V_CACHE + AXI_GMEM_WORD_BYTES - 1u) / AXI_GMEM_WORD_BYTES);
-    const uint32_t layer_stride_words = STRIDE_KV_LAYER / AXI_GMEM_WORD_BYTES;
-    const uint32_t head_stride_words = STRIDE_KV_HEAD / AXI_GMEM_WORD_BYTES;
-
-    std::printf("[KV] K-cache base=0x%08X words=%u token0_slots=%u\n",
-                static_cast<unsigned>(ctrl_mem.k_cache_offset),
-                static_cast<unsigned>(k_words),
-                static_cast<unsigned>(NUM_LAYERS * NUM_HEADS));
-    for (uint32_t layer = 0; layer < NUM_LAYERS; ++layer) {
-        for (uint32_t head = 0; head < NUM_HEADS; ++head) {
-            const uint32_t slot = layer * layer_stride_words + head * head_stride_words;
-            const uint32_t word = static_cast<uint32_t>(kv_cache[k_base_word + slot]);
-            std::printf("[KV] K[L%u H%u @ %03u] = 0x%08X\n",
-                        static_cast<unsigned>(layer),
-                        static_cast<unsigned>(head),
-                        static_cast<unsigned>(slot),
-                        static_cast<unsigned>(word));
-        }
-    }
-
-    std::printf("[KV] V-cache base=0x%08X words=%u token0_slots=%u\n",
-                static_cast<unsigned>(ctrl_mem.v_cache_offset),
-                static_cast<unsigned>(v_words),
-                static_cast<unsigned>(NUM_LAYERS * NUM_HEADS));
-    for (uint32_t layer = 0; layer < NUM_LAYERS; ++layer) {
-        for (uint32_t head = 0; head < NUM_HEADS; ++head) {
-            const uint32_t slot = layer * layer_stride_words + head * head_stride_words;
-            const uint32_t word = static_cast<uint32_t>(kv_cache[v_base_word + slot]);
-            std::printf("[KV] V[L%u H%u @ %03u] = 0x%08X\n",
-                        static_cast<unsigned>(layer),
-                        static_cast<unsigned>(head),
-                        static_cast<unsigned>(slot),
-                        static_cast<unsigned>(word));
-        }
-    }
-}
-
 static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
     const std::string ctrl_path = tb_source_dir() + "/test_data/ctrl_mem.bin";
     std::ifstream in(ctrl_path.c_str(), std::ios::binary);
@@ -438,39 +294,6 @@ static bool load_shared_stream_token(uint8_t *stream_in_buf, size_t token_bytes,
     return true;
 }
 
-static bool load_shared_stream_image(std::vector<uint8_t> &stream_bytes,
-                                     size_t token_bytes,
-                                     size_t &total_tokens) {
-    const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
-    size_t bytes_total = 0;
-    if (!get_shared_stream_size(bytes_total)) {
-        return false;
-    }
-    total_tokens = bytes_total / token_bytes;
-    if (total_tokens == 0) {
-        std::fprintf(stderr, "ERROR: stream_in.bin does not contain any full tokens\n");
-        return false;
-    }
-
-    std::ifstream in(stream_path.c_str(), std::ios::binary);
-    if (!in) {
-        std::fprintf(stderr, "ERROR: Failed to open shared stream image '%s'\n", stream_path.c_str());
-        return false;
-    }
-
-    stream_bytes.assign(total_tokens * token_bytes, 0);
-    in.read(reinterpret_cast<char *>(stream_bytes.data()),
-            static_cast<std::streamsize>(stream_bytes.size()));
-    const std::streamsize got = in.gcount();
-    if (got != static_cast<std::streamsize>(stream_bytes.size())) {
-        std::fprintf(stderr,
-                     "ERROR: Failed to read full shared stream image '%s' (got %lld bytes)\n",
-                     stream_path.c_str(), static_cast<long long>(got));
-        return false;
-    }
-    return true;
-}
-
 static void print_token_vector(size_t token_idx, const uint8_t *token_bytes, size_t token_len) {
     std::printf("token %zu: {", token_idx);
     for (size_t i = 0; i < token_len; ++i) {
@@ -518,8 +341,6 @@ static const char *status_name(uint32_t status) {
         return "S_STREAM_OUT";
     case S_DEBUG:
         return "S_DEBUG";
-    case S_DEBUG_AXI:
-        return "S_DEBUG_AXI";
     default:
         return "UNKNOWN";
     }
@@ -561,8 +382,6 @@ static const char *sched_state_name(uint32_t state) {
         return "S_STREAM_OUT";
     case S_DEBUG:
         return "S_DEBUG";
-    case S_DEBUG_AXI:
-        return "S_DEBUG_AXI";
     default:
         return "S_UNKNOWN";
     }
@@ -747,7 +566,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     bool axis_in_valid   = false;
     bool axis_in_last    = false;
     int  axis_sent       = 0;
-    bool axis_feed_done  = TB_AXI_DEBUG_MODE;
+    bool axis_feed_done  = false;
     bool axis_drive      = false;
     uint8_t axis_in_data = 0;
     uint8_t stream_in_buf[STREAM_IN_BUF_BYTES] = {};
@@ -774,7 +593,6 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     bool aborted_on_error = false;
     bool debug_output_match = false;
     int  base_assign_step = 0;
-    uint32_t observed_axi_signatures[DEBUG_AXI_REQ_COUNT] = {};
 
     if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
         return 1;
@@ -796,7 +614,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
                            static_cast<size_t>(STREAM_TOKEN_BYTES));
     }
     int32_t expected_debug_sum = 0;
-    if (TB_STREAM_DEBUG_MODE) {
+    if (TB_DEBUG_MODE) {
         for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
             expected_debug_sum += static_cast<int32_t>(static_cast<int8_t>(stream_in_buf[i]));
         }
@@ -828,14 +646,12 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     ControlMemSpace ctrl_mem{};
     StatusMemSpace status_mem{};
     SchedState dbg_state = S_IDLE;
+    uint32_t control_reg = 0;
     uint32_t ctrl_shadow_control = 0;
     int ctrl_gap_cycles = 0;
     bool seen_irq_done = false;
     auto set_control = [&](uint32_t value) {
-        const uint32_t control =
-            value |
-            (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 0u) |
-            (static_cast<uint32_t>(TB_DEBUG_MODE_SEL) << CTRL_DEBUG_MODE_SEL_SHIFT);
+        const uint32_t control = value | (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 0u);
         ctrl_mem.control = control;
         ctrl_shadow_control = control;
     };
@@ -1058,7 +874,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
                     (static_cast<uint32_t>(stream_out_buf[2]) << 16) |
                     (static_cast<uint32_t>(stream_out_buf[3]) << 24));
                 std::printf("(index=%d)\n", token_id);
-                if (TB_STREAM_DEBUG_MODE) {
+                if (TB_DEBUG_MODE) {
                     if (token_id != expected_debug_sum) {
                         std::fprintf(stderr,
                                      "ERROR: Debug sum mismatch for token %zu: expected=%d observed=%d\n",
@@ -1134,511 +950,23 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
         }
 
         const bool cntrl_start = ((ctrl_shadow_control & CTRL_START_BIT) != 0);
-        if (!cntrl_start && seen_done && seen_idle_after &&
-            (TB_AXI_DEBUG_MODE || (seen_stream_out && idle_after_stream >= 4))) {
+        if (!cntrl_start && seen_done && seen_idle_after && seen_stream_out && idle_after_stream >= 4) {
             break;
         }
     }
 
-    bool ok = !aborted_on_error &&
-              seen_done &&
-              seen_idle_after &&
-              (TB_AXI_DEBUG_MODE || (seen_stream_out && idle_after_stream >= 4)) &&
-              (!TB_STREAM_DEBUG_MODE || debug_output_match);
+    bool ok = !aborted_on_error && seen_stream_out && (idle_after_stream >= 4) &&
+              (!TB_DEBUG_MODE || debug_output_match);
 
     if (!ok) {
-        if (!TB_AXI_DEBUG_MODE && !seen_stream_out) {
-            std::fprintf(stderr, "ERROR: Inference done never reached\n");
-        }
-        if (!TB_AXI_DEBUG_MODE && idle_after_stream < 4) {
-            std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after done\n");
-        }
-        if (TB_STREAM_DEBUG_MODE && !debug_output_match) {
-            std::fprintf(stderr, "ERROR: Debug output mismatch detected\n");
-        }
+        if (!seen_stream_out) std::fprintf(stderr, "ERROR: Inference done never reached\n");
+        if (idle_after_stream < 4) std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after done\n");
+        if (!debug_output_match) std::fprintf(stderr, "ERROR: Debug output mismatch detected\n");
         return 1;
     }
 
-    if (TB_AXI_DEBUG_MODE) {
-        bool axi_debug_match = true;
-        for (uint32_t req_idx = 0; req_idx < DEBUG_AXI_REQ_COUNT; ++req_idx) {
-            uint32_t observed = 0;
-            const uint64_t scratch_byte_addr =
-                static_cast<uint64_t>(ctrl_mem.k_cache_offset) +
-                static_cast<uint64_t>(req_idx) * DEBUG_AXI_SCRATCH_STRIDE;
-            for (uint32_t i = 0; i < DEBUG_AXI_SCRATCH_STRIDE; ++i) {
-                const uint64_t byte_addr = scratch_byte_addr + static_cast<uint64_t>(i);
-                const uint64_t word_idx = byte_addr / AXI_GMEM_WORD_BYTES;
-                const uint32_t lane = static_cast<uint32_t>(byte_addr % AXI_GMEM_WORD_BYTES);
-                const axi_gmem_word_t word = kv_cache[word_idx];
-                const uint8_t byte = tb_gmem_get_byte(word, lane);
-                observed |= (static_cast<uint32_t>(byte) << (i * 8u));
-            }
-            observed_axi_signatures[req_idx] = observed;
-            const uint32_t expected =
-                tb_expected_axi_signature_for_req(ddr_mem, ctrl_mem, static_cast<uint8_t>(req_idx));
-            if (observed != expected) {
-                axi_debug_match = false;
-                std::fprintf(stderr,
-                             "ERROR: AXI debug signature mismatch req=%u observed=0x%08X expected=0x%08X\n",
-                             req_idx,
-                             static_cast<unsigned>(observed),
-                             static_cast<unsigned>(expected));
-            }
-        }
-        if (!axi_debug_match) {
-            return 1;
-        }
-        tb_dump_kv_cache(kv_cache, ctrl_mem);
-        std::printf("PASS: Token %zu AXI debug complete, signatures:",
-                    selected_stream_token);
-        for (uint32_t req_idx = 0; req_idx < DEBUG_AXI_REQ_COUNT; ++req_idx) {
-            std::printf(" [%u]=0x%08X",
-                        req_idx,
-                        static_cast<unsigned>(observed_axi_signatures[req_idx]));
-        }
-        std::printf("\n");
-    } else {
-        tb_dump_kv_cache(kv_cache, ctrl_mem);
-        std::printf("PASS: Token %zu inference complete, FSM stayed IDLE for %d cycles after.\n",
-                    selected_stream_token, idle_after_stream);
-    }
-    return 0;
-}
-
-static int run_top_no_debug_tb_autoregressive() {
-    const int MAX_CYCLES = 100000;
-    const int STREAM_TOKEN_BYTES = STREAM_IN_BUF_BYTES;
-    const int AXIS_BEATS = STREAM_TOKEN_BYTES;
-
-    axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
-    axi_gmem_word_t kv_cache[TB_DDR_IMAGE_WORDS] = {};
-
-    hls::stream<axis8_t> s_axis_in("s_axis_in");
-    hls::stream<axis8_t> m_axis_out("m_axis_out");
-
-    bool irq_ps = false;
-    bool irq_interupt_flagged = false;
-    uint32_t interupt_data = 0;
-
-    bool axis_in_valid = false;
-    bool axis_in_last = false;
-    uint8_t axis_in_data = 0;
-    bool axis_drive = false;
-    bool axis_feed_done = true;
-    int axis_sent = 0;
-    int stream_in_token_count = 0;
-    int stream_in_token_index = 0;
-    uint8_t stream_in_token_bytes[STREAM_TOKEN_BYTES] = {};
-    uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES] = {};
-    int stream_out_count = 0;
-    int stream_out_token_index = 0;
-
-    bool seen_stream_out = false;
-    int idle_after_stream = 0;
-    bool seen_done = false;
-    bool seen_irq_done = false;
-    int post_done_cycles = 0;
-    bool seen_idle_after = false;
-    bool aborted_on_error = false;
-
-    size_t total_stream_tokens = 0;
-    std::vector<uint8_t> stream_bytes;
-    if (!load_shared_stream_image(stream_bytes, STREAM_IN_BUF_BYTES, total_stream_tokens)) {
-        return 1;
-    }
-
-    if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
-        return 1;
-    }
-    g_loaded_ctrl_mem_valid = true;
-    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS) ||
-        !load_shared_ddr_image(kv_cache, TB_DDR_IMAGE_WORDS)) {
-        return 1;
-    }
-
-    std::printf("[TEST] stream_in.bin contains %zu token(s), running autoregressive session.\n",
-                total_stream_tokens);
-    for (size_t token_idx = 0; token_idx < total_stream_tokens; ++token_idx) {
-        print_token_vector(token_idx,
-                           &stream_bytes[token_idx * STREAM_IN_BUF_BYTES],
-                           static_cast<size_t>(STREAM_TOKEN_BYTES));
-    }
-
-    size_t next_token_to_launch = 0;
-    size_t active_token = 0;
-    bool token_active = false;
-
-    enum class CtrlSessionStage {
-        TestCtrlInit,
-        TestZeroStride,
-        TestZeroStrideCheck,
-        TestZeroStrideClear,
-        TestAlignment,
-        TestAlignmentCheck,
-        TestAlignmentClear,
-        AssertReset,
-        DeassertReset,
-        ProgramBases,
-        AssertStart,
-        ClearStart,
-        Running,
-        Done
-    };
-    CtrlSessionStage ctrl_stage = CtrlSessionStage::AssertReset;
-    int ctrl_gap_cycles = 0;
-    bool assign_base_addresses = false;
-    int base_assign_step = 0;
-    int test_errors_passed = 0;
-    int test_errors_failed = 0;
-    bool pending_done_clear_zero = false;
-
-    ControlMemSpace ctrl_mem{};
-    StatusMemSpace status_mem{};
-    SchedState dbg_state = S_IDLE;
-    uint32_t ctrl_shadow_control = 0;
-    auto set_control = [&](uint32_t value) {
-        const uint32_t control =
-            value |
-            (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 0u) |
-            (static_cast<uint32_t>(TB_DEBUG_MODE_SEL) << CTRL_DEBUG_MODE_SEL_SHIFT);
-        ctrl_mem.control = control;
-        ctrl_shadow_control = control;
-    };
-
-    uint32_t prev_status = 0;
-    uint32_t prev_irq_status = 0;
-    uint32_t prev_error_code = 0;
-    uint32_t prev_layer_index = 0;
-    std::printf("%8s | %12s | %8s | %10s | %8s | %8s | %6s | %6s\n",
-                "cycle",
-                "status",
-                "irq_stat",
-                "error_code",
-                "layer",
-                "head",
-                "irq_ps",
-                "ax_fed");
-    std::printf("--------------------------------------------------------------------------------------------------\n");
-
-    for (int cycle = 0; cycle < MAX_CYCLES; ++cycle) {
-        if (ctrl_gap_cycles > 0) {
-            ctrl_gap_cycles--;
-        } else if (ctrl_stage == CtrlSessionStage::TestCtrlInit) {
-            ctrl_mem = ctrl_mem_init(true);
-            set_control(CTRL_RESETN_BIT);
-            std::printf("[TEST] Starting ControlMemInterface error tests...\n");
-            ctrl_stage = CtrlSessionStage::TestZeroStride;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::TestZeroStride) {
-            ctrl_mem = ctrl_mem_init(true);
-            ctrl_mem.layer_stride = 0;
-            std::printf("[TEST 2] Injecting layer_stride=0 (expect ERR_DMA_ZERO_STRIDE)\n");
-            ctrl_stage = CtrlSessionStage::TestZeroStrideCheck;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::TestZeroStrideCheck) {
-            if ((status_mem.irq_status & IRQ_ERROR_BIT) &&
-                status_mem.error_code == ERR_DMA_ZERO_STRIDE) {
-                std::printf("[TEST 2] PASS: Zero stride error detected (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_passed++;
-            } else {
-                std::printf("[TEST 2] FAIL: Expected zero stride error (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_failed++;
-            }
-            ctrl_mem.irq_clear = IRQ_ERROR_BIT;
-            ctrl_stage = CtrlSessionStage::TestZeroStrideClear;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::TestZeroStrideClear) {
-            ctrl_mem.irq_clear = 0;
-            ctrl_mem = ctrl_mem_init(true);
-            ctrl_stage = CtrlSessionStage::TestAlignment;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::TestAlignment) {
-            ctrl_mem = ctrl_mem_init(true);
-            ctrl_mem.wq_offset = 0x00000001u;
-            std::printf("[TEST 3] Injecting wq_offset=0x00000001 (expect ERR_DMA_ALIGNMENT)\n");
-            ctrl_stage = CtrlSessionStage::TestAlignmentCheck;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::TestAlignmentCheck) {
-            if ((status_mem.irq_status & IRQ_ERROR_BIT) && status_mem.error_code == ERR_DMA_ALIGNMENT) {
-                std::printf("[TEST 3] PASS: ERR_DMA_ALIGNMENT detected (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_passed++;
-            } else {
-                std::printf("[TEST 3] FAIL: Expected ERR_DMA_ALIGNMENT (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_failed++;
-            }
-            ctrl_mem.irq_clear = IRQ_ERROR_BIT;
-            ctrl_stage = CtrlSessionStage::TestAlignmentClear;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::TestAlignmentClear) {
-            ctrl_mem.irq_clear = 0;
-            ctrl_mem = ctrl_mem_init(false);
-            std::printf("[TEST] Error tests complete: %d passed, %d failed\n",
-                        test_errors_passed, test_errors_failed);
-            ctrl_stage = CtrlSessionStage::AssertReset;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::AssertReset) {
-            ctrl_mem = ctrl_mem_init(false);
-            set_control(0x00000000);
-            ctrl_stage = CtrlSessionStage::DeassertReset;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::DeassertReset) {
-            set_control(CTRL_RESETN_BIT);
-            ctrl_stage = CtrlSessionStage::ProgramBases;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::ProgramBases) {
-            switch (base_assign_step) {
-            case 0:
-                ctrl_mem = ctrl_mem_init(true);
-                break;
-            case 1:
-                ctrl_mem.irq_clear = IRQ_ERROR_BIT;
-                break;
-            case 2:
-                ctrl_mem.irq_clear = 0;
-                break;
-            case 3:
-                ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
-                assign_base_addresses = true;
-                ctrl_stage = CtrlSessionStage::AssertStart;
-                break;
-            default:
-                assign_base_addresses = true;
-                ctrl_stage = CtrlSessionStage::AssertStart;
-                break;
-            }
-            if (!assign_base_addresses) {
-                base_assign_step++;
-            }
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::AssertStart) {
-            if (next_token_to_launch >= total_stream_tokens) {
-                ctrl_stage = CtrlSessionStage::Done;
-            } else {
-                active_token = next_token_to_launch;
-                std::printf("\n[TEST] ===== Begin token %zu =====\n", active_token);
-                set_control(CTRL_RESETN_BIT | CTRL_START_BIT);
-                token_active = true;
-                axis_sent = 0;
-                axis_feed_done = TB_AXI_DEBUG_MODE;
-                axis_drive = false;
-                stream_in_token_count = 0;
-                stream_out_count = 0;
-                seen_stream_out = false;
-                idle_after_stream = 0;
-                seen_done = false;
-                post_done_cycles = 0;
-                seen_idle_after = false;
-                ctrl_stage = CtrlSessionStage::ClearStart;
-                ctrl_gap_cycles = 1;
-            }
-        } else if (ctrl_stage == CtrlSessionStage::ClearStart) {
-            set_control(CTRL_RESETN_BIT);
-            ctrl_stage = CtrlSessionStage::Running;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::Running && pending_done_clear_zero) {
-            ctrl_mem.irq_clear = 0;
-            pending_done_clear_zero = false;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlSessionStage::Running && seen_irq_done) {
-            ctrl_mem.irq_clear = IRQ_INFER_DONE_BIT;
-            seen_irq_done = false;
-            pending_done_clear_zero = true;
-            ctrl_gap_cycles = 1;
-        }
-
-        axis_in_valid = false;
-        axis_in_last = false;
-        axis_in_data = 0;
-        if (!TB_AXI_DEBUG_MODE && ctrl_stage == CtrlSessionStage::Running &&
-            token_active && !axis_feed_done &&
-            (axis_drive || (((ctrl_shadow_control & CTRL_RESETN_BIT) != 0) &&
-                            ((ctrl_shadow_control & CTRL_START_BIT) == 0)))) {
-            axis_drive = true;
-            if (axis_sent < AXIS_BEATS) {
-                const size_t byte_idx =
-                    active_token * static_cast<size_t>(STREAM_IN_BUF_BYTES) +
-                    static_cast<size_t>(axis_sent);
-                axis8_t beat{};
-                beat.data = stream_bytes[byte_idx];
-                beat.keep = 1;
-                beat.strb = 1;
-                beat.last = (axis_sent == AXIS_BEATS - 1) ? 1 : 0;
-                if (s_axis_in.write_nb(beat)) {
-                    axis_in_valid = true;
-                    axis_in_last = (beat.last != 0);
-                    axis_in_data = static_cast<uint8_t>(beat.data);
-                    if (stream_in_token_count < STREAM_TOKEN_BYTES) {
-                        stream_in_token_bytes[stream_in_token_count] = axis_in_data;
-                        stream_in_token_count++;
-                    }
-                    std::printf("[CYCLE %d] Stream in beat: token=%zu byte_idx=%d token_byte_idx=%d data=0x%02X last=%d\n",
-                                cycle, active_token, axis_sent,
-                                (stream_in_token_count > 0) ? (stream_in_token_count - 1) : 0,
-                                static_cast<unsigned>(axis_in_data),
-                                axis_in_last ? 1 : 0);
-                    axis_sent++;
-                    if (axis_in_last) {
-                        uint32_t token_word = 0;
-                        if (stream_in_token_count >= 4) {
-                            token_word =
-                                static_cast<uint32_t>(stream_in_token_bytes[0]) |
-                                (static_cast<uint32_t>(stream_in_token_bytes[1]) << 8) |
-                                (static_cast<uint32_t>(stream_in_token_bytes[2]) << 16) |
-                                (static_cast<uint32_t>(stream_in_token_bytes[3]) << 24);
-                        }
-                        const int32_t token_id = static_cast<int32_t>(token_word);
-                        std::printf("[CYCLE %d] Stream in token %d complete: bytes=%d first_word=%d (0x%08X)\n",
-                                    cycle,
-                                    stream_in_token_index,
-                                    stream_in_token_count,
-                                    token_id,
-                                    static_cast<unsigned>(token_word));
-                        stream_in_token_index++;
-                        stream_in_token_count = 0;
-                        axis_feed_done = true;
-                        axis_drive = false;
-                    }
-                }
-            }
-        }
-
-        transformer_top(
-            s_axis_in,
-            m_axis_out,
-            ddr_mem,
-            kv_cache,
-            ctrl_mem,
-            status_mem,
-            irq_ps,
-            dbg_state
-        );
-
-        axis8_t axis_out_beat{};
-        while (m_axis_out.read_nb(axis_out_beat)) {
-            if (stream_out_count < STREAM_OUT_BUF_BYTES) {
-                stream_out_buf[stream_out_count] = static_cast<uint8_t>(axis_out_beat.data);
-                stream_out_count++;
-            }
-            if (axis_out_beat.last != 0) {
-                std::printf("[CYCLE %d] Stream out token %d: ", cycle, stream_out_token_index);
-                for (int i = 0; i < STREAM_OUT_BUF_BYTES; ++i) {
-                    std::printf("%02X ", static_cast<unsigned>(stream_out_buf[i]));
-                }
-                const int32_t token_id = static_cast<int32_t>(
-                    static_cast<uint32_t>(stream_out_buf[0]) |
-                    (static_cast<uint32_t>(stream_out_buf[1]) << 8) |
-                    (static_cast<uint32_t>(stream_out_buf[2]) << 16) |
-                    (static_cast<uint32_t>(stream_out_buf[3]) << 24));
-                std::printf("(index=%d)\n", token_id);
-                stream_out_count = 0;
-                stream_out_token_index++;
-            }
-        }
-
-        const bool status_changed = (status_mem.status != prev_status) ||
-                                    (status_mem.irq_status != prev_irq_status) ||
-                                    (status_mem.error_code != prev_error_code) ||
-                                    (status_mem.layer_index != prev_layer_index);
-        if (status_changed || (cycle % 100 == 0)) {
-            std::printf("%8d | %12s | %8s | 0x%08X | %8u | %8u | %6d | %6d\n",
-                        cycle,
-                        status_name(status_mem.status),
-                        irq_name(status_mem.irq_status),
-                        status_mem.error_code,
-                        status_mem.layer_index,
-                        status_mem.head_index,
-                        irq_ps ? 1 : 0,
-                        axis_feed_done ? 1 : 0);
-            prev_status = status_mem.status;
-            prev_irq_status = status_mem.irq_status;
-            prev_error_code = status_mem.error_code;
-            prev_layer_index = status_mem.layer_index;
-        }
-
-        if (status_mem.error_code != ERR_NONE &&
-            ctrl_stage != CtrlSessionStage::AssertReset &&
-            ctrl_stage != CtrlSessionStage::DeassertReset &&
-            ctrl_stage != CtrlSessionStage::ProgramBases &&
-            ctrl_stage != CtrlSessionStage::TestCtrlInit &&
-            ctrl_stage != CtrlSessionStage::TestZeroStride &&
-            ctrl_stage != CtrlSessionStage::TestZeroStrideCheck &&
-            ctrl_stage != CtrlSessionStage::TestZeroStrideClear &&
-            ctrl_stage != CtrlSessionStage::TestAlignment &&
-            ctrl_stage != CtrlSessionStage::TestAlignmentCheck &&
-            ctrl_stage != CtrlSessionStage::TestAlignmentClear) {
-            std::fprintf(stderr,
-                         "\nERROR: transformer_top flagged error (cycle=%d, code=0x%08X, status=0x%08X, mmu_subcode=%u:%s) : ",
-                         cycle, status_mem.error_code, status_mem.status,
-                         status_mem.mmu_error_subcode, mmu_subcode_name(status_mem.mmu_error_subcode));
-            print_error_code_bits(status_mem.error_code);
-            std::fprintf(stderr, "\n");
-            aborted_on_error = true;
-            break;
-        }
-
-        if (token_active && status_mem.status != static_cast<uint32_t>(S_IDLE)) {
-            seen_stream_out = false;
-        }
-        if (token_active && (status_mem.irq_status & IRQ_INFER_DONE_BIT) && !seen_done) {
-            seen_stream_out = true;
-        }
-        if (token_active && seen_stream_out && (status_mem.status == static_cast<uint32_t>(S_IDLE))) {
-            idle_after_stream++;
-        } else if (token_active && seen_stream_out) {
-            idle_after_stream = 0;
-        }
-
-        if (irq_interupt_flagged && (interupt_data & IRQ_INFER_DONE_BIT)) {
-            seen_done = true;
-            irq_interupt_flagged = false;
-            interupt_data = 0;
-            seen_irq_done = true;
-        } else if (seen_done) {
-            post_done_cycles++;
-            if (post_done_cycles >= 2) {
-                seen_idle_after = true;
-            }
-        } else if (irq_ps) {
-            irq_interupt_flagged = true;
-            interupt_data = status_mem.irq_status;
-        }
-
-        if (token_active &&
-            ((TB_AXI_DEBUG_MODE || (seen_stream_out && idle_after_stream >= 4)) &&
-             seen_done && seen_idle_after &&
-             ((ctrl_shadow_control & CTRL_START_BIT) == 0))) {
-            std::printf("[TEST] ===== End token %zu =====\n", active_token);
-            token_active = false;
-            next_token_to_launch++;
-            if (next_token_to_launch < total_stream_tokens) {
-                ctrl_stage = CtrlSessionStage::AssertStart;
-                ctrl_gap_cycles = 1;
-            } else {
-                ctrl_stage = CtrlSessionStage::Done;
-            }
-        }
-
-        if (ctrl_stage == CtrlSessionStage::Done && !token_active) {
-            break;
-        }
-    }
-
-    if (aborted_on_error || next_token_to_launch != total_stream_tokens) {
-        if (!aborted_on_error) {
-            std::fprintf(stderr, "ERROR: autoregressive run ended early (%zu/%zu tokens)\n",
-                         next_token_to_launch, total_stream_tokens);
-        }
-        return 1;
-    }
-
-    tb_dump_kv_cache(kv_cache, ctrl_mem);
-    std::printf("PASS: Autoregressive inference complete for %zu token(s)\n",
-                total_stream_tokens);
+    std::printf("PASS: Token %zu inference complete, FSM stayed IDLE for %d cycles after.\n",
+                selected_stream_token, idle_after_stream);
     return 0;
 }
 

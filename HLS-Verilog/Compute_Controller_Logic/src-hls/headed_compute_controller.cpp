@@ -1,4 +1,88 @@
 #include "headed_compute_controller.hpp"
+#ifndef __SYNTHESIS__
+#include <cstdio>
+#endif
+
+#ifndef __SYNTHESIS__
+static void print_head_buffers(
+    const char *label,
+    const int8_t vec[HEAD_VECTOR_MAX],
+    const int8_t mat[HEAD_MATRIX_MAX],
+    const int32_t bias[HEAD_ACCUM_MAX]
+) {
+    std::printf("%s head_vec[%d]:", label, HEAD_VECTOR_MAX);
+    for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
+        std::printf(" %d", static_cast<int>(vec[i]));
+    }
+    std::printf("\n%s head_mat[%d][%d]:\n", label, HEAD_ACCUM_MAX, HEAD_VECTOR_MAX);
+    for (int r = 0; r < HEAD_ACCUM_MAX; ++r) {
+        std::printf("  %02d:", r);
+        for (int c = 0; c < HEAD_VECTOR_MAX; ++c) {
+            std::printf(" %d", static_cast<int>(mat[r * HEAD_VECTOR_MAX + c]));
+        }
+        std::printf("\n");
+    }
+    std::printf("%s head_bias[%d]:", label, HEAD_ACCUM_MAX);
+    for (int i = 0; i < HEAD_ACCUM_MAX; ++i) {
+        std::printf(" %d", static_cast<int>(bias[i]));
+    }
+    std::printf("\n");
+}
+
+static void print_att_value_buffers(
+    const char *label,
+    const int16_t vec[CONTEXT_LENGTH],
+    const int8_t mat[D_HEADS * CONTEXT_LENGTH]
+) {
+    std::printf("%s head_vec_att[%d]:", label, CONTEXT_LENGTH);
+    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
+        std::printf(" %d", static_cast<int>(vec[i]));
+    }
+    std::printf("\n%s head_mat_att[%d][%d]:\n", label, D_HEADS, CONTEXT_LENGTH);
+    for (int r = 0; r < D_HEADS; ++r) {
+        std::printf("  %02d:", r);
+        for (int c = 0; c < CONTEXT_LENGTH; ++c) {
+            std::printf(" %d", static_cast<int>(mat[r * CONTEXT_LENGTH + c]));
+        }
+        std::printf("\n");
+    }
+}
+
+static void print_att_scores_rope_qk(
+    const int8_t vec[HEAD_VECTOR_MAX],
+    const int8_t mat[HEAD_MATRIX_MAX]
+) {
+    std::printf("Q:");
+    for (int i = 0; i < D_HEADS; ++i) {
+        std::printf(" %d", static_cast<int>(vec[i]));
+    }
+    std::printf("\n  K_CACHE:");
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+        for (int h = 0; h < D_HEADS; ++h) {
+            std::printf(" %d", static_cast<int>(mat[t * HEAD_VECTOR_MAX + h]));
+        }
+    }
+    std::printf("\n");
+}
+#else
+static inline void print_head_buffers(
+    const char *,
+    const int8_t[HEAD_VECTOR_MAX],
+    const int8_t[HEAD_MATRIX_MAX],
+    const int32_t[HEAD_ACCUM_MAX]
+) {}
+
+static inline void print_att_value_buffers(
+    const char *,
+    const int16_t[CONTEXT_LENGTH],
+    const int8_t[D_HEADS * CONTEXT_LENGTH]
+) {}
+
+static inline void print_att_scores_rope_qk(
+    const int8_t[HEAD_VECTOR_MAX],
+    const int8_t[HEAD_MATRIX_MAX]
+) {}
+#endif
 
 namespace rope_lut {
 

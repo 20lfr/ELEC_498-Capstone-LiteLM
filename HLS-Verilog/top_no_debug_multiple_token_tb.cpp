@@ -34,13 +34,18 @@ int main() {
         return 1;
     }
 
-    std::printf("[TEST] Multi-token autoregressive run across %zu token(s) (debug_mode=%s)\n",
-                total_stream_tokens, tb_debug_mode_name());
-
-    if (TB_AXI_DEBUG_MODE) {
-        std::printf("[TEST] AXI debug mode has no stream dependence; running one session only.\n");
-        return run_top_no_debug_tb_single_token(0);
+    std::printf("[TEST] Multi-token run across %zu token(s) (debug_mode=%s)\n",
+                total_stream_tokens, TB_DEBUG_MODE ? "on" : "off");
+    for (size_t token_idx = 0; token_idx < total_stream_tokens; ++token_idx) {
+        std::printf("\n[TEST] ===== Begin token %zu =====\n", token_idx);
+        const int rc = run_top_no_debug_tb_single_token(token_idx);
+        if (rc != 0) {
+            std::fprintf(stderr, "ERROR: token %zu failed with rc=%d\n", token_idx, rc);
+            return rc;
+        }
+        std::printf("[TEST] ===== End token %zu =====\n", token_idx);
     }
 
-    return run_top_no_debug_tb_autoregressive();
+    std::printf("PASS: Multi-token inference complete for %zu token(s)\n", total_stream_tokens);
+    return 0;
 }

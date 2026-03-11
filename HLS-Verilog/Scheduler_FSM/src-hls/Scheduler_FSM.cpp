@@ -50,7 +50,7 @@ void scheduler_hls(
     // ------------------------------------------------------------
     bool cntrl_reset_n,
     bool cntrl_start,
-    uint8_t debug_mode_sel,
+    bool debug_mode_en,
     bool ctrl_error,
 
     // ------------------------------------------------------------
@@ -233,28 +233,11 @@ void scheduler_hls(
 #pragma HLS reset variable = final_norm_dma_done
   static bool final_norm_compute_done;
 #pragma HLS reset variable = final_norm_compute_done
-  static bool debug_axi_started;
-#pragma HLS reset variable = debug_axi_started
-  static bool debug_axi_dma_busy;
-#pragma HLS reset variable = debug_axi_dma_busy
-  static bool debug_axi_dma_done;
-#pragma HLS reset variable = debug_axi_dma_done
-  static bool debug_axi_comp_busy;
-#pragma HLS reset variable = debug_axi_comp_busy
-  static bool debug_axi_compute_done;
-#pragma HLS reset variable = debug_axi_compute_done
-  static bool debug_axi_writeback_started;
-#pragma HLS reset variable = debug_axi_writeback_started
-  static bool debug_axi_writeback_dma_done;
-#pragma HLS reset variable = debug_axi_writeback_dma_done
-  static uint8_t debug_axi_req_idx;
-#pragma HLS reset variable = debug_axi_req_idx
 // POST-HEADED ATTENTION DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
   const bool reset = !cntrl_reset_n;
-  const bool debug_mode_en = (debug_mode_sel != DEBUG_MODE_NONE);
 
   // FSM Reset
   if (reset) {
@@ -322,14 +305,6 @@ void scheduler_hls(
     argmax_compute_done = false;
     logits_dma_done = false;
     stream_done_seen = false;
-    debug_axi_started = false;
-    debug_axi_dma_busy = false;
-    debug_axi_dma_done = false;
-    debug_axi_comp_busy = false;
-    debug_axi_compute_done = false;
-    debug_axi_writeback_started = false;
-    debug_axi_writeback_dma_done = false;
-    debug_axi_req_idx = 0;
 
     // Global progress/tiles
     stream_started = false;
@@ -402,17 +377,6 @@ void scheduler_hls(
         break;
       }
       case S_DEBUG: {
-        break;
-      }
-      case S_DEBUG_AXI: {
-        debug_axi_started = false;
-        debug_axi_dma_busy = false;
-        debug_axi_dma_done = false;
-        debug_axi_comp_busy = false;
-        debug_axi_compute_done = false;
-        debug_axi_writeback_started = false;
-        debug_axi_writeback_dma_done = false;
-        debug_axi_req_idx = 0;
         break;
       }
       case S_LAYER_COUNT: {
@@ -599,13 +563,6 @@ void scheduler_hls(
       else if (ffn_stage == FfnStage::W2 && w2_dma_busy) w2_dma_done = true;
     }
     if (st == S_HEAD_CONCAT && concat_started && concat_dma_busy) concat_dma_done = true;
-    if (st == S_DEBUG_AXI && debug_axi_started) {
-      if (debug_axi_writeback_started) {
-        debug_axi_writeback_dma_done = true;
-      } else if (debug_axi_dma_busy) {
-        debug_axi_dma_done = true;
-      }
-    }
   } else {
     if (outproj_started && !wo_dma_busy) wo_dma_done = false;
     if (ln0_started && !ln0_dma_busy) ln0_dma_done = false;
@@ -615,10 +572,6 @@ void scheduler_hls(
     if (ffn_started && (ffn_stage == FfnStage::W1) && !w1_dma_busy) w1_dma_done = false;
     if (ffn_started && (ffn_stage == FfnStage::W2) && !w2_dma_busy) w2_dma_done = false;
     if (st == S_HEAD_CONCAT && concat_started && !concat_dma_busy) concat_dma_done = false;
-    if (st == S_DEBUG_AXI && debug_axi_started && !debug_axi_dma_busy) debug_axi_dma_done = false;
-    if (st == S_DEBUG_AXI && debug_axi_started && !debug_axi_writeback_started) {
-      debug_axi_writeback_dma_done = false;
-    }
   }
   if (compute_done && !compute_start) {
     if (st == S_ATTENTION_HEADS && attn_started)  attn_compute_done = true;
@@ -635,9 +588,6 @@ void scheduler_hls(
     if (st == S_FINAL_NORM && final_norm_started) final_norm_compute_done = true;
     if (st == S_LOGITS && logits_started)         logits_compute_done = true;
     if (st == S_ARGMAX && argmax_started)         argmax_compute_done = true;
-    if (st == S_DEBUG_AXI && debug_axi_started && debug_axi_comp_busy) {
-      debug_axi_compute_done = true;
-    }
   }
 
   int head_group_idx_out = group_idx;
@@ -645,6 +595,7 @@ void scheduler_hls(
   switch (st) {
     case S_IDLE: {
       if (cntrl_start) {
+        st = S_STREAM_IN;
         layer_idx = 0;
 
         // Attention
@@ -717,14 +668,6 @@ void scheduler_hls(
         logits_dma_busy = false;
         logits_comp_busy = false;
         stream_done_seen = false;
-        debug_axi_started = false;
-        debug_axi_dma_busy = false;
-        debug_axi_dma_done = false;
-        debug_axi_comp_busy = false;
-        debug_axi_compute_done = false;
-        debug_axi_writeback_started = false;
-        debug_axi_writeback_dma_done = false;
-        debug_axi_req_idx = 0;
 
         // Weight Stager and Loader params
         wl_start = false;
@@ -741,19 +684,13 @@ void scheduler_hls(
         done = false;
         error = false;
         error_latched = false;
-
-        if (debug_mode_sel == DEBUG_MODE_AXI_SIGNATURE) {
-          st = S_DEBUG_AXI;
-        } else {
-          st = S_STREAM_IN;
-        }
       }
       break;
     }
     case S_STREAM_IN: {
       // Top-level handles AXIS beat handshake; scheduler waits for full token completion.
       if (axis_token_complete) {
-        st = (debug_mode_sel == DEBUG_MODE_STREAM_SUM) ? S_DEBUG : S_LAYER_COUNT;
+        st = debug_mode_en ? S_DEBUG : S_LAYER_COUNT;
       }
       break;
     }
@@ -762,68 +699,6 @@ void scheduler_hls(
         stream_started = false;
         stream_done_seen = false;
         st = S_STREAM_OUT;
-      }
-      break;
-    }
-    case S_DEBUG_AXI: {
-      constexpr uint8_t kDebugAxiReqCount = static_cast<uint8_t>(DEBUG_AXI_REQ_COUNT);
-      const DmaSel debug_sel =
-          (debug_axi_req_idx == 0) ? DMASEL_WQ :
-          (debug_axi_req_idx == 1) ? DMASEL_WK :
-          (debug_axi_req_idx == 2) ? DMASEL_WV :
-          (debug_axi_req_idx == 3) ? DMASEL_WO :
-          (debug_axi_req_idx == 4) ? DMASEL_W1 :
-          (debug_axi_req_idx == 5) ? DMASEL_W2 :
-                                     DMASEL_WLOGIT;
-      const int debug_head = (debug_axi_req_idx < 3) ? 0 : -1;
-      const int debug_tile = (debug_axi_req_idx >= 3) ? 0 : -1;
-
-      if (!debug_axi_started) {
-        debug_axi_started = true;
-        debug_axi_dma_busy = false;
-        debug_axi_dma_done = false;
-        debug_axi_comp_busy = false;
-        debug_axi_compute_done = false;
-        debug_axi_writeback_started = false;
-        debug_axi_writeback_dma_done = false;
-        debug_axi_req_idx = 0;
-      } else if (debug_axi_writeback_started) {
-        if (debug_axi_writeback_dma_done) {
-          debug_axi_writeback_started = false;
-          debug_axi_writeback_dma_done = false;
-          if (debug_axi_req_idx + 1 < kDebugAxiReqCount) {
-            debug_axi_req_idx = static_cast<uint8_t>(debug_axi_req_idx + 1);
-          } else {
-            debug_axi_started = false;
-            done = true;
-            st = S_IDLE;
-          }
-        }
-      } else if (!debug_axi_dma_busy && !debug_axi_comp_busy && !debug_axi_compute_done) {
-        if (wl_ready) {
-          wl_start = true;
-          wl_instruction = pack_dma_op(debug_sel, 0, debug_head, debug_tile);
-          debug_axi_dma_busy = true;
-          debug_axi_dma_done = false;
-        }
-      } else if (debug_axi_dma_busy && debug_axi_dma_done) {
-        debug_axi_dma_busy = false;
-        debug_axi_dma_done = false;
-        debug_axi_comp_busy = true;
-        debug_axi_compute_done = false;
-      } else if (debug_axi_comp_busy && compute_ready) {
-        compute_start = true;
-        compute_instruction =
-            pack_compute_instruction(CMP_DEBUG_AXI_SIG, 0, -1, debug_axi_req_idx);
-        debug_axi_comp_busy = false;
-      } else if (debug_axi_compute_done) {
-        debug_axi_compute_done = false;
-        if (wl_ready) {
-          wl_start = true;
-          wl_instruction = pack_dma_op(DMASEL_DEBUG_AXI_WRITE, 0, -1, debug_axi_req_idx);
-          debug_axi_writeback_started = true;
-          debug_axi_writeback_dma_done = false;
-        }
       }
       break;
     }

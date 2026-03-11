@@ -21,20 +21,6 @@
 #define TOP_DEBUG_TB_LOG_SUBDIR "top_DEBUG"
 #endif
 
-constexpr uint8_t TB_DEBUG_MODE_SEL = DEBUG_MODE_NONE; // could be DEBUG_MODE_AXI_SIGNATURE, DEBUG_MODE_STREAM_SUM or DEBUG_MODE_NONE
-constexpr bool TB_DEBUG_MODE = (TB_DEBUG_MODE_SEL != DEBUG_MODE_NONE);
-constexpr bool TB_STREAM_DEBUG_MODE = (TB_DEBUG_MODE_SEL == DEBUG_MODE_STREAM_SUM);
-constexpr bool TB_AXI_DEBUG_MODE = (TB_DEBUG_MODE_SEL == DEBUG_MODE_AXI_SIGNATURE);
-
-static const char *tb_debug_mode_name() {
-    switch (TB_DEBUG_MODE_SEL) {
-    case DEBUG_MODE_NONE: return "normal";
-    case DEBUG_MODE_STREAM_SUM: return "stream_sum";
-    case DEBUG_MODE_AXI_SIGNATURE: return "axi_signature";
-    default: return "unknown";
-    }
-}
-
 static bool ensure_dir_recursive(const char *dir) {
     char path[512];
     std::snprintf(path, sizeof(path), "%s", dir);
@@ -1467,10 +1453,6 @@ static const char *status_name(uint32_t status) {
         return "S_ARGMAX";
     case S_STREAM_OUT:
         return "S_STREAM_OUT";
-    case S_DEBUG:
-        return "S_DEBUG";
-    case S_DEBUG_AXI:
-        return "S_DEBUG_AXI";
     default:
         return "UNKNOWN";
     }
@@ -1837,15 +1819,6 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
     bool ctrl_resetn_in = false;
     int ctrl_gap_cycles = 0; // spacing between control bus transactions
     bool seen_irq_done = false;
-    auto set_control = [&](uint32_t value) {
-        const uint32_t control =
-            value |
-            (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 0u) |
-            (static_cast<uint32_t>(TB_DEBUG_MODE_SEL) << CTRL_DEBUG_MODE_SEL_SHIFT);
-        ctrl_mem.control = control;
-        ctrl_data_in = control;
-        ctrl_shadow_control = control;
-    };
 
     ControlMemSpace dbg_ctrl_mem{};
 
@@ -1927,10 +1900,11 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
         } else if (ctrl_stage == CtrlInitStage::TestCtrlInit) {
             // Start with valid config
             ctrl_mem = ctrl_mem_init(true);
-            set_control(CTRL_RESETN_BIT);
+            ctrl_mem.control = CTRL_RESETN_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT;
             ctrl_resetn_in = true;
-            std::printf("[TEST] Starting ControlMemInterface error tests... mode=%s\n",
-                        tb_debug_mode_name());
+            std::printf("[TEST] Starting ControlMemInterface error tests...\n");
             ctrl_stage = CtrlInitStage::TestZeroStride;
             ctrl_gap_cycles = 1;
         
@@ -1992,12 +1966,16 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
         // ========== NORMAL OPERATION ==========
         } else if (ctrl_stage == CtrlInitStage::AssertReset) {
             ctrl_mem = ctrl_mem_init(false); // Restore default config
-            set_control(0x00000000);
+            ctrl_mem.control = 0x00000000;
+            ctrl_data_in = 0x00000000;
+            ctrl_shadow_control = 0x00000000;
             ctrl_resetn_in = false;
             ctrl_stage = CtrlInitStage::DeassertReset;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::DeassertReset) {
-            set_control(CTRL_RESETN_BIT);
+            ctrl_mem.control = CTRL_RESETN_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT;
             ctrl_resetn_in = true;
             ctrl_stage = CtrlInitStage::ProgramBases;
             ctrl_gap_cycles = 1;
@@ -2037,7 +2015,9 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
             }
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::AssertStart) {
-            set_control(CTRL_RESETN_BIT | CTRL_START_BIT);
+            ctrl_mem.control = CTRL_RESETN_BIT | CTRL_START_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT | CTRL_START_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT | CTRL_START_BIT;
             ctrl_resetn_in = true;
             reset_released = true;
             start_pulsed   = true;
@@ -2045,7 +2025,9 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
             ctrl_stage = CtrlInitStage::ClearStart;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::ClearStart) {
-            set_control(CTRL_RESETN_BIT);
+            ctrl_mem.control = CTRL_RESETN_BIT;
+            ctrl_data_in = CTRL_RESETN_BIT;
+            ctrl_shadow_control = CTRL_RESETN_BIT;
             ctrl_resetn_in = true;
             pending_start_clear = false;
             ctrl_stage = CtrlInitStage::Done;

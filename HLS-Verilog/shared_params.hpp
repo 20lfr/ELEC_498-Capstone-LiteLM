@@ -170,27 +170,6 @@ constexpr uint32_t STRIDE_KV_TOKEN = D_HEADS;
 constexpr uint32_t CTRL_RESETN_BIT = 1u << 0;
 constexpr uint32_t CTRL_START_BIT = 1u << 1;
 constexpr uint32_t CTRL_DEBUG_MODE_BIT = 1u << 3;
-constexpr uint32_t CTRL_DEBUG_MODE_SEL_SHIFT = 4u;
-constexpr uint32_t CTRL_DEBUG_MODE_SEL_MASK = 0xFu << CTRL_DEBUG_MODE_SEL_SHIFT;
-
-constexpr uint8_t DEBUG_MODE_NONE = 0u;
-constexpr uint8_t DEBUG_MODE_STREAM_SUM = 1u;
-constexpr uint8_t DEBUG_MODE_AXI_SIGNATURE = 2u;
-
-constexpr uint32_t align64_constexpr(uint32_t v) { return (v + 63u) & ~63u; }
-constexpr uint32_t DEBUG_AXI_SIG_MODULUS = 65521u;
-constexpr uint32_t DEBUG_AXI_REQ_COUNT = 7u;
-constexpr uint32_t DEBUG_AXI_SCRATCH_STRIDE = 4u;
-constexpr uint32_t DEBUG_AXI_RESULT_BYTES = DEBUG_AXI_SCRATCH_STRIDE;
-
-constexpr uint8_t decode_debug_mode_sel(uint32_t control) {
-    if ((control & CTRL_DEBUG_MODE_BIT) == 0u) {
-        return DEBUG_MODE_NONE;
-    }
-    const uint8_t raw = static_cast<uint8_t>(
-        (control & CTRL_DEBUG_MODE_SEL_MASK) >> CTRL_DEBUG_MODE_SEL_SHIFT);
-    return (raw == DEBUG_MODE_NONE) ? DEBUG_MODE_STREAM_SUM : raw;
-}
 
 // IRQ Bits
 constexpr uint32_t IRQ_ERROR_BIT = 1u << 1;
@@ -216,8 +195,7 @@ enum SchedState {
     S_LOGITS,          // 13
     S_ARGMAX,          // 14
     S_STREAM_OUT,      // 15
-    S_DEBUG,           // 16
-    S_DEBUG_AXI        // 17
+    S_DEBUG            // 16
 };
 
 // Error Codes

@@ -1,10 +1,6 @@
 #include "top.hpp"
 #include "MMU/mmu_luka.hpp"
 
-#ifndef __SYNTHESIS__
-static inline uint64_t map_csim_ddr_addr(uint64_t byte_addr, const ControlMemSpace &ctrl_mem);
-#endif
-
 // C-sim helper: access the local testbench DMA staging buffer as byte-addressable storage.
 static inline uint8_t dma_buf_get_byte_u32(const uint32_t *buf, uint32_t byte_idx) {
     const uint32_t word = buf[byte_idx / static_cast<uint32_t>(sizeof(uint32_t))];
@@ -27,11 +23,6 @@ static inline uint8_t gmem_get_byte(const axi_gmem_word_t &word, uint32_t lane) 
     const uint32_t hi = ((lane + 1u) * 8u) - 1u;
     const uint32_t lo = lane * 8u;
     return static_cast<uint8_t>(word.range(hi, lo));
-}
-
-static inline uint8_t gmem_get_byte(const volatile axi_gmem_word_t &word, uint32_t lane) {
-    const axi_gmem_word_t local_word = word;
-    return gmem_get_byte(local_word, lane);
 }
 
 // Shared helper: overwrite one byte lane inside an AXI-Full word.
@@ -147,6 +138,8 @@ void transformer_top(
 #pragma HLS INTERFACE axis port=m_axis_out
 #pragma HLS INTERFACE m_axi port=ddr_mem offset=slave bundle=gmem depth=TOP_DMA_BUF_WORDS
 #pragma HLS INTERFACE m_axi port=kv_cache offset=slave bundle=kv_gmem depth=TOP_DMA_BUF_WORDS
+#pragma HLS INTERFACE s_axilite port=ddr_mem bundle=control
+#pragma HLS INTERFACE s_axilite port=kv_cache bundle=control
 #pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
@@ -253,8 +246,7 @@ void transformer_top(
     const bool reset = !reset_n;
     const bool start_en = (ctrl_mem.control & CTRL_START_BIT) != 0u;
     const bool start_edge = start_en && !prev_start;
-    const uint8_t debug_mode_sel = decode_debug_mode_sel(ctrl_mem.control);
-    const bool debug_mode_en = (debug_mode_sel != DEBUG_MODE_NONE);
+    const bool debug_mode_en = (ctrl_mem.control & CTRL_DEBUG_MODE_BIT) != 0u;
     const bool ctrl_error =
         ((active_status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
         (active_status_mem.error_code != ERR_NONE);
@@ -385,7 +377,7 @@ void transformer_top(
     scheduler_hls(
         reset_n,
         start_en,
-        debug_mode_sel,
+        debug_mode_en,
         ctrl_error,
         token_complete_local,
         mmu_main_dma_done_wire,
@@ -561,35 +553,13 @@ void transformer_top(
                     dma_rx_buf_local[i] = 0;
                 }
             }
-            const uint64_t byte_addr = dma_addr_latched_local;
-#ifndef __SYNTHESIS__
-            const uint64_t sim_byte_addr_base = map_csim_ddr_addr(byte_addr, ctrl_mem);
-#else
-            const uint64_t sim_byte_addr_base = byte_addr;
-#endif
-            const bool full_word_write =
-                dma_is_write_latched_local &&
-                (bytes == AXI_GMEM_WORD_BYTES) &&
-                ((sim_byte_addr_base % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES)) == 0);
-            if (full_word_write) {
-                const uint64_t idx =
-                    sim_byte_addr_base / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
-                axi_gmem_word_t beat = 0;
-                for (uint32_t lane = 0; lane < AXI_GMEM_WORD_BYTES; ++lane) {
-                    gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, lane));
-                }
-                if (dma_use_kv_cache_latched_local) {
-                    kv_cache[idx] = beat;
-                } else {
-                    ddr_mem[idx] = beat;
-                }
-            } else for (uint32_t i = 0; i < bytes; ++i) {
+            for (uint32_t i = 0; i < bytes; ++i) {
 // #pragma HLS PIPELINE II=1
-                const uint64_t byte_addr_i = dma_addr_latched_local + static_cast<uint64_t>(i);
+                const uint64_t byte_addr = dma_addr_latched_local + static_cast<uint64_t>(i);
 #ifndef __SYNTHESIS__
-                const uint64_t sim_byte_addr = map_csim_ddr_addr(byte_addr_i, ctrl_mem);
+                const uint64_t sim_byte_addr = map_csim_ddr_addr(byte_addr, ctrl_mem);
 #else
-                const uint64_t sim_byte_addr = byte_addr_i;
+                const uint64_t sim_byte_addr = byte_addr;
 #endif
                 const uint64_t word_idx_raw =
                     sim_byte_addr / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);

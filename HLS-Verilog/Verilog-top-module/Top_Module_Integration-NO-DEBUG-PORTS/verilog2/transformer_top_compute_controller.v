@@ -13,10 +13,10 @@ module transformer_top_compute_controller (
         ap_done,
         ap_idle,
         ap_ready,
-        cntrl_reset_n,
-        compute_start_2,
-        compute_instruction_2,
-        mem_transfer_done,
+        ctrl_mem_0,
+        empty_205,
+        empty_206,
+        empty,
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0,
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0,
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0,
@@ -76,88 +76,87 @@ module transformer_top_compute_controller (
         ap_return
 );
 
-parameter    ap_ST_fsm_state1 = 82'd1;
-parameter    ap_ST_fsm_state2 = 82'd2;
-parameter    ap_ST_fsm_state3 = 82'd4;
-parameter    ap_ST_fsm_state4 = 82'd8;
-parameter    ap_ST_fsm_state5 = 82'd16;
-parameter    ap_ST_fsm_state6 = 82'd32;
-parameter    ap_ST_fsm_state7 = 82'd64;
-parameter    ap_ST_fsm_state8 = 82'd128;
-parameter    ap_ST_fsm_state9 = 82'd256;
-parameter    ap_ST_fsm_state10 = 82'd512;
-parameter    ap_ST_fsm_state11 = 82'd1024;
-parameter    ap_ST_fsm_state12 = 82'd2048;
-parameter    ap_ST_fsm_state13 = 82'd4096;
-parameter    ap_ST_fsm_state14 = 82'd8192;
-parameter    ap_ST_fsm_state15 = 82'd16384;
-parameter    ap_ST_fsm_state16 = 82'd32768;
-parameter    ap_ST_fsm_state17 = 82'd65536;
-parameter    ap_ST_fsm_state18 = 82'd131072;
-parameter    ap_ST_fsm_state19 = 82'd262144;
-parameter    ap_ST_fsm_state20 = 82'd524288;
-parameter    ap_ST_fsm_state21 = 82'd1048576;
-parameter    ap_ST_fsm_state22 = 82'd2097152;
-parameter    ap_ST_fsm_state23 = 82'd4194304;
-parameter    ap_ST_fsm_state24 = 82'd8388608;
-parameter    ap_ST_fsm_state25 = 82'd16777216;
-parameter    ap_ST_fsm_state26 = 82'd33554432;
-parameter    ap_ST_fsm_state27 = 82'd67108864;
-parameter    ap_ST_fsm_state28 = 82'd134217728;
-parameter    ap_ST_fsm_state29 = 82'd268435456;
-parameter    ap_ST_fsm_state30 = 82'd536870912;
-parameter    ap_ST_fsm_state31 = 82'd1073741824;
-parameter    ap_ST_fsm_state32 = 82'd2147483648;
-parameter    ap_ST_fsm_state33 = 82'd4294967296;
-parameter    ap_ST_fsm_state34 = 82'd8589934592;
-parameter    ap_ST_fsm_state35 = 82'd17179869184;
-parameter    ap_ST_fsm_state36 = 82'd34359738368;
-parameter    ap_ST_fsm_state37 = 82'd68719476736;
-parameter    ap_ST_fsm_state38 = 82'd137438953472;
-parameter    ap_ST_fsm_state39 = 82'd274877906944;
-parameter    ap_ST_fsm_state40 = 82'd549755813888;
-parameter    ap_ST_fsm_state41 = 82'd1099511627776;
-parameter    ap_ST_fsm_state42 = 82'd2199023255552;
-parameter    ap_ST_fsm_state43 = 82'd4398046511104;
-parameter    ap_ST_fsm_state44 = 82'd8796093022208;
-parameter    ap_ST_fsm_state45 = 82'd17592186044416;
-parameter    ap_ST_fsm_state46 = 82'd35184372088832;
-parameter    ap_ST_fsm_state47 = 82'd70368744177664;
-parameter    ap_ST_fsm_state48 = 82'd140737488355328;
-parameter    ap_ST_fsm_state49 = 82'd281474976710656;
-parameter    ap_ST_fsm_state50 = 82'd562949953421312;
-parameter    ap_ST_fsm_state51 = 82'd1125899906842624;
-parameter    ap_ST_fsm_state52 = 82'd2251799813685248;
-parameter    ap_ST_fsm_state53 = 82'd4503599627370496;
-parameter    ap_ST_fsm_state54 = 82'd9007199254740992;
-parameter    ap_ST_fsm_state55 = 82'd18014398509481984;
-parameter    ap_ST_fsm_state56 = 82'd36028797018963968;
-parameter    ap_ST_fsm_state57 = 82'd72057594037927936;
-parameter    ap_ST_fsm_state58 = 82'd144115188075855872;
-parameter    ap_ST_fsm_state59 = 82'd288230376151711744;
-parameter    ap_ST_fsm_state60 = 82'd576460752303423488;
-parameter    ap_ST_fsm_state61 = 82'd1152921504606846976;
-parameter    ap_ST_fsm_state62 = 82'd2305843009213693952;
-parameter    ap_ST_fsm_state63 = 82'd4611686018427387904;
-parameter    ap_ST_fsm_state64 = 82'd9223372036854775808;
-parameter    ap_ST_fsm_state65 = 82'd18446744073709551616;
-parameter    ap_ST_fsm_state66 = 82'd36893488147419103232;
-parameter    ap_ST_fsm_state67 = 82'd73786976294838206464;
-parameter    ap_ST_fsm_state68 = 82'd147573952589676412928;
-parameter    ap_ST_fsm_state69 = 82'd295147905179352825856;
-parameter    ap_ST_fsm_state70 = 82'd590295810358705651712;
-parameter    ap_ST_fsm_state71 = 82'd1180591620717411303424;
-parameter    ap_ST_fsm_state72 = 82'd2361183241434822606848;
-parameter    ap_ST_fsm_state73 = 82'd4722366482869645213696;
-parameter    ap_ST_fsm_state74 = 82'd9444732965739290427392;
-parameter    ap_ST_fsm_state75 = 82'd18889465931478580854784;
-parameter    ap_ST_fsm_state76 = 82'd37778931862957161709568;
-parameter    ap_ST_fsm_state77 = 82'd75557863725914323419136;
-parameter    ap_ST_fsm_state78 = 82'd151115727451828646838272;
-parameter    ap_ST_fsm_state79 = 82'd302231454903657293676544;
-parameter    ap_ST_fsm_state80 = 82'd604462909807314587353088;
-parameter    ap_ST_fsm_state81 = 82'd1208925819614629174706176;
-parameter    ap_ST_fsm_state82 = 82'd2417851639229258349412352;
+parameter    ap_ST_fsm_state1 = 81'd1;
+parameter    ap_ST_fsm_state2 = 81'd2;
+parameter    ap_ST_fsm_state3 = 81'd4;
+parameter    ap_ST_fsm_state4 = 81'd8;
+parameter    ap_ST_fsm_state5 = 81'd16;
+parameter    ap_ST_fsm_state6 = 81'd32;
+parameter    ap_ST_fsm_state7 = 81'd64;
+parameter    ap_ST_fsm_state8 = 81'd128;
+parameter    ap_ST_fsm_state9 = 81'd256;
+parameter    ap_ST_fsm_state10 = 81'd512;
+parameter    ap_ST_fsm_state11 = 81'd1024;
+parameter    ap_ST_fsm_state12 = 81'd2048;
+parameter    ap_ST_fsm_state13 = 81'd4096;
+parameter    ap_ST_fsm_state14 = 81'd8192;
+parameter    ap_ST_fsm_state15 = 81'd16384;
+parameter    ap_ST_fsm_state16 = 81'd32768;
+parameter    ap_ST_fsm_state17 = 81'd65536;
+parameter    ap_ST_fsm_state18 = 81'd131072;
+parameter    ap_ST_fsm_state19 = 81'd262144;
+parameter    ap_ST_fsm_state20 = 81'd524288;
+parameter    ap_ST_fsm_state21 = 81'd1048576;
+parameter    ap_ST_fsm_state22 = 81'd2097152;
+parameter    ap_ST_fsm_state23 = 81'd4194304;
+parameter    ap_ST_fsm_state24 = 81'd8388608;
+parameter    ap_ST_fsm_state25 = 81'd16777216;
+parameter    ap_ST_fsm_state26 = 81'd33554432;
+parameter    ap_ST_fsm_state27 = 81'd67108864;
+parameter    ap_ST_fsm_state28 = 81'd134217728;
+parameter    ap_ST_fsm_state29 = 81'd268435456;
+parameter    ap_ST_fsm_state30 = 81'd536870912;
+parameter    ap_ST_fsm_state31 = 81'd1073741824;
+parameter    ap_ST_fsm_state32 = 81'd2147483648;
+parameter    ap_ST_fsm_state33 = 81'd4294967296;
+parameter    ap_ST_fsm_state34 = 81'd8589934592;
+parameter    ap_ST_fsm_state35 = 81'd17179869184;
+parameter    ap_ST_fsm_state36 = 81'd34359738368;
+parameter    ap_ST_fsm_state37 = 81'd68719476736;
+parameter    ap_ST_fsm_state38 = 81'd137438953472;
+parameter    ap_ST_fsm_state39 = 81'd274877906944;
+parameter    ap_ST_fsm_state40 = 81'd549755813888;
+parameter    ap_ST_fsm_state41 = 81'd1099511627776;
+parameter    ap_ST_fsm_state42 = 81'd2199023255552;
+parameter    ap_ST_fsm_state43 = 81'd4398046511104;
+parameter    ap_ST_fsm_state44 = 81'd8796093022208;
+parameter    ap_ST_fsm_state45 = 81'd17592186044416;
+parameter    ap_ST_fsm_state46 = 81'd35184372088832;
+parameter    ap_ST_fsm_state47 = 81'd70368744177664;
+parameter    ap_ST_fsm_state48 = 81'd140737488355328;
+parameter    ap_ST_fsm_state49 = 81'd281474976710656;
+parameter    ap_ST_fsm_state50 = 81'd562949953421312;
+parameter    ap_ST_fsm_state51 = 81'd1125899906842624;
+parameter    ap_ST_fsm_state52 = 81'd2251799813685248;
+parameter    ap_ST_fsm_state53 = 81'd4503599627370496;
+parameter    ap_ST_fsm_state54 = 81'd9007199254740992;
+parameter    ap_ST_fsm_state55 = 81'd18014398509481984;
+parameter    ap_ST_fsm_state56 = 81'd36028797018963968;
+parameter    ap_ST_fsm_state57 = 81'd72057594037927936;
+parameter    ap_ST_fsm_state58 = 81'd144115188075855872;
+parameter    ap_ST_fsm_state59 = 81'd288230376151711744;
+parameter    ap_ST_fsm_state60 = 81'd576460752303423488;
+parameter    ap_ST_fsm_state61 = 81'd1152921504606846976;
+parameter    ap_ST_fsm_state62 = 81'd2305843009213693952;
+parameter    ap_ST_fsm_state63 = 81'd4611686018427387904;
+parameter    ap_ST_fsm_state64 = 81'd9223372036854775808;
+parameter    ap_ST_fsm_state65 = 81'd18446744073709551616;
+parameter    ap_ST_fsm_state66 = 81'd36893488147419103232;
+parameter    ap_ST_fsm_state67 = 81'd73786976294838206464;
+parameter    ap_ST_fsm_state68 = 81'd147573952589676412928;
+parameter    ap_ST_fsm_state69 = 81'd295147905179352825856;
+parameter    ap_ST_fsm_state70 = 81'd590295810358705651712;
+parameter    ap_ST_fsm_state71 = 81'd1180591620717411303424;
+parameter    ap_ST_fsm_state72 = 81'd2361183241434822606848;
+parameter    ap_ST_fsm_state73 = 81'd4722366482869645213696;
+parameter    ap_ST_fsm_state74 = 81'd9444732965739290427392;
+parameter    ap_ST_fsm_state75 = 81'd18889465931478580854784;
+parameter    ap_ST_fsm_state76 = 81'd37778931862957161709568;
+parameter    ap_ST_fsm_state77 = 81'd75557863725914323419136;
+parameter    ap_ST_fsm_state78 = 81'd151115727451828646838272;
+parameter    ap_ST_fsm_state79 = 81'd302231454903657293676544;
+parameter    ap_ST_fsm_state80 = 81'd604462909807314587353088;
+parameter    ap_ST_fsm_state81 = 81'd1208925819614629174706176;
 
 input   ap_clk;
 input   ap_rst;
@@ -165,10 +164,10 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [0:0] cntrl_reset_n;
-input  [0:0] compute_start_2;
-input  [31:0] compute_instruction_2;
-input  [0:0] mem_transfer_done;
+input  [0:0] ctrl_mem_0;
+input  [0:0] empty_205;
+input  [31:0] empty_206;
+input  [0:0] empty;
 output  [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
 output   transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
 output   transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
@@ -273,7 +272,7 @@ reg main_mem_write_request_ap_vld;
 reg main_mem_op_ap_vld;
 reg[0:0] ap_return;
 
-(* fsm_encoding = "none" *) reg   [81:0] ap_CS_fsm;
+(* fsm_encoding = "none" *) reg   [80:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg   [7:0] state;
 reg   [31:0] req_instruction;
@@ -281,7 +280,6 @@ reg   [7:0] req_op;
 reg   [7:0] req_layer_idx;
 reg   [0:0] mac_ready;
 reg   [0:0] mac_complete;
-reg   [7:0] req_tile_idx;
 reg   [0:0] capture_pending;
 reg   [0:0] clear_pending;
 wire   [4:0] requant_params_REQUANT1_M_L_address0;
@@ -302,760 +300,732 @@ wire   [4:0] requant_params_REQUANT4_M_L_address0;
 wire   [30:0] requant_params_REQUANT4_M_L_q0;
 wire   [4:0] requant_params_REQUANT4_N_L_address0;
 wire   [5:0] requant_params_REQUANT4_N_L_q0;
-wire   [62:0] grp_fu_1739_p2;
-reg   [62:0] reg_1800;
-wire    ap_CS_fsm_state73;
-reg   [0:0] icmp_ln148_reg_4388;
-reg   [4:0] trunc_ln818_reg_4125;
+wire   [62:0] grp_fu_1643_p2;
+reg   [62:0] reg_1694;
 wire    ap_CS_fsm_state72;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_done;
-reg    ap_predicate_pred266_state73;
-reg    ap_predicate_pred281_state73;
-wire    ap_CS_fsm_state74;
-reg   [0:0] icmp_ln148_4_reg_4401;
-reg    ap_predicate_pred294_state74;
-reg    ap_predicate_pred299_state74;
-wire    ap_CS_fsm_state75;
-reg   [0:0] icmp_ln148_2_reg_4409;
-reg    ap_predicate_pred312_state75;
-reg    ap_predicate_pred317_state75;
-wire   [0:0] mem_transfer_done_read_read_fu_382_p2;
-wire   [0:0] compute_start_2_read_read_fu_394_p2;
-wire   [7:0] next_state_load_fu_1856_p1;
-wire   [0:0] icmp_ln687_fu_1860_p2;
-reg   [0:0] icmp_ln687_reg_4104;
-wire   [0:0] icmp_ln688_fu_1866_p2;
-reg   [0:0] icmp_ln688_reg_4109;
-reg   [31:0] req_instruction_load_reg_4114;
-wire   [7:0] req_op_load_load_fu_1876_p1;
-reg   [7:0] req_op_load_reg_4120;
-wire   [4:0] trunc_ln818_fu_1882_p1;
-reg   [7:0] layer_reg_4130;
-reg   [0:0] mac_ready_load_reg_4136;
-reg   [0:0] mac_complete_load_reg_4144;
-wire   [7:0] req_tile_idx_load_load_fu_2032_p1;
-reg   [7:0] req_tile_idx_load_reg_4153;
-wire   [0:0] grp_fu_1743_p2;
-reg   [0:0] icmp_ln824_reg_4177;
-wire   [0:0] grp_fu_1748_p2;
-reg   [0:0] icmp_ln824_1_reg_4182;
-wire   [0:0] mac_start_3_fu_2318_p2;
-wire    ap_CS_fsm_state2;
-wire   [2:0] grp_fu_1773_p3;
-wire   [0:0] mac_start_2_fu_2328_p2;
-wire    ap_CS_fsm_state4;
-wire   [7:0] zext_ln726_1_fu_2357_p1;
-reg   [7:0] zext_ln726_1_reg_4213;
-wire    ap_CS_fsm_state6;
-wire   [0:0] do_compute_fu_2399_p2;
-reg   [0:0] do_compute_reg_4221;
-wire   [0:0] mac_start_1_fu_2478_p2;
-wire    ap_CS_fsm_state8;
-wire   [30:0] M_6_fu_2489_p9;
-reg   [30:0] M_6_reg_4262;
-wire    ap_CS_fsm_state10;
-wire   [5:0] n_6_fu_2510_p9;
-reg   [5:0] n_6_reg_4267;
-wire   [0:0] mac_start_fu_2536_p2;
-wire    ap_CS_fsm_state12;
-wire   [8:0] zext_ln137_fu_2541_p1;
-reg   [8:0] zext_ln137_reg_4282;
-wire    ap_CS_fsm_state13;
-wire   [7:0] zext_ln137_1_fu_2545_p1;
-reg   [7:0] zext_ln137_1_reg_4289;
-wire   [5:0] zext_ln137_2_fu_2549_p1;
-reg   [5:0] zext_ln137_2_reg_4297;
-wire   [62:0] zext_ln394_fu_2553_p1;
-reg   [62:0] zext_ln394_reg_4302;
-wire   [62:0] zext_ln395_fu_2573_p1;
-reg   [62:0] zext_ln395_reg_4307;
-wire   [62:0] zext_ln215_fu_2577_p1;
-reg   [62:0] zext_ln215_reg_4313;
-wire   [62:0] zext_ln394_2_fu_2581_p1;
-reg   [62:0] zext_ln394_2_reg_4319;
-wire   [62:0] zext_ln395_1_fu_2601_p1;
-reg   [62:0] zext_ln395_1_reg_4324;
-wire   [62:0] zext_ln141_fu_2605_p1;
-reg   [62:0] zext_ln141_reg_4330;
-wire   [63:0] zext_ln144_fu_2618_p1;
-reg   [63:0] zext_ln144_reg_4342;
-wire    ap_CS_fsm_state14;
-wire   [8:0] zext_ln144_1_fu_2622_p1;
-reg   [8:0] zext_ln144_1_reg_4348;
-wire   [3:0] trunc_ln144_fu_2626_p1;
-reg   [3:0] trunc_ln144_reg_4353;
-wire   [2:0] lshr_ln4_fu_2630_p4;
-reg   [2:0] lshr_ln4_reg_4359;
-wire   [63:0] zext_ln141_1_fu_2640_p1;
-reg   [63:0] zext_ln141_1_reg_4367;
-wire   [4:0] add_ln144_fu_2644_p2;
-reg   [4:0] add_ln144_reg_4375;
-wire   [5:0] tile_out_count_fu_2665_p3;
-reg   [5:0] tile_out_count_reg_4380;
-wire   [0:0] icmp_ln148_fu_2673_p2;
-wire   [0:0] or_ln148_fu_2679_p2;
-reg   [0:0] or_ln148_reg_4392;
-wire   [4:0] tmp_476_fu_2708_p4;
-reg   [4:0] tmp_476_reg_4396;
-wire    ap_CS_fsm_state28;
-wire   [0:0] icmp_ln148_4_fu_2717_p2;
-wire   [0:0] or_ln148_1_fu_2723_p2;
-reg   [0:0] or_ln148_1_reg_4405;
-wire   [0:0] icmp_ln148_2_fu_2746_p2;
-wire    ap_CS_fsm_state42;
-wire   [0:0] or_ln148_2_fu_2751_p2;
-reg   [0:0] or_ln148_2_reg_4413;
-wire   [3:0] tmp_477_fu_2775_p4;
-reg   [3:0] tmp_477_reg_4417;
-wire    ap_CS_fsm_state56;
-wire   [0:0] icmp_ln148_5_fu_2784_p2;
-reg   [0:0] icmp_ln148_5_reg_4422;
-wire   [0:0] or_ln148_3_fu_2790_p2;
-reg   [0:0] or_ln148_3_reg_4426;
-wire   [7:0] add_ln150_3_fu_2808_p2;
-reg   [7:0] add_ln150_3_reg_4430;
-wire   [31:0] grp_read_i32_fu_1672_ap_return;
-wire    ap_CS_fsm_state70;
-reg   [3:0] tmp_123_reg_4440;
-wire   [8:0] tmp_124_fu_2827_p3;
-reg   [8:0] tmp_124_reg_4446;
+reg   [0:0] icmp_ln148_reg_4187;
+reg   [4:0] trunc_ln780_reg_3928;
 wire    ap_CS_fsm_state71;
-wire   [8:0] add_ln183_fu_2835_p2;
-reg   [8:0] add_ln183_reg_4451;
-wire   [8:0] add_ln183_1_fu_2841_p2;
-reg   [8:0] add_ln183_1_reg_4456;
-wire   [63:0] p_cast79_fu_2854_p1;
-reg   [63:0] p_cast79_reg_4461;
-wire   [1:0] grp_fu_1780_p4;
-reg   [1:0] tmp_234_reg_4467;
-wire   [63:0] zext_ln183_fu_2866_p1;
-reg   [63:0] zext_ln183_reg_4475;
-wire   [63:0] p_cast81_fu_2878_p1;
-reg   [63:0] p_cast81_reg_4481;
-wire   [63:0] zext_ln193_fu_2902_p1;
-reg   [63:0] zext_ln193_reg_4496;
-reg   [7:0] trunc_ln580_s_reg_4504;
-reg   [7:0] trunc_ln581_s_reg_4509;
-reg   [7:0] trunc_ln580_1_reg_4514;
-reg   [7:0] trunc_ln581_1_reg_4519;
-reg   [7:0] trunc_ln580_2_reg_4524;
-wire    ap_CS_fsm_state76;
-reg   [7:0] trunc_ln581_2_reg_4529;
-wire   [62:0] add_ln395_7_fu_3719_p2;
-reg   [62:0] add_ln395_7_reg_4534;
-wire   [62:0] add_ln395_6_fu_3840_p2;
-reg   [62:0] add_ln395_6_reg_4539;
-wire   [0:0] xor_ln789_fu_3976_p2;
-wire    ap_CS_fsm_state78;
-wire   [7:0] select_ln789_fu_3981_p3;
-wire   [7:0] zext_ln726_fu_3988_p1;
-reg   [7:0] zext_ln726_reg_4554;
-wire    ap_CS_fsm_state79;
-wire   [0:0] or_ln742_fu_4002_p2;
-reg   [0:0] or_ln742_reg_4559;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_done;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_idle;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_ready;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
-wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-wire   [7:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-wire    grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-wire   [7:0] grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_done;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_idle;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_ready;
-wire   [14:0] grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_debug_axi_sig_accum_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_debug_axi_sig_accum_out_ap_vld;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_ap_start;
-wire    grp_ARGMAX_TO_BUF_fu_1611_ap_done;
-wire    grp_ARGMAX_TO_BUF_fu_1611_ap_idle;
-wire    grp_ARGMAX_TO_BUF_fu_1611_ap_ready;
-wire   [5:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-wire   [5:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-wire   [5:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-wire   [5:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-wire   [5:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-wire   [4:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-wire   [7:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-wire   [4:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
-wire   [7:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
-wire   [4:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-wire   [7:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-wire   [4:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
-wire    grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
-wire   [7:0] grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_ap_start;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_ap_done;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_ap_idle;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_ap_ready;
-reg   [0:0] grp_RMS_NORM_TO_BUF_fu_1629_final_norm;
-reg   [30:0] grp_RMS_NORM_TO_BUF_fu_1629_requant_M;
-reg   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_requant_n;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
-wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
-wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
-wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
-wire    grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
-wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
-wire    grp_RES_ADD_TO_BUF_fu_1654_ap_start;
-wire    grp_RES_ADD_TO_BUF_fu_1654_ap_done;
-wire    grp_RES_ADD_TO_BUF_fu_1654_ap_idle;
-wire    grp_RES_ADD_TO_BUF_fu_1654_ap_ready;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-wire   [5:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
-wire   [4:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-wire   [7:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-wire   [4:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-wire    grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-wire   [7:0] grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-wire    grp_read_i32_fu_1672_ap_start;
-wire    grp_read_i32_fu_1672_ap_done;
-wire    grp_read_i32_fu_1672_ap_idle;
-wire    grp_read_i32_fu_1672_ap_ready;
-reg   [7:0] grp_read_i32_fu_1672_byte_addr;
-wire   [5:0] grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-wire    grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-wire   [5:0] grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-wire    grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-wire   [5:0] grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-wire    grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-wire   [5:0] grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-wire    grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-wire   [5:0] grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-wire    grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_idle;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_ready;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_55_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_55_out_ap_vld;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_39_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_39_out_ap_vld;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_23_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_23_out_ap_vld;
-wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_out;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_out_ap_vld;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_done;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_idle;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_ready;
-wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-wire   [7:0] grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-wire    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-wire   [7:0] grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-reg   [7:0] retval_0_i_i_ph_i_reg_790;
-wire   [0:0] cntrl_reset_n_read_read_fu_400_p2;
-reg   [14:0] ap_phi_mux_debug_axi_sig_accum_0_i_lcssa_i_phi_fu_815_p4;
-reg   [14:0] debug_axi_sig_accum_0_i_lcssa_i_reg_811;
-reg    ap_predicate_op230_call_state6;
-reg    ap_block_state6_on_subcall_done;
-reg   [0:0] write_flag_0_reg_822;
-wire    ap_CS_fsm_state3;
-wire    ap_CS_fsm_state7;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_done;
+reg    ap_predicate_pred264_state72;
+reg    ap_predicate_pred279_state72;
+wire    ap_CS_fsm_state73;
+reg   [0:0] icmp_ln148_4_reg_4200;
+reg    ap_predicate_pred292_state73;
+reg    ap_predicate_pred297_state73;
+wire    ap_CS_fsm_state74;
+reg   [0:0] icmp_ln148_2_reg_4208;
+reg    ap_predicate_pred310_state74;
+reg    ap_predicate_pred315_state74;
+wire   [0:0] tmp_473_read_fu_350_p2;
+wire   [0:0] tmp_475_read_fu_362_p2;
+wire   [7:0] next_state_load_fu_1750_p1;
+wire   [0:0] icmp_ln650_fu_1754_p2;
+reg   [0:0] icmp_ln650_reg_3907;
+wire   [0:0] icmp_ln651_fu_1760_p2;
+reg   [0:0] icmp_ln651_reg_3912;
+reg   [31:0] req_instruction_load_reg_3917;
+wire   [7:0] req_op_load_load_fu_1770_p1;
+reg   [7:0] req_op_load_reg_3923;
+wire   [4:0] trunc_ln780_fu_1776_p1;
+reg   [7:0] layer_reg_3933;
+reg   [0:0] mac_ready_load_reg_3939;
+reg   [0:0] mac_complete_load_reg_3947;
+wire   [0:0] grp_fu_1647_p2;
+reg   [0:0] icmp_ln786_reg_3976;
+wire   [0:0] grp_fu_1652_p2;
+reg   [0:0] icmp_ln786_1_reg_3981;
+wire   [0:0] mac_start_3_fu_2151_p2;
+wire    ap_CS_fsm_state2;
+wire   [2:0] grp_fu_1667_p3;
+wire   [0:0] mac_start_2_fu_2161_p2;
+wire    ap_CS_fsm_state4;
+wire   [0:0] mac_start_1_fu_2171_p2;
+wire    ap_CS_fsm_state6;
+wire   [30:0] M_6_fu_2182_p9;
+reg   [30:0] M_6_reg_4022;
+wire    ap_CS_fsm_state8;
+wire   [5:0] n_6_fu_2203_p9;
+reg   [5:0] n_6_reg_4027;
+wire   [7:0] zext_ln689_1_fu_2224_p1;
+reg   [7:0] zext_ln689_1_reg_4032;
 wire    ap_CS_fsm_state9;
+wire   [0:0] do_compute_fu_2266_p2;
+reg   [0:0] do_compute_reg_4040;
+wire   [0:0] mac_start_fu_2345_p2;
 wire    ap_CS_fsm_state11;
-reg   [0:0] ap_phi_mux_mac_start_4_phi_fu_867_p22;
-reg   [0:0] mac_start_4_reg_863;
-reg   [2:0] ap_phi_mux_next_state_8_phi_fu_903_p22;
-reg   [2:0] next_state_8_reg_898;
-reg   [0:0] use_bias_0_i_ph_i_reg_934;
-reg   [0:0] act_is_i16_0_i_ph_i_reg_954;
-reg   [6:0] bias_byte_base_0_i_ph_i_reg_974;
-reg   [7:0] weight_nibble_base_0_i_ph_i_reg_995;
-reg   [4:0] out_count_0_i_ph_i_reg_1016;
-reg   [4:0] vec_count_0_i_ph_i_reg_1037;
-reg   [31:0] storemerge277_i_reg_1057;
-wire   [0:0] icmp_ln144_fu_2612_p2;
-reg   [31:0] storemerge278_i_reg_1069;
-reg   [31:0] storemerge279_i_reg_1081;
-reg   [31:0] storemerge280_i_reg_1093;
-reg   [0:0] next_state_3_reg_1105;
-reg   [0:0] main_mem_read_request_flag_0_reg_1118;
-wire   [0:0] or_ln752_fu_2101_p2;
-wire   [0:0] empty_318_fu_2267_p2;
+wire   [8:0] zext_ln137_fu_2350_p1;
+reg   [8:0] zext_ln137_reg_4081;
+wire    ap_CS_fsm_state12;
+wire   [7:0] zext_ln137_1_fu_2354_p1;
+reg   [7:0] zext_ln137_1_reg_4088;
+wire   [5:0] zext_ln137_2_fu_2358_p1;
+reg   [5:0] zext_ln137_2_reg_4096;
+wire   [62:0] zext_ln355_fu_2362_p1;
+reg   [62:0] zext_ln355_reg_4101;
+wire   [62:0] zext_ln356_fu_2382_p1;
+reg   [62:0] zext_ln356_reg_4106;
+wire   [62:0] zext_ln215_fu_2386_p1;
+reg   [62:0] zext_ln215_reg_4112;
+wire   [62:0] zext_ln355_2_fu_2390_p1;
+reg   [62:0] zext_ln355_2_reg_4118;
+wire   [62:0] zext_ln356_16_fu_2410_p1;
+reg   [62:0] zext_ln356_16_reg_4123;
+wire   [62:0] zext_ln141_fu_2414_p1;
+reg   [62:0] zext_ln141_reg_4129;
+wire   [63:0] zext_ln144_fu_2427_p1;
+reg   [63:0] zext_ln144_reg_4141;
+wire    ap_CS_fsm_state13;
+wire   [8:0] zext_ln144_1_fu_2431_p1;
+reg   [8:0] zext_ln144_1_reg_4147;
+wire   [3:0] trunc_ln144_fu_2435_p1;
+reg   [3:0] trunc_ln144_reg_4152;
+wire   [2:0] lshr_ln4_fu_2439_p4;
+reg   [2:0] lshr_ln4_reg_4158;
+wire   [63:0] zext_ln141_1_fu_2449_p1;
+reg   [63:0] zext_ln141_1_reg_4166;
+wire   [4:0] add_ln144_fu_2453_p2;
+reg   [4:0] add_ln144_reg_4174;
+wire   [5:0] tile_out_count_fu_2474_p3;
+reg   [5:0] tile_out_count_reg_4179;
+wire   [0:0] icmp_ln148_fu_2482_p2;
+wire   [0:0] or_ln148_fu_2488_p2;
+reg   [0:0] or_ln148_reg_4191;
+wire   [4:0] tmp_478_fu_2517_p4;
+reg   [4:0] tmp_478_reg_4195;
+wire    ap_CS_fsm_state27;
+wire   [0:0] icmp_ln148_4_fu_2526_p2;
+wire   [0:0] or_ln148_1_fu_2532_p2;
+reg   [0:0] or_ln148_1_reg_4204;
+wire   [0:0] icmp_ln148_2_fu_2555_p2;
+wire    ap_CS_fsm_state41;
+wire   [0:0] or_ln148_2_fu_2560_p2;
+reg   [0:0] or_ln148_2_reg_4212;
+wire   [3:0] tmp_479_fu_2584_p4;
+reg   [3:0] tmp_479_reg_4216;
+wire    ap_CS_fsm_state55;
+wire   [0:0] icmp_ln148_5_fu_2593_p2;
+reg   [0:0] icmp_ln148_5_reg_4221;
+wire   [0:0] or_ln148_3_fu_2599_p2;
+reg   [0:0] or_ln148_3_reg_4225;
+wire   [7:0] add_ln150_3_fu_2617_p2;
+reg   [7:0] add_ln150_3_reg_4229;
+wire   [31:0] grp_read_i32_fu_1576_ap_return;
+wire    ap_CS_fsm_state69;
+reg   [3:0] tmp_74_reg_4239;
+wire   [8:0] tmp_75_fu_2636_p3;
+reg   [8:0] tmp_75_reg_4245;
+wire    ap_CS_fsm_state70;
+wire   [8:0] add_ln183_fu_2644_p2;
+reg   [8:0] add_ln183_reg_4250;
+wire   [8:0] add_ln183_1_fu_2650_p2;
+reg   [8:0] add_ln183_1_reg_4255;
+wire   [63:0] p_cast49_fu_2663_p1;
+reg   [63:0] p_cast49_reg_4260;
+wire   [1:0] grp_fu_1674_p4;
+reg   [1:0] tmp_232_reg_4266;
+wire   [63:0] zext_ln183_fu_2675_p1;
+reg   [63:0] zext_ln183_reg_4274;
+wire   [63:0] p_cast51_fu_2687_p1;
+reg   [63:0] p_cast51_reg_4280;
+wire   [63:0] zext_ln193_fu_2711_p1;
+reg   [63:0] zext_ln193_reg_4295;
+reg   [7:0] trunc_ln578_s_reg_4303;
+reg   [7:0] trunc_ln579_s_reg_4308;
+reg   [7:0] trunc_ln578_1_reg_4313;
+reg   [7:0] trunc_ln579_1_reg_4318;
+reg   [7:0] trunc_ln578_2_reg_4323;
+wire    ap_CS_fsm_state75;
+reg   [7:0] trunc_ln579_2_reg_4328;
+wire   [62:0] add_ln356_7_fu_3528_p2;
+reg   [62:0] add_ln356_7_reg_4333;
+wire   [62:0] add_ln356_6_fu_3649_p2;
+reg   [62:0] add_ln356_6_reg_4338;
+wire   [0:0] xor_ln751_fu_3785_p2;
+wire    ap_CS_fsm_state77;
+wire   [7:0] select_ln751_fu_3790_p3;
+wire   [7:0] zext_ln689_fu_3797_p1;
+reg   [7:0] zext_ln689_reg_4353;
+wire    ap_CS_fsm_state78;
+wire   [0:0] or_ln705_fu_3811_p2;
+reg   [0:0] or_ln705_reg_4358;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_done;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_idle;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_ready;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+wire   [5:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
+wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+wire   [7:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+wire   [4:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+wire    grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+wire   [7:0] grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_ap_start;
+wire    grp_ARGMAX_TO_BUF_fu_1515_ap_done;
+wire    grp_ARGMAX_TO_BUF_fu_1515_ap_idle;
+wire    grp_ARGMAX_TO_BUF_fu_1515_ap_ready;
+wire   [5:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+wire   [5:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+wire   [5:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+wire   [5:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+wire   [5:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+wire   [4:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+wire   [7:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+wire   [4:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
+wire   [7:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
+wire   [4:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+wire   [7:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+wire   [4:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
+wire    grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
+wire   [7:0] grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_ap_start;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_ap_done;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_ap_idle;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_ap_ready;
+reg   [0:0] grp_RMS_NORM_TO_BUF_fu_1533_final_norm;
+reg   [30:0] grp_RMS_NORM_TO_BUF_fu_1533_requant_M;
+reg   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_requant_n;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+wire   [5:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
+wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
+wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
+wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+wire   [4:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
+wire    grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
+wire   [7:0] grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
+wire    grp_RES_ADD_TO_BUF_fu_1558_ap_start;
+wire    grp_RES_ADD_TO_BUF_fu_1558_ap_done;
+wire    grp_RES_ADD_TO_BUF_fu_1558_ap_idle;
+wire    grp_RES_ADD_TO_BUF_fu_1558_ap_ready;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+wire   [5:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
+wire   [4:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+wire   [7:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+wire   [4:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+wire    grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+wire   [7:0] grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+wire    grp_read_i32_fu_1576_ap_start;
+wire    grp_read_i32_fu_1576_ap_done;
+wire    grp_read_i32_fu_1576_ap_idle;
+wire    grp_read_i32_fu_1576_ap_ready;
+reg   [7:0] grp_read_i32_fu_1576_byte_addr;
+wire   [5:0] grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+wire    grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+wire   [5:0] grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+wire    grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+wire   [5:0] grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+wire    grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+wire   [5:0] grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+wire    grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+wire   [5:0] grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+wire    grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_idle;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_ready;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_55_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_55_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_39_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_39_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_23_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_23_out_ap_vld;
+wire   [31:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_out;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_out_ap_vld;
+wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+wire   [5:0] grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_done;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_idle;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_ready;
+wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+wire   [7:0] grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+wire   [4:0] grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+wire    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+wire   [7:0] grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+reg   [0:0] write_flag_0_reg_752;
+wire   [0:0] ctrl_mem_0_read_read_fu_368_p2;
+wire    ap_CS_fsm_state3;
+wire    ap_CS_fsm_state5;
+wire    ap_CS_fsm_state7;
+reg    ap_predicate_op216_call_state9;
+reg    ap_block_state9_on_subcall_done;
+wire    ap_CS_fsm_state10;
+reg   [0:0] ap_phi_mux_mac_start_4_phi_fu_794_p20;
+reg   [0:0] mac_start_4_reg_790;
+reg   [2:0] ap_phi_mux_next_state_8_phi_fu_827_p20;
+reg   [2:0] next_state_8_reg_822;
+reg   [0:0] use_bias_0_i_ph_i_reg_855;
+reg   [0:0] act_is_i16_0_i_ph_i_reg_875;
+reg   [6:0] bias_byte_base_0_i_ph_i_reg_895;
+reg   [7:0] weight_nibble_base_0_i_ph_i_reg_916;
+reg   [4:0] out_count_0_i_ph_i_reg_937;
+reg   [4:0] vec_count_0_i_ph_i_reg_958;
+reg   [31:0] storemerge254_i_reg_978;
+wire   [0:0] icmp_ln144_fu_2421_p2;
+reg   [31:0] storemerge255_i_reg_990;
+reg   [31:0] storemerge256_i_reg_1002;
+reg   [31:0] storemerge257_i_reg_1014;
+reg   [0:0] next_state_3_reg_1026;
+reg   [0:0] main_mem_read_request_flag_0_reg_1039;
+wire   [0:0] or_ln715_fu_1958_p2;
+wire   [0:0] empty_318_fu_2106_p2;
+wire    ap_CS_fsm_state79;
+reg    ap_block_state79_on_subcall_done;
+reg   [0:0] main_mem_read_request_new_0_reg_1077;
+reg   [0:0] main_mem_write_request_flag_0_reg_1113;
+reg   [0:0] main_mem_write_request_new_0_reg_1151;
+reg   [0:0] main_mem_op_flag_0_reg_1190;
+reg   [31:0] main_mem_op_new_0_reg_1228;
+reg   [0:0] write_flag_1_reg_1264;
+reg   [0:0] compute_error_1_reg_1302;
+reg   [7:0] next_state_9_reg_1341;
+reg   [0:0] compute_ready_new_0_reg_1377;
 wire    ap_CS_fsm_state80;
-reg    ap_block_state80_on_subcall_done;
-reg   [0:0] main_mem_read_request_new_0_reg_1156;
-reg   [0:0] main_mem_write_request_flag_0_reg_1192;
-reg   [0:0] main_mem_write_request_new_0_reg_1230;
-reg   [0:0] main_mem_op_flag_0_reg_1269;
-reg   [31:0] main_mem_op_new_0_reg_1307;
-reg   [0:0] write_flag_1_reg_1343;
-reg   [0:0] error_1_reg_1381;
-reg   [7:0] next_state_9_reg_1420;
-reg   [0:0] compute_ready_new_0_reg_1456;
-wire    ap_CS_fsm_state81;
-reg   [0:0] compute_done_new_0_reg_1467;
-wire   [0:0] ap_phi_mux_main_mem_read_request_flag_1_phi_fu_1482_p4;
-reg   [0:0] main_mem_read_request_flag_1_reg_1478;
-reg   [0:0] main_mem_read_request_new_1_reg_1490;
-wire   [0:0] ap_phi_mux_main_mem_write_request_flag_1_phi_fu_1506_p4;
-reg   [0:0] main_mem_write_request_flag_1_reg_1502;
-reg   [0:0] main_mem_write_request_new_1_reg_1514;
-wire   [0:0] ap_phi_mux_main_mem_op_flag_1_phi_fu_1530_p4;
-reg   [0:0] main_mem_op_flag_1_reg_1526;
-reg   [31:0] main_mem_op_new_1_reg_1538;
-reg   [0:0] write_flag_2_reg_1550;
-reg   [0:0] error_2_reg_1562;
-reg    grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start_reg;
+reg   [0:0] compute_done_new_0_reg_1388;
+wire   [0:0] ap_phi_mux_main_mem_read_request_flag_1_phi_fu_1403_p4;
+reg   [0:0] main_mem_read_request_flag_1_reg_1399;
+reg   [0:0] main_mem_read_request_new_1_reg_1411;
+wire   [0:0] ap_phi_mux_main_mem_write_request_flag_1_phi_fu_1427_p4;
+reg   [0:0] main_mem_write_request_flag_1_reg_1423;
+reg   [0:0] main_mem_write_request_new_1_reg_1435;
+wire   [0:0] ap_phi_mux_main_mem_op_flag_1_phi_fu_1451_p4;
+reg   [0:0] main_mem_op_flag_1_reg_1447;
+reg   [31:0] main_mem_op_new_1_reg_1459;
+reg   [0:0] write_flag_2_reg_1471;
+reg   [0:0] compute_error_2_reg_1483;
+reg    grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start_reg;
 wire    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_out;
 wire    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_out;
-reg    grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start_reg;
-wire    ap_CS_fsm_state5;
-reg    grp_ARGMAX_TO_BUF_fu_1611_ap_start_reg;
+reg    grp_ARGMAX_TO_BUF_fu_1515_ap_start_reg;
 wire    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1_out;
 wire    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1_out;
-reg    grp_RMS_NORM_TO_BUF_fu_1629_ap_start_reg;
-reg    grp_RES_ADD_TO_BUF_fu_1654_ap_start_reg;
-reg    grp_read_i32_fu_1672_ap_start_reg;
-reg   [81:0] ap_NS_fsm;
-wire    ap_NS_fsm_state15;
-wire    ap_NS_fsm_state29;
-wire    ap_NS_fsm_state43;
-wire    ap_NS_fsm_state57;
-wire   [7:0] add_ln150_fu_2702_p2;
-wire    ap_CS_fsm_state15;
-wire   [7:0] add_ln150_1_fu_2740_p2;
-wire    ap_CS_fsm_state29;
-wire   [7:0] add_ln150_2_fu_2769_p2;
-wire    ap_CS_fsm_state43;
-wire    ap_CS_fsm_state57;
-wire    ap_CS_fsm_state27;
-wire    ap_CS_fsm_state41;
-wire    ap_CS_fsm_state55;
-wire    ap_CS_fsm_state69;
-reg    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start_reg;
-reg   [31:0] acc_55_loc_fu_370;
-reg   [31:0] acc_39_loc_fu_366;
-reg   [31:0] acc_23_loc_fu_362;
-reg   [31:0] acc_loc_fu_358;
-reg    grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start_reg;
-wire   [63:0] zext_ln826_fu_2083_p1;
-wire   [63:0] idxprom125_i_i3_fu_2460_p1;
-wire   [63:0] zext_ln576_fu_2911_p1;
-reg    ap_predicate_pred1478_state73;
-wire   [63:0] zext_ln580_fu_2951_p1;
-reg    ap_predicate_pred1489_state73;
-reg    ap_predicate_pred266_state74;
-wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_796_gep_fu_590_p3;
-reg    ap_predicate_pred281_state74;
-wire   [63:0] zext_ln576_1_fu_3173_p1;
-reg    ap_predicate_pred1504_state74;
-reg    ap_predicate_pred1510_state74;
-wire   [63:0] zext_ln580_1_fu_3338_p1;
-reg    ap_predicate_pred1517_state75;
-reg    ap_predicate_pred1523_state75;
-wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_811_gep_fu_654_p3;
-reg    ap_predicate_pred1528_state75;
-wire   [63:0] zext_ln576_2_fu_3425_p1;
-reg    ap_predicate_pred1534_state75;
-reg    ap_predicate_pred1540_state75;
-wire   [63:0] zext_ln580_2_fu_3590_p1;
-reg    ap_predicate_pred1547_state76;
-reg    ap_predicate_pred1553_state76;
-wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_819_gep_fu_718_p3;
-reg    ap_predicate_pred1558_state76;
-wire   [63:0] zext_ln576_3_fu_3677_p1;
-reg    ap_predicate_pred1566_state76;
-reg    ap_predicate_pred1572_state76;
-wire   [63:0] zext_ln580_3_fu_3852_p1;
-wire    ap_CS_fsm_state77;
-reg    ap_predicate_pred1584_state77;
-reg    ap_predicate_pred1590_state77;
-wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_827_gep_fu_782_p3;
-reg    ap_predicate_pred1595_state77;
-wire   [7:0] trunc_ln755_fu_2119_p1;
-wire   [7:0] trunc_ln735_fu_2291_p1;
-wire   [0:0] xor_ln83_fu_2371_p2;
-wire   [0:0] compute_done_1_load_load_fu_2383_p1;
-wire    ap_CS_fsm_state82;
-reg   [4:0] out_base_fu_378;
+reg    grp_RMS_NORM_TO_BUF_fu_1533_ap_start_reg;
+reg    grp_RES_ADD_TO_BUF_fu_1558_ap_start_reg;
+reg    grp_read_i32_fu_1576_ap_start_reg;
+reg   [80:0] ap_NS_fsm;
+wire    ap_NS_fsm_state14;
+wire    ap_NS_fsm_state28;
+wire    ap_NS_fsm_state42;
+wire    ap_NS_fsm_state56;
+wire   [7:0] add_ln150_fu_2511_p2;
+wire    ap_CS_fsm_state14;
+wire   [7:0] add_ln150_1_fu_2549_p2;
+wire    ap_CS_fsm_state28;
+wire   [7:0] add_ln150_2_fu_2578_p2;
+wire    ap_CS_fsm_state42;
+wire    ap_CS_fsm_state56;
+wire    ap_CS_fsm_state26;
+wire    ap_CS_fsm_state40;
+wire    ap_CS_fsm_state54;
+wire    ap_CS_fsm_state68;
+reg    grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start_reg;
+reg   [31:0] acc_55_loc_fu_342;
+reg   [31:0] acc_39_loc_fu_338;
+reg   [31:0] acc_23_loc_fu_334;
+reg   [31:0] acc_loc_fu_330;
+reg    grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start_reg;
+wire   [63:0] zext_ln788_fu_1940_p1;
+wire   [63:0] idxprom125_i_i3_fu_2327_p1;
+wire   [63:0] zext_ln574_fu_2720_p1;
+reg    ap_predicate_pred1348_state72;
+wire   [63:0] zext_ln578_fu_2760_p1;
+reg    ap_predicate_pred1359_state72;
+reg    ap_predicate_pred264_state73;
+wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_786_gep_fu_552_p3;
+reg    ap_predicate_pred279_state73;
+wire   [63:0] zext_ln574_1_fu_2982_p1;
+reg    ap_predicate_pred1374_state73;
+reg    ap_predicate_pred1380_state73;
+wire   [63:0] zext_ln578_1_fu_3147_p1;
+reg    ap_predicate_pred1387_state74;
+reg    ap_predicate_pred1393_state74;
+wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_801_gep_fu_616_p3;
+reg    ap_predicate_pred1398_state74;
+wire   [63:0] zext_ln574_2_fu_3234_p1;
+reg    ap_predicate_pred1404_state74;
+reg    ap_predicate_pred1410_state74;
+wire   [63:0] zext_ln578_2_fu_3399_p1;
+reg    ap_predicate_pred1417_state75;
+reg    ap_predicate_pred1423_state75;
+wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_809_gep_fu_680_p3;
+reg    ap_predicate_pred1428_state75;
+wire   [63:0] zext_ln574_3_fu_3486_p1;
+reg    ap_predicate_pred1436_state75;
+reg    ap_predicate_pred1442_state75;
+wire   [63:0] zext_ln578_3_fu_3661_p1;
+wire    ap_CS_fsm_state76;
+reg    ap_predicate_pred1454_state76;
+reg    ap_predicate_pred1460_state76;
+wire   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_817_gep_fu_744_p3;
+reg    ap_predicate_pred1465_state76;
+wire   [7:0] trunc_ln718_fu_1976_p1;
+wire   [7:0] trunc_ln698_fu_2130_p1;
+wire   [0:0] xor_ln83_fu_2238_p2;
+wire   [0:0] compute_done_1_load_load_fu_2250_p1;
+wire    ap_CS_fsm_state81;
+reg   [4:0] out_base_fu_346;
 reg    requant_params_REQUANT1_M_L_ce0_local;
 reg    requant_params_REQUANT1_N_L_ce0_local;
 reg    requant_params_REQUANT3_M_L_ce0_local;
 reg    requant_params_REQUANT3_N_L_ce0_local;
+reg    requant_params_REQUANT2_M_L_ce0_local;
+reg    requant_params_REQUANT2_N_L_ce0_local;
+reg    requant_params_REQUANT4_M_L_ce0_local;
+reg    requant_params_REQUANT4_N_L_ce0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1_local;
 reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local;
-wire   [7:0] trunc_ln271_fu_2337_p1;
+wire   [7:0] trunc_ln576_fu_2726_p1;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1_local;
 reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_local;
 reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local;
 reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local;
-wire   [7:0] trunc_ln578_fu_2917_p1;
-wire   [7:0] trunc_ln572_fu_3071_p1;
-wire   [7:0] select_ln397_3_fu_3120_p3;
-wire   [7:0] select_ln397_1_fu_3157_p3;
-wire   [7:0] trunc_ln578_10_fu_3179_p1;
-wire   [7:0] trunc_ln572_32_fu_3311_p1;
-wire   [7:0] trunc_ln578_11_fu_3431_p1;
-wire   [7:0] trunc_ln572_33_fu_3563_p1;
-wire   [7:0] select_ln397_11_fu_3624_p3;
-wire   [7:0] select_ln397_9_fu_3661_p3;
-wire   [7:0] trunc_ln578_12_fu_3683_p1;
-wire   [7:0] trunc_ln572_34_fu_3820_p1;
+wire   [7:0] trunc_ln570_fu_2880_p1;
+wire   [7:0] select_ln358_3_fu_2929_p3;
+wire   [7:0] select_ln358_1_fu_2966_p3;
+wire   [7:0] trunc_ln576_10_fu_2988_p1;
+wire   [7:0] trunc_ln570_32_fu_3120_p1;
+wire   [7:0] trunc_ln576_11_fu_3240_p1;
+wire   [7:0] trunc_ln570_33_fu_3372_p1;
+wire   [7:0] select_ln358_11_fu_3433_p3;
+wire   [7:0] select_ln358_9_fu_3470_p3;
+wire   [7:0] trunc_ln576_12_fu_3492_p1;
+wire   [7:0] trunc_ln570_34_fu_3629_p1;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1_local;
 reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local;
-wire   [7:0] zext_ln272_fu_2352_p1;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1_local;
 reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local;
 reg   [7:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local;
 reg    transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local;
 reg   [4:0] transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local;
-wire   [7:0] select_ln397_7_fu_3372_p3;
-wire   [7:0] select_ln397_5_fu_3409_p3;
-wire   [7:0] select_ln397_15_fu_3906_p3;
-wire   [7:0] select_ln397_13_fu_3963_p3;
-reg    requant_params_REQUANT2_M_L_ce0_local;
-reg    requant_params_REQUANT2_N_L_ce0_local;
-reg    requant_params_REQUANT4_M_L_ce0_local;
-reg    requant_params_REQUANT4_N_L_ce0_local;
-reg  signed [31:0] grp_fu_1739_p0;
-wire  signed [62:0] sext_ln392_1_fu_2968_p1;
-wire  signed [62:0] sext_ln392_fu_3087_p1;
-wire  signed [62:0] sext_ln392_3_fu_3211_p1;
-wire  signed [62:0] sext_ln392_2_fu_3327_p1;
-wire  signed [62:0] sext_ln392_5_fu_3463_p1;
-wire  signed [62:0] sext_ln392_4_fu_3579_p1;
-wire  signed [62:0] sext_ln392_7_fu_3715_p1;
-wire  signed [62:0] sext_ln392_6_fu_3836_p1;
-reg   [30:0] grp_fu_1739_p1;
-reg    ap_predicate_pred1822_state76;
-reg    ap_predicate_pred1826_state76;
-wire   [62:0] grp_fu_1804_p2;
-wire   [62:0] grp_fu_1809_p2;
-wire   [23:0] grp_fu_1814_p4;
-wire   [62:0] grp_fu_1830_p2;
-wire   [62:0] grp_fu_1835_p2;
-wire   [23:0] grp_fu_1840_p4;
-wire   [2:0] tmp_fu_2059_p4;
-wire   [0:0] icmp_ln819_fu_2069_p2;
-wire   [4:0] trunc_ln818_1_fu_2055_p1;
-wire   [4:0] layer_4_fu_2075_p3;
-wire   [0:0] icmp_ln752_fu_2095_p2;
-wire   [0:0] empty_297_fu_2153_p2;
-wire   [0:0] empty_fu_2147_p2;
-wire   [0:0] empty_299_fu_2165_p2;
-wire   [0:0] empty_298_fu_2159_p2;
-wire   [0:0] empty_301_fu_2177_p2;
-wire   [0:0] empty_300_fu_2171_p2;
-wire   [0:0] empty_302_fu_2183_p2;
-wire   [0:0] empty_305_fu_2195_p2;
-wire   [0:0] empty_304_fu_2189_p2;
-wire   [0:0] empty_307_fu_2207_p2;
-wire   [0:0] empty_306_fu_2201_p2;
-wire   [0:0] empty_309_fu_2219_p2;
-wire   [0:0] empty_308_fu_2213_p2;
-wire   [0:0] empty_311_fu_2231_p2;
-wire   [0:0] empty_310_fu_2225_p2;
-wire   [0:0] empty_313_fu_2243_p2;
-wire   [0:0] empty_312_fu_2237_p2;
-wire   [0:0] empty_315_fu_2255_p2;
-wire   [0:0] empty_314_fu_2249_p2;
-wire   [0:0] empty_316_fu_2261_p2;
-wire   [0:0] xor_ln887_fu_2313_p2;
-wire   [0:0] xor_ln870_fu_2323_p2;
-wire   [6:0] tmp_230_fu_2342_p4;
-wire   [0:0] or_ln83_fu_2365_p2;
-wire   [0:0] xor_ln86_fu_2393_p2;
-wire   [2:0] tmp_475_fu_2437_p4;
-wire   [0:0] icmp_ln138_fu_2446_p2;
-wire   [4:0] trunc_ln137_fu_2434_p1;
-wire   [4:0] layer_5_fu_2452_p3;
-wire   [0:0] xor_ln848_fu_2473_p2;
-wire   [30:0] M_6_fu_2489_p7;
-wire   [1:0] sel_tmp2_fu_2483_p3;
-wire   [5:0] n_6_fu_2510_p7;
-wire   [0:0] xor_ln800_fu_2531_p2;
-wire   [5:0] add_ln394_fu_2557_p2;
-wire   [36:0] zext_ln394_1_fu_2563_p1;
-wire   [36:0] shl_ln394_fu_2567_p2;
-wire   [5:0] add_ln394_1_fu_2585_p2;
-wire   [34:0] zext_ln394_3_fu_2591_p1;
-wire   [34:0] shl_ln394_1_fu_2595_p2;
-wire   [5:0] zext_ln144_2_fu_2656_p1;
-wire   [0:0] icmp_ln144_1_fu_2650_p2;
-wire   [5:0] sub_ln144_fu_2660_p2;
-wire   [5:0] shl_ln150_3_fu_2691_p3;
-wire   [7:0] zext_ln150_fu_2698_p1;
-wire   [5:0] or_ln_fu_2729_p3;
-wire   [7:0] zext_ln150_1_fu_2736_p1;
-wire   [5:0] or_ln150_1_fu_2757_p3;
-wire   [7:0] zext_ln150_2_fu_2765_p1;
-wire   [5:0] or_ln150_2_fu_2796_p3;
-wire   [7:0] zext_ln150_3_fu_2804_p1;
-wire   [4:0] empty_319_fu_2813_p0;
-wire   [4:0] empty_319_fu_2813_p1;
-wire   [8:0] empty_319_fu_2813_p2;
-wire   [3:0] tmp_233_fu_2847_p3;
-wire   [3:0] tmp_235_fu_2858_p3;
-wire   [3:0] tmp_236_fu_2870_p3;
-wire   [2:0] tmp_237_fu_2894_p3;
-wire   [4:0] shl_ln576_fu_2906_p2;
-wire  signed [31:0] trunc_ln578_fu_2917_p0;
-wire  signed [31:0] trunc_ln18_fu_2922_p1;
-wire  signed [31:0] trunc_ln19_fu_2933_p1;
-wire   [4:0] or_ln9_fu_2944_p3;
-wire  signed [31:0] trunc_ln20_fu_2957_p1;
-wire  signed [31:0] sext_ln392_1_fu_2968_p0;
-wire  signed [31:0] prod_fu_2973_p1;
-wire   [45:0] prod_fu_2973_p3;
-wire  signed [31:0] tmp_479_fu_2985_p1;
-wire   [0:0] tmp_479_fu_2985_p3;
-wire   [46:0] select_ln207_fu_2993_p3;
-wire  signed [46:0] sext_ln203_fu_2981_p1;
-wire   [46:0] rounded_fu_3001_p2;
-wire   [16:0] tmp_480_fu_3017_p4;
-wire   [31:0] scaled_fu_3007_p4;
-wire   [0:0] icmp_ln209_fu_3027_p2;
-wire   [0:0] icmp_ln210_fu_3033_p2;
-wire   [0:0] or_ln211_fu_3057_p2;
-wire   [15:0] select_ln211_fu_3049_p3;
-wire   [15:0] trunc_ln16_fu_3039_p4;
-wire   [15:0] v_fu_3063_p3;
-wire  signed [31:0] sext_ln392_fu_3087_p0;
-wire   [30:0] trunc_ln395_1_fu_3092_p1;
-wire   [0:0] grp_fu_1824_p2;
-wire   [0:0] icmp_ln398_1_fu_3096_p2;
-wire   [0:0] or_ln397_1_fu_3114_p2;
-wire   [7:0] select_ln397_2_fu_3106_p3;
-wire   [7:0] trunc_ln399_1_fu_3102_p1;
-wire   [30:0] trunc_ln395_fu_3129_p1;
-wire   [0:0] grp_fu_1850_p2;
-wire   [0:0] icmp_ln398_fu_3133_p2;
-wire   [0:0] or_ln397_fu_3151_p2;
-wire   [7:0] select_ln397_fu_3143_p3;
-wire   [7:0] trunc_ln399_fu_3139_p1;
-wire   [4:0] shl_ln576_1_fu_3166_p3;
-wire  signed [31:0] trunc_ln578_10_fu_3179_p0;
-wire  signed [31:0] trunc_ln579_s_fu_3183_p1;
-wire  signed [31:0] trunc_ln580_s_fu_3193_p1;
-wire  signed [31:0] trunc_ln581_s_fu_3202_p1;
-wire  signed [31:0] sext_ln392_3_fu_3211_p0;
-wire  signed [31:0] prod_16_fu_3215_p1;
-wire   [45:0] prod_16_fu_3215_p3;
-wire  signed [31:0] tmp_483_fu_3226_p1;
-wire   [0:0] tmp_483_fu_3226_p3;
-wire   [46:0] select_ln207_1_fu_3233_p3;
-wire  signed [46:0] sext_ln203_1_fu_3222_p1;
-wire   [46:0] rounded_18_fu_3241_p2;
-wire   [16:0] tmp_484_fu_3257_p4;
-wire   [31:0] scaled_9_fu_3247_p4;
-wire   [0:0] icmp_ln209_1_fu_3267_p2;
-wire   [0:0] icmp_ln210_1_fu_3273_p2;
-wire   [0:0] or_ln211_1_fu_3297_p2;
-wire   [15:0] select_ln211_2_fu_3289_p3;
-wire   [15:0] trunc_ln211_1_fu_3279_p4;
-wire   [15:0] v_144_fu_3303_p3;
-wire  signed [31:0] sext_ln392_2_fu_3327_p0;
-wire   [4:0] or_ln580_1_fu_3331_p3;
-wire   [30:0] trunc_ln395_3_fu_3344_p1;
-wire   [0:0] icmp_ln398_3_fu_3348_p2;
-wire   [0:0] or_ln397_3_fu_3366_p2;
-wire   [7:0] select_ln397_6_fu_3358_p3;
-wire   [7:0] trunc_ln399_3_fu_3354_p1;
-wire   [30:0] trunc_ln395_2_fu_3381_p1;
-wire   [0:0] icmp_ln398_2_fu_3385_p2;
-wire   [0:0] or_ln397_2_fu_3403_p2;
-wire   [7:0] select_ln397_4_fu_3395_p3;
-wire   [7:0] trunc_ln399_2_fu_3391_p1;
-wire   [4:0] or_ln10_fu_3418_p3;
-wire  signed [31:0] trunc_ln578_11_fu_3431_p0;
-wire  signed [31:0] trunc_ln579_1_fu_3435_p1;
-wire  signed [31:0] trunc_ln580_1_fu_3445_p1;
-wire  signed [31:0] trunc_ln581_1_fu_3454_p1;
-wire  signed [31:0] sext_ln392_5_fu_3463_p0;
-wire  signed [31:0] prod_17_fu_3467_p1;
-wire   [45:0] prod_17_fu_3467_p3;
-wire  signed [31:0] tmp_487_fu_3478_p1;
-wire   [0:0] tmp_487_fu_3478_p3;
-wire   [46:0] select_ln207_2_fu_3485_p3;
-wire  signed [46:0] sext_ln203_2_fu_3474_p1;
-wire   [46:0] rounded_19_fu_3493_p2;
-wire   [16:0] tmp_488_fu_3509_p4;
-wire   [31:0] scaled_12_fu_3499_p4;
-wire   [0:0] icmp_ln209_2_fu_3519_p2;
-wire   [0:0] icmp_ln210_2_fu_3525_p2;
-wire   [0:0] or_ln211_2_fu_3549_p2;
-wire   [15:0] select_ln211_4_fu_3541_p3;
-wire   [15:0] trunc_ln211_2_fu_3531_p4;
-wire   [15:0] v_145_fu_3555_p3;
-wire  signed [31:0] sext_ln392_4_fu_3579_p0;
-wire   [4:0] or_ln580_2_fu_3583_p3;
-wire   [30:0] trunc_ln395_5_fu_3596_p1;
-wire   [0:0] icmp_ln398_5_fu_3600_p2;
-wire   [0:0] or_ln397_5_fu_3618_p2;
-wire   [7:0] select_ln397_10_fu_3610_p3;
-wire   [7:0] trunc_ln399_5_fu_3606_p1;
-wire   [30:0] trunc_ln395_4_fu_3633_p1;
-wire   [0:0] icmp_ln398_4_fu_3637_p2;
-wire   [0:0] or_ln397_4_fu_3655_p2;
-wire   [7:0] select_ln397_8_fu_3647_p3;
-wire   [7:0] trunc_ln399_4_fu_3643_p1;
-wire   [4:0] shl_ln576_3_fu_3670_p3;
-wire  signed [31:0] trunc_ln578_12_fu_3683_p0;
-wire  signed [31:0] trunc_ln579_2_fu_3687_p1;
-wire  signed [31:0] trunc_ln580_2_fu_3697_p1;
-wire  signed [31:0] trunc_ln581_2_fu_3706_p1;
-wire  signed [31:0] sext_ln392_7_fu_3715_p0;
-wire  signed [31:0] prod_18_fu_3724_p1;
-wire   [45:0] prod_18_fu_3724_p3;
-wire  signed [31:0] tmp_491_fu_3735_p1;
-wire   [0:0] tmp_491_fu_3735_p3;
-wire   [46:0] select_ln207_3_fu_3742_p3;
-wire  signed [46:0] sext_ln203_3_fu_3731_p1;
-wire   [46:0] rounded_20_fu_3750_p2;
-wire   [16:0] tmp_492_fu_3766_p4;
-wire   [31:0] scaled_15_fu_3756_p4;
-wire   [0:0] icmp_ln209_3_fu_3776_p2;
-wire   [0:0] icmp_ln210_3_fu_3782_p2;
-wire   [0:0] or_ln211_3_fu_3806_p2;
-wire   [15:0] select_ln211_6_fu_3798_p3;
-wire   [15:0] trunc_ln211_3_fu_3788_p4;
-wire   [15:0] v_146_fu_3812_p3;
-wire  signed [31:0] sext_ln392_6_fu_3836_p0;
-wire   [4:0] or_ln580_3_fu_3845_p3;
-wire   [62:0] scaled_16_fu_3858_p2;
-wire   [23:0] tmp_493_fu_3866_p4;
-wire   [30:0] trunc_ln395_7_fu_3862_p1;
-wire   [0:0] icmp_ln397_7_fu_3876_p2;
-wire   [0:0] icmp_ln398_7_fu_3882_p2;
-wire   [0:0] or_ln397_7_fu_3900_p2;
-wire   [7:0] select_ln397_14_fu_3892_p3;
-wire   [7:0] trunc_ln399_7_fu_3888_p1;
-wire   [62:0] scaled_14_fu_3915_p2;
-wire   [23:0] tmp_490_fu_3923_p4;
-wire   [30:0] trunc_ln395_6_fu_3919_p1;
-wire   [0:0] icmp_ln397_6_fu_3933_p2;
-wire   [0:0] icmp_ln398_6_fu_3939_p2;
-wire   [0:0] or_ln397_6_fu_3957_p2;
-wire   [7:0] select_ln397_12_fu_3949_p3;
-wire   [7:0] trunc_ln399_6_fu_3945_p1;
-wire   [0:0] xor_ln742_fu_3996_p2;
-wire   [0:0] error_write_assign_fu_4019_p2;
+wire   [7:0] select_ln358_7_fu_3181_p3;
+wire   [7:0] select_ln358_5_fu_3218_p3;
+wire   [7:0] select_ln358_15_fu_3715_p3;
+wire   [7:0] select_ln358_13_fu_3772_p3;
+reg  signed [31:0] grp_fu_1643_p0;
+wire  signed [62:0] sext_ln353_1_fu_2777_p1;
+wire  signed [62:0] sext_ln353_fu_2896_p1;
+wire  signed [62:0] sext_ln353_3_fu_3020_p1;
+wire  signed [62:0] sext_ln353_2_fu_3136_p1;
+wire  signed [62:0] sext_ln353_5_fu_3272_p1;
+wire  signed [62:0] sext_ln353_4_fu_3388_p1;
+wire  signed [62:0] sext_ln353_7_fu_3524_p1;
+wire  signed [62:0] sext_ln353_6_fu_3645_p1;
+reg   [30:0] grp_fu_1643_p1;
+reg    ap_predicate_pred1683_state75;
+reg    ap_predicate_pred1687_state75;
+wire   [62:0] grp_fu_1698_p2;
+wire   [62:0] grp_fu_1703_p2;
+wire   [23:0] grp_fu_1708_p4;
+wire   [62:0] grp_fu_1724_p2;
+wire   [62:0] grp_fu_1729_p2;
+wire   [23:0] grp_fu_1734_p4;
+wire   [2:0] tmp_476_fu_1916_p4;
+wire   [0:0] icmp_ln781_fu_1926_p2;
+wire   [4:0] trunc_ln780_1_fu_1912_p1;
+wire   [4:0] layer_4_fu_1932_p3;
+wire   [0:0] icmp_ln715_fu_1952_p2;
+wire   [0:0] empty_299_fu_2004_p2;
+wire   [0:0] empty_298_fu_1998_p2;
+wire   [0:0] empty_301_fu_2016_p2;
+wire   [0:0] empty_300_fu_2010_p2;
+wire   [0:0] empty_302_fu_2022_p2;
+wire   [0:0] empty_305_fu_2034_p2;
+wire   [0:0] empty_304_fu_2028_p2;
+wire   [0:0] empty_307_fu_2046_p2;
+wire   [0:0] empty_306_fu_2040_p2;
+wire   [0:0] empty_309_fu_2058_p2;
+wire   [0:0] empty_308_fu_2052_p2;
+wire   [0:0] empty_311_fu_2070_p2;
+wire   [0:0] empty_310_fu_2064_p2;
+wire   [0:0] empty_313_fu_2082_p2;
+wire   [0:0] empty_312_fu_2076_p2;
+wire   [0:0] empty_315_fu_2094_p2;
+wire   [0:0] empty_314_fu_2088_p2;
+wire   [0:0] empty_316_fu_2100_p2;
+wire   [0:0] xor_ln844_fu_2146_p2;
+wire   [0:0] xor_ln827_fu_2156_p2;
+wire   [0:0] xor_ln810_fu_2166_p2;
+wire   [30:0] M_6_fu_2182_p7;
+wire   [1:0] sel_tmp2_fu_2176_p3;
+wire   [5:0] n_6_fu_2203_p7;
+wire   [0:0] or_ln83_fu_2232_p2;
+wire   [0:0] xor_ln86_fu_2260_p2;
+wire   [2:0] tmp_477_fu_2304_p4;
+wire   [0:0] icmp_ln138_fu_2313_p2;
+wire   [4:0] trunc_ln137_fu_2301_p1;
+wire   [4:0] layer_5_fu_2319_p3;
+wire   [0:0] xor_ln762_fu_2340_p2;
+wire   [5:0] add_ln355_fu_2366_p2;
+wire   [36:0] zext_ln355_1_fu_2372_p1;
+wire   [36:0] shl_ln355_fu_2376_p2;
+wire   [5:0] add_ln355_1_fu_2394_p2;
+wire   [34:0] zext_ln355_3_fu_2400_p1;
+wire   [34:0] shl_ln355_1_fu_2404_p2;
+wire   [5:0] zext_ln144_2_fu_2465_p1;
+wire   [0:0] icmp_ln144_1_fu_2459_p2;
+wire   [5:0] sub_ln144_fu_2469_p2;
+wire   [5:0] shl_ln150_3_fu_2500_p3;
+wire   [7:0] zext_ln150_fu_2507_p1;
+wire   [5:0] or_ln_fu_2538_p3;
+wire   [7:0] zext_ln150_1_fu_2545_p1;
+wire   [5:0] or_ln150_1_fu_2566_p3;
+wire   [7:0] zext_ln150_2_fu_2574_p1;
+wire   [5:0] or_ln150_2_fu_2605_p3;
+wire   [7:0] zext_ln150_3_fu_2613_p1;
+wire   [4:0] empty_319_fu_2622_p0;
+wire   [4:0] empty_319_fu_2622_p1;
+wire   [8:0] empty_319_fu_2622_p2;
+wire   [3:0] tmp_231_fu_2656_p3;
+wire   [3:0] tmp_233_fu_2667_p3;
+wire   [3:0] tmp_234_fu_2679_p3;
+wire   [2:0] tmp_235_fu_2703_p3;
+wire   [4:0] shl_ln574_fu_2715_p2;
+wire  signed [31:0] trunc_ln576_fu_2726_p0;
+wire  signed [31:0] trunc_ln15_fu_2731_p1;
+wire  signed [31:0] trunc_ln16_fu_2742_p1;
+wire   [4:0] or_ln9_fu_2753_p3;
+wire  signed [31:0] trunc_ln17_fu_2766_p1;
+wire  signed [31:0] sext_ln353_1_fu_2777_p0;
+wire  signed [31:0] prod_fu_2782_p1;
+wire   [45:0] prod_fu_2782_p3;
+wire  signed [31:0] tmp_481_fu_2794_p1;
+wire   [0:0] tmp_481_fu_2794_p3;
+wire   [46:0] select_ln207_fu_2802_p3;
+wire  signed [46:0] sext_ln203_fu_2790_p1;
+wire   [46:0] rounded_fu_2810_p2;
+wire   [16:0] tmp_482_fu_2826_p4;
+wire   [31:0] scaled_fu_2816_p4;
+wire   [0:0] icmp_ln209_fu_2836_p2;
+wire   [0:0] icmp_ln210_fu_2842_p2;
+wire   [0:0] or_ln211_fu_2866_p2;
+wire   [15:0] select_ln211_fu_2858_p3;
+wire   [15:0] trunc_ln13_fu_2848_p4;
+wire   [15:0] v_fu_2872_p3;
+wire  signed [31:0] sext_ln353_fu_2896_p0;
+wire   [30:0] trunc_ln356_1_fu_2901_p1;
+wire   [0:0] grp_fu_1718_p2;
+wire   [0:0] icmp_ln359_1_fu_2905_p2;
+wire   [0:0] or_ln358_1_fu_2923_p2;
+wire   [7:0] select_ln358_2_fu_2915_p3;
+wire   [7:0] trunc_ln360_1_fu_2911_p1;
+wire   [30:0] trunc_ln356_fu_2938_p1;
+wire   [0:0] grp_fu_1744_p2;
+wire   [0:0] icmp_ln359_fu_2942_p2;
+wire   [0:0] or_ln358_fu_2960_p2;
+wire   [7:0] select_ln358_fu_2952_p3;
+wire   [7:0] trunc_ln360_fu_2948_p1;
+wire   [4:0] shl_ln574_1_fu_2975_p3;
+wire  signed [31:0] trunc_ln576_10_fu_2988_p0;
+wire  signed [31:0] trunc_ln577_s_fu_2992_p1;
+wire  signed [31:0] trunc_ln578_s_fu_3002_p1;
+wire  signed [31:0] trunc_ln579_s_fu_3011_p1;
+wire  signed [31:0] sext_ln353_3_fu_3020_p0;
+wire  signed [31:0] prod_16_fu_3024_p1;
+wire   [45:0] prod_16_fu_3024_p3;
+wire  signed [31:0] tmp_485_fu_3035_p1;
+wire   [0:0] tmp_485_fu_3035_p3;
+wire   [46:0] select_ln207_1_fu_3042_p3;
+wire  signed [46:0] sext_ln203_1_fu_3031_p1;
+wire   [46:0] rounded_18_fu_3050_p2;
+wire   [16:0] tmp_486_fu_3066_p4;
+wire   [31:0] scaled_9_fu_3056_p4;
+wire   [0:0] icmp_ln209_1_fu_3076_p2;
+wire   [0:0] icmp_ln210_1_fu_3082_p2;
+wire   [0:0] or_ln211_1_fu_3106_p2;
+wire   [15:0] select_ln211_2_fu_3098_p3;
+wire   [15:0] trunc_ln211_1_fu_3088_p4;
+wire   [15:0] v_144_fu_3112_p3;
+wire  signed [31:0] sext_ln353_2_fu_3136_p0;
+wire   [4:0] or_ln578_1_fu_3140_p3;
+wire   [30:0] trunc_ln356_3_fu_3153_p1;
+wire   [0:0] icmp_ln359_3_fu_3157_p2;
+wire   [0:0] or_ln358_3_fu_3175_p2;
+wire   [7:0] select_ln358_6_fu_3167_p3;
+wire   [7:0] trunc_ln360_3_fu_3163_p1;
+wire   [30:0] trunc_ln356_2_fu_3190_p1;
+wire   [0:0] icmp_ln359_2_fu_3194_p2;
+wire   [0:0] or_ln358_2_fu_3212_p2;
+wire   [7:0] select_ln358_4_fu_3204_p3;
+wire   [7:0] trunc_ln360_2_fu_3200_p1;
+wire   [4:0] or_ln10_fu_3227_p3;
+wire  signed [31:0] trunc_ln576_11_fu_3240_p0;
+wire  signed [31:0] trunc_ln577_1_fu_3244_p1;
+wire  signed [31:0] trunc_ln578_1_fu_3254_p1;
+wire  signed [31:0] trunc_ln579_1_fu_3263_p1;
+wire  signed [31:0] sext_ln353_5_fu_3272_p0;
+wire  signed [31:0] prod_17_fu_3276_p1;
+wire   [45:0] prod_17_fu_3276_p3;
+wire  signed [31:0] tmp_489_fu_3287_p1;
+wire   [0:0] tmp_489_fu_3287_p3;
+wire   [46:0] select_ln207_2_fu_3294_p3;
+wire  signed [46:0] sext_ln203_2_fu_3283_p1;
+wire   [46:0] rounded_19_fu_3302_p2;
+wire   [16:0] tmp_490_fu_3318_p4;
+wire   [31:0] scaled_12_fu_3308_p4;
+wire   [0:0] icmp_ln209_2_fu_3328_p2;
+wire   [0:0] icmp_ln210_2_fu_3334_p2;
+wire   [0:0] or_ln211_2_fu_3358_p2;
+wire   [15:0] select_ln211_4_fu_3350_p3;
+wire   [15:0] trunc_ln211_2_fu_3340_p4;
+wire   [15:0] v_145_fu_3364_p3;
+wire  signed [31:0] sext_ln353_4_fu_3388_p0;
+wire   [4:0] or_ln578_2_fu_3392_p3;
+wire   [30:0] trunc_ln356_5_fu_3405_p1;
+wire   [0:0] icmp_ln359_5_fu_3409_p2;
+wire   [0:0] or_ln358_5_fu_3427_p2;
+wire   [7:0] select_ln358_10_fu_3419_p3;
+wire   [7:0] trunc_ln360_5_fu_3415_p1;
+wire   [30:0] trunc_ln356_4_fu_3442_p1;
+wire   [0:0] icmp_ln359_4_fu_3446_p2;
+wire   [0:0] or_ln358_4_fu_3464_p2;
+wire   [7:0] select_ln358_8_fu_3456_p3;
+wire   [7:0] trunc_ln360_4_fu_3452_p1;
+wire   [4:0] shl_ln574_3_fu_3479_p3;
+wire  signed [31:0] trunc_ln576_12_fu_3492_p0;
+wire  signed [31:0] trunc_ln577_2_fu_3496_p1;
+wire  signed [31:0] trunc_ln578_2_fu_3506_p1;
+wire  signed [31:0] trunc_ln579_2_fu_3515_p1;
+wire  signed [31:0] sext_ln353_7_fu_3524_p0;
+wire  signed [31:0] prod_18_fu_3533_p1;
+wire   [45:0] prod_18_fu_3533_p3;
+wire  signed [31:0] tmp_493_fu_3544_p1;
+wire   [0:0] tmp_493_fu_3544_p3;
+wire   [46:0] select_ln207_3_fu_3551_p3;
+wire  signed [46:0] sext_ln203_3_fu_3540_p1;
+wire   [46:0] rounded_20_fu_3559_p2;
+wire   [16:0] tmp_494_fu_3575_p4;
+wire   [31:0] scaled_15_fu_3565_p4;
+wire   [0:0] icmp_ln209_3_fu_3585_p2;
+wire   [0:0] icmp_ln210_3_fu_3591_p2;
+wire   [0:0] or_ln211_3_fu_3615_p2;
+wire   [15:0] select_ln211_6_fu_3607_p3;
+wire   [15:0] trunc_ln211_3_fu_3597_p4;
+wire   [15:0] v_146_fu_3621_p3;
+wire  signed [31:0] sext_ln353_6_fu_3645_p0;
+wire   [4:0] or_ln578_3_fu_3654_p3;
+wire   [62:0] scaled_16_fu_3667_p2;
+wire   [23:0] tmp_495_fu_3675_p4;
+wire   [30:0] trunc_ln356_7_fu_3671_p1;
+wire   [0:0] icmp_ln358_7_fu_3685_p2;
+wire   [0:0] icmp_ln359_7_fu_3691_p2;
+wire   [0:0] or_ln358_7_fu_3709_p2;
+wire   [7:0] select_ln358_14_fu_3701_p3;
+wire   [7:0] trunc_ln360_7_fu_3697_p1;
+wire   [62:0] scaled_14_fu_3724_p2;
+wire   [23:0] tmp_492_fu_3732_p4;
+wire   [30:0] trunc_ln356_6_fu_3728_p1;
+wire   [0:0] icmp_ln358_6_fu_3742_p2;
+wire   [0:0] icmp_ln359_6_fu_3748_p2;
+wire   [0:0] or_ln358_6_fu_3766_p2;
+wire   [7:0] select_ln358_12_fu_3758_p3;
+wire   [7:0] trunc_ln360_6_fu_3754_p1;
+wire   [0:0] xor_ln705_fu_3805_p2;
+wire   [0:0] error_write_assign_fu_3828_p2;
 reg   [0:0] ap_return_preg;
 reg    ap_ST_fsm_state1_blk;
 wire    ap_ST_fsm_state2_blk;
 reg    ap_ST_fsm_state3_blk;
 wire    ap_ST_fsm_state4_blk;
 reg    ap_ST_fsm_state5_blk;
-reg    ap_ST_fsm_state6_blk;
+wire    ap_ST_fsm_state6_blk;
 reg    ap_ST_fsm_state7_blk;
 wire    ap_ST_fsm_state8_blk;
 reg    ap_ST_fsm_state9_blk;
-wire    ap_ST_fsm_state10_blk;
-reg    ap_ST_fsm_state11_blk;
+reg    ap_ST_fsm_state10_blk;
+wire    ap_ST_fsm_state11_blk;
 wire    ap_ST_fsm_state12_blk;
 wire    ap_ST_fsm_state13_blk;
 wire    ap_ST_fsm_state14_blk;
@@ -1115,59 +1085,51 @@ wire    ap_ST_fsm_state67_blk;
 wire    ap_ST_fsm_state68_blk;
 wire    ap_ST_fsm_state69_blk;
 wire    ap_ST_fsm_state70_blk;
-wire    ap_ST_fsm_state71_blk;
-reg    ap_ST_fsm_state72_blk;
+reg    ap_ST_fsm_state71_blk;
+wire    ap_ST_fsm_state72_blk;
 wire    ap_ST_fsm_state73_blk;
 wire    ap_ST_fsm_state74_blk;
 wire    ap_ST_fsm_state75_blk;
 wire    ap_ST_fsm_state76_blk;
 wire    ap_ST_fsm_state77_blk;
 wire    ap_ST_fsm_state78_blk;
-wire    ap_ST_fsm_state79_blk;
-reg    ap_ST_fsm_state80_blk;
+reg    ap_ST_fsm_state79_blk;
+wire    ap_ST_fsm_state80_blk;
 wire    ap_ST_fsm_state81_blk;
-wire    ap_ST_fsm_state82_blk;
-reg    ap_condition_1634;
-reg    ap_condition_1181;
-reg    ap_condition_1185;
-reg    ap_condition_3386;
-reg    ap_condition_1622;
-reg    ap_condition_856;
-reg    ap_condition_862;
-reg    ap_condition_868;
-reg    ap_condition_874;
-reg    ap_condition_887;
-wire  signed [1:0] M_6_fu_2489_p1;
-wire   [1:0] M_6_fu_2489_p3;
-wire   [1:0] M_6_fu_2489_p5;
-wire  signed [1:0] n_6_fu_2510_p1;
-wire   [1:0] n_6_fu_2510_p3;
-wire   [1:0] n_6_fu_2510_p5;
+reg    ap_condition_1501;
+reg    ap_condition_1068;
+reg    ap_condition_1072;
+reg    ap_condition_3220;
+reg    ap_condition_1489;
+wire  signed [1:0] M_6_fu_2182_p1;
+wire   [1:0] M_6_fu_2182_p3;
+wire   [1:0] M_6_fu_2182_p5;
+wire  signed [1:0] n_6_fu_2203_p1;
+wire   [1:0] n_6_fu_2203_p3;
+wire   [1:0] n_6_fu_2203_p5;
 wire    ap_ce_reg;
 
 // power-on initialization
 initial begin
-#0 ap_CS_fsm = 82'd1;
+#0 ap_CS_fsm = 81'd1;
 #0 state = 8'd0;
 #0 req_instruction = 32'd0;
 #0 req_op = 8'd0;
 #0 req_layer_idx = 8'd0;
 #0 mac_ready = 1'd1;
 #0 mac_complete = 1'd0;
-#0 req_tile_idx = 8'd0;
 #0 capture_pending = 1'd0;
 #0 clear_pending = 1'd0;
 #0 busy = 1'd0;
 #0 compute_done_1 = 1'd0;
-#0 grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start_reg = 1'b0;
-#0 grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start_reg = 1'b0;
-#0 grp_ARGMAX_TO_BUF_fu_1611_ap_start_reg = 1'b0;
-#0 grp_RMS_NORM_TO_BUF_fu_1629_ap_start_reg = 1'b0;
-#0 grp_RES_ADD_TO_BUF_fu_1654_ap_start_reg = 1'b0;
-#0 grp_read_i32_fu_1672_ap_start_reg = 1'b0;
-#0 grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start_reg = 1'b0;
-#0 grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start_reg = 1'b0;
-#0 out_base_fu_378 = 5'd0;
+#0 grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start_reg = 1'b0;
+#0 grp_ARGMAX_TO_BUF_fu_1515_ap_start_reg = 1'b0;
+#0 grp_RMS_NORM_TO_BUF_fu_1533_ap_start_reg = 1'b0;
+#0 grp_RES_ADD_TO_BUF_fu_1558_ap_start_reg = 1'b0;
+#0 grp_read_i32_fu_1576_ap_start_reg = 1'b0;
+#0 grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start_reg = 1'b0;
+#0 grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start_reg = 1'b0;
+#0 out_base_fu_346 = 5'd0;
 #0 ap_return_preg = 1'd0;
 end
 
@@ -1267,311 +1229,284 @@ requant_params_REQUANT4_N_L_U(
     .q0(requant_params_REQUANT4_N_L_q0)
 );
 
-transformer_top_FFN_ACT_Silu_TO_BUF grp_FFN_ACT_Silu_TO_BUF_fu_1574(
+transformer_top_FFN_ACT_Silu_TO_BUF grp_FFN_ACT_Silu_TO_BUF_fu_1495(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start),
-    .ap_done(grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_done),
-    .ap_idle(grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_idle),
-    .ap_ready(grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_ready),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
+    .ap_start(grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start),
+    .ap_done(grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_done),
+    .ap_idle(grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_idle),
+    .ap_ready(grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_ready),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0)
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0)
 );
 
-transformer_top_compute_controller_Pipeline_VITIS_LOOP_265_1 grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594(
+transformer_top_ARGMAX_TO_BUF grp_ARGMAX_TO_BUF_fu_1515(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start),
-    .ap_done(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_done),
-    .ap_idle(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_idle),
-    .ap_ready(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_ready),
-    .retval_0_i_i_ph_i(retval_0_i_i_ph_i_reg_790),
-    .debug_axi_sig_accum_out(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_debug_axi_sig_accum_out),
-    .debug_axi_sig_accum_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_debug_axi_sig_accum_out_ap_vld),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
+    .ap_start(grp_ARGMAX_TO_BUF_fu_1515_ap_start),
+    .ap_done(grp_ARGMAX_TO_BUF_fu_1515_ap_done),
+    .ap_idle(grp_ARGMAX_TO_BUF_fu_1515_ap_idle),
+    .ap_ready(grp_ARGMAX_TO_BUF_fu_1515_ap_ready),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0)
-);
-
-transformer_top_ARGMAX_TO_BUF grp_ARGMAX_TO_BUF_fu_1611(
-    .ap_clk(ap_clk),
-    .ap_rst(ap_rst),
-    .ap_start(grp_ARGMAX_TO_BUF_fu_1611_ap_start),
-    .ap_done(grp_ARGMAX_TO_BUF_fu_1611_ap_done),
-    .ap_idle(grp_ARGMAX_TO_BUF_fu_1611_ap_idle),
-    .ap_ready(grp_ARGMAX_TO_BUF_fu_1611_ap_ready),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1(grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1)
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1(grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1)
 );
 
-transformer_top_RMS_NORM_TO_BUF grp_RMS_NORM_TO_BUF_fu_1629(
+transformer_top_RMS_NORM_TO_BUF grp_RMS_NORM_TO_BUF_fu_1533(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_RMS_NORM_TO_BUF_fu_1629_ap_start),
-    .ap_done(grp_RMS_NORM_TO_BUF_fu_1629_ap_done),
-    .ap_idle(grp_RMS_NORM_TO_BUF_fu_1629_ap_idle),
-    .ap_ready(grp_RMS_NORM_TO_BUF_fu_1629_ap_ready),
-    .final_norm(grp_RMS_NORM_TO_BUF_fu_1629_final_norm),
-    .requant_M(grp_RMS_NORM_TO_BUF_fu_1629_requant_M),
-    .requant_n(grp_RMS_NORM_TO_BUF_fu_1629_requant_n),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
+    .ap_start(grp_RMS_NORM_TO_BUF_fu_1533_ap_start),
+    .ap_done(grp_RMS_NORM_TO_BUF_fu_1533_ap_done),
+    .ap_idle(grp_RMS_NORM_TO_BUF_fu_1533_ap_idle),
+    .ap_ready(grp_RMS_NORM_TO_BUF_fu_1533_ap_ready),
+    .final_norm(grp_RMS_NORM_TO_BUF_fu_1533_final_norm),
+    .requant_M(grp_RMS_NORM_TO_BUF_fu_1533_requant_M),
+    .requant_n(grp_RMS_NORM_TO_BUF_fu_1533_requant_n),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1(grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1)
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1(grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1)
 );
 
-transformer_top_RES_ADD_TO_BUF grp_RES_ADD_TO_BUF_fu_1654(
+transformer_top_RES_ADD_TO_BUF grp_RES_ADD_TO_BUF_fu_1558(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_RES_ADD_TO_BUF_fu_1654_ap_start),
-    .ap_done(grp_RES_ADD_TO_BUF_fu_1654_ap_done),
-    .ap_idle(grp_RES_ADD_TO_BUF_fu_1654_ap_idle),
-    .ap_ready(grp_RES_ADD_TO_BUF_fu_1654_ap_ready),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
+    .ap_start(grp_RES_ADD_TO_BUF_fu_1558_ap_start),
+    .ap_done(grp_RES_ADD_TO_BUF_fu_1558_ap_done),
+    .ap_idle(grp_RES_ADD_TO_BUF_fu_1558_ap_idle),
+    .ap_ready(grp_RES_ADD_TO_BUF_fu_1558_ap_ready),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q1(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q1),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0)
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0)
 );
 
-transformer_top_read_i32 grp_read_i32_fu_1672(
+transformer_top_read_i32 grp_read_i32_fu_1576(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_read_i32_fu_1672_ap_start),
-    .ap_done(grp_read_i32_fu_1672_ap_done),
-    .ap_idle(grp_read_i32_fu_1672_ap_idle),
-    .ap_ready(grp_read_i32_fu_1672_ap_ready),
+    .ap_start(grp_read_i32_fu_1576_ap_start),
+    .ap_done(grp_read_i32_fu_1576_ap_done),
+    .ap_idle(grp_read_i32_fu_1576_ap_idle),
+    .ap_ready(grp_read_i32_fu_1576_ap_ready),
     .ap_ce(1'b1),
-    .byte_addr(grp_read_i32_fu_1672_byte_addr),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
+    .byte_addr(grp_read_i32_fu_1576_byte_addr),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0),
-    .ap_return(grp_read_i32_fu_1672_ap_return)
+    .ap_return(grp_read_i32_fu_1576_ap_return)
 );
 
-transformer_top_compute_controller_Pipeline_VITIS_LOOP_157_3 grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690(
+transformer_top_compute_controller_Pipeline_VITIS_LOOP_157_3 grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start),
-    .ap_done(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_done),
-    .ap_idle(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_idle),
-    .ap_ready(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_ready),
-    .storemerge280_i(storemerge280_i_reg_1093),
-    .storemerge279_i(storemerge279_i_reg_1081),
-    .storemerge278_i(storemerge278_i_reg_1069),
-    .storemerge277_i(storemerge277_i_reg_1057),
-    .vec_count_0_i_ph_i(vec_count_0_i_ph_i_reg_1037),
-    .tile_out_count(tile_out_count_reg_4380),
-    .empty_205(tmp_476_reg_4396),
-    .empty(tmp_477_reg_4417),
-    .act_is_i16_0_i_ph_i(act_is_i16_0_i_ph_i_reg_954),
-    .use_bias_0_i_ph_i(use_bias_0_i_ph_i_reg_934),
-    .tmp_123(tmp_123_reg_4440),
-    .zext_ln137(weight_nibble_base_0_i_ph_i_reg_995),
-    .tmp_124(tmp_124_reg_4446),
-    .add_ln183(add_ln183_reg_4451),
-    .add_ln183_8(add_ln183_1_reg_4456),
-    .acc_55_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_55_out),
-    .acc_55_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_55_out_ap_vld),
-    .acc_39_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_39_out),
-    .acc_39_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_39_out_ap_vld),
-    .acc_23_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_23_out),
-    .acc_23_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_23_out_ap_vld),
-    .acc_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_out),
-    .acc_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_out_ap_vld),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
+    .ap_start(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start),
+    .ap_done(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_done),
+    .ap_idle(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_idle),
+    .ap_ready(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_ready),
+    .storemerge257_i(storemerge257_i_reg_1014),
+    .storemerge256_i(storemerge256_i_reg_1002),
+    .storemerge255_i(storemerge255_i_reg_990),
+    .storemerge254_i(storemerge254_i_reg_978),
+    .vec_count_0_i_ph_i(vec_count_0_i_ph_i_reg_958),
+    .tile_out_count(tile_out_count_reg_4179),
+    .empty_204(tmp_478_reg_4195),
+    .empty(tmp_479_reg_4216),
+    .act_is_i16_0_i_ph_i(act_is_i16_0_i_ph_i_reg_875),
+    .use_bias_0_i_ph_i(use_bias_0_i_ph_i_reg_855),
+    .tmp_74(tmp_74_reg_4239),
+    .zext_ln137(weight_nibble_base_0_i_ph_i_reg_916),
+    .tmp_75(tmp_75_reg_4245),
+    .add_ln183(add_ln183_reg_4250),
+    .add_ln183_8(add_ln183_1_reg_4255),
+    .acc_55_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_55_out),
+    .acc_55_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_55_out_ap_vld),
+    .acc_39_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_39_out),
+    .acc_39_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_39_out_ap_vld),
+    .acc_23_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_23_out),
+    .acc_23_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_23_out_ap_vld),
+    .acc_out(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_out),
+    .acc_out_ap_vld(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_out_ap_vld),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_q0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0),
     .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0(transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_q0)
 );
 
-transformer_top_compute_controller_Pipeline_VITIS_LOOP_743_1 grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731(
+transformer_top_compute_controller_Pipeline_VITIS_LOOP_706_1 grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start),
-    .ap_done(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_done),
-    .ap_idle(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_idle),
-    .ap_ready(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_ready),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
-    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0)
+    .ap_start(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start),
+    .ap_done(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_done),
+    .ap_idle(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_idle),
+    .ap_ready(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_ready),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0),
+    .transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0(grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0)
 );
 
 transformer_top_mul_32s_31ns_63_1_1 #(
@@ -1580,10 +1515,10 @@ transformer_top_mul_32s_31ns_63_1_1 #(
     .din0_WIDTH( 32 ),
     .din1_WIDTH( 31 ),
     .dout_WIDTH( 63 ))
-mul_32s_31ns_63_1_1_U1185(
-    .din0(grp_fu_1739_p0),
-    .din1(grp_fu_1739_p1),
-    .dout(grp_fu_1739_p2)
+mul_32s_31ns_63_1_1_U1174(
+    .din0(grp_fu_1643_p0),
+    .din1(grp_fu_1643_p1),
+    .dout(grp_fu_1643_p2)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_7_2_31_1_1 #(
@@ -1598,13 +1533,13 @@ mul_32s_31ns_63_1_1_U1185(
     .def_WIDTH( 31 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 31 ))
-sparsemux_7_2_31_1_1_U1186(
+sparsemux_7_2_31_1_1_U1175(
     .din0(requant_params_REQUANT3_M_L_q0),
     .din1(requant_params_REQUANT1_M_L_q0),
     .din2(31'd0),
-    .def(M_6_fu_2489_p7),
-    .sel(sel_tmp2_fu_2483_p3),
-    .dout(M_6_fu_2489_p9)
+    .def(M_6_fu_2182_p7),
+    .sel(sel_tmp2_fu_2176_p3),
+    .dout(M_6_fu_2182_p9)
 );
 
 (* dissolve_hierarchy = "yes" *) transformer_top_sparsemux_7_2_6_1_1 #(
@@ -1619,13 +1554,13 @@ sparsemux_7_2_31_1_1_U1186(
     .def_WIDTH( 6 ),
     .sel_WIDTH( 2 ),
     .dout_WIDTH( 6 ))
-sparsemux_7_2_6_1_1_U1187(
+sparsemux_7_2_6_1_1_U1176(
     .din0(requant_params_REQUANT3_N_L_q0),
     .din1(requant_params_REQUANT1_N_L_q0),
     .din2(6'd0),
-    .def(n_6_fu_2510_p7),
-    .sel(sel_tmp2_fu_2483_p3),
-    .dout(n_6_fu_2510_p9)
+    .def(n_6_fu_2203_p7),
+    .sel(sel_tmp2_fu_2176_p3),
+    .dout(n_6_fu_2203_p9)
 );
 
 transformer_top_mul_5ns_5ns_9_1_1 #(
@@ -1634,10 +1569,10 @@ transformer_top_mul_5ns_5ns_9_1_1 #(
     .din0_WIDTH( 5 ),
     .din1_WIDTH( 5 ),
     .dout_WIDTH( 9 ))
-mul_5ns_5ns_9_1_1_U1188(
-    .din0(empty_319_fu_2813_p0),
-    .din1(empty_319_fu_2813_p1),
-    .dout(empty_319_fu_2813_p2)
+mul_5ns_5ns_9_1_1_U1177(
+    .din0(empty_319_fu_2622_p0),
+    .din1(empty_319_fu_2622_p1),
+    .dout(empty_319_fu_2622_p2)
 );
 
 always @ (posedge ap_clk) begin
@@ -1652,8 +1587,8 @@ always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
         ap_return_preg <= 1'd0;
     end else begin
-        if ((1'b1 == ap_CS_fsm_state82)) begin
-            ap_return_preg <= error_write_assign_fu_4019_p2;
+        if ((1'b1 == ap_CS_fsm_state81)) begin
+            ap_return_preg <= error_write_assign_fu_3828_p2;
         end
     end
 end
@@ -1662,10 +1597,10 @@ always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
         busy <= 1'd0;
     end else begin
-        if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6))) begin
-            if ((do_compute_fu_2399_p2 == 1'd1)) begin
+        if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9))) begin
+            if ((do_compute_fu_2266_p2 == 1'd1)) begin
                 busy <= 1'd1;
-            end else if (((do_compute_fu_2399_p2 == 1'd0) & (compute_done_1_load_load_fu_2383_p1 == 1'd1))) begin
+            end else if (((do_compute_fu_2266_p2 == 1'd0) & (compute_done_1_load_load_fu_2250_p1 == 1'd1))) begin
                 busy <= 1'd0;
             end
         end
@@ -1676,9 +1611,9 @@ always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
         compute_done_1 <= 1'd0;
     end else begin
-        if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state6) & (compute_done_1_load_load_fu_2383_p1 == 1'd1))) begin
+        if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state9) & (compute_done_1_load_load_fu_2250_p1 == 1'd1))) begin
             compute_done_1 <= 1'd0;
-        end else if (((1'b1 == ap_CS_fsm_state14) & ((~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15) & (do_compute_reg_4221 == 1'd1)) | ((do_compute_reg_4221 == 1'd1) & (icmp_ln144_fu_2612_p2 == 1'd0))))) begin
+        end else if (((1'b1 == ap_CS_fsm_state13) & ((~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15) & (do_compute_reg_4040 == 1'd1)) | ((icmp_ln144_fu_2421_p2 == 1'd0) & (do_compute_reg_4040 == 1'd1))))) begin
             compute_done_1 <= 1'd1;
         end
     end
@@ -1686,97 +1621,84 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_ARGMAX_TO_BUF_fu_1611_ap_start_reg <= 1'b0;
+        grp_ARGMAX_TO_BUF_fu_1515_ap_start_reg <= 1'b0;
     end else begin
-        if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd27) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-            grp_ARGMAX_TO_BUF_fu_1611_ap_start_reg <= 1'b1;
-        end else if ((grp_ARGMAX_TO_BUF_fu_1611_ap_ready == 1'b1)) begin
-            grp_ARGMAX_TO_BUF_fu_1611_ap_start_reg <= 1'b0;
+        if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd27) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+            grp_ARGMAX_TO_BUF_fu_1515_ap_start_reg <= 1'b1;
+        end else if ((grp_ARGMAX_TO_BUF_fu_1515_ap_ready == 1'b1)) begin
+            grp_ARGMAX_TO_BUF_fu_1515_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start_reg <= 1'b0;
+        grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start_reg <= 1'b0;
     end else begin
-        if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd19) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-            grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start_reg <= 1'b1;
-        end else if ((grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_ready == 1'b1)) begin
-            grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start_reg <= 1'b0;
+        if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd19) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+            grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start_reg <= 1'b1;
+        end else if ((grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_ready == 1'b1)) begin
+            grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_RES_ADD_TO_BUF_fu_1654_ap_start_reg <= 1'b0;
+        grp_RES_ADD_TO_BUF_fu_1558_ap_start_reg <= 1'b0;
     end else begin
-        if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd22) & (next_state_load_fu_1856_p1 == 8'd3)) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd16) & (next_state_load_fu_1856_p1 == 8'd3))))) begin
-            grp_RES_ADD_TO_BUF_fu_1654_ap_start_reg <= 1'b1;
-        end else if ((grp_RES_ADD_TO_BUF_fu_1654_ap_ready == 1'b1)) begin
-            grp_RES_ADD_TO_BUF_fu_1654_ap_start_reg <= 1'b0;
+        if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd22) & (next_state_load_fu_1750_p1 == 8'd3)) | ((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd16) & (next_state_load_fu_1750_p1 == 8'd3))))) begin
+            grp_RES_ADD_TO_BUF_fu_1558_ap_start_reg <= 1'b1;
+        end else if ((grp_RES_ADD_TO_BUF_fu_1558_ap_ready == 1'b1)) begin
+            grp_RES_ADD_TO_BUF_fu_1558_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_RMS_NORM_TO_BUF_fu_1629_ap_start_reg <= 1'b0;
+        grp_RMS_NORM_TO_BUF_fu_1533_ap_start_reg <= 1'b0;
     end else begin
-        if (((1'b1 == ap_CS_fsm_state10) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd25) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1)))) begin
-            grp_RMS_NORM_TO_BUF_fu_1629_ap_start_reg <= 1'b1;
-        end else if ((grp_RMS_NORM_TO_BUF_fu_1629_ap_ready == 1'b1)) begin
-            grp_RMS_NORM_TO_BUF_fu_1629_ap_start_reg <= 1'b0;
+        if (((1'b1 == ap_CS_fsm_state8) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd25) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1)))) begin
+            grp_RMS_NORM_TO_BUF_fu_1533_ap_start_reg <= 1'b1;
+        end else if ((grp_RMS_NORM_TO_BUF_fu_1533_ap_ready == 1'b1)) begin
+            grp_RMS_NORM_TO_BUF_fu_1533_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start_reg <= 1'b0;
+        grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start_reg <= 1'b0;
     end else begin
-        if ((1'b1 == ap_CS_fsm_state71)) begin
-            grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start_reg <= 1'b1;
-        end else if ((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_ready == 1'b1)) begin
-            grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start_reg <= 1'b0;
+        if ((1'b1 == ap_CS_fsm_state70)) begin
+            grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start_reg <= 1'b1;
+        end else if ((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_ready == 1'b1)) begin
+            grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start_reg <= 1'b0;
+        grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start_reg <= 1'b0;
     end else begin
-        if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & ((((((((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd6) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3)) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd5) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd4) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd3) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd2) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd1) & (req_op_load_load_fu_1876_p1 
-    == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd0) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))))) begin
-            grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start_reg <= 1'b1;
-        end else if ((grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_ready == 1'b1)) begin
-            grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start_reg <= 1'b0;
+        if (((or_ln705_fu_3811_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state78))) begin
+            grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start_reg <= 1'b1;
+        end else if ((grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_ready == 1'b1)) begin
+            grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start_reg <= 1'b0;
+        grp_read_i32_fu_1576_ap_start_reg <= 1'b0;
     end else begin
-        if (((or_ln742_fu_4002_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
-            grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start_reg <= 1'b1;
-        end else if ((grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_ready == 1'b1)) begin
-            grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start_reg <= 1'b0;
-        end
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (ap_rst == 1'b1) begin
-        grp_read_i32_fu_1672_ap_start_reg <= 1'b0;
-    end else begin
-        if ((((1'b1 == ap_CS_fsm_state56) & (1'b1 == ap_NS_fsm_state57)) | ((1'b1 == ap_CS_fsm_state42) & (1'b1 == ap_NS_fsm_state43)) | ((1'b1 == ap_CS_fsm_state28) & (1'b1 == ap_NS_fsm_state29)) | ((1'b1 == ap_CS_fsm_state14) & (1'b1 == ap_NS_fsm_state15)))) begin
-            grp_read_i32_fu_1672_ap_start_reg <= 1'b1;
-        end else if ((grp_read_i32_fu_1672_ap_ready == 1'b1)) begin
-            grp_read_i32_fu_1672_ap_start_reg <= 1'b0;
+        if ((((1'b1 == ap_CS_fsm_state55) & (1'b1 == ap_NS_fsm_state56)) | ((1'b1 == ap_CS_fsm_state41) & (1'b1 == ap_NS_fsm_state42)) | ((1'b1 == ap_CS_fsm_state27) & (1'b1 == ap_NS_fsm_state28)) | ((1'b1 == ap_CS_fsm_state13) & (1'b1 == ap_NS_fsm_state14)))) begin
+            grp_read_i32_fu_1576_ap_start_reg <= 1'b1;
+        end else if ((grp_read_i32_fu_1576_ap_ready == 1'b1)) begin
+            grp_read_i32_fu_1576_ap_start_reg <= 1'b0;
         end
     end
 end
@@ -1785,674 +1707,621 @@ always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
         state <= 8'd0;
     end else begin
-        if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
             state <= 8'd0;
-        end else if ((1'b1 == ap_CS_fsm_state81)) begin
-            state <= next_state_9_reg_1420;
+        end else if ((1'b1 == ap_CS_fsm_state80)) begin
+            state <= next_state_9_reg_1341;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd20) & (1'b1 == ap_CS_fsm_state6))) begin
-        act_is_i16_0_i_ph_i_reg_954 <= 1'd1;
-    end else if ((((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd26) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd18) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd15) & (1'b1 == ap_CS_fsm_state6)))) begin
-        act_is_i16_0_i_ph_i_reg_954 <= 1'd0;
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd20) & (1'b1 == ap_CS_fsm_state9))) begin
+        act_is_i16_0_i_ph_i_reg_875 <= 1'd1;
+    end else if ((((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd26) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd18) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd15) & (1'b1 == ap_CS_fsm_state9)))) begin
+        act_is_i16_0_i_ph_i_reg_875 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_condition_1634)) begin
-        if ((req_op_load_reg_4120 == 8'd26)) begin
-                        bias_byte_base_0_i_ph_i_reg_974[4] <= 1'b0;
-            bias_byte_base_0_i_ph_i_reg_974[5] <= 1'b0;
-            bias_byte_base_0_i_ph_i_reg_974[6] <= 1'b0;
-        end else if ((req_op_load_reg_4120 == 8'd20)) begin
-                        bias_byte_base_0_i_ph_i_reg_974[4] <= 1'b0;
-            bias_byte_base_0_i_ph_i_reg_974[5] <= 1'b1;
-            bias_byte_base_0_i_ph_i_reg_974[6] <= 1'b1;
-        end else if ((req_op_load_reg_4120 == 8'd18)) begin
-                        bias_byte_base_0_i_ph_i_reg_974[4] <= 1'b0;
-            bias_byte_base_0_i_ph_i_reg_974[5] <= 1'b0;
-            bias_byte_base_0_i_ph_i_reg_974[6] <= 1'b1;
-        end else if ((req_op_load_reg_4120 == 8'd15)) begin
-                        bias_byte_base_0_i_ph_i_reg_974[4] <= 1'b1;
-            bias_byte_base_0_i_ph_i_reg_974[5] <= 1'b1;
-            bias_byte_base_0_i_ph_i_reg_974[6] <= 1'b0;
+    if ((1'b1 == ap_condition_1501)) begin
+        if ((req_op_load_reg_3923 == 8'd26)) begin
+                        bias_byte_base_0_i_ph_i_reg_895[4] <= 1'b0;
+            bias_byte_base_0_i_ph_i_reg_895[5] <= 1'b0;
+            bias_byte_base_0_i_ph_i_reg_895[6] <= 1'b0;
+        end else if ((req_op_load_reg_3923 == 8'd20)) begin
+                        bias_byte_base_0_i_ph_i_reg_895[4] <= 1'b0;
+            bias_byte_base_0_i_ph_i_reg_895[5] <= 1'b1;
+            bias_byte_base_0_i_ph_i_reg_895[6] <= 1'b1;
+        end else if ((req_op_load_reg_3923 == 8'd18)) begin
+                        bias_byte_base_0_i_ph_i_reg_895[4] <= 1'b0;
+            bias_byte_base_0_i_ph_i_reg_895[5] <= 1'b0;
+            bias_byte_base_0_i_ph_i_reg_895[6] <= 1'b1;
+        end else if ((req_op_load_reg_3923 == 8'd15)) begin
+                        bias_byte_base_0_i_ph_i_reg_895[4] <= 1'b1;
+            bias_byte_base_0_i_ph_i_reg_895[5] <= 1'b1;
+            bias_byte_base_0_i_ph_i_reg_895[6] <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if (((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0))) begin
+        if (((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd0))) begin
             capture_pending <= 1'd0;
-        end else if ((1'b1 == ap_condition_1185)) begin
+        end else if ((1'b1 == ap_condition_1072)) begin
             capture_pending <= 1'd0;
-        end else if ((1'b1 == ap_condition_1181)) begin
+        end else if ((1'b1 == ap_condition_1068)) begin
             capture_pending <= 1'd1;
-        end else if ((cntrl_reset_n_read_read_fu_400_p2 == 1'd0)) begin
+        end else if ((ctrl_mem_0_read_read_fu_368_p2 == 1'd0)) begin
             capture_pending <= 1'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
         clear_pending <= 1'd1;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((1'b0 == ap_block_state80_on_subcall_done) & (or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80)))) begin
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((1'b0 == ap_block_state79_on_subcall_done) & (or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79)))) begin
         clear_pending <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        compute_done_new_0_reg_1467 <= 1'd0;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        compute_done_new_0_reg_1467 <= icmp_ln688_reg_4109;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        compute_done_new_0_reg_1388 <= icmp_ln651_reg_3912;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        compute_done_new_0_reg_1388 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        compute_ready_new_0_reg_1456 <= 1'd1;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        compute_ready_new_0_reg_1456 <= icmp_ln687_reg_4104;
+    if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd1) & (or_ln715_fu_1958_p2 == 1'd1))) begin
+        compute_error_1_reg_1302 <= 1'd0;
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd0) & (or_ln715_fu_1958_p2 == 1'd1)) | ((1'b1 == ap_CS_fsm_state13) & (((icmp_ln144_fu_2421_p2 == 1'd0) | (do_compute_reg_4040 == 1'd0)) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15)))))) begin
+        compute_error_1_reg_1302 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6) & ((((((((req_tile_idx_load_reg_4153 == 8'd5) & (req_op_load_reg_4120 == 8'd28)) | ((req_tile_idx_load_reg_4153 == 8'd6) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd4) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd3) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd2) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd1) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd0) & (req_op_load_reg_4120 == 8'd28))))) begin
-        debug_axi_sig_accum_0_i_lcssa_i_reg_811 <= grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_debug_axi_sig_accum_out;
-    end else if ((~(req_tile_idx_load_load_fu_2032_p1 == 8'd0) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd1) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd2) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd6) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd5) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd4) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd3) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-        debug_axi_sig_accum_0_i_lcssa_i_reg_811 <= 15'd0;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        compute_error_2_reg_1483 <= compute_error_1_reg_1302;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        compute_error_2_reg_1483 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd1) & (or_ln752_fu_2101_p2 == 1'd1))) begin
-        error_1_reg_1381 <= 1'd0;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd0) & (or_ln752_fu_2101_p2 == 1'd1)) | ((1'b1 == ap_CS_fsm_state14) & (((do_compute_reg_4221 == 1'd0) | (icmp_ln144_fu_2612_p2 == 1'd0)) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15)))))) begin
-        error_1_reg_1381 <= 1'd1;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        compute_ready_new_0_reg_1377 <= icmp_ln650_reg_3907;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        compute_ready_new_0_reg_1377 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        error_2_reg_1562 <= 1'd0;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        error_2_reg_1562 <= error_1_reg_1381;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0) & (compute_start_2_read_read_fu_394_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd0) & (tmp_475_read_fu_362_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
         mac_complete <= 1'd0;
-    end else if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6))) begin
+    end else if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9))) begin
         mac_complete <= compute_done_1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+    if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
         mac_ready <= 1'd1;
-    end else if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6))) begin
-        mac_ready <= xor_ln83_fu_2371_p2;
+    end else if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9))) begin
+        mac_ready <= xor_ln83_fu_2238_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state12)) begin
-        mac_start_4_reg_863 <= mac_start_fu_2536_p2;
-    end else if ((1'b1 == ap_CS_fsm_state8)) begin
-        mac_start_4_reg_863 <= mac_start_1_fu_2478_p2;
+    if ((1'b1 == ap_CS_fsm_state11)) begin
+        mac_start_4_reg_790 <= mac_start_fu_2345_p2;
+    end else if ((1'b1 == ap_CS_fsm_state6)) begin
+        mac_start_4_reg_790 <= mac_start_1_fu_2171_p2;
     end else if ((1'b1 == ap_CS_fsm_state4)) begin
-        mac_start_4_reg_863 <= mac_start_2_fu_2328_p2;
+        mac_start_4_reg_790 <= mac_start_2_fu_2161_p2;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        mac_start_4_reg_863 <= mac_start_3_fu_2318_p2;
-    end else if ((((grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3)) | (~(req_op_load_load_fu_1876_p1 == 8'd20) & ~(req_op_load_load_fu_1876_p1 == 8'd19) & ~(req_op_load_load_fu_1876_p1 == 8'd18) & ~(req_op_load_load_fu_1876_p1 == 8'd27) & ~(req_op_load_load_fu_1876_p1 == 8'd26) & ~(req_op_load_load_fu_1876_p1 == 8'd25) & ~(req_op_load_load_fu_1876_p1 == 8'd23) & ~(req_op_load_load_fu_1876_p1 == 8'd1) & ~(req_op_load_load_fu_1876_p1 == 8'd22) & ~(req_op_load_load_fu_1876_p1 == 8'd16) & ~(req_op_load_load_fu_1876_p1 == 8'd15) & ~(req_op_load_load_fu_1876_p1 == 8'd28) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1)) | ((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6) & ((req_op_load_reg_4120 == 8'd23) | (req_op_load_reg_4120 == 8'd1))) | ((grp_RES_ADD_TO_BUF_fu_1654_ap_done == 1'b1) & 
-    (1'b1 == ap_CS_fsm_state11)) | ((grp_RMS_NORM_TO_BUF_fu_1629_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state9)) | ((grp_ARGMAX_TO_BUF_fu_1611_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7)))) begin
-        mac_start_4_reg_863 <= 1'd0;
+        mac_start_4_reg_790 <= mac_start_3_fu_2151_p2;
+    end else if ((((grp_RES_ADD_TO_BUF_fu_1558_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state10)) | ((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9) & ((req_op_load_reg_3923 == 8'd23) | (req_op_load_reg_3923 == 8'd1))) | ((grp_RMS_NORM_TO_BUF_fu_1533_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7)) | ((grp_ARGMAX_TO_BUF_fu_1515_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5)) | ((grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3)) | (~(req_op_load_load_fu_1770_p1 == 8'd20) & ~(req_op_load_load_fu_1770_p1 == 8'd19) & ~(req_op_load_load_fu_1770_p1 == 8'd18) & ~(req_op_load_load_fu_1770_p1 == 8'd27) & ~(req_op_load_load_fu_1770_p1 == 8'd26) & ~(req_op_load_load_fu_1770_p1 == 8'd25) & ~(req_op_load_load_fu_1770_p1 == 8'd23) & ~(req_op_load_load_fu_1770_p1 == 8'd1) & ~(req_op_load_load_fu_1770_p1 == 8'd22) & ~(req_op_load_load_fu_1770_p1 == 8'd16) & ~(req_op_load_load_fu_1770_p1 == 8'd15) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd3) 
+    & (1'b1 == ap_CS_fsm_state1)))) begin
+        mac_start_4_reg_790 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state78) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        main_mem_op_flag_0_reg_1269 <= 1'd1;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd1) & (or_ln752_fu_2101_p2 == 1'd1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd0) & (or_ln752_fu_2101_p2 == 1'd1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0)) | ((1'b1 == ap_CS_fsm_state14) & (((do_compute_reg_4221 == 1'd0) | (icmp_ln144_fu_2612_p2 == 1'd0)) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15)))) | ((1'b0 == ap_block_state80_on_subcall_done) & (1'b1 == ap_CS_fsm_state80)) 
-    | (~(next_state_load_fu_1856_p1 == 8'd3) & ~(next_state_load_fu_1856_p1 == 8'd5) & ~(next_state_load_fu_1856_p1 == 8'd4) & ~(next_state_load_fu_1856_p1 == 8'd2) & ~(next_state_load_fu_1856_p1 == 8'd1) & ~(next_state_load_fu_1856_p1 == 8'd0) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        main_mem_op_flag_0_reg_1269 <= 1'd0;
+    if (((1'b1 == ap_CS_fsm_state77) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        main_mem_op_flag_0_reg_1190 <= 1'd1;
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd1) & (or_ln715_fu_1958_p2 == 1'd1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd0) & (or_ln715_fu_1958_p2 == 1'd1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 == 1'd0)) | ((1'b1 == ap_CS_fsm_state13) & (((icmp_ln144_fu_2421_p2 == 1'd0) | (do_compute_reg_4040 == 1'd0)) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15)))) | ((1'b0 == ap_block_state79_on_subcall_done) & (1'b1 == ap_CS_fsm_state79)) | (~(next_state_load_fu_1750_p1 
+    == 8'd3) & ~(next_state_load_fu_1750_p1 == 8'd5) & ~(next_state_load_fu_1750_p1 == 8'd4) & ~(next_state_load_fu_1750_p1 == 8'd2) & ~(next_state_load_fu_1750_p1 == 8'd1) & ~(next_state_load_fu_1750_p1 == 8'd0) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        main_mem_op_flag_0_reg_1190 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_op_flag_1_reg_1526 <= 1'd1;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        main_mem_op_flag_1_reg_1526 <= main_mem_op_flag_0_reg_1269;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        main_mem_op_flag_1_reg_1447 <= main_mem_op_flag_0_reg_1190;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_op_flag_1_reg_1447 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state78)) begin
-        main_mem_op_new_0_reg_1307 <= req_instruction_load_reg_4114;
-    end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_op_new_0_reg_1307 <= req_instruction;
-    end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_op_new_0_reg_1307 <= 32'd0;
+    if ((1'b1 == ap_CS_fsm_state77)) begin
+        main_mem_op_new_0_reg_1228 <= req_instruction_load_reg_3917;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_op_new_0_reg_1228 <= req_instruction;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_op_new_0_reg_1228 <= 32'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_op_new_1_reg_1538 <= 32'd0;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        main_mem_op_new_1_reg_1538 <= main_mem_op_new_0_reg_1307;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        main_mem_op_new_1_reg_1459 <= main_mem_op_new_0_reg_1228;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_op_new_1_reg_1459 <= 32'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state78)) begin
-        main_mem_read_request_flag_0_reg_1118 <= 1'd1;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd1) & (or_ln752_fu_2101_p2 == 1'd1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd0) & (or_ln752_fu_2101_p2 == 1'd1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 
-    == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0)) | ((1'b1 == ap_CS_fsm_state14) & (((do_compute_reg_4221 == 1'd0) | (icmp_ln144_fu_2612_p2 == 1'd0)) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15)))) | ((1'b0 == ap_block_state80_on_subcall_done) & (1'b1 == ap_CS_fsm_state80)) | (~(next_state_load_fu_1856_p1 == 8'd3) & ~(next_state_load_fu_1856_p1 == 8'd5) & ~(next_state_load_fu_1856_p1 == 8'd4) & ~(next_state_load_fu_1856_p1 == 8'd2) & ~(next_state_load_fu_1856_p1 == 8'd1) & ~(next_state_load_fu_1856_p1 == 8'd0) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        main_mem_read_request_flag_0_reg_1118 <= 1'd0;
+    if ((1'b1 == ap_CS_fsm_state77)) begin
+        main_mem_read_request_flag_0_reg_1039 <= 1'd1;
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd1) & (or_ln715_fu_1958_p2 == 1'd1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd0) & (or_ln715_fu_1958_p2 == 1'd1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 
+    == 1'd0)) | ((1'b1 == ap_CS_fsm_state13) & (((icmp_ln144_fu_2421_p2 == 1'd0) | (do_compute_reg_4040 == 1'd0)) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15)))) | ((1'b0 == ap_block_state79_on_subcall_done) & (1'b1 == ap_CS_fsm_state79)) | (~(next_state_load_fu_1750_p1 == 8'd3) & ~(next_state_load_fu_1750_p1 == 8'd5) & ~(next_state_load_fu_1750_p1 == 8'd4) & ~(next_state_load_fu_1750_p1 == 8'd2) & ~(next_state_load_fu_1750_p1 == 8'd1) & ~(next_state_load_fu_1750_p1 == 8'd0) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        main_mem_read_request_flag_0_reg_1039 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_read_request_flag_1_reg_1478 <= 1'd1;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        main_mem_read_request_flag_1_reg_1478 <= main_mem_read_request_flag_0_reg_1118;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        main_mem_read_request_flag_1_reg_1399 <= main_mem_read_request_flag_0_reg_1039;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_read_request_flag_1_reg_1399 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_read_request_new_1_reg_1490 <= 1'd0;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        main_mem_read_request_new_1_reg_1490 <= main_mem_read_request_new_0_reg_1156;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        main_mem_read_request_new_1_reg_1411 <= main_mem_read_request_new_0_reg_1077;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_read_request_new_1_reg_1411 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        main_mem_write_request_flag_0_reg_1192 <= 1'd1;
-    end else if (((1'b1 == ap_CS_fsm_state78) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd1) & (or_ln752_fu_2101_p2 == 1'd1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd0) & (or_ln752_fu_2101_p2 == 1'd1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0)) | ((1'b1 == ap_CS_fsm_state14) & (((do_compute_reg_4221 == 1'd0) | (icmp_ln144_fu_2612_p2 == 1'd0)) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15)))) | ((1'b0 == ap_block_state80_on_subcall_done) 
-    & (1'b1 == ap_CS_fsm_state80)) | (~(next_state_load_fu_1856_p1 == 8'd3) & ~(next_state_load_fu_1856_p1 == 8'd5) & ~(next_state_load_fu_1856_p1 == 8'd4) & ~(next_state_load_fu_1856_p1 == 8'd2) & ~(next_state_load_fu_1856_p1 == 8'd1) & ~(next_state_load_fu_1856_p1 == 8'd0) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        main_mem_write_request_flag_0_reg_1192 <= 1'd0;
+    if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        main_mem_write_request_flag_0_reg_1113 <= 1'd1;
+    end else if (((1'b1 == ap_CS_fsm_state77) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd1) & (or_ln715_fu_1958_p2 == 1'd1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd0) & (or_ln715_fu_1958_p2 == 1'd1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 == 1'd0)) | ((1'b1 == ap_CS_fsm_state13) & (((icmp_ln144_fu_2421_p2 == 1'd0) | (do_compute_reg_4040 == 1'd0)) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15)))) | ((1'b0 == ap_block_state79_on_subcall_done) & (1'b1 
+    == ap_CS_fsm_state79)) | (~(next_state_load_fu_1750_p1 == 8'd3) & ~(next_state_load_fu_1750_p1 == 8'd5) & ~(next_state_load_fu_1750_p1 == 8'd4) & ~(next_state_load_fu_1750_p1 == 8'd2) & ~(next_state_load_fu_1750_p1 == 8'd1) & ~(next_state_load_fu_1750_p1 == 8'd0) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        main_mem_write_request_flag_0_reg_1113 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_write_request_flag_1_reg_1502 <= 1'd1;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        main_mem_write_request_flag_1_reg_1502 <= main_mem_write_request_flag_0_reg_1192;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        main_mem_write_request_flag_1_reg_1423 <= main_mem_write_request_flag_0_reg_1113;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_write_request_flag_1_reg_1423 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_condition_3386)) begin
-        if ((mem_transfer_done_read_read_fu_382_p2 == 1'd0)) begin
-            main_mem_write_request_new_0_reg_1230 <= 1'd1;
-        end else if ((mem_transfer_done_read_read_fu_382_p2 == 1'd1)) begin
-            main_mem_write_request_new_0_reg_1230 <= 1'd0;
+    if ((1'b1 == ap_condition_3220)) begin
+        if ((tmp_473_read_fu_350_p2 == 1'd0)) begin
+            main_mem_write_request_new_0_reg_1151 <= 1'd1;
+        end else if ((tmp_473_read_fu_350_p2 == 1'd1)) begin
+            main_mem_write_request_new_0_reg_1151 <= 1'd0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        main_mem_write_request_new_1_reg_1514 <= 1'd0;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        main_mem_write_request_new_1_reg_1514 <= main_mem_write_request_new_0_reg_1230;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        main_mem_write_request_new_1_reg_1435 <= main_mem_write_request_new_0_reg_1151;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        main_mem_write_request_new_1_reg_1435 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_condition_1622)) begin
-        if ((compute_start_2_read_read_fu_394_p2 == 1'd0)) begin
-            next_state_3_reg_1105 <= 1'd0;
-        end else if ((compute_start_2_read_read_fu_394_p2 == 1'd1)) begin
-            next_state_3_reg_1105 <= 1'd1;
+    if ((1'b1 == ap_condition_1489)) begin
+        if ((tmp_475_read_fu_362_p2 == 1'd0)) begin
+            next_state_3_reg_1026 <= 1'd0;
+        end else if ((tmp_475_read_fu_362_p2 == 1'd1)) begin
+            next_state_3_reg_1026 <= 1'd1;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3)) | ((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6) & ((req_op_load_reg_4120 == 8'd23) | (req_op_load_reg_4120 == 8'd1))) | ((grp_RES_ADD_TO_BUF_fu_1654_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state11)) | ((grp_RMS_NORM_TO_BUF_fu_1629_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state9)) | ((grp_ARGMAX_TO_BUF_fu_1611_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7)))) begin
-        next_state_8_reg_898 <= 3'd4;
-    end else if (((1'b1 == ap_CS_fsm_state12) | (1'b1 == ap_CS_fsm_state8) | (1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2))) begin
-        next_state_8_reg_898 <= grp_fu_1773_p3;
-    end else if ((~(req_op_load_load_fu_1876_p1 == 8'd20) & ~(req_op_load_load_fu_1876_p1 == 8'd19) & ~(req_op_load_load_fu_1876_p1 == 8'd18) & ~(req_op_load_load_fu_1876_p1 == 8'd27) & ~(req_op_load_load_fu_1876_p1 == 8'd26) & ~(req_op_load_load_fu_1876_p1 == 8'd25) & ~(req_op_load_load_fu_1876_p1 == 8'd23) & ~(req_op_load_load_fu_1876_p1 == 8'd1) & ~(req_op_load_load_fu_1876_p1 == 8'd22) & ~(req_op_load_load_fu_1876_p1 == 8'd16) & ~(req_op_load_load_fu_1876_p1 == 8'd15) & ~(req_op_load_load_fu_1876_p1 == 8'd28) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-        next_state_8_reg_898 <= 3'd5;
+    if ((((grp_RES_ADD_TO_BUF_fu_1558_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state10)) | ((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9) & ((req_op_load_reg_3923 == 8'd23) | (req_op_load_reg_3923 == 8'd1))) | ((grp_RMS_NORM_TO_BUF_fu_1533_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7)) | ((grp_ARGMAX_TO_BUF_fu_1515_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5)) | ((grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3)))) begin
+        next_state_8_reg_822 <= 3'd4;
+    end else if (((1'b1 == ap_CS_fsm_state11) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2))) begin
+        next_state_8_reg_822 <= grp_fu_1667_p3;
+    end else if ((~(req_op_load_load_fu_1770_p1 == 8'd20) & ~(req_op_load_load_fu_1770_p1 == 8'd19) & ~(req_op_load_load_fu_1770_p1 == 8'd18) & ~(req_op_load_load_fu_1770_p1 == 8'd27) & ~(req_op_load_load_fu_1770_p1 == 8'd26) & ~(req_op_load_load_fu_1770_p1 == 8'd25) & ~(req_op_load_load_fu_1770_p1 == 8'd23) & ~(req_op_load_load_fu_1770_p1 == 8'd1) & ~(req_op_load_load_fu_1770_p1 == 8'd22) & ~(req_op_load_load_fu_1770_p1 == 8'd16) & ~(req_op_load_load_fu_1770_p1 == 8'd15) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+        next_state_8_reg_822 <= 3'd5;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state80_on_subcall_done) & (1'b1 == ap_CS_fsm_state80))) begin
-        next_state_9_reg_1420 <= zext_ln726_reg_4554;
-    end else if (((1'b1 == ap_CS_fsm_state14) & (((do_compute_reg_4221 == 1'd0) | (icmp_ln144_fu_2612_p2 == 1'd0)) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15))))) begin
-        next_state_9_reg_1420 <= zext_ln726_1_reg_4213;
-    end else if ((1'b1 == ap_CS_fsm_state78)) begin
-        next_state_9_reg_1420 <= select_ln789_fu_3981_p3;
-    end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd1) & (or_ln752_fu_2101_p2 == 1'd1))) begin
-        next_state_9_reg_1420 <= 8'd2;
-    end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0))) begin
-        next_state_9_reg_1420 <= 8'd1;
-    end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        next_state_9_reg_1420 <= 8'd4;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd0) & (or_ln752_fu_2101_p2 == 1'd1)))) begin
-        next_state_9_reg_1420 <= 8'd5;
-    end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1))) begin
-        next_state_9_reg_1420 <= 8'd0;
-    end else if ((~(next_state_load_fu_1856_p1 == 8'd3) & ~(next_state_load_fu_1856_p1 == 8'd5) & ~(next_state_load_fu_1856_p1 == 8'd4) & ~(next_state_load_fu_1856_p1 == 8'd2) & ~(next_state_load_fu_1856_p1 == 8'd1) & ~(next_state_load_fu_1856_p1 == 8'd0) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        next_state_9_reg_1420 <= state;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6) & (((((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd20)) | ((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd18))) | ((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd26))) | ((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd15))))) begin
-        out_base_fu_378 <= 5'd0;
+    if (((1'b0 == ap_block_state79_on_subcall_done) & (1'b1 == ap_CS_fsm_state79))) begin
+        next_state_9_reg_1341 <= zext_ln689_reg_4353;
+    end else if (((1'b1 == ap_CS_fsm_state13) & (((icmp_ln144_fu_2421_p2 == 1'd0) | (do_compute_reg_4040 == 1'd0)) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15))))) begin
+        next_state_9_reg_1341 <= zext_ln689_1_reg_4032;
     end else if ((1'b1 == ap_CS_fsm_state77)) begin
-        out_base_fu_378 <= add_ln144_reg_4375;
+        next_state_9_reg_1341 <= select_ln751_fu_3790_p3;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd1) & (or_ln715_fu_1958_p2 == 1'd1))) begin
+        next_state_9_reg_1341 <= 8'd2;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 == 1'd0))) begin
+        next_state_9_reg_1341 <= 8'd1;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        next_state_9_reg_1341 <= 8'd4;
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd0) & (or_ln715_fu_1958_p2 == 1'd1)))) begin
+        next_state_9_reg_1341 <= 8'd5;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1))) begin
+        next_state_9_reg_1341 <= 8'd0;
+    end else if ((~(next_state_load_fu_1750_p1 == 8'd3) & ~(next_state_load_fu_1750_p1 == 8'd5) & ~(next_state_load_fu_1750_p1 == 8'd4) & ~(next_state_load_fu_1750_p1 == 8'd2) & ~(next_state_load_fu_1750_p1 == 8'd1) & ~(next_state_load_fu_1750_p1 == 8'd0) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        next_state_9_reg_1341 <= state;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd26) & (1'b1 == ap_CS_fsm_state6))) begin
-                out_count_0_i_ph_i_reg_1016[1] <= 1'b0;
-        out_count_0_i_ph_i_reg_1016[2] <= 1'b0;
-        out_count_0_i_ph_i_reg_1016[4] <= 1'b1;
-    end else if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd18) & (1'b1 == ap_CS_fsm_state6))) begin
-                out_count_0_i_ph_i_reg_1016[1] <= 1'b1;
-        out_count_0_i_ph_i_reg_1016[2] <= 1'b1;
-        out_count_0_i_ph_i_reg_1016[4] <= 1'b0;
-    end else if ((((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd20) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd15) & (1'b1 == ap_CS_fsm_state6)))) begin
-                out_count_0_i_ph_i_reg_1016[1] <= 1'b0;
-        out_count_0_i_ph_i_reg_1016[2] <= 1'b1;
-        out_count_0_i_ph_i_reg_1016[4] <= 1'b0;
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9) & (((((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd20)) | ((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd18))) | ((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd26))) | ((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd15))))) begin
+        out_base_fu_346 <= 5'd0;
+    end else if ((1'b1 == ap_CS_fsm_state76)) begin
+        out_base_fu_346 <= add_ln144_reg_4174;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0) & (compute_start_2_read_read_fu_394_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        req_instruction <= compute_instruction_2;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd26) & (1'b1 == ap_CS_fsm_state9))) begin
+                out_count_0_i_ph_i_reg_937[1] <= 1'b0;
+        out_count_0_i_ph_i_reg_937[2] <= 1'b0;
+        out_count_0_i_ph_i_reg_937[4] <= 1'b1;
+    end else if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd18) & (1'b1 == ap_CS_fsm_state9))) begin
+                out_count_0_i_ph_i_reg_937[1] <= 1'b1;
+        out_count_0_i_ph_i_reg_937[2] <= 1'b1;
+        out_count_0_i_ph_i_reg_937[4] <= 1'b0;
+    end else if ((((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd20) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd15) & (1'b1 == ap_CS_fsm_state9)))) begin
+                out_count_0_i_ph_i_reg_937[1] <= 1'b0;
+        out_count_0_i_ph_i_reg_937[2] <= 1'b1;
+        out_count_0_i_ph_i_reg_937[4] <= 1'b0;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 == 1'd0)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd0) & (tmp_475_read_fu_362_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        req_instruction <= empty_206;
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
         req_instruction <= 32'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0) & (compute_start_2_read_read_fu_394_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        req_layer_idx <= {{compute_instruction_2[15:8]}};
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 == 1'd0)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd0) & (tmp_475_read_fu_362_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        req_layer_idx <= {{empty_206[15:8]}};
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
         req_layer_idx <= 8'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0) & (compute_start_2_read_read_fu_394_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
-        req_op <= trunc_ln735_fu_2291_p1;
-    end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0))) begin
-        req_op <= trunc_ln755_fu_2119_p1;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd0) & (tmp_475_read_fu_362_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1))) begin
+        req_op <= trunc_ln698_fu_2130_p1;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 == 1'd0))) begin
+        req_op <= trunc_ln718_fu_1976_p1;
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
         req_op <= 8'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0) & (compute_start_2_read_read_fu_394_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        req_tile_idx <= {{compute_instruction_2[31:24]}};
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)))) begin
-        req_tile_idx <= 8'd0;
+    if (((1'b1 == ap_CS_fsm_state13) & (((((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd20)) | ((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd18))) | ((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd26))) | ((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd15))))) begin
+        storemerge254_i_reg_978 <= 32'd0;
+    end else if (((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27))) begin
+        storemerge254_i_reg_978 <= grp_read_i32_fu_1576_ap_return;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-        if ((1'b1 == ap_condition_887)) begin
-                        retval_0_i_i_ph_i_reg_790[3] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[4] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[5] <= 1'b1;
-            retval_0_i_i_ph_i_reg_790[6] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[7] <= 1'b0;
-        end else if ((1'b1 == ap_condition_874)) begin
-                        retval_0_i_i_ph_i_reg_790[3] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[4] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[5] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[6] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[7] <= 1'b1;
-        end else if ((1'b1 == ap_condition_868)) begin
-                        retval_0_i_i_ph_i_reg_790[3] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[4] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[5] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[6] <= 1'b1;
-            retval_0_i_i_ph_i_reg_790[7] <= 1'b0;
-        end else if ((1'b1 == ap_condition_862)) begin
-                        retval_0_i_i_ph_i_reg_790[3] <= 1'b1;
-            retval_0_i_i_ph_i_reg_790[4] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[5] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[6] <= 1'b1;
-            retval_0_i_i_ph_i_reg_790[7] <= 1'b0;
-        end else if ((1'b1 == ap_condition_856)) begin
-                        retval_0_i_i_ph_i_reg_790[3] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[4] <= 1'b1;
-            retval_0_i_i_ph_i_reg_790[5] <= 1'b1;
-            retval_0_i_i_ph_i_reg_790[6] <= 1'b0;
-            retval_0_i_i_ph_i_reg_790[7] <= 1'b0;
-        end
+    if (((or_ln148_1_fu_2532_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state27))) begin
+        storemerge255_i_reg_990 <= 32'd0;
+    end else if (((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41))) begin
+        storemerge255_i_reg_990 <= grp_read_i32_fu_1576_ap_return;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state14) & (((((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd20) & (icmp_ln144_fu_2612_p2 == 1'd1)) | ((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd18) & (icmp_ln144_fu_2612_p2 == 1'd1))) | ((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd26) & (icmp_ln144_fu_2612_p2 == 1'd1))) | ((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd15) & (icmp_ln144_fu_2612_p2 == 1'd1))))) begin
-        storemerge277_i_reg_1057 <= 32'd0;
-    end else if (((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28))) begin
-        storemerge277_i_reg_1057 <= grp_read_i32_fu_1672_ap_return;
+    if (((or_ln148_2_fu_2560_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state41))) begin
+        storemerge256_i_reg_1002 <= 32'd0;
+    end else if (((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55))) begin
+        storemerge256_i_reg_1002 <= grp_read_i32_fu_1576_ap_return;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((or_ln148_1_fu_2723_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state28))) begin
-        storemerge278_i_reg_1069 <= 32'd0;
-    end else if (((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42))) begin
-        storemerge278_i_reg_1069 <= grp_read_i32_fu_1672_ap_return;
+    if (((or_ln148_3_fu_2599_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state55))) begin
+        storemerge257_i_reg_1014 <= 32'd0;
+    end else if (((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69))) begin
+        storemerge257_i_reg_1014 <= grp_read_i32_fu_1576_ap_return;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((or_ln148_2_fu_2751_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state42))) begin
-        storemerge279_i_reg_1081 <= 32'd0;
-    end else if (((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56))) begin
-        storemerge279_i_reg_1081 <= grp_read_i32_fu_1672_ap_return;
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd26) & (1'b1 == ap_CS_fsm_state9))) begin
+        use_bias_0_i_ph_i_reg_855 <= 1'd1;
+    end else if ((((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd20) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd18) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd15) & (1'b1 == ap_CS_fsm_state9)))) begin
+        use_bias_0_i_ph_i_reg_855 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((or_ln148_3_fu_2790_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state56))) begin
-        storemerge280_i_reg_1093 <= 32'd0;
-    end else if (((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70))) begin
-        storemerge280_i_reg_1093 <= grp_read_i32_fu_1672_ap_return;
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd20) & (1'b1 == ap_CS_fsm_state9))) begin
+                vec_count_0_i_ph_i_reg_958[3] <= 1'b1;
+    end else if ((((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd26) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd18) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd15) & (1'b1 == ap_CS_fsm_state9)))) begin
+                vec_count_0_i_ph_i_reg_958[3] <= 1'b0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd26) & (1'b1 == ap_CS_fsm_state6))) begin
-        use_bias_0_i_ph_i_reg_934 <= 1'd1;
-    end else if ((((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd20) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd18) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd15) & (1'b1 == ap_CS_fsm_state6)))) begin
-        use_bias_0_i_ph_i_reg_934 <= 1'd0;
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd26) & (1'b1 == ap_CS_fsm_state9))) begin
+                weight_nibble_base_0_i_ph_i_reg_916[5] <= 1'b0;
+        weight_nibble_base_0_i_ph_i_reg_916[6] <= 1'b0;
+        weight_nibble_base_0_i_ph_i_reg_916[7] <= 1'b1;
+    end else if (((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd20) & (1'b1 == ap_CS_fsm_state9))) begin
+                weight_nibble_base_0_i_ph_i_reg_916[5] <= 1'b1;
+        weight_nibble_base_0_i_ph_i_reg_916[6] <= 1'b1;
+        weight_nibble_base_0_i_ph_i_reg_916[7] <= 1'b0;
+    end else if ((((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd18) & (1'b1 == ap_CS_fsm_state9)) | ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd15) & (1'b1 == ap_CS_fsm_state9)))) begin
+                weight_nibble_base_0_i_ph_i_reg_916[5] <= 1'b1;
+        weight_nibble_base_0_i_ph_i_reg_916[6] <= 1'b0;
+        weight_nibble_base_0_i_ph_i_reg_916[7] <= 1'b0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd20) & (1'b1 == ap_CS_fsm_state6))) begin
-                vec_count_0_i_ph_i_reg_1037[3] <= 1'b1;
-    end else if ((((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd26) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd18) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd15) & (1'b1 == ap_CS_fsm_state6)))) begin
-                vec_count_0_i_ph_i_reg_1037[3] <= 1'b0;
+    if (((1'b1 == ap_CS_fsm_state11) | (1'b1 == ap_CS_fsm_state6) | (1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2) | ((grp_RES_ADD_TO_BUF_fu_1558_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state10)) | ((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9) & ((req_op_load_reg_3923 == 8'd23) | (req_op_load_reg_3923 == 8'd1))) | ((grp_RMS_NORM_TO_BUF_fu_1533_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7)) | ((grp_ARGMAX_TO_BUF_fu_1515_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5)) | ((grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3)))) begin
+        write_flag_0_reg_752 <= 1'd0;
+    end else if ((~(req_op_load_load_fu_1770_p1 == 8'd20) & ~(req_op_load_load_fu_1770_p1 == 8'd19) & ~(req_op_load_load_fu_1770_p1 == 8'd18) & ~(req_op_load_load_fu_1770_p1 == 8'd27) & ~(req_op_load_load_fu_1770_p1 == 8'd26) & ~(req_op_load_load_fu_1770_p1 == 8'd25) & ~(req_op_load_load_fu_1770_p1 == 8'd23) & ~(req_op_load_load_fu_1770_p1 == 8'd1) & ~(req_op_load_load_fu_1770_p1 == 8'd22) & ~(req_op_load_load_fu_1770_p1 == 8'd16) & ~(req_op_load_load_fu_1770_p1 == 8'd15) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+        write_flag_0_reg_752 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd26) & (1'b1 == ap_CS_fsm_state6))) begin
-                weight_nibble_base_0_i_ph_i_reg_995[5] <= 1'b0;
-        weight_nibble_base_0_i_ph_i_reg_995[6] <= 1'b0;
-        weight_nibble_base_0_i_ph_i_reg_995[7] <= 1'b1;
-    end else if (((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd20) & (1'b1 == ap_CS_fsm_state6))) begin
-                weight_nibble_base_0_i_ph_i_reg_995[5] <= 1'b1;
-        weight_nibble_base_0_i_ph_i_reg_995[6] <= 1'b1;
-        weight_nibble_base_0_i_ph_i_reg_995[7] <= 1'b0;
-    end else if ((((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd18) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd15) & (1'b1 == ap_CS_fsm_state6)))) begin
-                weight_nibble_base_0_i_ph_i_reg_995[5] <= 1'b1;
-        weight_nibble_base_0_i_ph_i_reg_995[6] <= 1'b0;
-        weight_nibble_base_0_i_ph_i_reg_995[7] <= 1'b0;
+    if (((1'b1 == ap_CS_fsm_state13) & (((icmp_ln144_fu_2421_p2 == 1'd0) | (do_compute_reg_4040 == 1'd0)) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15))))) begin
+        write_flag_1_reg_1264 <= write_flag_0_reg_752;
+    end else if ((((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd1) & (or_ln715_fu_1958_p2 == 1'd1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2106_p2 == 1'd0) & (or_ln715_fu_1958_p2 == 1'd1)))) begin
+        write_flag_1_reg_1264 <= 1'd1;
+    end else if (((1'b1 == ap_CS_fsm_state77) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (tmp_473_read_fu_350_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln715_fu_1958_p2 == 1'd0)) | ((1'b0 == ap_block_state79_on_subcall_done) & (1'b1 == ap_CS_fsm_state79)) | (~(next_state_load_fu_1750_p1 == 8'd3) & ~(next_state_load_fu_1750_p1 == 8'd5) & ~(next_state_load_fu_1750_p1 == 8'd4) & ~(next_state_load_fu_1750_p1 == 8'd2) & ~(next_state_load_fu_1750_p1 == 8'd1) & ~(next_state_load_fu_1750_p1 == 8'd0) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 
+    == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
+        write_flag_1_reg_1264 <= 1'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state12) | (1'b1 == ap_CS_fsm_state8) | (1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2) | ((grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3)) | ((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6) & ((req_op_load_reg_4120 == 8'd23) | (req_op_load_reg_4120 == 8'd1))) | ((grp_RES_ADD_TO_BUF_fu_1654_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state11)) | ((grp_RMS_NORM_TO_BUF_fu_1629_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state9)) | ((grp_ARGMAX_TO_BUF_fu_1611_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7)))) begin
-        write_flag_0_reg_822 <= 1'd0;
-    end else if ((~(req_op_load_load_fu_1876_p1 == 8'd20) & ~(req_op_load_load_fu_1876_p1 == 8'd19) & ~(req_op_load_load_fu_1876_p1 == 8'd18) & ~(req_op_load_load_fu_1876_p1 == 8'd27) & ~(req_op_load_load_fu_1876_p1 == 8'd26) & ~(req_op_load_load_fu_1876_p1 == 8'd25) & ~(req_op_load_load_fu_1876_p1 == 8'd23) & ~(req_op_load_load_fu_1876_p1 == 8'd1) & ~(req_op_load_load_fu_1876_p1 == 8'd22) & ~(req_op_load_load_fu_1876_p1 == 8'd16) & ~(req_op_load_load_fu_1876_p1 == 8'd15) & ~(req_op_load_load_fu_1876_p1 == 8'd28) & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-        write_flag_0_reg_822 <= 1'd1;
+    if ((1'b1 == ap_CS_fsm_state80)) begin
+        write_flag_2_reg_1471 <= write_flag_1_reg_1264;
+    end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+        write_flag_2_reg_1471 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state14) & (((do_compute_reg_4221 == 1'd0) | (icmp_ln144_fu_2612_p2 == 1'd0)) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15))))) begin
-        write_flag_1_reg_1343 <= write_flag_0_reg_822;
-    end else if ((((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd1) & (or_ln752_fu_2101_p2 == 1'd1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (empty_318_fu_2267_p2 == 1'd0) & (or_ln752_fu_2101_p2 == 1'd1)))) begin
-        write_flag_1_reg_1343 <= 1'd1;
-    end else if (((1'b1 == ap_CS_fsm_state78) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd5) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (mem_transfer_done_read_read_fu_382_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)) | ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (1'b1 == ap_CS_fsm_state1) & (or_ln752_fu_2101_p2 == 1'd0)) | ((1'b0 == ap_block_state80_on_subcall_done) & (1'b1 == ap_CS_fsm_state80)) | (~(next_state_load_fu_1856_p1 == 8'd3) & ~(next_state_load_fu_1856_p1 == 8'd5) & ~(next_state_load_fu_1856_p1 == 8'd4) & ~(next_state_load_fu_1856_p1 == 8'd2) & ~(next_state_load_fu_1856_p1 == 8'd1) & ~(next_state_load_fu_1856_p1 == 8'd0) 
-    & (ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1)))) begin
-        write_flag_1_reg_1343 <= 1'd0;
+    if ((1'b1 == ap_CS_fsm_state8)) begin
+        M_6_reg_4022 <= M_6_fu_2182_p9;
+        n_6_reg_4027 <= n_6_fu_2203_p9;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-        write_flag_2_reg_1550 <= 1'd1;
-    end else if ((1'b1 == ap_CS_fsm_state81)) begin
-        write_flag_2_reg_1550 <= write_flag_1_reg_1343;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_23_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state71))) begin
+        acc_23_loc_fu_334 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_23_out;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state10)) begin
-        M_6_reg_4262 <= M_6_fu_2489_p9;
-        n_6_reg_4267 <= n_6_fu_2510_p9;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_39_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state71))) begin
+        acc_39_loc_fu_338 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_39_out;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_23_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
-        acc_23_loc_fu_362 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_23_out;
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_55_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state71))) begin
+        acc_55_loc_fu_342 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_55_out;
     end
 end
 
 always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_39_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
-        acc_39_loc_fu_366 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_39_out;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_55_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
-        acc_55_loc_fu_370 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_55_out;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
-        acc_loc_fu_358 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_acc_out;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state14)) begin
-        add_ln144_reg_4375 <= add_ln144_fu_2644_p2;
-        icmp_ln148_reg_4388 <= icmp_ln148_fu_2673_p2;
-        lshr_ln4_reg_4359 <= {{out_base_fu_378[3:1]}};
-        or_ln148_reg_4392 <= or_ln148_fu_2679_p2;
-        tile_out_count_reg_4380 <= tile_out_count_fu_2665_p3;
-        trunc_ln144_reg_4353 <= trunc_ln144_fu_2626_p1;
-        zext_ln141_1_reg_4367[2 : 0] <= zext_ln141_1_fu_2640_p1[2 : 0];
-        zext_ln144_1_reg_4348[4 : 0] <= zext_ln144_1_fu_2622_p1[4 : 0];
-        zext_ln144_reg_4342[4 : 0] <= zext_ln144_fu_2618_p1[4 : 0];
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state56)) begin
-        add_ln150_3_reg_4430[7 : 4] <= add_ln150_3_fu_2808_p2[7 : 4];
-        icmp_ln148_5_reg_4422 <= icmp_ln148_5_fu_2784_p2;
-        or_ln148_3_reg_4426 <= or_ln148_3_fu_2790_p2;
-        tmp_477_reg_4417 <= {{tile_out_count_reg_4380[5:2]}};
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state71)) begin
-        add_ln183_1_reg_4456[8 : 3] <= add_ln183_1_fu_2841_p2[8 : 3];
-        add_ln183_reg_4451[8 : 3] <= add_ln183_fu_2835_p2[8 : 3];
-        tmp_124_reg_4446[3] <= tmp_124_fu_2827_p3[3];
-tmp_124_reg_4446[8 : 5] <= tmp_124_fu_2827_p3[8 : 5];
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state76)) begin
-        add_ln395_6_reg_4539 <= add_ln395_6_fu_3840_p2;
-        add_ln395_7_reg_4534 <= add_ln395_7_fu_3719_p2;
-        ap_predicate_pred1584_state77 <= ((icmp_ln148_5_reg_4422 == 1'd0) & (trunc_ln818_reg_4125 == 5'd26));
-        ap_predicate_pred1590_state77 <= ((icmp_ln148_5_reg_4422 == 1'd0) & (trunc_ln818_reg_4125 == 5'd20));
-        ap_predicate_pred1595_state77 <= ((icmp_ln148_5_reg_4422 == 1'd0) & (trunc_ln818_reg_4125 == 5'd15));
-        trunc_ln580_2_reg_4524 <= {{trunc_ln580_2_fu_3697_p1[23:16]}};
-        trunc_ln581_2_reg_4529 <= {{trunc_ln581_2_fu_3706_p1[31:24]}};
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
-        ap_predicate_pred1478_state73 <= ((trunc_ln818_reg_4125 == 5'd26) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred1489_state73 <= ((trunc_ln818_reg_4125 == 5'd18) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred266_state73 <= ((trunc_ln818_reg_4125 == 5'd20) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred281_state73 <= ((trunc_ln818_reg_4125 == 5'd15) & (icmp_ln148_reg_4388 == 1'd0));
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state73)) begin
-        ap_predicate_pred1504_state74 <= ((icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd26) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred1510_state74 <= ((icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd18) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred266_state74 <= ((trunc_ln818_reg_4125 == 5'd20) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred281_state74 <= ((trunc_ln818_reg_4125 == 5'd15) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred294_state74 <= ((icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd20) & (icmp_ln148_reg_4388 == 1'd0));
-        ap_predicate_pred299_state74 <= ((icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd15) & (icmp_ln148_reg_4388 == 1'd0));
-        p_cast79_reg_4461[3 : 1] <= p_cast79_fu_2854_p1[3 : 1];
-        p_cast81_reg_4481[3 : 2] <= p_cast81_fu_2878_p1[3 : 2];
-        tmp_234_reg_4467 <= {{out_base_fu_378[3:2]}};
-        zext_ln183_reg_4475[3 : 2] <= zext_ln183_fu_2866_p1[3 : 2];
-        zext_ln193_reg_4496[2 : 1] <= zext_ln193_fu_2902_p1[2 : 1];
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state74)) begin
-        ap_predicate_pred1517_state75 <= ((icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd26));
-        ap_predicate_pred1523_state75 <= ((icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd20));
-        ap_predicate_pred1528_state75 <= ((icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd15));
-        ap_predicate_pred1534_state75 <= ((icmp_ln148_2_reg_4409 == 1'd0) & (icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd26));
-        ap_predicate_pred1540_state75 <= ((icmp_ln148_2_reg_4409 == 1'd0) & (icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd18));
-        ap_predicate_pred312_state75 <= ((icmp_ln148_2_reg_4409 == 1'd0) & (icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd20));
-        ap_predicate_pred317_state75 <= ((icmp_ln148_2_reg_4409 == 1'd0) & (icmp_ln148_4_reg_4401 == 1'd0) & (trunc_ln818_reg_4125 == 5'd15));
-        trunc_ln580_s_reg_4504 <= {{trunc_ln580_s_fu_3193_p1[23:16]}};
-        trunc_ln581_s_reg_4509 <= {{trunc_ln581_s_fu_3202_p1[31:24]}};
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state75)) begin
-        ap_predicate_pred1547_state76 <= ((icmp_ln148_2_reg_4409 == 1'd0) & (trunc_ln818_reg_4125 == 5'd26));
-        ap_predicate_pred1553_state76 <= ((icmp_ln148_2_reg_4409 == 1'd0) & (trunc_ln818_reg_4125 == 5'd20));
-        ap_predicate_pred1558_state76 <= ((icmp_ln148_2_reg_4409 == 1'd0) & (trunc_ln818_reg_4125 == 5'd15));
-        ap_predicate_pred1566_state76 <= ((icmp_ln148_5_reg_4422 == 1'd0) & (icmp_ln148_2_reg_4409 == 1'd0) & (trunc_ln818_reg_4125 == 5'd26));
-        ap_predicate_pred1572_state76 <= ((icmp_ln148_5_reg_4422 == 1'd0) & (icmp_ln148_2_reg_4409 == 1'd0) & (trunc_ln818_reg_4125 == 5'd18));
-        ap_predicate_pred1822_state76 <= ((icmp_ln148_5_reg_4422 == 1'd0) & (icmp_ln148_2_reg_4409 == 1'd0) & (trunc_ln818_reg_4125 == 5'd20));
-        ap_predicate_pred1826_state76 <= ((icmp_ln148_5_reg_4422 == 1'd0) & (icmp_ln148_2_reg_4409 == 1'd0) & (trunc_ln818_reg_4125 == 5'd15));
-        trunc_ln580_1_reg_4514 <= {{trunc_ln580_1_fu_3445_p1[23:16]}};
-        trunc_ln581_1_reg_4519 <= {{trunc_ln581_1_fu_3454_p1[31:24]}};
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state6)) begin
-        do_compute_reg_4221 <= do_compute_fu_2399_p2;
-        zext_ln726_1_reg_4213[2 : 0] <= zext_ln726_1_fu_2357_p1[2 : 0];
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state42)) begin
-        icmp_ln148_2_reg_4409 <= icmp_ln148_2_fu_2746_p2;
-        or_ln148_2_reg_4413 <= or_ln148_2_fu_2751_p2;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state28)) begin
-        icmp_ln148_4_reg_4401 <= icmp_ln148_4_fu_2717_p2;
-        or_ln148_1_reg_4405 <= or_ln148_1_fu_2723_p2;
-        tmp_476_reg_4396 <= {{tile_out_count_reg_4380[5:1]}};
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state1)) begin
-        icmp_ln687_reg_4104 <= icmp_ln687_fu_1860_p2;
-        icmp_ln688_reg_4109 <= icmp_ln688_fu_1866_p2;
-        icmp_ln824_1_reg_4182 <= grp_fu_1748_p2;
-        icmp_ln824_reg_4177 <= grp_fu_1743_p2;
-        layer_reg_4130 <= req_layer_idx;
-        mac_complete_load_reg_4144 <= mac_complete;
-        mac_ready_load_reg_4136 <= mac_ready;
-        req_instruction_load_reg_4114 <= req_instruction;
-        req_op_load_reg_4120 <= req_op;
-        req_tile_idx_load_reg_4153 <= req_tile_idx;
-        trunc_ln818_reg_4125 <= trunc_ln818_fu_1882_p1;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state78)) begin
-        main_mem_read_request_new_0_reg_1156 <= xor_ln789_fu_3976_p2;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state79)) begin
-        or_ln742_reg_4559 <= or_ln742_fu_4002_p2;
-        zext_ln726_reg_4554[0] <= zext_ln726_fu_3988_p1[0];
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((((ap_predicate_pred317_state75 == 1'b1) & (1'b1 == ap_CS_fsm_state75)) | ((ap_predicate_pred312_state75 == 1'b1) & (1'b1 == ap_CS_fsm_state75)) | ((ap_predicate_pred299_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred294_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred281_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)) | ((ap_predicate_pred266_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)))) begin
-        reg_1800 <= grp_fu_1739_p2;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state70)) begin
-        tmp_123_reg_4440 <= {{empty_319_fu_2813_p2[8:5]}};
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_out_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state71))) begin
+        acc_loc_fu_330 <= grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_acc_out;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state13)) begin
-        zext_ln137_1_reg_4289[6 : 4] <= zext_ln137_1_fu_2545_p1[6 : 4];
-        zext_ln137_2_reg_4297[2 : 1] <= zext_ln137_2_fu_2549_p1[2 : 1];
-zext_ln137_2_reg_4297[4] <= zext_ln137_2_fu_2549_p1[4];
-        zext_ln137_reg_4282[3] <= zext_ln137_fu_2541_p1[3];
-        zext_ln141_reg_4330[5 : 0] <= zext_ln141_fu_2605_p1[5 : 0];
-        zext_ln215_reg_4313[5 : 0] <= zext_ln215_fu_2577_p1[5 : 0];
-        zext_ln394_2_reg_4319[30 : 0] <= zext_ln394_2_fu_2581_p1[30 : 0];
-        zext_ln394_reg_4302[30 : 0] <= zext_ln394_fu_2553_p1[30 : 0];
-        zext_ln395_1_reg_4324[34 : 0] <= zext_ln395_1_fu_2601_p1[34 : 0];
-        zext_ln395_reg_4307[36 : 0] <= zext_ln395_fu_2573_p1[36 : 0];
+        add_ln144_reg_4174 <= add_ln144_fu_2453_p2;
+        icmp_ln148_reg_4187 <= icmp_ln148_fu_2482_p2;
+        lshr_ln4_reg_4158 <= {{out_base_fu_346[3:1]}};
+        or_ln148_reg_4191 <= or_ln148_fu_2488_p2;
+        tile_out_count_reg_4179 <= tile_out_count_fu_2474_p3;
+        trunc_ln144_reg_4152 <= trunc_ln144_fu_2435_p1;
+        zext_ln141_1_reg_4166[2 : 0] <= zext_ln141_1_fu_2449_p1[2 : 0];
+        zext_ln144_1_reg_4147[4 : 0] <= zext_ln144_1_fu_2431_p1[4 : 0];
+        zext_ln144_reg_4141[4 : 0] <= zext_ln144_fu_2427_p1[4 : 0];
     end
 end
 
-assign ap_ST_fsm_state10_blk = 1'b0;
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state55)) begin
+        add_ln150_3_reg_4229[7 : 4] <= add_ln150_3_fu_2617_p2[7 : 4];
+        icmp_ln148_5_reg_4221 <= icmp_ln148_5_fu_2593_p2;
+        or_ln148_3_reg_4225 <= or_ln148_3_fu_2599_p2;
+        tmp_479_reg_4216 <= {{tile_out_count_reg_4179[5:2]}};
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state70)) begin
+        add_ln183_1_reg_4255[8 : 3] <= add_ln183_1_fu_2650_p2[8 : 3];
+        add_ln183_reg_4250[8 : 3] <= add_ln183_fu_2644_p2[8 : 3];
+        tmp_75_reg_4245[3] <= tmp_75_fu_2636_p3[3];
+tmp_75_reg_4245[8 : 5] <= tmp_75_fu_2636_p3[8 : 5];
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state75)) begin
+        add_ln356_6_reg_4338 <= add_ln356_6_fu_3649_p2;
+        add_ln356_7_reg_4333 <= add_ln356_7_fu_3528_p2;
+        ap_predicate_pred1454_state76 <= ((icmp_ln148_5_reg_4221 == 1'd0) & (trunc_ln780_reg_3928 == 5'd26));
+        ap_predicate_pred1460_state76 <= ((icmp_ln148_5_reg_4221 == 1'd0) & (trunc_ln780_reg_3928 == 5'd20));
+        ap_predicate_pred1465_state76 <= ((icmp_ln148_5_reg_4221 == 1'd0) & (trunc_ln780_reg_3928 == 5'd15));
+        trunc_ln578_2_reg_4323 <= {{trunc_ln578_2_fu_3506_p1[23:16]}};
+        trunc_ln579_2_reg_4328 <= {{trunc_ln579_2_fu_3515_p1[31:24]}};
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state71))) begin
+        ap_predicate_pred1348_state72 <= ((trunc_ln780_reg_3928 == 5'd26) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred1359_state72 <= ((trunc_ln780_reg_3928 == 5'd18) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred264_state72 <= ((trunc_ln780_reg_3928 == 5'd20) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred279_state72 <= ((trunc_ln780_reg_3928 == 5'd15) & (icmp_ln148_reg_4187 == 1'd0));
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state72)) begin
+        ap_predicate_pred1374_state73 <= ((icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd26) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred1380_state73 <= ((icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd18) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred264_state73 <= ((trunc_ln780_reg_3928 == 5'd20) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred279_state73 <= ((trunc_ln780_reg_3928 == 5'd15) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred292_state73 <= ((icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd20) & (icmp_ln148_reg_4187 == 1'd0));
+        ap_predicate_pred297_state73 <= ((icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd15) & (icmp_ln148_reg_4187 == 1'd0));
+        p_cast49_reg_4260[3 : 1] <= p_cast49_fu_2663_p1[3 : 1];
+        p_cast51_reg_4280[3 : 2] <= p_cast51_fu_2687_p1[3 : 2];
+        tmp_232_reg_4266 <= {{out_base_fu_346[3:2]}};
+        zext_ln183_reg_4274[3 : 2] <= zext_ln183_fu_2675_p1[3 : 2];
+        zext_ln193_reg_4295[2 : 1] <= zext_ln193_fu_2711_p1[2 : 1];
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state73)) begin
+        ap_predicate_pred1387_state74 <= ((icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd26));
+        ap_predicate_pred1393_state74 <= ((icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd20));
+        ap_predicate_pred1398_state74 <= ((icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd15));
+        ap_predicate_pred1404_state74 <= ((icmp_ln148_2_reg_4208 == 1'd0) & (icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd26));
+        ap_predicate_pred1410_state74 <= ((icmp_ln148_2_reg_4208 == 1'd0) & (icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd18));
+        ap_predicate_pred310_state74 <= ((icmp_ln148_2_reg_4208 == 1'd0) & (icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd20));
+        ap_predicate_pred315_state74 <= ((icmp_ln148_2_reg_4208 == 1'd0) & (icmp_ln148_4_reg_4200 == 1'd0) & (trunc_ln780_reg_3928 == 5'd15));
+        trunc_ln578_s_reg_4303 <= {{trunc_ln578_s_fu_3002_p1[23:16]}};
+        trunc_ln579_s_reg_4308 <= {{trunc_ln579_s_fu_3011_p1[31:24]}};
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state74)) begin
+        ap_predicate_pred1417_state75 <= ((icmp_ln148_2_reg_4208 == 1'd0) & (trunc_ln780_reg_3928 == 5'd26));
+        ap_predicate_pred1423_state75 <= ((icmp_ln148_2_reg_4208 == 1'd0) & (trunc_ln780_reg_3928 == 5'd20));
+        ap_predicate_pred1428_state75 <= ((icmp_ln148_2_reg_4208 == 1'd0) & (trunc_ln780_reg_3928 == 5'd15));
+        ap_predicate_pred1436_state75 <= ((icmp_ln148_5_reg_4221 == 1'd0) & (icmp_ln148_2_reg_4208 == 1'd0) & (trunc_ln780_reg_3928 == 5'd26));
+        ap_predicate_pred1442_state75 <= ((icmp_ln148_5_reg_4221 == 1'd0) & (icmp_ln148_2_reg_4208 == 1'd0) & (trunc_ln780_reg_3928 == 5'd18));
+        ap_predicate_pred1683_state75 <= ((icmp_ln148_5_reg_4221 == 1'd0) & (icmp_ln148_2_reg_4208 == 1'd0) & (trunc_ln780_reg_3928 == 5'd20));
+        ap_predicate_pred1687_state75 <= ((icmp_ln148_5_reg_4221 == 1'd0) & (icmp_ln148_2_reg_4208 == 1'd0) & (trunc_ln780_reg_3928 == 5'd15));
+        trunc_ln578_1_reg_4313 <= {{trunc_ln578_1_fu_3254_p1[23:16]}};
+        trunc_ln579_1_reg_4318 <= {{trunc_ln579_1_fu_3263_p1[31:24]}};
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state9)) begin
+        do_compute_reg_4040 <= do_compute_fu_2266_p2;
+        zext_ln689_1_reg_4032[2 : 0] <= zext_ln689_1_fu_2224_p1[2 : 0];
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state41)) begin
+        icmp_ln148_2_reg_4208 <= icmp_ln148_2_fu_2555_p2;
+        or_ln148_2_reg_4212 <= or_ln148_2_fu_2560_p2;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state27)) begin
+        icmp_ln148_4_reg_4200 <= icmp_ln148_4_fu_2526_p2;
+        or_ln148_1_reg_4204 <= or_ln148_1_fu_2532_p2;
+        tmp_478_reg_4195 <= {{tile_out_count_reg_4179[5:1]}};
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state1)) begin
+        icmp_ln650_reg_3907 <= icmp_ln650_fu_1754_p2;
+        icmp_ln651_reg_3912 <= icmp_ln651_fu_1760_p2;
+        icmp_ln786_1_reg_3981 <= grp_fu_1652_p2;
+        icmp_ln786_reg_3976 <= grp_fu_1647_p2;
+        layer_reg_3933 <= req_layer_idx;
+        mac_complete_load_reg_3947 <= mac_complete;
+        mac_ready_load_reg_3939 <= mac_ready;
+        req_instruction_load_reg_3917 <= req_instruction;
+        req_op_load_reg_3923 <= req_op;
+        trunc_ln780_reg_3928 <= trunc_ln780_fu_1776_p1;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state77)) begin
+        main_mem_read_request_new_0_reg_1077 <= xor_ln751_fu_3785_p2;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state78)) begin
+        or_ln705_reg_4358 <= or_ln705_fu_3811_p2;
+        zext_ln689_reg_4353[0] <= zext_ln689_fu_3797_p1[0];
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((((ap_predicate_pred315_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred310_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred297_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)) | ((ap_predicate_pred292_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)) | ((ap_predicate_pred279_state72 == 1'b1) & (1'b1 == ap_CS_fsm_state72)) | ((ap_predicate_pred264_state72 == 1'b1) & (1'b1 == ap_CS_fsm_state72)))) begin
+        reg_1694 <= grp_fu_1643_p2;
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state69)) begin
+        tmp_74_reg_4239 <= {{empty_319_fu_2622_p2[8:5]}};
+    end
+end
+
+always @ (posedge ap_clk) begin
+    if ((1'b1 == ap_CS_fsm_state12)) begin
+        zext_ln137_1_reg_4088[6 : 4] <= zext_ln137_1_fu_2354_p1[6 : 4];
+        zext_ln137_2_reg_4096[2 : 1] <= zext_ln137_2_fu_2358_p1[2 : 1];
+zext_ln137_2_reg_4096[4] <= zext_ln137_2_fu_2358_p1[4];
+        zext_ln137_reg_4081[3] <= zext_ln137_fu_2350_p1[3];
+        zext_ln141_reg_4129[5 : 0] <= zext_ln141_fu_2414_p1[5 : 0];
+        zext_ln215_reg_4112[5 : 0] <= zext_ln215_fu_2386_p1[5 : 0];
+        zext_ln355_2_reg_4118[30 : 0] <= zext_ln355_2_fu_2390_p1[30 : 0];
+        zext_ln355_reg_4101[30 : 0] <= zext_ln355_fu_2362_p1[30 : 0];
+        zext_ln356_16_reg_4123[34 : 0] <= zext_ln356_16_fu_2410_p1[34 : 0];
+        zext_ln356_reg_4106[36 : 0] <= zext_ln356_fu_2382_p1[36 : 0];
+    end
+end
 
 always @ (*) begin
-    if ((grp_RES_ADD_TO_BUF_fu_1654_ap_done == 1'b0)) begin
-        ap_ST_fsm_state11_blk = 1'b1;
+    if ((grp_RES_ADD_TO_BUF_fu_1558_ap_done == 1'b0)) begin
+        ap_ST_fsm_state10_blk = 1'b1;
     end else begin
-        ap_ST_fsm_state11_blk = 1'b0;
+        ap_ST_fsm_state10_blk = 1'b0;
     end
 end
+
+assign ap_ST_fsm_state11_blk = 1'b0;
 
 assign ap_ST_fsm_state12_blk = 1'b0;
 
@@ -2521,7 +2390,7 @@ assign ap_ST_fsm_state38_blk = 1'b0;
 assign ap_ST_fsm_state39_blk = 1'b0;
 
 always @ (*) begin
-    if ((grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_done == 1'b0)) begin
+    if ((grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_done == 1'b0)) begin
         ap_ST_fsm_state3_blk = 1'b1;
     end else begin
         ap_ST_fsm_state3_blk = 1'b0;
@@ -2571,7 +2440,7 @@ assign ap_ST_fsm_state58_blk = 1'b0;
 assign ap_ST_fsm_state59_blk = 1'b0;
 
 always @ (*) begin
-    if ((grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_done == 1'b0)) begin
+    if ((grp_ARGMAX_TO_BUF_fu_1515_ap_done == 1'b0)) begin
         ap_ST_fsm_state5_blk = 1'b1;
     end else begin
         ap_ST_fsm_state5_blk = 1'b0;
@@ -2598,25 +2467,19 @@ assign ap_ST_fsm_state68_blk = 1'b0;
 
 assign ap_ST_fsm_state69_blk = 1'b0;
 
-always @ (*) begin
-    if ((1'b1 == ap_block_state6_on_subcall_done)) begin
-        ap_ST_fsm_state6_blk = 1'b1;
-    end else begin
-        ap_ST_fsm_state6_blk = 1'b0;
-    end
-end
+assign ap_ST_fsm_state6_blk = 1'b0;
 
 assign ap_ST_fsm_state70_blk = 1'b0;
 
-assign ap_ST_fsm_state71_blk = 1'b0;
-
 always @ (*) begin
-    if ((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_done == 1'b0)) begin
-        ap_ST_fsm_state72_blk = 1'b1;
+    if ((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_done == 1'b0)) begin
+        ap_ST_fsm_state71_blk = 1'b1;
     end else begin
-        ap_ST_fsm_state72_blk = 1'b0;
+        ap_ST_fsm_state71_blk = 1'b0;
     end
 end
+
+assign ap_ST_fsm_state72_blk = 1'b0;
 
 assign ap_ST_fsm_state73_blk = 1'b0;
 
@@ -2630,32 +2493,30 @@ assign ap_ST_fsm_state77_blk = 1'b0;
 
 assign ap_ST_fsm_state78_blk = 1'b0;
 
-assign ap_ST_fsm_state79_blk = 1'b0;
+always @ (*) begin
+    if ((1'b1 == ap_block_state79_on_subcall_done)) begin
+        ap_ST_fsm_state79_blk = 1'b1;
+    end else begin
+        ap_ST_fsm_state79_blk = 1'b0;
+    end
+end
 
 always @ (*) begin
-    if ((grp_ARGMAX_TO_BUF_fu_1611_ap_done == 1'b0)) begin
+    if ((grp_RMS_NORM_TO_BUF_fu_1533_ap_done == 1'b0)) begin
         ap_ST_fsm_state7_blk = 1'b1;
     end else begin
         ap_ST_fsm_state7_blk = 1'b0;
     end
 end
 
-always @ (*) begin
-    if ((1'b1 == ap_block_state80_on_subcall_done)) begin
-        ap_ST_fsm_state80_blk = 1'b1;
-    end else begin
-        ap_ST_fsm_state80_blk = 1'b0;
-    end
-end
+assign ap_ST_fsm_state80_blk = 1'b0;
 
 assign ap_ST_fsm_state81_blk = 1'b0;
-
-assign ap_ST_fsm_state82_blk = 1'b0;
 
 assign ap_ST_fsm_state8_blk = 1'b0;
 
 always @ (*) begin
-    if ((grp_RMS_NORM_TO_BUF_fu_1629_ap_done == 1'b0)) begin
+    if ((1'b1 == ap_block_state9_on_subcall_done)) begin
         ap_ST_fsm_state9_blk = 1'b1;
     end else begin
         ap_ST_fsm_state9_blk = 1'b0;
@@ -2663,7 +2524,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state82) | ((ap_start == 1'b0) & (1'b1 == ap_CS_fsm_state1)))) begin
+    if (((1'b1 == ap_CS_fsm_state81) | ((ap_start == 1'b0) & (1'b1 == ap_CS_fsm_state1)))) begin
         ap_done = 1'b1;
     end else begin
         ap_done = 1'b0;
@@ -2679,31 +2540,23 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state6) & ((((((((req_tile_idx_load_reg_4153 == 8'd5) & (req_op_load_reg_4120 == 8'd28)) | ((req_tile_idx_load_reg_4153 == 8'd6) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd4) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd3) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd2) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd1) & (req_op_load_reg_4120 == 8'd28))) | ((req_tile_idx_load_reg_4153 == 8'd0) & (req_op_load_reg_4120 == 8'd28))))) begin
-        ap_phi_mux_debug_axi_sig_accum_0_i_lcssa_i_phi_fu_815_p4 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_debug_axi_sig_accum_out;
+    if (((1'b1 == ap_CS_fsm_state9) & ((req_op_load_reg_3923 == 8'd23) | (req_op_load_reg_3923 == 8'd1)))) begin
+        ap_phi_mux_mac_start_4_phi_fu_794_p20 = 1'd0;
     end else begin
-        ap_phi_mux_debug_axi_sig_accum_0_i_lcssa_i_phi_fu_815_p4 = debug_axi_sig_accum_0_i_lcssa_i_reg_811;
+        ap_phi_mux_mac_start_4_phi_fu_794_p20 = mac_start_4_reg_790;
     end
 end
 
 always @ (*) begin
-    if ((((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state6) & ((req_op_load_reg_4120 == 8'd23) | (req_op_load_reg_4120 == 8'd1))))) begin
-        ap_phi_mux_mac_start_4_phi_fu_867_p22 = 1'd0;
+    if (((1'b1 == ap_CS_fsm_state9) & ((req_op_load_reg_3923 == 8'd23) | (req_op_load_reg_3923 == 8'd1)))) begin
+        ap_phi_mux_next_state_8_phi_fu_827_p20 = 3'd4;
     end else begin
-        ap_phi_mux_mac_start_4_phi_fu_867_p22 = mac_start_4_reg_863;
+        ap_phi_mux_next_state_8_phi_fu_827_p20 = next_state_8_reg_822;
     end
 end
 
 always @ (*) begin
-    if ((((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state6) & ((req_op_load_reg_4120 == 8'd23) | (req_op_load_reg_4120 == 8'd1))))) begin
-        ap_phi_mux_next_state_8_phi_fu_903_p22 = 3'd4;
-    end else begin
-        ap_phi_mux_next_state_8_phi_fu_903_p22 = next_state_8_reg_898;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state82)) begin
+    if ((1'b1 == ap_CS_fsm_state81)) begin
         ap_ready = 1'b1;
     end else begin
         ap_ready = 1'b0;
@@ -2711,15 +2564,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state82)) begin
-        ap_return = error_write_assign_fu_4019_p2;
+    if ((1'b1 == ap_CS_fsm_state81)) begin
+        ap_return = error_write_assign_fu_3828_p2;
     end else begin
         ap_return = ap_return_preg;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state82)) begin
+    if ((1'b1 == ap_CS_fsm_state81)) begin
         compute_done_ap_vld = 1'b1;
     end else begin
         compute_done_ap_vld = 1'b0;
@@ -2727,7 +2580,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state82)) begin
+    if ((1'b1 == ap_CS_fsm_state81)) begin
         compute_ready_ap_vld = 1'b1;
     end else begin
         compute_ready_ap_vld = 1'b0;
@@ -2735,83 +2588,83 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6))) begin
-        grp_RMS_NORM_TO_BUF_fu_1629_final_norm = 1'd0;
-    end else if ((1'b1 == ap_CS_fsm_state9)) begin
-        grp_RMS_NORM_TO_BUF_fu_1629_final_norm = 1'd1;
+    if (((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9))) begin
+        grp_RMS_NORM_TO_BUF_fu_1533_final_norm = 1'd0;
+    end else if ((1'b1 == ap_CS_fsm_state7)) begin
+        grp_RMS_NORM_TO_BUF_fu_1533_final_norm = 1'd1;
     end else begin
-        grp_RMS_NORM_TO_BUF_fu_1629_final_norm = 'bx;
+        grp_RMS_NORM_TO_BUF_fu_1533_final_norm = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6))) begin
-        grp_RMS_NORM_TO_BUF_fu_1629_requant_M = M_6_reg_4262;
-    end else if ((1'b1 == ap_CS_fsm_state9)) begin
-        grp_RMS_NORM_TO_BUF_fu_1629_requant_M = 31'd0;
+    if (((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9))) begin
+        grp_RMS_NORM_TO_BUF_fu_1533_requant_M = M_6_reg_4022;
+    end else if ((1'b1 == ap_CS_fsm_state7)) begin
+        grp_RMS_NORM_TO_BUF_fu_1533_requant_M = 31'd0;
     end else begin
-        grp_RMS_NORM_TO_BUF_fu_1629_requant_M = 'bx;
+        grp_RMS_NORM_TO_BUF_fu_1533_requant_M = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6))) begin
-        grp_RMS_NORM_TO_BUF_fu_1629_requant_n = n_6_reg_4267;
-    end else if ((1'b1 == ap_CS_fsm_state9)) begin
-        grp_RMS_NORM_TO_BUF_fu_1629_requant_n = 6'd0;
+    if (((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9))) begin
+        grp_RMS_NORM_TO_BUF_fu_1533_requant_n = n_6_reg_4027;
+    end else if ((1'b1 == ap_CS_fsm_state7)) begin
+        grp_RMS_NORM_TO_BUF_fu_1533_requant_n = 6'd0;
     end else begin
-        grp_RMS_NORM_TO_BUF_fu_1629_requant_n = 'bx;
+        grp_RMS_NORM_TO_BUF_fu_1533_requant_n = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1826_state76 == 1'b1))) begin
-        grp_fu_1739_p0 = sext_ln392_6_fu_3836_p1;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1822_state76 == 1'b1))) begin
-        grp_fu_1739_p0 = sext_ln392_7_fu_3715_p1;
-    end else if (((ap_predicate_pred317_state75 == 1'b1) & (1'b1 == ap_CS_fsm_state75))) begin
-        grp_fu_1739_p0 = sext_ln392_4_fu_3579_p1;
-    end else if (((ap_predicate_pred312_state75 == 1'b1) & (1'b1 == ap_CS_fsm_state75))) begin
-        grp_fu_1739_p0 = sext_ln392_5_fu_3463_p1;
-    end else if (((ap_predicate_pred299_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74))) begin
-        grp_fu_1739_p0 = sext_ln392_2_fu_3327_p1;
-    end else if (((ap_predicate_pred294_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74))) begin
-        grp_fu_1739_p0 = sext_ln392_3_fu_3211_p1;
-    end else if (((ap_predicate_pred281_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73))) begin
-        grp_fu_1739_p0 = sext_ln392_fu_3087_p1;
-    end else if (((ap_predicate_pred266_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73))) begin
-        grp_fu_1739_p0 = sext_ln392_1_fu_2968_p1;
+    if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1687_state75 == 1'b1))) begin
+        grp_fu_1643_p0 = sext_ln353_6_fu_3645_p1;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1683_state75 == 1'b1))) begin
+        grp_fu_1643_p0 = sext_ln353_7_fu_3524_p1;
+    end else if (((ap_predicate_pred315_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74))) begin
+        grp_fu_1643_p0 = sext_ln353_4_fu_3388_p1;
+    end else if (((ap_predicate_pred310_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74))) begin
+        grp_fu_1643_p0 = sext_ln353_5_fu_3272_p1;
+    end else if (((ap_predicate_pred297_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73))) begin
+        grp_fu_1643_p0 = sext_ln353_2_fu_3136_p1;
+    end else if (((ap_predicate_pred292_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73))) begin
+        grp_fu_1643_p0 = sext_ln353_3_fu_3020_p1;
+    end else if (((ap_predicate_pred279_state72 == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
+        grp_fu_1643_p0 = sext_ln353_fu_2896_p1;
+    end else if (((ap_predicate_pred264_state72 == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
+        grp_fu_1643_p0 = sext_ln353_1_fu_2777_p1;
     end else begin
-        grp_fu_1739_p0 = 'bx;
+        grp_fu_1643_p0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1826_state76 == 1'b1)) | ((ap_predicate_pred317_state75 == 1'b1) & (1'b1 == ap_CS_fsm_state75)) | ((ap_predicate_pred299_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred281_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)))) begin
-        grp_fu_1739_p1 = zext_ln394_reg_4302;
-    end else if ((((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1822_state76 == 1'b1)) | ((ap_predicate_pred312_state75 == 1'b1) & (1'b1 == ap_CS_fsm_state75)) | ((ap_predicate_pred294_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred266_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)))) begin
-        grp_fu_1739_p1 = zext_ln394_2_reg_4319;
+    if ((((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1687_state75 == 1'b1)) | ((ap_predicate_pred315_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred297_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)) | ((ap_predicate_pred279_state72 == 1'b1) & (1'b1 == ap_CS_fsm_state72)))) begin
+        grp_fu_1643_p1 = zext_ln355_reg_4101;
+    end else if ((((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1683_state75 == 1'b1)) | ((ap_predicate_pred310_state74 == 1'b1) & (1'b1 == ap_CS_fsm_state74)) | ((ap_predicate_pred292_state73 == 1'b1) & (1'b1 == ap_CS_fsm_state73)) | ((ap_predicate_pred264_state72 == 1'b1) & (1'b1 == ap_CS_fsm_state72)))) begin
+        grp_fu_1643_p1 = zext_ln355_2_reg_4118;
     end else begin
-        grp_fu_1739_p1 = 'bx;
+        grp_fu_1643_p1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state57)) begin
-        grp_read_i32_fu_1672_byte_addr = add_ln150_3_reg_4430;
-    end else if ((1'b1 == ap_CS_fsm_state43)) begin
-        grp_read_i32_fu_1672_byte_addr = add_ln150_2_fu_2769_p2;
-    end else if ((1'b1 == ap_CS_fsm_state29)) begin
-        grp_read_i32_fu_1672_byte_addr = add_ln150_1_fu_2740_p2;
-    end else if ((1'b1 == ap_CS_fsm_state15)) begin
-        grp_read_i32_fu_1672_byte_addr = add_ln150_fu_2702_p2;
+    if ((1'b1 == ap_CS_fsm_state56)) begin
+        grp_read_i32_fu_1576_byte_addr = add_ln150_3_reg_4229;
+    end else if ((1'b1 == ap_CS_fsm_state42)) begin
+        grp_read_i32_fu_1576_byte_addr = add_ln150_2_fu_2578_p2;
+    end else if ((1'b1 == ap_CS_fsm_state28)) begin
+        grp_read_i32_fu_1576_byte_addr = add_ln150_1_fu_2549_p2;
+    end else if ((1'b1 == ap_CS_fsm_state14)) begin
+        grp_read_i32_fu_1576_byte_addr = add_ln150_fu_2511_p2;
     end else begin
-        grp_read_i32_fu_1672_byte_addr = 'bx;
+        grp_read_i32_fu_1576_byte_addr = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state82) & (ap_phi_mux_main_mem_op_flag_1_phi_fu_1530_p4 == 1'd1))) begin
+    if (((1'b1 == ap_CS_fsm_state81) & (ap_phi_mux_main_mem_op_flag_1_phi_fu_1451_p4 == 1'd1))) begin
         main_mem_op_ap_vld = 1'b1;
     end else begin
         main_mem_op_ap_vld = 1'b0;
@@ -2819,7 +2672,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state82) & (ap_phi_mux_main_mem_read_request_flag_1_phi_fu_1482_p4 == 1'd1))) begin
+    if (((1'b1 == ap_CS_fsm_state81) & (ap_phi_mux_main_mem_read_request_flag_1_phi_fu_1403_p4 == 1'd1))) begin
         main_mem_read_request_ap_vld = 1'b1;
     end else begin
         main_mem_read_request_ap_vld = 1'b0;
@@ -2827,7 +2680,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state82) & (ap_phi_mux_main_mem_write_request_flag_1_phi_fu_1506_p4 == 1'd1))) begin
+    if (((1'b1 == ap_CS_fsm_state81) & (ap_phi_mux_main_mem_write_request_flag_1_phi_fu_1427_p4 == 1'd1))) begin
         main_mem_write_request_ap_vld = 1'b1;
     end else begin
         main_mem_write_request_ap_vld = 1'b0;
@@ -2851,7 +2704,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6))) begin
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9))) begin
         requant_params_REQUANT2_M_L_ce0_local = 1'b1;
     end else begin
         requant_params_REQUANT2_M_L_ce0_local = 1'b0;
@@ -2859,7 +2712,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6))) begin
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9))) begin
         requant_params_REQUANT2_N_L_ce0_local = 1'b1;
     end else begin
         requant_params_REQUANT2_N_L_ce0_local = 1'b0;
@@ -2883,7 +2736,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6))) begin
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9))) begin
         requant_params_REQUANT4_M_L_ce0_local = 1'b1;
     end else begin
         requant_params_REQUANT4_M_L_ce0_local = 1'b0;
@@ -2891,7 +2744,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6))) begin
+    if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9))) begin
         requant_params_REQUANT4_N_L_ce0_local = 1'b1;
     end else begin
         requant_params_REQUANT4_N_L_ce0_local = 1'b0;
@@ -2899,157 +2752,149 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_address1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce0 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_10_ce1 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state76)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln580_2_fu_3590_p1;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln183_reg_4475;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln576_2_fu_3425_p1;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1528_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_811_gep_fu_654_p3;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1523_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln141_1_reg_4367;
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln144_reg_4342;
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln580_fu_2951_p1;
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = 5'd1;
+    if ((1'b1 == ap_CS_fsm_state75)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln578_2_fu_3399_p1;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln183_reg_4274;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln574_2_fu_3234_p1;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1398_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_801_gep_fu_616_p3;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1393_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln141_1_reg_4166;
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln144_reg_4141;
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = zext_ln578_fu_2760_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1595_state77 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_827_gep_fu_782_p3;
-    end else if (((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1590_state77 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln193_reg_4496;
-    end else if (((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1584_state77 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln580_3_fu_3852_p1;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = p_cast81_reg_4481;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln576_3_fu_3677_p1;
-    end else if ((1'b1 == ap_CS_fsm_state75)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln580_1_fu_3338_p1;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = p_cast79_reg_4461;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln576_1_fu_3173_p1;
-    end else if ((1'b1 == ap_CS_fsm_state73)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln576_fu_2911_p1;
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = 5'd0;
+    if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1465_state76 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_817_gep_fu_744_p3;
+    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1460_state76 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln193_reg_4295;
+    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1454_state76 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln578_3_fu_3661_p1;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = p_cast51_reg_4280;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln574_3_fu_3486_p1;
+    end else if ((1'b1 == ap_CS_fsm_state74)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln578_1_fu_3147_p1;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = p_cast49_reg_4260;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln574_1_fu_2982_p1;
+    end else if ((1'b1 == ap_CS_fsm_state72)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = zext_ln574_fu_2720_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state76) | ((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1528_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1523_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1)))) begin
+    if (((1'b1 == ap_CS_fsm_state75) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1398_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1393_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce0_local = 1'b0;
@@ -3057,17 +2902,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1_local;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state75) | (1'b1 == ap_CS_fsm_state73) | ((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1595_state77 == 1'b1)) | ((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1590_state77 == 1'b1)) | ((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1584_state77 == 1'b1)))) begin
+    if (((1'b1 == ap_CS_fsm_state74) | (1'b1 == ap_CS_fsm_state72) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1465_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1460_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1454_state76 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_ce1_local = 1'b0;
@@ -3075,97 +2920,93 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state76)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = trunc_ln581_1_reg_4519;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{v_145_fu_3555_p3[15:8]}};
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{trunc_ln579_1_fu_3435_p1[15:8]}};
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1528_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = select_ln397_5_fu_3409_p3;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1523_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = select_ln397_7_fu_3372_p3;
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{v_fu_3063_p3[15:8]}};
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{trunc_ln20_fu_2957_p1[31:24]}};
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = 8'd0;
+    if ((1'b1 == ap_CS_fsm_state75)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = trunc_ln579_1_reg_4318;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{v_145_fu_3364_p3[15:8]}};
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{trunc_ln577_1_fu_3244_p1[15:8]}};
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1398_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = select_ln358_5_fu_3218_p3;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1393_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = select_ln358_7_fu_3181_p3;
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{v_fu_2872_p3[15:8]}};
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = {{trunc_ln17_fu_2766_p1[31:24]}};
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1595_state77 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = select_ln397_13_fu_3963_p3;
-    end else if (((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1590_state77 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = select_ln397_15_fu_3906_p3;
-    end else if (((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1584_state77 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = trunc_ln581_2_reg_4529;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{v_146_fu_3812_p3[15:8]}};
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{trunc_ln579_2_fu_3687_p1[15:8]}};
-    end else if ((1'b1 == ap_CS_fsm_state75)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = trunc_ln581_s_reg_4509;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{v_144_fu_3303_p3[15:8]}};
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{trunc_ln579_s_fu_3183_p1[15:8]}};
-    end else if ((1'b1 == ap_CS_fsm_state73)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{trunc_ln18_fu_2922_p1[15:8]}};
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = zext_ln272_fu_2352_p1;
+    if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1465_state76 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = select_ln358_13_fu_3772_p3;
+    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1460_state76 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = select_ln358_15_fu_3715_p3;
+    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1454_state76 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = trunc_ln579_2_reg_4328;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{v_146_fu_3621_p3[15:8]}};
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{trunc_ln577_2_fu_3496_p1[15:8]}};
+    end else if ((1'b1 == ap_CS_fsm_state74)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = trunc_ln579_s_reg_4308;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{v_144_fu_3112_p3[15:8]}};
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{trunc_ln577_s_fu_2992_p1[15:8]}};
+    end else if ((1'b1 == ap_CS_fsm_state72)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = {{trunc_ln15_fu_2731_p1[15:8]}};
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_d1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0 = (transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_out | 1'b0);
     end
 end
 
 always @ (*) begin
-    if ((((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1547_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1528_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1523_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1)))) begin
+    if ((((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1417_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1398_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1393_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local = 1'b0;
@@ -3173,17 +3014,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1 = (transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1_out | 1'b0);
     end
 end
 
 always @ (*) begin
-    if ((((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1517_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1595_state77 == 1'b1)) | ((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1590_state77 == 1'b1)) | ((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1584_state77 == 1'b1)))) begin
+    if ((((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1387_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1465_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1460_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1454_state76 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we1_local = 1'b0;
@@ -3191,97 +3032,93 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = p_cast81_reg_4481;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln576_3_fu_3677_p1;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1558_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_819_gep_fu_718_p3;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1553_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln193_reg_4496;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln183_reg_4475;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln576_2_fu_3425_p1;
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln144_reg_4342;
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln580_fu_2951_p1;
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = 5'd1;
+    if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = p_cast51_reg_4280;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln574_3_fu_3486_p1;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1428_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_809_gep_fu_680_p3;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1423_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln193_reg_4295;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln183_reg_4274;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln574_2_fu_3234_p1;
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln144_reg_4141;
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = zext_ln578_fu_2760_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state77)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln580_3_fu_3852_p1;
-    end else if ((1'b1 == ap_CS_fsm_state76)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln580_2_fu_3590_p1;
+    if ((1'b1 == ap_CS_fsm_state76)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln578_3_fu_3661_p1;
     end else if ((1'b1 == ap_CS_fsm_state75)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln580_1_fu_3338_p1;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = p_cast79_reg_4461;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln576_1_fu_3173_p1;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred281_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_796_gep_fu_590_p3;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred266_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln141_1_reg_4367;
-    end else if ((1'b1 == ap_CS_fsm_state73)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln576_fu_2911_p1;
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = 5'd0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln578_2_fu_3399_p1;
+    end else if ((1'b1 == ap_CS_fsm_state74)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln578_1_fu_3147_p1;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = p_cast49_reg_4260;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln574_1_fu_2982_p1;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred279_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_786_gep_fu_552_p3;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred264_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln141_1_reg_4166;
+    end else if ((1'b1 == ap_CS_fsm_state72)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = zext_ln574_fu_2720_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_address1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local;
     end
 end
 
 always @ (*) begin
-    if ((((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1558_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1553_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1)))) begin
+    if ((((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1428_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1423_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce0_local = 1'b0;
@@ -3289,17 +3126,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1_local;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state76) | (1'b1 == ap_CS_fsm_state75) | (1'b1 == ap_CS_fsm_state73) | (1'b1 == ap_CS_fsm_state77) | ((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred281_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred266_state74 == 1'b1)))) begin
+    if (((1'b1 == ap_CS_fsm_state75) | (1'b1 == ap_CS_fsm_state74) | (1'b1 == ap_CS_fsm_state72) | (1'b1 == ap_CS_fsm_state76) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred279_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred264_state73 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_ce1_local = 1'b0;
@@ -3307,97 +3144,93 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln572_34_fu_3820_p1;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln578_12_fu_3683_p1;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1558_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = select_ln397_9_fu_3661_p3;
-    end else if (((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1553_state76 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = select_ln397_11_fu_3624_p3;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln572_33_fu_3563_p1;
-    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln578_11_fu_3431_p1;
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln572_fu_3071_p1;
-    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = {{trunc_ln19_fu_2933_p1[23:16]}};
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = 8'd0;
+    if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln570_34_fu_3629_p1;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln576_12_fu_3492_p1;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1428_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = select_ln358_9_fu_3470_p3;
+    end else if (((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1423_state75 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = select_ln358_11_fu_3433_p3;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln570_33_fu_3372_p1;
+    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln576_11_fu_3240_p1;
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = trunc_ln570_fu_2880_p1;
+    end else if (((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = {{trunc_ln16_fu_2742_p1[23:16]}};
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state77)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln580_2_reg_4524;
-    end else if ((1'b1 == ap_CS_fsm_state76)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln580_1_reg_4514;
+    if ((1'b1 == ap_CS_fsm_state76)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln578_2_reg_4323;
     end else if ((1'b1 == ap_CS_fsm_state75)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln580_s_reg_4504;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln572_32_fu_3311_p1;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln578_10_fu_3179_p1;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred281_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = select_ln397_1_fu_3157_p3;
-    end else if (((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred266_state74 == 1'b1))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = select_ln397_3_fu_3120_p3;
-    end else if ((1'b1 == ap_CS_fsm_state73)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln578_fu_2917_p1;
-    end else if (((req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln271_fu_2337_p1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln578_1_reg_4313;
+    end else if ((1'b1 == ap_CS_fsm_state74)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln578_s_reg_4303;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln570_32_fu_3120_p1;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln576_10_fu_2988_p1;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred279_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = select_ln358_1_fu_2966_p3;
+    end else if (((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred264_state73 == 1'b1))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = select_ln358_3_fu_2929_p3;
+    end else if ((1'b1 == ap_CS_fsm_state72)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = trunc_ln576_fu_2726_p1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_d1_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((or_ln742_reg_4559 == 1'd0) & (1'b1 == ap_CS_fsm_state80))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+    if (((or_ln705_reg_4358 == 1'd0) & (1'b1 == ap_CS_fsm_state79))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0 = (transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_out | 1'b0);
     end
 end
 
 always @ (*) begin
-    if ((((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1572_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1566_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1558_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1553_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1540_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1534_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1489_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1)))) begin
+    if ((((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1442_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1436_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1428_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1423_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1410_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1404_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1359_state72 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we0_local = 1'b0;
@@ -3405,17 +3238,17 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
+    if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
+    end else if ((1'b1 == ap_CS_fsm_state5)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1 = (transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1_out | 1'b0);
     end
 end
 
 always @ (*) begin
-    if ((((1'b0 == ap_block_state6_on_subcall_done) & (req_op_load_reg_4120 == 8'd28) & (1'b1 == ap_CS_fsm_state6)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1547_state76 == 1'b1)) | ((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1517_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1510_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1504_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred281_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred266_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1478_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state77) & (ap_predicate_pred1584_state77 == 1'b1)))) begin
+    if ((((1'b1 == ap_CS_fsm_state75) & (ap_predicate_pred1417_state75 == 1'b1)) | ((1'b1 == ap_CS_fsm_state74) & (ap_predicate_pred1387_state74 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1380_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred1374_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred279_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state73) & (ap_predicate_pred264_state73 == 1'b1)) | ((1'b1 == ap_CS_fsm_state72) & (ap_predicate_pred1348_state72 == 1'b1)) | ((1'b1 == ap_CS_fsm_state76) & (ap_predicate_pred1454_state76 == 1'b1)))) begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1_local = 1'b1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1_local = 1'b0;
@@ -3423,256 +3256,240 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_address1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce0 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_6_ce1 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_address1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce0 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_7_ce1 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_address1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce0 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_8_ce1 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_address1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state72)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state69) | (1'b1 == ap_CS_fsm_state55) | (1'b1 == ap_CS_fsm_state41) | (1'b1 == ap_CS_fsm_state27) | ((or_ln148_3_reg_4426 == 1'd0) & (1'b1 == ap_CS_fsm_state70)) | ((or_ln148_2_reg_4413 == 1'd0) & (1'b1 == ap_CS_fsm_state56)) | ((or_ln148_1_reg_4405 == 1'd0) & (1'b1 == ap_CS_fsm_state42)) | ((or_ln148_reg_4392 == 1'd0) & (1'b1 == ap_CS_fsm_state28)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_read_i32_fu_1672_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
-    end else if ((1'b1 == ap_CS_fsm_state7)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_ARGMAX_TO_BUF_fu_1611_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+    if ((1'b1 == ap_CS_fsm_state71)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state68) | (1'b1 == ap_CS_fsm_state54) | (1'b1 == ap_CS_fsm_state40) | (1'b1 == ap_CS_fsm_state26) | ((or_ln148_reg_4191 == 1'd0) & (1'b1 == ap_CS_fsm_state27)) | ((or_ln148_3_reg_4225 == 1'd0) & (1'b1 == ap_CS_fsm_state69)) | ((or_ln148_2_reg_4212 == 1'd0) & (1'b1 == ap_CS_fsm_state55)) | ((or_ln148_1_reg_4204 == 1'd0) & (1'b1 == ap_CS_fsm_state41)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_read_i32_fu_1576_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+    end else if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
     end else if ((1'b1 == ap_CS_fsm_state5)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_ARGMAX_TO_BUF_fu_1515_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce0 = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state11)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1 = grp_RES_ADD_TO_BUF_fu_1654_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
-    end else if (((1'b1 == ap_CS_fsm_state9) | ((ap_predicate_op230_call_state6 == 1'b1) & (1'b1 == ap_CS_fsm_state6)))) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1 = grp_RMS_NORM_TO_BUF_fu_1629_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
+    if ((1'b1 == ap_CS_fsm_state10)) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1 = grp_RES_ADD_TO_BUF_fu_1558_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
+    end else if (((1'b1 == ap_CS_fsm_state7) | ((ap_predicate_op216_call_state9 == 1'b1) & (1'b1 == ap_CS_fsm_state9)))) begin
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1 = grp_RMS_NORM_TO_BUF_fu_1533_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
     end else if ((1'b1 == ap_CS_fsm_state3)) begin
-        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1574_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
+        transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1 = grp_FFN_ACT_Silu_TO_BUF_fu_1495_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1;
     end else begin
         transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_9_ce1 = 1'b0;
     end
@@ -3681,112 +3498,104 @@ end
 always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_state1 : begin
-            if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state79;
-            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & ((((((((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd6) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3)) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd5) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd4) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd3) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd2) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd1) & (req_op_load_load_fu_1876_p1 
-    == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd0) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))))) begin
-                ap_NS_fsm = ap_ST_fsm_state5;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd15) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state12;
-            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd22) & (next_state_load_fu_1856_p1 == 8'd3)) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd16) & (next_state_load_fu_1856_p1 == 8'd3))))) begin
-                ap_NS_fsm = ap_ST_fsm_state11;
-            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd23) & (next_state_load_fu_1856_p1 == 8'd3)) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd1) & (next_state_load_fu_1856_p1 == 8'd3))))) begin
-                ap_NS_fsm = ap_ST_fsm_state10;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd25) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state9;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd26) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state8;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd27) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state7;
-            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & ((~(req_op_load_load_fu_1876_p1 == 8'd20) & ~(req_op_load_load_fu_1876_p1 == 8'd19) & ~(req_op_load_load_fu_1876_p1 == 8'd18) & ~(req_op_load_load_fu_1876_p1 == 8'd27) & ~(req_op_load_load_fu_1876_p1 == 8'd26) & ~(req_op_load_load_fu_1876_p1 == 8'd25) & ~(req_op_load_load_fu_1876_p1 == 8'd23) & ~(req_op_load_load_fu_1876_p1 == 8'd1) & ~(req_op_load_load_fu_1876_p1 == 8'd22) & ~(req_op_load_load_fu_1876_p1 == 8'd16) & ~(req_op_load_load_fu_1876_p1 == 8'd15) & ~(req_op_load_load_fu_1876_p1 == 8'd28) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd3)) | (~(req_tile_idx_load_load_fu_2032_p1 == 8'd0) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd1) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd2) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd6) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd5) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd4) & ~(req_tile_idx_load_load_fu_2032_p1 == 8'd3) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 
-    == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))))) begin
-                ap_NS_fsm = ap_ST_fsm_state6;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd18) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state4;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd19) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state3;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_op_load_load_fu_1876_p1 == 8'd20) & (next_state_load_fu_1856_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state2;
-            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1)) | (~(next_state_load_fu_1856_p1 == 8'd3) & ~(next_state_load_fu_1856_p1 == 8'd2) & ~(next_state_load_fu_1856_p1 == 8'd0) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1))))) begin
-                ap_NS_fsm = ap_ST_fsm_state81;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+            if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd0) & (1'b1 == ap_CS_fsm_state1))) begin
                 ap_NS_fsm = ap_ST_fsm_state78;
-            end else if (((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state82;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd15) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state11;
+            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd22) & (next_state_load_fu_1750_p1 == 8'd3)) | ((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd16) & (next_state_load_fu_1750_p1 == 8'd3))))) begin
+                ap_NS_fsm = ap_ST_fsm_state10;
+            end else if ((~(req_op_load_load_fu_1770_p1 == 8'd20) & ~(req_op_load_load_fu_1770_p1 == 8'd19) & ~(req_op_load_load_fu_1770_p1 == 8'd18) & ~(req_op_load_load_fu_1770_p1 == 8'd27) & ~(req_op_load_load_fu_1770_p1 == 8'd26) & ~(req_op_load_load_fu_1770_p1 == 8'd25) & ~(req_op_load_load_fu_1770_p1 == 8'd23) & ~(req_op_load_load_fu_1770_p1 == 8'd1) & ~(req_op_load_load_fu_1770_p1 == 8'd22) & ~(req_op_load_load_fu_1770_p1 == 8'd16) & ~(req_op_load_load_fu_1770_p1 == 8'd15) & (ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state9;
+            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd23) & (next_state_load_fu_1750_p1 == 8'd3)) | ((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd1) & (next_state_load_fu_1750_p1 == 8'd3))))) begin
+                ap_NS_fsm = ap_ST_fsm_state8;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd25) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state7;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd26) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state6;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd27) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state5;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd18) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state4;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd19) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state3;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (req_op_load_load_fu_1770_p1 == 8'd20) & (next_state_load_fu_1750_p1 == 8'd3) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state2;
+            end else if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1) & (((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1)) | (~(next_state_load_fu_1750_p1 == 8'd3) & ~(next_state_load_fu_1750_p1 == 8'd2) & ~(next_state_load_fu_1750_p1 == 8'd0) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1))))) begin
+                ap_NS_fsm = ap_ST_fsm_state80;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd2) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state77;
+            end else if (((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
+                ap_NS_fsm = ap_ST_fsm_state81;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state1;
             end
         end
         ap_ST_fsm_state2 : begin
-            ap_NS_fsm = ap_ST_fsm_state6;
+            ap_NS_fsm = ap_ST_fsm_state9;
         end
         ap_ST_fsm_state3 : begin
-            if (((grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-                ap_NS_fsm = ap_ST_fsm_state6;
+            if (((grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+                ap_NS_fsm = ap_ST_fsm_state9;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end
         end
         ap_ST_fsm_state4 : begin
-            ap_NS_fsm = ap_ST_fsm_state6;
+            ap_NS_fsm = ap_ST_fsm_state9;
         end
         ap_ST_fsm_state5 : begin
-            if (((grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
-                ap_NS_fsm = ap_ST_fsm_state6;
+            if (((grp_ARGMAX_TO_BUF_fu_1515_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state5))) begin
+                ap_NS_fsm = ap_ST_fsm_state9;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state5;
             end
         end
         ap_ST_fsm_state6 : begin
-            if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6) & (((((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd20)) | ((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd18))) | ((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd26))) | ((do_compute_fu_2399_p2 == 1'd1) & (req_op_load_reg_4120 == 8'd15))))) begin
-                ap_NS_fsm = ap_ST_fsm_state13;
-            end else if (((1'b0 == ap_block_state6_on_subcall_done) & (1'b1 == ap_CS_fsm_state6) & ((do_compute_fu_2399_p2 == 1'd0) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15))))) begin
-                ap_NS_fsm = ap_ST_fsm_state14;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state6;
-            end
+            ap_NS_fsm = ap_ST_fsm_state9;
         end
         ap_ST_fsm_state7 : begin
-            if (((grp_ARGMAX_TO_BUF_fu_1611_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7))) begin
-                ap_NS_fsm = ap_ST_fsm_state6;
+            if (((grp_RMS_NORM_TO_BUF_fu_1533_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state7))) begin
+                ap_NS_fsm = ap_ST_fsm_state9;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state7;
             end
         end
         ap_ST_fsm_state8 : begin
-            ap_NS_fsm = ap_ST_fsm_state6;
+            ap_NS_fsm = ap_ST_fsm_state9;
         end
         ap_ST_fsm_state9 : begin
-            if (((grp_RMS_NORM_TO_BUF_fu_1629_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state9))) begin
-                ap_NS_fsm = ap_ST_fsm_state6;
+            if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9) & (((((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd20)) | ((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd18))) | ((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd26))) | ((do_compute_fu_2266_p2 == 1'd1) & (req_op_load_reg_3923 == 8'd15))))) begin
+                ap_NS_fsm = ap_ST_fsm_state12;
+            end else if (((1'b0 == ap_block_state9_on_subcall_done) & (1'b1 == ap_CS_fsm_state9) & ((do_compute_fu_2266_p2 == 1'd0) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15))))) begin
+                ap_NS_fsm = ap_ST_fsm_state13;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state9;
             end
         end
         ap_ST_fsm_state10 : begin
-            ap_NS_fsm = ap_ST_fsm_state6;
+            if (((grp_RES_ADD_TO_BUF_fu_1558_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state10))) begin
+                ap_NS_fsm = ap_ST_fsm_state9;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state10;
+            end
         end
         ap_ST_fsm_state11 : begin
-            if (((grp_RES_ADD_TO_BUF_fu_1654_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state11))) begin
-                ap_NS_fsm = ap_ST_fsm_state6;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state11;
-            end
+            ap_NS_fsm = ap_ST_fsm_state9;
         end
         ap_ST_fsm_state12 : begin
-            ap_NS_fsm = ap_ST_fsm_state6;
+            ap_NS_fsm = ap_ST_fsm_state13;
         end
         ap_ST_fsm_state13 : begin
-            ap_NS_fsm = ap_ST_fsm_state14;
+            if (((1'b1 == ap_CS_fsm_state13) & (((icmp_ln144_fu_2421_p2 == 1'd0) | (do_compute_reg_4040 == 1'd0)) | (~(req_op_load_reg_3923 == 8'd26) & ~(req_op_load_reg_3923 == 8'd20) & ~(req_op_load_reg_3923 == 8'd18) & ~(req_op_load_reg_3923 == 8'd15))))) begin
+                ap_NS_fsm = ap_ST_fsm_state80;
+            end else if (((1'b1 == ap_CS_fsm_state13) & (((((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd20)) | ((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd18))) | ((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd26))) | ((icmp_ln144_fu_2421_p2 == 1'd1) & (or_ln148_fu_2488_p2 == 1'd1) & (do_compute_reg_4040 == 1'd1) & (req_op_load_reg_3923 == 8'd15))))) begin
+                ap_NS_fsm = ap_ST_fsm_state27;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state14;
+            end
         end
         ap_ST_fsm_state14 : begin
-            if (((1'b1 == ap_CS_fsm_state14) & (((do_compute_reg_4221 == 1'd0) | (icmp_ln144_fu_2612_p2 == 1'd0)) | (~(req_op_load_reg_4120 == 8'd26) & ~(req_op_load_reg_4120 == 8'd20) & ~(req_op_load_reg_4120 == 8'd18) & ~(req_op_load_reg_4120 == 8'd15))))) begin
-                ap_NS_fsm = ap_ST_fsm_state81;
-            end else if (((1'b1 == ap_CS_fsm_state14) & (((((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd20) & (icmp_ln144_fu_2612_p2 == 1'd1)) | ((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd18) & (icmp_ln144_fu_2612_p2 == 1'd1))) | ((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd26) & (icmp_ln144_fu_2612_p2 == 1'd1))) | ((or_ln148_fu_2679_p2 == 1'd1) & (do_compute_reg_4221 == 1'd1) & (req_op_load_reg_4120 == 8'd15) & (icmp_ln144_fu_2612_p2 == 1'd1))))) begin
-                ap_NS_fsm = ap_ST_fsm_state28;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state15;
-            end
+            ap_NS_fsm = ap_ST_fsm_state15;
         end
         ap_ST_fsm_state15 : begin
             ap_NS_fsm = ap_ST_fsm_state16;
@@ -3825,14 +3634,14 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state27;
         end
         ap_ST_fsm_state27 : begin
-            ap_NS_fsm = ap_ST_fsm_state28;
+            if (((or_ln148_1_fu_2532_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state27))) begin
+                ap_NS_fsm = ap_ST_fsm_state41;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state28;
+            end
         end
         ap_ST_fsm_state28 : begin
-            if (((or_ln148_1_fu_2723_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state28))) begin
-                ap_NS_fsm = ap_ST_fsm_state42;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state29;
-            end
+            ap_NS_fsm = ap_ST_fsm_state29;
         end
         ap_ST_fsm_state29 : begin
             ap_NS_fsm = ap_ST_fsm_state30;
@@ -3871,14 +3680,14 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state41;
         end
         ap_ST_fsm_state41 : begin
-            ap_NS_fsm = ap_ST_fsm_state42;
+            if (((or_ln148_2_fu_2560_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state41))) begin
+                ap_NS_fsm = ap_ST_fsm_state55;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state42;
+            end
         end
         ap_ST_fsm_state42 : begin
-            if (((or_ln148_2_fu_2751_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state42))) begin
-                ap_NS_fsm = ap_ST_fsm_state56;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state43;
-            end
+            ap_NS_fsm = ap_ST_fsm_state43;
         end
         ap_ST_fsm_state43 : begin
             ap_NS_fsm = ap_ST_fsm_state44;
@@ -3917,14 +3726,14 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state55;
         end
         ap_ST_fsm_state55 : begin
-            ap_NS_fsm = ap_ST_fsm_state56;
+            if (((or_ln148_3_fu_2599_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state55))) begin
+                ap_NS_fsm = ap_ST_fsm_state69;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state56;
+            end
         end
         ap_ST_fsm_state56 : begin
-            if (((or_ln148_3_fu_2790_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state56))) begin
-                ap_NS_fsm = ap_ST_fsm_state70;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state57;
-            end
+            ap_NS_fsm = ap_ST_fsm_state57;
         end
         ap_ST_fsm_state57 : begin
             ap_NS_fsm = ap_ST_fsm_state58;
@@ -3969,14 +3778,14 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state71;
         end
         ap_ST_fsm_state71 : begin
-            ap_NS_fsm = ap_ST_fsm_state72;
+            if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state71))) begin
+                ap_NS_fsm = ap_ST_fsm_state72;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state71;
+            end
         end
         ap_ST_fsm_state72 : begin
-            if (((grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state72))) begin
-                ap_NS_fsm = ap_ST_fsm_state73;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state72;
-            end
+            ap_NS_fsm = ap_ST_fsm_state73;
         end
         ap_ST_fsm_state73 : begin
             ap_NS_fsm = ap_ST_fsm_state74;
@@ -3988,28 +3797,25 @@ always @ (*) begin
             ap_NS_fsm = ap_ST_fsm_state76;
         end
         ap_ST_fsm_state76 : begin
-            ap_NS_fsm = ap_ST_fsm_state77;
+            ap_NS_fsm = ap_ST_fsm_state13;
         end
         ap_ST_fsm_state77 : begin
-            ap_NS_fsm = ap_ST_fsm_state14;
-        end
-        ap_ST_fsm_state78 : begin
-            ap_NS_fsm = ap_ST_fsm_state81;
-        end
-        ap_ST_fsm_state79 : begin
             ap_NS_fsm = ap_ST_fsm_state80;
         end
-        ap_ST_fsm_state80 : begin
-            if (((1'b0 == ap_block_state80_on_subcall_done) & (1'b1 == ap_CS_fsm_state80))) begin
-                ap_NS_fsm = ap_ST_fsm_state81;
-            end else begin
+        ap_ST_fsm_state78 : begin
+            ap_NS_fsm = ap_ST_fsm_state79;
+        end
+        ap_ST_fsm_state79 : begin
+            if (((1'b0 == ap_block_state79_on_subcall_done) & (1'b1 == ap_CS_fsm_state79))) begin
                 ap_NS_fsm = ap_ST_fsm_state80;
+            end else begin
+                ap_NS_fsm = ap_ST_fsm_state79;
             end
         end
-        ap_ST_fsm_state81 : begin
-            ap_NS_fsm = ap_ST_fsm_state82;
+        ap_ST_fsm_state80 : begin
+            ap_NS_fsm = ap_ST_fsm_state81;
         end
-        ap_ST_fsm_state82 : begin
+        ap_ST_fsm_state81 : begin
             ap_NS_fsm = ap_ST_fsm_state1;
         end
         default : begin
@@ -4018,29 +3824,29 @@ always @ (*) begin
     endcase
 end
 
-assign M_6_fu_2489_p7 = 'bx;
+assign M_6_fu_2182_p7 = 'bx;
 
-assign add_ln144_fu_2644_p2 = (out_base_fu_378 + 5'd4);
+assign add_ln144_fu_2453_p2 = (out_base_fu_346 + 5'd4);
 
-assign add_ln150_1_fu_2740_p2 = (zext_ln150_1_fu_2736_p1 + zext_ln137_1_reg_4289);
+assign add_ln150_1_fu_2549_p2 = (zext_ln150_1_fu_2545_p1 + zext_ln137_1_reg_4088);
 
-assign add_ln150_2_fu_2769_p2 = (zext_ln150_2_fu_2765_p1 + zext_ln137_1_reg_4289);
+assign add_ln150_2_fu_2578_p2 = (zext_ln150_2_fu_2574_p1 + zext_ln137_1_reg_4088);
 
-assign add_ln150_3_fu_2808_p2 = (zext_ln150_3_fu_2804_p1 + zext_ln137_1_reg_4289);
+assign add_ln150_3_fu_2617_p2 = (zext_ln150_3_fu_2613_p1 + zext_ln137_1_reg_4088);
 
-assign add_ln150_fu_2702_p2 = (zext_ln150_fu_2698_p1 + zext_ln137_1_reg_4289);
+assign add_ln150_fu_2511_p2 = (zext_ln150_fu_2507_p1 + zext_ln137_1_reg_4088);
 
-assign add_ln183_1_fu_2841_p2 = (add_ln183_fu_2835_p2 + zext_ln137_reg_4282);
+assign add_ln183_1_fu_2650_p2 = (add_ln183_fu_2644_p2 + zext_ln137_reg_4081);
 
-assign add_ln183_fu_2835_p2 = (tmp_124_fu_2827_p3 + zext_ln137_reg_4282);
+assign add_ln183_fu_2644_p2 = (tmp_75_fu_2636_p3 + zext_ln137_reg_4081);
 
-assign add_ln394_1_fu_2585_p2 = ($signed(requant_params_REQUANT4_N_L_q0) + $signed(6'd63));
+assign add_ln355_1_fu_2394_p2 = ($signed(requant_params_REQUANT4_N_L_q0) + $signed(6'd63));
 
-assign add_ln394_fu_2557_p2 = ($signed(requant_params_REQUANT2_N_L_q0) + $signed(6'd63));
+assign add_ln355_fu_2366_p2 = ($signed(requant_params_REQUANT2_N_L_q0) + $signed(6'd63));
 
-assign add_ln395_6_fu_3840_p2 = (grp_fu_1739_p2 + zext_ln395_reg_4307);
+assign add_ln356_6_fu_3649_p2 = (grp_fu_1643_p2 + zext_ln356_reg_4106);
 
-assign add_ln395_7_fu_3719_p2 = (grp_fu_1739_p2 + zext_ln395_1_reg_4324);
+assign add_ln356_7_fu_3528_p2 = (grp_fu_1643_p2 + zext_ln356_16_reg_4123);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -4054,35 +3860,35 @@ assign ap_CS_fsm_state13 = ap_CS_fsm[32'd12];
 
 assign ap_CS_fsm_state14 = ap_CS_fsm[32'd13];
 
-assign ap_CS_fsm_state15 = ap_CS_fsm[32'd14];
-
 assign ap_CS_fsm_state2 = ap_CS_fsm[32'd1];
+
+assign ap_CS_fsm_state26 = ap_CS_fsm[32'd25];
 
 assign ap_CS_fsm_state27 = ap_CS_fsm[32'd26];
 
 assign ap_CS_fsm_state28 = ap_CS_fsm[32'd27];
 
-assign ap_CS_fsm_state29 = ap_CS_fsm[32'd28];
-
 assign ap_CS_fsm_state3 = ap_CS_fsm[32'd2];
 
 assign ap_CS_fsm_state4 = ap_CS_fsm[32'd3];
+
+assign ap_CS_fsm_state40 = ap_CS_fsm[32'd39];
 
 assign ap_CS_fsm_state41 = ap_CS_fsm[32'd40];
 
 assign ap_CS_fsm_state42 = ap_CS_fsm[32'd41];
 
-assign ap_CS_fsm_state43 = ap_CS_fsm[32'd42];
-
 assign ap_CS_fsm_state5 = ap_CS_fsm[32'd4];
+
+assign ap_CS_fsm_state54 = ap_CS_fsm[32'd53];
 
 assign ap_CS_fsm_state55 = ap_CS_fsm[32'd54];
 
 assign ap_CS_fsm_state56 = ap_CS_fsm[32'd55];
 
-assign ap_CS_fsm_state57 = ap_CS_fsm[32'd56];
-
 assign ap_CS_fsm_state6 = ap_CS_fsm[32'd5];
+
+assign ap_CS_fsm_state68 = ap_CS_fsm[32'd67];
 
 assign ap_CS_fsm_state69 = ap_CS_fsm[32'd68];
 
@@ -4114,531 +3920,499 @@ assign ap_CS_fsm_state80 = ap_CS_fsm[32'd79];
 
 assign ap_CS_fsm_state81 = ap_CS_fsm[32'd80];
 
-assign ap_CS_fsm_state82 = ap_CS_fsm[32'd81];
-
 assign ap_CS_fsm_state9 = ap_CS_fsm[32'd8];
 
-assign ap_NS_fsm_state15 = ap_NS_fsm[32'd14];
+assign ap_NS_fsm_state14 = ap_NS_fsm[32'd13];
 
-assign ap_NS_fsm_state29 = ap_NS_fsm[32'd28];
+assign ap_NS_fsm_state28 = ap_NS_fsm[32'd27];
 
-assign ap_NS_fsm_state43 = ap_NS_fsm[32'd42];
+assign ap_NS_fsm_state42 = ap_NS_fsm[32'd41];
 
-assign ap_NS_fsm_state57 = ap_NS_fsm[32'd56];
+assign ap_NS_fsm_state56 = ap_NS_fsm[32'd55];
 
 always @ (*) begin
-    ap_block_state6_on_subcall_done = ((ap_predicate_op230_call_state6 == 1'b1) & (grp_RMS_NORM_TO_BUF_fu_1629_ap_done == 1'b0));
+    ap_block_state79_on_subcall_done = ((grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_done == 1'b0) & (or_ln705_reg_4358 == 1'd0));
 end
 
 always @ (*) begin
-    ap_block_state80_on_subcall_done = ((grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_done == 1'b0) & (or_ln742_reg_4559 == 1'd0));
+    ap_block_state9_on_subcall_done = ((ap_predicate_op216_call_state9 == 1'b1) & (grp_RMS_NORM_TO_BUF_fu_1533_ap_done == 1'b0));
 end
 
 always @ (*) begin
-    ap_condition_1181 = ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (or_ln752_fu_2101_p2 == 1'd0));
+    ap_condition_1068 = ((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (or_ln715_fu_1958_p2 == 1'd0));
 end
 
 always @ (*) begin
-    ap_condition_1185 = ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd1) & (or_ln752_fu_2101_p2 == 1'd1));
+    ap_condition_1072 = ((ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd1) & (or_ln715_fu_1958_p2 == 1'd1));
 end
 
 always @ (*) begin
-    ap_condition_1622 = ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd0) & (1'b1 == ap_CS_fsm_state1));
+    ap_condition_1489 = ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd0) & (1'b1 == ap_CS_fsm_state1));
 end
 
 always @ (*) begin
-    ap_condition_1634 = ((1'b0 == ap_block_state6_on_subcall_done) & (do_compute_fu_2399_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state6));
+    ap_condition_1501 = ((1'b0 == ap_block_state9_on_subcall_done) & (do_compute_fu_2266_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state9));
 end
 
 always @ (*) begin
-    ap_condition_3386 = ((ap_start == 1'b1) & (cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (next_state_load_fu_1856_p1 == 8'd4) & (1'b1 == ap_CS_fsm_state1));
+    ap_condition_3220 = ((ap_start == 1'b1) & (ctrl_mem_0_read_read_fu_368_p2 == 1'd1) & (next_state_load_fu_1750_p1 == 8'd4) & (1'b1 == ap_CS_fsm_state1));
 end
+
+assign ap_phi_mux_main_mem_op_flag_1_phi_fu_1451_p4 = main_mem_op_flag_1_reg_1447;
+
+assign ap_phi_mux_main_mem_read_request_flag_1_phi_fu_1403_p4 = main_mem_read_request_flag_1_reg_1399;
+
+assign ap_phi_mux_main_mem_write_request_flag_1_phi_fu_1427_p4 = main_mem_write_request_flag_1_reg_1423;
 
 always @ (*) begin
-    ap_condition_856 = ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd3) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3));
+    ap_predicate_op216_call_state9 = ((req_op_load_reg_3923 == 8'd23) | (req_op_load_reg_3923 == 8'd1));
 end
 
-always @ (*) begin
-    ap_condition_862 = ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd4) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3));
-end
+assign compute_done = compute_done_new_0_reg_1388;
 
-always @ (*) begin
-    ap_condition_868 = ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd5) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3));
-end
+assign compute_done_1_load_load_fu_2250_p1 = compute_done_1;
 
-always @ (*) begin
-    ap_condition_874 = ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd6) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3));
-end
+assign compute_ready = compute_ready_new_0_reg_1377;
 
-always @ (*) begin
-    ap_condition_887 = ((((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd1) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3)) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd2) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3))) | ((cntrl_reset_n_read_read_fu_400_p2 == 1'd1) & (req_tile_idx_load_load_fu_2032_p1 == 8'd0) & (req_op_load_load_fu_1876_p1 == 8'd28) & (next_state_load_fu_1856_p1 == 8'd3)));
-end
+assign ctrl_mem_0_read_read_fu_368_p2 = ctrl_mem_0;
 
-assign ap_phi_mux_main_mem_op_flag_1_phi_fu_1530_p4 = main_mem_op_flag_1_reg_1526;
+assign do_compute_fu_2266_p2 = (xor_ln86_fu_2260_p2 & ap_phi_mux_mac_start_4_phi_fu_794_p20);
 
-assign ap_phi_mux_main_mem_read_request_flag_1_phi_fu_1482_p4 = main_mem_read_request_flag_1_reg_1478;
+assign empty_298_fu_1998_p2 = ((req_op == 8'd27) ? 1'b1 : 1'b0);
 
-assign ap_phi_mux_main_mem_write_request_flag_1_phi_fu_1506_p4 = main_mem_write_request_flag_1_reg_1502;
+assign empty_299_fu_2004_p2 = ((req_op == 8'd26) ? 1'b1 : 1'b0);
 
-always @ (*) begin
-    ap_predicate_op230_call_state6 = ((req_op_load_reg_4120 == 8'd23) | (req_op_load_reg_4120 == 8'd1));
-end
+assign empty_300_fu_2010_p2 = (empty_299_fu_2004_p2 | empty_298_fu_1998_p2);
 
-assign cntrl_reset_n_read_read_fu_400_p2 = cntrl_reset_n;
+assign empty_301_fu_2016_p2 = ((req_op == 8'd25) ? 1'b1 : 1'b0);
 
-assign compute_done = compute_done_new_0_reg_1467;
+assign empty_302_fu_2022_p2 = (empty_301_fu_2016_p2 | empty_300_fu_2010_p2);
 
-assign compute_done_1_load_load_fu_2383_p1 = compute_done_1;
+assign empty_304_fu_2028_p2 = (grp_fu_1647_p2 | empty_302_fu_2022_p2);
 
-assign compute_ready = compute_ready_new_0_reg_1456;
+assign empty_305_fu_2034_p2 = ((req_op == 8'd22) ? 1'b1 : 1'b0);
 
-assign compute_start_2_read_read_fu_394_p2 = compute_start_2;
+assign empty_306_fu_2040_p2 = (empty_305_fu_2034_p2 | empty_304_fu_2028_p2);
 
-assign do_compute_fu_2399_p2 = (xor_ln86_fu_2393_p2 & ap_phi_mux_mac_start_4_phi_fu_867_p22);
+assign empty_307_fu_2046_p2 = ((req_op == 8'd20) ? 1'b1 : 1'b0);
 
-assign empty_297_fu_2153_p2 = ((req_op == 8'd27) ? 1'b1 : 1'b0);
+assign empty_308_fu_2052_p2 = (empty_307_fu_2046_p2 | empty_306_fu_2040_p2);
 
-assign empty_298_fu_2159_p2 = (empty_fu_2147_p2 | empty_297_fu_2153_p2);
+assign empty_309_fu_2058_p2 = ((req_op == 8'd19) ? 1'b1 : 1'b0);
 
-assign empty_299_fu_2165_p2 = ((req_op == 8'd26) ? 1'b1 : 1'b0);
+assign empty_310_fu_2064_p2 = (empty_309_fu_2058_p2 | empty_308_fu_2052_p2);
 
-assign empty_300_fu_2171_p2 = (empty_299_fu_2165_p2 | empty_298_fu_2159_p2);
+assign empty_311_fu_2070_p2 = ((req_op == 8'd18) ? 1'b1 : 1'b0);
 
-assign empty_301_fu_2177_p2 = ((req_op == 8'd25) ? 1'b1 : 1'b0);
+assign empty_312_fu_2076_p2 = (empty_311_fu_2070_p2 | empty_310_fu_2064_p2);
 
-assign empty_302_fu_2183_p2 = (empty_301_fu_2177_p2 | empty_300_fu_2171_p2);
+assign empty_313_fu_2082_p2 = ((req_op == 8'd16) ? 1'b1 : 1'b0);
 
-assign empty_304_fu_2189_p2 = (grp_fu_1743_p2 | empty_302_fu_2183_p2);
+assign empty_314_fu_2088_p2 = (empty_313_fu_2082_p2 | empty_312_fu_2076_p2);
 
-assign empty_305_fu_2195_p2 = ((req_op == 8'd22) ? 1'b1 : 1'b0);
+assign empty_315_fu_2094_p2 = ((req_op == 8'd15) ? 1'b1 : 1'b0);
 
-assign empty_306_fu_2201_p2 = (empty_305_fu_2195_p2 | empty_304_fu_2189_p2);
+assign empty_316_fu_2100_p2 = (empty_315_fu_2094_p2 | empty_314_fu_2088_p2);
 
-assign empty_307_fu_2207_p2 = ((req_op == 8'd20) ? 1'b1 : 1'b0);
+assign empty_318_fu_2106_p2 = (grp_fu_1652_p2 | empty_316_fu_2100_p2);
 
-assign empty_308_fu_2213_p2 = (empty_307_fu_2207_p2 | empty_306_fu_2201_p2);
+assign empty_319_fu_2622_p0 = zext_ln144_1_reg_4147;
 
-assign empty_309_fu_2219_p2 = ((req_op == 8'd19) ? 1'b1 : 1'b0);
+assign empty_319_fu_2622_p1 = zext_ln137_reg_4081;
 
-assign empty_310_fu_2225_p2 = (empty_309_fu_2219_p2 | empty_308_fu_2213_p2);
+assign error_write_assign_fu_3828_p2 = (write_flag_2_reg_1471 & compute_error_2_reg_1483);
 
-assign empty_311_fu_2231_p2 = ((req_op == 8'd18) ? 1'b1 : 1'b0);
+assign grp_ARGMAX_TO_BUF_fu_1515_ap_start = grp_ARGMAX_TO_BUF_fu_1515_ap_start_reg;
 
-assign empty_312_fu_2237_p2 = (empty_311_fu_2231_p2 | empty_310_fu_2225_p2);
+assign grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start = grp_FFN_ACT_Silu_TO_BUF_fu_1495_ap_start_reg;
 
-assign empty_313_fu_2243_p2 = ((req_op == 8'd16) ? 1'b1 : 1'b0);
+assign grp_RES_ADD_TO_BUF_fu_1558_ap_start = grp_RES_ADD_TO_BUF_fu_1558_ap_start_reg;
 
-assign empty_314_fu_2249_p2 = (empty_313_fu_2243_p2 | empty_312_fu_2237_p2);
+assign grp_RMS_NORM_TO_BUF_fu_1533_ap_start = grp_RMS_NORM_TO_BUF_fu_1533_ap_start_reg;
 
-assign empty_315_fu_2255_p2 = ((req_op == 8'd15) ? 1'b1 : 1'b0);
+assign grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1594_ap_start_reg;
 
-assign empty_316_fu_2261_p2 = (empty_315_fu_2255_p2 | empty_314_fu_2249_p2);
+assign grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start = grp_compute_controller_Pipeline_VITIS_LOOP_706_1_fu_1635_ap_start_reg;
 
-assign empty_318_fu_2267_p2 = (grp_fu_1748_p2 | empty_316_fu_2261_p2);
+assign grp_fu_1647_p2 = ((req_op == 8'd23) ? 1'b1 : 1'b0);
 
-assign empty_319_fu_2813_p0 = zext_ln144_1_reg_4348;
+assign grp_fu_1652_p2 = ((req_op == 8'd1) ? 1'b1 : 1'b0);
 
-assign empty_319_fu_2813_p1 = zext_ln137_reg_4282;
+assign grp_fu_1667_p3 = ((mac_complete_load_reg_3947[0:0] == 1'b1) ? 3'd4 : 3'd3);
 
-assign empty_fu_2147_p2 = ((req_op == 8'd28) ? 1'b1 : 1'b0);
+assign grp_fu_1674_p4 = {{out_base_fu_346[3:2]}};
 
-assign error_write_assign_fu_4019_p2 = (write_flag_2_reg_1550 & error_2_reg_1562);
+assign grp_fu_1698_p2 = (reg_1694 + zext_ln356_16_reg_4123);
 
-assign grp_ARGMAX_TO_BUF_fu_1611_ap_start = grp_ARGMAX_TO_BUF_fu_1611_ap_start_reg;
+assign grp_fu_1703_p2 = $signed(grp_fu_1698_p2) >>> zext_ln141_reg_4129;
 
-assign grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start = grp_FFN_ACT_Silu_TO_BUF_fu_1574_ap_start_reg;
+assign grp_fu_1708_p4 = {{grp_fu_1703_p2[30:7]}};
 
-assign grp_RES_ADD_TO_BUF_fu_1654_ap_start = grp_RES_ADD_TO_BUF_fu_1654_ap_start_reg;
+assign grp_fu_1718_p2 = (($signed(grp_fu_1708_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign grp_RMS_NORM_TO_BUF_fu_1629_ap_start = grp_RMS_NORM_TO_BUF_fu_1629_ap_start_reg;
+assign grp_fu_1724_p2 = (reg_1694 + zext_ln356_reg_4106);
 
-assign grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start = grp_compute_controller_Pipeline_VITIS_LOOP_157_3_fu_1690_ap_start_reg;
+assign grp_fu_1729_p2 = $signed(grp_fu_1724_p2) >>> zext_ln215_reg_4112;
 
-assign grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start = grp_compute_controller_Pipeline_VITIS_LOOP_265_1_fu_1594_ap_start_reg;
+assign grp_fu_1734_p4 = {{grp_fu_1729_p2[30:7]}};
 
-assign grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start = grp_compute_controller_Pipeline_VITIS_LOOP_743_1_fu_1731_ap_start_reg;
+assign grp_fu_1744_p2 = (($signed(grp_fu_1734_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1743_p2 = ((req_op == 8'd23) ? 1'b1 : 1'b0);
+assign grp_read_i32_fu_1576_ap_start = grp_read_i32_fu_1576_ap_start_reg;
 
-assign grp_fu_1748_p2 = ((req_op == 8'd1) ? 1'b1 : 1'b0);
+assign icmp_ln138_fu_2313_p2 = ((tmp_477_fu_2304_p4 != 3'd0) ? 1'b1 : 1'b0);
 
-assign grp_fu_1773_p3 = ((mac_complete_load_reg_4144[0:0] == 1'b1) ? 3'd4 : 3'd3);
+assign icmp_ln144_1_fu_2459_p2 = ((add_ln144_fu_2453_p2 < out_count_0_i_ph_i_reg_937) ? 1'b1 : 1'b0);
 
-assign grp_fu_1780_p4 = {{out_base_fu_378[3:2]}};
+assign icmp_ln144_fu_2421_p2 = ((out_base_fu_346 < out_count_0_i_ph_i_reg_937) ? 1'b1 : 1'b0);
 
-assign grp_fu_1804_p2 = (reg_1800 + zext_ln395_1_reg_4324);
+assign icmp_ln148_2_fu_2555_p2 = (($signed(tile_out_count_reg_4179) < $signed(6'd3)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1809_p2 = $signed(grp_fu_1804_p2) >>> zext_ln141_reg_4330;
+assign icmp_ln148_4_fu_2526_p2 = (($signed(tmp_478_fu_2517_p4) < $signed(5'd1)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1814_p4 = {{grp_fu_1809_p2[30:7]}};
+assign icmp_ln148_5_fu_2593_p2 = (($signed(tmp_479_fu_2584_p4) < $signed(4'd1)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1824_p2 = (($signed(grp_fu_1814_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln148_fu_2482_p2 = (($signed(tile_out_count_fu_2474_p3) < $signed(6'd1)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1830_p2 = (reg_1800 + zext_ln395_reg_4307);
+assign icmp_ln209_1_fu_3076_p2 = (($signed(tmp_486_fu_3066_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1835_p2 = $signed(grp_fu_1830_p2) >>> zext_ln215_reg_4313;
+assign icmp_ln209_2_fu_3328_p2 = (($signed(tmp_490_fu_3318_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1840_p4 = {{grp_fu_1835_p2[30:7]}};
+assign icmp_ln209_3_fu_3585_p2 = (($signed(tmp_494_fu_3575_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign grp_fu_1850_p2 = (($signed(grp_fu_1840_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln209_fu_2836_p2 = (($signed(tmp_482_fu_2826_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
 
-assign grp_read_i32_fu_1672_ap_start = grp_read_i32_fu_1672_ap_start_reg;
+assign icmp_ln210_1_fu_3082_p2 = (($signed(scaled_9_fu_3056_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln138_fu_2446_p2 = ((tmp_475_fu_2437_p4 != 3'd0) ? 1'b1 : 1'b0);
+assign icmp_ln210_2_fu_3334_p2 = (($signed(scaled_12_fu_3308_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln144_1_fu_2650_p2 = ((add_ln144_fu_2644_p2 < out_count_0_i_ph_i_reg_1016) ? 1'b1 : 1'b0);
+assign icmp_ln210_3_fu_3591_p2 = (($signed(scaled_15_fu_3565_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln144_fu_2612_p2 = ((out_base_fu_378 < out_count_0_i_ph_i_reg_1016) ? 1'b1 : 1'b0);
+assign icmp_ln210_fu_2842_p2 = (($signed(scaled_fu_2816_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
 
-assign icmp_ln148_2_fu_2746_p2 = (($signed(tile_out_count_reg_4380) < $signed(6'd3)) ? 1'b1 : 1'b0);
+assign icmp_ln358_6_fu_3742_p2 = (($signed(tmp_492_fu_3732_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln148_4_fu_2717_p2 = (($signed(tmp_476_fu_2708_p4) < $signed(5'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln358_7_fu_3685_p2 = (($signed(tmp_495_fu_3675_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
 
-assign icmp_ln148_5_fu_2784_p2 = (($signed(tmp_477_fu_2775_p4) < $signed(4'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln359_1_fu_2905_p2 = (($signed(trunc_ln356_1_fu_2901_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln148_fu_2673_p2 = (($signed(tile_out_count_fu_2665_p3) < $signed(6'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln359_2_fu_3194_p2 = (($signed(trunc_ln356_2_fu_3190_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln209_1_fu_3267_p2 = (($signed(tmp_484_fu_3257_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln359_3_fu_3157_p2 = (($signed(trunc_ln356_3_fu_3153_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln209_2_fu_3519_p2 = (($signed(tmp_488_fu_3509_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln359_4_fu_3446_p2 = (($signed(trunc_ln356_4_fu_3442_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln209_3_fu_3776_p2 = (($signed(tmp_492_fu_3766_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln359_5_fu_3409_p2 = (($signed(trunc_ln356_5_fu_3405_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln209_fu_3027_p2 = (($signed(tmp_480_fu_3017_p4) > $signed(17'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln359_6_fu_3748_p2 = (($signed(trunc_ln356_6_fu_3728_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln210_1_fu_3273_p2 = (($signed(scaled_9_fu_3247_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln359_7_fu_3691_p2 = (($signed(trunc_ln356_7_fu_3671_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln210_2_fu_3525_p2 = (($signed(scaled_12_fu_3499_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln359_fu_2942_p2 = (($signed(trunc_ln356_fu_2938_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
 
-assign icmp_ln210_3_fu_3782_p2 = (($signed(scaled_15_fu_3756_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln650_fu_1754_p2 = ((state == 8'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln210_fu_3033_p2 = (($signed(scaled_fu_3007_p4) < $signed(32'd4294934528)) ? 1'b1 : 1'b0);
+assign icmp_ln651_fu_1760_p2 = ((state == 8'd5) ? 1'b1 : 1'b0);
 
-assign icmp_ln397_6_fu_3933_p2 = (($signed(tmp_490_fu_3923_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln715_fu_1952_p2 = ((req_instruction == empty_206) ? 1'b1 : 1'b0);
 
-assign icmp_ln397_7_fu_3876_p2 = (($signed(tmp_493_fu_3866_p4) > $signed(24'd0)) ? 1'b1 : 1'b0);
+assign icmp_ln781_fu_1926_p2 = ((tmp_476_fu_1916_p4 != 3'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln398_1_fu_3096_p2 = (($signed(trunc_ln395_1_fu_3092_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign idxprom125_i_i3_fu_2327_p1 = layer_5_fu_2319_p3;
 
-assign icmp_ln398_2_fu_3385_p2 = (($signed(trunc_ln395_2_fu_3381_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign layer_4_fu_1932_p3 = ((icmp_ln781_fu_1926_p2[0:0] == 1'b1) ? 5'd0 : trunc_ln780_1_fu_1912_p1);
 
-assign icmp_ln398_3_fu_3348_p2 = (($signed(trunc_ln395_3_fu_3344_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign layer_5_fu_2319_p3 = ((icmp_ln138_fu_2313_p2[0:0] == 1'b1) ? 5'd0 : trunc_ln137_fu_2301_p1);
 
-assign icmp_ln398_4_fu_3637_p2 = (($signed(trunc_ln395_4_fu_3633_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign lshr_ln4_fu_2439_p4 = {{out_base_fu_346[3:1]}};
 
-assign icmp_ln398_5_fu_3600_p2 = (($signed(trunc_ln395_5_fu_3596_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign mac_start_1_fu_2171_p2 = (xor_ln810_fu_2166_p2 & mac_ready_load_reg_3939);
 
-assign icmp_ln398_6_fu_3939_p2 = (($signed(trunc_ln395_6_fu_3919_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign mac_start_2_fu_2161_p2 = (xor_ln827_fu_2156_p2 & mac_ready_load_reg_3939);
 
-assign icmp_ln398_7_fu_3882_p2 = (($signed(trunc_ln395_7_fu_3862_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign mac_start_3_fu_2151_p2 = (xor_ln844_fu_2146_p2 & mac_ready_load_reg_3939);
 
-assign icmp_ln398_fu_3133_p2 = (($signed(trunc_ln395_fu_3129_p1) < $signed(31'd2147483520)) ? 1'b1 : 1'b0);
+assign mac_start_fu_2345_p2 = (xor_ln762_fu_2340_p2 & mac_ready_load_reg_3939);
 
-assign icmp_ln687_fu_1860_p2 = ((state == 8'd0) ? 1'b1 : 1'b0);
+assign main_mem_op = main_mem_op_new_1_reg_1459;
 
-assign icmp_ln688_fu_1866_p2 = ((state == 8'd5) ? 1'b1 : 1'b0);
+assign main_mem_read_request = main_mem_read_request_new_1_reg_1411;
 
-assign icmp_ln752_fu_2095_p2 = ((req_instruction == compute_instruction_2) ? 1'b1 : 1'b0);
+assign main_mem_write_request = main_mem_write_request_new_1_reg_1435;
 
-assign icmp_ln819_fu_2069_p2 = ((tmp_fu_2059_p4 != 3'd0) ? 1'b1 : 1'b0);
+assign n_6_fu_2203_p7 = 'bx;
 
-assign idxprom125_i_i3_fu_2460_p1 = layer_5_fu_2452_p3;
+assign next_state_load_fu_1750_p1 = state;
 
-assign layer_4_fu_2075_p3 = ((icmp_ln819_fu_2069_p2[0:0] == 1'b1) ? 5'd0 : trunc_ln818_1_fu_2055_p1);
+assign or_ln10_fu_3227_p3 = {{tmp_232_reg_4266}, {3'd4}};
 
-assign layer_5_fu_2452_p3 = ((icmp_ln138_fu_2446_p2[0:0] == 1'b1) ? 5'd0 : trunc_ln137_fu_2434_p1);
+assign or_ln148_1_fu_2532_p2 = (use_bias_0_i_ph_i_reg_855 | icmp_ln148_4_fu_2526_p2);
 
-assign lshr_ln4_fu_2630_p4 = {{out_base_fu_378[3:1]}};
+assign or_ln148_2_fu_2560_p2 = (use_bias_0_i_ph_i_reg_855 | icmp_ln148_2_fu_2555_p2);
 
-assign mac_start_1_fu_2478_p2 = (xor_ln848_fu_2473_p2 & mac_ready_load_reg_4136);
+assign or_ln148_3_fu_2599_p2 = (use_bias_0_i_ph_i_reg_855 | icmp_ln148_5_fu_2593_p2);
 
-assign mac_start_2_fu_2328_p2 = (xor_ln870_fu_2323_p2 & mac_ready_load_reg_4136);
+assign or_ln148_fu_2488_p2 = (use_bias_0_i_ph_i_reg_855 | icmp_ln148_fu_2482_p2);
 
-assign mac_start_3_fu_2318_p2 = (xor_ln887_fu_2313_p2 & mac_ready_load_reg_4136);
+assign or_ln150_1_fu_2566_p3 = {{grp_fu_1674_p4}, {4'd8}};
 
-assign mac_start_fu_2536_p2 = (xor_ln800_fu_2531_p2 & mac_ready_load_reg_4136);
+assign or_ln150_2_fu_2605_p3 = {{grp_fu_1674_p4}, {4'd12}};
 
-assign main_mem_op = main_mem_op_new_1_reg_1538;
+assign or_ln211_1_fu_3106_p2 = (icmp_ln210_1_fu_3082_p2 | icmp_ln209_1_fu_3076_p2);
 
-assign main_mem_read_request = main_mem_read_request_new_1_reg_1490;
+assign or_ln211_2_fu_3358_p2 = (icmp_ln210_2_fu_3334_p2 | icmp_ln209_2_fu_3328_p2);
 
-assign main_mem_write_request = main_mem_write_request_new_1_reg_1514;
+assign or_ln211_3_fu_3615_p2 = (icmp_ln210_3_fu_3591_p2 | icmp_ln209_3_fu_3585_p2);
 
-assign mem_transfer_done_read_read_fu_382_p2 = mem_transfer_done;
+assign or_ln211_fu_2866_p2 = (icmp_ln210_fu_2842_p2 | icmp_ln209_fu_2836_p2);
 
-assign n_6_fu_2510_p7 = 'bx;
+assign or_ln358_1_fu_2923_p2 = (icmp_ln359_1_fu_2905_p2 | grp_fu_1718_p2);
 
-assign next_state_load_fu_1856_p1 = state;
+assign or_ln358_2_fu_3212_p2 = (icmp_ln359_2_fu_3194_p2 | grp_fu_1744_p2);
 
-assign or_ln10_fu_3418_p3 = {{tmp_234_reg_4467}, {3'd4}};
+assign or_ln358_3_fu_3175_p2 = (icmp_ln359_3_fu_3157_p2 | grp_fu_1718_p2);
 
-assign or_ln148_1_fu_2723_p2 = (use_bias_0_i_ph_i_reg_934 | icmp_ln148_4_fu_2717_p2);
+assign or_ln358_4_fu_3464_p2 = (icmp_ln359_4_fu_3446_p2 | grp_fu_1744_p2);
 
-assign or_ln148_2_fu_2751_p2 = (use_bias_0_i_ph_i_reg_934 | icmp_ln148_2_fu_2746_p2);
+assign or_ln358_5_fu_3427_p2 = (icmp_ln359_5_fu_3409_p2 | grp_fu_1718_p2);
 
-assign or_ln148_3_fu_2790_p2 = (use_bias_0_i_ph_i_reg_934 | icmp_ln148_5_fu_2784_p2);
+assign or_ln358_6_fu_3766_p2 = (icmp_ln359_6_fu_3748_p2 | icmp_ln358_6_fu_3742_p2);
 
-assign or_ln148_fu_2679_p2 = (use_bias_0_i_ph_i_reg_934 | icmp_ln148_fu_2673_p2);
+assign or_ln358_7_fu_3709_p2 = (icmp_ln359_7_fu_3691_p2 | icmp_ln358_7_fu_3685_p2);
 
-assign or_ln150_1_fu_2757_p3 = {{grp_fu_1780_p4}, {4'd8}};
+assign or_ln358_fu_2960_p2 = (icmp_ln359_fu_2942_p2 | grp_fu_1744_p2);
 
-assign or_ln150_2_fu_2796_p3 = {{grp_fu_1780_p4}, {4'd12}};
+assign or_ln578_1_fu_3140_p3 = {{lshr_ln4_reg_4158}, {2'd3}};
 
-assign or_ln211_1_fu_3297_p2 = (icmp_ln210_1_fu_3273_p2 | icmp_ln209_1_fu_3267_p2);
+assign or_ln578_2_fu_3392_p3 = {{tmp_232_reg_4266}, {3'd5}};
 
-assign or_ln211_2_fu_3549_p2 = (icmp_ln210_2_fu_3525_p2 | icmp_ln209_2_fu_3519_p2);
+assign or_ln578_3_fu_3654_p3 = {{tmp_232_reg_4266}, {3'd7}};
 
-assign or_ln211_3_fu_3806_p2 = (icmp_ln210_3_fu_3782_p2 | icmp_ln209_3_fu_3776_p2);
+assign or_ln705_fu_3811_p2 = (xor_ln705_fu_3805_p2 | empty_205);
 
-assign or_ln211_fu_3057_p2 = (icmp_ln210_fu_3033_p2 | icmp_ln209_fu_3027_p2);
+assign or_ln715_fu_1958_p2 = (icmp_ln715_fu_1952_p2 | capture_pending);
 
-assign or_ln397_1_fu_3114_p2 = (icmp_ln398_1_fu_3096_p2 | grp_fu_1824_p2);
+assign or_ln83_fu_2232_p2 = (busy | ap_phi_mux_mac_start_4_phi_fu_794_p20);
 
-assign or_ln397_2_fu_3403_p2 = (icmp_ln398_2_fu_3385_p2 | grp_fu_1850_p2);
+assign or_ln9_fu_2753_p3 = {{trunc_ln144_reg_4152}, {1'd1}};
 
-assign or_ln397_3_fu_3366_p2 = (icmp_ln398_3_fu_3348_p2 | grp_fu_1824_p2);
+assign or_ln_fu_2538_p3 = {{lshr_ln4_reg_4158}, {3'd4}};
 
-assign or_ln397_4_fu_3655_p2 = (icmp_ln398_4_fu_3637_p2 | grp_fu_1850_p2);
+assign p_cast49_fu_2663_p1 = tmp_231_fu_2656_p3;
 
-assign or_ln397_5_fu_3618_p2 = (icmp_ln398_5_fu_3600_p2 | grp_fu_1824_p2);
+assign p_cast51_fu_2687_p1 = tmp_234_fu_2679_p3;
 
-assign or_ln397_6_fu_3957_p2 = (icmp_ln398_6_fu_3939_p2 | icmp_ln397_6_fu_3933_p2);
+assign prod_16_fu_3024_p1 = acc_23_loc_fu_334;
 
-assign or_ln397_7_fu_3900_p2 = (icmp_ln398_7_fu_3882_p2 | icmp_ln397_7_fu_3876_p2);
+assign prod_16_fu_3024_p3 = {{prod_16_fu_3024_p1}, {14'd0}};
 
-assign or_ln397_fu_3151_p2 = (icmp_ln398_fu_3133_p2 | grp_fu_1850_p2);
+assign prod_17_fu_3276_p1 = acc_39_loc_fu_338;
 
-assign or_ln580_1_fu_3331_p3 = {{lshr_ln4_reg_4359}, {2'd3}};
+assign prod_17_fu_3276_p3 = {{prod_17_fu_3276_p1}, {14'd0}};
 
-assign or_ln580_2_fu_3583_p3 = {{tmp_234_reg_4467}, {3'd5}};
+assign prod_18_fu_3533_p1 = acc_55_loc_fu_342;
 
-assign or_ln580_3_fu_3845_p3 = {{tmp_234_reg_4467}, {3'd7}};
+assign prod_18_fu_3533_p3 = {{prod_18_fu_3533_p1}, {14'd0}};
 
-assign or_ln742_fu_4002_p2 = (xor_ln742_fu_3996_p2 | compute_start_2);
+assign prod_fu_2782_p1 = acc_loc_fu_330;
 
-assign or_ln752_fu_2101_p2 = (icmp_ln752_fu_2095_p2 | capture_pending);
+assign prod_fu_2782_p3 = {{prod_fu_2782_p1}, {14'd0}};
 
-assign or_ln83_fu_2365_p2 = (busy | ap_phi_mux_mac_start_4_phi_fu_867_p22);
+assign req_op_load_load_fu_1770_p1 = req_op;
 
-assign or_ln9_fu_2944_p3 = {{trunc_ln144_reg_4353}, {1'd1}};
+assign requant_params_REQUANT1_M_L_address0 = zext_ln788_fu_1940_p1;
 
-assign or_ln_fu_2729_p3 = {{lshr_ln4_reg_4359}, {3'd4}};
+assign requant_params_REQUANT1_N_L_address0 = zext_ln788_fu_1940_p1;
 
-assign p_cast79_fu_2854_p1 = tmp_233_fu_2847_p3;
+assign requant_params_REQUANT2_M_L_address0 = idxprom125_i_i3_fu_2327_p1;
 
-assign p_cast81_fu_2878_p1 = tmp_236_fu_2870_p3;
+assign requant_params_REQUANT2_N_L_address0 = idxprom125_i_i3_fu_2327_p1;
 
-assign prod_16_fu_3215_p1 = acc_23_loc_fu_362;
+assign requant_params_REQUANT3_M_L_address0 = zext_ln788_fu_1940_p1;
 
-assign prod_16_fu_3215_p3 = {{prod_16_fu_3215_p1}, {14'd0}};
+assign requant_params_REQUANT3_N_L_address0 = zext_ln788_fu_1940_p1;
 
-assign prod_17_fu_3467_p1 = acc_39_loc_fu_366;
+assign requant_params_REQUANT4_M_L_address0 = idxprom125_i_i3_fu_2327_p1;
 
-assign prod_17_fu_3467_p3 = {{prod_17_fu_3467_p1}, {14'd0}};
+assign requant_params_REQUANT4_N_L_address0 = idxprom125_i_i3_fu_2327_p1;
 
-assign prod_18_fu_3724_p1 = acc_55_loc_fu_370;
+assign rounded_18_fu_3050_p2 = ($signed(select_ln207_1_fu_3042_p3) + $signed(sext_ln203_1_fu_3031_p1));
 
-assign prod_18_fu_3724_p3 = {{prod_18_fu_3724_p1}, {14'd0}};
+assign rounded_19_fu_3302_p2 = ($signed(select_ln207_2_fu_3294_p3) + $signed(sext_ln203_2_fu_3283_p1));
 
-assign prod_fu_2973_p1 = acc_loc_fu_358;
+assign rounded_20_fu_3559_p2 = ($signed(select_ln207_3_fu_3551_p3) + $signed(sext_ln203_3_fu_3540_p1));
 
-assign prod_fu_2973_p3 = {{prod_fu_2973_p1}, {14'd0}};
+assign rounded_fu_2810_p2 = ($signed(select_ln207_fu_2802_p3) + $signed(sext_ln203_fu_2790_p1));
 
-assign req_op_load_load_fu_1876_p1 = req_op;
+assign scaled_12_fu_3308_p4 = {{rounded_19_fu_3302_p2[46:15]}};
 
-assign req_tile_idx_load_load_fu_2032_p1 = req_tile_idx;
+assign scaled_14_fu_3724_p2 = $signed(add_ln356_6_reg_4338) >>> zext_ln215_reg_4112;
 
-assign requant_params_REQUANT1_M_L_address0 = zext_ln826_fu_2083_p1;
+assign scaled_15_fu_3565_p4 = {{rounded_20_fu_3559_p2[46:15]}};
 
-assign requant_params_REQUANT1_N_L_address0 = zext_ln826_fu_2083_p1;
+assign scaled_16_fu_3667_p2 = $signed(add_ln356_7_reg_4333) >>> zext_ln141_reg_4129;
 
-assign requant_params_REQUANT2_M_L_address0 = idxprom125_i_i3_fu_2460_p1;
+assign scaled_9_fu_3056_p4 = {{rounded_18_fu_3050_p2[46:15]}};
 
-assign requant_params_REQUANT2_N_L_address0 = idxprom125_i_i3_fu_2460_p1;
+assign scaled_fu_2816_p4 = {{rounded_fu_2810_p2[46:15]}};
 
-assign requant_params_REQUANT3_M_L_address0 = zext_ln826_fu_2083_p1;
+assign sel_tmp2_fu_2176_p3 = {{icmp_ln786_reg_3976}, {icmp_ln786_1_reg_3981}};
 
-assign requant_params_REQUANT3_N_L_address0 = zext_ln826_fu_2083_p1;
+assign select_ln207_1_fu_3042_p3 = ((tmp_485_fu_3035_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign requant_params_REQUANT4_M_L_address0 = idxprom125_i_i3_fu_2460_p1;
+assign select_ln207_2_fu_3294_p3 = ((tmp_489_fu_3287_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign requant_params_REQUANT4_N_L_address0 = idxprom125_i_i3_fu_2460_p1;
+assign select_ln207_3_fu_3551_p3 = ((tmp_493_fu_3544_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign rounded_18_fu_3241_p2 = ($signed(select_ln207_1_fu_3233_p3) + $signed(sext_ln203_1_fu_3222_p1));
+assign select_ln207_fu_2802_p3 = ((tmp_481_fu_2794_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
 
-assign rounded_19_fu_3493_p2 = ($signed(select_ln207_2_fu_3485_p3) + $signed(sext_ln203_2_fu_3474_p1));
+assign select_ln211_2_fu_3098_p3 = ((icmp_ln209_1_fu_3076_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
 
-assign rounded_20_fu_3750_p2 = ($signed(select_ln207_3_fu_3742_p3) + $signed(sext_ln203_3_fu_3731_p1));
+assign select_ln211_4_fu_3350_p3 = ((icmp_ln209_2_fu_3328_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
 
-assign rounded_fu_3001_p2 = ($signed(select_ln207_fu_2993_p3) + $signed(sext_ln203_fu_2981_p1));
+assign select_ln211_6_fu_3607_p3 = ((icmp_ln209_3_fu_3585_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
 
-assign scaled_12_fu_3499_p4 = {{rounded_19_fu_3493_p2[46:15]}};
+assign select_ln211_fu_2858_p3 = ((icmp_ln209_fu_2836_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
 
-assign scaled_14_fu_3915_p2 = $signed(add_ln395_6_reg_4539) >>> zext_ln215_reg_4313;
+assign select_ln358_10_fu_3419_p3 = ((grp_fu_1718_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign scaled_15_fu_3756_p4 = {{rounded_20_fu_3750_p2[46:15]}};
+assign select_ln358_11_fu_3433_p3 = ((or_ln358_5_fu_3427_p2[0:0] == 1'b1) ? select_ln358_10_fu_3419_p3 : trunc_ln360_5_fu_3415_p1);
 
-assign scaled_16_fu_3858_p2 = $signed(add_ln395_7_reg_4534) >>> zext_ln141_reg_4330;
+assign select_ln358_12_fu_3758_p3 = ((icmp_ln358_6_fu_3742_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign scaled_9_fu_3247_p4 = {{rounded_18_fu_3241_p2[46:15]}};
+assign select_ln358_13_fu_3772_p3 = ((or_ln358_6_fu_3766_p2[0:0] == 1'b1) ? select_ln358_12_fu_3758_p3 : trunc_ln360_6_fu_3754_p1);
 
-assign scaled_fu_3007_p4 = {{rounded_fu_3001_p2[46:15]}};
+assign select_ln358_14_fu_3701_p3 = ((icmp_ln358_7_fu_3685_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign sel_tmp2_fu_2483_p3 = {{icmp_ln824_reg_4177}, {icmp_ln824_1_reg_4182}};
+assign select_ln358_15_fu_3715_p3 = ((or_ln358_7_fu_3709_p2[0:0] == 1'b1) ? select_ln358_14_fu_3701_p3 : trunc_ln360_7_fu_3697_p1);
 
-assign select_ln207_1_fu_3233_p3 = ((tmp_483_fu_3226_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln358_1_fu_2966_p3 = ((or_ln358_fu_2960_p2[0:0] == 1'b1) ? select_ln358_fu_2952_p3 : trunc_ln360_fu_2948_p1);
 
-assign select_ln207_2_fu_3485_p3 = ((tmp_487_fu_3478_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln358_2_fu_2915_p3 = ((grp_fu_1718_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign select_ln207_3_fu_3742_p3 = ((tmp_491_fu_3735_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln358_3_fu_2929_p3 = ((or_ln358_1_fu_2923_p2[0:0] == 1'b1) ? select_ln358_2_fu_2915_p3 : trunc_ln360_1_fu_2911_p1);
 
-assign select_ln207_fu_2993_p3 = ((tmp_479_fu_2985_p3[0:0] == 1'b1) ? 47'd140737488338944 : 47'd16384);
+assign select_ln358_4_fu_3204_p3 = ((grp_fu_1744_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign select_ln211_2_fu_3289_p3 = ((icmp_ln209_1_fu_3267_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
+assign select_ln358_5_fu_3218_p3 = ((or_ln358_2_fu_3212_p2[0:0] == 1'b1) ? select_ln358_4_fu_3204_p3 : trunc_ln360_2_fu_3200_p1);
 
-assign select_ln211_4_fu_3541_p3 = ((icmp_ln209_2_fu_3519_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
+assign select_ln358_6_fu_3167_p3 = ((grp_fu_1718_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign select_ln211_6_fu_3798_p3 = ((icmp_ln209_3_fu_3776_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
+assign select_ln358_7_fu_3181_p3 = ((or_ln358_3_fu_3175_p2[0:0] == 1'b1) ? select_ln358_6_fu_3167_p3 : trunc_ln360_3_fu_3163_p1);
 
-assign select_ln211_fu_3049_p3 = ((icmp_ln209_fu_3027_p2[0:0] == 1'b1) ? 16'd32767 : 16'd32768);
+assign select_ln358_8_fu_3456_p3 = ((grp_fu_1744_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign select_ln397_10_fu_3610_p3 = ((grp_fu_1824_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign select_ln358_9_fu_3470_p3 = ((or_ln358_4_fu_3464_p2[0:0] == 1'b1) ? select_ln358_8_fu_3456_p3 : trunc_ln360_4_fu_3452_p1);
 
-assign select_ln397_11_fu_3624_p3 = ((or_ln397_5_fu_3618_p2[0:0] == 1'b1) ? select_ln397_10_fu_3610_p3 : trunc_ln399_5_fu_3606_p1);
+assign select_ln358_fu_2952_p3 = ((grp_fu_1744_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
 
-assign select_ln397_12_fu_3949_p3 = ((icmp_ln397_6_fu_3933_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign select_ln751_fu_3790_p3 = ((empty[0:0] == 1'b1) ? 8'd3 : 8'd2);
 
-assign select_ln397_13_fu_3963_p3 = ((or_ln397_6_fu_3957_p2[0:0] == 1'b1) ? select_ln397_12_fu_3949_p3 : trunc_ln399_6_fu_3945_p1);
+assign sext_ln203_1_fu_3031_p1 = $signed(prod_16_fu_3024_p3);
 
-assign select_ln397_14_fu_3892_p3 = ((icmp_ln397_7_fu_3876_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign sext_ln203_2_fu_3283_p1 = $signed(prod_17_fu_3276_p3);
 
-assign select_ln397_15_fu_3906_p3 = ((or_ln397_7_fu_3900_p2[0:0] == 1'b1) ? select_ln397_14_fu_3892_p3 : trunc_ln399_7_fu_3888_p1);
+assign sext_ln203_3_fu_3540_p1 = $signed(prod_18_fu_3533_p3);
 
-assign select_ln397_1_fu_3157_p3 = ((or_ln397_fu_3151_p2[0:0] == 1'b1) ? select_ln397_fu_3143_p3 : trunc_ln399_fu_3139_p1);
+assign sext_ln203_fu_2790_p1 = $signed(prod_fu_2782_p3);
 
-assign select_ln397_2_fu_3106_p3 = ((grp_fu_1824_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign sext_ln353_1_fu_2777_p0 = acc_loc_fu_330;
 
-assign select_ln397_3_fu_3120_p3 = ((or_ln397_1_fu_3114_p2[0:0] == 1'b1) ? select_ln397_2_fu_3106_p3 : trunc_ln399_1_fu_3102_p1);
+assign sext_ln353_1_fu_2777_p1 = sext_ln353_1_fu_2777_p0;
 
-assign select_ln397_4_fu_3395_p3 = ((grp_fu_1850_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign sext_ln353_2_fu_3136_p0 = acc_23_loc_fu_334;
 
-assign select_ln397_5_fu_3409_p3 = ((or_ln397_2_fu_3403_p2[0:0] == 1'b1) ? select_ln397_4_fu_3395_p3 : trunc_ln399_2_fu_3391_p1);
+assign sext_ln353_2_fu_3136_p1 = sext_ln353_2_fu_3136_p0;
 
-assign select_ln397_6_fu_3358_p3 = ((grp_fu_1824_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign sext_ln353_3_fu_3020_p0 = acc_23_loc_fu_334;
 
-assign select_ln397_7_fu_3372_p3 = ((or_ln397_3_fu_3366_p2[0:0] == 1'b1) ? select_ln397_6_fu_3358_p3 : trunc_ln399_3_fu_3354_p1);
+assign sext_ln353_3_fu_3020_p1 = sext_ln353_3_fu_3020_p0;
 
-assign select_ln397_8_fu_3647_p3 = ((grp_fu_1850_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign sext_ln353_4_fu_3388_p0 = acc_39_loc_fu_338;
 
-assign select_ln397_9_fu_3661_p3 = ((or_ln397_4_fu_3655_p2[0:0] == 1'b1) ? select_ln397_8_fu_3647_p3 : trunc_ln399_4_fu_3643_p1);
+assign sext_ln353_4_fu_3388_p1 = sext_ln353_4_fu_3388_p0;
 
-assign select_ln397_fu_3143_p3 = ((grp_fu_1850_p2[0:0] == 1'b1) ? 8'd127 : 8'd128);
+assign sext_ln353_5_fu_3272_p0 = acc_39_loc_fu_338;
 
-assign select_ln789_fu_3981_p3 = ((mem_transfer_done[0:0] == 1'b1) ? 8'd3 : 8'd2);
+assign sext_ln353_5_fu_3272_p1 = sext_ln353_5_fu_3272_p0;
 
-assign sext_ln203_1_fu_3222_p1 = $signed(prod_16_fu_3215_p3);
+assign sext_ln353_6_fu_3645_p0 = acc_55_loc_fu_342;
 
-assign sext_ln203_2_fu_3474_p1 = $signed(prod_17_fu_3467_p3);
+assign sext_ln353_6_fu_3645_p1 = sext_ln353_6_fu_3645_p0;
 
-assign sext_ln203_3_fu_3731_p1 = $signed(prod_18_fu_3724_p3);
+assign sext_ln353_7_fu_3524_p0 = acc_55_loc_fu_342;
 
-assign sext_ln203_fu_2981_p1 = $signed(prod_fu_2973_p3);
+assign sext_ln353_7_fu_3524_p1 = sext_ln353_7_fu_3524_p0;
 
-assign sext_ln392_1_fu_2968_p0 = acc_loc_fu_358;
+assign sext_ln353_fu_2896_p0 = acc_loc_fu_330;
 
-assign sext_ln392_1_fu_2968_p1 = sext_ln392_1_fu_2968_p0;
+assign sext_ln353_fu_2896_p1 = sext_ln353_fu_2896_p0;
 
-assign sext_ln392_2_fu_3327_p0 = acc_23_loc_fu_362;
+assign shl_ln150_3_fu_2500_p3 = {{trunc_ln144_reg_4152}, {2'd0}};
 
-assign sext_ln392_2_fu_3327_p1 = sext_ln392_2_fu_3327_p0;
+assign shl_ln355_1_fu_2404_p2 = 35'd1 << zext_ln355_3_fu_2400_p1;
 
-assign sext_ln392_3_fu_3211_p0 = acc_23_loc_fu_362;
+assign shl_ln355_fu_2376_p2 = 37'd1 << zext_ln355_1_fu_2372_p1;
 
-assign sext_ln392_3_fu_3211_p1 = sext_ln392_3_fu_3211_p0;
+assign shl_ln574_1_fu_2975_p3 = {{lshr_ln4_reg_4158}, {2'd2}};
 
-assign sext_ln392_4_fu_3579_p0 = acc_39_loc_fu_366;
+assign shl_ln574_3_fu_3479_p3 = {{tmp_232_reg_4266}, {3'd6}};
 
-assign sext_ln392_4_fu_3579_p1 = sext_ln392_4_fu_3579_p0;
+assign shl_ln574_fu_2715_p2 = out_base_fu_346 << 5'd1;
 
-assign sext_ln392_5_fu_3463_p0 = acc_39_loc_fu_366;
+assign sub_ln144_fu_2469_p2 = (zext_ln137_2_reg_4096 - zext_ln144_2_fu_2465_p1);
 
-assign sext_ln392_5_fu_3463_p1 = sext_ln392_5_fu_3463_p0;
+assign tile_out_count_fu_2474_p3 = ((icmp_ln144_1_fu_2459_p2[0:0] == 1'b1) ? 6'd4 : sub_ln144_fu_2469_p2);
 
-assign sext_ln392_6_fu_3836_p0 = acc_55_loc_fu_370;
+assign tmp_231_fu_2656_p3 = {{lshr_ln4_reg_4158}, {1'd1}};
 
-assign sext_ln392_6_fu_3836_p1 = sext_ln392_6_fu_3836_p0;
+assign tmp_233_fu_2667_p3 = {{grp_fu_1674_p4}, {2'd2}};
 
-assign sext_ln392_7_fu_3715_p0 = acc_55_loc_fu_370;
+assign tmp_234_fu_2679_p3 = {{grp_fu_1674_p4}, {2'd3}};
 
-assign sext_ln392_7_fu_3715_p1 = sext_ln392_7_fu_3715_p0;
+assign tmp_235_fu_2703_p3 = {{grp_fu_1674_p4}, {1'd1}};
 
-assign sext_ln392_fu_3087_p0 = acc_loc_fu_358;
+assign tmp_473_read_fu_350_p2 = empty;
 
-assign sext_ln392_fu_3087_p1 = sext_ln392_fu_3087_p0;
+assign tmp_475_read_fu_362_p2 = empty_205;
 
-assign shl_ln150_3_fu_2691_p3 = {{trunc_ln144_reg_4353}, {2'd0}};
+assign tmp_476_fu_1916_p4 = {{req_layer_idx[7:5]}};
 
-assign shl_ln394_1_fu_2595_p2 = 35'd1 << zext_ln394_3_fu_2591_p1;
+assign tmp_477_fu_2304_p4 = {{layer_reg_3933[7:5]}};
 
-assign shl_ln394_fu_2567_p2 = 37'd1 << zext_ln394_1_fu_2563_p1;
+assign tmp_478_fu_2517_p4 = {{tile_out_count_reg_4179[5:1]}};
 
-assign shl_ln576_1_fu_3166_p3 = {{lshr_ln4_reg_4359}, {2'd2}};
+assign tmp_479_fu_2584_p4 = {{tile_out_count_reg_4179[5:2]}};
 
-assign shl_ln576_3_fu_3670_p3 = {{tmp_234_reg_4467}, {3'd6}};
+assign tmp_481_fu_2794_p1 = acc_loc_fu_330;
 
-assign shl_ln576_fu_2906_p2 = out_base_fu_378 << 5'd1;
+assign tmp_481_fu_2794_p3 = tmp_481_fu_2794_p1[32'd31];
 
-assign sub_ln144_fu_2660_p2 = (zext_ln137_2_reg_4297 - zext_ln144_2_fu_2656_p1);
+assign tmp_482_fu_2826_p4 = {{rounded_fu_2810_p2[46:30]}};
 
-assign tile_out_count_fu_2665_p3 = ((icmp_ln144_1_fu_2650_p2[0:0] == 1'b1) ? 6'd4 : sub_ln144_fu_2660_p2);
+assign tmp_485_fu_3035_p1 = acc_23_loc_fu_334;
 
-assign tmp_124_fu_2827_p3 = {{tmp_123_reg_4440}, {vec_count_0_i_ph_i_reg_1037}};
+assign tmp_485_fu_3035_p3 = tmp_485_fu_3035_p1[32'd31];
 
-assign tmp_230_fu_2342_p4 = {{ap_phi_mux_debug_axi_sig_accum_0_i_lcssa_i_phi_fu_815_p4[14:8]}};
+assign tmp_486_fu_3066_p4 = {{rounded_18_fu_3050_p2[46:30]}};
 
-assign tmp_233_fu_2847_p3 = {{lshr_ln4_reg_4359}, {1'd1}};
+assign tmp_489_fu_3287_p1 = acc_39_loc_fu_338;
 
-assign tmp_235_fu_2858_p3 = {{grp_fu_1780_p4}, {2'd2}};
+assign tmp_489_fu_3287_p3 = tmp_489_fu_3287_p1[32'd31];
 
-assign tmp_236_fu_2870_p3 = {{grp_fu_1780_p4}, {2'd3}};
+assign tmp_490_fu_3318_p4 = {{rounded_19_fu_3302_p2[46:30]}};
 
-assign tmp_237_fu_2894_p3 = {{grp_fu_1780_p4}, {1'd1}};
+assign tmp_492_fu_3732_p4 = {{scaled_14_fu_3724_p2[30:7]}};
 
-assign tmp_475_fu_2437_p4 = {{layer_reg_4130[7:5]}};
+assign tmp_493_fu_3544_p1 = acc_55_loc_fu_342;
 
-assign tmp_476_fu_2708_p4 = {{tile_out_count_reg_4380[5:1]}};
+assign tmp_493_fu_3544_p3 = tmp_493_fu_3544_p1[32'd31];
 
-assign tmp_477_fu_2775_p4 = {{tile_out_count_reg_4380[5:2]}};
+assign tmp_494_fu_3575_p4 = {{rounded_20_fu_3559_p2[46:30]}};
 
-assign tmp_479_fu_2985_p1 = acc_loc_fu_358;
+assign tmp_495_fu_3675_p4 = {{scaled_16_fu_3667_p2[30:7]}};
 
-assign tmp_479_fu_2985_p3 = tmp_479_fu_2985_p1[32'd31];
-
-assign tmp_480_fu_3017_p4 = {{rounded_fu_3001_p2[46:30]}};
-
-assign tmp_483_fu_3226_p1 = acc_23_loc_fu_362;
-
-assign tmp_483_fu_3226_p3 = tmp_483_fu_3226_p1[32'd31];
-
-assign tmp_484_fu_3257_p4 = {{rounded_18_fu_3241_p2[46:30]}};
-
-assign tmp_487_fu_3478_p1 = acc_39_loc_fu_366;
-
-assign tmp_487_fu_3478_p3 = tmp_487_fu_3478_p1[32'd31];
-
-assign tmp_488_fu_3509_p4 = {{rounded_19_fu_3493_p2[46:30]}};
-
-assign tmp_490_fu_3923_p4 = {{scaled_14_fu_3915_p2[30:7]}};
-
-assign tmp_491_fu_3735_p1 = acc_55_loc_fu_370;
-
-assign tmp_491_fu_3735_p3 = tmp_491_fu_3735_p1[32'd31];
-
-assign tmp_492_fu_3766_p4 = {{rounded_20_fu_3750_p2[46:30]}};
-
-assign tmp_493_fu_3866_p4 = {{scaled_16_fu_3858_p2[30:7]}};
-
-assign tmp_fu_2059_p4 = {{req_layer_idx[7:5]}};
+assign tmp_75_fu_2636_p3 = {{tmp_74_reg_4239}, {vec_count_0_i_ph_i_reg_958}};
 
 assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_out = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_4_we0_local;
 
@@ -4648,245 +4422,240 @@ assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMe
 
 assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1_out = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_5_we1_local;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_796_gep_fu_590_p3 = zext_ln141_1_reg_4367;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_786_gep_fu_552_p3 = zext_ln141_1_reg_4166;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_811_gep_fu_654_p3 = zext_ln141_1_reg_4367;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_801_gep_fu_616_p3 = zext_ln141_1_reg_4166;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_819_gep_fu_718_p3 = zext_ln193_reg_4496;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_809_gep_fu_680_p3 = zext_ln193_reg_4295;
 
-assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_827_gep_fu_782_p3 = zext_ln193_reg_4496;
+assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_817_gep_fu_744_p3 = zext_ln193_reg_4295;
 
-assign trunc_ln137_fu_2434_p1 = layer_reg_4130[4:0];
+assign trunc_ln137_fu_2301_p1 = layer_reg_3933[4:0];
 
-assign trunc_ln144_fu_2626_p1 = out_base_fu_378[3:0];
+assign trunc_ln13_fu_2848_p4 = {{rounded_fu_2810_p2[30:15]}};
 
-assign trunc_ln16_fu_3039_p4 = {{rounded_fu_3001_p2[30:15]}};
+assign trunc_ln144_fu_2435_p1 = out_base_fu_346[3:0];
 
-assign trunc_ln18_fu_2922_p1 = acc_loc_fu_358;
+assign trunc_ln15_fu_2731_p1 = acc_loc_fu_330;
 
-assign trunc_ln19_fu_2933_p1 = acc_loc_fu_358;
+assign trunc_ln16_fu_2742_p1 = acc_loc_fu_330;
 
-assign trunc_ln20_fu_2957_p1 = acc_loc_fu_358;
+assign trunc_ln17_fu_2766_p1 = acc_loc_fu_330;
 
-assign trunc_ln211_1_fu_3279_p4 = {{rounded_18_fu_3241_p2[30:15]}};
+assign trunc_ln211_1_fu_3088_p4 = {{rounded_18_fu_3050_p2[30:15]}};
 
-assign trunc_ln211_2_fu_3531_p4 = {{rounded_19_fu_3493_p2[30:15]}};
+assign trunc_ln211_2_fu_3340_p4 = {{rounded_19_fu_3302_p2[30:15]}};
 
-assign trunc_ln211_3_fu_3788_p4 = {{rounded_20_fu_3750_p2[30:15]}};
+assign trunc_ln211_3_fu_3597_p4 = {{rounded_20_fu_3559_p2[30:15]}};
 
-assign trunc_ln271_fu_2337_p1 = ap_phi_mux_debug_axi_sig_accum_0_i_lcssa_i_phi_fu_815_p4[7:0];
+assign trunc_ln356_1_fu_2901_p1 = grp_fu_1703_p2[30:0];
 
-assign trunc_ln395_1_fu_3092_p1 = grp_fu_1809_p2[30:0];
+assign trunc_ln356_2_fu_3190_p1 = grp_fu_1729_p2[30:0];
 
-assign trunc_ln395_2_fu_3381_p1 = grp_fu_1835_p2[30:0];
+assign trunc_ln356_3_fu_3153_p1 = grp_fu_1703_p2[30:0];
 
-assign trunc_ln395_3_fu_3344_p1 = grp_fu_1809_p2[30:0];
+assign trunc_ln356_4_fu_3442_p1 = grp_fu_1729_p2[30:0];
 
-assign trunc_ln395_4_fu_3633_p1 = grp_fu_1835_p2[30:0];
+assign trunc_ln356_5_fu_3405_p1 = grp_fu_1703_p2[30:0];
 
-assign trunc_ln395_5_fu_3596_p1 = grp_fu_1809_p2[30:0];
+assign trunc_ln356_6_fu_3728_p1 = scaled_14_fu_3724_p2[30:0];
 
-assign trunc_ln395_6_fu_3919_p1 = scaled_14_fu_3915_p2[30:0];
+assign trunc_ln356_7_fu_3671_p1 = scaled_16_fu_3667_p2[30:0];
 
-assign trunc_ln395_7_fu_3862_p1 = scaled_16_fu_3858_p2[30:0];
+assign trunc_ln356_fu_2938_p1 = grp_fu_1729_p2[30:0];
 
-assign trunc_ln395_fu_3129_p1 = grp_fu_1835_p2[30:0];
+assign trunc_ln360_1_fu_2911_p1 = grp_fu_1703_p2[7:0];
 
-assign trunc_ln399_1_fu_3102_p1 = grp_fu_1809_p2[7:0];
+assign trunc_ln360_2_fu_3200_p1 = grp_fu_1729_p2[7:0];
 
-assign trunc_ln399_2_fu_3391_p1 = grp_fu_1835_p2[7:0];
+assign trunc_ln360_3_fu_3163_p1 = grp_fu_1703_p2[7:0];
 
-assign trunc_ln399_3_fu_3354_p1 = grp_fu_1809_p2[7:0];
+assign trunc_ln360_4_fu_3452_p1 = grp_fu_1729_p2[7:0];
 
-assign trunc_ln399_4_fu_3643_p1 = grp_fu_1835_p2[7:0];
+assign trunc_ln360_5_fu_3415_p1 = grp_fu_1703_p2[7:0];
 
-assign trunc_ln399_5_fu_3606_p1 = grp_fu_1809_p2[7:0];
+assign trunc_ln360_6_fu_3754_p1 = scaled_14_fu_3724_p2[7:0];
 
-assign trunc_ln399_6_fu_3945_p1 = scaled_14_fu_3915_p2[7:0];
+assign trunc_ln360_7_fu_3697_p1 = scaled_16_fu_3667_p2[7:0];
 
-assign trunc_ln399_7_fu_3888_p1 = scaled_16_fu_3858_p2[7:0];
+assign trunc_ln360_fu_2948_p1 = grp_fu_1729_p2[7:0];
 
-assign trunc_ln399_fu_3139_p1 = grp_fu_1835_p2[7:0];
+assign trunc_ln570_32_fu_3120_p1 = v_144_fu_3112_p3[7:0];
 
-assign trunc_ln572_32_fu_3311_p1 = v_144_fu_3303_p3[7:0];
+assign trunc_ln570_33_fu_3372_p1 = v_145_fu_3364_p3[7:0];
 
-assign trunc_ln572_33_fu_3563_p1 = v_145_fu_3555_p3[7:0];
+assign trunc_ln570_34_fu_3629_p1 = v_146_fu_3621_p3[7:0];
 
-assign trunc_ln572_34_fu_3820_p1 = v_146_fu_3812_p3[7:0];
+assign trunc_ln570_fu_2880_p1 = v_fu_2872_p3[7:0];
 
-assign trunc_ln572_fu_3071_p1 = v_fu_3063_p3[7:0];
+assign trunc_ln576_10_fu_2988_p0 = acc_23_loc_fu_334;
 
-assign trunc_ln578_10_fu_3179_p0 = acc_23_loc_fu_362;
+assign trunc_ln576_10_fu_2988_p1 = trunc_ln576_10_fu_2988_p0[7:0];
 
-assign trunc_ln578_10_fu_3179_p1 = trunc_ln578_10_fu_3179_p0[7:0];
+assign trunc_ln576_11_fu_3240_p0 = acc_39_loc_fu_338;
 
-assign trunc_ln578_11_fu_3431_p0 = acc_39_loc_fu_366;
+assign trunc_ln576_11_fu_3240_p1 = trunc_ln576_11_fu_3240_p0[7:0];
 
-assign trunc_ln578_11_fu_3431_p1 = trunc_ln578_11_fu_3431_p0[7:0];
+assign trunc_ln576_12_fu_3492_p0 = acc_55_loc_fu_342;
 
-assign trunc_ln578_12_fu_3683_p0 = acc_55_loc_fu_370;
+assign trunc_ln576_12_fu_3492_p1 = trunc_ln576_12_fu_3492_p0[7:0];
 
-assign trunc_ln578_12_fu_3683_p1 = trunc_ln578_12_fu_3683_p0[7:0];
+assign trunc_ln576_fu_2726_p0 = acc_loc_fu_330;
 
-assign trunc_ln578_fu_2917_p0 = acc_loc_fu_358;
+assign trunc_ln576_fu_2726_p1 = trunc_ln576_fu_2726_p0[7:0];
 
-assign trunc_ln578_fu_2917_p1 = trunc_ln578_fu_2917_p0[7:0];
+assign trunc_ln577_1_fu_3244_p1 = acc_39_loc_fu_338;
 
-assign trunc_ln579_1_fu_3435_p1 = acc_39_loc_fu_366;
+assign trunc_ln577_2_fu_3496_p1 = acc_55_loc_fu_342;
 
-assign trunc_ln579_2_fu_3687_p1 = acc_55_loc_fu_370;
+assign trunc_ln577_s_fu_2992_p1 = acc_23_loc_fu_334;
 
-assign trunc_ln579_s_fu_3183_p1 = acc_23_loc_fu_362;
+assign trunc_ln578_1_fu_3254_p1 = acc_39_loc_fu_338;
 
-assign trunc_ln580_1_fu_3445_p1 = acc_39_loc_fu_366;
+assign trunc_ln578_2_fu_3506_p1 = acc_55_loc_fu_342;
 
-assign trunc_ln580_2_fu_3697_p1 = acc_55_loc_fu_370;
+assign trunc_ln578_s_fu_3002_p1 = acc_23_loc_fu_334;
 
-assign trunc_ln580_s_fu_3193_p1 = acc_23_loc_fu_362;
+assign trunc_ln579_1_fu_3263_p1 = acc_39_loc_fu_338;
 
-assign trunc_ln581_1_fu_3454_p1 = acc_39_loc_fu_366;
+assign trunc_ln579_2_fu_3515_p1 = acc_55_loc_fu_342;
 
-assign trunc_ln581_2_fu_3706_p1 = acc_55_loc_fu_370;
+assign trunc_ln579_s_fu_3011_p1 = acc_23_loc_fu_334;
 
-assign trunc_ln581_s_fu_3202_p1 = acc_23_loc_fu_362;
+assign trunc_ln698_fu_2130_p1 = empty_206[7:0];
 
-assign trunc_ln735_fu_2291_p1 = compute_instruction_2[7:0];
+assign trunc_ln718_fu_1976_p1 = empty_206[7:0];
 
-assign trunc_ln755_fu_2119_p1 = compute_instruction_2[7:0];
+assign trunc_ln780_1_fu_1912_p1 = req_layer_idx[4:0];
 
-assign trunc_ln818_1_fu_2055_p1 = req_layer_idx[4:0];
+assign trunc_ln780_fu_1776_p1 = req_op[4:0];
 
-assign trunc_ln818_fu_1882_p1 = req_op[4:0];
+assign v_144_fu_3112_p3 = ((or_ln211_1_fu_3106_p2[0:0] == 1'b1) ? select_ln211_2_fu_3098_p3 : trunc_ln211_1_fu_3088_p4);
 
-assign v_144_fu_3303_p3 = ((or_ln211_1_fu_3297_p2[0:0] == 1'b1) ? select_ln211_2_fu_3289_p3 : trunc_ln211_1_fu_3279_p4);
+assign v_145_fu_3364_p3 = ((or_ln211_2_fu_3358_p2[0:0] == 1'b1) ? select_ln211_4_fu_3350_p3 : trunc_ln211_2_fu_3340_p4);
 
-assign v_145_fu_3555_p3 = ((or_ln211_2_fu_3549_p2[0:0] == 1'b1) ? select_ln211_4_fu_3541_p3 : trunc_ln211_2_fu_3531_p4);
+assign v_146_fu_3621_p3 = ((or_ln211_3_fu_3615_p2[0:0] == 1'b1) ? select_ln211_6_fu_3607_p3 : trunc_ln211_3_fu_3597_p4);
 
-assign v_146_fu_3812_p3 = ((or_ln211_3_fu_3806_p2[0:0] == 1'b1) ? select_ln211_6_fu_3798_p3 : trunc_ln211_3_fu_3788_p4);
+assign v_fu_2872_p3 = ((or_ln211_fu_2866_p2[0:0] == 1'b1) ? select_ln211_fu_2858_p3 : trunc_ln13_fu_2848_p4);
 
-assign v_fu_3063_p3 = ((or_ln211_fu_3057_p2[0:0] == 1'b1) ? select_ln211_fu_3049_p3 : trunc_ln16_fu_3039_p4);
+assign xor_ln705_fu_3805_p2 = (clear_pending ^ 1'd1);
 
-assign xor_ln742_fu_3996_p2 = (clear_pending ^ 1'd1);
+assign xor_ln751_fu_3785_p2 = (empty ^ 1'd1);
 
-assign xor_ln789_fu_3976_p2 = (mem_transfer_done ^ 1'd1);
+assign xor_ln762_fu_2340_p2 = (mac_complete_load_reg_3947 ^ 1'd1);
 
-assign xor_ln800_fu_2531_p2 = (mac_complete_load_reg_4144 ^ 1'd1);
+assign xor_ln810_fu_2166_p2 = (mac_complete_load_reg_3947 ^ 1'd1);
 
-assign xor_ln83_fu_2371_p2 = (or_ln83_fu_2365_p2 ^ 1'd1);
+assign xor_ln827_fu_2156_p2 = (mac_complete_load_reg_3947 ^ 1'd1);
 
-assign xor_ln848_fu_2473_p2 = (mac_complete_load_reg_4144 ^ 1'd1);
+assign xor_ln83_fu_2238_p2 = (or_ln83_fu_2232_p2 ^ 1'd1);
 
-assign xor_ln86_fu_2393_p2 = (busy ^ 1'd1);
+assign xor_ln844_fu_2146_p2 = (mac_complete_load_reg_3947 ^ 1'd1);
 
-assign xor_ln870_fu_2323_p2 = (mac_complete_load_reg_4144 ^ 1'd1);
+assign xor_ln86_fu_2260_p2 = (busy ^ 1'd1);
 
-assign xor_ln887_fu_2313_p2 = (mac_complete_load_reg_4144 ^ 1'd1);
+assign zext_ln137_1_fu_2354_p1 = bias_byte_base_0_i_ph_i_reg_895;
 
-assign zext_ln137_1_fu_2545_p1 = bias_byte_base_0_i_ph_i_reg_974;
+assign zext_ln137_2_fu_2358_p1 = out_count_0_i_ph_i_reg_937;
 
-assign zext_ln137_2_fu_2549_p1 = out_count_0_i_ph_i_reg_1016;
+assign zext_ln137_fu_2350_p1 = vec_count_0_i_ph_i_reg_958;
 
-assign zext_ln137_fu_2541_p1 = vec_count_0_i_ph_i_reg_1037;
+assign zext_ln141_1_fu_2449_p1 = lshr_ln4_fu_2439_p4;
 
-assign zext_ln141_1_fu_2640_p1 = lshr_ln4_fu_2630_p4;
+assign zext_ln141_fu_2414_p1 = requant_params_REQUANT4_N_L_q0;
 
-assign zext_ln141_fu_2605_p1 = requant_params_REQUANT4_N_L_q0;
+assign zext_ln144_1_fu_2431_p1 = out_base_fu_346;
 
-assign zext_ln144_1_fu_2622_p1 = out_base_fu_378;
+assign zext_ln144_2_fu_2465_p1 = trunc_ln144_fu_2435_p1;
 
-assign zext_ln144_2_fu_2656_p1 = trunc_ln144_fu_2626_p1;
+assign zext_ln144_fu_2427_p1 = out_base_fu_346;
 
-assign zext_ln144_fu_2618_p1 = out_base_fu_378;
+assign zext_ln150_1_fu_2545_p1 = or_ln_fu_2538_p3;
 
-assign zext_ln150_1_fu_2736_p1 = or_ln_fu_2729_p3;
+assign zext_ln150_2_fu_2574_p1 = or_ln150_1_fu_2566_p3;
 
-assign zext_ln150_2_fu_2765_p1 = or_ln150_1_fu_2757_p3;
+assign zext_ln150_3_fu_2613_p1 = or_ln150_2_fu_2605_p3;
 
-assign zext_ln150_3_fu_2804_p1 = or_ln150_2_fu_2796_p3;
+assign zext_ln150_fu_2507_p1 = shl_ln150_3_fu_2500_p3;
 
-assign zext_ln150_fu_2698_p1 = shl_ln150_3_fu_2691_p3;
+assign zext_ln183_fu_2675_p1 = tmp_233_fu_2667_p3;
 
-assign zext_ln183_fu_2866_p1 = tmp_235_fu_2858_p3;
+assign zext_ln193_fu_2711_p1 = tmp_235_fu_2703_p3;
 
-assign zext_ln193_fu_2902_p1 = tmp_237_fu_2894_p3;
+assign zext_ln215_fu_2386_p1 = requant_params_REQUANT2_N_L_q0;
 
-assign zext_ln215_fu_2577_p1 = requant_params_REQUANT2_N_L_q0;
+assign zext_ln355_1_fu_2372_p1 = add_ln355_fu_2366_p2;
 
-assign zext_ln272_fu_2352_p1 = tmp_230_fu_2342_p4;
+assign zext_ln355_2_fu_2390_p1 = requant_params_REQUANT4_M_L_q0;
 
-assign zext_ln394_1_fu_2563_p1 = add_ln394_fu_2557_p2;
+assign zext_ln355_3_fu_2400_p1 = add_ln355_1_fu_2394_p2;
 
-assign zext_ln394_2_fu_2581_p1 = requant_params_REQUANT4_M_L_q0;
+assign zext_ln355_fu_2362_p1 = requant_params_REQUANT2_M_L_q0;
 
-assign zext_ln394_3_fu_2591_p1 = add_ln394_1_fu_2585_p2;
+assign zext_ln356_16_fu_2410_p1 = shl_ln355_1_fu_2404_p2;
 
-assign zext_ln394_fu_2553_p1 = requant_params_REQUANT2_M_L_q0;
+assign zext_ln356_fu_2382_p1 = shl_ln355_fu_2376_p2;
 
-assign zext_ln395_1_fu_2601_p1 = shl_ln394_1_fu_2595_p2;
+assign zext_ln574_1_fu_2982_p1 = shl_ln574_1_fu_2975_p3;
 
-assign zext_ln395_fu_2573_p1 = shl_ln394_fu_2567_p2;
+assign zext_ln574_2_fu_3234_p1 = or_ln10_fu_3227_p3;
 
-assign zext_ln576_1_fu_3173_p1 = shl_ln576_1_fu_3166_p3;
+assign zext_ln574_3_fu_3486_p1 = shl_ln574_3_fu_3479_p3;
 
-assign zext_ln576_2_fu_3425_p1 = or_ln10_fu_3418_p3;
+assign zext_ln574_fu_2720_p1 = shl_ln574_fu_2715_p2;
 
-assign zext_ln576_3_fu_3677_p1 = shl_ln576_3_fu_3670_p3;
+assign zext_ln578_1_fu_3147_p1 = or_ln578_1_fu_3140_p3;
 
-assign zext_ln576_fu_2911_p1 = shl_ln576_fu_2906_p2;
+assign zext_ln578_2_fu_3399_p1 = or_ln578_2_fu_3392_p3;
 
-assign zext_ln580_1_fu_3338_p1 = or_ln580_1_fu_3331_p3;
+assign zext_ln578_3_fu_3661_p1 = or_ln578_3_fu_3654_p3;
 
-assign zext_ln580_2_fu_3590_p1 = or_ln580_2_fu_3583_p3;
+assign zext_ln578_fu_2760_p1 = or_ln9_fu_2753_p3;
 
-assign zext_ln580_3_fu_3852_p1 = or_ln580_3_fu_3845_p3;
+assign zext_ln689_1_fu_2224_p1 = ap_phi_mux_next_state_8_phi_fu_827_p20;
 
-assign zext_ln580_fu_2951_p1 = or_ln9_fu_2944_p3;
+assign zext_ln689_fu_3797_p1 = next_state_3_reg_1026;
 
-assign zext_ln726_1_fu_2357_p1 = ap_phi_mux_next_state_8_phi_fu_903_p22;
-
-assign zext_ln726_fu_3988_p1 = next_state_3_reg_1105;
-
-assign zext_ln826_fu_2083_p1 = layer_4_fu_2075_p3;
+assign zext_ln788_fu_1940_p1 = layer_4_fu_1932_p3;
 
 always @ (posedge ap_clk) begin
-    zext_ln726_1_reg_4213[7:3] <= 5'b00000;
-    zext_ln137_reg_4282[2:0] <= 3'b000;
-    zext_ln137_reg_4282[8:4] <= 5'b00001;
-    zext_ln137_1_reg_4289[3:0] <= 4'b0000;
-    zext_ln137_1_reg_4289[7] <= 1'b0;
-    zext_ln137_2_reg_4297[0] <= 1'b0;
-    zext_ln137_2_reg_4297[3:3] <= 1'b0;
-    zext_ln137_2_reg_4297[5] <= 1'b0;
-    zext_ln394_reg_4302[62:31] <= 32'b00000000000000000000000000000000;
-    zext_ln395_reg_4307[62:37] <= 26'b00000000000000000000000000;
-    zext_ln215_reg_4313[62:6] <= 57'b000000000000000000000000000000000000000000000000000000000;
-    zext_ln394_2_reg_4319[62:31] <= 32'b00000000000000000000000000000000;
-    zext_ln395_1_reg_4324[62:35] <= 28'b0000000000000000000000000000;
-    zext_ln141_reg_4330[62:6] <= 57'b000000000000000000000000000000000000000000000000000000000;
-    zext_ln144_reg_4342[63:5] <= 59'b00000000000000000000000000000000000000000000000000000000000;
-    zext_ln144_1_reg_4348[8:5] <= 4'b0000;
-    zext_ln141_1_reg_4367[63:3] <= 61'b0000000000000000000000000000000000000000000000000000000000000;
-    add_ln150_3_reg_4430[3:0] <= 4'b1100;
-    tmp_124_reg_4446[2:0] <= 3'b000;
-    tmp_124_reg_4446[4] <= 1'b1;
-    add_ln183_reg_4451[2:0] <= 3'b000;
-    add_ln183_1_reg_4456[2:0] <= 3'b000;
-    p_cast79_reg_4461[0] <= 1'b1;
-    p_cast79_reg_4461[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
-    zext_ln183_reg_4475[1:0] <= 2'b10;
-    zext_ln183_reg_4475[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
-    p_cast81_reg_4481[1:0] <= 2'b11;
-    p_cast81_reg_4481[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
-    zext_ln193_reg_4496[0] <= 1'b1;
-    zext_ln193_reg_4496[63:3] <= 61'b0000000000000000000000000000000000000000000000000000000000000;
-    zext_ln726_reg_4554[7:1] <= 7'b0000000;
-    retval_0_i_i_ph_i_reg_790[2:0] <= 3'b000;
-    bias_byte_base_0_i_ph_i_reg_974[3:0] <= 4'b0000;
-    weight_nibble_base_0_i_ph_i_reg_995[4:0] <= 5'b00000;
-    out_count_0_i_ph_i_reg_1016[0] <= 1'b0;
-    out_count_0_i_ph_i_reg_1016[3] <= 1'b0;
-    vec_count_0_i_ph_i_reg_1037[2:0] <= 3'b000;
-    vec_count_0_i_ph_i_reg_1037[4] <= 1'b1;
+    zext_ln689_1_reg_4032[7:3] <= 5'b00000;
+    zext_ln137_reg_4081[2:0] <= 3'b000;
+    zext_ln137_reg_4081[8:4] <= 5'b00001;
+    zext_ln137_1_reg_4088[3:0] <= 4'b0000;
+    zext_ln137_1_reg_4088[7] <= 1'b0;
+    zext_ln137_2_reg_4096[0] <= 1'b0;
+    zext_ln137_2_reg_4096[3:3] <= 1'b0;
+    zext_ln137_2_reg_4096[5] <= 1'b0;
+    zext_ln355_reg_4101[62:31] <= 32'b00000000000000000000000000000000;
+    zext_ln356_reg_4106[62:37] <= 26'b00000000000000000000000000;
+    zext_ln215_reg_4112[62:6] <= 57'b000000000000000000000000000000000000000000000000000000000;
+    zext_ln355_2_reg_4118[62:31] <= 32'b00000000000000000000000000000000;
+    zext_ln356_16_reg_4123[62:35] <= 28'b0000000000000000000000000000;
+    zext_ln141_reg_4129[62:6] <= 57'b000000000000000000000000000000000000000000000000000000000;
+    zext_ln144_reg_4141[63:5] <= 59'b00000000000000000000000000000000000000000000000000000000000;
+    zext_ln144_1_reg_4147[8:5] <= 4'b0000;
+    zext_ln141_1_reg_4166[63:3] <= 61'b0000000000000000000000000000000000000000000000000000000000000;
+    add_ln150_3_reg_4229[3:0] <= 4'b1100;
+    tmp_75_reg_4245[2:0] <= 3'b000;
+    tmp_75_reg_4245[4] <= 1'b1;
+    add_ln183_reg_4250[2:0] <= 3'b000;
+    add_ln183_1_reg_4255[2:0] <= 3'b000;
+    p_cast49_reg_4260[0] <= 1'b1;
+    p_cast49_reg_4260[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
+    zext_ln183_reg_4274[1:0] <= 2'b10;
+    zext_ln183_reg_4274[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
+    p_cast51_reg_4280[1:0] <= 2'b11;
+    p_cast51_reg_4280[63:4] <= 60'b000000000000000000000000000000000000000000000000000000000000;
+    zext_ln193_reg_4295[0] <= 1'b1;
+    zext_ln193_reg_4295[63:3] <= 61'b0000000000000000000000000000000000000000000000000000000000000;
+    zext_ln689_reg_4353[7:1] <= 7'b0000000;
+    bias_byte_base_0_i_ph_i_reg_895[3:0] <= 4'b0000;
+    weight_nibble_base_0_i_ph_i_reg_916[4:0] <= 5'b00000;
+    out_count_0_i_ph_i_reg_937[0] <= 1'b0;
+    out_count_0_i_ph_i_reg_937[3] <= 1'b0;
+    vec_count_0_i_ph_i_reg_958[2:0] <= 3'b000;
+    vec_count_0_i_ph_i_reg_958[4] <= 1'b1;
 end
 
 endmodule //transformer_top_compute_controller

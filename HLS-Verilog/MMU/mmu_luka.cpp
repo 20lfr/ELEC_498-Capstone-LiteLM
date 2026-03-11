@@ -1,5 +1,8 @@
 #include "mmu_luka.hpp"
+
 namespace {
+
+constexpr int MAX_DMA_PIECES = 3;
 
 struct DmaQueueEntry {
     bool valid = false;
@@ -72,9 +75,9 @@ static int active_dma_tile = -1;
 static uint64_t active_dma_addr_base = 0;
 static uint8_t active_piece_idx = 0;
 static uint8_t active_piece_count = 0;
-static uint32_t active_piece_bytes[MMU_MAX_DMA_PIECES];
-static uint32_t active_piece_addr_off[MMU_MAX_DMA_PIECES];
-static Tag active_piece_tag[MMU_MAX_DMA_PIECES];
+static uint32_t active_piece_bytes[MAX_DMA_PIECES];
+static uint32_t active_piece_addr_off[MAX_DMA_PIECES];
+static Tag active_piece_tag[MAX_DMA_PIECES];
 
 // Active compute request context
 static bool active_compute_valid = false;
@@ -307,8 +310,7 @@ static inline bool dma_uses_kv_cache(DmaSel sel) {
     return (sel == DMASEL_CTX_K) ||
            (sel == DMASEL_CTX_V) ||
            (sel == DMASEL_K_WRITE) ||
-           (sel == DMASEL_V_WRITE) ||
-           (sel == DMASEL_DEBUG_AXI_WRITE);
+           (sel == DMASEL_V_WRITE);
 }
 
 static inline int head_to_lane(int head) {
@@ -364,9 +366,6 @@ static inline uint32_t main_op_out_bytes(ComputeOp op) {
         }
         case CMP_ARGMAX: {
             return compute_buf::OUTArgmaxLayout::TOTAL_BYTES;
-        }
-        case CMP_DEBUG_AXI_SIG: {
-            return DEBUG_AXI_RESULT_BYTES;
         }
         case CMP_CONCAT: {
             return D_MODEL;
@@ -453,8 +452,7 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::SOFTMAX_OUT:
         case Tag::ATT_VALUE_OUT:
         case Tag::HEAD_REQUANT_PACKED:
-        case Tag::CONCAT_OUT:
-        case Tag::DEBUG_AXI_SIG_OUT: {
+        case Tag::CONCAT_OUT: {
             return 1;
         }
         default: {
@@ -497,8 +495,7 @@ static inline bool should_consume(Tag tag) {
         case Tag::ATT_SCORES_OUT:
         case Tag::VALUE_SCALE_OUT:
         case Tag::SOFTMAX_OUT:
-        case Tag::ATT_VALUE_OUT:
-        case Tag::DEBUG_AXI_SIG_OUT: {
+        case Tag::ATT_VALUE_OUT: {
             return true;
         }
         default: {
@@ -1576,11 +1573,6 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
             s.key_tile = -1;
             break;
         }
-        case CMP_DEBUG_AXI_SIG: {
-            s.tag = Tag::DEBUG_AXI_SIG_OUT;
-            s.key_tile = -1;
-            break;
-        }
         case CMP_LN0: {
             s.tag = Tag::LN0_OUT;
             s.key_tile = -1;
@@ -1599,11 +1591,11 @@ static WriteSpec build_write_spec(ComputeOp op, bool headed, int head, int tile)
 // DMA planning
 // ---------------------------------------------------------------------------
 static bool build_dma_piece_plan(DmaSel sel,
-                                 uint8_t &piece_count, uint32_t piece_bytes[MMU_MAX_DMA_PIECES],
-                                 uint32_t piece_addr_off[MMU_MAX_DMA_PIECES], Tag piece_tag[MMU_MAX_DMA_PIECES]) {
+                                 uint8_t &piece_count, uint32_t piece_bytes[MAX_DMA_PIECES],
+                                 uint32_t piece_addr_off[MAX_DMA_PIECES], Tag piece_tag[MAX_DMA_PIECES]) {
 #pragma HLS INLINE off
     piece_count = 0;
-    for (int i = 0; i < MMU_MAX_DMA_PIECES; ++i) {
+    for (int i = 0; i < MAX_DMA_PIECES; ++i) {
 // #pragma HLS UNROLL
         piece_bytes[i] = 0;
         piece_addr_off[i] = 0;
@@ -1709,9 +1701,6 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[0] = compute_buf::INLogitsLayout::W_BYTES;
             piece_addr_off[0] = 0;
             piece_tag[0] = Tag::LOGITS_W;
-            return true;
-        }
-        case DMASEL_DEBUG_AXI_WRITE: {
             return true;
         }
         case DMASEL_NONE: {
@@ -1820,12 +1809,6 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
                      + static_cast<uint32_t>(tile) * ctrl_mem.wlogit_tile_stride;
             return true;
         }
-        case DmaSel::DMASEL_DEBUG_AXI_WRITE: {
-            if (tile < 0 || tile >= static_cast<int>(DEBUG_AXI_REQ_COUNT)) return false;
-            addr_out = static_cast<uint64_t>(ctrl_mem.k_cache_offset)
-                     + static_cast<uint32_t>(tile) * DEBUG_AXI_SCRATCH_STRIDE;
-            return true;
-        }
         case DmaSel::DMASEL_NONE:
         case DmaSel::DMASEL_K_WRITE:
         case DmaSel::DMASEL_V_WRITE: {
@@ -1895,11 +1878,14 @@ static uint64_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int lay
     const uint64_t base = (sel == DMASEL_K_WRITE)
         ? static_cast<uint64_t>(ctrl_mem.k_cache_offset)
         : static_cast<uint64_t>(ctrl_mem.v_cache_offset);
-    const uint64_t layer_stride = static_cast<uint64_t>(NUM_HEADS) *
-                                  static_cast<uint64_t>(CONTEXT_LENGTH) *
-                                  static_cast<uint64_t>(D_HEADS);
-    const uint64_t head_stride = static_cast<uint64_t>(CONTEXT_LENGTH) *
-                                 static_cast<uint64_t>(D_HEADS);
+    const uint64_t layer_stride = (ctrl_mem.layer_stride != 0)
+        ? static_cast<uint64_t>(ctrl_mem.layer_stride)
+        : static_cast<uint64_t>(NUM_HEADS * CONTEXT_LENGTH * D_HEADS);
+    const uint64_t head_stride = (sel == DMASEL_K_WRITE)
+        ? ((ctrl_mem.k_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.k_cache_stride)
+                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS))
+        : ((ctrl_mem.v_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.v_cache_stride)
+                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS));
     const uint64_t token_off = static_cast<uint64_t>(token_pos) * static_cast<uint64_t>(D_HEADS);
     return base + static_cast<uint64_t>(layer) * layer_stride
                 + static_cast<uint64_t>(head) * head_stride
@@ -2169,50 +2155,6 @@ static bool build_main_in_buf(ComputeOp op, int layer, int tile,
             return load_region_to_buf(Tag::LOGITS_PACKED, layer, -1, -1,
                                       buf, compute_buf::INArgmaxLayout::X,
                                       compute_buf::INArgmaxLayout::X_BYTES, true, invalid_flag);
-        }
-        case CMP_DEBUG_AXI_SIG: {
-            switch (tile) {
-                case 0:
-                    return load_region_to_buf(Tag::WQ_W, 0, 0, -1, buf, 0,
-                                              head_buf::QKV_W_FULL_BYTES, true, invalid_flag);
-                case 1:
-                    return load_region_to_buf(Tag::WK_W, 0, 0, -1, buf, 0,
-                                              head_buf::QKV_W_FULL_BYTES, true, invalid_flag);
-                case 2:
-                    return load_region_to_buf(Tag::WV_W, 0, 0, -1, buf, 0,
-                                              head_buf::QKV_W_FULL_BYTES, true, invalid_flag);
-                case 3: {
-                    bool ok = load_region_to_buf(Tag::WO_W, 0, -1, 0, buf, 0,
-                                                 compute_buf::INOutProjLayout::W_BYTES, true, invalid_flag);
-                    if (!ok) return false;
-                    return load_region_to_buf(Tag::WO_B, 0, -1, 0, buf,
-                                              compute_buf::INOutProjLayout::W_BYTES,
-                                              compute_buf::INOutProjLayout::B_BYTES, true, invalid_flag);
-                }
-                case 4: {
-                    bool ok = load_region_to_buf(Tag::W1_W, 0, -1, 0, buf, 0,
-                                                 compute_buf::INFfnW1Layout::W_BYTES, true, invalid_flag);
-                    if (!ok) return false;
-                    return load_region_to_buf(Tag::W1_B, 0, -1, 0, buf,
-                                              compute_buf::INFfnW1Layout::W_BYTES,
-                                              compute_buf::INFfnW1Layout::B_BYTES, true, invalid_flag);
-                }
-                case 5: {
-                    bool ok = load_region_to_buf(Tag::W2_W, 0, -1, 0, buf, 0,
-                                                 compute_buf::INFfnW2Layout::W_BYTES, true, invalid_flag);
-                    if (!ok) return false;
-                    return load_region_to_buf(Tag::W2_B, 0, -1, 0, buf,
-                                              compute_buf::INFfnW2Layout::W_BYTES,
-                                              compute_buf::INFfnW2Layout::B_BYTES, true, invalid_flag);
-                }
-                case 6:
-                    return load_region_to_buf(Tag::LOGITS_W, 0, -1, 0, buf, 0,
-                                              compute_buf::INLogitsLayout::W_BYTES, true, invalid_flag);
-                default:
-                    mmu_set_invalid(ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED);
-                    invalid_flag = true;
-                    return false;
-            }
         }
         default: {
             mmu_set_invalid(ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED);
@@ -2681,9 +2623,7 @@ void mmu_fsm(
                 }
             }
 
-            if (active_dma_sel == DMASEL_K_WRITE ||
-                active_dma_sel == DMASEL_V_WRITE ||
-                active_dma_sel == DMASEL_DEBUG_AXI_WRITE) {
+            if (active_dma_sel == DMASEL_K_WRITE || active_dma_sel == DMASEL_V_WRITE) {
                 g_state = State::DMA_WRITEBACK_PREP;
             } else if (active_dma_sel == DMASEL_CONCAT) {
                 g_state = State::DMA_INTERNAL_CONCAT;
@@ -2868,9 +2808,8 @@ void mmu_fsm(
             break;
         }
         case State::DMA_WRITEBACK_PREP: {
-            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT :
-                                (active_dma_sel == DMASEL_V_WRITE) ? Tag::V_OUT :
-                                Tag::DEBUG_AXI_SIG_OUT;
+            // K/V writeback source comes from per-head K_OUT/V_OUT artifacts.
+            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
             const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
             if (src_idx < 0 || !region_ready(regions[src_idx])) {
                 mmu_set_invalid(ERR_MMU_WRITEBACK_SRC);
@@ -2878,23 +2817,15 @@ void mmu_fsm(
                 g_state = State::IDLE;
                 break;
             }
-            const uint32_t wb_len =
-                (active_dma_sel == DMASEL_DEBUG_AXI_WRITE)
-                    ? static_cast<uint32_t>(DEBUG_AXI_SCRATCH_STRIDE)
-                    : static_cast<uint32_t>(D_HEADS);
-            if (active_dma_sel == DMASEL_DEBUG_AXI_WRITE) {
-                active_dma_addr_base = static_cast<uint64_t>(ctrl_mem.k_cache_offset)
-                                     + static_cast<uint32_t>(active_dma_tile) * DEBUG_AXI_SCRATCH_STRIDE;
-            } else {
-                if (token_pos >= static_cast<uint16_t>(CONTEXT_LENGTH)) {
-                    mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
-                    active_dma_valid = false;
-                    g_state = State::IDLE;
-                    break;
-                }
-                active_dma_addr_base = calc_kv_write_addr(ctrl_mem, active_dma_sel, active_dma_layer,
-                                                          active_dma_head, token_pos);
+            const uint32_t wb_len = static_cast<uint32_t>(D_HEADS);
+            if (token_pos >= static_cast<uint16_t>(CONTEXT_LENGTH)) {
+                mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
+                active_dma_valid = false;
+                g_state = State::IDLE;
+                break;
             }
+            active_dma_addr_base = calc_kv_write_addr(ctrl_mem, active_dma_sel, active_dma_layer,
+                                                      active_dma_head, token_pos);
             active_piece_idx = 0;
             active_piece_count = 1;
             active_piece_bytes[0] = wb_len;
@@ -2905,9 +2836,7 @@ void mmu_fsm(
         }
         case State::DMA_WRITEBACK_ISSUE: {
             if (!dma_ready) break;
-            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT :
-                                (active_dma_sel == DMASEL_V_WRITE) ? Tag::V_OUT :
-                                Tag::DEBUG_AXI_SIG_OUT;
+            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
             const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
             if (src_idx < 0 || !region_ready(regions[src_idx])) {
                 mmu_set_invalid(ERR_MMU_WRITEBACK_SRC);
@@ -2946,9 +2875,7 @@ void mmu_fsm(
             if (active_piece_bytes_done < active_piece_bytes[0]) {
                 g_state = State::DMA_WRITEBACK_ISSUE;
             } else {
-                const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT :
-                                    (active_dma_sel == DMASEL_V_WRITE) ? Tag::V_OUT :
-                                    Tag::DEBUG_AXI_SIG_OUT;
+                const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
                 const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
                 if (src_idx >= 0 && should_consume(src_tag)) {
                     maybe_consume(src_idx);

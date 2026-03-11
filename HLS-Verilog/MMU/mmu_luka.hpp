@@ -43,7 +43,6 @@ constexpr int DMA_BUF_BYTES = 65536;
 #endif
 constexpr int DMA_BUF_WORDS = DMA_BUF_BYTES / AXI_GMEM_WORD_BYTES;
 static_assert((DMA_BUF_BYTES % AXI_GMEM_WORD_BYTES) == 0, "DMA_BUF_BYTES must be word-aligned");
-constexpr int MMU_MAX_DMA_PIECES = 3;
 
 enum class ComputeReqType : uint8_t {
     NONE = 0,
@@ -108,7 +107,6 @@ enum class Tag : uint8_t {
     FINAL_NORM_OUT,
     LOGITS_PACKED,
     ARGMAX_OUT,
-    DEBUG_AXI_SIG_OUT,
 
     // Headed compute outputs
     Q_OUT,
