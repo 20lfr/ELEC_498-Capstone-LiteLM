@@ -28,9 +28,21 @@ int main() {
         return 1;
     }
 
+    if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
+        return 1;
+    }
+    g_loaded_ctrl_mem_valid = true;
+
     const size_t total_stream_tokens = count_stream_tokens_from_file();
     if (total_stream_tokens == 0) {
         std::fprintf(stderr, "ERROR: stream_in.bin does not contain any full tokens\n");
+        return 1;
+    }
+
+    axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
+    axi_gmem_word_t kv_cache[TB_DDR_IMAGE_WORDS] = {};
+    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS) ||
+        !load_shared_ddr_image(kv_cache, TB_DDR_IMAGE_WORDS)) {
         return 1;
     }
 
@@ -38,7 +50,7 @@ int main() {
                 total_stream_tokens, TB_DEBUG_MODE ? "on" : "off");
     for (size_t token_idx = 0; token_idx < total_stream_tokens; ++token_idx) {
         std::printf("\n[TEST] ===== Begin token %zu =====\n", token_idx);
-        const int rc = run_top_no_debug_tb_single_token(token_idx);
+        const int rc = run_top_no_debug_tb_single_token_with_mem(token_idx, ddr_mem, kv_cache);
         if (rc != 0) {
             std::fprintf(stderr, "ERROR: token %zu failed with rc=%d\n", token_idx, rc);
             return rc;

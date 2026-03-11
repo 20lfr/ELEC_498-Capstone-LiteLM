@@ -573,13 +573,12 @@ static void print_kv_cache_upto_token(const ControlMemSpace &ctrl,
     }
 }
 
-static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
+static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_token,
+                                                     axi_gmem_word_t *ddr_mem,
+                                                     axi_gmem_word_t *kv_cache) {
     const int MAX_CYCLES = 10000;
     const int STREAM_TOKEN_BYTES = STREAM_IN_BUF_BYTES;
     const int AXIS_BEATS = STREAM_TOKEN_BYTES;
-
-    axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
-    axi_gmem_word_t kv_cache[TB_DDR_IMAGE_WORDS] = {};
 
     hls::stream<axis8_t> s_axis_in("s_axis_in");
     hls::stream<axis8_t> m_axis_out("m_axis_out");
@@ -615,13 +614,11 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     bool debug_output_match = false;
     int  base_assign_step = 0;
 
-    if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
-        return 1;
-    }
-    g_loaded_ctrl_mem_valid = true;
-    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS) ||
-        !load_shared_ddr_image(kv_cache, TB_DDR_IMAGE_WORDS)) {
-        return 1;
+    if (!g_loaded_ctrl_mem_valid) {
+        if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
+            return 1;
+        }
+        g_loaded_ctrl_mem_valid = true;
     }
     size_t total_stream_tokens = 0;
     if (!load_shared_stream_token(stream_in_buf, STREAM_IN_BUF_BYTES,
@@ -996,6 +993,18 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     std::printf("PASS: Token %zu inference complete, FSM stayed IDLE for %d cycles after.\n",
                 selected_stream_token, idle_after_stream);
     return 0;
+}
+
+static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
+    axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
+    axi_gmem_word_t kv_cache[TB_DDR_IMAGE_WORDS] = {};
+
+    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS) ||
+        !load_shared_ddr_image(kv_cache, TB_DDR_IMAGE_WORDS)) {
+        return 1;
+    }
+
+    return run_top_no_debug_tb_single_token_with_mem(selected_stream_token, ddr_mem, kv_cache);
 }
 
 int main() {
