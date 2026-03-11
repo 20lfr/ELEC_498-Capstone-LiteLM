@@ -782,36 +782,36 @@
 			no-map;
 		};
 
-		/* cma_high Region 2: Bank 1 (256 MB) */
 		cma_low: buffer@40000000 {
 		    compatible = "shared-dma-pool";
-            reusable;
-		    reg = <0x0 0x40000000 0x0 0x10000000>;
+			no-map;
+		    reg = <0x0 0x40000000 0x0 0x20000000>;
 		};
 
-		/* cma_high Region 2: Bank 1 (1.8 GB) */
 		cma_high: buffer@800000000 {
 		    compatible = "shared-dma-pool";
-            reusable;
-		    reg = <0x8 0x00000000 0x0 0x70000000>;
+			reusable;
+		    reg = <0x8 0x00000000 0x0 0x72000000>;
 		};
 	};
 
-    udmabuf_low {
-        compatible = "ikwzm,u-dma-buf";
-        device-name = "udmabuf1";
-        memory-region = <&cma_low>;
-        size = <0x0 0x10000000>; 
-        dma-mask = <64>;
-    };
+	    udmabuf_low {
+	        compatible = "ikwzm,u-dma-buf";
+	        device-name = "udmabuf1";
+	        memory-region = <&cma_low>;
+	        size = <0x0 0x20000000>;
+	        dma-mask = <64>;
+			quirk-mmap-off;
+	    };
 
-    udmabuf_high {
-        compatible = "ikwzm,u-dma-buf";
-        device-name = "udmabuf0";
-        memory-region = <&cma_high>;
-        size = <0x0 0x70000000>; 
-        dma-mask = <64>;
-    };
+	    udmabuf_high {
+	        compatible = "ikwzm,u-dma-buf";
+	        device-name = "udmabuf0";
+	        memory-region = <&cma_high>;
+	        size = <0x0 0x72000000>;
+	        dma-mask = <64>;
+			quirk-mmap-off;
+	    };
 
 	axi {
 		#address-cells = <0x02>;
