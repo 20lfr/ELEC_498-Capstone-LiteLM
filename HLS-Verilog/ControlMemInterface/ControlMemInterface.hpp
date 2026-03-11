@@ -78,6 +78,13 @@ public:
                 local_status.error_code |= ERR_DMA_ALIGNMENT;
             }
         }
+
+        if(ctrl_mem.token_position >= (CONTEXT_LENGTH)) {
+            if (irq_error_en) {
+                local_status.irq_status |= IRQ_ERROR_BIT;
+                local_status.error_code |= ERR_TOKEN_MAX;
+            }
+        }
     
         if(scheduler_error){
             if (irq_error_en) {

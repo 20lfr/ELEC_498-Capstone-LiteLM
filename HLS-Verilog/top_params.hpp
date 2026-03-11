@@ -203,8 +203,7 @@ struct PendingRequest {
 //       sizeof(int32_t).
 struct ControlMemSpace {
     uint32_t control = CTRL_RESETN_BIT; // bit0=reset_n, bit1=start, bit3=debug_mode
-    uint32_t irq_mask =
-        0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
+    uint32_t irq_mask = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
 
     uint32_t layer_stride = 0;
@@ -254,6 +253,8 @@ struct ControlMemSpace {
     uint32_t ln1_eps_offset = 0;
     uint32_t final_norm_eps_offset = 0;
     uint32_t wlogit_offset = 0;
+
+    uint32_t token_position = 0;
 };
 
 // Status (PS Reads <- PL Writes)

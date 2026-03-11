@@ -266,6 +266,7 @@ static void print_error_code_bits(uint32_t err) {
     if (err & ERR_MMU_REGION_TABLE_FULL) emit("ERR_MMU_REGION_TABLE_FULL");
     if (err & ERR_MMU_URAM_CHUNK_ALLOC_FAIL) emit("ERR_MMU_URAM_CHUNK_ALLOC_FAIL");
     if (err & ERR_MMU_REGION_TOO_LARGE) emit("ERR_MMU_REGION_TOO_LARGE");
+    if (err & ERR_TOKEN_MAX) emit("ERR_TOKEN_MAX");
 }
 
 static const char *mmu_subcode_name(uint32_t subcode) {

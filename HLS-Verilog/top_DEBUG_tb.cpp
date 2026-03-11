@@ -1503,6 +1503,7 @@ static void print_error_code_bits(uint32_t err) {
     if (err & ERR_MMU_REGION_TABLE_FULL) emit("ERR_MMU_REGION_TABLE_FULL");
     if (err & ERR_MMU_URAM_CHUNK_ALLOC_FAIL) emit("ERR_MMU_URAM_CHUNK_ALLOC_FAIL");
     if (err & ERR_MMU_REGION_TOO_LARGE) emit("ERR_MMU_REGION_TOO_LARGE");
+    if (err & ERR_TOKEN_MAX) emit("ERR_TOKEN_MAX");
     if (err & ERR_MMU_STREAM_OUTPUT_MISSING) emit("ERR_MMU_STREAM_OUTPUT_MISSING");
 }
 
@@ -1579,49 +1580,9 @@ ControlMemSpace ctrl_mem_init(bool init) {
         if (g_loaded_ctrl_mem_valid) {
             return g_loaded_ctrl_mem;
         }
-        ctrl_mem.control = CTRL_RESETN_BIT;
-        ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
-        ctrl_mem.irq_clear = 0;
-        // Strides (non-zero required) - match OG testbench values
-        ctrl_mem.layer_stride    = 0x00001000;
-        ctrl_mem.wq_head_stride  = 0x00000100;
-        ctrl_mem.wk_head_stride  = 0x00000100;
-        ctrl_mem.wv_head_stride  = 0x00000100;
-        ctrl_mem.k_cache_stride  = 0x00000100;
-        ctrl_mem.v_cache_stride  = 0x00000100;
-        ctrl_mem.wo_tile_stride  = 0x00000020;
-        ctrl_mem.w1_tile_stride  = 0x00000040;
-        ctrl_mem.w2_tile_stride  = 0x00000040;
-        ctrl_mem.wo_bias_tile_stride = 0x00000020;
-        ctrl_mem.w1_bias_tile_stride = 0x00000040;
-        ctrl_mem.w2_bias_tile_stride = 0x00000020;
-        ctrl_mem.ln0_gamma_stride = 0x00000040;
-        ctrl_mem.ln1_gamma_stride = 0x00000040;
-        ctrl_mem.final_norm_gamma_stride = 0x00000040;
-        ctrl_mem.ln0_eps_stride = 0x00000004;
-        ctrl_mem.ln1_eps_stride = 0x00000004;
-        ctrl_mem.final_norm_eps_stride = 0x00000004;
-        // Region offsets into the shared AXI full backing image (must remain
-        // 64-byte aligned).
-        ctrl_mem.wq_offset = static_cast<uint32_t>(TB_BASE_WQ);
-        ctrl_mem.wk_offset = static_cast<uint32_t>(TB_BASE_WK);
-        ctrl_mem.wv_offset = static_cast<uint32_t>(TB_BASE_WV);
-        ctrl_mem.wo_offset = static_cast<uint32_t>(TB_BASE_WO);
-        ctrl_mem.w1_offset = static_cast<uint32_t>(TB_BASE_W1);
-        ctrl_mem.w2_offset = static_cast<uint32_t>(TB_BASE_W2);
-        ctrl_mem.k_cache_offset = static_cast<uint32_t>(TB_BASE_K_CACHE);
-        ctrl_mem.v_cache_offset = static_cast<uint32_t>(TB_BASE_V_CACHE);
-        ctrl_mem.wo_bias_offset = static_cast<uint32_t>(TB_BASE_WO_BIAS);
-        ctrl_mem.w1_bias_offset = static_cast<uint32_t>(TB_BASE_W1_BIAS);
-        ctrl_mem.w2_bias_offset = static_cast<uint32_t>(TB_BASE_W2_BIAS);
-        ctrl_mem.ln0_gamma_offset = static_cast<uint32_t>(TB_BASE_LN0_GAMMA);
-        ctrl_mem.ln1_gamma_offset = static_cast<uint32_t>(TB_BASE_LN1_GAMMA);
-        ctrl_mem.final_norm_gamma_offset = static_cast<uint32_t>(TB_BASE_FINAL_NORM_GAMMA);
-        ctrl_mem.ln0_eps_offset = static_cast<uint32_t>(TB_BASE_LN0_EPS);
-        ctrl_mem.ln1_eps_offset = static_cast<uint32_t>(TB_BASE_LN1_EPS);
-        ctrl_mem.final_norm_eps_offset = static_cast<uint32_t>(TB_BASE_FINAL_NORM_EPS);
-        ctrl_mem.wlogit_tile_stride = 0x00000080;
-        ctrl_mem.wlogit_offset = static_cast<uint32_t>(TB_BASE_WVOCAB);
+        std::fprintf(stderr,
+                     "ERROR: ctrl_mem_init(true) called before ctrl_mem.bin was loaded\n");
+        std::abort();
     }
     return ctrl_mem;
 }
@@ -2015,6 +1976,14 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
             }
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::AssertStart) {
+            ctrl_mem.token_position = static_cast<uint32_t>(selected_stream_token);
+            if (ctrl_mem.token_position != static_cast<uint32_t>(selected_stream_token)) {
+                std::fprintf(stderr,
+                             "ERROR: ctrl_mem.token_position mismatch before start (expected=%zu got=%u)\n",
+                             selected_stream_token,
+                             ctrl_mem.token_position);
+                return 1;
+            }
             ctrl_mem.control = CTRL_RESETN_BIT | CTRL_START_BIT;
             ctrl_data_in = CTRL_RESETN_BIT | CTRL_START_BIT;
             ctrl_shadow_control = CTRL_RESETN_BIT | CTRL_START_BIT;

@@ -199,35 +199,36 @@ enum SchedState {
 };
 
 // Error Codes
-constexpr uint32_t ERR_NONE = 0;
-constexpr uint32_t ERR_DMA_ALIGNMENT = 1;
-constexpr uint32_t ERR_DMA_ZERO_LEN = 2;
-constexpr uint32_t ERR_DMA_ZERO_STRIDE = 4;
-constexpr uint32_t ERR_SCHEDULER_ERROR = 8;
-constexpr uint32_t ERR_COMPUTE_ERROR = 16;
-constexpr uint32_t ERR_MMU_INVALID = 32;
-constexpr uint32_t ERR_MMU_OVERFLOW = 64;
-constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_DMA = 128;
-constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED = 256;
-constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED = 512;
-constexpr uint32_t ERR_MMU_BAD_DMA_PLAN = 2048;
-constexpr uint32_t ERR_MMU_BAD_DMA_ADDR = 4096;
-constexpr uint32_t ERR_MMU_REGION_ACCESS = 8192;
-constexpr uint32_t ERR_MMU_CONCAT_SOURCE = 16384;
-constexpr uint32_t ERR_MMU_WRITEBACK_SRC = 32768;
-constexpr uint32_t ERR_MMU_QUEUE_OVERFLOW = 65536;
-constexpr uint32_t ERR_MMU_REGION_OVERFLOW = 131072; // legacy/general
-constexpr uint32_t ERR_MMU_STREAM_OUTPUT_MISSING = 262144;
-constexpr uint32_t ERR_MMU_MISSING_REGION_FULL_READ = 524288;
-constexpr uint32_t ERR_MMU_MISSING_REGION_PARTIAL_READ = 1048576;
-constexpr uint32_t ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP = 2097152;
-constexpr uint32_t ERR_MMU_REGION_OVERFLOW_STREAM_IN = 4194304;
-constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_CONCAT = 8388608;
-constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_STORE = 16777216;
-constexpr uint32_t ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE = 33554432;
-constexpr uint32_t ERR_MMU_REGION_TABLE_FULL = 67108864;
-constexpr uint32_t ERR_MMU_URAM_CHUNK_ALLOC_FAIL = 134217728;
-constexpr uint32_t ERR_MMU_REGION_TOO_LARGE = 268435456;
+constexpr uint32_t ERR_NONE = 0u;
+constexpr uint32_t ERR_DMA_ALIGNMENT = 1u << 0;
+constexpr uint32_t ERR_DMA_ZERO_LEN = 1u << 1;
+constexpr uint32_t ERR_DMA_ZERO_STRIDE = 1u << 2;
+constexpr uint32_t ERR_SCHEDULER_ERROR = 1u << 3;
+constexpr uint32_t ERR_COMPUTE_ERROR = 1u << 4;
+constexpr uint32_t ERR_MMU_INVALID = 1u << 5;
+constexpr uint32_t ERR_MMU_OVERFLOW = 1u << 6;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_DMA = 1u << 7;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED = 1u << 8;
+constexpr uint32_t ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED = 1u << 9;
+constexpr uint32_t ERR_MMU_BAD_DMA_PLAN = 1u << 11;
+constexpr uint32_t ERR_MMU_BAD_DMA_ADDR = 1u << 12;
+constexpr uint32_t ERR_MMU_REGION_ACCESS = 1u << 13;
+constexpr uint32_t ERR_MMU_CONCAT_SOURCE = 1u << 14;
+constexpr uint32_t ERR_MMU_WRITEBACK_SRC = 1u << 15;
+constexpr uint32_t ERR_MMU_QUEUE_OVERFLOW = 1u << 16;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW = 1u << 17; // legacy/general
+constexpr uint32_t ERR_MMU_STREAM_OUTPUT_MISSING = 1u << 18;
+constexpr uint32_t ERR_MMU_MISSING_REGION_FULL_READ = 1u << 19;
+constexpr uint32_t ERR_MMU_MISSING_REGION_PARTIAL_READ = 1u << 20;
+constexpr uint32_t ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP = 1u << 21;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_STREAM_IN = 1u << 22;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_CONCAT = 1u << 23;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_DMA_STORE = 1u << 24;
+constexpr uint32_t ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE = 1u << 25;
+constexpr uint32_t ERR_MMU_REGION_TABLE_FULL = 1u << 26;
+constexpr uint32_t ERR_MMU_URAM_CHUNK_ALLOC_FAIL = 1u << 27;
+constexpr uint32_t ERR_MMU_REGION_TOO_LARGE = 1u << 28;
+constexpr uint32_t ERR_TOKEN_MAX = 1u << 29;
 
 // MMU detailed subcodes (for richer debug than bitmask error_code alone)
 constexpr uint32_t MMU_ERR_SUBCODE_NONE = 0;

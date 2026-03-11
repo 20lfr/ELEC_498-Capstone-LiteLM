@@ -212,7 +212,7 @@ void transformer_top(
     static bool             stream_tx_active_local         = false;
     static uint16_t         stream_tx_index_local          = 0;
     static uint32_t         stream_in_counter              = 0;
-    static bool             token_complete_local           = false;
+    static bool             token_loaded_complete_local    = false;
 
     // MMU external DMA/status interface state
     static Status           mmu_status;
@@ -234,8 +234,6 @@ void transformer_top(
     static bool             main_mem_read_request         = false;
     static bool             main_mem_write_request        = false;
     static uint32_t         main_mem_op                   = 0;
-    static uint16_t         token_pos_current             = 0;
-    static uint16_t         token_pos_next                = 0;
     static bool             debug_sum_done_local          = false;
     static int32_t          debug_sum_value_local         = 0;
     static bool             prev_start                    = false;
@@ -250,6 +248,7 @@ void transformer_top(
     const bool ctrl_error =
         ((active_status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
         (active_status_mem.error_code != ERR_NONE);
+    const uint16_t token_position_local = static_cast<uint16_t>(ctrl_mem.token_position);
 
     // Reset once at boot, then re-arm run-local state on each new start pulse.
     if (reset || start_edge) {
@@ -300,11 +299,9 @@ void transformer_top(
         stream_tx_active_local = false;
         stream_tx_index_local = 0;
         stream_in_counter = 0;
-        token_complete_local = false;
+        token_loaded_complete_local = false;
 
         if (reset) {
-            token_pos_current = 0;
-            token_pos_next = 0;
             prev_start = false;
         }
 
@@ -349,7 +346,7 @@ void transformer_top(
     }
 
     const bool axis_buf_full = (stream_in_counter >= static_cast<uint32_t>(STREAM_IN_BUF_BYTES));
-    const bool axis_in_ready_wire = (reset_n && (state_local == S_STREAM_IN) && !axis_buf_full && !token_complete_local);
+    const bool axis_in_ready_wire = (reset_n && (state_local == S_STREAM_IN) && !axis_buf_full && !token_loaded_complete_local);
 
     bool axis_in_valid = false;
     bool axis_in_last = false;
@@ -364,7 +361,7 @@ void transformer_top(
             stream_in_counter++;
         }
         if (beat.last != 0) {
-            token_complete_local = true;
+            token_loaded_complete_local = true;
             stream_in_counter = 0;
         }
     }
@@ -379,7 +376,7 @@ void transformer_top(
         start_en,
         debug_mode_en,
         ctrl_error,
-        token_complete_local,
+        token_loaded_complete_local,
         mmu_main_dma_done_wire,
         mmu_req_ready_wire,
         scheduler_wl_accept,
@@ -403,18 +400,8 @@ void transformer_top(
 
     // AXIS token completion is a per-token ingress latch. Once the scheduler
     // has advanced beyond STREAM_IN, clear it so the next token can be accepted.
-    if (token_complete_local && (state_local != S_STREAM_IN)) {
-        token_complete_local = false;
-    }
-
-    if (axis_in_valid && axis_in_last && axis_in_ready_wire) {
-        const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
-        token_pos_current = (token_pos_next <= token_pos_max) ? token_pos_next : token_pos_max;
-        if (token_pos_next < token_pos_max) {
-            token_pos_next = static_cast<uint16_t>(token_pos_next + 1);
-        } else {
-            token_pos_next = token_pos_max;
-        }
+    if (token_loaded_complete_local && (state_local != S_STREAM_IN)) {
+        token_loaded_complete_local = false;
     }
 
     if (state_local == S_DEBUG) {
@@ -481,7 +468,7 @@ void transformer_top(
     drive_headed_compute_controller(
         head_compute_ctx_local,
         reset_n,
-        token_pos_current,
+        token_position_local,
         mmu_head_in_buf,
         mmu_head_out_buf,
         head_error_any
@@ -500,7 +487,7 @@ void transformer_top(
     mmu_fsm(
         reset_n,
         ctrl_mem,
-        token_pos_current,
+        token_position_local,
         dma_ready_local,
         dma_done_local,
         dma_rx_buf_local,
@@ -622,7 +609,7 @@ void transformer_top(
     ctrl_mem_interface.check_control(ctrl_mem, done);
     active_status_mem.status = static_cast<uint32_t>(state_local);
     active_status_mem.layer_index = scheduler_layer_index_local;
-    active_status_mem.token_index = static_cast<uint32_t>(token_pos_current);
+    active_status_mem.token_index = static_cast<uint32_t>(token_position_local);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
     status_mem = active_status_mem;

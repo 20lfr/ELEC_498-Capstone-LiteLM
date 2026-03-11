@@ -92,23 +92,23 @@ void transformer_top(
 
     // MMU-owned compute buffers (main + headed lanes)
     static uint8_t          mmu_in_buf[compute_buf::IN_BUF_BYTES];
-    #pragma HLS BIND_STORAGE variable=mmu_in_buf type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=mmu_in_buf type=ram_t2p impl=bram
     static uint8_t          mmu_out_buf[compute_buf::OUT_BUF_BYTES];
-    #pragma HLS BIND_STORAGE variable=mmu_out_buf type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=mmu_out_buf type=ram_t2p impl=bram
     static uint8_t          mmu_head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES];
-    #pragma HLS ARRAY_PARTITION variable=mmu_head_in_buf complete dim=1
-    #pragma HLS BIND_STORAGE variable=mmu_head_in_buf type=ram_t2p impl=bram
+#pragma HLS ARRAY_PARTITION variable=mmu_head_in_buf complete dim=1
+#pragma HLS BIND_STORAGE variable=mmu_head_in_buf type=ram_t2p impl=bram
     static uint8_t          mmu_head_out_buf[HEADS_PARALLEL][head_buf::OUT_BUF_BYTES];
-    #pragma HLS ARRAY_PARTITION variable=mmu_head_out_buf complete dim=1
-    #pragma HLS BIND_STORAGE variable=mmu_head_out_buf type=ram_t2p impl=bram
+#pragma HLS ARRAY_PARTITION variable=mmu_head_out_buf complete dim=1
+#pragma HLS BIND_STORAGE variable=mmu_head_out_buf type=ram_t2p impl=bram
     static uint8_t          stream_in_buf_local[STREAM_IN_BUF_BYTES];
-    #pragma HLS BIND_STORAGE variable=stream_in_buf_local type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=stream_in_buf_local type=ram_t2p impl=bram
     static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
-    #pragma HLS BIND_STORAGE variable=stream_out_buf_local type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=stream_out_buf_local type=ram_t2p impl=bram
     static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
-    #pragma HLS BIND_STORAGE variable=dma_rx_buf_local type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=dma_rx_buf_local type=ram_t2p impl=bram
     static uint32_t         dma_tx_buf_local[TOP_DMA_BUF_WORDS];
-    #pragma HLS BIND_STORAGE variable=dma_tx_buf_local type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=dma_tx_buf_local type=ram_t2p impl=bram
     static bool             dma_ready_local                = true;
     static bool             dma_done_local                 = false;
     static bool             dma_busy_local                 = false;
@@ -128,35 +128,24 @@ void transformer_top(
     static bool             stream_tx_active_local         = false;
     static uint16_t         stream_tx_index_local          = 0;
     static uint32_t         stream_in_counter              = 0;
-    static bool             token_complete_local           = false;
+    static bool             token_loaded_complete_local    = false;
 
     // MMU external DMA/status interface state
     static Status           mmu_status;
     static bool             mmu_req_ready_wire            = true;
     static bool             mmu_main_dma_done_wire        = false;
     static bool             mmu_main_mem_transfer_done_wire = false;
-    static uint32_t         mmu_dma_instruction           = 0;
-    static bool             wl_ready_local                = false;
-    static uint32_t         wl_instruction_local          = 0;
-    static bool             wl_start_local                = false;
-    static bool             wl_accept_local               = false;
-    static bool             mem_transfer_done_local       = false;
-    static bool             mem_read_request_local        = false;
-    static bool             mem_write_request_local       = false;
-    static uint32_t         mem_op_local                  = 0;
     static bool             scheduler_wl_start            = false;
     static bool             scheduler_wl_accept           = false;
     static uint32_t         scheduler_wl_instruction      = 0;
     static bool             main_mem_read_request         = false;
     static bool             main_mem_write_request        = false;
     static uint32_t         main_mem_op                   = 0;
-    static uint16_t         token_pos_current             = 0;
-    static uint16_t         token_pos_next                = 0;
     static bool             debug_sum_done_local          = false;
     static int32_t          debug_sum_value_local         = 0;
     static bool             prev_start                    = false;
     static uint32_t         scheduler_layer_index_local   = 0;
-
+    
     // Active-low reset derived from control register.
     const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
     const bool reset = !reset_n;
@@ -166,7 +155,8 @@ void transformer_top(
     const bool ctrl_error =
         ((active_status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
         (active_status_mem.error_code != ERR_NONE);
-
+    const uint16_t token_position_local = static_cast<uint16_t>(ctrl_mem.token_position);
+        
     // Reset once at boot, then re-arm run-local state on each new start pulse.
     if (reset || start_edge) {
         compute_ready = true;
@@ -178,17 +168,8 @@ void transformer_top(
         mmu_req_ready_wire = true;
         mmu_main_dma_done_wire = false;
         mmu_main_mem_transfer_done_wire = false;
-        mmu_dma_instruction = 0;
         mmu_status = Status();
         dma_ready_local = true;
-        wl_ready_local = false;
-        wl_instruction_local = 0;
-        wl_start_local = false;
-        wl_accept_local = false;
-        mem_transfer_done_local = false;
-        mem_read_request_local = false;
-        mem_write_request_local = false;
-        mem_op_local = 0;
         scheduler_wl_start = false;
         scheduler_wl_accept = false;
         scheduler_wl_instruction = 0;
@@ -216,11 +197,9 @@ void transformer_top(
         stream_tx_active_local = false;
         stream_tx_index_local = 0;
         stream_in_counter = 0;
-        token_complete_local = false;
+        token_loaded_complete_local = false;
 
         if (reset) {
-            token_pos_current = 0;
-            token_pos_next = 0;
             prev_start = false;
         }
 
@@ -265,7 +244,7 @@ void transformer_top(
     }
 
     const bool axis_buf_full = (stream_in_counter >= static_cast<uint32_t>(STREAM_IN_BUF_BYTES));
-    const bool axis_in_ready_wire = (reset_n && (state_local == S_STREAM_IN) && !axis_buf_full && !token_complete_local);
+    const bool axis_in_ready_wire = (reset_n && (state_local == S_STREAM_IN) && !axis_buf_full && !token_loaded_complete_local);
 
     bool axis_in_valid = false;
     bool axis_in_last = false;
@@ -280,7 +259,7 @@ void transformer_top(
             stream_in_counter++;
         }
         if (beat.last != 0) {
-            token_complete_local = true;
+            token_loaded_complete_local = true;
             stream_in_counter = 0;
         }
     }
@@ -295,7 +274,7 @@ void transformer_top(
         start_en,
         debug_mode_en,
         ctrl_error,
-        token_complete_local,
+        token_loaded_complete_local,
         mmu_main_dma_done_wire,
         mmu_req_ready_wire,
         scheduler_wl_accept,
@@ -319,18 +298,8 @@ void transformer_top(
 
     // AXIS token completion is a per-token ingress latch. Once the scheduler
     // has advanced beyond STREAM_IN, clear it so the next token can be accepted.
-    if (token_complete_local && (state_local != S_STREAM_IN)) {
-        token_complete_local = false;
-    }
-
-    if (axis_in_valid && axis_in_last && axis_in_ready_wire) {
-        const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
-        token_pos_current = (token_pos_next <= token_pos_max) ? token_pos_next : token_pos_max;
-        if (token_pos_next < token_pos_max) {
-            token_pos_next = static_cast<uint16_t>(token_pos_next + 1);
-        } else {
-            token_pos_next = token_pos_max;
-        }
+    if (token_loaded_complete_local && (state_local != S_STREAM_IN)) {
+        token_loaded_complete_local = false;
     }
 
     if (state_local == S_DEBUG) {
@@ -409,7 +378,7 @@ void transformer_top(
     drive_headed_compute_controller(
         head_compute_ctx_local,
         reset_n,
-        token_pos_current,
+        token_position_local,
         mmu_head_in_buf,
         mmu_head_out_buf,
         head_error_any
@@ -422,13 +391,10 @@ void transformer_top(
         head_ctx_local[lane].compute_done  = head_compute_ctx_local[lane].compute_done;
     }
 
-    // Main-scheduler DMA instruction mirror.
-    mmu_dma_instruction = scheduler_wl_instruction;
-
     mmu_fsm(
         reset_n,
         ctrl_mem,
-        token_pos_current,
+        token_position_local,
         dma_ready_local,
         dma_done_local,
         dma_rx_buf_local,
@@ -550,7 +516,7 @@ void transformer_top(
     ctrl_mem_interface.check_control(ctrl_mem, done);
     active_status_mem.status = static_cast<uint32_t>(state_local);
     active_status_mem.layer_index = scheduler_layer_index_local;
-    active_status_mem.token_index = static_cast<uint32_t>(token_pos_current);
+    active_status_mem.token_index = static_cast<uint32_t>(token_position_local);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
     status_mem = active_status_mem;

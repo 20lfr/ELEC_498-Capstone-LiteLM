@@ -432,6 +432,7 @@ static void print_error_code_bits(uint32_t err) {
     if (err & ERR_MMU_REGION_TABLE_FULL) emit("ERR_MMU_REGION_TABLE_FULL");
     if (err & ERR_MMU_URAM_CHUNK_ALLOC_FAIL) emit("ERR_MMU_URAM_CHUNK_ALLOC_FAIL");
     if (err & ERR_MMU_REGION_TOO_LARGE) emit("ERR_MMU_REGION_TOO_LARGE");
+    if (err & ERR_TOKEN_MAX) emit("ERR_TOKEN_MAX");
     if (err & ERR_MMU_STREAM_OUTPUT_MISSING) emit("ERR_MMU_STREAM_OUTPUT_MISSING");
 }
 
@@ -508,48 +509,68 @@ ControlMemSpace ctrl_mem_init(bool init) {
         if (g_loaded_ctrl_mem_valid) {
             return g_loaded_ctrl_mem;
         }
-        ctrl_mem.control = CTRL_RESETN_BIT;
-        ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
-        ctrl_mem.irq_clear = 0;
-        ctrl_mem.layer_stride    = 0x00001000;
-        ctrl_mem.wq_head_stride  = 0x00000100;
-        ctrl_mem.wk_head_stride  = 0x00000100;
-        ctrl_mem.wv_head_stride  = 0x00000100;
-        ctrl_mem.k_cache_stride  = 0x00000100;
-        ctrl_mem.v_cache_stride  = 0x00000100;
-        ctrl_mem.wo_tile_stride  = 0x00000020;
-        ctrl_mem.w1_tile_stride  = 0x00000040;
-        ctrl_mem.w2_tile_stride  = 0x00000040;
-        ctrl_mem.wo_bias_tile_stride = 0x00000020;
-        ctrl_mem.w1_bias_tile_stride = 0x00000040;
-        ctrl_mem.w2_bias_tile_stride = 0x00000020;
-        ctrl_mem.ln0_gamma_stride = 0x00000040;
-        ctrl_mem.ln1_gamma_stride = 0x00000040;
-        ctrl_mem.final_norm_gamma_stride = 0x00000040;
-        ctrl_mem.ln0_eps_stride = 0x00000004;
-        ctrl_mem.ln1_eps_stride = 0x00000004;
-        ctrl_mem.final_norm_eps_stride = 0x00000004;
-        ctrl_mem.wq_offset = static_cast<uint32_t>(TB_BASE_WQ);
-        ctrl_mem.wk_offset = static_cast<uint32_t>(TB_BASE_WK);
-        ctrl_mem.wv_offset = static_cast<uint32_t>(TB_BASE_WV);
-        ctrl_mem.wo_offset = static_cast<uint32_t>(TB_BASE_WO);
-        ctrl_mem.w1_offset = static_cast<uint32_t>(TB_BASE_W1);
-        ctrl_mem.w2_offset = static_cast<uint32_t>(TB_BASE_W2);
-        ctrl_mem.k_cache_offset = static_cast<uint32_t>(TB_BASE_K_CACHE);
-        ctrl_mem.v_cache_offset = static_cast<uint32_t>(TB_BASE_V_CACHE);
-        ctrl_mem.wo_bias_offset = static_cast<uint32_t>(TB_BASE_WO_BIAS);
-        ctrl_mem.w1_bias_offset = static_cast<uint32_t>(TB_BASE_W1_BIAS);
-        ctrl_mem.w2_bias_offset = static_cast<uint32_t>(TB_BASE_W2_BIAS);
-        ctrl_mem.ln0_gamma_offset = static_cast<uint32_t>(TB_BASE_LN0_GAMMA);
-        ctrl_mem.ln1_gamma_offset = static_cast<uint32_t>(TB_BASE_LN1_GAMMA);
-        ctrl_mem.final_norm_gamma_offset = static_cast<uint32_t>(TB_BASE_FINAL_NORM_GAMMA);
-        ctrl_mem.ln0_eps_offset = static_cast<uint32_t>(TB_BASE_LN0_EPS);
-        ctrl_mem.ln1_eps_offset = static_cast<uint32_t>(TB_BASE_LN1_EPS);
-        ctrl_mem.final_norm_eps_offset = static_cast<uint32_t>(TB_BASE_FINAL_NORM_EPS);
-        ctrl_mem.wlogit_tile_stride = 0x00000080;
-        ctrl_mem.wlogit_offset = static_cast<uint32_t>(TB_BASE_WVOCAB);
+        std::fprintf(stderr,
+                     "ERROR: ctrl_mem_init(true) called before ctrl_mem.bin was loaded\n");
+        std::abort();
     }
     return ctrl_mem;
+}
+
+static uint8_t kv_cache_get_byte(const axi_gmem_word_t *buf, uint64_t byte_addr) {
+    const uint64_t word_idx = byte_addr / static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t lane = static_cast<uint32_t>(byte_addr % static_cast<uint64_t>(AXI_GMEM_WORD_BYTES));
+    const axi_gmem_word_t word = buf[word_idx];
+    return static_cast<uint8_t>(word.range(((lane + 1u) * 8u) - 1u, lane * 8u));
+}
+
+static void print_kv_cache_upto_token(const ControlMemSpace &ctrl,
+                                      const axi_gmem_word_t *kv_cache,
+                                      size_t upto_token_idx) {
+    const uint64_t layer_stride =
+        (ctrl.layer_stride != 0)
+            ? static_cast<uint64_t>(ctrl.layer_stride)
+            : static_cast<uint64_t>(NUM_HEADS * CONTEXT_LENGTH * D_HEADS);
+    const uint64_t k_head_stride =
+        (ctrl.k_cache_stride != 0)
+            ? static_cast<uint64_t>(ctrl.k_cache_stride)
+            : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS);
+    const uint64_t v_head_stride =
+        (ctrl.v_cache_stride != 0)
+            ? static_cast<uint64_t>(ctrl.v_cache_stride)
+            : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS);
+    const size_t max_token_idx = (upto_token_idx < static_cast<size_t>(CONTEXT_LENGTH))
+                                     ? upto_token_idx
+                                     : static_cast<size_t>(CONTEXT_LENGTH - 1);
+
+    std::printf("[KV DUMP] K/V cache through token %zu\n", max_token_idx);
+    for (int layer = 0; layer < NUM_LAYERS; ++layer) {
+        for (int head = 0; head < NUM_HEADS; ++head) {
+            for (size_t token = 0; token <= max_token_idx; ++token) {
+                const uint64_t k_base = static_cast<uint64_t>(ctrl.k_cache_offset) +
+                                        static_cast<uint64_t>(layer) * layer_stride +
+                                        static_cast<uint64_t>(head) * k_head_stride +
+                                        static_cast<uint64_t>(token) * static_cast<uint64_t>(D_HEADS);
+                const uint64_t v_base = static_cast<uint64_t>(ctrl.v_cache_offset) +
+                                        static_cast<uint64_t>(layer) * layer_stride +
+                                        static_cast<uint64_t>(head) * v_head_stride +
+                                        static_cast<uint64_t>(token) * static_cast<uint64_t>(D_HEADS);
+
+                std::printf("[KV DUMP] L%d H%d T%zu K:", layer, head, token);
+                for (int i = 0; i < D_HEADS; ++i) {
+                    const int8_t value = static_cast<int8_t>(kv_cache_get_byte(
+                        kv_cache, k_base + static_cast<uint64_t>(i)));
+                    std::printf(" %d", static_cast<int>(value));
+                }
+                std::printf(" | V:");
+                for (int i = 0; i < D_HEADS; ++i) {
+                    const int8_t value = static_cast<int8_t>(kv_cache_get_byte(
+                        kv_cache, v_base + static_cast<uint64_t>(i)));
+                    std::printf(" %d", static_cast<int>(value));
+                }
+                std::printf("\n");
+            }
+        }
+    }
 }
 
 static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
@@ -571,11 +592,11 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     uint8_t axis_in_data = 0;
     uint8_t stream_in_buf[STREAM_IN_BUF_BYTES] = {};
     uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES] = {};
-    int stream_in_token_index = 0;
+    int stream_in_token_index = static_cast<int>(selected_stream_token);
     uint8_t stream_in_token_bytes[STREAM_TOKEN_BYTES] = {};
     int stream_in_token_count = 0;
     int stream_out_count = 0;
-    int stream_out_token_index = 0;
+    int stream_out_token_index = static_cast<int>(selected_stream_token);
 
     bool irq_ps              = false;
     bool irq_interupt_flagged = false;
@@ -769,6 +790,14 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             }
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::AssertStart) {
+            ctrl_mem.token_position = static_cast<uint32_t>(selected_stream_token);
+            if (ctrl_mem.token_position != static_cast<uint32_t>(selected_stream_token)) {
+                std::fprintf(stderr,
+                             "ERROR: ctrl_mem.token_position mismatch before start (expected=%zu got=%u)\n",
+                             selected_stream_token,
+                             ctrl_mem.token_position);
+                return 1;
+            }
             set_control(CTRL_RESETN_BIT | CTRL_START_BIT);
             reset_released = true;
             start_pulsed   = true;
@@ -834,7 +863,6 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
                                     stream_in_token_count,
                                     token_id,
                                     static_cast<unsigned>(token_word));
-                        stream_in_token_index++;
                         stream_in_token_count = 0;
                         axis_feed_done = true;
                         axis_drive = false;
@@ -885,7 +913,6 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
                     }
                 }
                 stream_out_count = 0;
-                stream_out_token_index++;
             }
         }
 
@@ -965,6 +992,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
         return 1;
     }
 
+    print_kv_cache_upto_token(ctrl_mem, kv_cache, selected_stream_token);
     std::printf("PASS: Token %zu inference complete, FSM stayed IDLE for %d cycles after.\n",
                 selected_stream_token, idle_after_stream);
     return 0;
