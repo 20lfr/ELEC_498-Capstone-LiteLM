@@ -10,9 +10,9 @@ struct HardwareConfig {
     uint64_t stream_reg_base_addr = 0xa0000000;
     std::string uio_device = "transformer_top";
     std::string dmabuf0_name = "udmabuf0";
-    size_t dmabuf0_size = 0x70000000;
+    size_t dmabuf0_size = 0x72000000;
     std::string dmabuf1_name = "udmabuf1";
-    size_t dmabuf1_size = 0x10000000;
+    size_t dmabuf1_size = 0x20000000;
     uint32_t timeout_ms = 30000;
     bool mock_mode = false;
     bool debug_mode = false;
@@ -93,8 +93,10 @@ struct MemoryLayout {
     static constexpr uint32_t k_cache_off = 0;
     static constexpr uint32_t v_cache_off = align64(k_cache_off + MEM_K_CACHE);
     static constexpr uint32_t input_off = align64(v_cache_off + MEM_V_CACHE);
-    static constexpr uint32_t output_off = align64(input_off + D_MODEL);
-    static constexpr uint32_t kv_size = align64(output_off + D_MODEL);
+    static constexpr uint32_t output_off =
+        align64(input_off + STREAM_IN_BUF_BYTES);
+    static constexpr uint32_t kv_size =
+        align64(output_off + STREAM_OUT_BUF_BYTES);
 
     // Runtime-overridable fields (default to computed values)
     uint32_t wq_offset = wq_off;
