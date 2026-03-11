@@ -852,8 +852,7 @@ static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
             ctrl_mem,
             status_mem,
             irq_ps,
-            dbg_state,
-            control_reg
+            dbg_state
         );
 
         // Drain AXI stream output
