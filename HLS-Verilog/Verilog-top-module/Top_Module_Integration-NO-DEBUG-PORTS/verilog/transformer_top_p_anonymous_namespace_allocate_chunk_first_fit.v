@@ -630,8 +630,8 @@ wire    ap_CS_fsm_state14;
 wire   [3:0] trunc_ln669_fu_1473_p1;
 reg   [3:0] trunc_ln669_reg_2363;
 wire    ap_CS_fsm_state15;
-wire   [0:0] tmp_603_fu_1477_p3;
-reg   [0:0] tmp_603_reg_2368;
+wire   [0:0] tmp_615_fu_1477_p3;
+reg   [0:0] tmp_615_reg_2368;
 wire   [0:0] icmp_ln634_fu_1485_p2;
 reg   [0:0] icmp_ln634_reg_2372;
 wire   [31:0] tmp_s_fu_1491_p35;
@@ -658,8 +658,8 @@ reg   [4:0] p_anonymous_namespace_bank_offsets_addr_1_reg_2466;
 wire   [15:0] trunc_ln669_1_fu_1552_p1;
 reg   [15:0] trunc_ln669_1_reg_2471;
 wire    ap_CS_fsm_state16;
-wire   [31:0] tmp_201_fu_1556_p35;
-reg   [31:0] tmp_201_reg_2477;
+wire   [31:0] tmp_211_fu_1556_p35;
+reg   [31:0] tmp_211_reg_2477;
 wire   [0:0] icmp_ln641_1_fu_1740_p2;
 reg   [0:0] icmp_ln641_1_reg_2482;
 wire   [15:0] sub_i_i92_fu_1744_p2;
@@ -1251,13 +1251,13 @@ wire   [5:0] grp_fu_1426_p0;
 wire   [16:0] zext_ln623_fu_1462_p1;
 wire   [31:0] tmp_s_fu_1491_p33;
 wire   [3:0] tmp_s_fu_1491_p34;
-wire   [31:0] tmp_201_fu_1556_p33;
+wire   [31:0] tmp_211_fu_1556_p33;
 wire   [16:0] zext_ln538_fu_1749_p1;
 wire   [15:0] add_ln538_1_fu_1765_p2;
 wire   [4:0] add_ln672_fu_1781_p2;
 wire   [0:0] icmp_ln672_fu_1786_p2;
 wire   [4:0] add_ln672_1_fu_1792_p2;
-wire   [16:0] tmp_604_fu_1835_p4;
+wire   [16:0] tmp_616_fu_1835_p4;
 wire   [31:0] sub_ln678_fu_1851_p2;
 wire   [0:0] icmp_ln679_fu_1857_p2;
 wire   [0:0] icmp_ln677_fu_1845_p2;
@@ -1335,22 +1335,22 @@ wire  signed [3:0] tmp_s_fu_1491_p25;
 wire  signed [3:0] tmp_s_fu_1491_p27;
 wire  signed [3:0] tmp_s_fu_1491_p29;
 wire  signed [3:0] tmp_s_fu_1491_p31;
-wire   [3:0] tmp_201_fu_1556_p1;
-wire   [3:0] tmp_201_fu_1556_p3;
-wire   [3:0] tmp_201_fu_1556_p5;
-wire   [3:0] tmp_201_fu_1556_p7;
-wire   [3:0] tmp_201_fu_1556_p9;
-wire   [3:0] tmp_201_fu_1556_p11;
-wire   [3:0] tmp_201_fu_1556_p13;
-wire   [3:0] tmp_201_fu_1556_p15;
-wire  signed [3:0] tmp_201_fu_1556_p17;
-wire  signed [3:0] tmp_201_fu_1556_p19;
-wire  signed [3:0] tmp_201_fu_1556_p21;
-wire  signed [3:0] tmp_201_fu_1556_p23;
-wire  signed [3:0] tmp_201_fu_1556_p25;
-wire  signed [3:0] tmp_201_fu_1556_p27;
-wire  signed [3:0] tmp_201_fu_1556_p29;
-wire  signed [3:0] tmp_201_fu_1556_p31;
+wire   [3:0] tmp_211_fu_1556_p1;
+wire   [3:0] tmp_211_fu_1556_p3;
+wire   [3:0] tmp_211_fu_1556_p5;
+wire   [3:0] tmp_211_fu_1556_p7;
+wire   [3:0] tmp_211_fu_1556_p9;
+wire   [3:0] tmp_211_fu_1556_p11;
+wire   [3:0] tmp_211_fu_1556_p13;
+wire   [3:0] tmp_211_fu_1556_p15;
+wire  signed [3:0] tmp_211_fu_1556_p17;
+wire  signed [3:0] tmp_211_fu_1556_p19;
+wire  signed [3:0] tmp_211_fu_1556_p21;
+wire  signed [3:0] tmp_211_fu_1556_p23;
+wire  signed [3:0] tmp_211_fu_1556_p25;
+wire  signed [3:0] tmp_211_fu_1556_p27;
+wire  signed [3:0] tmp_211_fu_1556_p29;
+wire  signed [3:0] tmp_211_fu_1556_p31;
 wire    ap_ce_reg;
 
 // power-on initialization
@@ -1905,9 +1905,9 @@ sparsemux_33_4_32_1_1_U2825(
     .din13(p_anonymous_namespace_free_spans_offset_13_q0),
     .din14(p_anonymous_namespace_free_spans_offset_14_q0),
     .din15(p_anonymous_namespace_free_spans_offset_15_q0),
-    .def(tmp_201_fu_1556_p33),
+    .def(tmp_211_fu_1556_p33),
     .sel(trunc_ln669_reg_2363),
-    .dout(tmp_201_fu_1556_p35)
+    .dout(tmp_211_fu_1556_p35)
 );
 
 always @ (posedge ap_clk) begin
@@ -2007,8 +2007,8 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19))) begin
-        chunk_offset_0_reg_1023 <= tmp_201_reg_2477;
+    if (((icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19))) begin
+        chunk_offset_0_reg_1023 <= tmp_211_reg_2477;
     end else if (((1'b1 == ap_CS_fsm_state22) & (or_ln677_fu_1862_p2 == 1'd0))) begin
         chunk_offset_0_reg_1023 <= p_anonymous_namespace_bank_offsets_q0;
     end
@@ -2176,7 +2176,7 @@ always @ (posedge ap_clk) begin
         icmp_ln538_reg_2492 <= icmp_ln538_fu_1753_p2;
         icmp_ln641_1_reg_2482 <= icmp_ln641_1_fu_1740_p2;
         sub_i_i92_reg_2486 <= sub_i_i92_fu_1744_p2;
-        tmp_201_reg_2477 <= tmp_201_fu_1556_p35;
+        tmp_211_reg_2477 <= tmp_211_fu_1556_p35;
         trunc_ln669_1_reg_2471 <= trunc_ln669_1_fu_1552_p1;
     end
 end
@@ -2202,7 +2202,7 @@ always @ (posedge ap_clk) begin
         p_anonymous_namespace_free_spans_offset_7_addr_reg_2416 <= idxprom_i_reg_2142;
         p_anonymous_namespace_free_spans_offset_8_addr_reg_2421 <= idxprom_i_reg_2142;
         p_anonymous_namespace_free_spans_offset_9_addr_reg_2426 <= idxprom_i_reg_2142;
-        tmp_603_reg_2368 <= ap_phi_mux_fit_idx_phi_fu_1015_p4[32'd16];
+        tmp_615_reg_2368 <= ap_phi_mux_fit_idx_phi_fu_1015_p4[32'd16];
         tmp_s_reg_2376 <= tmp_s_fu_1491_p35;
         trunc_ln669_reg_2363 <= trunc_ln669_fu_1473_p1;
     end
@@ -2467,8 +2467,8 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19))) begin
-        ap_phi_mux_chunk_offset_0_phi_fu_1026_p4 = tmp_201_reg_2477;
+    if (((icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19))) begin
+        ap_phi_mux_chunk_offset_0_phi_fu_1026_p4 = tmp_211_reg_2477;
     end else begin
         ap_phi_mux_chunk_offset_0_phi_fu_1026_p4 = chunk_offset_0_reg_1023;
     end
@@ -2667,7 +2667,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)) | ((icmp_ln641_reg_2584 == 1'd1) & (1'b1 == ap_CS_fsm_state37)))) begin
+    if ((((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)) | ((icmp_ln641_reg_2584 == 1'd1) & (1'b1 == ap_CS_fsm_state37)))) begin
         p_anonymous_namespace_free_span_count_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_span_count_we0_local = 1'b0;
@@ -2749,7 +2749,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state32) | ((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1380_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd0) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd1) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if (((1'b1 == ap_CS_fsm_state32) | ((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1380_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd0) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd1) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_0_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_0_we0_local = 1'b0;
@@ -2827,7 +2827,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1543_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd10) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd11) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1543_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd10) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd11) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_10_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_10_we0_local = 1'b0;
@@ -2905,7 +2905,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1559_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd11) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd12) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1559_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd11) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd12) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_11_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_11_we0_local = 1'b0;
@@ -2983,7 +2983,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1575_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd12) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd13) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1575_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd12) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd13) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_12_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_12_we0_local = 1'b0;
@@ -3061,7 +3061,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1591_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd13) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd14) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1591_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd13) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd14) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_13_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_13_we0_local = 1'b0;
@@ -3139,7 +3139,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1607_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd14) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd15) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1607_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd14) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd15) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_14_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_14_we0_local = 1'b0;
@@ -3217,7 +3217,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1623_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd15) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd16) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1623_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd15) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd16) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_15_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_15_we0_local = 1'b0;
@@ -3295,7 +3295,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1398_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd1) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd2) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1398_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd1) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd2) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_1_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_1_we0_local = 1'b0;
@@ -3373,7 +3373,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1415_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd2) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd3) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1415_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd2) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd3) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_2_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_2_we0_local = 1'b0;
@@ -3451,7 +3451,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1431_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd3) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd4) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1431_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd3) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd4) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_3_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_3_we0_local = 1'b0;
@@ -3529,7 +3529,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1447_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd4) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd5) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1447_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd4) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd5) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_4_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_4_we0_local = 1'b0;
@@ -3607,7 +3607,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1463_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd5) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd6) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1463_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd5) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd6) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_5_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_5_we0_local = 1'b0;
@@ -3685,7 +3685,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1479_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd6) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd7) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1479_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd6) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd7) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_6_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_6_we0_local = 1'b0;
@@ -3763,7 +3763,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1495_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd7) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd8) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1495_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd7) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd8) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_7_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_7_we0_local = 1'b0;
@@ -3841,7 +3841,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1511_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd8) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd9) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1511_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd8) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd9) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_8_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_8_we0_local = 1'b0;
@@ -3919,7 +3919,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1527_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd9) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd10) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((1'b1 == ap_CS_fsm_state35) & (ap_predicate_pred1527_state35 == 1'b1)) | ((trunc_ln669_1_fu_1552_p1 == 16'd9) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd10) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_offset_9_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_9_we0_local = 1'b0;
@@ -4005,7 +4005,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd1) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd0) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd1) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)) | (~(targetBlock6_reg_2514 == 2'd1) & ~(targetBlock6_reg_2514 == 2'd0) & (icmp_ln686_reg_2133 == 1'd1) & (1'b1 == ap_CS_fsm_state30)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd1) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd0) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd1) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)) | (~(targetBlock6_reg_2514 == 2'd1) & ~(targetBlock6_reg_2514 == 2'd0) & (icmp_ln686_reg_2133 == 1'd1) & (1'b1 == ap_CS_fsm_state30)))) begin
         p_anonymous_namespace_free_spans_size_0_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_0_we0_local = 1'b0;
@@ -4083,7 +4083,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd11) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd10) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd11) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd11) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd10) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd11) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_10_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_10_we0_local = 1'b0;
@@ -4161,7 +4161,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd12) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd11) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd12) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd12) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd11) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd12) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_11_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_11_we0_local = 1'b0;
@@ -4239,7 +4239,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd13) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd12) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd13) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd13) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd12) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd13) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_12_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_12_we0_local = 1'b0;
@@ -4317,7 +4317,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd14) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd13) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd14) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd14) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd13) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd14) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_13_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_13_we0_local = 1'b0;
@@ -4395,7 +4395,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd15) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd14) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd15) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd15) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd14) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd15) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_14_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_14_we0_local = 1'b0;
@@ -4473,7 +4473,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd16) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd15) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd16) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd16) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd15) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd16) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_15_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_15_we0_local = 1'b0;
@@ -4551,7 +4551,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd2) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd1) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd2) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd2) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd1) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd2) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_1_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_1_we0_local = 1'b0;
@@ -4629,7 +4629,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd3) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd2) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd3) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd3) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd2) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd3) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_2_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_2_we0_local = 1'b0;
@@ -4707,7 +4707,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd4) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd3) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd4) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd4) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd3) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd4) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_3_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_3_we0_local = 1'b0;
@@ -4785,7 +4785,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd5) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd4) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd5) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd5) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd4) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd5) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_4_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_4_we0_local = 1'b0;
@@ -4863,7 +4863,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd6) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd5) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd6) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd6) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd5) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd6) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_5_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_5_we0_local = 1'b0;
@@ -4941,7 +4941,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd7) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd6) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd7) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd7) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd6) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd7) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_6_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_6_we0_local = 1'b0;
@@ -5019,7 +5019,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd8) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd7) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd8) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd8) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd7) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd8) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_7_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_7_we0_local = 1'b0;
@@ -5097,7 +5097,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd9) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd8) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd9) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd9) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd8) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd9) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_8_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_8_we0_local = 1'b0;
@@ -5175,7 +5175,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd10) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd9) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_603_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd10) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
+    if ((((p_anonymous_namespace_free_span_count_load_1_reg_2533 == 16'd10) & (1'b1 == ap_CS_fsm_state36)) | ((trunc_ln669_1_fu_1552_p1 == 16'd9) & (1'b1 == ap_CS_fsm_state16)) | ((icmp_ln641_1_reg_2482 == 1'd1) & (icmp_ln635_reg_2382 == 1'd0) & (icmp_ln634_reg_2372 == 1'd1) & (tmp_615_reg_2368 == 1'd0) & (p_anonymous_namespace_free_span_count_load_reg_2255 == 16'd10) & (icmp_ln666_reg_2119 == 1'd1) & (tmp_reg_2110 == 1'd0) & (1'b1 == ap_CS_fsm_state19)))) begin
         p_anonymous_namespace_free_spans_size_9_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_9_we0_local = 1'b0;
@@ -5263,7 +5263,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state15 : begin
-            if (((icmp_ln635_fu_1547_p2 == 1'd0) & (icmp_ln634_fu_1485_p2 == 1'd1) & (tmp_603_fu_1477_p3 == 1'd0) & (1'b1 == ap_CS_fsm_state15))) begin
+            if (((icmp_ln635_fu_1547_p2 == 1'd0) & (icmp_ln634_fu_1485_p2 == 1'd1) & (tmp_615_fu_1477_p3 == 1'd0) & (1'b1 == ap_CS_fsm_state15))) begin
                 ap_NS_fsm = ap_ST_fsm_state16;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state20;
@@ -5382,7 +5382,7 @@ assign add_ln538_1_fu_1765_p2 = (trunc_ln669_1_reg_2471 + 16'd1);
 
 assign add_ln538_fu_1979_p2 = ($signed(p_anonymous_namespace_free_span_count_load_1_loc_fu_242) + $signed(16'd65535));
 
-assign add_ln639_1_fu_1627_p2 = (tmp_201_fu_1556_p35 + remaining);
+assign add_ln639_1_fu_1627_p2 = (tmp_211_fu_1556_p35 + remaining);
 
 assign add_ln639_fu_1973_p2 = (p_anonymous_namespace_free_spans_offset_0_q0 + take_loc_fu_234);
 
@@ -5480,7 +5480,7 @@ assign icmp_ln666_fu_1405_p2 = ((i_019_reg_1001 < 5'd24) ? 1'b1 : 1'b0);
 
 assign icmp_ln672_fu_1786_p2 = ((add_ln672_fu_1781_p2 < 5'd24) ? 1'b1 : 1'b0);
 
-assign icmp_ln677_fu_1845_p2 = ((tmp_604_fu_1835_p4 != 17'd0) ? 1'b1 : 1'b0);
+assign icmp_ln677_fu_1845_p2 = ((tmp_616_fu_1835_p4 != 17'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln679_fu_1857_p2 = ((sub_ln678_fu_1851_p2 < remaining) ? 1'b1 : 1'b0);
 
@@ -5586,11 +5586,11 @@ assign tail_space_fu_1933_p2 = (32'd32768 - off_loc_fu_254);
 
 assign take_fu_1950_p3 = ((icmp_ln701_fu_1938_p2[0:0] == 1'b1) ? trunc_ln701_fu_1943_p1 : trunc_ln701_1_fu_1946_p1);
 
-assign tmp_201_fu_1556_p33 = 'bx;
+assign tmp_211_fu_1556_p33 = 'bx;
 
-assign tmp_603_fu_1477_p3 = ap_phi_mux_fit_idx_phi_fu_1015_p4[32'd16];
+assign tmp_615_fu_1477_p3 = ap_phi_mux_fit_idx_phi_fu_1015_p4[32'd16];
 
-assign tmp_604_fu_1835_p4 = {{p_anonymous_namespace_bank_offsets_q0[31:15]}};
+assign tmp_616_fu_1835_p4 = {{p_anonymous_namespace_bank_offsets_q0[31:15]}};
 
 assign tmp_fu_1391_p3 = pass_fu_230[32'd1];
 

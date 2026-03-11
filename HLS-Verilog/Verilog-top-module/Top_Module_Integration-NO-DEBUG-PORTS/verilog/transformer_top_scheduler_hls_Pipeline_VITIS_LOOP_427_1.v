@@ -865,7 +865,7 @@ wire   [31:0] or_ln12_7_fu_3042_p5;
 wire   [31:0] or_ln12_6_fu_3526_p5;
 wire   [31:0] or_ln12_5_fu_4010_p5;
 wire   [31:0] or_ln12_4_fu_4347_p5;
-wire   [7:0] empty_229_fu_936_p1;
+wire   [7:0] empty_228_fu_936_p1;
 reg   [7:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_258;
 wire   [0:0] select_ln133_1_fu_1727_p3;
 reg   [2:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_228;
@@ -1005,7 +1005,7 @@ reg   [0:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_u
 reg   [0:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_301;
 reg   [0:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_279;
 reg   [0:0] grp_load_fu_374_p1;
-wire   [7:0] empty_230_fu_680_p1;
+wire   [7:0] empty_229_fu_680_p1;
 reg   [7:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_259;
 reg   [2:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_229;
 reg   [2:0] ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_231;
@@ -1105,9 +1105,9 @@ wire   [0:0] group_finished_1_fu_5008_p2;
 wire    ap_block_pp0_stage0_01001;
 wire   [31:0] abs_head_fu_559_p3;
 wire   [0:0] trunc_ln432_fu_574_p1;
-wire   [0:0] tmp_55_fu_566_p3;
+wire   [0:0] tmp_72_fu_566_p3;
 wire   [31:0] add_ln_fu_577_p3;
-wire   [29:0] tmp_56_fu_593_p4;
+wire   [29:0] tmp_73_fu_593_p4;
 wire   [3:0] select_ln442_fu_624_p3;
 wire   [0:0] icmp_ln442_fu_631_p2;
 wire   [31:0] select_ln107_fu_668_p3;
@@ -1118,7 +1118,7 @@ wire   [24:0] or_ln_fu_1245_p5;
 wire   [7:0] trunc_ln117_fu_1299_p1;
 wire   [7:0] trunc_ln117_1_fu_1303_p1;
 wire   [7:0] select_ln117_fu_1307_p3;
-wire   [24:0] or_ln1_fu_1314_p5;
+wire   [24:0] or_ln11_fu_1314_p5;
 wire   [2:0] select_ln122_1_fu_1391_p3;
 wire   [2:0] select_ln123_1_fu_1439_p3;
 wire   [2:0] select_ln124_1_fu_1487_p3;
@@ -1158,7 +1158,7 @@ wire   [7:0] trunc_ln376_3_fu_2400_p1;
 wire   [7:0] select_ln376_fu_2389_p3;
 wire   [7:0] select_ln376_1_fu_2404_p3;
 wire   [31:0] select_ln379_fu_2473_p3;
-wire   [30:0] tmp_61_fu_2486_p4;
+wire   [30:0] tmp_78_fu_2486_p4;
 wire   [7:0] trunc_ln354_fu_2601_p1;
 wire   [7:0] trunc_ln354_1_fu_2605_p1;
 wire   [7:0] select_ln354_fu_2609_p3;
@@ -1178,7 +1178,7 @@ wire   [7:0] trunc_ln322_3_fu_3031_p1;
 wire   [7:0] select_ln322_fu_3020_p3;
 wire   [7:0] select_ln322_1_fu_3035_p3;
 wire   [31:0] select_ln325_fu_3104_p3;
-wire   [30:0] tmp_60_fu_3117_p4;
+wire   [30:0] tmp_77_fu_3117_p4;
 wire   [7:0] trunc_ln300_fu_3232_p1;
 wire   [7:0] trunc_ln300_1_fu_3236_p1;
 wire   [7:0] select_ln300_fu_3240_p3;
@@ -1194,7 +1194,7 @@ wire   [7:0] trunc_ln279_3_fu_3515_p1;
 wire   [7:0] select_ln279_fu_3504_p3;
 wire   [7:0] select_ln279_1_fu_3519_p3;
 wire   [31:0] select_ln283_fu_3588_p3;
-wire   [30:0] tmp_59_fu_3601_p4;
+wire   [30:0] tmp_76_fu_3601_p4;
 wire   [7:0] trunc_ln257_fu_3716_p1;
 wire   [7:0] trunc_ln257_1_fu_3720_p1;
 wire   [7:0] select_ln257_fu_3724_p3;
@@ -1210,7 +1210,7 @@ wire   [7:0] trunc_ln236_3_fu_3999_p1;
 wire   [7:0] select_ln236_fu_3988_p3;
 wire   [7:0] select_ln236_1_fu_4003_p3;
 wire   [31:0] select_ln240_fu_4072_p3;
-wire   [30:0] tmp_58_fu_4085_p4;
+wire   [30:0] tmp_75_fu_4085_p4;
 wire   [7:0] trunc_ln195_fu_4200_p1;
 wire   [7:0] trunc_ln195_1_fu_4204_p1;
 wire   [7:0] select_ln195_fu_4208_p3;
@@ -1222,7 +1222,7 @@ wire   [7:0] trunc_ln205_3_fu_4336_p1;
 wire   [7:0] select_ln205_fu_4325_p3;
 wire   [7:0] select_ln205_1_fu_4340_p3;
 wire   [31:0] select_ln209_fu_4409_p3;
-wire   [30:0] tmp_57_fu_4422_p4;
+wire   [30:0] tmp_74_fu_4422_p4;
 wire   [7:0] trunc_ln154_fu_4522_p1;
 wire   [7:0] trunc_ln154_1_fu_4526_p1;
 wire   [7:0] select_ln154_fu_4530_p3;
@@ -2138,7 +2138,7 @@ end
 
 always @ (*) begin
     if (((icmp_ln107_fu_675_p2 == 1'd0) & (icmp_ln444_fu_654_p2 == 1'd0) & (icmp_ln436_fu_609_p2 == 1'd1) & (icmp_ln435_fu_603_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_258 = empty_229_fu_936_p1;
+        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_258 = empty_228_fu_936_p1;
     end else begin
         ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_258 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52_i;
     end
@@ -2146,7 +2146,7 @@ end
 
 always @ (*) begin
     if (((icmp_ln107_fu_675_p2 == 1'd0) & (icmp_ln444_fu_654_p2 == 1'd0) & (icmp_ln436_fu_609_p2 == 1'd0) & (icmp_ln435_fu_603_p2 == 1'd1) & (1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
-        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_259 = empty_230_fu_680_p1;
+        ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_259 = empty_229_fu_680_p1;
     end else begin
         ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_259 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51_i;
     end
@@ -5605,7 +5605,7 @@ always @ (*) begin
         end else if ((1'b1 == ap_condition_2672)) begin
             transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51_o = 8'd13;
         end else if ((1'b1 == ap_condition_1019)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51_o = empty_230_fu_680_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51_o = empty_229_fu_680_p1;
         end else begin
             transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51_o = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51_i;
         end
@@ -5647,7 +5647,7 @@ always @ (*) begin
         end else if ((1'b1 == ap_condition_1500)) begin
             transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52_o = 8'd13;
         end else if ((1'b1 == ap_condition_389)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52_o = empty_229_fu_936_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52_o = empty_228_fu_936_p1;
         end else begin
             transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52_o = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52_i;
         end
@@ -6865,7 +6865,7 @@ always @ (*) begin
     endcase
 end
 
-assign abs_head_1_fu_584_p3 = ((tmp_55_fu_566_p3[0:0] == 1'b1) ? add_ln_fu_577_p3 : abs_head_fu_559_p3);
+assign abs_head_1_fu_584_p3 = ((tmp_72_fu_566_p3[0:0] == 1'b1) ? add_ln_fu_577_p3 : abs_head_fu_559_p3);
 
 assign abs_head_fu_559_p3 = ((icmp_ln431_reg_5086[0:0] == 1'b1) ? transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_67_i : transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_68_i);
 
@@ -7645,9 +7645,9 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign empty_229_fu_936_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
+assign empty_228_fu_936_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
 
-assign empty_230_fu_680_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
+assign empty_229_fu_680_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
 
 assign group_finished_1_fu_5008_p2 = (head_done_fu_5002_p2 & group_finished_fu_308);
 
@@ -7707,21 +7707,21 @@ assign icmp_ln141_fu_1998_p2 = ((last_op_fu_1742_p3 == 8'd12) ? 1'b1 : 1'b0);
 
 assign icmp_ln142_fu_2037_p2 = ((last_op_fu_1742_p3 == 8'd13) ? 1'b1 : 1'b0);
 
-assign icmp_ln209_fu_4432_p2 = (($signed(tmp_57_fu_4422_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln209_fu_4432_p2 = (($signed(tmp_74_fu_4422_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
 
-assign icmp_ln240_fu_4095_p2 = (($signed(tmp_58_fu_4085_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln240_fu_4095_p2 = (($signed(tmp_75_fu_4085_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
 
-assign icmp_ln283_fu_3611_p2 = (($signed(tmp_59_fu_3601_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln283_fu_3611_p2 = (($signed(tmp_76_fu_3601_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
 
-assign icmp_ln325_fu_3127_p2 = (($signed(tmp_60_fu_3117_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln325_fu_3127_p2 = (($signed(tmp_77_fu_3117_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
 
-assign icmp_ln379_fu_2496_p2 = (($signed(tmp_61_fu_2486_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
+assign icmp_ln379_fu_2496_p2 = (($signed(tmp_78_fu_2486_p4) < $signed(31'd1)) ? 1'b1 : 1'b0);
 
 assign icmp_ln427_fu_528_p2 = ((ap_sig_allocacmp_lane == 2'd2) ? 1'b1 : 1'b0);
 
 assign icmp_ln431_fu_540_p2 = ((ap_sig_allocacmp_lane == 2'd1) ? 1'b1 : 1'b0);
 
-assign icmp_ln435_fu_603_p2 = ((tmp_56_fu_593_p4 == 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln435_fu_603_p2 = ((tmp_73_fu_593_p4 == 30'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln436_fu_609_p2 = ((lane_reg_5076 == 2'd0) ? 1'b1 : 1'b0);
 
@@ -7730,6 +7730,8 @@ assign icmp_ln442_fu_631_p2 = ((select_ln442_fu_624_p3 == 4'd0) ? 1'b1 : 1'b0);
 assign icmp_ln444_fu_654_p2 = ((select_ln442_fu_624_p3 == 4'd11) ? 1'b1 : 1'b0);
 
 assign last_op_fu_1742_p3 = ((icmp_ln431_reg_5086[0:0] == 1'b1) ? ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_259 : ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_258);
+
+assign or_ln11_fu_1314_p5 = {{{{{{1'd1}, {select_ln117_fu_1307_p3}}}, {empty}}}, {8'd0}};
 
 assign or_ln12_1_fu_2763_p5 = {{{{{{1'd1}, {select_ln342_fu_2756_p3}}}, {empty}}}, {8'd10}};
 
@@ -7746,8 +7748,6 @@ assign or_ln12_6_fu_3526_p5 = {{{{select_ln279_fu_3504_p3}, {select_ln279_1_fu_3
 assign or_ln12_7_fu_3042_p5 = {{{{select_ln322_fu_3020_p3}, {select_ln322_1_fu_3035_p3}}, {empty}}, {8'd9}};
 
 assign or_ln12_8_fu_2411_p5 = {{{{select_ln376_fu_2389_p3}, {select_ln376_1_fu_2404_p3}}, {empty}}, {8'd12}};
-
-assign or_ln1_fu_1314_p5 = {{{{{{1'd1}, {select_ln117_fu_1307_p3}}}, {empty}}}, {8'd0}};
 
 assign or_ln21_1_fu_4537_p5 = {{{{{{1'd1}, {select_ln154_fu_4530_p3}}}, {empty}}}, {8'd0}};
 
@@ -7949,7 +7949,7 @@ assign select_ln442_fu_624_p3 = ((icmp_ln431_reg_5086[0:0] == 1'b1) ? transforme
 
 assign sext_ln111_fu_1256_p1 = $signed(or_ln_fu_1245_p5);
 
-assign sext_ln116_fu_1325_p1 = $signed(or_ln1_fu_1314_p5);
+assign sext_ln116_fu_1325_p1 = $signed(or_ln11_fu_1314_p5);
 
 assign sext_ln150_fu_4548_p1 = $signed(or_ln21_1_fu_4537_p5);
 
@@ -7973,19 +7973,19 @@ assign sext_ln365_fu_2290_p1 = $signed(or_ln21_8_fu_2279_p5);
 
 assign sext_ln395_fu_2143_p1 = $signed(or_ln12_3_fu_2132_p5);
 
-assign tmp_55_fu_566_p3 = abs_head_fu_559_p3[32'd31];
+assign tmp_72_fu_566_p3 = abs_head_fu_559_p3[32'd31];
 
-assign tmp_56_fu_593_p4 = {{abs_head_1_fu_584_p3[31:2]}};
+assign tmp_73_fu_593_p4 = {{abs_head_1_fu_584_p3[31:2]}};
 
-assign tmp_57_fu_4422_p4 = {{add_ln209_fu_4416_p2[31:1]}};
+assign tmp_74_fu_4422_p4 = {{add_ln209_fu_4416_p2[31:1]}};
 
-assign tmp_58_fu_4085_p4 = {{add_ln240_fu_4079_p2[31:1]}};
+assign tmp_75_fu_4085_p4 = {{add_ln240_fu_4079_p2[31:1]}};
 
-assign tmp_59_fu_3601_p4 = {{add_ln283_fu_3595_p2[31:1]}};
+assign tmp_76_fu_3601_p4 = {{add_ln283_fu_3595_p2[31:1]}};
 
-assign tmp_60_fu_3117_p4 = {{add_ln325_fu_3111_p2[31:1]}};
+assign tmp_77_fu_3117_p4 = {{add_ln325_fu_3111_p2[31:1]}};
 
-assign tmp_61_fu_2486_p4 = {{add_ln379_fu_2480_p2[31:1]}};
+assign tmp_78_fu_2486_p4 = {{add_ln379_fu_2480_p2[31:1]}};
 
 assign trunc_ln112_1_fu_1234_p1 = ap_sig_allocacmp_transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_208[7:0];
 

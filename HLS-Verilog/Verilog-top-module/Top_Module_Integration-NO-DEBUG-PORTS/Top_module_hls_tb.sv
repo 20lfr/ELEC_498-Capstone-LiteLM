@@ -3,8 +3,8 @@
 module top_module_hls_tb;
   localparam int CLK_PERIOD_NS        = 10;
   localparam int MAX_CYCLES           = 5000000;
-  localparam int CTRL_MEM_WORDS       = 40;
-  localparam int DBG_CTRL_MEM_WORDS   = 40;
+  localparam int CTRL_MEM_WORDS       = 41;
+  localparam int DBG_CTRL_MEM_WORDS   = 41;
   localparam int STREAM_IN_BUF_BYTES  = 16;
   localparam int MAX_STREAM_TOKENS    = 256;
   localparam int STREAM_IN_FILE_BYTES_MAX = STREAM_IN_BUF_BYTES * MAX_STREAM_TOKENS;
@@ -71,13 +71,13 @@ module top_module_hls_tb;
 
   localparam logic [7:0] ADDR_AP_CTRL           = 8'h00;
   localparam logic [7:0] ADDR_CTRL_MEM_DATA_0   = 8'h10;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_0 = 8'hB4;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_1 = 8'hB8;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_2 = 8'hBC;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_3 = 8'hC0;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_4 = 8'hC4;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_5 = 8'hC8;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_6 = 8'hCC;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_0 = 8'hB8;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_1 = 8'hBC;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_2 = 8'hC0;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_3 = 8'hC4;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_4 = 8'hC8;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_5 = 8'hCC;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_6 = 8'hD0;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
@@ -126,6 +126,7 @@ module top_module_hls_tb;
     logic [31:0] ln1_eps_offset;
     logic [31:0] final_norm_eps_offset;
     logic [31:0] wlogit_offset;
+    logic [31:0] token_position;
   } dbg_control_mem_t;
 
   typedef struct packed {
@@ -299,10 +300,6 @@ module top_module_hls_tb;
   // Re-added reduced debug outputs from top_no_debug.cpp
   logic [31:0]  dbg_state;
   logic         dbg_state_ap_vld;
-  logic [1279:0] dbg_ctrl_mem;
-  logic         dbg_ctrl_mem_ap_vld;
-  logic [31:0]  control_reg;
-  logic         control_reg_ap_vld;
   logic [0:0]   dbg_error;
   logic         dbg_error_ap_vld;
   logic [31:0]  dbg_error_code;
@@ -393,7 +390,7 @@ module top_module_hls_tb;
   logic next_token_pending;
   logic launch_next_token;
 
-  // AXI ctrl_mem word map for the current 40-word ControlMemSpace.
+  // AXI ctrl_mem word map for the current 41-word ControlMemSpace.
   localparam int CTRLW_CONTROL            = 0;
   localparam int CTRLW_IRQ_MASK           = 1;
   localparam int CTRLW_IRQ_CLEAR          = 2;
@@ -452,6 +449,7 @@ module top_module_hls_tb;
   localparam int CTRLW_FINAL_NORM_EPS_BASE_HI = 38;
   localparam int CTRLW_WLOGIT_BASE_LO     = 39;
   localparam int CTRLW_WLOGIT_BASE_HI     = 39;
+  localparam int CTRLW_TOKEN_POSITION     = 40;
   // 64-bit DDR base map for control memory programming.
   localparam logic [63:0] BASE_WQ               = 64'h0000_0001_6000_0000;
   localparam logic [63:0] BASE_WK               = 64'h0000_0001_6100_0000;
@@ -487,6 +485,7 @@ module top_module_hls_tb;
     CTRL_PROGRAM_BASES,
     CTRL_RELAUNCH_PREP,
     CTRL_ASSERT_DEBUG_MODE,
+    CTRL_ASSERT_TOKEN_INDEX,
     CTRL_ASSERT_START,
     CTRL_ASSERT_AP_START,
     CTRL_HOLD_START,
@@ -555,11 +554,11 @@ module top_module_hls_tb;
   assign done_req_fire  = ctrl_can_issue && !irq_req_valid && done_req_valid;
   assign error_req_fire = ctrl_can_issue && !irq_req_valid && !done_req_valid && error_req_valid;
 
-  // Decode packed dbg_ctrl_mem bus into named fields for waveform readability.
+  // Decode the testbench's local ctrl_mem shadow into named fields for waveform readability.
   always_comb begin : p_dbg_ctrl_mem_shadow_unpack_active
     int w;
     for (w = 0; w < DBG_CTRL_MEM_WORDS; w = w + 1) begin
-      dbg_ctrl_words[w] = dbg_ctrl_mem[w*32 +: 32];
+      dbg_ctrl_words[w] = ctrl_words[w];
     end
 
     dbg_ctrl_mem_shadow.control                 = dbg_ctrl_words[0];
@@ -602,6 +601,7 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[37];
     dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[38];
     dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[39];
+    dbg_ctrl_mem_shadow.token_position          = dbg_ctrl_words[40];
   end
 
   function automatic [31:0] dma_pattern_word(
@@ -666,7 +666,7 @@ module top_module_hls_tb;
   function automatic int ctrl_prog_word_idx(input int step);
     begin
       if (step >= 0 && step <= (CTRL_MEM_WORDS - 2)) begin
-        // Program words 1..53 after the initial control write.
+        // Program words 1..CTRL_MEM_WORDS-1 after the initial control write.
         ctrl_prog_word_idx = step + 1;
       end else begin
         ctrl_prog_word_idx = CTRLW_IRQ_MASK;
@@ -1545,7 +1545,7 @@ module top_module_hls_tb;
           ctrl_data_in <= ctrl_init_words[prog_word_idx];
           ctrl_words[prog_word_idx] <= ctrl_init_words[prog_word_idx];
           if (base_assign_step >= (CTRL_MEM_WORDS - 2)) begin
-            ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_START;
+            ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_TOKEN_INDEX;
           end else begin
             base_assign_step <= base_assign_step + 1;
           end
@@ -1561,7 +1561,7 @@ module top_module_hls_tb;
           ctrl_chip_en <= 1'b1;
           ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
-          ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_START;
+          ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_TOKEN_INDEX;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
         CTRL_ASSERT_DEBUG_MODE: begin
@@ -1573,6 +1573,17 @@ module top_module_hls_tb;
           ctrl_chip_en <= 1'b1;
           ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_stage <= CTRL_ASSERT_TOKEN_INDEX;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_ASSERT_TOKEN_INDEX: begin
+          $display("[CTRL] cycle=%0d token=%0d write token_position=%0d",
+                   cycle_count, current_stream_token, current_stream_token);
+          ctrl_addr <= ctrl_mem_addr(CTRLW_TOKEN_POSITION);
+          ctrl_data_in <= current_stream_token[31:0];
+          ctrl_write_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          ctrl_words[CTRLW_TOKEN_POSITION] <= current_stream_token[31:0];
           ctrl_stage <= CTRL_ASSERT_START;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
@@ -1662,10 +1673,10 @@ module top_module_hls_tb;
                  status_mem_shadow.status, status_mem_shadow.irq_status, status_mem_shadow.error_code);
         dbg_state_prev <= dbg_state;
       end
-      if (control_reg_ap_vld && (control_reg != control_reg_prev)) begin
+      if (ctrl_words[CTRLW_CONTROL] != control_reg_prev) begin
         $display("[CONTROL-REG] cycle=%0d token=%0d control_reg 0x%08h -> 0x%08h",
-                 cycle_count, current_stream_token, control_reg_prev, control_reg);
-        control_reg_prev <= control_reg;
+                 cycle_count, current_stream_token, control_reg_prev, ctrl_words[CTRLW_CONTROL]);
+        control_reg_prev <= ctrl_words[CTRLW_CONTROL];
       end
     end
   end
@@ -1893,8 +1904,6 @@ module top_module_hls_tb;
     .irq_ps(irq_ps),
     .dbg_state(dbg_state),
     .dbg_state_ap_vld(dbg_state_ap_vld),
-    .control_reg(control_reg),
-    .control_reg_ap_vld(control_reg_ap_vld),
     .s_axi_control_AWVALID(s_axi_control_AWVALID),
     .s_axi_control_AWREADY(s_axi_control_AWREADY),
     .s_axi_control_AWADDR(s_axi_control_AWADDR),

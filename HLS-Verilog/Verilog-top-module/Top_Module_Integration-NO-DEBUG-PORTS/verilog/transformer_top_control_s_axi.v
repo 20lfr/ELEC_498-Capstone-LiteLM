@@ -32,7 +32,7 @@ module transformer_top_control_s_axi
     output wire                          RVALID,
     input  wire                          RREADY,
     output wire                          interrupt,
-    output wire [1279:0]                 ctrl_mem,
+    output wire [1311:0]                 ctrl_mem,
     input  wire [223:0]                  status_mem,
     input  wire                          status_mem_ap_vld,
     output wire                          ap_start,
@@ -142,22 +142,24 @@ module transformer_top_control_s_axi
 //        bit 31~0 - ctrl_mem[1247:1216] (Read/Write)
 // 0xac : Data signal of ctrl_mem
 //        bit 31~0 - ctrl_mem[1279:1248] (Read/Write)
-// 0xb0 : reserved
-// 0xb4 : Data signal of status_mem
-//        bit 31~0 - status_mem[31:0] (Read)
+// 0xb0 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[1311:1280] (Read/Write)
+// 0xb4 : reserved
 // 0xb8 : Data signal of status_mem
-//        bit 31~0 - status_mem[63:32] (Read)
+//        bit 31~0 - status_mem[31:0] (Read)
 // 0xbc : Data signal of status_mem
-//        bit 31~0 - status_mem[95:64] (Read)
+//        bit 31~0 - status_mem[63:32] (Read)
 // 0xc0 : Data signal of status_mem
-//        bit 31~0 - status_mem[127:96] (Read)
+//        bit 31~0 - status_mem[95:64] (Read)
 // 0xc4 : Data signal of status_mem
-//        bit 31~0 - status_mem[159:128] (Read)
+//        bit 31~0 - status_mem[127:96] (Read)
 // 0xc8 : Data signal of status_mem
-//        bit 31~0 - status_mem[191:160] (Read)
+//        bit 31~0 - status_mem[159:128] (Read)
 // 0xcc : Data signal of status_mem
+//        bit 31~0 - status_mem[191:160] (Read)
+// 0xd0 : Data signal of status_mem
 //        bit 31~0 - status_mem[223:192] (Read)
-// 0xd0 : Control signal of status_mem
+// 0xd4 : Control signal of status_mem
 //        bit 0  - status_mem_ap_vld (Read/COR)
 //        others - reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
@@ -208,15 +210,16 @@ localparam
     ADDR_CTRL_MEM_DATA_37  = 8'ha4,
     ADDR_CTRL_MEM_DATA_38  = 8'ha8,
     ADDR_CTRL_MEM_DATA_39  = 8'hac,
-    ADDR_CTRL_MEM_CTRL     = 8'hb0,
-    ADDR_STATUS_MEM_DATA_0 = 8'hb4,
-    ADDR_STATUS_MEM_DATA_1 = 8'hb8,
-    ADDR_STATUS_MEM_DATA_2 = 8'hbc,
-    ADDR_STATUS_MEM_DATA_3 = 8'hc0,
-    ADDR_STATUS_MEM_DATA_4 = 8'hc4,
-    ADDR_STATUS_MEM_DATA_5 = 8'hc8,
-    ADDR_STATUS_MEM_DATA_6 = 8'hcc,
-    ADDR_STATUS_MEM_CTRL   = 8'hd0,
+    ADDR_CTRL_MEM_DATA_40  = 8'hb0,
+    ADDR_CTRL_MEM_CTRL     = 8'hb4,
+    ADDR_STATUS_MEM_DATA_0 = 8'hb8,
+    ADDR_STATUS_MEM_DATA_1 = 8'hbc,
+    ADDR_STATUS_MEM_DATA_2 = 8'hc0,
+    ADDR_STATUS_MEM_DATA_3 = 8'hc4,
+    ADDR_STATUS_MEM_DATA_4 = 8'hc8,
+    ADDR_STATUS_MEM_DATA_5 = 8'hcc,
+    ADDR_STATUS_MEM_DATA_6 = 8'hd0,
+    ADDR_STATUS_MEM_CTRL   = 8'hd4,
     WRIDLE                 = 2'd0,
     WRDATA                 = 2'd1,
     WRRESP                 = 2'd2,
@@ -253,7 +256,7 @@ localparam
     reg                           int_gie = 1'b0;
     reg  [1:0]                    int_ier = 2'b0;
     reg  [1:0]                    int_isr = 2'b0;
-    reg  [1279:0]                 int_ctrl_mem = 'b0;
+    reg  [1311:0]                 int_ctrl_mem = 'b0;
     reg                           int_status_mem_ap_vld;
     reg  [223:0]                  int_status_mem = 'b0;
 
@@ -484,6 +487,9 @@ always @(posedge ACLK) begin
                 end
                 ADDR_CTRL_MEM_DATA_39: begin
                     rdata <= int_ctrl_mem[1279:1248];
+                end
+                ADDR_CTRL_MEM_DATA_40: begin
+                    rdata <= int_ctrl_mem[1311:1280];
                 end
                 ADDR_STATUS_MEM_DATA_0: begin
                     rdata <= int_status_mem[31:0];
@@ -1051,6 +1057,16 @@ always @(posedge ACLK) begin
     else if (ACLK_EN) begin
         if (w_hs && waddr == ADDR_CTRL_MEM_DATA_39)
             int_ctrl_mem[1279:1248] <= (WDATA[31:0] & wmask) | (int_ctrl_mem[1279:1248] & ~wmask);
+    end
+end
+
+// int_ctrl_mem[1311:1280]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_ctrl_mem[1311:1280] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CTRL_MEM_DATA_40)
+            int_ctrl_mem[1311:1280] <= (WDATA[31:0] & wmask) | (int_ctrl_mem[1311:1280] & ~wmask);
     end
 end
 

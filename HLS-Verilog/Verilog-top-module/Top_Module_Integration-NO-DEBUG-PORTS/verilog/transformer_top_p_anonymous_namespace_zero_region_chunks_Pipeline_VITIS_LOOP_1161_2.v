@@ -87,12 +87,12 @@ wire   [19:0] tmp_s_fu_190_p11;
 wire   [19:0] trunc_ln1160_fu_186_p1;
 wire   [19:0] bank_byte_addr_fu_214_p2;
 wire   [31:0] sub_ln1165_fu_230_p2;
-wire   [29:0] tmp_533_fu_236_p4;
+wire   [29:0] tmp_545_fu_236_p4;
 wire   [0:0] icmp_ln1164_fu_224_p2;
 wire   [0:0] icmp_ln1165_fu_246_p2;
 wire   [4:0] bank_assign_fu_268_p9;
 wire   [4:0] bank_assign_fu_268_p11;
-wire   [17:0] tmp_238_fu_292_p3;
+wire   [17:0] tmp_235_fu_292_p3;
 wire   [17:0] word_idx_fu_258_p4;
 wire   [17:0] add_ln1168_fu_300_p2;
 wire   [4:0] bit_off_fu_333_p3;
@@ -335,7 +335,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln1168_fu_300_p2 = (tmp_238_fu_292_p3 + word_idx_fu_258_p4);
+assign add_ln1168_fu_300_p2 = (tmp_235_fu_292_p3 + word_idx_fu_258_p4);
 
 assign and_ln1164_fu_252_p2 = (icmp_ln1165_fu_246_p2 & icmp_ln1164_fu_224_p2);
 
@@ -363,7 +363,7 @@ assign icmp_ln1161_fu_180_p2 = ((ap_sig_allocacmp_local_1 < tmp) ? 1'b1 : 1'b0);
 
 assign icmp_ln1164_fu_224_p2 = ((trunc_ln1163_fu_220_p1 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln1165_fu_246_p2 = ((tmp_533_fu_236_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln1165_fu_246_p2 = ((tmp_545_fu_236_p4 != 30'd0) ? 1'b1 : 1'b0);
 
 assign local_2_fu_322_p2 = (ap_sig_allocacmp_local_1 + 32'd4);
 
@@ -381,9 +381,9 @@ assign p_anonymous_namespace_uram_banks_we0 = p_anonymous_namespace_uram_banks_w
 
 assign sub_ln1165_fu_230_p2 = (tmp - ap_sig_allocacmp_local_1);
 
-assign tmp_238_fu_292_p3 = {{bank_assign_fu_268_p11}, {13'd0}};
+assign tmp_235_fu_292_p3 = {{bank_assign_fu_268_p11}, {13'd0}};
 
-assign tmp_533_fu_236_p4 = {{sub_ln1165_fu_230_p2[31:2]}};
+assign tmp_545_fu_236_p4 = {{sub_ln1165_fu_230_p2[31:2]}};
 
 assign tmp_s_fu_190_p9 = 'bx;
 
