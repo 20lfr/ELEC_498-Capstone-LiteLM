@@ -3,15 +3,22 @@
 module top_module_hls_tb;
   localparam int CLK_PERIOD_NS        = 10;
   localparam int MAX_CYCLES           = 5000000;
-  localparam int CTRL_MEM_WORDS       = 54;
-  localparam int DBG_CTRL_MEM_WORDS   = 54;
+  localparam int CTRL_MEM_WORDS       = 40;
+  localparam int DBG_CTRL_MEM_WORDS   = 40;
   localparam int STREAM_IN_BUF_BYTES  = 16;
+  localparam int MAX_STREAM_TOKENS    = 256;
+  localparam int STREAM_IN_FILE_BYTES_MAX = STREAM_IN_BUF_BYTES * MAX_STREAM_TOKENS;
   localparam int STREAM_OUT_BUF_BYTES = 64;
   localparam int TOP_DMA_BUF_WORDS    = 16384;
   localparam int KV_STORE_WORDS       = 131072;
   localparam int DMA_LATENCY_CYCLES   = 4;
   localparam int STREAM_LATENCY_CYCLES = 6;
-  localparam int CTRL_START_HOLD_CYCLES = 24;
+  localparam int TB_DEBUG_MODE_SEL      = 0; // 0=normal, 1=stream_sum, 2=axi_signature
+  localparam bit TB_DEBUG_MODE          = (TB_DEBUG_MODE_SEL != 0);
+  localparam bit TB_STREAM_DEBUG_MODE   = (TB_DEBUG_MODE_SEL == 1);
+  localparam bit TB_AXI_DEBUG_MODE      = (TB_DEBUG_MODE_SEL == 2);
+  localparam int CTRL_START_HOLD_CYCLES = 128;
+  localparam int CTRL_CTRL_GAP_CYCLES = 24;
   localparam int RAM_REGION_WORDS      = 65536;
   `include "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/generated_mem_map.svh"
   localparam int TB_HEADS_PARALLEL     = 2;
@@ -22,15 +29,35 @@ module top_module_hls_tb;
   localparam int TB_NUM_WO_TILES       = 4;
   localparam int TB_NUM_W1_TILES       = 8;
   localparam int TB_NUM_W2_TILES       = 4;
+  localparam int TB_NUM_LOGIT_TILES    = 2;
+  localparam int TB_NUM_QKV_HEAD_TILES = 2;
+  localparam int TB_ATT_CTX_BLOCK      = 8;
+  localparam int TB_NUM_ATT_VALUE_HEAD_TILES = 2;
   localparam int TB_D_TILE_WO          = (TB_D_MODEL / TB_NUM_WO_TILES);
   localparam int TB_D_TILE_W1          = ((TB_D_FFN * 2) / TB_NUM_W1_TILES);
   localparam int TB_D_TILE_W2          = (TB_D_MODEL / TB_NUM_W2_TILES);
+  localparam int TB_D_VOCAB            = 32;
+  localparam int TB_D_TILE_LOGIT       = (TB_D_VOCAB / TB_NUM_LOGIT_TILES);
   localparam int TB_CONTEXT_LENGTH     = 16;
+  localparam int TB_D_HEAD_TILE_QKV    = (TB_D_HEADS / TB_NUM_QKV_HEAD_TILES);
+  localparam int TB_NUM_ATT_CTX_BLOCKS = (TB_CONTEXT_LENGTH / TB_ATT_CTX_BLOCK);
+  localparam int TB_D_HEAD_TILE_ATT_VALUE = (TB_D_HEADS / TB_NUM_ATT_VALUE_HEAD_TILES);
   localparam int TB_OUT_PROJ_W_BYTES   = ((TB_D_MODEL * TB_D_TILE_WO) + 1) / 2;
   localparam int TB_FFN_W1_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_W1) + 1) / 2;
   localparam int TB_FFN_W2_W_BYTES     = ((TB_D_FFN * TB_D_TILE_W2) + 1) / 2;
   localparam int TB_QKV_W_BYTES        = ((TB_D_MODEL * TB_D_HEADS) + 1) / 2;
-  localparam int DBG_MAIN_IN_BYTES     = 128;
+  localparam int TB_QKV_W_TILE_BYTES   = ((TB_D_MODEL * TB_D_HEAD_TILE_QKV) + 1) / 2;
+  localparam int TB_LOGITS_W_BYTES     = ((TB_D_MODEL * TB_D_TILE_LOGIT) + 1) / 2;
+  localparam int TB_WO_BIAS_BYTES      = TB_D_TILE_WO * 4;
+  localparam int TB_W1_BIAS_BYTES      = TB_D_TILE_W1 * 4;
+  localparam int TB_W2_BIAS_BYTES      = TB_D_TILE_W2 * 4;
+  localparam int TB_ATT_SCORES_K_TILE_BYTES = (TB_ATT_CTX_BLOCK * TB_D_HEADS);
+  localparam int TB_ATT_VALUE_V_TILE_BYTES  = (TB_CONTEXT_LENGTH * TB_D_HEAD_TILE_ATT_VALUE);
+  localparam int DEBUG_AXI_SIG_MODULUS = 65521;
+  localparam int DEBUG_AXI_REQ_COUNT = 7;
+  localparam int DEBUG_AXI_SCRATCH_STRIDE = 4;
+  // Current generated RTL exports main debug input bytes at addresses 0..192.
+  localparam int DBG_MAIN_IN_BYTES     = 193;
   localparam int DBG_MAIN_OUT_BYTES    = 64;
   localparam int DBG_HEAD_IN_BYTES     = 128;
   localparam int DBG_HEAD_OUT_BYTES    = 64;
@@ -54,20 +81,35 @@ module top_module_hls_tb;
   localparam int OP_CMP_RESID2      = 22;
   localparam int OP_CMP_LN1         = 23;
   localparam int OP_CMP_FINAL_NORM  = 25;
+  localparam int OP_CMP_LOGITS      = 26;
+  localparam int OP_CMP_ARGMAX      = 27;
   localparam logic [7:0] COMPUTE_STATE_WAIT_MEM = 8'd2;
   localparam logic [7:0] COMPUTE_STATE_EXECUTE  = 8'd3;
 
-  localparam logic [8:0] ADDR_AP_CTRL         = 9'h000;
-  localparam logic [8:0] ADDR_CTRL_MEM_DATA_0 = 9'h01c;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_0 = 9'h130;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_1 = 9'h134;
-  localparam logic [8:0] ADDR_STATUS_MEM_DATA_2 = 9'h138;
+  localparam logic [7:0] ADDR_AP_CTRL           = 8'h00;
+  localparam logic [7:0] ADDR_CTRL_MEM_DATA_0   = 8'h10;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_0 = 8'hB4;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_1 = 8'hB8;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_2 = 8'hBC;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_3 = 8'hC0;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_4 = 8'hC4;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_5 = 8'hC8;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_6 = 8'hCC;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
+  localparam logic [31:0] CTRL_DEBUG_MODE_BIT = 32'h0000_0008;
+  localparam int CTRL_DEBUG_MODE_SEL_SHIFT = 4;
+  localparam logic [31:0] IRQ_ERROR_BIT = 32'h0000_0002;
+  localparam logic [31:0] IRQ_INFER_DONE_BIT = 32'h0000_0004;
 
   // Reverse order of HeadCtx so LSBs align with C layout.
   typedef struct packed {
+    logic        in_multi_tile_phase;
+    logic [31:0] active_tile_target;
+    logic [31:0] att_value_tile_idx;
+    logic [31:0] att_ctx_block_idx;
+    logic [31:0] qkv_tile_idx;
     logic        att_value_dma_done;
     logic        att_scores_dma_done;
     logic        v_writeback_dma_done;
@@ -135,7 +177,7 @@ module top_module_hls_tb;
   } ComputeHeadCtx_t;
 
   // Unpack raw HLS debug buses using explicit bit positions from C-struct field order.
-  function automatic head_ctx_t unpack_head_ctx(input logic [208:0] raw);
+  function automatic head_ctx_t unpack_head_ctx(input logic [337:0] raw);
     head_ctx_t s;
     begin
       s.layer_stamp               = raw[31:0];
@@ -178,6 +220,11 @@ module top_module_hls_tb;
       s.v_writeback_dma_done      = raw[206];
       s.att_scores_dma_done       = raw[207];
       s.att_value_dma_done        = raw[208];
+      s.qkv_tile_idx              = raw[240:209];
+      s.att_ctx_block_idx         = raw[272:241];
+      s.att_value_tile_idx        = raw[304:273];
+      s.active_tile_target        = raw[336:305];
+      s.in_multi_tile_phase       = raw[337];
       unpack_head_ctx = s;
     end
   endfunction
@@ -226,13 +273,33 @@ module top_module_hls_tb;
     instr_tile = instr[31:24];
   endfunction
 
+  function automatic int main_input_last_addr(input logic [7:0] op);
+    int last_addr;
+    begin
+      case (op)
+        OP_CMP_LN0,
+        OP_CMP_LN1,
+        OP_CMP_FINAL_NORM: last_addr = TB_D_MODEL + (TB_D_MODEL * 4) + 4 - 1;
+        OP_CMP_OUT_PROJ:   last_addr = TB_D_MODEL + TB_OUT_PROJ_W_BYTES + (TB_D_TILE_WO * 4) - 1;
+        OP_CMP_RESID1,
+        OP_CMP_RESID2:     last_addr = (TB_D_MODEL * 2) - 1;
+        OP_CMP_FFN_W1:     last_addr = TB_D_MODEL + TB_FFN_W1_W_BYTES + (TB_D_TILE_W1 * 4) - 1;
+        OP_CMP_FFN_ACT:    last_addr = (TB_D_FFN * 4) - 1;
+        OP_CMP_FFN_W2:     last_addr = (TB_D_FFN * 2) + TB_FFN_W2_W_BYTES + (TB_D_TILE_W2 * 4) - 1;
+        OP_CMP_LOGITS:     last_addr = (TB_D_MODEL * 4) + TB_LOGITS_W_BYTES - 1;
+        OP_CMP_ARGMAX:     last_addr = (TB_D_VOCAB * 4) - 1;
+        default:           last_addr = -1;
+      endcase
+      if (last_addr >= DBG_MAIN_IN_BYTES)
+        last_addr = DBG_MAIN_IN_BYTES - 1;
+      main_input_last_addr = last_addr;
+    end
+  endfunction
+
   typedef struct packed {
     logic [31:0] control;
     logic [31:0] irq_mask;
     logic [31:0] irq_clear;
-    logic [31:0] dma_layer_len;
-    logic [31:0] dma_head_len;
-    logic [31:0] dma_tile_len;
     logic [31:0] layer_stride;
     logic [31:0] wq_head_stride;
     logic [31:0] wk_head_stride;
@@ -242,12 +309,10 @@ module top_module_hls_tb;
     logic [31:0] wo_tile_stride;
     logic [31:0] w1_tile_stride;
     logic [31:0] w2_tile_stride;
-    logic [31:0] wq_bias_head_stride;
-    logic [31:0] wk_bias_head_stride;
-    logic [31:0] wv_bias_head_stride;
     logic [31:0] wo_bias_tile_stride;
     logic [31:0] w1_bias_tile_stride;
     logic [31:0] w2_bias_tile_stride;
+    logic [31:0] wlogit_tile_stride;
     logic [31:0] ln0_gamma_stride;
     logic [31:0] ln1_gamma_stride;
     logic [31:0] final_norm_gamma_stride;
@@ -262,9 +327,6 @@ module top_module_hls_tb;
     logic [31:0] w2_offset;
     logic [31:0] k_cache_offset;
     logic [31:0] v_cache_offset;
-    logic [31:0] wq_bias_offset;
-    logic [31:0] wk_bias_offset;
-    logic [31:0] wv_bias_offset;
     logic [31:0] wo_bias_offset;
     logic [31:0] w1_bias_offset;
     logic [31:0] w2_bias_offset;
@@ -274,13 +336,7 @@ module top_module_hls_tb;
     logic [31:0] ln0_eps_offset;
     logic [31:0] ln1_eps_offset;
     logic [31:0] final_norm_eps_offset;
-    logic [31:0] logit_scale_qv;
-    logic [31:0] scale_q;
-    logic [31:0] zero_point_q;
-    logic [31:0] scale_k;
-    logic [31:0] zero_point_k;
-    logic [31:0] scale_v;
-    logic [31:0] zero_point_v;
+    logic [31:0] wlogit_offset;
   } dbg_control_mem_t;
 
   typedef struct packed {
@@ -362,12 +418,12 @@ module top_module_hls_tb;
   logic [0:0] m_axis_out_TSTRB;
   logic [0:0] m_axis_out_TLAST;
 
-  logic [8:0]  s_axi_control_AWADDR;
+  logic [7:0]  s_axi_control_AWADDR;
   logic        s_axi_control_AWVALID;
   logic        s_axi_control_WVALID;
   logic [31:0] s_axi_control_WDATA;
   logic [3:0]  s_axi_control_WSTRB;
-  logic [8:0]  s_axi_control_ARADDR;
+  logic [7:0]  s_axi_control_ARADDR;
   logic        s_axi_control_ARVALID;
   logic        s_axi_control_RREADY;
   logic        s_axi_control_BREADY;
@@ -381,10 +437,32 @@ module top_module_hls_tb;
   logic         s_axi_control_BVALID;
   logic [1:0]   s_axi_control_BRESP;
 
+  logic [5:0]   s_axi_control_r_AWADDR;
+  logic         s_axi_control_r_AWVALID;
+  logic         s_axi_control_r_WVALID;
+  logic [31:0]  s_axi_control_r_WDATA;
+  logic [3:0]   s_axi_control_r_WSTRB;
+  logic [5:0]   s_axi_control_r_ARADDR;
+  logic         s_axi_control_r_ARVALID;
+  logic         s_axi_control_r_RREADY;
+  logic         s_axi_control_r_BREADY;
+
+  logic         s_axi_control_r_AWREADY;
+  logic         s_axi_control_r_WREADY;
+  logic         s_axi_control_r_ARREADY;
+  logic         s_axi_control_r_RVALID;
+  logic [31:0]  s_axi_control_r_RDATA;
+  logic [1:0]   s_axi_control_r_RRESP;
+  logic         s_axi_control_r_BVALID;
+  logic [1:0]   s_axi_control_r_BRESP;
+
   logic [0:0] irq_ps;
+  logic [0:0] irq_ps_shadow;
+  logic [0:0] irq_ps_prev;
+  logic [31:0] dbg_state_prev;
   logic [31:0] dbg_state;
   logic       dbg_state_ap_vld;
-  logic [1727:0] dbg_ctrl_mem;
+  logic [1279:0] dbg_ctrl_mem;
   logic       dbg_ctrl_mem_ap_vld;
   logic [31:0] control_reg;
   logic       control_reg_ap_vld;
@@ -481,16 +559,16 @@ module top_module_hls_tb;
   logic [31:0] dbg_stream_in_counter;
   logic       dbg_stream_in_counter_ap_vld;
 
-  logic [208:0] dbg_head_ctx_ref_0;
+  logic [337:0] dbg_head_ctx_ref_0;
   logic         dbg_head_ctx_ref_0_ap_vld;
-  logic [208:0] dbg_head_ctx_ref_1;
+  logic [337:0] dbg_head_ctx_ref_1;
   logic         dbg_head_ctx_ref_1_ap_vld;
   logic [148:0] dbg_head_compute_ctx_0;
   logic         dbg_head_compute_ctx_0_ap_vld;
   logic [148:0] dbg_head_compute_ctx_1;
   logic         dbg_head_compute_ctx_1_ap_vld;
 
-  wire [6:0] dbg_in_buf_address0;
+  wire [7:0] dbg_in_buf_address0;
   wire       dbg_in_buf_ce0;
   wire       dbg_in_buf_we0;
   wire [7:0] dbg_in_buf_d0;
@@ -532,6 +610,7 @@ module top_module_hls_tb;
   logic [31:0] wo_ram        [0:RAM_REGION_WORDS-1];
   logic [31:0] w1_ram        [0:RAM_REGION_WORDS-1];
   logic [31:0] w2_ram        [0:RAM_REGION_WORDS-1];
+  logic [31:0] wlogit_ram    [0:RAM_REGION_WORDS-1];
   logic [31:0] wq_bias_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] wk_bias_ram   [0:RAM_REGION_WORDS-1];
   logic [31:0] wv_bias_ram   [0:RAM_REGION_WORDS-1];
@@ -550,11 +629,24 @@ module top_module_hls_tb;
   // consumes them through arrays so downstream logic scales with TB_HEADS_PARALLEL.
   head_ctx_t dbg_head_ctx_ref_struct [0:TB_HEADS_PARALLEL-1];
   ComputeHeadCtx_t dbg_head_compute_ctx_struct [0:TB_HEADS_PARALLEL-1];
-  logic [7:0] dbg_in_buf_mem [0:127];
+  logic [7:0] dbg_in_buf_mem [0:DBG_MAIN_IN_BYTES-1];
   logic [7:0] dbg_out_buf_mem [0:63];
   logic [7:0] dbg_stream_in_buf_mem [0:STREAM_IN_BUF_BYTES-1];
-  logic [7:0] dbg_head_in_buf_mem [0:255];
-  logic [7:0] dbg_head_out_buf_mem [0:127];
+  logic [7:0] dbg_head_in_buf_mem [0:(TB_HEADS_PARALLEL*DBG_HEAD_IN_BYTES)-1];
+  logic [7:0] dbg_head_out_buf_mem [0:(TB_HEADS_PARALLEL*DBG_HEAD_OUT_BYTES)-1];
+
+  function automatic logic [7:0] main_dbg_in_byte(
+      input int unsigned idx,
+      input logic write_en,
+      input logic [7:0] write_addr,
+      input logic [7:0] write_data);
+    begin
+      if ((idx < DBG_MAIN_IN_BYTES) && write_en && (write_addr == idx[7:0]))
+        main_dbg_in_byte = write_data;
+      else
+        main_dbg_in_byte = dbg_in_buf_mem[idx];
+    end
+  endfunction
 
   // --------------------------------------------------------------------------
   // Debug buffer snapshots (for easier full-buffer validation in waveform)
@@ -668,11 +760,15 @@ module top_module_hls_tb;
   logic [7:0] ffn_w1_x_in [0:TB_D_MODEL-1];
   logic signed [3:0] ffn_w1_w_in [0:(TB_D_MODEL*TB_D_TILE_W1)-1];
   logic signed [31:0] ffn_w1_b_in [0:TB_D_TILE_W1-1];
+  logic signed [31:0] wlogit_act_in [0:TB_D_MODEL-1];
+  logic signed [3:0] wlogit_w_in [0:(TB_D_MODEL*TB_D_TILE_LOGIT)-1];
+  logic signed [31:0] wlogit_b_in [0:TB_D_TILE_LOGIT-1];
   logic signed [15:0] ffn_act_gate_in [0:TB_D_FFN-1];
   logic signed [15:0] ffn_act_up_in   [0:TB_D_FFN-1];
   logic signed [15:0] ffn_w2_x_in [0:TB_D_FFN-1];
   logic signed [3:0] ffn_w2_w_in [0:(TB_D_FFN*TB_D_TILE_W2)-1];
   logic signed [31:0] ffn_w2_b_in [0:TB_D_TILE_W2-1];
+  logic signed [31:0] argmax_in [0:TB_D_VOCAB-1];
   logic signed [7:0] q_act_in [0:TB_NUM_HEADS-1][0:TB_D_MODEL-1];
   logic signed [3:0] q_w_in [0:TB_NUM_HEADS-1][0:(TB_D_MODEL*TB_D_HEADS)-1];
   logic signed [31:0] q_b_in [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
@@ -698,7 +794,12 @@ module top_module_hls_tb;
   logic [7:0] out_proj_out_by_tile [0:TB_NUM_WO_TILES-1][0:TB_D_TILE_WO-1];
   logic signed [15:0] ffn_w1_out_by_tile [0:TB_NUM_W1_TILES-1][0:TB_D_TILE_W1-1];
   logic [7:0] ffn_w2_out_by_tile [0:TB_NUM_W2_TILES-1][0:TB_D_TILE_W2-1];
+  logic signed [31:0] wlogit_out [0:TB_D_VOCAB-1];
+  logic signed [31:0] wlogit_out_by_tile [0:TB_NUM_LOGIT_TILES-1][0:TB_D_TILE_LOGIT-1];
   logic signed [31:0] final_norm_out [0:TB_D_MODEL-1];
+  logic signed [31:0] argmax_out;
+  logic signed [31:0] stream_out_token;
+  logic signed [3:0]  selected_embedding [0:TB_D_MODEL-1];
   logic signed [15:0] ffn_w1_out [0:TB_D_FFN-1];
   logic signed [15:0] ffn_act_out[0:TB_D_FFN-1];
   logic signed [7:0] q_out        [0:TB_NUM_HEADS-1][0:TB_D_HEADS-1];
@@ -741,86 +842,76 @@ module top_module_hls_tb;
   logic [31:0] ctrl_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] ctrl_init_words [0:CTRL_MEM_WORDS-1];
   logic [31:0] dbg_ctrl_words [0:DBG_CTRL_MEM_WORDS-1];
+  logic        dbg_main_in_decode_pulse;
   dbg_control_mem_t dbg_ctrl_mem_shadow;
   byte unsigned ctrl_mem_file_bytes [0:(CTRL_MEM_WORDS*4)-1];
   byte unsigned ddr_image_bytes [0:('h43000)-1];
-  byte unsigned stream_in_file_bytes [0:STREAM_IN_BUF_BYTES-1];
+  byte unsigned stream_in_file_bytes [0:STREAM_IN_FILE_BYTES_MAX-1];
+  integer total_stream_tokens;
+  integer current_stream_token;
+  logic next_token_pending;
+  logic launch_next_token;
+  logic axi_debug_sig_checked;
 
   // AXI ctrl_mem word map for the offset-only ControlMemSpace.
   localparam int CTRLW_CONTROL            = 0;
   localparam int CTRLW_IRQ_MASK           = 1;
   localparam int CTRLW_IRQ_CLEAR          = 2;
-  localparam int CTRLW_DMA_LAYER_LEN      = 3;
-  localparam int CTRLW_DMA_HEAD_LEN       = 4;
-  localparam int CTRLW_DMA_TILE_LEN       = 5;
-  localparam int CTRLW_LAYER_STRIDE       = 6;
-  localparam int CTRLW_WQ_HEAD_STRIDE     = 7;
-  localparam int CTRLW_WK_HEAD_STRIDE     = 8;
-  localparam int CTRLW_WV_HEAD_STRIDE     = 9;
-  localparam int CTRLW_K_CACHE_STRIDE     = 10;
-  localparam int CTRLW_V_CACHE_STRIDE     = 11;
-  localparam int CTRLW_WO_TILE_STRIDE     = 12;
-  localparam int CTRLW_W1_TILE_STRIDE     = 13;
-  localparam int CTRLW_W2_TILE_STRIDE     = 14;
-  localparam int CTRLW_WQ_BIAS_HEAD_STRIDE = 15;
-  localparam int CTRLW_WK_BIAS_HEAD_STRIDE = 16;
-  localparam int CTRLW_WV_BIAS_HEAD_STRIDE = 17;
-  localparam int CTRLW_WO_BIAS_TILE_STRIDE = 18;
-  localparam int CTRLW_W1_BIAS_TILE_STRIDE = 19;
-  localparam int CTRLW_W2_BIAS_TILE_STRIDE = 20;
-  localparam int CTRLW_LN0_GAMMA_STRIDE   = 21;
-  localparam int CTRLW_LN1_GAMMA_STRIDE   = 22;
-  localparam int CTRLW_FINAL_NORM_GAMMA_STRIDE = 23;
-  localparam int CTRLW_LN0_EPS_STRIDE     = 24;
-  localparam int CTRLW_LN1_EPS_STRIDE     = 25;
-  localparam int CTRLW_FINAL_NORM_EPS_STRIDE = 26;
-  localparam int CTRLW_WQ_BASE_LO         = 27;
-  localparam int CTRLW_WQ_BASE_HI         = 27;
-  localparam int CTRLW_WK_BASE_LO         = 28;
-  localparam int CTRLW_WK_BASE_HI         = 28;
-  localparam int CTRLW_WV_BASE_LO         = 29;
-  localparam int CTRLW_WV_BASE_HI         = 29;
-  localparam int CTRLW_WO_BASE_LO         = 30;
-  localparam int CTRLW_WO_BASE_HI         = 30;
-  localparam int CTRLW_W1_BASE_LO         = 31;
-  localparam int CTRLW_W1_BASE_HI         = 31;
-  localparam int CTRLW_W2_BASE_LO         = 32;
-  localparam int CTRLW_W2_BASE_HI         = 32;
-  localparam int CTRLW_K_CACHE_LO         = 33;
-  localparam int CTRLW_K_CACHE_HI         = 33;
-  localparam int CTRLW_V_CACHE_LO         = 34;
-  localparam int CTRLW_V_CACHE_HI         = 34;
-  localparam int CTRLW_WQ_BIAS_BASE_LO    = 35;
-  localparam int CTRLW_WQ_BIAS_BASE_HI    = 35;
-  localparam int CTRLW_WK_BIAS_BASE_LO    = 36;
-  localparam int CTRLW_WK_BIAS_BASE_HI    = 36;
-  localparam int CTRLW_WV_BIAS_BASE_LO    = 37;
-  localparam int CTRLW_WV_BIAS_BASE_HI    = 37;
-  localparam int CTRLW_WO_BIAS_BASE_LO    = 38;
-  localparam int CTRLW_WO_BIAS_BASE_HI    = 38;
-  localparam int CTRLW_W1_BIAS_BASE_LO    = 39;
-  localparam int CTRLW_W1_BIAS_BASE_HI    = 39;
-  localparam int CTRLW_W2_BIAS_BASE_LO    = 40;
-  localparam int CTRLW_W2_BIAS_BASE_HI    = 40;
-  localparam int CTRLW_LN0_GAMMA_BASE_LO  = 41;
-  localparam int CTRLW_LN0_GAMMA_BASE_HI  = 41;
-  localparam int CTRLW_LN1_GAMMA_BASE_LO  = 42;
-  localparam int CTRLW_LN1_GAMMA_BASE_HI  = 42;
-  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_LO = 43;
-  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_HI = 43;
-  localparam int CTRLW_LN0_EPS_BASE_LO    = 44;
-  localparam int CTRLW_LN0_EPS_BASE_HI    = 44;
-  localparam int CTRLW_LN1_EPS_BASE_LO    = 45;
-  localparam int CTRLW_LN1_EPS_BASE_HI    = 45;
-  localparam int CTRLW_FINAL_NORM_EPS_BASE_LO = 46;
-  localparam int CTRLW_FINAL_NORM_EPS_BASE_HI = 46;
-  localparam int CTRLW_LOGIT_SCALE_QV     = 47;
-  localparam int CTRLW_SCALE_Q            = 48;
-  localparam int CTRLW_ZERO_POINT_Q       = 49;
-  localparam int CTRLW_SCALE_K            = 50;
-  localparam int CTRLW_ZERO_POINT_K       = 51;
-  localparam int CTRLW_SCALE_V            = 52;
-  localparam int CTRLW_ZERO_POINT_V       = 53;
+  localparam int CTRLW_LAYER_STRIDE       = 3;
+  localparam int CTRLW_WQ_HEAD_STRIDE     = 4;
+  localparam int CTRLW_WK_HEAD_STRIDE     = 5;
+  localparam int CTRLW_WV_HEAD_STRIDE     = 6;
+  localparam int CTRLW_K_CACHE_STRIDE     = 7;
+  localparam int CTRLW_V_CACHE_STRIDE     = 8;
+  localparam int CTRLW_WO_TILE_STRIDE     = 9;
+  localparam int CTRLW_W1_TILE_STRIDE     = 10;
+  localparam int CTRLW_W2_TILE_STRIDE     = 11;
+  localparam int CTRLW_WO_BIAS_TILE_STRIDE = 12;
+  localparam int CTRLW_W1_BIAS_TILE_STRIDE = 13;
+  localparam int CTRLW_W2_BIAS_TILE_STRIDE = 14;
+  localparam int CTRLW_WLOGIT_TILE_STRIDE = 15;
+  localparam int CTRLW_LN0_GAMMA_STRIDE   = 16;
+  localparam int CTRLW_LN1_GAMMA_STRIDE   = 17;
+  localparam int CTRLW_FINAL_NORM_GAMMA_STRIDE = 18;
+  localparam int CTRLW_LN0_EPS_STRIDE     = 19;
+  localparam int CTRLW_LN1_EPS_STRIDE     = 20;
+  localparam int CTRLW_FINAL_NORM_EPS_STRIDE = 21;
+  localparam int CTRLW_WQ_BASE_LO         = 22;
+  localparam int CTRLW_WQ_BASE_HI         = 22;
+  localparam int CTRLW_WK_BASE_LO         = 23;
+  localparam int CTRLW_WK_BASE_HI         = 23;
+  localparam int CTRLW_WV_BASE_LO         = 24;
+  localparam int CTRLW_WV_BASE_HI         = 24;
+  localparam int CTRLW_WO_BASE_LO         = 25;
+  localparam int CTRLW_WO_BASE_HI         = 25;
+  localparam int CTRLW_W1_BASE_LO         = 26;
+  localparam int CTRLW_W1_BASE_HI         = 26;
+  localparam int CTRLW_W2_BASE_LO         = 27;
+  localparam int CTRLW_W2_BASE_HI         = 27;
+  localparam int CTRLW_K_CACHE_LO         = 28;
+  localparam int CTRLW_K_CACHE_HI         = 28;
+  localparam int CTRLW_V_CACHE_LO         = 29;
+  localparam int CTRLW_V_CACHE_HI         = 29;
+  localparam int CTRLW_WO_BIAS_BASE_LO    = 30;
+  localparam int CTRLW_WO_BIAS_BASE_HI    = 30;
+  localparam int CTRLW_W1_BIAS_BASE_LO    = 31;
+  localparam int CTRLW_W1_BIAS_BASE_HI    = 31;
+  localparam int CTRLW_W2_BIAS_BASE_LO    = 32;
+  localparam int CTRLW_W2_BIAS_BASE_HI    = 32;
+  localparam int CTRLW_LN0_GAMMA_BASE_LO  = 33;
+  localparam int CTRLW_LN0_GAMMA_BASE_HI  = 33;
+  localparam int CTRLW_LN1_GAMMA_BASE_LO  = 34;
+  localparam int CTRLW_LN1_GAMMA_BASE_HI  = 34;
+  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_LO = 35;
+  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_HI = 35;
+  localparam int CTRLW_LN0_EPS_BASE_LO    = 36;
+  localparam int CTRLW_LN0_EPS_BASE_HI    = 36;
+  localparam int CTRLW_LN1_EPS_BASE_LO    = 37;
+  localparam int CTRLW_LN1_EPS_BASE_HI    = 37;
+  localparam int CTRLW_FINAL_NORM_EPS_BASE_LO = 38;
+  localparam int CTRLW_FINAL_NORM_EPS_BASE_HI = 38;
+  localparam int CTRLW_WLOGIT_BASE_LO     = 39;
+  localparam int CTRLW_WLOGIT_BASE_HI     = 39;
 
   // 64-bit DDR base map for control memory programming.
   localparam logic [63:0] BASE_WQ               = 64'h0000_0001_6000_0000;
@@ -831,9 +922,6 @@ module top_module_hls_tb;
   localparam logic [63:0] BASE_W2               = 64'h0000_0001_6500_0000;
   localparam logic [63:0] BASE_K_CACHE          = 64'h0000_0001_6600_0000;
   localparam logic [63:0] BASE_V_CACHE          = 64'h0000_0001_6700_0000;
-  localparam logic [63:0] BASE_WQ_BIAS          = 64'h0000_0001_6008_0000;
-  localparam logic [63:0] BASE_WK_BIAS          = 64'h0000_0001_6108_0000;
-  localparam logic [63:0] BASE_WV_BIAS          = 64'h0000_0001_6208_0000;
   localparam logic [63:0] BASE_WO_BIAS          = 64'h0000_0001_6308_0000;
   localparam logic [63:0] BASE_W1_BIAS          = 64'h0000_0001_6408_0000;
   localparam logic [63:0] BASE_W2_BIAS          = 64'h0000_0001_6508_0000;
@@ -853,13 +941,16 @@ module top_module_hls_tb;
   } axi_state_t;
   axi_state_t axi_state;
 
-  typedef enum logic [2:0] {
+  typedef enum logic [3:0] {
     CTRL_RESET_MEM,
     CTRL_ASSERT_RESET,
     CTRL_DEASSERT_RESET,
     CTRL_PROGRAM_BASES,
+    CTRL_RELAUNCH_PREP,
+    CTRL_ASSERT_DEBUG_MODE,
     CTRL_ASSERT_AP_START,
     CTRL_ASSERT_START,
+    CTRL_HOLD_START,
     CTRL_CLEAR_START,
     CTRL_DONE
   } ctrl_init_stage_t;
@@ -878,7 +969,7 @@ module top_module_hls_tb;
   } err_phase_t;
   err_phase_t err_phase;
 
-  logic [8:0]  ctrl_addr;
+  logic [7:0]  ctrl_addr;
   logic [31:0] ctrl_data_in;
   logic        ctrl_read_en;
   logic        ctrl_write_en;
@@ -888,29 +979,31 @@ module top_module_hls_tb;
   integer      base_assign_step;
   logic [31:0] axi_rdata;
   logic        axi_read_valid;
-  logic [8:0]  axi_addr;
+  logic [7:0]  axi_addr;
   logic        axi_is_write;
   logic        axi_aw_seen;
   logic        axi_w_seen;
   logic        axi_b_seen;
   logic [31:0] error_code_lat;
+  dbg_status_mem_t dbg_status_mem_shadow;
   logic        irq_pending;
   logic        irq_seen_done;
   logic        irq_seen_error;
-  logic        irq_seen_done_clr;
-  logic        irq_seen_error_clr;
   logic        irq_req_valid;
   logic        irq_req_read;
-  logic [8:0]  irq_req_addr;
+  logic [7:0]  irq_req_addr;
   logic        done_req_valid;
   logic        done_req_write;
-  logic [8:0]  done_req_addr;
+  logic [7:0]  done_req_addr;
   logic [31:0] done_req_wdata;
+  logic        done_clear_release_pending;
   logic        error_req_valid;
   logic        error_req_write;
   logic        error_req_read;
-  logic [8:0]  error_req_addr;
+  logic [7:0]  error_req_addr;
   logic [31:0] error_req_wdata;
+  logic        error_clear_release_pending;
+  logic [2:0]  status_poll_idx;
   wire         irq_req_fire;
   wire         done_req_fire;
   wire         error_req_fire;
@@ -930,9 +1023,38 @@ module top_module_hls_tb;
     dma_pattern_word = base_addr[31:0] ^ (32'h1357_0000 + word_idx);
   endfunction
 
-  function automatic [8:0] ctrl_mem_addr(input int word_idx);
+  function automatic [7:0] ctrl_mem_addr(input int word_idx);
     ctrl_mem_addr = ADDR_CTRL_MEM_DATA_0 + (word_idx * 4);
   endfunction
+
+  function automatic [7:0] status_mem_addr(input logic [2:0] idx);
+    case (idx)
+      3'd0: status_mem_addr = ADDR_STATUS_MEM_DATA_0;
+      3'd1: status_mem_addr = ADDR_STATUS_MEM_DATA_1;
+      3'd2: status_mem_addr = ADDR_STATUS_MEM_DATA_2;
+      3'd3: status_mem_addr = ADDR_STATUS_MEM_DATA_3;
+      3'd4: status_mem_addr = ADDR_STATUS_MEM_DATA_4;
+      3'd5: status_mem_addr = ADDR_STATUS_MEM_DATA_5;
+      default: status_mem_addr = ADDR_STATUS_MEM_DATA_6;
+    endcase
+  endfunction
+
+  function automatic [31:0] ctrl_debug_bits();
+    ctrl_debug_bits =
+      (TB_DEBUG_MODE ? CTRL_DEBUG_MODE_BIT : 32'd0) |
+      (32'(TB_DEBUG_MODE_SEL) << CTRL_DEBUG_MODE_SEL_SHIFT);
+  endfunction
+
+  task automatic load_stream_token(input int token_idx);
+    int base_idx;
+    int j;
+    begin
+      base_idx = token_idx * STREAM_IN_BUF_BYTES;
+      for (j = 0; j < STREAM_IN_BUF_BYTES; j = j + 1) begin
+        stream_in_mem[j] = stream_in_file_bytes[base_idx + j];
+      end
+    end
+  endtask
 
   function automatic [63:0] ctrl_base_addr64(input int lo_idx, input int hi_idx);
     if (lo_idx == hi_idx) begin
@@ -958,11 +1080,37 @@ module top_module_hls_tb;
   function automatic int ctrl_prog_word_idx(input int step);
     begin
       if (step >= 0 && step <= (CTRL_MEM_WORDS - 2)) begin
-        // Program words 1..53 after the initial control write.
+        // Program words 1..39 after the initial control write.
         ctrl_prog_word_idx = step + 1;
       end else begin
         ctrl_prog_word_idx = CTRLW_IRQ_MASK;
       end
+    end
+  endfunction
+
+  function automatic [31:0] ctrl_prog_word_data(input int word_idx);
+    begin
+      case (word_idx)
+        CTRLW_WQ_BASE_LO:               ctrl_prog_word_data = BASE_WQ[31:0];
+        CTRLW_WK_BASE_LO:               ctrl_prog_word_data = BASE_WK[31:0];
+        CTRLW_WV_BASE_LO:               ctrl_prog_word_data = BASE_WV[31:0];
+        CTRLW_WO_BASE_LO:               ctrl_prog_word_data = BASE_WO[31:0];
+        CTRLW_W1_BASE_LO:               ctrl_prog_word_data = BASE_W1[31:0];
+        CTRLW_W2_BASE_LO:               ctrl_prog_word_data = BASE_W2[31:0];
+        CTRLW_K_CACHE_LO:               ctrl_prog_word_data = BASE_K_CACHE[31:0];
+        CTRLW_V_CACHE_LO:               ctrl_prog_word_data = BASE_V_CACHE[31:0];
+        CTRLW_WO_BIAS_BASE_LO:          ctrl_prog_word_data = BASE_WO_BIAS[31:0];
+        CTRLW_W1_BIAS_BASE_LO:          ctrl_prog_word_data = BASE_W1_BIAS[31:0];
+        CTRLW_W2_BIAS_BASE_LO:          ctrl_prog_word_data = BASE_W2_BIAS[31:0];
+        CTRLW_LN0_GAMMA_BASE_LO:        ctrl_prog_word_data = BASE_LN0_GAMMA[31:0];
+        CTRLW_LN1_GAMMA_BASE_LO:        ctrl_prog_word_data = BASE_LN1_GAMMA[31:0];
+        CTRLW_FINAL_NORM_GAMMA_BASE_LO: ctrl_prog_word_data = BASE_FINAL_NORM_GAMMA[31:0];
+        CTRLW_LN0_EPS_BASE_LO:          ctrl_prog_word_data = BASE_LN0_EPS[31:0];
+        CTRLW_LN1_EPS_BASE_LO:          ctrl_prog_word_data = BASE_LN1_EPS[31:0];
+        CTRLW_FINAL_NORM_EPS_BASE_LO:   ctrl_prog_word_data = BASE_FINAL_NORM_EPS[31:0];
+        CTRLW_WLOGIT_BASE_LO:           ctrl_prog_word_data = IMG_BASE_WVOCAB[31:0];
+        default:                        ctrl_prog_word_data = ctrl_init_words[word_idx];
+      endcase
     end
   endfunction
 
@@ -1006,16 +1154,8 @@ module top_module_hls_tb;
     is_w2_addr = in_range64(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI), IMG_SPAN_W2);
   endfunction
 
-  function automatic bit is_wq_bias_addr(input [63:0] addr);
-    is_wq_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WQ_BIAS_BASE_LO, CTRLW_WQ_BIAS_BASE_HI), IMG_SPAN_WQ_BIAS);
-  endfunction
-
-  function automatic bit is_wk_bias_addr(input [63:0] addr);
-    is_wk_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WK_BIAS_BASE_LO, CTRLW_WK_BIAS_BASE_HI), IMG_SPAN_WK_BIAS);
-  endfunction
-
-  function automatic bit is_wv_bias_addr(input [63:0] addr);
-    is_wv_bias_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WV_BIAS_BASE_LO, CTRLW_WV_BIAS_BASE_HI), IMG_SPAN_WV_BIAS);
+  function automatic bit is_wlogit_addr(input [63:0] addr);
+    is_wlogit_addr = in_range64(addr, ctrl_base_addr64(CTRLW_WLOGIT_BASE_LO, CTRLW_WLOGIT_BASE_HI), IMG_SPAN_WVOCAB);
   endfunction
 
   function automatic bit is_wo_bias_addr(input [63:0] addr);
@@ -1099,12 +1239,8 @@ module top_module_hls_tb;
         mem_read_word = w1_ram[region_index(addr, ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI))];
       end else if (is_w2_addr(addr)) begin
         mem_read_word = w2_ram[region_index(addr, ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI))];
-      end else if (is_wq_bias_addr(addr)) begin
-        mem_read_word = wq_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WQ_BIAS_BASE_LO, CTRLW_WQ_BIAS_BASE_HI))];
-      end else if (is_wk_bias_addr(addr)) begin
-        mem_read_word = wk_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WK_BIAS_BASE_LO, CTRLW_WK_BIAS_BASE_HI))];
-      end else if (is_wv_bias_addr(addr)) begin
-        mem_read_word = wv_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WV_BIAS_BASE_LO, CTRLW_WV_BIAS_BASE_HI))];
+      end else if (is_wlogit_addr(addr)) begin
+        mem_read_word = wlogit_ram[region_index(addr, ctrl_base_addr64(CTRLW_WLOGIT_BASE_LO, CTRLW_WLOGIT_BASE_HI))];
       end else if (is_wo_bias_addr(addr)) begin
         mem_read_word = wo_bias_ram[region_index(addr, ctrl_base_addr64(CTRLW_WO_BIAS_BASE_LO, CTRLW_WO_BIAS_BASE_HI))];
       end else if (is_w1_bias_addr(addr)) begin
@@ -1126,6 +1262,63 @@ module top_module_hls_tb;
       end else begin
         mem_read_word = dma_pattern_word(addr, 0);
       end
+    end
+  endfunction
+
+  function automatic [7:0] mem_read_byte(input [63:0] addr64);
+    logic [31:0] word;
+    logic [1:0] lane;
+    begin
+      word = mem_read_word({addr64[63:2], 2'b00});
+      lane = addr64[1:0];
+      mem_read_byte = word[(lane * 8) +: 8];
+    end
+  endfunction
+
+  function automatic [31:0] expected_axi_debug_signature(input int req_idx);
+    int unsigned sum;
+    int unsigned i;
+    logic [63:0] base;
+    begin
+      sum = 0;
+      case (req_idx)
+        0: begin
+          base = ctrl_base_addr64(CTRLW_WQ_BASE_LO, CTRLW_WQ_BASE_HI);
+          for (i = 0; i < TB_QKV_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        1: begin
+          base = ctrl_base_addr64(CTRLW_WK_BASE_LO, CTRLW_WK_BASE_HI);
+          for (i = 0; i < TB_QKV_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        2: begin
+          base = ctrl_base_addr64(CTRLW_WV_BASE_LO, CTRLW_WV_BASE_HI);
+          for (i = 0; i < TB_QKV_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        3: begin
+          base = ctrl_base_addr64(CTRLW_WO_BASE_LO, CTRLW_WO_BASE_HI);
+          for (i = 0; i < TB_OUT_PROJ_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+          base = ctrl_base_addr64(CTRLW_WO_BIAS_BASE_LO, CTRLW_WO_BIAS_BASE_HI);
+          for (i = 0; i < TB_WO_BIAS_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        4: begin
+          base = ctrl_base_addr64(CTRLW_W1_BASE_LO, CTRLW_W1_BASE_HI);
+          for (i = 0; i < TB_FFN_W1_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+          base = ctrl_base_addr64(CTRLW_W1_BIAS_BASE_LO, CTRLW_W1_BIAS_BASE_HI);
+          for (i = 0; i < TB_W1_BIAS_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        5: begin
+          base = ctrl_base_addr64(CTRLW_W2_BASE_LO, CTRLW_W2_BASE_HI);
+          for (i = 0; i < TB_FFN_W2_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+          base = ctrl_base_addr64(CTRLW_W2_BIAS_BASE_LO, CTRLW_W2_BIAS_BASE_HI);
+          for (i = 0; i < TB_W2_BIAS_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+        default: begin
+          base = ctrl_base_addr64(CTRLW_WLOGIT_BASE_LO, CTRLW_WLOGIT_BASE_HI);
+          for (i = 0; i < TB_LOGITS_W_BYTES; i = i + 1) sum += mem_read_byte(base + i);
+        end
+      endcase
+
+      expected_axi_debug_signature = sum % DEBUG_AXI_SIG_MODULUS;
     end
   endfunction
 
@@ -1282,57 +1475,43 @@ module top_module_hls_tb;
     dbg_ctrl_mem_shadow.control                 = dbg_ctrl_words[0];
     dbg_ctrl_mem_shadow.irq_mask                = dbg_ctrl_words[1];
     dbg_ctrl_mem_shadow.irq_clear               = dbg_ctrl_words[2];
-    dbg_ctrl_mem_shadow.dma_layer_len           = dbg_ctrl_words[3];
-    dbg_ctrl_mem_shadow.dma_head_len            = dbg_ctrl_words[4];
-    dbg_ctrl_mem_shadow.dma_tile_len            = dbg_ctrl_words[5];
-    dbg_ctrl_mem_shadow.layer_stride            = dbg_ctrl_words[6];
-    dbg_ctrl_mem_shadow.wq_head_stride          = dbg_ctrl_words[7];
-    dbg_ctrl_mem_shadow.wk_head_stride          = dbg_ctrl_words[8];
-    dbg_ctrl_mem_shadow.wv_head_stride          = dbg_ctrl_words[9];
-    dbg_ctrl_mem_shadow.k_cache_stride          = dbg_ctrl_words[10];
-    dbg_ctrl_mem_shadow.v_cache_stride          = dbg_ctrl_words[11];
-    dbg_ctrl_mem_shadow.wo_tile_stride          = dbg_ctrl_words[12];
-    dbg_ctrl_mem_shadow.w1_tile_stride          = dbg_ctrl_words[13];
-    dbg_ctrl_mem_shadow.w2_tile_stride          = dbg_ctrl_words[14];
-    dbg_ctrl_mem_shadow.wq_bias_head_stride     = dbg_ctrl_words[15];
-    dbg_ctrl_mem_shadow.wk_bias_head_stride     = dbg_ctrl_words[16];
-    dbg_ctrl_mem_shadow.wv_bias_head_stride     = dbg_ctrl_words[17];
-    dbg_ctrl_mem_shadow.wo_bias_tile_stride     = dbg_ctrl_words[18];
-    dbg_ctrl_mem_shadow.w1_bias_tile_stride     = dbg_ctrl_words[19];
-    dbg_ctrl_mem_shadow.w2_bias_tile_stride     = dbg_ctrl_words[20];
-    dbg_ctrl_mem_shadow.ln0_gamma_stride        = dbg_ctrl_words[21];
-    dbg_ctrl_mem_shadow.ln1_gamma_stride        = dbg_ctrl_words[22];
-    dbg_ctrl_mem_shadow.final_norm_gamma_stride = dbg_ctrl_words[23];
-    dbg_ctrl_mem_shadow.ln0_eps_stride          = dbg_ctrl_words[24];
-    dbg_ctrl_mem_shadow.ln1_eps_stride          = dbg_ctrl_words[25];
-    dbg_ctrl_mem_shadow.final_norm_eps_stride   = dbg_ctrl_words[26];
-    dbg_ctrl_mem_shadow.wq_offset               = dbg_ctrl_words[27];
-    dbg_ctrl_mem_shadow.wk_offset               = dbg_ctrl_words[28];
-    dbg_ctrl_mem_shadow.wv_offset               = dbg_ctrl_words[29];
-    dbg_ctrl_mem_shadow.wo_offset               = dbg_ctrl_words[30];
-    dbg_ctrl_mem_shadow.w1_offset               = dbg_ctrl_words[31];
-    dbg_ctrl_mem_shadow.w2_offset               = dbg_ctrl_words[32];
-    dbg_ctrl_mem_shadow.k_cache_offset          = dbg_ctrl_words[33];
-    dbg_ctrl_mem_shadow.v_cache_offset          = dbg_ctrl_words[34];
-    dbg_ctrl_mem_shadow.wq_bias_offset          = dbg_ctrl_words[35];
-    dbg_ctrl_mem_shadow.wk_bias_offset          = dbg_ctrl_words[36];
-    dbg_ctrl_mem_shadow.wv_bias_offset          = dbg_ctrl_words[37];
-    dbg_ctrl_mem_shadow.wo_bias_offset          = dbg_ctrl_words[38];
-    dbg_ctrl_mem_shadow.w1_bias_offset          = dbg_ctrl_words[39];
-    dbg_ctrl_mem_shadow.w2_bias_offset          = dbg_ctrl_words[40];
-    dbg_ctrl_mem_shadow.ln0_gamma_offset        = dbg_ctrl_words[41];
-    dbg_ctrl_mem_shadow.ln1_gamma_offset        = dbg_ctrl_words[42];
-    dbg_ctrl_mem_shadow.final_norm_gamma_offset = dbg_ctrl_words[43];
-    dbg_ctrl_mem_shadow.ln0_eps_offset          = dbg_ctrl_words[44];
-    dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[45];
-    dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[46];
-    dbg_ctrl_mem_shadow.logit_scale_qv          = dbg_ctrl_words[47];
-    dbg_ctrl_mem_shadow.scale_q                 = dbg_ctrl_words[48];
-    dbg_ctrl_mem_shadow.zero_point_q            = dbg_ctrl_words[49];
-    dbg_ctrl_mem_shadow.scale_k                 = dbg_ctrl_words[50];
-    dbg_ctrl_mem_shadow.zero_point_k            = dbg_ctrl_words[51];
-    dbg_ctrl_mem_shadow.scale_v                 = dbg_ctrl_words[52];
-    dbg_ctrl_mem_shadow.zero_point_v            = dbg_ctrl_words[53];
+    dbg_ctrl_mem_shadow.layer_stride            = dbg_ctrl_words[3];
+    dbg_ctrl_mem_shadow.wq_head_stride          = dbg_ctrl_words[4];
+    dbg_ctrl_mem_shadow.wk_head_stride          = dbg_ctrl_words[5];
+    dbg_ctrl_mem_shadow.wv_head_stride          = dbg_ctrl_words[6];
+    dbg_ctrl_mem_shadow.k_cache_stride          = dbg_ctrl_words[7];
+    dbg_ctrl_mem_shadow.v_cache_stride          = dbg_ctrl_words[8];
+    dbg_ctrl_mem_shadow.wo_tile_stride          = dbg_ctrl_words[9];
+    dbg_ctrl_mem_shadow.w1_tile_stride          = dbg_ctrl_words[10];
+    dbg_ctrl_mem_shadow.w2_tile_stride          = dbg_ctrl_words[11];
+    dbg_ctrl_mem_shadow.wo_bias_tile_stride     = dbg_ctrl_words[12];
+    dbg_ctrl_mem_shadow.w1_bias_tile_stride     = dbg_ctrl_words[13];
+    dbg_ctrl_mem_shadow.w2_bias_tile_stride     = dbg_ctrl_words[14];
+    dbg_ctrl_mem_shadow.wlogit_tile_stride      = dbg_ctrl_words[15];
+    dbg_ctrl_mem_shadow.ln0_gamma_stride        = dbg_ctrl_words[16];
+    dbg_ctrl_mem_shadow.ln1_gamma_stride        = dbg_ctrl_words[17];
+    dbg_ctrl_mem_shadow.final_norm_gamma_stride = dbg_ctrl_words[18];
+    dbg_ctrl_mem_shadow.ln0_eps_stride          = dbg_ctrl_words[19];
+    dbg_ctrl_mem_shadow.ln1_eps_stride          = dbg_ctrl_words[20];
+    dbg_ctrl_mem_shadow.final_norm_eps_stride   = dbg_ctrl_words[21];
+    dbg_ctrl_mem_shadow.wq_offset               = dbg_ctrl_words[22];
+    dbg_ctrl_mem_shadow.wk_offset               = dbg_ctrl_words[23];
+    dbg_ctrl_mem_shadow.wv_offset               = dbg_ctrl_words[24];
+    dbg_ctrl_mem_shadow.wo_offset               = dbg_ctrl_words[25];
+    dbg_ctrl_mem_shadow.w1_offset               = dbg_ctrl_words[26];
+    dbg_ctrl_mem_shadow.w2_offset               = dbg_ctrl_words[27];
+    dbg_ctrl_mem_shadow.k_cache_offset          = dbg_ctrl_words[28];
+    dbg_ctrl_mem_shadow.v_cache_offset          = dbg_ctrl_words[29];
+    dbg_ctrl_mem_shadow.wo_bias_offset          = dbg_ctrl_words[30];
+    dbg_ctrl_mem_shadow.w1_bias_offset          = dbg_ctrl_words[31];
+    dbg_ctrl_mem_shadow.w2_bias_offset          = dbg_ctrl_words[32];
+    dbg_ctrl_mem_shadow.ln0_gamma_offset        = dbg_ctrl_words[33];
+    dbg_ctrl_mem_shadow.ln1_gamma_offset        = dbg_ctrl_words[34];
+    dbg_ctrl_mem_shadow.final_norm_gamma_offset = dbg_ctrl_words[35];
+    dbg_ctrl_mem_shadow.ln0_eps_offset          = dbg_ctrl_words[36];
+    dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[37];
+    dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[38];
+    dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[39];
   end
 
   // dbg_in_buf/dbg_out_buf are write-only in this RTL.
@@ -1341,7 +1520,7 @@ module top_module_hls_tb;
 
   // Debug memory model writes for all dual-port debug interfaces.
   always_ff @(posedge ap_clk) begin : p_dbg_mem_writes
-    if (dbg_in_buf_ce0 && dbg_in_buf_we0) begin
+    if (dbg_in_buf_ce0 && dbg_in_buf_we0 && (dbg_in_buf_address0 < DBG_MAIN_IN_BYTES)) begin
       dbg_in_buf_mem[dbg_in_buf_address0] <= dbg_in_buf_d0;
     end
     if (dbg_out_buf_ce0 && dbg_out_buf_we0) begin
@@ -1390,6 +1569,7 @@ module top_module_hls_tb;
       main_out_capture_pending <= 1'b0;
       main_in_quiet_ctr        <= '0;
       main_out_quiet_ctr       <= '0;
+      dbg_main_in_decode_pulse <= 1'b0;
       dbg_compute_start_d      <= 1'b0;
       dbg_compute_done_d       <= 1'b0;
       dbg_compute_state_d      <= 8'd0;
@@ -1431,6 +1611,7 @@ module top_module_hls_tb;
         resid2_x_in[elem_idx]    <= 8'd0;
         resid2_r_in[elem_idx]    <= 8'd0;
         ffn_w1_x_in[elem_idx]    <= 8'd0;
+        wlogit_act_in[elem_idx]  <= 32'sd0;
         out_proj_out[elem_idx]   <= 8'd0;
         resid1_out[elem_idx]     <= 8'd0;
         resid2_out[elem_idx]     <= 8'd0;
@@ -1458,8 +1639,14 @@ module top_module_hls_tb;
       for (elem_idx = 0; elem_idx < (TB_D_MODEL * TB_D_TILE_W1); elem_idx = elem_idx + 1) begin
         ffn_w1_w_in[elem_idx] <= 4'sd0;
       end
+      for (elem_idx = 0; elem_idx < (TB_D_MODEL * TB_D_TILE_LOGIT); elem_idx = elem_idx + 1) begin
+        wlogit_w_in[elem_idx] <= 4'sd0;
+      end
       for (elem_idx = 0; elem_idx < TB_D_TILE_W1; elem_idx = elem_idx + 1) begin
         ffn_w1_b_in[elem_idx] <= 32'sd0;
+      end
+      for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+        wlogit_b_in[elem_idx] <= 32'sd0;
       end
       for (elem_idx = 0; elem_idx < (TB_D_FFN * TB_D_TILE_W2); elem_idx = elem_idx + 1) begin
         ffn_w2_w_in[elem_idx] <= 4'sd0;
@@ -1482,6 +1669,16 @@ module top_module_hls_tb;
           ffn_w2_out_by_tile[op_idx][elem_idx] <= 8'd0;
         end
       end
+      for (op_idx = 0; op_idx < TB_NUM_LOGIT_TILES; op_idx = op_idx + 1) begin
+        for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+          wlogit_out_by_tile[op_idx][elem_idx] <= 32'sd0;
+        end
+      end
+      for (elem_idx = 0; elem_idx < TB_D_VOCAB; elem_idx = elem_idx + 1) begin
+        argmax_in[elem_idx] <= 32'sd0;
+        wlogit_out[elem_idx] <= 32'sd0;
+      end
+      argmax_out <= 32'sd0;
       for (head_idx = 0; head_idx < TB_NUM_HEADS; head_idx = head_idx + 1) begin
         for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
           q_act_in[head_idx][elem_idx] <= 8'sd0;
@@ -1560,10 +1757,12 @@ module top_module_hls_tb;
       // -------------------------
       // Main path snapshots
       // -------------------------
+      dbg_main_in_decode_pulse <= 1'b0;
       main_wait_to_exec = (dbg_compute_state_d == COMPUTE_STATE_WAIT_MEM) &&
-                          (dbg_compute_state    == COMPUTE_STATE_EXECUTE);
+                          (dbg_compute_state == COMPUTE_STATE_EXECUTE);
       // Latch current main compute instruction whenever a new tile/instruction appears.
-      if (dbg_compute_instruction_ap_vld && dbg_compute_start[0] && (dbg_compute_instruction != 32'd0) &&
+      if (!main_in_capture_pending &&
+          dbg_compute_instruction_ap_vld && dbg_compute_start[0] && (dbg_compute_instruction != 32'd0) &&
           (dbg_compute_instruction != main_last_seen_instr)) begin
         main_last_seen_instr     <= dbg_compute_instruction;
         main_in_capture_pending  <= 1'b1;
@@ -1592,6 +1791,7 @@ module top_module_hls_tb;
       if (main_in_capture_pending) begin
         // Inputs are semantically valid when the main compute FSM leaves WAIT_MEM and enters EXECUTE.
         if (main_wait_to_exec) begin
+          dbg_main_in_decode_pulse <= 1'b1;
           for (b = 0; b < DBG_MAIN_IN_BYTES; b = b + 1) begin
             main_in_snap[main_in_snap_wr_idx][b] <= dbg_in_buf_mem[b];
           end
@@ -1679,16 +1879,42 @@ module top_module_hls_tb;
                                                   dbg_in_buf_mem[TB_D_MODEL + TB_FFN_W1_W_BYTES + (4*elem_idx) + 0]});
               end
             end
+            OP_CMP_LOGITS: begin
+              for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
+                wlogit_act_in[elem_idx] <= $signed({dbg_in_buf_mem[(4*elem_idx) + 3],
+                                                    dbg_in_buf_mem[(4*elem_idx) + 2],
+                                                    dbg_in_buf_mem[(4*elem_idx) + 1],
+                                                    dbg_in_buf_mem[(4*elem_idx) + 0]});
+              end
+              for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_TILE_LOGIT); flat_idx = flat_idx + 1) begin
+                wlogit_w_in[flat_idx] <= $signed(flat_idx[0] ?
+                  dbg_in_buf_mem[(TB_D_MODEL*4) + (flat_idx >> 1)][7:4] :
+                  dbg_in_buf_mem[(TB_D_MODEL*4) + (flat_idx >> 1)][3:0]);
+              end
+              for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+                wlogit_b_in[elem_idx] <= 32'sd0;
+              end
+            end
+            OP_CMP_ARGMAX: begin
+              for (elem_idx = 0; elem_idx < TB_D_VOCAB; elem_idx = elem_idx + 1) begin
+                argmax_in[elem_idx] <= $signed({dbg_in_buf_mem[(4*elem_idx) + 3],
+                                                dbg_in_buf_mem[(4*elem_idx) + 2],
+                                                dbg_in_buf_mem[(4*elem_idx) + 1],
+                                                dbg_in_buf_mem[(4*elem_idx) + 0]});
+              end
+            end
             OP_CMP_FFN_ACT: begin
               for (elem_idx = 0; elem_idx < TB_D_FFN; elem_idx = elem_idx + 1) begin
-                ffn_act_gate_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1], dbg_in_buf_mem[(2*elem_idx)+0]});
+                ffn_act_gate_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1],
+                                                      dbg_in_buf_mem[(2*elem_idx)+0]});
                 ffn_act_up_in[elem_idx] <= $signed({dbg_in_buf_mem[(TB_D_FFN*2) + (2*elem_idx)+1],
                                                     dbg_in_buf_mem[(TB_D_FFN*2) + (2*elem_idx)+0]});
               end
             end
             OP_CMP_FFN_W2: begin
               for (elem_idx = 0; elem_idx < TB_D_FFN; elem_idx = elem_idx + 1) begin
-                ffn_w2_x_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1], dbg_in_buf_mem[(2*elem_idx)+0]});
+                ffn_w2_x_in[elem_idx] <= $signed({dbg_in_buf_mem[(2*elem_idx)+1],
+                                                  dbg_in_buf_mem[(2*elem_idx)+0]});
               end
               for (flat_idx = 0; flat_idx < (TB_D_FFN * TB_D_TILE_W2); flat_idx = flat_idx + 1) begin
                 ffn_w2_w_in[flat_idx] <= $signed(flat_idx[0] ?
@@ -1789,6 +2015,25 @@ module top_module_hls_tb;
             for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
               final_norm_out[elem_idx] <= {dbg_out_buf_mem[(4*elem_idx)+3], dbg_out_buf_mem[(4*elem_idx)+2], dbg_out_buf_mem[(4*elem_idx)+1], dbg_out_buf_mem[(4*elem_idx)+0]};
             end
+          end
+          OP_CMP_LOGITS: begin
+            if (main_out_pending_tile < TB_NUM_LOGIT_TILES) begin
+              for (elem_idx = 0; elem_idx < TB_D_TILE_LOGIT; elem_idx = elem_idx + 1) begin
+                wlogit_out_by_tile[main_out_pending_tile][elem_idx] <=
+                  $signed({dbg_out_buf_mem[(4*elem_idx)+3],
+                           dbg_out_buf_mem[(4*elem_idx)+2],
+                           dbg_out_buf_mem[(4*elem_idx)+1],
+                           dbg_out_buf_mem[(4*elem_idx)+0]});
+                wlogit_out[(main_out_pending_tile * TB_D_TILE_LOGIT) + elem_idx] <=
+                  $signed({dbg_out_buf_mem[(4*elem_idx)+3],
+                           dbg_out_buf_mem[(4*elem_idx)+2],
+                           dbg_out_buf_mem[(4*elem_idx)+1],
+                           dbg_out_buf_mem[(4*elem_idx)+0]});
+              end
+            end
+          end
+          OP_CMP_ARGMAX: begin
+            argmax_out <= $signed({dbg_out_buf_mem[3], dbg_out_buf_mem[2], dbg_out_buf_mem[1], dbg_out_buf_mem[0]});
           end
           default: begin
           end
@@ -1896,48 +2141,39 @@ module top_module_hls_tb;
                   for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
                     q_act_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    q_w_in[head_in_pending_head[lane]][flat_idx] <= $signed(flat_idx[0] ?
+                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEAD_TILE_QKV); flat_idx = flat_idx + 1) begin
+                    q_w_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * (TB_D_MODEL * TB_D_HEAD_TILE_QKV)) + flat_idx] <= $signed(flat_idx[0] ?
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][7:4] :
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
-                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                    q_b_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 3],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 2],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 1],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 0]});
+                  for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                    q_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_K: begin
                   for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
                     k_act_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    k_w_in[head_in_pending_head[lane]][flat_idx] <= $signed(flat_idx[0] ?
+                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEAD_TILE_QKV); flat_idx = flat_idx + 1) begin
+                    k_w_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * (TB_D_MODEL * TB_D_HEAD_TILE_QKV)) + flat_idx] <= $signed(flat_idx[0] ?
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][7:4] :
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
-                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                    k_b_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 3],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 2],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 1],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 0]});
+                  for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                    k_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_V: begin
                   for (elem_idx = 0; elem_idx < TB_D_MODEL; elem_idx = elem_idx + 1) begin
                     v_act_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    v_w_in[head_in_pending_head[lane]][flat_idx] <= $signed(flat_idx[0] ?
+                  for (flat_idx = 0; flat_idx < (TB_D_MODEL * TB_D_HEAD_TILE_QKV); flat_idx = flat_idx + 1) begin
+                    v_w_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * (TB_D_MODEL * TB_D_HEAD_TILE_QKV)) + flat_idx] <= $signed(flat_idx[0] ?
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][7:4] :
                       dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + (flat_idx >> 1)][3:0]);
                   end
-                  for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                    v_b_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 3],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 2],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 1],
-                                                                              dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_MODEL + TB_QKV_W_BYTES + (4*elem_idx) + 0]});
+                  for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                    v_b_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <= '0;
                   end
                 end
                 OP_CMP_HEAD_REQUANT: begin
@@ -1952,8 +2188,8 @@ module top_module_hls_tb;
                   for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
                     att_scores_q_in[head_in_pending_head[lane]][elem_idx] <= $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + elem_idx]);
                   end
-                  for (flat_idx = 0; flat_idx < (TB_CONTEXT_LENGTH * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    att_scores_k_cache_in[head_in_pending_head[lane]][flat_idx] <=
+                  for (flat_idx = 0; flat_idx < TB_ATT_SCORES_K_TILE_BYTES; flat_idx = flat_idx + 1) begin
+                    att_scores_k_cache_in[head_in_pending_head[lane]][(head_in_pending_tile[lane] * TB_ATT_SCORES_K_TILE_BYTES) + flat_idx] <=
                       $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + TB_D_HEADS + flat_idx]);
                   end
                 end
@@ -1976,8 +2212,11 @@ module top_module_hls_tb;
                     att_value_weights_in[head_in_pending_head[lane]][elem_idx] <= $signed({dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + (2*elem_idx) + 1],
                                                                                            dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + (2*elem_idx) + 0]});
                   end
-                  for (flat_idx = 0; flat_idx < (TB_CONTEXT_LENGTH * TB_D_HEADS); flat_idx = flat_idx + 1) begin
-                    att_value_v_cache_in[head_in_pending_head[lane]][flat_idx] <=
+                  for (flat_idx = 0; flat_idx < TB_ATT_VALUE_V_TILE_BYTES; flat_idx = flat_idx + 1) begin
+                    att_value_v_cache_in[head_in_pending_head[lane]]
+                                        [((flat_idx / TB_D_HEAD_TILE_ATT_VALUE) * TB_D_HEADS) +
+                                         (head_in_pending_tile[lane] * TB_D_HEAD_TILE_ATT_VALUE) +
+                                         (flat_idx % TB_D_HEAD_TILE_ATT_VALUE)] <=
                       $signed(dbg_head_in_buf_mem[(lane * DBG_HEAD_IN_BYTES) + (TB_CONTEXT_LENGTH * 2) + flat_idx]);
                   end
                 end
@@ -2009,18 +2248,21 @@ module top_module_hls_tb;
 
             case (head_out_pending_op[lane])
               OP_CMP_Q: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  q_out[head_out_pending_head[lane]][elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                  q_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <=
+                    $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
                 end
               end
               OP_CMP_K: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  k_out[head_out_pending_head[lane]][elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                  k_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <=
+                    $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
                 end
               end
               OP_CMP_V: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  v_out[head_out_pending_head[lane]][elem_idx] <= $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_QKV; elem_idx = elem_idx + 1) begin
+                  v_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_QKV) + elem_idx] <=
+                    $signed(dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + elem_idx]);
                 end
               end
               OP_CMP_HEAD_REQUANT: begin
@@ -2029,8 +2271,8 @@ module top_module_hls_tb;
                 end
               end
               OP_CMP_ATT_SCORES: begin
-                for (elem_idx = 0; elem_idx < TB_CONTEXT_LENGTH; elem_idx = elem_idx + 1) begin
-                  att_scores_out[head_out_pending_head[lane]][elem_idx] <=
+                for (elem_idx = 0; elem_idx < TB_ATT_CTX_BLOCK; elem_idx = elem_idx + 1) begin
+                  att_scores_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_ATT_CTX_BLOCK) + elem_idx] <=
                     {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 3],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 2],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 1],
@@ -2052,8 +2294,8 @@ module top_module_hls_tb;
                 end
               end
               OP_CMP_ATT_VALUE: begin
-                for (elem_idx = 0; elem_idx < TB_D_HEADS; elem_idx = elem_idx + 1) begin
-                  att_value_out[head_out_pending_head[lane]][elem_idx] <=
+                for (elem_idx = 0; elem_idx < TB_D_HEAD_TILE_ATT_VALUE; elem_idx = elem_idx + 1) begin
+                  att_value_out[head_out_pending_head[lane]][(head_out_pending_tile[lane] * TB_D_HEAD_TILE_ATT_VALUE) + elem_idx] <=
                     {dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 3],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 2],
                      dbg_head_out_buf_mem[(lane * DBG_HEAD_OUT_BYTES) + (4*elem_idx) + 1],
@@ -2119,6 +2361,15 @@ module top_module_hls_tb;
   assign s_axis_in_TKEEP = 1'b1;
   assign s_axis_in_TSTRB = 1'b1;
   assign m_axis_out_TREADY = 1'b1;
+  assign s_axi_control_r_AWVALID = 1'b0;
+  assign s_axi_control_r_WVALID  = 1'b0;
+  assign s_axi_control_r_WDATA   = 32'd0;
+  assign s_axi_control_r_WSTRB   = 4'h0;
+  assign s_axi_control_r_ARVALID = 1'b0;
+  assign s_axi_control_r_RREADY  = 1'b1;
+  assign s_axi_control_r_BREADY  = 1'b1;
+  assign s_axi_control_r_AWADDR  = 6'd0;
+  assign s_axi_control_r_ARADDR  = 6'd0;
 
   // Build/drive AXI-stream input packet.
   always_comb begin : p_axis_ingress_outputs
@@ -2130,17 +2381,26 @@ module top_module_hls_tb;
   // Build/drive stream-in beat traffic only when DUT requests ingress.
   always_ff @(posedge ap_clk) begin : axis_driver
     if (!ap_rst_n) begin
-      axis_packet_sent   <= 1'b0;
+      axis_packet_sent   <= TB_AXI_DEBUG_MODE ? 1'b1 : 1'b0;
       stream_fill_active <= 1'b0;
       stream_fill_idx    <= '0;
       stream_gap_countdown <= '0;
     end else begin
+      if (launch_next_token) begin
+        axis_packet_sent   <= TB_AXI_DEBUG_MODE ? 1'b1 : 1'b0;
+        stream_fill_active <= 1'b0;
+        stream_fill_idx    <= '0;
+        stream_gap_countdown <= '0;
+      end
       if (stream_fill_active && (stream_gap_countdown != 0)) begin
         stream_gap_countdown <= stream_gap_countdown - 1'b1;
       end
 
-      // Start ingress only once DUT is in STREAM_IN and ready.
-      if (!axis_packet_sent && !stream_fill_active && (dbg_state == 32'd1) && s_axis_in_TREADY) begin
+      // Start ingress only once dbg_state reaches S_STREAM_IN.
+      if (!axis_packet_sent && !stream_fill_active &&
+          !TB_AXI_DEBUG_MODE &&
+          (dbg_state == 32'd1) &&
+          s_axis_in_TREADY) begin
         stream_fill_active <= 1'b1;
         stream_fill_idx    <= '0;
         stream_gap_countdown <= '0;
@@ -2165,10 +2425,25 @@ module top_module_hls_tb;
     if (!ap_rst_n) begin
       stream_out_count     <= 0;
       stream_out_last_seen <= 1'b0;
+      stream_out_token     <= 32'sd0;
     end else begin
+      if (launch_next_token) begin
+        stream_out_count     <= 0;
+        stream_out_last_seen <= 1'b0;
+        stream_out_token     <= 32'sd0;
+      end
       if (m_axis_out_TVALID && m_axis_out_TREADY) begin
         if (stream_out_count < STREAM_OUT_BUF_BYTES) begin
           stream_out_mem[stream_out_count] <= m_axis_out_TDATA;
+          if (stream_out_count == 0) begin
+            stream_out_token[7:0] <= m_axis_out_TDATA;
+          end else if (stream_out_count == 1) begin
+            stream_out_token[15:8] <= m_axis_out_TDATA;
+          end else if (stream_out_count == 2) begin
+            stream_out_token[23:16] <= m_axis_out_TDATA;
+          end else if (stream_out_count == 3) begin
+            stream_out_token[31:24] <= m_axis_out_TDATA;
+          end
           stream_out_count <= stream_out_count + 1;
         end
         if (m_axis_out_TLAST[0]) begin
@@ -2176,6 +2451,15 @@ module top_module_hls_tb;
           stream_out_count     <= 0;
         end
       end
+    end
+  end
+
+  // Select embedding vector from vocab weight matrix using argmax token index.
+  always_comb begin : p_embedding_lookup
+    int wbase;
+    wbase = stream_out_token * (TB_D_MODEL / 8);
+    for (int k = 0; k < TB_D_MODEL; k++) begin
+      selected_embedding[k] = $signed(wlogit_ram[wbase + (k / 8)][(k % 8) * 4 +: 4]);
     end
   end
 
@@ -2280,31 +2564,54 @@ module top_module_hls_tb;
   end
 
   // Track IRQ status and decoded done/error flags.
+  always_ff @(posedge ap_clk) begin : IRQ_SHADOW_TRACKER
+    if (!ap_rst_n) begin
+      irq_ps_shadow <= 1'b0;
+      irq_ps_prev   <= 1'b0;
+    end else begin
+      if ((irq_ps[0] === 1'b0) || (irq_ps[0] === 1'b1)) begin
+        if (irq_ps !== irq_ps_prev) begin
+          irq_ps_shadow <= irq_ps;
+          irq_ps_prev   <= irq_ps;
+        end
+      end
+    end
+  end
+
   always_ff @(posedge ap_clk) begin : IRQ_TRACKER
     if (!ap_rst_n) begin
       irq_pending <= 1'b0;
       irq_seen_done <= 1'b0;
       irq_seen_error <= 1'b0;
-      irq_seen_done_clr <= 1'b0;
-      irq_seen_error_clr <= 1'b0;
       error_code_lat <= 32'd0;
+      dbg_status_mem_shadow <= '0;
     end else begin
-      irq_seen_done_clr <= 1'b0;
-      irq_seen_error_clr <= 1'b0;
-      if (irq_ps[0]) begin
+      if (irq_ps_shadow[0]) begin
         irq_pending <= 1'b1;
       end
+      if (axi_read_valid) begin
+        case (axi_addr)
+          ADDR_STATUS_MEM_DATA_0: dbg_status_mem_shadow.status <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_1: dbg_status_mem_shadow.irq_status <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_2: dbg_status_mem_shadow.error_code <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_3: dbg_status_mem_shadow.mmu_error_subcode <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_4: dbg_status_mem_shadow.layer_index <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_5: dbg_status_mem_shadow.head_index <= axi_rdata;
+          ADDR_STATUS_MEM_DATA_6: dbg_status_mem_shadow.token_index <= axi_rdata;
+          default: begin end
+        endcase
+      end
       if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_1)) begin
-        if (axi_rdata[0]) irq_seen_done <= 1'b1;
+        if (axi_rdata[2]) irq_seen_done <= 1'b1;
         if (axi_rdata[1]) irq_seen_error <= 1'b1;
       end
       if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_2)) begin
         error_code_lat <= axi_rdata;
       end
-      if (irq_seen_done_clr) begin
+      if (done_req_fire) begin
         irq_seen_done <= 1'b0;
       end
-      if (irq_seen_error_clr) begin
+      if (error_req_fire && error_req_write) begin
         irq_seen_error <= 1'b0;
       end
       if (!irq_seen_done && !irq_seen_error && (irq_read_phase == IRQ_RD_DONE)) begin
@@ -2357,19 +2664,67 @@ module top_module_hls_tb;
       done_req_write <= 1'b0;
       done_req_addr  <= ctrl_mem_addr(2);
       done_req_wdata <= 32'd0;
+      done_clear_release_pending <= 1'b0;
     end else begin
       done_req_valid <= 1'b0;
       done_req_write <= 1'b0;
       done_req_addr  <= ctrl_mem_addr(2);
       done_req_wdata <= 32'd0;
-      if (irq_seen_done) begin
+      if (done_clear_release_pending) begin
         done_req_valid <= 1'b1;
         done_req_write <= 1'b1;
         done_req_addr  <= ctrl_mem_addr(2); // irq_clear
-        done_req_wdata <= 32'h0000_0001;
+        done_req_wdata <= 32'd0;
         if (done_req_fire) begin
-          irq_seen_done_clr <= 1'b1;
+          done_clear_release_pending <= 1'b0;
         end
+      end else if (irq_seen_done) begin
+        done_req_valid <= 1'b1;
+        done_req_write <= 1'b1;
+        done_req_addr  <= ctrl_mem_addr(2); // irq_clear
+        done_req_wdata <= IRQ_INFER_DONE_BIT;
+        if (done_req_fire) begin
+          done_clear_release_pending <= 1'b1;
+        end
+      end
+    end
+  end
+
+  always_ff @(posedge ap_clk) begin : TOKEN_MANAGER
+    if (!ap_rst_n) begin
+      current_stream_token <= 0;
+      next_token_pending   <= 1'b0;
+      launch_next_token    <= 1'b0;
+      axi_debug_sig_checked <= 1'b0;
+    end else begin
+      launch_next_token <= 1'b0;
+      if (TB_AXI_DEBUG_MODE && irq_seen_done && !axi_debug_sig_checked) begin
+        logic [31:0] observed_sig;
+        logic [31:0] expected_sig;
+        int req_idx;
+        for (req_idx = 0; req_idx < DEBUG_AXI_REQ_COUNT; req_idx = req_idx + 1) begin
+          observed_sig = mem_read_word(
+              ctrl_base_addr64(CTRLW_K_CACHE_LO, CTRLW_K_CACHE_HI) +
+              (req_idx * DEBUG_AXI_SCRATCH_STRIDE));
+          expected_sig = expected_axi_debug_signature(req_idx);
+          if (observed_sig !== expected_sig) begin
+            $error("[AXI-DEBUG] cycle=%0d token=%0d req=%0d signature mismatch observed=0x%08h expected=0x%08h",
+                   cycle_count, current_stream_token, req_idx, observed_sig, expected_sig);
+          end
+        end
+        axi_debug_sig_checked <= 1'b1;
+      end
+      if (irq_seen_done && !next_token_pending && ((current_stream_token + 1) < total_stream_tokens)) begin
+        next_token_pending <= 1'b1;
+      end
+      if (next_token_pending &&
+          !irq_ps_shadow[0] && !irq_pending && !irq_seen_done && !irq_seen_error &&
+          (ctrl_stage == CTRL_DONE) && (axi_state == AXI_IDLE) && (ctrl_gap_cycles == 0)) begin
+        current_stream_token <= current_stream_token + 1;
+        load_stream_token(current_stream_token + 1);
+        next_token_pending <= 1'b0;
+        launch_next_token <= 1'b1;
+        axi_debug_sig_checked <= 1'b0;
       end
     end
   end
@@ -2383,6 +2738,7 @@ module top_module_hls_tb;
       error_req_addr  <= ADDR_STATUS_MEM_DATA_2;
       error_req_wdata <= 32'd0;
       err_phase       <= ERR_PHASE_READ;
+      error_clear_release_pending <= 1'b0;
     end else begin
       error_req_valid <= 1'b0;
       error_req_write <= 1'b0;
@@ -2404,10 +2760,14 @@ module top_module_hls_tb;
           error_req_valid <= 1'b1;
           error_req_write <= 1'b1;
           error_req_addr  <= ctrl_mem_addr(2); // irq_clear
-          error_req_wdata <= 32'h0000_0002;
+          error_req_wdata <= error_clear_release_pending ? 32'd0 : IRQ_ERROR_BIT;
           if (error_req_fire) begin
-            irq_seen_error_clr <= 1'b1;
-            err_phase <= ERR_PHASE_READ;
+            if (error_clear_release_pending) begin
+              error_clear_release_pending <= 1'b0;
+              err_phase <= ERR_PHASE_READ;
+            end else begin
+              error_clear_release_pending <= 1'b1;
+            end
           end
         end
         default: err_phase <= ERR_PHASE_READ;
@@ -2449,6 +2809,9 @@ module top_module_hls_tb;
       ctrl_write_en <= error_req_write;
       ctrl_chip_en  <= 1'b1;
       ctrl_gap_cycles <= 1;
+    end else if (launch_next_token) begin
+      ctrl_stage <= CTRL_RELAUNCH_PREP;
+      ctrl_gap_cycles <= 1;
     end else if (ctrl_gap_cycles > 0) begin
       ctrl_gap_cycles <= ctrl_gap_cycles - 1;
     end else if (axi_state != AXI_IDLE) begin
@@ -2485,43 +2848,90 @@ module top_module_hls_tb;
           ctrl_chip_en  <= 1'b1;
           prog_word_idx = ctrl_prog_word_idx(base_assign_step);
           ctrl_addr <= ctrl_mem_addr(prog_word_idx);
-          ctrl_data_in <= ctrl_init_words[prog_word_idx];
-          ctrl_words[prog_word_idx] <= ctrl_init_words[prog_word_idx];
+          ctrl_data_in <= ctrl_prog_word_data(prog_word_idx);
+          ctrl_words[prog_word_idx] <= ctrl_prog_word_data(prog_word_idx);
           if (base_assign_step >= (CTRL_MEM_WORDS - 2)) begin
-            // IMPORTANT: program ctrl_mem.control START before ap_start so HLS kernel
-            // snapshots control args with START already high.
-            ctrl_stage <= CTRL_ASSERT_START;
+            ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_START;
           end else begin
             base_assign_step <= base_assign_step + 1;
           end
           ctrl_gap_cycles <= 2;
         end
-        CTRL_ASSERT_START: begin
+        CTRL_RELAUNCH_PREP: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(relaunch-prep)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
+                   dbg_state, dbg_status_mem_shadow.status);
           ctrl_addr <= ctrl_mem_addr(0);
-          ctrl_data_in <= 32'h0000_0003;
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
-          ctrl_shadow_control <= 32'h0000_0003;
-          ctrl_words[0] <= 32'h0000_0003;
-          ctrl_stage <= CTRL_ASSERT_AP_START;
-          ctrl_gap_cycles <= 4;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_ASSERT_DEBUG_MODE: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(debug)=0x%08h",
+                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits());
+          ctrl_addr <= ctrl_mem_addr(0);
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_write_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_stage <= CTRL_ASSERT_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_ASSERT_START: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(start)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token,
+                   CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
+                   dbg_state, dbg_status_mem_shadow.status);
+          ctrl_addr <= ctrl_mem_addr(0);
+          ctrl_data_in <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
+          ctrl_write_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
+          ctrl_stage <= (current_stream_token == 0) ? CTRL_ASSERT_AP_START : CTRL_HOLD_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
         CTRL_ASSERT_AP_START: begin
+          $display("[CTRL] cycle=%0d token=%0d write ap_start=0x00000081 dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token, dbg_state, dbg_status_mem_shadow.status);
           ctrl_addr <= ADDR_AP_CTRL;
           ctrl_data_in <= 32'h0000_0081;
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
+          ctrl_stage <= CTRL_HOLD_START;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_HOLD_START: begin
+          $display("[CTRL] cycle=%0d token=%0d hold control(start)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token,
+                   CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
+                   dbg_state, dbg_status_mem_shadow.status);
           ctrl_stage <= CTRL_CLEAR_START;
           ctrl_gap_cycles <= CTRL_START_HOLD_CYCLES;
         end
         CTRL_CLEAR_START: begin
+          $display("[CTRL] cycle=%0d token=%0d write control(clear-start)=0x%08h dbg_state=%0d status=0x%08h",
+                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
+                   dbg_state, dbg_status_mem_shadow.status);
           ctrl_addr <= ctrl_mem_addr(0);
-          ctrl_data_in <= 32'h0000_0001;
+          ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
           ctrl_chip_en <= 1'b1;
-          ctrl_shadow_control <= 32'h0000_0001;
-          ctrl_words[0] <= 32'h0000_0001;
+          ctrl_shadow_control <= CTRL_RESETN_BIT | ctrl_debug_bits();
+          ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_stage <= CTRL_DONE;
+          ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+        end
+        CTRL_DONE: begin
+          ctrl_addr <= status_mem_addr(status_poll_idx);
+          ctrl_read_en <= 1'b1;
+          ctrl_chip_en <= 1'b1;
+          status_poll_idx <= (status_poll_idx == 3'd6) ? 3'd0 : (status_poll_idx + 3'd1);
           ctrl_gap_cycles <= 1;
         end
         default: begin end
@@ -2536,7 +2946,7 @@ module top_module_hls_tb;
     if (dbg_error[0]) begin
       $finish;
     end
-    if (irq_seen_done) begin
+    if (irq_seen_done && ((current_stream_token + 1) >= total_stream_tokens)) begin
       $finish;
     end
 
@@ -2549,7 +2959,14 @@ module top_module_hls_tb;
   // Print debug mirror updates when DUT marks outputs valid.
   always_ff @(posedge ap_clk) begin : p_debug_vld_monitor
     if (!ap_rst_n) begin
-      // no-op
+      dbg_state_prev <= 32'd0;
+    end else begin
+      if (dbg_state != dbg_state_prev) begin
+        $display("[DBG-STATE] cycle=%0d token=%0d dbg_state %0d -> %0d status=0x%08h irq=0x%08h error=0x%08h",
+                 cycle_count, current_stream_token, dbg_state_prev, dbg_state,
+                 dbg_status_mem_shadow.status, dbg_status_mem_shadow.irq_status, dbg_status_mem_shadow.error_code);
+        dbg_state_prev <= dbg_state;
+      end
     end
   end
 
@@ -2589,6 +3006,7 @@ module top_module_hls_tb;
     stream_gap_countdown = '0;
     stream_out_count   = 0;
     stream_out_last_seen = 1'b0;
+    stream_out_token   = 32'sd0;
 
     axi_aw_active       = 1'b0;
     axi_aw_addr_latched = 64'd0;
@@ -2608,11 +3026,21 @@ module top_module_hls_tb;
     base_assign_step   = 0;
     ctrl_shadow_control = 32'd0;
     axi_state          = AXI_IDLE;
+    total_stream_tokens = 0;
+    current_stream_token = 0;
+    next_token_pending = 1'b0;
+    launch_next_token = 1'b0;
+    axi_debug_sig_checked = 1'b0;
     irq_pending        = 1'b0;
     irq_seen_done      = 1'b0;
     irq_seen_error     = 1'b0;
-    irq_seen_done_clr  = 1'b0;
-    irq_seen_error_clr = 1'b0;
+    irq_ps_shadow      = 1'b0;
+    irq_ps_prev        = 1'b0;
+    dbg_state_prev     = 32'd0;
+    done_clear_release_pending = 1'b0;
+    error_clear_release_pending = 1'b0;
+    status_poll_idx    = 3'd0;
+    dbg_status_mem_shadow = '0;
     irq_req_valid      = 1'b0;
     done_req_valid     = 1'b0;
     error_req_valid    = 1'b0;
@@ -2624,9 +3052,11 @@ module top_module_hls_tb;
     ctrl_write_en      = 1'b0;
     ctrl_chip_en       = 1'b0;
 
+    for (i = 0; i < STREAM_IN_FILE_BYTES_MAX; i = i + 1) begin
+      stream_in_file_bytes[i] = 8'h00;
+    end
     for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
       stream_in_mem[i] = 8'h00;
-      stream_in_file_bytes[i] = 8'h00;
     end
     for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
       ctrl_words[i] = 32'h0000_0000;
@@ -2674,9 +3104,17 @@ module top_module_hls_tb;
     if (bytes_read <= 0) begin
       $fatal(1, "Failed to read stream_in.bin");
     end
-    for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
-      stream_in_mem[i] = stream_in_file_bytes[i];
+    if (bytes_read > STREAM_IN_FILE_BYTES_MAX) begin
+      $fatal(1, "stream_in.bin too large for testbench buffer");
     end
+    if ((bytes_read % STREAM_IN_BUF_BYTES) != 0) begin
+      $fatal(1, "stream_in.bin size is not a whole number of tokens");
+    end
+    total_stream_tokens = bytes_read / STREAM_IN_BUF_BYTES;
+    if (total_stream_tokens <= 0) begin
+      $fatal(1, "stream_in.bin contains zero tokens");
+    end
+    load_stream_token(0);
 
     file_fd = $fopen("/home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/test_data/ddr_image.bin", "rb");
     if (file_fd == 0) begin
@@ -2694,6 +3132,7 @@ module top_module_hls_tb;
       wo_ram[i] = load_image_word(IMG_BASE_WO + (i * 4));
       w1_ram[i] = load_image_word(IMG_BASE_W1 + (i * 4));
       w2_ram[i] = load_image_word(IMG_BASE_W2 + (i * 4));
+      wlogit_ram[i] = load_image_word(IMG_BASE_WVOCAB + (i * 4));
       wq_bias_ram[i] = load_image_word(IMG_BASE_WQ_BIAS + (i * 4));
       wk_bias_ram[i] = load_image_word(IMG_BASE_WK_BIAS + (i * 4));
       wv_bias_ram[i] = load_image_word(IMG_BASE_WV_BIAS + (i * 4));
@@ -2714,14 +3153,16 @@ module top_module_hls_tb;
     for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
       dbg_stream_in_buf_mem[i] = 8'h00;
     end
-    for (i = 0; i < 128; i = i + 1) begin
+    for (i = 0; i < DBG_MAIN_IN_BYTES; i = i + 1) begin
       dbg_in_buf_mem[i] = 8'h00;
+    end
+    for (i = 0; i < (TB_HEADS_PARALLEL * DBG_HEAD_OUT_BYTES); i = i + 1) begin
       dbg_head_out_buf_mem[i] = 8'h00;
     end
-    for (i = 0; i < 64; i = i + 1) begin
+    for (i = 0; i < DBG_MAIN_OUT_BYTES; i = i + 1) begin
       dbg_out_buf_mem[i] = 8'h00;
     end
-    for (i = 0; i < 256; i = i + 1) begin
+    for (i = 0; i < (TB_HEADS_PARALLEL * DBG_HEAD_IN_BYTES); i = i + 1) begin
       dbg_head_in_buf_mem[i] = 8'h00;
     end
 
@@ -2901,23 +3342,23 @@ module top_module_hls_tb;
     .dbg_out_buf_we0(dbg_out_buf_we0),
     .dbg_out_buf_d0(dbg_out_buf_d0),
 
-    .dbg_head_in_buf_0_address0(dbg_head_in_buf_0_address0),
-    .dbg_head_in_buf_0_ce0(dbg_head_in_buf_0_ce0),
-    .dbg_head_in_buf_0_we0(dbg_head_in_buf_0_we0),
-    .dbg_head_in_buf_0_d0(dbg_head_in_buf_0_d0),
-    .dbg_head_in_buf_1_address0(dbg_head_in_buf_1_address0),
-    .dbg_head_in_buf_1_ce0(dbg_head_in_buf_1_ce0),
-    .dbg_head_in_buf_1_we0(dbg_head_in_buf_1_we0),
-    .dbg_head_in_buf_1_d0(dbg_head_in_buf_1_d0),
+    .dbg_head_in_buf_address0(dbg_head_in_buf_0_address0),
+    .dbg_head_in_buf_ce0(dbg_head_in_buf_0_ce0),
+    .dbg_head_in_buf_we0(dbg_head_in_buf_0_we0),
+    .dbg_head_in_buf_d0(dbg_head_in_buf_0_d0),
+    .dbg_head_in_buf_address1(dbg_head_in_buf_1_address0),
+    .dbg_head_in_buf_ce1(dbg_head_in_buf_1_ce0),
+    .dbg_head_in_buf_we1(dbg_head_in_buf_1_we0),
+    .dbg_head_in_buf_d1(dbg_head_in_buf_1_d0),
 
-    .dbg_head_out_buf_0_address0(dbg_head_out_buf_0_address0),
-    .dbg_head_out_buf_0_ce0(dbg_head_out_buf_0_ce0),
-    .dbg_head_out_buf_0_we0(dbg_head_out_buf_0_we0),
-    .dbg_head_out_buf_0_d0(dbg_head_out_buf_0_d0),
-    .dbg_head_out_buf_1_address0(dbg_head_out_buf_1_address0),
-    .dbg_head_out_buf_1_ce0(dbg_head_out_buf_1_ce0),
-    .dbg_head_out_buf_1_we0(dbg_head_out_buf_1_we0),
-    .dbg_head_out_buf_1_d0(dbg_head_out_buf_1_d0),
+    .dbg_head_out_buf_address0(dbg_head_out_buf_0_address0),
+    .dbg_head_out_buf_ce0(dbg_head_out_buf_0_ce0),
+    .dbg_head_out_buf_we0(dbg_head_out_buf_0_we0),
+    .dbg_head_out_buf_d0(dbg_head_out_buf_0_d0),
+    .dbg_head_out_buf_address1(dbg_head_out_buf_1_address0),
+    .dbg_head_out_buf_ce1(dbg_head_out_buf_1_ce0),
+    .dbg_head_out_buf_we1(dbg_head_out_buf_1_we0),
+    .dbg_head_out_buf_d1(dbg_head_out_buf_1_d0),
     .dbg_stream_in_buf_address0(dbg_stream_in_buf_address0),
     .dbg_stream_in_buf_ce0(dbg_stream_in_buf_ce0),
     .dbg_stream_in_buf_we0(dbg_stream_in_buf_we0),
@@ -2955,7 +3396,24 @@ module top_module_hls_tb;
     .s_axi_control_BVALID(s_axi_control_BVALID),
     .s_axi_control_BREADY(s_axi_control_BREADY),
     .s_axi_control_BRESP(s_axi_control_BRESP),
-    .interrupt()
+    .interrupt(),
+    .s_axi_control_r_AWVALID(s_axi_control_r_AWVALID),
+    .s_axi_control_r_AWREADY(s_axi_control_r_AWREADY),
+    .s_axi_control_r_AWADDR(s_axi_control_r_AWADDR),
+    .s_axi_control_r_WVALID(s_axi_control_r_WVALID),
+    .s_axi_control_r_WREADY(s_axi_control_r_WREADY),
+    .s_axi_control_r_WDATA(s_axi_control_r_WDATA),
+    .s_axi_control_r_WSTRB(s_axi_control_r_WSTRB),
+    .s_axi_control_r_ARVALID(s_axi_control_r_ARVALID),
+    .s_axi_control_r_ARREADY(s_axi_control_r_ARREADY),
+    .s_axi_control_r_ARADDR(s_axi_control_r_ARADDR),
+    .s_axi_control_r_RVALID(s_axi_control_r_RVALID),
+    .s_axi_control_r_RREADY(s_axi_control_r_RREADY),
+    .s_axi_control_r_RDATA(s_axi_control_r_RDATA),
+    .s_axi_control_r_RRESP(s_axi_control_r_RRESP),
+    .s_axi_control_r_BVALID(s_axi_control_r_BVALID),
+    .s_axi_control_r_BREADY(s_axi_control_r_BREADY),
+    .s_axi_control_r_BRESP(s_axi_control_r_BRESP)
   );
 
 endmodule

@@ -2,6 +2,9 @@
 #include "MMU/mmu_luka.hpp"
 
 #ifndef __SYNTHESIS__
+#endif
+
+#ifndef __SYNTHESIS__
 static inline uint64_t map_csim_ddr_addr(uint64_t byte_addr, const ControlMemSpace &ctrl_mem);
 #endif
 
@@ -332,7 +335,6 @@ void transformer_top(
     if (token_complete_local && (state_local != S_STREAM_IN)) {
         token_complete_local = false;
     }
-
     if (axis_in_valid && axis_in_last && axis_in_ready_wire) {
         const uint16_t token_pos_max = static_cast<uint16_t>(CONTEXT_LENGTH - 1);
         token_pos_current = (token_pos_next <= token_pos_max) ? token_pos_next : token_pos_max;

@@ -147,8 +147,6 @@ void transformer_top(
 #pragma HLS INTERFACE axis port=m_axis_out
 #pragma HLS INTERFACE m_axi port=ddr_mem offset=slave bundle=gmem depth=TOP_DMA_BUF_WORDS
 #pragma HLS INTERFACE m_axi port=kv_cache offset=slave bundle=kv_gmem depth=TOP_DMA_BUF_WORDS
-#pragma HLS INTERFACE s_axilite port=ddr_mem bundle=control
-#pragma HLS INTERFACE s_axilite port=kv_cache bundle=control
 #pragma HLS INTERFACE s_axilite port=ctrl_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=status_mem bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control

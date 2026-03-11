@@ -36,7 +36,7 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [3:0] sel;
+input  [4:0] sel;
 output  [7:0] p_ZN12_GLOBAL_N_118active_piece_bytesE_0;
 output   p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld;
 output  [4:0] p_ZN12_GLOBAL_N_116active_piece_tagE_0;
@@ -63,24 +63,24 @@ reg p_anonymous_namespace_active_piece_count_ap_vld;
 
 (* fsm_encoding = "none" *) reg   [2:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
-wire   [3:0] sel_read_read_fu_100_p2;
+wire   [4:0] sel_read_read_fu_74_p2;
 wire    ap_CS_fsm_state2;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_done;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_idle;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_ready;
-wire   [7:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_0;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld;
-wire   [4:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_0;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld;
-wire   [4:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_1;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld;
-wire   [4:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_1;
-wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld;
-reg   [1:0] ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_110_p28;
-reg   [1:0] p_anonymous_namespace_active_piece_count_new_0_reg_106;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_done;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_idle;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_ready;
+wire   [7:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_0;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld;
+wire   [4:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_0;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld;
+wire   [4:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_1;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld;
+wire   [4:0] grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_1;
+wire    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld;
+reg   [1:0] ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_84_p28;
+reg   [1:0] p_anonymous_namespace_active_piece_count_new_0_reg_80;
 wire    ap_CS_fsm_state3;
-reg    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start_reg;
+reg    grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start_reg;
 reg   [2:0] ap_NS_fsm;
 reg    ap_ST_fsm_state1_blk;
 reg    ap_ST_fsm_state2_blk;
@@ -90,24 +90,24 @@ wire    ap_ce_reg;
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 3'd1;
-#0 grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start_reg = 1'b0;
+#0 grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start_reg = 1'b0;
 end
 
-transformer_top_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1 grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154(
+transformer_top_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1 grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128(
     .ap_clk(ap_clk),
     .ap_rst(ap_rst),
-    .ap_start(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start),
-    .ap_done(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_done),
-    .ap_idle(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_idle),
-    .ap_ready(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_ready),
-    .p_ZN12_GLOBAL_N_118active_piece_bytesE_0(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_0),
-    .p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld),
-    .p_ZN12_GLOBAL_N_116active_piece_tagE_0(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_0),
-    .p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld),
-    .p_ZN12_GLOBAL_N_118active_piece_bytesE_1(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_1),
-    .p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld),
-    .p_ZN12_GLOBAL_N_116active_piece_tagE_1(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_1),
-    .p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld)
+    .ap_start(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start),
+    .ap_done(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_done),
+    .ap_idle(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_idle),
+    .ap_ready(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_ready),
+    .p_ZN12_GLOBAL_N_118active_piece_bytesE_0(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_0),
+    .p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld),
+    .p_ZN12_GLOBAL_N_116active_piece_tagE_0(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_0),
+    .p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld),
+    .p_ZN12_GLOBAL_N_118active_piece_bytesE_1(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_1),
+    .p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld),
+    .p_ZN12_GLOBAL_N_116active_piece_tagE_1(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_1),
+    .p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld(grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld)
 );
 
 always @ (posedge ap_clk) begin
@@ -120,23 +120,23 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start_reg <= 1'b0;
+        grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start_reg <= 1'b0;
     end else begin
         if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
-            grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start_reg <= 1'b1;
-        end else if ((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_ready == 1'b1)) begin
-            grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start_reg <= 1'b0;
+            grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start_reg <= 1'b1;
+        end else if ((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_ready == 1'b1)) begin
+            grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start_reg <= 1'b0;
         end
     end
 end
 
 always @ (posedge ap_clk) begin
-    if ((((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state2) & ((sel_read_read_fu_100_p2 == 4'd5) | ((sel_read_read_fu_100_p2 == 4'd12) | (sel_read_read_fu_100_p2 == 4'd3)))) | ((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_done == 1'b1) & (sel_read_read_fu_100_p2 == 4'd0) & (1'b1 == ap_CS_fsm_state2)))) begin
-        p_anonymous_namespace_active_piece_count_new_0_reg_106 <= 2'd0;
-    end else if ((((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
-        p_anonymous_namespace_active_piece_count_new_0_reg_106 <= 2'd2;
-    end else if ((((sel_read_read_fu_100_p2 == 4'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
-        p_anonymous_namespace_active_piece_count_new_0_reg_106 <= 2'd1;
+    if (((~(sel_read_read_fu_74_p2 == 5'd4) & ~(sel_read_read_fu_74_p2 == 5'd8) & ~(sel_read_read_fu_74_p2 == 5'd9) & ~(sel_read_read_fu_74_p2 == 5'd10) & ~(sel_read_read_fu_74_p2 == 5'd6) & ~(sel_read_read_fu_74_p2 == 5'd7) & ~(sel_read_read_fu_74_p2 == 5'd13) & ~(sel_read_read_fu_74_p2 == 5'd14) & ~(sel_read_read_fu_74_p2 == 5'd15) & ~(sel_read_read_fu_74_p2 == 5'd11) & ~(sel_read_read_fu_74_p2 == 5'd12) & ~(sel_read_read_fu_74_p2 == 5'd5) & ~(sel_read_read_fu_74_p2 == 5'd3) & ~(sel_read_read_fu_74_p2 == 5'd1) & ~(sel_read_read_fu_74_p2 == 5'd2) & (grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state2)) | ((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state2) & ((sel_read_read_fu_74_p2 == 5'd3) | ((sel_read_read_fu_74_p2 == 5'd12) | (sel_read_read_fu_74_p2 == 5'd5)))))) begin
+        p_anonymous_namespace_active_piece_count_new_0_reg_80 <= 2'd0;
+    end else if ((((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
+        p_anonymous_namespace_active_piece_count_new_0_reg_80 <= 2'd2;
+    end else if ((((sel_read_read_fu_74_p2 == 5'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
+        p_anonymous_namespace_active_piece_count_new_0_reg_80 <= 2'd1;
     end
 end
 
@@ -149,7 +149,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_done == 1'b0)) begin
+    if ((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_done == 1'b0)) begin
         ap_ST_fsm_state2_blk = 1'b1;
     end else begin
         ap_ST_fsm_state2_blk = 1'b0;
@@ -175,12 +175,12 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
-        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_110_p28 = 2'd2;
-    end else if ((((sel_read_read_fu_100_p2 == 4'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
-        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_110_p28 = 2'd1;
+    if ((((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
+        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_84_p28 = 2'd2;
+    end else if ((((sel_read_read_fu_74_p2 == 5'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
+        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_84_p28 = 2'd1;
     end else begin
-        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_110_p28 = p_anonymous_namespace_active_piece_count_new_0_reg_106;
+        ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_84_p28 = p_anonymous_namespace_active_piece_count_new_0_reg_80;
     end
 end
 
@@ -193,124 +193,124 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((sel_read_read_fu_100_p2 == 4'd1) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((sel_read_read_fu_74_p2 == 5'd1) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd1;
-    end else if (((sel_read_read_fu_100_p2 == 4'd2) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd2) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd3;
-    end else if (((sel_read_read_fu_100_p2 == 4'd4) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd4) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd5;
-    end else if (((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd7;
-    end else if (((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd9;
-    end else if (((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd11;
-    end else if (((sel_read_read_fu_100_p2 == 4'd6) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd6) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd14;
-    end else if (((sel_read_read_fu_100_p2 == 4'd7) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd7) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd15;
-    end else if (((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd16;
-    end else if (((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd18;
-    end else if (((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd20;
-    end else if (((sel_read_read_fu_100_p2 == 4'd11) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd11) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 5'd13;
-    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
-        p_ZN12_GLOBAL_N_116active_piece_tagE_0 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_0;
+    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
+        p_ZN12_GLOBAL_N_116active_piece_tagE_0 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_0;
     end else begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((sel_read_read_fu_100_p2 == 4'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
+    if ((((sel_read_read_fu_74_p2 == 5'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld = 1'b1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld;
+        p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld;
     end else begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_0_ap_vld = 1'b0;
     end
 end
 
 always @ (*) begin
-    if (((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1 = 5'd8;
-    end else if (((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1 = 5'd10;
-    end else if (((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1 = 5'd12;
-    end else if (((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1 = 5'd17;
-    end else if (((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1 = 5'd19;
-    end else if (((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1 = 5'd21;
-    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
-        p_ZN12_GLOBAL_N_116active_piece_tagE_1 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_1;
+    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
+        p_ZN12_GLOBAL_N_116active_piece_tagE_1 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_1;
     end else begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
+    if ((((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld = 1'b1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld;
+        p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld;
     end else begin
         p_ZN12_GLOBAL_N_116active_piece_tagE_1_ap_vld = 1'b0;
     end
 end
 
 always @ (*) begin
-    if ((((sel_read_read_fu_100_p2 == 4'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
+    if ((((sel_read_read_fu_74_p2 == 5'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = 8'd32;
-    end else if ((((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3)))) begin
+    end else if ((((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = 8'd48;
-    end else if ((((sel_read_read_fu_100_p2 == 4'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
+    end else if ((((sel_read_read_fu_74_p2 == 5'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = 8'd64;
-    end else if (((sel_read_read_fu_100_p2 == 4'd11) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd11) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = 8'd128;
-    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
-        p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_0;
+    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
+        p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_0;
     end else begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((sel_read_read_fu_100_p2 == 4'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
+    if ((((sel_read_read_fu_74_p2 == 5'd4) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd6) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd7) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd11) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd1) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd2) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld = 1'b1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld;
+        p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld;
     end else begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_0_ap_vld = 1'b0;
     end
 end
 
 always @ (*) begin
-    if (((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = 5'd16;
-    end else if (((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = 5'd24;
-    end else if (((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3))) begin
+    end else if (((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = 5'd16;
-    end else if ((((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
+    end else if ((((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = 5'd4;
-    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
-        p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_1;
+    end else if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
+        p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_1;
     end else begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1 = 'bx;
     end
 end
 
 always @ (*) begin
-    if ((((sel_read_read_fu_100_p2 == 4'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_100_p2 == 4'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
+    if ((((sel_read_read_fu_74_p2 == 5'd8) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd9) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd10) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd13) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd14) & (1'b1 == ap_CS_fsm_state3)) | ((sel_read_read_fu_74_p2 == 5'd15) & (1'b1 == ap_CS_fsm_state3)))) begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld = 1'b1;
     end else if ((1'b1 == ap_CS_fsm_state2)) begin
-        p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld;
+        p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld;
     end else begin
         p_ZN12_GLOBAL_N_118active_piece_bytesE_1_ap_vld = 1'b0;
     end
@@ -334,7 +334,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
+            if (((grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state2;
@@ -355,10 +355,10 @@ assign ap_CS_fsm_state2 = ap_CS_fsm[32'd1];
 
 assign ap_CS_fsm_state3 = ap_CS_fsm[32'd2];
 
-assign grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1598_1_fu_154_ap_start_reg;
+assign grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start = grp_p_anonymous_namespace_build_dma_piece_plan_Pipeline_VITIS_LOOP_1606_1_fu_128_ap_start_reg;
 
-assign p_anonymous_namespace_active_piece_count = ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_110_p28;
+assign p_anonymous_namespace_active_piece_count = ap_phi_mux_p_anonymous_namespace_active_piece_count_new_0_phi_fu_84_p28;
 
-assign sel_read_read_fu_100_p2 = sel;
+assign sel_read_read_fu_74_p2 = sel;
 
 endmodule //transformer_top_p_anonymous_namespace_build_dma_piece_plan

@@ -1,5 +1,4 @@
 #include "mmu_luka.hpp"
-
 namespace {
 
 struct DmaQueueEntry {
@@ -1896,14 +1895,11 @@ static uint64_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int lay
     const uint64_t base = (sel == DMASEL_K_WRITE)
         ? static_cast<uint64_t>(ctrl_mem.k_cache_offset)
         : static_cast<uint64_t>(ctrl_mem.v_cache_offset);
-    const uint64_t layer_stride = (ctrl_mem.layer_stride != 0)
-        ? static_cast<uint64_t>(ctrl_mem.layer_stride)
-        : static_cast<uint64_t>(NUM_HEADS * CONTEXT_LENGTH * D_HEADS);
-    const uint64_t head_stride = (sel == DMASEL_K_WRITE)
-        ? ((ctrl_mem.k_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.k_cache_stride)
-                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS))
-        : ((ctrl_mem.v_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.v_cache_stride)
-                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS));
+    const uint64_t layer_stride = static_cast<uint64_t>(NUM_HEADS) *
+                                  static_cast<uint64_t>(CONTEXT_LENGTH) *
+                                  static_cast<uint64_t>(D_HEADS);
+    const uint64_t head_stride = static_cast<uint64_t>(CONTEXT_LENGTH) *
+                                 static_cast<uint64_t>(D_HEADS);
     const uint64_t token_off = static_cast<uint64_t>(token_pos) * static_cast<uint64_t>(D_HEADS);
     return base + static_cast<uint64_t>(layer) * layer_stride
                 + static_cast<uint64_t>(head) * head_stride
