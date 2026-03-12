@@ -796,7 +796,6 @@ wire   [0:0] and_ln252_fu_5592_p2;
 reg   [1311:0] ctrl_mem_read_reg_7223;
 reg   [63:0] kv_cache_read_reg_7230;
 reg   [63:0] ddr_mem_read_reg_7235;
-wire   [31:0] control_reg_local_wire;
 wire   [1:0] trunc_ln53_fu_4718_p1;
 reg   [1:0] trunc_ln53_reg_7246;
 wire   [0:0] reset_n_fu_4722_p1;
@@ -11048,8 +11047,6 @@ assign out_beat_data_fu_6018_p9 = 'bx;
 
 assign out_beat_last_fu_6043_p2 = ((ap_phi_mux_stream_tx_index_local_loc_1_phi_fu_2202_p4 == 16'd3) ? 1'b1 : 1'b0);
 
-assign control_reg_local_wire = ctrl_mem[31:0];
-
 assign reset_fu_5220_p2 = (reset_n_fu_4722_p1 ^ 1'd1);
 
 assign reset_n_fu_4722_p1 = ctrl_mem[0:0];
@@ -11184,4 +11181,11 @@ always @ (posedge ap_clk) begin
     zext_ln240_reg_7657[14] <= 1'b0;
 end
 
+
+reg find_kernel_block = 0;
+// synthesis translate_off
+`include "transformer_top_hls_deadlock_kernel_monitor_top.vh"
+// synthesis translate_on
+
 endmodule //transformer_top
+

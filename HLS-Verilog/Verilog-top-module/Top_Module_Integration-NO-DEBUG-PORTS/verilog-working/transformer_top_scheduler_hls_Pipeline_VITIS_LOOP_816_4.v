@@ -488,10 +488,10 @@ reg   [31:0] grp_init_head_ctx_fu_232_ctx_head_idx_write;
 wire   [0:0] icmp_ln819_fu_315_p2;
 wire   [0:0] icmp_ln822_fu_321_p2;
 wire   [31:0] trunc_ln820_fu_839_p1;
-wire   [7:0] empty_225_fu_583_p1;
+wire   [7:0] empty_224_fu_583_p1;
 wire   [7:0] empty_fu_1100_p1;
-wire   [7:0] empty_226_fu_327_p1;
-wire   [7:0] empty_224_fu_844_p1;
+wire   [7:0] empty_225_fu_327_p1;
+wire   [7:0] empty_223_fu_844_p1;
 reg   [1:0] lane_fu_216;
 wire   [1:0] add_ln816_fu_289_p2;
 wire    ap_loop_init;
@@ -983,9 +983,9 @@ end
 always @ (*) begin
     if ((1'b1 == ap_condition_394)) begin
         if ((icmp_ln819_fu_315_p2 == 1'd1)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51 = empty_224_fu_844_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51 = empty_223_fu_844_p1;
         end else if ((icmp_ln819_fu_315_p2 == 1'd0)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51 = empty_226_fu_327_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51 = empty_225_fu_327_p1;
         end else begin
             transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_51 = 'bx;
         end
@@ -1007,7 +1007,7 @@ always @ (*) begin
         if ((icmp_ln819_fu_315_p2 == 1'd1)) begin
             transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52 = empty_fu_1100_p1;
         end else if ((icmp_ln819_fu_315_p2 == 1'd0)) begin
-            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52 = empty_225_fu_583_p1;
+            transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52 = empty_224_fu_583_p1;
         end else begin
             transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_52 = 'bx;
         end
@@ -1395,11 +1395,11 @@ assign ap_loop_exit_ready = ap_condition_exit_pp0_iter0_stage0;
 
 assign ap_ready = ap_ready_sig;
 
-assign empty_224_fu_844_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
+assign empty_223_fu_844_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
 
-assign empty_225_fu_583_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
+assign empty_224_fu_583_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
 
-assign empty_226_fu_327_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
+assign empty_225_fu_327_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
 
 assign empty_fu_1100_p1 = grp_init_head_ctx_fu_41254_p_dout0_3[7:0];
 

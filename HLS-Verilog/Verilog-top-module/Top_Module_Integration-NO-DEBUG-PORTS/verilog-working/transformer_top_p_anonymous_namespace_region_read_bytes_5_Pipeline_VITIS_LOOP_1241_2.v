@@ -162,12 +162,12 @@ wire   [19:0] tmp_s_fu_433_p11;
 wire   [19:0] trunc_ln1240_4_fu_429_p1;
 wire   [19:0] bank_byte_addr_fu_452_p2;
 wire   [1:0] or_ln1244_fu_462_p2;
-wire   [29:0] tmp_545_fu_474_p4;
+wire   [29:0] tmp_557_fu_474_p4;
 wire   [0:0] icmp_ln1244_fu_468_p2;
 wire   [0:0] icmp_ln1246_fu_484_p2;
 wire   [4:0] bank_assign_fu_506_p9;
 wire   [4:0] bank_assign_fu_506_p11;
-wire   [17:0] tmp_244_fu_525_p3;
+wire   [17:0] tmp_241_fu_525_p3;
 wire   [17:0] word_idx_fu_496_p4;
 wire   [17:0] add_ln1249_fu_533_p2;
 wire   [10:0] lshr_ln_fu_637_p4;
@@ -665,7 +665,7 @@ assign add_ln1149_2_fu_777_p2 = (trunc_ln1240_3_fu_634_p1 + 13'd3);
 
 assign add_ln1149_fu_701_p2 = (trunc_ln1240_3_fu_634_p1 + 13'd1);
 
-assign add_ln1249_fu_533_p2 = (tmp_244_fu_525_p3 + word_idx_fu_496_p4);
+assign add_ln1249_fu_533_p2 = (tmp_241_fu_525_p3 + word_idx_fu_496_p4);
 
 assign and_ln1244_fu_490_p2 = (icmp_ln1246_fu_484_p2 & icmp_ln1244_fu_468_p2);
 
@@ -715,7 +715,7 @@ assign icmp_ln1241_fu_418_p2 = ((take_14_fu_136 == 32'd0) ? 1'b1 : 1'b0);
 
 assign icmp_ln1244_fu_468_p2 = ((or_ln1244_fu_462_p2 == 2'd0) ? 1'b1 : 1'b0);
 
-assign icmp_ln1246_fu_484_p2 = ((tmp_545_fu_474_p4 != 30'd0) ? 1'b1 : 1'b0);
+assign icmp_ln1246_fu_484_p2 = ((tmp_557_fu_474_p4 != 30'd0) ? 1'b1 : 1'b0);
 
 assign logical_24_fu_601_p2 = (logical_1_fu_140 + 32'd4);
 
@@ -777,9 +777,9 @@ assign take_19_fu_607_p2 = ($signed(take_14_fu_136) + $signed(32'd4294967292));
 
 assign take_20_fu_562_p2 = ($signed(take_14_fu_136) + $signed(32'd4294967295));
 
-assign tmp_244_fu_525_p3 = {{bank_assign_fu_506_p11}, {13'd0}};
+assign tmp_241_fu_525_p3 = {{bank_assign_fu_506_p11}, {13'd0}};
 
-assign tmp_545_fu_474_p4 = {{take_14_fu_136[31:2]}};
+assign tmp_557_fu_474_p4 = {{take_14_fu_136[31:2]}};
 
 assign tmp_s_fu_433_p9 = 'bx;
 

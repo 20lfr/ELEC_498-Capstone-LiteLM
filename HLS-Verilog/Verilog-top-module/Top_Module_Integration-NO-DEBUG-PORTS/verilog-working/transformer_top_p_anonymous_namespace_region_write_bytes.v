@@ -215,7 +215,7 @@ reg   [2:0] c_fu_164;
 wire   [31:0] add_ln1181_fu_527_p2;
 wire   [7:0] zext_ln1186_fu_565_p1;
 wire   [0:0] icmp_ln1188_fu_583_p2;
-wire   [0:0] tmp_541_fu_569_p3;
+wire   [0:0] tmp_553_fu_569_p3;
 wire   [0:0] xor_ln1188_fu_588_p2;
 wire   [0:0] or_ln1186_fu_594_p2;
 wire   [31:0] tmp_fu_619_p9;
@@ -581,7 +581,7 @@ assign logical_15_fu_645_p2 = (logical_fu_160 - tmp_fu_619_p11);
 
 assign or_ln1186_3_fu_600_p2 = (or_ln1186_fu_594_p2 | icmp_ln1186_fu_577_p2);
 
-assign or_ln1186_fu_594_p2 = (xor_ln1188_fu_588_p2 | tmp_541_fu_569_p3);
+assign or_ln1186_fu_594_p2 = (xor_ln1188_fu_588_p2 | tmp_553_fu_569_p3);
 
 assign p_anonymous_namespace_uram_banks_address0 = grp_p_anonymous_namespace_region_write_bytes_Pipeline_VITIS_LOOP_1196_2_fu_475_p_anonymous_namespace_uram_banks_address0;
 
@@ -595,7 +595,7 @@ assign room_fu_659_p2 = (tmp_fu_619_p11 - logical_fu_160);
 
 assign take_fu_671_p3 = ((icmp_ln1195_fu_665_p2[0:0] == 1'b1) ? remaining_fu_168 : room_fu_659_p2);
 
-assign tmp_541_fu_569_p3 = c_fu_164[32'd2];
+assign tmp_553_fu_569_p3 = c_fu_164[32'd2];
 
 assign tmp_fu_619_p10 = c_fu_164[1:0];
 

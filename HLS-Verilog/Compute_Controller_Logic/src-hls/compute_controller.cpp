@@ -8,14 +8,10 @@
 static inline int8_t requant_scalar_to_i8(const int32_t x32, const int32_t M, const int32_t n);
 static inline int16_t sigmoid_q15(int16_t x_q15);
 
-// MAC Architecture
-void MAC_ARCHITECTURE(
-    bool start,
-    bool &ready,
-    const int16_t vectorA[VECTOR_MAX],
+static void MAC_COMPUTE_CORE(
+    const int32_t vectorA[VECTOR_MAX],
     const int4_t matrixB[MATRIX_MAX],
     const int32_t bias[ACCUM_MAX],
-    bool &complete,
     int32_t accum_vector[ACCUM_MAX]
 ) {
 #pragma HLS INLINE
@@ -24,12 +20,34 @@ void MAC_ARCHITECTURE(
 #pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_OUT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
 
+    for (int out = 0; out < ACCUM_MAX; ++out) {
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
+        int32_t acc = bias[out];
+        for (int i = 0; i < VECTOR_MAX; ++i) {
+#pragma HLS UNROLL factor=MAC_VEC_UNROLL
+            const int4_t w = matrixB[out * VECTOR_MAX + i];
+            acc += vectorA[i] * static_cast<int32_t>(w);
+        }
+        accum_vector[out] = acc;
+    }
+}
+
+// MAC Architecture
+void MAC_ARCHITECTURE(
+    bool start,
+    bool &ready,
+    const int32_t vectorA[VECTOR_MAX],
+    const int4_t matrixB[MATRIX_MAX],
+    const int32_t bias[ACCUM_MAX],
+    bool &complete,
+    int32_t accum_vector[ACCUM_MAX]
+) {
+#pragma HLS INLINE
     static bool busy = false;
     static bool compute_done = false;
 #pragma HLS reset variable = busy
 #pragma HLS reset variable = compute_done
 
-    // Drop ready immediately when a start pulse is present
     ready = (!busy) && (!start);
     complete = compute_done;
 
@@ -38,23 +56,9 @@ void MAC_ARCHITECTURE(
     if (do_compute) {
         busy = true;
         compute_done = false;
-        
-        // Perform the actual computation
-        for (int out = 0; out < ACCUM_MAX; ++out) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
-            int32_t acc = bias[out];
-            for (int i = 0; i < VECTOR_MAX; ++i) {
-#pragma HLS UNROLL factor=MAC_VEC_UNROLL
-                const int4_t w = matrixB[out * VECTOR_MAX + i];
-                acc += static_cast<int32_t>(vectorA[i]) * static_cast<int32_t>(w);
-            }
-            accum_vector[out] = acc;
-        }
-        
-        // Signal completion for next cycle
+        MAC_COMPUTE_CORE(vectorA, matrixB, bias, accum_vector);
         compute_done = true;
     } else if (compute_done) {
-        // Clear flags after complete pulse
         compute_done = false;
         busy = false;
     }
@@ -75,10 +79,14 @@ static void MAC_OP_TO_BUF(
 #pragma HLS reset variable = busy
 #pragma HLS reset variable = compute_done
 
-    int32_t vec_tile[MAC_VEC_UNROLL];
-    int32_t accum_tile[MAC_OUT_UNROLL];
-#pragma HLS ARRAY_PARTITION variable=vec_tile complete dim=1
-#pragma HLS ARRAY_PARTITION variable=accum_tile complete dim=1
+    int32_t vectorA[VECTOR_MAX];
+    int4_t matrixB[MATRIX_MAX];
+    int32_t bias[ACCUM_MAX];
+    int32_t accum_vector[ACCUM_MAX];
+#pragma HLS ARRAY_PARTITION variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_OUT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
 
     ready = (!busy) && (!start);
     complete = compute_done;
@@ -135,95 +143,87 @@ static void MAC_OP_TO_BUF(
 
         if (!compute_done) {
             int layer = static_cast<int>(layer_idx);
-            if (layer < 0 || layer >= MODEL_LAYERS) {
+            if (layer >= MODEL_LAYERS) {
                 layer = 0;
             }
-            for (int out_base = 0; out_base < out_count; out_base += MAC_OUT_UNROLL) {
-#pragma HLS LOOP_FLATTEN off
-                const int tile_out_count =
-                    ((out_base + MAC_OUT_UNROLL) < out_count) ? MAC_OUT_UNROLL : (out_count - out_base);
 
-                for (int o = 0; o < MAC_OUT_UNROLL; ++o) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
-                    if (o < tile_out_count) {
-                        accum_tile[o] = use_bias
-                                            ? compute_buf::read_i32(in_buf, bias_byte_base + ((out_base + o) * 4))
-                                            : 0;
+            for (int i = 0; i < VECTOR_MAX; ++i) {
+#pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                if (i < vec_count) {
+                    if (act_is_i32) {
+                        const int act_addr = act_byte_base + (i * 4);
+                        vectorA[i] = compute_buf::read_i32(in_buf, act_addr);
+                    } else if (act_is_i16) {
+                        const int act_addr = act_byte_base + (i * 2);
+                        vectorA[i] = static_cast<int32_t>(compute_buf::read_i16(in_buf, act_addr));
                     } else {
-                        accum_tile[o] = 0;
+                        const int act_addr = act_byte_base + i;
+                        vectorA[i] = static_cast<int32_t>(compute_buf::read_i8(in_buf, act_addr));
+                    }
+                } else {
+                    vectorA[i] = 0;
+                }
+            }
+
+            for (int out = 0; out < ACCUM_MAX; ++out) {
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
+                if (use_bias && out < out_count) {
+                    const int bias_addr = bias_byte_base + (out * 4);
+                    bias[out] = compute_buf::read_i32(in_buf, bias_addr);
+                } else {
+                    bias[out] = 0;
+                }
+            }
+
+            for (int out = 0; out < ACCUM_MAX; ++out) {
+#pragma HLS UNROLL factor=MAC_OUT_UNROLL
+                for (int i = 0; i < VECTOR_MAX; ++i) {
+#pragma HLS UNROLL factor=MAC_VEC_UNROLL
+                    if (out < out_count && i < vec_count) {
+                        const int w_idx = (out * vec_count) + i;
+                        const int weight_addr = weight_nibble_base + w_idx;
+                        matrixB[out * VECTOR_MAX + i] = compute_buf::read_i4(in_buf, weight_addr);
+                    } else {
+                        matrixB[out * VECTOR_MAX + i] = 0;
                     }
                 }
+            }
 
-                for (int k_base = 0; k_base < vec_count; k_base += MAC_VEC_UNROLL) {
-#pragma HLS LOOP_FLATTEN off
-                    const int tile_k_count =
-                        ((k_base + MAC_VEC_UNROLL) < vec_count) ? MAC_VEC_UNROLL : (vec_count - k_base);
-                    for (int k = 0; k < MAC_VEC_UNROLL; ++k) {
-#pragma HLS UNROLL factor=MAC_VEC_UNROLL
-                        if (k < tile_k_count) {
-                            vec_tile[k] = act_is_i32
-                                              ? compute_buf::read_i32(in_buf, act_byte_base + ((k_base + k) * 4))
-                                              : (act_is_i16
-                                                     ? static_cast<int32_t>(compute_buf::read_i16(
-                                                           in_buf, act_byte_base + ((k_base + k) * 2)))
-                                                     : static_cast<int32_t>(
-                                                           compute_buf::read_i8(in_buf, act_byte_base + (k_base + k))));
-                        } else {
-                            vec_tile[k] = 0;
-                        }
-                    }
+            MAC_COMPUTE_CORE(vectorA, matrixB, bias, accum_vector);
 
-                    for (int o = 0; o < MAC_OUT_UNROLL; ++o) {
+            for (int out = 0; out < out_count; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
-                        if (o >= tile_out_count) continue;
-                        int32_t acc = accum_tile[o];
-                        for (int k = 0; k < MAC_VEC_UNROLL; ++k) {
-#pragma HLS UNROLL factor=MAC_VEC_UNROLL
-                            if (k >= tile_k_count) continue;
-                            const int w_idx = ((out_base + o) * vec_count) + (k_base + k);
-                            const int4_t w = compute_buf::read_i4(in_buf, weight_nibble_base + w_idx);
-                            acc += static_cast<int32_t>(vec_tile[k]) * static_cast<int32_t>(w);
-                        }
-                        accum_tile[o] = acc;
+                switch (op) {
+                    case ComputeOp::CMP_OUT_PROJ: {
+                        const int32_t M = requant_params::REQUANT2_M_L[layer];
+                        const int32_t n = requant_params::REQUANT2_N_L[layer];
+                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
+                        break;
                     }
-                }
-
-                for (int o = 0; o < MAC_OUT_UNROLL; ++o) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
-                    if (o >= tile_out_count) continue;
-                    const int dst_idx = out_base + o;
-                    switch (op) {
-                        case ComputeOp::CMP_OUT_PROJ: {
-                            const int32_t M = requant_params::REQUANT2_M_L[layer];
-                            const int32_t n = requant_params::REQUANT2_N_L[layer];
-                            compute_buf::write_i8(out_buf, dst_idx, requant_scalar_to_i8(accum_tile[o], M, n));
-                            break;
-                        }
-                        case ComputeOp::CMP_FFN_W1: {
-                            const int64_t prod =
-                                static_cast<int64_t>(accum_tile[o]) *
-                                static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
-                            const int64_t rounded =
-                                prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
-                            int32_t scaled = static_cast<int32_t>(rounded >> 15);
-                            if (scaled > 32767) scaled = 32767;
-                            else if (scaled < -32768) scaled = -32768;
-                            compute_buf::write_i16(out_buf, dst_idx * 2, static_cast<int16_t>(scaled));
-                            break;
-                        }
-                        case ComputeOp::CMP_FFN_W2: {
-                            const int32_t M = requant_params::REQUANT4_M_L[layer];
-                            const int32_t n = requant_params::REQUANT4_N_L[layer];
-                            compute_buf::write_i8(out_buf, dst_idx, requant_scalar_to_i8(accum_tile[o], M, n));
-                            break;
-                        }
-                        case ComputeOp::CMP_LOGITS: {
-                            compute_buf::write_i32(out_buf, dst_idx * 4, accum_tile[o]);
-                            break;
-                        }
-                        default:
-                            break;
+                    case ComputeOp::CMP_FFN_W1: {
+                        const int64_t prod =
+                            static_cast<int64_t>(accum_vector[out]) *
+                            static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
+                        const int64_t rounded =
+                            prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
+                        int32_t scaled = static_cast<int32_t>(rounded >> 15);
+                        if (scaled > 32767) scaled = 32767;
+                        else if (scaled < -32768) scaled = -32768;
+                        compute_buf::write_i16(out_buf, out * 2, static_cast<int16_t>(scaled));
+                        break;
                     }
+                    case ComputeOp::CMP_FFN_W2: {
+                        const int32_t M = requant_params::REQUANT4_M_L[layer];
+                        const int32_t n = requant_params::REQUANT4_N_L[layer];
+                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
+                        break;
+                    }
+                    case ComputeOp::CMP_LOGITS: {
+                        compute_buf::write_i32(out_buf, out * 4, accum_vector[out]);
+                        break;
+                    }
+                    default:
+                        break;
                 }
             }
 
