@@ -83,8 +83,7 @@ echo "Updating module dependencies (Please wait, this might take a minute)..."
 sudo depmod -a
 
 echo "[4/4] Configuring journald volatile storage (prevents CMA fragmentation)..."
-sudo mkdir -p /etc/systemd/journald.conf.d/
-echo -e "[Journal]\nStorage=volatile" | sudo tee /etc/systemd/journald.conf.d/volatile.conf > /dev/null
+echo -e "[Journal]\nStorage=volatile" | sudo tee /etc/systemd/journald.conf > /dev/null
 sudo systemctl restart systemd-journald
 
 echo "[boot] Building boot files..."
