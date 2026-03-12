@@ -243,7 +243,8 @@ public:
 
     /** Execute one forward pass through the PL for a single token.
      *  Returns the argmax token ID computed by the FPGA. */
-    bool executeToken(uint32_t token_id, uint32_t &out_token) {
+    bool executeToken(uint32_t token_id, uint32_t token_position,
+                      uint32_t &out_token) {
         perf->startGeneration();
 
         int8_t send_buf[STREAM_IN_BUF_BYTES];
@@ -253,7 +254,8 @@ public:
         {
             std::string buf_str = "send_buf {";
             for (int i = 0; i < (int)STREAM_IN_BUF_BYTES; i++) {
-                buf_str += std::to_string(send_buf[i]) + (i < (int)STREAM_IN_BUF_BYTES - 1 ? ", " : "");
+                buf_str += std::to_string(send_buf[i]) +
+                           (i < (int)STREAM_IN_BUF_BYTES - 1 ? ", " : "");
             }
             buf_str += "}";
             LOG_DEBUG(buf_str);
@@ -273,6 +275,7 @@ public:
         uint32_t ctrl_bits = CTRL_RESETN_BIT | CTRL_START_BIT;
         if (debug_mode)
             ctrl_bits |= CTRL_DEBUG_MODE_BIT;
+        pl->writeReg(PLReg::TOKEN_POSITION, token_position);
         pl->writeReg(PLReg::CONTROL, ctrl_bits);
 
         usleep(10);
@@ -546,7 +549,7 @@ private:
 
         print("Registers BEFORE:\n" + pl->getRegStats() + "\n");
 
-        bool ok = exec->executeToken(input_token, out_token);
+        bool ok = exec->executeToken(input_token, 0, out_token);
 
         print("Registers AFTER:\n" + pl->getRegStats() + "\n");
 
@@ -597,7 +600,8 @@ private:
         // ── Prefill: feed prompt tokens to populate KV cache ──
         for (size_t i = 0; i + 1 < tokens.size() && !state.cancel; i++) {
             uint32_t discard = 0;
-            if (!exec->executeToken(tokens[i], discard)) {
+            if (!exec->executeToken(tokens[i], static_cast<uint32_t>(i),
+                                    discard)) {
                 LOG_ERROR("Prefill failed at token " + std::to_string(i));
                 break;
             }
@@ -618,7 +622,9 @@ private:
 
         for (uint32_t i = 0; i < state.maxTokens && !state.cancel; i++) {
             uint32_t out_token = 0;
-            if (!exec->executeToken(next_input, out_token))
+            const uint32_t token_position =
+                static_cast<uint32_t>(tokens.size() - 1) + i;
+            if (!exec->executeToken(next_input, token_position, out_token))
                 break;
 
             LOG_DEBUG("Decode [" + std::to_string(i) + "/" +

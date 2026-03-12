@@ -97,6 +97,7 @@ namespace PLReg {
     constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x94;
     constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x98;
     constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0x9C;
+    constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0xA0;
 
     // StatusMemSpace (PL->PS reads)
     constexpr uint32_t STATUS_BASE =
