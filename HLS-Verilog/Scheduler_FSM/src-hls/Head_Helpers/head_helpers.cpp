@@ -1,7 +1,6 @@
 // Simplified, single-head helper flow that only exercises compute.
 // Each head has its own "resource" (no shared arbitration).
 #include "head_helpers.hpp"
-#include "../../../Weight_Loader-Stager/Weight_stager.hpp"
 
 static inline uint32_t pack_compute_op(ComputeOp op, int layer, int head, int tile) {
     #pragma HLS INLINE

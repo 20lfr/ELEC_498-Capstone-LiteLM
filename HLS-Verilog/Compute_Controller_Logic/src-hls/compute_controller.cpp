@@ -8,6 +8,224 @@
 static inline int8_t requant_scalar_to_i8(const int32_t x32, const int32_t M, const int32_t n);
 static inline int16_t sigmoid_q15(int16_t x_q15);
 
+#ifndef __SYNTHESIS__
+static const char *compute_op_name(ComputeOp op) {
+    switch (op) {
+        case ComputeOp::CMP_OUT_PROJ: return "CMP_OUT_PROJ";
+        case ComputeOp::CMP_RESID1: return "CMP_RESID1";
+        case ComputeOp::CMP_RESID2: return "CMP_RESID2";
+        case ComputeOp::CMP_LN0: return "CMP_LN0";
+        case ComputeOp::CMP_LN1: return "CMP_LN1";
+        case ComputeOp::CMP_FINAL_NORM: return "CMP_FINAL_NORM";
+        case ComputeOp::CMP_FFN_W1: return "CMP_FFN_W1";
+        case ComputeOp::CMP_FFN_ACT: return "CMP_FFN_ACT";
+        case ComputeOp::CMP_FFN_W2: return "CMP_FFN_W2";
+        case ComputeOp::CMP_LOGITS: return "CMP_LOGITS";
+        case ComputeOp::CMP_ARGMAX: return "CMP_ARGMAX";
+        default: return "CMP_UNKNOWN";
+    }
+}
+
+static void print_i8_vector(const char *label, const int8_t *data, int count) {
+    std::printf("%s[%d]:", label, count);
+    for (int i = 0; i < count; ++i) {
+        std::printf(" %d", static_cast<int>(data[i]));
+    }
+    std::printf("\n");
+}
+
+static void print_i16_vector(const char *label, const int16_t *data, int count) {
+    std::printf("%s[%d]:", label, count);
+    for (int i = 0; i < count; ++i) {
+        std::printf(" %d", static_cast<int>(data[i]));
+    }
+    std::printf("\n");
+}
+
+static void print_i32_vector(const char *label, const int32_t *data, int count) {
+    std::printf("%s[%d]:", label, count);
+    for (int i = 0; i < count; ++i) {
+        std::printf(" %d", data[i]);
+    }
+    std::printf("\n");
+}
+
+static void print_i4_matrix(const char *label,
+                            const int4_t *data,
+                            int rows,
+                            int cols,
+                            int stride) {
+    std::printf("%s[%d][%d]:\n", label, rows, cols);
+    for (int r = 0; r < rows; ++r) {
+        std::printf("  %02d:", r);
+        for (int c = 0; c < cols; ++c) {
+            std::printf(" %d", static_cast<int>(data[r * stride + c]));
+        }
+        std::printf("\n");
+    }
+}
+
+static void trace_mac_op_inputs(ComputeOp op,
+                                uint8_t layer_idx,
+                                uint8_t tile_idx,
+                                const int32_t *vectorA,
+                                int vec_count,
+                                const int4_t *matrixB,
+                                const int32_t *bias,
+                                int out_count,
+                                bool use_bias) {
+    std::printf("[COMPUTE IN] op=%s layer=%u tile=%u\n",
+                compute_op_name(op),
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(tile_idx));
+    print_i32_vector("  act", vectorA, vec_count);
+    print_i4_matrix("  weight", matrixB, out_count, vec_count, VECTOR_MAX);
+    if (use_bias) {
+        print_i32_vector("  bias", bias, out_count);
+    }
+}
+
+static void trace_mac_op_outputs(ComputeOp op,
+                                 uint8_t layer_idx,
+                                 uint8_t tile_idx,
+                                 const int32_t *accum_vector,
+                                 int out_count,
+                                 const uint8_t out_buf[],
+                                 int32_t requant_M,
+                                 int32_t requant_n) {
+    std::printf("[COMPUTE OUT] op=%s layer=%u tile=%u M=%d n=%d\n",
+                compute_op_name(op),
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(tile_idx),
+                requant_M,
+                requant_n);
+    print_i32_vector("  accum", accum_vector, out_count);
+    switch (op) {
+        case ComputeOp::CMP_OUT_PROJ:
+        case ComputeOp::CMP_FFN_W2: {
+            int8_t y[ACCUM_MAX];
+            for (int i = 0; i < out_count; ++i) {
+                y[i] = compute_buf::read_i8(out_buf, i);
+            }
+            print_i8_vector("  out", y, out_count);
+            break;
+        }
+        case ComputeOp::CMP_FFN_W1: {
+            int16_t y[ACCUM_MAX];
+            for (int i = 0; i < out_count; ++i) {
+                y[i] = compute_buf::read_i16(out_buf, i * 2);
+            }
+            print_i16_vector("  out", y, out_count);
+            break;
+        }
+        case ComputeOp::CMP_LOGITS: {
+            int32_t y[ACCUM_MAX];
+            for (int i = 0; i < out_count; ++i) {
+                y[i] = compute_buf::read_i32(out_buf, i * 4);
+            }
+            print_i32_vector("  out", y, out_count);
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+static void trace_res_add_buffers(ComputeOp op,
+                                  uint8_t layer_idx,
+                                  const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+                                  const uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
+    int8_t x[D_MODEL];
+    int8_t r[D_MODEL];
+    int8_t y[D_MODEL];
+    for (int i = 0; i < D_MODEL; ++i) {
+        x[i] = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i);
+        r[i] = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::R + i);
+        y[i] = compute_buf::read_i8(out_buf, compute_buf::OUTResidLayout::X + i);
+    }
+    std::printf("[COMPUTE IO] op=%s layer=%u\n",
+                compute_op_name(op),
+                static_cast<unsigned>(layer_idx));
+    print_i8_vector("  x", x, D_MODEL);
+    print_i8_vector("  residual", r, D_MODEL);
+    print_i8_vector("  out", y, D_MODEL);
+}
+
+static void trace_ffn_act_buffers(uint8_t layer_idx,
+                                  uint8_t tile_idx,
+                                  const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+                                  const uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
+    int16_t gate[D_FFN];
+    int16_t up[D_FFN];
+    int16_t y[D_FFN];
+    for (int i = 0; i < D_FFN; ++i) {
+        gate[i] = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2));
+        up[i] = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::UP + (i * 2));
+        y[i] = compute_buf::read_i16(out_buf, compute_buf::OUTFfnActLayout::Y + (i * 2));
+    }
+    std::printf("[COMPUTE IO] op=CMP_FFN_ACT layer=%u tile=%u\n",
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(tile_idx));
+    print_i16_vector("  gate", gate, D_FFN);
+    print_i16_vector("  up", up, D_FFN);
+    print_i16_vector("  out", y, D_FFN);
+}
+
+static void trace_argmax_buffers(uint8_t layer_idx,
+                                 const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+                                 const uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
+    int32_t x[D_VOCAB];
+    for (int i = 0; i < D_VOCAB; ++i) {
+        x[i] = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + (i * 4));
+    }
+    const int32_t best_idx = compute_buf::read_i32(out_buf, compute_buf::OUTArgmaxLayout::Y);
+    std::printf("[COMPUTE IO] op=CMP_ARGMAX layer=%u\n",
+                static_cast<unsigned>(layer_idx));
+    print_i32_vector("  logits", x, D_VOCAB);
+    std::printf("  out_idx: %d\n", best_idx);
+}
+
+static void trace_rms_norm_buffers(ComputeOp op,
+                                   uint8_t layer_idx,
+                                   const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+                                   const uint8_t out_buf[compute_buf::OUT_BUF_BYTES],
+                                   bool final_norm,
+                                   int32_t requant_M,
+                                   int32_t requant_n) {
+    int8_t x[D_MODEL];
+    int32_t gamma[D_MODEL];
+    for (int i = 0; i < D_MODEL; ++i) {
+        x[i] = compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + i);
+        gamma[i] = compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4));
+    }
+    const int32_t eps = compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::EPS);
+
+    std::printf("[COMPUTE IO] op=%s layer=%u final_norm=%u M=%d n=%d\n",
+                compute_op_name(op),
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(final_norm),
+                requant_M,
+                requant_n);
+    print_i8_vector("  x", x, D_MODEL);
+    print_i32_vector("  gamma", gamma, D_MODEL);
+    std::printf("  eps: %d\n", eps);
+
+    if (final_norm) {
+        int32_t y[D_MODEL];
+        for (int i = 0; i < D_MODEL; ++i) {
+            y[i] = compute_buf::read_i32(out_buf, compute_buf::OUTLayerNormLayout::X + (i * 4));
+        }
+        print_i32_vector("  out", y, D_MODEL);
+    } else {
+        int8_t y[D_MODEL];
+        for (int i = 0; i < D_MODEL; ++i) {
+            y[i] = compute_buf::read_i8(out_buf, compute_buf::OUTRequantLayout::X + i);
+        }
+        print_i8_vector("  out", y, D_MODEL);
+    }
+}
+#endif
+
 static void MAC_COMPUTE_CORE(
     const int32_t vectorA[VECTOR_MAX],
     const int4_t matrixB[MATRIX_MAX],
@@ -69,6 +287,7 @@ static void MAC_OP_TO_BUF(
     bool &ready,
     ComputeOp op,
     uint8_t layer_idx,
+    uint8_t tile_idx,
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     bool &complete,
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES]
@@ -141,15 +360,17 @@ static void MAC_OP_TO_BUF(
                 break;
         }
 
-        if (!compute_done) {
-            int layer = static_cast<int>(layer_idx);
-            if (layer >= MODEL_LAYERS) {
-                layer = 0;
-            }
+	        if (!compute_done) {
+	            int layer = static_cast<int>(layer_idx);
+	            if (layer >= MODEL_LAYERS) {
+	                layer = 0;
+	            }
+            int32_t trace_M = 0;
+            int32_t trace_n = 0;
 
-            for (int i = 0; i < VECTOR_MAX; ++i) {
+	            for (int i = 0; i < VECTOR_MAX; ++i) {
 #pragma HLS UNROLL factor=MAC_VEC_UNROLL
-                if (i < vec_count) {
+	                if (i < vec_count) {
                     if (act_is_i32) {
                         const int act_addr = act_byte_base + (i * 4);
                         vectorA[i] = compute_buf::read_i32(in_buf, act_addr);
@@ -185,22 +406,28 @@ static void MAC_OP_TO_BUF(
                         matrixB[out * VECTOR_MAX + i] = compute_buf::read_i4(in_buf, weight_addr);
                     } else {
                         matrixB[out * VECTOR_MAX + i] = 0;
-                    }
-                }
-            }
+	                    }
+	                }
+	            }
 
-            MAC_COMPUTE_CORE(vectorA, matrixB, bias, accum_vector);
+#ifndef __SYNTHESIS__
+            trace_mac_op_inputs(op, layer_idx, tile_idx, vectorA, vec_count,
+                                matrixB, bias, out_count, use_bias);
+#endif
+	            MAC_COMPUTE_CORE(vectorA, matrixB, bias, accum_vector);
 
-            for (int out = 0; out < out_count; ++out) {
+	            for (int out = 0; out < out_count; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
-                switch (op) {
-                    case ComputeOp::CMP_OUT_PROJ: {
-                        const int32_t M = requant_params::REQUANT2_M_L[layer];
-                        const int32_t n = requant_params::REQUANT2_N_L[layer];
-                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
-                        break;
-                    }
-                    case ComputeOp::CMP_FFN_W1: {
+	                switch (op) {
+	                    case ComputeOp::CMP_OUT_PROJ: {
+	                        const int32_t M = requant_params::REQUANT2_M_L[layer];
+	                        const int32_t n = requant_params::REQUANT2_N_L[layer];
+                            trace_M = M;
+                            trace_n = n;
+	                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
+	                        break;
+	                    }
+	                    case ComputeOp::CMP_FFN_W1: {
                         const int64_t prod =
                             static_cast<int64_t>(accum_vector[out]) *
                             static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
@@ -212,25 +439,31 @@ static void MAC_OP_TO_BUF(
                         compute_buf::write_i16(out_buf, out * 2, static_cast<int16_t>(scaled));
                         break;
                     }
-                    case ComputeOp::CMP_FFN_W2: {
-                        const int32_t M = requant_params::REQUANT4_M_L[layer];
-                        const int32_t n = requant_params::REQUANT4_N_L[layer];
-                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
+	                    case ComputeOp::CMP_FFN_W2: {
+	                        const int32_t M = requant_params::REQUANT4_M_L[layer];
+	                        const int32_t n = requant_params::REQUANT4_N_L[layer];
+                            trace_M = M;
+                            trace_n = n;
+	                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
+	                        break;
+	                    }
+	                    case ComputeOp::CMP_LOGITS: {
+	                        compute_buf::write_i32(out_buf, out * 4, accum_vector[out]);
                         break;
                     }
-                    case ComputeOp::CMP_LOGITS: {
-                        compute_buf::write_i32(out_buf, out * 4, accum_vector[out]);
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
+	                    default:
+	                        break;
+	                }
+	            }
 
-            compute_done = true;
-        }
-    } else if (compute_done) {
-        compute_done = false;
+#ifndef __SYNTHESIS__
+            trace_mac_op_outputs(op, layer_idx, tile_idx, accum_vector, out_count,
+                                 out_buf, trace_M, trace_n);
+#endif
+	            compute_done = true;
+	        }
+	    } else if (compute_done) {
+	        compute_done = false;
         busy = false;
     }
 }
@@ -360,7 +593,9 @@ static inline int8_t requant_scalar_to_i8(const int32_t x32, const int32_t M, co
     return static_cast<int8_t>(scaled);
 }
 
-static void RES_ADD_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+static void RES_ADD_TO_BUF(ComputeOp op,
+                           uint8_t layer_idx,
+                           const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                            uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
     for (int i = 0; i < D_MODEL; ++i) {
@@ -373,9 +608,14 @@ static void RES_ADD_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
         else if (sat < -128) sat = -128;
         compute_buf::write_i8(out_buf, compute_buf::OUTResidLayout::X + i, static_cast<int8_t>(sat));
     }
+#ifndef __SYNTHESIS__
+    trace_res_add_buffers(op, layer_idx, in_buf, out_buf);
+#endif
 }
 
-static void FFN_ACT_Silu_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+static void FFN_ACT_Silu_TO_BUF(uint8_t layer_idx,
+                                uint8_t tile_idx,
+                                const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                                 uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
     for (int i = 0; i < D_FFN; ++i) {
@@ -396,9 +636,13 @@ static void FFN_ACT_Silu_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
         else if (shifted < -32768) sat = -32768;
         compute_buf::write_i16(out_buf, compute_buf::OUTFfnActLayout::Y + (i * 2), sat);
     }
+#ifndef __SYNTHESIS__
+    trace_ffn_act_buffers(layer_idx, tile_idx, in_buf, out_buf);
+#endif
 }
 
-static void ARGMAX_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+static void ARGMAX_TO_BUF(uint8_t layer_idx,
+                          const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                           uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
     int32_t best_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X);
@@ -412,9 +656,14 @@ static void ARGMAX_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
         }
     }
     compute_buf::write_i32(out_buf, compute_buf::OUTArgmaxLayout::Y, best_idx);
+#ifndef __SYNTHESIS__
+    trace_argmax_buffers(layer_idx, in_buf, out_buf);
+#endif
 }
 
-static void RMS_NORM_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+static void RMS_NORM_TO_BUF(ComputeOp op,
+                            uint8_t layer_idx,
+                            const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                             uint8_t out_buf[compute_buf::OUT_BUF_BYTES],
                             bool final_norm,
                             int32_t requant_M,
@@ -472,6 +721,10 @@ static void RMS_NORM_TO_BUF(const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
             }
         }
     }
+#ifndef __SYNTHESIS__
+    trace_rms_norm_buffers(op, layer_idx, in_buf, out_buf, final_norm, requant_M,
+                           requant_n);
+#endif
 }
 
 
@@ -545,7 +798,6 @@ void FFN_ACT_Silu(
     const int16_t input_gate[D_FFN],
     int16_t       output[D_FFN]
 ) {
-    int16_t sig_raw[D_FFN];
     for (int i = 0; i < D_FFN; ++i) {
 // #pragma HLS PIPELINE II=1
         const int16_t sig = sigmoid_q15(input_gate[i]);
@@ -556,30 +808,10 @@ void FFN_ACT_Silu(
         } else if (scaled < -32768) {
             scaled = -32768;
         }
-        sig_raw[i] = sig;
         const int16_t out = scaled;
         output[i] = out;
     }
 
-#ifndef __SYNTHESIS__
-    std::printf("FFN_ACT gate:");
-    for (int i = 0; i < D_FFN; ++i) {
-        std::printf(" %d", static_cast<int>(input_gate[i]));
-    }
-    std::printf("\nFFN_ACT sigmoid:");
-    for (int i = 0; i < D_FFN; ++i) {
-        std::printf(" %d", static_cast<int>(sig_raw[i]));
-    }
-    std::printf("\nFFN_ACT up:");
-    for (int i = 0; i < D_FFN; ++i) {
-        std::printf(" %d", static_cast<int>(input_up[i]));
-    }
-    std::printf("\nFFN_ACT out:");
-    for (int i = 0; i < D_FFN; ++i) {
-        std::printf(" %d", static_cast<int>(output[i]));
-    }
-    std::printf("\n");
-#endif
 }
  
 
@@ -769,7 +1001,7 @@ void compute_controller(
                 }
                 case ComputeOp::CMP_RESID1:         // Q0.7   -> Q0.7    [After OutputProj] 
                 case ComputeOp::CMP_RESID2:{        // Q0.7   -> Q0.7    [After FFN] 
-                    RES_ADD_TO_BUF(in_buf, out_buf);
+                    RES_ADD_TO_BUF(req.op, req.layer_idx, in_buf, out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
@@ -795,12 +1027,14 @@ void compute_controller(
                             n = 0;
                             break;
                     }
-                    RMS_NORM_TO_BUF(in_buf, out_buf, false, M, n);
+                    RMS_NORM_TO_BUF(req.op, req.layer_idx, in_buf, out_buf, false,
+                                    M, n);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
                 case ComputeOp::CMP_FINAL_NORM: {   // Q0.7    -> Q19.13
-                    RMS_NORM_TO_BUF(in_buf, out_buf, true, 0, 0);
+                    RMS_NORM_TO_BUF(req.op, req.layer_idx, in_buf, out_buf, true,
+                                    0, 0);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
@@ -816,7 +1050,7 @@ void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_ARGMAX: {       // logits packed -> token id
-                    ARGMAX_TO_BUF(in_buf, out_buf);
+                    ARGMAX_TO_BUF(req.layer_idx, in_buf, out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
@@ -833,7 +1067,8 @@ void compute_controller(
                     break;
                 }
                 case ComputeOp::CMP_FFN_ACT:{       // Q1.15   -> Q1.15     [FFN SwiGLU activation]
-                    FFN_ACT_Silu_TO_BUF(in_buf, out_buf);
+                    FFN_ACT_Silu_TO_BUF(req.layer_idx, req.tile_idx, in_buf,
+                                        out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
@@ -854,7 +1089,8 @@ void compute_controller(
                     next_state = ComputeState::DONE;
                     break;
             }
-            MAC_OP_TO_BUF(mac_start, mac_ready, req.op, req.layer_idx, in_buf, mac_complete, out_buf);
+            MAC_OP_TO_BUF(mac_start, mac_ready, req.op, req.layer_idx,
+                          req.tile_idx, in_buf, mac_complete, out_buf);
             break;
         }
         case ComputeState::MEM_WRITEBACK: {

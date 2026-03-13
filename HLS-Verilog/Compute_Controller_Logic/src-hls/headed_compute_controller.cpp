@@ -4,84 +4,210 @@
 #endif
 
 #ifndef __SYNTHESIS__
-static void print_head_buffers(
-    const char *label,
-    const int8_t vec[HEAD_VECTOR_MAX],
-    const int8_t mat[HEAD_MATRIX_MAX],
-    const int32_t bias[HEAD_ACCUM_MAX]
-) {
-    std::printf("%s head_vec[%d]:", label, HEAD_VECTOR_MAX);
-    for (int i = 0; i < HEAD_VECTOR_MAX; ++i) {
-        std::printf(" %d", static_cast<int>(vec[i]));
+static const char *head_op_name(ComputeOp op) {
+    switch (op) {
+        case ComputeOp::CMP_Q: return "CMP_Q";
+        case ComputeOp::CMP_K: return "CMP_K";
+        case ComputeOp::CMP_V: return "CMP_V";
+        case ComputeOp::CMP_ATT_SCORES: return "CMP_ATT_SCORES";
+        case ComputeOp::CMP_VALUE_SCALE: return "CMP_VALUE_SCALE";
+        case ComputeOp::CMP_SOFTMAX: return "CMP_SOFTMAX";
+        case ComputeOp::CMP_ATT_VALUE: return "CMP_ATT_VALUE";
+        case ComputeOp::CMP_HEAD_REQUANT: return "CMP_HEAD_REQUANT";
+        default: return "CMP_UNKNOWN";
     }
-    std::printf("\n%s head_mat[%d][%d]:\n", label, HEAD_ACCUM_MAX, HEAD_VECTOR_MAX);
-    for (int r = 0; r < HEAD_ACCUM_MAX; ++r) {
-        std::printf("  %02d:", r);
-        for (int c = 0; c < HEAD_VECTOR_MAX; ++c) {
-            std::printf(" %d", static_cast<int>(mat[r * HEAD_VECTOR_MAX + c]));
-        }
-        std::printf("\n");
-    }
-    std::printf("%s head_bias[%d]:", label, HEAD_ACCUM_MAX);
-    for (int i = 0; i < HEAD_ACCUM_MAX; ++i) {
-        std::printf(" %d", static_cast<int>(bias[i]));
+}
+
+static void print_i8_vector(const char *label, const int8_t *data, int count) {
+    std::printf("%s[%d]:", label, count);
+    for (int i = 0; i < count; ++i) {
+        std::printf(" %d", static_cast<int>(data[i]));
     }
     std::printf("\n");
 }
 
-static void print_att_value_buffers(
-    const char *label,
-    const int16_t vec[CONTEXT_LENGTH],
-    const int8_t mat[D_HEADS * CONTEXT_LENGTH]
-) {
-    std::printf("%s head_vec_att[%d]:", label, CONTEXT_LENGTH);
-    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
-        std::printf(" %d", static_cast<int>(vec[i]));
+static void print_i16_vector(const char *label, const int16_t *data, int count) {
+    std::printf("%s[%d]:", label, count);
+    for (int i = 0; i < count; ++i) {
+        std::printf(" %d", static_cast<int>(data[i]));
     }
-    std::printf("\n%s head_mat_att[%d][%d]:\n", label, D_HEADS, CONTEXT_LENGTH);
-    for (int r = 0; r < D_HEADS; ++r) {
+    std::printf("\n");
+}
+
+static void print_i32_vector(const char *label, const int32_t *data, int count) {
+    std::printf("%s[%d]:", label, count);
+    for (int i = 0; i < count; ++i) {
+        std::printf(" %d", data[i]);
+    }
+    std::printf("\n");
+}
+
+static void print_i8_matrix(const char *label,
+                            const int8_t *data,
+                            int rows,
+                            int cols,
+                            int stride) {
+    std::printf("%s[%d][%d]:\n", label, rows, cols);
+    for (int r = 0; r < rows; ++r) {
         std::printf("  %02d:", r);
-        for (int c = 0; c < CONTEXT_LENGTH; ++c) {
-            std::printf(" %d", static_cast<int>(mat[r * CONTEXT_LENGTH + c]));
+        for (int c = 0; c < cols; ++c) {
+            std::printf(" %d", static_cast<int>(data[r * stride + c]));
         }
         std::printf("\n");
     }
 }
 
-static void print_att_scores_rope_qk(
-    const int8_t vec[HEAD_VECTOR_MAX],
-    const int8_t mat[HEAD_MATRIX_MAX]
-) {
-    std::printf("Q:");
+static void print_qkv_weight_matrix(const uint8_t in_buf[head_buf::IN_BUF_BYTES]) {
+    std::printf("  weight[%d][%d]:\n", D_HEAD_TILE_QKV, D_MODEL);
+    for (int r = 0; r < D_HEAD_TILE_QKV; ++r) {
+        std::printf("  %02d:", r);
+        for (int c = 0; c < D_MODEL; ++c) {
+            const int w_idx = (r * D_MODEL) + c;
+            const int8_t w = static_cast<int8_t>(
+                compute_buf::read_i4(in_buf, (head_buf::INQkvLayout::W * 2) + w_idx));
+            std::printf(" %d", static_cast<int>(w));
+        }
+        std::printf("\n");
+    }
+}
+
+static void trace_qkv_buffers(ComputeOp op,
+                              uint8_t layer_idx,
+                              uint8_t head_idx,
+                              const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+                              const uint8_t out_buf[head_buf::OUT_BUF_BYTES],
+                              int32_t M,
+                              int32_t n) {
+    int8_t act[D_MODEL];
+    int8_t y[D_HEAD_TILE_QKV];
+    for (int i = 0; i < D_MODEL; ++i) {
+        act[i] = compute_buf::read_i8(in_buf, head_buf::INQkvLayout::ACT + i);
+    }
+    for (int i = 0; i < D_HEAD_TILE_QKV; ++i) {
+        y[i] = compute_buf::read_i8(out_buf, head_buf::OUTQkvLayout::Y + i);
+    }
+    std::printf("[HEAD IO] op=%s layer=%u head=%u M=%d n=%d\n",
+                head_op_name(op),
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(head_idx),
+                M,
+                n);
+    print_i8_vector("  act", act, D_MODEL);
+    print_qkv_weight_matrix(in_buf);
+    print_i8_vector("  out", y, D_HEAD_TILE_QKV);
+}
+
+static void trace_att_scores_buffers(uint8_t layer_idx,
+                                     uint8_t head_idx,
+                                     uint8_t tile_idx,
+                                     uint16_t token_pos,
+                                     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+                                     const uint8_t out_buf[head_buf::OUT_BUF_BYTES]) {
+    int8_t q[D_HEADS];
+    int8_t k_cache[ATT_CTX_BLOCK * D_HEADS];
+    int32_t y[ATT_CTX_BLOCK];
     for (int i = 0; i < D_HEADS; ++i) {
-        std::printf(" %d", static_cast<int>(vec[i]));
+        q[i] = compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + i);
     }
-    std::printf("\n  K_CACHE:");
-    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-        for (int h = 0; h < D_HEADS; ++h) {
-            std::printf(" %d", static_cast<int>(mat[t * HEAD_VECTOR_MAX + h]));
+    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
+        for (int d = 0; d < D_HEADS; ++d) {
+            k_cache[t * D_HEADS + d] =
+                compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::K_CACHE +
+                                             (t * D_HEADS) + d);
         }
+        y[t] = compute_buf::read_i32(out_buf, head_buf::OUTAttScoresLayout::X + (t * 4));
     }
-    std::printf("\n");
+    std::printf("[HEAD IO] op=CMP_ATT_SCORES layer=%u head=%u tile=%u token=%u\n",
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(head_idx),
+                static_cast<unsigned>(tile_idx),
+                static_cast<unsigned>(token_pos));
+    print_i8_vector("  q", q, D_HEADS);
+    print_i8_matrix("  k_cache", k_cache, ATT_CTX_BLOCK, D_HEADS, D_HEADS);
+    print_i32_vector("  out", y, ATT_CTX_BLOCK);
 }
-#else
-static inline void print_head_buffers(
-    const char *,
-    const int8_t[HEAD_VECTOR_MAX],
-    const int8_t[HEAD_MATRIX_MAX],
-    const int32_t[HEAD_ACCUM_MAX]
-) {}
 
-static inline void print_att_value_buffers(
-    const char *,
-    const int16_t[CONTEXT_LENGTH],
-    const int8_t[D_HEADS * CONTEXT_LENGTH]
-) {}
+static void trace_value_scale_buffers(uint8_t layer_idx,
+                                      uint8_t head_idx,
+                                      const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+                                      const uint8_t out_buf[head_buf::OUT_BUF_BYTES]) {
+    int32_t x[CONTEXT_LENGTH];
+    int16_t y[CONTEXT_LENGTH];
+    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
+        x[i] = compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (i * 4));
+        y[i] = compute_buf::read_i16(out_buf, head_buf::OUTValueScaleLayout::X + (i * 2));
+    }
+    std::printf("[HEAD IO] op=CMP_VALUE_SCALE layer=%u head=%u\n",
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(head_idx));
+    print_i32_vector("  x", x, CONTEXT_LENGTH);
+    print_i16_vector("  out", y, CONTEXT_LENGTH);
+}
 
-static inline void print_att_scores_rope_qk(
-    const int8_t[HEAD_VECTOR_MAX],
-    const int8_t[HEAD_MATRIX_MAX]
-) {}
+static void trace_softmax_buffers(uint8_t layer_idx,
+                                  uint8_t head_idx,
+                                  const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+                                  const uint8_t out_buf[head_buf::OUT_BUF_BYTES]) {
+    int16_t x[CONTEXT_LENGTH];
+    int16_t y[CONTEXT_LENGTH];
+    for (int i = 0; i < CONTEXT_LENGTH; ++i) {
+        x[i] = compute_buf::read_i16(in_buf, head_buf::INSoftmaxLayout::X + (i * 2));
+        y[i] = compute_buf::read_i16(out_buf, head_buf::OUTSoftmaxLayout::X + (i * 2));
+    }
+    std::printf("[HEAD IO] op=CMP_SOFTMAX layer=%u head=%u\n",
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(head_idx));
+    print_i16_vector("  x", x, CONTEXT_LENGTH);
+    print_i16_vector("  out", y, CONTEXT_LENGTH);
+}
+
+static void trace_att_value_buffers(uint8_t layer_idx,
+                                    uint8_t head_idx,
+                                    const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+                                    const uint8_t out_buf[head_buf::OUT_BUF_BYTES]) {
+    int16_t weights[CONTEXT_LENGTH];
+    int8_t v_cache[D_HEAD_TILE_ATT_VALUE * CONTEXT_LENGTH];
+    int32_t y[D_HEAD_TILE_ATT_VALUE];
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+        weights[t] = compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (t * 2));
+    }
+    for (int r = 0; r < D_HEAD_TILE_ATT_VALUE; ++r) {
+        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+            v_cache[r * CONTEXT_LENGTH + t] =
+                compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE +
+                                             (r * CONTEXT_LENGTH) + t);
+        }
+        y[r] = compute_buf::read_i32(out_buf, head_buf::OUTAttValueLayout::Y + (r * 4));
+    }
+    std::printf("[HEAD IO] op=CMP_ATT_VALUE layer=%u head=%u\n",
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(head_idx));
+    print_i16_vector("  weights", weights, CONTEXT_LENGTH);
+    print_i8_matrix("  v_cache", v_cache, D_HEAD_TILE_ATT_VALUE, CONTEXT_LENGTH,
+                    CONTEXT_LENGTH);
+    print_i32_vector("  out", y, D_HEAD_TILE_ATT_VALUE);
+}
+
+static void trace_head_requant_buffers(uint8_t layer_idx,
+                                       uint8_t head_idx,
+                                       const uint8_t in_buf[head_buf::IN_BUF_BYTES],
+                                       const uint8_t out_buf[head_buf::OUT_BUF_BYTES],
+                                       int32_t M,
+                                       int32_t n) {
+    int32_t x[D_HEADS];
+    int8_t y[D_HEADS];
+    for (int i = 0; i < D_HEADS; ++i) {
+        x[i] = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (i * 4));
+        y[i] = compute_buf::read_i8(out_buf, head_buf::OUTHeadRequantLayout::X + i);
+    }
+    std::printf("[HEAD IO] op=CMP_HEAD_REQUANT layer=%u head=%u M=%d n=%d\n",
+                static_cast<unsigned>(layer_idx),
+                static_cast<unsigned>(head_idx),
+                M,
+                n);
+    print_i32_vector("  x", x, D_HEADS);
+    print_i8_vector("  out", y, D_HEADS);
+}
 #endif
 
 namespace rope_lut {
@@ -384,9 +510,6 @@ void SOFTMAX(
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
 // #pragma HLS PIPELINE II=1
         int16_t diff = static_cast<int16_t>(input[i] - max_val);
-#ifndef __SYNTHESIS__
-        printf("diff[%d] = %d\n", i, static_cast<int>(diff));
-#endif
         uint16_t e_q15 = exp_approx_q15(diff);   // Q1.15
         // uint16_t e_q15 = diff * 2;
         exp_buf[i] = e_q15;
@@ -461,6 +584,8 @@ static inline int8_t requant_scalar_to_i8(
 }
 
 static void VALUE_SCALE_CLAMP_TO_BUF(
+    uint8_t layer_idx,
+    uint8_t head_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -477,11 +602,17 @@ static void VALUE_SCALE_CLAMP_TO_BUF(
         } else if (scaled < -32768) {
             scaled = -32768;
         }
-        compute_buf::write_i16(out_buf, t * 2, static_cast<int16_t>(scaled));
+        compute_buf::write_i16(out_buf, head_buf::OUTValueScaleLayout::X + (t * 2),
+                               static_cast<int16_t>(scaled));
     }
+#ifndef __SYNTHESIS__
+    trace_value_scale_buffers(layer_idx, head_idx, in_buf, out_buf);
+#endif
 }
 
 static void SOFTMAX_TO_BUF(
+    uint8_t layer_idx,
+    uint8_t head_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -520,11 +651,17 @@ static void SOFTMAX_TO_BUF(
         if (prob_q15 > MAX_Q15) {
             prob_q15 = MAX_Q15;
         }
-        compute_buf::write_i16(out_buf, i * 2, static_cast<int16_t>(prob_q15));
+        compute_buf::write_i16(out_buf, head_buf::OUTSoftmaxLayout::X + (i * 2),
+                               static_cast<int16_t>(prob_q15));
     }
+#ifndef __SYNTHESIS__
+    trace_softmax_buffers(layer_idx, head_idx, in_buf, out_buf);
+#endif
 }
 
 static void ATT_VALUE_TO_BUF(
+    uint8_t layer_idx,
+    uint8_t head_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -556,10 +693,14 @@ static void ATT_VALUE_TO_BUF(
 #pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
             if (out_idx < D_HEAD_TILE_ATT_VALUE) {
-                compute_buf::write_i32(out_buf, out_idx * 4, accum_tile[lane]);
+                compute_buf::write_i32(out_buf, head_buf::OUTAttValueLayout::Y + (out_idx * 4),
+                                       accum_tile[lane]);
             }
         }
     }
+#ifndef __SYNTHESIS__
+    trace_att_value_buffers(layer_idx, head_idx, in_buf, out_buf);
+#endif
 }
 
 static inline void get_qkv_requant_params(
@@ -596,6 +737,7 @@ static inline void get_qkv_requant_params(
 static void QKV_TO_BUF(
     ComputeOp op,
     uint8_t layer_idx,
+    uint8_t head_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -638,13 +780,19 @@ static void QKV_TO_BUF(
 #pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
             if (out_idx < D_HEAD_TILE_QKV) {
-                compute_buf::write_i8(out_buf, out_idx, requant_scalar_to_i8(accum_tile[lane], M, n));
+                const int8_t y = requant_scalar_to_i8(accum_tile[lane], M, n);
+                compute_buf::write_i8(out_buf, head_buf::OUTQkvLayout::Y + out_idx, y);
             }
         }
     }
+#ifndef __SYNTHESIS__
+    trace_qkv_buffers(op, layer_idx, head_idx, in_buf, out_buf, M, n);
+#endif
 }
 
 static void ATT_SCORES_TO_BUF(
+    uint8_t layer_idx,
+    uint8_t head_idx,
     uint16_t token_pos,
     uint8_t tile_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
@@ -692,8 +840,11 @@ static void ATT_SCORES_TO_BUF(
             const int8_t k = compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::K_CACHE + (t * D_HEADS) + last);
             acc += static_cast<int32_t>(q) * static_cast<int32_t>(k);
         }
-        compute_buf::write_i32(out_buf, t * 4, acc);
+        compute_buf::write_i32(out_buf, head_buf::OUTAttScoresLayout::X + (t * 4), acc);
     }
+#ifndef __SYNTHESIS__
+    trace_att_scores_buffers(layer_idx, head_idx, tile_idx, token_pos, in_buf, out_buf);
+#endif
 }
 
 static void headed_compute_controller_lane(
@@ -820,7 +971,8 @@ static void headed_compute_controller_lane(
                 case ComputeOp::CMP_Q:              // Q0.7   -> Q0.7 (requant in-op)
                 case ComputeOp::CMP_K:              // Q0.7   -> Q0.7 (requant in-op)
                 case ComputeOp::CMP_V: {            // Q0.7   -> Q0.7 (requant in-op)
-                    QKV_TO_BUF(ctx.req.op, ctx.req.layer_idx, in_buf, out_buf);
+                    QKV_TO_BUF(ctx.req.op, ctx.req.layer_idx, ctx.req.head_idx, in_buf,
+                               out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
@@ -844,25 +996,32 @@ static void headed_compute_controller_lane(
                     for (int h = 0; h < D_HEADS; ++h) {
 // #pragma HLS PIPELINE II=1
                         const int32_t x = compute_buf::read_i32(in_buf, head_buf::INHeadRequantLayout::X + (h * 4));
-                        compute_buf::write_i8(out_buf, head_buf::INHeadRequantLayout::X + h, requant_scalar_to_i8(x, M, n));
+                        compute_buf::write_i8(out_buf, head_buf::OUTHeadRequantLayout::X + h,
+                                              requant_scalar_to_i8(x, M, n));
                     }
+#ifndef __SYNTHESIS__
+                    trace_head_requant_buffers(ctx.req.layer_idx, ctx.req.head_idx, in_buf,
+                                               out_buf, M, n);
+#endif
                     break;
                 }
                 case ComputeOp::CMP_ATT_SCORES: {   // Q0.7   -> Qacc
-                    ATT_SCORES_TO_BUF(token_pos, ctx.req.tile_idx, in_buf, out_buf);
+                    ATT_SCORES_TO_BUF(ctx.req.layer_idx, ctx.req.head_idx, token_pos,
+                                      ctx.req.tile_idx, in_buf, out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;
                 }
                 case ComputeOp::CMP_VALUE_SCALE: {  // Qacc   -> Q1.15
-                    VALUE_SCALE_CLAMP_TO_BUF(in_buf, out_buf);
+                    VALUE_SCALE_CLAMP_TO_BUF(ctx.req.layer_idx, ctx.req.head_idx, in_buf,
+                                             out_buf);
                     break;
                 }
                 case ComputeOp::CMP_SOFTMAX: {      // Q1.15  -> Q1.15
-                    SOFTMAX_TO_BUF(in_buf, out_buf);
+                    SOFTMAX_TO_BUF(ctx.req.layer_idx, ctx.req.head_idx, in_buf, out_buf);
                     break;
                 }
                 case ComputeOp::CMP_ATT_VALUE: {    // Q1.15  -> Qacc
-                    ATT_VALUE_TO_BUF(in_buf, out_buf);
+                    ATT_VALUE_TO_BUF(ctx.req.layer_idx, ctx.req.head_idx, in_buf, out_buf);
                     break;
                 }      
                 default:

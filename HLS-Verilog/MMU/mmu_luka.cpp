@@ -1,4 +1,7 @@
 #include "mmu_luka.hpp"
+#ifndef __SYNTHESIS__
+#include <cstdio>
+#endif
 
 namespace {
 
@@ -548,6 +551,8 @@ static void free_span_compact_and_coalesce(uint8_t bank) {
     const int count = free_span_count[bank_i];
     if (count <= 1) return;
 
+    FreeSpan merged_spans[MAX_FREE_SPANS_PER_BANK];
+
     for (int i = 1; i < count; ++i) {
         const FreeSpan cur = free_spans[bank_i][i];
         int j = i - 1;
@@ -563,10 +568,10 @@ static void free_span_compact_and_coalesce(uint8_t bank) {
         const FreeSpan cur = free_spans[bank_i][i];
         if (cur.size == 0) continue;
         if (write_idx == 0) {
-            free_spans[bank_i][write_idx++] = cur;
+            merged_spans[write_idx++] = cur;
             continue;
         }
-        FreeSpan &prev = free_spans[bank_i][write_idx - 1];
+        FreeSpan &prev = merged_spans[write_idx - 1];
         const uint32_t prev_end = prev.offset + prev.size;
         const uint32_t cur_end = cur.offset + cur.size;
         if (cur.offset <= prev_end) {
@@ -574,10 +579,13 @@ static void free_span_compact_and_coalesce(uint8_t bank) {
                 prev.size = cur_end - prev.offset;
             }
         } else {
-            free_spans[bank_i][write_idx++] = cur;
+            merged_spans[write_idx++] = cur;
         }
     }
 
+    for (int i = 0; i < write_idx; ++i) {
+        free_spans[bank_i][i] = merged_spans[i];
+    }
     for (int i = write_idx; i < count; ++i) {
         free_spans[bank_i][i] = FreeSpan{};
     }
@@ -1726,67 +1734,73 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
         case DmaSel::DMASEL_WQ: {
             if (head < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wq_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.wq_head_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_WQ_LAYER
+                     + static_cast<uint32_t>(head) * STRIDE_QKV_HEAD;
             return true;
         }
         case DmaSel::DMASEL_WK: {
             if (head < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wk_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.wk_head_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_WK_LAYER
+                     + static_cast<uint32_t>(head) * STRIDE_QKV_HEAD;
             return true;
         }
         case DmaSel::DMASEL_WV: {
             if (head < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wv_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.wv_head_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_WV_LAYER
+                     + static_cast<uint32_t>(head) * STRIDE_QKV_HEAD;
             return true;
         }
         case DmaSel::DMASEL_CTX_K: {
             if (head < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.k_cache_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.k_cache_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_KV_LAYER
+                     + static_cast<uint32_t>(head) * STRIDE_KV_HEAD;
             return true;
         }
         case DmaSel::DMASEL_CTX_V: {
             if (head < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.v_cache_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(head) * ctrl_mem.v_cache_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_KV_LAYER
+                     + static_cast<uint32_t>(head) * STRIDE_KV_HEAD;
             return true;
         }
         case DmaSel::DMASEL_WO: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wo_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(tile) * ctrl_mem.wo_tile_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_WO_LAYER
+                     + static_cast<uint32_t>(tile) * STRIDE_WO_TILE;
             return true;
         }
         case DmaSel::DMASEL_W1: {
             if (tile < 0) return false;
-            addr_out = static_cast<uint64_t>(ctrl_mem.w1_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(tile) * ctrl_mem.w1_tile_stride;
+            if (tile < (NUM_W1_TILES / 2)) {
+                addr_out = static_cast<uint64_t>(ctrl_mem.w1_gate_offset)
+                         + static_cast<uint32_t>(layer) * STRIDE_W1_GATE_LAYER
+                         + static_cast<uint32_t>(tile) * STRIDE_W1_TILE;
+            } else {
+                addr_out = static_cast<uint64_t>(ctrl_mem.w1_up_offset)
+                         + static_cast<uint32_t>(layer) * STRIDE_W1_UP_LAYER
+                         + static_cast<uint32_t>(tile - (NUM_W1_TILES / 2)) * STRIDE_W1_TILE;
+            }
             return true;
         }
         case DmaSel::DMASEL_W2: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.w2_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(tile) * ctrl_mem.w2_tile_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_W2_LAYER
+                     + static_cast<uint32_t>(tile) * STRIDE_W2_TILE;
             return true;
         }
         case DmaSel::DMASEL_LN0: {
             addr_out = static_cast<uint64_t>(ctrl_mem.ln0_gamma_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.ln0_gamma_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_LN0_GAMMA;
             return true;
         }
         case DmaSel::DMASEL_LN1: {
             addr_out = static_cast<uint64_t>(ctrl_mem.ln1_gamma_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.ln1_gamma_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_LN1_GAMMA;
             return true;
         }
         case DmaSel::DMASEL_FINAL_NORM: {
@@ -1796,8 +1810,8 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
         case DmaSel::DMASEL_CONCAT: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wlogit_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(tile) * ctrl_mem.wlogit_tile_stride;
+                     + static_cast<uint32_t>(layer) * D_MODEL
+                     + static_cast<uint32_t>(tile) * STRIDE_WLOGIT_TILE;
             return true;
         }
         case DmaSel::DMASEL_WLOGIT: {
@@ -1806,7 +1820,7 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
             // Do not apply layer_stride here, otherwise layer>0 reads can go out-of-range
             // of the compact DDR image and become nondeterministic in C-sim.
             addr_out = static_cast<uint64_t>(ctrl_mem.wlogit_offset)
-                     + static_cast<uint32_t>(tile) * ctrl_mem.wlogit_tile_stride;
+                     + static_cast<uint32_t>(tile) * STRIDE_WLOGIT_TILE;
             return true;
         }
         case DmaSel::DMASEL_NONE:
@@ -1834,32 +1848,32 @@ static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer,
         case DMASEL_WO: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wo_bias_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(tile) * ctrl_mem.wo_bias_tile_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_WO_BIAS_LAYER
+                     + static_cast<uint32_t>(tile) * STRIDE_WO_BIAS_TILE;
             return true;
         }
         case DMASEL_W1: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.w1_bias_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(tile) * ctrl_mem.w1_bias_tile_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_W1_BIAS_LAYER
+                     + static_cast<uint32_t>(tile) * STRIDE_W1_BIAS_TILE;
             return true;
         }
         case DMASEL_W2: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.w2_bias_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.layer_stride
-                     + static_cast<uint32_t>(tile) * ctrl_mem.w2_bias_tile_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_W2_BIAS_LAYER
+                     + static_cast<uint32_t>(tile) * STRIDE_W2_BIAS_TILE;
             return true;
         }
         case DMASEL_LN0: {
             addr_out = static_cast<uint64_t>(ctrl_mem.ln0_eps_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.ln0_eps_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_LN0_EPS;
             return true;
         }
         case DMASEL_LN1: {
             addr_out = static_cast<uint64_t>(ctrl_mem.ln1_eps_offset)
-                     + static_cast<uint32_t>(layer) * ctrl_mem.ln1_eps_stride;
+                     + static_cast<uint32_t>(layer) * STRIDE_LN1_EPS;
             return true;
         }
         case DMASEL_FINAL_NORM: {
@@ -1873,19 +1887,78 @@ static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer,
     }
 }
 
+#ifndef __SYNTHESIS__
+static const char *dma_sel_name(DmaSel sel) {
+    switch (sel) {
+        case DMASEL_NONE: return "DMASEL_NONE";
+        case DMASEL_WQ: return "DMASEL_WQ";
+        case DMASEL_WK: return "DMASEL_WK";
+        case DMASEL_WV: return "DMASEL_WV";
+        case DMASEL_WO: return "DMASEL_WO";
+        case DMASEL_W1: return "DMASEL_W1";
+        case DMASEL_W2: return "DMASEL_W2";
+        case DMASEL_CTX_K: return "DMASEL_CTX_K";
+        case DMASEL_CTX_V: return "DMASEL_CTX_V";
+        case DMASEL_LN0: return "DMASEL_LN0";
+        case DMASEL_LN1: return "DMASEL_LN1";
+        case DMASEL_FINAL_NORM: return "DMASEL_FINAL_NORM";
+        case DMASEL_CONCAT: return "DMASEL_CONCAT";
+        case DMASEL_WLOGIT: return "DMASEL_WLOGIT";
+        case DMASEL_K_WRITE: return "DMASEL_K_WRITE";
+        case DMASEL_V_WRITE: return "DMASEL_V_WRITE";
+        default: return "DMASEL_UNKNOWN";
+    }
+}
+
+static void trace_ddr_fetch_plan(ControlMemSpace ctrl_mem,
+                                 DmaSel sel,
+                                 int layer,
+                                 int head,
+                                 int tile,
+                                 uint64_t dma_base_addr,
+                                 uint8_t piece_count,
+                                 const uint32_t piece_bytes[MAX_DMA_PIECES],
+                                 const uint32_t piece_addr_off[MAX_DMA_PIECES]) {
+    if (dma_uses_kv_cache(sel) || sel == DMASEL_NONE || sel == DMASEL_CONCAT ||
+        sel == DMASEL_K_WRITE || sel == DMASEL_V_WRITE) {
+        return;
+    }
+
+    std::printf("[MMU DDR FETCH] sel=%s layer=%d head=%d tile=%d base=0x%08llX pieces=%u\n",
+                dma_sel_name(sel),
+                layer,
+                head,
+                tile,
+                static_cast<unsigned long long>(dma_base_addr),
+                static_cast<unsigned>(piece_count));
+
+    for (uint8_t piece_idx = 0; piece_idx < piece_count; ++piece_idx) {
+        uint64_t piece_addr = 0;
+        const bool ok = calc_dma_piece_addr(ctrl_mem, sel, layer, head, tile, dma_base_addr,
+                                            piece_idx, piece_addr_off[piece_idx], piece_addr);
+        if (ok) {
+            std::printf("  piece[%u] off=0x%08X addr=0x%08llX bytes=%u\n",
+                        static_cast<unsigned>(piece_idx),
+                        piece_addr_off[piece_idx],
+                        static_cast<unsigned long long>(piece_addr),
+                        static_cast<unsigned>(piece_bytes[piece_idx]));
+        } else {
+            std::printf("  piece[%u] off=0x%08X addr=<invalid> bytes=%u\n",
+                        static_cast<unsigned>(piece_idx),
+                        piece_addr_off[piece_idx],
+                        static_cast<unsigned>(piece_bytes[piece_idx]));
+        }
+    }
+}
+#endif
+
 static uint64_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, uint16_t token_pos) {
 #pragma HLS INLINE
     const uint64_t base = (sel == DMASEL_K_WRITE)
         ? static_cast<uint64_t>(ctrl_mem.k_cache_offset)
         : static_cast<uint64_t>(ctrl_mem.v_cache_offset);
-    const uint64_t layer_stride = (ctrl_mem.layer_stride != 0)
-        ? static_cast<uint64_t>(ctrl_mem.layer_stride)
-        : static_cast<uint64_t>(NUM_HEADS * CONTEXT_LENGTH * D_HEADS);
-    const uint64_t head_stride = (sel == DMASEL_K_WRITE)
-        ? ((ctrl_mem.k_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.k_cache_stride)
-                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS))
-        : ((ctrl_mem.v_cache_stride != 0) ? static_cast<uint64_t>(ctrl_mem.v_cache_stride)
-                                          : static_cast<uint64_t>(CONTEXT_LENGTH * D_HEADS));
+    const uint64_t layer_stride = static_cast<uint64_t>(STRIDE_KV_LAYER);
+    const uint64_t head_stride = static_cast<uint64_t>(STRIDE_KV_HEAD);
     const uint64_t token_off = static_cast<uint64_t>(token_pos) * static_cast<uint64_t>(D_HEADS);
     return base + static_cast<uint64_t>(layer) * layer_stride
                 + static_cast<uint64_t>(head) * head_stride
@@ -2702,6 +2775,11 @@ void mmu_fsm(
                 g_state = State::IDLE;
                 break;
             }
+#ifndef __SYNTHESIS__
+            trace_ddr_fetch_plan(ctrl_mem, active_dma_sel, active_dma_layer, active_dma_head,
+                                 active_dma_tile, active_dma_addr_base, active_piece_count,
+                                 active_piece_bytes, active_piece_addr_off);
+#endif
             active_piece_idx = 0;
             active_piece_bytes_done = 0;
             active_chunk_bytes = 0;

@@ -675,14 +675,14 @@ void transformer_top(
         wk_base_addr   = ctrl_mem.wk_offset;
         wv_base_addr   = ctrl_mem.wv_offset;
         wo_base_addr   = ctrl_mem.wo_offset;
-        w1_base_addr   = ctrl_mem.w1_offset;
+        w1_base_addr   = ctrl_mem.w1_gate_offset;
         w2_base_addr   = ctrl_mem.w2_offset;
-        wq_head_stride   = ctrl_mem.wq_head_stride;
-        wk_head_stride   = ctrl_mem.wk_head_stride;
-        wv_head_stride   = ctrl_mem.wv_head_stride;
-        wo_tile_stride   = ctrl_mem.wo_tile_stride;
-        w1_tile_stride   = ctrl_mem.w1_tile_stride;
-        w2_tile_stride   = ctrl_mem.w2_tile_stride;
+        wq_head_stride   = STRIDE_QKV_HEAD;
+        wk_head_stride   = STRIDE_QKV_HEAD;
+        wv_head_stride   = STRIDE_QKV_HEAD;
+        wo_tile_stride   = STRIDE_WO_TILE;
+        w1_tile_stride   = STRIDE_W1_TILE;
+        w2_tile_stride   = STRIDE_W2_TILE;
         dbg_error_code = active_status_mem.error_code | mmu_status.error_code;
         dbg_error =
             scheduler_error ||

@@ -26,7 +26,7 @@ constexpr bool MMU_USE_HARDCODED_LN_PARAMS = false;
 //   -DREQUANT_SCALES_VER=1  -> requant_scales_v1.hpp
 //   -DREQUANT_SCALES_VER=2  -> requant_scales_v2.hpp
 #ifndef REQUANT_SCALES_VER
-#define REQUANT_SCALES_VER 2
+#define REQUANT_SCALES_VER 3
 #endif
 
 #if (REQUANT_SCALES_VER == 0)
@@ -35,8 +35,10 @@ constexpr bool MMU_USE_HARDCODED_LN_PARAMS = false;
 #include "requant_scales_v1.hpp"
 #elif (REQUANT_SCALES_VER == 2)
 #include "requant_scales_v2.hpp"
+#elif (REQUANT_SCALES_VER == 3)
+#include "requant_scales_v3.hpp"
 #else
-#error "Invalid REQUANT_SCALES_VER. Use 0, 1, or 2."
+#error "Invalid REQUANT_SCALES_VER. Use 0, 1, 2, or 3."
 #endif
 // ------------------------------------------------------------
 // Headed Attention and FSM enums
@@ -198,46 +200,22 @@ struct PendingRequest {
 
 // Config (PS Writes -> PL Reads)
 // Passed by value
-// NOTE: All offsets and strides are in BYTES (matching AXI byte-addressing).
-//       burst_read/write call sites convert to word index via /
-//       sizeof(int32_t).
+// NOTE: All offsets are in BYTES (matching AXI byte-addressing).
+//       Burst read/write call sites convert to word index via /
+//       sizeof(int32_t). Strides are derived inside PL from shared_params.hpp.
 struct ControlMemSpace {
     uint32_t control = CTRL_RESETN_BIT; // bit0=reset_n, bit1=start, bit3=debug_mode
     uint32_t irq_mask = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
 
-    uint32_t layer_stride = 0;
-    uint32_t wq_head_stride = 0;
-    uint32_t wk_head_stride = 0;
-    uint32_t wv_head_stride = 0;
-
-    uint32_t k_cache_stride = 0;
-    uint32_t v_cache_stride = 0;
-
-    uint32_t wo_tile_stride = 0;
-    uint32_t w1_tile_stride = 0;
-    uint32_t w2_tile_stride = 0;
-
-    uint32_t wo_bias_tile_stride = 0;
-    uint32_t w1_bias_tile_stride = 0;
-    uint32_t w2_bias_tile_stride = 0;
-    uint32_t wlogit_tile_stride = 0;
-
-    // Optional LN/RMS parameter strides (per-layer tables).
-    uint32_t ln0_gamma_stride = 0;
-    uint32_t ln1_gamma_stride = 0;
-    uint32_t final_norm_gamma_stride = 0;
-    uint32_t ln0_eps_stride = 0;
-    uint32_t ln1_eps_stride = 0;
-    uint32_t final_norm_eps_stride = 0;
-
-    // Word offsets relative to AXI Full base (set by PS)
+    // Byte offsets relative to AXI Full base (set by PS)
     // wq=0, wk=size(wq), wv=size(wq)+size(wk), ...
     uint32_t wq_offset = 0;
     uint32_t wk_offset = 0;
     uint32_t wv_offset = 0;
     uint32_t wo_offset = 0;
-    uint32_t w1_offset = 0;
+    uint32_t w1_gate_offset = 0;
+    uint32_t w1_up_offset = 0;
     uint32_t w2_offset = 0;
     uint32_t k_cache_offset = 0;
     uint32_t v_cache_offset = 0;

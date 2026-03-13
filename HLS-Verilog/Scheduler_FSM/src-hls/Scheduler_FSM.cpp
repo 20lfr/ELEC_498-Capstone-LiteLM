@@ -1,5 +1,4 @@
 #include "Scheduler_FSM.hpp"
-#include "../../Weight_Loader-Stager/Weight_stager.hpp"
 #include <cstdint>
 
 // Minimal, single-path scheduler FSM used to bring RTL back to a known-good

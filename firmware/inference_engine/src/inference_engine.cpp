@@ -109,7 +109,7 @@ public:
     bool configureAddresses(const ModelConfig &cfg, const MemoryLayout &mem) {
         if (!cfg.validate()) {
             err->setError(ErrorCode::CONFIG_ERROR,
-                          "Invalid config (zero DMA length or stride)");
+                          "Invalid config");
             return false;
         }
         if (!mem.isAligned()) {
@@ -120,28 +120,6 @@ public:
 
         // beginConfig: disables IRQs, sets IRQ clear high
         pl->beginConfig();
-
-        // Strides
-        pl->writeReg(PLReg::LAYER_STRIDE, cfg.layer_stride);
-        pl->writeReg(PLReg::WQ_HEAD_STRIDE, cfg.wq_head_stride);
-        pl->writeReg(PLReg::WK_HEAD_STRIDE, cfg.wk_head_stride);
-        pl->writeReg(PLReg::WV_HEAD_STRIDE, cfg.wv_head_stride);
-        pl->writeReg(PLReg::K_CACHE_STRIDE, cfg.k_cache_stride);
-        pl->writeReg(PLReg::V_CACHE_STRIDE, cfg.v_cache_stride);
-        pl->writeReg(PLReg::WO_TILE_STRIDE, cfg.wo_tile_stride);
-        pl->writeReg(PLReg::W1_TILE_STRIDE, cfg.w1_tile_stride);
-        pl->writeReg(PLReg::W2_TILE_STRIDE, cfg.w2_tile_stride);
-        pl->writeReg(PLReg::WO_BIAS_TILE_STRIDE, cfg.wo_bias_tile_stride);
-        pl->writeReg(PLReg::W1_BIAS_TILE_STRIDE, cfg.w1_bias_tile_stride);
-        pl->writeReg(PLReg::W2_BIAS_TILE_STRIDE, cfg.w2_bias_tile_stride);
-        pl->writeReg(PLReg::WLOGIT_TILE_STRIDE, cfg.wlogit_tile_stride);
-        pl->writeReg(PLReg::LN0_GAMMA_STRIDE, cfg.ln0_gamma_stride);
-        pl->writeReg(PLReg::LN1_GAMMA_STRIDE, cfg.ln1_gamma_stride);
-        pl->writeReg(PLReg::FINAL_NORM_GAMMA_STRIDE,
-                     cfg.final_norm_gamma_stride);
-        pl->writeReg(PLReg::LN0_EPS_STRIDE, cfg.ln0_eps_stride);
-        pl->writeReg(PLReg::LN1_EPS_STRIDE, cfg.ln1_eps_stride);
-        pl->writeReg(PLReg::FINAL_NORM_EPS_STRIDE, cfg.final_norm_eps_stride);
 
         // 64-bit DDR base addresses (on control_r bus)
         pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
@@ -154,7 +132,8 @@ public:
         pl->writeReg(PLReg::WK_OFFSET, mem.wk_offset);
         pl->writeReg(PLReg::WV_OFFSET, mem.wv_offset);
         pl->writeReg(PLReg::WO_OFFSET, mem.wo_offset);
-        pl->writeReg(PLReg::W1_OFFSET, mem.w1_offset);
+        pl->writeReg(PLReg::W1_GATE_OFFSET, mem.w1_gate_offset);
+        pl->writeReg(PLReg::W1_UP_OFFSET, mem.w1_up_offset);
         pl->writeReg(PLReg::W2_OFFSET, mem.w2_offset);
         pl->writeReg(PLReg::K_CACHE_OFFSET, mem.k_cache_offset);
         pl->writeReg(PLReg::V_CACHE_OFFSET, mem.v_cache_offset);
@@ -429,7 +408,7 @@ public:
 
         // Load binary weights into DDR — cap at what the FPGA actually needs
         loader->setWeightsFile(config.model.weights_file);
-        if (!loader->loadAllWeights(config.model, MemoryLayout::w_size)) {
+        if (!loader->loadAllWeights(config.model, WEIGHTS_SIZE)) {
             LOG_FATAL("Weight load failed " + err.getLastErrorMessage());
             return false;
         }

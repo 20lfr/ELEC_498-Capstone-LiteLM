@@ -1031,27 +1031,27 @@ module top_module_hls_tb;
   endfunction
 
   function automatic bit is_ln0_gamma_addr(input [63:0] addr);
-    is_ln0_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN0_GAMMA_BASE_LO, CTRLW_LN0_GAMMA_BASE_HI), IMG_SPAN_LN_GAMMA);
+    is_ln0_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN0_GAMMA_BASE_LO, CTRLW_LN0_GAMMA_BASE_HI), IMG_SPAN_LN0_GAMMA);
   endfunction
 
   function automatic bit is_ln1_gamma_addr(input [63:0] addr);
-    is_ln1_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN1_GAMMA_BASE_LO, CTRLW_LN1_GAMMA_BASE_HI), IMG_SPAN_LN_GAMMA);
+    is_ln1_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN1_GAMMA_BASE_LO, CTRLW_LN1_GAMMA_BASE_HI), IMG_SPAN_LN1_GAMMA);
   endfunction
 
   function automatic bit is_final_norm_gamma_addr(input [63:0] addr);
-    is_final_norm_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_FINAL_NORM_GAMMA_BASE_LO, CTRLW_FINAL_NORM_GAMMA_BASE_HI), IMG_SPAN_LN_GAMMA);
+    is_final_norm_gamma_addr = in_range64(addr, ctrl_base_addr64(CTRLW_FINAL_NORM_GAMMA_BASE_LO, CTRLW_FINAL_NORM_GAMMA_BASE_HI), IMG_SPAN_FINAL_NORM_GAMMA);
   endfunction
 
   function automatic bit is_ln0_eps_addr(input [63:0] addr);
-    is_ln0_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN0_EPS_BASE_LO, CTRLW_LN0_EPS_BASE_HI), IMG_SPAN_LN_EPS);
+    is_ln0_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN0_EPS_BASE_LO, CTRLW_LN0_EPS_BASE_HI), IMG_SPAN_LN0_EPS);
   endfunction
 
   function automatic bit is_ln1_eps_addr(input [63:0] addr);
-    is_ln1_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN1_EPS_BASE_LO, CTRLW_LN1_EPS_BASE_HI), IMG_SPAN_LN_EPS);
+    is_ln1_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_LN1_EPS_BASE_LO, CTRLW_LN1_EPS_BASE_HI), IMG_SPAN_LN1_EPS);
   endfunction
 
   function automatic bit is_final_norm_eps_addr(input [63:0] addr);
-    is_final_norm_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_FINAL_NORM_EPS_BASE_LO, CTRLW_FINAL_NORM_EPS_BASE_HI), IMG_SPAN_LN_EPS);
+    is_final_norm_eps_addr = in_range64(addr, ctrl_base_addr64(CTRLW_FINAL_NORM_EPS_BASE_LO, CTRLW_FINAL_NORM_EPS_BASE_HI), IMG_SPAN_FINAL_NORM_EPS);
   endfunction
 
   function automatic int unsigned region_index(

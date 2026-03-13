@@ -5,8 +5,6 @@
 #include "top_params.hpp"
 #include "Scheduler_FSM/src-hls/Scheduler_FSM.hpp"
 #include "ControlMemInterface/ControlMemInterface.hpp"
-// IRQ_Wizard functionality now integrated into ControlMemInterface
-// #include "Weight_Loader-Stager/Weight_stager.hpp"
 #include "Compute_Controller_Logic/src-hls/compute_controller.hpp"
 #include "Compute_Controller_Logic/src-hls/headed_compute_controller.hpp"
 #include "MMU/mmu_luka.hpp"

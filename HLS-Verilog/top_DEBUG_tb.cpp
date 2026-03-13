@@ -9,8 +9,10 @@
 #include <limits>
 #include <string>
 #include <ctime>
+#include <vector>
 #include <sys/stat.h>
 
+#include "tb_model_bin_loader.hpp"
 #include "top.hpp"
 
 #ifndef TOP_DEBUG_TB_BASENAME
@@ -87,32 +89,11 @@ static bool init_tb_logs() {
     return true;
 }
 
-constexpr uint64_t TB_BASE_WQ               = 0x00000ull;
-constexpr uint64_t TB_BASE_WK               = 0x04000ull;
-constexpr uint64_t TB_BASE_WV               = 0x08000ull;
-constexpr uint64_t TB_BASE_WO               = 0x0C000ull;
-constexpr uint64_t TB_BASE_W1               = 0x10000ull;
-constexpr uint64_t TB_BASE_W2               = 0x16000ull;
-constexpr uint64_t TB_BASE_K_CACHE          = 0x1C000ull;
-constexpr uint64_t TB_BASE_V_CACHE          = 0x20000ull;
-constexpr uint64_t TB_BASE_WQ_BIAS          = 0x24000ull;
-constexpr uint64_t TB_BASE_WK_BIAS          = 0x28000ull;
-constexpr uint64_t TB_BASE_WV_BIAS          = 0x2C000ull;
-constexpr uint64_t TB_BASE_WO_BIAS          = 0x30000ull;
-constexpr uint64_t TB_BASE_W1_BIAS          = 0x34000ull;
-constexpr uint64_t TB_BASE_W2_BIAS          = 0x3A000ull;
-constexpr uint64_t TB_BASE_WVOCAB           = 0x40000ull;
-constexpr uint64_t TB_BASE_WVOCAB_BIAS      = 0x41000ull;
-constexpr uint64_t TB_BASE_LN0_GAMMA        = 0x42000ull;
-constexpr uint64_t TB_BASE_LN1_GAMMA        = 0x42400ull;
-constexpr uint64_t TB_BASE_FINAL_NORM_GAMMA = 0x42800ull;
-constexpr uint64_t TB_BASE_LN0_EPS          = 0x42C00ull;
-constexpr uint64_t TB_BASE_LN1_EPS          = 0x42C40ull;
-constexpr uint64_t TB_BASE_FINAL_NORM_EPS   = 0x42C80ull;
-constexpr uint64_t TB_DDR_IMAGE_BYTES       = 0x43000ull;
+constexpr uint64_t TB_DDR_IMAGE_BYTES = static_cast<uint64_t>(WEIGHTS_SIZE);
 constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
-constexpr size_t   TB_CTRL_MEM_WORDS        = 40u;
-constexpr size_t   TB_CTRL_MEM_BYTES        = TB_CTRL_MEM_WORDS * sizeof(uint32_t);
+constexpr uint64_t TB_KV_IMAGE_BYTES  = static_cast<uint64_t>(KV_SIZE);
+constexpr uint64_t TB_KV_IMAGE_WORDS        = TB_KV_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
+constexpr size_t   TB_CTRL_MEM_WORDS        = 23u;
 
 static ControlMemSpace g_loaded_ctrl_mem{};
 static bool g_loaded_ctrl_mem_valid = false;
@@ -126,112 +107,53 @@ static std::string tb_source_dir() {
     return path.substr(0, slash);
 }
 
-static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count) {
+static void zero_axi_mem(axi_gmem_word_t *mem, uint64_t word_count) {
     for (uint64_t i = 0; i < word_count; ++i) {
-        ddr_mem[i] = 0;
+        mem[i] = 0;
     }
-
-    const std::string image_path = tb_source_dir() + "/test_data/ddr_image.bin";
-    std::ifstream in(image_path.c_str(), std::ios::binary);
-    if (!in) {
-        std::fprintf(stderr, "ERROR: Failed to open shared DDR image '%s'\n", image_path.c_str());
-        return false;
-    }
-
-    for (uint64_t i = 0; i < word_count; ++i) {
-        uint8_t bytes[AXI_GMEM_WORD_BYTES] = {};
-        in.read(reinterpret_cast<char *>(bytes), AXI_GMEM_WORD_BYTES);
-        const std::streamsize got = in.gcount();
-        if (got <= 0) {
-            break;
-        }
-        axi_gmem_word_t word = 0;
-        for (int b = 0; b < AXI_GMEM_WORD_BYTES; ++b) {
-            const uint8_t byte = (b < got) ? bytes[b] : 0;
-            word.range(((b + 1) * 8) - 1, b * 8) = static_cast<ap_uint<8> >(byte);
-        }
-        ddr_mem[i] = word;
-        if (got < AXI_GMEM_WORD_BYTES) {
-            break;
-        }
-    }
-
-    return true;
 }
 
-static bool load_shared_ctrl_mem(ControlMemSpace &ctrl_mem) {
-    const std::string ctrl_path = tb_source_dir() + "/test_data/ctrl_mem.bin";
-    std::ifstream in(ctrl_path.c_str(), std::ios::binary);
-    if (!in) {
-        std::fprintf(stderr, "ERROR: Failed to open shared ctrl image '%s'\n", ctrl_path.c_str());
-        return false;
+static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count) {
+    const std::string image_path =
+        tb_model_bin_loader::default_model_bin_path(tb_source_dir());
+    return tb_model_bin_loader::load_compact_weights_image(
+        image_path, ddr_mem, word_count);
+}
+
+static ControlMemSpace make_default_ctrl_mem() {
+    ControlMemSpace ctrl_mem{};
+    ctrl_mem.control = CTRL_RESETN_BIT;
+    ctrl_mem.irq_mask = IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT;
+    ctrl_mem.irq_clear = 0;
+
+    ctrl_mem.wq_offset = WQ_OFF;
+    ctrl_mem.wk_offset = WK_OFF;
+    ctrl_mem.wv_offset = WV_OFF;
+    ctrl_mem.wo_offset = WO_OFF;
+    ctrl_mem.w1_gate_offset = W1_OFF;
+    ctrl_mem.w1_up_offset = W1_UP_OFF;
+    ctrl_mem.w2_offset = W2_OFF;
+    ctrl_mem.k_cache_offset = K_CACHE_OFF;
+    ctrl_mem.v_cache_offset = V_CACHE_OFF;
+    ctrl_mem.wo_bias_offset = WO_BIAS_OFF;
+    ctrl_mem.w1_bias_offset = W1_BIAS_OFF;
+    ctrl_mem.w2_bias_offset = W2_BIAS_OFF;
+    ctrl_mem.ln0_gamma_offset = LN0_GAMMA_OFF;
+    ctrl_mem.ln1_gamma_offset = LN1_GAMMA_OFF;
+    ctrl_mem.final_norm_gamma_offset = FINAL_NORM_GAMMA_OFF;
+    ctrl_mem.ln0_eps_offset = LN0_EPS_OFF;
+    ctrl_mem.ln1_eps_offset = LN1_EPS_OFF;
+    ctrl_mem.final_norm_eps_offset = FINAL_NORM_EPS_OFF;
+    ctrl_mem.wlogit_offset = WLOGIT_OFF;
+    ctrl_mem.token_position = 0;
+    return ctrl_mem;
+}
+
+static void ensure_default_ctrl_mem_loaded() {
+    if (!g_loaded_ctrl_mem_valid) {
+        g_loaded_ctrl_mem = make_default_ctrl_mem();
+        g_loaded_ctrl_mem_valid = true;
     }
-
-    uint8_t raw[TB_CTRL_MEM_BYTES] = {};
-    in.read(reinterpret_cast<char *>(raw), static_cast<std::streamsize>(TB_CTRL_MEM_BYTES));
-    if (in.gcount() != static_cast<std::streamsize>(TB_CTRL_MEM_BYTES)) {
-        std::fprintf(stderr, "ERROR: Failed to read full shared ctrl image '%s' (got %lld bytes)\n",
-                     ctrl_path.c_str(),
-                     static_cast<long long>(in.gcount()));
-        return false;
-    }
-
-    auto read_u32 = [&](size_t word_idx) -> uint32_t {
-        const size_t off = word_idx * sizeof(uint32_t);
-        return static_cast<uint32_t>(raw[off + 0]) |
-               (static_cast<uint32_t>(raw[off + 1]) << 8) |
-               (static_cast<uint32_t>(raw[off + 2]) << 16) |
-               (static_cast<uint32_t>(raw[off + 3]) << 24);
-    };
-    auto read_u64 = [&](size_t word_idx_lo) -> uint64_t {
-        return static_cast<uint64_t>(read_u32(word_idx_lo)) |
-               (static_cast<uint64_t>(read_u32(word_idx_lo + 1)) << 32);
-    };
-
-    ControlMemSpace tmp{};
-    tmp.control = read_u32(0);
-    tmp.irq_mask = read_u32(1);
-    tmp.irq_clear = read_u32(2);
-    tmp.layer_stride = read_u32(3);
-    tmp.wq_head_stride = read_u32(4);
-    tmp.wk_head_stride = read_u32(5);
-    tmp.wv_head_stride = read_u32(6);
-    tmp.k_cache_stride = read_u32(7);
-    tmp.v_cache_stride = read_u32(8);
-    tmp.wo_tile_stride = read_u32(9);
-    tmp.w1_tile_stride = read_u32(10);
-    tmp.w2_tile_stride = read_u32(11);
-    tmp.wo_bias_tile_stride = read_u32(12);
-    tmp.w1_bias_tile_stride = read_u32(13);
-    tmp.w2_bias_tile_stride = read_u32(14);
-    tmp.wlogit_tile_stride = read_u32(15);
-    tmp.ln0_gamma_stride = read_u32(16);
-    tmp.ln1_gamma_stride = read_u32(17);
-    tmp.final_norm_gamma_stride = read_u32(18);
-    tmp.ln0_eps_stride = read_u32(19);
-    tmp.ln1_eps_stride = read_u32(20);
-    tmp.final_norm_eps_stride = read_u32(21);
-    tmp.wq_offset = read_u32(22);
-    tmp.wk_offset = read_u32(23);
-    tmp.wv_offset = read_u32(24);
-    tmp.wo_offset = read_u32(25);
-    tmp.w1_offset = read_u32(26);
-    tmp.w2_offset = read_u32(27);
-    tmp.k_cache_offset = read_u32(28);
-    tmp.v_cache_offset = read_u32(29);
-    tmp.wo_bias_offset = read_u32(30);
-    tmp.w1_bias_offset = read_u32(31);
-    tmp.w2_bias_offset = read_u32(32);
-    tmp.ln0_gamma_offset = read_u32(33);
-    tmp.ln1_gamma_offset = read_u32(34);
-    tmp.final_norm_gamma_offset = read_u32(35);
-    tmp.ln0_eps_offset = read_u32(36);
-    tmp.ln1_eps_offset = read_u32(37);
-    tmp.final_norm_eps_offset = read_u32(38);
-    tmp.wlogit_offset = read_u32(39);
-
-    ctrl_mem = tmp;
-    return true;
 }
 
 static bool get_shared_stream_size(size_t &bytes_total) {
@@ -1312,44 +1234,49 @@ static uint64_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) 
     switch (f.sel) {
     case DMASEL_WQ:
         if (f.head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wq_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wq_head_stride);
+        return static_cast<uint64_t>(ctrl.wq_offset) + layer_u * static_cast<uint64_t>(STRIDE_WQ_LAYER) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_WK:
         if (f.head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wk_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wk_head_stride);
+        return static_cast<uint64_t>(ctrl.wk_offset) + layer_u * static_cast<uint64_t>(STRIDE_WK_LAYER) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_WV:
         if (f.head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.wv_head_stride);
+        return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(STRIDE_WV_LAYER) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_CTX_K:
         if (f.head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.k_cache_stride);
+        return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_KV_HEAD);
     case DMASEL_CTX_V:
         if (f.head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(ctrl.v_cache_stride);
+        return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_KV_HEAD);
     case DMASEL_WO:
         if (f.tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wo_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.wo_tile_stride);
+        return static_cast<uint64_t>(ctrl.wo_offset) + layer_u * static_cast<uint64_t>(STRIDE_WO_LAYER) +
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(STRIDE_WO_TILE);
     case DMASEL_W1:
         if (f.tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.w1_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w1_tile_stride);
+        if (f.tile < (NUM_W1_TILES / 2)) {
+            return static_cast<uint64_t>(ctrl.w1_gate_offset) + layer_u * static_cast<uint64_t>(STRIDE_W1_GATE_LAYER) +
+                   static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(STRIDE_W1_TILE);
+        }
+        return static_cast<uint64_t>(ctrl.w1_up_offset) +
+               layer_u * static_cast<uint64_t>(STRIDE_W1_UP_LAYER) +
+               static_cast<uint64_t>(f.tile - (NUM_W1_TILES / 2)) * static_cast<uint64_t>(STRIDE_W1_TILE);
     case DMASEL_W2:
         if (f.tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
+        return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(STRIDE_W2_LAYER) +
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(STRIDE_W2_TILE);
     case DMASEL_WLOGIT:
         if (f.tile < 0) return 0;
         return static_cast<uint64_t>(ctrl.wlogit_offset) +
-               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(ctrl.wlogit_tile_stride);
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(STRIDE_WLOGIT_TILE);
     case DMASEL_LN0:
-        return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
+        return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(STRIDE_LN0_GAMMA);
     case DMASEL_LN1:
-        return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
+        return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(STRIDE_LN1_GAMMA);
     case DMASEL_FINAL_NORM:
         return static_cast<uint64_t>(ctrl.final_norm_gamma_offset);
     case DMASEL_CONCAT:
@@ -1373,44 +1300,49 @@ static uint64_t compute_wl_address(
     switch (sel) {
     case DMASEL_WQ:
         if (head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wq_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wq_head_stride);
+        return static_cast<uint64_t>(ctrl.wq_offset) + layer_u * static_cast<uint64_t>(STRIDE_WQ_LAYER) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_WK:
         if (head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wk_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wk_head_stride);
+        return static_cast<uint64_t>(ctrl.wk_offset) + layer_u * static_cast<uint64_t>(STRIDE_WK_LAYER) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_WV:
         if (head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.wv_head_stride);
+        return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(STRIDE_WV_LAYER) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_CTX_K:
         if (head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.k_cache_stride);
+        return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_KV_HEAD);
     case DMASEL_CTX_V:
         if (head < 0) return 0;
-        return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(head) * static_cast<uint64_t>(ctrl.v_cache_stride);
+        return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_KV_HEAD);
     case DMASEL_WO:
         if (tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.wo_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.wo_tile_stride);
+        return static_cast<uint64_t>(ctrl.wo_offset) + layer_u * static_cast<uint64_t>(STRIDE_WO_LAYER) +
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(STRIDE_WO_TILE);
     case DMASEL_W1:
         if (tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.w1_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w1_tile_stride);
+        if (tile < (NUM_W1_TILES / 2)) {
+            return static_cast<uint64_t>(ctrl.w1_gate_offset) + layer_u * static_cast<uint64_t>(STRIDE_W1_GATE_LAYER) +
+                   static_cast<uint64_t>(tile) * static_cast<uint64_t>(STRIDE_W1_TILE);
+        }
+        return static_cast<uint64_t>(ctrl.w1_up_offset) +
+               layer_u * static_cast<uint64_t>(STRIDE_W1_UP_LAYER) +
+               static_cast<uint64_t>(tile - (NUM_W1_TILES / 2)) * static_cast<uint64_t>(STRIDE_W1_TILE);
     case DMASEL_W2:
         if (tile < 0) return 0;
-        return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(ctrl.layer_stride) +
-               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.w2_tile_stride);
+        return static_cast<uint64_t>(ctrl.w2_offset) + layer_u * static_cast<uint64_t>(STRIDE_W2_LAYER) +
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(STRIDE_W2_TILE);
     case DMASEL_WLOGIT:
         if (tile < 0) return 0;
         return static_cast<uint64_t>(ctrl.wlogit_offset) +
-               static_cast<uint64_t>(tile) * static_cast<uint64_t>(ctrl.wlogit_tile_stride);
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(STRIDE_WLOGIT_TILE);
     case DMASEL_LN0:
-        return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
+        return static_cast<uint64_t>(ctrl.ln0_gamma_offset) + layer_u * static_cast<uint64_t>(STRIDE_LN0_GAMMA);
     case DMASEL_LN1:
-        return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
+        return static_cast<uint64_t>(ctrl.ln1_gamma_offset) + layer_u * static_cast<uint64_t>(STRIDE_LN1_GAMMA);
     case DMASEL_FINAL_NORM:
         return static_cast<uint64_t>(ctrl.final_norm_gamma_offset);
     default:
@@ -1577,12 +1509,8 @@ static const char *mmu_subcode_name(uint32_t subcode) {
 ControlMemSpace ctrl_mem_init(bool init) {
     ControlMemSpace ctrl_mem{};
     if(init) {
-        if (g_loaded_ctrl_mem_valid) {
-            return g_loaded_ctrl_mem;
-        }
-        std::fprintf(stderr,
-                     "ERROR: ctrl_mem_init(true) called before ctrl_mem.bin was loaded\n");
-        std::abort();
+        ensure_default_ctrl_mem_loaded();
+        return g_loaded_ctrl_mem;
     }
     return ctrl_mem;
 }
@@ -1634,13 +1562,13 @@ static void seed_ln_params_ddr(const ControlMemSpace &ctrl,
 
     for (int layer = 0; layer < NUM_LAYERS; ++layer) {
         const uint64_t ln0_gamma_addr = static_cast<uint64_t>(ctrl.ln0_gamma_offset) +
-            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln0_gamma_stride);
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(STRIDE_LN0_GAMMA);
         const uint64_t ln1_gamma_addr = static_cast<uint64_t>(ctrl.ln1_gamma_offset) +
-            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln1_gamma_stride);
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(STRIDE_LN1_GAMMA);
         const uint64_t ln0_eps_addr = static_cast<uint64_t>(ctrl.ln0_eps_offset) +
-            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln0_eps_stride);
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(STRIDE_LN0_EPS);
         const uint64_t ln1_eps_addr = static_cast<uint64_t>(ctrl.ln1_eps_offset) +
-            static_cast<uint64_t>(layer) * static_cast<uint64_t>(ctrl.ln1_eps_stride);
+            static_cast<uint64_t>(layer) * static_cast<uint64_t>(STRIDE_LN1_EPS);
 
         for (int i = 0; i < D_MODEL; ++i) {
             write_i32_le(ln0_gamma_addr + static_cast<uint64_t>(i) * 4ull, 8192);
@@ -1667,8 +1595,8 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
     uint32_t dma_addr    = 0;
     uint32_t dma_rx_word = 0;
     uint32_t dma_tx_word = 0;
-    axi_gmem_word_t ddr_mem[TB_DDR_IMAGE_WORDS] = {};
-    axi_gmem_word_t kv_cache[TB_DDR_IMAGE_WORDS] = {};
+    std::vector<axi_gmem_word_t> ddr_mem(static_cast<size_t>(TB_DDR_IMAGE_WORDS));
+    std::vector<axi_gmem_word_t> kv_cache(static_cast<size_t>(TB_KV_IMAGE_WORDS));
 
     hls::stream<axis8_t> s_axis_in("s_axis_in");
     hls::stream<axis8_t> m_axis_out("m_axis_out");
@@ -1727,14 +1655,11 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
     bool aborted_on_error = false;
     int  base_assign_step = 0;
 
-    if (!load_shared_ctrl_mem(g_loaded_ctrl_mem)) {
+    ensure_default_ctrl_mem_loaded();
+    if (!load_shared_ddr_image(ddr_mem.data(), TB_DDR_IMAGE_WORDS)) {
         return 1;
     }
-    g_loaded_ctrl_mem_valid = true;
-    if (!load_shared_ddr_image(ddr_mem, TB_DDR_IMAGE_WORDS) ||
-        !load_shared_ddr_image(kv_cache, TB_DDR_IMAGE_WORDS)) {
-        return 1;
-    }
+    zero_axi_mem(kv_cache.data(), TB_KV_IMAGE_WORDS);
     size_t total_stream_tokens = 0;
     if (!load_shared_stream_token(stream_in_buf, STREAM_IN_BUF_BYTES,
                                   selected_stream_token, total_stream_tokens)) {
@@ -1746,13 +1671,10 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
                        static_cast<size_t>(STREAM_TOKEN_BYTES));
     enum class CtrlInitStage { 
         TestCtrlInit,           // 0: Initialize with valid config
-        TestZeroStride,         // 4: Test zero-stride error  
-        TestZeroStrideCheck,    // 5: Verify error was flagged
-        TestZeroStrideClear,    // 6: Clear the error
-        TestAlignment,          // 7: Test misaligned address error
-        TestAlignmentCheck,     // 8: Verify error was flagged
-        TestAlignmentClear,     // 9: Clear the error
-        AssertReset,            // 10: Normal operation begins
+        TestAlignment,          // 1: Test misaligned address error
+        TestAlignmentCheck,     // 2: Verify error was flagged
+        TestAlignmentClear,     // 3: Clear the error
+        AssertReset,            // 4: Normal operation begins
         DeassertReset, 
         ProgramBases, 
         AssertStart, 
@@ -1866,50 +1788,23 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
             ctrl_shadow_control = CTRL_RESETN_BIT;
             ctrl_resetn_in = true;
             std::printf("[TEST] Starting ControlMemInterface error tests...\n");
-            ctrl_stage = CtrlInitStage::TestZeroStride;
-            ctrl_gap_cycles = 1;
-        
-        // ========== TEST 2: Zero Stride ==========
-        } else if (ctrl_stage == CtrlInitStage::TestZeroStride) {
-            ctrl_mem = ctrl_mem_init(true);  // Start fresh
-            ctrl_mem.layer_stride = 0;       // Inject error: zero stride
-            std::printf("[TEST 2] Injecting layer_stride=0 (expect ERR_DMA_ZERO_STRIDE)\n");
-            ctrl_stage = CtrlInitStage::TestZeroStrideCheck;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlInitStage::TestZeroStrideCheck) {
-            if ((status_mem.irq_status & IRQ_ERROR_BIT) &&
-                status_mem.error_code == ERR_DMA_ZERO_STRIDE) {
-                std::printf("[TEST 2] PASS: Zero stride error detected (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_passed++;
-            } else {
-                std::printf("[TEST 2] FAIL: Expected zero stride error (irq=0x%X, err=0x%X)\n",
-                            status_mem.irq_status, status_mem.error_code);
-                test_errors_failed++;
-            }
-            ctrl_mem.irq_clear = IRQ_ERROR_BIT;
-            ctrl_stage = CtrlInitStage::TestZeroStrideClear;
-            ctrl_gap_cycles = 1;
-        } else if (ctrl_stage == CtrlInitStage::TestZeroStrideClear) {
-            ctrl_mem.irq_clear = 0;
-            ctrl_mem = ctrl_mem_init(true);
             ctrl_stage = CtrlInitStage::TestAlignment;
             ctrl_gap_cycles = 1;
         
-        // ========== TEST 3: Address Alignment ==========
+        // ========== TEST 2: Address Alignment ==========
         } else if (ctrl_stage == CtrlInitStage::TestAlignment) {
             ctrl_mem = ctrl_mem_init(true);  // Start fresh
             ctrl_mem.wq_offset = 0x00000001u;  // Inject error: not 64-byte aligned
-            std::printf("[TEST 3] Injecting wq_offset=0x00000001 (expect ERR_DMA_ALIGNMENT)\n");
+            std::printf("[TEST 2] Injecting wq_offset=0x00000001 (expect ERR_DMA_ALIGNMENT)\n");
             ctrl_stage = CtrlInitStage::TestAlignmentCheck;
             ctrl_gap_cycles = 1;
         } else if (ctrl_stage == CtrlInitStage::TestAlignmentCheck) {
             if ((status_mem.irq_status & IRQ_ERROR_BIT) && status_mem.error_code == ERR_DMA_ALIGNMENT) {
-                std::printf("[TEST 3] PASS: ERR_DMA_ALIGNMENT detected (irq=0x%X, err=0x%X)\n",
+                std::printf("[TEST 2] PASS: ERR_DMA_ALIGNMENT detected (irq=0x%X, err=0x%X)\n",
                             status_mem.irq_status, status_mem.error_code);
                 test_errors_passed++;
             } else {
-                std::printf("[TEST 3] FAIL: Expected ERR_DMA_ALIGNMENT (irq=0x%X, err=0x%X)\n",
+                std::printf("[TEST 2] FAIL: Expected ERR_DMA_ALIGNMENT (irq=0x%X, err=0x%X)\n",
                             status_mem.irq_status, status_mem.error_code);
                 test_errors_failed++;
             }
@@ -2080,8 +1975,8 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
         transformer_top(
             s_axis_in,
             m_axis_out,
-            ddr_mem,
-            kv_cache,
+            ddr_mem.data(),
+            kv_cache.data(),
             ctrl_mem,
             status_mem,
             irq_ps,
@@ -2196,10 +2091,10 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
                         const uint64_t gamma_addr = static_cast<uint64_t>(ctrl_mem.final_norm_gamma_offset);
                         const uint64_t eps_addr = static_cast<uint64_t>(ctrl_mem.final_norm_eps_offset);
                         for (int i = 0; i < compute_buf::INLayerNormLayout::GAMMA_BYTES; ++i) {
-                            final_norm_gamma_src[i] = dma_word_get_byte(ddr_mem, gamma_addr + static_cast<uint64_t>(i));
+                            final_norm_gamma_src[i] = dma_word_get_byte(ddr_mem.data(), gamma_addr + static_cast<uint64_t>(i));
                         }
                         for (int i = 0; i < compute_buf::INLayerNormLayout::EPS_BYTES; ++i) {
-                            final_norm_eps_src[i] = dma_word_get_byte(ddr_mem, eps_addr + static_cast<uint64_t>(i));
+                            final_norm_eps_src[i] = dma_word_get_byte(ddr_mem.data(), eps_addr + static_cast<uint64_t>(i));
                         }
                         std::printf("final_norm preload source:\n");
                         std::printf("  gamma_addr=0x%08llX eps_addr=0x%08llX\n",

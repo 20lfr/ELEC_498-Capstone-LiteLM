@@ -184,31 +184,31 @@ struct Step {
 
 static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
     std::printf("\n[CTRL_MEM] strides:\n");
-    std::printf("  layer_stride=%u\n", static_cast<unsigned>(ctrl.layer_stride));
-    std::printf("  wq_head_stride=%u\n", static_cast<unsigned>(ctrl.wq_head_stride));
-    std::printf("  wk_head_stride=%u\n", static_cast<unsigned>(ctrl.wk_head_stride));
-    std::printf("  wv_head_stride=%u\n", static_cast<unsigned>(ctrl.wv_head_stride));
-    std::printf("  k_cache_stride=%u\n", static_cast<unsigned>(ctrl.k_cache_stride));
-    std::printf("  v_cache_stride=%u\n", static_cast<unsigned>(ctrl.v_cache_stride));
-    std::printf("  wo_tile_stride=%u\n", static_cast<unsigned>(ctrl.wo_tile_stride));
-    std::printf("  w1_tile_stride=%u\n", static_cast<unsigned>(ctrl.w1_tile_stride));
-    std::printf("  w2_tile_stride=%u\n", static_cast<unsigned>(ctrl.w2_tile_stride));
-    std::printf("  wo_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.wo_bias_tile_stride));
-    std::printf("  w1_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.w1_bias_tile_stride));
-    std::printf("  w2_bias_tile_stride=%u\n", static_cast<unsigned>(ctrl.w2_bias_tile_stride));
-    std::printf("  ln0_gamma_stride=%u\n", static_cast<unsigned>(ctrl.ln0_gamma_stride));
-    std::printf("  ln1_gamma_stride=%u\n", static_cast<unsigned>(ctrl.ln1_gamma_stride));
-    std::printf("  final_norm_gamma_stride=%u\n", static_cast<unsigned>(ctrl.final_norm_gamma_stride));
-    std::printf("  ln0_eps_stride=%u\n", static_cast<unsigned>(ctrl.ln0_eps_stride));
-    std::printf("  ln1_eps_stride=%u\n", static_cast<unsigned>(ctrl.ln1_eps_stride));
-    std::printf("  final_norm_eps_stride=%u\n", static_cast<unsigned>(ctrl.final_norm_eps_stride));
+    std::printf("  wq_layer_stride=%u\n", static_cast<unsigned>(STRIDE_WQ_LAYER));
+    std::printf("  qkv_head_stride=%u\n", static_cast<unsigned>(STRIDE_QKV_HEAD));
+    std::printf("  kv_layer_stride=%u\n", static_cast<unsigned>(STRIDE_KV_LAYER));
+    std::printf("  kv_head_stride=%u\n", static_cast<unsigned>(STRIDE_KV_HEAD));
+    std::printf("  wo_tile_stride=%u\n", static_cast<unsigned>(STRIDE_WO_TILE));
+    std::printf("  w1_tile_stride=%u\n", static_cast<unsigned>(STRIDE_W1_TILE));
+    std::printf("  w2_tile_stride=%u\n", static_cast<unsigned>(STRIDE_W2_TILE));
+    std::printf("  wo_bias_tile_stride=%u\n", static_cast<unsigned>(STRIDE_WO_BIAS_TILE));
+    std::printf("  w1_bias_tile_stride=%u\n", static_cast<unsigned>(STRIDE_W1_BIAS_TILE));
+    std::printf("  w2_bias_tile_stride=%u\n", static_cast<unsigned>(STRIDE_W2_BIAS_TILE));
+    std::printf("  wlogit_tile_stride=%u\n", static_cast<unsigned>(STRIDE_WLOGIT_TILE));
+    std::printf("  ln0_gamma_stride=%u\n", static_cast<unsigned>(STRIDE_LN0_GAMMA));
+    std::printf("  ln1_gamma_stride=%u\n", static_cast<unsigned>(STRIDE_LN1_GAMMA));
+    std::printf("  final_norm_gamma_stride=%u\n", static_cast<unsigned>(STRIDE_FINAL_NORM_GAMMA));
+    std::printf("  ln0_eps_stride=%u\n", static_cast<unsigned>(STRIDE_LN0_EPS));
+    std::printf("  ln1_eps_stride=%u\n", static_cast<unsigned>(STRIDE_LN1_EPS));
+    std::printf("  final_norm_eps_stride=%u\n", static_cast<unsigned>(STRIDE_FINAL_NORM_EPS));
 
     std::printf("[CTRL_MEM] base addresses:\n");
     std::printf("  wq_offset=0x%x\n", static_cast<unsigned>(ctrl.wq_offset));
     std::printf("  wk_offset=0x%x\n", static_cast<unsigned>(ctrl.wk_offset));
     std::printf("  wv_offset=0x%x\n", static_cast<unsigned>(ctrl.wv_offset));
     std::printf("  wo_offset=0x%x\n", static_cast<unsigned>(ctrl.wo_offset));
-    std::printf("  w1_offset=0x%x\n", static_cast<unsigned>(ctrl.w1_offset));
+    std::printf("  w1_gate_offset=0x%x\n", static_cast<unsigned>(ctrl.w1_gate_offset));
+    std::printf("  w1_up_offset=0x%x\n", static_cast<unsigned>(ctrl.w1_up_offset));
     std::printf("  w2_offset=0x%x\n", static_cast<unsigned>(ctrl.w2_offset));
     std::printf("  k_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.k_cache_offset));
     std::printf("  v_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.v_cache_offset));
@@ -371,24 +371,13 @@ int main() {
     constexpr int DMA_LATENCY = 3;
 
     ControlMemSpace ctrl{};
-    ctrl.layer_stride = 0x00100000;
-
-    ctrl.wq_head_stride = head_buf::QKV_W_FULL_BYTES;
-    ctrl.wk_head_stride = head_buf::QKV_W_FULL_BYTES;
-    ctrl.wv_head_stride = head_buf::QKV_W_FULL_BYTES;
-
-    ctrl.wo_tile_stride = compute_buf::INOutProjLayout::W_BYTES + compute_buf::INOutProjLayout::B_BYTES;
-    ctrl.w1_tile_stride = compute_buf::INFfnW1Layout::W_BYTES + compute_buf::INFfnW1Layout::B_BYTES;
-    ctrl.w2_tile_stride = compute_buf::INFfnW2Layout::W_BYTES + compute_buf::INFfnW2Layout::B_BYTES;
-
-    ctrl.k_cache_stride = CONTEXT_LENGTH * D_HEADS;
-    ctrl.v_cache_stride = CONTEXT_LENGTH * D_HEADS;
 
     ctrl.wq_offset = 0x10000000u;
     ctrl.wk_offset = 0x11000000u;
     ctrl.wv_offset = 0x12000000u;
     ctrl.wo_offset = 0x13000000u;
-    ctrl.w1_offset = 0x14000000u;
+    ctrl.w1_gate_offset = 0x14000000u;
+    ctrl.w1_up_offset = 0x15000000u;
     ctrl.w2_offset = 0x15000000u;
     ctrl.k_cache_offset = 0x20000000u;
     ctrl.v_cache_offset = 0x21000000u;
