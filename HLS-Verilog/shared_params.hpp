@@ -20,12 +20,12 @@ constexpr int min2_constexpr(int a, int b) { return (a < b) ? a : b; }
 // Tunable architecture parameters::
 // ------------------------------------------------------------
 // Tiling controls
-constexpr int NUM_WO_TILES       = 4;
-constexpr int NUM_W1_TILES       = 8;
-constexpr int NUM_W2_TILES       = 4;
-constexpr int NUM_LOGIT_TILES    = 2;
-constexpr int NUM_QKV_HEAD_TILES = 2;
-constexpr int ATT_CTX_BLOCK      = 8;
+constexpr int NUM_WO_TILES             = 4;
+constexpr int NUM_W1_TILES             = 8;
+constexpr int NUM_W2_TILES             = 4;
+constexpr int NUM_LOGIT_TILES          = 2;
+constexpr int NUM_QKV_HEAD_TILES       = 2;
+constexpr int ATT_CTX_BLOCK            = 8;
 constexpr int NUM_ATT_VALUE_HEAD_TILES = 2;
 
 // Parallelism controls
@@ -44,20 +44,20 @@ constexpr int MAX_CYCLIC_SIZE = NORM_TILE_SIZE;
 constexpr int HEADS_PARALLEL = 2;
 
 // Params used in architecture
-constexpr int NUM_HEADS           = 4;
-constexpr int NUM_LAYERS          = 4;
-constexpr int D_MODEL             = 16; // Number of heads processed in parallel
-constexpr int D_FFN               = 24; // Feed-Forward hidden layer size
-constexpr int D_VOCAB             = 32; // Vocab projection output size
-constexpr int D_HEADS             = D_MODEL / NUM_HEADS; // Number of heads processed in parallel
-constexpr int CONTEXT_LENGTH      = 16; // Context window length
-constexpr int D_HEAD_TILE_QKV     = D_HEADS / NUM_QKV_HEAD_TILES;
-constexpr int D_TILE_WO           = D_MODEL / NUM_WO_TILES; // Tile size for WO
-constexpr int D_TILE_W1           = D_FFN * 2 / NUM_W1_TILES; // Tile size for W1
-constexpr int D_TILE_W2           = D_MODEL / NUM_W2_TILES;
-constexpr int D_TILE_LOGIT        = D_VOCAB / NUM_LOGIT_TILES; // Tile size for vocab projection
-constexpr int STREAM_IN_BUF_BYTES = D_MODEL; // Token ingress payload (int8 activations)
-constexpr int STREAM_OUT_BUF_BYTES  = 4;       // Streamed egress payload (argmax token id)
+constexpr int NUM_HEADS            = 4;
+constexpr int NUM_LAYERS           = 4;
+constexpr int D_MODEL              = 16;
+constexpr int D_FFN                = 24;
+constexpr int D_VOCAB              = 32;
+constexpr int D_HEADS              = D_MODEL / NUM_HEADS;
+constexpr int CONTEXT_LENGTH       = 16;
+constexpr int D_HEAD_TILE_QKV      = D_HEADS / NUM_QKV_HEAD_TILES;
+constexpr int D_TILE_WO            = D_MODEL / NUM_WO_TILES;
+constexpr int D_TILE_W1            = D_FFN * 2 / NUM_W1_TILES;
+constexpr int D_TILE_W2            = D_MODEL / NUM_W2_TILES;
+constexpr int D_TILE_LOGIT         = D_VOCAB / NUM_LOGIT_TILES;
+constexpr int STREAM_IN_BUF_BYTES  = D_MODEL;
+constexpr int STREAM_OUT_BUF_BYTES = 4;
 
 static_assert((D_HEADS % NUM_QKV_HEAD_TILES) == 0,
               "D_HEADS must divide NUM_QKV_HEAD_TILES");
@@ -179,6 +179,7 @@ constexpr uint32_t STRIDE_W1_BIAS_LAYER    = (2 * MODEL_INTERMEDIATE_SIZE) * siz
 constexpr uint32_t STRIDE_W2_BIAS_LAYER    = MODEL_HIDDEN_SIZE * sizeof(int32_t);
 constexpr uint32_t STRIDE_KV_LAYER         = NUM_HEADS * CONTEXT_LENGTH * D_HEADS;
 constexpr uint32_t STRIDE_KV_HEAD          = CONTEXT_LENGTH * D_HEADS;
+constexpr uint32_t STRIDE_KV_CTX_BLOCK     = ATT_CTX_BLOCK * D_HEADS;
 constexpr uint32_t STRIDE_KV_TOKEN         = D_HEADS;
 
 // DDR Memory Offsets

@@ -1,4 +1,5 @@
 #include "headed_compute_controller.hpp"
+#include "../../rope_lut_full_q15.hpp"
 #ifndef __SYNTHESIS__
 #include <cstdio>
 #endif
@@ -74,6 +75,7 @@ static void print_qkv_weight_matrix(const uint8_t in_buf[head_buf::IN_BUF_BYTES]
 static void trace_qkv_buffers(ComputeOp op,
                               uint8_t layer_idx,
                               uint8_t head_idx,
+                              uint8_t tile_idx,
                               const uint8_t in_buf[head_buf::IN_BUF_BYTES],
                               const uint8_t out_buf[head_buf::OUT_BUF_BYTES],
                               int32_t M,
@@ -86,10 +88,11 @@ static void trace_qkv_buffers(ComputeOp op,
     for (int i = 0; i < D_HEAD_TILE_QKV; ++i) {
         y[i] = compute_buf::read_i8(out_buf, head_buf::OUTQkvLayout::Y + i);
     }
-    std::printf("[HEAD IO] op=%s layer=%u head=%u M=%d n=%d\n",
+    std::printf("[HEAD IO] op=%s layer=%u head=%u tile=%u M=%d n=%d\n",
                 head_op_name(op),
                 static_cast<unsigned>(layer_idx),
                 static_cast<unsigned>(head_idx),
+                static_cast<unsigned>(tile_idx),
                 M,
                 n);
     print_i8_vector("  act", act, D_MODEL);
@@ -223,28 +226,10 @@ static inline int8_t sat_i8(int32_t x) {
     return static_cast<int8_t>(x);
 }
 
-// RoPE LUTs for current bring-up config (CONTEXT_LENGTH=16, D_HEADS=4).
-// Pair 0 angle: pos, Pair 1 angle: pos * 0.01, both in Q1.15.
-static constexpr int ROPE_LUT_CONTEXT = 16;
-static_assert(CONTEXT_LENGTH == ROPE_LUT_CONTEXT, "RoPE LUT expects CONTEXT_LENGTH=16");
-static_assert(D_HEADS == 4, "RoPE LUT expects D_HEADS=4");
-
-static constexpr int16_t ROPE_PAIR0_COS_Q15[ROPE_LUT_CONTEXT] = {
-    32767, 17705, -13636, -32440, -21419, 9295, 31463, 24704,
-    -4768, -29856, -27495, 145, 27651, 29735, 4481, -24893
-};
-static constexpr int16_t ROPE_PAIR0_SIN_Q15[ROPE_LUT_CONTEXT] = {
-    0, 27573, 29796, 4624, -24799, -31422, -9156, 21528,
-    32419, 13504, -17826, -32768, -17582, 13768, 32460, 21309
-};
-static constexpr int16_t ROPE_PAIR1_COS_Q15[ROPE_LUT_CONTEXT] = {
-    32767, 32766, 32761, 32753, 32742, 32727, 32709, 32688,
-    32663, 32635, 32604, 32570, 32532, 32492, 32447, 32400
-};
-static constexpr int16_t ROPE_PAIR1_SIN_Q15[ROPE_LUT_CONTEXT] = {
-    0, 328, 655, 983, 1310, 1638, 1965, 2292,
-    2619, 2945, 3271, 3597, 3923, 4248, 4573, 4897
-};
+static_assert(CONTEXT_LENGTH <= ROPE_LUT_CONTEXT,
+              "RoPE LUT must cover the configured CONTEXT_LENGTH");
+static_assert((D_HEADS / 2) <= ROPE_LUT_PAIRS,
+              "RoPE LUT must cover the configured head-dimension pairs");
 
 static inline int clamp_pos(uint16_t pos) {
 #pragma HLS INLINE
@@ -259,14 +244,10 @@ static inline void lookup_sincos_q15(
 ) {
 #pragma HLS INLINE
     const int p = clamp_pos(pos);
-    if (pair_idx == 0) {
-        c_q15 = ROPE_PAIR0_COS_Q15[p];
-        s_q15 = ROPE_PAIR0_SIN_Q15[p];
-        return;
-    }
-    if (pair_idx == 1) {
-        c_q15 = ROPE_PAIR1_COS_Q15[p];
-        s_q15 = ROPE_PAIR1_SIN_Q15[p];
+    if ((pair_idx >= 0) && (pair_idx < ROPE_LUT_PAIRS)) {
+        const int lut_idx = (pair_idx * ROPE_LUT_CONTEXT) + p;
+        c_q15 = ROPE_COS_Q15[lut_idx];
+        s_q15 = ROPE_SIN_Q15[lut_idx];
         return;
     }
     c_q15 = 32767;
@@ -738,6 +719,7 @@ static void QKV_TO_BUF(
     ComputeOp op,
     uint8_t layer_idx,
     uint8_t head_idx,
+    uint8_t tile_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -786,7 +768,7 @@ static void QKV_TO_BUF(
         }
     }
 #ifndef __SYNTHESIS__
-    trace_qkv_buffers(op, layer_idx, head_idx, in_buf, out_buf, M, n);
+    trace_qkv_buffers(op, layer_idx, head_idx, tile_idx, in_buf, out_buf, M, n);
 #endif
 }
 
@@ -971,7 +953,8 @@ static void headed_compute_controller_lane(
                 case ComputeOp::CMP_Q:              // Q0.7   -> Q0.7 (requant in-op)
                 case ComputeOp::CMP_K:              // Q0.7   -> Q0.7 (requant in-op)
                 case ComputeOp::CMP_V: {            // Q0.7   -> Q0.7 (requant in-op)
-                    QKV_TO_BUF(ctx.req.op, ctx.req.layer_idx, ctx.req.head_idx, in_buf,
+                    QKV_TO_BUF(ctx.req.op, ctx.req.layer_idx, ctx.req.head_idx,
+                               ctx.req.tile_idx, in_buf,
                                out_buf);
                     next_state = ComputeState::MEM_WRITEBACK;
                     break;

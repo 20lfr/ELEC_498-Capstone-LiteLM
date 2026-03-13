@@ -1664,7 +1664,8 @@ static bool build_dma_piece_plan(DmaSel sel,
         }
         case DMASEL_CTX_K: {
             piece_count = 1;
-            piece_bytes[0] = head_buf::ATT_SCORES_K_CACHE_FULL_BYTES;
+            piece_bytes[0] = head_buf::ATT_SCORES_K_CACHE_TILE_BYTES;
+            piece_addr_off[0] = 0;
             piece_tag[0] = Tag::CTX_K;
             return true;
         }
@@ -1753,10 +1754,11 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
             return true;
         }
         case DmaSel::DMASEL_CTX_K: {
-            if (head < 0) return false;
+            if (head < 0 || tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.k_cache_offset)
                      + static_cast<uint32_t>(layer) * STRIDE_KV_LAYER
-                     + static_cast<uint32_t>(head) * STRIDE_KV_HEAD;
+                     + static_cast<uint32_t>(head) * STRIDE_KV_HEAD
+                     + static_cast<uint32_t>(tile) * STRIDE_KV_CTX_BLOCK;
             return true;
         }
         case DmaSel::DMASEL_CTX_V: {
@@ -1919,7 +1921,8 @@ static void trace_ddr_fetch_plan(ControlMemSpace ctrl_mem,
                                  uint8_t piece_count,
                                  const uint32_t piece_bytes[MAX_DMA_PIECES],
                                  const uint32_t piece_addr_off[MAX_DMA_PIECES]) {
-    if (dma_uses_kv_cache(sel) || sel == DMASEL_NONE || sel == DMASEL_CONCAT ||
+    if ((dma_uses_kv_cache(sel) && sel != DMASEL_CTX_K) ||
+        sel == DMASEL_NONE || sel == DMASEL_CONCAT ||
         sel == DMASEL_K_WRITE || sel == DMASEL_V_WRITE) {
         return;
     }
@@ -2018,15 +2021,14 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head, int tile,
         }
         case CMP_ATT_SCORES: {
             const int tile_idx = (tile < 0) ? 0 : tile;
-            const bool consume_inputs = (tile < 0) || (tile_idx >= (NUM_ATT_CTX_BLOCKS - 1));
-            const uint32_t k_off = static_cast<uint32_t>(tile_idx) * head_buf::INAttScoresLayout::K_CACHE_BYTES;
+            const bool consume_q = (tile < 0) || (tile_idx >= (NUM_ATT_CTX_BLOCKS - 1));
             bool ok = load_region_to_buf(Tag::Q_OUT, layer, head, -1,
                                          lane_buf, head_buf::INAttScoresLayout::Q, head_buf::INAttScoresLayout::Q_BYTES,
-                                         consume_inputs, invalid_flag);
+                                         consume_q, invalid_flag);
             if (!ok) return false;
-            return load_region_segment_to_buf(Tag::CTX_K, layer, head, -1, k_off,
-                                              lane_buf, head_buf::INAttScoresLayout::K_CACHE, head_buf::INAttScoresLayout::K_CACHE_BYTES,
-                                              consume_inputs, invalid_flag);
+            return load_region_to_buf(Tag::CTX_K, layer, head, tile_idx,
+                                      lane_buf, head_buf::INAttScoresLayout::K_CACHE, head_buf::INAttScoresLayout::K_CACHE_BYTES,
+                                      true, invalid_flag);
         }
         case CMP_VALUE_SCALE: {
             return load_region_to_buf(Tag::ATT_SCORES_OUT, layer, head, -1,
@@ -2834,7 +2836,8 @@ void mmu_fsm(
             const int key_tile = (tag == Tag::WO_W || tag == Tag::WO_B ||
                                   tag == Tag::W1_W || tag == Tag::W1_B ||
                                   tag == Tag::W2_W || tag == Tag::W2_B ||
-                                  tag == Tag::LOGITS_W)
+                                  tag == Tag::LOGITS_W ||
+                                  tag == Tag::CTX_K)
                                  ? active_dma_tile : -1;
 
             const int idx = get_or_create_region(tag, active_dma_layer, key_head, key_tile,

@@ -25,7 +25,7 @@ constexpr uint32_t URAM_BANK_WORDS = URAM_BANK_BYTES / URAM_BANK_WORD_BYTES;
 //   0 -> full-capacity MMU sizing (default)
 //   1 -> reduced MMU bookkeeping/buffer sizing for faster HLS synth iterations
 #ifndef FAST_SYNTH
-#define FAST_SYNTH 1
+#define FAST_SYNTH 0
 #endif
 
 #if FAST_SYNTH

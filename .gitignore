@@ -1,5 +1,6 @@
 # --- Vivado / FPGA General ---
 *.log
+*.logs
 *.jou
 *.str
 *.zip
@@ -60,3 +61,5 @@ hardware_overlay/
 dependencies/
 package/
 .tar.gz
+HLS-Verilog/test_data/
+*.bin

@@ -118,8 +118,8 @@ static void zero_axi_mem(axi_gmem_word_t *mem, uint64_t word_count) {
 
 static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count) {
     const std::string image_path =
-        tb_model_bin_loader::default_model_bin_path(tb_source_dir());
-    return tb_model_bin_loader::load_compact_weights_image(
+        tb_model_bin_loader::default_generated_ddr_image_path(tb_source_dir());
+    return tb_model_bin_loader::load_prebuilt_ddr_image(
         image_path, ddr_mem, word_count);
 }
 

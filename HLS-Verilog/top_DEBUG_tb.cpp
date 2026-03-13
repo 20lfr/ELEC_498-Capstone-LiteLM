@@ -115,8 +115,8 @@ static void zero_axi_mem(axi_gmem_word_t *mem, uint64_t word_count) {
 
 static bool load_shared_ddr_image(axi_gmem_word_t *ddr_mem, uint64_t word_count) {
     const std::string image_path =
-        tb_model_bin_loader::default_model_bin_path(tb_source_dir());
-    return tb_model_bin_loader::load_compact_weights_image(
+        tb_model_bin_loader::default_generated_ddr_image_path(tb_source_dir());
+    return tb_model_bin_loader::load_prebuilt_ddr_image(
         image_path, ddr_mem, word_count);
 }
 
@@ -1245,9 +1245,10 @@ static uint64_t compute_wl_address(uint32_t instr, const ControlMemSpace &ctrl) 
         return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(STRIDE_WV_LAYER) +
                static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_CTX_K:
-        if (f.head < 0) return 0;
+        if (f.head < 0 || f.tile < 0) return 0;
         return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +
-               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_KV_HEAD);
+               static_cast<uint64_t>(f.head) * static_cast<uint64_t>(STRIDE_KV_HEAD) +
+               static_cast<uint64_t>(f.tile) * static_cast<uint64_t>(STRIDE_KV_CTX_BLOCK);
     case DMASEL_CTX_V:
         if (f.head < 0) return 0;
         return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +
@@ -1311,9 +1312,10 @@ static uint64_t compute_wl_address(
         return static_cast<uint64_t>(ctrl.wv_offset) + layer_u * static_cast<uint64_t>(STRIDE_WV_LAYER) +
                static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_QKV_HEAD);
     case DMASEL_CTX_K:
-        if (head < 0) return 0;
+        if (head < 0 || tile < 0) return 0;
         return static_cast<uint64_t>(ctrl.k_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +
-               static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_KV_HEAD);
+               static_cast<uint64_t>(head) * static_cast<uint64_t>(STRIDE_KV_HEAD) +
+               static_cast<uint64_t>(tile) * static_cast<uint64_t>(STRIDE_KV_CTX_BLOCK);
     case DMASEL_CTX_V:
         if (head < 0) return 0;
         return static_cast<uint64_t>(ctrl.v_cache_offset) + layer_u * static_cast<uint64_t>(STRIDE_KV_LAYER) +

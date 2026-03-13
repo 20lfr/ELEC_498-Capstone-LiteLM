@@ -816,7 +816,7 @@ module top_module_hls_tb;
   logic        dbg_main_in_decode_pulse;
   dbg_control_mem_t dbg_ctrl_mem_shadow;
   byte unsigned ctrl_mem_file_bytes [0:(CTRL_MEM_WORDS*4)-1];
-  byte unsigned ddr_image_bytes [0:('h43000)-1];
+  byte unsigned ddr_image_bytes [0:(DDR_IMAGE_BYTES)-1];
   byte unsigned stream_in_file_bytes [0:STREAM_IN_BUF_BYTES-1];
 
   // AXI ctrl_mem word map for the offset-only ControlMemSpace.
@@ -2835,7 +2835,7 @@ module top_module_hls_tb;
       dma_rx_mem[i] = 32'h0000_0000;
       dma_tx_mem[i] = 32'h0000_0000;
     end
-    for (i = 0; i < 'h43000; i = i + 1) begin
+    for (i = 0; i < DDR_IMAGE_BYTES; i = i + 1) begin
       ddr_image_bytes[i] = 8'h00;
     end
 

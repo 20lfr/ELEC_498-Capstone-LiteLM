@@ -306,29 +306,32 @@ bool run_single_head(
             break;
         }
         case HeadPhase::ATT_SCORES: {
-            if (ctx.wl_ready && !ctx.att_scores_started) {
+            if (!ctx.att_scores_started && ctx.wl_ready) {
+                if (ctx.att_ctx_block_idx == 0) {
+                    begin_tile_phase(ctx, NUM_ATT_CTX_BLOCKS);
+                }
                 ctx.wl_start = true;
-                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_CTX_K, layer_idx, ctx.head_idx, -1);
+                ctx.wl_instruction = pack_dma_op(DmaSel::DMASEL_CTX_K, layer_idx, ctx.head_idx, ctx.att_ctx_block_idx);
                 ctx.last_wl_addr = DmaSel::DMASEL_CTX_K;
                 ctx.att_scores_started = true;
+                ctx.att_scores_dma_done = false;
                 ctx.att_scores_compute_done = false;
-                ctx.att_ctx_block_idx = 0;
-                begin_tile_phase(ctx, NUM_ATT_CTX_BLOCKS);
             }
 
-            else if (ctx.compute_ready && !ctx.compute_start && ctx.att_scores_dma_done && !ctx.att_scores_compute_done) {
+            else if (ctx.att_scores_started && ctx.compute_ready &&
+                     !ctx.compute_start && ctx.att_scores_dma_done &&
+                     !ctx.att_scores_compute_done) {
                 ctx.compute_start = true;
                 ctx.compute_op    = pack_compute_op(ComputeOp::CMP_ATT_SCORES, layer_idx, ctx.head_idx, ctx.att_ctx_block_idx);
                 ctx.last_compute_op = pack_compute_op(ComputeOp::CMP_ATT_SCORES, layer_idx, ctx.head_idx, ctx.att_ctx_block_idx);
             } else if (ctx.att_scores_compute_done && ctx.att_scores_started) {
+                ctx.att_scores_started = false;
+                ctx.att_scores_compute_done = false;
+                ctx.att_scores_dma_done = false;
                 if (ctx.att_ctx_block_idx + 1 < NUM_ATT_CTX_BLOCKS) {
                     ctx.att_ctx_block_idx++;
-                    ctx.att_scores_compute_done = false;
                 } else {
                     ctx.phase = HeadPhase::VALUE_SCALE_CLAMP;
-                    ctx.att_scores_started = false;
-                    ctx.att_scores_compute_done = false;
-                    ctx.att_scores_dma_done = false;
                     ctx.att_ctx_block_idx = 0;
                     end_tile_phase(ctx);
                 }

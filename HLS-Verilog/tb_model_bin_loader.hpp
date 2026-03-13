@@ -12,10 +12,16 @@ namespace tb_model_bin_loader {
 
 constexpr const char *DEFAULT_MODEL_BIN_PATH =
     "/home/luka/Scripting/model/phi3_weights_int4.bin";
+constexpr const char *DEFAULT_GENERATED_DDR_IMAGE_REL = "/test_data/ddr_image.bin";
 
 inline std::string default_model_bin_path(const std::string &tb_source_dir) {
     (void)tb_source_dir;
     return DEFAULT_MODEL_BIN_PATH;
+}
+
+inline std::string default_generated_ddr_image_path(
+    const std::string &tb_source_dir) {
+    return tb_source_dir + DEFAULT_GENERATED_DDR_IMAGE_REL;
 }
 
 constexpr size_t packed_i4_bytes(int elems) {
@@ -129,6 +135,226 @@ inline bool copy_bytes_block(std::ifstream &in,
     }
     return write_axi_bytes(ddr_mem, word_count, dst_off, buf.data(), len,
                            label);
+}
+
+inline bool load_prebuilt_ddr_image(const std::string &image_path,
+                                    axi_gmem_word_t *ddr_mem,
+                                    uint64_t word_count) {
+    zero_axi_words(ddr_mem, word_count);
+
+    const uint64_t total_bytes =
+        word_count * static_cast<uint64_t>(AXI_GMEM_WORD_BYTES);
+
+    std::ifstream in(image_path.c_str(), std::ios::binary | std::ios::ate);
+    if (!in) {
+        std::fprintf(stderr,
+                     "ERROR: Failed to open generated DDR image '%s'\n",
+                     image_path.c_str());
+        return false;
+    }
+
+    const std::streamoff file_size = in.tellg();
+    if (file_size <= 0) {
+        std::fprintf(stderr,
+                     "ERROR: Failed to size generated DDR image '%s'\n",
+                     image_path.c_str());
+        return false;
+    }
+    if (static_cast<uint64_t>(file_size) != total_bytes) {
+        std::fprintf(stderr,
+                     "ERROR: Generated DDR image '%s' size mismatch "
+                     "(have=%llu expected=%llu)\n",
+                     image_path.c_str(),
+                     static_cast<unsigned long long>(file_size),
+                     static_cast<unsigned long long>(total_bytes));
+        return false;
+    }
+
+    const size_t compact_hidden_bytes = packed_i4_bytes(D_MODEL);
+    const size_t compact_ffn_bytes = packed_i4_bytes(D_FFN);
+
+    for (int layer = 0; layer < NUM_LAYERS; ++layer) {
+        for (int head = 0; head < NUM_HEADS; ++head) {
+            const uint64_t row0_off =
+                static_cast<uint64_t>(layer) * STRIDE_WQ_LAYER +
+                static_cast<uint64_t>(head * MODEL_HEAD_DIMENSTION) *
+                    (static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull);
+
+            if (!copy_i4_rows(
+                    in, ddr_mem, word_count, "DDR_WQ",
+                    static_cast<uint64_t>(WQ_OFF) + row0_off,
+                    static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull, D_HEADS,
+                    compact_hidden_bytes, static_cast<uint64_t>(WQ_OFF) + row0_off)) {
+                return false;
+            }
+            if (!copy_i4_rows(
+                    in, ddr_mem, word_count, "DDR_WK",
+                    static_cast<uint64_t>(WK_OFF) + row0_off,
+                    static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull, D_HEADS,
+                    compact_hidden_bytes, static_cast<uint64_t>(WK_OFF) + row0_off)) {
+                return false;
+            }
+            if (!copy_i4_rows(
+                    in, ddr_mem, word_count, "DDR_WV",
+                    static_cast<uint64_t>(WV_OFF) + row0_off,
+                    static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull, D_HEADS,
+                    compact_hidden_bytes, static_cast<uint64_t>(WV_OFF) + row0_off)) {
+                return false;
+            }
+        }
+    }
+
+    for (int layer = 0; layer < NUM_LAYERS; ++layer) {
+        for (int tile = 0; tile < NUM_WO_TILES; ++tile) {
+            const uint64_t tile_off =
+                static_cast<uint64_t>(WO_OFF) +
+                static_cast<uint64_t>(layer) * STRIDE_WO_LAYER +
+                static_cast<uint64_t>(tile * D_TILE_WO) *
+                    (static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull);
+            if (!copy_i4_rows(
+                    in, ddr_mem, word_count, "DDR_WO", tile_off,
+                    static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull, D_TILE_WO,
+                    compact_hidden_bytes, tile_off)) {
+                return false;
+            }
+        }
+    }
+
+    for (int layer = 0; layer < NUM_LAYERS; ++layer) {
+        for (int tile = 0; tile < (NUM_W1_TILES / 2); ++tile) {
+            const uint64_t gate_tile_off =
+                static_cast<uint64_t>(W1_OFF) +
+                static_cast<uint64_t>(layer) * STRIDE_W1_GATE_LAYER +
+                static_cast<uint64_t>(tile * D_TILE_W1) *
+                    (static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull);
+            if (!copy_i4_rows(
+                    in, ddr_mem, word_count, "DDR_W1_GATE", gate_tile_off,
+                    static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull, D_TILE_W1,
+                    compact_hidden_bytes, gate_tile_off)) {
+                return false;
+            }
+
+            const uint64_t up_tile_off =
+                static_cast<uint64_t>(W1_UP_OFF) +
+                static_cast<uint64_t>(layer) * STRIDE_W1_UP_LAYER +
+                static_cast<uint64_t>(tile * D_TILE_W1) *
+                    (static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull);
+            if (!copy_i4_rows(
+                    in, ddr_mem, word_count, "DDR_W1_UP", up_tile_off,
+                    static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull, D_TILE_W1,
+                    compact_hidden_bytes, up_tile_off)) {
+                return false;
+            }
+        }
+    }
+
+    for (int layer = 0; layer < NUM_LAYERS; ++layer) {
+        for (int tile = 0; tile < NUM_W2_TILES; ++tile) {
+            const uint64_t tile_off =
+                static_cast<uint64_t>(W2_OFF) +
+                static_cast<uint64_t>(layer) * STRIDE_W2_LAYER +
+                static_cast<uint64_t>(tile * D_TILE_W2) *
+                    (static_cast<uint64_t>(MODEL_INTERMEDIATE_SIZE) / 2ull);
+            if (!copy_i4_rows(
+                    in, ddr_mem, word_count, "DDR_W2", tile_off,
+                    static_cast<uint64_t>(MODEL_INTERMEDIATE_SIZE) / 2ull,
+                    D_TILE_W2, compact_ffn_bytes, tile_off)) {
+                return false;
+            }
+        }
+    }
+
+    for (int layer = 0; layer < NUM_LAYERS; ++layer) {
+        const uint64_t wo_bias_off =
+            static_cast<uint64_t>(WO_BIAS_OFF) +
+            static_cast<uint64_t>(layer) * STRIDE_WO_BIAS_LAYER;
+        if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_WO_BIAS",
+                              wo_bias_off, wo_bias_off,
+                              static_cast<size_t>(D_MODEL * sizeof(int32_t)))) {
+            return false;
+        }
+
+        const uint64_t w1_bias_off =
+            static_cast<uint64_t>(W1_BIAS_OFF) +
+            static_cast<uint64_t>(layer) * STRIDE_W1_BIAS_LAYER;
+        if (!copy_bytes_block(
+                in, ddr_mem, word_count, "DDR_W1_BIAS", w1_bias_off,
+                w1_bias_off,
+                static_cast<size_t>(2 * D_FFN * sizeof(int32_t)))) {
+            return false;
+        }
+
+        const uint64_t w2_bias_off =
+            static_cast<uint64_t>(W2_BIAS_OFF) +
+            static_cast<uint64_t>(layer) * STRIDE_W2_BIAS_LAYER;
+        if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_W2_BIAS",
+                              w2_bias_off, w2_bias_off,
+                              static_cast<size_t>(D_MODEL * sizeof(int32_t)))) {
+            return false;
+        }
+
+        const uint64_t ln0_gamma_off =
+            static_cast<uint64_t>(LN0_GAMMA_OFF) +
+            static_cast<uint64_t>(layer) * STRIDE_LN0_GAMMA;
+        if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_LN0_GAMMA",
+                              ln0_gamma_off, ln0_gamma_off,
+                              static_cast<size_t>(D_MODEL * sizeof(int32_t)))) {
+            return false;
+        }
+
+        const uint64_t ln1_gamma_off =
+            static_cast<uint64_t>(LN1_GAMMA_OFF) +
+            static_cast<uint64_t>(layer) * STRIDE_LN1_GAMMA;
+        if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_LN1_GAMMA",
+                              ln1_gamma_off, ln1_gamma_off,
+                              static_cast<size_t>(D_MODEL * sizeof(int32_t)))) {
+            return false;
+        }
+
+        const uint64_t ln0_eps_off =
+            static_cast<uint64_t>(LN0_EPS_OFF) +
+            static_cast<uint64_t>(layer) * STRIDE_LN0_EPS;
+        if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_LN0_EPS",
+                              ln0_eps_off, ln0_eps_off,
+                              sizeof(uint32_t))) {
+            return false;
+        }
+
+        const uint64_t ln1_eps_off =
+            static_cast<uint64_t>(LN1_EPS_OFF) +
+            static_cast<uint64_t>(layer) * STRIDE_LN1_EPS;
+        if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_LN1_EPS",
+                              ln1_eps_off, ln1_eps_off,
+                              sizeof(uint32_t))) {
+            return false;
+        }
+    }
+
+    if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_FINAL_NORM_GAMMA",
+                          FINAL_NORM_GAMMA_OFF, FINAL_NORM_GAMMA_OFF,
+                          static_cast<size_t>(D_MODEL * sizeof(int32_t)))) {
+        return false;
+    }
+    if (!copy_bytes_block(in, ddr_mem, word_count, "DDR_FINAL_NORM_EPS",
+                          FINAL_NORM_EPS_OFF, FINAL_NORM_EPS_OFF,
+                          sizeof(uint32_t))) {
+        return false;
+    }
+
+    for (int tile = 0; tile < NUM_LOGIT_TILES; ++tile) {
+        const uint64_t tile_off =
+            static_cast<uint64_t>(WLOGIT_OFF) +
+            static_cast<uint64_t>(tile * D_TILE_LOGIT) *
+                (static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull);
+        if (!copy_i4_rows(
+                in, ddr_mem, word_count, "DDR_WLOGIT", tile_off,
+                static_cast<uint64_t>(MODEL_HIDDEN_SIZE) / 2ull, D_TILE_LOGIT,
+                compact_hidden_bytes, tile_off)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 inline bool load_compact_weights_image(const std::string &image_path,
