@@ -1,53 +1,48 @@
 `timescale 1ns/1ps
 
+`ifndef TB_TEST_DATA_DIR
+  // Default is relative to the simulation working directory.
+  // Override at runtime with: +TEST_DATA_DIR=/abs/path/to/test_data
+  // Or override at compile time with: +define+TB_TEST_DATA_DIR=\"/abs/path\"
+  `define TB_TEST_DATA_DIR "../../test_data"
+`endif
+
 module top_module_hls_tb;
   localparam int CLK_PERIOD_NS        = 10;
   localparam int MAX_CYCLES           = 5000000;
-  localparam int CTRL_MEM_WORDS       = 22;
-  localparam int DBG_CTRL_MEM_WORDS   = 22;
-  localparam int STREAM_IN_BUF_BYTES  = 16;
+  `include "../../test_data/generated_params.svh"
+  `include "../../test_data/generated_mem_map.svh"
+  localparam int DBG_CTRL_MEM_WORDS   = CTRL_MEM_WORDS;
   localparam int MAX_STREAM_TOKENS    = 256;
   localparam int STREAM_IN_FILE_BYTES_MAX = STREAM_IN_BUF_BYTES * MAX_STREAM_TOKENS;
-  localparam int STREAM_OUT_BUF_BYTES = 64;
-  localparam int TOP_DMA_BUF_WORDS    = 16384;
   localparam int KV_STORE_WORDS       = 131072;
   localparam int DMA_LATENCY_CYCLES   = 4;
   localparam int STREAM_LATENCY_CYCLES = 6;
   localparam int TB_DEBUG_MODE         = 0; // <----- DEBUG MODE FLAG
   localparam int CTRL_START_HOLD_CYCLES = 128;
   localparam int CTRL_CTRL_GAP_CYCLES   = 24;
-  `include "../../test_data/generated_mem_map.svh"
-  localparam int TB_HEADS_PARALLEL     = 2;
-  localparam int TB_NUM_HEADS          = 4;
-  localparam int TB_D_MODEL            = 16;
-  localparam int TB_D_FFN              = 24;
+  localparam int TB_HEADS_PARALLEL     = HEADS_PARALLEL;
+  localparam int TB_NUM_HEADS          = NUM_HEADS;
+  localparam int TB_D_MODEL            = D_MODEL;
+  localparam int TB_D_FFN              = D_FFN;
   localparam int TB_D_HEADS            = (TB_D_MODEL / TB_NUM_HEADS);
-  localparam int TB_NUM_WO_TILES       = 4;
-  localparam int TB_NUM_W1_TILES       = 8;
-  localparam int TB_NUM_W2_TILES       = 4;
-  localparam int TB_NUM_LOGIT_TILES    = 2;
-  localparam int TB_NUM_QKV_HEAD_TILES = 2;
-  localparam int TB_ATT_CTX_BLOCK      = 8;
-  localparam int TB_NUM_ATT_VALUE_HEAD_TILES = 2;
+  localparam int TB_NUM_WO_TILES       = NUM_WO_TILES;
+  localparam int TB_NUM_W1_TILES       = NUM_W1_TILES;
+  localparam int TB_NUM_W2_TILES       = NUM_W2_TILES;
+  localparam int TB_NUM_LOGIT_TILES    = NUM_LOGIT_TILES;
+  localparam int TB_NUM_QKV_HEAD_TILES = NUM_QKV_HEAD_TILES;
+  localparam int TB_ATT_CTX_BLOCK      = ATT_CTX_BLOCK;
+  localparam int TB_NUM_ATT_VALUE_HEAD_TILES = NUM_ATT_VALUE_HEAD_TILES;
   localparam int TB_D_TILE_WO          = (TB_D_MODEL / TB_NUM_WO_TILES);
   localparam int TB_D_TILE_W1          = (TB_D_FFN / TB_NUM_W1_TILES);
   localparam int TB_D_TILE_W2          = (TB_D_MODEL / TB_NUM_W2_TILES);
-  localparam int TB_D_VOCAB            = 32;
+  localparam int TB_D_VOCAB            = D_VOCAB;
   localparam int TB_D_TILE_LOGIT       = (TB_D_VOCAB / TB_NUM_LOGIT_TILES);
-  localparam int TB_CONTEXT_LENGTH     = 16;
+  localparam int TB_CONTEXT_LENGTH     = CONTEXT_LENGTH;
   localparam int TB_D_HEAD_TILE_QKV    = (TB_D_HEADS / TB_NUM_QKV_HEAD_TILES);
   localparam int TB_NUM_ATT_CTX_BLOCKS = (TB_CONTEXT_LENGTH / TB_ATT_CTX_BLOCK);
   localparam int TB_D_HEAD_TILE_ATT_VALUE = (TB_D_HEADS / TB_NUM_ATT_VALUE_HEAD_TILES);
 
-  function automatic string dirname(input string path);
-    int i;
-    for (i = path.len() - 1; i >= 0; i--) begin
-      if (path.getc(i) == "/") begin
-        return path.substr(0, i - 1);
-      end
-    end
-    return ".";
-  endfunction
   localparam int TB_OUT_PROJ_W_BYTES   = (TB_D_MODEL * TB_D_TILE_WO);
   localparam int TB_FFN_W1_W_BYTES     = (TB_D_MODEL * TB_D_TILE_W1);
   localparam int TB_FFN_W2_W_BYTES     = (TB_D_FFN * TB_D_TILE_W2);
@@ -75,9 +70,6 @@ module top_module_hls_tb;
   localparam int OP_CMP_FINAL_NORM  = 25;
   localparam int OP_CMP_LOGITS      = 26;
   localparam int OP_CMP_ARGMAX      = 27;
-  localparam logic [7:0] COMPUTE_STATE_WAIT_MEM = 8'd2;
-  localparam logic [7:0] COMPUTE_STATE_EXECUTE  = 8'd3;
-
   localparam logic [7:0] ADDR_AP_CTRL           = 8'h00;
   localparam logic [7:0] ADDR_CTRL_MEM_DATA_0   = 8'h10;
   localparam logic [7:0] ADDR_STATUS_MEM_DATA_0 = 8'hB8;
@@ -302,18 +294,29 @@ module top_module_hls_tb;
   logic [31:0] control_reg_prev;
   logic [7:0]  stream_in_mem [0:STREAM_IN_BUF_BYTES-1];
   logic [7:0]  stream_out_mem[0:STREAM_OUT_BUF_BYTES-1];
-  logic [31:0] dma_rx_mem    [0:TOP_DMA_BUF_WORDS-1];
-  logic [31:0] dma_tx_mem    [0:TOP_DMA_BUF_WORDS-1];
-  logic [31:0] ddr_flat_words [int unsigned];
+  byte unsigned ddr_bytes [0:DDR_IMAGE_BYTES-1];
   logic [31:0] k_cache_store [0:KV_STORE_WORDS-1];
   logic [31:0] v_cache_store [0:KV_STORE_WORDS-1];
   logic signed [31:0] stream_out_token;
-  logic signed [3:0]  selected_embedding [0:TB_D_MODEL-1];
+
+  string test_data_dir;
+  string tb_file_path;
+  string tb_file_dir;
+
+  task automatic tb_dirname_from_file(input string full_path, output string out_dir);
+    int slash_idx = -1;
+    for (int i = full_path.len() - 1; i >= 0; i--) begin
+      if (full_path[i] == "/") begin
+        slash_idx = i;
+        break;
+      end
+    end
+    out_dir = (slash_idx > 0) ? full_path.substr(0, slash_idx - 1) : "";
+  endtask
 
   integer cycle_count;
   integer i;
   integer file_fd;
-  integer ddr_bin_fd;
   integer bytes_read;
   integer prog_word_idx;
   logic axis_packet_sent;
@@ -480,7 +483,6 @@ module top_module_hls_tb;
   logic        axi_aw_seen;
   logic        axi_w_seen;
   logic        axi_b_seen;
-  logic [31:0] error_code_lat;
   status_mem_shadow_t status_mem_shadow;
   logic        irq_pending;
   logic        irq_seen_done;
@@ -589,16 +591,12 @@ module top_module_hls_tb;
     end
   endfunction
 
-  function automatic int unsigned ddr_word_index(input [63:0] addr64);
-    ddr_word_index = int'(addr64[31:2]);
-  endfunction
-
   task automatic ddr_read_word(
     input  [63:0] addr64,
     output [31:0] rdata
   );
-    int unsigned idx;
-    integer seek_rc;
+    int unsigned addr;
+    int unsigned byte_idx;
     integer b0;
     integer b1;
     integer b2;
@@ -607,27 +605,15 @@ module top_module_hls_tb;
       if (addr64 >= DDR_IMAGE_BYTES) begin
         rdata = dma_pattern_word(addr64, 0);
       end else begin
-        idx = ddr_word_index(addr64);
-        if (ddr_flat_words.exists(idx)) begin
-          rdata = ddr_flat_words[idx];
-        end else begin
-          if (ddr_bin_fd == 0) begin
-            $fatal(1, "ddr_image.bin is not open");
-          end
-          seek_rc = $fseek(ddr_bin_fd, int'(addr64[31:0]), 0);
-          if (seek_rc != 0) begin
-            $fatal(1, "Failed to seek ddr_image.bin to byte address 0x%08h", addr64[31:0]);
-          end
-          b0 = $fgetc(ddr_bin_fd);
-          b1 = $fgetc(ddr_bin_fd);
-          b2 = $fgetc(ddr_bin_fd);
-          b3 = $fgetc(ddr_bin_fd);
-          if (b0 < 0) b0 = 0;
-          if (b1 < 0) b1 = 0;
-          if (b2 < 0) b2 = 0;
-          if (b3 < 0) b3 = 0;
-          rdata = {b3[7:0], b2[7:0], b1[7:0], b0[7:0]};
-        end
+        addr = int'(addr64[31:0]);
+        b0 = (addr < DDR_IMAGE_BYTES) ? ddr_bytes[addr] : 0;
+        byte_idx = addr + 1;
+        b1 = (byte_idx < DDR_IMAGE_BYTES) ? ddr_bytes[byte_idx] : 0;
+        byte_idx = addr + 2;
+        b2 = (byte_idx < DDR_IMAGE_BYTES) ? ddr_bytes[byte_idx] : 0;
+        byte_idx = addr + 3;
+        b3 = (byte_idx < DDR_IMAGE_BYTES) ? ddr_bytes[byte_idx] : 0;
+        rdata = {b3[7:0], b2[7:0], b1[7:0], b0[7:0]};
       end
     end
   endtask
@@ -637,21 +623,18 @@ module top_module_hls_tb;
     input [31:0] wdata,
     input [3:0]  wstrb
   );
-    int unsigned idx;
-    logic [31:0] cur;
-    logic [31:0] nxt;
+    int unsigned addr;
     int b;
     begin
       if (addr64 < DDR_IMAGE_BYTES) begin
-        idx = ddr_word_index(addr64);
-        cur = ddr_flat_words.exists(idx) ? ddr_flat_words[idx] : 32'h0000_0000;
-        nxt = cur;
+        addr = int'(addr64[31:0]);
         for (b = 0; b < 4; b = b + 1) begin
           if (wstrb[b]) begin
-            nxt[(b*8) +: 8] = wdata[(b*8) +: 8];
+            if ((addr + b) < DDR_IMAGE_BYTES) begin
+              ddr_bytes[addr + b] = wdata[(b*8) +: 8];
+            end
           end
         end
-        ddr_flat_words[idx] = nxt;
       end
     end
   endtask
@@ -1002,13 +985,6 @@ module top_module_hls_tb;
     end
   end
 
-  // Select embedding vector from vocab weight matrix using argmax token index.
-  always_comb begin : p_embedding_lookup
-    for (int k = 0; k < TB_D_MODEL; k++) begin
-      selected_embedding[k] = '0;
-    end
-  end
-
   // AXI4-Full ready/user defaults.
   assign m_axi_gmem_AWREADY = !axi_aw_active;
   assign m_axi_gmem_WREADY  = axi_aw_active;
@@ -1244,7 +1220,6 @@ module top_module_hls_tb;
       irq_pending <= 1'b0;
       irq_seen_done <= 1'b0;
       irq_seen_error <= 1'b0;
-      error_code_lat <= 32'd0;
       status_mem_shadow <= '0;
     end else begin
       if (irq_ps_shadow[0]) begin
@@ -1265,9 +1240,6 @@ module top_module_hls_tb;
       if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_1)) begin
         if (axi_rdata[2]) irq_seen_done <= 1'b1;
         if (axi_rdata[1]) irq_seen_error <= 1'b1;
-      end
-      if (axi_read_valid && (axi_addr == ADDR_STATUS_MEM_DATA_2)) begin
-        error_code_lat <= axi_rdata;
       end
       if (done_req_fire) begin
         irq_seen_done <= 1'b0;
@@ -1657,24 +1629,37 @@ module top_module_hls_tb;
     for (i = 0; i < STREAM_OUT_BUF_BYTES; i = i + 1) begin
       stream_out_mem[i] = 8'h00;
     end
-    for (i = 0; i < TOP_DMA_BUF_WORDS; i = i + 1) begin
-      dma_rx_mem[i] = 32'h0000_0000;
-      dma_tx_mem[i] = 32'h0000_0000;
+    for (i = 0; i < DDR_IMAGE_BYTES; i = i + 1) begin
+      ddr_bytes[i] = 8'h00;
     end
-    ddr_flat_words.delete();
 
-    string test_data_dir;
-    test_data_dir = {dirname(`__FILE__), "/../../test_data"};
+    if ($value$plusargs("TEST_DATA_DIR=%s", test_data_dir)) begin
+      $display("[TB] Using TEST_DATA_DIR plusarg: %0s", test_data_dir);
+    end else begin
+      tb_file_path = `__FILE__;
+      tb_dirname_from_file(tb_file_path, tb_file_dir);
+      if (tb_file_dir != "") begin
+        // Build a path relative to this testbench file location so it works
+        // regardless of the simulator run directory.
+        $sformat(test_data_dir, "%0s/../../test_data", tb_file_dir);
+        $display("[TB] Using __FILE__-relative test_data_dir: %0s", test_data_dir);
+      end else begin
+        test_data_dir = `TB_TEST_DATA_DIR;
+        $display("[TB] Using fallback TB_TEST_DATA_DIR: %0s", test_data_dir);
+      end
+    end
 
     file_fd = $fopen({test_data_dir, "/ctrl_mem.bin"}, "rb");
     if (file_fd == 0) begin
-      $fatal(1, "Failed to open ctrl_mem.bin");
+      $fatal(1, "Failed to open ctrl_mem.bin at path: %0s", {test_data_dir, "/ctrl_mem.bin"});
     end
     bytes_read = $fread(ctrl_mem_file_bytes, file_fd);
     $fclose(file_fd);
-    if (bytes_read <= 0) begin
-      $fatal(1, "Failed to read ctrl_mem.bin");
+    if (bytes_read != (CTRL_MEM_WORDS*4)) begin
+      $fatal(1, "ctrl_mem.bin size mismatch (got=%0d expected=%0d)",
+             bytes_read, (CTRL_MEM_WORDS*4));
     end
+    $display("[TB] Loaded ctrl_mem.bin bytes=%0d (expected=%0d)", bytes_read, (CTRL_MEM_WORDS*4));
     for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
       ctrl_init_words[i] = {ctrl_mem_file_bytes[(i*4)+3],
                             ctrl_mem_file_bytes[(i*4)+2],
@@ -1684,7 +1669,7 @@ module top_module_hls_tb;
 
     file_fd = $fopen({test_data_dir, "/stream_in.bin"}, "rb");
     if (file_fd == 0) begin
-      $fatal(1, "Failed to open stream_in.bin");
+      $fatal(1, "Failed to open stream_in.bin at path: %0s", {test_data_dir, "/stream_in.bin"});
     end
     bytes_read = $fread(stream_in_file_bytes, file_fd);
     $fclose(file_fd);
@@ -1703,10 +1688,22 @@ module top_module_hls_tb;
     end
     load_stream_token(0);
 
-    ddr_bin_fd = $fopen({test_data_dir, "/ddr_image.bin"}, "rb");
-    if (ddr_bin_fd == 0) begin
-      $fatal(1, "Failed to open ddr_image.bin");
+    file_fd = $fopen({test_data_dir, "/ddr_image.bin"}, "rb");
+    if (file_fd == 0) begin
+      $fatal(1, "Failed to open ddr_image.bin at path: %0s", {test_data_dir, "/ddr_image.bin"});
     end
+    bytes_read = $fread(ddr_bytes, file_fd);
+    if (bytes_read != DDR_IMAGE_BYTES) begin
+      $fatal(1, "ddr_image.bin size mismatch (got=%0d expected=%0d)",
+             bytes_read, DDR_IMAGE_BYTES);
+    end
+    $display("[TB] Loaded ddr_image.bin bytes=%0d (expected=%0d)", bytes_read, DDR_IMAGE_BYTES);
+    // Ensure no extra bytes beyond DDR_IMAGE_BYTES.
+    if ($fgetc(file_fd) >= 0) begin
+      $fatal(1, "ddr_image.bin is larger than DDR_IMAGE_BYTES (%0d)", DDR_IMAGE_BYTES);
+    end
+    $fclose(file_fd);
+
     for (i = 0; i < KV_STORE_WORDS; i = i + 1) begin
       k_cache_store[i] = 32'h0000_0000;
       v_cache_store[i] = 32'h0000_0000;
