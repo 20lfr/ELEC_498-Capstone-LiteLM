@@ -1,0 +1,197 @@
+// Testbench for drive_head_phase: exercises grouped heads through all phases.
+#include <array>
+#include <cassert>
+#include <iomanip>
+#include <iostream>
+#include <string>
+
+#include "head_helpers.hpp"
+
+static const char* phase_str(HeadPhase phase) {
+    switch (phase) {
+        case HeadPhase::IDLE: return "IDLE";
+        case HeadPhase::Q: return "Q";
+        case HeadPhase::K: return "K";
+        case HeadPhase::K_WRITEBACK: return "K_WB";
+        case HeadPhase::V: return "V";
+        case HeadPhase::V_WRITEBACK: return "V_WB";
+        case HeadPhase::ATT_SCORES: return "ATT_SCO";
+        case HeadPhase::VALUE_SCALE_CLAMP: return "VAL_SCL";
+        case HeadPhase::ATT_SOFTMAX: return "SOFT";
+        case HeadPhase::ATT_VALUE: return "ATT_VAL";
+        case HeadPhase::HEAD_REQUANT: return "HEAD_RQ";
+        case HeadPhase::DONE: return "DONE";
+        default: return "?";
+    }
+}
+
+static const char* op_str(uint32_t packed_op) {
+    const ComputeOp op = static_cast<ComputeOp>(packed_op & 0xFFu);
+    switch (op) {
+        case CMP_Q: return "Q";
+        case CMP_K: return "K";
+        case CMP_V: return "V";
+        case CMP_ATT_SCORES: return "SCO";
+        case CMP_VALUE_SCALE: return "SCL";
+        case CMP_SOFTMAX: return "SFM";
+        case CMP_ATT_VALUE: return "VAL";
+        default: return "-";
+    }
+}
+
+static const char* dma_str(DmaSel sel) {
+    switch (sel) {
+        case DMASEL_WQ: return "WQ";
+        case DMASEL_WK: return "WK";
+        case DMASEL_WV: return "WV";
+        case DMASEL_CTX_K: return "CK";
+        case DMASEL_CTX_V: return "CV";
+        case DMASEL_K_WRITE: return "KW";
+        case DMASEL_V_WRITE: return "VW";
+        case DMASEL_WO: return "WO";
+        case DMASEL_W1: return "W1";
+        case DMASEL_W2: return "W2";
+        case DMASEL_WLOGIT: return "WL";
+        case DMASEL_CONCAT: return "CONCAT";
+        case DMASEL_NONE:
+        default: return "-";
+    }
+}
+
+static inline DmaSel decode_wl_sel(uint32_t instr) {
+    return static_cast<DmaSel>(instr & 0xFFu);
+}
+
+int main() {
+    constexpr int HEADS_TOTAL = NUM_HEADS;
+    constexpr int PAR = HEADS_PARALLEL;
+    constexpr int GROUPS = (HEADS_TOTAL + PAR - 1) / PAR;
+    constexpr int NUM_LAYERS = 1; // adjust if you want to iterate layers
+    constexpr int COMPUTE_LATENCY = 3;
+    constexpr int DMA_LATENCY = 2;
+
+    HeadCtx head_ctx[HEADS_TOTAL];
+    for (int h = 0; h < HEADS_TOTAL; ++h) init_head_ctx(head_ctx[h], 0, h);
+
+    // Per-head compute models (use arrays to avoid vector<bool> proxy references)
+    std::array<int, HEADS_TOTAL> busy_ctr{};
+    std::array<int, HEADS_TOTAL> dma_ctr{};
+
+    std::cout << std::left << std::setw(6) << "cycle";
+    for (int h = 0; h < HEADS_TOTAL; ++h) {
+        std::string hdr = "h" + std::to_string(h) + "_phase";
+        std::cout << "|" << std::setw(12) << hdr
+                  << "|" << std::setw(4) << "hstrt"
+                  << "|" << std::setw(4) << "rdy"
+                  << "|" << std::setw(4) << "done"
+                  << "|" << std::setw(6) << "start"
+                  << "|" << std::setw(4) << "op"
+                  << "|" << std::setw(4) << "wl_r"
+                  << "|" << std::setw(4) << "wl_s"
+                  << "|" << std::setw(6) << "wl_sel"
+                  << "|" << std::setw(4) << "dma"
+                  << "  ";
+    }
+    std::cout << "\n";
+
+    bool all_done = false;
+    int layer_idx = 0;
+    int cycle = 0;
+    int group_idx = 0;
+
+    // Start each group sequentially; only the active group gets ready/done pulses.
+    while (!all_done && layer_idx < NUM_LAYERS && cycle < 1024) {
+        const int group_base = group_idx * PAR;
+
+        // Default all compute signals low
+        for (int h = 0; h < HEADS_TOTAL; ++h) {
+            head_ctx[h].compute_ready = false;
+            head_ctx[h].compute_done  = false;
+            head_ctx[h].wl_ready      = false;
+            head_ctx[h].dma_done      = false;
+        }
+
+        // Drive compute_ready/done for active group only
+        for (int lane = 0; lane < PAR; ++lane) {
+            const int h = group_base + lane;
+            if (h >= HEADS_TOTAL) break;
+            head_ctx[h].compute_ready = (busy_ctr[h] == 0);
+            head_ctx[h].compute_done  = (busy_ctr[h] == 1);
+            head_ctx[h].wl_ready      = (dma_ctr[h] == 0);
+            head_ctx[h].dma_done      = (dma_ctr[h] == 1);
+            head_ctx[h].wl_start      = false; // clear outputs before evaluation
+            head_ctx[h].wl_instruction = 0;
+        }
+        for (int lane = 0; lane < PAR; ++lane) {
+            const int h = group_base + lane;
+            if (h >= HEADS_TOTAL) break;
+            if (busy_ctr[h] > 0) busy_ctr[h]--;
+            if (dma_ctr[h] > 0) dma_ctr[h]--;
+        }
+
+        // Start pulse for any idle head in the active group
+        bool start_pulse = false;
+        for (int lane = 0; lane < PAR; ++lane) {
+            const int h = group_base + lane;
+            if (h >= HEADS_TOTAL) break;
+            if (head_ctx[h].phase == HeadPhase::IDLE) {
+                start_pulse = true;
+                break;
+            }
+        }
+
+        // Call the grouped driver for the active group
+        bool group_finished = drive_group_head_phase(
+            head_ctx,
+            group_base,
+            layer_idx,
+            start_pulse);
+
+        // Log activity for this cycle (columns per head)
+        std::cout << std::left << std::setw(6) << cycle;
+        for (int h = 0; h < HEADS_TOTAL; ++h) {
+            std::cout << "|"
+                      << std::setw(12) << phase_str(head_ctx[h].phase)
+                      << "|" << std::setw(4) << (head_ctx[h].start_head ? "1" : "-")
+                      << "|" << std::setw(4) << (head_ctx[h].compute_ready ? "1" : "-")
+                      << "|" << std::setw(4) << (head_ctx[h].compute_done ? "1" : "-")
+                      << "|" << std::setw(6) << (head_ctx[h].compute_start ? "1" : "-")
+                      << "|" << std::setw(4) << op_str(head_ctx[h].compute_op)
+                      << "|" << std::setw(4) << (head_ctx[h].wl_ready ? "1" : "-")
+                      << "|" << std::setw(4) << (head_ctx[h].wl_start ? "1" : "-")
+                      << "|" << std::setw(6) << dma_str(decode_wl_sel(head_ctx[h].wl_instruction))
+                      << "|" << std::setw(4) << (head_ctx[h].dma_done ? "1" : "-")
+                      << "  ";
+        }
+        std::cout << "\n";
+
+        // On compute_start, arm latency counter (simple fixed latency = 3 cycles)
+        for (int lane = 0; lane < PAR; ++lane) {
+            const int h = group_base + lane;
+            if (h >= HEADS_TOTAL) break;
+            if (head_ctx[h].compute_start) {
+                busy_ctr[h] = COMPUTE_LATENCY;
+            }
+            if (head_ctx[h].wl_start && dma_ctr[h] == 0) {
+                dma_ctr[h] = DMA_LATENCY;
+            }
+        }
+
+        // If the active group finished, move to next
+        if (group_finished) {
+            group_idx++;
+            if (group_idx >= GROUPS) {
+                all_done = true;
+            }
+        }
+
+        cycle++;
+    }
+
+    for (int h = 0; h < HEADS_TOTAL; ++h) {
+        assert(head_ctx[h].phase == HeadPhase::DONE && "head did not reach DONE");
+    }
+
+    std::cout << "drive_head_phase test complete.\n";
+    return 0;
+}
