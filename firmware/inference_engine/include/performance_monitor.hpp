@@ -72,9 +72,6 @@ public:
         return static_cast<double>(total_inference_ms) / num_inferences;
     }
 
-    uint32_t getTokensGenerated() const { return tokens_generated; }
-    uint32_t getTotalInferences() const { return num_inferences; }
-
     std::string getDetailedStats() const {
         char buf[256];
         snprintf(buf, sizeof(buf),

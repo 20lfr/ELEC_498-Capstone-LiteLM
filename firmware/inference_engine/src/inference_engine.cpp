@@ -84,7 +84,7 @@ public:
                 break;
             }
 
-            if (!pl->writeDDR(DmaBufType::WEIGHTS, ddr_offset, chunk.data(),
+            if (!pl->writeDDR(DmaBufType::BUF0, ddr_offset, chunk.data(),
                               static_cast<size_t>(bytes_read))) {
                 err->setError(ErrorCode::HARDWARE_FAULT,
                               "Staged DDR write failed at offset " +
@@ -121,35 +121,15 @@ public:
         // beginConfig: disables IRQs, sets IRQ clear high
         pl->beginConfig();
 
-        // Strides
-        pl->writeReg(PLReg::LAYER_STRIDE, cfg.layer_stride);
-        pl->writeReg(PLReg::WQ_HEAD_STRIDE, cfg.wq_head_stride);
-        pl->writeReg(PLReg::WK_HEAD_STRIDE, cfg.wk_head_stride);
-        pl->writeReg(PLReg::WV_HEAD_STRIDE, cfg.wv_head_stride);
-        pl->writeReg(PLReg::K_CACHE_STRIDE, cfg.k_cache_stride);
-        pl->writeReg(PLReg::V_CACHE_STRIDE, cfg.v_cache_stride);
-        pl->writeReg(PLReg::WO_TILE_STRIDE, cfg.wo_tile_stride);
-        pl->writeReg(PLReg::W1_TILE_STRIDE, cfg.w1_tile_stride);
-        pl->writeReg(PLReg::W2_TILE_STRIDE, cfg.w2_tile_stride);
-        pl->writeReg(PLReg::WO_BIAS_TILE_STRIDE, cfg.wo_bias_tile_stride);
-        pl->writeReg(PLReg::W1_BIAS_TILE_STRIDE, cfg.w1_bias_tile_stride);
-        pl->writeReg(PLReg::W2_BIAS_TILE_STRIDE, cfg.w2_bias_tile_stride);
-        pl->writeReg(PLReg::WLOGIT_TILE_STRIDE, cfg.wlogit_tile_stride);
-        pl->writeReg(PLReg::LN0_GAMMA_STRIDE, cfg.ln0_gamma_stride);
-        pl->writeReg(PLReg::LN1_GAMMA_STRIDE, cfg.ln1_gamma_stride);
-        pl->writeReg(PLReg::FINAL_NORM_GAMMA_STRIDE,
-                     cfg.final_norm_gamma_stride);
-        pl->writeReg(PLReg::LN0_EPS_STRIDE, cfg.ln0_eps_stride);
-        pl->writeReg(PLReg::LN1_EPS_STRIDE, cfg.ln1_eps_stride);
-        pl->writeReg(PLReg::FINAL_NORM_EPS_STRIDE, cfg.final_norm_eps_stride);
-
         // 64-bit DDR base addresses (on control_r bus)
         pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
-                       pl->getDDRBaseAddr(DmaBufType::WEIGHTS));
+                       pl->getDDRBaseAddr(DmaBufType::BUF0));
         pl->writeReg64(RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO,
-                       pl->getDDRBaseAddr(DmaBufType::KV_CACHE));
+                       pl->getDDRBaseAddr(DmaBufType::BUF1));
 
-        // Weight / KV-cache / parameter offsets
+        // ── ControlMemSpace (Sequential writes matching top_params.hpp) ──
+        
+        // Words 3-10: Weights / KV-cache offsets
         pl->writeReg(PLReg::WQ_OFFSET, mem.wq_offset);
         pl->writeReg(PLReg::WK_OFFSET, mem.wk_offset);
         pl->writeReg(PLReg::WV_OFFSET, mem.wv_offset);
@@ -159,34 +139,20 @@ public:
         pl->writeReg(PLReg::K_CACHE_OFFSET, mem.k_cache_offset);
         pl->writeReg(PLReg::V_CACHE_OFFSET, mem.v_cache_offset);
 
-        // Bias offsets (GPT-2 has biases on all projections)
-        pl->writeReg(PLReg::WQ_BIAS_OFFSET, mem.wq_bias_offset);
-        pl->writeReg(PLReg::WK_BIAS_OFFSET, mem.wk_bias_offset);
-        pl->writeReg(PLReg::WV_BIAS_OFFSET, mem.wv_bias_offset);
+        // Words 11-20: Bias and parameter offsets
         pl->writeReg(PLReg::WO_BIAS_OFFSET, mem.wo_bias_offset);
         pl->writeReg(PLReg::W1_BIAS_OFFSET, mem.w1_bias_offset);
         pl->writeReg(PLReg::W2_BIAS_OFFSET, mem.w2_bias_offset);
-
-        // LayerNorm gamma + beta offsets (GPT-2 uses full LN, not RMSNorm)
         pl->writeReg(PLReg::LN0_GAMMA_OFFSET, mem.ln0_gamma_offset);
-        pl->writeReg(PLReg::LN0_BETA_OFFSET, mem.ln0_beta_offset);
         pl->writeReg(PLReg::LN1_GAMMA_OFFSET, mem.ln1_gamma_offset);
-        pl->writeReg(PLReg::LN1_BETA_OFFSET, mem.ln1_beta_offset);
-        pl->writeReg(PLReg::FINAL_NORM_GAMMA_OFFSET,
-                     mem.final_norm_gamma_offset);
-        pl->writeReg(PLReg::FINAL_NORM_BETA_OFFSET,
-                     mem.final_norm_beta_offset);
-
-        // Epsilon offsets
+        pl->writeReg(PLReg::FINAL_NORM_GAMMA_OFFSET, mem.final_norm_gamma_offset);
         pl->writeReg(PLReg::LN0_EPS_OFFSET, mem.ln0_eps_offset);
         pl->writeReg(PLReg::LN1_EPS_OFFSET, mem.ln1_eps_offset);
         pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET, mem.final_norm_eps_offset);
-
-        // Logit weights
         pl->writeReg(PLReg::WLOGIT_OFFSET, mem.wlogit_offset);
 
-        // Position embeddings (in DDR, used by PL for direct access if needed)
-        pl->writeReg(PLReg::POS_EMBED_OFFSET, mem.pos_embed_offset);
+        // Word 21: GPT-2 extensions
+        pl->writeReg(PLReg::TOKEN_POSITION, 0);
 
         // endConfig: clears IRQ clear, enables IRQs, checks for config errors
         pl->endConfig();
@@ -511,7 +477,7 @@ public:
 
         exec = std::unique_ptr<InferenceExecutor>(new InferenceExecutor(
             pl.get(), tokenizer.get(), perf.get(), g_logger, &err,
-            config.model.vocab_size, MODEL_CONTEXT_LENGTH,
+            config.model.vocab_size, config.model.context_length,
             config.memory.input_offset,
             config.memory.output_offset, config.hardware.timeout_ms,
             config.hardware.debug_mode));

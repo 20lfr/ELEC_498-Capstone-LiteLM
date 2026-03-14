@@ -33,7 +33,7 @@ endif
 # Sources & Includes
 DRIVER_DIR     = $(FIRMWARE_DIR)/../hardware_overlay/drivers/transformer_top_v1_0/src
 UDMABUF_DIR    = $(FIRMWARE_DIR)/udmabuf
-MODEL_ARCH    ?= phi3-mini-int4-HARDWARE
+MODEL_ARCH    ?= gpt2-HARDWARE
 HLS_DIR        = $(FIRMWARE_DIR)/../Model-architectures/$(MODEL_ARCH)/HLS-Verilog
 TESTING_DIR = $(FIRMWARE_DIR)/interface_testing
 INFERENCE_DIR = $(FIRMWARE_DIR)/inference_engine

@@ -343,7 +343,7 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
 // DDR access
 bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
                            size_t size) {
-    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    DmaBuffer *buf = (type == DmaBufType::BUF0) ? &_dma_buf0 : &_dma_buf1;
     if (!buf->isAllocated() || offset + size > buf->size())
         return false;
     memcpy((uint8_t *)buf->virt() + offset, data, size);
@@ -353,7 +353,7 @@ bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
 
 bool PLInterface::readDDR(DmaBufType type, uint32_t offset, void *data,
                           size_t size) {
-    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    DmaBuffer *buf = (type == DmaBufType::BUF0) ? &_dma_buf0 : &_dma_buf1;
     if (!buf->isAllocated() || offset + size > buf->size())
         return false;
     buf->sync_for_cpu(offset, size);
@@ -432,7 +432,7 @@ bool PLInterface::streamInitSend(uint32_t dma_offset, const void *data,
                                  size_t size) {
     if (!_stream_regs || !_dma_buf1.isAllocated())
         return false;
-    writeDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
+    writeDDR(DmaBufType::BUF1, dma_offset, data, size);
     return streamTransfer(StreamReg::MM2S_CR, StreamReg::MM2S_SR,
                           StreamReg::MM2S_SA, StreamReg::MM2S_SA_MSB,
                           StreamReg::MM2S_LEN, _dma_buf1.phys() + dma_offset,
@@ -459,7 +459,7 @@ bool PLInterface::streamWaitRecv(uint32_t dma_offset, void *data, size_t size,
                                  uint32_t timeout_ms) {
     if (!streamWait(StreamReg::S2MM_SR, timeout_ms))
         return false;
-    readDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
+    readDDR(DmaBufType::BUF1, dma_offset, data, size);
     return true;
 }
 
@@ -566,8 +566,7 @@ std::string PLInterface::dumpCtrlMem() {
         {"WK_OFFSET", PLReg::WK_OFFSET},
         {"WV_OFFSET", PLReg::WV_OFFSET},
         {"WO_OFFSET", PLReg::WO_OFFSET},
-        {"W1_GATE_OFFSET", PLReg::W1_GATE_OFFSET},
-        {"W1_UP_OFFSET", PLReg::W1_UP_OFFSET},
+        {"W1_OFFSET", PLReg::W1_OFFSET},
         {"W2_OFFSET", PLReg::W2_OFFSET},
         {"K_CACHE_OFFSET", PLReg::K_CACHE_OFFSET},
         {"V_CACHE_OFFSET", PLReg::V_CACHE_OFFSET},
