@@ -784,7 +784,7 @@
 
 		cma_low: buffer@40000000 {
 		    compatible = "shared-dma-pool";
-			no-map;
+			reusable;
 		    reg = <0x0 0x40000000 0x0 0x20000000>;
 		};
 
