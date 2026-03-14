@@ -15,6 +15,7 @@
 #include <memory>
 #include <mutex>
 #include <thread>
+#include <unistd.h>
 #include <vector>
 
 Logger *g_logger = nullptr;
@@ -28,17 +29,15 @@ Queue<Command, 10> g_command_queue;
 // =============================================================================
 class WeightLoader {
     PLInterface *pl;
-    Logger *logger;
     ErrorHandler *err;
     std::string weights_file;
     static constexpr size_t kWeightLoadChunkBytes = 32 * 1024 * 1024;
 
 public:
-    WeightLoader(PLInterface *p, Logger *l, ErrorHandler *e)
-        : pl(p), logger(l), err(e) {}
+    WeightLoader(PLInterface *p, ErrorHandler *e) : pl(p), err(e) {}
     void setWeightsFile(const std::string &f) { weights_file = f; }
 
-    bool loadAllWeights(const ModelConfig &cfg, size_t max_bytes = 0) {
+    bool loadAllWeights(const ModelConfig &model_cfg, size_t max_bytes = 0) {
         LOG_INFO("Loading weights from " + weights_file);
         std::ifstream f(weights_file, std::ios::binary);
         if (!f) {
@@ -84,7 +83,8 @@ public:
                 break;
             }
 
-            if (!pl->writeDDR(DmaBufType::BUF0, ddr_offset, chunk.data(),
+            if (!pl->writeDDR(DmaBufType::BUF0,
+                              static_cast<uint32_t>(ddr_offset), chunk.data(),
                               static_cast<size_t>(bytes_read))) {
                 err->setError(ErrorCode::HARDWARE_FAULT,
                               "Staged DDR write failed at offset " +
@@ -101,13 +101,13 @@ public:
             return false;
         }
 
-        LOG_INFO("Loaded " + std::to_string(ddr_offset) +
-                 " bytes of weights via staged DDR writes");
+        LOG_INFO("Loaded " + std::to_string(ddr_offset) + " bytes into BUF0");
         return true;
     }
 
-    bool configureAddresses(const ModelConfig &cfg, const MemoryLayout &mem) {
-        if (!cfg.validate()) {
+    bool configureAddresses(const ModelConfig &model_cfg,
+                            const MemoryLayout &mem) {
+        if (!model_cfg.validate()) {
             err->setError(ErrorCode::CONFIG_ERROR,
                           "Invalid config (zero DMA length or stride)");
             return false;
@@ -127,8 +127,6 @@ public:
         pl->writeReg64(RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO,
                        pl->getDDRBaseAddr(DmaBufType::BUF1));
 
-        // ── ControlMemSpace (Sequential writes matching top_params.hpp) ──
-        
         // Words 3-10: Weights / KV-cache offsets
         pl->writeReg(PLReg::WQ_OFFSET, mem.wq_offset);
         pl->writeReg(PLReg::WK_OFFSET, mem.wk_offset);
@@ -145,7 +143,8 @@ public:
         pl->writeReg(PLReg::W2_BIAS_OFFSET, mem.w2_bias_offset);
         pl->writeReg(PLReg::LN0_GAMMA_OFFSET, mem.ln0_gamma_offset);
         pl->writeReg(PLReg::LN1_GAMMA_OFFSET, mem.ln1_gamma_offset);
-        pl->writeReg(PLReg::FINAL_NORM_GAMMA_OFFSET, mem.final_norm_gamma_offset);
+        pl->writeReg(PLReg::FINAL_NORM_GAMMA_OFFSET,
+                     mem.final_norm_gamma_offset);
         pl->writeReg(PLReg::LN0_EPS_OFFSET, mem.ln0_eps_offset);
         pl->writeReg(PLReg::LN1_EPS_OFFSET, mem.ln1_eps_offset);
         pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET, mem.final_norm_eps_offset);
@@ -164,44 +163,40 @@ public:
 };
 
 // =============================================================================
-// InferenceExecutor — single start pulse, autonomous PL, stream argmax readback
-// Uses only: readReg(), writeReg(), waitDone(), clearIRQ(),
-//            streamInitSend/Recv(), streamWaitSend/Recv(), readDDR()
+// InferenceExecutor — handles executeToken(), readDDR()
 // =============================================================================
 class InferenceExecutor {
     PLInterface *pl;
     Tokenizer *tok;
     PerformanceMonitor *perf;
-    Logger *logger;
     ErrorHandler *err;
+    ModelConfig model_cfg;
 
-    uint32_t vocab_size;
     uint32_t input_offset;  // DMA buffer offset for stream in staging
     uint32_t output_offset; // DMA buffer offset for stream out staging
     uint32_t timeout_ms;
     bool debug_mode;
 
-    // Embedding table: vocab_size x STREAM_IN_BUF_BYTES, held in process memory
+    // Embedding table: vocab_size x hidden_size, held in process memory
     std::vector<int8_t> embedding_table;
 
-    // Position embedding table: context_length x STREAM_IN_BUF_BYTES (GPT-2 learned positions)
+    // Position embedding table: context_length x hidden_size (GPT-2 learned
+    // positions)
     std::vector<int8_t> pos_embedding_table;
-    uint32_t context_length;
 
 public:
     InferenceExecutor(PLInterface *p, Tokenizer *t, PerformanceMonitor *pf,
-                      Logger *l, ErrorHandler *e, uint32_t vocab_sz,
-                      uint32_t ctx_len,
+                      ErrorHandler *e, const ModelConfig &m_cfg,
                       uint32_t in_off, uint32_t out_off, uint32_t tmo_ms,
                       bool debug = false)
-        : pl(p), tok(t), perf(pf), logger(l), err(e), vocab_size(vocab_sz),
-          context_length(ctx_len),
+        : pl(p), tok(t), perf(pf), err(e), model_cfg(m_cfg),
           input_offset(in_off), output_offset(out_off), timeout_ms(tmo_ms),
           debug_mode(debug) {}
 
     /** Load embedding table from file into process memory. */
     bool loadEmbeddingTable(const std::string &path) {
-        size_t expected = static_cast<size_t>(vocab_size) * STREAM_IN_BUF_BYTES;
+        size_t expected =
+            static_cast<size_t>(model_cfg.vocab_size) * model_cfg.hidden_size;
 
         std::ifstream f(path, std::ios::binary);
         if (!f) {
@@ -225,15 +220,16 @@ public:
         embedding_table.resize(expected);
         f.read(reinterpret_cast<char *>(embedding_table.data()), expected);
 
-        LOG_INFO("Loaded embedding table into process memory: " +
-                 std::to_string(vocab_size) + " x " +
-                 std::to_string(STREAM_IN_BUF_BYTES) + " bytes");
+        LOG_INFO(
+            "Loaded embedding table: " + std::to_string(model_cfg.vocab_size) +
+            " x " + std::to_string(model_cfg.hidden_size) + " bytes");
         return true;
     }
 
     /** Load position embedding table from file into process memory (GPT-2). */
     bool loadPositionEmbeddings(const std::string &path) {
-        size_t expected = static_cast<size_t>(context_length) * STREAM_IN_BUF_BYTES;
+        size_t expected = static_cast<size_t>(model_cfg.context_length) *
+                          model_cfg.hidden_size;
 
         std::ifstream f(path, std::ios::binary);
         if (!f) {
@@ -247,10 +243,10 @@ public:
         f.seekg(0);
 
         if (file_size < expected) {
-            err->setError(
-                ErrorCode::FILE_NOT_FOUND,
-                "Position embedding file too small: " + std::to_string(file_size) +
-                    " bytes, expected " + std::to_string(expected));
+            err->setError(ErrorCode::FILE_NOT_FOUND,
+                          "Position embedding file too small: " +
+                              std::to_string(file_size) + " bytes, expected " +
+                              std::to_string(expected));
             return false;
         }
 
@@ -258,8 +254,8 @@ public:
         f.read(reinterpret_cast<char *>(pos_embedding_table.data()), expected);
 
         LOG_INFO("Loaded position embeddings: " +
-                 std::to_string(context_length) + " x " +
-                 std::to_string(STREAM_IN_BUF_BYTES) + " bytes");
+                 std::to_string(model_cfg.context_length) + " x " +
+                 std::to_string(model_cfg.hidden_size) + " bytes");
         return true;
     }
 
@@ -269,26 +265,20 @@ public:
                       uint32_t &out_token) {
         perf->startGeneration();
 
-        int8_t send_buf[STREAM_IN_BUF_BYTES];
-        if (!lookupEmbedding(token_id, token_position, send_buf))
+        LOG_DEBUG("executeToken: token_id=" + std::to_string(token_id) +
+                  " pos=" + std::to_string(token_position));
+
+        std::vector<int8_t> send_buf(model_cfg.stream_in_size);
+        if (!lookupEmbedding(token_id, token_position, send_buf.data()))
             return false;
 
-        {
-            std::string buf_str = "send_buf {";
-            for (int i = 0; i < (int)STREAM_IN_BUF_BYTES; i++) {
-                buf_str += std::to_string(send_buf[i]) +
-                           (i < (int)STREAM_IN_BUF_BYTES - 1 ? ", " : "");
-            }
-            buf_str += "}";
-            LOG_DEBUG(buf_str);
-        }
-
-        if (!pl->streamInitRecv(output_offset, STREAM_OUT_BUF_BYTES)) {
+        if (!pl->streamInitRecv(output_offset, model_cfg.stream_out_size)) {
             logPLStatus("streamInitRecv failed");
             return false;
         }
 
-        if (!pl->streamInitSend(input_offset, send_buf, STREAM_IN_BUF_BYTES)) {
+        if (!pl->streamInitSend(input_offset, send_buf.data(),
+                                model_cfg.stream_in_size)) {
             logPLStatus("streamInitSend failed");
             return false;
         }
@@ -297,6 +287,14 @@ public:
         uint32_t ctrl_bits = CTRL_RESETN_BIT | CTRL_START_BIT;
         if (debug_mode)
             ctrl_bits |= CTRL_DEBUG_MODE_BIT;
+
+        LOG_DEBUG("Pulsing START (CTRL=0x" + ([&] {
+                      char b[16];
+                      snprintf(b, sizeof(b), "%08X", ctrl_bits);
+                      return std::string(b);
+                  })() +
+                  ")");
+
         pl->writeReg(PLReg::TOKEN_POSITION, token_position);
         pl->writeReg(PLReg::CONTROL, ctrl_bits);
 
@@ -317,15 +315,16 @@ public:
             return false;
         }
 
-        uint8_t recv_buf[STREAM_OUT_BUF_BYTES] = {};
-        if (!pl->streamWaitRecv(output_offset, recv_buf, STREAM_OUT_BUF_BYTES,
-                                timeout_ms)) {
+        std::vector<uint8_t> recv_buf(model_cfg.stream_out_size, 0);
+        if (!pl->streamWaitRecv(output_offset, recv_buf.data(),
+                                model_cfg.stream_out_size, timeout_ms)) {
             logPLStatus("streamWaitRecv failed");
             pl->clearIRQ();
             return false;
         }
 
         // Decode little-endian int32 (matches testbench stream out decode)
+        // Assume stream_out_size >= 4 for GPT-2
         out_token = static_cast<uint32_t>(recv_buf[0]) |
                     (static_cast<uint32_t>(recv_buf[1]) << 8) |
                     (static_cast<uint32_t>(recv_buf[2]) << 16) |
@@ -346,28 +345,33 @@ public:
     }
 
 private:
-    bool lookupEmbedding(uint32_t token_id, uint32_t token_position, int8_t *out) {
+    bool lookupEmbedding(uint32_t token_id, uint32_t token_position,
+                         int8_t *out) {
         if (embedding_table.empty()) {
             LOG_WARN("No embedding table loaded, using test pattern");
-            for (int i = 0; i < STREAM_IN_BUF_BYTES; i++)
+            for (uint32_t i = 0; i < model_cfg.hidden_size; i++)
                 out[i] = static_cast<int8_t>(i & 0xFF);
             return true;
         }
-        if (token_id >= vocab_size) {
+        if (token_id >= model_cfg.vocab_size) {
             LOG_ERROR("Token ID " + std::to_string(token_id) +
-                      " out of range (" + std::to_string(vocab_size) + ")");
+                      " out of range (" + std::to_string(model_cfg.vocab_size) +
+                      ")");
             err->setError(ErrorCode::INVALID_TOKEN, "Token out of range");
             return false;
         }
 
         // Look up token embedding
-        size_t tok_offset = static_cast<size_t>(token_id) * STREAM_IN_BUF_BYTES;
-        memcpy(out, &embedding_table[tok_offset], STREAM_IN_BUF_BYTES);
+        size_t tok_offset =
+            static_cast<size_t>(token_id) * model_cfg.hidden_size;
+        memcpy(out, &embedding_table[tok_offset], model_cfg.hidden_size);
 
         // Add position embedding (GPT-2 learned positional encoding)
-        if (!pos_embedding_table.empty() && token_position < context_length) {
-            size_t pos_offset = static_cast<size_t>(token_position) * STREAM_IN_BUF_BYTES;
-            for (int i = 0; i < STREAM_IN_BUF_BYTES; i++) {
+        if (!pos_embedding_table.empty() &&
+            token_position < model_cfg.context_length) {
+            size_t pos_offset =
+                static_cast<size_t>(token_position) * model_cfg.hidden_size;
+            for (uint32_t i = 0; i < model_cfg.hidden_size; i++) {
                 int sum = static_cast<int>(out[i]) +
                           static_cast<int>(pos_embedding_table[pos_offset + i]);
                 // Clamp to int8 range
@@ -376,9 +380,10 @@ private:
             }
         } else if (pos_embedding_table.empty()) {
             LOG_WARN("No position embeddings loaded, skipping pos addition");
-        } else if (token_position >= context_length) {
+        } else if (token_position >= model_cfg.context_length) {
             LOG_ERROR("Token position " + std::to_string(token_position) +
-                      " exceeds context length " + std::to_string(context_length));
+                      " exceeds context length " +
+                      std::to_string(model_cfg.context_length));
         }
 
         return true;
@@ -423,11 +428,13 @@ class InferenceEngine {
 public:
     ~InferenceEngine() { shutdown(); }
 
-    bool initialize(const std::string &cfg_file,
-                    bool debug_hw_override = false) {
+    bool initialize(const std::string &cfg_file, bool debug_hw_override = false,
+                    bool mock_override = false) {
         config.loadFromFile(cfg_file);
         if (debug_hw_override)
             config.hardware.debug_mode = true;
+        if (mock_override)
+            config.hardware.mock_mode = true;
         if (!config.validate()) {
             LOG_ERROR("Invalid configuration");
             return false;
@@ -460,8 +467,8 @@ public:
 
         perf = std::unique_ptr<PerformanceMonitor>(new PerformanceMonitor);
 
-        loader = std::unique_ptr<WeightLoader>(
-            new WeightLoader(pl.get(), g_logger, &err));
+        loader =
+            std::unique_ptr<WeightLoader>(new WeightLoader(pl.get(), &err));
 
         if (!loader->configureAddresses(config.model, config.memory)) {
             LOG_FATAL("Config failed " + err.getLastErrorMessage());
@@ -470,17 +477,15 @@ public:
 
         // Load binary weights into DDR — cap at what the FPGA actually needs
         loader->setWeightsFile(config.model.weights_file);
-        if (!loader->loadAllWeights(config.model, WEIGHTS_SIZE)) {
+        if (!loader->loadAllWeights(config.model, config.memory.weights_size)) {
             LOG_FATAL("Weight load failed " + err.getLastErrorMessage());
             return false;
         }
 
         exec = std::unique_ptr<InferenceExecutor>(new InferenceExecutor(
-            pl.get(), tokenizer.get(), perf.get(), g_logger, &err,
-            config.model.vocab_size, config.model.context_length,
-            config.memory.input_offset,
-            config.memory.output_offset, config.hardware.timeout_ms,
-            config.hardware.debug_mode));
+            pl.get(), tokenizer.get(), perf.get(), &err, config.model,
+            config.memory.input_offset, config.memory.output_offset,
+            config.hardware.timeout_ms, config.hardware.debug_mode));
 
         // Load embedding table from file into process memory
         if (!config.model.embeddings_file.empty()) {
@@ -493,8 +498,10 @@ public:
 
         // Load position embeddings (GPT-2 learned positional encoding)
         if (!config.model.pos_embeddings_file.empty()) {
-            if (!exec->loadPositionEmbeddings(config.model.pos_embeddings_file)) {
-                LOG_WARN("Position embedding load failed, positions will be ignored");
+            if (!exec->loadPositionEmbeddings(
+                    config.model.pos_embeddings_file)) {
+                LOG_WARN("Position embedding load failed, positions will be "
+                         "ignored");
             }
         } else {
             LOG_WARN("No pos_embeddings_file configured, no position encoding");
@@ -524,6 +531,49 @@ public:
     bool submitCommand(const Command &c) { return g_command_queue.push(c); }
     std::string getPerfStats() const { return perf->getDetailedStats(); }
     std::string getRegStats() const { return pl->getRegStats(); }
+    std::string dumpPLRegs() const { return pl->dumpCtrlMem(); }
+
+    std::string dumpConfig() const {
+        auto hex32 = [](uint32_t val) {
+            char b[16];
+            snprintf(b, sizeof(b), "0x%08X", val);
+            return std::string(b);
+        };
+
+        std::string s = "--- System Config ---\n";
+        s += "Weights: " + config.model.weights_file + "\n";
+        s += "Vocab:   " + config.model.tokenizer_vocab + "\n";
+        s += "Model:   Ctx=" + std::to_string(config.model.context_length) +
+             ", Hid=" + std::to_string(config.model.hidden_size) +
+             ", Layers=" + std::to_string(config.model.num_layers) + "\n";
+
+        s += "--- Memory Layout (Offsets) ---\n";
+        s += "WQ: " + hex32(config.memory.wq_offset) +
+             "  WK: " + hex32(config.memory.wk_offset) +
+             "  WV: " + hex32(config.memory.wv_offset) +
+             "  WO: " + hex32(config.memory.wo_offset) + "\n";
+        s += "W1: " + hex32(config.memory.w1_offset) +
+             "  W2: " + hex32(config.memory.w2_offset) +
+             "  WL: " + hex32(config.memory.wlogit_offset) + "\n";
+        s += "B_WO: " + hex32(config.memory.wo_bias_offset) +
+             "  B_W1: " + hex32(config.memory.w1_bias_offset) +
+             "  B_W2: " + hex32(config.memory.w2_bias_offset) + "\n";
+        s += "LN0_G: " + hex32(config.memory.ln0_gamma_offset) +
+             "  LN0_B: " + hex32(config.memory.ln0_beta_offset) +
+             "  LN1_G: " + hex32(config.memory.ln1_gamma_offset) + "\n";
+        s += "LN1_B: " + hex32(config.memory.ln1_beta_offset) +
+             "  FN_G:  " + hex32(config.memory.final_norm_gamma_offset) +
+             "  FN_B:  " + hex32(config.memory.final_norm_beta_offset) + "\n";
+        s += "LN0_E: " + hex32(config.memory.ln0_eps_offset) +
+             "  LN1_E: " + hex32(config.memory.ln1_eps_offset) +
+             "  FN_E:  " + hex32(config.memory.final_norm_eps_offset) + "\n";
+        s += "--- KV Cache / Streams ---\n";
+        s += "K : " + hex32(config.memory.k_cache_offset) +
+             "  V : " + hex32(config.memory.v_cache_offset) + "\n";
+        s += "In: " + hex32(config.memory.input_offset) +
+             "  Out:" + hex32(config.memory.output_offset) + "\n";
+        return s;
+    }
 
 private:
     void loop() {
@@ -587,10 +637,10 @@ private:
               tokenizer->decodeToken(input_token) + "\"\n");
 
         // Compute expected sum of int8 embedding on CPU side
-        int8_t embed_buf[STREAM_IN_BUF_BYTES];
+        std::vector<int8_t> embed_buf(config.model.hidden_size);
         int32_t expected_sum = 0;
-        if (exec->getEmbedding(input_token, 0, embed_buf)) {
-            for (int i = 0; i < STREAM_IN_BUF_BYTES; i++)
+        if (exec->getEmbedding(input_token, 0, embed_buf.data())) {
+            for (uint32_t i = 0; i < config.model.hidden_size; i++)
                 expected_sum += static_cast<int32_t>(embed_buf[i]);
             print("CPU embedding sum (int8): " + std::to_string(expected_sum) +
                   "\n");
@@ -648,6 +698,9 @@ private:
             return;
         }
 
+        LOG_DEBUG("Entering Prefill phase: prompt_len=" +
+                  std::to_string(tokens.size()));
+
         // ── Prefill: feed prompt tokens to populate KV cache ──
         for (size_t i = 0; i + 1 < tokens.size() && !state.cancel; i++) {
             uint32_t discard = 0;
@@ -667,6 +720,9 @@ private:
             g_engine_status = EngineStatus::IDLE;
             return;
         }
+
+        LOG_DEBUG("Entering Decode phase: max_tokens=" +
+                  std::to_string(state.maxTokens));
 
         // ── Decode: generate from the last prompt token onward ──
         uint32_t next_input = tokens.back();
@@ -727,6 +783,7 @@ int main(int argc, char *argv[]) {
 
     LogLevel lvl = LogLevel::INFO;
     bool debug_hw = false;
+    bool mock_hw = false;
 
     for (int i = 1; i < argc; i++) {
         std::string arg(argv[i]);
@@ -734,29 +791,35 @@ int main(int argc, char *argv[]) {
             lvl = LogLevel::DEBUG;
         if (arg == "--debug-hw")
             debug_hw = true;
+        if (arg == "--mock")
+            mock_hw = true;
     }
 
     g_logger = new Logger(lvl, "inference.log");
 
-    std::string cfg = "config.yaml";
+    std::string cfg_file = "config.yaml";
     for (int i = 1; i < argc - 1; i++)
         if (std::string(argv[i]) == "--config")
-            cfg = argv[i + 1];
+            cfg_file = argv[i + 1];
 
     InferenceEngine engine;
 
     if (debug_hw) {
         LOG_INFO("Hardware debug mode enabled via --debug-hw");
     }
+    if (mock_hw) {
+        LOG_INFO("Hardware mock mode enabled via --mock");
+    }
 
-    if (!engine.initialize(cfg, debug_hw)) {
+    if (!engine.initialize(cfg_file, debug_hw, mock_hw)) {
         LOG_FATAL("Init failed");
         delete g_logger;
         return 1;
     }
 
     engine.start();
-    std::cout << "Commands: /quit /stop /reset /stats_perf /stats_reg\n> ";
+    std::cout << "Commands: /quit /stop /reset /stats_perf /stats_reg "
+                 "/reg_dump /config_dump\n> ";
 
     int taskId = 1;
     std::string input;
@@ -777,6 +840,10 @@ int main(int argc, char *argv[]) {
             std::cout << engine.getPerfStats() << "\n";
         } else if (input == "/stats_reg") {
             std::cout << engine.getRegStats() << "\n";
+        } else if (input == "/reg_dump") {
+            std::cout << engine.dumpPLRegs() << "\n";
+        } else if (input == "/config_dump") {
+            std::cout << engine.dumpConfig() << "\n";
         } else {
             engine.submitTask(Task(taskId++, TaskType::GENERATE, input));
         }

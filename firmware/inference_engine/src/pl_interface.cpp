@@ -21,7 +21,7 @@ bool PLInterface::init(const std::string &device_name,
                        uint64_t stream_reg_base_addr) {
 
     if (_mock_mode) {
-        LOG_INFO("PLInterface: Mock mode");
+        _logger->info("PLInterface: Mock mode");
         _mock_regs[PLReg::CONTROL / 4] = CTRL_RESETN_BIT;
         // _mock_regs[PLReg::STATUS / 4] = STATUS_IDLE;
         _initialized = true;
@@ -40,7 +40,7 @@ bool PLInterface::init(const std::string &device_name,
     reset();
 
     _initialized = true;
-    LOG_INFO("PLInterface: Initialized");
+    _logger->info("PLInterface: Initialized");
     return true;
 }
 
@@ -148,7 +148,7 @@ bool PLInterface::findAndOpenUIO(const std::string &device_name) {
                 return false;
             }
             // map1 may not exist if control_r is a separate UIO device
-            LOG_INFO("PLInterface: map1 not found, control_r may be separate");
+            _logger->info("PLInterface: map1 not found, control_r may be separate");
             break;
         }
         unsigned long sz = 0;
@@ -194,7 +194,7 @@ bool PLInterface::findAndOpenUIO(const std::string &device_name) {
         }
     }
 
-    LOG_INFO("PLInterface: Found " + device_name + " at " +
+    _logger->info("PLInterface: Found " + device_name + " at " +
              std::string(dev_path) + " (map0=0x" + std::to_string(_ctrl_size) +
              ", map1=0x" + std::to_string(_addr_size) + ")");
     return true;
@@ -336,7 +336,7 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
         return true;
 
-    LOG_WARN("waitDone: spurious IRQ wakeup");
+    _logger->warn("waitDone: spurious IRQ wakeup");
     return false;
 }
 
@@ -346,6 +346,15 @@ bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
     DmaBuffer *buf = (type == DmaBufType::BUF0) ? &_dma_buf0 : &_dma_buf1;
     if (!buf->isAllocated() || offset + size > buf->size())
         return false;
+
+    if (_logger->level() == LogLevel::DEBUG) {
+        char msg[128];
+        snprintf(msg, sizeof(msg), "writeDDR: %s + 0x%08X (phys 0x%016llX), size %zu",
+                 (type == DmaBufType::BUF0 ? "BUF0" : "BUF1"), offset,
+                 (unsigned long long)(buf->phys() + offset), size);
+        _logger->debug(msg);
+    }
+
     memcpy((uint8_t *)buf->virt() + offset, data, size);
     buf->sync_for_device(offset, size);
     return true;
