@@ -249,6 +249,10 @@ public:
 
         while (std::getline(file, line)) {
             if (line.empty()) continue;
+            // Trim \r from CRLF
+            if (line.back() == '\r') line.pop_back();
+            if (line.empty()) continue;
+
             if (line.rfind("#config", 0) == 0) {
                 std::istringstream ss(line.substr(7));
                 uint32_t vs, bos, eos, unk;
@@ -262,15 +266,19 @@ public:
             if (line == "#added")  { section = ADDED;   continue; }
             if (line[0] == '#')    continue;
 
-            size_t tab = line.find('\t');
-            if (tab == std::string::npos) continue;
-
             if (section == VOCAB || section == ADDED) {
+                size_t tab = line.rfind('\t'); // ID is always after the last tab
+                if (tab == std::string::npos) continue;
                 std::string piece = hexUnescape(line.substr(0, tab));
                 uint32_t id = static_cast<uint32_t>(std::stoul(line.substr(tab + 1)));
                 token_to_id[piece] = id;
                 id_to_token[id] = piece;
+                if (id == 0 || id == 50256) {
+                    LOG_DEBUG("Vocab sample: ID=" + std::to_string(id) + " token=[" + piece + "]");
+                }
             } else if (section == MERGES) {
+                size_t tab = line.find('\t'); // Merge pairs are separated by the first tab
+                if (tab == std::string::npos) continue;
                 std::string left = hexUnescape(line.substr(0, tab));
                 std::string right = hexUnescape(line.substr(tab + 1));
                 merge_priority[{left, right}] = merge_rank++;
