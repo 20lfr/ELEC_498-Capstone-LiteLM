@@ -2,7 +2,8 @@
 # Converts the irq_ps busInterface from data to interrupt bus type.
 # Usage: ./modify_xml.sh <input_xml> [output_xml]
 
-# /home/luka/Scripting/vitis_simulations/Top_Module_No_Debug/Top_Module_No_Debug/hls/impl/ip/xgui
+# Example path (varies by MODEL_ARCH):
+# Model-architectures/<arch>/vitis_simulations/<proj>/<proj>/hls/impl/ip/xgui
 
 set -e
 

@@ -1,9 +1,0 @@
-{
-  "name": "Top_module_Non_Debug_Multiple_Token",
-  "type": "HLS",
-  "configuration": {
-    "componentType": "HLS",
-    "configFiles": ["hls_config.cfg"],
-    "work_dir": "."
-  }
-}

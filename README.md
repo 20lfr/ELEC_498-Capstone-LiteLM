@@ -8,7 +8,8 @@ The accelerator is built around a custom High-Level Synthesis (HLS) design that 
 
 ## Directory Structure
 
-*   **`HLS-Verilog/`**: Contains the core HLS source code for the hardware accelerator.
+*   **`Model-architectures/<arch>/HLS-Verilog/`**: Core HLS source code for a given hardware architecture (e.g. Phi-3, GPT-2).
+    *   Current Phi-3 baseline: `Model-architectures/phi3-mini-int4-HARDWARE/HLS-Verilog/`
     *   `Scheduler_FSM/`: The main control logic and Finite State Machine.
     *   `ControlMemInterface/`: Interface for control memory.
     *   `IRQ_Wizard/`: Interrupt handling logic.
@@ -21,7 +22,7 @@ The accelerator is built around a custom High-Level Synthesis (HLS) design that 
 *   Xilinx Vitis / Vivado (2024.1 or compatible)
 
 ### Simulation
-Refer to the `HLS-Verilog/README.md` for details on running C-simulations for individual modules.
+Refer to `Model-architectures/phi3-mini-int4-HARDWARE/HLS-Verilog/README.md` for details on running C-simulations for individual modules.
 
 # Part Number for the Kria260 Vison Dev Board: 
 xck26-sfvc784-2lv
