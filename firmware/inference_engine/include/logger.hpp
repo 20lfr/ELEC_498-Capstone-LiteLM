@@ -62,6 +62,8 @@ public:
         current_level = level;
     }
     
+    LogLevel level() const { return current_level; }
+    
     void log(LogLevel level, const std::string& msg) {
         if (level < current_level) return;
         

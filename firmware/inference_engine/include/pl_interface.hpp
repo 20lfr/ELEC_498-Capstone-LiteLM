@@ -12,8 +12,8 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+#include "config.hpp"
 #include "dma_buffer.hpp"
-#include "shared_params.hpp"
 
 // TODO: Replace with final HLS-generated header after GPT-2 synthesis
 #include "xtransformer_top_hw.h"
@@ -208,12 +208,6 @@ public:
         return readReg64(RegBus::CTRL, offset_lo);
     }
 
-    void setRegBits(uint32_t offset, uint32_t mask) {
-        writeReg(offset, readReg(offset) | mask);
-    }
-    void clearRegBits(uint32_t offset, uint32_t mask) {
-        writeReg(offset, readReg(offset) & ~mask);
-    }
     bool testRegBits(uint32_t offset, uint32_t mask) {
         return (readReg(offset) & mask) != 0;
     }
