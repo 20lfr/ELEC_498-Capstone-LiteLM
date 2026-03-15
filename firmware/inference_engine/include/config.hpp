@@ -3,6 +3,8 @@
 
 #include "shared_params.hpp"
 #include <cstdint>
+#include <iomanip>
+#include <sstream>
 #include <string>
 
 struct HardwareConfig {
@@ -64,8 +66,14 @@ struct MemoryLayout {
                                  MODEL_INTERMEDIATE_SIZE));
 
     // Biases (Q16.16 int32)
-    uint32_t wo_bias_offset =
+    uint32_t wq_bias_offset =
         align64_u32(wlogit_offset + (MODEL_VOCAB_SIZE * MODEL_HIDDEN_SIZE));
+    uint32_t wk_bias_offset =
+        align64_u32(wq_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
+    uint32_t wv_bias_offset =
+        align64_u32(wk_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
+    uint32_t wo_bias_offset =
+        align64_u32(wv_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
     uint32_t w1_bias_offset =
         align64_u32(wo_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
     uint32_t w2_bias_offset = align64_u32(
@@ -134,6 +142,94 @@ struct SystemConfig {
                hardware.dmabuf1_size >= memory.total_kv_size;
     }
     bool loadFromFile(const std::string &) { return true; }
+
+    std::string toString() const {
+        std::stringstream ss;
+        auto hex32 = [&](uint32_t val) {
+            ss << "0x" << std::setfill('0') << std::setw(8) << std::uppercase
+               << std::hex << val << std::dec;
+            return "";
+        };
+
+        ss << "--- System Config ---\n";
+        ss << "Weights: " << model.weights_file << "\n";
+        ss << "Vocab:   " << model.tokenizer_vocab << "\n";
+        ss << "Model:   Ctx=" << model.context_length
+           << ", Hid=" << model.hidden_size << ", Layers=" << model.num_layers
+           << "\n";
+
+        ss << "--- Memory Layout (Offsets) ---\n";
+        ss << "WQ: ";
+        hex32(memory.wq_offset);
+        ss << "  WK: ";
+        hex32(memory.wk_offset);
+        ss << "  WV: ";
+        hex32(memory.wv_offset);
+        ss << "  WO: ";
+        hex32(memory.wo_offset);
+        ss << "\n";
+
+        ss << "W1: ";
+        hex32(memory.w1_offset);
+        ss << "  W2: ";
+        hex32(memory.w2_offset);
+        ss << "  WL: ";
+        hex32(memory.wlogit_offset);
+        ss << "\n";
+
+        ss << "B_WQ: ";
+        hex32(memory.wq_bias_offset);
+        ss << "  B_WK: ";
+        hex32(memory.wk_bias_offset);
+        ss << "  B_WV: ";
+        hex32(memory.wv_bias_offset);
+        ss << "\n";
+
+        ss << "B_WO: ";
+        hex32(memory.wo_bias_offset);
+        ss << "  B_W1: ";
+        hex32(memory.w1_bias_offset);
+        ss << "  B_W2: ";
+        hex32(memory.w2_bias_offset);
+        ss << "\n";
+        ss << "LN0_G: ";
+        hex32(memory.ln0_gamma_offset);
+        ss << "  LN0_B: ";
+        hex32(memory.ln0_beta_offset);
+        ss << "  LN1_G: ";
+        hex32(memory.ln1_gamma_offset);
+        ss << "\n";
+
+        ss << "LN1_B: ";
+        hex32(memory.ln1_beta_offset);
+        ss << "  FN_G:  ";
+        hex32(memory.final_norm_gamma_offset);
+        ss << "  FN_B:  ";
+        hex32(memory.final_norm_beta_offset);
+        ss << "\n";
+
+        ss << "LN0_E: ";
+        hex32(memory.ln0_eps_offset);
+        ss << "  LN1_E: ";
+        hex32(memory.ln1_eps_offset);
+        ss << "  FN_E:  ";
+        hex32(memory.final_norm_eps_offset);
+        ss << "\n";
+
+        ss << "--- KV Cache / Streams ---\n";
+        ss << "K : ";
+        hex32(memory.k_cache_offset);
+        ss << "  V : ";
+        hex32(memory.v_cache_offset);
+        ss << "\n";
+        ss << "In: ";
+        hex32(memory.input_offset);
+        ss << "  Out:";
+        hex32(memory.output_offset);
+        ss << "\n";
+
+        return ss.str();
+    }
 };
 
 #endif

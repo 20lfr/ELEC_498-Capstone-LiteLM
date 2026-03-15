@@ -137,7 +137,10 @@ public:
         pl->writeReg(PLReg::K_CACHE_OFFSET, mem.k_cache_offset);
         pl->writeReg(PLReg::V_CACHE_OFFSET, mem.v_cache_offset);
 
-        // Words 11-20: Bias and parameter offsets
+        // Words 11-23: Bias and parameter offsets
+        pl->writeReg(PLReg::WQ_BIAS_OFFSET, mem.wq_bias_offset);
+        pl->writeReg(PLReg::WK_BIAS_OFFSET, mem.wk_bias_offset);
+        pl->writeReg(PLReg::WV_BIAS_OFFSET, mem.wv_bias_offset);
         pl->writeReg(PLReg::WO_BIAS_OFFSET, mem.wo_bias_offset);
         pl->writeReg(PLReg::W1_BIAS_OFFSET, mem.w1_bias_offset);
         pl->writeReg(PLReg::W2_BIAS_OFFSET, mem.w2_bias_offset);
@@ -150,7 +153,7 @@ public:
         pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET, mem.final_norm_eps_offset);
         pl->writeReg(PLReg::WLOGIT_OFFSET, mem.wlogit_offset);
 
-        // Word 21: GPT-2 extensions
+        // Word 24: GPT-2 extensions
         pl->writeReg(PLReg::TOKEN_POSITION, 0);
 
         // endConfig: clears IRQ clear, enables IRQs, checks for config errors
@@ -458,7 +461,7 @@ public:
             return false;
         }
 
-        tokenizer = std::unique_ptr<Tokenizer>(new Tokenizer);
+        tokenizer = std::unique_ptr<Tokenizer>(new Tokenizer());
         if (!tokenizer->loadVocabulary(config.model.tokenizer_vocab)) {
             LOG_FATAL("Tokenizer vocab load failed " +
                       err.getLastErrorMessage());
@@ -490,10 +493,12 @@ public:
         // Load embedding table from file into process memory
         if (!config.model.embeddings_file.empty()) {
             if (!exec->loadEmbeddingTable(config.model.embeddings_file)) {
-                LOG_WARN("Embedding load failed, using test patterns");
+                LOG_WARN("Embedding load failed, using test patterns" +
+                         err.getLastErrorMessage());
             }
         } else {
-            LOG_WARN("No embeddings_file configured, using test patterns");
+            LOG_WARN("No embeddings_file configured, using test patterns" +
+                     err.getLastErrorMessage());
         }
 
         // Load position embeddings (GPT-2 learned positional encoding)
@@ -501,10 +506,12 @@ public:
             if (!exec->loadPositionEmbeddings(
                     config.model.pos_embeddings_file)) {
                 LOG_WARN("Position embedding load failed, positions will be "
-                         "ignored");
+                         "ignored" +
+                         err.getLastErrorMessage());
             }
         } else {
-            LOG_WARN("No pos_embeddings_file configured, no position encoding");
+            LOG_WARN("No pos_embeddings_file configured, no position encoding" +
+                     err.getLastErrorMessage());
         }
 
         LOG_INFO("Initialized" + std::string(config.hardware.debug_mode
@@ -532,48 +539,7 @@ public:
     std::string getPerfStats() const { return perf->getDetailedStats(); }
     std::string getRegStats() const { return pl->getRegStats(); }
     std::string dumpPLRegs() const { return pl->dumpCtrlMem(); }
-
-    std::string dumpConfig() const {
-        auto hex32 = [](uint32_t val) {
-            char b[16];
-            snprintf(b, sizeof(b), "0x%08X", val);
-            return std::string(b);
-        };
-
-        std::string s = "--- System Config ---\n";
-        s += "Weights: " + config.model.weights_file + "\n";
-        s += "Vocab:   " + config.model.tokenizer_vocab + "\n";
-        s += "Model:   Ctx=" + std::to_string(config.model.context_length) +
-             ", Hid=" + std::to_string(config.model.hidden_size) +
-             ", Layers=" + std::to_string(config.model.num_layers) + "\n";
-
-        s += "--- Memory Layout (Offsets) ---\n";
-        s += "WQ: " + hex32(config.memory.wq_offset) +
-             "  WK: " + hex32(config.memory.wk_offset) +
-             "  WV: " + hex32(config.memory.wv_offset) +
-             "  WO: " + hex32(config.memory.wo_offset) + "\n";
-        s += "W1: " + hex32(config.memory.w1_offset) +
-             "  W2: " + hex32(config.memory.w2_offset) +
-             "  WL: " + hex32(config.memory.wlogit_offset) + "\n";
-        s += "B_WO: " + hex32(config.memory.wo_bias_offset) +
-             "  B_W1: " + hex32(config.memory.w1_bias_offset) +
-             "  B_W2: " + hex32(config.memory.w2_bias_offset) + "\n";
-        s += "LN0_G: " + hex32(config.memory.ln0_gamma_offset) +
-             "  LN0_B: " + hex32(config.memory.ln0_beta_offset) +
-             "  LN1_G: " + hex32(config.memory.ln1_gamma_offset) + "\n";
-        s += "LN1_B: " + hex32(config.memory.ln1_beta_offset) +
-             "  FN_G:  " + hex32(config.memory.final_norm_gamma_offset) +
-             "  FN_B:  " + hex32(config.memory.final_norm_beta_offset) + "\n";
-        s += "LN0_E: " + hex32(config.memory.ln0_eps_offset) +
-             "  LN1_E: " + hex32(config.memory.ln1_eps_offset) +
-             "  FN_E:  " + hex32(config.memory.final_norm_eps_offset) + "\n";
-        s += "--- KV Cache / Streams ---\n";
-        s += "K : " + hex32(config.memory.k_cache_offset) +
-             "  V : " + hex32(config.memory.v_cache_offset) + "\n";
-        s += "In: " + hex32(config.memory.input_offset) +
-             "  Out:" + hex32(config.memory.output_offset) + "\n";
-        return s;
-    }
+    std::string dumpConfig() const { return config.toString(); }
 
 private:
     void loop() {

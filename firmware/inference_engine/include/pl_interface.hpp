@@ -63,7 +63,7 @@ namespace PLReg {
     constexpr uint32_t IRQ_MASK = CTRL_BASE + 0x04;
     constexpr uint32_t IRQ_CLEAR = CTRL_BASE + 0x08;
 
-    // Weight/KV-cache offsets (words 3-10)
+    // Words 3-10: Weights / KV-cache offsets
     constexpr uint32_t WQ_OFFSET = CTRL_BASE + 0x0C;
     constexpr uint32_t WK_OFFSET = CTRL_BASE + 0x10;
     constexpr uint32_t WV_OFFSET = CTRL_BASE + 0x14;
@@ -73,20 +73,23 @@ namespace PLReg {
     constexpr uint32_t K_CACHE_OFFSET = CTRL_BASE + 0x24;
     constexpr uint32_t V_CACHE_OFFSET = CTRL_BASE + 0x28;
 
-    // Bias and parameter offsets (words 11-20)
-    constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x2C;
-    constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0x30;
-    constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0x34;
-    constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0x38;
-    constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0x3C;
-    constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0x40;
-    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0x44;
-    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x48;
-    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x4C;
-    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0x50;
+    // Words 11-21: Bias and parameter offsets
+    constexpr uint32_t WQ_BIAS_OFFSET = CTRL_BASE + 0x2C;
+    constexpr uint32_t WK_BIAS_OFFSET = CTRL_BASE + 0x30;
+    constexpr uint32_t WV_BIAS_OFFSET = CTRL_BASE + 0x34;
+    constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x38;
+    constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0x3C;
+    constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0x40;
+    constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0x44;
+    constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0x48;
+    constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0x4C;
+    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0x50;
+    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x54;
+    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x58;
+    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0x5C;
 
-    // GPT-2 extensions (word 21)
-    constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x54;
+    // GPT-2 extensions (word 24)
+    constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x60;
 
     // ── StatusMemSpace (PL → PS reads) ──
     constexpr uint32_t STATUS_BASE =

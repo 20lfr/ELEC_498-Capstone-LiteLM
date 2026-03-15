@@ -148,7 +148,8 @@ bool PLInterface::findAndOpenUIO(const std::string &device_name) {
                 return false;
             }
             // map1 may not exist if control_r is a separate UIO device
-            _logger->info("PLInterface: map1 not found, control_r may be separate");
+            _logger->info(
+                "PLInterface: map1 not found, control_r may be separate");
             break;
         }
         unsigned long sz = 0;
@@ -195,8 +196,9 @@ bool PLInterface::findAndOpenUIO(const std::string &device_name) {
     }
 
     _logger->info("PLInterface: Found " + device_name + " at " +
-             std::string(dev_path) + " (map0=0x" + std::to_string(_ctrl_size) +
-             ", map1=0x" + std::to_string(_addr_size) + ")");
+                  std::string(dev_path) + " (map0=0x" +
+                  std::to_string(_ctrl_size) + ", map1=0x" +
+                  std::to_string(_addr_size) + ")");
     return true;
 }
 
@@ -349,7 +351,8 @@ bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
 
     if (_logger->level() == LogLevel::DEBUG) {
         char msg[128];
-        snprintf(msg, sizeof(msg), "writeDDR: %s + 0x%08X (phys 0x%016llX), size %zu",
+        snprintf(msg, sizeof(msg),
+                 "writeDDR: %s + 0x%08X (phys 0x%016llX), size %zu",
                  (type == DmaBufType::BUF0 ? "BUF0" : "BUF1"), offset,
                  (unsigned long long)(buf->phys() + offset), size);
         _logger->debug(msg);
@@ -579,6 +582,9 @@ std::string PLInterface::dumpCtrlMem() {
         {"W2_OFFSET", PLReg::W2_OFFSET},
         {"K_CACHE_OFFSET", PLReg::K_CACHE_OFFSET},
         {"V_CACHE_OFFSET", PLReg::V_CACHE_OFFSET},
+        {"WQ_BIAS_OFFSET", PLReg::WQ_BIAS_OFFSET},
+        {"WK_BIAS_OFFSET", PLReg::WK_BIAS_OFFSET},
+        {"WV_BIAS_OFFSET", PLReg::WV_BIAS_OFFSET},
         {"WO_BIAS_OFFSET", PLReg::WO_BIAS_OFFSET},
         {"W1_BIAS_OFFSET", PLReg::W1_BIAS_OFFSET},
         {"W2_BIAS_OFFSET", PLReg::W2_BIAS_OFFSET},
@@ -705,6 +711,8 @@ std::string PLInterface::getErrorCodeString(const uint32_t error_mask) {
         append("MMU URAM chunk allocation failure");
     if (code & ERR_MMU_REGION_TOO_LARGE)
         append("MMU region too large");
+    if (code & ERR_TOKEN_MAX)
+        append("Max tokens reached error");
 
     if (msg.empty())
         append("Unknown error code");
@@ -838,6 +846,12 @@ std::string PLInterface::getMMUErrorSubcodeString() {
         return "MISSING_FINAL_NORM_GAMMA";
     case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_EPS:
         return "MISSING_FINAL_NORM_EPS";
+    case MMU_ERR_SUBCODE_MISSING_LN0_BETA:
+        return "MISSING_LN0_BETA";
+    case MMU_ERR_SUBCODE_MISSING_LN1_BETA:
+        return "MISSING_LN1_BETA";
+    case MMU_ERR_SUBCODE_MISSING_FINAL_NORM_BETA:
+        return "MISSING_FINAL_NORM_BETA";
     default:
         return "UNKNOWN_MMU_SUBCODE";
     }
