@@ -533,13 +533,37 @@ std::string PLInterface::getRegStats(bool compact) {
     uint32_t head_idx = readReg(PLReg::HEAD_INDEX);
     uint32_t token_idx = readReg(PLReg::TOKEN_INDEX);
 
-    char buf[768];
+    // Optional build/config mirrors (StatusMemSpace word 7+). If the loaded
+    // bitstream doesn't implement them yet, reads typically return 0.
+    uint32_t cfg_num_layers = readReg(PLReg::CFG_NUM_LAYERS);
+    uint32_t cfg_d_model = readReg(PLReg::CFG_D_MODEL);
+    uint32_t cfg_d_ffn = readReg(PLReg::CFG_D_FFN);
+    uint32_t cfg_d_vocab = readReg(PLReg::CFG_D_VOCAB);
+    uint32_t cfg_context_length = readReg(PLReg::CFG_CONTEXT_LENGTH);
+    uint32_t cfg_d_heads = readReg(PLReg::CFG_D_HEADS);
+    uint32_t cfg_num_heads = readReg(PLReg::CFG_NUM_HEADS);
+    uint32_t cfg_d_tile_wo = readReg(PLReg::CFG_D_TILE_WO);
+    uint32_t cfg_d_tile_w1 = readReg(PLReg::CFG_D_TILE_W1);
+    uint32_t cfg_d_tile_w2 = readReg(PLReg::CFG_D_TILE_W2);
+    uint32_t cfg_d_tile_logit = readReg(PLReg::CFG_D_TILE_LOGIT);
+    uint32_t cfg_d_head_tile_qkv = readReg(PLReg::CFG_D_HEAD_TILE_QKV);
+    uint32_t cfg_att_ctx_block = readReg(PLReg::CFG_ATT_CTX_BLOCK);
+    uint32_t cfg_d_head_tile_att_value =
+        readReg(PLReg::CFG_D_HEAD_TILE_ATT_VALUE);
+
+    char buf[1400];
     if (compact) {
         snprintf(buf, sizeof(buf),
                  "status=0x%08X irq=0x%08X error=0x%08X mmu_sub=0x%08X "
-                 "layer=%u head=%u token=%u | stream: %s",
+                 "layer=%u head=%u token=%u | cfg: L=%u DM=%u FFN=%u V=%u "
+                 "CTX=%u DH=%u H=%u | tiles: WO=%u W1=%u W2=%u LOG=%u QKV=%u "
+                 "BLK=%u AV=%u | stream: %s",
                  status, irq_status, error_code, mmu_subcode, layer_idx,
-                 head_idx, token_idx, streamStatusString().c_str());
+                 head_idx, token_idx, cfg_num_layers, cfg_d_model, cfg_d_ffn,
+                 cfg_d_vocab, cfg_context_length, cfg_d_heads, cfg_num_heads,
+                 cfg_d_tile_wo, cfg_d_tile_w1, cfg_d_tile_w2, cfg_d_tile_logit,
+                 cfg_d_head_tile_qkv, cfg_att_ctx_block,
+                 cfg_d_head_tile_att_value, streamStatusString().c_str());
     } else {
         snprintf(buf, sizeof(buf),
                  "  Status:     0x%08X\n"
@@ -549,11 +573,29 @@ std::string PLInterface::getRegStats(bool compact) {
                  "  Layer:      %u\n"
                  "  Head:       %u\n"
                  "  Token:      %u\n"
+                 "  CFG Layers: %u\n"
+                 "  CFG DModel: %u\n"
+                 "  CFG DFFN:   %u\n"
+                 "  CFG DVocab: %u\n"
+                 "  CFG CtxLen: %u\n"
+                 "  CFG DHeads: %u\n"
+                 "  CFG NHeads: %u\n"
+                 "  CFG T_WO:   %u\n"
+                 "  CFG T_W1:   %u\n"
+                 "  CFG T_W2:   %u\n"
+                 "  CFG T_LOG:  %u\n"
+                 "  CFG T_QKV:  %u\n"
+                 "  CFG ATTBLK: %u\n"
+                 "  CFG T_AV:   %u\n"
                  "  Stream:     %s",
                  status, irq_status, error_code,
                  getErrorCodeString(error_code).c_str(), mmu_subcode,
                  getMMUErrorSubcodeString().c_str(), layer_idx, head_idx,
-                 token_idx, streamStatusString().c_str());
+                 token_idx, cfg_num_layers, cfg_d_model, cfg_d_ffn, cfg_d_vocab,
+                 cfg_context_length, cfg_d_heads, cfg_num_heads, cfg_d_tile_wo,
+                 cfg_d_tile_w1, cfg_d_tile_w2, cfg_d_tile_logit,
+                 cfg_d_head_tile_qkv, cfg_att_ctx_block,
+                 cfg_d_head_tile_att_value, streamStatusString().c_str());
     }
     return std::string(buf);
 }
@@ -607,6 +649,20 @@ std::string PLInterface::dumpCtrlMem() {
         {"LAYER_INDEX", PLReg::LAYER_INDEX},
         {"HEAD_INDEX", PLReg::HEAD_INDEX},
         {"TOKEN_INDEX", PLReg::TOKEN_INDEX},
+        {"CFG_NUM_LAYERS", PLReg::CFG_NUM_LAYERS},
+        {"CFG_D_MODEL", PLReg::CFG_D_MODEL},
+        {"CFG_D_FFN", PLReg::CFG_D_FFN},
+        {"CFG_D_VOCAB", PLReg::CFG_D_VOCAB},
+        {"CFG_CONTEXT_LENGTH", PLReg::CFG_CONTEXT_LENGTH},
+        {"CFG_D_HEADS", PLReg::CFG_D_HEADS},
+        {"CFG_NUM_HEADS", PLReg::CFG_NUM_HEADS},
+        {"CFG_D_TILE_WO", PLReg::CFG_D_TILE_WO},
+        {"CFG_D_TILE_W1", PLReg::CFG_D_TILE_W1},
+        {"CFG_D_TILE_W2", PLReg::CFG_D_TILE_W2},
+        {"CFG_D_TILE_LOGIT", PLReg::CFG_D_TILE_LOGIT},
+        {"CFG_D_HEAD_TILE_QKV", PLReg::CFG_D_HEAD_TILE_QKV},
+        {"CFG_ATT_CTX_BLOCK", PLReg::CFG_ATT_CTX_BLOCK},
+        {"CFG_D_HEAD_TILE_ATT_VALUE", PLReg::CFG_D_HEAD_TILE_ATT_VALUE},
     };
 
     // m_axi base addresses (separate AXI-Lite bus)

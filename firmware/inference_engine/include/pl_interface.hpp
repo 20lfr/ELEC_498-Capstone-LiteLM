@@ -92,8 +92,9 @@ namespace PLReg {
     constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x60;
 
     // ── StatusMemSpace (PL → PS reads) ──
-    constexpr uint32_t STATUS_BASE =
-        XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
+    constexpr uint32_t STATUS_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
+
+    // Word 0-6: legacy status fields (always present)
     constexpr uint32_t STATUS = STATUS_BASE + 0x00;
     constexpr uint32_t IRQ_STATUS = STATUS_BASE + 0x04;
     constexpr uint32_t ERROR_CODE = STATUS_BASE + 0x08;
@@ -102,8 +103,22 @@ namespace PLReg {
     constexpr uint32_t HEAD_INDEX = STATUS_BASE + 0x14;
     constexpr uint32_t TOKEN_INDEX = STATUS_BASE + 0x18;
 
-    constexpr uint32_t STATUS_CTRL =
-        XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL;
+    // Word 7-20: build/config mirrors (added to StatusMemSpace)
+    constexpr uint32_t CFG_NUM_LAYERS = STATUS_BASE + 0x1C;
+    constexpr uint32_t CFG_D_MODEL = STATUS_BASE + 0x20;
+    constexpr uint32_t CFG_D_FFN = STATUS_BASE + 0x24;
+    constexpr uint32_t CFG_D_VOCAB = STATUS_BASE + 0x28;
+    constexpr uint32_t CFG_CONTEXT_LENGTH = STATUS_BASE + 0x2C;
+    constexpr uint32_t CFG_D_HEADS = STATUS_BASE + 0x30;
+    constexpr uint32_t CFG_NUM_HEADS = STATUS_BASE + 0x34;
+    constexpr uint32_t CFG_D_TILE_WO = STATUS_BASE + 0x38;
+    constexpr uint32_t CFG_D_TILE_W1 = STATUS_BASE + 0x3C;
+    constexpr uint32_t CFG_D_TILE_W2 = STATUS_BASE + 0x40;
+    constexpr uint32_t CFG_D_TILE_LOGIT = STATUS_BASE + 0x44;
+    constexpr uint32_t CFG_D_HEAD_TILE_QKV = STATUS_BASE + 0x48;
+    constexpr uint32_t CFG_ATT_CTX_BLOCK = STATUS_BASE + 0x4C;
+    constexpr uint32_t CFG_D_HEAD_TILE_ATT_VALUE = STATUS_BASE + 0x50;
+
 } // namespace PLReg
 
 // m_axi Base Address Registers (on s_axi_control_r bundle)
