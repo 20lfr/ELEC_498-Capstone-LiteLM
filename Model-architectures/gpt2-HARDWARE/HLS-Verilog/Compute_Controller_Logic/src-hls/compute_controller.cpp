@@ -895,7 +895,6 @@ void FFN_ACT_Silu(
 
 void FFN_ACT_Gelu(const int16_t input_gate[D_FFN], int16_t output[D_FFN]) {
     for (int i = 0; i < D_FFN; ++i) {
-// #pragma HLS PIPELINE II=1
         output[i] = gelu_q15(input_gate[i]);
     }
 }

@@ -2511,7 +2511,7 @@ void mmu_fsm(
 #pragma HLS BIND_STORAGE variable=compute_q     type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=regions       type=ram_1p impl=bram
 #pragma HLS BIND_STORAGE variable=main_x_slot   type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=scratch       type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=scratch       type=ram_1p impl=uram
 
     // Default outputs
     dma_start = false;

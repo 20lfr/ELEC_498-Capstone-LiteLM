@@ -849,7 +849,7 @@ void drive_headed_compute_controller(
     error = false;
     
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-// #pragma HLS UNROLL
+#pragma HLS UNROLL
         ComputeState dbg_state;
         uint64_t dbg_req_instruction;
         uint8_t dbg_req_op;

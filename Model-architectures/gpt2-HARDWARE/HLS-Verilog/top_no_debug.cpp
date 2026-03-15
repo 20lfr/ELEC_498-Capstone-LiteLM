@@ -106,9 +106,9 @@ void transformer_top(
     static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
 #pragma HLS BIND_STORAGE variable=stream_out_buf_local type=ram_t2p impl=bram
     static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
-#pragma HLS BIND_STORAGE variable=dma_rx_buf_local type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=dma_rx_buf_local type=ram_t2p impl=uram
     static uint32_t         dma_tx_buf_local[TOP_DMA_BUF_WORDS];
-#pragma HLS BIND_STORAGE variable=dma_tx_buf_local type=ram_t2p impl=bram
+#pragma HLS BIND_STORAGE variable=dma_tx_buf_local type=ram_t2p impl=uram
     static bool             dma_ready_local                = true;
     static bool             dma_done_local                 = false;
     static bool             dma_busy_local                 = false;
@@ -204,11 +204,11 @@ void transformer_top(
         }
 
         for (int i = 0; i < HEADS_PARALLEL; ++i) {
-// #pragma HLS UNROLL
+#pragma HLS UNROLL
             head_ctx_local[i] = HeadCtx();
         }
         for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-// #pragma HLS UNROLL
+#pragma HLS UNROLL
             head_compute_ctx_local[lane] = ComputeHeadCtx();
         }
         for (int i = 0; i < compute_buf::IN_BUF_BYTES; ++i) {
@@ -369,7 +369,7 @@ void transformer_top(
 
     // Mirror headed compute contexts for MMU handshake.
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-// #pragma HLS UNROLL
+#pragma HLS UNROLL
         head_compute_ctx_local[lane].compute_start = head_ctx_local[lane].compute_start;
         head_compute_ctx_local[lane].compute_instruction = head_ctx_local[lane].compute_op;
     }
@@ -385,7 +385,7 @@ void transformer_top(
 
     // Mirror headed compute contexts back to main scheduler context.
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
-// #pragma HLS UNROLL
+#pragma HLS UNROLL
         head_ctx_local[lane].compute_ready = head_compute_ctx_local[lane].compute_ready;
         head_ctx_local[lane].compute_done  = head_compute_ctx_local[lane].compute_done;
     }
