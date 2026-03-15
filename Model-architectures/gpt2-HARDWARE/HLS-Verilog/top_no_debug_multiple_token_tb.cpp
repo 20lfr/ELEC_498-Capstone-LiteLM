@@ -4,6 +4,7 @@
 #include "top_no_debug_tb.cpp"
 #undef main
 
+#include <algorithm>
 #include <fstream>
 #include <cstdlib>
 
@@ -48,6 +49,14 @@ int main() {
         std::fprintf(stderr, "ERROR: stream_in.bin does not contain any full tokens\n");
         return 1;
     }
+    size_t run_stream_tokens = total_stream_tokens;
+    if (const char *env_max_tokens = std::getenv("LITELM_TB_MAX_TOKENS")) {
+        char *end = nullptr;
+        const unsigned long parsed = std::strtoul(env_max_tokens, &end, 10);
+        if (end != env_max_tokens && end != nullptr && *end == '\0' && parsed > 0) {
+            run_stream_tokens = std::min(run_stream_tokens, static_cast<size_t>(parsed));
+        }
+    }
 
     std::vector<axi_gmem_word_t> ddr_mem(static_cast<size_t>(TB_DDR_IMAGE_WORDS));
     std::vector<axi_gmem_word_t> kv_cache(static_cast<size_t>(TB_KV_IMAGE_WORDS));
@@ -69,10 +78,10 @@ int main() {
                     (unsigned long long)ddr_checksum, (unsigned long long)ddr_checksum);
     }
 
-    std::printf("[TEST] Multi-token run across %zu token(s) (debug_mode=%s)\n",
-                total_stream_tokens, TB_DEBUG_MODE ? "on" : "off");
+    std::printf("[TEST] Multi-token run across %zu/%zu token(s) (debug_mode=%s)\n",
+                run_stream_tokens, total_stream_tokens, TB_DEBUG_MODE ? "on" : "off");
     dump_ctrl_mem_words(g_loaded_ctrl_mem);
-    for (size_t token_idx = 0; token_idx < total_stream_tokens; ++token_idx) {
+    for (size_t token_idx = 0; token_idx < run_stream_tokens; ++token_idx) {
         std::printf("\n[TEST] ===== Begin token %zu =====\n", token_idx);
         const int rc = run_top_no_debug_tb_single_token_with_mem(
             token_idx, ddr_mem.data(), kv_cache.data());
@@ -83,6 +92,6 @@ int main() {
         std::printf("[TEST] ===== End token %zu =====\n", token_idx);
     }
 
-    std::printf("PASS: Multi-token inference complete for %zu token(s)\n", total_stream_tokens);
+    std::printf("PASS: Multi-token inference complete for %zu token(s)\n", run_stream_tokens);
     return 0;
 }

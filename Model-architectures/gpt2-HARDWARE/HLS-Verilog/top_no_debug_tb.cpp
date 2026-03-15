@@ -11,6 +11,11 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <csignal>
+#if !defined(_WIN32)
+#include <execinfo.h>
+#include <unistd.h>
+#endif
 #include <sys/stat.h>
 
 #include "tb_paths.hpp"
@@ -50,6 +55,41 @@ static bool ensure_dir_recursive(const char *dir) {
     return (::mkdir(path, 0777) == 0 || errno == EEXIST);
 }
 
+static void install_tb_crash_handlers() {
+#if !defined(_WIN32)
+    static bool installed = false;
+    if (installed) {
+        return;
+    }
+    installed = true;
+
+    auto handler = +[](int signum) {
+        const char *name = "UNKNOWN";
+        switch (signum) {
+            case SIGSEGV: name = "SIGSEGV"; break;
+            case SIGABRT: name = "SIGABRT"; break;
+            case SIGFPE:  name = "SIGFPE"; break;
+            case SIGILL:  name = "SIGILL"; break;
+            case SIGBUS:  name = "SIGBUS"; break;
+            default: break;
+        }
+
+        ::dprintf(2, "\n[FATAL] Testbench crashed: signal %d (%s)\n", signum, name);
+        void *frames[64];
+        const int n = ::backtrace(frames, static_cast<int>(sizeof(frames) / sizeof(frames[0])));
+        ::backtrace_symbols_fd(frames, n, 2);
+        ::dprintf(2, "[FATAL] End backtrace\n");
+        ::_exit(128 + signum);
+    };
+
+    std::signal(SIGSEGV, handler);
+    std::signal(SIGABRT, handler);
+    std::signal(SIGFPE, handler);
+    std::signal(SIGILL, handler);
+    std::signal(SIGBUS, handler);
+#endif
+}
+
 static bool init_tb_logs() {
     const std::string log_root = tb_paths::log_root_from_file(__FILE__);
     char log_dir[512];
@@ -87,6 +127,11 @@ static bool init_tb_logs() {
                      stderr_path, std::strerror(errno));
         return false;
     }
+
+    // Make logs deterministic and avoid losing the last lines on crashes.
+    std::setvbuf(stdout, nullptr, _IONBF, 0);
+    std::setvbuf(stderr, nullptr, _IONBF, 0);
+    install_tb_crash_handlers();
 
     std::printf("[LOG] %s stdout: %s\n", TOP_NO_DEBUG_TB_BASENAME, stdout_path);
     std::fprintf(stderr, "[LOG] %s stderr: %s\n", TOP_NO_DEBUG_TB_BASENAME, stderr_path);

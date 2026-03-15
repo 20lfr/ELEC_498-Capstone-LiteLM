@@ -173,15 +173,39 @@ static void trace_ffn_act_buffers(uint8_t layer_idx,
 static void trace_argmax_buffers(uint8_t layer_idx,
                                  const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                                  const uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
-    int32_t x[D_VOCAB];
-    for (int i = 0; i < D_VOCAB; ++i) {
-        x[i] = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + (i * 4));
-    }
+    // NOTE: `CMP_ARGMAX` consumes per-tile pairs (max_val: i32, local_idx: i32),
+    // not a dense D_VOCAB logits vector. Dumping D_VOCAB entries here is both
+    // incorrect and can read past `in_buf` (CSim SIGSEGV).
+    static_assert((compute_buf::INArgmaxLayout::X + (NUM_LOGIT_TILES * 8) - 1) <
+                      compute_buf::IN_BUF_BYTES,
+                  "Argmax trace expects NUM_LOGIT_TILES * 8 bytes in in_buf");
+
     const int32_t best_idx = compute_buf::read_i32(out_buf, compute_buf::OUTArgmaxLayout::Y);
-    std::printf("[COMPUTE IO] op=CMP_ARGMAX layer=%u\n",
-                static_cast<unsigned>(layer_idx));
-    print_i32_vector("  logits", x, D_VOCAB);
-    std::printf("  out_idx: %d\n", best_idx);
+    std::printf("[COMPUTE IO] op=CMP_ARGMAX layer=%u out_idx=%d tiles=%d\n",
+                static_cast<unsigned>(layer_idx),
+                best_idx,
+                static_cast<int>(NUM_LOGIT_TILES));
+
+    const int tiles_to_print = (NUM_LOGIT_TILES < 16) ? NUM_LOGIT_TILES : 16;
+    for (int tile = 0; tile < tiles_to_print; ++tile) {
+        const int32_t tile_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8);
+        const int32_t tile_local_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8 + 4);
+        std::printf("  tile[%d] max=%d local_idx=%d global_idx=%d\n",
+                    tile,
+                    tile_val,
+                    tile_local_idx,
+                    (tile * D_TILE_LOGIT) + tile_local_idx);
+    }
+    if (NUM_LOGIT_TILES > tiles_to_print) {
+        const int tile = NUM_LOGIT_TILES - 1;
+        const int32_t tile_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8);
+        const int32_t tile_local_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8 + 4);
+        std::printf("  tile[%d] max=%d local_idx=%d global_idx=%d\n",
+                    tile,
+                    tile_val,
+                    tile_local_idx,
+                    (tile * D_TILE_LOGIT) + tile_local_idx);
+    }
 }
 
 static void trace_layer_norm_buffers(ComputeOp op,
@@ -649,8 +673,12 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
     // so eps must be mapped into the same variance units:
     //   x_real = x_i8 / 2^7  => var_real = var_i8 / 2^14
     //   eps_var_units = eps_real * 2^14 = (eps_q0_32 / 2^32) * 2^14 = eps_q0_32 / 2^18
-    const ap_fixed<32, 19> q16_16_scale = ap_fixed<32, 19>(65536);          // 2^16
-    const ap_fixed<32, 19> eps_q0_32_to_var_scale = ap_fixed<32, 19>(262144); // 2^18
+    // NOTE: use wider intermediates here to avoid overflow when converting large
+    // accumulators (e.g. `sumsq`) into fixed-point.
+    using ln_acc_t = ap_fixed<48, 28>;
+
+    const ap_fixed<32, 19> q16_16_scale = ap_fixed<32, 19>(65536); // 2^16
+    const ln_acc_t eps_q0_32_to_var_scale = ln_acc_t(262144);      // 2^18 (must be representable)
 
     int32_t sum = 0;
     int32_t sumsq = 0;
@@ -663,18 +691,29 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
 
     const int32_t epsilon = compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::EPS);
 
-    ap_fixed<32, 19> mean = ap_fixed<32, 19>(sum) / D_MODEL;
-    ap_fixed<32, 19> ex2 = ap_fixed<32, 19>(sumsq) / D_MODEL;
+    const ap_fixed<32, 19> mean = static_cast<ap_fixed<32, 19> >(ln_acc_t(sum) / D_MODEL);
+    const ap_fixed<32, 19> ex2 = static_cast<ap_fixed<32, 19> >(ln_acc_t(sumsq) / D_MODEL);
     ap_fixed<32, 19> var = ex2 - (mean * mean);
     if (var < 0) {
         var = 0;
     }
 
-    ap_fixed<32, 19> v = var + (ap_fixed<32, 19>(epsilon) / eps_q0_32_to_var_scale);
+    const ln_acc_t eps_var_units =
+        ln_acc_t(static_cast<uint32_t>(epsilon)) / eps_q0_32_to_var_scale;
+    ap_fixed<32, 19> v = var + static_cast<ap_fixed<32, 19> >(eps_var_units);
     if (v < 0) {
         v = 0;
     }
-    ap_fixed<32, 19> inv_std = ap_fixed<32, 19>(1) / hls::sqrt(v);
+    // Guard against divide-by-zero in fixed-point sqrt() paths (CSim SIGFPE).
+    // If v quantizes to 0, the normalized term is effectively 0 (x-mean is also ~0),
+    // so falling back to inv_std=0 keeps output well-defined (y ~= beta).
+    ap_fixed<32, 19> inv_std = 0;
+    const ap_fixed<32, 19> stddev = hls::sqrt(v);
+
+    // safe guarding against divide-by-zero in fixed-point reciprocal paths (CSim SIGFPE)
+    if (stddev != 0) {
+        inv_std = ap_fixed<32, 19>(1) / stddev;
+    }
 
     for (int base = 0; base < D_MODEL; base += MAX_CYCLIC_SIZE) {
 #pragma HLS PIPELINE off

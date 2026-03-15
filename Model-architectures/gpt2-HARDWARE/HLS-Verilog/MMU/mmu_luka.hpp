@@ -35,11 +35,11 @@ constexpr int DMA_QUEUE_DEPTH = 4;
 constexpr int COMPUTE_QUEUE_DEPTH = 4;
 constexpr int DMA_BUF_BYTES = 8192;
 #else
-constexpr int MAX_CHUNKS = URAM_BANKS; // one chunk per bank is the physical maximum
-constexpr int MAX_REGIONS = 256;
+constexpr int MAX_CHUNKS = URAM_BANKS / 2; // one chunk per bank is the physical maximum
+constexpr int MAX_REGIONS = 256 / 2;
 constexpr int DMA_QUEUE_DEPTH = 16;
 constexpr int COMPUTE_QUEUE_DEPTH = 16;
-constexpr int DMA_BUF_BYTES = 65536;
+constexpr int DMA_BUF_BYTES = 65536 / 2;
 #endif
 constexpr int DMA_BUF_WORDS = DMA_BUF_BYTES / AXI_GMEM_WORD_BYTES;
 static_assert((DMA_BUF_BYTES % AXI_GMEM_WORD_BYTES) == 0, "DMA_BUF_BYTES must be word-aligned");

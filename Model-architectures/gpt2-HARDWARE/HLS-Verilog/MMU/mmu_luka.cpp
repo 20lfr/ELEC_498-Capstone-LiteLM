@@ -2505,13 +2505,13 @@ void mmu_fsm(
 // #pragma HLS ARRAY_PARTITION variable=uram_banks complete dim=1
 #pragma HLS BIND_STORAGE variable=uram_banks type=ram_t2p impl=uram
 
-#pragma HLS BIND_STORAGE variable=bank_offsets type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=free_spans type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=dma_q type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=compute_q type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=regions type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=main_x_slot type=ram_1p impl=bram
-#pragma HLS BIND_STORAGE variable=scratch type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=bank_offsets  type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=free_spans    type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=dma_q         type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=compute_q     type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=regions       type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=main_x_slot   type=ram_1p impl=bram
+#pragma HLS BIND_STORAGE variable=scratch       type=ram_1p impl=bram
 
     // Default outputs
     dma_start = false;
