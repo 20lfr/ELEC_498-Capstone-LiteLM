@@ -442,12 +442,10 @@ void transformer_top(
             if (!dma_is_write_latched_local) {
                 const uint32_t rx_words = (bytes + 3u) >> 2;
                 for (uint32_t i = 0; i < rx_words; ++i) {
-// #pragma HLS PIPELINE II=1
                     dma_rx_buf_local[i] = 0;
                 }
             }
             for (uint32_t i = 0; i < bytes; ++i) {
-// #pragma HLS PIPELINE II=1
                 const uint64_t byte_addr = dma_addr_latched_local + static_cast<uint64_t>(i);
 #ifndef __SYNTHESIS__
                 const uint64_t sim_byte_addr = map_csim_ddr_addr(byte_addr, ctrl_mem);
@@ -516,6 +514,20 @@ void transformer_top(
     active_status_mem.status = static_cast<uint32_t>(state_local);
     active_status_mem.layer_index = scheduler_layer_index_local;
     active_status_mem.token_index = static_cast<uint32_t>(token_position_local);
+    active_status_mem.cfg_num_layers = static_cast<uint32_t>(NUM_LAYERS);
+    active_status_mem.cfg_d_model = static_cast<uint32_t>(D_MODEL);
+    active_status_mem.cfg_d_ffn = static_cast<uint32_t>(D_FFN);
+    active_status_mem.cfg_d_vocab = static_cast<uint32_t>(D_VOCAB);
+    active_status_mem.cfg_context_length = static_cast<uint32_t>(CONTEXT_LENGTH);
+    active_status_mem.cfg_d_heads = static_cast<uint32_t>(D_HEADS);
+    active_status_mem.cfg_num_heads = static_cast<uint32_t>(NUM_HEADS);
+    active_status_mem.cfg_d_tile_wo = static_cast<uint32_t>(D_TILE_WO);
+    active_status_mem.cfg_d_tile_w1 = static_cast<uint32_t>(D_TILE_W1);
+    active_status_mem.cfg_d_tile_w2 = static_cast<uint32_t>(D_TILE_W2);
+    active_status_mem.cfg_d_tile_logit = static_cast<uint32_t>(D_TILE_LOGIT);
+    active_status_mem.cfg_d_head_tile_qkv = static_cast<uint32_t>(D_HEAD_TILE_QKV);
+    active_status_mem.cfg_att_ctx_block = static_cast<uint32_t>(ATT_CTX_BLOCK);
+    active_status_mem.cfg_d_head_tile_att_value = static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE);
     irq_ps = ctrl_mem_interface.compute_irq(ctrl_mem.irq_mask);
 
     status_mem = active_status_mem;

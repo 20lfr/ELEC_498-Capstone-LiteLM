@@ -239,6 +239,22 @@ struct StatusMemSpace {
     // Testing registers
     uint32_t head_index = 0;
     uint32_t token_index = 0;
+
+    // Static build/config mirrors (readable by PS for sanity-checking bitstream parameters).
+    uint32_t cfg_num_layers = 0;
+    uint32_t cfg_d_model = 0;
+    uint32_t cfg_d_ffn = 0;
+    uint32_t cfg_d_vocab = 0;
+    uint32_t cfg_context_length = 0;
+    uint32_t cfg_d_heads = 0;
+    uint32_t cfg_num_heads = 0;
+    uint32_t cfg_d_tile_wo = 0;
+    uint32_t cfg_d_tile_w1 = 0;
+    uint32_t cfg_d_tile_w2 = 0;
+    uint32_t cfg_d_tile_logit = 0;
+    uint32_t cfg_d_head_tile_qkv = 0;
+    uint32_t cfg_att_ctx_block = 0;
+    uint32_t cfg_d_head_tile_att_value = 0;
 };
 
 // ---------------------------------------------------------------------------

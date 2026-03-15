@@ -228,6 +228,45 @@ struct SystemConfig {
         hex32(memory.output_offset);
         ss << "\n";
 
+        ss << "--- Strides (Bytes) ---\n";
+        ss << "WQ_LAYER: ";
+        hex32(STRIDE_WQ_LAYER);
+        ss << "  QKV_HEAD: ";
+        hex32(STRIDE_QKV_HEAD);
+        ss << "  KV_HEAD: ";
+        hex32(STRIDE_KV_HEAD);
+        ss << "\n";
+        ss << "WO_TILE: ";
+        hex32(STRIDE_WO_TILE);
+        ss << "  W1_TILE: ";
+        hex32(STRIDE_W1_TILE);
+        ss << "  W2_TILE: ";
+        hex32(STRIDE_W2_TILE);
+        ss << "  WLOGIT_TILE: ";
+        hex32(STRIDE_WLOGIT_TILE);
+        ss << "\n";
+        ss << "WO_BIAS_TILE: ";
+        hex32(STRIDE_WO_BIAS_TILE);
+        ss << "  W1_BIAS_TILE: ";
+        hex32(STRIDE_W1_BIAS_TILE);
+        ss << "  W2_BIAS_TILE: ";
+        hex32(STRIDE_W2_BIAS_TILE);
+        ss << "\n";
+        ss << "LN0_GAMMA: ";
+        hex32(STRIDE_LN0_GAMMA);
+        ss << "  LN1_GAMMA: ";
+        hex32(STRIDE_LN1_GAMMA);
+        ss << "  FINAL_NORM_GAMMA: ";
+        hex32(STRIDE_FINAL_NORM_GAMMA);
+        ss << "\n";
+        ss << "LN0_EPS: ";
+        hex32(STRIDE_LN0_EPS);
+        ss << "  LN1_EPS: ";
+        hex32(STRIDE_LN1_EPS);
+        ss << "  FINAL_NORM_EPS: ";
+        hex32(STRIDE_FINAL_NORM_EPS);
+        ss << "\n";
+
         return ss.str();
     }
 };

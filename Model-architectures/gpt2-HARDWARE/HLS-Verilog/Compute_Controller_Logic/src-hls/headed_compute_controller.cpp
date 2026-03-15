@@ -540,15 +540,19 @@ static void QKV_TO_BUF(
 ) {
 #pragma HLS INLINE
     int32_t accum_tile[HEAD_MAC_OUT_UNROLL];
-#pragma HLS ARRAY_PARTITION variable=accum_tile complete dim=1
+    int8_t  act_local[HEAD_MAC_VEC_UNROLL];
+    int8_t  weight_tile[HEAD_MAC_OUT_UNROLL * HEAD_MAC_VEC_UNROLL];
+#pragma HLS ARRAY_PARTITION variable=accum_tile   complete dim=1
+#pragma HLS ARRAY_PARTITION variable=act_local    complete dim=1
+#pragma HLS ARRAY_PARTITION variable=weight_tile  cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
 
     int32_t M = 1;
     int32_t n = 0;
     get_qkv_requant_params(op, layer_idx, M, n);
 
     for (int out_base = 0; out_base < D_HEAD_TILE_QKV; out_base += HEAD_MAC_OUT_UNROLL) {
+        // Init accum_tile from bias (serial: reads in_buf)
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
             if (out_idx < D_HEAD_TILE_QKV) {
                 accum_tile[lane] = compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (out_idx * 4));
@@ -558,26 +562,43 @@ static void QKV_TO_BUF(
         }
 
         for (int in_base = 0; in_base < D_MODEL; in_base += HEAD_MAC_VEC_UNROLL) {
+            // Load activation stripe into local register bank (serial: reads in_buf)
+            for (int k = 0; k < HEAD_MAC_VEC_UNROLL; ++k) {
+                const int in_idx = in_base + k;
+                act_local[k] = (in_idx < D_MODEL)
+                    ? compute_buf::read_i8(in_buf, head_buf::INQkvLayout::ACT + in_idx)
+                    : int8_t(0);
+            }
+
+            // Load weight tile into local register bank (serial: reads in_buf)
+            for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
+                for (int k = 0; k < HEAD_MAC_VEC_UNROLL; ++k) {
+                    const int out_idx = out_base + lane;
+                    const int in_idx  = in_base  + k;
+                    const bool valid  = (out_idx < D_HEAD_TILE_QKV) && (in_idx < D_MODEL);
+                    const int w_idx   = (out_idx * D_MODEL) + in_idx;
+                    weight_tile[lane * HEAD_MAC_VEC_UNROLL + k] = valid
+                        ? compute_buf::read_i8(in_buf, head_buf::INQkvLayout::W + w_idx)
+                        : int8_t(0);
+                }
+            }
+
+            // MAC from local register banks
             for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
                 const int out_idx = out_base + lane;
                 if (out_idx < D_HEAD_TILE_QKV) {
                     for (int k = 0; k < HEAD_MAC_VEC_UNROLL; ++k) {
 #pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
-                        const int in_idx = in_base + k;
-	                        if (in_idx < D_MODEL) {
-	                            const int8_t x = compute_buf::read_i8(in_buf, head_buf::INQkvLayout::ACT + in_idx);
-	                            const int w_idx = (out_idx * D_MODEL) + in_idx;
-	                            const int8_t w = compute_buf::read_i8(in_buf, head_buf::INQkvLayout::W + w_idx);
-	                            accum_tile[lane] += static_cast<int32_t>(x) * static_cast<int32_t>(w);
-	                        }
-	                    }
-	                }
+                        accum_tile[lane] += static_cast<int32_t>(act_local[k])
+                                          * static_cast<int32_t>(weight_tile[lane * HEAD_MAC_VEC_UNROLL + k]);
+                    }
+                }
             }
         }
 
+        // Write output (serial: writes out_buf)
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
             if (out_idx < D_HEAD_TILE_QKV) {
                 const int8_t y = requant_scalar_to_i8(accum_tile[lane], M, n);
