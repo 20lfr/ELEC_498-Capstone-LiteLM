@@ -3,7 +3,7 @@
 // Tool Version Limit: 2025.05
 // Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
-//
+// 
 // ==============================================================
 // control
 // 0x00 : Control signals
@@ -69,38 +69,43 @@
 //        bit 31~0 - ctrl_mem[671:640] (Read/Write)
 // 0x64 : Data signal of ctrl_mem
 //        bit 31~0 - ctrl_mem[703:672] (Read/Write)
-// 0x68 : reserved
-// 0x6c : Data signal of status_mem
-//        bit 31~0 - status_mem[31:0] (Read)
-// 0x70 : Data signal of status_mem
-//        bit 31~0 - status_mem[63:32] (Read)
-// 0x74 : Data signal of status_mem
-//        bit 31~0 - status_mem[95:64] (Read)
+// 0x68 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[735:704] (Read/Write)
+// 0x6c : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[767:736] (Read/Write)
+// 0x70 : Data signal of ctrl_mem
+//        bit 31~0 - ctrl_mem[799:768] (Read/Write)
+// 0x74 : reserved
 // 0x78 : Data signal of status_mem
-//        bit 31~0 - status_mem[127:96] (Read)
+//        bit 31~0 - status_mem[31:0] (Read)
 // 0x7c : Data signal of status_mem
-//        bit 31~0 - status_mem[159:128] (Read)
+//        bit 31~0 - status_mem[63:32] (Read)
 // 0x80 : Data signal of status_mem
-//        bit 31~0 - status_mem[191:160] (Read)
+//        bit 31~0 - status_mem[95:64] (Read)
 // 0x84 : Data signal of status_mem
+//        bit 31~0 - status_mem[127:96] (Read)
+// 0x88 : Data signal of status_mem
+//        bit 31~0 - status_mem[159:128] (Read)
+// 0x8c : Data signal of status_mem
+//        bit 31~0 - status_mem[191:160] (Read)
+// 0x90 : Data signal of status_mem
 //        bit 31~0 - status_mem[223:192] (Read)
-// 0x88 : Control signal of status_mem
+// 0x94 : Control signal of status_mem
 //        bit 0  - status_mem_ap_vld (Read/COR)
 //        others - reserved
-// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on
-// Handshake)
+// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
-#define XTRANSFORMER_TOP_CONTROL_ADDR_AP_CTRL 0x00
-#define XTRANSFORMER_TOP_CONTROL_ADDR_GIE 0x04
-#define XTRANSFORMER_TOP_CONTROL_ADDR_IER 0x08
-#define XTRANSFORMER_TOP_CONTROL_ADDR_ISR 0x0c
-#define XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA 0x10
-#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA 704
-#define XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA_ 0x38
-#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA 704
-#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA 0x6c
+#define XTRANSFORMER_TOP_CONTROL_ADDR_AP_CTRL         0x00
+#define XTRANSFORMER_TOP_CONTROL_ADDR_GIE             0x04
+#define XTRANSFORMER_TOP_CONTROL_ADDR_IER             0x08
+#define XTRANSFORMER_TOP_CONTROL_ADDR_ISR             0x0c
+#define XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA   0x10
+#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   800
+#define XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA_  0x38
+#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   800
+#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA 0x78
 #define XTRANSFORMER_TOP_CONTROL_BITS_STATUS_MEM_DATA 224
-#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL 0x88
+#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL 0x94
 
 // control_r
 // 0x00 : reserved
@@ -117,10 +122,10 @@
 // 0x20 : Data signal of kv_cache
 //        bit 31~0 - kv_cache[63:32] (Read/Write)
 // 0x24 : reserved
-// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on
-// Handshake)
+// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
-#define XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA 0x10
-#define XTRANSFORMER_TOP_CONTROL_R_BITS_DDR_MEM_DATA 64
+#define XTRANSFORMER_TOP_CONTROL_R_ADDR_DDR_MEM_DATA  0x10
+#define XTRANSFORMER_TOP_CONTROL_R_BITS_DDR_MEM_DATA  64
 #define XTRANSFORMER_TOP_CONTROL_R_ADDR_KV_CACHE_DATA 0x1c
 #define XTRANSFORMER_TOP_CONTROL_R_BITS_KV_CACHE_DATA 64
+
