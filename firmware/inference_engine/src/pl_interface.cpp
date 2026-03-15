@@ -21,7 +21,7 @@ bool PLInterface::init(const std::string &device_name,
                        uint64_t stream_reg_base_addr) {
 
     if (_mock_mode) {
-        LOG_INFO("PLInterface: Mock mode");
+        _logger->info("PLInterface: Mock mode");
         _mock_regs[PLReg::CONTROL / 4] = CTRL_RESETN_BIT;
         // _mock_regs[PLReg::STATUS / 4] = STATUS_IDLE;
         _initialized = true;
@@ -40,7 +40,7 @@ bool PLInterface::init(const std::string &device_name,
     reset();
 
     _initialized = true;
-    LOG_INFO("PLInterface: Initialized");
+    _logger->info("PLInterface: Initialized");
     return true;
 }
 
@@ -148,7 +148,7 @@ bool PLInterface::findAndOpenUIO(const std::string &device_name) {
                 return false;
             }
             // map1 may not exist if control_r is a separate UIO device
-            LOG_INFO("PLInterface: map1 not found, control_r may be separate");
+            _logger->info("PLInterface: map1 not found, control_r may be separate");
             break;
         }
         unsigned long sz = 0;
@@ -194,7 +194,7 @@ bool PLInterface::findAndOpenUIO(const std::string &device_name) {
         }
     }
 
-    LOG_INFO("PLInterface: Found " + device_name + " at " +
+    _logger->info("PLInterface: Found " + device_name + " at " +
              std::string(dev_path) + " (map0=0x" + std::to_string(_ctrl_size) +
              ", map1=0x" + std::to_string(_addr_size) + ")");
     return true;
@@ -336,16 +336,25 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
         return true;
 
-    LOG_WARN("waitDone: spurious IRQ wakeup");
+    _logger->warn("waitDone: spurious IRQ wakeup");
     return false;
 }
 
 // DDR access
 bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
                            size_t size) {
-    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    DmaBuffer *buf = (type == DmaBufType::BUF0) ? &_dma_buf0 : &_dma_buf1;
     if (!buf->isAllocated() || offset + size > buf->size())
         return false;
+
+    if (_logger->level() == LogLevel::DEBUG) {
+        char msg[128];
+        snprintf(msg, sizeof(msg), "writeDDR: %s + 0x%08X (phys 0x%016llX), size %zu",
+                 (type == DmaBufType::BUF0 ? "BUF0" : "BUF1"), offset,
+                 (unsigned long long)(buf->phys() + offset), size);
+        _logger->debug(msg);
+    }
+
     memcpy((uint8_t *)buf->virt() + offset, data, size);
     buf->sync_for_device(offset, size);
     return true;
@@ -353,7 +362,7 @@ bool PLInterface::writeDDR(DmaBufType type, uint32_t offset, const void *data,
 
 bool PLInterface::readDDR(DmaBufType type, uint32_t offset, void *data,
                           size_t size) {
-    DmaBuffer *buf = (type == DmaBufType::WEIGHTS) ? &_dma_buf0 : &_dma_buf1;
+    DmaBuffer *buf = (type == DmaBufType::BUF0) ? &_dma_buf0 : &_dma_buf1;
     if (!buf->isAllocated() || offset + size > buf->size())
         return false;
     buf->sync_for_cpu(offset, size);
@@ -432,7 +441,7 @@ bool PLInterface::streamInitSend(uint32_t dma_offset, const void *data,
                                  size_t size) {
     if (!_stream_regs || !_dma_buf1.isAllocated())
         return false;
-    writeDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
+    writeDDR(DmaBufType::BUF1, dma_offset, data, size);
     return streamTransfer(StreamReg::MM2S_CR, StreamReg::MM2S_SR,
                           StreamReg::MM2S_SA, StreamReg::MM2S_SA_MSB,
                           StreamReg::MM2S_LEN, _dma_buf1.phys() + dma_offset,
@@ -459,7 +468,7 @@ bool PLInterface::streamWaitRecv(uint32_t dma_offset, void *data, size_t size,
                                  uint32_t timeout_ms) {
     if (!streamWait(StreamReg::S2MM_SR, timeout_ms))
         return false;
-    readDDR(DmaBufType::IO_STREAM, dma_offset, data, size);
+    readDDR(DmaBufType::BUF1, dma_offset, data, size);
     return true;
 }
 
@@ -566,8 +575,7 @@ std::string PLInterface::dumpCtrlMem() {
         {"WK_OFFSET", PLReg::WK_OFFSET},
         {"WV_OFFSET", PLReg::WV_OFFSET},
         {"WO_OFFSET", PLReg::WO_OFFSET},
-        {"W1_GATE_OFFSET", PLReg::W1_GATE_OFFSET},
-        {"W1_UP_OFFSET", PLReg::W1_UP_OFFSET},
+        {"W1_OFFSET", PLReg::W1_OFFSET},
         {"W2_OFFSET", PLReg::W2_OFFSET},
         {"K_CACHE_OFFSET", PLReg::K_CACHE_OFFSET},
         {"V_CACHE_OFFSET", PLReg::V_CACHE_OFFSET},

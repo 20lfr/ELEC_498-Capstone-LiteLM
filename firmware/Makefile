@@ -33,7 +33,7 @@ endif
 # Sources & Includes
 DRIVER_DIR     = $(FIRMWARE_DIR)/../hardware_overlay/drivers/transformer_top_v1_0/src
 UDMABUF_DIR    = $(FIRMWARE_DIR)/udmabuf
-MODEL_ARCH    ?= phi3-mini-int4-HARDWARE
+MODEL_ARCH    ?= gpt2-HARDWARE
 HLS_DIR        = $(FIRMWARE_DIR)/../Model-architectures/$(MODEL_ARCH)/HLS-Verilog
 TESTING_DIR = $(FIRMWARE_DIR)/interface_testing
 INFERENCE_DIR = $(FIRMWARE_DIR)/inference_engine
@@ -83,8 +83,7 @@ echo "Updating module dependencies (Please wait, this might take a minute)..."
 sudo depmod -a
 
 echo "[4/4] Configuring journald volatile storage (prevents CMA fragmentation)..."
-sudo mkdir -p /etc/systemd/journald.conf.d/
-echo -e "[Journal]\nStorage=volatile" | sudo tee /etc/systemd/journald.conf.d/volatile.conf > /dev/null
+echo -e "[Journal]\nStorage=volatile" | sudo tee /etc/systemd/journald.conf > /dev/null
 sudo systemctl restart systemd-journald
 
 echo "[boot] Building boot files..."
