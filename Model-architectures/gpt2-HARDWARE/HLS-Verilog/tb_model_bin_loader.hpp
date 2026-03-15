@@ -21,7 +21,11 @@ inline std::string default_model_bin_path(const std::string &tb_source_dir) {
 
 inline std::string default_generated_ddr_image_path(
     const std::string &tb_source_dir) {
+#ifdef FULL_MODEL_TEST
+    return tb_source_dir + "/../model/gpt2_weights_int8.bin";
+#else
     return tb_source_dir + DEFAULT_GENERATED_DDR_IMAGE_REL;
+#endif
 }
 
 constexpr size_t packed_i8_bytes(int elems) {

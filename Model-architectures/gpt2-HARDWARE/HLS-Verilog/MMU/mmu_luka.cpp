@@ -9,14 +9,14 @@ constexpr int MAX_DMA_PIECES = 3;
 
 struct DmaQueueEntry {
     bool valid = false;
-    uint32_t packed = 0;
+    uint64_t packed = 0;
     bool headed = false;
     int8_t lane = -1;
 };
 
 struct ComputeQueueEntry {
     bool valid = false;
-    uint32_t packed = 0;
+    uint64_t packed = 0;
     ComputeReqType type = ComputeReqType::NONE;
     bool headed = false;
     uint8_t head = 0;
@@ -96,9 +96,9 @@ static int active_compute_tile = -1;
 static bool main_wl_accepted = false;
 static bool head_wl_accepted[HEADS_PARALLEL];
 static bool prev_main_mem_req = false;
-static uint32_t prev_main_mem_op = 0;
+static uint64_t prev_main_mem_op = 0;
 static bool prev_head_mem_req[HEADS_PARALLEL];
-static uint32_t prev_head_mem_op[HEADS_PARALLEL];
+static uint64_t prev_head_mem_op[HEADS_PARALLEL];
 static bool stream_in_capturing = false;
 static uint16_t stream_in_write_idx = 0;
 static uint8_t stream_in_capture_buf[STREAM_IN_BUF_BYTES];
@@ -110,6 +110,7 @@ static int g_current_layer = -1;
 static uint8_t scratch[DMA_BUF_BYTES];
 static uint32_t active_piece_bytes_done = 0;
 static uint32_t active_chunk_bytes = 0;
+static bool active_dma_pad_zero = false;
 
 #ifndef __SYNTHESIS__
 // C-sim-only trace budget for verbose strided CTX_V DMA issue addresses.
@@ -123,6 +124,12 @@ static uint8_t trace_ctx_v_issue_budget = 0;
 static inline int decode_s8(uint32_t v) {
     return static_cast<int>(static_cast<int8_t>(v & 0xFFu));
 }
+
+// Instruction packing format (64 bits):
+//   bits [7:0]   = op    (8-bit unsigned)
+//   bits [15:8]  = layer (8-bit signed via decode_s8, covers -1..11)
+//   bits [23:16] = head  (8-bit signed via decode_s8, covers -1..11)
+//   bits [55:24] = tile  (32-bit unsigned, covers 0..12799 and beyond)
 
 static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint32_t byte_idx) {
 #pragma HLS INLINE
@@ -185,8 +192,11 @@ static inline uint32_t mmu_missing_subcode_from_tag(Tag tag) {
         case Tag::STREAM_IN_TOKEN: return MMU_ERR_SUBCODE_MISSING_STREAM_IN_TOKEN;
         case Tag::LN0_OUT: return MMU_ERR_SUBCODE_MISSING_LN0_OUT;
         case Tag::WQ_W: return MMU_ERR_SUBCODE_MISSING_WQ_W;
+        case Tag::WQ_B: return MMU_ERR_SUBCODE_MISSING_WQ_B;
         case Tag::WK_W: return MMU_ERR_SUBCODE_MISSING_WK_W;
+        case Tag::WK_B: return MMU_ERR_SUBCODE_MISSING_WK_B;
         case Tag::WV_W: return MMU_ERR_SUBCODE_MISSING_WV_W;
+        case Tag::WV_B: return MMU_ERR_SUBCODE_MISSING_WV_B;
         case Tag::Q_OUT: return MMU_ERR_SUBCODE_MISSING_Q_OUT;
         case Tag::CTX_K: return MMU_ERR_SUBCODE_MISSING_CTX_K;
         case Tag::ATT_SCORES_OUT: return MMU_ERR_SUBCODE_MISSING_ATT_SCORES_OUT;
@@ -252,20 +262,20 @@ static inline void mmu_set_overflow(uint32_t err_bit, uint32_t err_subcode = MMU
     mmu_latch_subcode(err_subcode);
 }
 
-static inline void unpack_dma(uint32_t packed, DmaSel &sel, int &layer, int &head, int &tile) {
+static inline void unpack_dma(uint64_t packed, DmaSel &sel, int &layer, int &head, int &tile) {
 #pragma HLS INLINE
-    sel = static_cast<DmaSel>(packed & 0xFFu);
-    layer = decode_s8((packed >> 8) & 0xFFu);
-    head = decode_s8((packed >> 16) & 0xFFu);
-    tile = decode_s8((packed >> 24) & 0xFFu);
+    sel   = static_cast<DmaSel>(packed & 0xFFu);
+    layer = decode_s8((packed >> 8)  & 0xFFu);
+    head  = decode_s8((packed >> 16) & 0xFFu);
+    tile  = static_cast<int>((packed >> 24) & 0xFFFFFFFFull);
 }
 
-static inline void unpack_compute(uint32_t packed, ComputeOp &op, int &layer, int &head, int &tile) {
+static inline void unpack_compute(uint64_t packed, ComputeOp &op, int &layer, int &head, int &tile) {
 #pragma HLS INLINE
-    op = static_cast<ComputeOp>(packed & 0xFFu);
-    layer = decode_s8((packed >> 8) & 0xFFu);
-    head = decode_s8((packed >> 16) & 0xFFu);
-    tile = decode_s8((packed >> 24) & 0xFFu);
+    op    = static_cast<ComputeOp>(packed & 0xFFu);
+    layer = decode_s8((packed >> 8)  & 0xFFu);
+    head  = decode_s8((packed >> 16) & 0xFFu);
+    tile  = static_cast<int>((packed >> 24) & 0xFFFFFFFFull);
 }
 
 static inline bool is_headed_dma(DmaSel sel) {
@@ -421,8 +431,11 @@ static inline uint8_t default_retain(Tag tag) {
 #pragma HLS INLINE off
     switch (tag) {
         case Tag::WQ_W:
+        case Tag::WQ_B:
         case Tag::WK_W:
+        case Tag::WK_B:
         case Tag::WV_W:
+        case Tag::WV_B:
         case Tag::WO_W:
         case Tag::WO_B:
         case Tag::W1_W:
@@ -480,8 +493,11 @@ static inline bool should_consume(Tag tag) {
 #pragma HLS INLINE off
     switch (tag) {
         case Tag::WQ_W:
+        case Tag::WQ_B:
         case Tag::WK_W:
+        case Tag::WK_B:
         case Tag::WV_W:
+        case Tag::WV_B:
         case Tag::WO_W:
         case Tag::WO_B:
         case Tag::W1_W:
@@ -828,7 +844,7 @@ static bool arb_is_granted(int head) {
 // ---------------------------------------------------------------------------
 // Queue helpers
 // ---------------------------------------------------------------------------
-static inline bool dma_q_push(uint32_t packed, bool headed, int8_t lane) {
+static inline bool dma_q_push(uint64_t packed, bool headed, int8_t lane) {
 #pragma HLS INLINE
     if (dma_q_count >= DMA_QUEUE_DEPTH) return false;
     dma_q[dma_q_tail].valid = true;
@@ -850,7 +866,7 @@ static inline bool dma_q_pop(DmaQueueEntry &out) {
     return true;
 }
 
-static inline bool compute_q_push(uint32_t packed, ComputeReqType type, bool headed, uint8_t head, int8_t lane) {
+static inline bool compute_q_push(uint64_t packed, ComputeReqType type, bool headed, uint8_t head, int8_t lane) {
 #pragma HLS INLINE
     if (compute_q_count >= COMPUTE_QUEUE_DEPTH) return false;
     compute_q[compute_q_tail].valid = true;
@@ -921,7 +937,7 @@ static bool allocate_chunks(uint32_t total_bytes, Chunk chunks[MAX_CHUNKS], uint
     uint32_t remaining = total_bytes;
     num_chunks = 0;
     while (remaining > 0) {
-#pragma HLS LOOP_TRIPCOUNT min=1 max=8
+#pragma HLS LOOP_TRIPCOUNT min=1 max=URAM_BANKS
         if (num_chunks >= MAX_CHUNKS) {
             release_allocated_chunks(chunks, num_chunks);
             num_chunks = 0;
@@ -1444,7 +1460,19 @@ struct WriteSpec {
 static bool validate_write_spec(const WriteSpec &s) {
 #pragma HLS INLINE
     if (s.tag == Tag::NONE) return false;
-    if (s.expected_parts == 0 || s.expected_parts > 32) return false;
+    // `expected_parts` is used for multiple different packing schemes (logit tiles, FFN tiles, head packs, etc.).
+    // The upper bound should cover the maximum number of parts any op can produce for the configured model.
+    constexpr uint16_t MAX_EXPECTED_PARTS =
+        static_cast<uint16_t>(max2_constexpr(
+            NUM_LOGIT_TILES,
+            max2_constexpr(
+                NUM_HEADS,
+                max2_constexpr(
+                    max2_constexpr(NUM_WO_TILES, NUM_W1_TILES),
+                    max2_constexpr(
+                        max2_constexpr(NUM_W2_TILES, NUM_QKV_HEAD_TILES),
+                        max2_constexpr(NUM_ATT_CTX_BLOCKS, NUM_ATT_VALUE_HEAD_TILES))))));
+    if (s.expected_parts == 0 || s.expected_parts > MAX_EXPECTED_PARTS) return false;
     if (s.part_idx < 0 || s.part_idx >= static_cast<int>(s.expected_parts)) return false;
     if (s.part_bytes == 0 || s.total_bytes == 0) return false;
 
@@ -1625,24 +1653,33 @@ static bool build_dma_piece_plan(DmaSel sel,
 
     switch (sel) {
         case DMASEL_WQ: {
-            piece_count = 1;
+            piece_count = 2;
             piece_bytes[0] = head_buf::QKV_W_TILE_BYTES;
+            piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
             piece_addr_off[0] = 0;
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WQ_W;
+            piece_tag[1] = Tag::WQ_B;
             return true;
         }
         case DMASEL_WK: {
-            piece_count = 1;
+            piece_count = 2;
             piece_bytes[0] = head_buf::QKV_W_TILE_BYTES;
+            piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
             piece_addr_off[0] = 0;
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WK_W;
+            piece_tag[1] = Tag::WK_B;
             return true;
         }
         case DMASEL_WV: {
-            piece_count = 1;
+            piece_count = 2;
             piece_bytes[0] = head_buf::QKV_W_TILE_BYTES;
+            piece_bytes[1] = head_buf::INQkvLayout::B_BYTES;
             piece_addr_off[0] = 0;
+            piece_addr_off[1] = 0;
             piece_tag[0] = Tag::WV_W;
+            piece_tag[1] = Tag::WV_B;
             return true;
         }
         case DMASEL_WO: {
@@ -1908,6 +1945,36 @@ static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer,
     }
 
     switch (sel) {
+        case DMASEL_WQ: {
+            const int head_idx = (head < 0) ? 0 : head;
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            addr_out = static_cast<uint64_t>(ctrl_mem.wq_bias_offset)
+                     + static_cast<uint32_t>(layer) * STRIDE_WQ_BIAS_LAYER
+                     + static_cast<uint32_t>(head_idx) * STRIDE_QKV_HEAD_BIAS
+                     + static_cast<uint32_t>(tile_idx) * STRIDE_QKV_HEAD_TILE_BIAS
+                     + piece_addr_off;
+            return true;
+        }
+        case DMASEL_WK: {
+            const int head_idx = (head < 0) ? 0 : head;
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            addr_out = static_cast<uint64_t>(ctrl_mem.wk_bias_offset)
+                     + static_cast<uint32_t>(layer) * STRIDE_WK_BIAS_LAYER
+                     + static_cast<uint32_t>(head_idx) * STRIDE_QKV_HEAD_BIAS
+                     + static_cast<uint32_t>(tile_idx) * STRIDE_QKV_HEAD_TILE_BIAS
+                     + piece_addr_off;
+            return true;
+        }
+        case DMASEL_WV: {
+            const int head_idx = (head < 0) ? 0 : head;
+            const int tile_idx = (tile < 0) ? 0 : tile;
+            addr_out = static_cast<uint64_t>(ctrl_mem.wv_bias_offset)
+                     + static_cast<uint32_t>(layer) * STRIDE_WV_BIAS_LAYER
+                     + static_cast<uint32_t>(head_idx) * STRIDE_QKV_HEAD_BIAS
+                     + static_cast<uint32_t>(tile_idx) * STRIDE_QKV_HEAD_TILE_BIAS
+                     + piece_addr_off;
+            return true;
+        }
         case DMASEL_WO: {
             if (tile < 0) return false;
             addr_out = static_cast<uint64_t>(ctrl_mem.wo_bias_offset)
@@ -2038,8 +2105,12 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head, int tile,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::WQ_W, layer, head, tile_idx,
-                                      lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+            ok = load_region_to_buf(Tag::WQ_W, layer, head, tile_idx,
+                                    lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+                                    true, invalid_flag);
+            if (!ok) return false;
+            return load_region_to_buf(Tag::WQ_B, layer, head, tile_idx,
+                                      lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
                                       true, invalid_flag);
         }
         case CMP_K: {
@@ -2048,8 +2119,12 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head, int tile,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::WK_W, layer, head, tile_idx,
-                                      lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+            ok = load_region_to_buf(Tag::WK_W, layer, head, tile_idx,
+                                    lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+                                    true, invalid_flag);
+            if (!ok) return false;
+            return load_region_to_buf(Tag::WK_B, layer, head, tile_idx,
+                                      lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
                                       true, invalid_flag);
         }
         case CMP_V: {
@@ -2058,8 +2133,12 @@ static bool build_head_in_buf(ComputeOp op, int layer, int head, int tile,
                                          lane_buf, head_buf::INQkvLayout::ACT, head_buf::INQkvLayout::ACT_BYTES,
                                          false, invalid_flag);
             if (!ok) return false;
-            return load_region_to_buf(Tag::WV_W, layer, head, tile_idx,
-                                      lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+            ok = load_region_to_buf(Tag::WV_W, layer, head, tile_idx,
+                                    lane_buf, head_buf::INQkvLayout::W, head_buf::INQkvLayout::W_BYTES,
+                                    true, invalid_flag);
+            if (!ok) return false;
+            return load_region_to_buf(Tag::WV_B, layer, head, tile_idx,
+                                      lane_buf, head_buf::INQkvLayout::B, head_buf::INQkvLayout::B_BYTES,
                                       true, invalid_flag);
         }
         case CMP_ATT_SCORES: {
@@ -2392,7 +2471,7 @@ void mmu_fsm(
 
     // Main scheduler DMA request (non-headed path)
     bool            mmu_dma_req_start,              // [INPUT] Main scheduler DMA request valid
-    uint32_t        mmu_dma_instruction,            // [INPUT] Packed request [sel|layer|head|tile]
+    uint64_t        mmu_dma_instruction,            // [INPUT] Packed request [sel|layer|head|tile]
     bool            &mmu_req_ready,                 // [OUTPUT] MMU can accept new DMA request
     bool            &main_wl_accept,                // [OUTPUT] Main scheduler request accepted/captured
     bool            &main_dma_done,                 // [OUTPUT] Main scheduler DMA done pulse
@@ -2400,7 +2479,7 @@ void mmu_fsm(
     // Main compute request (non-headed path)
     bool            mem_read_request,               // [INPUT] Main compute read request
     bool            mem_write_request,              // [INPUT] Main compute write request
-    uint32_t        mem_op,                         // [INPUT] Packed request [op|layer|head|tile]
+    uint64_t        mem_op,                         // [INPUT] Packed request [op|layer|head|tile]
     bool            &mem_transfer_done,             // [OUTPUT] Main compute transfer done pulse
 
     // Head contexts (headed scheduler + headed compute request signals)
@@ -2848,11 +2927,11 @@ void mmu_fsm(
             active_piece_idx = 0;
             active_piece_bytes_done = 0;
             active_chunk_bytes = 0;
+            active_dma_pad_zero = false;
             g_state = State::DMA_ISSUE;
             break;
         }
         case State::DMA_ISSUE: {
-            if (!dma_ready) break;
             const int piece_idx = static_cast<int>(active_piece_idx);
             const uint32_t piece_total = active_piece_bytes[piece_idx];
             if (active_piece_bytes_done >= piece_total) {
@@ -2862,6 +2941,7 @@ void mmu_fsm(
             uint32_t sz = (remaining < static_cast<uint32_t>(DMA_BUF_BYTES))
                               ? remaining
                               : static_cast<uint32_t>(DMA_BUF_BYTES);
+            const uint32_t desired_sz = sz;
             // Strided V cache: limit burst to one context row's d_head tile portion
             if (active_dma_sel == DMASEL_CTX_V && active_dma_tile >= 0) {
                 const uint32_t col = active_piece_bytes_done % static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE);
@@ -2878,6 +2958,36 @@ void mmu_fsm(
 	                g_state = State::IDLE;
 	                break;
 	            }
+
+            // Logits weights tiling can require padding when D_VOCAB is not divisible by NUM_LOGIT_TILES.
+            // Guard against overreading past the end of the wlogit region: clamp reads to [wlogit_start, wlogit_end)
+            // and synthesize any out-of-range bytes as zeros.
+            if (active_dma_sel == DMASEL_WLOGIT) {
+                const uint64_t wlogit_start = static_cast<uint64_t>(ctrl_mem.wlogit_offset);
+                const uint64_t wlogit_end =
+                    wlogit_start + static_cast<uint64_t>(MEM_WLOGIT);
+
+                if (piece_addr >= wlogit_end) {
+                    // Entire chunk is past end-of-wlogit: skip external DMA and pad zeros into the region.
+                    active_dma_pad_zero = true;
+                    active_chunk_bytes = desired_sz;
+                    g_state = State::DMA_STORE;
+                    break;
+                }
+
+                const uint64_t avail = wlogit_end - piece_addr;
+                if (static_cast<uint64_t>(sz) > avail) {
+                    sz = static_cast<uint32_t>(avail);
+                    if (sz == 0) {
+                        active_dma_pad_zero = true;
+                        active_chunk_bytes = desired_sz;
+                        g_state = State::DMA_STORE;
+                        break;
+                    }
+                }
+            }
+
+            if (!dma_ready) break;
 #ifndef __SYNTHESIS__
 	            if (active_dma_sel == DMASEL_CTX_V && active_dma_tile >= 0 && trace_ctx_v_issue_budget > 0) {
 	                const uint32_t off = active_piece_addr_off[piece_idx] + active_piece_bytes_done;
@@ -2900,6 +3010,7 @@ void mmu_fsm(
 	                --trace_ctx_v_issue_budget;
 	            }
 #endif
+	            active_dma_pad_zero = false;
 	            dma_start = true;
 	            dma_is_write = false;
 	            dma_use_kv_cache = dma_uses_kv_cache(active_dma_sel);
@@ -2920,8 +3031,11 @@ void mmu_fsm(
             const uint32_t chunk_bytes = active_chunk_bytes;
             const Tag tag = active_piece_tag[piece_idx];
             const int key_head = (tag == Tag::WQ_W ||
+                                  tag == Tag::WQ_B ||
                                   tag == Tag::WK_W ||
+                                  tag == Tag::WK_B ||
                                   tag == Tag::WV_W ||
+                                  tag == Tag::WV_B ||
                                   tag == Tag::CTX_K || tag == Tag::CTX_V)
                                  ? active_dma_head : -1;
             const int key_tile = (tag == Tag::WO_W || tag == Tag::WO_B ||
@@ -2930,7 +3044,9 @@ void mmu_fsm(
                                   tag == Tag::LOGITS_W ||
                                   tag == Tag::CTX_K || tag == Tag::CTX_V ||
                                   tag == Tag::WQ_W || tag == Tag::WK_W ||
-                                  tag == Tag::WV_W)
+                                  tag == Tag::WV_W ||
+                                  tag == Tag::WQ_B || tag == Tag::WK_B ||
+                                  tag == Tag::WV_B)
                                  ? active_dma_tile : -1;
 
             const int idx = get_or_create_region(tag, active_dma_layer, key_head, key_tile,
@@ -2942,9 +3058,17 @@ void mmu_fsm(
                 break;
             }
 
-            for (uint32_t i = 0; i < chunk_bytes; ++i) {
+            if (active_dma_pad_zero) {
+                for (uint32_t i = 0; i < chunk_bytes; ++i) {
 // #pragma HLS PIPELINE II=1
-                scratch[i] = dma_word_get_byte(dma_rx_buf, i);
+                    scratch[i] = 0;
+                }
+                active_dma_pad_zero = false;
+            } else {
+                for (uint32_t i = 0; i < chunk_bytes; ++i) {
+// #pragma HLS PIPELINE II=1
+                    scratch[i] = dma_word_get_byte(dma_rx_buf, i);
+                }
             }
 
             if (!region_write_segment(idx, active_piece_bytes_done, scratch, chunk_bytes)) {

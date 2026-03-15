@@ -23,21 +23,26 @@
 //   9) z_i       = gamma_i * y_hat[i]
 //  10) o_i       = z_i + beta_i
 // Output: o_i
-static inline uint32_t pack_compute_instruction(ComputeOp op, int layer, int head, int tile) {
+// Instruction packing format (64 bits):
+//   bits [7:0]   = op    (8-bit unsigned, covers all ComputeOp/DmaSel values 0-27)
+//   bits [15:8]  = layer (8-bit signed, covers -1..11)
+//   bits [23:16] = head  (8-bit signed, covers -1..11)
+//   bits [55:24] = tile  (32-bit, covers 0..12799 and beyond)
+static inline uint64_t pack_compute_instruction(ComputeOp op, int layer, int head, int tile) {
 #pragma HLS INLINE
-  const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
-  const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
-  const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
-  const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
+  const uint64_t op_field    = static_cast<uint64_t>(static_cast<uint8_t>(op));
+  const uint64_t layer_field = static_cast<uint64_t>(static_cast<uint8_t>(layer));
+  const uint64_t head_field  = static_cast<uint64_t>(static_cast<uint8_t>(head));
+  const uint64_t tile_field  = static_cast<uint64_t>(static_cast<uint32_t>(tile));
   return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
-static inline uint32_t pack_dma_op(DmaSel op, int layer, int head, int tile) {
+static inline uint64_t pack_dma_op(DmaSel op, int layer, int head, int tile) {
 #pragma HLS INLINE
-  const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
-  const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
-  const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
-  const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
+  const uint64_t op_field    = static_cast<uint64_t>(static_cast<uint8_t>(op));
+  const uint64_t layer_field = static_cast<uint64_t>(static_cast<uint8_t>(layer));
+  const uint64_t head_field  = static_cast<uint64_t>(static_cast<uint8_t>(head));
+  const uint64_t tile_field  = static_cast<uint64_t>(static_cast<uint32_t>(tile));
   return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
@@ -63,7 +68,7 @@ void scheduler_hls(
     bool      dma_done,        // [INPUT]  DMA transfer completed (single-cycle pulse)
     bool      wl_ready,         // [INPUT]  Weight loader ready for a new request
     bool      wl_accept,        // [INPUT]  MMU accepted/captured scheduler wl request
-    uint32_t  &wl_instruction,
+    uint64_t  &wl_instruction,
     bool      &wl_start,        // [OUTPUT] Start weight load DMA
 
     // ------------------------------------------------------------
@@ -74,7 +79,7 @@ void scheduler_hls(
     HeadCtx (&head_ctx_ref)[HEADS_PARALLEL], // [BOTH]  Active-lane head context (in/out)
     int   &head_group_idx,        // [OUTPUT]  Current head group index (0 to NUM_HEADS/HEADS_PARALLEL-1) 
     bool &compute_start, // [OUTPUT] Trigger compute engine
-    uint32_t &compute_instruction,     // [OUTPUT] Packed op|layer|head|tile for compute
+    uint64_t &compute_instruction,     // [OUTPUT] Packed op|layer|head|tile for compute
     bool debug_done, // [INPUT]  Debug-mode reduction/result is ready
     // ------------------------------------------------------------
     // AXI4-STREAM OUTPUT (EGRESS: PL → PS)

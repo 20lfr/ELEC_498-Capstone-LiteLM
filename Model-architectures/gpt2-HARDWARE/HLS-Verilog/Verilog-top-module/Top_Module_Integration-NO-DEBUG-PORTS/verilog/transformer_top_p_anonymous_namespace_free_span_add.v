@@ -85,8 +85,8 @@ reg[0:0] ap_return;
 (* fsm_encoding = "none" *) reg   [3:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg   [4:0] p_anonymous_namespace_free_span_count_addr_reg_191;
-wire   [0:0] icmp_ln614_fu_152_p2;
-reg   [0:0] icmp_ln614_reg_196;
+wire   [0:0] icmp_ln615_fu_152_p2;
+reg   [0:0] icmp_ln615_reg_196;
 wire    ap_CS_fsm_state2;
 wire    grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_ap_start;
 wire    grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_ap_done;
@@ -113,22 +113,22 @@ wire    ap_CS_fsm_state3;
 wire    p_anonymous_namespace_free_span_count_we0_out;
 wire    p_anonymous_namespace_free_spans_offset_we0_out;
 wire    p_anonymous_namespace_free_spans_size_we0_out;
-wire   [63:0] zext_ln614_fu_126_p1;
-wire   [63:0] zext_ln617_fu_168_p1;
+wire   [63:0] zext_ln615_fu_126_p1;
+wire   [63:0] zext_ln618_fu_168_p1;
 reg    p_anonymous_namespace_free_span_count_ce0_local;
 reg   [4:0] p_anonymous_namespace_free_span_count_address0_local;
 reg    p_anonymous_namespace_free_span_count_we0_local;
-wire   [15:0] zext_ln619_fu_180_p1;
+wire   [15:0] zext_ln620_fu_180_p1;
 reg    p_anonymous_namespace_free_spans_offset_we0_local;
 reg    p_anonymous_namespace_free_spans_offset_ce0_local;
 reg    p_anonymous_namespace_free_spans_size_we0_local;
 reg    p_anonymous_namespace_free_spans_size_ce0_local;
-wire   [7:0] tmp_419_fu_142_p4;
+wire   [7:0] tmp_418_fu_142_p4;
 wire   [12:0] tmp_fu_131_p3;
-wire   [12:0] trunc_ln617_fu_158_p1;
-wire   [12:0] add_ln617_fu_162_p2;
-wire   [8:0] trunc_ln614_fu_138_p1;
-wire   [8:0] add_ln619_fu_174_p2;
+wire   [12:0] trunc_ln618_fu_158_p1;
+wire   [12:0] add_ln618_fu_162_p2;
+wire   [8:0] trunc_ln615_fu_138_p1;
+wire   [8:0] add_ln620_fu_174_p2;
 reg   [0:0] ap_return_preg;
 reg   [3:0] ap_NS_fsm;
 reg    ap_ST_fsm_state1_blk;
@@ -200,22 +200,22 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((icmp_ln614_fu_152_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((icmp_ln615_fu_152_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
         retval_1_reg_103 <= 1'd0;
-    end else if (((1'b0 == ap_block_state4_on_subcall_done) & (icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    end else if (((1'b0 == ap_block_state4_on_subcall_done) & (icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         retval_1_reg_103 <= 1'd1;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
-        icmp_ln614_reg_196 <= icmp_ln614_fu_152_p2;
+        icmp_ln615_reg_196 <= icmp_ln615_fu_152_p2;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state1)) begin
-        p_anonymous_namespace_free_span_count_addr_reg_191 <= zext_ln614_fu_126_p1;
+        p_anonymous_namespace_free_span_count_addr_reg_191 <= zext_ln615_fu_126_p1;
     end
 end
 
@@ -256,7 +256,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         ap_phi_mux_retval_1_phi_fu_107_p4 = 1'd1;
     end else begin
         ap_phi_mux_retval_1_phi_fu_107_p4 = retval_1_reg_103;
@@ -280,7 +280,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_span_count_address0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_span_count_address0;
     end else begin
         p_anonymous_namespace_free_span_count_address0 = p_anonymous_namespace_free_span_count_address0_local;
@@ -291,14 +291,14 @@ always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state2)) begin
         p_anonymous_namespace_free_span_count_address0_local = p_anonymous_namespace_free_span_count_addr_reg_191;
     end else if ((1'b1 == ap_CS_fsm_state1)) begin
-        p_anonymous_namespace_free_span_count_address0_local = zext_ln614_fu_126_p1;
+        p_anonymous_namespace_free_span_count_address0_local = zext_ln615_fu_126_p1;
     end else begin
         p_anonymous_namespace_free_span_count_address0_local = 'bx;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_span_count_ce0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_span_count_ce0;
     end else begin
         p_anonymous_namespace_free_span_count_ce0 = p_anonymous_namespace_free_span_count_ce0_local;
@@ -314,15 +314,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_span_count_d0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_span_count_d0;
     end else begin
-        p_anonymous_namespace_free_span_count_d0 = zext_ln619_fu_180_p1;
+        p_anonymous_namespace_free_span_count_d0 = zext_ln620_fu_180_p1;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_span_count_we0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_span_count_we0;
     end else begin
         p_anonymous_namespace_free_span_count_we0 = (p_anonymous_namespace_free_span_count_we0_out | 1'b0);
@@ -330,7 +330,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_fu_152_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((icmp_ln615_fu_152_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_span_count_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_span_count_we0_local = 1'b0;
@@ -338,15 +338,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_offset_address0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_offset_address0;
     end else begin
-        p_anonymous_namespace_free_spans_offset_address0 = zext_ln617_fu_168_p1;
+        p_anonymous_namespace_free_spans_offset_address0 = zext_ln618_fu_168_p1;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_offset_ce0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_offset_ce0;
     end else begin
         p_anonymous_namespace_free_spans_offset_ce0 = p_anonymous_namespace_free_spans_offset_ce0_local;
@@ -362,7 +362,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_offset_d0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_offset_d0;
     end else begin
         p_anonymous_namespace_free_spans_offset_d0 = offset;
@@ -370,7 +370,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_offset_we0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_offset_we0;
     end else begin
         p_anonymous_namespace_free_spans_offset_we0 = (p_anonymous_namespace_free_spans_offset_we0_out | 1'b0);
@@ -378,7 +378,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_fu_152_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((icmp_ln615_fu_152_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_offset_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_offset_we0_local = 1'b0;
@@ -386,15 +386,15 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_size_address0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_size_address0;
     end else begin
-        p_anonymous_namespace_free_spans_size_address0 = zext_ln617_fu_168_p1;
+        p_anonymous_namespace_free_spans_size_address0 = zext_ln618_fu_168_p1;
     end
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_size_ce0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_size_ce0;
     end else begin
         p_anonymous_namespace_free_spans_size_ce0 = p_anonymous_namespace_free_spans_size_ce0_local;
@@ -410,7 +410,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_size_d0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_size_d0;
     end else begin
         p_anonymous_namespace_free_spans_size_d0 = size;
@@ -418,7 +418,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((icmp_ln615_reg_196 == 1'd1) & (1'b1 == ap_CS_fsm_state4))) begin
         p_anonymous_namespace_free_spans_size_we0 = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_p_anonymous_namespace_free_spans_size_we0;
     end else begin
         p_anonymous_namespace_free_spans_size_we0 = (p_anonymous_namespace_free_spans_size_we0_out | 1'b0);
@@ -426,7 +426,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln614_fu_152_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if (((icmp_ln615_fu_152_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_anonymous_namespace_free_spans_size_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_free_spans_size_we0_local = 1'b0;
@@ -443,7 +443,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((icmp_ln614_fu_152_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
+            if (((icmp_ln615_fu_152_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state4;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state3;
@@ -465,9 +465,9 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln617_fu_162_p2 = (tmp_fu_131_p3 + trunc_ln617_fu_158_p1);
+assign add_ln618_fu_162_p2 = (tmp_fu_131_p3 + trunc_ln618_fu_158_p1);
 
-assign add_ln619_fu_174_p2 = (trunc_ln614_fu_138_p1 + 9'd1);
+assign add_ln620_fu_174_p2 = (trunc_ln615_fu_138_p1 + 9'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -478,12 +478,12 @@ assign ap_CS_fsm_state3 = ap_CS_fsm[32'd2];
 assign ap_CS_fsm_state4 = ap_CS_fsm[32'd3];
 
 always @ (*) begin
-    ap_block_state4_on_subcall_done = ((grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_ap_done == 1'b0) & (icmp_ln614_reg_196 == 1'd1));
+    ap_block_state4_on_subcall_done = ((grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_ap_done == 1'b0) & (icmp_ln615_reg_196 == 1'd1));
 end
 
 assign grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_ap_start = grp_p_anonymous_namespace_free_span_compact_and_coalesce_fu_115_ap_start_reg;
 
-assign icmp_ln614_fu_152_p2 = ((tmp_419_fu_142_p4 == 8'd0) ? 1'b1 : 1'b0);
+assign icmp_ln615_fu_152_p2 = ((tmp_418_fu_142_p4 == 8'd0) ? 1'b1 : 1'b0);
 
 assign p_anonymous_namespace_free_span_count_we0_out = p_anonymous_namespace_free_span_count_we0_local;
 
@@ -491,18 +491,18 @@ assign p_anonymous_namespace_free_spans_offset_we0_out = p_anonymous_namespace_f
 
 assign p_anonymous_namespace_free_spans_size_we0_out = p_anonymous_namespace_free_spans_size_we0_local;
 
-assign tmp_419_fu_142_p4 = {{p_anonymous_namespace_free_span_count_q0[15:8]}};
+assign tmp_418_fu_142_p4 = {{p_anonymous_namespace_free_span_count_q0[15:8]}};
 
 assign tmp_fu_131_p3 = {{bank}, {8'd0}};
 
-assign trunc_ln614_fu_138_p1 = p_anonymous_namespace_free_span_count_q0[8:0];
+assign trunc_ln615_fu_138_p1 = p_anonymous_namespace_free_span_count_q0[8:0];
 
-assign trunc_ln617_fu_158_p1 = p_anonymous_namespace_free_span_count_q0[12:0];
+assign trunc_ln618_fu_158_p1 = p_anonymous_namespace_free_span_count_q0[12:0];
 
-assign zext_ln614_fu_126_p1 = bank;
+assign zext_ln615_fu_126_p1 = bank;
 
-assign zext_ln617_fu_168_p1 = add_ln617_fu_162_p2;
+assign zext_ln618_fu_168_p1 = add_ln618_fu_162_p2;
 
-assign zext_ln619_fu_180_p1 = add_ln619_fu_174_p2;
+assign zext_ln620_fu_180_p1 = add_ln620_fu_174_p2;
 
 endmodule //transformer_top_p_anonymous_namespace_free_span_add

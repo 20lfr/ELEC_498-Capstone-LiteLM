@@ -128,7 +128,7 @@ reg    ap_loop_exit_ready_pp0_iter3_reg;
 reg   [19:0] sumsq_fu_102;
 wire  signed [19:0] grp_fu_430_p3;
 reg  signed [19:0] ap_sig_allocacmp_sumsq_2;
-reg   [4:0] i_52_fu_106;
+reg   [4:0] i_53_fu_106;
 wire   [4:0] add_ln634_fu_278_p2;
 reg   [4:0] ap_sig_allocacmp_i;
 wire    ap_block_pp0_stage0_01001;
@@ -184,7 +184,7 @@ initial begin
 #0 ap_enable_reg_pp0_iter4 = 1'b0;
 #0 sum_fu_98 = 12'd0;
 #0 sumsq_fu_102 = 20'd0;
-#0 i_52_fu_106 = 5'd0;
+#0 i_53_fu_106 = 5'd0;
 #0 ap_done_reg = 1'b0;
 end
 
@@ -339,9 +339,9 @@ end
 always @ (posedge ap_clk) begin
     if (((1'b0 == ap_block_pp0_stage0_11001) & (1'b1 == ap_CS_fsm_pp0_stage0))) begin
         if (((icmp_ln634_fu_272_p2 == 1'd0) & (ap_enable_reg_pp0_iter0 == 1'b1))) begin
-            i_52_fu_106 <= add_ln634_fu_278_p2;
+            i_53_fu_106 <= add_ln634_fu_278_p2;
         end else if ((ap_loop_init == 1'b1)) begin
-            i_52_fu_106 <= 5'd0;
+            i_53_fu_106 <= 5'd0;
         end
     end
 end
@@ -435,7 +435,7 @@ always @ (*) begin
     if (((1'b0 == ap_block_pp0_stage0) & (1'b1 == ap_CS_fsm_pp0_stage0) & (ap_loop_init == 1'b1))) begin
         ap_sig_allocacmp_i = 5'd0;
     end else begin
-        ap_sig_allocacmp_i = i_52_fu_106;
+        ap_sig_allocacmp_i = i_53_fu_106;
     end
 end
 

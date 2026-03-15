@@ -78,7 +78,7 @@ void transformer_top(
     static bool             compute_ready                  = false;
     static bool             compute_done                   = false;
     static bool             compute_start                  = false;
-    static uint32_t         compute_instruction            = 0;
+    static uint64_t         compute_instruction            = 0;
     static SchedState       state_local                    = S_IDLE;
     static HeadCtx          head_ctx_local[HEADS_PARALLEL];
 #pragma HLS ARRAY_PARTITION variable=head_ctx_local complete dim=1
@@ -137,10 +137,10 @@ void transformer_top(
     static bool             mmu_main_mem_transfer_done_wire = false;
     static bool             scheduler_wl_start            = false;
     static bool             scheduler_wl_accept           = false;
-    static uint32_t         scheduler_wl_instruction      = 0;
+    static uint64_t         scheduler_wl_instruction      = 0;
     static bool             main_mem_read_request         = false;
     static bool             main_mem_write_request        = false;
-    static uint32_t         main_mem_op                   = 0;
+    static uint64_t         main_mem_op                   = 0;
     static bool             debug_sum_done_local          = false;
     static int32_t          debug_sum_value_local         = 0;
     static bool             prev_start                    = false;
@@ -331,11 +331,11 @@ void transformer_top(
     // Local throwaway variables for compute_controller debug ports.
     // HLS will optimize these away since they are never read externally.
     ComputeState cc_dbg_state;
-    uint32_t     cc_dbg_req_instruction;
+    uint64_t     cc_dbg_req_instruction;
     uint8_t      cc_dbg_req_op;
     uint8_t      cc_dbg_req_layer;
     uint8_t      cc_dbg_req_head;
-    uint8_t      cc_dbg_req_tile;
+    uint16_t     cc_dbg_req_tile;
     bool         cc_dbg_mac_start;
     bool         cc_dbg_mac_ready;
     bool         cc_dbg_mac_complete;

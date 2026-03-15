@@ -14,7 +14,7 @@ module transformer_top_compute_controller_Pipeline_VITIS_LOOP_402_415 (
         ap_idle,
         ap_ready,
         vec_count_0_i_ph_i,
-        cmp74_i_2_i,
+        cmp76_i_2_i,
         matrixB_7_address0,
         matrixB_7_ce0,
         matrixB_7_we0,
@@ -194,7 +194,7 @@ output   ap_done;
 output   ap_idle;
 output   ap_ready;
 input  [4:0] vec_count_0_i_ph_i;
-input  [0:0] cmp74_i_2_i;
+input  [0:0] cmp76_i_2_i;
 output  [5:0] matrixB_7_address0;
 output   matrixB_7_ce0;
 output   matrixB_7_we0;
@@ -306,7 +306,7 @@ reg   [2:0] tmp_228_reg_808;
 reg   [5:0] matrixB_2_addr_reg_814;
 reg   [5:0] matrixB_3_addr_reg_819;
 reg   [5:0] matrixB_4_addr_reg_824;
-reg   [0:0] tmp_290_reg_829;
+reg   [0:0] tmp_289_reg_829;
 reg   [5:0] matrixB_5_addr_reg_834;
 reg   [5:0] matrixB_6_addr_reg_839;
 reg   [5:0] matrixB_7_addr_reg_844;
@@ -789,7 +789,7 @@ always @ (posedge ap_clk) begin
         matrixB_7_addr_reg_844 <= zext_ln409_2_fu_442_p1;
         or_ln402_8_reg_794[4 : 1] <= or_ln402_8_fu_463_p3[4 : 1];
         tmp_228_reg_808 <= {{i_31_reg_768[4:2]}};
-        tmp_290_reg_829 <= i_31_reg_768[32'd1];
+        tmp_289_reg_829 <= i_31_reg_768[32'd1];
     end
 end
 
@@ -1965,21 +1965,21 @@ assign add_ln407_fu_515_p2 = (add_ln405_fu_510_p2 + zext_ln365_cast_reg_756);
 
 assign add_ln409_fu_437_p2 = (zext_ln409_fu_433_p1 + p_udiv243_i);
 
-assign and_ln404_10_fu_564_p2 = (icmp_ln404_10_fu_559_p2 & cmp74_i_2_i);
+assign and_ln404_10_fu_564_p2 = (icmp_ln404_10_fu_559_p2 & cmp76_i_2_i);
 
-assign and_ln404_11_fu_595_p2 = (icmp_ln404_11_fu_590_p2 & cmp74_i_2_i);
+assign and_ln404_11_fu_595_p2 = (icmp_ln404_11_fu_590_p2 & cmp76_i_2_i);
 
-assign and_ln404_12_fu_633_p2 = (icmp_ln404_12_fu_628_p2 & cmp74_i_2_i);
+assign and_ln404_12_fu_633_p2 = (icmp_ln404_12_fu_628_p2 & cmp76_i_2_i);
 
-assign and_ln404_13_fu_664_p2 = (icmp_ln404_13_fu_659_p2 & cmp74_i_2_i);
+assign and_ln404_13_fu_664_p2 = (icmp_ln404_13_fu_659_p2 & cmp76_i_2_i);
 
-assign and_ln404_14_fu_695_p2 = (icmp_ln404_14_fu_690_p2 & cmp74_i_2_i);
+assign and_ln404_14_fu_695_p2 = (icmp_ln404_14_fu_690_p2 & cmp76_i_2_i);
 
-assign and_ln404_8_fu_476_p2 = (icmp_ln404_8_fu_471_p2 & cmp74_i_2_i);
+assign and_ln404_8_fu_476_p2 = (icmp_ln404_8_fu_471_p2 & cmp76_i_2_i);
 
-assign and_ln404_9_fu_533_p2 = (icmp_ln404_9_fu_528_p2 & cmp74_i_2_i);
+assign and_ln404_9_fu_533_p2 = (icmp_ln404_9_fu_528_p2 & cmp76_i_2_i);
 
-assign and_ln404_fu_404_p2 = (icmp_ln404_fu_398_p2 & cmp74_i_2_i);
+assign and_ln404_fu_404_p2 = (icmp_ln404_fu_398_p2 & cmp76_i_2_i);
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -2487,7 +2487,7 @@ assign matrixB_d0 = ap_phi_mux_storemerge658_i_phi_fu_255_p4;
 
 assign matrixB_we0 = matrixB_we0_local;
 
-assign or_ln402_10_fu_614_p5 = {{{{lshr_ln409_1_reg_786}, {1'd1}}, {tmp_290_reg_829}}, {1'd1}};
+assign or_ln402_10_fu_614_p5 = {{{{lshr_ln409_1_reg_786}, {1'd1}}, {tmp_289_reg_829}}, {1'd1}};
 
 assign or_ln402_11_fu_648_p3 = {{lshr_ln409_1_reg_786}, {3'd6}};
 

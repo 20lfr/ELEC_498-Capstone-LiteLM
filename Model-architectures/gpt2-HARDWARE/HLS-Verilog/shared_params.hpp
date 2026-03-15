@@ -15,18 +15,57 @@ constexpr int16_t ATTN_SCALE_Q15      = 4096; // Q1.15: round((1/sqrt(64)) * 2^1
 
 constexpr int max2_constexpr(int a, int b) { return (a > b) ? a : b; }
 constexpr int min2_constexpr(int a, int b) { return (a < b) ? a : b; }
+constexpr int div_ceil_constexpr(int a, int b) { return (a + b - 1) / b; }
 
 // ------------------------------------------------------------
 // Tunable architecture parameters::
 // ------------------------------------------------------------
-// Tiling controls
-constexpr int NUM_WO_TILES             = 4;
-constexpr int NUM_W1_TILES             = 8;
-constexpr int NUM_W2_TILES             = 4;
-constexpr int NUM_LOGIT_TILES          = 2;
-constexpr int NUM_QKV_HEAD_TILES       = 2;
-constexpr int ATT_CTX_BLOCK            = 8;
-constexpr int NUM_ATT_VALUE_HEAD_TILES = 2;
+#define FULL_MODEL_TEST
+
+#ifdef FULL_MODEL_TEST
+    // Architecture params
+    constexpr int NUM_LAYERS    = 12;
+    constexpr int D_MODEL       = 768;
+    constexpr int D_FFN         = 3072;
+    constexpr int D_VOCAB       = 50257;
+    constexpr int CONTEXT_LENGTH = 1024;
+    constexpr int D_HEADS       = 64;
+    constexpr int NUM_HEADS     = D_MODEL / D_HEADS;
+    // Tile widths (primary — tile counts derived below)
+    constexpr int D_TILE_WO            = 24;  // 32 tiles over D_MODEL=768
+    constexpr int D_TILE_W1            = 24;  // 128 tiles over D_FFN=3072
+    constexpr int D_TILE_W2            = 24;  // 32 tiles over D_MODEL=768
+    constexpr int D_TILE_LOGIT         = 4;   // 12565 tiles over D_VOCAB=50257
+    constexpr int D_HEAD_TILE_QKV      = 4;   // 16 tiles over D_HEADS=64
+    constexpr int ATT_CTX_BLOCK        = 64;
+    constexpr int D_HEAD_TILE_ATT_VALUE = 4;  // 16 tiles over D_HEADS=64
+#else
+    // Architecture params
+    constexpr int NUM_LAYERS    = 4;
+    constexpr int D_MODEL       = 16;
+    constexpr int D_FFN         = 24;
+    constexpr int D_VOCAB       = 32;
+    constexpr int CONTEXT_LENGTH = 16;
+    constexpr int D_HEADS       = 4;
+    constexpr int NUM_HEADS     = D_MODEL / D_HEADS;
+    // Tile widths (primary — tile counts derived below)
+    constexpr int D_TILE_WO            = 4;
+    constexpr int D_TILE_W1            = 3;
+    constexpr int D_TILE_W2            = 4;
+    constexpr int D_TILE_LOGIT         = 16;
+    constexpr int D_HEAD_TILE_QKV      = 2;
+    constexpr int ATT_CTX_BLOCK        = 8;
+    constexpr int D_HEAD_TILE_ATT_VALUE = 2;
+#endif
+
+// Derived tile counts (from tile widths above)
+constexpr int NUM_WO_TILES             = D_MODEL / D_TILE_WO;
+constexpr int NUM_W1_TILES             = D_FFN   / D_TILE_W1;
+constexpr int NUM_W2_TILES             = D_MODEL / D_TILE_W2;
+constexpr int NUM_LOGIT_TILES          = div_ceil_constexpr(D_VOCAB, D_TILE_LOGIT);
+constexpr int NUM_QKV_HEAD_TILES       = D_HEADS / D_HEAD_TILE_QKV;
+constexpr int NUM_ATT_VALUE_HEAD_TILES = D_HEADS / D_HEAD_TILE_ATT_VALUE;
+
 
 // Parallelism controls
 constexpr int MAIN_MAC_VEC_UNROLL_TARGET  = 8;
@@ -43,46 +82,28 @@ constexpr int MAX_CYCLIC_SIZE = NORM_TILE_SIZE;
 // Top-level lane parallelism
 constexpr int HEADS_PARALLEL = 2;
 
-// Params used in architecture
-constexpr int NUM_LAYERS           = 4;
-constexpr int D_MODEL              = 16;
-constexpr int D_FFN                = 24;
-constexpr int D_VOCAB              = 32;
-constexpr int CONTEXT_LENGTH       = 16;
-constexpr int D_HEADS              = 4;
-constexpr int NUM_HEADS            = D_MODEL / D_HEADS;
 
-constexpr int D_HEAD_TILE_QKV      = D_HEADS / NUM_QKV_HEAD_TILES;
-constexpr int D_TILE_WO            = D_MODEL / NUM_WO_TILES;
-constexpr int D_TILE_W1            = D_FFN / NUM_W1_TILES;
-constexpr int D_TILE_W2            = D_MODEL / NUM_W2_TILES;
-constexpr int D_TILE_LOGIT         = D_VOCAB / NUM_LOGIT_TILES;
+
 constexpr int STREAM_IN_BUF_BYTES  = D_MODEL;
 constexpr int STREAM_OUT_BUF_BYTES = 4;
 
-static_assert((D_HEADS % NUM_QKV_HEAD_TILES) == 0,
-              "D_HEADS must divide NUM_QKV_HEAD_TILES");
-static_assert((D_VOCAB % NUM_LOGIT_TILES) == 0,
-              "D_VOCAB must divide NUM_LOGIT_TILES");
-static_assert((D_MODEL % NUM_WO_TILES) == 0,
-              "D_MODEL must divide NUM_WO_TILES");
-static_assert((D_FFN % NUM_W1_TILES) == 0,
-              "D_FFN must divide NUM_W1_TILES");
-static_assert((D_MODEL % NUM_W2_TILES) == 0,
-              "D_MODEL must divide NUM_W2_TILES");
+static_assert((D_MODEL % D_TILE_WO) == 0,            "D_MODEL must be divisible by D_TILE_WO");
+static_assert((D_FFN   % D_TILE_W1) == 0,            "D_FFN must be divisible by D_TILE_W1");
+static_assert((D_MODEL % D_TILE_W2) == 0,            "D_MODEL must be divisible by D_TILE_W2");
+static_assert((D_HEADS % D_HEAD_TILE_QKV) == 0,      "D_HEADS must be divisible by D_HEAD_TILE_QKV");
+static_assert((D_HEADS % D_HEAD_TILE_ATT_VALUE) == 0, "D_HEADS must be divisible by D_HEAD_TILE_ATT_VALUE");
+static_assert((D_TILE_LOGIT > 0),                    "D_TILE_LOGIT must be positive");
+static_assert(((D_TILE_LOGIT * NUM_LOGIT_TILES) >= D_VOCAB), "D_TILE_LOGIT*NUM_LOGIT_TILES must cover D_VOCAB");
 
 // AXI-Full DDR beat sizing (one m_axi_gmem data beat).
 // Keep this aligned with the top-level DDR port element type.
 constexpr int NUM_ATT_CTX_BLOCKS      = CONTEXT_LENGTH / ATT_CTX_BLOCK;
-constexpr int D_HEAD_TILE_ATT_VALUE   = D_HEADS / NUM_ATT_VALUE_HEAD_TILES;
 constexpr int NUM_HEAD_GROUPS         = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
 constexpr int AXI_GMEM_WORD_BYTES     = 4;
 constexpr int AXI_GMEM_WORD_BITS      = AXI_GMEM_WORD_BYTES * 8;
 
 static_assert((CONTEXT_LENGTH % ATT_CTX_BLOCK) == 0,
-              "CONTEXT_LENGTH must divide ATT_CTX_BLOCK");
-static_assert((D_HEADS % NUM_ATT_VALUE_HEAD_TILES) == 0,
-              "D_HEADS must divide NUM_ATT_VALUE_HEAD_TILES");
+              "CONTEXT_LENGTH must be divisible by ATT_CTX_BLOCK");
 static_assert((D_MODEL % 2) == 0,
               "D_MODEL must be even");
 static_assert((AXI_GMEM_WORD_BITS % 8) == 0,
@@ -129,8 +150,8 @@ constexpr uint32_t MEM_W1_UP   = 0u;
 constexpr uint32_t MEM_W2      = static_cast<uint32_t>(static_cast<uint64_t>(NUM_LAYERS) * D_MODEL * D_FFN);
 constexpr uint32_t MEM_EMBED   = 0u;
 
-// Optional Q/K/V bias slabs (Q16.16 packed as int32); currently unused by hardware but
-// included to match the reference ordering used by test_data/test_gpt2_int8.py.
+// Q/K/V bias slabs (packed as int32, typically Q16.16) used by headed Q/K/V compute.
+// Included to match the reference ordering used by test_data/test_gpt2_int8.py.
 constexpr uint32_t MEM_WQ_BIAS = static_cast<uint32_t>(static_cast<uint64_t>(NUM_LAYERS) * D_MODEL * sizeof(int32_t));
 constexpr uint32_t MEM_WK_BIAS = MEM_WQ_BIAS;
 constexpr uint32_t MEM_WV_BIAS = MEM_WQ_BIAS;
@@ -163,6 +184,8 @@ constexpr uint32_t STRIDE_WV_LAYER      = STRIDE_WQ_LAYER;
 constexpr uint32_t STRIDE_WO_LAYER      = STRIDE_WQ_LAYER;
 constexpr uint32_t STRIDE_QKV_HEAD      = D_HEADS * D_MODEL;
 constexpr uint32_t STRIDE_QKV_HEAD_TILE = D_HEAD_TILE_QKV * D_MODEL;
+constexpr uint32_t STRIDE_QKV_HEAD_BIAS      = D_HEADS * sizeof(int32_t);
+constexpr uint32_t STRIDE_QKV_HEAD_TILE_BIAS = D_HEAD_TILE_QKV * sizeof(int32_t);
 
 constexpr uint32_t STRIDE_WO_TILE      = D_TILE_WO * D_MODEL;
 constexpr uint32_t STRIDE_W1_TILE      = D_TILE_W1 * D_MODEL;
@@ -180,6 +203,9 @@ constexpr uint32_t STRIDE_FINAL_NORM_EPS   = sizeof(uint32_t);
 constexpr uint32_t STRIDE_W1_GATE_LAYER    = D_FFN * D_MODEL;
 constexpr uint32_t STRIDE_W1_UP_LAYER      = 0u;
 constexpr uint32_t STRIDE_W2_LAYER         = D_MODEL * D_FFN;
+constexpr uint32_t STRIDE_WQ_BIAS_LAYER    = D_MODEL * sizeof(int32_t);
+constexpr uint32_t STRIDE_WK_BIAS_LAYER    = STRIDE_WQ_BIAS_LAYER;
+constexpr uint32_t STRIDE_WV_BIAS_LAYER    = STRIDE_WQ_BIAS_LAYER;
 constexpr uint32_t STRIDE_WO_BIAS_LAYER    = D_MODEL * sizeof(int32_t);
 constexpr uint32_t STRIDE_W1_BIAS_LAYER    = D_FFN * sizeof(int32_t);
 constexpr uint32_t STRIDE_W2_BIAS_LAYER    = D_MODEL * sizeof(int32_t);

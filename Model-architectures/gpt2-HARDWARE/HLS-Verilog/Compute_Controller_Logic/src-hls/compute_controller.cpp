@@ -1,5 +1,6 @@
 #include "compute_controller.hpp"
 #include <ap_fixed.h>
+#include <climits>
 #include <hls_math.h>
 #ifndef __SYNTHESIS__
 #include <cstdio>
@@ -68,7 +69,7 @@ static void print_i8_matrix(const char *label,
 
 static void trace_mac_op_inputs(ComputeOp op,
                                 uint8_t layer_idx,
-                                uint8_t tile_idx,
+                                uint16_t tile_idx,
                                 const int32_t *vectorA,
                                 int vec_count,
                                 const int8_t *matrixB,
@@ -88,7 +89,7 @@ static void trace_mac_op_inputs(ComputeOp op,
 
 static void trace_mac_op_outputs(ComputeOp op,
                                  uint8_t layer_idx,
-                                 uint8_t tile_idx,
+                                 uint16_t tile_idx,
                                  const int32_t *accum_vector,
                                  int out_count,
                                  const uint8_t out_buf[],
@@ -153,7 +154,7 @@ static void trace_res_add_buffers(ComputeOp op,
 }
 
 static void trace_ffn_act_buffers(uint8_t layer_idx,
-                                  uint8_t tile_idx,
+                                  uint16_t tile_idx,
                                   const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                                   const uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
     int16_t x[D_FFN];
@@ -288,7 +289,7 @@ static void MAC_OP_TO_BUF(
     bool &ready,
     ComputeOp op,
     uint8_t layer_idx,
-    uint8_t tile_idx,
+    uint16_t tile_idx,
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
     bool &complete,
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES]
@@ -417,6 +418,9 @@ static void MAC_OP_TO_BUF(
 #endif
 	            MAC_COMPUTE_CORE(vectorA, matrixB, bias, accum_vector);
 
+	            int32_t logit_best_val = INT32_MIN;
+	            int32_t logit_best_local_idx = 0;
+
 	            for (int out = 0; out < out_count; ++out) {
 #pragma HLS UNROLL factor=MAC_OUT_UNROLL
 	                switch (op) {
@@ -449,12 +453,19 @@ static void MAC_OP_TO_BUF(
 	                        break;
 	                    }
 	                    case ComputeOp::CMP_LOGITS: {
-	                        compute_buf::write_i32(out_buf, out * 4, accum_vector[out]);
+	                        if (accum_vector[out] > logit_best_val) {
+	                            logit_best_val = accum_vector[out];
+	                            logit_best_local_idx = out;
+	                        }
                         break;
                     }
 	                    default:
 	                        break;
 	                }
+	            }
+	            if (op == ComputeOp::CMP_LOGITS) {
+	                compute_buf::write_i32(out_buf, 0, logit_best_val);
+	                compute_buf::write_i32(out_buf, 4, logit_best_local_idx);
 	            }
 
 #ifndef __SYNTHESIS__
@@ -582,7 +593,7 @@ static void RES_ADD_TO_BUF(ComputeOp op,
 }
 
 static void FFN_ACT_Gelu_TO_BUF(uint8_t layer_idx,
-                                uint8_t tile_idx,
+                                uint16_t tile_idx,
                                 const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                                 uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
@@ -600,17 +611,19 @@ static void ARGMAX_TO_BUF(uint8_t layer_idx,
                           const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                           uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
+    // Each tile wrote (max_val: i32, local_idx: i32) = 8 bytes.
+    // Reconstruct global argmax: global_idx = tile * D_TILE_LOGIT + local_idx.
     int32_t best_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X);
-    int32_t best_idx = 0;
-    for (int i = 1; i < D_VOCAB; ++i) {
-// #pragma HLS PIPELINE II=1
-        const int32_t x = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + (i * 4));
-        if (x > best_val) {
-            best_val = x;
-            best_idx = i;
+    int32_t best_global_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + 4);
+    for (int tile = 1; tile < NUM_LOGIT_TILES; ++tile) {
+        const int32_t tile_val       = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8);
+        const int32_t tile_local_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8 + 4);
+        if (tile_val > best_val) {
+            best_val = tile_val;
+            best_global_idx = tile * D_TILE_LOGIT + tile_local_idx;
         }
     }
-    compute_buf::write_i32(out_buf, compute_buf::OUTArgmaxLayout::Y, best_idx);
+    compute_buf::write_i32(out_buf, compute_buf::OUTArgmaxLayout::Y, best_global_idx);
 #ifndef __SYNTHESIS__
     trace_argmax_buffers(layer_idx, in_buf, out_buf);
 #endif
@@ -627,7 +640,17 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
     // LayerNorm (not RMSNorm):
     //   y = (x - mean(x)) / sqrt(var(x) + eps) * gamma
     // Output format is Q19.13 in `scaled_bits` (raw ap_fixed bits).
-    const ap_fixed<32, 19> q19_13_scale = ap_fixed<32, 19>(8192);
+    //
+    // DDR packing formats (matching test_data/test_gpt2_int8.py):
+    //   - gamma/beta are Q16.16 stored as int32
+    //   - eps is Q0.32 stored as uint32, representing eps_real (e.g. 1e-5)
+    //
+    // Internal LN math operates directly on the int8 activation domain (no explicit /2^7),
+    // so eps must be mapped into the same variance units:
+    //   x_real = x_i8 / 2^7  => var_real = var_i8 / 2^14
+    //   eps_var_units = eps_real * 2^14 = (eps_q0_32 / 2^32) * 2^14 = eps_q0_32 / 2^18
+    const ap_fixed<32, 19> q16_16_scale = ap_fixed<32, 19>(65536);          // 2^16
+    const ap_fixed<32, 19> eps_q0_32_to_var_scale = ap_fixed<32, 19>(262144); // 2^18
 
     int32_t sum = 0;
     int32_t sumsq = 0;
@@ -647,13 +670,15 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
         var = 0;
     }
 
-    ap_fixed<32, 19> v = var + (ap_fixed<32, 19>(epsilon) / q19_13_scale);
+    ap_fixed<32, 19> v = var + (ap_fixed<32, 19>(epsilon) / eps_q0_32_to_var_scale);
     if (v < 0) {
         v = 0;
     }
     ap_fixed<32, 19> inv_std = ap_fixed<32, 19>(1) / hls::sqrt(v);
 
     for (int base = 0; base < D_MODEL; base += MAX_CYCLIC_SIZE) {
+#pragma HLS PIPELINE off
+#pragma HLS LOOP_FLATTEN off
         const int tile_elems =
             ((base + MAX_CYCLIC_SIZE) < D_MODEL) ? MAX_CYCLIC_SIZE : (D_MODEL - base);
         int8_t x_tile[MAX_CYCLIC_SIZE];
@@ -663,6 +688,7 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
 #pragma HLS ARRAY_PARTITION variable=gamma_tile complete dim=1
 #pragma HLS ARRAY_PARTITION variable=beta_tile complete dim=1
         for (int i = 0; i < MAX_CYCLIC_SIZE; ++i) {
+#pragma HLS PIPELINE II=1
             if (i < tile_elems) {
                 x_tile[i] = compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + base + i);
                 gamma_tile[i] =
@@ -676,12 +702,13 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
             }
         }
         for (int i = 0; i < MAX_CYCLIC_SIZE; ++i) {
+#pragma HLS PIPELINE II=1
             if (i >= tile_elems) {
                 continue;
             }
             ap_fixed<32, 19> normalized = (ap_fixed<32, 19>(x_tile[i]) - mean) * inv_std;
-            ap_fixed<32, 19> gamma_fx = ap_fixed<32, 19>(gamma_tile[i]) / q19_13_scale;
-            ap_fixed<32, 19> beta_fx = ap_fixed<32, 19>(beta_tile[i]) / q19_13_scale;
+            ap_fixed<32, 19> gamma_fx = ap_fixed<32, 19>(gamma_tile[i]) / q16_16_scale;
+            ap_fixed<32, 19> beta_fx = ap_fixed<32, 19>(beta_tile[i]) / q16_16_scale;
             ap_fixed<32, 19> scaled = (normalized * gamma_fx) + beta_fx;
             const int32_t scaled_bits = static_cast<int32_t>(scaled.range(31, 0));
             if (final_norm) {
@@ -862,7 +889,7 @@ void compute_controller(
 
     // FSM communication signals
     bool        compute_start,       // [INPUT] Start signal for compute
-    uint32_t    compute_instruction,          // [INPUT] Compute operation [7:0]=op [15:8]=layer [23:16]=head [31:24]=tile
+    uint64_t    compute_instruction,          // [INPUT] Compute operation [7:0]=op [15:8]=layer [23:16]=head [55:24]=tile
     bool        &compute_ready,      // [OUTPUT] Compute engine ready for new operation
     bool        &compute_done,       // [OUTPUT] Compute operation finished
 
@@ -870,7 +897,7 @@ void compute_controller(
     bool        mem_transfer_done,
     bool        &mem_read_request,        // [OUTPUT] Request memory manager
     bool        &mem_write_request,        // [OUTPUT] Request memory manager
-    uint32_t     &mem_op,             // [OUTPUT] Full Intruction Identifier for memory manager
+    uint64_t     &mem_op,             // [OUTPUT] Full Instruction Identifier for memory manager
 
     // Flat input/output buffers
     const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
@@ -878,11 +905,11 @@ void compute_controller(
 
     // Debug visibility
     ComputeState &dbg_state,
-    uint32_t    &dbg_req_instruction,
+    uint64_t    &dbg_req_instruction,
     uint8_t     &dbg_req_op,
     uint8_t     &dbg_req_layer,
     uint8_t     &dbg_req_head,
-    uint8_t     &dbg_req_tile,
+    uint16_t    &dbg_req_tile,
     bool        &dbg_mac_start,
     bool        &dbg_mac_ready,
     bool        &dbg_mac_complete,
@@ -948,7 +975,7 @@ void compute_controller(
                 req.op              = static_cast<ComputeOp>(compute_instruction & 0xFFu);
                 req.layer_idx       = (compute_instruction >> 8) & 0xFFu;
                 req.head_idx        = (compute_instruction >> 16) & 0xFFu;
-                req.tile_idx        = (compute_instruction >> 24) & 0xFFu;
+                req.tile_idx        = static_cast<uint16_t>((compute_instruction >> 24) & 0xFFFFu);
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
             }
             // Clear output buffer when idling
@@ -968,7 +995,7 @@ void compute_controller(
                 req.op              = static_cast<ComputeOp>(compute_instruction & 0xFFu);
                 req.layer_idx       = (compute_instruction >> 8) & 0xFFu;
                 req.head_idx        = (compute_instruction >> 16) & 0xFFu;
-                req.tile_idx        = (compute_instruction >> 24) & 0xFFu;
+                req.tile_idx        = static_cast<uint16_t>((compute_instruction >> 24) & 0xFFFFu);
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
                 break;
             }

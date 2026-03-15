@@ -13,7 +13,7 @@ void headed_compute_controller(
 
     // Debug visibility
     ComputeState &dbg_state,
-    uint32_t    &dbg_req_instruction,
+    uint64_t    &dbg_req_instruction,
     uint8_t     &dbg_req_op,
     uint8_t     &dbg_req_layer,
     uint8_t     &dbg_req_head,

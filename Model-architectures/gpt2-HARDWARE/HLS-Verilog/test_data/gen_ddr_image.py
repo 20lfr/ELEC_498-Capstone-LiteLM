@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
+import argparse
 import os
 import re
 import struct
 from pathlib import Path
 
 
-CTRL_MEM_WORDS = 22
+CTRL_MEM_WORDS = 25
 NUM_STREAM_TOKENS = 4
 
 # This script lives under <HLS_ROOT>/test_data, so infer HLS root locally
@@ -25,20 +26,54 @@ def sanitize_expr(expr: str) -> str:
     return expr
 
 
+def is_full_model_test_defined() -> bool:
+    """Return True if FULL_MODEL_TEST is an active (uncommented) #define in shared_params.hpp."""
+    define_re = re.compile(r"^\s*#\s*define\s+FULL_MODEL_TEST\b")
+    with SHARED_PARAMS_PATH.open("r", encoding="utf-8") as f:
+        for line in f:
+            if define_re.match(line):
+                return True
+    return False
+
+
 def parse_shared_params() -> dict[str, int]:
+    full_model = is_full_model_test_defined()
     values: dict[str, int] = {}
     env = {
         "align64_u32": lambda v: (v + 63) & ~63,
         "align64_u64": lambda v: (v + 63) & ~63,
         "max2_constexpr": max,
         "min2_constexpr": min,
+        "div_ceil_constexpr": lambda a, b: (a + b - 1) // b,
     }
     constexpr_re = re.compile(
         r"^\s*constexpr\s+[^=;]+\s+([A-Za-z_]\w*)\s*=\s*(.+?);(?:\s*//.*)?$"
     )
+    ifdef_re = re.compile(r"^\s*#\s*ifdef\s+FULL_MODEL_TEST\b")
+    else_re  = re.compile(r"^\s*#\s*else\b")
+    endif_re = re.compile(r"^\s*#\s*endif\b")
+
+    # None = outside any FULL_MODEL_TEST block; True = inside #ifdef branch; False = inside #else branch
+    in_block: bool | None = None
 
     with SHARED_PARAMS_PATH.open("r", encoding="utf-8") as f:
         for line in f:
+            if ifdef_re.match(line):
+                in_block = True
+                continue
+            if else_re.match(line) and in_block is not None:
+                in_block = False
+                continue
+            if endif_re.match(line) and in_block is not None:
+                in_block = None
+                continue
+
+            # Skip lines from the inactive branch of #ifdef FULL_MODEL_TEST
+            if in_block is True and not full_model:
+                continue
+            if in_block is False and full_model:
+                continue
+
             match = constexpr_re.match(line)
             if not match:
                 continue
@@ -159,17 +194,20 @@ def build_ctrl_words(c: dict[str, int]) -> list[int]:
     words[8] = c["W2_OFF"]
     words[9] = c["K_CACHE_OFF"]
     words[10] = c["V_CACHE_OFF"]
-    words[11] = c["WO_BIAS_OFF"]
-    words[12] = c["W1_BIAS_OFF"]
-    words[13] = c["W2_BIAS_OFF"]
-    words[14] = c["LN0_GAMMA_OFF"]
-    words[15] = c["LN1_GAMMA_OFF"]
-    words[16] = c["FINAL_NORM_GAMMA_OFF"]
-    words[17] = c["LN0_EPS_OFF"]
-    words[18] = c["LN1_EPS_OFF"]
-    words[19] = c["FINAL_NORM_EPS_OFF"]
-    words[20] = c["WLOGIT_OFF"]
-    words[21] = 0
+    words[11] = c["WQ_BIAS_OFF"]
+    words[12] = c["WK_BIAS_OFF"]
+    words[13] = c["WV_BIAS_OFF"]
+    words[14] = c["WO_BIAS_OFF"]
+    words[15] = c["W1_BIAS_OFF"]
+    words[16] = c["W2_BIAS_OFF"]
+    words[17] = c["LN0_GAMMA_OFF"]
+    words[18] = c["LN1_GAMMA_OFF"]
+    words[19] = c["FINAL_NORM_GAMMA_OFF"]
+    words[20] = c["LN0_EPS_OFF"]
+    words[21] = c["LN1_EPS_OFF"]
+    words[22] = c["FINAL_NORM_EPS_OFF"]
+    words[23] = c["WLOGIT_OFF"]
+    words[24] = 0
     return words
 
 
@@ -334,7 +372,7 @@ def build_generated_params_svh(c: dict[str, int]) -> str:
   // AXI sizing
   localparam int AXI_GMEM_WORD_BYTES = {axi_gmem_word_bytes};
 
-  // Control memory layout (22x32b = 704b wire ctrl_mem)
+  // Control memory layout (25x32b = 800b wire ctrl_mem)
   localparam int CTRL_MEM_WORDS = {CTRL_MEM_WORDS};
 """
 
@@ -418,6 +456,15 @@ def emit_synthetic_image(c: dict[str, int], out_path: Path) -> dict[int, int]:
                         "W2",
                     )
 
+            wq_bias_addr = c["WQ_BIAS_OFF"] + layer * (c["D_MODEL"] * 4)
+            write_region(wq_bias_addr, build_i32_block(c["D_MODEL"], 41 + layer * 3, 9), "WQ_BIAS")
+
+            wk_bias_addr = c["WK_BIAS_OFF"] + layer * (c["D_MODEL"] * 4)
+            write_region(wk_bias_addr, build_i32_block(c["D_MODEL"], 61 + layer * 5, 7), "WK_BIAS")
+
+            wv_bias_addr = c["WV_BIAS_OFF"] + layer * (c["D_MODEL"] * 4)
+            write_region(wv_bias_addr, build_i32_block(c["D_MODEL"], 81 + layer * 7, 5), "WV_BIAS")
+
             wo_bias_addr = c["WO_BIAS_OFF"] + layer * c["STRIDE_WO_BIAS_LAYER"]
             write_region(wo_bias_addr, build_i32_block(c["D_MODEL"], 101 + layer * 7, 8), "WO_BIAS")
 
@@ -467,6 +514,8 @@ def emit_synthetic_image(c: dict[str, int], out_path: Path) -> dict[int, int]:
         for tile in range(c["NUM_LOGIT_TILES"]):
             for row in range(c["D_TILE_LOGIT"]):
                 vocab_row = tile * c["D_TILE_LOGIT"] + row
+                if vocab_row >= c["D_VOCAB"]:
+                    continue
                 row_addr = c["WLOGIT_OFF"] + vocab_row * qkv_row_stride
                 write_region(
                     row_addr,
@@ -483,26 +532,73 @@ def emit_synthetic_image(c: dict[str, int], out_path: Path) -> dict[int, int]:
     return word_map
 
 
+def build_stream_bytes_from_embed(embed_path: Path, token_id: int,
+                                   stream_in_buf_bytes: int) -> bytes:
+    """Read a single token embedding row from embed_tokens.bin."""
+    with embed_path.open("rb") as f:
+        f.seek(token_id * stream_in_buf_bytes)
+        row = f.read(stream_in_buf_bytes)
+    if len(row) != stream_in_buf_bytes:
+        raise IOError(
+            f"Failed to read embedding row {token_id} from {embed_path} "
+            f"(got {len(row)} bytes, expected {stream_in_buf_bytes})"
+        )
+    return row
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Generate testbench data files from shared_params.hpp."
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=OUT_DIR,
+        help="Directory to write generated files (default: test_data/ next to this script).",
+    )
+    parser.add_argument(
+        "--embed-path",
+        type=Path,
+        default=None,
+        help="Path to embed_tokens.bin. When provided, stream_in.bin is built from "
+             "token-0's real embedding instead of synthetic data.",
+    )
+    args = parser.parse_args()
+
+    out = args.output_dir
+    out.mkdir(parents=True, exist_ok=True)
+
     c = parse_shared_params()
+    full_model = is_full_model_test_defined()
 
-    ddr_path = OUT_DIR / "ddr_image.bin"
-    ddr_hex_path = OUT_DIR / "ddr_image.hex"
-    ctrl_path = OUT_DIR / "ctrl_mem.bin"
-    stream_path = OUT_DIR / "stream_in.bin"
-    mem_map_path = OUT_DIR / "generated_mem_map.svh"
-    params_path = OUT_DIR / "generated_params.svh"
+    ctrl_path = out / "ctrl_mem.bin"
+    stream_path = out / "stream_in.bin"
+    mem_map_path = out / "generated_mem_map.svh"
+    params_path = out / "generated_params.svh"
 
-    word_map = emit_synthetic_image(c, ddr_path)
-    write_hex_map(ddr_hex_path, word_map)
+    # DDR image: only generated for synthetic (test) mode.
+    # In full-model mode the real gpt2_weights_int8.bin already exists in model/.
+    if not full_model:
+        ddr_path = out / "ddr_image.bin"
+        ddr_hex_path = out / "ddr_image.hex"
+        word_map = emit_synthetic_image(c, ddr_path)
+        write_hex_map(ddr_hex_path, word_map)
+        print(ddr_path)
+        print(ddr_hex_path)
 
     ctrl_words = build_ctrl_words(c)
     with ctrl_path.open("wb") as f:
         for word in ctrl_words:
             f.write(struct.pack("<I", word & 0xFFFFFFFF))
 
+    if args.embed_path is not None:
+        stream_data = build_stream_bytes_from_embed(
+            args.embed_path, 0, c["STREAM_IN_BUF_BYTES"]
+        )
+    else:
+        stream_data = build_stream_bytes(c["STREAM_IN_BUF_BYTES"])
     with stream_path.open("wb") as f:
-        f.write(build_stream_bytes(c["STREAM_IN_BUF_BYTES"]))
+        f.write(stream_data)
 
     with mem_map_path.open("w", encoding="ascii") as f:
         f.write(build_generated_mem_map_svh(c))
@@ -511,8 +607,6 @@ def main() -> None:
         f.write(build_generated_params_svh(c))
 
     print(ctrl_path)
-    print(ddr_path)
-    print(ddr_hex_path)
     print(stream_path)
     print(mem_map_path)
     print(params_path)

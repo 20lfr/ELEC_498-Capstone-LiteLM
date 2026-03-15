@@ -2,25 +2,25 @@
 // Each head has its own "resource" (no shared arbitration).
 #include "head_helpers.hpp"
 
-static inline uint32_t pack_compute_op(ComputeOp op, int layer, int head, int tile) {
+static inline uint64_t pack_compute_op(ComputeOp op, int layer, int head, int tile) {
     #pragma HLS INLINE
-    const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
-    const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
-    const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
-    const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
+    const uint64_t op_field    = static_cast<uint64_t>(static_cast<uint8_t>(op));
+    const uint64_t layer_field = static_cast<uint64_t>(static_cast<uint8_t>(layer));
+    const uint64_t head_field  = static_cast<uint64_t>(static_cast<uint8_t>(head));
+    const uint64_t tile_field  = static_cast<uint64_t>(static_cast<uint32_t>(tile));
     return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
-static inline uint32_t pack_dma_op(DmaSel op, int layer, int head, int tile) {
+static inline uint64_t pack_dma_op(DmaSel op, int layer, int head, int tile) {
 #pragma HLS INLINE
-    const uint32_t op_field = static_cast<uint32_t>(op) & 0xFFu;
-    const uint32_t layer_field = static_cast<uint32_t>(layer) & 0xFFu;
-    const uint32_t head_field = static_cast<uint32_t>(head) & 0xFFu;
-    const uint32_t tile_field = static_cast<uint32_t>(tile) & 0xFFu;
+    const uint64_t op_field    = static_cast<uint64_t>(static_cast<uint8_t>(op));
+    const uint64_t layer_field = static_cast<uint64_t>(static_cast<uint8_t>(layer));
+    const uint64_t head_field  = static_cast<uint64_t>(static_cast<uint8_t>(head));
+    const uint64_t tile_field  = static_cast<uint64_t>(static_cast<uint32_t>(tile));
     return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
-static inline ComputeOp unpack_compute_op(uint32_t packed_op) {
+static inline ComputeOp unpack_compute_op(uint64_t packed_op) {
     #pragma HLS INLINE
     return static_cast<ComputeOp>(packed_op & 0xFFu);
 }

@@ -97,7 +97,7 @@ constexpr uint64_t TB_DDR_IMAGE_BYTES = static_cast<uint64_t>(WEIGHTS_SIZE);
 constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
 constexpr uint64_t TB_KV_IMAGE_BYTES  = static_cast<uint64_t>(KV_SIZE);
 constexpr uint64_t TB_KV_IMAGE_WORDS        = TB_KV_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
-constexpr size_t   TB_CTRL_MEM_WORDS        = 22u;
+constexpr size_t   TB_CTRL_MEM_WORDS        = 25u;
 
 static ControlMemSpace g_loaded_ctrl_mem{};
 static bool g_loaded_ctrl_mem_valid = false;
@@ -138,6 +138,9 @@ static ControlMemSpace make_default_ctrl_mem() {
     ctrl_mem.w2_offset = W2_OFF;
     ctrl_mem.k_cache_offset = K_CACHE_OFF;
     ctrl_mem.v_cache_offset = V_CACHE_OFF;
+    ctrl_mem.wq_bias_offset = WQ_BIAS_OFF;
+    ctrl_mem.wk_bias_offset = WK_BIAS_OFF;
+    ctrl_mem.wv_bias_offset = WV_BIAS_OFF;
     ctrl_mem.wo_bias_offset = WO_BIAS_OFF;
     ctrl_mem.w1_bias_offset = W1_BIAS_OFF;
     ctrl_mem.w2_bias_offset = W2_BIAS_OFF;
@@ -172,6 +175,9 @@ static void dump_ctrl_mem_words(const ControlMemSpace &ctrl_mem) {
         ctrl_mem.w2_offset,
         ctrl_mem.k_cache_offset,
         ctrl_mem.v_cache_offset,
+        ctrl_mem.wq_bias_offset,
+        ctrl_mem.wk_bias_offset,
+        ctrl_mem.wv_bias_offset,
         ctrl_mem.wo_bias_offset,
         ctrl_mem.w1_bias_offset,
         ctrl_mem.w2_bias_offset,
@@ -196,6 +202,9 @@ static void dump_ctrl_mem_words(const ControlMemSpace &ctrl_mem) {
         "w2_offset",
         "k_cache_offset",
         "v_cache_offset",
+        "wq_bias_offset",
+        "wk_bias_offset",
+        "wv_bias_offset",
         "wo_bias_offset",
         "w1_bias_offset",
         "w2_bias_offset",
@@ -216,7 +225,11 @@ static void dump_ctrl_mem_words(const ControlMemSpace &ctrl_mem) {
 }
 
 static bool get_shared_stream_size(size_t &bytes_total) {
+#ifdef FULL_MODEL_TEST
+    const std::string stream_path = tb_source_dir() + "/../model/stream_in.bin";
+#else
     const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
+#endif
     std::ifstream in(stream_path.c_str(), std::ios::binary | std::ios::ate);
     if (!in) {
         std::fprintf(stderr, "ERROR: Failed to open shared stream image '%s'\n", stream_path.c_str());
@@ -233,7 +246,11 @@ static bool get_shared_stream_size(size_t &bytes_total) {
 
 static bool load_shared_stream_token(uint8_t *stream_in_buf, size_t token_bytes,
                                      size_t selected_token, size_t &total_tokens) {
+#ifdef FULL_MODEL_TEST
+    const std::string stream_path = tb_source_dir() + "/../model/stream_in.bin";
+#else
     const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
+#endif
     size_t bytes_total = 0;
     if (!get_shared_stream_size(bytes_total)) {
         return false;
@@ -545,7 +562,7 @@ static void print_kv_cache_upto_token(const ControlMemSpace &ctrl,
 static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_token,
                                                      axi_gmem_word_t *ddr_mem,
                                                      axi_gmem_word_t *kv_cache) {
-    const int MAX_CYCLES = 10000;
+    const int MAX_CYCLES = 1000000000;
     const int STREAM_TOKEN_BYTES = STREAM_IN_BUF_BYTES;
     const int AXIS_BEATS = STREAM_TOKEN_BYTES;
 
@@ -744,7 +761,7 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
             ctrl_gap_cycles = 1;
         } else if(seen_irq_done){
             ctrl_mem.irq_clear = IRQ_INFER_DONE_BIT;
-            ctrl_gap_cycles = 1;
+            ctrl_gap_cycles = 4;
             seen_irq_done = false;
         }
         else if(irq_ps){

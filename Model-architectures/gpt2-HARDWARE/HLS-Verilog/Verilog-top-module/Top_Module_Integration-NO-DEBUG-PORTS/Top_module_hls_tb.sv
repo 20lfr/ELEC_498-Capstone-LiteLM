@@ -4,14 +4,38 @@
   // Default is relative to the simulation working directory.
   // Override at runtime with: +TEST_DATA_DIR=/abs/path/to/test_data
   // Or override at compile time with: +define+TB_TEST_DATA_DIR=\"/abs/path\"
-  `define TB_TEST_DATA_DIR "../../test_data"
+  `ifdef FULL_MODEL_TEST
+    `define TB_TEST_DATA_DIR "../../model"
+  `else
+    `define TB_TEST_DATA_DIR "../../test_data"
+  `endif
 `endif
 
 module top_module_hls_tb;
+  // -------------------------------------------------------------------------
+  // Testbench logging
+  // -------------------------------------------------------------------------
+  // By default, mirror all $display output into a timestamped log file under:
+  //   Model-architectures/gpt2-HARDWARE/logs/Top_module_hls_tb
+  //
+  // Override at runtime with:
+  //   +TB_LOG_DIR=/abs/path/to/log/dir
+  // -------------------------------------------------------------------------
+  // Vivado's preprocessor support for variadic macros is limited, so logging is
+  // implemented via tasks and explicit $sformatf() at call sites.
+
+  localparam string DEFAULT_TB_LOG_DIR =
+      "/home/luka/Scripting/ELEC_498-Capstone-LiteLM/Model-architectures/gpt2-HARDWARE/logs/Top_module_hls_tb";
+
   localparam int CLK_PERIOD_NS        = 10;
   localparam int MAX_CYCLES           = 5000000;
-  `include "../../test_data/generated_params.svh"
-  `include "../../test_data/generated_mem_map.svh"
+  `ifdef FULL_MODEL_TEST
+    `include "../../model/generated_params.svh"
+    `include "../../model/generated_mem_map.svh"
+  `else
+    `include "../../test_data/generated_params.svh"
+    `include "../../test_data/generated_mem_map.svh"
+  `endif
   localparam int DBG_CTRL_MEM_WORDS   = CTRL_MEM_WORDS;
   localparam int MAX_STREAM_TOKENS    = 256;
   localparam int STREAM_IN_FILE_BYTES_MAX = STREAM_IN_BUF_BYTES * MAX_STREAM_TOKENS;
@@ -35,13 +59,13 @@ module top_module_hls_tb;
   localparam int TB_NUM_ATT_VALUE_HEAD_TILES = NUM_ATT_VALUE_HEAD_TILES;
   localparam int TB_D_TILE_WO          = (TB_D_MODEL / TB_NUM_WO_TILES);
   localparam int TB_D_TILE_W1          = (TB_D_FFN / TB_NUM_W1_TILES);
-  localparam int TB_D_TILE_W2          = (TB_D_MODEL / TB_NUM_W2_TILES);
-  localparam int TB_D_VOCAB            = D_VOCAB;
-  localparam int TB_D_TILE_LOGIT       = (TB_D_VOCAB / TB_NUM_LOGIT_TILES);
-  localparam int TB_CONTEXT_LENGTH     = CONTEXT_LENGTH;
-  localparam int TB_D_HEAD_TILE_QKV    = (TB_D_HEADS / TB_NUM_QKV_HEAD_TILES);
-  localparam int TB_NUM_ATT_CTX_BLOCKS = (TB_CONTEXT_LENGTH / TB_ATT_CTX_BLOCK);
-  localparam int TB_D_HEAD_TILE_ATT_VALUE = (TB_D_HEADS / TB_NUM_ATT_VALUE_HEAD_TILES);
+	  localparam int TB_D_TILE_W2          = (TB_D_MODEL / TB_NUM_W2_TILES);
+	  localparam int TB_D_VOCAB            = D_VOCAB;
+	  localparam int TB_D_TILE_LOGIT       = D_TILE_LOGIT;
+	  localparam int TB_CONTEXT_LENGTH     = CONTEXT_LENGTH;
+	  localparam int TB_D_HEAD_TILE_QKV    = (TB_D_HEADS / TB_NUM_QKV_HEAD_TILES);
+	  localparam int TB_NUM_ATT_CTX_BLOCKS = (TB_CONTEXT_LENGTH / TB_ATT_CTX_BLOCK);
+	  localparam int TB_D_HEAD_TILE_ATT_VALUE = (TB_D_HEADS / TB_NUM_ATT_VALUE_HEAD_TILES);
 
   localparam int TB_OUT_PROJ_W_BYTES   = (TB_D_MODEL * TB_D_TILE_WO);
   localparam int TB_FFN_W1_W_BYTES     = (TB_D_MODEL * TB_D_TILE_W1);
@@ -72,19 +96,23 @@ module top_module_hls_tb;
   localparam int OP_CMP_ARGMAX      = 27;
   localparam logic [7:0] ADDR_AP_CTRL           = 8'h00;
   localparam logic [7:0] ADDR_CTRL_MEM_DATA_0   = 8'h10;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_0 = 8'hB8;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_1 = 8'hBC;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_2 = 8'hC0;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_3 = 8'hC4;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_4 = 8'hC8;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_5 = 8'hCC;
-  localparam logic [7:0] ADDR_STATUS_MEM_DATA_6 = 8'hD0;
+  // status_mem follows ctrl_mem_data (N words) + ctrl_mem_ctrl (1 word) in the AXI map:
+  //   ctrl_mem_data_0..N-1 @ 0x10..0x10+(N-1)*4, ctrl_mem_ctrl @ 0x10+N*4, status_mem_data_0 @ 0x10+N*4+4
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_0 = ADDR_CTRL_MEM_DATA_0 + (CTRL_MEM_WORDS * 4) + 4;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_1 = ADDR_STATUS_MEM_DATA_0 + 8'h04;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_2 = ADDR_STATUS_MEM_DATA_0 + 8'h08;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_3 = ADDR_STATUS_MEM_DATA_0 + 8'h0C;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_4 = ADDR_STATUS_MEM_DATA_0 + 8'h10;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_5 = ADDR_STATUS_MEM_DATA_0 + 8'h14;
+  localparam logic [7:0] ADDR_STATUS_MEM_DATA_6 = ADDR_STATUS_MEM_DATA_0 + 8'h18;
 
   localparam logic [31:0] CTRL_RESETN_BIT = 32'h0000_0001;
   localparam logic [31:0] CTRL_START_BIT  = 32'h0000_0002;
   localparam logic [31:0] CTRL_DEBUG_MODE_BIT = 32'h0000_0008;
   localparam logic [31:0] IRQ_ERROR_BIT = 32'h0000_0002;
   localparam logic [31:0] IRQ_INFER_DONE_BIT = 32'h0000_0004;
+  localparam integer IRQ_CLEAR_ASSERT_HOLD   = 4;  // write-1 AXI transactions
+  localparam integer IRQ_CLEAR_DEASSERT_HOLD = 4;  // write-0 AXI transactions
 
 	  typedef struct packed {
 	    logic [31:0] control;
@@ -98,6 +126,9 @@ module top_module_hls_tb;
 	    logic [31:0] w2_offset;
 	    logic [31:0] k_cache_offset;
 	    logic [31:0] v_cache_offset;
+	    logic [31:0] wq_bias_offset;
+	    logic [31:0] wk_bias_offset;
+	    logic [31:0] wv_bias_offset;
 	    logic [31:0] wo_bias_offset;
     logic [31:0] w1_bias_offset;
     logic [31:0] w2_bias_offset;
@@ -302,6 +333,24 @@ module top_module_hls_tb;
   string test_data_dir;
   string tb_file_path;
   string tb_file_dir;
+  string tb_log_dir;
+  string tb_log_ts;
+  string tb_log_path;
+  integer tb_log_fd;
+  bit tb_log_kv_only;
+
+  task automatic tb_chomp(inout string s);
+    byte last_ch;
+    while (s.len() > 0) begin
+      last_ch = s[s.len() - 1];
+      if (last_ch == "\n" || last_ch == "\r") begin
+        if (s.len() == 1) s = "";
+        else s = s.substr(0, s.len() - 2);
+      end else begin
+        break;
+      end
+    end
+  endtask
 
   task automatic tb_dirname_from_file(input string full_path, output string out_dir);
     int slash_idx = -1;
@@ -314,10 +363,45 @@ module top_module_hls_tb;
     out_dir = (slash_idx > 0) ? full_path.substr(0, slash_idx - 1) : "";
   endtask
 
+  task automatic tb_log_str(input string s);
+    if (tb_log_kv_only) begin
+      return;
+    end
+    $display("%s", s);
+    if (tb_log_fd != 0) begin
+      $fdisplay(tb_log_fd, "%s", s);
+      $fflush(tb_log_fd);
+    end
+  endtask
+
+  task automatic tb_file_str(input string s);
+    if (tb_log_fd != 0) begin
+      $fdisplay(tb_log_fd, "%s", s);
+      $fflush(tb_log_fd);
+    end
+  endtask
+
+  task automatic tb_log_kv_write(input string s);
+    $display("%s", s);
+    if (tb_log_fd != 0) begin
+      $fdisplay(tb_log_fd, "%s", s);
+      $fflush(tb_log_fd);
+    end
+  endtask
+
+  task automatic tb_fatal_str(input integer level, input string s);
+    if (tb_log_fd != 0) begin
+      $fdisplay(tb_log_fd, "%s", s);
+      $fflush(tb_log_fd);
+    end
+    $fatal(level, "%s", s);
+  endtask
+
   integer cycle_count;
   integer i;
   integer file_fd;
   integer bytes_read;
+  longint unsigned ddr_checksum;
   integer prog_word_idx;
   logic axis_packet_sent;
   logic stream_fill_active;
@@ -366,11 +450,11 @@ module top_module_hls_tb;
   byte unsigned ctrl_mem_file_bytes [0:(CTRL_MEM_WORDS*4)-1];
   byte unsigned stream_in_file_bytes [0:STREAM_IN_FILE_BYTES_MAX-1];
   integer total_stream_tokens;
-  integer current_stream_token;
-  logic next_token_pending;
-  logic launch_next_token;
+	  integer current_stream_token;
+	  logic next_token_pending;
+	  logic launch_next_token;
 
-	  // AXI ctrl_mem word map for the current 22-word ControlMemSpace.
+	  // AXI ctrl_mem word map for the current 25-word ControlMemSpace.
 	  localparam int CTRLW_CONTROL                 = 0;
 	  localparam int CTRLW_IRQ_MASK                = 1;
 	  localparam int CTRLW_IRQ_CLEAR               = 2;
@@ -390,27 +474,33 @@ module top_module_hls_tb;
 	  localparam int CTRLW_K_CACHE_HI              = 9;
 	  localparam int CTRLW_V_CACHE_LO              = 10;
 	  localparam int CTRLW_V_CACHE_HI              = 10;
-	  localparam int CTRLW_WO_BIAS_BASE_LO         = 11;
-	  localparam int CTRLW_WO_BIAS_BASE_HI         = 11;
-	  localparam int CTRLW_W1_BIAS_BASE_LO         = 12;
-	  localparam int CTRLW_W1_BIAS_BASE_HI         = 12;
-	  localparam int CTRLW_W2_BIAS_BASE_LO         = 13;
-	  localparam int CTRLW_W2_BIAS_BASE_HI         = 13;
-	  localparam int CTRLW_LN0_GAMMA_BASE_LO       = 14;
-	  localparam int CTRLW_LN0_GAMMA_BASE_HI       = 14;
-	  localparam int CTRLW_LN1_GAMMA_BASE_LO       = 15;
-	  localparam int CTRLW_LN1_GAMMA_BASE_HI       = 15;
-	  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_LO = 16;
-	  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_HI = 16;
-	  localparam int CTRLW_LN0_EPS_BASE_LO         = 17;
-	  localparam int CTRLW_LN0_EPS_BASE_HI         = 17;
-	  localparam int CTRLW_LN1_EPS_BASE_LO         = 18;
-	  localparam int CTRLW_LN1_EPS_BASE_HI         = 18;
-	  localparam int CTRLW_FINAL_NORM_EPS_BASE_LO  = 19;
-	  localparam int CTRLW_FINAL_NORM_EPS_BASE_HI  = 19;
-	  localparam int CTRLW_WLOGIT_BASE_LO          = 20;
-	  localparam int CTRLW_WLOGIT_BASE_HI          = 20;
-	  localparam int CTRLW_TOKEN_POSITION          = 21;
+	  localparam int CTRLW_WQ_BIAS_BASE_LO         = 11;
+	  localparam int CTRLW_WQ_BIAS_BASE_HI         = 11;
+	  localparam int CTRLW_WK_BIAS_BASE_LO         = 12;
+	  localparam int CTRLW_WK_BIAS_BASE_HI         = 12;
+	  localparam int CTRLW_WV_BIAS_BASE_LO         = 13;
+	  localparam int CTRLW_WV_BIAS_BASE_HI         = 13;
+	  localparam int CTRLW_WO_BIAS_BASE_LO         = 14;
+	  localparam int CTRLW_WO_BIAS_BASE_HI         = 14;
+	  localparam int CTRLW_W1_BIAS_BASE_LO         = 15;
+	  localparam int CTRLW_W1_BIAS_BASE_HI         = 15;
+	  localparam int CTRLW_W2_BIAS_BASE_LO         = 16;
+	  localparam int CTRLW_W2_BIAS_BASE_HI         = 16;
+	  localparam int CTRLW_LN0_GAMMA_BASE_LO       = 17;
+	  localparam int CTRLW_LN0_GAMMA_BASE_HI       = 17;
+	  localparam int CTRLW_LN1_GAMMA_BASE_LO       = 18;
+	  localparam int CTRLW_LN1_GAMMA_BASE_HI       = 18;
+	  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_LO = 19;
+	  localparam int CTRLW_FINAL_NORM_GAMMA_BASE_HI = 19;
+	  localparam int CTRLW_LN0_EPS_BASE_LO         = 20;
+	  localparam int CTRLW_LN0_EPS_BASE_HI         = 20;
+	  localparam int CTRLW_LN1_EPS_BASE_LO         = 21;
+	  localparam int CTRLW_LN1_EPS_BASE_HI         = 21;
+	  localparam int CTRLW_FINAL_NORM_EPS_BASE_LO  = 22;
+	  localparam int CTRLW_FINAL_NORM_EPS_BASE_HI  = 22;
+	  localparam int CTRLW_WLOGIT_BASE_LO          = 23;
+	  localparam int CTRLW_WLOGIT_BASE_HI          = 23;
+	  localparam int CTRLW_TOKEN_POSITION          = 24;
   // 64-bit DDR base map for control memory programming.
   localparam logic [63:0] BASE_WQ               = 64'h0000_0001_6000_0000;
   localparam logic [63:0] BASE_WK               = 64'h0000_0001_6100_0000;
@@ -495,6 +585,9 @@ module top_module_hls_tb;
   logic [7:0]  done_req_addr;
   logic [31:0] done_req_wdata;
   logic        done_clear_release_pending;
+  logic        done_assert_active;
+  integer      done_assert_cnt;
+  integer      done_deassert_cnt;
   logic        error_req_valid;
   logic        error_req_write;
   logic        error_req_read;
@@ -532,17 +625,20 @@ module top_module_hls_tb;
 	    dbg_ctrl_mem_shadow.w2_offset               = dbg_ctrl_words[8];
 	    dbg_ctrl_mem_shadow.k_cache_offset          = dbg_ctrl_words[9];
 	    dbg_ctrl_mem_shadow.v_cache_offset          = dbg_ctrl_words[10];
-	    dbg_ctrl_mem_shadow.wo_bias_offset          = dbg_ctrl_words[11];
-	    dbg_ctrl_mem_shadow.w1_bias_offset          = dbg_ctrl_words[12];
-	    dbg_ctrl_mem_shadow.w2_bias_offset          = dbg_ctrl_words[13];
-	    dbg_ctrl_mem_shadow.ln0_gamma_offset        = dbg_ctrl_words[14];
-	    dbg_ctrl_mem_shadow.ln1_gamma_offset        = dbg_ctrl_words[15];
-	    dbg_ctrl_mem_shadow.final_norm_gamma_offset = dbg_ctrl_words[16];
-	    dbg_ctrl_mem_shadow.ln0_eps_offset          = dbg_ctrl_words[17];
-	    dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[18];
-	    dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[19];
-	    dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[20];
-	    dbg_ctrl_mem_shadow.token_position          = dbg_ctrl_words[21];
+	    dbg_ctrl_mem_shadow.wq_bias_offset          = dbg_ctrl_words[11];
+	    dbg_ctrl_mem_shadow.wk_bias_offset          = dbg_ctrl_words[12];
+	    dbg_ctrl_mem_shadow.wv_bias_offset          = dbg_ctrl_words[13];
+	    dbg_ctrl_mem_shadow.wo_bias_offset          = dbg_ctrl_words[14];
+	    dbg_ctrl_mem_shadow.w1_bias_offset          = dbg_ctrl_words[15];
+	    dbg_ctrl_mem_shadow.w2_bias_offset          = dbg_ctrl_words[16];
+	    dbg_ctrl_mem_shadow.ln0_gamma_offset        = dbg_ctrl_words[17];
+	    dbg_ctrl_mem_shadow.ln1_gamma_offset        = dbg_ctrl_words[18];
+	    dbg_ctrl_mem_shadow.final_norm_gamma_offset = dbg_ctrl_words[19];
+	    dbg_ctrl_mem_shadow.ln0_eps_offset          = dbg_ctrl_words[20];
+	    dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[21];
+	    dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[22];
+	    dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[23];
+	    dbg_ctrl_mem_shadow.token_position          = dbg_ctrl_words[24];
 	  end
 
   function automatic [31:0] dma_pattern_word(
@@ -1002,16 +1098,16 @@ module top_module_hls_tb;
       tb_gmem_arvalid_prev <= 1'b0;
       tb_gmem_araddr_prev  <= 64'd0;
     end else begin
-      if (!tb_gmem_arvalid_prev && m_axi_gmem_ARVALID) begin
-        $display("[AXI-AR] cycle=%0d ARVALID rise araddr=0x%016h arlen=%0d arsize=%0d arready=%0b active=%0b",
-                 cycle_count, m_axi_gmem_ARADDR, m_axi_gmem_ARLEN,
-                 m_axi_gmem_ARSIZE, m_axi_gmem_ARREADY, axi_ar_active);
-      end else if (tb_gmem_arvalid_prev && m_axi_gmem_ARVALID &&
-                   (m_axi_gmem_ARADDR !== tb_gmem_araddr_prev)) begin
-        $display("[AXI-AR] cycle=%0d ARADDR change old=0x%016h new=0x%016h arready=%0b active=%0b",
-                 cycle_count, tb_gmem_araddr_prev, m_axi_gmem_ARADDR,
-                 m_axi_gmem_ARREADY, axi_ar_active);
-      end
+	      if (!tb_gmem_arvalid_prev && m_axi_gmem_ARVALID) begin
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[AXI-AR] cycle=%0d ARVALID rise araddr=0x%016h arlen=%0d arsize=%0d arready=%0b active=%0b",
+	                                                  cycle_count, m_axi_gmem_ARADDR, m_axi_gmem_ARLEN,
+	                                                  m_axi_gmem_ARSIZE, m_axi_gmem_ARREADY, axi_ar_active));
+	      end else if (tb_gmem_arvalid_prev && m_axi_gmem_ARVALID &&
+	                   (m_axi_gmem_ARADDR !== tb_gmem_araddr_prev)) begin
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[AXI-AR] cycle=%0d ARADDR change old=0x%016h new=0x%016h arready=%0b active=%0b",
+	                                                  cycle_count, tb_gmem_araddr_prev, m_axi_gmem_ARADDR,
+	                                                  m_axi_gmem_ARREADY, axi_ar_active));
+	      end
       tb_gmem_arvalid_prev <= m_axi_gmem_ARVALID;
       tb_gmem_araddr_prev  <= m_axi_gmem_ARADDR;
     end
@@ -1090,13 +1186,13 @@ module top_module_hls_tb;
         ddr_read_word(raddr_cur, rdata_cur);
         m_axi_gmem_RDATA  <= rdata_cur;
         m_axi_gmem_RID    <= axi_rid_latched;
-        m_axi_gmem_RRESP  <= 2'b00;
-        m_axi_gmem_RLAST  <= (axi_r_beats_sent == axi_ar_len_latched);
-        m_axi_gmem_RVALID <= 1'b1;
-        $display("[AXI-RD] cycle=%0d araddr=0x%016h rdata=0x%08h beat=%0d last=%0b",
-                 cycle_count, raddr_cur, rdata_cur, axi_r_beats_sent,
-                 (axi_r_beats_sent == axi_ar_len_latched));
-      end else if (m_axi_gmem_RVALID && m_axi_gmem_RREADY) begin
+	        m_axi_gmem_RRESP  <= 2'b00;
+	        m_axi_gmem_RLAST  <= (axi_r_beats_sent == axi_ar_len_latched);
+	        m_axi_gmem_RVALID <= 1'b1;
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[AXI-RD] cycle=%0d araddr=0x%016h rdata=0x%08h beat=%0d last=%0b",
+	                                                  cycle_count, raddr_cur, rdata_cur, axi_r_beats_sent,
+	                                                  (axi_r_beats_sent == axi_ar_len_latched)));
+	      end else if (m_axi_gmem_RVALID && m_axi_gmem_RREADY) begin
         if (m_axi_gmem_RLAST) begin
           m_axi_gmem_RVALID <= 1'b0;
           m_axi_gmem_RLAST  <= 1'b0;
@@ -1152,6 +1248,25 @@ module top_module_hls_tb;
       if (kv_axi_aw_active && m_axi_kv_gmem_WVALID && m_axi_kv_gmem_WREADY) begin
         waddr_cur = kv_axi_aw_addr_latched + ({{56{1'b0}}, kv_axi_w_beats_seen} << kv_axi_aw_size_latched);
         mem_write_kv_word(waddr_cur, m_axi_kv_gmem_WDATA, m_axi_kv_gmem_WSTRB);
+        if (is_k_cache_addr(waddr_cur)) begin
+          tb_log_kv_write($sformatf("[KV-WR-K] cycle=%0d token=%0d addr=0x%016h wdata=0x%08h wstrb=0x%1h beat=%0d last=%0b",
+                                   cycle_count, current_stream_token, waddr_cur,
+                                   m_axi_kv_gmem_WDATA, m_axi_kv_gmem_WSTRB,
+                                   kv_axi_w_beats_seen,
+                                   (m_axi_kv_gmem_WLAST || (kv_axi_w_beats_seen == kv_axi_aw_len_latched))));
+        end else if (is_v_cache_addr(waddr_cur)) begin
+          tb_log_kv_write($sformatf("[KV-WR-V] cycle=%0d token=%0d addr=0x%016h wdata=0x%08h wstrb=0x%1h beat=%0d last=%0b",
+                                   cycle_count, current_stream_token, waddr_cur,
+                                   m_axi_kv_gmem_WDATA, m_axi_kv_gmem_WSTRB,
+                                   kv_axi_w_beats_seen,
+                                   (m_axi_kv_gmem_WLAST || (kv_axi_w_beats_seen == kv_axi_aw_len_latched))));
+        end else begin
+          tb_log_kv_write($sformatf("[KV-WR-?] cycle=%0d token=%0d addr=0x%016h wdata=0x%08h wstrb=0x%1h beat=%0d last=%0b",
+                                   cycle_count, current_stream_token, waddr_cur,
+                                   m_axi_kv_gmem_WDATA, m_axi_kv_gmem_WSTRB,
+                                   kv_axi_w_beats_seen,
+                                   (m_axi_kv_gmem_WLAST || (kv_axi_w_beats_seen == kv_axi_aw_len_latched))));
+        end
         if (m_axi_kv_gmem_WLAST || (kv_axi_w_beats_seen == kv_axi_aw_len_latched)) begin
           kv_axi_aw_active        <= 1'b0;
           m_axi_kv_gmem_BVALID    <= 1'b1;
@@ -1180,13 +1295,13 @@ module top_module_hls_tb;
         rdata_cur            = mem_read_kv_word(raddr_cur);
         m_axi_kv_gmem_RDATA  <= rdata_cur;
         m_axi_kv_gmem_RID    <= kv_axi_rid_latched;
-        m_axi_kv_gmem_RRESP  <= 2'b00;
-        m_axi_kv_gmem_RLAST  <= (kv_axi_r_beats_sent == kv_axi_ar_len_latched);
-        m_axi_kv_gmem_RVALID <= 1'b1;
-        $display("[AXI-KV-RD] cycle=%0d araddr=0x%016h rdata=0x%08h beat=%0d last=%0b",
-                 cycle_count, raddr_cur, rdata_cur, kv_axi_r_beats_sent,
-                 (kv_axi_r_beats_sent == kv_axi_ar_len_latched));
-      end else if (m_axi_kv_gmem_RVALID && m_axi_kv_gmem_RREADY) begin
+	        m_axi_kv_gmem_RRESP  <= 2'b00;
+	        m_axi_kv_gmem_RLAST  <= (kv_axi_r_beats_sent == kv_axi_ar_len_latched);
+	        m_axi_kv_gmem_RVALID <= 1'b1;
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[AXI-KV-RD] cycle=%0d araddr=0x%016h rdata=0x%08h beat=%0d last=%0b",
+	                                                  cycle_count, raddr_cur, rdata_cur, kv_axi_r_beats_sent,
+	                                                  (kv_axi_r_beats_sent == kv_axi_ar_len_latched)));
+	      end else if (m_axi_kv_gmem_RVALID && m_axi_kv_gmem_RREADY) begin
         if (m_axi_kv_gmem_RLAST) begin
           m_axi_kv_gmem_RVALID <= 1'b0;
           m_axi_kv_gmem_RLAST  <= 1'b0;
@@ -1291,34 +1406,60 @@ module top_module_hls_tb;
   end
 
   // Clear DONE IRQ after status has reached idle.
+  // Assert phase:   hold irq_clear=1 for IRQ_CLEAR_ASSERT_HOLD transactions.
+  // Deassert phase: hold irq_clear=0 for IRQ_CLEAR_DEASSERT_HOLD transactions.
   always_ff @(posedge ap_clk) begin : HANDLE_IRQ_DONE
     if (!ap_rst_n) begin
-      done_req_valid <= 1'b0;
-      done_req_write <= 1'b0;
-      done_req_addr  <= ctrl_mem_addr(2);
-      done_req_wdata <= 32'd0;
+      done_req_valid             <= 1'b0;
+      done_req_write             <= 1'b0;
+      done_req_addr              <= ctrl_mem_addr(2);
+      done_req_wdata             <= 32'd0;
+      done_assert_active         <= 1'b0;
       done_clear_release_pending <= 1'b0;
+      done_assert_cnt            <= IRQ_CLEAR_ASSERT_HOLD;
+      done_deassert_cnt          <= IRQ_CLEAR_DEASSERT_HOLD;
     end else begin
       done_req_valid <= 1'b0;
       done_req_write <= 1'b0;
       done_req_addr  <= ctrl_mem_addr(2);
       done_req_wdata <= 32'd0;
+
       if (done_clear_release_pending) begin
+        // DEASSERT phase: hold irq_clear = 0
         done_req_valid <= 1'b1;
         done_req_write <= 1'b1;
         done_req_addr  <= ctrl_mem_addr(2); // irq_clear
         done_req_wdata <= 32'd0;
         if (done_req_fire) begin
-          done_clear_release_pending <= 1'b0;
+          if (done_deassert_cnt > 1) begin
+            done_deassert_cnt <= done_deassert_cnt - 1;
+          end else begin
+            done_deassert_cnt          <= IRQ_CLEAR_DEASSERT_HOLD;
+            done_clear_release_pending <= 1'b0;
+          end
         end
-      end else if (irq_seen_done) begin
+
+      end else if (done_assert_active) begin
+        // ASSERT phase: hold irq_clear = 1
         done_req_valid <= 1'b1;
         done_req_write <= 1'b1;
         done_req_addr  <= ctrl_mem_addr(2); // irq_clear
-        done_req_wdata <= IRQ_INFER_DONE_BIT;
+        done_req_wdata <= 32'd1; // write 1 to clear DONE IRQ
         if (done_req_fire) begin
-          done_clear_release_pending <= 1'b1;
+          if (done_assert_cnt > 1) begin
+            done_assert_cnt <= done_assert_cnt - 1;
+          end else begin
+            done_assert_cnt            <= IRQ_CLEAR_ASSERT_HOLD;
+            done_assert_active         <= 1'b0;
+            done_clear_release_pending <= 1'b1;
+            done_deassert_cnt          <= IRQ_CLEAR_DEASSERT_HOLD;
+          end
         end
+
+      end else if (irq_seen_done) begin
+        // IDLE→ASSERT trigger: latch into assert phase next cycle
+        done_assert_active <= 1'b1;
+        done_assert_cnt    <= IRQ_CLEAR_ASSERT_HOLD;
       end
     end
   end
@@ -1333,13 +1474,13 @@ module top_module_hls_tb;
       if (irq_seen_done && !next_token_pending && ((current_stream_token + 1) < total_stream_tokens)) begin
         next_token_pending <= 1'b1;
       end
-      if (next_token_pending &&
-          !irq_ps_shadow[0] && !irq_pending && !irq_seen_done && !irq_seen_error &&
-          (ctrl_stage == CTRL_DONE) && (axi_state == AXI_IDLE) && (ctrl_gap_cycles == 0)) begin
-        $display("[TOKEN-MANAGER] cycle=%0d launching next token: current=%0d next=%0d dbg_state=%0d status=0x%08h irq_ps_shadow=%0b irq_pending=%0b",
-                 cycle_count, current_stream_token, current_stream_token + 1, dbg_state,
-                 status_mem_shadow.status, irq_ps_shadow[0], irq_pending);
-        current_stream_token <= current_stream_token + 1;
+	      if (next_token_pending &&
+	          !irq_ps_shadow[0] && !irq_pending && !irq_seen_done && !irq_seen_error &&
+	          (ctrl_stage == CTRL_DONE) && (axi_state == AXI_IDLE) && (ctrl_gap_cycles == 0)) begin
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[TOKEN-MANAGER] cycle=%0d launching next token: current=%0d next=%0d dbg_state=%0d status=0x%08h irq_ps_shadow=%0b irq_pending=%0b",
+	                                                  cycle_count, current_stream_token, current_stream_token + 1, dbg_state,
+	                                                  status_mem_shadow.status, irq_ps_shadow[0], irq_pending));
+	        current_stream_token <= current_stream_token + 1;
         load_stream_token(current_stream_token + 1);
         next_token_pending <= 1'b0;
         launch_next_token <= 1'b1;
@@ -1420,19 +1561,19 @@ module top_module_hls_tb;
       ctrl_write_en <= done_req_write;
       ctrl_chip_en  <= 1'b1;
       ctrl_gap_cycles <= 1;
-    end else if (error_req_fire) begin
-      ctrl_addr     <= error_req_addr;
-      ctrl_data_in  <= error_req_wdata;
-      ctrl_read_en  <= error_req_read;
+	    end else if (error_req_fire) begin
+	      ctrl_addr     <= error_req_addr;
+	      ctrl_data_in  <= error_req_wdata;
+	      ctrl_read_en  <= error_req_read;
       ctrl_write_en <= error_req_write;
-      ctrl_chip_en  <= 1'b1;
-      ctrl_gap_cycles <= 1;
-    end else if (launch_next_token) begin
-      $display("[START-FSM] cycle=%0d relaunch token=%0d -> ctrl_stage=%s dbg_state=%0d status=0x%08h",
-               cycle_count, current_stream_token + 1,
-               "CTRL_RELAUNCH_PREP",
-               dbg_state, status_mem_shadow.status);
-      ctrl_stage <= CTRL_RELAUNCH_PREP;
+	      ctrl_chip_en  <= 1'b1;
+	      ctrl_gap_cycles <= 1;
+	    end else if (launch_next_token) begin
+	      if (!tb_log_kv_only) tb_log_str($sformatf("[START-FSM] cycle=%0d relaunch token=%0d -> ctrl_stage=%s dbg_state=%0d status=0x%08h",
+	                                                cycle_count, current_stream_token + 1,
+	                                                "CTRL_RELAUNCH_PREP",
+	                                                dbg_state, status_mem_shadow.status));
+	      ctrl_stage <= CTRL_RELAUNCH_PREP;
       ctrl_gap_cycles <= 1;
     end else if (ctrl_gap_cycles > 0) begin
       ctrl_gap_cycles <= ctrl_gap_cycles - 1;
@@ -1478,11 +1619,11 @@ module top_module_hls_tb;
             base_assign_step <= base_assign_step + 1;
           end
           ctrl_gap_cycles <= 2;
-        end
-        CTRL_RELAUNCH_PREP: begin
-          $display("[CTRL] cycle=%0d token=%0d write control(relaunch-prep)=0x%08h dbg_state=%0d status=0x%08h",
-                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
-                   dbg_state, status_mem_shadow.status);
+	        end
+	        CTRL_RELAUNCH_PREP: begin
+	          if (!tb_log_kv_only) tb_log_str($sformatf("[CTRL] cycle=%0d token=%0d write control(relaunch-prep)=0x%08h dbg_state=%0d status=0x%08h",
+	                                                    cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
+	                                                    dbg_state, status_mem_shadow.status));
           ctrl_addr <= ctrl_mem_addr(0);
           ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
@@ -1491,10 +1632,10 @@ module top_module_hls_tb;
           ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_stage <= TB_DEBUG_MODE ? CTRL_ASSERT_DEBUG_MODE : CTRL_ASSERT_TOKEN_INDEX;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
-        end
-        CTRL_ASSERT_DEBUG_MODE: begin
-          $display("[CTRL] cycle=%0d token=%0d write control(debug)=0x%08h",
-                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits());
+	        end
+	        CTRL_ASSERT_DEBUG_MODE: begin
+	          if (!tb_log_kv_only) tb_log_str($sformatf("[CTRL] cycle=%0d token=%0d write control(debug)=0x%08h",
+	                                                    cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits()));
           ctrl_addr <= ctrl_mem_addr(0);
           ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
@@ -1503,10 +1644,10 @@ module top_module_hls_tb;
           ctrl_words[0] <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_stage <= CTRL_ASSERT_TOKEN_INDEX;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
-        end
-        CTRL_ASSERT_TOKEN_INDEX: begin
-          $display("[CTRL] cycle=%0d token=%0d write token_position=%0d",
-                   cycle_count, current_stream_token, current_stream_token);
+	        end
+	        CTRL_ASSERT_TOKEN_INDEX: begin
+	          if (!tb_log_kv_only) tb_log_str($sformatf("[CTRL] cycle=%0d token=%0d write token_position=%0d",
+	                                                    cycle_count, current_stream_token, current_stream_token));
           ctrl_addr <= ctrl_mem_addr(CTRLW_TOKEN_POSITION);
           ctrl_data_in <= current_stream_token[31:0];
           ctrl_write_en <= 1'b1;
@@ -1514,12 +1655,12 @@ module top_module_hls_tb;
           ctrl_words[CTRLW_TOKEN_POSITION] <= current_stream_token[31:0];
           ctrl_stage <= CTRL_ASSERT_START;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
-        end
-        CTRL_ASSERT_START: begin
-          $display("[CTRL] cycle=%0d token=%0d write control(start)=0x%08h dbg_state=%0d status=0x%08h",
-                   cycle_count, current_stream_token,
-                   CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
-                   dbg_state, status_mem_shadow.status);
+	        end
+	        CTRL_ASSERT_START: begin
+	          if (!tb_log_kv_only) tb_log_str($sformatf("[CTRL] cycle=%0d token=%0d write control(start)=0x%08h dbg_state=%0d status=0x%08h",
+	                                                    cycle_count, current_stream_token,
+	                                                    CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
+	                                                    dbg_state, status_mem_shadow.status));
           ctrl_addr <= ctrl_mem_addr(0);
           ctrl_data_in <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
@@ -1528,10 +1669,10 @@ module top_module_hls_tb;
           ctrl_words[0] <= CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits();
           ctrl_stage <= (current_stream_token == 0) ? CTRL_ASSERT_AP_START : CTRL_HOLD_START;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
-        end
-        CTRL_ASSERT_AP_START: begin
-          $display("[CTRL] cycle=%0d token=%0d write ap_start=0x00000081 dbg_state=%0d status=0x%08h",
-                   cycle_count, current_stream_token, dbg_state, status_mem_shadow.status);
+	        end
+	        CTRL_ASSERT_AP_START: begin
+	          if (!tb_log_kv_only) tb_log_str($sformatf("[CTRL] cycle=%0d token=%0d write ap_start=0x00000081 dbg_state=%0d status=0x%08h",
+	                                                    cycle_count, current_stream_token, dbg_state, status_mem_shadow.status));
           ctrl_addr <= ADDR_AP_CTRL;
           ctrl_data_in <= 32'h0000_0081;
           ctrl_write_en <= 1'b1;
@@ -1540,17 +1681,22 @@ module top_module_hls_tb;
           ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
         end
         CTRL_HOLD_START: begin
-          $display("[CTRL] cycle=%0d token=%0d hold control(start)=0x%08h dbg_state=%0d status=0x%08h",
-                   cycle_count, current_stream_token,
-                   CTRL_RESETN_BIT | CTRL_START_BIT | ctrl_debug_bits(),
-                   dbg_state, status_mem_shadow.status);
-          ctrl_stage <= CTRL_CLEAR_START;
-          ctrl_gap_cycles <= CTRL_START_HOLD_CYCLES;
-        end
-        CTRL_CLEAR_START: begin
-          $display("[CTRL] cycle=%0d token=%0d write control(clear-start)=0x%08h dbg_state=%0d status=0x%08h",
-                   cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
-                   dbg_state, status_mem_shadow.status);
+	          // Hold ctrl_mem[1]=1 until DUT reaches S_STREAM_IN (dbg_state==1).
+	          // This ensures the auto_restart 1-cycle state1 window sees ctrl_mem[1]=1
+	          // so start_en_reg_6987 latches correctly before clearing START.
+	          if (dbg_state == 32'd1) begin
+	            if (!tb_log_kv_only) tb_log_str($sformatf("[CTRL] cycle=%0d token=%0d stream_in seen -> clearing start, dbg_state=%0d status=0x%08h",
+	                                                      cycle_count, current_stream_token, dbg_state, status_mem_shadow.status));
+            ctrl_stage <= CTRL_CLEAR_START;
+            ctrl_gap_cycles <= CTRL_CTRL_GAP_CYCLES;
+          end else begin
+            ctrl_gap_cycles <= 8; // re-poll every 8 cycles
+          end
+	        end
+	        CTRL_CLEAR_START: begin
+	          if (!tb_log_kv_only) tb_log_str($sformatf("[CTRL] cycle=%0d token=%0d write control(clear-start)=0x%08h dbg_state=%0d status=0x%08h",
+	                                                    cycle_count, current_stream_token, CTRL_RESETN_BIT | ctrl_debug_bits(),
+	                                                    dbg_state, status_mem_shadow.status));
           ctrl_addr <= ctrl_mem_addr(0);
           ctrl_data_in <= CTRL_RESETN_BIT | ctrl_debug_bits();
           ctrl_write_en <= 1'b1;
@@ -1577,13 +1723,19 @@ module top_module_hls_tb;
     cycle_count <= cycle_count + 1;
 
     if (dbg_error[0]) begin
+      if (!tb_log_kv_only) tb_log_str($sformatf("[TB] FINISH: dbg_error asserted cycle=%0d token=%0d error_code=0x%08h",
+                                                cycle_count, current_stream_token, dbg_error_code));
       $finish;
     end
     if (irq_seen_done && ((current_stream_token + 1) >= total_stream_tokens)) begin
+      if (!tb_log_kv_only) tb_log_str($sformatf("[TB] FINISH: all tokens done cycle=%0d token=%0d total_tokens=%0d",
+                                                cycle_count, current_stream_token, total_stream_tokens));
       $finish;
     end
 
     if (cycle_count > MAX_CYCLES) begin
+      if (!tb_log_kv_only) tb_log_str($sformatf("[TB] FINISH: timeout cycle=%0d (MAX_CYCLES=%0d) token=%0d",
+                                                cycle_count, MAX_CYCLES, current_stream_token));
       $finish;
     end
 
@@ -1594,28 +1746,67 @@ module top_module_hls_tb;
     if (!ap_rst_n) begin
       dbg_state_prev <= 32'd0;
       control_reg_prev <= 32'd0;
-    end else begin
-      if (dbg_state != dbg_state_prev) begin
-        $display("[DBG-STATE] cycle=%0d token=%0d dbg_state %0d -> %0d status=0x%08h irq=0x%08h error=0x%08h",
-                 cycle_count, current_stream_token, dbg_state_prev, dbg_state,
-                 status_mem_shadow.status, status_mem_shadow.irq_status, status_mem_shadow.error_code);
-        dbg_state_prev <= dbg_state;
-      end
-      if (ctrl_words[CTRLW_CONTROL] != control_reg_prev) begin
-        $display("[CONTROL-REG] cycle=%0d token=%0d control_reg 0x%08h -> 0x%08h",
-                 cycle_count, current_stream_token, control_reg_prev, ctrl_words[CTRLW_CONTROL]);
-        control_reg_prev <= ctrl_words[CTRLW_CONTROL];
-      end
+	    end else begin
+	      if (dbg_state != dbg_state_prev) begin
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[DBG-STATE] cycle=%0d token=%0d dbg_state %0d -> %0d status=0x%08h irq=0x%08h error=0x%08h",
+	                                                  cycle_count, current_stream_token, dbg_state_prev, dbg_state,
+	                                                  status_mem_shadow.status, status_mem_shadow.irq_status, status_mem_shadow.error_code));
+	        dbg_state_prev <= dbg_state;
+	      end
+	      if (ctrl_words[CTRLW_CONTROL] != control_reg_prev) begin
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[CONTROL-REG] cycle=%0d token=%0d control_reg 0x%08h -> 0x%08h",
+	                                                  cycle_count, current_stream_token, control_reg_prev, ctrl_words[CTRLW_CONTROL]));
+	        control_reg_prev <= ctrl_words[CTRLW_CONTROL];
+	      end
     end
   end
 
-  initial begin
-    ap_clk = 1'b0;
-    ap_rst_n = 1'b0;
+	  initial begin
+	    ap_clk = 1'b0;
+	    ap_rst_n = 1'b0;
 
-    for (i = 0; i < STREAM_IN_FILE_BYTES_MAX; i = i + 1) begin
-      stream_in_file_bytes[i] = 8'h00;
-    end
+	    // Initialize TB log file (mirrors console output).
+	    tb_log_fd = 0;
+      tb_log_kv_only = 1'b1;
+      begin : p_log_mode
+        int kv_only_i;
+        if ($value$plusargs("TB_LOG_KV_ONLY=%d", kv_only_i)) begin
+          tb_log_kv_only = (kv_only_i != 0);
+        end
+      end
+	    if (!$value$plusargs("TB_LOG_DIR=%s", tb_log_dir)) begin
+	      tb_log_dir = DEFAULT_TB_LOG_DIR;
+	    end
+	    void'($system($sformatf("mkdir -p \"%0s\"", tb_log_dir)));
+	    tb_log_ts = "";
+	    begin : p_log_timestamp
+	      int ts_fd;
+	      string ts_tmp;
+	      ts_tmp = "/tmp/top_module_hls_tb_timestamp.txt";
+	      void'($system($sformatf("date +%%Y%%m%%d_%%H%%M%%S > \"%0s\"", ts_tmp)));
+	      ts_fd = $fopen(ts_tmp, "r");
+	      if (ts_fd != 0) begin
+	        void'($fgets(tb_log_ts, ts_fd));
+	        $fclose(ts_fd);
+	        tb_chomp(tb_log_ts);
+	      end
+	    end
+	    if (tb_log_ts == "") begin
+	      tb_log_ts = $sformatf("sim_%0t_%0d", $time, $urandom);
+	    end
+	    tb_log_path = {tb_log_dir, "/Top_module_hls_tb_stdout_", tb_log_ts, ".log"};
+	    tb_log_fd = $fopen(tb_log_path, "w");
+	    if (tb_log_fd == 0) begin
+	      $display("[TB] WARNING: failed to open log file: %0s", tb_log_path);
+	    end else begin
+	      tb_file_str($sformatf("[TB] Logging to: %0s", tb_log_path));
+	      tb_file_str($sformatf("[TB] Mode: TB_LOG_KV_ONLY=%0d (1=KV writes only)", tb_log_kv_only));
+	      if (!tb_log_kv_only) tb_log_str($sformatf("[TB] Logging to: %0s", tb_log_path));
+	    end
+
+	    for (i = 0; i < STREAM_IN_FILE_BYTES_MAX; i = i + 1) begin
+	      stream_in_file_bytes[i] = 8'h00;
+	    end
     for (i = 0; i < STREAM_IN_BUF_BYTES; i = i + 1) begin
       stream_in_mem[i] = 8'h00;
     end
@@ -1629,80 +1820,95 @@ module top_module_hls_tb;
     for (i = 0; i < STREAM_OUT_BUF_BYTES; i = i + 1) begin
       stream_out_mem[i] = 8'h00;
     end
-    for (i = 0; i < DDR_IMAGE_BYTES; i = i + 1) begin
-      ddr_bytes[i] = 8'h00;
-    end
+	    for (i = 0; i < DDR_IMAGE_BYTES; i = i + 1) begin
+	      ddr_bytes[i] = 8'h00;
+	    end
 
-    if ($value$plusargs("TEST_DATA_DIR=%s", test_data_dir)) begin
-      $display("[TB] Using TEST_DATA_DIR plusarg: %0s", test_data_dir);
-    end else begin
-      tb_file_path = `__FILE__;
-      tb_dirname_from_file(tb_file_path, tb_file_dir);
-      if (tb_file_dir != "") begin
+	    if ($value$plusargs("TEST_DATA_DIR=%s", test_data_dir)) begin
+	      if (!tb_log_kv_only) tb_log_str($sformatf("[TB] Using TEST_DATA_DIR plusarg: %0s", test_data_dir));
+	    end else begin
+	      tb_file_path = `__FILE__;
+	      tb_dirname_from_file(tb_file_path, tb_file_dir);
+	      if (tb_file_dir != "") begin
         // Build a path relative to this testbench file location so it works
-        // regardless of the simulator run directory.
-        $sformat(test_data_dir, "%0s/../../test_data", tb_file_dir);
-        $display("[TB] Using __FILE__-relative test_data_dir: %0s", test_data_dir);
-      end else begin
-        test_data_dir = `TB_TEST_DATA_DIR;
-        $display("[TB] Using fallback TB_TEST_DATA_DIR: %0s", test_data_dir);
-      end
-    end
+	        // regardless of the simulator run directory.
+	        `ifdef FULL_MODEL_TEST
+	        $sformat(test_data_dir, "%0s/../../model", tb_file_dir);
+	        `else
+	        $sformat(test_data_dir, "%0s/../../test_data", tb_file_dir);
+	        `endif
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[TB] Using __FILE__-relative test_data_dir: %0s", test_data_dir));
+	      end else begin
+	        test_data_dir = `TB_TEST_DATA_DIR;
+	        if (!tb_log_kv_only) tb_log_str($sformatf("[TB] Using fallback TB_TEST_DATA_DIR: %0s", test_data_dir));
+	      end
+	    end
 
-    file_fd = $fopen({test_data_dir, "/ctrl_mem.bin"}, "rb");
-    if (file_fd == 0) begin
-      $fatal(1, "Failed to open ctrl_mem.bin at path: %0s", {test_data_dir, "/ctrl_mem.bin"});
-    end
-    bytes_read = $fread(ctrl_mem_file_bytes, file_fd);
-    $fclose(file_fd);
-    if (bytes_read != (CTRL_MEM_WORDS*4)) begin
-      $fatal(1, "ctrl_mem.bin size mismatch (got=%0d expected=%0d)",
-             bytes_read, (CTRL_MEM_WORDS*4));
-    end
-    $display("[TB] Loaded ctrl_mem.bin bytes=%0d (expected=%0d)", bytes_read, (CTRL_MEM_WORDS*4));
-    for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
-      ctrl_init_words[i] = {ctrl_mem_file_bytes[(i*4)+3],
-                            ctrl_mem_file_bytes[(i*4)+2],
-                            ctrl_mem_file_bytes[(i*4)+1],
+	    file_fd = $fopen({test_data_dir, "/ctrl_mem.bin"}, "rb");
+	    if (file_fd == 0) begin
+	      tb_fatal_str(1, $sformatf("Failed to open ctrl_mem.bin at path: %0s", {test_data_dir, "/ctrl_mem.bin"}));
+	    end
+	    bytes_read = $fread(ctrl_mem_file_bytes, file_fd);
+	    $fclose(file_fd);
+	    if (bytes_read != (CTRL_MEM_WORDS*4)) begin
+	      tb_fatal_str(1, $sformatf("ctrl_mem.bin size mismatch (got=%0d expected=%0d)",
+	                                bytes_read, (CTRL_MEM_WORDS*4)));
+	    end
+	    if (!tb_log_kv_only) tb_log_str($sformatf("[TB] Loaded ctrl_mem.bin bytes=%0d (expected=%0d)", bytes_read, (CTRL_MEM_WORDS*4)));
+	    for (i = 0; i < CTRL_MEM_WORDS; i = i + 1) begin
+	      ctrl_init_words[i] = {ctrl_mem_file_bytes[(i*4)+3],
+	                            ctrl_mem_file_bytes[(i*4)+2],
+	                            ctrl_mem_file_bytes[(i*4)+1],
                             ctrl_mem_file_bytes[(i*4)+0]};
     end
 
-    file_fd = $fopen({test_data_dir, "/stream_in.bin"}, "rb");
-    if (file_fd == 0) begin
-      $fatal(1, "Failed to open stream_in.bin at path: %0s", {test_data_dir, "/stream_in.bin"});
-    end
-    bytes_read = $fread(stream_in_file_bytes, file_fd);
-    $fclose(file_fd);
-    if (bytes_read <= 0) begin
-      $fatal(1, "Failed to read stream_in.bin");
-    end
-    if (bytes_read > STREAM_IN_FILE_BYTES_MAX) begin
-      $fatal(1, "stream_in.bin too large for testbench buffer");
-    end
-    if ((bytes_read % STREAM_IN_BUF_BYTES) != 0) begin
-      $fatal(1, "stream_in.bin size is not a whole number of tokens");
-    end
-    total_stream_tokens = bytes_read / STREAM_IN_BUF_BYTES;
-    if (total_stream_tokens <= 0) begin
-      $fatal(1, "stream_in.bin contains zero tokens");
-    end
-    load_stream_token(0);
+	    file_fd = $fopen({test_data_dir, "/stream_in.bin"}, "rb");
+	    if (file_fd == 0) begin
+	      tb_fatal_str(1, $sformatf("Failed to open stream_in.bin at path: %0s", {test_data_dir, "/stream_in.bin"}));
+	    end
+	    bytes_read = $fread(stream_in_file_bytes, file_fd);
+	    $fclose(file_fd);
+	    if (bytes_read <= 0) begin
+	      tb_fatal_str(1, $sformatf("Failed to read stream_in.bin"));
+	    end
+	    if (bytes_read > STREAM_IN_FILE_BYTES_MAX) begin
+	      tb_fatal_str(1, $sformatf("stream_in.bin too large for testbench buffer"));
+	    end
+	    if ((bytes_read % STREAM_IN_BUF_BYTES) != 0) begin
+	      tb_fatal_str(1, $sformatf("stream_in.bin size is not a whole number of tokens"));
+	    end
+	    total_stream_tokens = bytes_read / STREAM_IN_BUF_BYTES;
+	    if (total_stream_tokens <= 0) begin
+	      tb_fatal_str(1, $sformatf("stream_in.bin contains zero tokens"));
+	    end
+	    load_stream_token(0);
 
-    file_fd = $fopen({test_data_dir, "/ddr_image.bin"}, "rb");
-    if (file_fd == 0) begin
-      $fatal(1, "Failed to open ddr_image.bin at path: %0s", {test_data_dir, "/ddr_image.bin"});
-    end
-    bytes_read = $fread(ddr_bytes, file_fd);
-    if (bytes_read != DDR_IMAGE_BYTES) begin
-      $fatal(1, "ddr_image.bin size mismatch (got=%0d expected=%0d)",
-             bytes_read, DDR_IMAGE_BYTES);
-    end
-    $display("[TB] Loaded ddr_image.bin bytes=%0d (expected=%0d)", bytes_read, DDR_IMAGE_BYTES);
-    // Ensure no extra bytes beyond DDR_IMAGE_BYTES.
-    if ($fgetc(file_fd) >= 0) begin
-      $fatal(1, "ddr_image.bin is larger than DDR_IMAGE_BYTES (%0d)", DDR_IMAGE_BYTES);
-    end
-    $fclose(file_fd);
+	    `ifdef FULL_MODEL_TEST
+	    file_fd = $fopen({test_data_dir, "/gpt2_weights_int8.bin"}, "rb");
+	    if (file_fd == 0) begin
+	      tb_fatal_str(1, $sformatf("Failed to open gpt2_weights_int8.bin at path: %0s", {test_data_dir, "/gpt2_weights_int8.bin"}));
+	    end
+	    `else
+	    file_fd = $fopen({test_data_dir, "/ddr_image.bin"}, "rb");
+	    if (file_fd == 0) begin
+	      tb_fatal_str(1, $sformatf("Failed to open ddr_image.bin at path: %0s", {test_data_dir, "/ddr_image.bin"}));
+	    end
+	    `endif
+	    bytes_read = $fread(ddr_bytes, file_fd);
+	    if (bytes_read != DDR_IMAGE_BYTES) begin
+	      tb_fatal_str(1, $sformatf("ddr_image.bin size mismatch (got=%0d expected=%0d)",
+	                                bytes_read, DDR_IMAGE_BYTES));
+	    end
+	    if (!tb_log_kv_only) tb_log_str($sformatf("[TB] Loaded DDR image bytes=%0d (expected=%0d)", bytes_read, DDR_IMAGE_BYTES));
+	    // Ensure no extra bytes beyond DDR_IMAGE_BYTES.
+	    if ($fgetc(file_fd) >= 0) begin
+	      tb_fatal_str(1, $sformatf("DDR image is larger than DDR_IMAGE_BYTES (%0d)", DDR_IMAGE_BYTES));
+	    end
+	    $fclose(file_fd);
+	    ddr_checksum = 0;
+	    for (i = 0; i < DDR_IMAGE_BYTES; i = i + 1)
+	      ddr_checksum = ddr_checksum + ddr_bytes[i];
+	    if (!tb_log_kv_only) tb_log_str($sformatf("[TB] DDR image byte-sum checksum = %0d (0x%016h)", ddr_checksum, ddr_checksum));
 
     for (i = 0; i < KV_STORE_WORDS; i = i + 1) begin
       k_cache_store[i] = 32'h0000_0000;
@@ -1856,5 +2062,13 @@ module top_module_hls_tb;
     .s_axi_control_r_BREADY(s_axi_control_r_BREADY),
     .s_axi_control_r_BRESP(s_axi_control_r_BRESP)
   );
+
+  final begin
+    if (tb_log_fd != 0) begin
+      $fdisplay(tb_log_fd, "[TB] FINAL: closing log");
+      $fclose(tb_log_fd);
+      tb_log_fd = 0;
+    end
+  end
 
 endmodule

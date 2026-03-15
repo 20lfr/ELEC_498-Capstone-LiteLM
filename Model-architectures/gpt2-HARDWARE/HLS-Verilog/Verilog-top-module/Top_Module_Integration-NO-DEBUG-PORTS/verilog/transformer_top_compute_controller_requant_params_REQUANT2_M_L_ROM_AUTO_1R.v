@@ -9,8 +9,8 @@ module transformer_top_compute_controller_requant_params_REQUANT2_M_L_ROM_AUTO_1
     reset, clk);
 
 parameter DataWidth = 31;
-parameter AddressWidth = 5;
-parameter AddressRange = 32;
+parameter AddressWidth = 4;
+parameter AddressRange = 12;
  
 input[AddressWidth-1:0] address0;
 input ce0;

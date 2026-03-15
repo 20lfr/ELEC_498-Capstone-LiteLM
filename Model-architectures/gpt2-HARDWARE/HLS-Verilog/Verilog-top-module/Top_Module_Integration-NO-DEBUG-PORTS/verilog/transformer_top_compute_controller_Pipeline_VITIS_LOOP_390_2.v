@@ -204,8 +204,8 @@ wire    ap_block_pp0_stage55_subdone;
 reg    ap_enable_reg_pp0_iter0_reg;
 wire    ap_block_pp0_stage0_11001;
 reg   [0:0] tmp_reg_474;
-wire   [1:0] lshr_ln5_fu_266_p4;
-reg   [1:0] lshr_ln5_reg_478;
+wire   [1:0] lshr_ln6_fu_266_p4;
+reg   [1:0] lshr_ln6_reg_478;
 wire   [0:0] and_ln392_fu_282_p2;
 reg   [0:0] and_ln392_reg_485;
 wire   [3:0] trunc_ln394_fu_288_p1;
@@ -540,7 +540,7 @@ always @ (posedge ap_clk) begin
         and_ln392_2_reg_503 <= and_ln392_2_fu_344_p2;
         and_ln392_3_reg_507 <= and_ln392_3_fu_368_p2;
         and_ln392_reg_485 <= and_ln392_fu_282_p2;
-        lshr_ln5_reg_478 <= {{ap_sig_allocacmp_out_2[3:2]}};
+        lshr_ln6_reg_478 <= {{ap_sig_allocacmp_out_2[3:2]}};
         tmp_reg_474 <= ap_sig_allocacmp_out_2[32'd4];
         tmp_s_reg_494 <= {{ap_sig_allocacmp_out_2[3:1]}};
         trunc_ln394_reg_489 <= trunc_ln394_fu_288_p1;
@@ -1511,11 +1511,11 @@ assign icmp_ln392_3_fu_362_p2 = ((zext_ln392_2_fu_358_p1 < out_count_0_i_ph_i) ?
 
 assign icmp_ln392_fu_276_p2 = ((ap_sig_allocacmp_out_2 < out_count_0_i_ph_i) ? 1'b1 : 1'b0);
 
-assign lshr_ln5_fu_266_p4 = {{ap_sig_allocacmp_out_2[3:2]}};
+assign lshr_ln6_fu_266_p4 = {{ap_sig_allocacmp_out_2[3:2]}};
 
-assign or_ln390_1_fu_326_p3 = {{lshr_ln5_fu_266_p4}, {2'd2}};
+assign or_ln390_1_fu_326_p3 = {{lshr_ln6_fu_266_p4}, {2'd2}};
 
-assign or_ln390_2_fu_350_p3 = {{lshr_ln5_fu_266_p4}, {2'd3}};
+assign or_ln390_2_fu_350_p3 = {{lshr_ln6_fu_266_p4}, {2'd3}};
 
 assign or_ln_fu_302_p3 = {{tmp_s_fu_292_p4}, {1'd1}};
 
@@ -1523,9 +1523,9 @@ assign shl_ln1_fu_385_p3 = {{trunc_ln394_reg_489}, {2'd0}};
 
 assign shl_ln394_1_fu_409_p3 = {{tmp_s_reg_494}, {3'd4}};
 
-assign shl_ln394_2_fu_426_p3 = {{lshr_ln5_reg_478}, {4'd8}};
+assign shl_ln394_2_fu_426_p3 = {{lshr_ln6_reg_478}, {4'd8}};
 
-assign shl_ln394_3_fu_443_p3 = {{lshr_ln5_reg_478}, {4'd12}};
+assign shl_ln394_3_fu_443_p3 = {{lshr_ln6_reg_478}, {4'd12}};
 
 assign tmp_fu_258_p3 = ap_sig_allocacmp_out_2[32'd4];
 
@@ -1553,7 +1553,7 @@ assign transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMe
 
 assign trunc_ln394_fu_288_p1 = ap_sig_allocacmp_out_2[3:0];
 
-assign zext_ln390_fu_402_p1 = lshr_ln5_reg_478;
+assign zext_ln390_fu_402_p1 = lshr_ln6_reg_478;
 
 assign zext_ln392_1_fu_334_p1 = or_ln390_1_fu_326_p3;
 

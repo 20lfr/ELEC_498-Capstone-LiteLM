@@ -613,11 +613,11 @@ wire    ap_CS_fsm_state2;
 reg   [4:0] p_anonymous_namespace_g_active_bank_reg;
 reg   [7:0] p_anonymous_namespace_g_current_layer_reg;
 reg   [0:0] p_anonymous_namespace_main_x_slot_valid_reg;
-wire   [63:0] zext_ln911_fu_308_p1;
+wire   [63:0] zext_ln912_fu_308_p1;
 wire    ap_CS_fsm_state3;
-wire   [0:0] icmp_ln911_fu_296_p2;
+wire   [0:0] icmp_ln912_fu_296_p2;
 reg   [4:0] i_fu_138;
-wire   [4:0] add_ln911_fu_302_p2;
+wire   [4:0] add_ln912_fu_302_p2;
 reg    p_anonymous_namespace_stream_in_capture_buf_we0_local;
 reg    p_anonymous_namespace_stream_in_capture_buf_ce0_local;
 wire    ap_CS_fsm_state4;
@@ -843,8 +843,8 @@ end
 always @ (posedge ap_clk) begin
     if (((ap_start == 1'b1) & (1'b1 == ap_CS_fsm_state1))) begin
         i_fu_138 <= 5'd0;
-    end else if (((icmp_ln911_fu_296_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
-        i_fu_138 <= add_ln911_fu_302_p2;
+    end else if (((icmp_ln912_fu_296_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
+        i_fu_138 <= add_ln912_fu_302_p2;
     end
 end
 
@@ -989,7 +989,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((icmp_ln911_fu_296_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
+    if (((icmp_ln912_fu_296_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
         p_anonymous_namespace_stream_in_capture_buf_we0_local = 1'b1;
     end else begin
         p_anonymous_namespace_stream_in_capture_buf_we0_local = 1'b0;
@@ -1029,7 +1029,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state3 : begin
-            if (((icmp_ln911_fu_296_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
+            if (((icmp_ln912_fu_296_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state4;
@@ -1044,7 +1044,7 @@ always @ (*) begin
     endcase
 end
 
-assign add_ln911_fu_302_p2 = (i_fu_138 + 5'd1);
+assign add_ln912_fu_302_p2 = (i_fu_138 + 5'd1);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -1056,7 +1056,7 @@ assign ap_CS_fsm_state4 = ap_CS_fsm[32'd3];
 
 assign grp_p_anonymous_namespace_clear_token_regions_and_slots_fu_156_ap_start = grp_p_anonymous_namespace_clear_token_regions_and_slots_fu_156_ap_start_reg;
 
-assign icmp_ln911_fu_296_p2 = ((i_fu_138 == 5'd16) ? 1'b1 : 1'b0);
+assign icmp_ln912_fu_296_p2 = ((i_fu_138 == 5'd16) ? 1'b1 : 1'b0);
 
 assign p_anonymous_namespace_bank_offsets_address0 = grp_p_anonymous_namespace_clear_token_regions_and_slots_fu_156_p_anonymous_namespace_bank_offsets_address0;
 
@@ -1410,7 +1410,7 @@ assign p_anonymous_namespace_regions_written_parts_d0 = grp_p_anonymous_namespac
 
 assign p_anonymous_namespace_regions_written_parts_we0 = grp_p_anonymous_namespace_clear_token_regions_and_slots_fu_156_p_anonymous_namespace_regions_written_parts_we0;
 
-assign p_anonymous_namespace_stream_in_capture_buf_address0 = zext_ln911_fu_308_p1;
+assign p_anonymous_namespace_stream_in_capture_buf_address0 = zext_ln912_fu_308_p1;
 
 assign p_anonymous_namespace_stream_in_capture_buf_ce0 = p_anonymous_namespace_stream_in_capture_buf_ce0_local;
 
@@ -1422,6 +1422,6 @@ assign p_anonymous_namespace_stream_in_capturing = 1'd0;
 
 assign p_anonymous_namespace_stream_in_write_idx = 5'd0;
 
-assign zext_ln911_fu_308_p1 = i_fu_138;
+assign zext_ln912_fu_308_p1 = i_fu_138;
 
 endmodule //transformer_top_p_anonymous_namespace_begin_new_token_cleanup

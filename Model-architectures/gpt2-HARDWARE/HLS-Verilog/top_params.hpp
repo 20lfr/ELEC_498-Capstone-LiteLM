@@ -21,25 +21,16 @@ constexpr bool MMU_USE_HARDCODED_LN_PARAMS = false;
 // ---------------------------------------------------------------------------
 // Requant configuration (compile-time)
 // ---------------------------------------------------------------------------
-// Select one:
-//   -DREQUANT_SCALES_VER=0  -> requant_scales_v0.hpp
-//   -DREQUANT_SCALES_VER=1  -> requant_scales_v1.hpp
-//   -DREQUANT_SCALES_VER=2  -> requant_scales_v2.hpp
+// requant_scales_v0.hpp is the single source of truth for requant tables.
+// Keep REQUANT_SCALES_VER for backwards-compatible build flags, but ignore
+// non-zero selections (the versioned headers were removed).
 #ifndef REQUANT_SCALES_VER
-#define REQUANT_SCALES_VER 3
+#define REQUANT_SCALES_VER 0
 #endif
-
-#if (REQUANT_SCALES_VER == 0)
+#if (REQUANT_SCALES_VER != 0)
+#pragma message("REQUANT_SCALES_VER!=0 is deprecated; using requant_scales_v0.hpp")
+#endif
 #include "requant_scales_v0.hpp"
-#elif (REQUANT_SCALES_VER == 1)
-#include "requant_scales_v1.hpp"
-#elif (REQUANT_SCALES_VER == 2)
-#include "requant_scales_v2.hpp"
-#elif (REQUANT_SCALES_VER == 3)
-#include "requant_scales_v3.hpp"
-#else
-#error "Invalid REQUANT_SCALES_VER. Use 0, 1, 2, or 3."
-#endif
 // ------------------------------------------------------------
 // Headed Attention and FSM enums
 // ------------------------------------------------------------
@@ -123,15 +114,15 @@ struct HeadCtx {
     bool compute_ready = false;
     bool compute_done = false;
     bool compute_start = false;
-    uint32_t compute_op = 0;
-    uint32_t last_compute_op = 0; // Packed compute op for done gating
+    uint64_t compute_op = 0;
+    uint64_t last_compute_op = 0; // Packed compute op for done gating
     DmaSel last_wl_addr = DmaSel::DMASEL_NONE; // Tracks last issued WL request
                                                // for dma_done attribution
 
     bool wl_ready = false;       // INPUT FROM WL/MMU
     bool wl_accept = false;      // INPUT FROM MMU: request captured
     bool wl_start = false;       // OUTPUT signal for head
-    uint32_t wl_instruction = 0; // OUTPUT packed DMA op|layer|head|tile
+    uint64_t wl_instruction = 0; // OUTPUT packed DMA op|layer|head|tile (64-bit)
     bool dma_done = false;       // INPUT FROM AXI-FULL/MMU
 
     bool start_head = false;
@@ -188,11 +179,11 @@ enum class ComputeState : uint8_t {
 
 // Captured request from the scheduler.
 struct PendingRequest {
-    uint32_t instruction = 0x00000000;
+    uint64_t instruction = 0;
     ComputeOp op = ComputeOp::CMP_NONE;
     uint8_t layer_idx = 0;
     uint8_t head_idx = 0;
-    uint8_t tile_idx = 0;
+    uint16_t tile_idx = 0;
 };
 
 // Register Addr mapping is auto generated in a HLS project
@@ -220,6 +211,9 @@ struct ControlMemSpace {
 	    uint32_t v_cache_offset = 0;
 
     // Dedicated offset tables for bias and norm parameters.
+    uint32_t wq_bias_offset = 0;
+    uint32_t wk_bias_offset = 0;
+    uint32_t wv_bias_offset = 0;
     uint32_t wo_bias_offset = 0;
     uint32_t w1_bias_offset = 0;
     uint32_t w2_bias_offset = 0;
@@ -306,7 +300,7 @@ namespace compute_buf {
 	    constexpr int LOGITS_X_BYTES = D_MODEL * 4;
 	    constexpr int LOGITS_W_BYTES = D_MODEL * D_TILE_LOGIT;
 	    constexpr int LOGITS_IN_BYTES = LOGITS_X_BYTES + LOGITS_W_BYTES;
-    constexpr int ARGMAX_IN_BYTES = D_VOCAB * 4;
+    constexpr int ARGMAX_IN_BYTES = NUM_LOGIT_TILES * 8;  // NUM_LOGIT_TILES pairs of (max_val: i32, local_idx: i32)
 
     constexpr int IN_BUF_BYTES = max2(
         OUT_PROJ_IN_BYTES,
@@ -328,7 +322,7 @@ namespace compute_buf {
     constexpr int FFN_W1_OUT_BYTES = D_TILE_W1 * 2;
     constexpr int FFN_ACT_OUT_BYTES = D_FFN * 2;
     constexpr int FFN_W2_OUT_BYTES = D_TILE_W2;
-    constexpr int LOGITS_OUT_BYTES = D_TILE_LOGIT * 4;
+    constexpr int LOGITS_OUT_BYTES = 8;  // (max_val: i32, local_argmax_idx: i32)
     constexpr int ARGMAX_OUT_BYTES = 4;
 
     constexpr int OUT_BUF_BYTES =
@@ -480,7 +474,7 @@ namespace compute_buf {
     };
 
     struct OUTLogitsLayout {
-        static constexpr int NUM_ELEMS = D_TILE_LOGIT;
+        static constexpr int NUM_ELEMS = 2;  // (max_val, local_argmax_idx)
         static constexpr BufDType TYPE = BufDType::I32;
         static constexpr int TOTAL_BYTES = LOGITS_OUT_BYTES;
         static constexpr int Y = 0;
@@ -586,7 +580,7 @@ struct ComputeHeadCtx {
 
     // FSM communication signals
     bool compute_start = false;
-    uint32_t compute_instruction = 0;
+    uint64_t compute_instruction = 0;
     bool compute_ready = false;
     bool compute_done = false;
 
@@ -594,7 +588,7 @@ struct ComputeHeadCtx {
     bool mem_transfer_done = false;
     bool mem_read_request = false;
     bool mem_write_request = false;
-    uint32_t mem_op = 0;
+    uint64_t mem_op = 0;
 };
 // ------------------------------------------------------------
 // Headed attention buffer layouts
@@ -607,7 +601,8 @@ namespace head_buf {
 	    constexpr int QKV_OUT_FULL_BYTES = D_HEADS;
 
 	    constexpr int QKV_W_TILE_BYTES = D_MODEL * D_HEAD_TILE_QKV;
-	    constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_TILE_BYTES;
+	    constexpr int QKV_B_TILE_BYTES = D_HEAD_TILE_QKV * 4;
+	    constexpr int QKV_IN_BYTES = D_MODEL + QKV_W_TILE_BYTES + QKV_B_TILE_BYTES;
 	    constexpr int QKV_OUT_BYTES = D_HEAD_TILE_QKV;
 
     constexpr int HEAD_REQUANT_IN_BYTES = (D_HEADS * 4);
@@ -656,9 +651,11 @@ namespace head_buf {
     struct INQkvLayout {
         static constexpr int ACT_BYTES = D_MODEL;
         static constexpr int W_BYTES = QKV_W_TILE_BYTES;
+        static constexpr int B_BYTES = QKV_B_TILE_BYTES;
         static constexpr int TOTAL_BYTES = QKV_IN_BYTES;
         static constexpr int ACT = 0;
         static constexpr int W = ACT + ACT_BYTES;
+        static constexpr int B = W + W_BYTES;
     };
 
     struct INHeadRequantLayout {

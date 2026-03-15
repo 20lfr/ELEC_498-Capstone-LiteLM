@@ -11,18 +11,20 @@
 
 namespace {
 
-static inline uint32_t pack_dma(DmaSel sel, int layer, int head, int tile) {
-    return static_cast<uint32_t>(sel)
-        | (static_cast<uint32_t>(static_cast<uint8_t>(static_cast<int8_t>(layer))) << 8)
-        | (static_cast<uint32_t>(static_cast<uint8_t>(static_cast<int8_t>(head))) << 16)
-        | (static_cast<uint32_t>(static_cast<uint8_t>(static_cast<int8_t>(tile))) << 24);
+static inline uint64_t pack_dma(DmaSel sel, int layer, int head, int tile) {
+    const uint64_t op_field    = static_cast<uint64_t>(static_cast<uint8_t>(sel));
+    const uint64_t layer_field = static_cast<uint64_t>(static_cast<uint8_t>(layer));
+    const uint64_t head_field  = static_cast<uint64_t>(static_cast<uint8_t>(head));
+    const uint64_t tile_field  = static_cast<uint64_t>(static_cast<uint32_t>(tile));
+    return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
-static inline uint32_t pack_compute(ComputeOp op, int layer, int head, int tile) {
-    return static_cast<uint32_t>(op)
-        | (static_cast<uint32_t>(static_cast<uint8_t>(static_cast<int8_t>(layer))) << 8)
-        | (static_cast<uint32_t>(static_cast<uint8_t>(static_cast<int8_t>(head))) << 16)
-        | (static_cast<uint32_t>(static_cast<uint8_t>(static_cast<int8_t>(tile))) << 24);
+static inline uint64_t pack_compute(ComputeOp op, int layer, int head, int tile) {
+    const uint64_t op_field    = static_cast<uint64_t>(static_cast<uint8_t>(op));
+    const uint64_t layer_field = static_cast<uint64_t>(static_cast<uint8_t>(layer));
+    const uint64_t head_field  = static_cast<uint64_t>(static_cast<uint8_t>(head));
+    const uint64_t tile_field  = static_cast<uint64_t>(static_cast<uint32_t>(tile));
+    return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
 static inline int head_to_lane(int head) {
@@ -212,6 +214,9 @@ static void dump_ctrl_mem(const ControlMemSpace &ctrl) {
     std::printf("  w2_offset=0x%x\n", static_cast<unsigned>(ctrl.w2_offset));
     std::printf("  k_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.k_cache_offset));
     std::printf("  v_cache_offset=0x%x\n", static_cast<unsigned>(ctrl.v_cache_offset));
+    std::printf("  wq_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wq_bias_offset));
+    std::printf("  wk_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wk_bias_offset));
+    std::printf("  wv_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wv_bias_offset));
     std::printf("  wo_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.wo_bias_offset));
     std::printf("  w1_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.w1_bias_offset));
     std::printf("  w2_bias_offset=0x%x\n", static_cast<unsigned>(ctrl.w2_bias_offset));

@@ -35,5 +35,5 @@
   // AXI sizing
   localparam int AXI_GMEM_WORD_BYTES = 4;
 
-  // Control memory layout (22x32b = 704b wire ctrl_mem)
-  localparam int CTRL_MEM_WORDS = 22;
+  // Control memory layout (25x32b = 800b wire ctrl_mem)
+  localparam int CTRL_MEM_WORDS = 25;

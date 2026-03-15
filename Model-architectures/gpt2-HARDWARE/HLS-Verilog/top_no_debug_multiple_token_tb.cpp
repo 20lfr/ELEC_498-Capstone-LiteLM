@@ -8,7 +8,11 @@
 #include <cstdlib>
 
 static size_t count_stream_tokens_from_file() {
+#ifdef FULL_MODEL_TEST
+    const std::string stream_path = tb_source_dir() + "/../model/stream_in.bin";
+#else
     const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
+#endif
     std::ifstream in(stream_path.c_str(), std::ios::binary | std::ios::ate);
     if (!in) {
         std::fprintf(stderr, "ERROR: Failed to open shared stream image '%s'\n", stream_path.c_str());
@@ -51,6 +55,19 @@ int main() {
         return 1;
     }
     zero_axi_mem(kv_cache.data(), TB_KV_IMAGE_WORDS);
+
+    {
+        uint64_t ddr_checksum = 0;
+        for (size_t wi = 0; wi < TB_DDR_IMAGE_WORDS; ++wi) {
+            const uint32_t w = (uint32_t)ddr_mem[wi];
+            ddr_checksum += (w & 0xFF);
+            ddr_checksum += ((w >> 8) & 0xFF);
+            ddr_checksum += ((w >> 16) & 0xFF);
+            ddr_checksum += ((w >> 24) & 0xFF);
+        }
+        std::printf("[TEST] DDR image byte-sum checksum = %llu (0x%016llx)\n",
+                    (unsigned long long)ddr_checksum, (unsigned long long)ddr_checksum);
+    }
 
     std::printf("[TEST] Multi-token run across %zu token(s) (debug_mode=%s)\n",
                 total_stream_tokens, TB_DEBUG_MODE ? "on" : "off");

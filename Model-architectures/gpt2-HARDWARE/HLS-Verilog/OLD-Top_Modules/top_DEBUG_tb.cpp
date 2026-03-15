@@ -94,7 +94,7 @@ constexpr uint64_t TB_DDR_IMAGE_BYTES = static_cast<uint64_t>(WEIGHTS_SIZE);
 constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
 constexpr uint64_t TB_KV_IMAGE_BYTES  = static_cast<uint64_t>(KV_SIZE);
 constexpr uint64_t TB_KV_IMAGE_WORDS        = TB_KV_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
-constexpr size_t   TB_CTRL_MEM_WORDS        = 22u;
+constexpr size_t   TB_CTRL_MEM_WORDS        = 25u;
 
 static ControlMemSpace g_loaded_ctrl_mem{};
 static bool g_loaded_ctrl_mem_valid = false;
@@ -135,6 +135,9 @@ static ControlMemSpace make_default_ctrl_mem() {
     ctrl_mem.w2_offset = W2_OFF;
     ctrl_mem.k_cache_offset = K_CACHE_OFF;
     ctrl_mem.v_cache_offset = V_CACHE_OFF;
+    ctrl_mem.wq_bias_offset = WQ_BIAS_OFF;
+    ctrl_mem.wk_bias_offset = WK_BIAS_OFF;
+    ctrl_mem.wv_bias_offset = WV_BIAS_OFF;
     ctrl_mem.wo_bias_offset = WO_BIAS_OFF;
     ctrl_mem.w1_bias_offset = W1_BIAS_OFF;
     ctrl_mem.w2_bias_offset = W2_BIAS_OFF;
@@ -1524,7 +1527,7 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
     bool wl_ready        = false;
     bool wl_start        = false;
     bool wl_accept       = false;
-    uint32_t wl_instruction = 0;
+    uint64_t wl_instruction = 0;
     HeadCtx head_ctx_ref[HEADS_PARALLEL];
     ComputeHeadCtx head_compute_ctx[HEADS_PARALLEL] = {};
     bool dma_start       = false;
@@ -1549,7 +1552,7 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
     bool mem_transfer_done = false;
     bool mem_read_request  = false;
     bool mem_write_request = false;
-    uint32_t mem_op         = 0;
+    uint64_t mem_op         = 0;
     uint8_t in_buf[compute_buf::IN_BUF_BYTES] = {};
     uint8_t out_buf[compute_buf::OUT_BUF_BYTES] = {};
     uint8_t head_in_buf[HEADS_PARALLEL][head_buf::IN_BUF_BYTES] = {};
@@ -1643,14 +1646,14 @@ static int run_top_DEBUG_tb_single_token(size_t selected_stream_token) {
 
     ComputeState dbg_compute_state = ComputeState::IDLE;
     bool dbg_compute_start = false;
-    uint32_t dbg_compute_instruction = 0;
+    uint64_t dbg_compute_instruction = 0;
     bool dbg_compute_ready = false;
     bool dbg_compute_done = false;
-    uint32_t dbg_req_instruction = 0;
+    uint64_t dbg_req_instruction = 0;
     uint8_t dbg_req_op = 0;
     uint8_t dbg_req_layer = 0;
     uint8_t dbg_req_head = 0;
-    uint8_t dbg_req_tile = 0;
+    uint16_t dbg_req_tile = 0;
     bool dbg_mac_start = false;
     bool dbg_mac_ready = false;
     bool dbg_mac_complete = false;

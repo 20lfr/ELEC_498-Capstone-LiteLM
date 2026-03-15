@@ -9,14 +9,15 @@
 
 namespace {
 
-static inline uint32_t pack_dma_instruction(DmaSel sel, int layer, int head, int tile) {
-    return (static_cast<uint32_t>(sel) & 0xFFu)
-         | ((static_cast<uint32_t>(layer) & 0xFFu) << 8)
-         | ((static_cast<uint32_t>(head) & 0xFFu) << 16)
-         | ((static_cast<uint32_t>(tile) & 0xFFu) << 24);
+static inline uint64_t pack_dma_instruction(DmaSel sel, int layer, int head, int tile) {
+    const uint64_t op_field    = static_cast<uint64_t>(static_cast<uint8_t>(sel));
+    const uint64_t layer_field = static_cast<uint64_t>(static_cast<uint8_t>(layer));
+    const uint64_t head_field  = static_cast<uint64_t>(static_cast<uint8_t>(head));
+    const uint64_t tile_field  = static_cast<uint64_t>(static_cast<uint32_t>(tile));
+    return op_field | (layer_field << 8) | (head_field << 16) | (tile_field << 24);
 }
 
-static inline DmaSel decode_dma_sel(uint32_t instr) {
+static inline DmaSel decode_dma_sel(uint64_t instr) {
     return static_cast<DmaSel>(instr & 0xFFu);
 }
 

@@ -35,7 +35,7 @@ constexpr int DMA_QUEUE_DEPTH = 4;
 constexpr int COMPUTE_QUEUE_DEPTH = 4;
 constexpr int DMA_BUF_BYTES = 8192;
 #else
-constexpr int MAX_CHUNKS = 8;
+constexpr int MAX_CHUNKS = URAM_BANKS; // one chunk per bank is the physical maximum
 constexpr int MAX_REGIONS = 256;
 constexpr int DMA_QUEUE_DEPTH = 16;
 constexpr int COMPUTE_QUEUE_DEPTH = 16;
@@ -191,7 +191,7 @@ void mmu_fsm(
     // Main scheduler DMA requests
     // ------------------------------------------------------------
     bool mmu_dma_req_start,             // [INPUT] Main scheduler DMA request valid
-    uint32_t mmu_dma_instruction,       // [INPUT] Packed DMA request [sel|layer|head|tile]
+    uint64_t mmu_dma_instruction,       // [INPUT] Packed DMA request [sel|layer|head|tile]
     bool &mmu_req_ready,                // [OUTPUT] MMU ready for new DMA request
     bool &main_wl_accept,               // [OUTPUT] Main scheduler wl request accepted/captured
     bool &main_dma_done,                // [OUTPUT] Main scheduler DMA completion pulse
@@ -201,7 +201,7 @@ void mmu_fsm(
     // ------------------------------------------------------------
     bool mem_read_request,              // [INPUT] Main compute read request
     bool mem_write_request,             // [INPUT] Main compute write request
-    uint32_t mem_op,                    // [INPUT] Packed compute op [op|layer|head|tile]
+    uint64_t mem_op,                    // [INPUT] Packed compute op [op|layer|head|tile]
     bool &mem_transfer_done,            // [OUTPUT] Main compute transfer completion pulse
 
     // ------------------------------------------------------------

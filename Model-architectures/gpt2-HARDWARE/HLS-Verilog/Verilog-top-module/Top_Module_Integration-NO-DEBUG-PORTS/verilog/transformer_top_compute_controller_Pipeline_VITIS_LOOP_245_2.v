@@ -168,7 +168,7 @@ reg    matrixB_6_ce0_local;
 reg    vectorA_6_ce0_local;
 reg    matrixB_7_ce0_local;
 reg    vectorA_7_ce0_local;
-wire   [1:0] lshr_ln9_fu_378_p4;
+wire   [1:0] lshr_ln_fu_378_p4;
 wire   [3:0] tmp_s_fu_400_p4;
 wire   [5:0] add_ln2_fu_410_p3;
 wire   [31:0] mul_ln248_fu_319_p2;
@@ -583,7 +583,7 @@ assign add_ln248_6_fu_520_p2 = (add_ln248_5_fu_514_p2 + add_ln248_2_fu_496_p2);
 
 assign add_ln248_fu_484_p2 = (mul_ln248_fu_319_p2 + mul_ln248_7_fu_354_p2);
 
-assign add_ln2_fu_410_p3 = {{tmp_s_fu_400_p4}, {lshr_ln9_fu_378_p4}};
+assign add_ln2_fu_410_p3 = {{tmp_s_fu_400_p4}, {lshr_ln_fu_378_p4}};
 
 assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
 
@@ -607,7 +607,7 @@ assign ap_ready = ap_ready_sig;
 
 assign icmp_ln245_fu_372_p2 = ((ap_sig_allocacmp_i_37 == 5'd24) ? 1'b1 : 1'b0);
 
-assign lshr_ln9_fu_378_p4 = {{ap_sig_allocacmp_i_37[4:3]}};
+assign lshr_ln_fu_378_p4 = {{ap_sig_allocacmp_i_37[4:3]}};
 
 assign matrixB_1_address0 = zext_ln247_fu_418_p1;
 
@@ -675,7 +675,7 @@ assign vectorA_address0 = zext_ln244_fu_388_p1;
 
 assign vectorA_ce0 = vectorA_ce0_local;
 
-assign zext_ln244_fu_388_p1 = lshr_ln9_fu_378_p4;
+assign zext_ln244_fu_388_p1 = lshr_ln_fu_378_p4;
 
 assign zext_ln247_fu_418_p1 = add_ln2_fu_410_p3;
 

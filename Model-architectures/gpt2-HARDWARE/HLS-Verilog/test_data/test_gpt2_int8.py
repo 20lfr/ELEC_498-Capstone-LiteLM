@@ -1,5 +1,6 @@
 import argparse, json, os, sys, time
 import re
+from functools import lru_cache
 
 try:
     import numpy as np
@@ -7,6 +8,109 @@ except ImportError:
     np = None
 
 NL=12; NH=12; DM=768; DH=64; DF=3072; VS=50257; CTX=1024
+
+_GPT2_TOKEN_RE_ASCII = re.compile(
+    r"'s|'t|'re|'ve|'m|'ll|'d| ?[A-Za-z]+| ?\d+| ?[^\sA-Za-z\d]+|\s+(?!\S)|\s+"
+)
+
+def _bytes_to_unicode():
+    # Byte-level BPE requires a reversible mapping from bytes -> unicode.
+    bs = (
+        list(range(ord("!"), ord("~") + 1))
+        + list(range(ord("¡"), ord("¬") + 1))
+        + list(range(ord("®"), ord("ÿ") + 1))
+    )
+    cs = bs[:]
+    n = 0
+    for b in range(256):
+        if b not in bs:
+            bs.append(b)
+            cs.append(256 + n)
+            n += 1
+    cs = [chr(c) for c in cs]
+    return dict(zip(bs, cs))
+
+def _get_pairs(word):
+    pairs = set()
+    prev = word[0]
+    for ch in word[1:]:
+        pairs.add((prev, ch))
+        prev = ch
+    return pairs
+
+def _load_bpe_ranks(merges_path):
+    with open(merges_path, "r", encoding="utf-8") as f:
+        merges = [tuple(line.strip().split()) for line in f if line and not line.startswith("#")]
+    return {pair: i for i, pair in enumerate(merges)}
+
+def _load_encoder(vocab_json_path):
+    with open(vocab_json_path, "r", encoding="utf-8") as f:
+        enc = json.load(f)
+    # token -> id
+    return enc
+
+def _make_local_gpt2_encode_fn(model_dir):
+    vocab_path = os.path.join(model_dir, "vocab.json")
+    merges_path = os.path.join(model_dir, "merges.txt")
+    if not (os.path.exists(vocab_path) and os.path.exists(merges_path)):
+        raise FileNotFoundError("Missing vocab.json/merges.txt in model-dir")
+
+    encoder = _load_encoder(vocab_path)
+    bpe_ranks = _load_bpe_ranks(merges_path)
+    byte_encoder = _bytes_to_unicode()
+
+    @lru_cache(maxsize=65536)
+    def bpe(token):
+        # GPT-2 byte-level BPE (no </w> marker; the leading-space byte maps to 'Ġ' via bytes_to_unicode()).
+        word = tuple(token)
+        pairs = _get_pairs(word)
+        if not pairs:
+            return token
+
+        while True:
+            bigram = min(pairs, key=lambda p: bpe_ranks.get(p, 10**18))
+            if bigram not in bpe_ranks:
+                break
+
+            first, second = bigram
+            new_word = []
+            i = 0
+            while i < len(word):
+                try:
+                    j = word.index(first, i)
+                    new_word.extend(word[i:j])
+                    i = j
+                except ValueError:
+                    new_word.extend(word[i:])
+                    break
+
+                if i < len(word) - 1 and word[i] == first and word[i + 1] == second:
+                    new_word.append(first + second)
+                    i += 2
+                else:
+                    new_word.append(word[i])
+                    i += 1
+
+            word = tuple(new_word)
+            if len(word) == 1:
+                break
+            pairs = _get_pairs(word)
+
+        return " ".join(word)
+
+    def encode(text):
+        bpe_tokens = []
+        for token in _GPT2_TOKEN_RE_ASCII.findall(text):
+            token_bytes = token.encode("utf-8")
+            token_transformed = "".join(byte_encoder[b] for b in token_bytes)
+            for bpe_token in bpe(token_transformed).split(" "):
+                tok_id = encoder.get(bpe_token, None)
+                if tok_id is None:
+                    raise KeyError(f"Unknown BPE token in vocab: {bpe_token!r}")
+                bpe_tokens.append(int(tok_id))
+        return bpe_tokens
+
+    return encode
 
 def align64(v): return (v+63)&~63
 
@@ -161,11 +265,30 @@ def dump_layout_from_shared_params(shared_params_path: str) -> int:
 class GPT2Int8:
     def __init__(self, model_dir):
         if np is None:
-            raise RuntimeError("numpy is required for GPT2Int8 (pip install numpy)")
+            raise RuntimeError(
+                "numpy is required for GPT2Int8.\n"
+                "On Debian/Ubuntu you may need a virtualenv (PEP 668), e.g.:\n"
+                "  python3 -m venv .venv\n"
+                "  . .venv/bin/activate\n"
+                "  python -m pip install -U pip\n"
+                "  python -m pip install numpy\n"
+            )
+        model_dir = os.fspath(model_dir)
         L = compute_layout()
         self.L = L
 
-        with open(os.path.join(model_dir, "quant_scales.json")) as f:
+        scales_path = os.path.join(model_dir, "quant_scales.json")
+        if not os.path.isfile(scales_path):
+            expected = os.path.normpath(
+                os.path.join(os.path.dirname(__file__), "..", "..", "model")
+            )
+            raise FileNotFoundError(
+                f"missing {scales_path}\n"
+                f"Pass --model-dir pointing at the quantized model artifacts.\n"
+                f"For this repo, the default is typically: {expected}"
+            )
+
+        with open(scales_path) as f:
             self.scales = json.load(f)
 
         ddr_path = os.path.join(model_dir, "gpt2_weights_int8.bin")
@@ -314,8 +437,11 @@ class GPT2Int8:
         return generated
 
 def main():
+    default_model_dir = os.path.normpath(
+        os.path.join(os.path.dirname(__file__), "..", "..", "model")
+    )
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model-dir", default="model/")
+    ap.add_argument("--model-dir", default=default_model_dir)
     ap.add_argument("--prompt", default="The answer to life is")
     ap.add_argument("--max-tokens", type=int, default=20)
     ap.add_argument("--dump-layout", action="store_true",
@@ -331,13 +457,28 @@ def main():
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(a.model_dir)
     except:
-        try:
-            from transformers import AutoTokenizer
-            tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2")
-        except:
-            print("ERROR: pip install transformers"); sys.exit(1)
+        tokenizer = None
 
-    ids = tokenizer.encode(a.prompt)
+    if tokenizer is not None:
+        encode_fn = tokenizer.encode
+    else:
+        # Offline fallback: use local GPT-2 byte-level BPE assets from model-dir.
+        # This avoids requiring `transformers` just to tokenize a prompt.
+        try:
+            encode_fn = _make_local_gpt2_encode_fn(a.model_dir)
+        except Exception as e:
+            print(
+                "ERROR: transformers is required (or provide GPT-2 vocab/merges in --model-dir).\n"
+                "On Debian/Ubuntu you may need a virtualenv (PEP 668), e.g.:\n"
+                "  python3 -m venv .venv\n"
+                "  . .venv/bin/activate\n"
+                "  python -m pip install -U pip\n"
+                "  python -m pip install transformers\n"
+                f"\nTokenizer fallback error: {e}\n"
+            )
+            sys.exit(1)
+
+    ids = encode_fn(a.prompt)
     print(f'Prompt: "{a.prompt}"')
     print(f"Tokens: {ids} ({len(ids)} tokens)\n")
 
@@ -346,10 +487,13 @@ def main():
     gen = model.generate(ids, max_new_tokens=a.max_tokens)
     print("=" * 60)
 
-    new_text = tokenizer.decode(gen[len(ids):])
-    print(f'\nPrompt:    "{a.prompt}"')
-    print(f'Generated: "{new_text}"')
-    print(f'Full:      "{tokenizer.decode(gen)}"')
+    if tokenizer is not None:
+        new_text = tokenizer.decode(gen[len(ids):])
+        print(f'\nPrompt:    "{a.prompt}"')
+        print(f'Generated: "{new_text}"')
+        print(f'Full:      "{tokenizer.decode(gen)}"')
+    else:
+        print(f"\nGenerated token ids: {gen[len(ids):]}")
 
 if __name__ == "__main__":
     main()

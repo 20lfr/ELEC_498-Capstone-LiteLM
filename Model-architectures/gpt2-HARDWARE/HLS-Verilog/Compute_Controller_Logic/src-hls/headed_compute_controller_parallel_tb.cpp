@@ -557,6 +557,8 @@ int main() {
                             case ComputeOp::CMP_Q:
                             case ComputeOp::CMP_K:
                             case ComputeOp::CMP_V: {
+                                const int8_t tile_req = static_cast<int8_t>((mem_op_lat[lane] >> 24) & 0xFFu);
+                                const int tile_idx = (tile_req < 0) ? 0 : static_cast<int>(tile_req);
                                 const int8_t *act = (mem_op_code == ComputeOp::CMP_Q) ? q_act[lane]
                                                   : (mem_op_code == ComputeOp::CMP_K) ? k_act[lane]
                                                   : v_act[lane];
@@ -569,6 +571,14 @@ int main() {
                                 for (int i = 0; i < head_buf::INQkvLayout::W_BYTES; ++i) {
                                     compute_buf::write_i8(in_buf[lane], head_buf::INQkvLayout::W + i,
                                                           static_cast<int8_t>(src[i]));
+                                }
+                                const int4_t *bias = (mem_op_code == ComputeOp::CMP_Q) ? q_bias[lane]
+                                                   : (mem_op_code == ComputeOp::CMP_K) ? k_bias[lane]
+                                                   : v_bias[lane];
+                                for (int out = 0; out < D_HEAD_TILE_QKV; ++out) {
+                                    const int full_idx = tile_idx * D_HEAD_TILE_QKV + out;
+                                    const int32_t b = (full_idx < D_HEADS) ? static_cast<int32_t>(bias[full_idx]) : 0;
+                                    compute_buf::write_i32(in_buf[lane], head_buf::INQkvLayout::B + (out * 4), b);
                                 }
                                 break;
                             }

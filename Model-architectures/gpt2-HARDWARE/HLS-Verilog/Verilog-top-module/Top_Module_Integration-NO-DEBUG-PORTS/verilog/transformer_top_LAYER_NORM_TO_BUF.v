@@ -304,8 +304,8 @@ wire    ap_CS_fsm_state12;
 wire    ap_CS_fsm_state42;
 wire   [26:0] grp_fu_725_p2;
 reg   [26:0] udiv_ln654_reg_1447;
-wire   [40:0] rounded_fu_958_p3;
-reg   [40:0] rounded_reg_1452;
+wire   [35:0] rounded_fu_958_p3;
+reg   [35:0] rounded_reg_1452;
 wire    grp_LAYER_NORM_TO_BUF_Pipeline_VITIS_LOOP_634_1_fu_362_ap_start;
 wire    grp_LAYER_NORM_TO_BUF_Pipeline_VITIS_LOOP_634_1_fu_362_ap_done;
 wire    grp_LAYER_NORM_TO_BUF_Pipeline_VITIS_LOOP_634_1_fu_362_ap_idle;
@@ -575,7 +575,7 @@ wire   [44:0] shl_ln650_1_fu_634_p5;
 wire   [44:0] sub_ln650_fu_654_p2;
 wire   [18:0] tmp_s_fu_660_p4;
 wire   [19:0] zext_ln650_1_fu_670_p1;
-wire   [0:0] tmp_359_fu_646_p3;
+wire   [0:0] tmp_358_fu_646_p3;
 wire   [19:0] sub_ln650_1_fu_674_p2;
 wire   [19:0] zext_ln650_fu_630_p1;
 wire   [19:0] select_ln650_fu_680_p3;
@@ -583,7 +583,7 @@ wire   [29:0] zext_ln645_fu_612_p1;
 wire  signed [29:0] sext_ln650_fu_688_p1;
 wire  signed [29:0] v_fu_692_p2;
 wire  signed [31:0] sext_ln650_1_fu_698_p1;
-wire   [0:0] tmp_360_fu_706_p3;
+wire   [0:0] tmp_359_fu_706_p3;
 wire   [28:0] trunc_ln650_1_fu_702_p1;
 wire   [22:0] grp_fu_725_p1;
 wire   [6:0] requant_n_cast_fu_732_p1;
@@ -592,7 +592,7 @@ wire  signed [31:0] sh_prom_i_cast_cast_cast_fu_934_p1;
 wire   [63:0] sh_prom_i_cast_cast_cast_cast_fu_938_p1;
 wire   [63:0] shl_i_fu_948_p2;
 wire   [0:0] do_shift_fu_942_p2;
-wire   [40:0] empty_fu_954_p1;
+wire   [35:0] empty_fu_954_p1;
 reg    grp_fu_725_ap_start;
 wire    grp_fu_725_ap_done;
 reg   [42:0] ap_NS_fsm;
@@ -892,37 +892,37 @@ transformer_top_LAYER_NORM_TO_BUF_Pipeline_VITIS_LOOP_678_4 grp_LAYER_NORM_TO_BU
     .x_tile_15_reload(grp_LAYER_NORM_TO_BUF_Pipeline_VITIS_LOOP_665_3_fu_393_x_tile_15_out),
     .shl_ln643_cast3(shl_ln_reg_1267),
     .zext_ln682(udiv_ln654_reg_1447),
-    .empty_198(gamma_tile_loc_fu_190),
-    .empty_199(gamma_tile_1_loc_fu_194),
-    .empty_200(gamma_tile_2_loc_fu_198),
-    .empty_201(gamma_tile_3_loc_fu_202),
-    .empty_202(gamma_tile_4_loc_fu_206),
-    .empty_203(gamma_tile_5_loc_fu_210),
-    .empty_204(gamma_tile_6_loc_fu_214),
-    .empty_205(gamma_tile_7_loc_fu_218),
-    .empty_206(gamma_tile_8_loc_fu_222),
-    .empty_207(gamma_tile_9_loc_fu_226),
-    .empty_208(gamma_tile_10_loc_fu_230),
-    .empty_209(gamma_tile_11_loc_fu_234),
-    .empty_210(gamma_tile_12_loc_fu_238),
-    .empty_211(gamma_tile_13_loc_fu_242),
-    .empty_212(gamma_tile_14_loc_fu_246),
-    .empty_213(gamma_tile_15_loc_fu_250),
-    .empty_214(beta_tile_loc_fu_254),
-    .empty_215(beta_tile_1_loc_fu_258),
-    .empty_216(beta_tile_2_loc_fu_262),
-    .empty_217(beta_tile_3_loc_fu_266),
-    .empty_218(beta_tile_4_loc_fu_270),
-    .empty_219(beta_tile_5_loc_fu_274),
-    .empty_220(beta_tile_6_loc_fu_278),
-    .empty_221(beta_tile_7_loc_fu_282),
-    .empty_222(beta_tile_8_loc_fu_286),
-    .empty_223(beta_tile_9_loc_fu_290),
-    .empty_224(beta_tile_10_loc_fu_294),
-    .empty_225(beta_tile_11_loc_fu_298),
-    .empty_226(beta_tile_12_loc_fu_302),
-    .empty_227(beta_tile_13_loc_fu_306),
-    .empty_228(beta_tile_14_loc_fu_310),
+    .empty_199(gamma_tile_loc_fu_190),
+    .empty_200(gamma_tile_1_loc_fu_194),
+    .empty_201(gamma_tile_2_loc_fu_198),
+    .empty_202(gamma_tile_3_loc_fu_202),
+    .empty_203(gamma_tile_4_loc_fu_206),
+    .empty_204(gamma_tile_5_loc_fu_210),
+    .empty_205(gamma_tile_6_loc_fu_214),
+    .empty_206(gamma_tile_7_loc_fu_218),
+    .empty_207(gamma_tile_8_loc_fu_222),
+    .empty_208(gamma_tile_9_loc_fu_226),
+    .empty_209(gamma_tile_10_loc_fu_230),
+    .empty_210(gamma_tile_11_loc_fu_234),
+    .empty_211(gamma_tile_12_loc_fu_238),
+    .empty_212(gamma_tile_13_loc_fu_242),
+    .empty_213(gamma_tile_14_loc_fu_246),
+    .empty_214(gamma_tile_15_loc_fu_250),
+    .empty_215(beta_tile_loc_fu_254),
+    .empty_216(beta_tile_1_loc_fu_258),
+    .empty_217(beta_tile_2_loc_fu_262),
+    .empty_218(beta_tile_3_loc_fu_266),
+    .empty_219(beta_tile_4_loc_fu_270),
+    .empty_220(beta_tile_5_loc_fu_274),
+    .empty_221(beta_tile_6_loc_fu_278),
+    .empty_222(beta_tile_7_loc_fu_282),
+    .empty_223(beta_tile_8_loc_fu_286),
+    .empty_224(beta_tile_9_loc_fu_290),
+    .empty_225(beta_tile_10_loc_fu_294),
+    .empty_226(beta_tile_11_loc_fu_298),
+    .empty_227(beta_tile_12_loc_fu_302),
+    .empty_228(beta_tile_13_loc_fu_306),
+    .empty_229(beta_tile_14_loc_fu_310),
     .empty(beta_tile_15_loc_fu_314),
     .final_norm(final_norm),
     .requant_M_cast(requant_M),
@@ -1890,7 +1890,7 @@ assign ap_CS_fsm_state9 = ap_CS_fsm[32'd8];
 
 assign do_shift_fu_942_p2 = ((requant_n != 6'd0) ? 1'b1 : 1'b0);
 
-assign empty_fu_954_p1 = shl_i_fu_948_p2[40:0];
+assign empty_fu_954_p1 = shl_i_fu_948_p2[35:0];
 
 assign grp_LAYER_NORM_TO_BUF_Pipeline_VITIS_LOOP_634_1_fu_362_ap_start = grp_LAYER_NORM_TO_BUF_Pipeline_VITIS_LOOP_634_1_fu_362_ap_start_reg;
 
@@ -1908,9 +1908,9 @@ assign mul_ln645_fu_544_p1 = sext_ln645_fu_562_p1;
 
 assign requant_n_cast_fu_732_p1 = requant_n;
 
-assign rounded_fu_958_p3 = ((do_shift_fu_942_p2[0:0] == 1'b1) ? empty_fu_954_p1 : 41'd0);
+assign rounded_fu_958_p3 = ((do_shift_fu_942_p2[0:0] == 1'b1) ? empty_fu_954_p1 : 36'd0);
 
-assign select_ln650_fu_680_p3 = ((tmp_359_fu_646_p3[0:0] == 1'b1) ? sub_ln650_1_fu_674_p2 : zext_ln650_fu_630_p1);
+assign select_ln650_fu_680_p3 = ((tmp_358_fu_646_p3[0:0] == 1'b1) ? sub_ln650_1_fu_674_p2 : zext_ln650_fu_630_p1);
 
 assign sext_ln645_1_fu_576_p1 = $signed(shl_ln2_fu_568_p3);
 
@@ -1940,9 +1940,9 @@ assign sub_ln650_1_fu_674_p2 = (20'd0 - zext_ln650_1_fu_670_p1);
 
 assign sub_ln650_fu_654_p2 = (45'd0 - shl_ln650_1_fu_634_p5);
 
-assign tmp_359_fu_646_p3 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_18_q0[32'd2];
+assign tmp_358_fu_646_p3 = transformer_top_stream_stream_ap_uint_volatile_ap_uint_volatile_ControlMemSp_18_q0[32'd2];
 
-assign tmp_360_fu_706_p3 = sext_ln650_1_fu_698_p1[32'd31];
+assign tmp_359_fu_706_p3 = sext_ln650_1_fu_698_p1[32'd31];
 
 assign tmp_fu_596_p3 = sub_ln645_fu_580_p2[32'd41];
 
@@ -2038,7 +2038,7 @@ assign trunc_ln650_fu_616_p1 = transformer_top_stream_stream_ap_uint_volatile_ap
 
 assign trunc_ln_cast_fu_586_p4 = {{sub_ln645_fu_580_p2[40:13]}};
 
-assign v_157_fu_714_p3 = ((tmp_360_fu_706_p3[0:0] == 1'b1) ? 29'd0 : trunc_ln650_1_fu_702_p1);
+assign v_157_fu_714_p3 = ((tmp_359_fu_706_p3[0:0] == 1'b1) ? 29'd0 : trunc_ln650_1_fu_702_p1);
 
 assign v_fu_692_p2 = ($signed(zext_ln645_fu_612_p1) + $signed(sext_ln650_fu_688_p1));
 

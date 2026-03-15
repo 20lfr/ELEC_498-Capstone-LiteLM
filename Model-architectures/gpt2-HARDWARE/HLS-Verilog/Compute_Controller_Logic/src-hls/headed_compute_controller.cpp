@@ -73,7 +73,7 @@ static void print_qkv_weight_matrix(const uint8_t in_buf[head_buf::IN_BUF_BYTES]
 static void trace_qkv_buffers(ComputeOp op,
                               uint8_t layer_idx,
                               uint8_t head_idx,
-                              uint8_t tile_idx,
+                              uint16_t tile_idx,
                               const uint8_t in_buf[head_buf::IN_BUF_BYTES],
                               const uint8_t out_buf[head_buf::OUT_BUF_BYTES],
                               int32_t M,
@@ -100,7 +100,7 @@ static void trace_qkv_buffers(ComputeOp op,
 
 static void trace_att_scores_buffers(uint8_t layer_idx,
                                      uint8_t head_idx,
-                                     uint8_t tile_idx,
+                                     uint16_t tile_idx,
                                      const uint8_t in_buf[head_buf::IN_BUF_BYTES],
                                      const uint8_t out_buf[head_buf::OUT_BUF_BYTES]) {
     int8_t q[D_HEADS];
@@ -534,7 +534,7 @@ static void QKV_TO_BUF(
     ComputeOp op,
     uint8_t layer_idx,
     uint8_t head_idx,
-    uint8_t tile_idx,
+    uint16_t tile_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -550,7 +550,11 @@ static void QKV_TO_BUF(
         for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
 #pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
             const int out_idx = out_base + lane;
-            accum_tile[lane] = 0;
+            if (out_idx < D_HEAD_TILE_QKV) {
+                accum_tile[lane] = compute_buf::read_i32(in_buf, head_buf::INQkvLayout::B + (out_idx * 4));
+            } else {
+                accum_tile[lane] = 0;
+            }
         }
 
         for (int in_base = 0; in_base < D_MODEL; in_base += HEAD_MAC_VEC_UNROLL) {
@@ -589,7 +593,7 @@ static void QKV_TO_BUF(
 static void ATT_SCORES_TO_BUF(
     uint8_t layer_idx,
     uint8_t head_idx,
-    uint8_t tile_idx,
+    uint16_t tile_idx,
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
@@ -618,11 +622,11 @@ static void headed_compute_controller_lane(
     const uint8_t in_buf[head_buf::IN_BUF_BYTES],
     uint8_t       out_buf[head_buf::OUT_BUF_BYTES],
     ComputeState &dbg_state,
-    uint32_t    &dbg_req_instruction,
+    uint64_t    &dbg_req_instruction,
     uint8_t     &dbg_req_op,
     uint8_t     &dbg_req_layer,
     uint8_t     &dbg_req_head,
-    uint8_t     &dbg_req_tile,
+    uint16_t    &dbg_req_tile,
     bool        &error
 ) {
 #pragma HLS INLINE
@@ -675,7 +679,7 @@ static void headed_compute_controller_lane(
                 ctx.req.op            = static_cast<ComputeOp>(ctx.compute_instruction & 0xFFu);
                 ctx.req.layer_idx     = (ctx.compute_instruction >> 8) & 0xFFu;
                 ctx.req.head_idx      = (ctx.compute_instruction >> 16) & 0xFFu;
-                ctx.req.tile_idx      = (ctx.compute_instruction >> 24) & 0xFFu;
+                ctx.req.tile_idx      = static_cast<uint16_t>((ctx.compute_instruction >> 24) & 0xFFFFu);
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
             }
 
@@ -696,7 +700,7 @@ static void headed_compute_controller_lane(
                 ctx.req.op            = static_cast<ComputeOp>(ctx.compute_instruction & 0xFFu);
                 ctx.req.layer_idx     = (ctx.compute_instruction >> 8) & 0xFFu;
                 ctx.req.head_idx      = (ctx.compute_instruction >> 16) & 0xFFu;
-                ctx.req.tile_idx      = (ctx.compute_instruction >> 24) & 0xFFu;
+                ctx.req.tile_idx      = static_cast<uint16_t>((ctx.compute_instruction >> 24) & 0xFFFFu);
                 next_state = ComputeState::CAPTURE_INSTRUCTION;
                 break;
             }
@@ -847,11 +851,11 @@ void drive_headed_compute_controller(
     for (int lane = 0; lane < HEADS_PARALLEL; ++lane) {
 // #pragma HLS UNROLL
         ComputeState dbg_state;
-        uint32_t dbg_req_instruction;
+        uint64_t dbg_req_instruction;
         uint8_t dbg_req_op;
         uint8_t dbg_req_layer;
         uint8_t dbg_req_head;
-        uint8_t dbg_req_tile;
+        uint16_t dbg_req_tile;
         bool lane_error = false;
 
         headed_compute_controller_lane(
@@ -884,11 +888,11 @@ void headed_compute_controller(
 
     // Debug visibility
     ComputeState &dbg_state,
-    uint32_t    &dbg_req_instruction,
+    uint64_t    &dbg_req_instruction,
     uint8_t     &dbg_req_op,
     uint8_t     &dbg_req_layer,
     uint8_t     &dbg_req_head,
-    uint8_t     &dbg_req_tile,
+    uint16_t    &dbg_req_tile,
 
     bool        &error               // [OUTPUT] Error flag on invalid request
 ) {
