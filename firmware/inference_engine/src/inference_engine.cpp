@@ -148,6 +148,10 @@ public:
         pl->writeReg(PLReg::LN1_GAMMA_OFFSET, mem.ln1_gamma_offset);
         pl->writeReg(PLReg::FINAL_NORM_GAMMA_OFFSET,
                      mem.final_norm_gamma_offset);
+        //        pl->writeReg(PLReg::LN0_BETA_OFFSET, mem.ln0_beta_offset);
+        //        pl->writeReg(PLReg::LN1_BETA_OFFSET, mem.ln1_beta_offset);
+        //        pl->writeReg(PLReg::FINAL_NORM_BETA_OFFSET,
+        //        mem.final_norm_beta_offset);
         pl->writeReg(PLReg::LN0_EPS_OFFSET, mem.ln0_eps_offset);
         pl->writeReg(PLReg::LN1_EPS_OFFSET, mem.ln1_eps_offset);
         pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET, mem.final_norm_eps_offset);
@@ -317,6 +321,10 @@ public:
             pl->clearIRQ();
             return false;
         }
+
+        LOG_DEBUG("Token(" + std::to_string(token_id) + ", " +
+                  std::to_string(token_position) +
+                  ") dumping registers: " + pl->getRegStats(true));
 
         std::vector<uint8_t> recv_buf(model_cfg.stream_out_size, 0);
         if (!pl->streamWaitRecv(output_offset, recv_buf.data(),

@@ -83,6 +83,9 @@ namespace PLReg {
     constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0x44;
     constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0x48;
     constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0x4C;
+    // constexpr uint32_t LN0_BETA_OFFSET = CTRL_BASE + 0x50;
+    // constexpr uint32_t LN1_BETA_OFFSET = CTRL_BASE + 0x54;
+    // constexpr uint32_t FINAL_NORM_BETA_OFFSET = CTRL_BASE + 0x58;
     constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0x50;
     constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x54;
     constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x58;
@@ -92,7 +95,8 @@ namespace PLReg {
     constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x60;
 
     // ── StatusMemSpace (PL → PS reads) ──
-    constexpr uint32_t STATUS_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA;
+    constexpr uint32_t STATUS_BASE =
+        XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_BASE;
 
     // Word 0-6: legacy status fields (always present)
     constexpr uint32_t STATUS = STATUS_BASE + 0x00;
@@ -258,6 +262,7 @@ public:
     bool waitIRQ(uint32_t timeout_ms);
 
     // Diagnostics
+    std::string dumpKVCache();
     std::string getRegStats(bool compact = false);
     std::string dumpCtrlMem();
     std::string getErrorCodeString(const uint32_t error_mask = 0xFFFFFFFF);
