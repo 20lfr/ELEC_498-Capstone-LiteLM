@@ -7,7 +7,7 @@
 #endif
 
 static inline int8_t requant_scalar_to_i8(const int32_t x32, const int32_t M, const int32_t n);
-static inline int16_t gelu_q15(int16_t x_q15);
+static inline int16_t gelu_q511(int16_t x_q511);
 
 #ifndef __SYNTHESIS__
 static const char *compute_op_name(ComputeOp op) {
@@ -305,11 +305,13 @@ static void MAC_I8I8_DISPATCH(
                 break;
             }
             case ComputeOp::CMP_FFN_W1: {
-                const int64_t prod =
-                    static_cast<int64_t>(accum[out]) *
-                    static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
-                const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
-                int32_t scaled = static_cast<int32_t>(rounded >> 15);
+                // int8×int8 acc → Q5.11 int16 (1 LSB = 2^-11, range ±16 real)
+                // real_scale = S_w1_eff[l] × 16; uses per-layer M/N requant
+                const int32_t M_w1 = requant_params::REQUANT_FFN_W1_M_L[layer];
+                const int32_t n_w1 = requant_params::REQUANT_FFN_W1_N_L[layer];
+                const int64_t prod = static_cast<int64_t>(accum[out]) * static_cast<int64_t>(M_w1);
+                const int64_t rounded = prod + ((prod >= 0) ? (1LL << (n_w1 - 1)) : -(1LL << (n_w1 - 1)));
+                int32_t scaled = static_cast<int32_t>(rounded >> n_w1);
                 if (scaled >  32767) scaled =  32767;
                 else if (scaled < -32768) scaled = -32768;
                 compute_buf::write_i16(out_buf, out * 2, static_cast<int16_t>(scaled));
@@ -569,7 +571,7 @@ static void FFN_ACT_Gelu_TO_BUF(uint8_t layer_idx,
     // FFN_ACT_TO_BUF_VEC_UNROLL independent GELU lanes can execute simultaneously
     for (int i = 0; i < D_FFN; ++i) {
 #pragma HLS UNROLL factor=FFN_ACT_TO_BUF_VEC_UNROLL
-        out_local[i] = gelu_q15(gate_local[i]);
+        out_local[i] = gelu_q511(gate_local[i]);
     }
 
     // Stage 3: write results back to out_buf
@@ -743,17 +745,27 @@ static inline int32_t mul_q15_i32(int32_t a_q15, int32_t b_q15) {
     return static_cast<int32_t>((prod + round) >> 15);
 }
 
-static inline int16_t gelu_q15(int16_t x_q15) {
+// GELU for Q5.11 inputs (1 LSB = 2^-11, real range ±16).
+// For |x_real| >= 1.0 (|x_q511| >= 2048): use asymptotes (GELU(x)≈x for x≥1, ≈0 for x≤-1).
+// For |x_real| < 1.0: convert to Q1.15 (×16), apply polynomial approximation, convert back (/16).
+static inline int16_t gelu_q511(int16_t x_q511) {
 #pragma HLS INLINE
-    // GELU tanh-approx in Q1.15:
-    //   gelu(x) = 0.5*x*(1 + tanh(sqrt(2/pi)*(x + 0.044715*x^3)))
-    // tanh is approximated with: u - u^3/3 + 2u^5/15 (good over |u|~<1).
-    constexpr int32_t A_Q15 = 26200;  // round(sqrt(2/pi) * 2^15)
-    constexpr int32_t B_Q15 = 1466;   // round(0.044715 * 2^15)
-    constexpr int32_t INV3_Q15 = 10923;   // round((1/3) * 2^15)
+    constexpr int32_t A_Q15 = 26200;        // round(sqrt(2/pi) * 2^15)
+    constexpr int32_t B_Q15 = 1466;         // round(0.044715 * 2^15)
+    constexpr int32_t INV3_Q15 = 10923;     // round((1/3) * 2^15)
     constexpr int32_t TWO_INV15_Q15 = 4369; // round((2/15) * 2^15)
 
-    const int32_t x = static_cast<int32_t>(x_q15);
+    const int32_t xi = static_cast<int32_t>(x_q511);
+
+    // Asymptote: GELU(x) ≈ x for x ≥ 1.0 real (Q5.11: ≥ 2048)
+    if (xi >= 2048) return x_q511;
+    // Asymptote: GELU(x) ≈ 0 for x ≤ -1.0 real (Q5.11: ≤ -2048)
+    if (xi <= -2048) return 0;
+
+    // Convert Q5.11 → Q1.15 for polynomial: x_q15 = xi << 4
+    // (real value unchanged: xi/2048 = (xi<<4)/32768)
+    const int32_t x = xi << 4;  // Q1.15
+
     const int32_t x2 = mul_q15_i32(x, x);
     const int32_t x3 = mul_q15_i32(x2, x);
     const int32_t inner = x + mul_q15_i32(B_Q15, x3);
@@ -771,11 +783,14 @@ static inline int16_t gelu_q15(int16_t x_q15) {
     const int32_t one_plus = (1 << 15) + tanh_q15; // Q1.15 in [0, 2]
     const int64_t prod = static_cast<int64_t>(x) * static_cast<int64_t>(one_plus); // Q2.30
     const int64_t round = (prod >= 0) ? (1LL << 15) : -(1LL << 15);
-    const int32_t y = static_cast<int32_t>((prod + round) >> 16); // 0.5 scaling + back to Q1.15
+    const int32_t y_q15 = static_cast<int32_t>((prod + round) >> 16); // Q1.15
 
-    if (y > 32767) return 32767;
-    if (y < -32768) return -32768;
-    return static_cast<int16_t>(y);
+    // Convert Q1.15 → Q5.11: y_q511 = y_q15 >> 4
+    const int32_t y_q511 = y_q15 >> 4;
+
+    if (y_q511 > 32767) return 32767;
+    if (y_q511 < -32768) return -32768;
+    return static_cast<int16_t>(y_q511);
 }
 
 // ---------------------------------------------------------------------------

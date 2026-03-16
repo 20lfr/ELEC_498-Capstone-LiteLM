@@ -11,7 +11,9 @@ constexpr int MODEL_HEAD_DIMENSTION   = 64;
 constexpr int MODEL_INTERMEDIATE_SIZE = 3072;
 constexpr int MODEL_CONTEXT_LENGTH    = 1024;
 constexpr int MODEL_VOCAB_SIZE        = 50257;
-constexpr int16_t ATTN_SCALE_Q15      = 4096; // Q1.15: round((1/sqrt(64)) * 2^15) = 4096 (0x1000)
+constexpr int16_t ATTN_SCALE_Q15      = 8192; // Q1.15: round((1/sqrt(64)) * 2^15 * 2) = 8192 (0x2000)
+// NOTE: factor-of-2 vs naive formula because Q0.7 inputs contribute 2^14 per raw dot product unit,
+// so correct mapping to Q1.15 is raw_dot/4 (>>2), not raw_dot/8 (>>3).
 
 constexpr int max2_constexpr(int a, int b) { return (a > b) ? a : b; }
 constexpr int min2_constexpr(int a, int b) { return (a < b) ? a : b; }

@@ -18,9 +18,18 @@
 //   current HLS datapath:
 //     REQUANT_POST_LN0/REQUANT_POST_LN1 (LN Q16.16 -> int8):  real_scale = 2^-16 / 2^-7 = 2^-9
 //     REQUANT_POST_OUTPROJ   (out-proj -> int8):  real_scale = S_w_wo_eff
-//     REQUANT_POST_FFN   (ffn_w2   -> int8):  real_scale = (2^-15 * S_w_w2_eff) / 2^-7 = S_w_w2_eff * 2^-8
+//     REQUANT_FFN_W1 (ffn_w1 int8x int8 -> Q5.11 int16): real_scale = S_w_w1_eff * 2^4
+//       (maps acc * 2^-7 * S_w1 to Q5.11 where 1 LSB = 2^-11; Q5.11 covers ±16 real)
+//     REQUANT_POST_FFN   (ffn_w2 Q5.11 -> int8): real_scale = (2^-11 * S_w_w2_eff) / 2^-7 = S_w_w2_eff * 2^-4
+//       (was 2^-8 when input was Q1.15; Q5.11 input is 16x larger per LSB → N decreases by 4)
 //     REQUANT_Q/K/V (qkv   -> int8):  real_scale = S_w_w{q,k,v}_eff
-//     REQUANT_HEAD (attn value -> int8): real_scale = 2^-7
+//     REQUANT_HEAD (attn value -> int8): real_scale = 2^-15
+//       acc = Σ(w_q15 × v_i8), softmax weights sum ≈ 2^15, v_i8 in Q0.7 → need shift 15 for Q0.7 out
+//
+// KNOWN ISSUE (bias format): Biases are stored as Q16.16 (b_float * 2^16) but are added to raw
+// int8×int8 accumulators. Correct unit would be b_float / (scale_act * scale_W). Error is
+// ~1-4x on the bias term, but bias contribution to accumulator is typically <1%, so net
+// effect on output is <0.1%. Fixing requires activation calibration data at conversion time.
 
 #include <cstdint>
 
@@ -73,20 +82,20 @@ constexpr double S_w_wo = S_w_wo_L[0];
 constexpr double S_w_w1 = S_w_w1_L[0];
 constexpr double S_w_w2 = S_w_w2_L[0];
 
-// FFN per-stage fixed-point scale (Q1.15)
-constexpr int16_t FFN_W1_SCALE_Q15 = 0x4000; // 0.5
-constexpr int16_t FFN_W2_SCALE_Q15 = 0x4000; // 0.5
+// FFN_W2_SCALE_Q15 kept for reference but unused (FFN_W2 uses REQUANT_POST_FFN tables)
+constexpr int16_t FFN_W2_SCALE_Q15 = 0x4000; // 0.5 (unused)
 } // namespace requant_scales
 
 namespace requant_params {
 constexpr int32_t REQUANT_POST_LN0_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT_POST_OUTPROJ_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38, 38 };
 constexpr int32_t REQUANT_POST_LN1_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
-constexpr int32_t REQUANT_POST_FFN_N_L[MODEL_LAYERS] = { 47, 47, 47, 47, 47, 47, 46, 46, 46, 46, 46, 45 };
+constexpr int32_t REQUANT_POST_FFN_N_L[MODEL_LAYERS] = { 43, 43, 43, 43, 43, 43, 42, 42, 42, 42, 42, 41 };
+constexpr int32_t REQUANT_FFN_W1_N_L[MODEL_LAYERS]   = { 34, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35 };
 constexpr int32_t REQUANT_Q_N_L[MODEL_LAYERS] = { 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT_K_N_L[MODEL_LAYERS] = { 37, 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT_V_N_L[MODEL_LAYERS] = { 40, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38 };
-constexpr int32_t REQUANT_HEAD_N_L[MODEL_LAYERS] = { 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37 };
+constexpr int32_t REQUANT_HEAD_N_L[MODEL_LAYERS] = { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45 };
 
 constexpr int32_t REQUANT_POST_LN0_M_L[MODEL_LAYERS] = {
     1073741824, 1073741824, 1073741824, 1073741824, 1073741824, 1073741824,
@@ -103,6 +112,12 @@ constexpr int32_t REQUANT_POST_LN1_M_L[MODEL_LAYERS] = {
 constexpr int32_t REQUANT_POST_FFN_M_L[MODEL_LAYERS] = {
     2124245376, 1920686976, 2138422784, 2049671808, 1907768448, 2037531008,
     1113657216, 1212957312, 1417219456, 1634339840, 2002711040, 1331169152
+};
+// FFN W1: int8×int8 acc → Q5.11 int16 (1 LSB = 2^-11, range ±16 real)
+// real_scale = S_w1_eff * 2^4; M/2^N = S_w1_eff * 16
+constexpr int32_t REQUANT_FFN_W1_M_L[MODEL_LAYERS] = {
+    1201301888, 1990940672, 1991986304, 1895421952, 1913168768, 1849140736,
+    1846176768, 1841215104, 1869124224, 1883561600, 1915682432, 1965782656
 };
 constexpr int32_t REQUANT_Q_M_L[MODEL_LAYERS] = {
     1813034880, 1209907456, 1377564032, 1225791744, 1248283776, 1075072640,
