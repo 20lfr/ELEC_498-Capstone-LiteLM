@@ -38,6 +38,10 @@ enum class DmaBufType : uint8_t {
 // ═══════════════════════════════════════════════════════════════════════════════
 // HLS REGISTER OFFSETS
 // Update after synthesis from: drivers/<top>/src/x<top>_hw.h
+//
+// IMPORTANT: Word order must match ControlMemSpace struct in HLS.
+// After adding beta fields and matmul fields, the struct is 30 words.
+// Verify byte offsets against xtransformer_top_hw.h after re-synthesis.
 // ═══════════════════════════════════════════════════════════════════════════════
 namespace PLReg {
     // AXI-Lite control interface (ap_ctrl_hs)
@@ -54,8 +58,8 @@ namespace PLReg {
     constexpr uint32_t AP_AUTO_RESTART_BIT = (1u << 7);
 
     // ── ControlMemSpace (PS → PL writes) ──
-    // Packed struct mapped at CTRL_BASE. Word order matches ControlMemSpace (22
-    // words).
+    // Packed struct mapped at CTRL_BASE. Word order matches ControlMemSpace
+    // (30 words after P0 fix + matmul mode additions).
     constexpr uint32_t CTRL_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA;
 
     // Control + IRQ (words 0-2)
@@ -73,26 +77,38 @@ namespace PLReg {
     constexpr uint32_t K_CACHE_OFFSET = CTRL_BASE + 0x24;
     constexpr uint32_t V_CACHE_OFFSET = CTRL_BASE + 0x28;
 
-    // Words 11-21: Bias and parameter offsets
+    // Words 11-16: Bias offsets
     constexpr uint32_t WQ_BIAS_OFFSET = CTRL_BASE + 0x2C;
     constexpr uint32_t WK_BIAS_OFFSET = CTRL_BASE + 0x30;
     constexpr uint32_t WV_BIAS_OFFSET = CTRL_BASE + 0x34;
     constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x38;
     constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0x3C;
     constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0x40;
+
+    // Words 17-19: LN gamma offsets
     constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0x44;
     constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0x48;
     constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0x4C;
-    // constexpr uint32_t LN0_BETA_OFFSET = CTRL_BASE + 0x50;
-    // constexpr uint32_t LN1_BETA_OFFSET = CTRL_BASE + 0x54;
-    // constexpr uint32_t FINAL_NORM_BETA_OFFSET = CTRL_BASE + 0x58;
-    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0x50;
-    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x54;
-    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x58;
-    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0x5C;
 
-    // GPT-2 extensions (word 24)
-    constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x60;
+    // Words 20-22: LN beta offsets (P0 FIX: were commented out)
+    constexpr uint32_t LN0_BETA_OFFSET = CTRL_BASE + 0x50;
+    constexpr uint32_t LN1_BETA_OFFSET = CTRL_BASE + 0x54;
+    constexpr uint32_t FINAL_NORM_BETA_OFFSET = CTRL_BASE + 0x58;
+
+    // Words 23-25: LN epsilon offsets (SHIFTED from 0x50/0x54/0x58)
+    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0x5C;
+    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x60;
+    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x64;
+
+    // Word 26: Logit weight offset (SHIFTED from 0x5C)
+    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0x68;
+
+    // Word 27: Token position (SHIFTED from 0x60)
+    constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x6C;
+
+    // Words 28-29: Matmul mode control (NEW)
+    constexpr uint32_t MATMUL_WEIGHT_SEL = CTRL_BASE + 0x70;
+    constexpr uint32_t MATMUL_LAYER = CTRL_BASE + 0x74;
 
     // ── StatusMemSpace (PL → PS reads) ──
     constexpr uint32_t STATUS_BASE =
