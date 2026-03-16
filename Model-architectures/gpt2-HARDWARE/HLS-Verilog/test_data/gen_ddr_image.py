@@ -181,6 +181,10 @@ def write_hex_map(path: Path, word_map: dict[int, int]) -> None:
             f.write(f"{(word_idx * 4):08X} {word_map[word_idx] & 0xFFFFFFFF:08X}\n")
 
 
+# GPT-2 layer norm epsilon in Q0.32 format: round(1e-5 * 2^32)
+LN_EPS_Q0_32 = round(1e-5 * (2**32))   # = 42950 = 0x0000A7C6
+
+
 def build_ctrl_words(c: dict[str, int]) -> list[int]:
     words = [0] * CTRL_MEM_WORDS
     words[0] = c["CTRL_RESETN_BIT"]
@@ -502,9 +506,9 @@ def emit_synthetic_image(c: dict[str, int], out_path: Path) -> dict[int, int]:
             write_region(ln1_beta_addr, build_beta_block(c["D_MODEL"]), "LN1_BETA")
 
             ln0_eps_addr = c["LN0_EPS_OFF"] + layer * c["STRIDE_LN0_EPS"]
-            write_region(ln0_eps_addr, struct.pack("<I", 0x00000004), "LN0_EPS")
+            write_region(ln0_eps_addr, struct.pack("<I", LN_EPS_Q0_32), "LN0_EPS")
             ln1_eps_addr = c["LN1_EPS_OFF"] + layer * c["STRIDE_LN1_EPS"]
-            write_region(ln1_eps_addr, struct.pack("<I", 0x00000004), "LN1_EPS")
+            write_region(ln1_eps_addr, struct.pack("<I", LN_EPS_Q0_32), "LN1_EPS")
 
         write_region(
             c["FINAL_NORM_GAMMA_OFF"],
@@ -512,7 +516,7 @@ def emit_synthetic_image(c: dict[str, int], out_path: Path) -> dict[int, int]:
             "FINAL_NORM_GAMMA",
         )
         write_region(c["FINAL_NORM_BETA_OFF"], build_beta_block(c["D_MODEL"]), "FINAL_NORM_BETA")
-        write_region(c["FINAL_NORM_EPS_OFF"], struct.pack("<I", 0x00000004), "FINAL_NORM_EPS")
+        write_region(c["FINAL_NORM_EPS_OFF"], struct.pack("<I", LN_EPS_Q0_32), "FINAL_NORM_EPS")
 
         for tile in range(c["NUM_LOGIT_TILES"]):
             for row in range(c["D_TILE_LOGIT"]):

@@ -269,17 +269,17 @@ static const char *op_name(ComputeOp op) {
     case CMP_HEAD_REQUANT: return "HEAD_RQ";
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
-    case CMP_REQUANT1:     return "RQ1";
+    case CMP_REQUANT_POST_LN0:     return "RQ1";
     case CMP_RESID1:       return "RESID1";
     case CMP_LN0:          return "LN0";
-    case CMP_REQUANT2:     return "RQ2";
+    case CMP_REQUANT_POST_OUTPROJ:     return "RQ2";
     case CMP_FFN_W1:       return "FFN_W1";
     case CMP_FFN_ACT:      return "FFN_ACT";
     case CMP_FFN_W2:       return "FFN_W2";
-    case CMP_REQUANT3:     return "RQ3";
+    case CMP_REQUANT_POST_LN1:     return "RQ3";
     case CMP_RESID2:       return "RESID2";
     case CMP_LN1:          return "LN1";
-    case CMP_REQUANT4:     return "RQ4";
+    case CMP_REQUANT_POST_FFN:     return "RQ4";
     case CMP_FINAL_NORM:   return "FINAL_NORM";
     case CMP_LOGITS:       return "LOGITS";
     case CMP_ARGMAX:       return "ARGMAX";
@@ -649,10 +649,10 @@ static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         std::printf("\n");
         break;
     }
-    case ComputeOp::CMP_REQUANT1:
-    case ComputeOp::CMP_REQUANT2:
-    case ComputeOp::CMP_REQUANT3:
-    case ComputeOp::CMP_REQUANT4: {
+    case ComputeOp::CMP_REQUANT_POST_LN0:
+    case ComputeOp::CMP_REQUANT_POST_OUTPROJ:
+    case ComputeOp::CMP_REQUANT_POST_LN1:
+    case ComputeOp::CMP_REQUANT_POST_FFN: {
         std::printf("REQUANT in_buf (decoded):\n  X:");
         for (int i = 0; i < D_MODEL; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4))));
@@ -660,21 +660,21 @@ static void print_in_buf_decoded(ComputeOp op, const uint8_t *in_buf) {
         int32_t M = 0;
         int32_t N = 0;
         switch (op) {
-            case ComputeOp::CMP_REQUANT1:
-                M = requant_params::REQUANT1_M;
-                N = requant_params::REQUANT1_N;
+            case ComputeOp::CMP_REQUANT_POST_LN0:
+                M = requant_params::REQUANT_POST_LN0_M;
+                N = requant_params::REQUANT_POST_LN0_N;
                 break;
-            case ComputeOp::CMP_REQUANT2:
-                M = requant_params::REQUANT2_M;
-                N = requant_params::REQUANT2_N;
+            case ComputeOp::CMP_REQUANT_POST_OUTPROJ:
+                M = requant_params::REQUANT_POST_OUTPROJ_M;
+                N = requant_params::REQUANT_POST_OUTPROJ_N;
                 break;
-            case ComputeOp::CMP_REQUANT3:
-                M = requant_params::REQUANT3_M;
-                N = requant_params::REQUANT3_N;
+            case ComputeOp::CMP_REQUANT_POST_LN1:
+                M = requant_params::REQUANT_POST_LN1_M;
+                N = requant_params::REQUANT_POST_LN1_N;
                 break;
-            case ComputeOp::CMP_REQUANT4:
-                M = requant_params::REQUANT4_M;
-                N = requant_params::REQUANT4_N;
+            case ComputeOp::CMP_REQUANT_POST_FFN:
+                M = requant_params::REQUANT_POST_FFN_M;
+                N = requant_params::REQUANT_POST_FFN_N;
                 break;
             default:
                 break;
@@ -779,10 +779,10 @@ static void print_out_buf_decoded(ComputeOp op, const uint8_t *out_buf) {
         std::printf("\n");
         break;
     }
-    case ComputeOp::CMP_REQUANT1:
-    case ComputeOp::CMP_REQUANT2:
-    case ComputeOp::CMP_REQUANT3:
-    case ComputeOp::CMP_REQUANT4: {
+    case ComputeOp::CMP_REQUANT_POST_LN0:
+    case ComputeOp::CMP_REQUANT_POST_OUTPROJ:
+    case ComputeOp::CMP_REQUANT_POST_LN1:
+    case ComputeOp::CMP_REQUANT_POST_FFN: {
         std::printf("REQUANT out_buf (decoded):\n  Y:");
         for (int i = 0; i < D_MODEL; ++i) {
             std::printf(" %d", static_cast<int>(compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i)));

@@ -60,17 +60,17 @@ static const char *op_name(ComputeOp op) {
     case CMP_VALUE_SCALE:  return "VALUE_SCALE";
     case CMP_SOFTMAX:      return "SOFTMAX";
     case CMP_ATT_VALUE:    return "ATT_VALUE";
-    case CMP_REQUANT2:     return "RQ2";
+    case CMP_REQUANT_POST_OUTPROJ:     return "RQ2";
     case CMP_CONCAT:       return "CONCAT";
     case CMP_OUT_PROJ:     return "OUT_PROJ";
-    case CMP_REQUANT1:     return "RQ1";
+    case CMP_REQUANT_POST_LN0:     return "RQ1";
     case CMP_RESID1:       return "RESID1";
     case CMP_LN0:          return "LN0";
-    case CMP_REQUANT3:     return "RQ3";
+    case CMP_REQUANT_POST_LN1:     return "RQ3";
     case CMP_FFN_W1:       return "FFN_W1";
     case CMP_FFN_ACT:      return "FFN_ACT";
     case CMP_FFN_W2:       return "FFN_W2";
-    case CMP_REQUANT4:     return "RQ4";
+    case CMP_REQUANT_POST_FFN:     return "RQ4";
     case CMP_RESID2:       return "RESID2";
     case CMP_LN1:          return "LN1";
     default:               return "UNK";
@@ -335,25 +335,25 @@ int main() {
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT1: {
+                        case ComputeOp::CMP_REQUANT_POST_LN0: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), full_accum[i]);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT2: {
+                        case ComputeOp::CMP_REQUANT_POST_OUTPROJ: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), ln0_out[i]);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT3: {
+                        case ComputeOp::CMP_REQUANT_POST_LN1: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), ffn2_out_full[i]);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT4: {
+                        case ComputeOp::CMP_REQUANT_POST_FFN: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 compute_buf::write_i32(in_buf, compute_buf::INRequantLayout::X + (i * 4), ln1_out[i]);
                             }
@@ -451,25 +451,25 @@ int main() {
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT1: {
+                        case ComputeOp::CMP_REQUANT_POST_LN0: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 rq1_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT2: {
+                        case ComputeOp::CMP_REQUANT_POST_OUTPROJ: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 head_requant_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT3: {
+                        case ComputeOp::CMP_REQUANT_POST_LN1: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 rq3_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }
                             break;
                         }
-                        case ComputeOp::CMP_REQUANT4: {
+                        case ComputeOp::CMP_REQUANT_POST_FFN: {
                             for (int i = 0; i < D_MODEL; ++i) {
                                 rq4_out[i] = compute_buf::read_i8(out_buf, compute_buf::INRequantLayout::X + i);
                             }

@@ -108,17 +108,17 @@ static const char *op_name(ComputeOp op) {
         case CMP_HEAD_REQUANT: return "CMP_HEAD_REQUANT";
         case CMP_CONCAT: return "CMP_CONCAT";
         case CMP_OUT_PROJ: return "CMP_OUT_PROJ";
-        case CMP_REQUANT2: return "CMP_REQUANT2";
+        case CMP_REQUANT_POST_OUTPROJ: return "CMP_REQUANT_POST_OUTPROJ";
         case CMP_RESID1: return "CMP_RESID1";
         case CMP_LN1: return "CMP_LN1";
-        case CMP_REQUANT3: return "CMP_REQUANT3";
+        case CMP_REQUANT_POST_LN1: return "CMP_REQUANT_POST_LN1";
         case CMP_FFN_W1: return "CMP_FFN_W1";
         case CMP_FFN_ACT: return "CMP_FFN_ACT";
         case CMP_FFN_W2: return "CMP_FFN_W2";
-        case CMP_REQUANT4: return "CMP_REQUANT4";
+        case CMP_REQUANT_POST_FFN: return "CMP_REQUANT_POST_FFN";
         case CMP_RESID2: return "CMP_RESID2";
         case CMP_FINAL_NORM: return "CMP_FINAL_NORM";
-        case CMP_REQUANT1: return "CMP_REQUANT1";
+        case CMP_REQUANT_POST_LN0: return "CMP_REQUANT_POST_LN0";
         case CMP_REQUANT_Q: return "CMP_REQUANT_Q";
         default: return "CMP?";
     }

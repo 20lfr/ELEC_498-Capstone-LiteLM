@@ -53,7 +53,7 @@ enum ComputeOp : uint8_t {
     CMP_NONE = 0, // 0
 
     CMP_LN0 = 1,      // 17
-    CMP_REQUANT1 = 2, // 15
+    CMP_REQUANT_POST_LN0 = 2, // 15
 
     // Attention ops
     CMP_Q = 3,            // 1
@@ -72,14 +72,14 @@ enum ComputeOp : uint8_t {
     CMP_CONCAT = 14,     // 13
     CMP_OUT_PROJ = 15,   // 14
     CMP_RESID1 = 16,     // 16
-    CMP_REQUANT2 = 17,   // 18
+    CMP_REQUANT_POST_OUTPROJ = 17,   // 18
     CMP_FFN_W1 = 18,     // 19
     CMP_FFN_ACT = 19,    // 20
     CMP_FFN_W2 = 20,     // 21
-    CMP_REQUANT3 = 21,   // 22
+    CMP_REQUANT_POST_LN1 = 21,   // 22
     CMP_RESID2 = 22,     // 23
     CMP_LN1 = 23,        // 24
-    CMP_REQUANT4 = 24,   // 25
+    CMP_REQUANT_POST_FFN = 24,   // 25
     CMP_FINAL_NORM = 25, // 26
     CMP_LOGITS = 26,     // 27
     CMP_ARGMAX = 27,     // 28

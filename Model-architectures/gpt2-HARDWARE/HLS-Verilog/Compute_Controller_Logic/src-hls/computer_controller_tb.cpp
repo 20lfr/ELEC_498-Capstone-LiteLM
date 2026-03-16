@@ -246,8 +246,8 @@ static void compute_expected_out_buf(const OpStep &step,
 
     switch (step.op) {
         case CMP_OUT_PROJ: {
-            const int32_t M = requant_params::REQUANT2_M_L[layer];
-            const int32_t n = requant_params::REQUANT2_N_L[layer];
+            const int32_t M = requant_params::REQUANT_POST_OUTPROJ_M_L[layer];
+            const int32_t n = requant_params::REQUANT_POST_OUTPROJ_N_L[layer];
             for (int out = 0; out < D_TILE_WO; ++out) {
                 int32_t acc = compute_buf::read_i32(in_buf, compute_buf::INOutProjLayout::B + out * 4);
                 for (int i = 0; i < D_MODEL; ++i) {
@@ -302,8 +302,8 @@ static void compute_expected_out_buf(const OpStep &step,
             break;
         }
         case CMP_FFN_W2: {
-            const int32_t M = requant_params::REQUANT4_M_L[layer];
-            const int32_t n = requant_params::REQUANT4_N_L[layer];
+            const int32_t M = requant_params::REQUANT_POST_FFN_M_L[layer];
+            const int32_t n = requant_params::REQUANT_POST_FFN_N_L[layer];
             for (int out = 0; out < D_TILE_W2; ++out) {
                 int32_t acc = compute_buf::read_i32(in_buf, compute_buf::INFfnW2Layout::B + out * 4);
                 for (int i = 0; i < D_FFN; ++i) {
@@ -323,11 +323,11 @@ static void compute_expected_out_buf(const OpStep &step,
             int32_t M = 0, n = 0;
             if (!final_norm) {
                 if (step.op == CMP_LN0) {
-                    M = requant_params::REQUANT1_M_L[layer];
-                    n = requant_params::REQUANT1_N_L[layer];
+                    M = requant_params::REQUANT_POST_LN0_M_L[layer];
+                    n = requant_params::REQUANT_POST_LN0_N_L[layer];
                 } else {
-                    M = requant_params::REQUANT3_M_L[layer];
-                    n = requant_params::REQUANT3_N_L[layer];
+                    M = requant_params::REQUANT_POST_LN1_M_L[layer];
+                    n = requant_params::REQUANT_POST_LN1_N_L[layer];
                 }
             }
 

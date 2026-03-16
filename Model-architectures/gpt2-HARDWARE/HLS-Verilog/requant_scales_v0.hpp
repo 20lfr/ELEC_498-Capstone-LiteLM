@@ -16,9 +16,9 @@
 // - For lack of per-layer activation/output calibration in quant_scales.json,
 //   real_scale is chosen using fixed-point assumptions consistent with the
 //   current HLS datapath:
-//     REQUANT1/3 (LN Q16.16 -> int8):  real_scale = 2^-16 / 2^-7 = 2^-9
-//     REQUANT2   (out-proj -> int8):  real_scale = S_w_wo_eff
-//     REQUANT4   (ffn_w2   -> int8):  real_scale = (2^-15 * S_w_w2_eff) / 2^-7 = S_w_w2_eff * 2^-8
+//     REQUANT_POST_LN0/REQUANT_POST_LN1 (LN Q16.16 -> int8):  real_scale = 2^-16 / 2^-7 = 2^-9
+//     REQUANT_POST_OUTPROJ   (out-proj -> int8):  real_scale = S_w_wo_eff
+//     REQUANT_POST_FFN   (ffn_w2   -> int8):  real_scale = (2^-15 * S_w_w2_eff) / 2^-7 = S_w_w2_eff * 2^-8
 //     REQUANT_Q/K/V (qkv   -> int8):  real_scale = S_w_w{q,k,v}_eff
 //     REQUANT_HEAD (attn value -> int8): real_scale = 2^-7
 
@@ -79,28 +79,28 @@ constexpr int16_t FFN_W2_SCALE_Q15 = 0x4000; // 0.5
 } // namespace requant_scales
 
 namespace requant_params {
-constexpr int32_t REQUANT1_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
-constexpr int32_t REQUANT2_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38, 38 };
-constexpr int32_t REQUANT3_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
-constexpr int32_t REQUANT4_N_L[MODEL_LAYERS] = { 47, 47, 47, 47, 47, 47, 46, 46, 46, 46, 46, 45 };
+constexpr int32_t REQUANT_POST_LN0_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
+constexpr int32_t REQUANT_POST_OUTPROJ_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38, 38 };
+constexpr int32_t REQUANT_POST_LN1_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
+constexpr int32_t REQUANT_POST_FFN_N_L[MODEL_LAYERS] = { 47, 47, 47, 47, 47, 47, 46, 46, 46, 46, 46, 45 };
 constexpr int32_t REQUANT_Q_N_L[MODEL_LAYERS] = { 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT_K_N_L[MODEL_LAYERS] = { 37, 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT_V_N_L[MODEL_LAYERS] = { 40, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38 };
 constexpr int32_t REQUANT_HEAD_N_L[MODEL_LAYERS] = { 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37 };
 
-constexpr int32_t REQUANT1_M_L[MODEL_LAYERS] = {
+constexpr int32_t REQUANT_POST_LN0_M_L[MODEL_LAYERS] = {
     1073741824, 1073741824, 1073741824, 1073741824, 1073741824, 1073741824,
     1073741824, 1073741824, 1073741824, 1073741824, 1073741824, 1073741824
 };
-constexpr int32_t REQUANT2_M_L[MODEL_LAYERS] = {
+constexpr int32_t REQUANT_POST_OUTPROJ_M_L[MODEL_LAYERS] = {
     1692334464, 1540847616, 1402086016, 1389463168, 1524429184, 1485712384,
     1794790400, 1817906304, 1853225856, 2076041216, 1113299584, 1274316928
 };
-constexpr int32_t REQUANT3_M_L[MODEL_LAYERS] = {
+constexpr int32_t REQUANT_POST_LN1_M_L[MODEL_LAYERS] = {
     1073741824, 1073741824, 1073741824, 1073741824, 1073741824, 1073741824,
     1073741824, 1073741824, 1073741824, 1073741824, 1073741824, 1073741824
 };
-constexpr int32_t REQUANT4_M_L[MODEL_LAYERS] = {
+constexpr int32_t REQUANT_POST_FFN_M_L[MODEL_LAYERS] = {
     2124245376, 1920686976, 2138422784, 2049671808, 1907768448, 2037531008,
     1113657216, 1212957312, 1417219456, 1634339840, 2002711040, 1331169152
 };
@@ -121,18 +121,18 @@ constexpr int32_t REQUANT_HEAD_M_L[MODEL_LAYERS] = {
     1073741824, 1073741824, 1073741824, 1073741824, 1073741824, 1073741824
 };
 
-constexpr int32_t REQUANT1_N = REQUANT1_N_L[0];
-constexpr int32_t REQUANT2_N = REQUANT2_N_L[0];
-constexpr int32_t REQUANT3_N = REQUANT3_N_L[0];
-constexpr int32_t REQUANT4_N = REQUANT4_N_L[0];
+constexpr int32_t REQUANT_POST_LN0_N = REQUANT_POST_LN0_N_L[0];
+constexpr int32_t REQUANT_POST_OUTPROJ_N = REQUANT_POST_OUTPROJ_N_L[0];
+constexpr int32_t REQUANT_POST_LN1_N = REQUANT_POST_LN1_N_L[0];
+constexpr int32_t REQUANT_POST_FFN_N = REQUANT_POST_FFN_N_L[0];
 constexpr int32_t REQUANT_Q_N = REQUANT_Q_N_L[0];
 constexpr int32_t REQUANT_K_N = REQUANT_K_N_L[0];
 constexpr int32_t REQUANT_V_N = REQUANT_V_N_L[0];
 constexpr int32_t REQUANT_HEAD_N = REQUANT_HEAD_N_L[0];
-constexpr int32_t REQUANT1_M = REQUANT1_M_L[0];
-constexpr int32_t REQUANT2_M = REQUANT2_M_L[0];
-constexpr int32_t REQUANT3_M = REQUANT3_M_L[0];
-constexpr int32_t REQUANT4_M = REQUANT4_M_L[0];
+constexpr int32_t REQUANT_POST_LN0_M = REQUANT_POST_LN0_M_L[0];
+constexpr int32_t REQUANT_POST_OUTPROJ_M = REQUANT_POST_OUTPROJ_M_L[0];
+constexpr int32_t REQUANT_POST_LN1_M = REQUANT_POST_LN1_M_L[0];
+constexpr int32_t REQUANT_POST_FFN_M = REQUANT_POST_FFN_M_L[0];
 constexpr int32_t REQUANT_Q_M = REQUANT_Q_M_L[0];
 constexpr int32_t REQUANT_K_M = REQUANT_K_M_L[0];
 constexpr int32_t REQUANT_V_M = REQUANT_V_M_L[0];

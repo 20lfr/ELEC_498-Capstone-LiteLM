@@ -298,8 +298,8 @@ static void MAC_I8I8_DISPATCH(
         if (out >= out_count) continue;
         switch (op) {
             case ComputeOp::CMP_OUT_PROJ: {
-                const int32_t M = requant_params::REQUANT2_M_L[layer];
-                const int32_t n = requant_params::REQUANT2_N_L[layer];
+                const int32_t M = requant_params::REQUANT_POST_OUTPROJ_M_L[layer];
+                const int32_t n = requant_params::REQUANT_POST_OUTPROJ_N_L[layer];
                 trace_M = M;  trace_n = n;
                 compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum[out], M, n));
                 break;
@@ -375,8 +375,8 @@ static void MAC_I16I8_DISPATCH(
 
     int layer = static_cast<int>(layer_idx);
     if (layer >= MODEL_LAYERS) layer = 0;
-    const int32_t M = requant_params::REQUANT4_M_L[layer];
-    const int32_t n = requant_params::REQUANT4_N_L[layer];
+    const int32_t M = requant_params::REQUANT_POST_FFN_M_L[layer];
+    const int32_t n = requant_params::REQUANT_POST_FFN_N_L[layer];
 
     for (int out = 0; out < ACCUM_MAX_I16I8; ++out) {
 #pragma HLS UNROLL factor=MAC_I16I8_OUT_UNROLL
@@ -959,12 +959,12 @@ void compute_controller(
                     int32_t n = 0;
                     switch (req.op) {
                         case ComputeOp::CMP_LN0:
-                            M = requant_params::REQUANT1_M_L[layer];
-                            n = requant_params::REQUANT1_N_L[layer];
+                            M = requant_params::REQUANT_POST_LN0_M_L[layer];
+                            n = requant_params::REQUANT_POST_LN0_N_L[layer];
                             break;
                         case ComputeOp::CMP_LN1:
-                            M = requant_params::REQUANT3_M_L[layer];
-                            n = requant_params::REQUANT3_N_L[layer];
+                            M = requant_params::REQUANT_POST_LN1_M_L[layer];
+                            n = requant_params::REQUANT_POST_LN1_N_L[layer];
                             break;
                         default:
                             M = 0;
