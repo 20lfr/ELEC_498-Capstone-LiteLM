@@ -33,27 +33,6 @@ enum ComputeOp : uint8_t {
     CMP_FFN_W1     = 7,  // FFN W1 tile: int8[D_MODEL] x int8[D_TILE_W1 x D_MODEL] -> int32[D_TILE_W1]
     CMP_FFN_W2     = 8,  // FFN W2 tile: int8[D_FFN] x int8[D_TILE_W2 x D_FFN] -> int32[D_TILE_W2]
     CMP_LOGITS     = 9,  // Vocab proj tile: int8[D_MODEL] x int8[D_TILE_LOGIT x D_MODEL] -> int32[D_TILE_LOGIT]
-
-    // Legacy ops — no longer dispatched in MatMul mode.
-    // Retained so that existing MMU code (switch statements) still compiles.
-    CMP_LN0                  = 10,
-    CMP_REQUANT_POST_LN0     = 11,
-    CMP_K_REQUANT            = 12,
-    CMP_V_REQUANT            = 13,
-    CMP_REQUANT_Q            = 14,
-    CMP_VALUE_SCALE          = 15,
-    CMP_SOFTMAX              = 16,
-    CMP_HEAD_REQUANT         = 17,
-    CMP_CONCAT               = 18,
-    CMP_RESID1               = 19,
-    CMP_REQUANT_POST_OUTPROJ = 20,
-    CMP_FFN_ACT              = 21,
-    CMP_REQUANT_POST_LN1     = 22,
-    CMP_RESID2               = 23,
-    CMP_LN1                  = 24,
-    CMP_REQUANT_POST_FFN     = 25,
-    CMP_FINAL_NORM           = 26,
-    CMP_ARGMAX               = 27,
 };
 
 // MatMul-only DMA selectors — only weight tiles and KV-cache ctx blocks.
@@ -69,16 +48,6 @@ enum DmaSel : uint8_t {
     DMASEL_W1     = 7,  // W1 weight tile (layer, tile)
     DMASEL_W2     = 8,  // W2 weight tile (layer, tile)
     DMASEL_WLOGIT = 9,  // W_vocab weight tile (tile)
-
-    // Legacy selectors — no longer dispatched in MatMul mode.
-    // Retained so that existing MMU switch statements still compile.
-    DMASEL_K_WRITE   = 10,  // dead — K write-back now done by PS
-    DMASEL_V_WRITE   = 11,  // dead — V write-back now done by PS
-    DMASEL_CONCAT    = 12,  // dead
-    DMASEL_LN0       = 13,  // dead
-    DMASEL_LN1       = 14,  // dead
-    DMASEL_FINAL_NORM = 15, // dead
-    DMASEL_LOGITS    = DMASEL_WLOGIT, // alias (was = 11, now = 9 via WLOGIT)
 };
 
 enum class ComputeErrorCodes { IncorrectRequest, InvalidComputationForamt };
@@ -117,7 +86,7 @@ struct PendingRequest {
 struct ControlMemSpace {
     uint32_t control = CTRL_RESETN_BIT; // bit0=reset_n, bit1=start
     // MatMul instruction (PS → PL): [15:10]=head, [9:4]=layer, [3:0]=op.
-    // NOTE: [31:16] is reserved/ignored — PL internally iterates tiles per op.
+    // [31:16] unused — no tile field; tiling is managed entirely on-chip.
     uint32_t instr   = 0;
     uint32_t irq_mask = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
@@ -560,9 +529,10 @@ namespace mm_buf {
     constexpr int ATT_SCORES_OUT_BYTES = ATT_CTX_BLOCK * 4;  // int32
 
     // --- Attention value tile ---
-    // Stream-in: int8[ATT_CTX_BLOCK] softmax weights; DMA: int8[ATT_CTX_BLOCK * D_HEAD_TILE_ATT_VALUE] V tile
-    constexpr int ATT_VALUE_ACT_BYTES = ATT_CTX_BLOCK;
-    constexpr int ATT_VALUE_W_BYTES   = ATT_CTX_BLOCK * D_HEAD_TILE_ATT_VALUE;
+    // No context chunking:
+    // Stream-in: int16[CONTEXT_LENGTH] softmax weights; DMA: int8[CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE] V tile
+    constexpr int ATT_VALUE_ACT_BYTES = CONTEXT_LENGTH * 2;
+    constexpr int ATT_VALUE_W_BYTES   = CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE;
     constexpr int ATT_VALUE_IN_BYTES  = ATT_VALUE_ACT_BYTES + ATT_VALUE_W_BYTES;
     constexpr int ATT_VALUE_OUT_BYTES = D_HEAD_TILE_ATT_VALUE * 4;  // int32
 

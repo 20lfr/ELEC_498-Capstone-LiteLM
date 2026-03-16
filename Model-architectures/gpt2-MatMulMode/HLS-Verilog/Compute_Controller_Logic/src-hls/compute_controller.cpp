@@ -55,6 +55,14 @@ static inline int32_t read_i32_in(const uint8_t *buf, int byte_addr) {
     return static_cast<int32_t>(v);
 }
 
+static inline int16_t read_i16_in(const uint8_t *buf, int byte_addr) {
+#pragma HLS INLINE
+    const uint16_t v =
+        static_cast<uint16_t>(buf[byte_addr + 0]) |
+        (static_cast<uint16_t>(buf[byte_addr + 1]) << 8);
+    return static_cast<int16_t>(v);
+}
+
 #ifndef __SYNTHESIS__
 static const char *compute_op_name(ComputeOp op) {
     switch (op) {
@@ -96,25 +104,26 @@ static void print_i32_prefix(const char *label, const uint8_t *buf, int byte_off
     std::printf("\n");
 }
 
+static void print_i16_prefix(const char *label, const uint8_t *buf, int byte_offset, int count, int max_print = 16) {
+    const int to_print = (count < max_print) ? count : max_print;
+    std::printf("  %s @%d i16[%d]:", label, byte_offset, count);
+    for (int i = 0; i < to_print; ++i) {
+        std::printf(" %d", static_cast<int>(read_i16_in(buf, byte_offset + i * 2)));
+    }
+    if (to_print < count) {
+        std::printf(" ...");
+    }
+    std::printf("\n");
+}
+
 static void trace_matmul_io(const PendingRequest &req,
                             const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                             const uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
-    if (req.op == CMP_ATT_VALUE) {
-        const unsigned ctx = static_cast<unsigned>(req.tile_idx >> 4);
-        const unsigned dtile = static_cast<unsigned>(req.tile_idx & 0xFu);
-        std::printf("[COMPUTE IO] op=%s layer=%u head=%u tile=0x%04x (ctx=%u dtile=%u)\n",
-                    compute_op_name(req.op),
-                    static_cast<unsigned>(req.layer_idx),
-                    static_cast<unsigned>(req.head_idx),
-                    static_cast<unsigned>(req.tile_idx),
-                    ctx, dtile);
-    } else {
-        std::printf("[COMPUTE IO] op=%s layer=%u head=%u tile=%u\n",
-                    compute_op_name(req.op),
-                    static_cast<unsigned>(req.layer_idx),
-                    static_cast<unsigned>(req.head_idx),
-                    static_cast<unsigned>(req.tile_idx));
-    }
+    std::printf("[COMPUTE IO] op=%s layer=%u head=%u tile=%u\n",
+                compute_op_name(req.op),
+                static_cast<unsigned>(req.layer_idx),
+                static_cast<unsigned>(req.head_idx),
+                static_cast<unsigned>(req.tile_idx));
 
     switch (req.op) {
         case CMP_Q:
@@ -139,8 +148,8 @@ static void trace_matmul_io(const PendingRequest &req,
         case CMP_ATT_VALUE:
             std::printf("  INAttValueLayout: ACT=%d W=%d\n",
                         mm_buf::INAttValueLayout::ACT, mm_buf::INAttValueLayout::W);
-            print_i8_prefix("IN.ACT(weights)", in_buf, mm_buf::INAttValueLayout::ACT, ATT_CTX_BLOCK);
-            print_i8_prefix("IN.W(V)",         in_buf, mm_buf::INAttValueLayout::W, ATT_CTX_BLOCK * D_HEAD_TILE_ATT_VALUE);
+            print_i16_prefix("IN.ACT(weights)", in_buf, mm_buf::INAttValueLayout::ACT, CONTEXT_LENGTH);
+            print_i8_prefix("IN.W(V)",          in_buf, mm_buf::INAttValueLayout::W, CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE);
             print_i32_prefix("OUT(values)", out_buf, 0, D_HEAD_TILE_ATT_VALUE, D_HEAD_TILE_ATT_VALUE);
             break;
 
@@ -313,41 +322,41 @@ static void MATMUL_ATT_SCORES(
 // ---------------------------------------------------------------------------
 // MATMUL_ATT_VALUE
 //
-// Computes a partial weighted sum of V for one context block and one d-tile.
+// Computes the full-context weighted sum of V for one d-tile (no ctx chunking).
 //
-//   out[d] = sum_{t in [0, ATT_CTX_BLOCK)} weights[t] * V_tile[d][t]
+//   out[d] = sum_{t in [0, CONTEXT_LENGTH)} weights[t] * V_tile[d][t]
 //
 // in_buf layout (mm_buf::INAttValueLayout):
-//   [ACT] int8[ATT_CTX_BLOCK]                        — softmax weights (one ctx block) from stream-in
-//   [W]   int8[ATT_CTX_BLOCK * D_HEAD_TILE_ATT_VALUE] — V cache tile from DMA
-//                                                        layout: V[d][t] at W + d*ATT_CTX_BLOCK + t
+//   [ACT] int16[CONTEXT_LENGTH]                         — softmax weights (full context) from stream-in
+//   [W]   int8[CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE]   — V cache tile from DMA
+//                                                         layout: V[d][t] at W + d*CONTEXT_LENGTH + t
 // out_buf:
-//   int32[D_HEAD_TILE_ATT_VALUE]                      — partial sums (PS accumulates across ctx blocks)
+//   int32[D_HEAD_TILE_ATT_VALUE]                        — full-context sums for this d-tile
 // ---------------------------------------------------------------------------
 static void MATMUL_ATT_VALUE(
     const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
     uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE
-    int8_t  weights[ATT_CTX_BLOCK];
-    int8_t  v[D_HEAD_TILE_ATT_VALUE * ATT_CTX_BLOCK];
+    int16_t weights[CONTEXT_LENGTH];
+    int8_t  v[D_HEAD_TILE_ATT_VALUE * CONTEXT_LENGTH];
     int32_t acc[D_HEAD_TILE_ATT_VALUE];
 #pragma HLS ARRAY_PARTITION variable=weights cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=v       cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=acc     cyclic factor=ATT_VALUE_TO_BUF_OUT_UNROLL dim=1
 
     // Stage 1: activation (softmax weights)
-    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
-        weights[t] = read_i8_in(in_buf, mm_buf::INAttValueLayout::ACT + t);
+        weights[t] = read_i16_in(in_buf, mm_buf::INAttValueLayout::ACT + t * 2);
     }
 
     // Stage 2: weight tile (V cache)
     for (int d = 0; d < D_HEAD_TILE_ATT_VALUE; ++d) {
-        for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
+        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
-            v[d * ATT_CTX_BLOCK + t] = read_i8_in(in_buf,
-                mm_buf::INAttValueLayout::W + d * ATT_CTX_BLOCK + t);
+            v[d * CONTEXT_LENGTH + t] = read_i8_in(in_buf,
+                mm_buf::INAttValueLayout::W + d * CONTEXT_LENGTH + t);
         }
     }
 
@@ -356,12 +365,12 @@ static void MATMUL_ATT_VALUE(
 #pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_OUT_UNROLL
         acc[d] = 0;
     }
-    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
 #pragma HLS PIPELINE II=1
         const int32_t wt = static_cast<int32_t>(weights[t]);
         for (int d = 0; d < D_HEAD_TILE_ATT_VALUE; ++d) {
 #pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_OUT_UNROLL
-            acc[d] += wt * static_cast<int32_t>(v[d * ATT_CTX_BLOCK + t]);
+            acc[d] += wt * static_cast<int32_t>(v[d * CONTEXT_LENGTH + t]);
         }
     }
 
@@ -373,17 +382,10 @@ static void MATMUL_ATT_VALUE(
 }
 
 // ---------------------------------------------------------------------------
-// MATMUL_OUTPROJ_OR_W1
+// MATMUL_OUT_PROJ
 //
-// OUT_PROJ and W1 share the same inner dimension (D_MODEL) but can have
-// different output tile widths (D_TILE_WO vs D_TILE_W1).
-//
-// in_buf layouts:
-//   OUT_PROJ: mm_buf::INOutProjLayout = [ACT(int8[D_MODEL]) | W(int8[D_TILE_WO*D_MODEL]) | B(int32[D_TILE_WO])]
-//   W1:       mm_buf::INW1Layout      = [ACT(int8[D_MODEL]) | W(int8[D_TILE_W1*D_MODEL]) | B(int32[D_TILE_W1])]
-//
-// out_buf:
-//   int32[D_TILE_*] raw accumulators
+// in_buf: mm_buf::INOutProjLayout = [ACT(int8[D_MODEL]) | W(int8[D_TILE_WO*D_MODEL]) | B(int32[D_TILE_WO])]
+// out_buf: int32[D_TILE_WO]
 // ---------------------------------------------------------------------------
 static void MATMUL_OUT_PROJ(
     const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
@@ -494,20 +496,6 @@ static void MATMUL_W1(
     for (int d = 0; d < D_TILE_W1; ++d) {
 #pragma HLS PIPELINE II=1
         write_i32_out(out_buf, d * 4, acc[d]);
-    }
-}
-
-static void MATMUL_OUTPROJ_OR_W1(
-    const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[mm_buf::OUT_BUF_BYTES],
-    ComputeOp     op
-) {
-#pragma HLS INLINE
-    if (op == CMP_OUT_PROJ) {
-        MATMUL_OUT_PROJ(in_buf, out_buf);
-    } else {
-        // Only valid other caller is CMP_FFN_W1.
-        MATMUL_W1(in_buf, out_buf);
     }
 }
 
@@ -777,11 +765,11 @@ void compute_controller(
                     break;
 
                 case CMP_OUT_PROJ:
-                    MATMUL_OUTPROJ_OR_W1(in_buf, out_buf, req.op);
+                    MATMUL_OUT_PROJ(in_buf, out_buf);
                     break;
 
                 case CMP_FFN_W1:
-                    MATMUL_OUTPROJ_OR_W1(in_buf, out_buf, req.op);
+                    MATMUL_W1(in_buf, out_buf);
                     break;
 
                 case CMP_FFN_W2:

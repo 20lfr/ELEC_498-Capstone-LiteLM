@@ -26,6 +26,29 @@ std::mutex g_console_mutex;
 Queue<Task, 100> g_task_queue;
 Queue<Command, 10> g_command_queue;
 
+// Firmware-local mirror of MatMulMode opcodes (shared with PL INSTR[3:0]).
+// Keep numeric values aligned with HLS `ComputeOp` in top_params.hpp.
+enum class ComputeOp : uint8_t {
+    CMP_NONE       = 0,
+    CMP_Q          = 1,
+    CMP_K          = 2,
+    CMP_V          = 3,
+    CMP_ATT_SCORES = 4,
+    CMP_ATT_VALUE  = 5,
+    CMP_OUT_PROJ   = 6,
+    CMP_FFN_W1     = 7,
+    CMP_FFN_W2     = 8,
+    CMP_LOGITS     = 9,
+};
+
+static inline uint32_t pack_instr32(ComputeOp op, uint32_t layer,
+                                   uint32_t head) {
+    const uint32_t op4 = static_cast<uint32_t>(op) & 0xFu;
+    const uint32_t layer6 = layer & 0x3Fu;
+    const uint32_t head6 = head & 0x3Fu;
+    return op4 | (layer6 << 4) | (head6 << 10);
+}
+
 // =============================================================================
 // WeightLoader — loads DDR image + programs config registers
 // =============================================================================
@@ -159,9 +182,9 @@ public:
 
         pl->writeReg(PLReg::TOKEN_POSITION, 0);
 
-        // Matmul mode registers (safe to write 0 during init)
-        pl->writeReg(PLReg::MATMUL_WEIGHT_SEL, 0);
-        pl->writeReg(PLReg::MATMUL_LAYER, 0);
+        // Instruction is written per op invocation; keep cleared during init.
+        pl->writeReg(PLReg::INSTR, 0);
+        pl->writeReg(PLReg::COMPUTE_INSTRUCTION, 0);
 
         pl->endConfig();
         if (err->hasError()) {
@@ -430,7 +453,7 @@ public:
 
     bool loadMatmulModeParams(const std::string &model_dir) {
         const uint32_t H = model_cfg.hidden_size;
-        const uint32_t FF = H * 4;
+        const uint32_t FF = model_cfg.intermediate_size;
         const uint32_t V = model_cfg.vocab_size;
         const uint32_t NL = model_cfg.num_layers;
         const MemoryLayout &mem = mem_layout;
@@ -544,43 +567,129 @@ public:
         return true;
     }
 
-    bool executeMatmul(uint8_t weight_sel, uint32_t layer,
-                       const int8_t *act_i8, uint32_t act_len,
-                       int32_t *acc_out, uint32_t out_len) {
-        uint32_t out_bytes = out_len * sizeof(int32_t);
-
-        pl->writeReg(PLReg::MATMUL_WEIGHT_SEL, weight_sel);
-        pl->writeReg(PLReg::MATMUL_LAYER, layer);
-        pl->writeReg(PLReg::TOKEN_POSITION, 0);
-
-        if (!pl->streamInitRecv(output_offset, out_bytes)) {
-            LOG_ERROR("matmul recv init failed"); return false;
+    bool executeMatmul(ComputeOp op, uint32_t layer, uint32_t head,
+                       uint32_t token_position, const int8_t *act_i8,
+                       uint32_t act_len, int32_t *acc_out,
+                       uint32_t out_len) {
+        uint32_t tile_end = 0;
+        uint32_t tile_out_elems = 0;
+        switch (op) {
+        case ComputeOp::CMP_Q:
+        case ComputeOp::CMP_K:
+        case ComputeOp::CMP_V:
+            tile_end = NUM_QKV_HEAD_TILES;
+            tile_out_elems = D_HEAD_TILE_QKV;
+            break;
+        case ComputeOp::CMP_ATT_SCORES:
+            tile_end = NUM_ATT_CTX_BLOCKS;
+            tile_out_elems = ATT_CTX_BLOCK;
+            break;
+        case ComputeOp::CMP_ATT_VALUE:
+            tile_end = NUM_ATT_VALUE_HEAD_TILES * NUM_ATT_CTX_BLOCKS;
+            tile_out_elems = D_HEAD_TILE_ATT_VALUE;
+            break;
+        case ComputeOp::CMP_OUT_PROJ:
+            tile_end = NUM_WO_TILES;
+            tile_out_elems = D_TILE_WO;
+            break;
+        case ComputeOp::CMP_FFN_W1:
+            tile_end = NUM_W1_TILES;
+            tile_out_elems = D_TILE_W1;
+            break;
+        case ComputeOp::CMP_FFN_W2:
+            tile_end = NUM_W2_TILES;
+            tile_out_elems = D_TILE_W2;
+            break;
+        case ComputeOp::CMP_LOGITS:
+            tile_end = NUM_LOGIT_TILES;
+            tile_out_elems = D_TILE_LOGIT;
+            break;
+        default:
+            LOG_ERROR("executeMatmul: invalid op");
+            return false;
         }
-        if (!pl->streamInitSend(input_offset, act_i8, act_len)) {
-            LOG_ERROR("matmul send init failed"); return false;
+
+        const uint32_t expected_total = tile_end * tile_out_elems;
+        if (out_len > expected_total) {
+            LOG_ERROR("executeMatmul: out_len exceeds op tile output");
+            return false;
+        }
+        if (act_len > static_cast<uint32_t>(STREAM_IN_BUF_BYTES)) {
+            LOG_ERROR("executeMatmul: act_len exceeds STREAM_IN_BUF_BYTES");
+            return false;
         }
 
-        uint32_t ctrl = CTRL_RESETN_BIT | CTRL_START_BIT | CTRL_MATMUL_MODE_BIT;
+        std::vector<uint8_t> send_buf(STREAM_IN_BUF_BYTES, 0);
+        memcpy(send_buf.data(), act_i8, act_len);
+
+        pl->writeReg(PLReg::INSTR, pack_instr32(op, layer, head));
+        pl->writeReg(PLReg::TOKEN_POSITION, token_position);
+
+        // Arm first receive before starting (backpressure-safe).
+        if (!pl->streamInitRecv(output_offset,
+                                static_cast<size_t>(STREAM_OUT_BUF_BYTES))) {
+            LOG_ERROR("matmul recv init failed");
+            return false;
+        }
+        if (!pl->streamInitSend(input_offset, send_buf.data(),
+                                static_cast<size_t>(STREAM_IN_BUF_BYTES))) {
+            LOG_ERROR("matmul send init failed");
+            return false;
+        }
+
+        uint32_t ctrl = CTRL_RESETN_BIT | CTRL_START_BIT;
+        if (debug_mode)
+            ctrl |= CTRL_DEBUG_MODE_BIT;
         pl->writeReg(PLReg::CONTROL, ctrl);
         usleep(10);
         pl->writeReg(PLReg::CONTROL, ctrl & ~CTRL_START_BIT);
 
         if (!pl->streamWaitSend(timeout_ms)) {
-            LOG_ERROR("matmul send timeout"); pl->clearIRQ(); return false;
-        }
-        if (!pl->waitDone(timeout_ms)) {
-            LOG_ERROR("matmul done timeout (sel=" +
-                      std::to_string(weight_sel) + " ly=" +
-                      std::to_string(layer) + ")");
-            pl->clearIRQ(); return false;
+            LOG_ERROR("matmul send timeout");
+            pl->clearIRQ();
+            return false;
         }
 
-        std::vector<uint8_t> recv_buf(out_bytes, 0);
-        if (!pl->streamWaitRecv(output_offset, recv_buf.data(), out_bytes,
-                                timeout_ms)) {
-            LOG_ERROR("matmul recv timeout"); pl->clearIRQ(); return false;
+        std::vector<uint8_t> recv_tile(STREAM_OUT_BUF_BYTES, 0);
+        for (uint32_t t = 0; t < tile_end; t++) {
+            if (!pl->streamWaitRecv(
+                    output_offset + t * STREAM_OUT_BUF_BYTES,
+                    recv_tile.data(), static_cast<size_t>(STREAM_OUT_BUF_BYTES),
+                    timeout_ms)) {
+                LOG_ERROR("matmul recv timeout");
+                pl->clearIRQ();
+                return false;
+            }
+
+            const uint32_t base = t * tile_out_elems;
+            if (base < out_len) {
+                const uint32_t remaining = out_len - base;
+                const uint32_t copy_elems =
+                    (remaining < tile_out_elems) ? remaining : tile_out_elems;
+                memcpy(&acc_out[base], recv_tile.data(),
+                       copy_elems * sizeof(int32_t));
+            }
+
+            if (t + 1 < tile_end) {
+                if (!pl->streamInitRecv(
+                        output_offset + (t + 1) * STREAM_OUT_BUF_BYTES,
+                        static_cast<size_t>(STREAM_OUT_BUF_BYTES))) {
+                    LOG_ERROR("matmul recv init failed (next tile)");
+                    pl->clearIRQ();
+                    return false;
+                }
+            }
         }
-        memcpy(acc_out, recv_buf.data(), out_bytes);
+
+        if (!pl->waitDone(timeout_ms)) {
+            LOG_ERROR("matmul done timeout (op=" +
+                      std::to_string(static_cast<uint32_t>(op)) +
+                      " layer=" + std::to_string(layer) +
+                      " head=" + std::to_string(head) + ")");
+            pl->clearIRQ();
+            return false;
+        }
+
         pl->clearIRQ();
         return true;
     }
@@ -595,16 +704,18 @@ public:
         perf->startGeneration();
 
         const uint32_t H = model_cfg.hidden_size;
-        const uint32_t FF = H * 4;
+        const uint32_t FF = model_cfg.intermediate_size;
         const uint32_t V = model_cfg.vocab_size;
         const uint32_t NL_count = model_cfg.num_layers;
+        const uint32_t NH_count = model_cfg.num_heads;
+        const uint32_t DH_size = model_cfg.head_dim;
 
         std::vector<double> x(H), h(H), h2(H);
         std::vector<double> q(H), k(H), v(H), o(H);
         std::vector<double> fc1(FF), fc2(H);
         std::vector<double> attn_out(H);
         std::vector<int8_t> act_i8_h(H), act_i8_ff(FF);
-        std::vector<int32_t> acc_h(H), acc_ff(FF);
+        std::vector<int32_t> acc_h(H), acc_ff(FF), acc_head(DH_size);
         double act_scale;
 
         // ── Float embedding ──
@@ -631,23 +742,34 @@ public:
                          h.data(), H);
             ps_quantize_act(h.data(), act_i8_h.data(), act_scale, H);
 
-            // PL: Q projection
-            if (!executeMatmul(0, ly, act_i8_h.data(), H, acc_h.data(), H))
-                return false;
-            ps_dequant(acc_h.data(), act_scale, wq_scale[ly].data(),
-                       bq_f[ly].data(), bq_raw[ly].data(), q.data(), H);
+            // PL: Q/K/V projections are per-head in MatMulMode.
+            for (uint32_t head = 0; head < NH_count; head++) {
+                const uint32_t off = head * DH_size;
 
-            // PL: K projection
-            if (!executeMatmul(1, ly, act_i8_h.data(), H, acc_h.data(), H))
-                return false;
-            ps_dequant(acc_h.data(), act_scale, wk_scale[ly].data(),
-                       bk_f[ly].data(), bk_raw[ly].data(), k.data(), H);
+                if (!executeMatmul(ComputeOp::CMP_Q, ly, head, token_position,
+                                   act_i8_h.data(), H, acc_head.data(),
+                                   DH_size))
+                    return false;
+                ps_dequant(acc_head.data(), act_scale,
+                           wq_scale[ly].data() + off, bq_f[ly].data() + off,
+                           bq_raw[ly].data() + off, q.data() + off, DH_size);
 
-            // PL: V projection
-            if (!executeMatmul(2, ly, act_i8_h.data(), H, acc_h.data(), H))
-                return false;
-            ps_dequant(acc_h.data(), act_scale, wv_scale[ly].data(),
-                       bv_f[ly].data(), bv_raw[ly].data(), v.data(), H);
+                if (!executeMatmul(ComputeOp::CMP_K, ly, head, token_position,
+                                   act_i8_h.data(), H, acc_head.data(),
+                                   DH_size))
+                    return false;
+                ps_dequant(acc_head.data(), act_scale,
+                           wk_scale[ly].data() + off, bk_f[ly].data() + off,
+                           bk_raw[ly].data() + off, k.data() + off, DH_size);
+
+                if (!executeMatmul(ComputeOp::CMP_V, ly, head, token_position,
+                                   act_i8_h.data(), H, acc_head.data(),
+                                   DH_size))
+                    return false;
+                ps_dequant(acc_head.data(), act_scale,
+                           wv_scale[ly].data() + off, bv_f[ly].data() + off,
+                           bv_raw[ly].data() + off, v.data() + off, DH_size);
+            }
 
             // PS: KV cache
             size_t kv_off = (size_t)token_position * H;
@@ -656,16 +778,14 @@ public:
 
             // PS: Float multi-head attention
             std::fill(attn_out.begin(), attn_out.end(), 0.0);
-            const int NH_count = 12, DH_size = 64;
-
-            for (int head = 0; head < NH_count; head++) {
+            for (uint32_t head = 0; head < NH_count; head++) {
                 double *qh = &q[head * DH_size];
                 std::vector<double> scores(token_position + 1);
                 double max_score = -1e30;
                 for (uint32_t t = 0; t <= token_position; t++) {
                     double s = 0;
                     double *kt = &kv_k[ly][t * H + head * DH_size];
-                    for (int d = 0; d < DH_size; d++) s += qh[d] * kt[d];
+                    for (uint32_t d = 0; d < DH_size; d++) s += qh[d] * kt[d];
                     scores[t] = s / 8.0;
                     if (scores[t] > max_score) max_score = scores[t];
                 }
@@ -676,7 +796,7 @@ public:
                 }
                 for (uint32_t t = 0; t <= token_position; t++)
                     scores[t] /= (sum_exp + 1e-10);
-                for (int d = 0; d < DH_size; d++) {
+                for (uint32_t d = 0; d < DH_size; d++) {
                     double a = 0;
                     for (uint32_t t = 0; t <= token_position; t++)
                         a += scores[t] * kv_v[ly][t * H + head * DH_size + d];
@@ -688,7 +808,8 @@ public:
             ps_quantize_act(attn_out.data(), act_i8_h.data(), act_scale, H);
 
             // PL: O projection
-            if (!executeMatmul(3, ly, act_i8_h.data(), H, acc_h.data(), H))
+            if (!executeMatmul(ComputeOp::CMP_OUT_PROJ, ly, 0, token_position,
+                               act_i8_h.data(), H, acc_h.data(), H))
                 return false;
             ps_dequant(acc_h.data(), act_scale, wo_scale[ly].data(),
                        bo_f[ly].data(), bo_raw[ly].data(), o.data(), H);
@@ -702,7 +823,8 @@ public:
             ps_quantize_act(h2.data(), act_i8_h.data(), act_scale, H);
 
             // PL: FFN W1
-            if (!executeMatmul(4, ly, act_i8_h.data(), H, acc_ff.data(), FF))
+            if (!executeMatmul(ComputeOp::CMP_FFN_W1, ly, 0, token_position,
+                               act_i8_h.data(), H, acc_ff.data(), FF))
                 return false;
             ps_dequant(acc_ff.data(), act_scale, w1_scale[ly].data(),
                        b1_f[ly].data(), b1_raw[ly].data(), fc1.data(), FF);
@@ -712,7 +834,8 @@ public:
             ps_quantize_act(fc1.data(), act_i8_ff.data(), act_scale, FF);
 
             // PL: FFN W2
-            if (!executeMatmul(5, ly, act_i8_ff.data(), FF, acc_h.data(), H))
+            if (!executeMatmul(ComputeOp::CMP_FFN_W2, ly, 0, token_position,
+                               act_i8_ff.data(), FF, acc_h.data(), H))
                 return false;
             ps_dequant(acc_h.data(), act_scale, w2_scale[ly].data(),
                        b2_f[ly].data(), b2_raw[ly].data(), fc2.data(), H);

@@ -254,7 +254,7 @@ static inline int tile_end_for_op(uint8_t op)
         case CMP_K:
         case CMP_V:          return NUM_QKV_HEAD_TILES;
         case CMP_ATT_SCORES: return NUM_ATT_CTX_BLOCKS;
-        case CMP_ATT_VALUE:  return NUM_ATT_VALUE_HEAD_TILES * NUM_ATT_CTX_BLOCKS;
+        case CMP_ATT_VALUE:  return NUM_ATT_VALUE_HEAD_TILES; // d_tile only (no ctx chunking)
         case CMP_OUT_PROJ:   return NUM_WO_TILES;
         case CMP_FFN_W1:     return NUM_W1_TILES;
         case CMP_FFN_W2:     return NUM_W2_TILES;
@@ -265,14 +265,9 @@ static inline int tile_end_for_op(uint8_t op)
 
 static inline uint16_t tile_for_burst(uint8_t op, int burst_idx)
 {
-    if (op != CMP_ATT_VALUE) {
-        return static_cast<uint16_t>(burst_idx);
-    }
-    // ATT_VALUE uses d_tile-major ordering:
-    //   d_tile = burst_idx / NUM_ATT_CTX_BLOCKS, ctx = burst_idx % NUM_ATT_CTX_BLOCKS
-    const uint16_t d_tile = static_cast<uint16_t>(burst_idx / NUM_ATT_CTX_BLOCKS);
-    const uint16_t ctx    = static_cast<uint16_t>(burst_idx % NUM_ATT_CTX_BLOCKS);
-    return static_cast<uint16_t>((ctx << 4) | (d_tile & 0xFu));
+    (void)op;
+    // Tile is always the burst index. For ATT_VALUE this is d_tile_idx.
+    return static_cast<uint16_t>(burst_idx);
 }
 
 // ---------------------------------------------------------------------------
@@ -284,7 +279,7 @@ static inline int act_len_for_op(uint8_t op)
 {
     switch (op) {
         case CMP_ATT_SCORES: return D_HEADS;          // 64
-        case CMP_ATT_VALUE:  return CONTEXT_LENGTH;   // 1024
+        case CMP_ATT_VALUE:  return CONTEXT_LENGTH * 2; // int16[CONTEXT_LENGTH]
         case CMP_FFN_W2:     return D_FFN;            // 3072 (= STREAM_IN_BUF_BYTES)
         default:             return D_MODEL;           // 768
     }
@@ -514,11 +509,47 @@ static MatmulInvocationResult run_one_matmul(
 
         // Error check
         if (status_mem.error_code != ERR_NONE) {
-            const uint16_t cur_tile = tile_for_burst(op, result.tiles_seen);
+            const uint32_t ec = status_mem.error_code;
             std::fprintf(stderr,
-                "  ERROR on (op=%u L=%u H=%u tile=%u idx=%d/%d): error_code=0x%08X cycle=%d\n",
-                op, layer, head, cur_tile, result.tiles_seen, result.tiles_expected,
-                status_mem.error_code, cycle);
+                "  ERROR on (op=%u L=%u H=%u tile_idx=%d/%d): error_code=0x%08X cycle=%d\n",
+                op, layer, head, result.tiles_seen, result.tiles_expected, ec, cycle);
+            // Decode each set bit
+            struct { uint32_t mask; const char *name; } errbits[] = {
+                { ERR_DMA_ALIGNMENT,                          "ERR_DMA_ALIGNMENT"                          },
+                { ERR_DMA_ZERO_LEN,                           "ERR_DMA_ZERO_LEN"                           },
+                { ERR_DMA_ZERO_STRIDE,                        "ERR_DMA_ZERO_STRIDE"                        },
+                { ERR_SCHEDULER_ERROR,                        "ERR_SCHEDULER_ERROR"                        },
+                { ERR_COMPUTE_ERROR,                          "ERR_COMPUTE_ERROR"                          },
+                { ERR_MMU_INVALID,                            "ERR_MMU_INVALID"                            },
+                { ERR_MMU_OVERFLOW,                           "ERR_MMU_OVERFLOW"                           },
+                { ERR_MMU_UNSUPPORTED_REQ_DMA,                "ERR_MMU_UNSUPPORTED_REQ_DMA"                },
+                { ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED,  "ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_HEADED"  },
+                { ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED, "ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED" },
+                { ERR_MMU_BAD_DMA_PLAN,                       "ERR_MMU_BAD_DMA_PLAN"                       },
+                { ERR_MMU_BAD_DMA_ADDR,                       "ERR_MMU_BAD_DMA_ADDR"                       },
+                { ERR_MMU_REGION_ACCESS,                      "ERR_MMU_REGION_ACCESS"                      },
+                { ERR_MMU_CONCAT_SOURCE,                      "ERR_MMU_CONCAT_SOURCE"                      },
+                { ERR_MMU_WRITEBACK_SRC,                      "ERR_MMU_WRITEBACK_SRC"                      },
+                { ERR_MMU_QUEUE_OVERFLOW,                     "ERR_MMU_QUEUE_OVERFLOW"                     },
+                { ERR_MMU_REGION_OVERFLOW,                    "ERR_MMU_REGION_OVERFLOW"                    },
+                { ERR_MMU_STREAM_OUTPUT_MISSING,              "ERR_MMU_STREAM_OUTPUT_MISSING"              },
+                { ERR_MMU_MISSING_REGION_FULL_READ,           "ERR_MMU_MISSING_REGION_FULL_READ"           },
+                { ERR_MMU_MISSING_REGION_PARTIAL_READ,        "ERR_MMU_MISSING_REGION_PARTIAL_READ"        },
+                { ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP,   "ERR_MMU_MISSING_REGION_COMPUTE_READ_PREP"   },
+                { ERR_MMU_REGION_OVERFLOW_STREAM_IN,          "ERR_MMU_REGION_OVERFLOW_STREAM_IN"          },
+                { ERR_MMU_REGION_OVERFLOW_DMA_CONCAT,         "ERR_MMU_REGION_OVERFLOW_DMA_CONCAT"         },
+                { ERR_MMU_REGION_OVERFLOW_DMA_STORE,          "ERR_MMU_REGION_OVERFLOW_DMA_STORE"          },
+                { ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE,      "ERR_MMU_REGION_OVERFLOW_COMPUTE_WRITE"      },
+                { ERR_MMU_REGION_TABLE_FULL,                  "ERR_MMU_REGION_TABLE_FULL"                  },
+                { ERR_MMU_URAM_CHUNK_ALLOC_FAIL,              "ERR_MMU_URAM_CHUNK_ALLOC_FAIL"              },
+                { ERR_MMU_REGION_TOO_LARGE,                   "ERR_MMU_REGION_TOO_LARGE"                   },
+                { ERR_TOKEN_MAX,                              "ERR_TOKEN_MAX"                              },
+            };
+            for (const auto &b : errbits) {
+                if (ec & b.mask) {
+                    std::fprintf(stderr, "    [bit] %s\n", b.name);
+                }
+            }
             error_seen = true;
             break;
         }
@@ -619,6 +650,25 @@ int main()
     // --- Build ctrl_mem template --------------------------------------------
     const ControlMemSpace ctrl_template = make_default_ctrl_mem();
 
+    // --- Dump ctrl_mem for verification ------------------------------------
+    tprintf("\n=== ControlMemSpace (before matmuls) ===\n");
+    tprintf("  wq_offset        = 0x%08X\n", ctrl_template.wq_offset);
+    tprintf("  wk_offset        = 0x%08X\n", ctrl_template.wk_offset);
+    tprintf("  wv_offset        = 0x%08X\n", ctrl_template.wv_offset);
+    tprintf("  wo_offset        = 0x%08X\n", ctrl_template.wo_offset);
+    tprintf("  w1_offset        = 0x%08X\n", ctrl_template.w1_offset);
+    tprintf("  w2_offset        = 0x%08X\n", ctrl_template.w2_offset);
+    tprintf("  wlogit_offset    = 0x%08X\n", ctrl_template.wlogit_offset);
+    tprintf("  k_cache_offset   = 0x%08X\n", ctrl_template.k_cache_offset);
+    tprintf("  v_cache_offset   = 0x%08X\n", ctrl_template.v_cache_offset);
+    tprintf("  wq_bias_offset   = 0x%08X\n", ctrl_template.wq_bias_offset);
+    tprintf("  wk_bias_offset   = 0x%08X\n", ctrl_template.wk_bias_offset);
+    tprintf("  wv_bias_offset   = 0x%08X\n", ctrl_template.wv_bias_offset);
+    tprintf("  wo_bias_offset   = 0x%08X\n", ctrl_template.wo_bias_offset);
+    tprintf("  w1_bias_offset   = 0x%08X\n", ctrl_template.w1_bias_offset);
+    tprintf("  w2_bias_offset   = 0x%08X\n", ctrl_template.w2_bias_offset);
+    tprintf("=========================================\n\n");
+
     // --- AXIS streams (persistent across invocations) ----------------------
     hls::stream<axis8_t> s_axis("s_axis_in");
     hls::stream<axis8_t> m_axis("m_axis_out");
@@ -644,8 +694,13 @@ int main()
     const uint8_t *act_model = stream_in_token;     // first D_MODEL bytes
     // D_HEADS bytes from stream_in (for ATT_SCORES)
     const uint8_t *act_heads = stream_in_token;     // first D_HEADS bytes
-    // CONTEXT_LENGTH bytes from stream_in (for ATT_VALUE)
-    const uint8_t *act_ctx   = stream_in_token;     // first CONTEXT_LENGTH bytes
+    // int16[CONTEXT_LENGTH] softmax weights (for ATT_VALUE)
+    uint8_t act_ctx_i16[static_cast<size_t>(CONTEXT_LENGTH) * 2] = {};
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+        const int16_t w = static_cast<int16_t>(static_cast<int8_t>(stream_in_token[t]));
+        act_ctx_i16[t * 2 + 0] = static_cast<uint8_t>(static_cast<uint16_t>(w) & 0xFFu);
+        act_ctx_i16[t * 2 + 1] = static_cast<uint8_t>((static_cast<uint16_t>(w) >> 8) & 0xFFu);
+    }
     // D_FFN bytes = full STREAM_IN_BUF_BYTES (for W2)
     const uint8_t *act_ffn   = stream_in_token;     // full D_FFN bytes
 
@@ -653,7 +708,7 @@ int main()
         const int act_len = act_len_for_op(op);
         const uint8_t *act = (op == CMP_FFN_W2)      ? act_ffn
                            : (op == CMP_ATT_SCORES)  ? act_heads
-                           : (op == CMP_ATT_VALUE)   ? act_ctx
+                           : (op == CMP_ATT_VALUE)   ? act_ctx_i16
                            : act_model;
 
         MatmulInvocationResult r = run_one_matmul(
@@ -707,7 +762,7 @@ int main()
             run(CMP_ATT_SCORES, layer, head);
         }
 
-        // ATT_VALUE: per-head (scheduler internally iterates (d_tile, ctx_block))
+        // ATT_VALUE: per-head (scheduler internally iterates d_tile only)
         for (int head = 0; head < max_head; ++head) {
             run(CMP_ATT_VALUE, layer, head);
         }

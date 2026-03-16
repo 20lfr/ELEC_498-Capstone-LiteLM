@@ -269,24 +269,15 @@ static inline void unpack_compute(uint64_t packed, ComputeOp &op, int &layer, in
     tile  = static_cast<int>((packed >> 24) & 0xFFFFFFFFull);
 }
 
-static inline bool is_disabled_compute_op(ComputeOp op) {
+static inline bool is_disabled_compute_op(ComputeOp /*op*/) {
 #pragma HLS INLINE
-    switch (op) {
-        case CMP_CONCAT: {
-            return true;
-        }
-        default: {
-            return false;
-        }
-    }
+    return false;
 }
 
 static inline bool dma_uses_kv_cache(DmaSel sel) {
 #pragma HLS INLINE
     return (sel == DMASEL_CTX_K) ||
-           (sel == DMASEL_CTX_V) ||
-           (sel == DMASEL_K_WRITE) ||
-           (sel == DMASEL_V_WRITE);
+           (sel == DMASEL_CTX_V);
 }
 
 static inline uint32_t main_op_out_bytes(ComputeOp op) {
@@ -295,32 +286,14 @@ static inline uint32_t main_op_out_bytes(ComputeOp op) {
         case CMP_OUT_PROJ: {
             return compute_buf::OUTOutProjLayout::TOTAL_BYTES;
         }
-        case CMP_RESID1:
-        case CMP_RESID2: {
-            return compute_buf::OUTResidLayout::TOTAL_BYTES;
-        }
-        case CMP_LN0:
-        case CMP_LN1:
-        case CMP_FINAL_NORM: {
-            return compute_buf::OUTLayerNormLayout::TOTAL_BYTES;
-        }
         case CMP_FFN_W1: {
             return compute_buf::OUTFfnW1Layout::TOTAL_BYTES;
-        }
-        case CMP_FFN_ACT: {
-            return compute_buf::OUTFfnActLayout::TOTAL_BYTES;
         }
         case CMP_FFN_W2: {
             return compute_buf::OUTFfnW2Layout::TOTAL_BYTES;
         }
         case CMP_LOGITS: {
             return compute_buf::OUTLogitsLayout::TOTAL_BYTES;
-        }
-        case CMP_ARGMAX: {
-            return compute_buf::OUTArgmaxLayout::TOTAL_BYTES;
-        }
-        case CMP_CONCAT: {
-            return D_MODEL;
         }
         default: {
             return compute_buf::OUT_BUF_BYTES;
@@ -1395,13 +1368,27 @@ static WriteSpec build_write_spec(ComputeOp op, int tile) {
 
     s.key_tile = tile;
     switch (op) {
-        case CMP_CONCAT: {
-            s.tag = Tag::CONCAT_OUT;
-            s.key_tile = -1;
+        case CMP_Q: {
+            s.tag = Tag::Q_OUT;
+            break;
+        }
+        case CMP_K: {
+            s.tag = Tag::K_OUT;
+            break;
+        }
+        case CMP_V: {
+            s.tag = Tag::V_OUT;
+            break;
+        }
+        case CMP_ATT_SCORES: {
+            s.tag = Tag::ATT_SCORES_OUT;
+            break;
+        }
+        case CMP_ATT_VALUE: {
+            s.tag = Tag::ATT_VALUE_OUT;
             break;
         }
         case CMP_OUT_PROJ: {
-            // Contiguous tile pack for downstream stage.
             s.tag = Tag::OUT_PROJ_PACKED;
             s.key_tile = -1;
             s.expected_parts = NUM_WO_TILES;
@@ -1409,18 +1396,7 @@ static WriteSpec build_write_spec(ComputeOp op, int tile) {
             s.total_bytes = static_cast<uint32_t>(NUM_WO_TILES) * s.part_bytes;
             break;
         }
-        case CMP_RESID1: {
-            s.tag = Tag::RESID1_OUT;
-            s.key_tile = -1;
-            break;
-        }
-        case CMP_LN1: {
-            s.tag = Tag::LN1_OUT;
-            s.key_tile = -1;
-            break;
-        }
         case CMP_FFN_W1: {
-            // Contiguous tile pack for FFN activation stage.
             s.tag = Tag::FFN_W1_PACKED;
             s.key_tile = -1;
             s.expected_parts = NUM_W1_TILES;
@@ -1428,28 +1404,12 @@ static WriteSpec build_write_spec(ComputeOp op, int tile) {
             s.total_bytes = static_cast<uint32_t>(NUM_W1_TILES) * s.part_bytes;
             break;
         }
-        case CMP_FFN_ACT: {
-            s.tag = Tag::FFN_ACT_OUT;
-            s.key_tile = -1;
-            break;
-        }
         case CMP_FFN_W2: {
-            // Contiguous tile pack for downstream requant/residual.
             s.tag = Tag::FFN_W2_PACKED;
             s.key_tile = -1;
             s.expected_parts = NUM_W2_TILES;
             s.part_idx = (tile >= 0) ? tile : 0;
             s.total_bytes = static_cast<uint32_t>(NUM_W2_TILES) * s.part_bytes;
-            break;
-        }
-        case CMP_RESID2: {
-            s.tag = Tag::RESID2_OUT;
-            s.key_tile = -1;
-            break;
-        }
-        case CMP_FINAL_NORM: {
-            s.tag = Tag::FINAL_NORM_OUT;
-            s.key_tile = -1;
             break;
         }
         case CMP_LOGITS: {
@@ -1460,18 +1420,8 @@ static WriteSpec build_write_spec(ComputeOp op, int tile) {
             s.total_bytes = static_cast<uint32_t>(NUM_LOGIT_TILES) * s.part_bytes;
             break;
         }
-        case CMP_ARGMAX: {
-            s.tag = Tag::ARGMAX_OUT;
-            s.key_tile = -1;
-            break;
-        }
-        case CMP_LN0: {
-            s.tag = Tag::LN0_OUT;
-            s.key_tile = -1;
-            break;
-        }
         default: {
-            s.tag = Tag::FINAL_NORM_OUT;
+            s.tag = Tag::NONE;
             s.key_tile = -1;
             break;
         }
@@ -1569,45 +1519,6 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_tag[0] = Tag::CTX_V;
             return true;
         }
-        case DMASEL_LN0: {
-            piece_count = 3;
-            piece_bytes[0] = compute_buf::INLayerNormLayout::GAMMA_BYTES;
-            piece_bytes[1] = compute_buf::INLayerNormLayout::BETA_BYTES;
-            piece_bytes[2] = compute_buf::INLayerNormLayout::EPS_BYTES;
-            piece_addr_off[0] = 0;
-            piece_addr_off[1] = 0; // beta addr comes from ctrl_mem.ln0_beta_offset
-            piece_addr_off[2] = 0;
-            piece_tag[0] = Tag::LN0_GAMMA;
-            piece_tag[1] = Tag::LN0_BETA;
-            piece_tag[2] = Tag::LN0_EPS;
-            return true;
-        }
-        case DMASEL_LN1: {
-            piece_count = 3;
-            piece_bytes[0] = compute_buf::INLayerNormLayout::GAMMA_BYTES;
-            piece_bytes[1] = compute_buf::INLayerNormLayout::BETA_BYTES;
-            piece_bytes[2] = compute_buf::INLayerNormLayout::EPS_BYTES;
-            piece_addr_off[0] = 0;
-            piece_addr_off[1] = 0; // beta addr comes from ctrl_mem.ln1_beta_offset
-            piece_addr_off[2] = 0;
-            piece_tag[0] = Tag::LN1_GAMMA;
-            piece_tag[1] = Tag::LN1_BETA;
-            piece_tag[2] = Tag::LN1_EPS;
-            return true;
-        }
-        case DMASEL_FINAL_NORM: {
-            piece_count = 3;
-            piece_bytes[0] = compute_buf::INLayerNormLayout::GAMMA_BYTES;
-            piece_bytes[1] = compute_buf::INLayerNormLayout::BETA_BYTES;
-            piece_bytes[2] = compute_buf::INLayerNormLayout::EPS_BYTES;
-            piece_addr_off[0] = 0;
-            piece_addr_off[1] = 0; // beta addr comes from ctrl_mem.final_norm_beta_offset
-            piece_addr_off[2] = 0;
-            piece_tag[0] = Tag::FINAL_NORM_GAMMA;
-            piece_tag[1] = Tag::FINAL_NORM_BETA;
-            piece_tag[2] = Tag::FINAL_NORM_EPS;
-            return true;
-        }
         case DMASEL_WLOGIT: {
             piece_count = 1;
             piece_bytes[0] = mm_buf::LOGITS_W_BYTES;
@@ -1617,11 +1528,6 @@ static bool build_dma_piece_plan(DmaSel sel,
         }
         case DMASEL_NONE: {
             piece_count = 0;
-            return true;
-        }
-        case DMASEL_CONCAT:
-        case DMASEL_K_WRITE:
-        case DMASEL_V_WRITE: {
             return true;
         }
         default: {
@@ -1697,27 +1603,6 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
                      + static_cast<uint32_t>(tile) * STRIDE_W2_TILE;
             return true;
         }
-        case DmaSel::DMASEL_LN0: {
-            addr_out = static_cast<uint64_t>(ctrl_mem.ln0_gamma_offset)
-                     + static_cast<uint32_t>(layer) * STRIDE_LN0_GAMMA;
-            return true;
-        }
-        case DmaSel::DMASEL_LN1: {
-            addr_out = static_cast<uint64_t>(ctrl_mem.ln1_gamma_offset)
-                     + static_cast<uint32_t>(layer) * STRIDE_LN1_GAMMA;
-            return true;
-        }
-        case DmaSel::DMASEL_FINAL_NORM: {
-            addr_out = static_cast<uint64_t>(ctrl_mem.final_norm_gamma_offset);
-            return true;
-        }
-        case DmaSel::DMASEL_CONCAT: {
-            if (tile < 0) return false;
-            addr_out = static_cast<uint64_t>(ctrl_mem.wlogit_offset)
-                     + static_cast<uint32_t>(layer) * D_MODEL
-                     + static_cast<uint32_t>(tile) * STRIDE_WLOGIT_TILE;
-            return true;
-        }
         case DmaSel::DMASEL_WLOGIT: {
             if (tile < 0) return false;
             // Logits projection weights are shared across layers in this design.
@@ -1727,9 +1612,7 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
                      + static_cast<uint32_t>(tile) * STRIDE_WLOGIT_TILE;
             return true;
         }
-        case DmaSel::DMASEL_NONE:
-        case DmaSel::DMASEL_K_WRITE:
-        case DmaSel::DMASEL_V_WRITE: {
+        case DmaSel::DMASEL_NONE: {
             addr_out = 0;
             return true;
         }
@@ -1757,49 +1640,6 @@ static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer,
         }
         addr_out = dma_base_addr + piece_addr_off;
         return true;
-    }
-
-    // LayerNorm: piece1 = beta (explicit ctrl_mem offset), piece2 = eps (separate control offset).
-    if (sel == DMASEL_LN0 || sel == DMASEL_LN1 || sel == DMASEL_FINAL_NORM) {
-        if (piece_idx == 1) {
-            switch (sel) {
-                case DMASEL_LN0: {
-                    addr_out = static_cast<uint64_t>(ctrl_mem.ln0_beta_offset)
-                             + static_cast<uint32_t>(layer) * STRIDE_LN0_GAMMA;
-                    return true;
-                }
-                case DMASEL_LN1: {
-                    addr_out = static_cast<uint64_t>(ctrl_mem.ln1_beta_offset)
-                             + static_cast<uint32_t>(layer) * STRIDE_LN1_GAMMA;
-                    return true;
-                }
-                case DMASEL_FINAL_NORM: {
-                    addr_out = static_cast<uint64_t>(ctrl_mem.final_norm_beta_offset);
-                    return true;
-                }
-                default: break;
-            }
-        }
-        // piece_idx >= 2 -> treat as EPS
-        switch (sel) {
-            case DMASEL_LN0: {
-                addr_out = static_cast<uint64_t>(ctrl_mem.ln0_eps_offset)
-                         + static_cast<uint32_t>(layer) * STRIDE_LN0_EPS;
-                return true;
-            }
-            case DMASEL_LN1: {
-                addr_out = static_cast<uint64_t>(ctrl_mem.ln1_eps_offset)
-                         + static_cast<uint32_t>(layer) * STRIDE_LN1_EPS;
-                return true;
-            }
-            case DMASEL_FINAL_NORM: {
-                addr_out = static_cast<uint64_t>(ctrl_mem.final_norm_eps_offset);
-                return true;
-            }
-            default: {
-                break;
-            }
-        }
     }
 
     switch (sel) {
@@ -1873,13 +1713,7 @@ static const char *dma_sel_name(DmaSel sel) {
         case DMASEL_W2: return "DMASEL_W2";
         case DMASEL_CTX_K: return "DMASEL_CTX_K";
         case DMASEL_CTX_V: return "DMASEL_CTX_V";
-        case DMASEL_LN0: return "DMASEL_LN0";
-        case DMASEL_LN1: return "DMASEL_LN1";
-        case DMASEL_FINAL_NORM: return "DMASEL_FINAL_NORM";
-        case DMASEL_CONCAT: return "DMASEL_CONCAT";
         case DMASEL_WLOGIT: return "DMASEL_WLOGIT";
-        case DMASEL_K_WRITE: return "DMASEL_K_WRITE";
-        case DMASEL_V_WRITE: return "DMASEL_V_WRITE";
         default: return "DMASEL_UNKNOWN";
     }
 }
@@ -1896,8 +1730,7 @@ static void trace_ddr_fetch_plan(ControlMemSpace ctrl_mem,
     // By default we suppress most KV-cache traffic because it can be extremely
     // verbose; CTX_K/CTX_V are the exceptions we want to see for debugging.
     if ((dma_uses_kv_cache(sel) && sel != DMASEL_CTX_K && sel != DMASEL_CTX_V) ||
-        sel == DMASEL_NONE || sel == DMASEL_CONCAT ||
-        sel == DMASEL_K_WRITE || sel == DMASEL_V_WRITE) {
+        sel == DMASEL_NONE) {
         return;
     }
 
@@ -1929,19 +1762,6 @@ static void trace_ddr_fetch_plan(ControlMemSpace ctrl_mem,
 }
 #endif
 
-static uint64_t calc_kv_write_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, int head, uint16_t token_pos) {
-#pragma HLS INLINE
-    const uint64_t base = (sel == DMASEL_K_WRITE)
-        ? static_cast<uint64_t>(ctrl_mem.k_cache_offset)
-        : static_cast<uint64_t>(ctrl_mem.v_cache_offset);
-    const uint64_t layer_stride = static_cast<uint64_t>(STRIDE_KV_LAYER);
-    const uint64_t head_stride = static_cast<uint64_t>(STRIDE_KV_HEAD);
-    const uint64_t token_off = static_cast<uint64_t>(token_pos) * static_cast<uint64_t>(D_HEADS);
-    return base + static_cast<uint64_t>(layer) * layer_stride
-                + static_cast<uint64_t>(head) * head_stride
-                + token_off;
-}
-
 // ---------------------------------------------------------------------------
 // Compute read population
 // ---------------------------------------------------------------------------
@@ -1957,42 +1777,6 @@ static bool build_main_in_buf(ComputeOp op, int layer, int head, int tile,
 #pragma HLS INLINE off
     zero_buf(buf, compute_buf::IN_BUF_BYTES);
     switch (op) {
-        case CMP_LN0: {
-            const Tag missing_tag = (layer > 0) ? Tag::RESID2_OUT : Tag::STREAM_IN_TOKEN;
-            bool ok = load_main_x_slot_to_buf(
-                buf,
-                compute_buf::INLayerNormLayout::X,
-                compute_buf::INLayerNormLayout::X_BYTES,
-                missing_tag,
-                invalid_flag);
-            if (!ok) return false;
-            if (MMU_USE_HARDCODED_LN_PARAMS) {
-                // Default gamma=1.0 (Q19.13) and epsilon=1 for bring-up.
-                for (int i = 0; i < D_MODEL; ++i) {
-// #pragma HLS PIPELINE II=1
-                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
-                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::BETA + (i * 4), 0);
-                }
-                compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
-                return true;
-            } else {
-                ok = load_region_to_buf(Tag::LN0_GAMMA, layer, -1, -1,
-                                        buf, compute_buf::INLayerNormLayout::GAMMA,
-                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, false, invalid_flag);
-                if (!ok) return false;
-                ok = load_region_to_buf(Tag::LN0_BETA, layer, -1, -1,
-                                        buf, compute_buf::INLayerNormLayout::BETA,
-                                        compute_buf::INLayerNormLayout::BETA_BYTES, false, invalid_flag);
-                if (!ok) return false;
-                return load_region_to_buf(Tag::LN0_EPS, layer, -1, -1,
-                                          buf, compute_buf::INLayerNormLayout::EPS,
-                                          compute_buf::INLayerNormLayout::EPS_BYTES, false, invalid_flag);
-            }
-        }
-        case CMP_CONCAT: {
-            return load_region_to_buf(Tag::HEAD_REQUANT_PACKED, layer, -1, -1,
-                                      buf, 0, D_MODEL, true, invalid_flag);
-        }
         // --- MatMul mode: Q projection tile ---
         case CMP_Q: {
             bool ok = load_main_x_slot_to_buf(buf, mm_buf::INQkvLayout::ACT, mm_buf::QKV_ACT_BYTES,
@@ -2044,30 +1828,21 @@ static bool build_main_in_buf(ComputeOp op, int layer, int head, int tile,
         }
         // --- MatMul mode: Attention value tile ---
         case CMP_ATT_VALUE: {
-            // Stream-in: int8[ATT_CTX_BLOCK] softmax weights.
-            // DMASEL_CTX_V stages a full-context V-cache slice for one d_tile:
-            //   CTX_V region bytes = CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE
-            // The compute tile packs both fields:
-            //   tile[15:4] = ctx_block_idx, tile[3:0] = d_tile_idx
-            const uint16_t tile_u = (tile < 0) ? 0u : static_cast<uint16_t>(tile);
-            const uint16_t ctx_block_idx = static_cast<uint16_t>(tile_u >> 4);
-            const uint16_t d_tile_idx = static_cast<uint16_t>(tile_u & 0xFu);
+            // No context chunking:
+            //   - Stream-in provides int16[CONTEXT_LENGTH] softmax weights (little-endian).
+            //   - DMASEL_CTX_V stages a full-context V-cache slice for one d_tile:
+            //       CTX_V region bytes = CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE
+            //   - tile is d_tile_idx (0..NUM_ATT_VALUE_HEAD_TILES-1).
+            const int d_tile_idx = (tile < 0) ? 0 : tile;
 
-            const uint32_t act_src_off =
-                static_cast<uint32_t>(ctx_block_idx) * static_cast<uint32_t>(ATT_CTX_BLOCK);
             bool ok = load_main_x_slot_slice_to_buf(buf, mm_buf::INAttValueLayout::ACT,
-                                                    act_src_off,
+                                                    0u,
                                                     mm_buf::ATT_VALUE_ACT_BYTES,
                                                     Tag::STREAM_IN_TOKEN, invalid_flag);
             if (!ok) return false;
-            const uint32_t src_off =
-                static_cast<uint32_t>(ctx_block_idx) *
-                static_cast<uint32_t>(ATT_CTX_BLOCK) *
-                static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE);
-            return load_region_slice_to_buf(Tag::CTX_V, layer, head, static_cast<int>(d_tile_idx),
-                                            src_off,
-                                            buf, mm_buf::INAttValueLayout::W, mm_buf::ATT_VALUE_W_BYTES,
-                                            true, invalid_flag);
+            return load_region_to_buf(Tag::CTX_V, layer, head, d_tile_idx,
+                                      buf, mm_buf::INAttValueLayout::W, mm_buf::ATT_VALUE_W_BYTES,
+                                      true, invalid_flag);
         }
         // --- MatMul mode: Output projection tile ---
         case CMP_OUT_PROJ: {
@@ -2082,46 +1857,6 @@ static bool build_main_in_buf(ComputeOp op, int layer, int head, int tile,
                                       buf, mm_buf::INOutProjLayout::B, mm_buf::OUT_PROJ_B_BYTES,
                                       true, invalid_flag);
         }
-        case CMP_RESID1: {
-            const Tag missing_tag = (layer > 0) ? Tag::RESID2_OUT : Tag::STREAM_IN_TOKEN;
-            bool ok = load_main_x_slot_to_buf(
-                buf,
-                compute_buf::INResidLayout::X,
-                compute_buf::INResidLayout::X_BYTES,
-                missing_tag,
-                invalid_flag);
-            if (!ok) return false;
-            return load_region_to_buf(Tag::OUT_PROJ_PACKED, layer, -1, -1,
-                                      buf, compute_buf::INResidLayout::R,
-                                      compute_buf::INResidLayout::R_BYTES, true, invalid_flag);
-        }
-        case CMP_LN1: {
-            bool ok = load_region_to_buf(Tag::RESID1_OUT, layer, -1, -1,
-                                         buf, compute_buf::INLayerNormLayout::X,
-                                         compute_buf::INLayerNormLayout::X_BYTES, false, invalid_flag);
-            if (!ok) return false;
-            if (MMU_USE_HARDCODED_LN_PARAMS) {
-                for (int i = 0; i < D_MODEL; ++i) {
-// #pragma HLS PIPELINE II=1
-                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
-                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::BETA + (i * 4), 0);
-                }
-                compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
-                return true;
-            } else {
-                ok = load_region_to_buf(Tag::LN1_GAMMA, layer, -1, -1,
-                                        buf, compute_buf::INLayerNormLayout::GAMMA,
-                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, true, invalid_flag);
-                if (!ok) return false;
-                ok = load_region_to_buf(Tag::LN1_BETA, layer, -1, -1,
-                                        buf, compute_buf::INLayerNormLayout::BETA,
-                                        compute_buf::INLayerNormLayout::BETA_BYTES, true, invalid_flag);
-                if (!ok) return false;
-                return load_region_to_buf(Tag::LN1_EPS, layer, -1, -1,
-                                          buf, compute_buf::INLayerNormLayout::EPS,
-                                          compute_buf::INLayerNormLayout::EPS_BYTES, true, invalid_flag);
-            }
-        }
         case CMP_FFN_W1: {
             bool ok = load_main_x_slot_to_buf(buf, mm_buf::INW1Layout::ACT, mm_buf::W1_ACT_BYTES,
                                               Tag::STREAM_IN_TOKEN, invalid_flag);
@@ -2133,11 +1868,6 @@ static bool build_main_in_buf(ComputeOp op, int layer, int head, int tile,
             return load_region_to_buf(Tag::W1_B, layer, -1, tile,
                                       buf, mm_buf::INW1Layout::B, mm_buf::W1_B_BYTES,
                                       true, invalid_flag);
-        }
-        case CMP_FFN_ACT: {
-            return load_region_to_buf(Tag::FFN_W1_PACKED, layer, -1, -1,
-                                      buf, compute_buf::INFfnActLayout::GATE,
-                                      compute_buf::INFfnActLayout::TOTAL_BYTES, true, invalid_flag);
         }
         case CMP_FFN_W2: {
             bool ok = load_main_x_slot_to_buf(buf, mm_buf::INW2Layout::ACT, mm_buf::W2_ACT_BYTES,
@@ -2151,45 +1881,6 @@ static bool build_main_in_buf(ComputeOp op, int layer, int head, int tile,
                                       buf, mm_buf::INW2Layout::B, mm_buf::W2_B_BYTES,
                                       true, invalid_flag);
         }
-        case CMP_RESID2: {
-            bool ok = load_region_to_buf(Tag::RESID1_OUT, layer, -1, -1,
-                                         buf, compute_buf::INResidLayout::X,
-                                         compute_buf::INResidLayout::X_BYTES, true, invalid_flag);
-            if (!ok) return false;
-            return load_region_to_buf(Tag::FFN_W2_PACKED, layer, -1, -1,
-                                      buf, compute_buf::INResidLayout::R,
-                                      compute_buf::INResidLayout::R_BYTES, true, invalid_flag);
-        }
-        case CMP_FINAL_NORM: {
-            bool ok = load_main_x_slot_to_buf(
-                buf,
-                compute_buf::INLayerNormLayout::X,
-                compute_buf::INLayerNormLayout::X_BYTES,
-                Tag::RESID2_OUT,
-                invalid_flag);
-            if (!ok) return false;
-            if (MMU_USE_HARDCODED_LN_PARAMS) {
-                for (int i = 0; i < D_MODEL; ++i) {
-// #pragma HLS PIPELINE II=1
-                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4), 8192);
-                    compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::BETA + (i * 4), 0);
-                }
-                compute_buf::write_i32(buf, compute_buf::INLayerNormLayout::EPS, 1);
-                return true;
-            } else {
-                ok = load_region_to_buf(Tag::FINAL_NORM_GAMMA, layer, -1, -1,
-                                        buf, compute_buf::INLayerNormLayout::GAMMA,
-                                        compute_buf::INLayerNormLayout::GAMMA_BYTES, true, invalid_flag);
-                if (!ok) return false;
-                ok = load_region_to_buf(Tag::FINAL_NORM_BETA, layer, -1, -1,
-                                        buf, compute_buf::INLayerNormLayout::BETA,
-                                        compute_buf::INLayerNormLayout::BETA_BYTES, true, invalid_flag);
-                if (!ok) return false;
-                return load_region_to_buf(Tag::FINAL_NORM_EPS, layer, -1, -1,
-                                          buf, compute_buf::INLayerNormLayout::EPS,
-                                          compute_buf::INLayerNormLayout::EPS_BYTES, true, invalid_flag);
-            }
-        }
         case CMP_LOGITS: {
             bool ok = load_main_x_slot_to_buf(buf, mm_buf::INLogitsLayout::ACT, mm_buf::LOGITS_ACT_BYTES,
                                               Tag::STREAM_IN_TOKEN, invalid_flag);
@@ -2197,11 +1888,6 @@ static bool build_main_in_buf(ComputeOp op, int layer, int head, int tile,
             return load_region_to_buf(Tag::LOGITS_W, layer, -1, tile,
                                       buf, mm_buf::INLogitsLayout::W,
                                       mm_buf::LOGITS_W_BYTES, true, invalid_flag);
-        }
-        case CMP_ARGMAX: {
-            return load_region_to_buf(Tag::LOGITS_PACKED, layer, -1, -1,
-                                      buf, compute_buf::INArgmaxLayout::X,
-                                      compute_buf::INArgmaxLayout::X_BYTES, true, invalid_flag);
         }
         default: {
             mmu_set_invalid(ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED);
@@ -2233,18 +1919,6 @@ const char *state_name_local(State s) {
         }
         case State::DMA_STORE: {
             return "DMA_STORE";
-        }
-        case State::DMA_INTERNAL_CONCAT: {
-            return "DMA_CONCAT";
-        }
-        case State::DMA_WRITEBACK_PREP: {
-            return "DMA_WB_PREP";
-        }
-        case State::DMA_WRITEBACK_ISSUE: {
-            return "DMA_WB_ISSUE";
-        }
-        case State::DMA_WRITEBACK_WAIT: {
-            return "DMA_WB_WAIT";
         }
         case State::COMPUTE_POP: {
             return "CMP_POP";
@@ -2552,53 +2226,7 @@ void mmu_fsm(
                 break;
             }
 
-            if (active_dma_sel == DMASEL_K_WRITE || active_dma_sel == DMASEL_V_WRITE) {
-                g_state = State::DMA_WRITEBACK_PREP;
-            } else if (active_dma_sel == DMASEL_CONCAT) {
-                g_state = State::DMA_INTERNAL_CONCAT;
-            } else {
-                g_state = State::DMA_PREP;
-            }
-            break;
-        }
-        case State::DMA_INTERNAL_CONCAT: {
-            // Internal operation: build contiguous concat output from packed head requant output.
-            const int src_idx = find_region(Tag::HEAD_REQUANT_PACKED, active_dma_layer, -1, -1);
-            if (src_idx < 0 || !region_ready(regions[src_idx])) {
-                mmu_set_invalid(ERR_MMU_CONCAT_SOURCE);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-
-            const int dst_idx = get_or_create_region(
-                Tag::CONCAT_OUT, active_dma_layer, -1, -1,
-                static_cast<uint32_t>(D_MODEL), 1, static_cast<uint32_t>(D_MODEL), g_overflow);
-            if (dst_idx < 0) {
-                mmu_set_overflow(ERR_MMU_REGION_OVERFLOW_DMA_CONCAT);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-
-            const uint32_t copy_bytes = (regions[src_idx].total_bytes < static_cast<uint32_t>(D_MODEL))
-                ? regions[src_idx].total_bytes
-                : static_cast<uint32_t>(D_MODEL);
-            zero_buf(scratch, D_MODEL);
-            if (!region_read_bytes(regions[src_idx], 0, scratch, copy_bytes)) {
-                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
-            } else {
-                if (!region_write_part(dst_idx, 0, scratch, static_cast<uint32_t>(D_MODEL))) {
-                    mmu_set_invalid(ERR_MMU_REGION_ACCESS);
-                }
-            }
-            if (should_consume(Tag::HEAD_REQUANT_PACKED)) {
-                maybe_consume(src_idx);
-            }
-
-            main_dma_done = true;
-            active_dma_valid = false;
-            g_state = State::IDLE;
+            g_state = State::DMA_PREP;
             break;
         }
         case State::DMA_PREP: {
@@ -2807,87 +2435,6 @@ void mmu_fsm(
             }
             break;
         }
-        case State::DMA_WRITEBACK_PREP: {
-            // K/V writeback source comes from per-head K_OUT/V_OUT artifacts.
-            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
-            const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
-            if (src_idx < 0 || !region_ready(regions[src_idx])) {
-                mmu_set_invalid(ERR_MMU_WRITEBACK_SRC);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-            const uint32_t wb_len = static_cast<uint32_t>(D_HEADS);
-            if (token_pos >= static_cast<uint16_t>(CONTEXT_LENGTH)) {
-                mmu_set_invalid(ERR_MMU_BAD_DMA_ADDR);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-            active_dma_addr_base = calc_kv_write_addr(ctrl_mem, active_dma_sel, active_dma_layer,
-                                                      active_dma_head, token_pos);
-            active_piece_idx = 0;
-            active_piece_count = 1;
-            active_piece_bytes[0] = wb_len;
-            active_piece_bytes_done = 0;
-            active_chunk_bytes = 0;
-            g_state = State::DMA_WRITEBACK_ISSUE;
-            break;
-        }
-        case State::DMA_WRITEBACK_ISSUE: {
-            if (!dma_ready) break;
-            const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
-            const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
-            if (src_idx < 0 || !region_ready(regions[src_idx])) {
-                mmu_set_invalid(ERR_MMU_WRITEBACK_SRC);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-            const uint32_t piece_total = active_piece_bytes[0];
-            const uint32_t remaining = piece_total - active_piece_bytes_done;
-            const uint32_t chunk_bytes = (remaining < static_cast<uint32_t>(DMA_BUF_BYTES))
-                                             ? remaining
-                                             : static_cast<uint32_t>(DMA_BUF_BYTES);
-            if (!region_read_bytes(regions[src_idx], active_piece_bytes_done, scratch, chunk_bytes)) {
-                mmu_set_invalid(ERR_MMU_REGION_ACCESS);
-                active_dma_valid = false;
-                g_state = State::IDLE;
-                break;
-            }
-            dma_word_clear_bytes(dma_tx_buf, chunk_bytes);
-            for (uint32_t i = 0; i < chunk_bytes; ++i) {
-// #pragma HLS PIPELINE II=1
-                dma_word_set_byte(dma_tx_buf, i, scratch[i]);
-            }
-            dma_start = true;
-            dma_is_write = true;
-            dma_use_kv_cache = dma_uses_kv_cache(active_dma_sel);
-            dma_addr = active_dma_addr_base + static_cast<uint64_t>(active_piece_bytes_done);
-            dma_len = chunk_bytes;
-            active_chunk_bytes = chunk_bytes;
-            g_state = State::DMA_WRITEBACK_WAIT;
-            break;
-        }
-        case State::DMA_WRITEBACK_WAIT: {
-            if (!dma_done) break;
-            active_piece_bytes_done += active_chunk_bytes;
-            if (active_piece_bytes_done < active_piece_bytes[0]) {
-                g_state = State::DMA_WRITEBACK_ISSUE;
-            } else {
-                const Tag src_tag = (active_dma_sel == DMASEL_K_WRITE) ? Tag::K_OUT : Tag::V_OUT;
-                const int src_idx = find_region(src_tag, active_dma_layer, active_dma_head, -1);
-                if (src_idx >= 0 && should_consume(src_tag)) {
-                    maybe_consume(src_idx);
-                }
-                active_piece_bytes_done = 0;
-                active_chunk_bytes = 0;
-                main_dma_done = true;
-                active_dma_valid = false;
-                g_state = State::IDLE;
-            }
-            break;
-        }
         case State::COMPUTE_POP: {
             ComputeQueueEntry q{};
             if (!active_compute_valid) {
@@ -2914,7 +2461,6 @@ void mmu_fsm(
             }
 
             // These ops are intentionally disabled in MMU compute path.
-            // Reformat/concat is done by DMASEL_CONCAT internal DMA flow.
             if (is_disabled_compute_op(active_compute_op)) {
                 mem_transfer_done = true;
                 active_compute_valid = false;
@@ -2973,16 +2519,6 @@ void mmu_fsm(
                 break;
             }
 
-            if (active_compute_op == CMP_RESID2) {
-                if (!write_main_x_slot_from_buf(out_buf, main_op_out_bytes(active_compute_op))) {
-                    mmu_set_invalid(ERR_MMU_REGION_ACCESS);
-                    active_compute_valid = false;
-                    g_state = State::IDLE;
-                    break;
-                }
-                g_state = State::COMPUTE_WRITE_DONE;
-                break;
-            }
             const WriteSpec spec = build_write_spec(active_compute_op, active_compute_tile);
             if (!validate_write_spec(spec)) {
                 mmu_set_invalid(ERR_MMU_REGION_ACCESS);

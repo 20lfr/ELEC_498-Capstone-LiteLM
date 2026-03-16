@@ -9,15 +9,13 @@
 // Protocol (per invocation):
 //   1) PS writes 32-bit INSTR to ctrl_mem.instr:
 //        [15:10] = head,  [9:4] = layer,  [3:0] = op
-//        [31:16] is reserved/ignored (tile is handled internally by PL).
+//        [31:16] unused — no tile field; all tiling is managed entirely on-chip.
 //   2) PS asserts cntrl_start (CTRL_START_BIT in ctrl_mem.control).
 //   3) Scheduler enters S_STREAM_IN.
 //   4) PS streams activation via AXIS; scheduler waits for axis_token_complete.
-//   5) Scheduler enters S_DECODE, decodes INSTR, selects the op-specific matmul state.
-//   6) Scheduler issues DMA request to MMU (weight/KV-cache tile).
-//   7) Scheduler issues compute request to compute controller.
-//   8) Scheduler enters S_STREAM_OUT; MMU streams int32 result to PS.
-//   9) done pulse; back to S_IDLE.
+//   5) Scheduler enters S_DECODE, decodes op/layer/head, computes tile_end on-chip.
+//   6) Scheduler (S_MATMUL) iterates all tiles: DMA → compute → stream-out per tile.
+//   7) done pulse after last tile; back to S_IDLE.
 // ------------------------------------------------------------
 void scheduler_hls(
     // AXI4-Lite control

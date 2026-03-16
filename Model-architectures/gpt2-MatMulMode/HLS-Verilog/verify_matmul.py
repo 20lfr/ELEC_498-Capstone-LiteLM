@@ -131,8 +131,10 @@ def load_bytes(path: str) -> bytes:
 
 
 def act_len_for_op(op: int) -> int:
-    if op in (CMP_ATT_SCORES, CMP_ATT_VALUE):
+    if op == CMP_ATT_SCORES:
         return D_HEADS
+    if op == CMP_ATT_VALUE:
+        return CONTEXT_LENGTH * 2  # int16[CONTEXT_LENGTH]
     if op == CMP_FFN_W2:
         return D_FFN
     return D_MODEL
@@ -372,20 +374,19 @@ def main():
                 n_out = ATT_CTX_BLOCK
 
             elif op == CMP_ATT_VALUE:
-                # tile packs [ctx_block_idx (bits[15:4]) | d_tile_idx (bits[3:0])]
-                ctx_block = (tile >> 4) & 0xFFF
-                d_tile    = tile & 0xF
-                # Softmax weights: first ATT_CTX_BLOCK bytes of stream_in
-                w_vec = stream_in_i8[:ATT_CTX_BLOCK].copy()
-                # V cache tile: [ATT_CTX_BLOCK × D_HEADS] — extract d_tile columns
+                # No context chunking: tile is d_tile_idx (0..NUM_ATT_VALUE_HEAD_TILES-1)
+                d_tile = tile
+                # Softmax weights: int16[CONTEXT_LENGTH] derived from stream_in_i8
+                # (mirrors the C++ TB packing: int16_t(int8_t(stream_in[t]))).
+                w_i16 = stream_in_i8[:CONTEXT_LENGTH].astype(np.int16)
+                # V cache full context: [CONTEXT_LENGTH × D_HEADS] — extract d_tile columns
                 V_full = get_kv_tile(v_cache_bytes, 0,
-                                     layer, head, ctx_block,
-                                     ATT_CTX_BLOCK, D_HEADS)
-                # d_tile selects D_HEAD_TILE_ATT_VALUE columns
+                                     layer, head, 0,
+                                     CONTEXT_LENGTH, D_HEADS)
                 col0 = d_tile * D_HEAD_TILE_ATT_VALUE
-                V_tile = V_full[:, col0: col0 + D_HEAD_TILE_ATT_VALUE]  # [ATT_CTX_BLOCK × D_HEAD_TILE_ATT_VALUE]
-                # Output[j] = sum_i(w[i] * V[i, j])
-                expected = matmul_int8_to_int32(V_tile.T, w_vec)
+                V_tile = V_full[:, col0: col0 + D_HEAD_TILE_ATT_VALUE]  # [CONTEXT_LENGTH × D_HEAD_TILE_ATT_VALUE]
+                # Output[j] = sum_t(w[t] * V[t, j])
+                expected = (V_tile.astype(np.int32).T @ w_i16.astype(np.int32)).astype(np.int32)
                 n_out = D_HEAD_TILE_ATT_VALUE
 
             elif op == CMP_OUT_PROJ:

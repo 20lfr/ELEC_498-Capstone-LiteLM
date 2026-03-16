@@ -40,7 +40,7 @@ enum class DmaBufType : uint8_t {
 // Update after synthesis from: drivers/<top>/src/x<top>_hw.h
 //
 // IMPORTANT: Word order must match ControlMemSpace struct in HLS.
-// After adding beta fields and matmul fields, the struct is 30 words.
+// MatMulMode ControlMemSpace is 30 words (control + instr + irq + offsets + token).
 // Verify byte offsets against xtransformer_top_hw.h after re-synthesis.
 // ═══════════════════════════════════════════════════════════════════════════════
 namespace PLReg {
@@ -59,56 +59,56 @@ namespace PLReg {
 
     // ── ControlMemSpace (PS → PL writes) ──
     // Packed struct mapped at CTRL_BASE. Word order matches ControlMemSpace
-    // (30 words after P0 fix + matmul mode additions).
+    // (30 words in MatMulMode: includes INSTR at word 1).
     constexpr uint32_t CTRL_BASE = XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA;
 
-    // Control + IRQ (words 0-2)
+    // Control + INSTR + IRQ (words 0-3)
     constexpr uint32_t CONTROL = CTRL_BASE + 0x00;
-    constexpr uint32_t IRQ_MASK = CTRL_BASE + 0x04;
-    constexpr uint32_t IRQ_CLEAR = CTRL_BASE + 0x08;
+    constexpr uint32_t INSTR = CTRL_BASE + 0x04;
+    constexpr uint32_t IRQ_MASK = CTRL_BASE + 0x08;
+    constexpr uint32_t IRQ_CLEAR = CTRL_BASE + 0x0C;
 
-    // Words 3-10: Weights / KV-cache offsets
-    constexpr uint32_t WQ_OFFSET = CTRL_BASE + 0x0C;
-    constexpr uint32_t WK_OFFSET = CTRL_BASE + 0x10;
-    constexpr uint32_t WV_OFFSET = CTRL_BASE + 0x14;
-    constexpr uint32_t WO_OFFSET = CTRL_BASE + 0x18;
-    constexpr uint32_t W1_OFFSET = CTRL_BASE + 0x1C;
-    constexpr uint32_t W2_OFFSET = CTRL_BASE + 0x20;
-    constexpr uint32_t K_CACHE_OFFSET = CTRL_BASE + 0x24;
-    constexpr uint32_t V_CACHE_OFFSET = CTRL_BASE + 0x28;
+    // Words 4-11: Weights / KV-cache offsets
+    constexpr uint32_t WQ_OFFSET = CTRL_BASE + 0x10;
+    constexpr uint32_t WK_OFFSET = CTRL_BASE + 0x14;
+    constexpr uint32_t WV_OFFSET = CTRL_BASE + 0x18;
+    constexpr uint32_t WO_OFFSET = CTRL_BASE + 0x1C;
+    constexpr uint32_t W1_OFFSET = CTRL_BASE + 0x20;
+    constexpr uint32_t W2_OFFSET = CTRL_BASE + 0x24;
+    constexpr uint32_t K_CACHE_OFFSET = CTRL_BASE + 0x28;
+    constexpr uint32_t V_CACHE_OFFSET = CTRL_BASE + 0x2C;
 
-    // Words 11-16: Bias offsets
-    constexpr uint32_t WQ_BIAS_OFFSET = CTRL_BASE + 0x2C;
-    constexpr uint32_t WK_BIAS_OFFSET = CTRL_BASE + 0x30;
-    constexpr uint32_t WV_BIAS_OFFSET = CTRL_BASE + 0x34;
-    constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x38;
-    constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0x3C;
-    constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0x40;
+    // Words 12-17: Bias offsets
+    constexpr uint32_t WQ_BIAS_OFFSET = CTRL_BASE + 0x30;
+    constexpr uint32_t WK_BIAS_OFFSET = CTRL_BASE + 0x34;
+    constexpr uint32_t WV_BIAS_OFFSET = CTRL_BASE + 0x38;
+    constexpr uint32_t WO_BIAS_OFFSET = CTRL_BASE + 0x3C;
+    constexpr uint32_t W1_BIAS_OFFSET = CTRL_BASE + 0x40;
+    constexpr uint32_t W2_BIAS_OFFSET = CTRL_BASE + 0x44;
 
-    // Words 17-19: LN gamma offsets
-    constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0x44;
-    constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0x48;
-    constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0x4C;
+    // Words 18-20: LN gamma offsets
+    constexpr uint32_t LN0_GAMMA_OFFSET = CTRL_BASE + 0x48;
+    constexpr uint32_t LN1_GAMMA_OFFSET = CTRL_BASE + 0x4C;
+    constexpr uint32_t FINAL_NORM_GAMMA_OFFSET = CTRL_BASE + 0x50;
 
-    // Words 20-22: LN beta offsets (P0 FIX: were commented out)
-    constexpr uint32_t LN0_BETA_OFFSET = CTRL_BASE + 0x50;
-    constexpr uint32_t LN1_BETA_OFFSET = CTRL_BASE + 0x54;
-    constexpr uint32_t FINAL_NORM_BETA_OFFSET = CTRL_BASE + 0x58;
+    // Words 21-23: LN beta offsets
+    constexpr uint32_t LN0_BETA_OFFSET = CTRL_BASE + 0x54;
+    constexpr uint32_t LN1_BETA_OFFSET = CTRL_BASE + 0x58;
+    constexpr uint32_t FINAL_NORM_BETA_OFFSET = CTRL_BASE + 0x5C;
 
-    // Words 23-25: LN epsilon offsets (SHIFTED from 0x50/0x54/0x58)
-    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0x5C;
-    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x60;
-    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x64;
+    // Words 24-26: LN epsilon offsets
+    constexpr uint32_t LN0_EPS_OFFSET = CTRL_BASE + 0x60;
+    constexpr uint32_t LN1_EPS_OFFSET = CTRL_BASE + 0x64;
+    constexpr uint32_t FINAL_NORM_EPS_OFFSET = CTRL_BASE + 0x68;
 
-    // Word 26: Logit weight offset (SHIFTED from 0x5C)
-    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0x68;
+    // Word 27: Logit weight offset
+    constexpr uint32_t WLOGIT_OFFSET = CTRL_BASE + 0x6C;
 
-    // Word 27: Token position (SHIFTED from 0x60)
-    constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x6C;
+    // Word 28: Token position
+    constexpr uint32_t TOKEN_POSITION = CTRL_BASE + 0x70;
 
-    // Words 28-29: Matmul mode control (NEW)
-    constexpr uint32_t MATMUL_WEIGHT_SEL = CTRL_BASE + 0x70;
-    constexpr uint32_t MATMUL_LAYER = CTRL_BASE + 0x74;
+    // Word 29: Legacy debug/visibility register (not used by MatMulMode scheduler)
+    constexpr uint32_t COMPUTE_INSTRUCTION = CTRL_BASE + 0x74;
 
     // ── StatusMemSpace (PL → PS reads) ──
     constexpr uint32_t STATUS_BASE =

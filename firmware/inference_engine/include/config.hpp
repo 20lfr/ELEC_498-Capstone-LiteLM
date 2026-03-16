@@ -28,15 +28,15 @@ struct ModelConfig {
     std::string embed_float_file = "model/embed_tokens_float.bin";
     std::string pos_float_file = "model/pos_embed_float.bin";
     std::string quant_scales_file = "model/quant_scales.json";
-    uint32_t num_heads = MODEL_NUM_HEADS;
-    uint32_t head_dim = MODEL_HEAD_DIM;
-    uint32_t intermediate_size = MODEL_INTERMEDIATE_SIZE;
-    uint32_t vocab_size = MODEL_VOCAB_SIZE;
-    uint32_t context_length = MODEL_CONTEXT_LENGTH;
-    uint32_t hidden_size = MODEL_HIDDEN_SIZE;
-    uint32_t num_layers = MODEL_LAYERS;
-    uint32_t stream_in_size = MODEL_HIDDEN_SIZE;
-    uint32_t stream_out_size = 4; // int32 token index
+    uint32_t num_heads = NUM_HEADS;
+    uint32_t head_dim = D_HEADS;
+    uint32_t intermediate_size = D_FFN;
+    uint32_t vocab_size = D_VOCAB;
+    uint32_t context_length = CONTEXT_LENGTH;
+    uint32_t hidden_size = D_MODEL;
+    uint32_t num_layers = NUM_LAYERS;
+    uint32_t stream_in_size = STREAM_IN_BUF_BYTES;
+    uint32_t stream_out_size = STREAM_OUT_BUF_BYTES;
 
     bool validate() const {
         return STRIDE_WQ_LAYER && STRIDE_QKV_HEAD && STRIDE_KV_HEAD &&
@@ -50,84 +50,61 @@ struct ModelConfig {
 
 struct MemoryLayout {
     // ═══════════════════════════════════════════════════════════════════
-    // Firmware computes full GPT-2 layout for DDR loading using MODEL_*
-    // constants to ensure alignment with the actual weight files.
+    // Firmware uses the shared_params.hpp packed DDR layout constants to
+    // ensure alignment with the PL/MMU view of memory.
     // ═══════════════════════════════════════════════════════════════════
 
     // Weights (int8)
-    uint32_t wq_offset = 0;
-    uint32_t wk_offset = align64_u32(
-        wq_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * MODEL_HIDDEN_SIZE));
-    uint32_t wv_offset = align64_u32(
-        wk_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * MODEL_HIDDEN_SIZE));
-    uint32_t wo_offset = align64_u32(
-        wv_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * MODEL_HIDDEN_SIZE));
-    uint32_t w1_offset = align64_u32(
-        wo_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * MODEL_HIDDEN_SIZE));
-    uint32_t w2_offset =
-        align64_u32(w1_offset + (MODEL_LAYERS * MODEL_INTERMEDIATE_SIZE *
-                                 MODEL_HIDDEN_SIZE));
-    uint32_t wlogit_offset =
-        align64_u32(w2_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE *
-                                 MODEL_INTERMEDIATE_SIZE));
+    uint32_t wq_offset = WQ_OFF;
+    uint32_t wk_offset = WK_OFF;
+    uint32_t wv_offset = WV_OFF;
+    uint32_t wo_offset = WO_OFF;
+    uint32_t w1_offset = W1_OFF;
+    uint32_t w2_offset = W2_OFF;
+    uint32_t wlogit_offset = WLOGIT_OFF;
 
     // Biases (Q16.16 int32)
-    uint32_t wq_bias_offset =
-        align64_u32(wlogit_offset + (MODEL_VOCAB_SIZE * MODEL_HIDDEN_SIZE));
-    uint32_t wk_bias_offset =
-        align64_u32(wq_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t wv_bias_offset =
-        align64_u32(wk_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t wo_bias_offset =
-        align64_u32(wv_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t w1_bias_offset =
-        align64_u32(wo_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t w2_bias_offset = align64_u32(
-        w1_bias_offset + (MODEL_LAYERS * MODEL_INTERMEDIATE_SIZE * 4));
+    uint32_t wq_bias_offset = WQ_BIAS_OFF;
+    uint32_t wk_bias_offset = WK_BIAS_OFF;
+    uint32_t wv_bias_offset = WV_BIAS_OFF;
+    uint32_t wo_bias_offset = WO_BIAS_OFF;
+    uint32_t w1_bias_offset = W1_BIAS_OFF;
+    uint32_t w2_bias_offset = W2_BIAS_OFF;
 
     // LayerNorm (Q16.16 int32)
-    uint32_t ln0_gamma_offset =
-        align64_u32(w2_bias_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t ln0_beta_offset =
-        align64_u32(ln0_gamma_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t ln1_gamma_offset =
-        align64_u32(ln0_beta_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t ln1_beta_offset =
-        align64_u32(ln1_gamma_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t final_norm_gamma_offset =
-        align64_u32(ln1_beta_offset + (MODEL_LAYERS * MODEL_HIDDEN_SIZE * 4));
-    uint32_t final_norm_beta_offset =
-        align64_u32(final_norm_gamma_offset + (MODEL_HIDDEN_SIZE * 4));
+    uint32_t ln0_gamma_offset = LN0_GAMMA_OFF;
+    uint32_t ln0_beta_offset = LN0_BETA_OFF;
+    uint32_t ln1_gamma_offset = LN1_GAMMA_OFF;
+    uint32_t ln1_beta_offset = LN1_BETA_OFF;
+    uint32_t final_norm_gamma_offset = FINAL_NORM_GAMMA_OFF;
+    uint32_t final_norm_beta_offset = FINAL_NORM_BETA_OFF;
 
     // Epsilon & Position Embeddings
-    uint32_t ln0_eps_offset =
-        align64_u32(final_norm_beta_offset + (MODEL_HIDDEN_SIZE * 4));
-    uint32_t ln1_eps_offset = align64_u32(ln0_eps_offset + (MODEL_LAYERS * 4));
-    uint32_t final_norm_eps_offset =
-        align64_u32(ln1_eps_offset + (MODEL_LAYERS * 4));
-    uint32_t pos_embed_offset = align64_u32(final_norm_eps_offset + 4);
+    uint32_t ln0_eps_offset = LN0_EPS_OFF;
+    uint32_t ln1_eps_offset = LN1_EPS_OFF;
+    uint32_t final_norm_eps_offset = FINAL_NORM_EPS_OFF;
+    uint32_t pos_embed_offset = POS_EMBED_OFF;
 
-    uint32_t weights_size = align64_u32(
-        pos_embed_offset + (MODEL_CONTEXT_LENGTH * MODEL_HIDDEN_SIZE));
+    uint32_t weights_size = WEIGHTS_SIZE;
 
     // KV Cache (DDR BUF1)
-    uint32_t k_cache_offset = 0;
-    uint32_t v_cache_offset =
-        align64_u32(k_cache_offset +
-                    (MODEL_LAYERS * MODEL_HIDDEN_SIZE * MODEL_CONTEXT_LENGTH));
-    uint32_t input_offset =
-        align64_u32(v_cache_offset +
-                    (MODEL_LAYERS * MODEL_HIDDEN_SIZE * MODEL_CONTEXT_LENGTH));
-    uint32_t output_offset = align64_u32(input_offset + MODEL_HIDDEN_SIZE);
-    uint32_t total_kv_size = align64_u32(output_offset + 4);
+    uint32_t k_cache_offset = K_CACHE_OFF;
+    uint32_t v_cache_offset = V_CACHE_OFF;
+    uint32_t input_offset = align64_u32(KV_SIZE);
+    uint32_t output_offset = align64_u32(input_offset + STREAM_IN_BUF_BYTES);
+    uint32_t stream_out_max_bytes =
+        align64_u32(NUM_LOGIT_TILES * STREAM_OUT_BUF_BYTES);
+    uint32_t total_kv_size =
+        align64_u32(output_offset + stream_out_max_bytes);
 
     bool isAligned() const {
         return !((wq_offset | wk_offset | wv_offset | wo_offset | w1_offset |
                   w2_offset | wlogit_offset | wo_bias_offset | w1_bias_offset |
                   w2_bias_offset | ln0_gamma_offset | ln1_gamma_offset |
-                  final_norm_gamma_offset |ln0_beta_offset | ln1_beta_offset | final_norm_beta_offset |
-                  ln0_eps_offset | ln1_eps_offset | final_norm_eps_offset | k_cache_offset | v_cache_offset |
-                  input_offset | output_offset) &
+                  final_norm_gamma_offset | ln0_beta_offset | ln1_beta_offset |
+                  final_norm_beta_offset | ln0_eps_offset | ln1_eps_offset |
+                  final_norm_eps_offset | k_cache_offset | v_cache_offset |
+                  input_offset | output_offset | stream_out_max_bytes) &
                  0x3F);
     }
 };

@@ -26,14 +26,13 @@ static inline uint64_t pack_compute_instruction(ComputeOp op, uint8_t layer, uin
 
 // Decode 32-bit PS instruction:
 //   [15:10]=head, [9:4]=layer, [3:0]=op
-//   [31:16] reserved/ignored (tile is handled internally by PL)
+//   [31:16] unused — no tile field; tiling is managed entirely on-chip
 static inline void decode_instr(uint32_t instr,
-    uint8_t &op, uint8_t &layer, uint8_t &head, uint16_t &tile) {
+    uint8_t &op, uint8_t &layer, uint8_t &head) {
 #pragma HLS INLINE
-    op    = static_cast<uint8_t> (instr & 0xFu);
-    layer = static_cast<uint8_t> ((instr >>  4) & 0x3Fu);
-    head  = static_cast<uint8_t> ((instr >> 10) & 0x3Fu);
-    tile  = static_cast<uint16_t>((instr >> 16) & 0xFFFFu);
+    op    = static_cast<uint8_t>(instr & 0xFu);
+    layer = static_cast<uint8_t>((instr >>  4) & 0x3Fu);
+    head  = static_cast<uint8_t>((instr >> 10) & 0x3Fu);
 }
 
 // Map ComputeOp to DmaSel for the weight/cache fetch.
@@ -54,34 +53,6 @@ static inline DmaSel op_to_dmasel(ComputeOp op) {
     }
 }
 
-// For ATT_VALUE the tile field packs [15:4]=ctx_block_idx and [3:0]=d_tile_idx.
-// The DMA instruction to the MMU for CTX_V uses the d_tile_idx portion.
-static inline uint16_t att_value_d_tile(uint16_t tile) {
-#pragma HLS INLINE
-    return tile & 0xFu;
-}
-
-// For ATT_VALUE the compute instruction passes the full tile so the compute
-// controller can unpack d_tile_idx from bits [3:0].
-// (No extra decode needed here — just pass tile as-is.)
-
-// Map SchedState target from decoded op.
-static inline SchedState op_to_state(ComputeOp op) {
-#pragma HLS INLINE
-    switch (op) {
-        case CMP_Q:          return S_MATMUL_Q;
-        case CMP_K:          return S_MATMUL_K;
-        case CMP_V:          return S_MATMUL_V;
-        case CMP_ATT_SCORES: return S_MATMUL_ATTENTION_SCORES;
-        case CMP_ATT_VALUE:  return S_MATMUL_ATTENTION_VALUES;
-        case CMP_OUT_PROJ:   return S_MATMUL_OUT_PROJ;
-        case CMP_FFN_W1:     return S_MATMUL_W1;
-        case CMP_FFN_W2:     return S_MATMUL_W2;
-        case CMP_LOGITS:     return S_MATMUL_W1;  // same path, different DMA sel
-        default:             return S_IDLE;
-    }
-}
-
 static inline uint16_t tile_end_for_op(ComputeOp op) {
 #pragma HLS INLINE
     switch (op) {
@@ -92,7 +63,8 @@ static inline uint16_t tile_end_for_op(ComputeOp op) {
         case CMP_ATT_SCORES:
             return static_cast<uint16_t>(NUM_ATT_CTX_BLOCKS);
         case CMP_ATT_VALUE:
-            return static_cast<uint16_t>(NUM_ATT_VALUE_HEAD_TILES * NUM_ATT_CTX_BLOCKS);
+            // No context chunking: tile only over head-dim (d_tile)
+            return static_cast<uint16_t>(NUM_ATT_VALUE_HEAD_TILES);
         case CMP_OUT_PROJ:
             return static_cast<uint16_t>(NUM_WO_TILES);
         case CMP_FFN_W1:
@@ -108,23 +80,18 @@ static inline uint16_t tile_end_for_op(ComputeOp op) {
 
 static inline uint16_t tile_payload_for_iter(ComputeOp op, uint16_t iter) {
 #pragma HLS INLINE
-    if (op != CMP_ATT_VALUE) {
-        return iter;
-    }
-    // ATT_VALUE tile packs: [15:4]=ctx_block_idx, [3:0]=d_tile_idx
-    // Iterate in d_tile-major order to avoid redundant DMA of CTX_V.
-    const uint16_t d_tile = static_cast<uint16_t>(iter / static_cast<uint16_t>(NUM_ATT_CTX_BLOCKS));
-    const uint16_t ctx = static_cast<uint16_t>(iter % static_cast<uint16_t>(NUM_ATT_CTX_BLOCKS));
-    return static_cast<uint16_t>((ctx << 4) | (d_tile & 0xFu));
+    (void)op;
+    // Tile payload is always the iteration index.
+    // For ATT_VALUE this is d_tile_idx (0..NUM_ATT_VALUE_HEAD_TILES-1).
+    return iter;
 }
 
 static inline bool need_dma_for_tile(ComputeOp op, uint16_t tile) {
 #pragma HLS INLINE
-    if (op != CMP_ATT_VALUE) {
-        return true;
-    }
-    const uint16_t ctx = static_cast<uint16_t>(tile >> 4);
-    return (ctx == 0);
+    (void)op;
+    (void)tile;
+    // No per-tile DMA skipping in MatMul mode.
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -158,7 +125,7 @@ void scheduler_hls(
     static SchedState st;
 #pragma HLS reset variable=st
 
-    // Decoded instruction fields (captured at S_IDLE on cntrl_start)
+    // Decoded instruction fields (op/layer/head from PS; no tile — managed on-chip)
     static uint32_t captured_instr;
 #pragma HLS reset variable=captured_instr
     static uint8_t  dec_op;
@@ -167,18 +134,18 @@ void scheduler_hls(
 #pragma HLS reset variable=dec_layer
     static uint8_t  dec_head;
 #pragma HLS reset variable=dec_head
-    static uint16_t dec_tile;
+
+    // On-chip tile loop state
+    static uint16_t tile_iter;   // current iteration index
+#pragma HLS reset variable=tile_iter
+    static uint16_t tile_end;    // total tiles for this op
+#pragma HLS reset variable=tile_end
+    static uint16_t dec_tile;    // packed tile payload for current iter (computed on-chip)
 #pragma HLS reset variable=dec_tile
 
-    // Internal per-op tile loop
-    static uint16_t tile_iter;
-#pragma HLS reset variable=tile_iter
-    static uint16_t tile_end;
-#pragma HLS reset variable=tile_end
-    static SchedState op_state;
-#pragma HLS reset variable=op_state
-
-    // Per-invocation handshake guards
+    // Per-tile handshake guards
+    static bool matmul_started;   // a tile's DMA+compute cycle is in progress
+#pragma HLS reset variable=matmul_started
     static bool dma_busy;
 #pragma HLS reset variable=dma_busy
     static bool dma_done_seen;
@@ -205,17 +172,17 @@ void scheduler_hls(
         dec_op          = 0;
         dec_layer       = 0;
         dec_head        = 0;
-        dec_tile        = 0;
-        tile_iter       = 0;
-        tile_end        = 0;
-        op_state        = S_IDLE;
-        dma_busy        = false;
-        dma_done_seen   = false;
-        comp_busy       = false;
-        comp_done_seen  = false;
-        stream_started  = false;
+        dec_tile         = 0;
+        tile_iter        = 0;
+        tile_end         = 0;
+        matmul_started   = false;
+        dma_busy         = false;
+        dma_done_seen    = false;
+        comp_busy        = false;
+        comp_done_seen   = false;
+        stream_started   = false;
         stream_done_seen = false;
-        error_latched   = false;
+        error_latched    = false;
 
         wl_start            = false;
         wl_instruction      = pack_dma_op(DMASEL_NONE, 0, 0, 0);
@@ -264,19 +231,19 @@ void scheduler_hls(
                 dec_op    = 0;
                 dec_layer = 0;
                 dec_head  = 0;
-                dec_tile  = 0;
-                tile_iter = 0;
-                tile_end  = 0;
-                op_state  = S_IDLE;
+                dec_tile         = 0;
+                tile_iter        = 0;
+                tile_end         = 0;
 
                 // Reset per-invocation guards
-                dma_busy        = false;
-                dma_done_seen   = false;
-                comp_busy       = false;
-                comp_done_seen  = false;
-                stream_started  = false;
+                matmul_started   = false;
+                dma_busy         = false;
+                dma_done_seen    = false;
+                comp_busy        = false;
+                comp_done_seen   = false;
+                stream_started   = false;
                 stream_done_seen = false;
-                error_latched   = false;
+                error_latched    = false;
 
                 wl_start            = false;
                 compute_start       = false;
@@ -305,16 +272,12 @@ void scheduler_hls(
         // Validates opcode and selects which MatMul state to enter next.
         // -------------------------------------------------------------------
         case S_DECODE: {
-            uint8_t  op;
-            uint8_t  layer;
-            uint8_t  head;
-            uint16_t tile;
-            decode_instr(captured_instr, op, layer, head, tile);
+            uint8_t op, layer, head;
+            decode_instr(captured_instr, op, layer, head);
 
             dec_op    = op;
             dec_layer = layer;
             dec_head  = head;
-            (void)tile; // reserved/ignored (tile is handled internally by PL)
 
             // Validate: must be one of the MatMul ops [CMP_Q..CMP_LOGITS].
             if (op < static_cast<uint8_t>(CMP_Q) || op > static_cast<uint8_t>(CMP_LOGITS)) {
@@ -323,92 +286,79 @@ void scheduler_hls(
                 break;
             }
             const ComputeOp cop = static_cast<ComputeOp>(dec_op);
-            op_state = op_to_state(cop);
             tile_end = tile_end_for_op(cop);
             tile_iter = 0;
             dec_tile = tile_payload_for_iter(cop, tile_iter);
 
-            if (op_state == S_IDLE || tile_end == 0) {
+            if (tile_end == 0) {
                 error_latched = true;
                 st = S_IDLE;
                 break;
             }
 
-            // Reset per-tile guards (tile 0). For ATT_VALUE, allow skipping DMA
-            // for ctx>0 tiles; ctx=0 always issues DMA.
-            dma_busy        = false;
-            dma_done_seen   = false;
-            comp_busy       = !need_dma_for_tile(cop, dec_tile);
-            comp_done_seen  = false;
-            stream_started  = false;
+            // Reset per-tile guards. S_MATMUL handles the DMA-skip logic internally.
+            matmul_started   = false;
+            dma_busy         = false;
+            dma_done_seen    = false;
+            comp_busy        = false;
+            comp_done_seen   = false;
+            stream_started   = false;
             stream_done_seen = false;
 
             wl_start      = false;
             compute_start = false;
 
-            st = op_state;
+            st = S_MATMUL;
             break;
         }
 
         // -------------------------------------------------------------------
-        // Generic MatMul state body (shared by all 9 matmul states).
-        // Phase 1: Issue DMA request → wait for dma_done.
-        // Phase 2: Issue compute request → wait for compute_done.
-        // → S_STREAM_OUT.
-        //
-        // All 9 states use the same pattern; they differ only in
-        // dec_op/dec_layer/dec_head/dec_tile captured at S_DECODE.
+        // Unified MatMul state: tile loop over all tiles for the decoded op.
+        //   - Exit check at top: tile_iter >= tile_end → done → S_IDLE
+        //   - else-if chain mirrors the reference S_OUT_PROJECTION pattern
+        //   - tile_iter++ and dec_tile update happen in the last branch
+        //   - → S_STREAM_OUT to stream one tile result, then loops back here
         // -------------------------------------------------------------------
-        case S_MATMUL_Q:
-        case S_MATMUL_K:
-        case S_MATMUL_V:
-        case S_MATMUL_ATTENTION_SCORES:
-        case S_MATMUL_ATTENTION_VALUES:
-        case S_MATMUL_OUT_PROJ:
-        case S_MATMUL_W1:
-        case S_MATMUL_W2: {
-            const ComputeOp cop   = static_cast<ComputeOp>(dec_op);
-            const DmaSel    dsel  = op_to_dmasel(cop);
-            const bool need_dma = need_dma_for_tile(cop, dec_tile);
-
-            // For ATT_VALUE the MMU-side tile index is d_tile_idx (tile[3:0]).
-            const uint32_t dma_tile =
-                (cop == CMP_ATT_VALUE)
-                ? static_cast<uint32_t>(att_value_d_tile(dec_tile))
-                : static_cast<uint32_t>(dec_tile);
-
-            // Phase 1: issue DMA request
-            if (need_dma && !dma_busy && !dma_done_seen && wl_ready) {
-                wl_start       = true;
-                wl_instruction = pack_dma_op(dsel, dec_layer, dec_head, dma_tile);
-                dma_busy = true;
+        case S_MATMUL: {
+            if (tile_iter >= tile_end) {
+                done = true;
+                st   = S_IDLE;
+                break;
             }
 
-            // Latch DMA done
-            if (need_dma && dma_busy && (dma_done || dma_done_seen)) {
+            const ComputeOp cop      = static_cast<ComputeOp>(dec_op);
+            const DmaSel    dsel     = op_to_dmasel(cop);
+            const bool      do_dma   = need_dma_for_tile(cop, dec_tile);
+            const uint32_t  dma_tile = static_cast<uint32_t>(dec_tile);
+
+            if (!matmul_started && do_dma && wl_ready) {
+                wl_start       = true;
+                wl_instruction = pack_dma_op(dsel, dec_layer, dec_head, dma_tile);
+                dma_busy       = true;
+                matmul_started = true;
+            } else if (!matmul_started && !do_dma) {
+                matmul_started = true;
+                comp_busy      = true;
+            } else if (matmul_started && dma_busy && (dma_done || dma_done_seen)) {
                 dma_busy      = false;
                 dma_done_seen = false;
                 comp_busy     = true;
-            }
-
-            // Phase 2: issue compute request once DMA done and compute idle
-            if (comp_busy && !comp_done_seen && compute_ready) {
+            } else if (matmul_started && comp_busy && compute_ready) {
                 compute_start       = true;
-                compute_instruction = pack_compute_instruction(
-                    cop,
-                    dec_layer, dec_head,
-                    static_cast<uint32_t>(dec_tile));
+                compute_instruction = pack_compute_instruction(cop, dec_layer, dec_head, static_cast<uint32_t>(dec_tile));
                 comp_busy = false;
-            }
-
-            // Wait for compute done
-            if (!comp_busy && (compute_done || comp_done_seen) && !compute_start) {
+            } else if (matmul_started && !dma_busy && !comp_busy && (compute_done || comp_done_seen) && !compute_start) {
+                matmul_started = false;
                 comp_done_seen = false;
+                tile_iter++;
+                dec_tile = tile_payload_for_iter(cop, tile_iter);
                 st = S_STREAM_OUT;
             }
             break;
         }
-
+        // -------------------------------------------------------------------
+        // Stream one tile's result to PS, then return to S_MATMUL.
+        // S_MATMUL checks tile_iter >= tile_end on re-entry and exits if done.
         // -------------------------------------------------------------------
         case S_STREAM_OUT: {
             if (!stream_started && stream_ready) {
@@ -418,31 +368,14 @@ void scheduler_hls(
             if (stream_started && (stream_done || stream_done_seen)) {
                 stream_started   = false;
                 stream_done_seen = false;
-                const ComputeOp cop = static_cast<ComputeOp>(dec_op);
-                if (tile_end > 0 && static_cast<uint16_t>(tile_iter + 1) < tile_end) {
-                    tile_iter = static_cast<uint16_t>(tile_iter + 1);
-                    dec_tile = tile_payload_for_iter(cop, tile_iter);
-
-                    // Reset per-tile guards for the next tile.
-                    dma_busy        = false;
-                    dma_done_seen   = false;
-                    comp_busy       = !need_dma_for_tile(cop, dec_tile);
-                    comp_done_seen  = false;
-                    stream_started  = false;
-                    stream_done_seen = false;
-
-                    wl_start      = false;
-                    compute_start = false;
-
-                    st = op_state;
-                } else {
-                    done = true;
-                    st   = S_IDLE;
-                }
+                dma_busy         = false;
+                dma_done_seen    = false;
+                comp_busy        = false;
+                comp_done_seen   = false;
+                st = S_MATMUL;
             }
             break;
         }
-
         default:
             st = S_IDLE;
             break;

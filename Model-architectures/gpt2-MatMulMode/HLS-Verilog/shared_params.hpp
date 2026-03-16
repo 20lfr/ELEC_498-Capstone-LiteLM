@@ -115,10 +115,23 @@ constexpr int HEADS_PARALLEL = 2;
 
 
 
-// MatMul-mode: stream-in holds largest activation (D_FFN=3072 for W2 op);
-// stream-out holds largest result tile (int32[ATT_CTX_BLOCK=64] = 256 bytes).
-constexpr int STREAM_IN_BUF_BYTES  = D_FFN;    // 3072
-constexpr int STREAM_OUT_BUF_BYTES = ATT_CTX_BLOCK * 4; // 256
+// MatMul-mode: stream-in holds the largest activation payload across all ops.
+// - W2 activation: int8[D_FFN]
+// - ATT_VALUE activation: int16[CONTEXT_LENGTH] (softmax weights)
+// Stream is always padded to STREAM_IN_BUF_BYTES and TLAST is asserted only on
+// the final byte so the MMU can capture a fixed-size token payload.
+constexpr int STREAM_IN_BUF_BYTES  = max2_constexpr(D_FFN, max2_constexpr(D_MODEL, 2 * CONTEXT_LENGTH));
+// Max over all op tile output sizes (each op produces int32[tile_width]):
+//   Q/K/V: D_HEAD_TILE_QKV, ATT_SCORES: ATT_CTX_BLOCK, ATT_VALUE: D_HEAD_TILE_ATT_VALUE,
+//   OUT_PROJ: D_TILE_WO, FFN_W1: D_TILE_W1, FFN_W2: D_TILE_W2, LOGITS: D_TILE_LOGIT
+constexpr int STREAM_OUT_BUF_BYTES =
+    max2_constexpr(D_HEAD_TILE_QKV,
+    max2_constexpr(ATT_CTX_BLOCK,
+    max2_constexpr(D_HEAD_TILE_ATT_VALUE,
+    max2_constexpr(D_TILE_WO,
+    max2_constexpr(D_TILE_W1,
+    max2_constexpr(D_TILE_W2,
+                   D_TILE_LOGIT)))))) * 4;
 
 static_assert((D_MODEL % D_TILE_WO) == 0,            "D_MODEL must be divisible by D_TILE_WO");
 static_assert((D_FFN   % D_TILE_W1) == 0,            "D_FFN must be divisible by D_TILE_W1");
@@ -354,20 +367,13 @@ constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
 // Scheduler state + helper enums
 // ------------------------------------------------------------
 // MatMul-only instruction-driven scheduler states.
-// Each invocation = one INSTR (one tile of one matmul op).
+// One invocation = one INSTR (op + layer + head); PL iterates all tiles internally.
 enum SchedState {
-    S_IDLE                    = 0,
-    S_STREAM_IN               = 1,
-    S_MATMUL_Q                = 2,
-    S_MATMUL_K                = 3,
-    S_MATMUL_V                = 4,
-    S_MATMUL_ATTENTION_SCORES = 5,
-    S_MATMUL_ATTENTION_VALUES = 6,
-    S_MATMUL_OUT_PROJ         = 7,
-    S_MATMUL_W1               = 8,
-    S_MATMUL_W2               = 9,
-    S_STREAM_OUT              = 10,
-    S_DECODE                  = 11
+    S_IDLE       = 0,
+    S_STREAM_IN  = 1,
+    S_MATMUL     = 2,   // unified: replaces all former S_MATMUL_* states
+    S_STREAM_OUT = 10,  // keep value for status register compatibility
+    S_DECODE     = 11   // keep value for status register compatibility
 };
 
 // Error Codes
