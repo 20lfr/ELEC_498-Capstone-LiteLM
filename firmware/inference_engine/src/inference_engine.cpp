@@ -9,11 +9,13 @@
 
 #include <atomic>
 #include <chrono>
+#include <cmath>
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <sstream>
 #include <thread>
 #include <unistd.h>
 #include <vector>
@@ -54,7 +56,6 @@ public:
         const size_t file_size = static_cast<size_t>(file_size_off);
         f.seekg(0, std::ios::beg);
 
-        // Only load what the FPGA will actually read
         size_t load_size = file_size;
         if (max_bytes > 0 && max_bytes < load_size)
             load_size = max_bytes;
@@ -118,16 +119,13 @@ public:
             return false;
         }
 
-        // beginConfig: disables IRQs, sets IRQ clear high
         pl->beginConfig();
 
-        // 64-bit DDR base addresses (on control_r bus)
         pl->writeReg64(RegBus::ADDR, AddrReg::WEIGHTS_BASE_LO,
                        pl->getDDRBaseAddr(DmaBufType::BUF0));
         pl->writeReg64(RegBus::ADDR, AddrReg::KV_CACHE_BASE_LO,
                        pl->getDDRBaseAddr(DmaBufType::BUF1));
 
-        // Words 3-10: Weights / KV-cache offsets
         pl->writeReg(PLReg::WQ_OFFSET, mem.wq_offset);
         pl->writeReg(PLReg::WK_OFFSET, mem.wk_offset);
         pl->writeReg(PLReg::WV_OFFSET, mem.wv_offset);
@@ -137,7 +135,6 @@ public:
         pl->writeReg(PLReg::K_CACHE_OFFSET, mem.k_cache_offset);
         pl->writeReg(PLReg::V_CACHE_OFFSET, mem.v_cache_offset);
 
-        // Words 11-23: Bias and parameter offsets
         pl->writeReg(PLReg::WQ_BIAS_OFFSET, mem.wq_bias_offset);
         pl->writeReg(PLReg::WK_BIAS_OFFSET, mem.wk_bias_offset);
         pl->writeReg(PLReg::WV_BIAS_OFFSET, mem.wv_bias_offset);
@@ -148,19 +145,24 @@ public:
         pl->writeReg(PLReg::LN1_GAMMA_OFFSET, mem.ln1_gamma_offset);
         pl->writeReg(PLReg::FINAL_NORM_GAMMA_OFFSET,
                      mem.final_norm_gamma_offset);
-        //        pl->writeReg(PLReg::LN0_BETA_OFFSET, mem.ln0_beta_offset);
-        //        pl->writeReg(PLReg::LN1_BETA_OFFSET, mem.ln1_beta_offset);
-        //        pl->writeReg(PLReg::FINAL_NORM_BETA_OFFSET,
-        //        mem.final_norm_beta_offset);
+
+        // P0 FIX: beta offsets (were commented out)
+        pl->writeReg(PLReg::LN0_BETA_OFFSET, mem.ln0_beta_offset);
+        pl->writeReg(PLReg::LN1_BETA_OFFSET, mem.ln1_beta_offset);
+        pl->writeReg(PLReg::FINAL_NORM_BETA_OFFSET,
+                     mem.final_norm_beta_offset);
+
         pl->writeReg(PLReg::LN0_EPS_OFFSET, mem.ln0_eps_offset);
         pl->writeReg(PLReg::LN1_EPS_OFFSET, mem.ln1_eps_offset);
         pl->writeReg(PLReg::FINAL_NORM_EPS_OFFSET, mem.final_norm_eps_offset);
         pl->writeReg(PLReg::WLOGIT_OFFSET, mem.wlogit_offset);
 
-        // Word 24: GPT-2 extensions
         pl->writeReg(PLReg::TOKEN_POSITION, 0);
 
-        // endConfig: clears IRQ clear, enables IRQs, checks for config errors
+        // Matmul mode registers (safe to write 0 during init)
+        pl->writeReg(PLReg::MATMUL_WEIGHT_SEL, 0);
+        pl->writeReg(PLReg::MATMUL_LAYER, 0);
+
         pl->endConfig();
         if (err->hasError()) {
             LOG_ERROR("Config error, register dump:\n" + pl->dumpCtrlMem());
@@ -170,7 +172,7 @@ public:
 };
 
 // =============================================================================
-// InferenceExecutor — handles executeToken(), readDDR()
+// InferenceExecutor — handles executeToken(), executeForwardHybrid()
 // =============================================================================
 class InferenceExecutor {
     PLInterface *pl;
@@ -179,17 +181,106 @@ class InferenceExecutor {
     ErrorHandler *err;
     ModelConfig model_cfg;
 
-    uint32_t input_offset;  // DMA buffer offset for stream in staging
-    uint32_t output_offset; // DMA buffer offset for stream out staging
+    uint32_t input_offset;
+    uint32_t output_offset;
     uint32_t timeout_ms;
     bool debug_mode;
 
-    // Embedding table: vocab_size x hidden_size, held in process memory
+    // int8 embedding tables (original, used by executeToken)
     std::vector<int8_t> embedding_table;
-
-    // Position embedding table: context_length x hidden_size (GPT-2 learned
-    // positions)
     std::vector<int8_t> pos_embedding_table;
+
+    // ── Matmul mode data ──
+
+    // Float embeddings for precise addition
+    std::vector<float> embed_float;
+    std::vector<float> pos_float;
+    bool use_float_embed = false;
+
+    // Per-channel weight scales [layer][channel]
+    std::vector<std::vector<double>> wq_scale;  // [12][768]
+    std::vector<std::vector<double>> wk_scale;
+    std::vector<std::vector<double>> wv_scale;
+    std::vector<std::vector<double>> wo_scale;
+    std::vector<std::vector<double>> w1_scale;  // [12][3072]
+    std::vector<std::vector<double>> w2_scale;  // [12][768]
+    std::vector<double> logit_scale;             // [50257]
+
+    // Float biases (decoded from Q16.16)
+    std::vector<std::vector<double>> bq_f, bk_f, bv_f, bo_f;
+    std::vector<std::vector<double>> b1_f, b2_f;
+
+    // Raw Q16.16 biases (needed for dequant subtraction)
+    std::vector<std::vector<int32_t>> bq_raw, bk_raw, bv_raw, bo_raw;
+    std::vector<std::vector<int32_t>> b1_raw, b2_raw;
+
+    // Float LayerNorm parameters
+    std::vector<std::vector<double>> ln1_w_f, ln1_b_f;
+    std::vector<std::vector<double>> ln2_w_f, ln2_b_f;
+    std::vector<double> fln_w_f, fln_b_f;
+
+    // PS-side float KV cache
+    std::vector<std::vector<double>> kv_k;  // [12][ctx * 768]
+    std::vector<std::vector<double>> kv_v;
+
+    // int8 logit weights for PS-side logit projection
+    std::vector<int8_t> wlogit_i8;
+
+    // Memory layout reference for DDR reads
+    MemoryLayout mem_layout;
+
+    bool matmul_mode_ready = false;
+
+    // ── PS-side float helpers ──
+
+    static void ps_layernorm(const double *x, const double *gamma,
+                             const double *beta, double *out, int n) {
+        double mean = 0;
+        for (int i = 0; i < n; i++) mean += x[i];
+        mean /= n;
+        double var = 0;
+        for (int i = 0; i < n; i++) {
+            double d = x[i] - mean;
+            var += d * d;
+        }
+        var /= n;
+        double inv = 1.0 / sqrt(var + 1e-5);
+        for (int i = 0; i < n; i++)
+            out[i] = gamma[i] * (x[i] - mean) * inv + beta[i];
+    }
+
+    static void ps_gelu(double *x, int n) {
+        const double c = sqrt(2.0 / M_PI);
+        for (int i = 0; i < n; i++)
+            x[i] = 0.5 * x[i] *
+                   (1.0 + tanh(c * (x[i] + 0.044715 * x[i] * x[i] * x[i])));
+    }
+
+    static void ps_quantize_act(const double *x, int8_t *out, double &scale,
+                                int n) {
+        double amax = 0;
+        for (int i = 0; i < n; i++) {
+            double a = fabs(x[i]);
+            if (a > amax) amax = a;
+        }
+        if (amax < 1e-10) amax = 1e-10;
+        scale = amax / 127.0;
+        for (int i = 0; i < n; i++) {
+            int v = (int)round(x[i] / scale);
+            out[i] = (int8_t)(v < -127 ? -127 : (v > 127 ? 127 : v));
+        }
+    }
+
+    static void ps_dequant(const int32_t *acc_with_bias, double act_scale,
+                           const double *w_scales, const double *bias_float,
+                           const int32_t *bias_q16, double *out, int n) {
+        for (int i = 0; i < n; i++) {
+            int64_t mac_raw =
+                (int64_t)acc_with_bias[i] - (int64_t)bias_q16[i];
+            out[i] = (double)mac_raw * act_scale * w_scales[i] +
+                     bias_float[i];
+        }
+    }
 
 public:
     InferenceExecutor(PLInterface *p, Tokenizer *t, PerformanceMonitor *pf,
@@ -200,55 +291,49 @@ public:
           input_offset(in_off), output_offset(out_off), timeout_ms(tmo_ms),
           debug_mode(debug) {}
 
-    /** Load embedding table from file into process memory. */
+    void setMemoryLayout(const MemoryLayout &mem) { mem_layout = mem; }
+
+    // ── Original methods (unchanged) ──
+
     bool loadEmbeddingTable(const std::string &path) {
         size_t expected =
             static_cast<size_t>(model_cfg.vocab_size) * model_cfg.hidden_size;
-
         std::ifstream f(path, std::ios::binary);
         if (!f) {
             err->setError(ErrorCode::FILE_NOT_FOUND,
                           "Cannot open embedding file: " + path);
             return false;
         }
-
         f.seekg(0, std::ios::end);
         size_t file_size = f.tellg();
         f.seekg(0);
-
         if (file_size < expected) {
-            err->setError(
-                ErrorCode::FILE_NOT_FOUND,
-                "Embedding file too small: " + std::to_string(file_size) +
-                    " bytes, expected " + std::to_string(expected));
+            err->setError(ErrorCode::FILE_NOT_FOUND,
+                          "Embedding file too small: " +
+                              std::to_string(file_size) + " bytes, expected " +
+                              std::to_string(expected));
             return false;
         }
-
         embedding_table.resize(expected);
         f.read(reinterpret_cast<char *>(embedding_table.data()), expected);
-
-        LOG_INFO(
-            "Loaded embedding table: " + std::to_string(model_cfg.vocab_size) +
-            " x " + std::to_string(model_cfg.hidden_size) + " bytes");
+        LOG_INFO("Loaded embedding table: " +
+                 std::to_string(model_cfg.vocab_size) + " x " +
+                 std::to_string(model_cfg.hidden_size) + " bytes");
         return true;
     }
 
-    /** Load position embedding table from file into process memory (GPT-2). */
     bool loadPositionEmbeddings(const std::string &path) {
         size_t expected = static_cast<size_t>(model_cfg.context_length) *
                           model_cfg.hidden_size;
-
         std::ifstream f(path, std::ios::binary);
         if (!f) {
             err->setError(ErrorCode::FILE_NOT_FOUND,
                           "Cannot open position embedding file: " + path);
             return false;
         }
-
         f.seekg(0, std::ios::end);
         size_t file_size = f.tellg();
         f.seekg(0);
-
         if (file_size < expected) {
             err->setError(ErrorCode::FILE_NOT_FOUND,
                           "Position embedding file too small: " +
@@ -256,22 +341,17 @@ public:
                               std::to_string(expected));
             return false;
         }
-
         pos_embedding_table.resize(expected);
         f.read(reinterpret_cast<char *>(pos_embedding_table.data()), expected);
-
         LOG_INFO("Loaded position embeddings: " +
                  std::to_string(model_cfg.context_length) + " x " +
                  std::to_string(model_cfg.hidden_size) + " bytes");
         return true;
     }
 
-    /** Execute one forward pass through the PL for a single token.
-     *  Returns the argmax token ID computed by the FPGA. */
     bool executeToken(uint32_t token_id, uint32_t token_position,
                       uint32_t &out_token) {
         perf->startGeneration();
-
         LOG_DEBUG("executeToken: token_id=" + std::to_string(token_id) +
                   " pos=" + std::to_string(token_position));
 
@@ -283,76 +363,395 @@ public:
             logPLStatus("streamInitRecv failed");
             return false;
         }
-
         if (!pl->streamInitSend(input_offset, send_buf.data(),
                                 model_cfg.stream_in_size)) {
             logPLStatus("streamInitSend failed");
             return false;
         }
 
-        // Build CONTROL word: RESETN | START, optionally | DEBUG_MODE
         uint32_t ctrl_bits = CTRL_RESETN_BIT | CTRL_START_BIT;
-        if (debug_mode)
-            ctrl_bits |= CTRL_DEBUG_MODE_BIT;
-
-        LOG_DEBUG("Pulsing START (CTRL=0x" + ([&] {
-                      char b[16];
-                      snprintf(b, sizeof(b), "%08X", ctrl_bits);
-                      return std::string(b);
-                  })() +
-                  ")");
+        if (debug_mode) ctrl_bits |= CTRL_DEBUG_MODE_BIT;
 
         pl->writeReg(PLReg::TOKEN_POSITION, token_position);
         pl->writeReg(PLReg::CONTROL, ctrl_bits);
-
         usleep(10);
-        // Clear START bit
         pl->writeReg(PLReg::CONTROL,
                      pl->readReg(PLReg::CONTROL) & ~CTRL_START_BIT);
 
         if (!pl->streamWaitSend(timeout_ms)) {
-            logPLStatus("streamWaitSend failed");
-            pl->clearIRQ();
-            return false;
+            logPLStatus("streamWaitSend failed"); pl->clearIRQ(); return false;
         }
-
         if (!pl->waitDone(timeout_ms)) {
-            logPLStatus("waitDone failed");
-            pl->clearIRQ();
-            return false;
+            logPLStatus("waitDone failed"); pl->clearIRQ(); return false;
         }
-
-        LOG_DEBUG("Token(" + std::to_string(token_id) + ", " +
-                  std::to_string(token_position) +
-                  ") dumping registers: " + pl->getRegStats(true));
 
         std::vector<uint8_t> recv_buf(model_cfg.stream_out_size, 0);
         if (!pl->streamWaitRecv(output_offset, recv_buf.data(),
                                 model_cfg.stream_out_size, timeout_ms)) {
-            logPLStatus("streamWaitRecv failed");
-            pl->clearIRQ();
-            return false;
+            logPLStatus("streamWaitRecv failed"); pl->clearIRQ(); return false;
         }
 
-        // Decode little-endian int32 (matches testbench stream out decode)
-        // Assume stream_out_size >= 4 for GPT-2
         out_token = static_cast<uint32_t>(recv_buf[0]) |
                     (static_cast<uint32_t>(recv_buf[1]) << 8) |
                     (static_cast<uint32_t>(recv_buf[2]) << 16) |
                     (static_cast<uint32_t>(recv_buf[3]) << 24);
 
-        // 8. Clear IRQ so PL is ready for next token
-        //    clearIRQ() pulses IRQ_CLEAR high then low.
         pl->clearIRQ();
+        perf->recordToken();
+        perf->endGeneration();
+        return true;
+    }
+
+    bool getEmbedding(uint32_t token_id, uint32_t token_position, int8_t *out) {
+        return lookupEmbedding(token_id, token_position, out);
+    }
+
+    // ── Matmul mode methods ──
+
+    bool loadFloatEmbeddings(const std::string &tok_path,
+                             const std::string &pos_path) {
+        const uint32_t H = model_cfg.hidden_size;
+        std::ifstream ft(tok_path, std::ios::binary);
+        std::ifstream fp(pos_path, std::ios::binary);
+        if (!ft || !fp) {
+            LOG_WARN("Float embedding files not found, using int8 addition");
+            return false;
+        }
+        embed_float.resize((size_t)model_cfg.vocab_size * H);
+        ft.read(reinterpret_cast<char *>(embed_float.data()),
+                embed_float.size() * sizeof(float));
+        pos_float.resize((size_t)model_cfg.context_length * H);
+        fp.read(reinterpret_cast<char *>(pos_float.data()),
+                pos_float.size() * sizeof(float));
+        use_float_embed = true;
+        LOG_INFO("Loaded float embeddings for matmul mode");
+        return true;
+    }
+
+    bool loadMatmulModeParams(const std::string &model_dir) {
+        const uint32_t H = model_cfg.hidden_size;
+        const uint32_t FF = H * 4;
+        const uint32_t V = model_cfg.vocab_size;
+        const uint32_t NL = model_cfg.num_layers;
+        const MemoryLayout &mem = mem_layout;
+
+        // ── Load per-channel weight scales from quant_scales.json ──
+        std::string json_path = model_dir + "/quant_scales.json";
+        std::ifstream jf(json_path);
+        if (!jf) {
+            LOG_ERROR("Cannot open " + json_path);
+            return false;
+        }
+        std::string json_str((std::istreambuf_iterator<char>(jf)),
+                              std::istreambuf_iterator<char>());
+
+        auto parse_array = [&](const std::string &key,
+                               std::vector<double> &out) -> bool {
+            std::string search = "\"" + key + "\"";
+            size_t pos = json_str.find(search);
+            if (pos == std::string::npos) return false;
+            size_t start = json_str.find('[', pos);
+            size_t end = json_str.find(']', start);
+            if (start == std::string::npos || end == std::string::npos)
+                return false;
+            std::string arr = json_str.substr(start + 1, end - start - 1);
+            out.clear();
+            size_t p = 0;
+            while (p < arr.size()) {
+                while (p < arr.size() && (arr[p] == ' ' || arr[p] == ',')) p++;
+                if (p >= arr.size()) break;
+                size_t e = p;
+                while (e < arr.size() && arr[e] != ',' && arr[e] != ' ') e++;
+                out.push_back(atof(arr.substr(p, e - p).c_str()));
+                p = e;
+            }
+            return true;
+        };
+
+        wq_scale.resize(NL); wk_scale.resize(NL); wv_scale.resize(NL);
+        wo_scale.resize(NL); w1_scale.resize(NL); w2_scale.resize(NL);
+        bq_f.resize(NL); bk_f.resize(NL); bv_f.resize(NL); bo_f.resize(NL);
+        b1_f.resize(NL); b2_f.resize(NL);
+        bq_raw.resize(NL); bk_raw.resize(NL); bv_raw.resize(NL); bo_raw.resize(NL);
+        b1_raw.resize(NL); b2_raw.resize(NL);
+        ln1_w_f.resize(NL); ln1_b_f.resize(NL);
+        ln2_w_f.resize(NL); ln2_b_f.resize(NL);
+        kv_k.resize(NL); kv_v.resize(NL);
+
+        for (uint32_t ly = 0; ly < NL; ly++) {
+            std::string pfx = "layer" + std::to_string(ly) + ".";
+            parse_array(pfx + "wq", wq_scale[ly]);
+            parse_array(pfx + "wk", wk_scale[ly]);
+            parse_array(pfx + "wv", wv_scale[ly]);
+            parse_array(pfx + "wo", wo_scale[ly]);
+            parse_array(pfx + "w1", w1_scale[ly]);
+            parse_array(pfx + "w2", w2_scale[ly]);
+            kv_k[ly].resize((size_t)model_cfg.context_length * H, 0.0);
+            kv_v[ly].resize((size_t)model_cfg.context_length * H, 0.0);
+        }
+        parse_array("lm_head", logit_scale);
+
+        // ── Read biases and LN params from DDR (Q16.16 -> float) ──
+        auto read_q16 = [&](uint32_t offset, uint32_t count,
+                            std::vector<double> &fout,
+                            std::vector<int32_t> &raw) -> bool {
+            raw.resize(count); fout.resize(count);
+            if (!pl->readDDR(DmaBufType::BUF0, offset, raw.data(),
+                             count * sizeof(int32_t)))
+                return false;
+            for (uint32_t i = 0; i < count; i++)
+                fout[i] = (double)raw[i] / 65536.0;
+            return true;
+        };
+        auto read_q16_f = [&](uint32_t offset, uint32_t count,
+                              std::vector<double> &fout) -> bool {
+            std::vector<int32_t> raw(count); fout.resize(count);
+            if (!pl->readDDR(DmaBufType::BUF0, offset, raw.data(),
+                             count * sizeof(int32_t)))
+                return false;
+            for (uint32_t i = 0; i < count; i++)
+                fout[i] = (double)raw[i] / 65536.0;
+            return true;
+        };
+
+        for (uint32_t ly = 0; ly < NL; ly++) {
+            uint32_t b4 = H * 4, b41 = FF * 4, g4 = H * 4;
+            read_q16(mem.wq_bias_offset + ly*b4, H, bq_f[ly], bq_raw[ly]);
+            read_q16(mem.wk_bias_offset + ly*b4, H, bk_f[ly], bk_raw[ly]);
+            read_q16(mem.wv_bias_offset + ly*b4, H, bv_f[ly], bv_raw[ly]);
+            read_q16(mem.wo_bias_offset + ly*b4, H, bo_f[ly], bo_raw[ly]);
+            read_q16(mem.w1_bias_offset + ly*b41, FF, b1_f[ly], b1_raw[ly]);
+            read_q16(mem.w2_bias_offset + ly*b4, H, b2_f[ly], b2_raw[ly]);
+            read_q16_f(mem.ln0_gamma_offset + ly*g4, H, ln1_w_f[ly]);
+            read_q16_f(mem.ln0_beta_offset + ly*g4, H, ln1_b_f[ly]);
+            read_q16_f(mem.ln1_gamma_offset + ly*g4, H, ln2_w_f[ly]);
+            read_q16_f(mem.ln1_beta_offset + ly*g4, H, ln2_b_f[ly]);
+        }
+        read_q16_f(mem.final_norm_gamma_offset, H, fln_w_f);
+        read_q16_f(mem.final_norm_beta_offset, H, fln_b_f);
+
+        // ── Load int8 logit weights ──
+        wlogit_i8.resize((size_t)V * H);
+        if (!pl->readDDR(DmaBufType::BUF0, mem.wlogit_offset,
+                         wlogit_i8.data(), (size_t)V * H)) {
+            LOG_ERROR("Failed to read logit weights from DDR");
+            return false;
+        }
+
+        matmul_mode_ready = true;
+        LOG_INFO("Matmul mode params loaded: " + std::to_string(NL) +
+                 " layers, " + std::to_string(H) + " hidden");
+        return true;
+    }
+
+    bool executeMatmul(uint8_t weight_sel, uint32_t layer,
+                       const int8_t *act_i8, uint32_t act_len,
+                       int32_t *acc_out, uint32_t out_len) {
+        uint32_t out_bytes = out_len * sizeof(int32_t);
+
+        pl->writeReg(PLReg::MATMUL_WEIGHT_SEL, weight_sel);
+        pl->writeReg(PLReg::MATMUL_LAYER, layer);
+        pl->writeReg(PLReg::TOKEN_POSITION, 0);
+
+        if (!pl->streamInitRecv(output_offset, out_bytes)) {
+            LOG_ERROR("matmul recv init failed"); return false;
+        }
+        if (!pl->streamInitSend(input_offset, act_i8, act_len)) {
+            LOG_ERROR("matmul send init failed"); return false;
+        }
+
+        uint32_t ctrl = CTRL_RESETN_BIT | CTRL_START_BIT | CTRL_MATMUL_MODE_BIT;
+        pl->writeReg(PLReg::CONTROL, ctrl);
+        usleep(10);
+        pl->writeReg(PLReg::CONTROL, ctrl & ~CTRL_START_BIT);
+
+        if (!pl->streamWaitSend(timeout_ms)) {
+            LOG_ERROR("matmul send timeout"); pl->clearIRQ(); return false;
+        }
+        if (!pl->waitDone(timeout_ms)) {
+            LOG_ERROR("matmul done timeout (sel=" +
+                      std::to_string(weight_sel) + " ly=" +
+                      std::to_string(layer) + ")");
+            pl->clearIRQ(); return false;
+        }
+
+        std::vector<uint8_t> recv_buf(out_bytes, 0);
+        if (!pl->streamWaitRecv(output_offset, recv_buf.data(), out_bytes,
+                                timeout_ms)) {
+            LOG_ERROR("matmul recv timeout"); pl->clearIRQ(); return false;
+        }
+        memcpy(acc_out, recv_buf.data(), out_bytes);
+        pl->clearIRQ();
+        return true;
+    }
+
+    bool executeForwardHybrid(uint32_t token_id, uint32_t token_position,
+                              uint32_t &out_token) {
+        if (!matmul_mode_ready) {
+            LOG_ERROR("Matmul mode not initialized");
+            return false;
+        }
+
+        perf->startGeneration();
+
+        const uint32_t H = model_cfg.hidden_size;
+        const uint32_t FF = H * 4;
+        const uint32_t V = model_cfg.vocab_size;
+        const uint32_t NL_count = model_cfg.num_layers;
+
+        std::vector<double> x(H), h(H), h2(H);
+        std::vector<double> q(H), k(H), v(H), o(H);
+        std::vector<double> fc1(FF), fc2(H);
+        std::vector<double> attn_out(H);
+        std::vector<int8_t> act_i8_h(H), act_i8_ff(FF);
+        std::vector<int32_t> acc_h(H), acc_ff(FF);
+        double act_scale;
+
+        // ── Float embedding ──
+        if (use_float_embed) {
+            size_t tok_off = (size_t)token_id * H;
+            size_t pos_off = (size_t)token_position * H;
+            for (uint32_t i = 0; i < H; i++)
+                x[i] = (double)embed_float[tok_off + i] +
+                       (double)pos_float[pos_off + i];
+        } else {
+            size_t tok_off = (size_t)token_id * H;
+            size_t pos_off = (size_t)token_position * H;
+            for (uint32_t i = 0; i < H; i++) {
+                int sum = (int)embedding_table[tok_off + i] +
+                          (int)pos_embedding_table[pos_off + i];
+                x[i] = (double)(sum < -128 ? -128 : (sum > 127 ? 127 : sum));
+            }
+        }
+
+        // ── Layer loop ──
+        for (uint32_t ly = 0; ly < NL_count; ly++) {
+
+            ps_layernorm(x.data(), ln1_w_f[ly].data(), ln1_b_f[ly].data(),
+                         h.data(), H);
+            ps_quantize_act(h.data(), act_i8_h.data(), act_scale, H);
+
+            // PL: Q projection
+            if (!executeMatmul(0, ly, act_i8_h.data(), H, acc_h.data(), H))
+                return false;
+            ps_dequant(acc_h.data(), act_scale, wq_scale[ly].data(),
+                       bq_f[ly].data(), bq_raw[ly].data(), q.data(), H);
+
+            // PL: K projection
+            if (!executeMatmul(1, ly, act_i8_h.data(), H, acc_h.data(), H))
+                return false;
+            ps_dequant(acc_h.data(), act_scale, wk_scale[ly].data(),
+                       bk_f[ly].data(), bk_raw[ly].data(), k.data(), H);
+
+            // PL: V projection
+            if (!executeMatmul(2, ly, act_i8_h.data(), H, acc_h.data(), H))
+                return false;
+            ps_dequant(acc_h.data(), act_scale, wv_scale[ly].data(),
+                       bv_f[ly].data(), bv_raw[ly].data(), v.data(), H);
+
+            // PS: KV cache
+            size_t kv_off = (size_t)token_position * H;
+            memcpy(&kv_k[ly][kv_off], k.data(), H * sizeof(double));
+            memcpy(&kv_v[ly][kv_off], v.data(), H * sizeof(double));
+
+            // PS: Float multi-head attention
+            std::fill(attn_out.begin(), attn_out.end(), 0.0);
+            const int NH_count = 12, DH_size = 64;
+
+            for (int head = 0; head < NH_count; head++) {
+                double *qh = &q[head * DH_size];
+                std::vector<double> scores(token_position + 1);
+                double max_score = -1e30;
+                for (uint32_t t = 0; t <= token_position; t++) {
+                    double s = 0;
+                    double *kt = &kv_k[ly][t * H + head * DH_size];
+                    for (int d = 0; d < DH_size; d++) s += qh[d] * kt[d];
+                    scores[t] = s / 8.0;
+                    if (scores[t] > max_score) max_score = scores[t];
+                }
+                double sum_exp = 0;
+                for (uint32_t t = 0; t <= token_position; t++) {
+                    scores[t] = exp(scores[t] - max_score);
+                    sum_exp += scores[t];
+                }
+                for (uint32_t t = 0; t <= token_position; t++)
+                    scores[t] /= (sum_exp + 1e-10);
+                for (int d = 0; d < DH_size; d++) {
+                    double a = 0;
+                    for (uint32_t t = 0; t <= token_position; t++)
+                        a += scores[t] * kv_v[ly][t * H + head * DH_size + d];
+                    attn_out[head * DH_size + d] = a;
+                }
+            }
+
+            // PS: Quantize attention output
+            ps_quantize_act(attn_out.data(), act_i8_h.data(), act_scale, H);
+
+            // PL: O projection
+            if (!executeMatmul(3, ly, act_i8_h.data(), H, acc_h.data(), H))
+                return false;
+            ps_dequant(acc_h.data(), act_scale, wo_scale[ly].data(),
+                       bo_f[ly].data(), bo_raw[ly].data(), o.data(), H);
+
+            // PS: Float residual 1
+            for (uint32_t i = 0; i < H; i++) x[i] += o[i];
+
+            // PS: Float LayerNorm 1
+            ps_layernorm(x.data(), ln2_w_f[ly].data(), ln2_b_f[ly].data(),
+                         h2.data(), H);
+            ps_quantize_act(h2.data(), act_i8_h.data(), act_scale, H);
+
+            // PL: FFN W1
+            if (!executeMatmul(4, ly, act_i8_h.data(), H, acc_ff.data(), FF))
+                return false;
+            ps_dequant(acc_ff.data(), act_scale, w1_scale[ly].data(),
+                       b1_f[ly].data(), b1_raw[ly].data(), fc1.data(), FF);
+
+            // PS: Float GELU
+            ps_gelu(fc1.data(), FF);
+            ps_quantize_act(fc1.data(), act_i8_ff.data(), act_scale, FF);
+
+            // PL: FFN W2
+            if (!executeMatmul(5, ly, act_i8_ff.data(), FF, acc_h.data(), H))
+                return false;
+            ps_dequant(acc_h.data(), act_scale, w2_scale[ly].data(),
+                       b2_f[ly].data(), b2_raw[ly].data(), fc2.data(), H);
+
+            // PS: Float residual 2
+            for (uint32_t i = 0; i < H; i++) x[i] += fc2[i];
+
+            LOG_DEBUG("Layer " + std::to_string(ly) + " complete");
+        }
+
+        // PS: Float final LayerNorm
+        ps_layernorm(x.data(), fln_w_f.data(), fln_b_f.data(), h.data(), H);
+        ps_quantize_act(h.data(), act_i8_h.data(), act_scale, H);
+
+        // PS: Logit projection on ARM
+        double best_logit = -1e30;
+        out_token = 0;
+        for (uint32_t i = 0; i < V; i++) {
+            int32_t acc = 0;
+            const int8_t *row = &wlogit_i8[i * H];
+            for (uint32_t j = 0; j < H; j++)
+                acc += (int32_t)row[j] * (int32_t)act_i8_h[j];
+            double logit = (double)acc * act_scale * logit_scale[i];
+            if (logit > best_logit) {
+                best_logit = logit;
+                out_token = i;
+            }
+        }
 
         perf->recordToken();
         perf->endGeneration();
         return true;
     }
 
-    /** Get embedding data for a token ID + position into caller buffer. */
-    bool getEmbedding(uint32_t token_id, uint32_t token_position, int8_t *out) {
-        return lookupEmbedding(token_id, token_position, out);
+    void resetKVCache() {
+        for (size_t ly = 0; ly < kv_k.size(); ly++) {
+            std::fill(kv_k[ly].begin(), kv_k[ly].end(), 0.0);
+            std::fill(kv_v[ly].begin(), kv_v[ly].end(), 0.0);
+        }
     }
 
 private:
@@ -371,13 +770,10 @@ private:
             err->setError(ErrorCode::INVALID_TOKEN, "Token out of range");
             return false;
         }
-
-        // Look up token embedding
         size_t tok_offset =
             static_cast<size_t>(token_id) * model_cfg.hidden_size;
         memcpy(out, &embedding_table[tok_offset], model_cfg.hidden_size);
 
-        // Add position embedding (GPT-2 learned positional encoding)
         if (!pos_embedding_table.empty() &&
             token_position < model_cfg.context_length) {
             size_t pos_offset =
@@ -385,7 +781,6 @@ private:
             for (uint32_t i = 0; i < model_cfg.hidden_size; i++) {
                 int sum = static_cast<int>(out[i]) +
                           static_cast<int>(pos_embedding_table[pos_offset + i]);
-                // Clamp to int8 range
                 out[i] = static_cast<int8_t>(
                     sum < -128 ? -128 : (sum > 127 ? 127 : sum));
             }
@@ -396,11 +791,9 @@ private:
                       " exceeds context length " +
                       std::to_string(model_cfg.context_length));
         }
-
         return true;
     }
 
-    /** Log error context + raw register dump for diagnostics. */
     void logPLStatus(const char *context) {
         LOG_ERROR("[" + std::string(context) + "] " +
                   err->getLastErrorMessage() +
@@ -442,17 +835,13 @@ public:
     bool initialize(const std::string &cfg_file, bool debug_hw_override = false,
                     bool mock_override = false) {
         config.loadFromFile(cfg_file);
-        if (debug_hw_override)
-            config.hardware.debug_mode = true;
-        if (mock_override)
-            config.hardware.mock_mode = true;
+        if (debug_hw_override) config.hardware.debug_mode = true;
+        if (mock_override) config.hardware.mock_mode = true;
         if (!config.validate()) {
             LOG_ERROR("Invalid configuration");
             return false;
         }
 
-        // init() opens UIO, maps registers, sets AP_AUTO_RESTART,
-        // calls reset() which asserts/deasserts RESETN and resets streams.
         pl = std::unique_ptr<PLInterface>(
             new PLInterface(g_logger, &err, config.hardware.mock_mode));
         if (!pl->init(config.hardware.uio_device,
@@ -461,7 +850,6 @@ public:
             return false;
         }
 
-        // initDMA() allocates the contiguous DMA buffer via u-dma-buf.
         if (!pl->initDMA(
                 config.hardware.dmabuf0_name, config.hardware.dmabuf0_size,
                 config.hardware.dmabuf1_name, config.hardware.dmabuf1_size)) {
@@ -486,7 +874,6 @@ public:
             return false;
         }
 
-        // Load binary weights into DDR — cap at what the FPGA actually needs
         loader->setWeightsFile(config.model.weights_file);
         if (!loader->loadAllWeights(config.model, config.memory.weights_size)) {
             LOG_FATAL("Weight load failed " + err.getLastErrorMessage());
@@ -498,28 +885,39 @@ public:
             config.memory.input_offset, config.memory.output_offset,
             config.hardware.timeout_ms, config.hardware.debug_mode));
 
-        // Load embedding table from file into process memory
+        // Load int8 embedding tables (used by autonomous mode)
         if (!config.model.embeddings_file.empty()) {
             if (!exec->loadEmbeddingTable(config.model.embeddings_file)) {
-                LOG_WARN("Embedding load failed, using test patterns" +
-                         err.getLastErrorMessage());
+                LOG_WARN("Embedding load failed" + err.getLastErrorMessage());
             }
-        } else {
-            LOG_WARN("No embeddings_file configured, using test patterns" +
-                     err.getLastErrorMessage());
         }
-
-        // Load position embeddings (GPT-2 learned positional encoding)
         if (!config.model.pos_embeddings_file.empty()) {
             if (!exec->loadPositionEmbeddings(
                     config.model.pos_embeddings_file)) {
-                LOG_WARN("Position embedding load failed, positions will be "
-                         "ignored" +
+                LOG_WARN("Position embedding load failed" +
                          err.getLastErrorMessage());
             }
-        } else {
-            LOG_WARN("No pos_embeddings_file configured, no position encoding" +
-                     err.getLastErrorMessage());
+        }
+
+        // ── Load matmul mode resources ──
+        exec->setMemoryLayout(config.memory);
+
+        // Float embeddings (falls back to int8 if files not found)
+        std::string model_dir = config.model.weights_file;
+        // Extract directory from weights file path
+        size_t last_slash = model_dir.find_last_of('/');
+        if (last_slash != std::string::npos)
+            model_dir = model_dir.substr(0, last_slash);
+        else
+            model_dir = ".";
+
+        exec->loadFloatEmbeddings(
+            model_dir + "/embed_tokens_float.bin",
+            model_dir + "/pos_embed_float.bin");
+
+        // Load weight scales, biases, LN params for matmul mode
+        if (!exec->loadMatmulModeParams(model_dir)) {
+            LOG_WARN("Matmul mode params not loaded, hybrid mode unavailable");
         }
 
         LOG_INFO("Initialized" + std::string(config.hardware.debug_mode
@@ -537,8 +935,7 @@ public:
         if (running) {
             running = false;
             g_command_queue.push(Command(CommandType::SHUTDOWN));
-            if (thread.joinable())
-                thread.join();
+            if (thread.joinable()) thread.join();
         }
     }
 
@@ -602,7 +999,6 @@ private:
             return;
         }
 
-        // Debug mode: single token in → single token out
         uint32_t input_token = tokens[0];
         uint32_t out_token = 0;
 
@@ -610,7 +1006,6 @@ private:
         print("Input token: " + std::to_string(input_token) + " text=\"" +
               tokenizer->decodeToken(input_token) + "\"\n");
 
-        // Compute expected sum of int8 embedding on CPU side
         std::vector<int8_t> embed_buf(config.model.hidden_size);
         int32_t expected_sum = 0;
         if (exec->getEmbedding(input_token, 0, embed_buf.data())) {
@@ -618,32 +1013,16 @@ private:
                 expected_sum += static_cast<int32_t>(embed_buf[i]);
             print("CPU embedding sum (int8): " + std::to_string(expected_sum) +
                   "\n");
-        } else {
-            print("WARNING: could not look up embedding\n");
         }
 
         print("Registers BEFORE:\n" + pl->getRegStats() + "\n");
-
         bool ok = exec->executeToken(input_token, 0, out_token);
-
         print("Registers AFTER:\n" + pl->getRegStats() + "\n");
 
         if (!ok) {
             print("executeToken FAILED: " + err.getLastErrorMessage() + "\n");
         } else {
-            int32_t hw_sum = static_cast<int32_t>(out_token);
-            print("HW returned: " + std::to_string(hw_sum) + " (0x" + ([&] {
-                      char b[16];
-                      snprintf(b, sizeof(b), "%08X", out_token);
-                      return std::string(b);
-                  })() +
-                  ")\n");
-            if (hw_sum == expected_sum) {
-                print("PASS: HW sum matches CPU sum\n");
-            } else {
-                print("FAIL: expected " + std::to_string(expected_sum) +
-                      " got " + std::to_string(hw_sum) + "\n");
-            }
+            print("HW returned: " + std::to_string(out_token) + "\n");
         }
 
         print("=== DEBUG END ===\n");
@@ -675,18 +1054,21 @@ private:
         LOG_DEBUG("Entering Prefill phase: prompt_len=" +
                   std::to_string(tokens.size()));
 
-        // ── Prefill: feed prompt tokens to populate KV cache ──
+        // Reset PS-side KV cache before new generation
+        exec->resetKVCache();
+
+        // ── Prefill ──
         for (size_t i = 0; i + 1 < tokens.size() && !state.cancel; i++) {
             uint32_t discard = 0;
-            if (!exec->executeToken(tokens[i], static_cast<uint32_t>(i),
-                                    discard)) {
+            if (!exec->executeForwardHybrid(tokens[i],
+                                            static_cast<uint32_t>(i),
+                                            discard)) {
                 LOG_ERROR("Prefill failed at token " + std::to_string(i));
                 break;
             }
             LOG_DEBUG("Prefill [" + std::to_string(i) + "/" +
                       std::to_string(tokens.size()) +
-                      "] token=" + std::to_string(tokens[i]) +
-                      " discard_token_idx=" + std::to_string(discard));
+                      "] token=" + std::to_string(tokens[i]));
         }
 
         if (state.cancel) {
@@ -698,14 +1080,15 @@ private:
         LOG_DEBUG("Entering Decode phase: max_tokens=" +
                   std::to_string(state.maxTokens));
 
-        // ── Decode: generate from the last prompt token onward ──
+        // ── Decode ──
         uint32_t next_input = tokens.back();
 
         for (uint32_t i = 0; i < state.maxTokens && !state.cancel; i++) {
             uint32_t out_token = 0;
             const uint32_t token_position =
                 static_cast<uint32_t>(tokens.size() - 1) + i;
-            if (!exec->executeToken(next_input, token_position, out_token))
+            if (!exec->executeForwardHybrid(next_input, token_position,
+                                            out_token))
                 break;
 
             std::string decoded = tokenizer->decodeToken(out_token);
@@ -716,12 +1099,8 @@ private:
                       " out_token=" + std::to_string(out_token) +
                       " out_decode=\"" + decoded + "\"");
 
-            if (!decoded.empty())
-                print(decoded);
-
-            if (out_token == tokenizer->getEOSTokenId())
-                break;
-
+            if (!decoded.empty()) print(decoded);
+            if (out_token == tokenizer->getEOSTokenId()) break;
             next_input = out_token;
         }
 
@@ -763,29 +1142,21 @@ int main(int argc, char *argv[]) {
 
     for (int i = 1; i < argc; i++) {
         std::string arg(argv[i]);
-        if (arg == "--debug")
-            lvl = LogLevel::DEBUG;
-        if (arg == "--debug-hw")
-            debug_hw = true;
-        if (arg == "--mock")
-            mock_hw = true;
+        if (arg == "--debug") lvl = LogLevel::DEBUG;
+        if (arg == "--debug-hw") debug_hw = true;
+        if (arg == "--mock") mock_hw = true;
     }
 
     g_logger = new Logger(lvl, "inference.log");
 
     std::string cfg_file = "config.yaml";
     for (int i = 1; i < argc - 1; i++)
-        if (std::string(argv[i]) == "--config")
-            cfg_file = argv[i + 1];
+        if (std::string(argv[i]) == "--config") cfg_file = argv[i + 1];
 
     InferenceEngine engine;
 
-    if (debug_hw) {
-        LOG_INFO("Hardware debug mode enabled via --debug-hw");
-    }
-    if (mock_hw) {
-        LOG_INFO("Hardware mock mode enabled via --mock");
-    }
+    if (debug_hw) LOG_INFO("Hardware debug mode enabled via --debug-hw");
+    if (mock_hw) LOG_INFO("Hardware mock mode enabled via --mock");
 
     if (!engine.initialize(cfg_file, debug_hw, mock_hw)) {
         LOG_FATAL("Init failed");
@@ -800,13 +1171,9 @@ int main(int argc, char *argv[]) {
     int taskId = 1;
     std::string input;
     while (std::getline(std::cin, input)) {
-        if (input.empty()) {
-            std::cout << "> ";
-            continue;
-        }
+        if (input.empty()) { std::cout << "> "; continue; }
         if (input == "/quit") {
-            engine.submitCommand(Command(CommandType::SHUTDOWN));
-            break;
+            engine.submitCommand(Command(CommandType::SHUTDOWN)); break;
         }
         if (input == "/stop") {
             engine.submitCommand(Command(CommandType::STOP_CURRENT));
